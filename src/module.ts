@@ -3029,8 +3029,12 @@ function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
   var len = u8s.length;
   var ptr = binaryen._malloc(len);
-  for (let i = 0; i < len; ++i) {
-    binaryen.__i32_store8(ptr + i, u8s[i]);
+  if ((ASC_TARGET | 0) == 0) {
+    binaryen.HEAPU8.set(u8s, ptr);
+  } else {
+    for (let i = 0; i < len; ++i) {
+      binaryen.__i32_store8(ptr + i, u8s[i]);
+    }
   }
   return ptr;
 }
@@ -3039,11 +3043,15 @@ function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
   var len = i32s.length;
   var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
-  for (let i = 0; i < len; ++i) {
-    let val = i32s[i];
-    binaryen.__i32_store(idx, val);
-    idx += 4;
+  if ((ASC_TARGET | 0) == 0) {
+    binaryen.HEAP32.set(i32s, ptr >>> 2);
+  } else {
+    var idx = ptr;
+    for (let i = 0; i < len; ++i) {
+      let val = i32s[i];
+      binaryen.__i32_store(idx, val);
+      idx += 4;
+    }
   }
   return ptr;
 }
@@ -3052,11 +3060,15 @@ function allocU32Array(u32s: u32[] | null): usize {
   if (!u32s) return 0;
   var len = u32s.length;
   var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
-  for (let i = 0; i < len; ++i) {
-    let val = u32s[i];
-    binaryen.__i32_store(idx, val);
-    idx += 4;
+  if ((ASC_TARGET | 0) == 0) {
+    binaryen.HEAPU32.set(u32s, ptr >>> 2);
+  } else {
+    var idx = ptr;
+    for (let i = 0; i < len; ++i) {
+      let val = u32s[i];
+      binaryen.__i32_store(idx, val);
+      idx += 4;
+    }
   }
   return ptr;
 }
@@ -3067,11 +3079,15 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
   assert(ASC_TARGET != Target.WASM64);
   var len = ptrs.length;
   var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
-  for (let i = 0, k = len; i < k; ++i) {
-    let val = ptrs[i];
-    binaryen.__i32_store(idx, <i32>val);
-    idx += 4;
+  if ((ASC_TARGET | 0) == 0) {
+    binaryen.HEAPU32.set(ptrs, ptr >>> 2);
+  } else {
+    var idx = ptr;
+    for (let i = 0, k = len; i < k; ++i) {
+      let val = ptrs[i];
+      binaryen.__i32_store(idx, <i32>val);
+      idx += 4;
+    }
   }
   return ptr;
 }
@@ -3138,11 +3154,15 @@ function allocString(str: string | null): usize {
 }
 
 function readBuffer(ptr: usize, len: i32): Uint8Array {
-  var ret = new Uint8Array(len);
-  for (let i = 0; i < len; ++i) {
-    ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
+  if ((ASC_TARGET | 0) == 0) {
+    return binaryen.HEAPU8.slice(ptr, ptr + len);
+  } else {
+    var ret = new Uint8Array(len);
+    for (let i = 0; i < len; ++i) {
+      ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
+    }
+    return ret;
   }
-  return ret;
 }
 
 export function readString(ptr: usize): string | null {
