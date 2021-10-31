@@ -3029,7 +3029,7 @@ function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
   var len = u8s.length;
   var ptr = binaryen._malloc(len);
-  if ((ASC_TARGET | 0) == 0) {
+  if ((ASC_TARGET | 0) == Target.JS) {
     binaryen.HEAPU8.set(u8s, ptr);
   } else {
     for (let i = 0; i < len; ++i) {
@@ -3043,7 +3043,7 @@ function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
   var len = i32s.length;
   var ptr = binaryen._malloc(len << 2);
-  if ((ASC_TARGET | 0) == 0) {
+  if ((ASC_TARGET | 0) == Target.JS) {
     binaryen.HEAP32.set(i32s, ptr >>> 2);
   } else {
     var idx = ptr;
@@ -3060,7 +3060,7 @@ function allocU32Array(u32s: u32[] | null): usize {
   if (!u32s) return 0;
   var len = u32s.length;
   var ptr = binaryen._malloc(len << 2);
-  if ((ASC_TARGET | 0) == 0) {
+  if ((ASC_TARGET | 0) == Target.JS) {
     binaryen.HEAPU32.set(u32s, ptr >>> 2);
   } else {
     var idx = ptr;
@@ -3079,7 +3079,7 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
   assert(ASC_TARGET != Target.WASM64);
   var len = ptrs.length;
   var ptr = binaryen._malloc(len << 2);
-  if ((ASC_TARGET | 0) == 0) {
+  if ((ASC_TARGET | 0) == Target.JS) {
     binaryen.HEAPU32.set(ptrs, ptr >>> 2);
   } else {
     var idx = ptr;
