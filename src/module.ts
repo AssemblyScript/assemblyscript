@@ -3129,7 +3129,6 @@ function allocString(str: string | null): usize {
     }
   } else {
     // the following is based on Emscripten's stringToUTF8Array
-    var idx = ptr;
     for (let i = 0, k = str.length; i < k; ++i) {
       let u = str.charCodeAt(i) >>> 0;
       if (u <= 0x7F) {
