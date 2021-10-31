@@ -3117,13 +3117,19 @@ function allocString(str: string | null): usize {
   var idx = ptr;
   if (len === str.length) {
     // fast path when all chars are latin1
-    for (let i = 0, k = str.length; i < k; ++i) {
-      // TODO: optimize this more
-      let u = str.charCodeAt(i) >>> 0;
-      binaryen.__i32_store8(idx++, u as u8);
+    if ((ASC_TARGET | 0) == Target.JS) {
+      for (let i = 0, k = str.length; i < k; ++i) {
+        binaryen.HEAPU8[idx++] = str.charCodeAt(i);
+      }
+    } else {
+      for (let i = 0, k = str.length; i < k; ++i) {
+        let u = str.charCodeAt(i) >>> 0;
+        binaryen.__i32_store8(idx++, u as u8);
+      }
     }
   } else {
     // the following is based on Emscripten's stringToUTF8Array
+    var idx = ptr;
     for (let i = 0, k = str.length; i < k; ++i) {
       let u = str.charCodeAt(i) >>> 0;
       if (u <= 0x7F) {
