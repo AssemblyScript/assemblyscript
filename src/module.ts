@@ -3106,8 +3106,10 @@ function allocString(str: string | null): usize {
     } else if (u <= 0x7FF) {
       binaryen.__i32_store8(idx++, (0xC0 |  (u >>> 6)       ) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-    } else if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
-      u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
+    } else if (u >= 0xD800 && u <= 0xDFFF) {
+      if (i + 1 < k) {
+        u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
+      }
       if (u <= 0xFFFF) {
         binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
         binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
