@@ -3114,8 +3114,8 @@ function allocString(str: string | null): usize {
   if (str === null) return 0;
   var len = stringLengthUTF8(str);
   var ptr = binaryen._malloc(len + 1) >>> 0;
+  var idx = ptr;
   if (len) {
-    var idx = ptr;
     if (len === str.length && str.charCodeAt(0) <= 0x7F) {
       // fast path when all chars are latin1
       if ((ASC_TARGET | 0) == Target.JS) {
