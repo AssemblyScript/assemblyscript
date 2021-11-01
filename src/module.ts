@@ -3145,7 +3145,7 @@ function allocString(str: string | null): usize {
           binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
           binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
         } else {
-          assert(u < 0x200000, "Invalid Unicode code point during allocString");
+          assert(u <= 0x10FFFF, "Invalid Unicode code point during allocString");
           binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
           binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
           binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
