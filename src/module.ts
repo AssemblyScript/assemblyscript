@@ -3117,7 +3117,7 @@ function allocString(str: string | null): usize {
   var idx = ptr;
   if (len === str.length) {
     // fast path when all chars are ascii
-    if ((ASC_TARGET | 0) == Target.JS) {
+    if (!ASC_TARGET) {
       for (let i = 0, k = str.length; i < k; ++i) {
         binaryen.HEAPU8[idx++] = str.charCodeAt(i);
       }
@@ -3159,7 +3159,7 @@ function allocString(str: string | null): usize {
 }
 
 function readBuffer(ptr: usize, len: i32): Uint8Array {
-  if ((ASC_TARGET | 0) == 0) {
+  if (!ASC_TARGET) {
     return binaryen.HEAPU8.slice(ptr, ptr + len);
   } else {
     var ret = new Uint8Array(len);
