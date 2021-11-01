@@ -1613,23 +1613,29 @@ export class Module {
 
   // exception handling
 
-  // try(
-  //   body: ExpressionRef,
-  //   catchTags: string[],
-  //   catchBodies: ExpressionRef[]
-  // ): ExpressionRef {
-  //   var numCatchTags = catchTags.length;
-  //   var strs = new Array<TagRef>(numCatchTags);
-  //   for (let i = 0; i < numCatchTags; ++i) {
-  //     strs[i] = this.allocStringCached(catchTags[i]);
-  //   }
-  //   var cArr1 = allocPtrArray(strs);
-  //   var cArr2 = allocPtrArray(catchBodies);
-  //   var ret = binaryen._BinaryenTry(this.ref, body, cArr1, numCatchTags, cArr2, catchBodies.length);
-  //   binaryen._free(cArr2);
-  //   binaryen._free(cArr1);
-  //   return ret;
-  // }
+  try(
+    name: string | null,
+    body: ExpressionRef,
+    catchTags: string[],
+    catchBodies: ExpressionRef[],
+    delegateTarget: string | null = null
+  ): ExpressionRef {
+    var numCatchTags = catchTags.length;
+    var strs = new Array<TagRef>(numCatchTags);
+    for (let i = 0; i < numCatchTags; ++i) {
+      strs[i] = this.allocStringCached(catchTags[i]);
+    }
+    var cArr1 = allocPtrArray(strs);
+    var cArr2 = allocPtrArray(catchBodies);
+    var cStr1 = this.allocStringCached(name);
+    var cStr2 = this.allocStringCached(delegateTarget);
+    var ret = binaryen._BinaryenTry(
+      this.ref, cStr1, body, cArr1, numCatchTags, cArr2, catchBodies.length, cStr2
+    );
+    binaryen._free(cArr2);
+    binaryen._free(cArr1);
+    return ret;
+  }
 
   throw(
     tagName: string,
