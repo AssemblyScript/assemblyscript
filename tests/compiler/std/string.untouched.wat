@@ -4712,7 +4712,7 @@
         local.get $4
         i32.add
         local.get $6
-        i32.store16
+        i32.store16 align=1
         local.get $4
         i32.const 2
         i32.add
@@ -4736,7 +4736,7 @@
        local.get $4
        i32.add
        local.get $6
-       i32.store
+       i32.store align=1
        local.get $4
        i32.const 4
        i32.add
@@ -4760,7 +4760,7 @@
       local.get $4
       i32.add
       local.get $8
-      i64.store
+      i64.store align=1
       local.get $4
       i32.const 8
       i32.add

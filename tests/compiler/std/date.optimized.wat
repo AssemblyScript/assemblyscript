@@ -9501,7 +9501,7 @@
          local.get $7
          i32.add
          local.get $5
-         i32.store16
+         i32.store16 align=1
          local.get $2
          i32.const 2
          i32.add
@@ -9523,7 +9523,7 @@
         local.get $7
         i32.add
         local.get $5
-        i32.store
+        i32.store align=1
         local.get $2
         i32.const 4
         i32.add
@@ -9545,7 +9545,7 @@
        local.get $7
        i32.add
        local.get $4
-       i64.store
+       i64.store align=1
        local.get $2
        i32.const 8
        i32.add
