@@ -59,7 +59,7 @@ export namespace memory {
         case 2: {
           let srcVal = load<u16>(src);
           while (index < total) {
-            store<u16>(dst + index, srcVal);
+            store<u16>(dst + index, srcVal, 0, 1);
             index += 2;
           }
           return;
@@ -67,7 +67,7 @@ export namespace memory {
         case 4: {
           let srcVal = load<u32>(src);
           while (index < total) {
-            store<u32>(dst + index, srcVal);
+            store<u32>(dst + index, srcVal, 0, 1);
             index += 4;
           }
           return;
@@ -75,7 +75,7 @@ export namespace memory {
         case 8: {
           let srcVal = load<u64>(src);
           while (index < total) {
-            store<u64>(dst + index, srcVal);
+            store<u64>(dst + index, srcVal, 0, 1);
             index += 8;
           }
           return;
