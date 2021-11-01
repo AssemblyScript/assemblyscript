@@ -3115,43 +3115,41 @@ function allocString(str: string | null): usize {
   var len = stringLengthUTF8(str);
   var ptr = binaryen._malloc(len + 1) >>> 0;
   var idx = ptr;
-  if (len) {
-    if (len === str.length && str.charCodeAt(0) <= 0x7F) {
-      // fast path when all chars are latin1
-      if ((ASC_TARGET | 0) == Target.JS) {
-        for (let i = 0, k = str.length; i < k; ++i) {
-          binaryen.HEAPU8[idx++] = str.charCodeAt(i);
-        }
-      } else {
-        for (let i = 0, k = str.length; i < k; ++i) {
-          let u = str.charCodeAt(i) >>> 0;
-          binaryen.__i32_store8(idx++, u as u8);
-        }
+  if (len === str.length) {
+    // fast path when all chars are latin1
+    if ((ASC_TARGET | 0) == Target.JS) {
+      for (let i = 0, k = str.length; i < k; ++i) {
+        binaryen.HEAPU8[idx++] = str.charCodeAt(i);
       }
     } else {
-      // the following is based on Emscripten's stringToUTF8Array
       for (let i = 0, k = str.length; i < k; ++i) {
         let u = str.charCodeAt(i) >>> 0;
-        if (u <= 0x7F) {
-          binaryen.__i32_store8(idx++, u as u8);
-        } else if (u <= 0x7FF) {
-          binaryen.__i32_store8(idx++, (0xC0 |  (u >>> 6)       ) as u8);
+        binaryen.__i32_store8(idx++, u as u8);
+      }
+    }
+  } else {
+    // the following is based on Emscripten's stringToUTF8Array
+    for (let i = 0, k = str.length; i < k; ++i) {
+      let u = str.charCodeAt(i) >>> 0;
+      if (u <= 0x7F) {
+        binaryen.__i32_store8(idx++, u as u8);
+      } else if (u <= 0x7FF) {
+        binaryen.__i32_store8(idx++, (0xC0 |  (u >>> 6)       ) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
+      } else if (u >= 0xD800 && u <= 0xDFFF) {
+        if (i + 1 < k) {
+          u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
+        }
+        if (u <= 0xFFFF) {
+          binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
           binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-        } else if (u >= 0xD800 && u <= 0xDFFF) {
-          if (i + 1 < k) {
-            u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
-          }
-          if (u <= 0xFFFF) {
-            binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
-            binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-            binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-          } else {
-            assert(u < 0x200000, "Invalid Unicode code point during allocString");
-            binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
-            binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
-            binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-            binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-          }
+        } else {
+          assert(u < 0x200000, "Invalid Unicode code point during allocString");
+          binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
         }
       }
     }
