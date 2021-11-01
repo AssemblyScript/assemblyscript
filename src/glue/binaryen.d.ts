@@ -643,6 +643,7 @@ export declare function _BinaryenSetAllowInliningFunctionsWithLoops(enabled: boo
 
 // Helpers
 
+// Binaryen.js only (ASC_TARGET = 0)
 export declare const HEAPU8:  Uint8Array;
 export declare const HEAPU32: Uint32Array;
 export declare const HEAP32:  Int32Array;
