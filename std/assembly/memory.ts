@@ -46,8 +46,44 @@ export namespace memory {
   // @ts-ignore: decorator
   @unsafe
   export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void {
-    var index: usize = 0;
-    var total = srcLength * count;
+    let index: usize = 0;
+    let total = srcLength * count;
+
+    if (ASC_SHRINK_LEVEL < 1) {
+      switch (<u32>srcLength) {
+        case 0: return;
+        case 1: {
+          memory.fill(dst, load<u8>(src), count);
+          return;
+        }
+        case 2: {
+          let srcVal = load<u16>(src);
+          while (index < total) {
+            store<u16>(dst + index, srcVal, 0, 1);
+            index += 2;
+          }
+          return;
+        }
+        case 4: {
+          let srcVal = load<u32>(src);
+          while (index < total) {
+            store<u32>(dst + index, srcVal, 0, 1);
+            index += 4;
+          }
+          return;
+        }
+        case 8: {
+          let srcVal = load<u64>(src);
+          while (index < total) {
+            store<u64>(dst + index, srcVal, 0, 1);
+            index += 8;
+          }
+          return;
+        }
+        default: break;
+      }
+    }
+
     while (index < total) {
       memory.copy(dst + index, src, srcLength);
       index += srcLength;
