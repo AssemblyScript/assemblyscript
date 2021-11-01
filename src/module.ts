@@ -1629,7 +1629,9 @@ export class Module {
     var cArr2 = allocPtrArray(catchBodies);
     var cStr1 = name !== null ? this.allocStringCached(name) : 0;
     var cStr2 = delegateTarget !== null ? this.allocStringCached(delegateTarget) : 0;
-    var ret = binaryen._BinaryenTry(this.ref, cStr1, body, cArr1, numCatchTags, cArr2, catchBodies.length, cStr2);
+    var ret = binaryen._BinaryenTry(
+      this.ref, cStr1, body, cArr1, numCatchTags, cArr2, catchBodies.length, cStr2
+    );
     binaryen._free(cArr2);
     binaryen._free(cArr1);
     return ret;
