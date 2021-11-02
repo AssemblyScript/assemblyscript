@@ -3107,6 +3107,7 @@ function stringLengthUTF8(str: string): usize {
     } else if (u <= 0x7FF) {
       len += 2;
     } else if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
+      i++;
       len += 4;
     } else {
       len += 3;
