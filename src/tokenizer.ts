@@ -217,24 +217,13 @@ export function tokenFromKeyword(text: string): Token {
         if (text == "do") return Token.DO;
         break;
       }
-      switch (text.charCodeAt(2)) {
-        case CharCode.b: {
-          if (text == "debugger") return Token.DEBUGGER;
-          break;
-        }
-        case CharCode.c: {
-          if (text == "declare") return Token.DECLARE;
-          break;
-        }
-        case CharCode.f: {
-          if (text == "default") return Token.DEFAULT;
-          break;
-        }
-        case CharCode.l: {
-          if (text == "delete") return Token.DELETE;
-          break;
-        }
+      if (len == 7) {
+        if (text == "default") return Token.DEFAULT;
+        if (text == "declare") return Token.DECLARE;
+        break;
       }
+      if (text == "debugger") return Token.DEBUGGER;
+      if (text == "delete") return Token.DELETE;
       break;
     }
     case CharCode.e: {
@@ -299,9 +288,9 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.n: {
-      if (text == "namespace") return Token.NAMESPACE;
       if (text == "new") return Token.NEW;
       if (text == "null") return Token.NULL;
+      if (text == "namespace") return Token.NAMESPACE;
       break;
     }
     case CharCode.o: {
@@ -310,23 +299,23 @@ export function tokenFromKeyword(text: string): Token {
     }
     case CharCode.p: {
       if (len == 7) {
-        if (text == "package") return Token.PACKAGE;
         if (text == "private") return Token.PRIVATE;
+        if (text == "package") return Token.PACKAGE;
         break;
       }
-      if (text == "protected") return Token.PROTECTED;
       if (text == "public") return Token.PUBLIC;
+      if (text == "protected") return Token.PROTECTED;
       break;
     }
     case CharCode.r: {
-      if (text == "readonly") return Token.READONLY;
       if (text == "return") return Token.RETURN;
+      if (text == "readonly") return Token.READONLY;
       break;
     }
     case CharCode.s: {
       if (len == 6) {
-        if (text == "static") return Token.STATIC;
         if (text == "switch") return Token.SWITCH;
+        if (text == "static") return Token.STATIC;
         break;
       }
       if (text == "set") return Token.SET;
@@ -335,8 +324,8 @@ export function tokenFromKeyword(text: string): Token {
     }
     case CharCode.t: {
       if (len == 4) {
-        if (text == "this") return Token.THIS;
         if (text == "true") return Token.TRUE;
+        if (text == "this") return Token.THIS;
         if (text == "type") return Token.TYPE;
         break;
       }
