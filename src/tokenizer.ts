@@ -191,23 +191,15 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.c: {
-      switch (text.charCodeAt(2)) {
-        case CharCode.s: {
-          if (text == "case") return Token.CASE;
-          break;
-        }
-        case CharCode.t: {
-          if (text == "catch") return Token.CATCH;
-          break;
-        }
-        case CharCode.n: {
-          if (text == "const") return Token.CONST;
-          break;
-        }
-        case CharCode.a: {
-          if (text == "class") return Token.CLASS;
-          break;
-        }
+      if (text.length == 4) {
+        if (text == "case") return Token.CASE;
+        break;
+      }
+      if (text.length == 5) {
+        if (text == "const") return Token.CONST;
+        if (text == "class") return Token.CLASS;
+        if (text == "catch") return Token.CATCH;
+        break;
       }
       switch (text.charCodeAt(3)) {
         case CharCode.t: {
