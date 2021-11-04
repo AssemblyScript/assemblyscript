@@ -1532,10 +1532,9 @@ export class Tokenizer extends DiagnosticEmitter {
         // try recognize potentially valid `123..identifier`
         if (this.pos + 1 < end) {
           if (!isIdentifierStart(text.charCodeAt(this.pos + 1))) {
-            this.pos++;
             this.error(
               DiagnosticCode.Identifier_expected,
-              this.range(this.pos)
+              this.range(this.pos++)
             );
           }
         }

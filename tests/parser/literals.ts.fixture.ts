@@ -109,14 +109,14 @@ c;
 d;
 a;
 b;
-// ERROR 1003: "Identifier expected." in literals.ts(87,4+0)
+// ERROR 1003: "Identifier expected." in literals.ts(87,3+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(88,2+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(89,2+0)
 // ERROR 1109: "Expression expected." in literals.ts(90,3+1)
 // ERROR 6188: "Numeric separators are not allowed here." in literals.ts(92,2+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(93,3+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(94,4+0)
-// ERROR 1003: "Identifier expected." in literals.ts(95,4+0)
+// ERROR 1003: "Identifier expected." in literals.ts(95,3+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(96,4+0)
 // ERROR 1127: "Invalid character." in literals.ts(97,3+0)
 // ERROR 1127: "Invalid character." in literals.ts(98,4+0)
