@@ -2298,6 +2298,7 @@ export class Module {
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
       if (optimizeLevel >= 2) {
         passes.push("once-reduction");
+        passes.push("inlining");
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");

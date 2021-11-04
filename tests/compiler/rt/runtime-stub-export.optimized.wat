@@ -66,9 +66,9 @@
   i32.sub
   local.tee $4
   i32.add
-  local.tee $6
-  memory.size
   local.tee $5
+  memory.size
+  local.tee $6
   i32.const 16
   i32.shl
   i32.const 15
@@ -78,8 +78,8 @@
   local.tee $7
   i32.gt_u
   if
-   local.get $5
    local.get $6
+   local.get $5
    local.get $7
    i32.sub
    i32.const 65535
@@ -89,7 +89,7 @@
    i32.const 16
    i32.shr_u
    local.tee $7
-   local.get $5
+   local.get $6
    local.get $7
    i32.gt_s
    select
@@ -106,7 +106,7 @@
     end
    end
   end
-  local.get $6
+  local.get $5
   global.set $~lib/rt/stub/offset
   local.get $3
   local.get $4

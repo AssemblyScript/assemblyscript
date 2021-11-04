@@ -230,19 +230,19 @@
   call $~lib/string/String.UTF8.encodeUnsafe@varargs
   i32.const 19
   i32.add
-  local.tee $0
+  local.tee $3
   i32.const 544106784
   i32.store
   i32.const 1212
   i32.load
   i32.const 1
   i32.shr_u
-  local.set $3
+  local.set $0
   i32.const 3
   global.set $~argumentsLength
   i32.const 1216
-  local.get $3
   local.get $0
+  local.get $3
   i32.const 4
   i32.add
   local.tee $0
