@@ -968,9 +968,9 @@ export class Tokenizer extends DiagnosticEmitter {
             if (identifierHandling != IdentifierHandling.ALWAYS) {
               let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
               if (
-                maybeKeywordToken !== Token.INVALID &&
+                maybeKeywordToken != Token.INVALID &&
                 !(
-                  identifierHandling === IdentifierHandling.PREFER &&
+                  identifierHandling == IdentifierHandling.PREFER &&
                   tokenIsAlsoIdentifier(maybeKeywordToken)
                 )
               ) {
@@ -987,7 +987,7 @@ export class Tokenizer extends DiagnosticEmitter {
           let start = pos++;
           if ( // surrogate pair?
             (c & 0xFC00) == 0xD800 && pos < end &&
-            ((text.charCodeAt(pos)) & 0xFC00) == 0xDC00
+            (text.charCodeAt(pos) & 0xFC00) == 0xDC00
           ) ++pos;
           this.error(
             DiagnosticCode.Invalid_character,
