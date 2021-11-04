@@ -249,10 +249,10 @@ export function tokenFromKeyword(text: string): Token {
     }
     case CharCode.f: {
       if (text == "false") return Token.FALSE;
-      if (text == "finally") return Token.FINALLY;
       if (text == "for") return Token.FOR;
-      if (text == "from") return Token.FROM;
       if (text == "function") return Token.FUNCTION;
+      if (text == "from") return Token.FROM;
+      if (text == "finally") return Token.FINALLY;
       break;
     }
     case CharCode.g: {
@@ -340,20 +340,9 @@ export function tokenFromKeyword(text: string): Token {
         if (text == "type") return Token.TYPE;
         break;
       }
-      switch (text.charCodeAt(1)) {
-        case CharCode.r: {
-          if (text == "try") return Token.TRY;
-          break;
-        }
-        case CharCode.h: {
-          if (text == "throw") return Token.THROW;
-          break;
-        }
-        case CharCode.y: {
-          if (text == "typeof") return Token.TYPEOF;
-          break;
-        }
-      }
+      if (text == "try") return Token.TRY;
+      if (text == "throw") return Token.THROW;
+      if (text == "typeof") return Token.TYPEOF;
       break;
     }
     case CharCode.v: {
