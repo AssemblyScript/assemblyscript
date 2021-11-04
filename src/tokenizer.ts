@@ -177,13 +177,20 @@ export enum IdentifierHandling {
 }
 
 export function tokenFromKeyword(text: string): Token {
-  assert(text.length);
+  let len = text.length;
+  assert(len);
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
+      if (len == 2) {
+        if (text == "as") return Token.AS;
+        break;
+      }
+      if (len == 5) {
+        if (text == "async") return Token.ASYNC;
+        if (text == "await") return Token.AWAIT;
+        break;
+      }
       if (text == "abstract") return Token.ABSTRACT;
-      if (text == "as") return Token.AS;
-      if (text == "async") return Token.ASYNC;
-      if (text == "await") return Token.AWAIT;
       break;
     }
     case CharCode.b: {
@@ -191,11 +198,11 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.c: {
-      if (text.length == 4) {
+      if (len == 4) {
         if (text == "case") return Token.CASE;
         break;
       }
-      if (text.length == 5) {
+      if (len == 5) {
         if (text == "const") return Token.CONST;
         if (text == "class") return Token.CLASS;
         if (text == "catch") return Token.CATCH;
@@ -206,7 +213,7 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.d: {
-      if (text.length == 2) {
+      if (len == 2) {
         if (text == "do") return Token.DO;
         break;
       }
@@ -231,8 +238,11 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.e: {
-      if (text == "else") return Token.ELSE;
-      if (text == "enum") return Token.ENUM;
+      if (len == 4) {
+        if (text == "else") return Token.ELSE;
+        if (text == "enum") return Token.ENUM;
+        break;
+      }
       if (text == "export") return Token.EXPORT;
       if (text == "extends") return Token.EXTENDS;
       break;
@@ -250,7 +260,7 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.i: {
-      if (text.length == 2) {
+      if (len == 2) {
         if (text == "if") return Token.IF;
         if (text == "in") return Token.IN;
         if (text == "is") return Token.IS;
@@ -299,8 +309,11 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.p: {
-      if (text == "package") return Token.PACKAGE;
-      if (text == "private") return Token.PRIVATE;
+      if (len == 7) {
+        if (text == "package") return Token.PACKAGE;
+        if (text == "private") return Token.PRIVATE;
+        break;
+      }
       if (text == "protected") return Token.PROTECTED;
       if (text == "public") return Token.PUBLIC;
       break;
@@ -311,14 +324,17 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.s: {
+      if (len == 6) {
+        if (text == "static") return Token.STATIC;
+        if (text == "switch") return Token.SWITCH;
+        break;
+      }
       if (text == "set") return Token.SET;
-      if (text == "static") return Token.STATIC;
       if (text == "super") return Token.SUPER;
-      if (text == "switch") return Token.SWITCH;
       break;
     }
     case CharCode.t: {
-      if (text.length == 4) {
+      if (len == 4) {
         if (text == "this") return Token.THIS;
         if (text == "true") return Token.TRUE;
         if (text == "type") return Token.TYPE;
