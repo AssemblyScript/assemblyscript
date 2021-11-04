@@ -94,6 +94,7 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 2.0b;
 1..1;
 1e1e2;
+1ee;
 1e3.5;
 1.0e1.0;
 `\unicode\xGG\u\x`;

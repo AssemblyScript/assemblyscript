@@ -95,6 +95,7 @@ b;
 1;
 10;
 e2;
+1;
 1000;
 0.5;
 10;
@@ -117,8 +118,9 @@ b;
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(94,4+0)
 // ERROR 1003: "Identifier expected." in literals.ts(95,4+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(96,4+0)
-// ERROR 1127: "Invalid character." in literals.ts(97,4+0)
-// ERROR 1127: "Invalid character." in literals.ts(98,6+0)
-// ERROR 1125: "Hexadecimal digit expected." in literals.ts(99,4+1)
-// ERROR 1125: "Hexadecimal digit expected." in literals.ts(99,12+1)
-// ERROR 1125: "Hexadecimal digit expected." in literals.ts(99,16+1)
+// ERROR 1127: "Invalid character." in literals.ts(97,3+0)
+// ERROR 1127: "Invalid character." in literals.ts(98,4+0)
+// ERROR 1127: "Invalid character." in literals.ts(99,6+0)
+// ERROR 1125: "Hexadecimal digit expected." in literals.ts(100,4+1)
+// ERROR 1125: "Hexadecimal digit expected." in literals.ts(100,12+1)
+// ERROR 1125: "Hexadecimal digit expected." in literals.ts(100,16+1)
