@@ -237,10 +237,13 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.f: {
-      if (text == "false") return Token.FALSE;
-      if (text == "for") return Token.FOR;
+      if (len <= 5) {
+        if (text == "false") return Token.FALSE;
+        if (text == "for") return Token.FOR;
+        if (text == "from") return Token.FROM;
+        break;
+      }
       if (text == "function") return Token.FUNCTION;
-      if (text == "from") return Token.FROM;
       if (text == "finally") return Token.FINALLY;
       break;
     }
