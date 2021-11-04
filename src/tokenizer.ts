@@ -1528,7 +1528,19 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepCount = this.readDecimalFloatPartial(false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      sepCount += this.readDecimalFloatPartial();
+      if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
+        // try recognize potentially valid `123..identifier`
+        if (this.pos + 1 < end) {
+          if (!isIdentifierStart(text.charCodeAt(this.pos + 1))) {
+            this.pos++;
+            this.error(
+              DiagnosticCode.Identifier_expected,
+              this.range(this.pos)
+            );
+          }
+        }
+      }
+      sepCount += this.readDecimalFloatPartial(true);
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1540,7 +1552,14 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        sepCount += this.readDecimalFloatPartial();
+        sepCount += this.readDecimalFloatPartial(true);
+        c = text.charCodeAt(this.pos);
+        if (c == CharCode.DOT) {
+          this.error(
+            DiagnosticCode.Invalid_character,
+            this.range(this.pos)
+          );
+        }
       }
     }
     let result = text.substring(start, this.pos);
@@ -1559,7 +1578,6 @@ export class Tokenizer extends DiagnosticEmitter {
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-
       if (c == CharCode._) {
         if (sepEnd == pos) {
           this.error(

@@ -56,6 +56,7 @@
 1.0e+1;
 1e-1;
 1.0e-1;
+1..toString();
 "";
 "\"";
 "123";
@@ -91,6 +92,10 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 7_;
 1.a;
 2.0b;
+1..1;
+1e1e2;
+1e3.5;
+1.0e1.0;
 `\unicode\xGG\u\x`;
 
 // technically invalid, but not handled by AS yet, TS1005: ';' expected
