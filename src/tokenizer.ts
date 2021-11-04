@@ -201,16 +201,8 @@ export function tokenFromKeyword(text: string): Token {
         if (text == "catch") return Token.CATCH;
         break;
       }
-      switch (text.charCodeAt(3)) {
-        case CharCode.t: {
-          if (text == "continue") return Token.CONTINUE;
-          break;
-        }
-        case CharCode.s: {
-          if (text == "constructor") return Token.CONSTRUCTOR;
-          break;
-        }
-      }
+      if (text == "continue") return Token.CONTINUE;
+      if (text == "constructor") return Token.CONSTRUCTOR;
       break;
     }
     case CharCode.d: {
