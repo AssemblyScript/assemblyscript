@@ -191,20 +191,59 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.c: {
-      if (text == "case") return Token.CASE;
-      if (text == "catch") return Token.CATCH;
-      if (text == "class") return Token.CLASS;
-      if (text == "continue") return Token.CONTINUE;
-      if (text == "const") return Token.CONST;
-      if (text == "constructor") return Token.CONSTRUCTOR;
+      switch (text.charCodeAt(2)) {
+        case CharCode.s: {
+          if (text == "case") return Token.CASE;
+          break;
+        }
+        case CharCode.t: {
+          if (text == "catch") return Token.CATCH;
+          break;
+        }
+        case CharCode.n: {
+          if (text == "const") return Token.CONST;
+          break;
+        }
+        case CharCode.a: {
+          if (text == "class") return Token.CLASS;
+          break;
+        }
+      }
+      switch (text.charCodeAt(3)) {
+        case CharCode.t: {
+          if (text == "continue") return Token.CONTINUE;
+          break;
+        }
+        case CharCode.s: {
+          if (text == "constructor") return Token.CONSTRUCTOR;
+          break;
+        }
+      }
       break;
     }
     case CharCode.d: {
-      if (text == "debugger") return Token.DEBUGGER;
-      if (text == "declare") return Token.DECLARE;
-      if (text == "default") return Token.DEFAULT;
-      if (text == "delete") return Token.DELETE;
-      if (text == "do") return Token.DO;
+      if (text.length == 2) {
+        if (text == "do") return Token.DO;
+        break;
+      }
+      switch (text.charCodeAt(2)) {
+        case CharCode.b: {
+          if (text == "debugger") return Token.DEBUGGER;
+          break;
+        }
+        case CharCode.c: {
+          if (text == "declare") return Token.DECLARE;
+          break;
+        }
+        case CharCode.f: {
+          if (text == "default") return Token.DEFAULT;
+          break;
+        }
+        case CharCode.l: {
+          if (text == "delete") return Token.DELETE;
+          break;
+        }
+      }
       break;
     }
     case CharCode.e: {
@@ -227,13 +266,30 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.i: {
-      if (text == "if") return Token.IF;
-      if (text == "implements") return Token.IMPLEMENTS;
-      if (text == "import") return Token.IMPORT;
-      if (text == "in") return Token.IN;
-      if (text == "instanceof") return Token.INSTANCEOF;
-      if (text == "interface") return Token.INTERFACE;
-      if (text == "is") return Token.IS;
+      if (text.length == 2) {
+        if (text == "if") return Token.IF;
+        if (text == "in") return Token.IN;
+        if (text == "is") return Token.IS;
+        break;
+      }
+      switch (text.charCodeAt(3)) {
+        case CharCode.l: {
+          if (text == "implements") return Token.IMPLEMENTS;
+          break;
+        }
+        case CharCode.o: {
+          if (text == "import") return Token.IMPORT;
+          break;
+        }
+        case CharCode.t: {
+          if (text == "instanceof") return Token.INSTANCEOF;
+          break;
+        }
+        case CharCode.e: {
+          if (text == "interface") return Token.INTERFACE;
+          break;
+        }
+      }
       break;
     }
     case CharCode.k: {
@@ -278,12 +334,26 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.t: {
-      if (text == "this") return Token.THIS;
-      if (text == "throw") return Token.THROW;
-      if (text == "true") return Token.TRUE;
-      if (text == "try") return Token.TRY;
-      if (text == "type") return Token.TYPE;
-      if (text == "typeof") return Token.TYPEOF;
+      if (text.length == 4) {
+        if (text == "this") return Token.THIS;
+        if (text == "true") return Token.TRUE;
+        if (text == "type") return Token.TYPE;
+        break;
+      }
+      switch (text.charCodeAt(1)) {
+        case CharCode.r: {
+          if (text == "try") return Token.TRY;
+          break;
+        }
+        case CharCode.h: {
+          if (text == "throw") return Token.THROW;
+          break;
+        }
+        case CharCode.y: {
+          if (text == "typeof") return Token.TYPEOF;
+          break;
+        }
+      }
       break;
     }
     case CharCode.v: {
