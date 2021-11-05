@@ -1566,6 +1566,7 @@ export class Tokenizer extends DiagnosticEmitter {
               DiagnosticCode.Invalid_character,
               this.range(this.pos)
             );
+            if (this.pos < end) ++this.pos;
           }
         }
       }

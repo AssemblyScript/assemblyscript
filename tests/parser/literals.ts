@@ -85,6 +85,7 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 
 // invalid
 1..;
+1e1..toString();
 3u8;
 4b;
 5-;
