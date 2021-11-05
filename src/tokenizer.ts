@@ -1551,6 +1551,7 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
+        sepCount += this.readDecimalFloatPartial(true);
         c = text.charCodeAt(this.pos);
         if (c == CharCode.DOT || (c | 32) == CharCode.e) {
           this.error(
@@ -1558,16 +1559,6 @@ export class Tokenizer extends DiagnosticEmitter {
             this.range(this.pos)
           );
           if (this.pos < end) ++this.pos;
-        } else {
-          sepCount += this.readDecimalFloatPartial(true);
-          c = text.charCodeAt(this.pos);
-          if (c == CharCode.DOT) {
-            this.error(
-              DiagnosticCode.Invalid_character,
-              this.range(this.pos)
-            );
-            if (this.pos < end) ++this.pos;
-          }
         }
       }
     }

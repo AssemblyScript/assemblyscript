@@ -95,7 +95,7 @@ a;
 b;
 1;
 10;
-e2;
+2;
 1;
 1000;
 5;
@@ -119,7 +119,7 @@ b;
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(94,3+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(95,4+0)
 // ERROR 1003: "Identifier expected." in literals.ts(96,3+0)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(97,4+0)
+// ERROR 1127: "Invalid character." in literals.ts(97,4+0)
 // ERROR 1127: "Invalid character." in literals.ts(98,3+0)
 // ERROR 1127: "Invalid character." in literals.ts(99,4+0)
 // ERROR 1127: "Invalid character." in literals.ts(100,6+0)
