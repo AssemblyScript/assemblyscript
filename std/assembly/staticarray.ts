@@ -1,6 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
+import { RuntimeType } from "shared/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
 import { REVERSE } from "./util/bytes";
 import { idof } from "./builtins";
@@ -90,7 +91,9 @@ export class StaticArray<T> {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     var outSize = <usize>length << alignof<T>();
     var out = changetype<StaticArray<T>>(__new(outSize, idof<StaticArray<T>>()));
-    memory.fill(changetype<usize>(out), 0, outSize);
+    if (ASC_RUNTIME != RuntimeType.Incremental) {
+      memory.fill(changetype<usize>(out), 0, outSize);
+    }
     return out;
   }
 

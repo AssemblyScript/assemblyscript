@@ -4,6 +4,7 @@ var globalScope = typeof window !== "undefined" && window || typeof global !== "
 if (typeof globalScope.ASC_TARGET === "undefined") {
 
   globalScope.ASC_TARGET = 0; // Target.JS
+  globalScope.ASC_RUNTIME = 0; // Runtime.Stub
   globalScope.ASC_NO_ASSERT = false;
   globalScope.ASC_MEMORY_BASE = 0;
   globalScope.ASC_OPTIMIZE_LEVEL = 3;

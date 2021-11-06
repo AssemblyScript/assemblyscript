@@ -20,10 +20,14 @@
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/rt/__rtti_base i32 (i32.const 512))
  (global $~lib/memory/__data_end i32 (i32.const 564))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16948))
@@ -2721,7 +2725,7 @@
   if
    i32.const 432
    i32.const 480
-   i32.const 65
+   i32.const 69
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -2743,10 +2747,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<i32>#set:buffer

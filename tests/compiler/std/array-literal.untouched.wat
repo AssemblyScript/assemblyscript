@@ -11,6 +11,9 @@
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/array-literal/staticArrayI8 i32 (i32.const 64))
+ (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
  (global $std/array-literal/staticArrayI32 i32 (i32.const 320))
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 400))
  (global $std/array-literal/i (mut i32) (i32.const 0))
@@ -69,7 +72,7 @@
   if
    i32.const 176
    i32.const 240
-   i32.const 107
+   i32.const 113
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -99,7 +102,7 @@
   if
    i32.const 176
    i32.const 240
-   i32.const 107
+   i32.const 113
    i32.const 42
    call $~lib/builtins/abort
    unreachable

@@ -16,6 +16,9 @@
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
+ (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -29,6 +32,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/ASC_RUNTIME i32 (i32.const 2))
  (global $std-wasi/crypto/ab (mut i32) (i32.const 0))
  (global $std-wasi/crypto/buf (mut i32) (i32.const 0))
  (global $~lib/process/process.stdout i32 (i32.const 1))
@@ -6166,7 +6170,7 @@
   if
    i32.const 144
    i32.const 192
-   i32.const 49
+   i32.const 52
    i32.const 43
    call $~lib/wasi/index/abort
    unreachable
@@ -6177,10 +6181,10 @@
   call $~lib/rt/itcms/__new
   local.tee $2
   i32.store
-  local.get $2
-  i32.const 0
-  local.get $1
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  i32.ne
+  drop
   local.get $2
   local.set $3
   global.get $~lib/memory/__stack_pointer
@@ -6855,7 +6859,7 @@
   if
    i32.const 144
    i32.const 192
-   i32.const 18
+   i32.const 19
    i32.const 57
    call $~lib/wasi/index/abort
    unreachable
@@ -6869,10 +6873,10 @@
   call $~lib/rt/itcms/__new
   local.tee $3
   i32.store offset=4
-  local.get $3
-  i32.const 0
-  local.get $1
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#set:buffer

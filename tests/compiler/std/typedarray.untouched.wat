@@ -64,6 +64,9 @@
  (global $~lib/typedarray/Uint64Array.BYTES_PER_ELEMENT i32 (i32.const 8))
  (global $~lib/typedarray/Float32Array.BYTES_PER_ELEMENT i32 (i32.const 4))
  (global $~lib/typedarray/Float64Array.BYTES_PER_ELEMENT i32 (i32.const 8))
+ (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -76,6 +79,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/ASC_RUNTIME i32 (i32.const 2))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
@@ -5974,7 +5978,7 @@
   if
    i32.const 336
    i32.const 736
-   i32.const 107
+   i32.const 113
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -6149,7 +6153,7 @@
   if
    i32.const 336
    i32.const 736
-   i32.const 107
+   i32.const 113
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -62639,7 +62643,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 18
+   i32.const 19
    i32.const 57
    call $~lib/builtins/abort
    unreachable
@@ -62653,10 +62657,10 @@
   call $~lib/rt/itcms/__new
   local.tee $3
   i32.store offset=4
-  local.get $3
-  i32.const 0
-  local.get $1
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#set:buffer
@@ -69675,7 +69679,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 49
+   i32.const 52
    i32.const 43
    call $~lib/builtins/abort
    unreachable
@@ -69686,10 +69690,10 @@
   call $~lib/rt/itcms/__new
   local.tee $2
   i32.store
-  local.get $2
-  i32.const 0
-  local.get $1
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  i32.ne
+  drop
   local.get $2
   local.set $3
   global.get $~lib/memory/__stack_pointer

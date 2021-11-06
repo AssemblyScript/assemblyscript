@@ -158,7 +158,7 @@ export namespace CommonNames {
   export const constructor = "constructor";
   // constants
   export const ASC_TARGET = "ASC_TARGET";
-  export const ASC_NO_TREESHAKING = "ASC_NO_TREESHAKING";
+  export const ASC_RUNTIME = "ASC_RUNTIME";
   export const ASC_NO_ASSERT = "ASC_NO_ASSERT";
   export const ASC_MEMORY_BASE = "ASC_MEMORY_BASE";
   export const ASC_TABLE_BASE = "ASC_TABLE_BASE";
@@ -256,4 +256,5 @@ export namespace CommonNames {
 // shared
 export { Feature, featureToString } from "../std/assembly/shared/feature";
 export { Target } from "../std/assembly/shared/target";
+export { RuntimeType } from "../std/assembly/shared/runtime";
 export { Typeinfo, TypeinfoFlags } from "../std/assembly/shared/typeinfo";

@@ -6,6 +6,9 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 284))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16668))
@@ -32,7 +35,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 107
+   i32.const 113
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -400,7 +403,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 107
+   i32.const 113
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -425,7 +428,7 @@
   if
    i32.const 144
    i32.const 96
-   i32.const 111
+   i32.const 117
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -456,7 +459,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 107
+   i32.const 113
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -481,7 +484,7 @@
   if
    i32.const 144
    i32.const 96
-   i32.const 111
+   i32.const 117
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -512,7 +515,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 107
+   i32.const 113
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -537,7 +540,7 @@
   if
    i32.const 144
    i32.const 96
-   i32.const 111
+   i32.const 117
    i32.const 40
    call $~lib/builtins/abort
    unreachable
