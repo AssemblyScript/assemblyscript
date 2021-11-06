@@ -94,9 +94,10 @@ function loadAssemblyScriptJS() {
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
           typeCheck: false,
           transpileOnly: true,
+          compilerHost: true,
           files: true,
           skipIgnore: true,
-          compilerOptions: { target: "ES2016" }
+          compilerOptions: { target: "ES2017" }
         });
         dynrequire("../src/glue/js");
         exports = dynrequire("../src");
