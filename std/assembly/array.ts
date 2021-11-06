@@ -1,7 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK_MAXSIZE } from "./rt/common";
-import { RuntimeType } from "shared/runtime";
+import { Runtime } from "shared/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
 import { REVERSE } from "./util/bytes";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
@@ -23,8 +23,9 @@ function ensureCapacity(array: usize, newSize: usize, alignLog2: u32, canGrow: b
     let newCapacity = max(newSize, MIN_SIZE) << alignLog2;
     if (canGrow) newCapacity = max(min(oldCapacity << 1, BLOCK_MAXSIZE), newCapacity);
     let newData = __renew(oldData, newCapacity);
-    // Incremental runtime __new / __renew already init memory to zero
-    if (ASC_RUNTIME != RuntimeType.Incremental) {
+    // __new / __renew already init memory range as zeros in Incremental runtime.
+    // So try to avoid this.
+    if (ASC_RUNTIME != Runtime.Incremental) {
       memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     }
     if (newData !== oldData) { // oldData has been free'd
@@ -70,7 +71,7 @@ export class Array<T> {
     // reserve capacity for at least MIN_SIZE elements
     var bufferSize = max(<usize>length, MIN_SIZE) << alignof<T>();
     var buffer = changetype<ArrayBuffer>(__new(bufferSize, idof<ArrayBuffer>()));
-    if (ASC_RUNTIME != RuntimeType.Incremental) {
+    if (ASC_RUNTIME != Runtime.Incremental) {
       memory.fill(changetype<usize>(buffer), 0, bufferSize);
     }
     this.buffer = buffer; // links

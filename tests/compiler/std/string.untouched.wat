@@ -25,9 +25,9 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/string/str (mut i32) (i32.const 32))
  (global $std/string/nullStr (mut i32) (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
- (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -7325,7 +7325,7 @@
    call $~lib/rt/itcms/__renew
    local.set $8
    i32.const 2
-   global.get $~lib/shared/runtime/RuntimeType.Incremental
+   global.get $~lib/shared/runtime/Runtime.Incremental
    i32.ne
    drop
    local.get $8
@@ -27000,7 +27000,7 @@
   if
    i32.const 240
    i32.const 14224
-   i32.const 113
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -27025,7 +27025,7 @@
   if
    i32.const 14272
    i32.const 14224
-   i32.const 117
+   i32.const 118
    i32.const 40
    call $~lib/builtins/abort
    unreachable

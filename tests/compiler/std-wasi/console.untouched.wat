@@ -23,9 +23,9 @@
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
  (global $~lib/process/process.stderr i32 (i32.const 2))
- (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
- (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/bindings/wasi/tempbuf i32 (i32.const 112))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -6140,7 +6140,7 @@
   local.tee $2
   i32.store
   i32.const 2
-  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $2

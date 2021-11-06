@@ -64,9 +64,9 @@
  (global $~lib/typedarray/Uint64Array.BYTES_PER_ELEMENT i32 (i32.const 8))
  (global $~lib/typedarray/Float32Array.BYTES_PER_ELEMENT i32 (i32.const 4))
  (global $~lib/typedarray/Float64Array.BYTES_PER_ELEMENT i32 (i32.const 8))
- (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
- (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -5978,7 +5978,7 @@
   if
    i32.const 336
    i32.const 736
-   i32.const 113
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -6153,7 +6153,7 @@
   if
    i32.const 336
    i32.const 736
-   i32.const 113
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -62658,7 +62658,7 @@
   local.tee $3
   i32.store offset=4
   i32.const 2
-  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $0
@@ -69691,7 +69691,7 @@
   local.tee $2
   i32.store
   i32.const 2
-  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $2

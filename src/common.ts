@@ -256,5 +256,5 @@ export namespace CommonNames {
 // shared
 export { Feature, featureToString } from "../std/assembly/shared/feature";
 export { Target } from "../std/assembly/shared/target";
-export { RuntimeType } from "../std/assembly/shared/runtime";
+export { Runtime } from "../std/assembly/shared/runtime";
 export { Typeinfo, TypeinfoFlags } from "../std/assembly/shared/typeinfo";

@@ -29,9 +29,9 @@
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
- (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -5319,7 +5319,7 @@
    call $~lib/rt/itcms/__renew
    local.set $8
    i32.const 2
-   global.get $~lib/shared/runtime/RuntimeType.Incremental
+   global.get $~lib/shared/runtime/Runtime.Incremental
    i32.ne
    drop
    local.get $8
@@ -11335,7 +11335,7 @@
   if
    i32.const 368
    i32.const 5472
-   i32.const 113
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -11360,7 +11360,7 @@
   if
    i32.const 5520
    i32.const 5472
-   i32.const 117
+   i32.const 118
    i32.const 40
    call $~lib/builtins/abort
    unreachable

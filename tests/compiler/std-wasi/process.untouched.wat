@@ -25,9 +25,9 @@
  (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
  (import "wasi_snapshot_preview1" "fd_read" (func $~lib/bindings/wasi_snapshot_preview1/fd_read (param i32 i32 i32 i32) (result i32)))
  (global $~lib/process/process.stdout i32 (i32.const 1))
- (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
- (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/bindings/wasi/tempbuf i32 (i32.const 64))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -5367,7 +5367,7 @@
    call $~lib/rt/itcms/__renew
    local.set $8
    i32.const 2
-   global.get $~lib/shared/runtime/RuntimeType.Incremental
+   global.get $~lib/shared/runtime/Runtime.Incremental
    i32.ne
    drop
    local.get $8
@@ -5418,7 +5418,7 @@
    if
     i32.const 3760
     i32.const 3584
-    i32.const 129
+    i32.const 130
     i32.const 22
     call $~lib/wasi/index/abort
     unreachable
@@ -7745,7 +7745,7 @@
   if
    i32.const 3536
    i32.const 3584
-   i32.const 69
+   i32.const 70
    i32.const 60
    call $~lib/wasi/index/abort
    unreachable
@@ -7768,7 +7768,7 @@
   local.tee $5
   i32.store offset=4
   i32.const 2
-  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $0
@@ -8172,7 +8172,7 @@
   if
    i32.const 3760
    i32.const 3584
-   i32.const 113
+   i32.const 114
    i32.const 42
    call $~lib/wasi/index/abort
    unreachable
@@ -8197,7 +8197,7 @@
   if
    i32.const 3952
    i32.const 3584
-   i32.const 117
+   i32.const 118
    i32.const 40
    call $~lib/wasi/index/abort
    unreachable
@@ -8239,7 +8239,7 @@
   local.tee $2
   i32.store
   i32.const 2
-  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $2

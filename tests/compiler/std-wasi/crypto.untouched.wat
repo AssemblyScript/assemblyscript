@@ -16,9 +16,9 @@
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
- (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
- (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -6182,7 +6182,7 @@
   local.tee $2
   i32.store
   i32.const 2
-  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $2
@@ -6874,7 +6874,7 @@
   local.tee $3
   i32.store offset=4
   i32.const 2
-  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $0

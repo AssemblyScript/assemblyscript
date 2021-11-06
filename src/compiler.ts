@@ -64,7 +64,7 @@ import {
   CommonNames,
   Feature,
   Target,
-  RuntimeType,
+  Runtime,
   featureToString
 } from "./common";
 
@@ -214,7 +214,7 @@ export class Options {
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
   /** Runtime type. Defaults to Incremental GC. */
-  runtimeType: RuntimeType = RuntimeType.Incremental;
+  runtime: Runtime = Runtime.Incremental;
   /** If true, replaces assertions with nops. */
   noAssert: bool = false;
   /** It true, exports the memory to the embedder. */

@@ -9,9 +9,9 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/shared/runtime/RuntimeType.Stub i32 (i32.const 0))
- (global $~lib/shared/runtime/RuntimeType.Minimal i32 (i32.const 1))
- (global $~lib/shared/runtime/RuntimeType.Incremental i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -3812,7 +3812,7 @@
    call $~lib/rt/itcms/__renew
    local.set $8
    i32.const 2
-   global.get $~lib/shared/runtime/RuntimeType.Incremental
+   global.get $~lib/shared/runtime/Runtime.Incremental
    i32.ne
    drop
    local.get $8
@@ -3863,7 +3863,7 @@
    if
     i32.const 320
     i32.const 80
-    i32.const 129
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -4191,7 +4191,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 69
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -4214,7 +4214,7 @@
   local.tee $5
   i32.store offset=4
   i32.const 2
-  global.get $~lib/shared/runtime/RuntimeType.Incremental
+  global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
   local.get $0
@@ -4286,7 +4286,7 @@
   if
    i32.const 320
    i32.const 80
-   i32.const 113
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4311,7 +4311,7 @@
   if
    i32.const 528
    i32.const 80
-   i32.const 117
+   i32.const 118
    i32.const 40
    call $~lib/builtins/abort
    unreachable

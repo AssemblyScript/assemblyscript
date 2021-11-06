@@ -33,7 +33,7 @@
  * When compiling to WebAssembly `glue/wasm/index.ts` must be included.
  */
 
-import { Target, RuntimeType, Feature } from "./common";
+import { Target, Runtime, Feature } from "./common";
 import { Compiler, Options } from "./compiler";
 import { IDLBuilder, TSDBuilder } from "./definitions";
 import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
@@ -52,8 +52,8 @@ export function setTarget(options: Options, target: Target): void {
   options.target = target;
 }
 
-export function setRuntime(options: Options, runtimeType: RuntimeType): void {
-  options.runtimeType = runtimeType;
+export function setRuntime(options: Options, runtime: Runtime): void {
+  options.runtime = runtime;
 }
 
 /** Sets the `noAssert` option. */
