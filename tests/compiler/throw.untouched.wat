@@ -217,7 +217,7 @@
     if
      i32.const 0
      i32.const 368
-     i32.const 159
+     i32.const 172
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -283,7 +283,7 @@
    if
     i32.const 0
     i32.const 368
-    i32.const 127
+    i32.const 140
     i32.const 18
     call $~lib/builtins/abort
     unreachable
@@ -300,7 +300,7 @@
   if
    i32.const 0
    i32.const 368
-   i32.const 131
+   i32.const 144
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -389,7 +389,7 @@
    if (result i32)
     i32.const 0
     i32.const 368
-    i32.const 147
+    i32.const 160
     i32.const 30
     call $~lib/builtins/abort
     unreachable
@@ -1602,7 +1602,7 @@
     if
      i32.const 0
      i32.const 368
-     i32.const 228
+     i32.const 241
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -1626,6 +1626,9 @@
  )
  (func $~lib/rt/itcms/__collect
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i64)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -1659,13 +1662,38 @@
     br $while-continue|1
    end
   end
-  global.get $~lib/rt/itcms/total
-  i64.extend_i32_u
-  i64.const 200
-  i64.mul
-  i64.const 100
-  i64.div_u
-  i32.wrap_i64
+  block $~lib/rt/itcms/muldiv|inlined.0 (result i32)
+   global.get $~lib/rt/itcms/total
+   local.set $2
+   i32.const 200
+   local.set $1
+   i32.const 100
+   local.set $0
+   local.get $2
+   i64.extend_i32_u
+   local.get $1
+   i64.extend_i32_u
+   i64.mul
+   local.set $3
+   local.get $3
+   i64.const 4294967295
+   i64.le_u
+   if
+    local.get $3
+    i32.wrap_i64
+    local.get $0
+    i32.div_u
+    br $~lib/rt/itcms/muldiv|inlined.0
+   else
+    local.get $3
+    local.get $0
+    i64.extend_i32_u
+    i64.div_u
+    i32.wrap_i64
+    br $~lib/rt/itcms/muldiv|inlined.0
+   end
+   unreachable
+  end
   i32.const 1024
   i32.add
   global.set $~lib/rt/itcms/threshold

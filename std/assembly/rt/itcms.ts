@@ -51,6 +51,19 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 // @ts-ignore: decorator
 @lazy var iter: Object; // null
 
+/** Perform overflow resistant `a * b / c` operation */
+// @ts-ignore: decorator
+@inline function muldiv(a: usize, b: usize, c: usize): usize {
+  let p = <u64>a * <u64>b;
+  if (p <= 0xFFFFFFFF) {
+    // use cheaper 32-bit division
+    return <usize>(<u32>p / <u32>c);
+  } else {
+    return <usize>(p / <u64>c);
+  }
+}
+
+
 function initLazy(space: Object): Object {
   space.nextWithColor = changetype<usize>(space);
   space.prev = space;
@@ -372,7 +385,7 @@ export function __collect(): void {
   // perform a full cycle
   step();
   while (state != STATE_IDLE) step();
-  threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
+  threshold = muldiv(total, IDLEFACTOR, 100) + GRANULARITY;
   if (TRACE) trace("GC (full) done at cur/max", 2, total, memory.size() << 16);
   if (RTRACE || PROFILE) oncollect(total);
 }
@@ -402,7 +415,7 @@ function interrupt(): void {
     budget -= step();
     if (state == STATE_IDLE) {
       if (TRACE) trace("└ GC (auto) done at cur/max", 2, total, memory.size() << 16);
-      threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
+      threshold = muldiv(total, IDLEFACTOR, 100) + GRANULARITY;
       if (PROFILE) onyield(total);
       return;
     }

@@ -2223,7 +2223,7 @@
     if
      i32.const 0
      i32.const 4992
-     i32.const 159
+     i32.const 172
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -2256,7 +2256,7 @@
    if
     i32.const 0
     i32.const 4992
-    i32.const 147
+    i32.const 160
     i32.const 30
     call $~lib/wasi/index/abort
     unreachable
@@ -2283,7 +2283,7 @@
     if
      i32.const 0
      i32.const 4992
-     i32.const 127
+     i32.const 140
      i32.const 18
      call $~lib/wasi/index/abort
      unreachable
@@ -2297,7 +2297,7 @@
    if
     i32.const 0
     i32.const 4992
-    i32.const 131
+    i32.const 144
     i32.const 16
     call $~lib/wasi/index/abort
     unreachable
@@ -2549,7 +2549,7 @@
     if
      i32.const 0
      i32.const 4992
-     i32.const 228
+     i32.const 241
      i32.const 20
      call $~lib/wasi/index/abort
      unreachable
@@ -2772,14 +2772,15 @@
  )
  (func $~lib/rt/itcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
+  (local $3 i64)
+  (local $4 i32)
   local.get $0
   i32.const 1073741804
   i32.ge_u
   if
    i32.const 4400
    i32.const 4992
-   i32.const 260
+   i32.const 273
    i32.const 31
    call $~lib/wasi/index/abort
    unreachable
@@ -2803,9 +2804,20 @@
       i64.extend_i32_u
       i64.const 200
       i64.mul
-      i64.const 100
-      i64.div_u
-      i32.wrap_i64
+      local.tee $3
+      i64.const 4294967295
+      i64.le_u
+      if (result i32)
+       local.get $3
+       i32.wrap_i64
+       i32.const 100
+       i32.div_u
+      else
+       local.get $3
+       i64.const 100
+       i64.div_u
+       i32.wrap_i64
+      end
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
@@ -2848,17 +2860,17 @@
   global.get $~lib/rt/itcms/fromSpace
   local.tee $1
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $2
   global.get $~lib/rt/itcms/white
   local.get $1
   i32.or
   i32.store offset=4
   local.get $2
-  local.get $3
+  local.get $4
   i32.store offset=8
-  local.get $3
-  local.get $3
+  local.get $4
+  local.get $4
   i32.load offset=4
   i32.const 3
   i32.and
@@ -4786,7 +4798,7 @@
   if
    i32.const 0
    i32.const 4992
-   i32.const 294
+   i32.const 307
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable

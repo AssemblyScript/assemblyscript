@@ -3093,7 +3093,7 @@
     if
      i32.const 0
      i32.const 3632
-     i32.const 159
+     i32.const 172
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -3159,7 +3159,7 @@
    if
     i32.const 0
     i32.const 3632
-    i32.const 127
+    i32.const 140
     i32.const 18
     call $~lib/wasi/index/abort
     unreachable
@@ -3176,7 +3176,7 @@
   if
    i32.const 0
    i32.const 3632
-   i32.const 131
+   i32.const 144
    i32.const 16
    call $~lib/wasi/index/abort
    unreachable
@@ -3265,7 +3265,7 @@
    if (result i32)
     i32.const 0
     i32.const 3632
-    i32.const 147
+    i32.const 160
     i32.const 30
     call $~lib/wasi/index/abort
     unreachable
@@ -3533,7 +3533,7 @@
     if
      i32.const 0
      i32.const 3632
-     i32.const 228
+     i32.const 241
      i32.const 20
      call $~lib/wasi/index/abort
      unreachable
@@ -3557,6 +3557,10 @@
  )
  (func $~lib/rt/itcms/interrupt
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i64)
   i32.const 0
   drop
   i32.const 0
@@ -3578,13 +3582,38 @@
    if
     i32.const 0
     drop
-    global.get $~lib/rt/itcms/total
-    i64.extend_i32_u
-    i64.const 200
-    i64.mul
-    i64.const 100
-    i64.div_u
-    i32.wrap_i64
+    block $~lib/rt/itcms/muldiv|inlined.0 (result i32)
+     global.get $~lib/rt/itcms/total
+     local.set $3
+     i32.const 200
+     local.set $2
+     i32.const 100
+     local.set $1
+     local.get $3
+     i64.extend_i32_u
+     local.get $2
+     i64.extend_i32_u
+     i64.mul
+     local.set $4
+     local.get $4
+     i64.const 4294967295
+     i64.le_u
+     if
+      local.get $4
+      i32.wrap_i64
+      local.get $1
+      i32.div_u
+      br $~lib/rt/itcms/muldiv|inlined.0
+     else
+      local.get $4
+      local.get $1
+      i64.extend_i32_u
+      i64.div_u
+      i32.wrap_i64
+      br $~lib/rt/itcms/muldiv|inlined.0
+     end
+     unreachable
+    end
     i32.const 1024
     i32.add
     global.set $~lib/rt/itcms/threshold
@@ -3862,7 +3891,7 @@
   if
    i32.const 3328
    i32.const 3632
-   i32.const 260
+   i32.const 273
    i32.const 31
    call $~lib/wasi/index/abort
    unreachable
@@ -3921,7 +3950,7 @@
   if
    i32.const 0
    i32.const 3632
-   i32.const 294
+   i32.const 307
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable

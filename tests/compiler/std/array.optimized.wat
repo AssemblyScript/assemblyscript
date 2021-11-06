@@ -769,7 +769,7 @@
     if
      i32.const 0
      i32.const 1216
-     i32.const 159
+     i32.const 172
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -802,7 +802,7 @@
    if
     i32.const 0
     i32.const 1216
-    i32.const 147
+    i32.const 160
     i32.const 30
     call $~lib/builtins/abort
     unreachable
@@ -829,7 +829,7 @@
     if
      i32.const 0
      i32.const 1216
-     i32.const 127
+     i32.const 140
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -843,7 +843,7 @@
    if
     i32.const 0
     i32.const 1216
-    i32.const 131
+    i32.const 144
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1735,7 +1735,7 @@
     if
      i32.const 0
      i32.const 1216
-     i32.const 228
+     i32.const 241
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -2292,14 +2292,15 @@
  )
  (func $~lib/rt/itcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
+  (local $3 i64)
+  (local $4 i32)
   local.get $0
   i32.const 1073741804
   i32.ge_u
   if
    i32.const 1152
    i32.const 1216
-   i32.const 260
+   i32.const 273
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -2323,9 +2324,20 @@
       i64.extend_i32_u
       i64.const 200
       i64.mul
-      i64.const 100
-      i64.div_u
-      i32.wrap_i64
+      local.tee $3
+      i64.const 4294967295
+      i64.le_u
+      if (result i32)
+       local.get $3
+       i32.wrap_i64
+       i32.const 100
+       i32.div_u
+      else
+       local.get $3
+       i64.const 100
+       i64.div_u
+       i32.wrap_i64
+      end
       i32.const 1024
       i32.add
       global.set $~lib/rt/itcms/threshold
@@ -2368,17 +2380,17 @@
   global.get $~lib/rt/itcms/fromSpace
   local.tee $1
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $2
   global.get $~lib/rt/itcms/white
   local.get $1
   i32.or
   i32.store offset=4
   local.get $2
-  local.get $3
+  local.get $4
   i32.store offset=8
-  local.get $3
-  local.get $3
+  local.get $4
+  local.get $4
   i32.load offset=4
   i32.const 3
   i32.and
@@ -14397,8 +14409,8 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 f64)
-  (local $11 i64)
+  (local $10 i64)
+  (local $11 f64)
   (local $12 f32)
   (local $13 i32)
   (local $14 i32)
@@ -19305,11 +19317,11 @@
       local.get $0
       i32.add
       f64.load
-      local.tee $10
+      local.tee $11
       f64.const nan:0x8000000000000
       f64.eq
-      local.get $10
-      local.get $10
+      local.get $11
+      local.get $11
       f64.ne
       i32.or
       br_if $__inlined_func$~lib/array/Array<f64>#includes
@@ -23905,51 +23917,51 @@
    i64.const -7046029254386353131
    call $~lib/bindings/Math/random
    i64.reinterpret_f64
-   local.tee $11
-   local.get $11
+   local.tee $10
+   local.get $10
    i64.eqz
    select
-   local.tee $11
+   local.tee $10
    i64.const 33
    i64.shr_u
-   local.get $11
+   local.get $10
    i64.xor
    i64.const -49064778989728563
    i64.mul
-   local.tee $11
+   local.tee $10
    i64.const 33
    i64.shr_u
-   local.get $11
+   local.get $10
    i64.xor
    i64.const -4265267296055464877
    i64.mul
-   local.tee $11
+   local.tee $10
    i64.const 33
    i64.shr_u
-   local.get $11
+   local.get $10
    i64.xor
    global.set $~lib/math/random_state0_64
    global.get $~lib/math/random_state0_64
    i64.const -1
    i64.xor
-   local.tee $11
+   local.tee $10
    i64.const 33
    i64.shr_u
-   local.get $11
+   local.get $10
    i64.xor
    i64.const -49064778989728563
    i64.mul
-   local.tee $11
+   local.tee $10
    i64.const 33
    i64.shr_u
-   local.get $11
+   local.get $10
    i64.xor
    i64.const -4265267296055464877
    i64.mul
-   local.tee $11
+   local.tee $10
    i64.const 33
    i64.shr_u
-   local.get $11
+   local.get $10
    i64.xor
    global.set $~lib/math/random_state1_64
    i32.const 1
@@ -24464,15 +24476,15 @@
       local.get $0
       local.get $62
       call $~lib/array/Array<f64>#__get
-      local.tee $10
-      local.get $10
+      local.tee $11
+      local.get $11
       f64.ne
       if (result i32)
        local.get $1
        local.get $62
        call $~lib/array/Array<f64>#__get
-       local.tee $10
-       local.get $10
+       local.tee $11
+       local.get $11
        f64.ne
       else
        i32.const 0
@@ -28161,9 +28173,20 @@
    i64.extend_i32_u
    i64.const 200
    i64.mul
-   i64.const 100
-   i64.div_u
-   i32.wrap_i64
+   local.tee $10
+   i64.const 4294967295
+   i64.le_u
+   if (result i32)
+    local.get $10
+    i32.wrap_i64
+    i32.const 100
+    i32.div_u
+   else
+    local.get $10
+    i64.const 100
+    i64.div_u
+    i32.wrap_i64
+   end
    i32.const 1024
    i32.add
    global.set $~lib/rt/itcms/threshold
@@ -36146,7 +36169,7 @@
   if
    i32.const 0
    i32.const 1216
-   i32.const 294
+   i32.const 307
    i32.const 14
    call $~lib/builtins/abort
    unreachable
