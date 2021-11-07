@@ -35,6 +35,8 @@ declare type valueof<T extends unknown[]> = T[0];
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
 declare const ASC_TARGET: i32;
+/** Runtime type. 0 = Stub, 1 = Minimal, 2 = Incremental. */
+declare const ASC_RUNTIME: i32;
 /** Provided noAssert option. */
 declare const ASC_NO_ASSERT: bool;
 /** Provided memoryBase option. */

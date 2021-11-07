@@ -1,6 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
+import { Runtime } from "shared/runtime";
 import { idof } from "./builtins";
 import { E_INVALIDLENGTH } from "./util/error";
 
@@ -17,7 +18,9 @@ export abstract class ArrayBufferView {
   protected constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     var buffer = changetype<ArrayBuffer>(__new(length = length << alignLog2, idof<ArrayBuffer>()));
-    memory.fill(changetype<usize>(buffer), 0, <usize>length);
+    if (ASC_RUNTIME != Runtime.Incremental) {
+      memory.fill(changetype<usize>(buffer), 0, <usize>length);
+    }
     this.buffer = buffer; // links
     this.dataStart = changetype<usize>(buffer);
     this.byteLength = length;
@@ -48,7 +51,9 @@ export abstract class ArrayBufferView {
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE) throw new RangeError(E_INVALIDLENGTH);
     var buffer = changetype<ArrayBuffer>(__new(<usize>length, idof<ArrayBuffer>()));
-    memory.fill(changetype<usize>(buffer), 0, <usize>length);
+    if (ASC_RUNTIME != Runtime.Incremental) {
+      memory.fill(changetype<usize>(buffer), 0, <usize>length);
+    }
     return buffer;
   }
 

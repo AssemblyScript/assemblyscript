@@ -440,9 +440,15 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Set up options
-  var program;
+  var program, runtime;
   const compilerOptions = __pin(assemblyscript.newOptions());
+  switch (opts.runtime) {
+    case "stub": runtime = 0; break;
+    case "minimal": runtime = 1; break;
+    default: runtime = 2; break;
+  }
   assemblyscript.setTarget(compilerOptions, 0);
+  assemblyscript.setRuntime(compilerOptions, runtime);
   assemblyscript.setNoAssert(compilerOptions, opts.noAssert);
   assemblyscript.setExportMemory(compilerOptions, !opts.noExportMemory);
   assemblyscript.setImportMemory(compilerOptions, opts.importMemory);
