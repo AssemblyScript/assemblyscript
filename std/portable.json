@@ -6,6 +6,7 @@
     "allowJs": true,
     "downlevelIteration": true,
     "preserveConstEnums": true,
+    "skipLibCheck": true,
     "typeRoots": [ "types" ],
     "types": [ "portable" ],
     "lib": ["esnext", "esnext.string"]
