@@ -92,10 +92,17 @@ function loadAssemblyScriptJS() {
       try { // `asc` on the command line without dist files (unnecessary in recent node)
         dynrequire("ts-node").register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
+          transpileOnly: true,
           compilerHost: true,
           files: true,
           skipIgnore: true,
-          compilerOptions: { target: "ES2017" }
+          compilerOptions: {
+            paths: {
+              "commonjs": "../src/glue/js"
+            },
+            module: "esnext",
+            target: "es2017"
+          }
         });
         dynrequire("../src/glue/js");
         exports = dynrequire("../src");

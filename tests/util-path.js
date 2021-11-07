@@ -3,8 +3,9 @@ const assert = require("assert");
 
 require("ts-node").register({
   project: path.join(__dirname, "..", "src", "tsconfig.json"),
+  transpileOnly: true,
   compilerHost: true,
-  files: true,
+  files: true
 });
 require("../src/glue/js");
 
