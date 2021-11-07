@@ -92,8 +92,6 @@ function loadAssemblyScriptJS() {
       try { // `asc` on the command line without dist files (unnecessary in recent node)
         dynrequire("ts-node").register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
-          typeCheck: false,
-          transpileOnly: true,
           compilerHost: true,
           files: true,
           skipIgnore: true,

@@ -4,6 +4,7 @@
     "outDir": "../out",
     "allowJs": false,
     "sourceMap": true,
+    "skipLibCheck": true,
     "target": "esnext",
     "strict": true
   },

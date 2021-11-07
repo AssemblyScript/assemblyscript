@@ -23,7 +23,8 @@
   "dependencies": {
     "binaryen": "102.0.0-nightly.20211028",
     "long": "^4.0.0",
-    "source-map-support": "^0.5.20"
+    "source-map-support": "^0.5.20",
+    "ts-node": "^10.4.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.4",
