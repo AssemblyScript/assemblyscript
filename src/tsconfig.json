@@ -14,7 +14,8 @@
   ],
   "exclude": [
     "../**/node_modules/",
-    "../lib",
+    "../tests/**",
+    "../lib/**",
     "./glue/wasm/**"
   ]
 }
