@@ -4898,7 +4898,7 @@
     if
      i32.const 1360
      i32.const 1760
-     i32.const 107
+     i32.const 114
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -4931,7 +4931,7 @@
   if
    i32.const 1360
    i32.const 1760
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -63582,7 +63582,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 18
+   i32.const 19
    i32.const 57
    call $~lib/builtins/abort
    unreachable
@@ -63596,10 +63596,6 @@
   call $~lib/rt/itcms/__new
   local.tee $2
   i32.store offset=4
-  local.get $2
-  i32.const 0
-  local.get $1
-  call $~lib/memory/memory.fill
   local.get $0
   local.get $2
   i32.store
@@ -65775,7 +65771,6 @@
   local.get $1
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (param $0 i32) (result i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -65800,7 +65795,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 49
+   i32.const 52
    i32.const 43
    call $~lib/builtins/abort
    unreachable
@@ -65809,17 +65804,13 @@
   local.get $0
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $1
+  local.tee $0
   i32.store
-  local.get $1
-  i32.const 0
-  local.get $0
-  call $~lib/memory/memory.fill
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $0
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)

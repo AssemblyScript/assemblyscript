@@ -12,6 +12,9 @@
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -3734,7 +3737,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3760,7 +3763,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3786,7 +3789,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3812,7 +3815,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3854,7 +3857,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4630,7 +4633,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4676,7 +4679,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4722,7 +4725,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4747,7 +4750,7 @@
   if
    i32.const 976
    i32.const 464
-   i32.const 111
+   i32.const 118
    i32.const 40
    call $~lib/builtins/abort
    unreachable
