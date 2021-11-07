@@ -49,7 +49,13 @@ if (argv.length) {
   }
 }
 
-require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
+require("ts-node").register({
+  project: path.join(__dirname, "..", "src", "tsconfig.json"),
+  typeCheck: false,
+  transpileOnly: true,
+  compilerHost: true,
+  files: true
+});
 require("../src/glue/js");
 
 const { Program, Options } = require("../src");
