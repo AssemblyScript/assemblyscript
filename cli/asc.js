@@ -97,8 +97,8 @@ function loadAssemblyScriptJS() {
           compilerHost: true,
           files: true,
           skipIgnore: true,
-          paths: {
-            "commonjs": ["../src/glue/js"]
+          moduleTypes: {
+            "../src/glue/js/*": "cjs"
           },
           compilerOptions: {
             module: "esnext",
