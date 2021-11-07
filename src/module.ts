@@ -1560,13 +1560,14 @@ export class Module {
   }
 
   call_indirect(
+    tableName: string | null,
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
     params: TypeRef,
     results: TypeRef,
     isReturn: bool = false
   ): ExpressionRef {
-    var cStr = this.allocStringCached("0"); // TODO: multiple tables
+    var cStr = this.allocStringCached(tableName !== null ? tableName : "0");
     var cArr = allocPtrArray(operands);
     var ret = isReturn
       ? binaryen._BinaryenReturnCallIndirect(
@@ -1580,13 +1581,13 @@ export class Module {
   }
 
   return_call_indirect(
-    tableName: string,
+    tableName: string | null,
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
     params: TypeRef,
     results: TypeRef
   ): ExpressionRef {
-    return this.call_indirect(index, operands, params, results, true);
+    return this.call_indirect(tableName, index, operands, params, results, true);
   }
 
   unreachable(): ExpressionRef {

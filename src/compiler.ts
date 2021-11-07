@@ -7366,6 +7366,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (operands) this.operandsTostack(signature, operands);
     var expr = module.call_indirect(
+      null, // TODO: handle multiple tables
       module.load(4, false, functionArg, TypeRef.I32), // ._index
       operands,
       signature.paramRefs,
