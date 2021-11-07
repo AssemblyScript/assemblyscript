@@ -35,10 +35,14 @@
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/rt/__rtti_base i32 (i32.const 624))
  (global $~lib/memory/__data_end i32 (i32.const 812))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17196))
@@ -4177,7 +4181,7 @@
    if
     i32.const 432
     i32.const 592
-    i32.const 18
+    i32.const 19
     i32.const 48
     call $~lib/builtins/abort
     unreachable
@@ -4221,14 +4225,10 @@
    local.get $6
    call $~lib/rt/itcms/__renew
    local.set $8
-   local.get $8
-   local.get $4
-   i32.add
-   i32.const 0
-   local.get $6
-   local.get $4
-   i32.sub
-   call $~lib/memory/memory.fill
+   i32.const 2
+   global.get $~lib/shared/runtime/Runtime.Incremental
+   i32.ne
+   drop
    local.get $8
    local.get $5
    i32.ne
@@ -4273,7 +4273,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -4319,7 +4319,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -5243,7 +5243,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -5289,7 +5289,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -6215,7 +6215,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -6261,7 +6261,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -7185,7 +7185,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -7231,7 +7231,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -8155,7 +8155,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -8201,7 +8201,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -9113,7 +9113,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -9159,7 +9159,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -10088,7 +10088,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -10134,7 +10134,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -11064,7 +11064,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -11110,7 +11110,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -12024,7 +12024,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -12070,7 +12070,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -13001,7 +13001,7 @@
    if
     i32.const 224
     i32.const 592
-    i32.const 123
+    i32.const 130
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -13047,7 +13047,7 @@
   if
    i32.const 224
    i32.const 592
-   i32.const 107
+   i32.const 114
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -14121,7 +14121,7 @@
   if
    i32.const 432
    i32.const 480
-   i32.const 49
+   i32.const 52
    i32.const 43
    call $~lib/builtins/abort
    unreachable
@@ -14132,10 +14132,10 @@
   call $~lib/rt/itcms/__new
   local.tee $2
   i32.store
-  local.get $2
-  i32.const 0
-  local.get $1
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $2
   local.set $3
   global.get $~lib/memory/__stack_pointer
@@ -14244,7 +14244,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -14266,10 +14266,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<i8>#set:buffer
@@ -14472,7 +14472,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -14494,10 +14494,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<u8>#set:buffer
@@ -14700,7 +14700,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -14722,10 +14722,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<i16>#set:buffer
@@ -14928,7 +14928,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -14950,10 +14950,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<u16>#set:buffer
@@ -15156,7 +15156,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -15178,10 +15178,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<i32>#set:buffer
@@ -15384,7 +15384,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -15406,10 +15406,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<u32>#set:buffer
@@ -15612,7 +15612,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -15634,10 +15634,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<i64>#set:buffer
@@ -15840,7 +15840,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -15862,10 +15862,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<u64>#set:buffer
@@ -16068,7 +16068,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -16090,10 +16090,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<f32>#set:buffer
@@ -16296,7 +16296,7 @@
   if
    i32.const 432
    i32.const 592
-   i32.const 65
+   i32.const 70
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -16318,10 +16318,10 @@
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
-  local.get $5
-  i32.const 0
-  local.get $4
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $0
   local.get $5
   call $~lib/array/Array<f64>#set:buffer

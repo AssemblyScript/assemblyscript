@@ -23,6 +23,9 @@
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
  (global $~lib/process/process.stderr i32 (i32.const 2))
+ (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
+ (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
+ (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/bindings/wasi/tempbuf i32 (i32.const 112))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -38,6 +41,7 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/console/timers (mut i32) (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/rt/__rtti_base i32 (i32.const 6912))
@@ -6124,7 +6128,7 @@
   if
    i32.const 4240
    i32.const 4288
-   i32.const 49
+   i32.const 52
    i32.const 43
    call $~lib/wasi/index/abort
    unreachable
@@ -6135,10 +6139,10 @@
   call $~lib/rt/itcms/__new
   local.tee $2
   i32.store
-  local.get $2
-  i32.const 0
-  local.get $1
-  call $~lib/memory/memory.fill
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
   local.get $2
   local.set $3
   global.get $~lib/memory/__stack_pointer
