@@ -108,7 +108,7 @@ function loadAssemblyScriptJS() {
         dynrequire("../src/glue/js");
         exports = dynrequire("../src");
       } catch (e_ts) {
-        if (!(e_ts instanceof tsNode.TSError)) {
+        if (!tsNode || !(e_ts instanceof tsNode.TSError)) {
           try { // `require("dist/asc.js")` in explicit browser tests
             exports = dynrequire("./assemblyscript");
           } catch (e) {
