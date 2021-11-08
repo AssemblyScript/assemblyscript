@@ -92,7 +92,10 @@ export interface ASUtil {
   /** Allocates a new ArrayBuffer in the module's memory and returns a reference (pointer) to it. */
   __newArrayBuffer(buf: ArrayBuffer): number;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
-  __newArray(id: number, valuesOrCapacity?: Array<number> | ArrayBufferView | number): number;
+  __newArray(
+    id: number,
+    valuesOrCapacity?: Array<number> | ArrayBufferView | number
+  ): number;
 
   /** Allocates an instance of the class represented by the specified id. */
   __new(size: number, id: number): number;
@@ -102,6 +105,13 @@ export interface ASUtil {
   __unpin(ptr: number): void;
   /** Performs a full garbage collection cycle. */
   __collect(incremental?: boolean): void;
+
+  /** FinalizationRegistry that handles automatic unpinning of managed objects */
+  __registry: FinalizationRegistry;
+  /** Pins a managed object externally, preventing it from becoming garbage collected. Whith automatic unpin */
+  __registryPin(value: any, ptr: number);
+  /** Unpins a managed object externally, allowing it to become garbage collected. And removes it from the registry.*/
+  __registryUnpin(value: any);
 }
 
 /** Asynchronously instantiates an AssemblyScript module from anything that can be instantiated. */
