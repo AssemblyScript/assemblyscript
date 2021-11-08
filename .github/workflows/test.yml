@@ -20,15 +20,6 @@ jobs:
         else
           printf "\nOK: Distributions files have not been modified.\n";
         fi
-    - name: "Setup cache dependencies"
-      run: |
-        npm config set cache "$( node -p "process.cwd()" )/temp/npm-cache"
-    - name: "Cache dependencies"
-      uses: actions/cache@v2
-      with:
-        path: temp/npm-cache
-        key: npm-cache-packaging-${{ hashFiles('package-lock.json') }}
-        restore-keys: npm-cache-packaging-
   test:
     name: "Compiler (Linux, node ${{ matrix.node_version }})"
     runs-on: ubuntu-latest
