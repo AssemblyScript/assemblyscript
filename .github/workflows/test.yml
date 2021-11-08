@@ -21,7 +21,7 @@ jobs:
           printf "\nOK: Distributions files have not been modified.\n";
         fi
     - name: "Setup cache dependencies"
-    - run: |
+      run: |
         npm config set cache "$( node -p "process.cwd()" )/temp/npm-cache"
     - name: "Cache dependencies"
       uses: actions/cache@v2
