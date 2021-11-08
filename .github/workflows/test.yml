@@ -20,10 +20,10 @@ jobs:
         else
           printf "\nOK: Distributions files have not been modified.\n";
         fi
-    - name: "Cache dependencies"
+    - name: "Setup cache dependencies"
     - run: |
         npm config set cache "$( node -p "process.cwd()" )/temp/npm-cache"
-    - name: Cache dependencies
+    - name: "Cache dependencies"
       uses: actions/cache@v2
       with:
         path: temp/npm-cache
