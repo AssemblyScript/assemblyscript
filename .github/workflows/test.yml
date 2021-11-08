@@ -43,7 +43,7 @@ jobs:
     - name: Build distribution files
       run: npm run build
     - name: Update entry file
-      run: npm run prepare:ci
+      run: npm run prepare-ci
     - name: Test distribution
       run: npm test
     - name: Test browser build
@@ -66,7 +66,7 @@ jobs:
     - name: Build distribution files
       run: npm run build
     - name: Update entry file
-      run: npm run prepare:ci
+      run: npm run prepare-ci
     - name: Test distribution
       run: npm test
     - name: Test browser build
@@ -89,7 +89,7 @@ jobs:
     - name: Build distribution files
       run: npm run build
     - name: Update entry file
-      run: npm run prepare:ci
+      run: npm run prepare-ci
     - name: Test distribution
       run: npm test
     - name: Test browser build
