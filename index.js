@@ -4,7 +4,7 @@ require("ts-node").register({
   skipIgnore: true,
   files: true,
   compilerOptions: {
-    target: "esnext",
+    noEmit: true,
     removeComments: false
   }
 });
