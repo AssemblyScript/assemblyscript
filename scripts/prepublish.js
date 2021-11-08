@@ -5,7 +5,7 @@ const path = require("path");
 const pkg = require("../package.json");
 const devFiles = require("./postpublish-files.json");
 
-var isCI = process.argv[3] == '--prepare-for-ci';
+var isCI = process.argv[2] === '--prepare-for-ci';
 
 if (!isCI) {
   if (!pkg.releaseFiles) {
