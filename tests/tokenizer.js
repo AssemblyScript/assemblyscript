@@ -1,7 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 
-require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
+require("ts-node").register({
+  project: path.join(__dirname, "..", "src", "tsconfig.json"),
+  typeCheck: false,
+  transpileOnly: true,
+  compilerHost: true,
+  files: true,
+});
 require("../src/glue/js");
 
 const { Tokenizer, Token } = require("../src/tokenizer");

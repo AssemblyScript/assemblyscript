@@ -80,7 +80,7 @@ if (process.removeAllListeners) {
 
 // Use distribution files if present, otherwise run the sources directly.
 function loadAssemblyScriptJS() {
-  var exports;
+  var exports, tsNode;
   try {
     // note that this case will always trigger in recent node.js versions for typical installs
     // see: https://nodejs.org/api/packages.html#packages_self_referencing_a_package_using_its_name
@@ -90,18 +90,33 @@ function loadAssemblyScriptJS() {
       exports = dynrequire("../dist/assemblyscript.js");
     } catch (e) {
       try { // `asc` on the command line without dist files (unnecessary in recent node)
-        dynrequire("ts-node").register({
+        tsNode = dynrequire("ts-node");
+        tsNode.register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
+          typeCheck: false,
+          transpileOnly: true,
+          compilerHost: true,
+          files: true,
           skipIgnore: true,
-          compilerOptions: { target: "ES2016" }
+          moduleTypes: {
+            "../src/glue/js/*": "cjs"
+          },
+          compilerOptions: {
+            module: "esnext",
+            target: "es2017"
+          }
         });
         dynrequire("../src/glue/js");
         exports = dynrequire("../src");
       } catch (e_ts) {
-        try { // `require("dist/asc.js")` in explicit browser tests
-          exports = dynrequire("./assemblyscript");
-        } catch (e) {
-          throw Error(`${e_ts.stack}\n---\n${e.stack}`);
+        if (!tsNode || !(e_ts instanceof tsNode.TSError)) {
+          try { // `require("dist/asc.js")` in explicit browser tests
+            exports = dynrequire("./assemblyscript");
+          } catch (e) {
+            throw Error(`${e_ts.stack}\n---\n${e.stack}`);
+          }
+        } else {
+          throw e_ts;
         }
       }
     }

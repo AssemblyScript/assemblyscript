@@ -2,8 +2,10 @@
   "extends": "../std/portable.json",
   "compilerOptions": {
     "outDir": "../out",
+    "types" : ["node"],
     "allowJs": false,
     "sourceMap": true,
+    "skipLibCheck": true,
     "target": "esnext",
     "strict": true
   },
@@ -11,6 +13,9 @@
     "./**/*.ts"
   ],
   "exclude": [
+    "../**/node_modules/",
+    "../tests/**",
+    "../lib/**",
     "./glue/wasm/**"
   ]
 }
