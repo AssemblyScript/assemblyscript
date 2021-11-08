@@ -93,6 +93,8 @@ function loadAssemblyScriptJS() {
         tsNode = dynrequire("ts-node");
         tsNode.register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
+          typeCheck: false,
+          transpileOnly: true,
           compilerHost: true,
           files: true,
           skipIgnore: true,

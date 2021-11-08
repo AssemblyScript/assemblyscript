@@ -42,8 +42,6 @@ jobs:
       run: npm test
     - name: Build distribution files
       run: npm run build
-    - name: Run prepublish script
-      run:  npm run prepublishOnly
     - name: Test distribution
       run: npm test
     - name: Test browser build
@@ -65,8 +63,6 @@ jobs:
       run: npm test
     - name: Build distribution files
       run: npm run build
-    - name: Run prepublish script
-      run:  npm run prepublishOnly
     - name: Test distribution
       run: npm test
     - name: Test browser build
@@ -86,8 +82,6 @@ jobs:
       run: npm run clean
     - name: Test sources
       run: npm test
-    - name: Run prepublish script
-      run:  npm run prepublishOnly
     - name: Build distribution files
       run: npm run build
     - name: Test distribution
