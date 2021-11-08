@@ -109,7 +109,9 @@ module.exports = {
             "args": "none",
             "ignoreRestSiblings": false
           }
-        ]
+        ],
+
+        "@typescript-eslint/no-loss-of-precision": "error",
       }
     },
 

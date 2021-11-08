@@ -78,7 +78,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["f32"] = function f32(value) { return Math.fround(value); },
     {
       "EPSILON":   { value: 1.1920928955078125e-07, writable: false },
-      "MIN_VALUE": { value: 1.4012984643248170e-45, writable: false },
+      "MIN_VALUE": { value: 1.401298464324817e-45, writable: false },
       "MAX_VALUE": { value: 3.4028234663852886e+38, writable: false },
       "MIN_NORMAL_VALUE":  { value:  1.1754943508222875e-38, writable: false },
       "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
