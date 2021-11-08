@@ -70,6 +70,9 @@ module.exports = {
     // Quite common in scenarios where an iteration starts at `current = this`.
     "@typescript-eslint/no-this-alias": "off",
 
+    // Interferes with tests and 64-bit literals
+    "@typescript-eslint/no-loss-of-precision": "off",
+
     // Disabled here, but enabled again for JavaScript files.
     "no-unused-vars": "off",
 
