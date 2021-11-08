@@ -87,6 +87,7 @@
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
     "prepublishOnly": "node scripts/prepublish",
     "postpublish": "node scripts/postpublish",
+    "prepare:ci": "node scripts/repace-entry",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "asbuild:untouched": "node bin/asc --config src/asconfig.json --target untouched",
     "asbuild:optimized": "node bin/asc --config src/asconfig.json --target optimized",
