@@ -3102,12 +3102,15 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
 function stringLengthUTF8(str: string): usize {
   var len = 0;
   for (let i = 0, k = str.length; i < k; ++i) {
-    let u = str.charCodeAt(i) >>> 0;
-    if (u <= 0x7F) {
+    let c1 = str.charCodeAt(i) >>> 0;
+    if (c1 <= 0x7F) {
       len += 1;
-    } else if (u <= 0x7FF) {
+    } else if (c1 <= 0x7FF) {
       len += 2;
-    } else if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
+    } else if (
+      (c1 & 0xFC00) === 0xD800 && i + 1 < k &&
+      (str.charCodeAt(i + 1) & 0xFC00) === 0xDC00
+    ) {
       i++;
       len += 4;
     } else {
@@ -3135,29 +3138,27 @@ function allocString(str: string | null): usize {
       }
     }
   } else {
-    // the following is based on Emscripten's stringToUTF8Array
     for (let i = 0, k = str.length; i < k; ++i) {
-      let u = str.charCodeAt(i) >>> 0;
-      if (u <= 0x7F) {
-        binaryen.__i32_store8(idx++, u as u8);
-      } else if (u <= 0x7FF) {
-        binaryen.__i32_store8(idx++, (0xC0 |  (u >>> 6)       ) as u8);
-        binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-      } else if (u >= 0xD800 && u <= 0xDFFF) {
-        if (i + 1 < k) {
-          u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
-        }
-        if (u <= 0xFFFF) {
-          binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-        } else {
-          assert(u <= 0x10FFFF, "Invalid Unicode code point during allocString");
-          binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-        }
+      let c1 = str.charCodeAt(i) >>> 0, c2: i32;
+      if (c1 <= 0x7F) {
+        binaryen.__i32_store8(idx++, c1 as u8);
+      } else if (c1 <= 0x7FF) {
+        binaryen.__i32_store8(idx++, (0xC0 |  (c1 >>> 6)       ) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ( c1         & 63)) as u8);
+      } else if (
+        (c1 & 0xFC00) === 0xD800 && i + 1 < k &&
+        ((c2 = str.charCodeAt(i + 1)) & 0xFC00) === 0xDC00
+      ) {
+        c1 = 0x10000 + ((c1 & 0x3FF) << 10) | (c2 & 0x3FF);
+        ++i;
+        binaryen.__i32_store8(idx++, (0xF0 |  (c1 >>> 18)      ) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ((c1 >>> 12) & 63)) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ((c1 >>>  6) & 63)) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ( c1         & 63)) as u8);
+      } else {
+        binaryen.__i32_store8(idx++, (0xE0 |  (c1 >>> 12)      ) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ((c1 >>>  6) & 63)) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ( c1         & 63)) as u8);
       }
     }
   }
