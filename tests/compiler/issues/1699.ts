@@ -1,5 +1,5 @@
 class MultiAssignmentTest {
-    test: i32 = 2;
+  test: i32 = 2;
 }
 
 function test(): void {

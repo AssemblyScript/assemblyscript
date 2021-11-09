@@ -71,10 +71,6 @@
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store
-  block $__inlined_func$return/testVoidReturnFunction
-   local.get $0
-   br_if $__inlined_func$return/testVoidReturnFunction
-  end
   local.get $1
   i32.load
   call_indirect $0 (type $none_=>_none)

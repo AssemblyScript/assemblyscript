@@ -1,6 +1,7 @@
 (module
  (type $none_=>_none (func))
  (global $~lib/ASC_TARGET i32 (i32.const 1))
+ (global $~lib/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/ASC_MEMORY_BASE i32 (i32.const 0))
  (global $~lib/ASC_OPTIMIZE_LEVEL i32 (i32.const 0))
@@ -27,6 +28,8 @@
  (start $~start)
  (func $start:asc-constants
   i32.const 1
+  drop
+  i32.const 2
   drop
   i32.const 0
   drop

@@ -1,20 +1,20 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17408))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "testTrue" (func $export:possibly-null/testTrue))
- (export "testFalseElse" (func $export:possibly-null/testTrue))
- (export "testFalseContinuation" (func $export:possibly-null/testTrue))
+ (export "testFalseElse" (func $export:possibly-null/testFalseElse))
+ (export "testFalseContinuation" (func $export:possibly-null/testFalseElse))
  (export "testNeNull" (func $export:possibly-null/testTrue))
- (export "testEqNullElse" (func $export:possibly-null/testTrue))
- (export "testEqNullContinuation" (func $export:possibly-null/testTrue))
+ (export "testEqNullElse" (func $export:possibly-null/testFalseElse))
+ (export "testEqNullContinuation" (func $export:possibly-null/testFalseElse))
  (export "testNotEqNull" (func $export:possibly-null/testTrue))
- (export "testNotNeNullElse" (func $export:possibly-null/testTrue))
- (export "testNotNeNullContinuation" (func $export:possibly-null/testTrue))
+ (export "testNotNeNullElse" (func $export:possibly-null/testFalseElse))
+ (export "testNotNeNullContinuation" (func $export:possibly-null/testFalseElse))
  (export "testWhile" (func $export:possibly-null/testWhile))
  (export "testWhile2" (func $export:possibly-null/testWhile2))
  (export "testWhile3" (func $export:possibly-null/testWhile3))
@@ -46,6 +46,35 @@
   local.get $0
   i32.store
   local.get $1
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $export:possibly-null/testFalseElse (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1024
+  i32.lt_s
+  if
+   i32.const 17440
+   i32.const 17488
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  block $__inlined_func$possibly-null/testFalseElse
+   local.get $0
+   i32.eqz
+   br_if $__inlined_func$possibly-null/testFalseElse
+  end
+  global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer

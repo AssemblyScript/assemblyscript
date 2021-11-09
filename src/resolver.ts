@@ -1957,30 +1957,7 @@ export class Resolver extends DiagnosticEmitter {
       case Token.MINUS:
       case Token.ASTERISK:
       case Token.SLASH:
-      case Token.PERCENT: { // mod has special logic, but also behaves like this
-        let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
-        if (!leftType) return null;
-        let classReference = leftType.getClassOrWrapper(this.program);
-        if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
-          if (overload) return overload.signature.returnType;
-        }
-        let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
-        if (!rightType) return null;
-        let commonType = Type.commonDenominator(leftType, rightType, false);
-        if (!commonType) {
-          if (reportMode == ReportMode.REPORT) {
-            this.error(
-              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-              node.range, leftType.toString(), rightType.toString()
-            );
-          }
-        }
-        return commonType;
-      }
-
-      // pow: result is common type of LHS and RHS, preferring overloads
-
+      case Token.PERCENT: // mod has special logic, but also behaves like this
       case Token.ASTERISK_ASTERISK: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;

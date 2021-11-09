@@ -1613,23 +1613,29 @@ export class Module {
 
   // exception handling
 
-  // try(
-  //   body: ExpressionRef,
-  //   catchTags: string[],
-  //   catchBodies: ExpressionRef[]
-  // ): ExpressionRef {
-  //   var numCatchTags = catchTags.length;
-  //   var strs = new Array<TagRef>(numCatchTags);
-  //   for (let i = 0; i < numCatchTags; ++i) {
-  //     strs[i] = this.allocStringCached(catchTags[i]);
-  //   }
-  //   var cArr1 = allocPtrArray(strs);
-  //   var cArr2 = allocPtrArray(catchBodies);
-  //   var ret = binaryen._BinaryenTry(this.ref, body, cArr1, numCatchTags, cArr2, catchBodies.length);
-  //   binaryen._free(cArr2);
-  //   binaryen._free(cArr1);
-  //   return ret;
-  // }
+  try(
+    name: string | null,
+    body: ExpressionRef,
+    catchTags: string[],
+    catchBodies: ExpressionRef[],
+    delegateTarget: string | null = null
+  ): ExpressionRef {
+    var numCatchTags = catchTags.length;
+    var strs = new Array<TagRef>(numCatchTags);
+    for (let i = 0; i < numCatchTags; ++i) {
+      strs[i] = this.allocStringCached(catchTags[i]);
+    }
+    var cArr1 = allocPtrArray(strs);
+    var cArr2 = allocPtrArray(catchBodies);
+    var cStr1 = this.allocStringCached(name);
+    var cStr2 = this.allocStringCached(delegateTarget);
+    var ret = binaryen._BinaryenTry(
+      this.ref, cStr1, body, cArr1, numCatchTags, cArr2, catchBodies.length, cStr2
+    );
+    binaryen._free(cArr2);
+    binaryen._free(cArr1);
+    return ret;
+  }
 
   throw(
     tagName: string,
@@ -2292,6 +2298,7 @@ export class Module {
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
       if (optimizeLevel >= 2) {
         passes.push("once-reduction");
+        passes.push("inlining");
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");
@@ -2501,7 +2508,7 @@ export class Module {
     // avoid quite a bit of unnecessary garbage.
     if (ptr == 0) return null;
     var cached = this.cachedPointersToStrings;
-    if (cached.has(ptr)) return changetype<string>(this.cachedPointersToStrings.get(ptr));
+    if (cached.has(ptr)) return changetype<string>(cached.get(ptr));
     var str = readString(ptr);
     cached.set(ptr, str);
     return str;
@@ -3029,8 +3036,12 @@ function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
   var len = u8s.length;
   var ptr = binaryen._malloc(len);
-  for (let i = 0; i < len; ++i) {
-    binaryen.__i32_store8(ptr + i, u8s[i]);
+  if (!ASC_TARGET) {
+    binaryen.HEAPU8.set(u8s, ptr);
+  } else {
+    for (let i = 0; i < len; ++i) {
+      binaryen.__i32_store8(ptr + i, u8s[i]);
+    }
   }
   return ptr;
 }
@@ -3039,11 +3050,15 @@ function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
   var len = i32s.length;
   var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
-  for (let i = 0; i < len; ++i) {
-    let val = i32s[i];
-    binaryen.__i32_store(idx, val);
-    idx += 4;
+  if (!ASC_TARGET) {
+    binaryen.HEAP32.set(i32s, ptr >>> 2);
+  } else {
+    var idx = ptr;
+    for (let i = 0; i < len; ++i) {
+      let val = i32s[i];
+      binaryen.__i32_store(idx, val);
+      idx += 4;
+    }
   }
   return ptr;
 }
@@ -3052,11 +3067,15 @@ function allocU32Array(u32s: u32[] | null): usize {
   if (!u32s) return 0;
   var len = u32s.length;
   var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
-  for (let i = 0; i < len; ++i) {
-    let val = u32s[i];
-    binaryen.__i32_store(idx, val);
-    idx += 4;
+  if (!ASC_TARGET) {
+    binaryen.HEAPU32.set(u32s, ptr >>> 2);
+  } else {
+    var idx = ptr;
+    for (let i = 0; i < len; ++i) {
+      let val = u32s[i];
+      binaryen.__i32_store(idx, val);
+      idx += 4;
+    }
   }
   return ptr;
 }
@@ -3067,11 +3086,15 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
   assert(ASC_TARGET != Target.WASM64);
   var len = ptrs.length;
   var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
-  for (let i = 0, k = len; i < k; ++i) {
-    let val = ptrs[i];
-    binaryen.__i32_store(idx, <i32>val);
-    idx += 4;
+  if (!ASC_TARGET) {
+    binaryen.HEAPU32.set(ptrs, ptr >>> 2);
+  } else {
+    var idx = ptr;
+    for (let i = 0, k = len; i < k; ++i) {
+      let val = ptrs[i];
+      binaryen.__i32_store(idx, <i32>val);
+      idx += 4;
+    }
   }
   return ptr;
 }
@@ -3079,18 +3102,16 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
 function stringLengthUTF8(str: string): usize {
   var len = 0;
   for (let i = 0, k = str.length; i < k; ++i) {
-    let u = str.charCodeAt(i);
-    if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
-      u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
-    }
+    let u = str.charCodeAt(i) >>> 0;
     if (u <= 0x7F) {
       len += 1;
     } else if (u <= 0x7FF) {
       len += 2;
-    } else if (u <= 0xFFFF) {
-      len += 3;
-    } else {
+    } else if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
+      i++;
       len += 4;
+    } else {
+      len += 3;
     }
   }
   return len;
@@ -3098,41 +3119,62 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str === null) return 0;
-  var ptr = binaryen._malloc(stringLengthUTF8(str) + 1) >>> 0;
-  // the following is based on Emscripten's stringToUTF8Array
+  var len = stringLengthUTF8(str);
+  var ptr = binaryen._malloc(len + 1) >>> 0;
   var idx = ptr;
-  for (let i = 0, k = str.length; i < k; ++i) {
-    let u = str.charCodeAt(i);
-    if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
-      u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
-    }
-    if (u <= 0x7F) {
-      binaryen.__i32_store8(idx++, u as u8);
-    } else if (u <= 0x7FF) {
-      binaryen.__i32_store8(idx++, (0xC0 |  (u >>> 6)       ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-    } else if (u <= 0xFFFF) {
-      binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
+  if (len === str.length) {
+    // fast path when all chars are ascii
+    if (!ASC_TARGET) {
+      for (let i = 0, k = str.length; i < k; ++i) {
+        binaryen.HEAPU8[idx++] = str.charCodeAt(i);
+      }
     } else {
-      assert(u < 0x200000, "Invalid Unicode code point during allocString");
-      binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
+      for (let i = 0, k = str.length; i < k; ++i) {
+        let u = str.charCodeAt(i) >>> 0;
+        binaryen.__i32_store8(idx++, u as u8);
+      }
+    }
+  } else {
+    // the following is based on Emscripten's stringToUTF8Array
+    for (let i = 0, k = str.length; i < k; ++i) {
+      let u = str.charCodeAt(i) >>> 0;
+      if (u <= 0x7F) {
+        binaryen.__i32_store8(idx++, u as u8);
+      } else if (u <= 0x7FF) {
+        binaryen.__i32_store8(idx++, (0xC0 |  (u >>> 6)       ) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
+      } else if (u >= 0xD800 && u <= 0xDFFF) {
+        if (i + 1 < k) {
+          u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
+        }
+        if (u <= 0xFFFF) {
+          binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
+        } else {
+          assert(u <= 0x10FFFF, "Invalid Unicode code point during allocString");
+          binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
+          binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
+        }
+      }
     }
   }
-  binaryen.__i32_store8(idx, 0);
+  binaryen.__i32_store8(idx, 0); // \0
   return ptr;
 }
 
 function readBuffer(ptr: usize, len: i32): Uint8Array {
-  var ret = new Uint8Array(len);
-  for (let i = 0; i < len; ++i) {
-    ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
+  if (!ASC_TARGET) {
+    return binaryen.HEAPU8.slice(ptr, ptr + len);
+  } else {
+    var ret = new Uint8Array(len);
+    for (let i = 0; i < len; ++i) {
+      ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
+    }
+    return ret;
   }
-  return ret;
 }
 
 export function readString(ptr: usize): string | null {
