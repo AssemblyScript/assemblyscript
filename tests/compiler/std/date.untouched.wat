@@ -240,7 +240,8 @@
   local.get $2
   call $~lib/date/daysSinceEpoch
   i64.extend_i32_s
-  i64.const 86400000
+  i32.const 86400000
+  i64.extend_i32_s
   i64.mul
   local.get $3
   i32.const 3600000
@@ -1893,7 +1894,8 @@
     drop
     global.get $~lib/rt/itcms/total
     i64.extend_i32_u
-    i64.const 200
+    i32.const 200
+    i64.extend_i32_u
     i64.mul
     i64.const 100
     i64.div_u
@@ -2963,7 +2965,8 @@
   local.get $1
   call $~lib/date/daysSinceEpoch
   i64.extend_i32_s
-  i64.const 86400000
+  i32.const 86400000
+  i64.extend_i32_s
   i64.mul
   local.get $5
   i64.add
@@ -3013,7 +3016,8 @@
   i32.load offset=8
   call $~lib/date/daysSinceEpoch
   i64.extend_i32_s
-  i64.const 86400000
+  i32.const 86400000
+  i64.extend_i32_s
   i64.mul
   local.get $5
   i64.add
@@ -3061,7 +3065,8 @@
   i32.load offset=8
   call $~lib/date/daysSinceEpoch
   i64.extend_i32_s
-  i64.const 86400000
+  i32.const 86400000
+  i64.extend_i32_s
   i64.mul
   local.get $5
   i64.add

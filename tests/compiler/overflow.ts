@@ -128,3 +128,12 @@
 
   assert(val - 1 == 0xffff);
 }
+
+{
+  // regression #2131
+  const a: u32 = 65;
+  const b: u16 = 63457;
+  let c = a + (((b & 0x1f8) >> 3) - (b & 0x200 ? 0x40 : 0));
+  // trace(">>>> c", 1, <f64>c);
+  assert(c == 65597);
+}

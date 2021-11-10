@@ -677,6 +677,32 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 65
+  i32.const 63457
+  i32.const 504
+  i32.and
+  i32.const 3
+  i32.const 15
+  i32.and
+  i32.shr_u
+  i32.const 64
+  i32.sub
+  i32.const 65535
+  i32.and
+  i32.add
+  local.set $0
+  local.get $0
+  i32.const 65597
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 138
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start
   call $start:overflow
