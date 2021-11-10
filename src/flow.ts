@@ -266,7 +266,7 @@ export class Flow {
   /** Unsets the specified flag or flags. */
   unset(flag: FlowFlags): void { this.flags &= ~flag; }
 
-  getConditionFlags(): FlowFlags {
+  deriveConditionalFlags(): FlowFlags {
     let condiFlags = this.flags & FlowFlags.ANY_CONDITIONAL;
     if (this.is(FlowFlags.RETURNS)) {
       condiFlags |= FlowFlags.CONDITIONALLY_RETURNS;
