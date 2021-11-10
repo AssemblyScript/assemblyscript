@@ -331,11 +331,43 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
 export function isIllegalVariableIdentifier(name: string): bool {
   assert(name.length);
   switch (name.charCodeAt(0)) {
-    case CharCode.d: return name == "delete";
-    case CharCode.f: return name == "for";
-    case CharCode.i: return name == "instanceof";
-    case CharCode.n: return name == "null";
+    case CharCode.c: {
+      if (name == "case") return true;
+      if (name == "class") return true;
+      if (name == "catch") return true;
+      break;
+    }
+    case CharCode.d: {
+      if (name == "default") return true;
+      if (name == "delete") return true;
+      break;
+    }
+    case CharCode.e: return name == "else";
+    case CharCode.f: {
+      if (name == "for") return true;
+      if (name == "false") return true;
+      break;
+    }
+    case CharCode.i: {
+      if (name == "in") return true;
+      if (name == "if") return true;
+      if (name == "interface") return true;
+      if (name == "instanceof") return true;
+      break;
+    }
+    case CharCode.n: {
+      if (name == "new") return true;
+      if (name == "null") return true;
+      break;
+    }
+    case CharCode.s: return name == "switch";
     case CharCode.v: return name == "void";
+    case CharCode.t: {
+      if (name == "try") return true;
+      if (name == "true") return true;
+      if (name == "throw") return true;
+      break;
+    }
   }
   return false;
 }
