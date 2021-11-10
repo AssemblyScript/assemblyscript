@@ -181,15 +181,12 @@ export function tokenFromKeyword(text: string): Token {
   assert(len);
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
-      if (len == 2) {
-        if (text == "as") return Token.AS;
-        break;
-      }
       if (len == 5) {
         if (text == "async") return Token.ASYNC;
         if (text == "await") return Token.AWAIT;
         break;
       }
+      if (text == "as") return Token.AS;
       if (text == "abstract") return Token.ABSTRACT;
       break;
     }
@@ -198,32 +195,26 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.c: {
-      if (len == 4) {
-        if (text == "case") return Token.CASE;
-        break;
-      }
       if (len == 5) {
         if (text == "const") return Token.CONST;
         if (text == "class") return Token.CLASS;
         if (text == "catch") return Token.CATCH;
         break;
       }
+      if (text == "case") return Token.CASE;
       if (text == "continue") return Token.CONTINUE;
       if (text == "constructor") return Token.CONSTRUCTOR;
       break;
     }
     case CharCode.d: {
-      if (len == 2) {
-        if (text == "do") return Token.DO;
-        break;
-      }
       if (len == 7) {
         if (text == "default") return Token.DEFAULT;
         if (text == "declare") return Token.DECLARE;
         break;
       }
-      if (text == "debugger") return Token.DEBUGGER;
+      if (text == "do") return Token.DO;
       if (text == "delete") return Token.DELETE;
+      if (text == "debugger") return Token.DEBUGGER;
       break;
     }
     case CharCode.e: {
