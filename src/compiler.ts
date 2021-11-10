@@ -2970,7 +2970,7 @@ export class Compiler extends DiagnosticEmitter {
         commonCategorical &= innerFlow.flags;
       }
 
-      commonConditional |= innerFlow.getConditionFlags();
+      commonConditional |= innerFlow.deriveConditionalFlags();
 
       // Switch back to the parent flow
       innerFlow.unset(
