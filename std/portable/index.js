@@ -4,6 +4,7 @@ var globalScope = typeof window !== "undefined" && window || typeof global !== "
 if (typeof globalScope.ASC_TARGET === "undefined") {
 
   globalScope.ASC_TARGET = 0; // Target.JS
+  globalScope.ASC_RUNTIME = 0; // Runtime.Stub
   globalScope.ASC_NO_ASSERT = false;
   globalScope.ASC_MEMORY_BASE = 0;
   globalScope.ASC_OPTIMIZE_LEVEL = 3;
@@ -77,7 +78,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     globalScope["f32"] = function f32(value) { return Math.fround(value); },
     {
       "EPSILON":   { value: 1.1920928955078125e-07, writable: false },
-      "MIN_VALUE": { value: 1.4012984643248170e-45, writable: false },
+      "MIN_VALUE": { value: 1.401298464324817e-45, writable: false },
       "MAX_VALUE": { value: 3.4028234663852886e+38, writable: false },
       "MIN_NORMAL_VALUE":  { value:  1.1754943508222875e-38, writable: false },
       "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
