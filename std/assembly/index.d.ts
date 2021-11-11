@@ -34,7 +34,9 @@ declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
 /** A 128-bit vector. */
-declare type v128 = object;
+declare type v128 = {
+  toString(radix?: number): string
+};
 /** Function reference. */
 declare type funcref = object | null;
 /** External reference. */
@@ -1369,6 +1371,13 @@ declare class _Float {
   toString(radix?: number): string;
 }
 
+/** Pseudo-class representing the backing class of vector type. */
+/** @internal */
+declare class _V128 {
+  /** Converts this vector set to a string. */
+  toString(radix?: number): string;
+}
+
 /** Backing class of signed 8-bit integers. */
 declare const I8: typeof _Integer;
 /** Backing class of signed 16-bit integers. */
@@ -1393,6 +1402,8 @@ declare const Usize: typeof _Integer;
 declare const F32: typeof _Float;
 /** Backing class of 64-bit floating-point values. */
 declare const F64: typeof _Float;
+/** Backing class of 128-bit vector values. */
+declare const V128: typeof _V128;
 
 // User-defined diagnostic macros
 
