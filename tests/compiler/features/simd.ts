@@ -1,6 +1,14 @@
 // hint: asc tests/compiler/simd --enable simd
 
 function test_v128(): void {
+  // check trueish
+  // @ts-ignore
+  assert(<bool>v128(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) == true);
+  // @ts-ignore
+  assert(<bool>v128(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1) == true);
+  // @ts-ignore
+  assert(<bool>v128(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) == false);
+
   // equality and inequality
   assert(
     v128(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)

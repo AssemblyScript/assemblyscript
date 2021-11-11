@@ -1015,7 +1015,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 59
+   i32.const 67
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1044,7 +1044,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 69
+   i32.const 77
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1073,7 +1073,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 79
+   i32.const 87
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1102,7 +1102,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 89
+   i32.const 97
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1131,7 +1131,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 99
+   i32.const 107
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1160,7 +1160,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 109
+   i32.const 117
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1169,7 +1169,7 @@
   call $~lib/rt/tlsf/__free
   i32.const 0
   i32.const 1184
-  i32.const 255
+  i32.const 263
   i32.const 3
   call $~lib/builtins/abort
   unreachable
