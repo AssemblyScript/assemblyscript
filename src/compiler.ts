@@ -3392,14 +3392,8 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     assert(element.is(CommonFlags.INLINED | CommonFlags.RESOLVED));
     var type = element.type;
-    switch (
-      !(constraints & (Constraints.CONV_IMPLICIT | Constraints.CONV_EXPLICIT)) &&
-      type.isIntegerValue &&
-      contextualType.isIntegerValue &&
-      type.size < contextualType.size
-        ? (this.currentType = contextualType).kind // essentially precomputes a (sign-)extension
-        : (this.currentType = type).kind
-    ) {
+    this.currentType = type;
+    switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16: {
         let shift = type.computeSmallIntegerShift(Type.i32);
