@@ -7591,7 +7591,7 @@
   if
    local.get $0
    i8x16.extract_lane_s 0
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7600,7 +7600,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 1
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7627,7 +7627,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 2
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7654,7 +7654,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 3
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7681,7 +7681,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 4
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7708,7 +7708,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 5
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7735,7 +7735,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 6
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7762,7 +7762,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 7
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7789,7 +7789,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 8
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7816,7 +7816,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 9
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7843,7 +7843,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 10
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7870,7 +7870,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 11
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7897,7 +7897,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 12
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7924,7 +7924,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 13
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7951,7 +7951,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 14
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
@@ -7978,7 +7978,7 @@
    local.get $2
    local.get $0
    i8x16.extract_lane_s 15
-   local.get $1
+   i32.const 10
    call $~lib/number/I8#toString
    local.set $2
    global.get $~lib/memory/__stack_pointer
