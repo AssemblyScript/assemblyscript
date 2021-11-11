@@ -4,7 +4,7 @@ export abstract class V128 {
   toString(this: v128, radix: i32 = 0): String {
     if (radix == 0 || radix == 10) {
       return (
-        i8x16.extract_lane_s(this, 0).toString() +
+        i8x16.extract_lane_s(this, 0).toString() + " " +
         i8x16.extract_lane_s(this, 1).toString() + " " +
         i8x16.extract_lane_s(this, 2).toString() + " " +
         i8x16.extract_lane_s(this, 3).toString() + " " +
@@ -26,7 +26,7 @@ export abstract class V128 {
       );
     } else {
       return (
-        i8x16.extract_lane_u(this, 0).toString(radix) +
+        i8x16.extract_lane_u(this, 0).toString(radix) + " " +
         i8x16.extract_lane_u(this, 1).toString(radix) + " " +
         i8x16.extract_lane_u(this, 2).toString(radix) + " " +
         i8x16.extract_lane_u(this, 3).toString(radix) + " " +
