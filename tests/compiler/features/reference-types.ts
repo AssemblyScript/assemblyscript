@@ -105,7 +105,7 @@ testLocal<anyref>();
 
 function someFunc(): void {}
 funcGlobal = someFunc;
-assert(funcGlobalInit);
+assert(funcGlobal);
 var otherFuncGlobal: funcref = someFunc;
 assert(otherFuncGlobal);
 {
