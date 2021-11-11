@@ -939,7 +939,7 @@ export class Flow {
         let key = _keys[i];
         let leftFlags = changetype<FieldFlags>(leftFieldFlags.get(key));
         if (
-          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) && 
+          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) &&
           (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.INITIALIZED)
         ) {
           newFieldFlags.set(key, FieldFlags.INITIALIZED);
@@ -1396,6 +1396,7 @@ export class Flow {
           case <u32>TypeRef.I64: { value = getConstValueI64Low(expr); break; } // discards upper bits
           case <u32>TypeRef.F32: { value = i32(getConstValueF32(expr)); break; }
           case <u32>TypeRef.F64: { value = i32(getConstValueF64(expr)); break; }
+          case <u32>TypeRef.V128: return false;
           default: assert(false);
         }
         switch (type.kind) {

@@ -3771,6 +3771,10 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
+    // v128 to bool
+    } else if (fromType == Type.v128 && toType.isBooleanValue) {
+      expr = this.makeIsTrueish(expr, Type.v128, reportNode);
+
     // int to int
     } else {
       // i64 to ...
@@ -10298,6 +10302,9 @@ export class Compiler extends DiagnosticEmitter {
           ),
           module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
         );
+      }
+      case TypeKind.V128: {
+        return module.unary(UnaryOp.AnyTrueV128, expr);
       }
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
