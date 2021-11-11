@@ -677,6 +677,64 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 2
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 144
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -1
+  local.set $1
+  local.get $1
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 147
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  local.set $2
+  local.get $2
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 150
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 65
   i32.const 63457
   i32.const 504
@@ -690,15 +748,15 @@
   i32.const 65535
   i32.and
   i32.add
-  local.set $0
-  local.get $0
+  local.set $2
+  local.get $2
   i32.const 65597
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 32
-   i32.const 138
+   i32.const 159
    i32.const 3
    call $~lib/builtins/abort
    unreachable

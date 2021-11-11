@@ -129,6 +129,27 @@
   assert(val - 1 == 0xffff);
 }
 
+// special cases
+{
+  const b1 = <bool>2;
+  assert(b1 == true);
+
+  const b2 = <bool>-1;
+  assert(b2 == true);
+
+  const b3 = <bool>0;
+  assert(b3 == false);
+
+  let b4 = <bool>2;
+  assert(b4 == true);
+
+  let b5 = <bool>-1;
+  assert(b5 == true);
+
+  let b6 = <bool>0;
+  assert(b6 == false);
+}
+
 {
   // regression #2131
   const a: u32 = 65;
