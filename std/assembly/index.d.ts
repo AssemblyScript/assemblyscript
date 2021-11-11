@@ -34,9 +34,7 @@ declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
 /** A 128-bit vector. */
-declare type v128 = {
-  toString(radix?: number): string
-};
+declare type v128 = _V128;
 /** Function reference. */
 declare type funcref = object | null;
 /** External reference. */
