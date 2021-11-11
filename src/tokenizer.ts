@@ -177,13 +177,17 @@ export enum IdentifierHandling {
 }
 
 export function tokenFromKeyword(text: string): Token {
-  assert(text.length);
+  let len = text.length;
+  assert(len);
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
-      if (text == "abstract") return Token.ABSTRACT;
+      if (len == 5) {
+        if (text == "async") return Token.ASYNC;
+        if (text == "await") return Token.AWAIT;
+        break;
+      }
       if (text == "as") return Token.AS;
-      if (text == "async") return Token.ASYNC;
-      if (text == "await") return Token.AWAIT;
+      if (text == "abstract") return Token.ABSTRACT;
       break;
     }
     case CharCode.b: {
@@ -191,35 +195,47 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.c: {
+      if (len == 5) {
+        if (text == "const") return Token.CONST;
+        if (text == "class") return Token.CLASS;
+        if (text == "catch") return Token.CATCH;
+        break;
+      }
       if (text == "case") return Token.CASE;
-      if (text == "catch") return Token.CATCH;
-      if (text == "class") return Token.CLASS;
       if (text == "continue") return Token.CONTINUE;
-      if (text == "const") return Token.CONST;
       if (text == "constructor") return Token.CONSTRUCTOR;
       break;
     }
     case CharCode.d: {
-      if (text == "debugger") return Token.DEBUGGER;
-      if (text == "declare") return Token.DECLARE;
-      if (text == "default") return Token.DEFAULT;
-      if (text == "delete") return Token.DELETE;
+      if (len == 7) {
+        if (text == "default") return Token.DEFAULT;
+        if (text == "declare") return Token.DECLARE;
+        break;
+      }
       if (text == "do") return Token.DO;
+      if (text == "delete") return Token.DELETE;
+      if (text == "debugger") return Token.DEBUGGER;
       break;
     }
     case CharCode.e: {
-      if (text == "else") return Token.ELSE;
-      if (text == "enum") return Token.ENUM;
+      if (len == 4) {
+        if (text == "else") return Token.ELSE;
+        if (text == "enum") return Token.ENUM;
+        break;
+      }
       if (text == "export") return Token.EXPORT;
       if (text == "extends") return Token.EXTENDS;
       break;
     }
     case CharCode.f: {
-      if (text == "false") return Token.FALSE;
-      if (text == "finally") return Token.FINALLY;
-      if (text == "for") return Token.FOR;
-      if (text == "from") return Token.FROM;
+      if (len <= 5) {
+        if (text == "false") return Token.FALSE;
+        if (text == "for") return Token.FOR;
+        if (text == "from") return Token.FROM;
+        break;
+      }
       if (text == "function") return Token.FUNCTION;
+      if (text == "finally") return Token.FINALLY;
       break;
     }
     case CharCode.g: {
@@ -227,13 +243,30 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.i: {
-      if (text == "if") return Token.IF;
-      if (text == "implements") return Token.IMPLEMENTS;
-      if (text == "import") return Token.IMPORT;
-      if (text == "in") return Token.IN;
-      if (text == "instanceof") return Token.INSTANCEOF;
-      if (text == "interface") return Token.INTERFACE;
-      if (text == "is") return Token.IS;
+      if (len == 2) {
+        if (text == "if") return Token.IF;
+        if (text == "in") return Token.IN;
+        if (text == "is") return Token.IS;
+        break;
+      }
+      switch (text.charCodeAt(3)) {
+        case CharCode.l: {
+          if (text == "implements") return Token.IMPLEMENTS;
+          break;
+        }
+        case CharCode.o: {
+          if (text == "import") return Token.IMPORT;
+          break;
+        }
+        case CharCode.t: {
+          if (text == "instanceof") return Token.INSTANCEOF;
+          break;
+        }
+        case CharCode.e: {
+          if (text == "interface") return Token.INTERFACE;
+          break;
+        }
+      }
       break;
     }
     case CharCode.k: {
@@ -249,9 +282,9 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.n: {
-      if (text == "namespace") return Token.NAMESPACE;
       if (text == "new") return Token.NEW;
       if (text == "null") return Token.NULL;
+      if (text == "namespace") return Token.NAMESPACE;
       break;
     }
     case CharCode.o: {
@@ -259,30 +292,39 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.p: {
-      if (text == "package") return Token.PACKAGE;
-      if (text == "private") return Token.PRIVATE;
-      if (text == "protected") return Token.PROTECTED;
+      if (len == 7) {
+        if (text == "private") return Token.PRIVATE;
+        if (text == "package") return Token.PACKAGE;
+        break;
+      }
       if (text == "public") return Token.PUBLIC;
+      if (text == "protected") return Token.PROTECTED;
       break;
     }
     case CharCode.r: {
-      if (text == "readonly") return Token.READONLY;
       if (text == "return") return Token.RETURN;
+      if (text == "readonly") return Token.READONLY;
       break;
     }
     case CharCode.s: {
+      if (len == 6) {
+        if (text == "switch") return Token.SWITCH;
+        if (text == "static") return Token.STATIC;
+        break;
+      }
       if (text == "set") return Token.SET;
-      if (text == "static") return Token.STATIC;
       if (text == "super") return Token.SUPER;
-      if (text == "switch") return Token.SWITCH;
       break;
     }
     case CharCode.t: {
-      if (text == "this") return Token.THIS;
-      if (text == "throw") return Token.THROW;
-      if (text == "true") return Token.TRUE;
+      if (len == 4) {
+        if (text == "true") return Token.TRUE;
+        if (text == "this") return Token.THIS;
+        if (text == "type") return Token.TYPE;
+        break;
+      }
       if (text == "try") return Token.TRY;
-      if (text == "type") return Token.TYPE;
+      if (text == "throw") return Token.THROW;
       if (text == "typeof") return Token.TYPEOF;
       break;
     }
@@ -917,9 +959,9 @@ export class Tokenizer extends DiagnosticEmitter {
             if (identifierHandling != IdentifierHandling.ALWAYS) {
               let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
               if (
-                maybeKeywordToken !== Token.INVALID &&
+                maybeKeywordToken != Token.INVALID &&
                 !(
-                  identifierHandling === IdentifierHandling.PREFER &&
+                  identifierHandling == IdentifierHandling.PREFER &&
                   tokenIsAlsoIdentifier(maybeKeywordToken)
                 )
               ) {
