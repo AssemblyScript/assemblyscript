@@ -705,9 +705,9 @@ function test_const(): v128 {
 
 function test_stringify(): void {
   var a = f64x2(1.5, 2.5);
-  assert(a.toString() == "0,0,0,0,0,0,-8,63,0,0,0,0,0,0,4,64");
+  assert(a.toString() == "0 0 0 0 0 0 -8 63 0 0 0 0 0 0 4 64");
   var b = i8x16.splat(-1);
-  assert(b.toString(16) == "ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff,ff");
+  assert(b.toString(16) == "ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff");
 }
 
 if (ASC_FEATURE_SIMD) {
