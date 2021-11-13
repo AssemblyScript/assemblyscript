@@ -3552,7 +3552,7 @@ function builtin_i8x16(ctx: BuiltinContext): ExpressionRef {
     }
     for (let i = i32(fullVars); i < 16; i++) {
       if (vars[i]) {
-        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI8x16, vec, i, vars[i]);
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI8x16, vec, <u8>i, vars[i]);
       }
     }
     return vec;
@@ -3604,7 +3604,7 @@ function builtin_i16x8(ctx: BuiltinContext): ExpressionRef {
     }
     for (let i = i32(fullVars); i < 8; i++) {
       if (vars[i]) {
-        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI16x8, vec, i, vars[i]);
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI16x8, vec, <u8>i, vars[i]);
       }
     }
     return vec;
@@ -3656,7 +3656,7 @@ function builtin_i32x4(ctx: BuiltinContext): ExpressionRef {
     }
     for (let i = i32(fullVars); i < 4; i++) {
       if (vars[i]) {
-        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI32x4, vec, i, vars[i]);
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI32x4, vec, <u8>i, vars[i]);
       }
     }
     return vec;
@@ -3712,7 +3712,7 @@ function builtin_i64x2(ctx: BuiltinContext): ExpressionRef {
     }
     for (let i = i32(fullVars); i < 2; i++) {
       if (vars[i]) {
-        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI64x2, vec, i, vars[i]);
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI64x2, vec, <u8>i, vars[i]);
       }
     }
     return vec;
@@ -3764,7 +3764,7 @@ function builtin_f32x4(ctx: BuiltinContext): ExpressionRef {
     }
     for (let i = i32(fullVars); i < 4; i++) {
       if (vars[i]) {
-        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneF32x4, vec, i, vars[i]);
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneF32x4, vec, <u8>i, vars[i]);
       }
     }
     return vec;
@@ -3816,7 +3816,7 @@ function builtin_f64x2(ctx: BuiltinContext): ExpressionRef {
     }
     for (let i = i32(fullVars); i < 2; i++) {
       if (vars[i]) {
-        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneF64x2, vec, i, vars[i]);
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneF64x2, vec, <u8>i, vars[i]);
       }
     }
     return vec;
