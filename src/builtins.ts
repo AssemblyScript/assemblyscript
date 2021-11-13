@@ -3531,7 +3531,6 @@ function builtin_i8x16(ctx: BuiltinContext): ExpressionRef {
     if (precomp) {
       writeI8(getConstValueI32(precomp), bytes, i);
     } else {
-      writeI8(0, bytes, i);
       vars[i] = expr;
       numVars++;
     }
@@ -3582,7 +3581,6 @@ function builtin_i16x8(ctx: BuiltinContext): ExpressionRef {
     if (precomp) {
       writeI16(getConstValueI32(precomp), bytes, i << 1);
     } else {
-      writeI16(0, bytes, i << 1);
       vars[i] = expr;
       numVars++;
     }
@@ -3633,7 +3631,6 @@ function builtin_i32x4(ctx: BuiltinContext): ExpressionRef {
     if (precomp) {
       writeI32(getConstValueI32(precomp), bytes, i << 2);
     } else {
-      writeI32(0, bytes, i << 2);
       vars[i] = expr;
       numVars++;
     }
@@ -3686,9 +3683,6 @@ function builtin_i64x2(ctx: BuiltinContext): ExpressionRef {
       writeI32(getConstValueI64Low(precomp),  bytes, off + 0);
       writeI32(getConstValueI64High(precomp), bytes, off + 4);
     } else {
-      let off = i << 3;
-      writeI32(0, bytes, off + 0);
-      writeI32(0, bytes, off + 4);
       vars[i] = expr;
       numVars++;
     }
@@ -3739,7 +3733,6 @@ function builtin_f32x4(ctx: BuiltinContext): ExpressionRef {
     if (precomp) {
       writeF32(getConstValueF32(precomp), bytes, i << 2);
     } else {
-      writeF32(0, bytes, i << 2);
       vars[i] = expr;
       numVars++;
     }
@@ -3790,7 +3783,6 @@ function builtin_f64x2(ctx: BuiltinContext): ExpressionRef {
     if (precomp) {
       writeF64(getConstValueF64(precomp), bytes, i << 3);
     } else {
-      writeF64(0, bytes, i << 3);
       vars[i] = expr;
       numVars++;
     }
