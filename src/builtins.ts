@@ -3522,20 +3522,41 @@ function builtin_i8x16(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
+  var vars  = new Array<ExpressionRef>(16);
+  var numVars = 0;
+
   for (let i = 0; i < 16; ++i) {
     let expr = compiler.compileExpression(operands[i], Type.i8, Constraints.CONV_IMPLICIT);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeI8(getConstValueI32(precomp), bytes, i);
     } else {
-      compiler.error(
-        DiagnosticCode.Expression_must_be_a_compile_time_constant,
-        operands[i].range
-      );
+      writeI8(0, bytes, i);
+      vars[i] = expr;
+      numVars++;
     }
   }
   compiler.currentType = Type.v128;
-  return module.v128(bytes);
+  if (numVars == 0) {
+    // all constants
+    return module.v128(bytes);
+  } else {
+    let vec: ExpressionRef;
+    let fullVars = numVars == 16;
+    if (fullVars) {
+      // all variants
+      vec = module.unary(UnaryOp.SplatI8x16, vars[0]);
+    } else {
+      // mixed constants / variants
+      vec = module.v128(bytes);
+    }
+    for (let i = i32(fullVars); i < 16; i++) {
+      if (vars[i]) {
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI8x16, vec, i, vars[i]);
+      }
+    }
+    return vec;
+  }
 }
 builtins.set(BuiltinNames.i8x16, builtin_i8x16);
 
@@ -3553,20 +3574,41 @@ function builtin_i16x8(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
+  var vars  = new Array<ExpressionRef>(8);
+  var numVars = 0;
+
   for (let i = 0; i < 8; ++i) {
     let expr = compiler.compileExpression(operands[i], Type.i16, Constraints.CONV_IMPLICIT);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeI16(getConstValueI32(precomp), bytes, i << 1);
     } else {
-      compiler.error(
-        DiagnosticCode.Expression_must_be_a_compile_time_constant,
-        operands[i].range
-      );
+      writeI16(0, bytes, i << 1);
+      vars[i] = expr;
+      numVars++;
     }
   }
   compiler.currentType = Type.v128;
-  return module.v128(bytes);
+  if (numVars == 0) {
+    // all constants
+    return module.v128(bytes);
+  } else {
+    let vec: ExpressionRef;
+    let fullVars = numVars == 8;
+    if (fullVars) {
+      // all variants
+      vec = module.unary(UnaryOp.SplatI16x8, vars[0]);
+    } else {
+      // mixed constants / variants
+      vec = module.v128(bytes);
+    }
+    for (let i = i32(fullVars); i < 8; i++) {
+      if (vars[i]) {
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI16x8, vec, i, vars[i]);
+      }
+    }
+    return vec;
+  }
 }
 builtins.set(BuiltinNames.i16x8, builtin_i16x8);
 
@@ -3584,20 +3626,41 @@ function builtin_i32x4(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
+  var vars  = new Array<ExpressionRef>(4);
+  var numVars = 0;
+
   for (let i = 0; i < 4; ++i) {
     let expr = compiler.compileExpression(operands[i], Type.i32, Constraints.CONV_IMPLICIT);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeI32(getConstValueI32(precomp), bytes, i << 2);
     } else {
-      compiler.error(
-        DiagnosticCode.Expression_must_be_a_compile_time_constant,
-        operands[i].range
-      );
+      writeI32(0, bytes, i << 2);
+      vars[i] = expr;
+      numVars++;
     }
   }
   compiler.currentType = Type.v128;
-  return module.v128(bytes);
+  if (numVars == 0) {
+    // all constants
+    return module.v128(bytes);
+  } else {
+    let vec: ExpressionRef;
+    let fullVars = numVars == 4;
+    if (fullVars) {
+      // all variants
+      vec = module.unary(UnaryOp.SplatI32x4, vars[0]);
+    } else {
+      // mixed constants / variants
+      vec = module.v128(bytes);
+    }
+    for (let i = i32(fullVars); i < 4; i++) {
+      if (vars[i]) {
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI32x4, vec, i, vars[i]);
+      }
+    }
+    return vec;
+  }
 }
 builtins.set(BuiltinNames.i32x4, builtin_i32x4);
 
@@ -3615,22 +3678,45 @@ function builtin_i64x2(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
+  var vars  = new Array<ExpressionRef>(2);
+  var numVars = 0;
+
   for (let i = 0; i < 2; ++i) {
     let expr = compiler.compileExpression(operands[i], Type.i64, Constraints.CONV_IMPLICIT);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       let off = i << 3;
-      writeI32(getConstValueI64Low(precomp), bytes, off);
+      writeI32(getConstValueI64Low(precomp),  bytes, off + 0);
       writeI32(getConstValueI64High(precomp), bytes, off + 4);
     } else {
-      compiler.error(
-        DiagnosticCode.Expression_must_be_a_compile_time_constant,
-        operands[i].range
-      );
+      let off = i << 3;
+      writeI32(0, bytes, off + 0);
+      writeI32(0, bytes, off + 4);
+      vars[i] = expr;
+      numVars++;
     }
   }
   compiler.currentType = Type.v128;
-  return module.v128(bytes);
+  if (numVars == 0) {
+    // all constants
+    return module.v128(bytes);
+  } else {
+    let vec: ExpressionRef;
+    let fullVars = numVars == 2;
+    if (fullVars) {
+      // all variants
+      vec = module.unary(UnaryOp.SplatI64x2, vars[0]);
+    } else {
+      // mixed constants / variants
+      vec = module.v128(bytes);
+    }
+    for (let i = i32(fullVars); i < 2; i++) {
+      if (vars[i]) {
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneI64x2, vec, i, vars[i]);
+      }
+    }
+    return vec;
+  }
 }
 builtins.set(BuiltinNames.i64x2, builtin_i64x2);
 
@@ -3648,20 +3734,41 @@ function builtin_f32x4(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
+  var vars  = new Array<ExpressionRef>(4);
+  var numVars = 0;
+
   for (let i = 0; i < 4; ++i) {
     let expr = compiler.compileExpression(operands[i], Type.f32, Constraints.CONV_IMPLICIT);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeF32(getConstValueF32(precomp), bytes, i << 2);
     } else {
-      compiler.error(
-        DiagnosticCode.Expression_must_be_a_compile_time_constant,
-        operands[i].range
-      );
+      writeF32(0, bytes, i << 2);
+      vars[i] = expr;
+      numVars++;
     }
   }
   compiler.currentType = Type.v128;
-  return module.v128(bytes);
+  if (numVars == 0) {
+    // all constants
+    return module.v128(bytes);
+  } else {
+    let vec: ExpressionRef;
+    let fullVars = numVars == 4;
+    if (fullVars) {
+      // all variants
+      vec = module.unary(UnaryOp.SplatF32x4, vars[0]);
+    } else {
+      // mixed constants / variants
+      vec = module.v128(bytes);
+    }
+    for (let i = i32(fullVars); i < 4; i++) {
+      if (vars[i]) {
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneF32x4, vec, i, vars[i]);
+      }
+    }
+    return vec;
+  }
 }
 builtins.set(BuiltinNames.f32x4, builtin_f32x4);
 
@@ -3679,20 +3786,41 @@ function builtin_f64x2(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
+  var vars  = new Array<ExpressionRef>(2);
+  var numVars = 0;
+
   for (let i = 0; i < 2; ++i) {
     let expr = compiler.compileExpression(operands[i], Type.f64, Constraints.CONV_IMPLICIT);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeF64(getConstValueF64(precomp), bytes, i << 3);
     } else {
-      compiler.error(
-        DiagnosticCode.Expression_must_be_a_compile_time_constant,
-        operands[i].range
-      );
+      writeF64(0, bytes, i << 3);
+      vars[i] = expr;
+      numVars++;
     }
   }
   compiler.currentType = Type.v128;
-  return module.v128(bytes);
+  if (numVars == 0) {
+    // all constants
+    return module.v128(bytes);
+  } else {
+    let vec: ExpressionRef;
+    let fullVars = numVars == 2;
+    if (fullVars) {
+      // all variants
+      vec = module.unary(UnaryOp.SplatF64x2, vars[0]);
+    } else {
+      // mixed constants / variants
+      vec = module.v128(bytes);
+    }
+    for (let i = i32(fullVars); i < 2; i++) {
+      if (vars[i]) {
+        vec = module.simd_replace(SIMDReplaceOp.ReplaceLaneF64x2, vec, i, vars[i]);
+      }
+    }
+    return vec;
+  }
 }
 builtins.set(BuiltinNames.f64x2, builtin_f64x2);
 

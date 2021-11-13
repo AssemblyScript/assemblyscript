@@ -1,10 +1,20 @@
 (module
+ (type $i32_i32_i32_=>_v128 (func (param i32 i32 i32) (result v128)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
+ (type $i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
+ (type $i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32) (result v128)))
+ (type $i64_=>_v128 (func (param i64) (result v128)))
+ (type $i64_i64_=>_v128 (func (param i64 i64) (result v128)))
+ (type $f32_f32_f32_=>_v128 (func (param f32 f32 f32) (result v128)))
+ (type $f32_f32_f32_f32_=>_v128 (func (param f32 f32 f32 f32) (result v128)))
+ (type $f64_=>_v128 (func (param f64) (result v128)))
+ (type $f64_f64_=>_v128 (func (param f64 f64) (result v128)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (memory $0 1)
@@ -14,6 +24,18 @@
  (data (i32.const 1112) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1164) "<")
  (data (i32.const 1176) "\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s")
+ (export "test_vars_i8x16_partial" (func $features/simd/test_vars_i8x16_partial))
+ (export "test_vars_i8x16_full" (func $features/simd/test_vars_i8x16_full))
+ (export "test_vars_i16x8_partial" (func $features/simd/test_vars_i16x8_partial))
+ (export "test_vars_i16x8_full" (func $features/simd/test_vars_i16x8_full))
+ (export "test_vars_i32x4_partial" (func $features/simd/test_vars_i32x4_partial))
+ (export "test_vars_i32x4_full" (func $features/simd/test_vars_i32x4_full))
+ (export "test_vars_i64x2_partial" (func $features/simd/test_vars_i64x2_partial))
+ (export "test_vars_i64x2_full" (func $features/simd/test_vars_i64x2_full))
+ (export "test_vars_f32x4_partial" (func $features/simd/test_vars_f32x4_partial))
+ (export "test_vars_f32x4_full" (func $features/simd/test_vars_f32x4_full))
+ (export "test_vars_f64x2_partial" (func $features/simd/test_vars_f64x2_partial))
+ (export "test_vars_f64x2_full" (func $features/simd/test_vars_f64x2_full))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -974,6 +996,136 @@
   i32.store
   local.get $1
   call $~lib/rt/tlsf/insertBlock
+ )
+ (func $features/simd/test_vars_i8x16_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
+  v128.const i32x4 0x03000100 0x07000504 0x0b0a0908 0x000e0d0c
+  local.get $0
+  i8x16.replace_lane 2
+  local.get $1
+  i8x16.replace_lane 6
+  local.get $2
+  i8x16.replace_lane 15
+ )
+ (func $features/simd/test_vars_i8x16_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (param $7 i32) (param $8 i32) (param $9 i32) (param $10 i32) (param $11 i32) (param $12 i32) (param $13 i32) (param $14 i32) (param $15 i32) (result v128)
+  local.get $0
+  i8x16.splat
+  local.get $1
+  i8x16.replace_lane 1
+  local.get $2
+  i8x16.replace_lane 2
+  local.get $3
+  i8x16.replace_lane 3
+  local.get $4
+  i8x16.replace_lane 4
+  local.get $5
+  i8x16.replace_lane 5
+  local.get $6
+  i8x16.replace_lane 6
+  local.get $7
+  i8x16.replace_lane 7
+  local.get $8
+  i8x16.replace_lane 8
+  local.get $9
+  i8x16.replace_lane 9
+  local.get $10
+  i8x16.replace_lane 10
+  local.get $11
+  i8x16.replace_lane 11
+  local.get $12
+  i8x16.replace_lane 12
+  local.get $13
+  i8x16.replace_lane 13
+  local.get $14
+  i8x16.replace_lane 14
+  local.get $15
+  i8x16.replace_lane 15
+ )
+ (func $features/simd/test_vars_i16x8_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
+  v128.const i32x4 0x00010000 0x00030000 0x00050000 0x00000006
+  local.get $0
+  i16x8.replace_lane 2
+  local.get $1
+  i16x8.replace_lane 4
+  local.get $2
+  i16x8.replace_lane 7
+ )
+ (func $features/simd/test_vars_i16x8_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (param $7 i32) (result v128)
+  local.get $0
+  i16x8.splat
+  local.get $1
+  i16x8.replace_lane 1
+  local.get $2
+  i16x8.replace_lane 2
+  local.get $3
+  i16x8.replace_lane 3
+  local.get $4
+  i16x8.replace_lane 4
+  local.get $5
+  i16x8.replace_lane 5
+  local.get $6
+  i16x8.replace_lane 6
+  local.get $7
+  i16x8.replace_lane 7
+ )
+ (func $features/simd/test_vars_i32x4_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  local.get $0
+  i32x4.replace_lane 1
+  local.get $1
+  i32x4.replace_lane 2
+  local.get $2
+  i32x4.replace_lane 3
+ )
+ (func $features/simd/test_vars_i32x4_full (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result v128)
+  local.get $0
+  i32x4.splat
+  local.get $1
+  i32x4.replace_lane 1
+  local.get $2
+  i32x4.replace_lane 2
+  local.get $3
+  i32x4.replace_lane 3
+ )
+ (func $features/simd/test_vars_i64x2_partial (param $0 i64) (result v128)
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  local.get $0
+  i64x2.replace_lane 1
+ )
+ (func $features/simd/test_vars_i64x2_full (param $0 i64) (param $1 i64) (result v128)
+  local.get $0
+  i64x2.splat
+  local.get $1
+  i64x2.replace_lane 1
+ )
+ (func $features/simd/test_vars_f32x4_partial (param $0 f32) (param $1 f32) (param $2 f32) (result v128)
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  local.get $0
+  f32x4.replace_lane 1
+  local.get $1
+  f32x4.replace_lane 2
+  local.get $2
+  f32x4.replace_lane 3
+ )
+ (func $features/simd/test_vars_f32x4_full (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (result v128)
+  local.get $0
+  f32x4.splat
+  local.get $1
+  f32x4.replace_lane 1
+  local.get $2
+  f32x4.replace_lane 2
+  local.get $3
+  f32x4.replace_lane 3
+ )
+ (func $features/simd/test_vars_f64x2_partial (param $0 f64) (result v128)
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  local.get $0
+  f64x2.replace_lane 1
+ )
+ (func $features/simd/test_vars_f64x2_full (param $0 f64) (param $1 f64) (result v128)
+  local.get $0
+  f64x2.splat
+  local.get $1
+  f64x2.replace_lane 1
  )
  (func $~start
   (local $0 i32)
