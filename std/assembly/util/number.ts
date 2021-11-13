@@ -748,20 +748,34 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
   if (isSigned<T>()) {
     sign = u32(value < 0);
     if (sign) {
-      value = changetype<T>(-value);
+      // @ts-ignore
       store<u16>(buffer, CharCode.MINUS);
+      if (sizeof<T>() == 1) {
+        if (value == -0x80) {
+          utoa32_dec_core(buffer + 2, 0x80, 3);
+          return 4;
+        }
+      }
+      if (sizeof<T>() == 2) {
+        if (value == -0x8000) {
+          utoa32_dec_core(buffer + 2, 0x8000, 5);
+          return 6;
+        }
+      }
+      // @ts-ignore
+      value = -value;
     }
   }
   if (ASC_SHRINK_LEVEL <= 1) {
     if (isSigned<T>()) {
       if (sizeof<T>() <= 4) {
         if (<u32>value < 10) {
-          store<u16>(buffer + (sign << 1), value | CharCode._0);
+          store<u16>(buffer + (sign << 1), <u32>value | CharCode._0);
           return 1 + sign;
         }
       } else {
         if (<u64>value < 10) {
-          store<u16>(buffer + (sign << 1), value | CharCode._0);
+          store<u16>(buffer + (sign << 1), <u32>value | CharCode._0);
           return 1 + sign;
         }
       }
@@ -772,21 +786,23 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
       }
     }
   }
-  var decimals = sign;
+  var decimals: u32 = 0;
   if (sizeof<T>() <= 4) {
-    decimals += decimalCount32(value);
-    utoa32_dec_core(buffer, value, decimals);
+    let val32 = <u32>value;
+    decimals = decimalCount32(val32);
+    utoa32_dec_core(buffer + (sign << 1), val32, decimals);
   } else {
     if (<u64>value <= <u64>u32.MAX_VALUE) {
       let val32 = <u32>value;
-      decimals += decimalCount32(val32);
-      utoa32_dec_core(buffer, val32, decimals);
+      decimals = decimalCount32(val32);
+      utoa32_dec_core(buffer + (sign << 1), val32, decimals);
     } else {
-      decimals += decimalCount64High(value);
-      utoa64_dec_core(buffer, value, decimals);
+      let val64 = <u64>value;
+      decimals = decimalCount64High(val64);
+      utoa64_dec_core(buffer + (sign << 1), val64, decimals);
     }
   }
-  return decimals;
+  return sign + decimals;
 }
 
 export function dtoa_buffered(buffer: usize, value: f64): u32 {
