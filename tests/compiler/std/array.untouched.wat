@@ -16401,6 +16401,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   i32.const 0
   local.set $2
   i32.const 1
@@ -16427,6 +16428,12 @@
    i32.sub
    local.set $1
   end
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $3
   i32.const 0
   i32.const 1
   i32.le_s
@@ -16441,11 +16448,7 @@
   i32.const 10
   i32.lt_u
   if
-   local.get $0
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.add
+   local.get $3
    local.get $1
    i32.const 48
    i32.or
@@ -16456,36 +16459,32 @@
    return
   end
   i32.const 0
-  local.set $3
+  local.set $4
   i32.const 4
   i32.const 4
   i32.le_u
   drop
   local.get $1
-  local.set $4
-  local.get $4
+  local.set $5
+  local.get $5
   call $~lib/util/number/decimalCount32
-  local.set $3
-  local.get $0
-  local.get $2
-  i32.const 1
-  i32.shl
-  i32.add
+  local.set $4
+  local.get $3
+  local.set $8
+  local.get $5
   local.set $7
   local.get $4
   local.set $6
-  local.get $3
-  local.set $5
   i32.const 0
   i32.const 1
   i32.ge_s
   drop
+  local.get $8
   local.get $7
   local.get $6
-  local.get $5
   call $~lib/util/number/utoa32_dec_lut
   local.get $2
-  local.get $3
+  local.get $4
   i32.add
  )
  (func $~lib/array/Array<i32>#join (param $0 i32) (param $1 i32) (result i32)
@@ -16514,10 +16513,17 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   i32.const 0
   local.set $2
   i32.const 0
   drop
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $3
   i32.const 0
   i32.const 1
   i32.le_s
@@ -16537,36 +16543,32 @@
    return
   end
   i32.const 0
-  local.set $3
+  local.set $4
   i32.const 4
   i32.const 4
   i32.le_u
   drop
   local.get $1
-  local.set $4
-  local.get $4
+  local.set $5
+  local.get $5
   call $~lib/util/number/decimalCount32
-  local.set $3
-  local.get $0
-  local.get $2
-  i32.const 1
-  i32.shl
-  i32.add
+  local.set $4
+  local.get $3
+  local.set $8
+  local.get $5
   local.set $7
   local.get $4
   local.set $6
-  local.get $3
-  local.set $5
   i32.const 0
   i32.const 1
   i32.ge_s
   drop
+  local.get $8
   local.get $7
   local.get $6
-  local.get $5
   call $~lib/util/number/utoa32_dec_lut
   local.get $2
-  local.get $3
+  local.get $4
   i32.add
  )
  (func $~lib/array/Array<u32>#join (param $0 i32) (param $1 i32) (result i32)
@@ -18027,6 +18029,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   i32.const 0
   local.set $2
   i32.const 1
@@ -18078,6 +18081,12 @@
    i32.sub
    local.set $1
   end
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $6
   i32.const 0
   i32.const 1
   i32.le_s
@@ -18093,11 +18102,7 @@
   i32.const 10
   i32.lt_u
   if
-   local.get $0
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.add
+   local.get $6
    local.get $1
    i32.extend8_s
    i32.const 48
@@ -18109,7 +18114,7 @@
    return
   end
   i32.const 0
-  local.set $6
+  local.set $7
   i32.const 1
   i32.const 4
   i32.le_u
@@ -18119,27 +18124,23 @@
   local.set $5
   local.get $5
   call $~lib/util/number/decimalCount32
-  local.set $6
-  local.get $0
-  local.get $2
-  i32.const 1
-  i32.shl
-  i32.add
   local.set $7
+  local.get $6
+  local.set $8
   local.get $5
   local.set $4
-  local.get $6
+  local.get $7
   local.set $3
   i32.const 0
   i32.const 1
   i32.ge_s
   drop
-  local.get $7
+  local.get $8
   local.get $4
   local.get $3
   call $~lib/util/number/utoa32_dec_lut
   local.get $2
-  local.get $6
+  local.get $7
   i32.add
  )
  (func $~lib/array/Array<i8>#join (param $0 i32) (param $1 i32) (result i32)
@@ -18168,10 +18169,17 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   i32.const 0
   local.set $2
   i32.const 0
   drop
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $3
   i32.const 0
   i32.const 1
   i32.le_s
@@ -18195,7 +18203,7 @@
    return
   end
   i32.const 0
-  local.set $3
+  local.set $4
   i32.const 2
   i32.const 4
   i32.le_u
@@ -18203,30 +18211,26 @@
   local.get $1
   i32.const 65535
   i32.and
-  local.set $4
-  local.get $4
+  local.set $5
+  local.get $5
   call $~lib/util/number/decimalCount32
-  local.set $3
-  local.get $0
-  local.get $2
-  i32.const 1
-  i32.shl
-  i32.add
+  local.set $4
+  local.get $3
+  local.set $8
+  local.get $5
   local.set $7
   local.get $4
   local.set $6
-  local.get $3
-  local.set $5
   i32.const 0
   i32.const 1
   i32.ge_s
   drop
+  local.get $8
   local.get $7
   local.get $6
-  local.get $5
   call $~lib/util/number/utoa32_dec_lut
   local.get $2
-  local.get $3
+  local.get $4
   i32.add
  )
  (func $~lib/array/Array<u16>#join (param $0 i32) (param $1 i32) (result i32)
@@ -18255,6 +18259,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   i32.const 0
   local.set $2
   i32.const 1
@@ -18306,6 +18311,12 @@
    i32.sub
    local.set $1
   end
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $6
   i32.const 0
   i32.const 1
   i32.le_s
@@ -18321,11 +18332,7 @@
   i32.const 10
   i32.lt_u
   if
-   local.get $0
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.add
+   local.get $6
    local.get $1
    i32.extend16_s
    i32.const 48
@@ -18337,7 +18344,7 @@
    return
   end
   i32.const 0
-  local.set $6
+  local.set $7
   i32.const 2
   i32.const 4
   i32.le_u
@@ -18347,27 +18354,23 @@
   local.set $5
   local.get $5
   call $~lib/util/number/decimalCount32
-  local.set $6
-  local.get $0
-  local.get $2
-  i32.const 1
-  i32.shl
-  i32.add
   local.set $7
+  local.get $6
+  local.set $8
   local.get $5
   local.set $4
-  local.get $6
+  local.get $7
   local.set $3
   i32.const 0
   i32.const 1
   i32.ge_s
   drop
-  local.get $7
+  local.get $8
   local.get $4
   local.get $3
   call $~lib/util/number/utoa32_dec_lut
   local.get $2
-  local.get $6
+  local.get $7
   i32.add
  )
  (func $~lib/array/Array<i16>#join (param $0 i32) (param $1 i32) (result i32)
@@ -18578,12 +18581,19 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i64)
+  (local $8 i32)
   (local $9 i64)
+  (local $10 i64)
   i32.const 0
   local.set $2
   i32.const 0
   drop
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $3
   i32.const 0
   i32.const 1
   i32.le_s
@@ -18604,7 +18614,7 @@
    return
   end
   i32.const 0
-  local.set $3
+  local.set $4
   i32.const 8
   i32.const 4
   i32.le_u
@@ -18616,55 +18626,47 @@
   if
    local.get $1
    i32.wrap_i64
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    call $~lib/util/number/decimalCount32
-   local.set $3
-   local.get $0
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.add
+   local.set $4
+   local.get $3
+   local.set $8
+   local.get $5
    local.set $7
    local.get $4
    local.set $6
+   i32.const 0
+   i32.const 1
+   i32.ge_s
+   drop
+   local.get $8
+   local.get $7
+   local.get $6
+   call $~lib/util/number/utoa32_dec_lut
+  else
+   local.get $1
+   local.set $9
+   local.get $9
+   call $~lib/util/number/decimalCount64High
+   local.set $4
    local.get $3
-   local.set $5
+   local.set $7
+   local.get $9
+   local.set $10
+   local.get $4
+   local.set $6
    i32.const 0
    i32.const 1
    i32.ge_s
    drop
    local.get $7
+   local.get $10
    local.get $6
-   local.get $5
-   call $~lib/util/number/utoa32_dec_lut
-  else
-   local.get $1
-   local.set $8
-   local.get $8
-   call $~lib/util/number/decimalCount64High
-   local.set $3
-   local.get $0
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.add
-   local.set $6
-   local.get $8
-   local.set $9
-   local.get $3
-   local.set $5
-   i32.const 0
-   i32.const 1
-   i32.ge_s
-   drop
-   local.get $6
-   local.get $9
-   local.get $5
    call $~lib/util/number/utoa64_dec_lut
   end
   local.get $2
-  local.get $3
+  local.get $4
   i32.add
  )
  (func $~lib/array/Array<u64>#join (param $0 i32) (param $1 i32) (result i32)
@@ -18693,8 +18695,9 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i64)
+  (local $8 i32)
   (local $9 i64)
+  (local $10 i64)
   i32.const 0
   local.set $2
   i32.const 1
@@ -18721,6 +18724,12 @@
    i64.sub
    local.set $1
   end
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $3
   i32.const 0
   i32.const 1
   i32.le_s
@@ -18735,11 +18744,7 @@
   i64.const 10
   i64.lt_u
   if
-   local.get $0
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.add
+   local.get $3
    local.get $1
    i32.wrap_i64
    i32.const 48
@@ -18751,7 +18756,7 @@
    return
   end
   i32.const 0
-  local.set $3
+  local.set $4
   i32.const 8
   i32.const 4
   i32.le_u
@@ -18763,55 +18768,47 @@
   if
    local.get $1
    i32.wrap_i64
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    call $~lib/util/number/decimalCount32
-   local.set $3
-   local.get $0
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.add
+   local.set $4
+   local.get $3
+   local.set $8
+   local.get $5
    local.set $7
    local.get $4
    local.set $6
+   i32.const 0
+   i32.const 1
+   i32.ge_s
+   drop
+   local.get $8
+   local.get $7
+   local.get $6
+   call $~lib/util/number/utoa32_dec_lut
+  else
+   local.get $1
+   local.set $9
+   local.get $9
+   call $~lib/util/number/decimalCount64High
+   local.set $4
    local.get $3
-   local.set $5
+   local.set $7
+   local.get $9
+   local.set $10
+   local.get $4
+   local.set $6
    i32.const 0
    i32.const 1
    i32.ge_s
    drop
    local.get $7
+   local.get $10
    local.get $6
-   local.get $5
-   call $~lib/util/number/utoa32_dec_lut
-  else
-   local.get $1
-   local.set $8
-   local.get $8
-   call $~lib/util/number/decimalCount64High
-   local.set $3
-   local.get $0
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.add
-   local.set $6
-   local.get $8
-   local.set $9
-   local.get $3
-   local.set $5
-   i32.const 0
-   i32.const 1
-   i32.ge_s
-   drop
-   local.get $6
-   local.get $9
-   local.get $5
    call $~lib/util/number/utoa64_dec_lut
   end
   local.get $2
-  local.get $3
+  local.get $4
   i32.add
  )
  (func $~lib/array/Array<i64>#join (param $0 i32) (param $1 i32) (result i32)
@@ -18885,10 +18882,17 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   i32.const 0
   local.set $2
   i32.const 0
   drop
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $3
   i32.const 0
   i32.const 1
   i32.le_s
@@ -18912,7 +18916,7 @@
    return
   end
   i32.const 0
-  local.set $3
+  local.set $4
   i32.const 1
   i32.const 4
   i32.le_u
@@ -18920,30 +18924,26 @@
   local.get $1
   i32.const 255
   i32.and
-  local.set $4
-  local.get $4
+  local.set $5
+  local.get $5
   call $~lib/util/number/decimalCount32
-  local.set $3
-  local.get $0
-  local.get $2
-  i32.const 1
-  i32.shl
-  i32.add
+  local.set $4
+  local.get $3
+  local.set $8
+  local.get $5
   local.set $7
   local.get $4
   local.set $6
-  local.get $3
-  local.set $5
   i32.const 0
   i32.const 1
   i32.ge_s
   drop
+  local.get $8
   local.get $7
   local.get $6
-  local.get $5
   call $~lib/util/number/utoa32_dec_lut
   local.get $2
-  local.get $3
+  local.get $4
   i32.add
  )
  (func $~lib/array/Array<u8>#join (param $0 i32) (param $1 i32) (result i32)
@@ -40112,6 +40112,8 @@
   local.get $0
   i32.const 31
   i32.shr_u
+  i32.const 1
+  i32.shl
   local.set $2
   local.get $2
   if
@@ -40126,18 +40128,20 @@
   if
    local.get $0
    call $~lib/util/number/decimalCount32
-   local.get $2
-   i32.add
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
    i32.const 1
    i32.shl
+   local.get $2
+   i32.add
    i32.const 1
    call $~lib/rt/itcms/__new
    local.tee $3
    i32.store
    local.get $3
+   local.get $2
+   i32.add
    local.set $7
    local.get $0
    local.set $6
@@ -40164,18 +40168,20 @@
     i32.shr_s
     i32.const 1
     i32.add
-    local.get $2
-    i32.add
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $4
     i32.const 1
     i32.shl
+    local.get $2
+    i32.add
     i32.const 1
     call $~lib/rt/itcms/__new
     local.tee $3
     i32.store
     local.get $3
+    local.get $2
+    i32.add
     local.set $7
     local.get $0
     local.set $6
@@ -40197,18 +40203,20 @@
     i64.extend_i32_u
     local.get $1
     call $~lib/util/number/ulog_base
-    local.get $2
-    i32.add
     local.set $7
     global.get $~lib/memory/__stack_pointer
     local.get $7
     i32.const 1
     i32.shl
+    local.get $2
+    i32.add
     i32.const 1
     call $~lib/rt/itcms/__new
     local.tee $3
     i32.store
     local.get $3
+    local.get $2
+    i32.add
     local.get $4
     i64.extend_i32_u
     local.get $7
@@ -42080,6 +42088,8 @@
   i64.const 63
   i64.shr_u
   i32.wrap_i64
+  i32.const 1
+  i32.shl
   local.set $2
   local.get $2
   if
@@ -42102,18 +42112,20 @@
     local.set $4
     local.get $4
     call $~lib/util/number/decimalCount32
-    local.get $2
-    i32.add
     local.set $5
     global.get $~lib/memory/__stack_pointer
     local.get $5
     i32.const 1
     i32.shl
+    local.get $2
+    i32.add
     i32.const 1
     call $~lib/rt/itcms/__new
     local.tee $3
     i32.store
     local.get $3
+    local.get $2
+    i32.add
     local.set $8
     local.get $4
     local.set $7
@@ -42130,18 +42142,20 @@
    else
     local.get $0
     call $~lib/util/number/decimalCount64High
-    local.get $2
-    i32.add
     local.set $5
     global.get $~lib/memory/__stack_pointer
     local.get $5
     i32.const 1
     i32.shl
+    local.get $2
+    i32.add
     i32.const 1
     call $~lib/rt/itcms/__new
     local.tee $3
     i32.store
     local.get $3
+    local.get $2
+    i32.add
     local.set $7
     local.get $0
     local.set $9
@@ -42170,18 +42184,20 @@
     i32.shr_s
     i32.const 1
     i32.add
-    local.get $2
-    i32.add
     local.set $5
     global.get $~lib/memory/__stack_pointer
     local.get $5
     i32.const 1
     i32.shl
+    local.get $2
+    i32.add
     i32.const 1
     call $~lib/rt/itcms/__new
     local.tee $3
     i32.store
     local.get $3
+    local.get $2
+    i32.add
     local.set $4
     local.get $0
     local.set $9
@@ -42199,18 +42215,20 @@
     local.get $0
     local.get $1
     call $~lib/util/number/ulog_base
-    local.get $2
-    i32.add
     local.set $5
     global.get $~lib/memory/__stack_pointer
     local.get $5
     i32.const 1
     i32.shl
+    local.get $2
+    i32.add
     i32.const 1
     call $~lib/rt/itcms/__new
     local.tee $3
     i32.store
     local.get $3
+    local.get $2
+    i32.add
     local.get $0
     local.get $5
     local.get $1

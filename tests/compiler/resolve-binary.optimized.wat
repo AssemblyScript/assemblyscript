@@ -2026,68 +2026,72 @@
    local.get $0
    i32.const 31
    i32.shr_u
-   local.tee $2
-   select
+   i32.const 1
+   i32.shl
    local.tee $1
+   select
+   local.tee $3
    i32.const 100000
    i32.lt_u
    if (result i32)
-    local.get $1
+    local.get $3
     i32.const 100
     i32.lt_u
     if (result i32)
-     local.get $1
+     local.get $3
      i32.const 10
      i32.ge_u
      i32.const 1
      i32.add
     else
-     local.get $1
+     local.get $3
      i32.const 10000
      i32.ge_u
      i32.const 3
      i32.add
-     local.get $1
+     local.get $3
      i32.const 1000
      i32.ge_u
      i32.add
     end
    else
-    local.get $1
+    local.get $3
     i32.const 10000000
     i32.lt_u
     if (result i32)
-     local.get $1
+     local.get $3
      i32.const 1000000
      i32.ge_u
      i32.const 6
      i32.add
     else
-     local.get $1
+     local.get $3
      i32.const 1000000000
      i32.ge_u
      i32.const 8
      i32.add
-     local.get $1
+     local.get $3
      i32.const 100000000
      i32.ge_u
      i32.add
     end
    end
-   local.get $2
-   i32.add
-   local.tee $3
+   local.tee $2
    i32.const 1
    i32.shl
+   local.get $1
+   i32.add
    i32.const 1
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
    local.get $0
    local.get $1
+   i32.add
    local.get $3
-   call $~lib/util/number/utoa32_dec_lut
    local.get $2
+   call $~lib/util/number/utoa32_dec_lut
+   local.get $1
    if
     local.get $0
     i32.const 45

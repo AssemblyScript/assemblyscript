@@ -6510,6 +6510,8 @@
   local.get $0
   i32.const 31
   i32.shr_u
+  i32.const 1
+  i32.shl
   local.set $2
   local.get $2
   if
@@ -6524,18 +6526,20 @@
   if
    local.get $0
    call $~lib/util/number/decimalCount32
-   local.get $2
-   i32.add
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
    i32.const 1
    i32.shl
+   local.get $2
+   i32.add
    i32.const 1
    call $~lib/rt/itcms/__new
    local.tee $3
    i32.store
    local.get $3
+   local.get $2
+   i32.add
    local.set $7
    local.get $0
    local.set $6
@@ -6562,18 +6566,20 @@
     i32.shr_s
     i32.const 1
     i32.add
-    local.get $2
-    i32.add
     local.set $4
     global.get $~lib/memory/__stack_pointer
     local.get $4
     i32.const 1
     i32.shl
+    local.get $2
+    i32.add
     i32.const 1
     call $~lib/rt/itcms/__new
     local.tee $3
     i32.store
     local.get $3
+    local.get $2
+    i32.add
     local.set $7
     local.get $0
     local.set $6
@@ -6595,18 +6601,20 @@
     i64.extend_i32_u
     local.get $1
     call $~lib/util/number/ulog_base
-    local.get $2
-    i32.add
     local.set $7
     global.get $~lib/memory/__stack_pointer
     local.get $7
     i32.const 1
     i32.shl
+    local.get $2
+    i32.add
     i32.const 1
     call $~lib/rt/itcms/__new
     local.tee $3
     i32.store
     local.get $3
+    local.get $2
+    i32.add
     local.get $4
     i64.extend_i32_u
     local.get $7

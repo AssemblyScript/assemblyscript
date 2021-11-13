@@ -4053,10 +4053,17 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   i32.const 0
   local.set $2
   i32.const 0
   drop
+  local.get $0
+  local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $3
   i32.const 0
   i32.const 1
   i32.le_s
@@ -4080,7 +4087,7 @@
    return
   end
   i32.const 0
-  local.set $3
+  local.set $4
   i32.const 1
   i32.const 4
   i32.le_u
@@ -4088,30 +4095,26 @@
   local.get $1
   i32.const 255
   i32.and
-  local.set $4
-  local.get $4
+  local.set $5
+  local.get $5
   call $~lib/util/number/decimalCount32
-  local.set $3
-  local.get $0
-  local.get $2
-  i32.const 1
-  i32.shl
-  i32.add
+  local.set $4
+  local.get $3
+  local.set $8
+  local.get $5
   local.set $7
   local.get $4
   local.set $6
-  local.get $3
-  local.set $5
   i32.const 0
   i32.const 1
   i32.ge_s
   drop
+  local.get $8
   local.get $7
   local.get $6
-  local.get $5
   call $~lib/util/number/utoa32_dec_lut
   local.get $2
-  local.get $3
+  local.get $4
   i32.add
  )
  (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)

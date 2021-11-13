@@ -374,23 +374,23 @@ export function itoa32(value: i32, radix: i32): String {
   }
   if (!value) return "0";
 
-  var sign = value >>> 31;
+  var sign = (value >>> 31) << 1;
   if (sign) value = -value;
   var out: String;
 
   if (radix == 10) {
-    let decimals = decimalCount32(value) + sign;
-    out = changetype<String>(__new(decimals << 1, idof<String>()));
-    utoa32_dec_core(changetype<usize>(out), value, decimals);
+    let decimals = decimalCount32(value);
+    out = changetype<String>(__new((decimals << 1) + sign, idof<String>()));
+    utoa32_dec_core(changetype<usize>(out) + sign, value, decimals);
   } else if (radix == 16) {
-    let decimals = (31 - clz(value) >> 2) + 1 + sign;
-    out = changetype<String>(__new(decimals << 1, idof<String>()));
-    utoa32_hex_core(changetype<usize>(out), value, decimals);
+    let decimals = (31 - clz(value) >> 2) + 1;
+    out = changetype<String>(__new((decimals << 1) + sign, idof<String>()));
+    utoa32_hex_core(changetype<usize>(out) + sign, value, decimals);
   } else {
     let val32 = u32(value);
-    let decimals = ulog_base(val32, radix) + sign;
-    out = changetype<String>(__new(decimals << 1, idof<String>()));
-    utoa64_any_core(changetype<usize>(out), val32, decimals, radix);
+    let decimals = ulog_base(val32, radix);
+    out = changetype<String>(__new((decimals << 1) + sign, idof<String>()));
+    utoa64_any_core(changetype<usize>(out) + sign, val32, decimals, radix);
   }
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
   return out;
@@ -432,29 +432,29 @@ export function itoa64(value: i64, radix: i32): String {
   }
   if (!value) return "0";
 
-  var sign = u32(value >>> 63);
+  var sign = u32(value >>> 63) << 1;
   if (sign) value = -value;
   var out: String;
 
   if (radix == 10) {
     if (<u64>value <= <u64>u32.MAX_VALUE) {
       let val32    = <u32>value;
-      let decimals = decimalCount32(val32) + sign;
-      out = changetype<String>(__new(decimals << 1, idof<String>()));
-      utoa32_dec_core(changetype<usize>(out), val32, decimals);
+      let decimals = decimalCount32(val32);
+      out = changetype<String>(__new((decimals << 1) + sign, idof<String>()));
+      utoa32_dec_core(changetype<usize>(out) + sign, val32, decimals);
     } else {
-      let decimals = decimalCount64High(value) + sign;
-      out = changetype<String>(__new(decimals << 1, idof<String>()));
-      utoa64_dec_core(changetype<usize>(out), value, decimals);
+      let decimals = decimalCount64High(value);
+      out = changetype<String>(__new((decimals << 1) + sign, idof<String>()));
+      utoa64_dec_core(changetype<usize>(out) + sign, value, decimals);
     }
   } else if (radix == 16) {
-    let decimals = (63 - u32(clz(value)) >> 2) + 1 + sign;
-    out = changetype<String>(__new(decimals << 1, idof<String>()));
-    utoa64_hex_core(changetype<usize>(out), value, decimals);
+    let decimals = (63 - u32(clz(value)) >> 2) + 1;
+    out = changetype<String>(__new((decimals << 1) + sign, idof<String>()));
+    utoa64_hex_core(changetype<usize>(out) + sign, value, decimals);
   } else {
-    let decimals = ulog_base(value, radix) + sign;
-    out = changetype<String>(__new(decimals << 1, idof<String>()));
-    utoa64_any_core(changetype<usize>(out), value, decimals, radix);
+    let decimals = ulog_base(value, radix);
+    out = changetype<String>(__new((decimals << 1) + sign, idof<String>()));
+    utoa64_any_core(changetype<usize>(out) + sign, value, decimals, radix);
   }
   if (sign) store<u16>(changetype<usize>(out), CharCode.MINUS);
   return out;
@@ -766,16 +766,17 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
       value = -value;
     }
   }
+  var dest = buffer + (sign << 1);
   if (ASC_SHRINK_LEVEL <= 1) {
     if (isSigned<T>()) {
       if (sizeof<T>() <= 4) {
         if (<u32>value < 10) {
-          store<u16>(buffer + (sign << 1), <u32>value | CharCode._0);
+          store<u16>(dest, <u32>value | CharCode._0);
           return 1 + sign;
         }
       } else {
         if (<u64>value < 10) {
-          store<u16>(buffer + (sign << 1), <u32>value | CharCode._0);
+          store<u16>(dest, <u32>value | CharCode._0);
           return 1 + sign;
         }
       }
@@ -790,16 +791,16 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
   if (sizeof<T>() <= 4) {
     let val32 = <u32>value;
     decimals = decimalCount32(val32);
-    utoa32_dec_core(buffer + (sign << 1), val32, decimals);
+    utoa32_dec_core(dest, val32, decimals);
   } else {
     if (<u64>value <= <u64>u32.MAX_VALUE) {
       let val32 = <u32>value;
       decimals = decimalCount32(val32);
-      utoa32_dec_core(buffer + (sign << 1), val32, decimals);
+      utoa32_dec_core(dest, val32, decimals);
     } else {
       let val64 = <u64>value;
       decimals = decimalCount64High(val64);
-      utoa64_dec_core(buffer + (sign << 1), val64, decimals);
+      utoa64_dec_core(dest, val64, decimals);
     }
   }
   return sign + decimals;
