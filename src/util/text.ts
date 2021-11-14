@@ -207,7 +207,7 @@ export function isIdentifierStart(c: i32): bool {
   return isAlpha(c)
       || c == CharCode._
       || c == CharCode.DOLLAR
-      || c > 0x7F && isUnicodeIdentifierStart(c);
+      || c >= 170 && c <= 65500 && isUnicodeIdentifierStart(c);
 }
 
 /** Tests if the specified character code is a valid part of an identifier. */
@@ -216,7 +216,7 @@ export function isIdentifierPart(c: i32): bool {
       || isDecimalDigit(c)
       || c == CharCode._
       || c == CharCode.DOLLAR
-      || c > 0x7F && isUnicodeIdentifierPart(c);
+      || c >= 170 && c <= 65500 && isUnicodeIdentifierPart(c);
 }
 
 // storing as u16 to save memory
@@ -357,8 +357,6 @@ const unicodeIdentifierPart: u16[] = [
 ];
 
 function lookupInUnicodeMap(code: u16, map: u16[]): bool {
-  if (code < map[0]) return false;
-
   var lo = 0;
   var hi = map.length;
   var mid: u32;
@@ -381,13 +379,11 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
 }
 
 function isUnicodeIdentifierStart(code: i32): bool {
-  return code < 170 || code > 65500 ? false :
-         lookupInUnicodeMap(code as u16, unicodeIdentifierStart);
+  return lookupInUnicodeMap(code as u16, unicodeIdentifierStart);
 }
 
 function isUnicodeIdentifierPart(code: i32): bool {
-  return code < 170 || code > 65500 ? false :
-         lookupInUnicodeMap(code as u16, unicodeIdentifierPart);
+  return lookupInUnicodeMap(code as u16, unicodeIdentifierPart);
 }
 
 const indentX1 = "  ";
