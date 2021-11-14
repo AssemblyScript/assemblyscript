@@ -786,18 +786,19 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode._0: {
           if (pos + 1 < end) {
-            switch (text.charCodeAt(pos + 1) | 32) {
+            let ch = text.charCodeAt(pos + 1);
+            if (ch == CharCode.DOT) {
+              // 0.
+              this.pos = pos;
+              return Token.FLOATLITERAL;
+            }
+            switch (ch | 32) {
               case CharCode.x:
               case CharCode.b:
               case CharCode.o: {
                 // 0x | 0b | 0o
                 this.pos = pos;
                 return Token.INTEGERLITERAL;
-              }
-              case CharCode.DOT: {
-                // 0.
-                this.pos = pos;
-                return Token.FLOATLITERAL;
               }
             }
           }
