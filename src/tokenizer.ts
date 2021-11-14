@@ -988,7 +988,11 @@ export class Tokenizer extends DiagnosticEmitter {
               ++pos < end &&
               isIdentifierPart(c = text.charCodeAt(pos))
             ) { /* nop */ }
-            if (identifierHandling != IdentifierHandling.ALWAYS) {
+            if (
+              identifierHandling != IdentifierHandling.ALWAYS &&
+              // Only a non-capitalised token can be a keyword
+              (c = text.charCodeAt(posBefore)) >= CharCode.a && c <= CharCode.z
+            ) {
               let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
               if (
                 maybeKeywordToken != Token.INVALID &&
