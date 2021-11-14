@@ -1312,7 +1312,7 @@ export class Tokenizer extends DiagnosticEmitter {
 
   testInteger(): bool {
     var text = this.source.text;
-    var pos = this.pos;
+    var pos = this.pos + 1;
     var end = this.end;
     while (pos < end) {
       let c = text.charCodeAt(pos);
