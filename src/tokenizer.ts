@@ -643,7 +643,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.CLOSEPAREN;
         }
-        // `*`, `*=`, `**`, `**=`
+        // `*`, `**`, `*=`, `**=`
         case CharCode.ASTERISK: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -668,7 +668,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.ASTERISK;
         }
-        // `+`, `+=`, `++`
+        // `+`, `++`, `+=`
         case CharCode.PLUS: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -834,7 +834,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.SEMICOLON;
         }
-        // `<`, `<=`, `<<`, `<<=`
+        // `<`, `<<`, `<=` `<<=`
         case CharCode.LESSTHAN: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -886,7 +886,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.EQUALS;
         }
-        // `>`, `>=`, `>>`, `>>>`, `>>=`, `>>>=`
+        // `>`, `>>`, `>>>`, `>=` `>>=`, `>>>=`
         case CharCode.GREATERTHAN: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
