@@ -139,7 +139,7 @@ export const enum CharCode {
 }
 
 /** Tests if the specified character code is some sort of line break. */
-export function isLineBreak(c: u32): bool {
+export function isLineBreak(c: i32): bool {
   switch (c) {
     case CharCode.LINEFEED:
     case CharCode.CARRIAGERETURN:
@@ -154,7 +154,7 @@ export function isLineBreak(c: u32): bool {
 }
 
 /** Tests if the specified character code is some sort of white space. */
-export function isWhiteSpace(c: u32): bool {
+export function isWhiteSpace(c: i32): bool {
   switch (c) {
     case CharCode.SPACE:
     case CharCode.TAB:
@@ -175,35 +175,35 @@ export function isWhiteSpace(c: u32): bool {
   }
 }
 
-export function isAlpha(c: u32): bool {
+export function isAlpha(c: i32): bool {
   let c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
   return c0 >= CharCode.a && c0 <= CharCode.z;
 }
 
 /** Tests if the specified character code is a valid decimal digit. */
-export function isDecimalDigit(c: u32): bool {
+export function isDecimalDigit(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._9;
 }
 
 /** Tests if the specified character code is a valid octal digit. */
-export function isOctalDigit(c: u32): bool {
+export function isOctalDigit(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._7;
 }
 
 /** Tests if the specified character code is a valid hexadecimal digit. */
-export function isHexDigit(c: u32): bool {
+export function isHexDigit(c: i32): bool {
   let c0 = c | 32; // unify uppercases and lowercases a|A - f|F
   return isDecimalDigit(c)
       || (c0 >= CharCode.a && c0 <= CharCode.f);
 }
 
 /** Tests if the specified character code is trivially alphanumeric. */
-export function isTrivialAlphanum(c: u32): bool {
+export function isTrivialAlphanum(c: i32): bool {
   return isAlpha(c) || isDecimalDigit(c);
 }
 
 /** Tests if the specified character code is a valid start of an identifier. */
-export function isIdentifierStart(c: u32): bool {
+export function isIdentifierStart(c: i32): bool {
   return isAlpha(c)
       || c == CharCode._
       || c == CharCode.DOLLAR
@@ -211,7 +211,7 @@ export function isIdentifierStart(c: u32): bool {
 }
 
 /** Tests if the specified character code is a valid part of an identifier. */
-export function isIdentifierPart(c: u32): bool {
+export function isIdentifierPart(c: i32): bool {
   return isAlpha(c)
       || isDecimalDigit(c)
       || c == CharCode._
