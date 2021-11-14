@@ -32,6 +32,8 @@ import {
   isOctalDigit
 } from "./util";
 
+const maxKeywordLength = 11; // 'constructor'
+
 /** Named token types. */
 export const enum Token {
 
@@ -990,6 +992,7 @@ export class Tokenizer extends DiagnosticEmitter {
             ) { /* nop */ }
             if (
               identifierHandling != IdentifierHandling.ALWAYS &&
+              pos - posBefore <= maxKeywordLength &&
               // Only a non-capitalised token can be a keyword
               (c = text.charCodeAt(posBefore)) >= CharCode.a && c <= CharCode.z
             ) {
