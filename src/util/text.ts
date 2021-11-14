@@ -181,25 +181,24 @@ export function isAlpha(c: i32): bool {
 }
 
 /** Tests if the specified character code is a valid decimal digit. */
-export function isDecimalDigit(c: i32): bool {
+export function isDecNum(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._9;
 }
 
 /** Tests if the specified character code is a valid octal digit. */
-export function isOctalDigit(c: i32): bool {
+export function isOctNum(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._7;
 }
 
 /** Tests if the specified character code is a valid hexadecimal digit. */
-export function isHexDigit(c: i32): bool {
+export function isHexNum(c: i32): bool {
   let c0 = c | 32; // unify uppercases and lowercases a|A - f|F
-  return isDecimalDigit(c)
-      || (c0 >= CharCode.a && c0 <= CharCode.f);
+  return isDecNum(c) || (c0 >= CharCode.a && c0 <= CharCode.f);
 }
 
 /** Tests if the specified character code is trivially alphanumeric. */
-export function isTrivialAlphanum(c: i32): bool {
-  return isAlpha(c) || isDecimalDigit(c);
+export function isAlphaNum(c: i32): bool {
+  return isAlpha(c) || isDecNum(c);
 }
 
 /** Tests if the specified character code is a valid start of an identifier. */
@@ -213,8 +212,7 @@ export function isIdentifierStart(c: i32): bool {
 
 /** Tests if the specified character code is a valid part of an identifier. */
 export function isIdentifierPart(c: i32): bool {
-  return isAlpha(c)
-      || isDecimalDigit(c)
+  return isAlphaNum(c)
       || c == CharCode._
       || c == CharCode.DOLLAR
       || c >= 170 && c <= 65500
