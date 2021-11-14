@@ -559,6 +559,7 @@ export class Tokenizer extends DiagnosticEmitter {
       this.tokenPos = pos;
       let c = text.charCodeAt(pos);
       switch (c) {
+        // `\r`, `\r\n`
         case CharCode.CARRIAGERETURN: {
           if (!(
             ++pos < end &&
@@ -574,6 +575,7 @@ export class Tokenizer extends DiagnosticEmitter {
           ++pos;
           break;
         }
+        // `!`, `!=`, `!==`
         case CharCode.EXCLAMATION: {
           ++pos;
           if (
@@ -603,6 +605,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.TEMPLATELITERAL;
         }
+        // `%`, `%=`
         case CharCode.PERCENT: {
           ++pos;
           if (
@@ -615,6 +618,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.PERCENT;
         }
+        // `&`, `&&`, `&=`
         case CharCode.AMPERSAND: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -639,6 +643,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.CLOSEPAREN;
         }
+        // `*`, `*=`, `**`, `**=`
         case CharCode.ASTERISK: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -663,6 +668,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.ASTERISK;
         }
+        // `+`, `+=`, `++`
         case CharCode.PLUS: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -683,6 +689,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.COMMA;
         }
+        // `-`, `-=`, `--`
         case CharCode.MINUS: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -699,6 +706,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.MINUS;
         }
+        // `.`, `.{d}`, `...`
         case CharCode.DOT: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -719,6 +727,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.DOT;
         }
+        // `/`, `//`, `/*`, `/=`, `///`
         case CharCode.SLASH: {
           let commentStartPos = pos;
           ++pos;
@@ -784,11 +793,11 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.SLASH;
         }
+        // `0.`, `0x`, `0b`, `0o`
         case CharCode._0: {
           if (pos + 1 < end) {
             let ch = text.charCodeAt(pos + 1);
             if (ch == CharCode.DOT) {
-              // 0.
               this.pos = pos;
               return Token.FLOATLITERAL;
             }
@@ -796,7 +805,6 @@ export class Tokenizer extends DiagnosticEmitter {
               case CharCode.x:
               case CharCode.b:
               case CharCode.o: {
-                // 0x | 0b | 0o
                 this.pos = pos;
                 return Token.INTEGERLITERAL;
               }
@@ -826,6 +834,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.SEMICOLON;
         }
+        // `<`, `<=`, `<<`, `<<=`
         case CharCode.LESSTHAN: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -851,6 +860,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.LESSTHAN;
         }
+        // `=`, `==`, `===`, `=>`
         case CharCode.EQUALS: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -876,6 +886,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.EQUALS;
         }
+        // `>`, `>=`, `>>`, `>>>`, `>>=`, `>>>=`
         case CharCode.GREATERTHAN: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
@@ -924,6 +935,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.CLOSEBRACKET;
         }
+        // `^`, `^=`
         case CharCode.CARET: {
           ++pos;
           if (
@@ -940,6 +952,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.OPENBRACE;
         }
+        // `|`, `||`, `|=`
         case CharCode.BAR: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
