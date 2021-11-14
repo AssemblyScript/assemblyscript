@@ -33,7 +33,7 @@ import {
 } from "./util";
 
 /** Named token types. */
-export enum Token {
+export const enum Token {
 
   // keywords
   // discarded: ANY, BOOLEAN, NEVER, NUMBER, STRING, SYMBOL, UNDEFINED, LESSTHAN_SLASH
@@ -170,7 +170,7 @@ export enum Token {
   ENDOFFILE
 }
 
-export enum IdentifierHandling {
+export const enum IdentifierHandling {
   DEFAULT,
   PREFER,
   ALWAYS
@@ -784,7 +784,25 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.SLASH;
         }
-        case CharCode._0:
+        case CharCode._0: {
+          if (pos + 1 < end) {
+            switch (text.charCodeAt(pos + 1) | 32) {
+              case CharCode.x:
+              case CharCode.b:
+              case CharCode.o: {
+                // 0x | 0b | 0o
+                this.pos = pos;
+                return Token.INTEGERLITERAL;
+              }
+              case CharCode.DOT: {
+                // 0.
+                this.pos = pos;
+                return Token.FLOATLITERAL;
+              }
+            }
+          }
+          // fall-through
+        }
         case CharCode._1:
         case CharCode._2:
         case CharCode._3:
@@ -1296,13 +1314,6 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var pos = this.pos;
     var end = this.end;
-    if (pos + 1 < end && text.charCodeAt(pos) == CharCode._0) {
-      switch (text.charCodeAt(pos + 2) | 32) {
-        case CharCode.x:
-        case CharCode.b:
-        case CharCode.o: return true;
-      }
-    }
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c == CharCode.DOT || (c | 32) == CharCode.e) return false;
