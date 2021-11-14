@@ -986,26 +986,27 @@ export class Tokenizer extends DiagnosticEmitter {
         default: {
           if (isIdentifierStart(c)) {
             let posBefore = pos;
-            while (
-              ++pos < end &&
-              isIdentifierPart(c = text.charCodeAt(pos))
-            ) { /* nop */ }
-            if (
-              identifierHandling != IdentifierHandling.ALWAYS &&
-              pos - posBefore <= maxKeywordLength &&
-              // Only a non-capitalised token can be a keyword
-              (c = text.charCodeAt(posBefore)) >= CharCode.a && c <= CharCode.z
-            ) {
-              let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
+            // Only a non-capitalised token can be a keyword
+            if (c >= CharCode.a && c <= CharCode.z) {
+              while (
+                ++pos < end &&
+                isIdentifierPart(c = text.charCodeAt(pos))
+              ) { /* nop */ }
               if (
-                maybeKeywordToken != Token.INVALID &&
-                !(
-                  identifierHandling == IdentifierHandling.PREFER &&
-                  tokenIsAlsoIdentifier(maybeKeywordToken)
-                )
+                identifierHandling != IdentifierHandling.ALWAYS &&
+                pos - posBefore <= maxKeywordLength
               ) {
-                this.pos = pos;
-                return maybeKeywordToken;
+                let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
+                if (
+                  maybeKeywordToken != Token.INVALID &&
+                  !(
+                    identifierHandling == IdentifierHandling.PREFER &&
+                    tokenIsAlsoIdentifier(maybeKeywordToken)
+                  )
+                ) {
+                  this.pos = pos;
+                  return maybeKeywordToken;
+                }
               }
             }
             this.pos = posBefore;
