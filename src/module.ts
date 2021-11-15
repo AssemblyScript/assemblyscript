@@ -10,7 +10,13 @@
 
 import { BuiltinNames } from "./builtins";
 import { Target } from "./common";
-import { isHighSurrogate, isLowSurrogate, combineSurrogates, SURROGATE_HIGH, SURROGATE_LOW } from "./util";
+import { 
+  isHighSurrogate, 
+  isLowSurrogate, 
+  combineSurrogates, 
+  SURROGATE_HIGH, 
+  SURROGATE_LOW 
+} from "./util";
 import * as binaryen from "./glue/binaryen";
 
 /** A Binaryen-compatible index. */
