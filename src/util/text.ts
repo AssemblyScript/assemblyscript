@@ -175,10 +175,10 @@ export function isWhiteSpace(c: i32): bool {
   }
 }
 
-/** First high surrogate. */
+/** First high (lead) surrogate. */
 export const SURROGATE_HIGH = 0xD800;
 
-/** First low surrogate. */
+/** First low (trail) surrogate. */
 export const SURROGATE_LOW = 0xDC00;
 
 /** Tests if a code unit or code point is a surrogate. */
