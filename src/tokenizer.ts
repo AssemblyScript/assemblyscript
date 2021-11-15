@@ -357,8 +357,8 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.CONSTRUCTOR:
     case Token.DECLARE:
     case Token.DELETE:
-    case Token.FROM:
     case Token.FOR:
+    case Token.FROM:
     case Token.GET:
     case Token.INSTANCEOF:
     case Token.IS:
@@ -366,6 +366,7 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.MODULE:
     case Token.NAMESPACE:
     case Token.NULL:
+    case Token.OF:
     case Token.READONLY:
     case Token.SET:
     case Token.TYPE:
@@ -379,7 +380,7 @@ export function isIllegalVariableIdentifier(name: string): bool {
   switch (name.charCodeAt(0)) {
     case CharCode.d: return name == "delete";
     case CharCode.f: return name == "for";
-    case CharCode.i: return name == "instanceof";
+    case CharCode.i: return name == "in" || name == "instanceof";
     case CharCode.n: return name == "null";
     case CharCode.v: return name == "void";
   }
@@ -992,7 +993,7 @@ export class Tokenizer extends DiagnosticEmitter {
               ++pos < end &&
               isIdentifierPart(c = text.charCodeAt(pos))
             ) { /* nop */ }
-            // TODO: check vlid termination of identifier?
+            // TODO: check valid termination of identifier?
 
             if (
               identifierHandling != IdentifierHandling.ALWAYS &&
