@@ -28,8 +28,8 @@ import {
   isWhiteSpace,
   isIdentifierStart,
   isIdentifierPart,
-  isDecimalDigit,
-  isOctalDigit
+  isDecimal,
+  isOctal
 } from "./util";
 
 const MAX_KEYWORD_LENGTH = 11; // 'constructor'
@@ -717,7 +717,7 @@ export class Tokenizer extends DiagnosticEmitter {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (isDecimalDigit(chr)) {
+            if (isDecimal(chr)) {
               this.pos = pos - 1;
               return Token.FLOATLITERAL; // expects a call to readFloat
             }
@@ -1233,7 +1233,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var c = text.charCodeAt(this.pos++);
     switch (c) {
       case CharCode._0: {
-        if (isTaggedTemplate && this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
+        if (isTaggedTemplate && this.pos < end && isDecimal(text.charCodeAt(this.pos))) {
           ++this.pos;
           return text.substring(start, this.pos);
         }
@@ -1380,7 +1380,7 @@ export class Tokenizer extends DiagnosticEmitter {
           return this.readOctalInteger();
         }
       }
-      if (isOctalDigit(text.charCodeAt(pos + 1))) {
+      if (isOctal(text.charCodeAt(pos + 1))) {
         let start = pos;
         this.pos = pos + 1;
         let value = this.readOctalInteger();
@@ -1627,7 +1627,7 @@ export class Tokenizer extends DiagnosticEmitter {
         if (
           ++this.pos < end &&
           (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
-          isDecimalDigit(text.charCodeAt(this.pos + 1))
+          isDecimal(text.charCodeAt(this.pos + 1))
         ) {
           ++this.pos;
         }
@@ -1667,7 +1667,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
         ++sepCount;
-      } else if (!isDecimalDigit(c)) {
+      } else if (!isDecimal(c)) {
         break;
       }
       ++pos;
