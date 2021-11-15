@@ -185,13 +185,13 @@ export function tokenFromKeyword(text: string): Token {
   assert(len);
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
+      if (text == "as") return Token.AS;
+      if (text == "abstract") return Token.ABSTRACT;
       if (len == 5) {
         if (text == "async") return Token.ASYNC;
         if (text == "await") return Token.AWAIT;
         break;
       }
-      if (text == "as") return Token.AS;
-      if (text == "abstract") return Token.ABSTRACT;
       break;
     }
     case CharCode.b: {
@@ -222,13 +222,13 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.e: {
+      if (text == "export") return Token.EXPORT;
+      if (text == "extends") return Token.EXTENDS;
       if (len == 4) {
         if (text == "else") return Token.ELSE;
         if (text == "enum") return Token.ENUM;
         break;
       }
-      if (text == "export") return Token.EXPORT;
-      if (text == "extends") return Token.EXTENDS;
       break;
     }
     case CharCode.f: {
@@ -254,20 +254,20 @@ export function tokenFromKeyword(text: string): Token {
         break;
       }
       switch (text.charCodeAt(3)) {
-        case CharCode.l: {
-          if (text == "implements") return Token.IMPLEMENTS;
-          break;
-        }
-        case CharCode.o: {
-          if (text == "import") return Token.IMPORT;
-          break;
-        }
         case CharCode.t: {
           if (text == "instanceof") return Token.INSTANCEOF;
           break;
         }
+        case CharCode.l: {
+          if (text == "implements") return Token.IMPLEMENTS;
+          break;
+        }
         case CharCode.e: {
           if (text == "interface") return Token.INTERFACE;
+          break;
+        }
+        case CharCode.o: {
+          if (text == "import") return Token.IMPORT;
           break;
         }
       }
@@ -286,8 +286,8 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.n: {
-      if (text == "new") return Token.NEW;
       if (text == "null") return Token.NULL;
+      if (text == "new") return Token.NEW;
       if (text == "namespace") return Token.NAMESPACE;
       break;
     }
