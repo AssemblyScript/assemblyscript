@@ -215,7 +215,7 @@ export function isLowSurrogate(c: i32): bool {
 }
 
 /** Converts a surrogate pair to its respective code point. */
-export function surrogatesToCodepoint(hi: i32, lo: i32): i32 {
+export function combineSurrogates(hi: i32, lo: i32): i32 {
   return 0x10000 + ((hi & 0x3FF) << 10) | (lo & 0x3FF);
 }
 

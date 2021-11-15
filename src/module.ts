@@ -10,7 +10,7 @@
 
 import { BuiltinNames } from "./builtins";
 import { Target } from "./common";
-import { isHighSurrogate, isLowSurrogate, surrogatesToCodepoint, SURROGATE_HIGH, SURROGATE_LOW } from "./util";
+import { isHighSurrogate, isLowSurrogate, combineSurrogates, SURROGATE_HIGH, SURROGATE_LOW } from "./util";
 import * as binaryen from "./glue/binaryen";
 
 /** A Binaryen-compatible index. */
@@ -3150,7 +3150,7 @@ function allocString(str: string | null): usize {
         isHighSurrogate(c1) && i + 1 < k &&
         isLowSurrogate(c2 = str.charCodeAt(i + 1))
       ) {
-        c1 = surrogatesToCodepoint(c1, c2);
+        c1 = combineSurrogates(c1, c2);
         ++i;
         binaryen.__i32_store8(idx++, (0xF0 |  (c1 >>> 18)      ) as u8);
         binaryen.__i32_store8(idx++, (0x80 | ((c1 >>> 12) & 63)) as u8);
