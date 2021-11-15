@@ -102,6 +102,8 @@ export const enum Token {
   WITH,         // ES2017
   YIELD,        // ES2017
 
+  LAST_KEYWORD = YIELD,
+
   // punctuation
 
   OPENBRACE,
@@ -176,6 +178,10 @@ export const enum IdentifierHandling {
   DEFAULT,
   PREFER,
   ALWAYS
+}
+
+export function isKeyword(token: Token): bool {
+  return token >= Token.ABSTRACT && token <= Token.LAST_KEYWORD;
 }
 
 export function tokenFromKeyword(text: string): Token {
