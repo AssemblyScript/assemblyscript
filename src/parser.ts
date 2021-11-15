@@ -619,19 +619,21 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     // ... | null
-    while (tn.peek() != Token.BAR_BAR && tn.skip(Token.BAR)) {
-      if (tn.skip(Token.NULL)) {
-        type.isNullable = true;
-      } else {
-        let notNullStart = tn.pos;
-        let notNull = this.parseType(tn, false, true);
-        if (!suppressErrors) {
-          this.error(
-            DiagnosticCode._0_expected,
-            notNull ? notNull.range : tn.range(notNullStart), "null"
-          );
+    if (tn.peek() != Token.BAR_BAR) {
+      while (tn.skip(Token.BAR)) {
+        if (tn.skip(Token.NULL)) {
+          type.isNullable = true;
+        } else {
+          let notNullStart = tn.pos;
+          let notNull = this.parseType(tn, false, true);
+          if (!suppressErrors) {
+            this.error(
+              DiagnosticCode._0_expected,
+              notNull ? notNull.range : tn.range(notNullStart), "null"
+            );
+          }
+          return null;
         }
-        return null;
       }
     }
     // ... [][]
