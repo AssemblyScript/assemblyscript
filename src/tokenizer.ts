@@ -393,6 +393,7 @@ export function operatorTokenToString(token: Token): string {
     case Token.IN: return "in";
     case Token.INSTANCEOF: return "instanceof";
     case Token.NEW: return "new";
+    case Token.OF: return "of";
     case Token.TYPEOF: return "typeof";
     case Token.VOID: return "void";
     case Token.YIELD: return "yield";

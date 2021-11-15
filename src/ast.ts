@@ -42,7 +42,7 @@ import {
 } from "./types";
 
 /** Indicates the kind of a node. */
-export enum NodeKind {
+export const enum NodeKind {
 
   SOURCE,
 
@@ -923,7 +923,7 @@ export class TypeParameterNode extends Node {
 }
 
 /** Represents the kind of a parameter. */
-export enum ParameterKind {
+export const enum ParameterKind {
   /** No specific flags. */
   DEFAULT,
   /** Is an optional parameter. */
@@ -1067,7 +1067,7 @@ export class DecoratorNode extends Node {
 }
 
 /** Comment kinds. */
-export enum CommentKind {
+export const enum CommentKind {
   /** Line comment. */
   LINE,
   /** Triple-slash line comment. */
@@ -1110,7 +1110,7 @@ export class IdentifierExpression extends Expression {
 }
 
 /** Indicates the kind of a literal. */
-export enum LiteralKind {
+export const enum LiteralKind {
   FLOAT,
   INTEGER,
   STRING,
@@ -1145,7 +1145,7 @@ export class ArrayLiteralExpression extends LiteralExpression {
 }
 
 /** Indicates the kind of an assertion. */
-export enum AssertionKind {
+export const enum AssertionKind {
   /** A prefix assertion, i.e. `<T>expr`. */
   PREFIX,
   /** An as assertion, i.e. `expr as T`. */
@@ -1586,7 +1586,7 @@ export class CompiledExpression extends Expression {
 export abstract class Statement extends Node { }
 
 /** Indicates the specific kind of a source. */
-export enum SourceKind {
+export const enum SourceKind {
   /** User-provided file. */
   USER = 0,
   /** User-provided entry file. */

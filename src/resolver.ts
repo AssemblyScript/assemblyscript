@@ -109,7 +109,7 @@ import {
 } from "./builtins";
 
 /** Indicates whether errors are reported or not. */
-export enum ReportMode {
+export const enum ReportMode {
   /** Report errors. */
   REPORT,
   /** Swallow errors. */

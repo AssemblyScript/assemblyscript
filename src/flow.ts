@@ -154,7 +154,7 @@ export const enum FlowFlags {
 }
 
 /** Flags indicating the current state of a local. */
-export enum LocalFlags {
+export const enum LocalFlags {
   /** No specific conditions. */
   NONE = 0,
 
@@ -169,7 +169,7 @@ export enum LocalFlags {
 }
 
 /** Flags indicating the current state of a field. */
-export enum FieldFlags {
+export const enum FieldFlags {
   NONE = 0,
   INITIALIZED = 1 << 0
 }

@@ -33,7 +33,7 @@ export {
 } from "./diagnosticMessages.generated";
 
 /** Indicates the category of a {@link DiagnosticMessage}. */
-export enum DiagnosticCategory {
+export const enum DiagnosticCategory {
   /** Overly pedantic message. */
   PEDANTIC,
   /** Informatory message. */

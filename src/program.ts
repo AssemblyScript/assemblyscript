@@ -2630,7 +2630,7 @@ export class Program extends DiagnosticEmitter {
 }
 
 /** Indicates the specific kind of an {@link Element}. */
-export enum ElementKind {
+export const enum ElementKind {
   /** A {@link Global}. */
   GLOBAL,
   /** A {@link Local}. */
