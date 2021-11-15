@@ -139,7 +139,7 @@ export const enum CharCode {
 }
 
 /** Tests if the specified character code is some sort of line break. */
-export function isLineBreak(c: CharCode): bool {
+export function isLineBreak(c: i32): bool {
   switch (c) {
     case CharCode.LINEFEED:
     case CharCode.CARRIAGERETURN:
@@ -175,45 +175,48 @@ export function isWhiteSpace(c: i32): bool {
   }
 }
 
+export function isAlpha(c: i32): bool {
+  let c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
+  return c0 >= CharCode.a && c0 <= CharCode.z;
+}
+
 /** Tests if the specified character code is a valid decimal digit. */
-export function isDecimalDigit(c: i32): bool {
+export function isDecimal(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._9;
 }
 
 /** Tests if the specified character code is a valid octal digit. */
-export function isOctalDigit(c: i32): bool {
+export function isOctal(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._7;
 }
 
 /** Tests if the specified character code is a valid hexadecimal digit. */
-export function isHexDigit(c: i32): bool {
-  return isDecimalDigit(c) || ((c | 32) >= CharCode.a && (c | 32) <= CharCode.f);
+export function isHex(c: i32): bool {
+  let c0 = c | 32; // unify uppercases and lowercases a|A - f|F
+  return isDecimal(c) || (c0 >= CharCode.a && c0 <= CharCode.f);
 }
 
 /** Tests if the specified character code is trivially alphanumeric. */
-export function isTrivialAlphanum(code: i32): bool {
-  return code >= CharCode.a && code <= CharCode.z
-      || code >= CharCode.A && code <= CharCode.Z
-      || code >= CharCode._0 && code <= CharCode._9;
+export function isAlphaOrDecimal(c: i32): bool {
+  return isAlpha(c) || isDecimal(c);
 }
 
 /** Tests if the specified character code is a valid start of an identifier. */
 export function isIdentifierStart(c: i32): bool {
-  let c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
-  return c0 >= CharCode.a && c0 <= CharCode.z
+  return isAlpha(c)
       || c == CharCode._
       || c == CharCode.DOLLAR
-      || c > 0x7F && isUnicodeIdentifierStart(c);
+      || c >= 170 && c <= 65500
+         && lookupInUnicodeMap(c as u16, unicodeIdentifierStart);
 }
 
 /** Tests if the specified character code is a valid part of an identifier. */
 export function isIdentifierPart(c: i32): bool {
-  const c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
-  return c0 >= CharCode.a && c0 <= CharCode.z
-      || c >= CharCode._0 && c <= CharCode._9
+  return isAlphaOrDecimal(c)
       || c == CharCode._
       || c == CharCode.DOLLAR
-      || c > 0x7F && isUnicodeIdentifierPart(c);
+      || c >= 170 && c <= 65500
+         && lookupInUnicodeMap(c as u16, unicodeIdentifierPart);
 }
 
 // storing as u16 to save memory
@@ -354,15 +357,13 @@ const unicodeIdentifierPart: u16[] = [
 ];
 
 function lookupInUnicodeMap(code: u16, map: u16[]): bool {
-  if (code < map[0]) return false;
-
   var lo = 0;
   var hi = map.length;
-  var mid: i32;
+  var mid: u32;
   var midVal: u16;
 
   while (lo + 1 < hi) {
-    mid = lo + ((hi - lo) >> 1);
+    mid = lo + ((hi - lo) >>> 1);
     mid -= (mid & 1);
     midVal = map[mid];
     if (midVal <= code && code <= map[mid + 1]) {
@@ -375,16 +376,6 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
     }
   }
   return false;
-}
-
-function isUnicodeIdentifierStart(code: i32): bool {
-  return code < 170 || code > 65500 ? false :
-         lookupInUnicodeMap(code as u16, unicodeIdentifierStart);
-}
-
-function isUnicodeIdentifierPart(code: i32): bool {
-  return code < 170 || code > 65500 ? false :
-         lookupInUnicodeMap(code as u16, unicodeIdentifierPart);
 }
 
 const indentX1 = "  ";
