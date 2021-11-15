@@ -175,6 +175,50 @@ export function isWhiteSpace(c: i32): bool {
   }
 }
 
+/** First high surrogate. */
+export const SURROGATE_HIGH = 0xD800;
+
+/** First low surrogate. */
+export const SURROGATE_LOW = 0xDC00;
+
+/** Tests if a code unit or code point is a surrogate. */
+export function isSurrogate(c: i32): bool {
+  // F800: 11111 0 0000000000 Mask
+  // D800: 11011 X XXXXXXXXXX Any surrogate
+  return (c & 0xF800) == SURROGATE_HIGH;
+}
+
+/** Tests if a surrogate is a high (lead) surrogate. */
+export function isSurrogateHigh(c: i32): bool {
+  // D800-DBFF
+  return c < SURROGATE_LOW;
+}
+
+/** Tests if a surrogate is a low (trail) surrogate. */
+export function isSurrogateLow(c: i32): bool {
+  // DC00-DFFF
+  return c >= SURROGATE_LOW;
+}
+
+/** Tests if a code unit or code point is a high (lead) surrogate. */
+export function isHighSurrogate(c: i32): bool {
+  // FC00: 11111 1 0000000000 Mask
+  // D800: 11011 0 XXXXXXXXXX High/Lead surrogate
+  return (c & 0xFC00) == SURROGATE_HIGH;
+}
+
+/** Tests if a code unit or code point is a low (trail) surrogate. */
+export function isLowSurrogate(c: i32): bool {
+  // FC00: 11111 1 0000000000 Mask
+  // DC00: 11011 1 XXXXXXXXXX Low/Trail surrogate
+  return (c & 0xFC00) == SURROGATE_LOW;
+}
+
+/** Converts a surrogate pair to its respective code point. */
+export function surrogatesToCodepoint(hi: i32, lo: i32): i32 {
+  return 0x10000 + ((hi & 0x3FF) << 10) | (lo & 0x3FF);
+}
+
 export function isAlpha(c: i32): bool {
   let c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
   return c0 >= CharCode.a && c0 <= CharCode.z;
