@@ -30,7 +30,7 @@ import {
   normalizePath,
   resolvePath,
   CharCode,
-  isAlphaNum
+  isAlphaOrDecimal
 } from "./util";
 
 import {
@@ -2347,7 +2347,7 @@ export function mangleInternalPath(path: string): string {
   if (pos >= 0 && len - pos >= 2) { // at least one char plus dot
     let cur = pos;
     while (++cur < len) {
-      if (!isAlphaNum(path.charCodeAt(cur))) {
+      if (!isAlphaOrDecimal(path.charCodeAt(cur))) {
         assert(false); // not a valid external path
         return path;
       }
