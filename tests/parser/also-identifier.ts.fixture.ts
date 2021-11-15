@@ -22,6 +22,7 @@ class Foo {
 }
 var as: i32;
 var is: i32;
+var of: i32;
 var get: i32;
 var set: i32;
 var from: i32;
@@ -31,4 +32,3 @@ var declare: i32;
 var readonly: i32;
 var namespace: i32;
 var constructor: i32;
-// ERROR 1003: "Identifier expected." in also-identifier.ts(26,1+3)

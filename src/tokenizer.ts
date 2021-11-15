@@ -380,7 +380,7 @@ export function isIllegalVariableIdentifier(name: string): bool {
   switch (name.charCodeAt(0)) {
     case CharCode.d: return name == "delete";
     case CharCode.f: return name == "for";
-    case CharCode.i: return name == "in" || name == "instanceof";
+    case CharCode.i: return name == "instanceof";
     case CharCode.n: return name == "null";
     case CharCode.v: return name == "void";
   }
