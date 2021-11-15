@@ -32,6 +32,8 @@ import {
   isOctalDigit
 } from "./util";
 
+const MAX_KEYWORD_LENGTH = 11; // 'constructor'
+
 /** Named token types. */
 export const enum Token {
 
@@ -176,79 +178,6 @@ export const enum IdentifierHandling {
   DEFAULT,
   PREFER,
   ALWAYS
-}
-
-const MAX_KEYWORD_LENGTH = 11; // 'constructor'
-function getKeywordLength(token: Token): i32 {
-  switch (token) {
-    case Token.ABSTRACT: return 8;
-    case Token.AS: return 2;
-    case Token.ASYNC: return 5;
-    case Token.AWAIT: return 5;
-    case Token.BREAK: return 5;
-    case Token.CASE: return 4;
-    case Token.CATCH: return 5;
-    case Token.CLASS: return 5;
-    case Token.CONST: return 5;
-    case Token.CONTINUE: return 8;
-    case Token.CONSTRUCTOR: return 11;
-    case Token.DEBUGGER: return 8;
-    case Token.DECLARE: return 7;
-    case Token.DEFAULT: return 7;
-    case Token.DELETE: return 6;
-    case Token.DO: return 2;
-    case Token.ELSE: return 4;
-    case Token.ENUM: return 4;
-    case Token.EXPORT: return 6;
-    case Token.EXTENDS: return 7;
-    case Token.FALSE: return 5;
-    case Token.FINALLY: return 7;
-    case Token.FOR: return 3;
-    case Token.FROM: return 4;
-    case Token.FUNCTION: return 8;
-    case Token.GET: return 3;
-    case Token.IF: return 2;
-    case Token.IMPLEMENTS: return 10;
-    case Token.IMPORT: return 6;
-    case Token.IN: return 2;
-    case Token.INSTANCEOF: return 10;
-    case Token.INTERFACE: return 9;
-    case Token.IS: return 2;
-    case Token.KEYOF: return 5;
-    case Token.LET: return 3;
-    case Token.MODULE: return 6;
-    case Token.NAMESPACE: return 9;
-    case Token.NEW: return 3;
-    case Token.NULL: return 4;
-    case Token.OF: return 2;
-    case Token.PACKAGE: return 7;
-    case Token.PRIVATE: return 7;
-    case Token.PROTECTED: return 9;
-    case Token.PUBLIC: return 6;
-    case Token.READONLY: return 8;
-    case Token.RETURN: return 6;
-    case Token.SET: return 3;
-    case Token.STATIC: return 6;
-    case Token.SUPER: return 5;
-    case Token.SWITCH: return 6;
-    case Token.THIS: return 4;
-    case Token.THROW: return 5;
-    case Token.TRUE: return 4;
-    case Token.TRY: return 3;
-    case Token.TYPE: return 4;
-    case Token.TYPEOF: return 6;
-    case Token.VAR: return 3;
-    case Token.VOID: return 4;
-    case Token.WHILE: return 5;
-    case Token.WITH: return 4;
-    case Token.YIELD: return 5;
-  }
-  assert(false);
-  return 0;
-}
-
-export function isKeyword(token: Token): bool {
-  return token >= Token.ABSTRACT && token <= Token.LAST_KEYWORD;
 }
 
 export function tokenFromKeyword(text: string): Token {
@@ -1140,21 +1069,6 @@ export class Tokenizer extends DiagnosticEmitter {
 
   skipIdentifier(identifierHandling: IdentifierHandling = IdentifierHandling.PREFER): bool {
     return this.skip(Token.IDENTIFIER, identifierHandling);
-  }
-
-  skipKeyword(token: Token): bool {
-    var end = this.end;
-    var pos = this.pos;
-    var text = this.source.text;
-    var keywordLen = getKeywordLength(token);
-    if (pos + keywordLen < end) {
-      let maybeToken = text.substring(pos, pos + keywordLen);
-      if (tokenFromKeyword(maybeToken) == token) {
-        return true;
-      }
-    }
-    // fallback to skip
-    return this.skip(token);
   }
 
   skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): bool {
