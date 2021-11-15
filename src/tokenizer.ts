@@ -1074,8 +1074,18 @@ export class Tokenizer extends DiagnosticEmitter {
     var tokenBefore = this.token;
     var tokenPosBefore = this.tokenPos;
     var maxCompoundLength = i32.MAX_VALUE;
-    if (token == Token.GREATERTHAN) {  // where parsing type arguments
-      maxCompoundLength = 1;
+    switch (token) {
+      case Token.ASTERISK:
+      case Token.GREATERTHAN:
+      case Token.LESSTHAN:
+      case Token.QUESTION:
+      case Token.EXCLAMATION:
+      case Token.EQUALS:
+      case Token.SLASH:
+      case Token.BAR:
+      case Token.DOT:
+        maxCompoundLength = 1;
+        break;
     }
     var nextToken: Token;
     do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
