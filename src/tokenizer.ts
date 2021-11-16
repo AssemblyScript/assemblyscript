@@ -550,6 +550,7 @@ export class Tokenizer extends DiagnosticEmitter {
           )) break;
           // otherwise fall-through
         }
+        // `\n`, `\t`, `\v`, `\f`, ` `
         case CharCode.LINEFEED:
         case CharCode.TAB:
         case CharCode.VERTICALTAB:
