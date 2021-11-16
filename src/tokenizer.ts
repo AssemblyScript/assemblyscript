@@ -153,6 +153,8 @@ export const enum Token {
   MINUS_EQUALS,
   ASTERISK_EQUALS,
   ASTERISK_ASTERISK_EQUALS,
+  BAR_BAR_EQUALS,
+  AMPERSAND_AMPERSAND_EQUALS,
   SLASH_EQUALS,
   PERCENT_EQUALS,
   LESSTHAN_LESSTHAN_EQUALS,
@@ -407,6 +409,8 @@ export function operatorTokenToString(token: Token): string {
     case Token.MINUS_EQUALS: return "-=";
     case Token.ASTERISK_EQUALS: return "*=";
     case Token.ASTERISK_ASTERISK_EQUALS: return "**=";
+    case Token.BAR_BAR_EQUALS: return "||=";
+    case Token.AMPERSAND_AMPERSAND_EQUALS: return "&&=";
     case Token.SLASH_EQUALS: return "/=";
     case Token.PERCENT_EQUALS: return "%=";
     case Token.LESSTHAN_LESSTHAN_EQUALS: return "<<=";
@@ -602,18 +606,26 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.PERCENT;
         }
-        // `&`, `&&`, `&=`
+        // `&`, `&&`, `&=`, `&&=`
         case CharCode.AMPERSAND: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.AMPERSAND) {
-              this.pos = pos + 1;
-              return Token.AMPERSAND_AMPERSAND;
-            }
             if (chr == CharCode.EQUALS) {
               this.pos = pos + 1;
               return Token.AMPERSAND_EQUALS;
+            }
+            if (chr == CharCode.AMPERSAND) {
+              ++pos;
+              if (
+                maxTokenLength > 2 && pos < end &&
+                text.charCodeAt(pos) == CharCode.EQUALS
+              ) {
+                this.pos = pos + 1;
+                return Token.AMPERSAND_AMPERSAND_EQUALS;
+              }
+              this.pos = pos;
+              return Token.AMPERSAND_AMPERSAND;
             }
           }
           this.pos = pos;
@@ -937,18 +949,26 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.OPENBRACE;
         }
-        // `|`, `||`, `|=`
+        // `|`, `||`, `|=`, `||=`
         case CharCode.BAR: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.BAR) {
-              this.pos = pos + 1;
-              return Token.BAR_BAR;
-            }
             if (chr == CharCode.EQUALS) {
               this.pos = pos + 1;
               return Token.BAR_EQUALS;
+            }
+            if (chr == CharCode.BAR) {
+              ++pos;
+              if (
+                maxTokenLength > 2 && pos < end &&
+                text.charCodeAt(pos) == CharCode.EQUALS
+              ) {
+                this.pos = pos + 1;
+                return Token.BAR_BAR_EQUALS;
+              }
+              this.pos = pos;
+              return Token.BAR_BAR;
             }
           }
           this.pos = pos;
