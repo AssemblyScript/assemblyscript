@@ -144,13 +144,9 @@ export function isLineBreak(c: i32): bool {
     case CharCode.LINEFEED:
     case CharCode.CARRIAGERETURN:
     case CharCode.LINESEPARATOR:
-    case CharCode.PARAGRAPHSEPARATOR: {
-      return true;
-    }
-    default: {
-      return false;
-    }
+    case CharCode.PARAGRAPHSEPARATOR: return true;
   }
+  return false;
 }
 
 /** Tests if the specified character code is some sort of white space. */
@@ -166,13 +162,9 @@ export function isWhiteSpace(c: i32): bool {
     case CharCode.NARROWNOBREAKSPACE:
     case CharCode.MATHEMATICALSPACE:
     case CharCode.IDEOGRAPHICSPACE:
-    case CharCode.BYTEORDERMARK: {
-      return true;
-    }
-    default: {
-      return c >= CharCode.ENQUAD && c <= CharCode.ZEROWIDTHSPACE;
-    }
+    case CharCode.BYTEORDERMARK: return true;
   }
+  return c >= CharCode.ENQUAD && c <= CharCode.ZEROWIDTHSPACE;
 }
 
 /** First high (lead) surrogate. */

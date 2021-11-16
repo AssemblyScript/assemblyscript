@@ -726,7 +726,7 @@ export class Tokenizer extends DiagnosticEmitter {
                 commentKind = CommentKind.TRIPLE;
               }
               while (++pos < end) {
-                if (text.charCodeAt(pos) == CharCode.LINEFEED) {
+                if (isLineBreak(text.charCodeAt(pos))) {
                   ++pos;
                   break;
                 }
