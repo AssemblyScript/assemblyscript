@@ -1,17 +1,17 @@
 {
   "extends": "../std/portable.json",
   "compilerOptions": {
+    "target": "esnext",
     "outDir": "../out",
     "types" : ["node"],
-    "allowJs": false,
     "sourceMap": true,
+    "allowJs": false,
+    "strict": true,
     "skipLibCheck": true,
     "preserveConstEnums": false,
-    "target": "esnext",
     "useDefineForClassFields": false,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true
   },
   "include": [
     "./**/*.ts"
