@@ -907,6 +907,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.GREATERTHAN;
         }
+        // `?`, TODO: `??`, `??=`
         case CharCode.QUESTION: {
           this.pos = pos + 1;
           return Token.QUESTION;
