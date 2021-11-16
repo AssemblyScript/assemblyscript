@@ -6,6 +6,7 @@
     "allowJs": false,
     "sourceMap": true,
     "skipLibCheck": true,
+    "preserveConstEnums": false,
     "target": "esnext",
     "useDefineForClassFields": false,
     "strict": true,
