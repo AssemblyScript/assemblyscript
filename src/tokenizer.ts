@@ -34,6 +34,7 @@ import {
   isLowSurrogate
 } from "./util";
 
+const MIN_KEYWORD_LENGTH = 2;  // 'as', 'if' and etc
 const MAX_KEYWORD_LENGTH = 11; // 'constructor'
 
 /** Named token types. */
@@ -1000,6 +1001,7 @@ export class Tokenizer extends DiagnosticEmitter {
 
             if (
               identifierHandling != IdentifierHandling.ALWAYS &&
+              pos - posBefore >= MIN_KEYWORD_LENGTH &&
               pos - posBefore <= MAX_KEYWORD_LENGTH &&
               // Only a non-capitalised token can be a keyword
               (c = text.charCodeAt(posBefore)) >= CharCode.a && c <= CharCode.z
