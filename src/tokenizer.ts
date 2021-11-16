@@ -190,11 +190,8 @@ export function tokenFromKeyword(text: string): Token {
     case CharCode.a: {
       if (text == "as") return Token.AS;
       if (text == "abstract") return Token.ABSTRACT;
-      if (len == 5) {
-        if (text == "async") return Token.ASYNC;
-        if (text == "await") return Token.AWAIT;
-        break;
-      }
+      if (text == "async") return Token.ASYNC;
+      if (text == "await") return Token.AWAIT;
       break;
     }
     case CharCode.b: {
@@ -202,46 +199,34 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.c: {
-      if (len == 5) {
-        if (text == "const") return Token.CONST;
-        if (text == "class") return Token.CLASS;
-        if (text == "catch") return Token.CATCH;
-        break;
-      }
+      if (text == "const") return Token.CONST;
+      if (text == "class") return Token.CLASS;
       if (text == "case") return Token.CASE;
       if (text == "continue") return Token.CONTINUE;
       if (text == "constructor") return Token.CONSTRUCTOR;
+      if (text == "catch") return Token.CATCH;
       break;
     }
     case CharCode.d: {
-      if (len == 7) {
-        if (text == "default") return Token.DEFAULT;
-        if (text == "declare") return Token.DECLARE;
-        break;
-      }
       if (text == "do") return Token.DO;
+      if (text == "default") return Token.DEFAULT;
+      if (text == "declare") return Token.DECLARE;
       if (text == "delete") return Token.DELETE;
       if (text == "debugger") return Token.DEBUGGER;
       break;
     }
     case CharCode.e: {
-      if (len == 4) {
-        if (text == "else") return Token.ELSE;
-        if (text == "enum") return Token.ENUM;
-        break;
-      }
+      if (text == "else") return Token.ELSE;
       if (text == "export") return Token.EXPORT;
+      if (text == "enum") return Token.ENUM;
       if (text == "extends") return Token.EXTENDS;
       break;
     }
     case CharCode.f: {
-      if (len <= 5) {
-        if (text == "false") return Token.FALSE;
-        if (text == "for") return Token.FOR;
-        if (text == "from") return Token.FROM;
-        break;
-      }
+      if (text == "false") return Token.FALSE;
       if (text == "function") return Token.FUNCTION;
+      if (text == "for") return Token.FOR;
+      if (text == "from") return Token.FROM;
       if (text == "finally") return Token.FINALLY;
       break;
     }
@@ -250,12 +235,10 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.i: {
-      if (len == 2) {
-        if (text == "if") return Token.IF;
-        if (text == "in") return Token.IN;
-        if (text == "is") return Token.IS;
-        break;
-      }
+      if (text == "if") return Token.IF;
+      if (text == "in") return Token.IN;
+      if (text == "is") return Token.IS;
+
       switch (text.charCodeAt(3)) {
         case CharCode.t: {
           if (text == "instanceof") return Token.INSTANCEOF;
@@ -301,11 +284,8 @@ export function tokenFromKeyword(text: string): Token {
     case CharCode.p: {
       if (text == "public") return Token.PUBLIC;
       if (text == "protected") return Token.PROTECTED;
-      if (len == 7) {
-        if (text == "private") return Token.PRIVATE;
-        if (text == "package") return Token.PACKAGE;
-        break;
-      }
+      if (text == "private") return Token.PRIVATE;
+      if (text == "package") return Token.PACKAGE;
       break;
     }
     case CharCode.r: {
@@ -314,22 +294,16 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.s: {
-      if (len == 6) {
-        if (text == "switch") return Token.SWITCH;
-        if (text == "static") return Token.STATIC;
-        break;
-      }
+      if (text == "switch") return Token.SWITCH;
+      if (text == "static") return Token.STATIC;
       if (text == "set") return Token.SET;
       if (text == "super") return Token.SUPER;
       break;
     }
     case CharCode.t: {
-      if (len == 4) {
-        if (text == "true") return Token.TRUE;
-        if (text == "this") return Token.THIS;
-        if (text == "type") return Token.TYPE;
-        break;
-      }
+      if (text == "true") return Token.TRUE;
+      if (text == "this") return Token.THIS;
+      if (text == "type") return Token.TYPE;
       if (text == "try") return Token.TRY;
       if (text == "throw") return Token.THROW;
       if (text == "typeof") return Token.TYPEOF;
