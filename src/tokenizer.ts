@@ -773,9 +773,7 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode._8:
         case CharCode._9: {
           this.pos = pos;
-          return this.testInteger()
-            ? Token.INTEGERLITERAL // expects a call to readInteger
-            : Token.FLOATLITERAL;  // expects a call to readFloat
+          return this.integerOrFloatToken();
         }
         case CharCode.COLON: {
           this.pos = pos + 1;
@@ -1360,18 +1358,20 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, this.pos);
   }
 
-  testInteger(): bool {
+  integerOrFloatToken(): Token {
     var text = this.source.text;
     var pos = this.pos + 1;
     var end = this.end;
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || (c | 32) == CharCode.e) return false;
+      if (c == CharCode.DOT || (c | 32) == CharCode.e) {
+        return Token.FLOATLITERAL;
+      }
       if (c != CharCode._ && (c < CharCode._0 || c > CharCode._9)) break;
       // does not validate separator placement (this is done in readXYInteger)
       pos++;
     }
-    return true;
+    return Token.INTEGERLITERAL;
   }
 
   readInteger(): i64 {
