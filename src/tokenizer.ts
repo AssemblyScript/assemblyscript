@@ -183,7 +183,7 @@ export const enum IdentifierHandling {
   ALWAYS
 }
 
-export function tokenFromKeyword(text: string): Token {
+export function probeKeywordToken(text: string): Token {
   let len = text.length;
   assert(len);
   switch (text.charCodeAt(0)) {
@@ -981,16 +981,16 @@ export class Tokenizer extends DiagnosticEmitter {
               // Only a non-capitalised token can be a keyword
               (c = text.charCodeAt(posBefore)) >= CharCode.a && c <= CharCode.z
             ) {
-              let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
+              let keywordToken = probeKeywordToken(text.substring(posBefore, pos));
               if (
-                maybeKeywordToken != Token.INVALID &&
+                keywordToken != Token.INVALID &&
                 !(
                   identifierHandling == IdentifierHandling.PREFER &&
-                  tokenIsAlsoIdentifier(maybeKeywordToken)
+                  tokenIsAlsoIdentifier(keywordToken)
                 )
               ) {
                 this.pos = pos;
-                return maybeKeywordToken;
+                return keywordToken;
               }
             }
             this.pos = posBefore;
