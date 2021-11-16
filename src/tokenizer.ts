@@ -733,7 +733,7 @@ export class Tokenizer extends DiagnosticEmitter {
               break;
             }
             if (c == CharCode.ASTERISK) { // multi-line
-              pos = this.skipMultileLine(text, pos, end);
+              pos = this.skipMultiLine(text, pos, end);
               break;
             }
             if (c == CharCode.EQUALS) {
@@ -1051,7 +1051,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return pos;
   }
 
-  skipMultileLine(text: string, pos: i32, end: i32): i32 {
+  skipMultiLine(text: string, pos: i32, end: i32): i32 {
     let commentStartPos = pos - 1;
     let closed = false;
     while (++pos < end) {
