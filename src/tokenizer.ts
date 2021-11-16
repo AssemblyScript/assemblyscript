@@ -29,7 +29,9 @@ import {
   isIdentifierStart,
   isIdentifierPart,
   isDecimal,
-  isOctal
+  isOctal,
+  isHighSurrogate,
+  isLowSurrogate
 } from "./util";
 
 const MAX_KEYWORD_LENGTH = 11; // 'constructor'
@@ -1021,9 +1023,9 @@ export class Tokenizer extends DiagnosticEmitter {
             break;
           }
           let start = pos++;
-          if ( // surrogate pair?
-            (c & 0xFC00) == 0xD800 && pos < end &&
-            ((text.charCodeAt(pos)) & 0xFC00) == 0xDC00
+          if (
+            isHighSurrogate(c) && pos < end &&
+            isLowSurrogate(text.charCodeAt(pos))
           ) ++pos;
           this.error(
             DiagnosticCode.Invalid_character,
@@ -1272,7 +1274,7 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.LINEFEED:
       case CharCode.LINESEPARATOR:
       case CharCode.PARAGRAPHSEPARATOR: return "";
-      default: return String.fromCharCode(c);
+      default: return String.fromCodePoint(c);
     }
   }
 
@@ -1726,7 +1728,7 @@ export class Tokenizer extends DiagnosticEmitter {
       return "";
     }
     this.pos = pos;
-    return String.fromCharCode(value);
+    return String.fromCodePoint(value);
   }
 
   checkForIdentifierStartAfterNumericLiteral(): void {
@@ -1788,12 +1790,7 @@ export class Tokenizer extends DiagnosticEmitter {
         ? text.substring(startIfTaggedTemplate, this.pos)
         : "";
     }
-    return value32 < 0x10000
-      ? String.fromCharCode(value32)
-      : String.fromCharCode(
-        ((value32 - 0x10000) >>> 10) | 0xD800,
-        ((value32 - 0x10000) & 1023) | 0xDC00
-      );
+    return String.fromCodePoint(value32);
   }
 }
 

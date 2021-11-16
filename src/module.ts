@@ -10,6 +10,13 @@
 
 import { BuiltinNames } from "./builtins";
 import { Target } from "./common";
+import { 
+  isHighSurrogate, 
+  isLowSurrogate, 
+  combineSurrogates, 
+  SURROGATE_HIGH, 
+  SURROGATE_LOW 
+} from "./util";
 import * as binaryen from "./glue/binaryen";
 
 /** A Binaryen-compatible index. */
@@ -3108,8 +3115,8 @@ function stringLengthUTF8(str: string): usize {
     } else if (c1 <= 0x7FF) {
       len += 2;
     } else if (
-      (c1 & 0xFC00) === 0xD800 && i + 1 < k &&
-      (str.charCodeAt(i + 1) & 0xFC00) === 0xDC00
+      isHighSurrogate(c1) && i + 1 < k &&
+      isLowSurrogate(str.charCodeAt(i + 1))
     ) {
       i++;
       len += 4;
@@ -3146,10 +3153,10 @@ function allocString(str: string | null): usize {
         binaryen.__i32_store8(idx++, (0xC0 |  (c1 >>> 6)       ) as u8);
         binaryen.__i32_store8(idx++, (0x80 | ( c1         & 63)) as u8);
       } else if (
-        (c1 & 0xFC00) === 0xD800 && i + 1 < k &&
-        ((c2 = str.charCodeAt(i + 1)) & 0xFC00) === 0xDC00
+        isHighSurrogate(c1) && i + 1 < k &&
+        isLowSurrogate(c2 = str.charCodeAt(i + 1))
       ) {
-        c1 = 0x10000 + ((c1 & 0x3FF) << 10) | (c2 & 0x3FF);
+        c1 = combineSurrogates(c1, c2);
         ++i;
         binaryen.__i32_store8(idx++, (0xF0 |  (c1 >>> 18)      ) as u8);
         binaryen.__i32_store8(idx++, (0x80 | ((c1 >>> 12) & 63)) as u8);
@@ -3209,10 +3216,11 @@ export function readString(ptr: usize): string | null {
       arr.push(cp);
     } else {
       let ch = cp - 0x10000;
-      arr.push(0xD800 | (ch >>> 10));
-      arr.push(0xDC00 | (ch & 0x3FF));
+      arr.push(SURROGATE_HIGH | (ch >>> 10));
+      arr.push(SURROGATE_LOW | (ch & 0x3FF));
     }
   }
+  // TODO: implement and use String.fromCodePoints
   return String.fromCharCodes(arr);
 }
 

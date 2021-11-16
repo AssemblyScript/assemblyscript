@@ -122,7 +122,7 @@ jobs:
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
-        node-version: 17.0.0-v8-canary2021082701777958f9
+        node-version: 18.0.0-v8-canary20211115037fd7ae8d
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
