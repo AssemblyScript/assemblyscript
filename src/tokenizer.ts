@@ -225,13 +225,13 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.e: {
-      if (text == "export") return Token.EXPORT;
-      if (text == "extends") return Token.EXTENDS;
       if (len == 4) {
         if (text == "else") return Token.ELSE;
         if (text == "enum") return Token.ENUM;
         break;
       }
+      if (text == "export") return Token.EXPORT;
+      if (text == "extends") return Token.EXTENDS;
       break;
     }
     case CharCode.f: {
@@ -299,13 +299,13 @@ export function tokenFromKeyword(text: string): Token {
       break;
     }
     case CharCode.p: {
+      if (text == "public") return Token.PUBLIC;
+      if (text == "protected") return Token.PROTECTED;
       if (len == 7) {
         if (text == "private") return Token.PRIVATE;
         if (text == "package") return Token.PACKAGE;
         break;
       }
-      if (text == "public") return Token.PUBLIC;
-      if (text == "protected") return Token.PROTECTED;
       break;
     }
     case CharCode.r: {
