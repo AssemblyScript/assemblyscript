@@ -965,6 +965,7 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.AT;
         }
         default: {
+          // TODO: \uXXXX also support for identifiers
           if (isIdentifierStart(c)) {
             let posBefore = pos;
             while (
