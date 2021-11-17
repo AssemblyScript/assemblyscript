@@ -433,15 +433,10 @@ export function operatorTokenToString(token: Token): string {
 
 export class Range {
 
-  start: i32;
-  end: i32;
   source!: Source;
   debugInfoRef: usize = 0;
 
-  constructor(start: i32, end: i32) {
-    this.start = start;
-    this.end = end;
-  }
+  constructor(public start: i32, public end: i32) {}
 
   static join(a: Range, b: Range): Range {
     if (a.source != b.source) throw new Error("source mismatch");
@@ -454,7 +449,11 @@ export class Range {
   }
 
   equals(other: Range): bool {
-    return this.source == other.source && this.start == other.start && this.end == other.end;
+    return (
+      this.source == other.source &&
+      this.start == other.start &&
+      this.end == other.end
+    );
   }
 
   get atStart(): Range {
