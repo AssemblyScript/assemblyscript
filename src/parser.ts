@@ -3419,7 +3419,7 @@ export class Parser extends DiagnosticEmitter {
     startPos: i32
   ): TypeDeclaration | null {
 
-    // at 'type': Identifier ('<' TypeParameters '>')? '=' Type ';'?
+    // at 'type': Identifier ('<' TypeParameters '>')? '=' '|'? Type ';'?
 
     if (tn.skipIdentifier()) {
       let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
@@ -3430,6 +3430,7 @@ export class Parser extends DiagnosticEmitter {
         flags |= CommonFlags.GENERIC;
       }
       if (tn.skip(Token.EQUALS)) {
+        tn.skip(Token.BAR);
         let type = this.parseType(tn);
         if (!type) return null;
         let ret = Node.createTypeDeclaration(
