@@ -143,10 +143,11 @@ export const enum Token {
   BAR,
   CARET,
   EXCLAMATION,
+  QUESTION,
   TILDE,
   AMPERSAND_AMPERSAND,
   BAR_BAR,
-  QUESTION,
+  QUESTION_QUESTION,
   COLON,
   EQUALS,
   PLUS_EQUALS,
@@ -155,6 +156,7 @@ export const enum Token {
   ASTERISK_ASTERISK_EQUALS,
   BAR_BAR_EQUALS,
   AMPERSAND_AMPERSAND_EQUALS,
+  QUESTION_QUESTION_EQUALS,
   SLASH_EQUALS,
   PERCENT_EQUALS,
   LESSTHAN_LESSTHAN_EQUALS,
@@ -401,16 +403,19 @@ export function operatorTokenToString(token: Token): string {
     case Token.BAR: return "|";
     case Token.CARET: return "^";
     case Token.EXCLAMATION: return "!";
+    case Token.QUESTION: return "?";
     case Token.TILDE: return "~";
     case Token.AMPERSAND_AMPERSAND: return "&&";
     case Token.BAR_BAR: return "||";
+    case Token.QUESTION_QUESTION: return "??";
     case Token.EQUALS: return "=";
     case Token.PLUS_EQUALS: return "+=";
     case Token.MINUS_EQUALS: return "-=";
     case Token.ASTERISK_EQUALS: return "*=";
     case Token.ASTERISK_ASTERISK_EQUALS: return "**=";
-    case Token.BAR_BAR_EQUALS: return "||=";
     case Token.AMPERSAND_AMPERSAND_EQUALS: return "&&=";
+    case Token.BAR_BAR_EQUALS: return "||=";
+    case Token.QUESTION_QUESTION_EQUALS: return "??=";
     case Token.SLASH_EQUALS: return "/=";
     case Token.PERCENT_EQUALS: return "%=";
     case Token.LESSTHAN_LESSTHAN_EQUALS: return "<<=";
@@ -872,9 +877,25 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.GREATERTHAN;
         }
-        // `?`, TODO: `??`, `??=`
+        // `?`, `??`, `??=`
         case CharCode.QUESTION: {
-          this.pos = pos + 1;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            c = text.charCodeAt(pos);
+            if (c == CharCode.QUESTION) {
+              ++pos;
+              if (maxTokenLength > 2 && pos < end) {
+                c = text.charCodeAt(pos);
+                if (c == CharCode.EQUALS) {
+                  this.pos = pos + 1;
+                  return Token.QUESTION_QUESTION_EQUALS;
+                }
+              }
+              this.pos = pos;
+              return Token.QUESTION_QUESTION;
+            }
+          }
+          this.pos = pos;
           return Token.QUESTION;
         }
         case CharCode.OPENBRACKET: {
