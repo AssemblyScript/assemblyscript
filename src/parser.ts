@@ -2601,13 +2601,16 @@ export class Parser extends DiagnosticEmitter {
   ): ImportStatement | null {
 
     // at 'import':
-    //  ('{' (ImportMember (',' ImportMember)* '}') | ('*' 'as' Identifier)?
+    //  'type'? ('{' (ImportMember (',' ImportMember)* '}') | ('*' 'as' Identifier)?
     //  'from' StringLiteral ';'?
 
     var startPos = tn.tokenPos;
     var members: ImportDeclaration[] | null = null;
     var namespaceName: IdentifierExpression | null = null;
     var skipFrom = false;
+
+    tn.skip(Token.TYPE);
+
     if (tn.skip(Token.OPENBRACE)) { // import { ... } from "file"
       members = new Array();
       while (!tn.skip(Token.CLOSEBRACE)) {
@@ -2703,7 +2706,8 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer
   ): ImportDeclaration | null {
 
-    // before: Identifier ('as' Identifier)?
+    // before: 'type'? Identifier ('as' Identifier)?
+    tn.skip(Token.TYPE);
 
     if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
