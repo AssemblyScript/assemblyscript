@@ -373,7 +373,9 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
 }
 
 export function isIllegalVariableIdentifier(name: string): bool {
-  assert(name.length);
+  if (name.length < 3 || name.length > 10) {
+    return false;
+  }
   switch (name.charCodeAt(0)) {
     case CharCode.d: return name == "delete";
     case CharCode.f: return name == "for";
