@@ -30,6 +30,7 @@ import {
   isIdentifierPart,
   isDecimal,
   isOctal,
+  isHex,
   isHighSurrogate,
   isLowSurrogate
 } from "./util";
@@ -734,8 +735,8 @@ export class Tokenizer extends DiagnosticEmitter {
               return Token.FLOATLITERAL; // expects a call to readFloat
             }
             if (
-              maxTokenLength > 2 && pos + 1 < end &&
-              c == CharCode.DOT &&
+              maxTokenLength > 2 &&
+              pos + 1 < end && c == CharCode.DOT &&
               text.charCodeAt(pos + 1) == CharCode.DOT
             ) {
               this.pos = pos + 2;
@@ -1405,7 +1406,7 @@ export class Tokenizer extends DiagnosticEmitter {
       if (c == CharCode.DOT || (c | 32) == CharCode.e) {
         return Token.FLOATLITERAL;
       }
-      if (c != CharCode._ && (c < CharCode._0 || c > CharCode._9)) break;
+      if (c != CharCode._ && !isDecimal(c)) break;
       // does not validate separator placement (this is done in readXYInteger)
       pos++;
     }
@@ -1454,23 +1455,17 @@ export class Tokenizer extends DiagnosticEmitter {
     var i64_4 = i64_new(4);
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c >= CharCode._0 && c <= CharCode._9) {
+      if (isDecimal(c)) {
         // value = (value << 4) + c - CharCode._0;
         value = i64_add(
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
-      } else if (c >= CharCode.A && c <= CharCode.F) {
-        // value = (value << 4) + 10 + c - CharCode.A;
+      } else if (isHex(c)) {
+        // value = (value << 4) + 10 + (c | 32) - CharCode.a;
         value = i64_add(
           i64_shl(value, i64_4),
-          i64_new(10 + c - CharCode.A)
-        );
-      } else if (c >= CharCode.a && c <= CharCode.f) {
-        // value = (value << 4) + 10 + c - CharCode.a;
-        value = i64_add(
-          i64_shl(value, i64_4),
-          i64_new(10 + c - CharCode.a)
+          i64_new(10 + (c | 32) - CharCode.a)
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
