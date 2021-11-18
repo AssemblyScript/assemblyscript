@@ -1696,6 +1696,13 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     let result = text.substring(start, this.pos);
+    if (this.pos - start == 3) {
+      // fast pathes for most usual floating loints
+      if (result == "0.0") return 0.0;
+      if (result == "1.0") return 1.0;
+      if (result == "0.5") return 0.5;
+      if (result == "2.0") return 2.0;
+    }
     if (sepCount) result = result.replaceAll("_", "");
     return parseFloat(result);
   }
