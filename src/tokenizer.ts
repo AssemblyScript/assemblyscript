@@ -30,7 +30,6 @@ import {
   isIdentifierPart,
   isDecimal,
   isOctal,
-  isHex,
   isHighSurrogate,
   isLowSurrogate
 } from "./util";
@@ -1461,7 +1460,7 @@ export class Tokenizer extends DiagnosticEmitter {
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
-      } else if (isHex(c)) {
+      } else if ((c | 32) >= CharCode.a && (c | 32) <= CharCode.f) {
         // value = (value << 4) + 10 + (c | 32) - CharCode.a;
         value = i64_add(
           i64_shl(value, i64_4),
