@@ -30,6 +30,7 @@ import {
   isIdentifierPart,
   isDecimal,
   isOctal,
+  isHexPart,
   isHighSurrogate,
   isLowSurrogate
 } from "./util";
@@ -1514,7 +1515,7 @@ export class Tokenizer extends DiagnosticEmitter {
           i64_new(c - CharCode._0)
         );
         zeros = 0;
-      } else if ((c | 32) >= CharCode.a && (c | 32) <= CharCode.f) {
+      } else if (isHexPart(c)) {
         // value = (value << (zeros + 1) * 4) + 10 + (c | 32) - CharCode.a;
         value = i64_add(
           i64_shl(value, i64_new((zeros + 1) << 2)),
@@ -1755,12 +1756,10 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     while (pos < end) {
       let c = text.charCodeAt(pos++);
-      if (c >= CharCode._0 && c <= CharCode._9) {
+      if (isDecimal(c)) {
         value = (value << 4) + c - CharCode._0;
-      } else if (c >= CharCode.A && c <= CharCode.F) {
-        value = (value << 4) + c + (10 - CharCode.A);
-      } else if (c >= CharCode.a && c <= CharCode.f) {
-        value = (value << 4) + c + (10 - CharCode.a);
+      } else if (isHexPart(c)) {
+        value = (value << 4) + (c | 32) + (10 - CharCode.a);
       } else if (~startIfTaggedTemplate) {
         this.pos = --pos;
         return text.substring(startIfTaggedTemplate, pos);
