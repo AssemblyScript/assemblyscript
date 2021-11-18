@@ -192,7 +192,12 @@ export function probeKeywordToken(text: string): Token {
   assert(len);
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
-      if (text == "as") return Token.AS;
+      if (len == 2) {
+        if (text.charCodeAt(1) == CharCode.s) {
+          return Token.AS;
+        }
+        break;
+      }
       if (text == "abstract") return Token.ABSTRACT;
       if (text == "async") return Token.ASYNC;
       if (text == "await") return Token.AWAIT;
@@ -204,15 +209,20 @@ export function probeKeywordToken(text: string): Token {
     }
     case CharCode.c: {
       if (text == "const") return Token.CONST;
-      if (text == "class") return Token.CLASS;
       if (text == "case") return Token.CASE;
       if (text == "continue") return Token.CONTINUE;
+      if (text == "class") return Token.CLASS;
       if (text == "constructor") return Token.CONSTRUCTOR;
       if (text == "catch") return Token.CATCH;
       break;
     }
     case CharCode.d: {
-      if (text == "do") return Token.DO;
+      if (len == 2) {
+        if (text.charCodeAt(1) == CharCode.o) {
+          return Token.DO;
+        }
+        break;
+      }
       if (text == "default") return Token.DEFAULT;
       if (text == "declare") return Token.DECLARE;
       if (text == "delete") return Token.DELETE;
@@ -239,10 +249,14 @@ export function probeKeywordToken(text: string): Token {
       break;
     }
     case CharCode.i: {
-      if (text == "if") return Token.IF;
-      if (text == "in") return Token.IN;
-      if (text == "is") return Token.IS;
-
+      if (len == 2) {
+        switch (text.charCodeAt(1)) {
+          case CharCode.f: return Token.IF;
+          case CharCode.n: return Token.IN;
+          case CharCode.s: return Token.IS;
+        }
+        break;
+      }
       switch (text.charCodeAt(3)) {
         case CharCode.t: {
           if (text == "instanceof") return Token.INSTANCEOF;
@@ -282,13 +296,15 @@ export function probeKeywordToken(text: string): Token {
       break;
     }
     case CharCode.o: {
-      if (text == "of") return Token.OF;
+      if (len == 2 && text.charCodeAt(1) == CharCode.f) {
+        return Token.OF;
+      }
       break;
     }
     case CharCode.p: {
       if (text == "public") return Token.PUBLIC;
-      if (text == "protected") return Token.PROTECTED;
       if (text == "private") return Token.PRIVATE;
+      if (text == "protected") return Token.PROTECTED;
       if (text == "package") return Token.PACKAGE;
       break;
     }
@@ -308,9 +324,9 @@ export function probeKeywordToken(text: string): Token {
       if (text == "true") return Token.TRUE;
       if (text == "this") return Token.THIS;
       if (text == "type") return Token.TYPE;
-      if (text == "try") return Token.TRY;
-      if (text == "throw") return Token.THROW;
       if (text == "typeof") return Token.TYPEOF;
+      if (text == "throw") return Token.THROW;
+      if (text == "try") return Token.TRY;
       break;
     }
     case CharCode.v: {
