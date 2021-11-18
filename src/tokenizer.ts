@@ -1268,8 +1268,8 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readEscapeSequence(isTaggedTemplate: bool = false): string {
     // for context on isTaggedTemplate, see: https://tc39.es/proposal-template-literal-revision/
-    var start = this.pos;
     var end = this.end;
+    var start = this.pos;
     if (++this.pos >= end) {
       this.error(
         DiagnosticCode.Unexpected_end_of_text,
@@ -1360,14 +1360,14 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readRegexpFlags(): string {
     var text = this.source.text;
-    var start = this.pos;
     var end = this.end;
+    var pos = this.pos;
+    var start = pos;
     var flags = 0;
-    while (this.pos < end) {
-      let c: i32 = text.charCodeAt(this.pos);
+    while (pos < end) {
+      let c = text.charCodeAt(pos);
       if (!isIdentifierPart(c)) break;
-      ++this.pos;
-
+      ++pos;
       // make sure each supported flag is unique
       switch (c) {
         case CharCode.g: {
@@ -1391,10 +1391,11 @@ export class Tokenizer extends DiagnosticEmitter {
     if (flags == -1) {
       this.error(
         DiagnosticCode.Invalid_regular_expression_flags,
-        this.range(start, this.pos)
+        this.range(start, pos)
       );
     }
-    return text.substring(start, this.pos);
+    this.pos = pos;
+    return text.substring(start, pos);
   }
 
   integerOrFloatToken(): Token {
@@ -1430,16 +1431,18 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 2;
           return this.readOctalInteger();
         }
-      }
-      if (isOctal(text.charCodeAt(pos + 1))) {
-        let start = pos;
-        this.pos = pos + 1;
-        let value = this.readOctalInteger();
-        this.error(
-          DiagnosticCode.Octal_literals_are_not_allowed_in_strict_mode,
-          this.range(start, this.pos)
-        );
-        return value;
+        default: {
+          if (isOctal(text.charCodeAt(pos + 1))) {
+            let start = pos;
+            this.pos = pos + 1;
+            let value = this.readOctalInteger();
+            this.error(
+              DiagnosticCode.Octal_literals_are_not_allowed_in_strict_mode,
+              this.range(start, this.pos)
+            );
+            return value;
+          }
+        }
       }
     }
     return this.readDecimalInteger();
