@@ -10,12 +10,12 @@
 
 import { BuiltinNames } from "./builtins";
 import { Target } from "./common";
-import { 
-  isHighSurrogate, 
-  isLowSurrogate, 
-  combineSurrogates, 
-  SURROGATE_HIGH, 
-  SURROGATE_LOW 
+import {
+  isHighSurrogate,
+  isLowSurrogate,
+  combineSurrogates,
+  SURROGATE_HIGH,
+  SURROGATE_LOW
 } from "./util";
 import * as binaryen from "./glue/binaryen";
 
@@ -2619,8 +2619,15 @@ export function expandType(type: TypeRef): TypeRef[] {
   var cArr = binaryen._malloc(<usize>arity << 2);
   binaryen._BinaryenTypeExpand(type, cArr);
   var types = new Array<TypeRef>(arity);
-  for (let i: u32 = 0; i < arity; ++i) {
-    types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+  if (!ASC_TARGET) {
+    let ptr = cArr >>> 2;
+    for (let i: u32 = 0; i < arity; ++i) {
+      types[i] = binaryen.HEAPU32[ptr + i];
+    }
+  } else {
+    for (let i: u32 = 0; i < arity; ++i) {
+      types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+    }
   }
   binaryen._free(cArr);
   return types;
