@@ -1677,10 +1677,10 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var end = this.end;
     var start = this.pos;
-    var sepCount = this.readDecimalFloatPartial(false);
+    var hasSep = this.readDecimalFloatPartial(false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      sepCount += this.readDecimalFloatPartial();
+      hasSep |= this.readDecimalFloatPartial();
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1692,7 +1692,7 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        sepCount += this.readDecimalFloatPartial();
+        hasSep |= this.readDecimalFloatPartial();
       }
     }
     let result = text.substring(start, this.pos);
@@ -1703,22 +1703,21 @@ export class Tokenizer extends DiagnosticEmitter {
       if (result == "0.5") return 0.5;
       if (result == "2.0") return 2.0;
     }
-    if (sepCount) result = result.replaceAll("_", "");
+    if (hasSep) result = result.replaceAll("_", "");
     return parseFloat(result);
   }
 
   /** Reads past one section of a decimal float literal. Returns the number of separators encountered. */
-  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): u32 {
+  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): i32 {
     var text = this.source.text;
     var pos = this.pos;
     var start = pos;
     var end = this.end;
     var sepEnd = start;
-    var sepCount = 0;
+    var hasSep = 0;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-
       if (c == CharCode._) {
         if (sepEnd == pos) {
           this.error(
@@ -1734,7 +1733,7 @@ export class Tokenizer extends DiagnosticEmitter {
           );
         }
         sepEnd = pos + 1;
-        ++sepCount;
+        hasSep = 1;
       } else if (!isDecimal(c)) {
         break;
       }
@@ -1749,7 +1748,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
 
     this.pos = pos;
-    return sepCount;
+    return hasSep;
   }
 
   readHexFloat(): f64 {
