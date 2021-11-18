@@ -1710,10 +1710,10 @@ export class Tokenizer extends DiagnosticEmitter {
   /** Reads past one section of a decimal float literal. Returns the number of separators encountered. */
   private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): i32 {
     var text = this.source.text;
+    var end = this.end;
     var pos = this.pos;
     var start = pos;
-    var end = this.end;
-    var sepEnd = start;
+    var sepEnd = pos;
     var hasSep = 0;
 
     while (pos < end) {
