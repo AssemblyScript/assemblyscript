@@ -209,11 +209,14 @@ export function probeKeywordToken(text: string): Token {
       break;
     }
     case CharCode.c: {
-      if (text == "const") return Token.CONST;
-      if (text == "case") return Token.CASE;
-      if (text == "continue") return Token.CONTINUE;
-      if (text == "class") return Token.CLASS;
+      if (len <= 5) {
+        if (text == "const") return Token.CONST;
+        if (text == "case") return Token.CASE;
+        if (text == "class") return Token.CLASS;
+        break;
+      }
       if (text == "constructor") return Token.CONSTRUCTOR;
+      if (text == "continue") return Token.CONTINUE;
       if (text == "catch") return Token.CATCH;
       break;
     }
@@ -259,20 +262,20 @@ export function probeKeywordToken(text: string): Token {
         break;
       }
       switch (text.charCodeAt(3)) {
-        case CharCode.t: {
-          if (text == "instanceof") return Token.INSTANCEOF;
+        case CharCode.e: {
+          if (text == "interface") return Token.INTERFACE;
           break;
         }
         case CharCode.l: {
           if (text == "implements") return Token.IMPLEMENTS;
           break;
         }
-        case CharCode.e: {
-          if (text == "interface") return Token.INTERFACE;
-          break;
-        }
         case CharCode.o: {
           if (text == "import") return Token.IMPORT;
+          break;
+        }
+        case CharCode.t: {
+          if (text == "instanceof") return Token.INSTANCEOF;
           break;
         }
       }
