@@ -1450,11 +1450,11 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = pos;
     var sepEnd = start;
-    var value = i64_new(0);
+    var value = i64_zero;
     var i64_10 = i64_new(10);
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c >= CharCode._0 && c <= CharCode._9) {
+      if (isDecimal(c)) {
         // value = value * 10 + c - CharCode._0;
         value = i64_add(
           i64_mul(value, i64_10),
@@ -1501,7 +1501,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = pos;
     var sepEnd = start;
-    var value = i64_new(0);
+    var value = i64_zero;
     var zeros = 0;
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1560,7 +1560,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = pos;
     var sepEnd = start;
-    var value = i64_new(0);
+    var value = i64_zero;
     var zeros = 0;
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1612,8 +1612,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = pos;
     var sepEnd = start;
-    var value = i64_new(0);
-    var i64_1 = i64_new(1);
+    var value = i64_zero;
     var zeros = 0;
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1623,7 +1622,7 @@ export class Tokenizer extends DiagnosticEmitter {
         // (value << zeros + 1) | 1
         value = i64_or(
           i64_shl(value, i64_new(zeros + 1)),
-          i64_1
+          i64_one
         );
         zeros = 0;
       } else if (c == CharCode._) {
