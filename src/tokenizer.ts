@@ -1704,8 +1704,8 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     let result = text.substring(start, this.pos);
-    if (this.pos - start == 3) {
-      // fast pathes for most usual floating loints
+    if (result.length == 3) {
+      // fast pathes for most usual literals
       if (result == "0.0") return 0.0;
       if (result == "1.0") return 1.0;
       if (result == "0.5") return 0.5;
