@@ -756,11 +756,11 @@ export class Tokenizer extends DiagnosticEmitter {
           if (maxTokenLength > 1 && pos < end) {
             c = text.charCodeAt(pos);
             if (c == CharCode.SLASH) { // single-line
-              pos = this.skipSingleLineComment(text, pos, end);
+              pos = this.skipLineComment(text, pos, end);
               break;
             }
             if (c == CharCode.ASTERISK) { // multi-line
-              pos = this.skipMultiLineComment(text, pos, end);
+              pos = this.skipBlockComment(text, pos, end);
               break;
             }
             if (c == CharCode.EQUALS) {
@@ -1066,7 +1066,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.nextToken;
   }
 
-  skipSingleLineComment(text: string, pos: i32, end: i32): i32 {
+  skipLineComment(text: string, pos: i32, end: i32): i32 {
     let commentStartPos = pos - 1;
     let commentKind = CommentKind.LINE;
     if (
@@ -1092,7 +1092,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return pos;
   }
 
-  skipMultiLineComment(text: string, pos: i32, end: i32): i32 {
+  skipBlockComment(text: string, pos: i32, end: i32): i32 {
     let commentStartPos = pos - 1;
     let closed = false;
     while (++pos < end) {
