@@ -1703,14 +1703,16 @@ export class Tokenizer extends DiagnosticEmitter {
         hasSep |= this.readDecimalFloatPartial();
       }
     }
-    let result = text.substring(start, this.pos);
-    if (result.length == 3) {
-      // fast pathes for most usual literals
-      if (result == "0.0") return 0.0;
-      if (result == "1.0") return 1.0;
-      if (result == "0.5") return 0.5;
-      if (result == "2.0") return 2.0;
-    }
+    let pos = this.pos;
+    // fast pathes for most usual literals:
+    //   0.0, 1.0, 2.0 .. 9.0
+    if (
+      pos - start == 3 &&
+      text.charCodeAt(start + 1) == CharCode.DOT &&
+      text.charCodeAt(start + 2) == CharCode._0
+    ) return <f64>(text.charCodeAt(start) - CharCode._0);
+
+    let result = text.substring(start, pos);
     if (hasSep) result = result.replaceAll("_", "");
     return parseFloat(result);
   }
