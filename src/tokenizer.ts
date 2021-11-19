@@ -1422,7 +1422,8 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var pos = this.pos;
     if (pos + 2 < this.end && text.charCodeAt(pos) == CharCode._0) {
-      switch (text.charCodeAt(pos + 1) | 32) {
+      let c1 = text.charCodeAt(pos + 1);
+      switch (c1 | 32) {
         case CharCode.x: {
           this.pos = pos + 2;
           return this.readHexInteger();
@@ -1436,7 +1437,7 @@ export class Tokenizer extends DiagnosticEmitter {
           return this.readOctalInteger();
         }
         default: {
-          if (isOctal(text.charCodeAt(pos + 1))) {
+          if (isOctal(c1)) {
             let start = pos;
             this.pos = pos + 1;
             let value = this.readOctalInteger();
