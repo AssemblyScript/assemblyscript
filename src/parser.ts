@@ -178,7 +178,7 @@ export class Parser extends DiagnosticEmitter {
     var tn = new Tokenizer(source, this.diagnostics);
     tn.onComment = this.onComment;
     var statements = source.statements;
-    while (!tn.skip(Token.ENDOFFILE)) {
+    while (!tn.skip(Token.EOF)) {
       let statement = this.parseTopLevelStatement(tn, null);
       if (statement) {
         statements.push(statement);
@@ -1763,7 +1763,7 @@ export class Parser extends DiagnosticEmitter {
           }
         } else {
           this.skipStatement(tn);
-          if (tn.skip(Token.ENDOFFILE)) {
+          if (tn.skip(Token.EOF)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), "}"
@@ -1821,7 +1821,7 @@ export class Parser extends DiagnosticEmitter {
           }
         } else {
           this.skipStatement(tn);
-          if (tn.skip(Token.ENDOFFILE)) {
+          if (tn.skip(Token.EOF)) {
             this.error(
               DiagnosticCode._0_expected,
               tn.range(), "}"
@@ -2421,7 +2421,7 @@ export class Parser extends DiagnosticEmitter {
           if (member) members.push(member);
           else {
             this.skipStatement(tn);
-            if (tn.skip(Token.ENDOFFILE)) {
+            if (tn.skip(Token.EOF)) {
               this.error(
                 DiagnosticCode._0_expected,
                 tn.range(), "}"
@@ -2893,7 +2893,7 @@ export class Parser extends DiagnosticEmitter {
       let state = tn.mark();
       let statement = this.parseStatement(tn, topLevel);
       if (!statement) {
-        if (tn.token == Token.ENDOFFILE) return null;
+        if (tn.token == Token.EOF) return null;
         tn.reset(state);
         this.skipStatement(tn);
       } else {
@@ -3847,7 +3847,7 @@ export class Parser extends DiagnosticEmitter {
         return this.parseClassExpression(tn);
       }
       default: {
-        if (token == Token.ENDOFFILE) {
+        if (token == Token.EOF) {
           this.error(
             DiagnosticCode.Unexpected_end_of_text,
             tn.range(startPos)
@@ -4235,7 +4235,7 @@ export class Parser extends DiagnosticEmitter {
     do {
       let nextToken = tn.peek(true);
       if (
-        nextToken == Token.ENDOFFILE ||   // next step should handle this
+        nextToken == Token.EOF ||   // next step should handle this
         nextToken == Token.SEMICOLON      // end of the statement for sure
       ) {
         tn.next();
@@ -4278,7 +4278,7 @@ export class Parser extends DiagnosticEmitter {
     var again = true;
     do {
       switch (tn.next()) {
-        case Token.ENDOFFILE: {
+        case Token.EOF: {
           this.error(
             DiagnosticCode._0_expected,
             tn.range(), "}"

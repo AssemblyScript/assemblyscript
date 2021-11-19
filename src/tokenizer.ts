@@ -179,7 +179,7 @@ export const enum Token {
   // meta
 
   INVALID,
-  ENDOFFILE
+  EOF
 }
 
 export const enum IdentifierHandling {
@@ -1032,7 +1032,7 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     this.pos = pos;
-    return Token.ENDOFFILE;
+    return Token.EOF;
   }
 
   peek(
