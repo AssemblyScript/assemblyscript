@@ -4092,26 +4092,6 @@ export class Parser extends DiagnosticEmitter {
           }
           break;
         }
-        // BinaryExpression (right associative)
-        case Token.EQUALS:
-        case Token.PLUS_EQUALS:
-        case Token.MINUS_EQUALS:
-        case Token.ASTERISK_ASTERISK_EQUALS:
-        case Token.ASTERISK_EQUALS:
-        case Token.SLASH_EQUALS:
-        case Token.PERCENT_EQUALS:
-        case Token.LESSTHAN_LESSTHAN_EQUALS:
-        case Token.GREATERTHAN_GREATERTHAN_EQUALS:
-        case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
-        case Token.AMPERSAND_EQUALS:
-        case Token.CARET_EQUALS:
-        case Token.BAR_EQUALS:
-        case Token.ASTERISK_ASTERISK: {
-          let next = this.parseExpression(tn, nextPrecedence);
-          if (!next) return null;
-          expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
-          break;
-        }
         // BinaryExpression
         case Token.LESSTHAN:
         case Token.GREATERTHAN:
@@ -4133,8 +4113,24 @@ export class Parser extends DiagnosticEmitter {
         case Token.BAR:
         case Token.CARET:
         case Token.AMPERSAND_AMPERSAND:
-        case Token.BAR_BAR: {
-          let next = this.parseExpression(tn, nextPrecedence + 1);
+        case Token.BAR_BAR:
+          ++nextPrecedence;
+        // BinaryExpression (right associative)
+        case Token.EQUALS:
+        case Token.PLUS_EQUALS:
+        case Token.MINUS_EQUALS:
+        case Token.ASTERISK_ASTERISK_EQUALS:
+        case Token.ASTERISK_EQUALS:
+        case Token.SLASH_EQUALS:
+        case Token.PERCENT_EQUALS:
+        case Token.LESSTHAN_LESSTHAN_EQUALS:
+        case Token.GREATERTHAN_GREATERTHAN_EQUALS:
+        case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
+        case Token.AMPERSAND_EQUALS:
+        case Token.CARET_EQUALS:
+        case Token.BAR_EQUALS:
+        case Token.ASTERISK_ASTERISK: {
+          let next = this.parseExpression(tn, nextPrecedence);
           if (!next) return null;
           expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
           break;
