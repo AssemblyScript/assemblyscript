@@ -1685,10 +1685,10 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var end = this.end;
     var start = this.pos;
-    var hasSep = this.readDecimalFloatPartial(false);
+    var hasSep = this.scanFloatPartial(false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      hasSep |= this.readDecimalFloatPartial();
+      hasSep |= this.scanFloatPartial();
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1700,7 +1700,7 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        hasSep |= this.readDecimalFloatPartial();
+        hasSep |= this.scanFloatPartial();
       }
     }
     let pos = this.pos;
@@ -1717,8 +1717,8 @@ export class Tokenizer extends DiagnosticEmitter {
     return parseFloat(result);
   }
 
-  /** Reads past one section of a decimal float literal. Returns the number of separators encountered. */
-  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): i32 {
+  /** Scan past one section of a decimal float literal. Returns `1` if separators encountered. */
+  private scanFloatPartial(allowLeadingZeroSep: bool = true): i32 {
     var text = this.source.text;
     var end = this.end;
     var pos = this.pos;
