@@ -408,7 +408,10 @@ export class Parser extends DiagnosticEmitter {
         case NodeKind.CLASSDECLARATION:
         case NodeKind.INTERFACEDECLARATION:
         case NodeKind.NAMESPACEDECLARATION: {
-          return Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
+          return Node.createExportDefaultStatement(
+            <DeclarationStatement>statement,
+            tn.range(startPos, tn.pos)
+          );
         }
         default: {
           this.error(
@@ -699,7 +702,6 @@ export class Parser extends DiagnosticEmitter {
       isSignature = true;
       tn.discard(state);
       parameters = [];
-
     } else {
       isSignature = false; // not yet known
       do {
@@ -766,7 +768,9 @@ export class Parser extends DiagnosticEmitter {
               }
             }
             if (isSignature) {
-              let param = Node.createParameter(kind, name, Node.createOmittedType(tn.range(tn.pos)), null, tn.range(paramStart, tn.pos));
+              let param = Node.createParameter(
+                kind, name, Node.createOmittedType(tn.range(tn.pos)), null, tn.range(paramStart, tn.pos)
+              );
               if (!parameters) parameters = [ param ];
               else parameters.push(param);
               this.error(
@@ -1568,7 +1572,9 @@ export class Parser extends DiagnosticEmitter {
     var parameters = this.parseParameters(tn);
     if (!parameters) return null;
 
-    return this.parseFunctionExpressionCommon(tn, name, parameters, this.parseParametersThis, arrowKind, startPos, signatureStart);
+    return this.parseFunctionExpressionCommon(
+      tn, name, parameters, this.parseParametersThis, arrowKind, startPos, signatureStart
+    );
   }
 
   private parseFunctionExpressionCommon(
