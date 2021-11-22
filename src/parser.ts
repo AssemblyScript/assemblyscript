@@ -4364,7 +4364,12 @@ export const enum Precedence {
 /** Determines the precende of a non-starting token. */
 function determinePrecedence(kind: Token): Precedence {
   switch (kind) {
-    case Token.COMMA: return Precedence.COMMA;
+    case Token.COMMA:
+      return Precedence.COMMA;
+
+    case Token.YIELD:
+      return Precedence.YIELD;
+
     case Token.EQUALS:
     case Token.PLUS_EQUALS:
     case Token.MINUS_EQUALS:
@@ -4380,39 +4385,68 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
     case Token.AMPERSAND_EQUALS:
     case Token.CARET_EQUALS:
-    case Token.BAR_EQUALS: return Precedence.ASSIGNMENT;
-    case Token.QUESTION: return Precedence.CONDITIONAL;
+    case Token.BAR_EQUALS:
+      return Precedence.ASSIGNMENT;
+
+    case Token.QUESTION:
+      return Precedence.CONDITIONAL;
+
     case Token.BAR_BAR:
-    case Token.QUESTION_QUESTION: return Precedence.LOGICAL_OR;
-    case Token.AMPERSAND_AMPERSAND: return Precedence.LOGICAL_AND;
-    case Token.BAR: return Precedence.BITWISE_OR;
-    case Token.CARET: return Precedence.BITWISE_XOR;
-    case Token.AMPERSAND: return Precedence.BITWISE_AND;
+    case Token.QUESTION_QUESTION:
+      return Precedence.LOGICAL_OR;
+
+    case Token.AMPERSAND_AMPERSAND:
+      return Precedence.LOGICAL_AND;
+
+    case Token.BAR:
+      return Precedence.BITWISE_OR;
+
+    case Token.CARET:
+      return Precedence.BITWISE_XOR;
+
+    case Token.AMPERSAND:
+      return Precedence.BITWISE_AND;
+
     case Token.EQUALS_EQUALS:
     case Token.EXCLAMATION_EQUALS:
     case Token.EQUALS_EQUALS_EQUALS:
-    case Token.EXCLAMATION_EQUALS_EQUALS: return Precedence.EQUALITY;
+    case Token.EXCLAMATION_EQUALS_EQUALS:
+      return Precedence.EQUALITY;
+
     case Token.AS:
     case Token.IN:
     case Token.INSTANCEOF:
     case Token.LESSTHAN:
     case Token.GREATERTHAN:
     case Token.LESSTHAN_EQUALS:
-    case Token.GREATERTHAN_EQUALS: return Precedence.RELATIONAL;
+    case Token.GREATERTHAN_EQUALS:
+      return Precedence.RELATIONAL;
+
     case Token.LESSTHAN_LESSTHAN:
     case Token.GREATERTHAN_GREATERTHAN:
-    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: return Precedence.SHIFT;
+    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
+      return Precedence.SHIFT;
+
     case Token.PLUS:
-    case Token.MINUS: return Precedence.ADDITIVE;
+    case Token.MINUS:
+      return Precedence.ADDITIVE;
+
     case Token.ASTERISK:
     case Token.SLASH:
-    case Token.PERCENT: return Precedence.MULTIPLICATIVE;
-    case Token.ASTERISK_ASTERISK: return Precedence.EXPONENTIATED;
+    case Token.PERCENT:
+      return Precedence.MULTIPLICATIVE;
+
+    case Token.ASTERISK_ASTERISK:
+      return Precedence.EXPONENTIATED;
+
     case Token.PLUS_PLUS:
-    case Token.MINUS_MINUS: return Precedence.UNARY_POSTFIX;
+    case Token.MINUS_MINUS:
+      return Precedence.UNARY_POSTFIX;
+
     case Token.DOT:
     case Token.OPENBRACKET:
-    case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
+    case Token.EXCLAMATION:
+      return Precedence.MEMBERACCESS;
   }
   return Precedence.NONE;
 }
