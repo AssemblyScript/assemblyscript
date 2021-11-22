@@ -3548,6 +3548,9 @@ export class Parser extends DiagnosticEmitter {
 
       // NewExpression
       case Token.NEW: {
+
+        // at 'new': Identifier ('<' TypeArguments '>')? ('(' Arguments ')')? ';'?
+
         if (!tn.skipIdentifier()) {
           this.error(
             DiagnosticCode.Identifier_expected,
