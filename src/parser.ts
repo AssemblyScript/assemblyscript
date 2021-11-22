@@ -4369,7 +4369,10 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.PLUS_EQUALS:
     case Token.MINUS_EQUALS:
     case Token.ASTERISK_ASTERISK_EQUALS:
+    case Token.BAR_BAR_EQUALS:
+    case Token.AMPERSAND_AMPERSAND_EQUALS:
     case Token.ASTERISK_EQUALS:
+    case Token.QUESTION_QUESTION_EQUALS:
     case Token.SLASH_EQUALS:
     case Token.PERCENT_EQUALS:
     case Token.LESSTHAN_LESSTHAN_EQUALS:
@@ -4379,7 +4382,8 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.CARET_EQUALS:
     case Token.BAR_EQUALS: return Precedence.ASSIGNMENT;
     case Token.QUESTION: return Precedence.CONDITIONAL;
-    case Token.BAR_BAR: return Precedence.LOGICAL_OR;
+    case Token.BAR_BAR:
+    case Token.QUESTION_QUESTION: return Precedence.LOGICAL_OR;
     case Token.AMPERSAND_AMPERSAND: return Precedence.LOGICAL_AND;
     case Token.BAR: return Precedence.BITWISE_OR;
     case Token.CARET: return Precedence.BITWISE_XOR;
