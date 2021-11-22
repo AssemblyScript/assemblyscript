@@ -4261,6 +4261,11 @@ export class Parser extends DiagnosticEmitter {
           tn.checkForIdentifierStartAfterNumericLiteral();
           break;
         }
+        case Token.SLASH: {
+          tn.readRegexpPattern();
+          tn.readRegexpFlags();
+          break;
+        }
         case Token.OPENBRACE: {
           this.skipBlock(tn);
           break;
