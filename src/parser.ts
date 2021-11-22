@@ -4309,7 +4309,7 @@ export class Parser extends DiagnosticEmitter {
         }
         case Token.TEMPLATELITERAL: {
           tn.readString();
-          while(tn.readingTemplateString){
+          while (tn.readingTemplateString) {
             this.skipBlock(tn);
             tn.readString(CharCode.BACKTICK);
           }
@@ -4323,6 +4323,11 @@ export class Parser extends DiagnosticEmitter {
         case Token.FLOATLITERAL: {
           tn.readFloat();
           tn.checkForIdentifierStartAfterNumericLiteral();
+          break;
+        }
+        case Token.SLASH: {
+          tn.readRegexpPattern();
+          tn.readRegexpFlags();
           break;
         }
       }
