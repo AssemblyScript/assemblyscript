@@ -1711,8 +1711,8 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
         if (!isInterface) {
-          if (!implementsTypes) implementsTypes = [];
-          implementsTypes.push(<NamedTypeNode>type);
+          if (!implementsTypes) implementsTypes = [ <NamedTypeNode>type ];
+          else implementsTypes.push(<NamedTypeNode>type);
         }
       } while (tn.skip(Token.COMMA));
     }
@@ -1855,8 +1855,8 @@ export class Parser extends DiagnosticEmitter {
       do {
         let decorator = this.parseDecorator(tn);
         if (!decorator) break;
-        if (!decorators) decorators = new Array();
-        decorators.push(decorator);
+        if (!decorators) decorators = [ decorator ];
+        else decorators.push(decorator);
       } while (tn.skip(Token.AT));
       if (isInterface && decorators !== null) {
         this.error(
@@ -4234,7 +4234,7 @@ export class Parser extends DiagnosticEmitter {
     do {
       let nextToken = tn.peek(true);
       if (
-        nextToken == Token.EOF ||   // next step should handle this
+        nextToken == Token.EOF ||         // next step should handle this
         nextToken == Token.SEMICOLON      // end of the statement for sure
       ) {
         tn.next();
