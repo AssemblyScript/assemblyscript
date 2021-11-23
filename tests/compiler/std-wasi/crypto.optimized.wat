@@ -1364,12 +1364,12 @@
   (local $0 i32)
   (local $1 i32)
   memory.size
-  local.tee $0
+  local.tee $1
   i32.const 0
   i32.le_s
   if (result i32)
    i32.const 1
-   local.get $0
+   local.get $1
    i32.sub
    memory.grow
    i32.const 0
@@ -1387,11 +1387,11 @@
   i32.const 0
   i32.store
   loop $for-loop|0
-   local.get $1
+   local.get $0
    i32.const 23
    i32.lt_u
    if
-    local.get $1
+    local.get $0
     i32.const 2
     i32.shl
     i32.const 23296
@@ -1399,14 +1399,14 @@
     i32.const 0
     i32.store offset=4
     i32.const 0
-    local.set $0
+    local.set $1
     loop $for-loop|1
-     local.get $0
+     local.get $1
      i32.const 16
      i32.lt_u
      if
-      local.get $0
       local.get $1
+      local.get $0
       i32.const 4
       i32.shl
       i32.add
@@ -1416,17 +1416,17 @@
       i32.add
       i32.const 0
       i32.store offset=96
-      local.get $0
+      local.get $1
       i32.const 1
       i32.add
-      local.set $0
+      local.set $1
       br $for-loop|1
      end
     end
-    local.get $1
+    local.get $0
     i32.const 1
     i32.add
-    local.set $1
+    local.set $0
     br $for-loop|0
    end
   end
@@ -3718,7 +3718,7 @@
   block $folding-inner1
    local.get $0
    i32.load offset=4
-   local.set $3
+   local.set $6
    local.get $0
    i32.load offset=8
    local.set $0
@@ -3754,7 +3754,7 @@
      i32.eqz
      if
       block $__inlined_func$~lib/util/number/utoa32 (result i32)
-       local.get $3
+       local.get $6
        i32.load8_u
        local.set $2
        global.get $~lib/memory/__stack_pointer
@@ -3861,70 +3861,72 @@
      i32.mul
      i32.const 10
      i32.add
-     local.tee $2
+     local.tee $3
      i32.const 1
      i32.shl
      i32.const 1
      call $~lib/rt/itcms/__new
-     local.tee $0
+     local.tee $1
      i32.store
+     i32.const 0
+     local.set $0
      loop $for-loop|0
+      local.get $0
       local.get $5
-      local.get $6
-      i32.gt_s
+      i32.lt_s
       if
-       local.get $1
+       local.get $2
        i32.const 1
        i32.shl
-       local.get $0
+       local.get $1
        i32.add
-       local.get $3
+       local.get $0
        local.get $6
        i32.add
        i32.load8_u
        call $~lib/util/number/itoa_buffered<u8>
-       local.get $1
+       local.get $2
        i32.add
-       local.set $1
+       local.set $2
        local.get $4
        if
-        local.get $1
+        local.get $2
         i32.const 1
         i32.shl
-        local.get $0
+        local.get $1
         i32.add
         i32.const 6656
         local.get $4
         i32.const 1
         i32.shl
         call $~lib/memory/memory.copy
-        local.get $1
+        local.get $2
         local.get $4
         i32.add
-        local.set $1
+        local.set $2
        end
-       local.get $6
+       local.get $0
        i32.const 1
        i32.add
-       local.set $6
+       local.set $0
        br $for-loop|0
       end
      end
      local.get $2
-     local.get $1
      i32.const 1
      i32.shl
-     local.get $0
+     local.get $1
      i32.add
-     local.get $3
      local.get $5
+     local.get $6
      i32.add
      i32.load8_u
      call $~lib/util/number/itoa_buffered<u8>
-     local.get $1
+     local.get $2
      i32.add
-     local.tee $1
-     i32.gt_s
+     local.tee $0
+     local.get $3
+     i32.lt_s
      if
       global.get $~lib/memory/__stack_pointer
       i32.const 4
@@ -3938,26 +3940,26 @@
       i32.const 0
       i32.store
       i32.const 0
-      local.get $1
+      local.get $0
       i32.const 0
-      local.get $1
+      local.get $0
       i32.const 0
       i32.gt_s
       select
-      local.tee $1
-      local.get $0
+      local.tee $0
+      local.get $1
       i32.const 20
       i32.sub
       i32.load offset=16
       i32.const 1
       i32.shr_u
       local.tee $4
-      local.get $1
+      local.get $0
       local.get $4
       i32.lt_s
       select
-      local.tee $1
-      local.get $1
+      local.tee $0
+      local.get $0
       i32.const 0
       i32.gt_s
       select
@@ -3966,14 +3968,14 @@
       local.set $3
       block $__inlined_func$~lib/string/String#substring
        i32.const 0
-       local.get $1
-       local.get $1
+       local.get $0
+       local.get $0
        i32.const 0
        i32.lt_s
        select
        i32.const 1
        i32.shl
-       local.tee $1
+       local.tee $0
        local.get $3
        i32.sub
        local.tee $2
@@ -3991,7 +3993,7 @@
        local.get $4
        i32.const 1
        i32.shl
-       local.get $1
+       local.get $0
        i32.eq
        local.get $3
        select
@@ -4000,16 +4002,18 @@
         i32.const 4
         i32.add
         global.set $~lib/memory/__stack_pointer
+        local.get $1
+        local.set $0
         br $__inlined_func$~lib/string/String#substring
        end
        global.get $~lib/memory/__stack_pointer
        local.get $2
        i32.const 1
        call $~lib/rt/itcms/__new
-       local.tee $1
+       local.tee $0
        i32.store
-       local.get $1
        local.get $0
+       local.get $1
        local.get $3
        i32.add
        local.get $2
@@ -4018,8 +4022,6 @@
        i32.const 4
        i32.add
        global.set $~lib/memory/__stack_pointer
-       local.get $1
-       local.set $0
       end
       global.get $~lib/memory/__stack_pointer
       i32.const 4
@@ -4031,6 +4033,8 @@
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
+     local.get $1
+     local.set $0
     end
     local.get $0
     return
@@ -4135,7 +4139,7 @@
         i32.load offset=16
         i32.const 1
         i32.shr_u
-        local.tee $2
+        local.tee $4
         br_table $case4|0 $case3|0 $case2|0 $case1|0 $case0|0 $break|0
        end
        local.get $0
@@ -4147,14 +4151,14 @@
       end
       local.get $0
       i32.load16_u offset=4
-      local.tee $4
+      local.tee $1
       i32.const 128
       i32.ge_u
       br_if $break|0
      end
      local.get $0
      i32.load16_u offset=2
-     local.tee $1
+     local.tee $2
      i32.const 128
      i32.ge_u
      br_if $break|0
@@ -4169,15 +4173,15 @@
     i32.const 6680
     i32.store
     i32.const 6676
-    local.get $2
+    local.get $4
     i32.store
     i32.const 6680
-    local.get $1
+    local.get $2
     i32.const 8
     i32.shl
     local.get $5
     i32.or
-    local.get $4
+    local.get $1
     i32.const 16
     i32.shl
     i32.or
@@ -4209,20 +4213,20 @@
   local.get $0
   local.get $0
   local.tee $1
-  local.tee $3
+  local.tee $2
   i32.const 20
   i32.sub
   i32.load offset=16
   i32.add
-  local.set $4
+  local.set $3
   i32.const 0
   local.set $0
   loop $while-continue|0
+   local.get $2
    local.get $3
-   local.get $4
    i32.lt_u
    if
-    local.get $3
+    local.get $2
     i32.load16_u
     local.tee $5
     i32.const 128
@@ -4245,14 +4249,14 @@
       i32.and
       i32.const 55296
       i32.eq
-      local.get $4
       local.get $3
+      local.get $2
       i32.const 2
       i32.add
       i32.gt_u
       i32.and
       if
-       local.get $3
+       local.get $2
        i32.load16_u offset=2
        i32.const 64512
        i32.and
@@ -4263,10 +4267,10 @@
         i32.const 4
         i32.add
         local.set $0
-        local.get $3
+        local.get $2
         i32.const 4
         i32.add
-        local.set $3
+        local.set $2
         br $while-continue|0
        end
       end
@@ -4276,10 +4280,10 @@
      end
     end
     local.set $0
-    local.get $3
+    local.get $2
     i32.const 2
     i32.add
-    local.set $3
+    local.set $2
     br $while-continue|0
    end
   end
@@ -4293,12 +4297,12 @@
   call $~lib/rt/tlsf/allocateBlock
   i32.const 4
   i32.add
-  local.set $3
+  local.set $2
   i32.const 3
   global.set $~argumentsLength
   local.get $1
+  local.get $4
   local.get $2
-  local.get $3
   call $~lib/string/String.UTF8.encodeUnsafe@varargs
   local.get $0
   i32.ne
@@ -4311,7 +4315,7 @@
    unreachable
   end
   i32.const 6672
-  local.get $3
+  local.get $2
   i32.store
   i32.const 6676
   local.get $0
@@ -4322,7 +4326,7 @@
   i32.const 6680
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
   local.set $0
-  local.get $3
+  local.get $2
   call $~lib/rt/tlsf/__free
   local.get $0
   i32.const 65535
@@ -4832,33 +4836,34 @@
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
    local.tee $3
+   local.tee $4
    i32.const 0
    i32.store
    i32.const 0
    local.get $0
+   local.tee $1
    i32.load offset=8
-   local.tee $4
-   local.get $4
+   local.tee $0
+   local.get $0
    i32.const 0
    i32.gt_s
    select
    local.set $2
-   local.get $3
+   local.get $4
    block $__inlined_func$~lib/typedarray/Uint8Array#constructor (result i32)
-    local.get $4
+    local.get $0
     local.get $2
     i32.sub
-    local.tee $3
+    local.tee $0
     i32.const 0
-    local.get $3
+    local.get $0
     i32.const 0
     i32.gt_s
     select
     local.tee $4
     local.set $5
-    local.get $1
+    local.get $3
     i32.const 4
     i32.sub
     global.set $~lib/memory/__stack_pointer
@@ -4868,14 +4873,14 @@
      i32.lt_s
      br_if $folding-inner0
      global.get $~lib/memory/__stack_pointer
-     local.tee $1
+     local.tee $0
      i32.const 0
      i32.store
-     local.get $1
+     local.get $0
      i32.const 12
      i32.const 3
      call $~lib/rt/itcms/__new
-     local.tee $1
+     local.tee $0
      i32.store
      global.get $~lib/memory/__stack_pointer
      local.tee $3
@@ -4889,23 +4894,23 @@
      global.get $~lib/memory/__stack_pointer
      i64.const 0
      i64.store
-     local.get $1
+     local.get $0
      i32.eqz
      if
       global.get $~lib/memory/__stack_pointer
       i32.const 12
       i32.const 2
       call $~lib/rt/itcms/__new
-      local.tee $1
+      local.tee $0
       i32.store
      end
-     local.get $1
+     local.get $0
      i32.const 0
      i32.store
-     local.get $1
+     local.get $0
      i32.const 0
      i32.store offset=4
-     local.get $1
+     local.get $0
      i32.const 0
      i32.store offset=8
      local.get $5
@@ -4925,19 +4930,19 @@
      call $~lib/rt/itcms/__new
      local.tee $6
      i32.store offset=4
-     local.get $1
+     local.get $0
      local.get $6
      i32.store
      local.get $6
      if
-      local.get $1
+      local.get $0
       local.get $6
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
-     local.get $1
+     local.get $0
      local.get $6
      i32.store offset=4
-     local.get $1
+     local.get $0
      local.get $5
      i32.store offset=8
      global.get $~lib/memory/__stack_pointer
@@ -4945,23 +4950,23 @@
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $3
-     local.get $1
+     local.get $0
      i32.store
      global.get $~lib/memory/__stack_pointer
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
-     local.get $1
+     local.get $0
      br $__inlined_func$~lib/typedarray/Uint8Array#constructor
     end
     br $folding-inner1
    end
-   local.tee $1
+   local.tee $0
    i32.store
-   local.get $1
+   local.get $0
    i32.load offset=4
    local.get $2
-   local.get $0
+   local.get $1
    i32.load offset=4
    i32.add
    local.get $4
@@ -4970,7 +4975,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $1
+   local.get $0
    return
   end
   i32.const 23312

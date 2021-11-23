@@ -2854,12 +2854,13 @@
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.tee $8
-   i32.const 1072693248
-   i32.sub
+   local.set $8
    local.get $7
    i32.wrap_i64
    local.tee $6
+   local.get $8
+   i32.const 1072693248
+   i32.sub
    i32.or
    i32.eqz
    if
@@ -2926,6 +2927,13 @@
       i32.const 2
       i32.and
       select
+      local.tee $10
+      f64.neg
+      local.get $10
+      local.get $4
+      i32.const 1
+      i32.and
+      select
      else
       f64.const 3.141592653589793
       f64.const 0
@@ -2933,14 +2941,14 @@
       i32.const 2
       i32.and
       select
+      local.tee $10
+      f64.neg
+      local.get $10
+      local.get $4
+      i32.const 1
+      i32.and
+      select
      end
-     local.tee $10
-     f64.neg
-     local.get $10
-     local.get $4
-     i32.const 1
-     i32.and
-     select
      br $__inlined_func$~lib/math/NativeMath.atan2
     end
     local.get $9
@@ -44063,7 +44071,6 @@
     global.get $~lib/math/random_state1_64
     local.tee $2
     global.set $~lib/math/random_state0_64
-    local.get $2
     local.get $6
     i64.const 23
     i64.shl
@@ -44074,6 +44081,7 @@
     i64.shr_u
     local.get $6
     i64.xor
+    local.get $2
     i64.xor
     local.get $2
     i64.const 26
