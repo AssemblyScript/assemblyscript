@@ -197,8 +197,6 @@
    i32.load
    i32.const 32
    i32.and
-   i32.const 0
-   i32.ne
   end
   local.set $3
   local.get $1
@@ -854,11 +852,11 @@
      if
       local.get $0
       global.set $~lib/rt/itcms/iter
-      local.get $1
       local.get $0
       i32.load offset=4
       i32.const 3
       i32.and
+      local.get $1
       i32.ne
       if
        local.get $0
@@ -927,11 +925,11 @@
       local.get $0
       i32.ne
       if
-       local.get $1
        local.get $0
        i32.load offset=4
        i32.const 3
        i32.and
+       local.get $1
        i32.ne
        if
         local.get $0
@@ -1073,8 +1071,7 @@
    end
    global.get $~lib/rt/itcms/toSpace
    local.tee $0
-   local.tee $1
-   local.get $1
+   local.get $0
    i32.store offset=4
    local.get $0
    local.get $0

@@ -2821,73 +2821,68 @@
   call $std/math/check<f32>
  )
  (func $std/math/test_atan2 (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
-  (local $4 f64)
-  (local $5 f64)
+  (local $4 i32)
+  (local $5 i64)
   (local $6 i32)
   (local $7 i64)
   (local $8 i32)
-  (local $9 i64)
-  (local $10 i32)
-  (local $11 i32)
-  block $__inlined_func$~lib/math/NativeMath.atan2
+  (local $9 i32)
+  (local $10 f64)
+  block $__inlined_func$~lib/math/NativeMath.atan2 (result f64)
+   local.get $1
    local.get $0
-   local.tee $4
-   local.get $4
+   f64.add
+   local.get $0
+   local.get $0
    f64.ne
    local.get $1
-   local.tee $5
-   local.get $5
+   local.get $1
    f64.ne
    i32.or
-   if
-    local.get $5
-    local.get $4
-    f64.add
-    local.set $1
-    br $__inlined_func$~lib/math/NativeMath.atan2
-   end
-   local.get $4
+   br_if $__inlined_func$~lib/math/NativeMath.atan2
+   drop
+   local.get $0
+   i64.reinterpret_f64
+   local.tee $5
+   i64.const 32
+   i64.shr_u
+   i32.wrap_i64
+   local.set $9
+   local.get $1
    i64.reinterpret_f64
    local.tee $7
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.set $11
-   local.get $5
-   i64.reinterpret_f64
-   local.tee $9
-   i64.const 32
-   i64.shr_u
+   local.set $8
+   local.get $7
    i32.wrap_i64
-   local.tee $10
+   local.tee $6
+   local.get $8
    i32.const 1072693248
    i32.sub
-   local.get $9
-   i32.wrap_i64
-   local.tee $8
    i32.or
    i32.eqz
    if
-    local.get $4
+    local.get $0
     call $~lib/math/NativeMath.atan
-    local.set $1
     br $__inlined_func$~lib/math/NativeMath.atan2
    end
-   local.get $10
+   local.get $8
    i32.const 30
    i32.shr_u
    i32.const 2
    i32.and
-   local.get $11
+   local.get $9
    i32.const 31
    i32.shr_u
    i32.or
-   local.set $6
-   local.get $11
+   local.set $4
+   local.get $9
    i32.const 2147483647
    i32.and
-   local.tee $11
-   local.get $7
+   local.tee $9
+   local.get $5
    i32.wrap_i64
    i32.or
    i32.eqz
@@ -2895,158 +2890,141 @@
     block $break|0
      block $case3|0
       block $case2|0
-       block $case1|0
-        local.get $6
-        br_table $case1|0 $case1|0 $case2|0 $case3|0 $break|0
+       block $case0|0
+        local.get $4
+        br_table $case0|0 $case0|0 $case2|0 $case3|0 $break|0
        end
-       local.get $4
-       local.set $1
+       local.get $0
        br $__inlined_func$~lib/math/NativeMath.atan2
       end
       f64.const 3.141592653589793
-      local.set $1
       br $__inlined_func$~lib/math/NativeMath.atan2
      end
      f64.const -3.141592653589793
-     local.set $1
      br $__inlined_func$~lib/math/NativeMath.atan2
     end
    end
-   local.get $8
-   local.get $10
-   i32.const 2147483647
-   i32.and
-   local.tee $10
-   i32.or
-   i32.eqz
-   if
-    f64.const -1.5707963267948966
-    f64.const 1.5707963267948966
+   block $folding-inner0
     local.get $6
-    i32.const 1
+    local.get $8
+    i32.const 2147483647
     i32.and
-    select
-    local.set $1
-    br $__inlined_func$~lib/math/NativeMath.atan2
-   end
-   local.get $10
-   i32.const 2146435072
-   i32.eq
-   if
-    local.get $11
+    local.tee $8
+    i32.or
+    i32.eqz
+    br_if $folding-inner0
+    local.get $8
     i32.const 2146435072
     i32.eq
-    if (result f64)
-     f64.const 2.356194490192345
-     f64.const 0.7853981633974483
-     local.get $6
-     i32.const 2
-     i32.and
-     select
-     local.tee $1
-     f64.neg
-     local.get $1
-     local.get $6
-     i32.const 1
-     i32.and
-     select
-    else
-     f64.const 3.141592653589793
-     f64.const 0
-     local.get $6
-     i32.const 2
-     i32.and
-     select
-     local.tee $1
-     f64.neg
-     local.get $1
-     local.get $6
-     i32.const 1
-     i32.and
-     select
-    end
-    local.set $1
-    br $__inlined_func$~lib/math/NativeMath.atan2
-   end
-   local.get $11
-   i32.const 2146435072
-   i32.eq
-   local.get $11
-   local.get $10
-   i32.const 67108864
-   i32.add
-   i32.gt_u
-   i32.or
-   if
-    f64.const -1.5707963267948966
-    f64.const 1.5707963267948966
-    local.get $6
-    i32.const 1
-    i32.and
-    select
-    local.set $1
-    br $__inlined_func$~lib/math/NativeMath.atan2
-   end
-   local.get $10
-   local.get $11
-   i32.const 67108864
-   i32.add
-   i32.gt_u
-   i32.const 0
-   local.get $6
-   i32.const 2
-   i32.and
-   select
-   if (result f64)
-    f64.const 0
-   else
-    local.get $4
-    local.get $5
-    f64.div
-    f64.abs
-    call $~lib/math/NativeMath.atan
-   end
-   local.set $1
-   block $break|1
-    block $case3|1
-     block $case2|1
-      block $case1|1
-       block $case0|1
-        local.get $6
-        br_table $case0|1 $case1|1 $case2|1 $case3|1 $break|1
-       end
-       br $__inlined_func$~lib/math/NativeMath.atan2
-      end
-      local.get $1
+    if
+     local.get $9
+     i32.const 2146435072
+     i32.eq
+     if (result f64)
+      f64.const 2.356194490192345
+      f64.const 0.7853981633974483
+      local.get $4
+      i32.const 2
+      i32.and
+      select
+      local.tee $10
       f64.neg
-      local.set $1
-      br $__inlined_func$~lib/math/NativeMath.atan2
+      local.get $10
+      local.get $4
+      i32.const 1
+      i32.and
+      select
+     else
+      f64.const 3.141592653589793
+      f64.const 0
+      local.get $4
+      i32.const 2
+      i32.and
+      select
+      local.tee $10
+      f64.neg
+      local.get $10
+      local.get $4
+      i32.const 1
+      i32.and
+      select
      end
-     f64.const 3.141592653589793
-     local.get $1
-     f64.const 1.2246467991473532e-16
-     f64.sub
-     f64.sub
-     local.set $1
      br $__inlined_func$~lib/math/NativeMath.atan2
     end
-    local.get $1
-    f64.const 1.2246467991473532e-16
-    f64.sub
-    f64.const 3.141592653589793
-    f64.sub
-    local.set $1
-    br $__inlined_func$~lib/math/NativeMath.atan2
+    local.get $9
+    i32.const 2146435072
+    i32.eq
+    local.get $9
+    local.get $8
+    i32.const 67108864
+    i32.add
+    i32.gt_u
+    i32.or
+    br_if $folding-inner0
+    local.get $8
+    local.get $9
+    i32.const 67108864
+    i32.add
+    i32.gt_u
+    i32.const 0
+    local.get $4
+    i32.const 2
+    i32.and
+    select
+    if (result f64)
+     f64.const 0
+    else
+     local.get $0
+     local.get $1
+     f64.div
+     f64.abs
+     call $~lib/math/NativeMath.atan
+    end
+    local.set $10
+    block $break|1
+     block $case3|1
+      block $case2|1
+       block $case1|1
+        block $case0|1
+         local.get $4
+         br_table $case0|1 $case1|1 $case2|1 $case3|1 $break|1
+        end
+        local.get $10
+        br $__inlined_func$~lib/math/NativeMath.atan2
+       end
+       local.get $10
+       f64.neg
+       br $__inlined_func$~lib/math/NativeMath.atan2
+      end
+      f64.const 3.141592653589793
+      local.get $10
+      f64.const 1.2246467991473532e-16
+      f64.sub
+      f64.sub
+      br $__inlined_func$~lib/math/NativeMath.atan2
+     end
+     local.get $10
+     f64.const 1.2246467991473532e-16
+     f64.sub
+     f64.const 3.141592653589793
+     f64.sub
+     br $__inlined_func$~lib/math/NativeMath.atan2
+    end
+    unreachable
    end
-   unreachable
+   f64.const -1.5707963267948966
+   f64.const 1.5707963267948966
+   local.get $4
+   i32.const 1
+   i32.and
+   select
   end
-  local.get $1
   local.get $2
   local.get $3
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   local.get $5
+   local.get $1
    call $~lib/bindings/Math/atan2
    local.get $2
    local.get $3
@@ -44093,17 +44071,17 @@
     global.get $~lib/math/random_state1_64
     local.tee $2
     global.set $~lib/math/random_state0_64
-    local.get $2
     local.get $6
     i64.const 23
     i64.shl
     local.get $6
     i64.xor
     local.tee $6
-    local.get $6
     i64.const 17
     i64.shr_u
+    local.get $6
     i64.xor
+    local.get $2
     i64.xor
     local.get $2
     i64.const 26

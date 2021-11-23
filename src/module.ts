@@ -2306,6 +2306,7 @@ export class Module {
       if (optimizeLevel >= 2) {
         passes.push("once-reduction");
         passes.push("inlining");
+        passes.push("simplify-globals-optimizing");
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");

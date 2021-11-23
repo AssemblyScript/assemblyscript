@@ -1301,7 +1301,7 @@
      local.get $0
      i32.const 4
      i32.add
-     local.tee $6
+     local.tee $0
      i32.const 1484
      i32.ge_u
      if
@@ -1311,15 +1311,15 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.get $6
+      local.get $0
       i32.const 4
       i32.sub
       local.set $4
-      local.get $6
+      local.get $0
       i32.const 15
       i32.and
       i32.const 1
-      local.get $6
+      local.get $0
       select
       if (result i32)
        i32.const 1

@@ -12,8 +12,7 @@
  (export "_start" (func $~start))
  (func $wasi/seed/test (result f64)
   (local $0 i64)
-  (local $1 i32)
-  (local $2 i64)
+  (local $1 i64)
   global.get $~lib/math/random_seeded
   i32.eqz
   if
@@ -34,74 +33,74 @@
    i64.eqz
    select
    local.tee $0
-   local.get $0
    i64.const 33
    i64.shr_u
+   local.get $0
    i64.xor
    i64.const -49064778989728563
    i64.mul
    local.tee $0
-   local.get $0
    i64.const 33
    i64.shr_u
+   local.get $0
    i64.xor
    i64.const -4265267296055464877
    i64.mul
    local.tee $0
-   local.get $0
    i64.const 33
    i64.shr_u
+   local.get $0
    i64.xor
    global.set $~lib/math/random_state0_64
    global.get $~lib/math/random_state0_64
    i64.const -1
    i64.xor
    local.tee $0
-   local.get $0
    i64.const 33
    i64.shr_u
+   local.get $0
    i64.xor
    i64.const -49064778989728563
    i64.mul
    local.tee $0
-   local.get $0
    i64.const 33
    i64.shr_u
+   local.get $0
    i64.xor
    i64.const -4265267296055464877
    i64.mul
    local.tee $0
-   local.get $0
    i64.const 33
    i64.shr_u
+   local.get $0
    i64.xor
    global.set $~lib/math/random_state1_64
    i32.const 1
    global.set $~lib/math/random_seeded
   end
   global.get $~lib/math/random_state0_64
-  local.set $0
+  local.set $1
   global.get $~lib/math/random_state1_64
-  local.tee $2
+  local.tee $0
   global.set $~lib/math/random_state0_64
-  local.get $2
-  local.get $0
+  local.get $1
   i64.const 23
   i64.shl
-  local.get $0
+  local.get $1
   i64.xor
-  local.tee $0
-  local.get $0
+  local.tee $1
   i64.const 17
   i64.shr_u
+  local.get $1
   i64.xor
+  local.get $0
   i64.xor
-  local.get $2
+  local.get $0
   i64.const 26
   i64.shr_u
   i64.xor
   global.set $~lib/math/random_state1_64
-  local.get $2
+  local.get $0
   i64.const 12
   i64.shr_u
   i64.const 4607182418800017408

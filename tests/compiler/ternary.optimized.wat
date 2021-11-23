@@ -21,7 +21,6 @@
   select
  )
  (func $ternary/testDropWithTypeMismatch (param $0 i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -38,14 +37,13 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $1
   local.tee $0
   i32.const 0
   i32.store
   local.get $0
   i32.const 1056
   i32.store
-  local.get $1
+  local.get $0
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
