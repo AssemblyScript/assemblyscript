@@ -2412,6 +2412,7 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
+        passes.push("simplify-globals-optimizing");
       } else {
         passes.push("precompute");
       }
