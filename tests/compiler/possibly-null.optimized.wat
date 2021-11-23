@@ -190,6 +190,7 @@
  )
  (func $export:possibly-null/testLogicalAndMulti (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -207,9 +208,10 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $2
+  local.tee $3
   local.get $0
   i32.store
-  local.get $2
+  local.get $3
   local.get $1
   i32.store offset=4
   local.get $2

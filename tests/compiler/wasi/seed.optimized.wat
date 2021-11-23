@@ -34,9 +34,9 @@
    i64.eqz
    select
    local.tee $0
+   local.get $0
    i64.const 33
    i64.shr_u
-   local.get $0
    i64.xor
    i64.const -49064778989728563
    i64.mul
