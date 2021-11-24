@@ -7401,32 +7401,32 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 24
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 25884
+  i32.lt_s
+  if
+   i32.const 42288
+   i32.const 42336
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $6
+  i64.const 0
+  i64.store
+  local.get $6
+  i64.const 0
+  i64.store offset=8
+  local.get $6
+  i64.const 0
+  i64.store offset=16
   block $folding-inner3
-   global.get $~lib/memory/__stack_pointer
-   i32.const 24
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 25884
-   i32.lt_s
-   if
-    i32.const 42288
-    i32.const 42336
-    i32.const 1
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.tee $6
-   i64.const 0
-   i64.store
-   local.get $6
-   i64.const 0
-   i64.store offset=8
-   local.get $6
-   i64.const 0
-   i64.store offset=16
    block $folding-inner2
     block $folding-inner0
      local.get $2
@@ -22885,25 +22885,25 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 25884
+  i32.lt_s
+  if
+   i32.const 42288
+   i32.const 42336
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   block $folding-inner2
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 25884
-   i32.lt_s
-   if
-    i32.const 42288
-    i32.const 42336
-    i32.const 1
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store
    block $folding-inner1
     local.get $0
     i32.const 20

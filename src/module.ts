@@ -2450,6 +2450,7 @@ export class Module {
         }
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
+        passes.push("merge-blocks");
         passes.push("vacuum");
 
         passes.push("optimize-instructions");

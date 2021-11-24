@@ -6103,7 +6103,6 @@
      br $while-continue|0
     end
    end
-   local.get $2
    local.get $1
    i32.const 8388608
    i32.ge_u
@@ -6121,6 +6120,7 @@
     i32.sub
     local.set $1
    end
+   local.get $2
    local.get $1
    i32.const 8
    i32.shl
@@ -25266,19 +25266,19 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  local.get $0
+  i32.load offset=4
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  i32.const 3
+  i32.shr_u
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   local.get $0
-   i32.load offset=4
-   local.set $5
-   local.get $0
-   i32.load offset=8
-   i32.const 3
-   i32.shr_u
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 16628
    i32.lt_s
@@ -25740,19 +25740,19 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  local.get $0
+  i32.load offset=4
+  local.set $7
+  local.get $0
+  i32.load offset=8
+  i32.const 3
+  i32.shr_u
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   local.get $0
-   i32.load offset=4
-   local.set $7
-   local.get $0
-   i32.load offset=8
-   i32.const 3
-   i32.shr_u
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 16628
    i32.lt_s
@@ -45070,6 +45070,10 @@
   (local $14 i64)
   (local $15 f32)
   (local $16 f64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 32
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner41
    block $folding-inner40
     block $folding-inner39
@@ -45093,10 +45097,6 @@
                       block $folding-inner18
                        block $folding-inner17
                         block $folding-inner16
-                         global.get $~lib/memory/__stack_pointer
-                         i32.const 32
-                         i32.sub
-                         global.set $~lib/memory/__stack_pointer
                          block $folding-inner22
                           block $folding-inner20
                            block $folding-inner19

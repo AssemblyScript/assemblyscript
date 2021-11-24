@@ -4142,13 +4142,13 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $5
+  i32.const 31
+  i32.shr_u
+  local.set $1
   block $folding-inner0
-   local.get $0
-   i32.reinterpret_f32
-   local.tee $5
-   i32.const 31
-   i32.shr_u
-   local.set $1
    local.get $5
    i32.const 2147483647
    i32.and
@@ -7051,7 +7051,6 @@
      br $while-continue|0
     end
    end
-   local.get $10
    local.get $3
    local.get $4
    i64.ge_u
@@ -7069,6 +7068,7 @@
     i64.sub
     local.set $3
    end
+   local.get $10
    local.get $3
    i64.const 11
    i64.shl
@@ -7268,7 +7268,6 @@
     br $while-continue|0
    end
   end
-  local.get $8
   local.get $2
   local.get $3
   i32.ge_u
@@ -7287,6 +7286,7 @@
    i32.sub
    local.set $2
   end
+  local.get $8
   local.get $2
   i32.const 8
   i32.shl
@@ -9564,13 +9564,13 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $6
+  i32.const 31
+  i32.shr_u
+  local.set $1
   block $folding-inner0
-   local.get $0
-   i32.reinterpret_f32
-   local.tee $6
-   i32.const 31
-   i32.shr_u
-   local.set $1
    local.get $6
    i32.const 2147483647
    i32.and
@@ -10632,14 +10632,14 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $6
+  i32.const 31
+  i32.shr_u
+  local.set $1
   block $folding-inner1
    block $folding-inner0
-    local.get $0
-    i32.reinterpret_f32
-    local.tee $6
-    i32.const 31
-    i32.shr_u
-    local.set $1
     local.get $6
     i32.const 2147483647
     i32.and

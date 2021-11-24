@@ -3511,27 +3511,26 @@
    local.get $2
    i32.shl
    local.set $2
-   block $__inlined_func$~lib/rt/itcms/__renew
-    local.get $3
-    if
-     local.get $5
-     i32.const 1
-     i32.shl
-     local.tee $1
-     i32.const 1073741820
-     local.get $1
-     i32.const 1073741820
-     i32.lt_u
-     select
-     local.tee $1
-     local.get $2
-     local.get $1
-     local.get $2
-     i32.gt_u
-     select
-     local.set $2
-    end
+   local.get $3
+   if
+    local.get $5
+    i32.const 1
+    i32.shl
+    local.tee $1
+    i32.const 1073741820
+    local.get $1
+    i32.const 1073741820
+    i32.lt_u
+    select
+    local.tee $1
     local.get $2
+    local.get $1
+    local.get $2
+    i32.gt_u
+    select
+    local.set $2
+   end
+   block $__inlined_func$~lib/rt/itcms/__renew
     local.get $4
     i32.const 20
     i32.sub
@@ -3541,7 +3540,8 @@
     i32.and
     i32.const 16
     i32.sub
-    i32.le_u
+    local.get $2
+    i32.ge_u
     if
      local.get $3
      local.get $2
@@ -11634,17 +11634,17 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  local.get $0
+  i32.load offset=4
+  local.set $7
+  local.get $0
+  i32.load offset=12
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   local.get $0
-   i32.load offset=4
-   local.set $7
-   local.get $0
-   i32.load offset=12
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 15652
    i32.lt_s
@@ -12108,17 +12108,17 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  local.get $0
+  i32.load offset=4
+  local.set $5
+  local.get $0
+  i32.load offset=12
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   local.get $0
-   i32.load offset=4
-   local.set $5
-   local.get $0
-   i32.load offset=12
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 15652
    i32.lt_s
@@ -14227,11 +14227,11 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 15652
    i32.lt_s
@@ -24858,11 +24858,11 @@
    end
    local.get $14
    call $std/array/assertSortedDefault<i32>
+   global.get $~lib/memory/__stack_pointer
+   i32.const 24
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
    block $__inlined_func$std/array/assertStableSortedForComplexObjects
-    global.get $~lib/memory/__stack_pointer
-    i32.const 24
-    i32.sub
-    global.set $~lib/memory/__stack_pointer
     block $folding-inner0
      global.get $~lib/memory/__stack_pointer
      i32.const 15652
@@ -30274,11 +30274,11 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 15652
    i32.lt_s
@@ -32224,11 +32224,11 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 15652
    i32.lt_s
