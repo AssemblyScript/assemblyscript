@@ -11,6 +11,13 @@ global.i64_zero    = Long.ZERO;
 global.i64_one     = Long.ONE;
 global.i64_neg_one = Long.fromInt(-1);
 
+const clz32 = Math.clz32;
+
+function ctz32(value) {
+  var c = Math.clz32(value & -value);
+  return value ? 31 - c : c;
+}
+
 global.i64_is = function i64_is(value) {
   return Long.isLong(value);
 };
@@ -25,6 +32,18 @@ global.i64_low = function i64_low(value) {
 
 global.i64_high = function i64_high(value) {
   return value.high;
+};
+
+global.i64_not = function i64_not(value) {
+  return value.not();
+};
+
+global.i64_clz = function i64_clz(value) {
+  return value.high ? clz32(value.high) : clz32(value.low) + 32;
+};
+
+global.i64_ctz = function i64_ctz(value) {
+  return value.low ? ctz32(value.low) : ctz32(value.high) + 32;
 };
 
 global.i64_add = function i64_add(left, right) {
@@ -102,10 +121,6 @@ global.i64_shr = function i64_shr(left, right) {
 
 global.i64_shr_u = function i64_shr_u(left, right) {
   return left.shru(right);
-};
-
-global.i64_not = function i64_not(value) {
-  return value.not();
 };
 
 global.i64_eq = function i64_eq(left, right) {

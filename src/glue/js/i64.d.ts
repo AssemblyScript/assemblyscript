@@ -13,6 +13,10 @@ declare function i64_new(lo: i32, hi?: i32): i64;
 declare function i64_low(value: i64): i32;
 declare function i64_high(value: i64): i32;
 
+declare function i64_not(value: i64): i64;
+declare function i64_clz(value: i64): i32;
+declare function i64_ctz(value: i64): i32;
+
 declare function i64_add(left: i64, right: i64): i64;
 declare function i64_sub(left: i64, right: i64): i64;
 declare function i64_mul(left: i64, right: i64): i64;
@@ -27,8 +31,6 @@ declare function i64_xor(left: i64, right: i64): i64;
 declare function i64_shl(left: i64, right: i64): i64;
 declare function i64_shr(left: i64, right: i64): i64;
 declare function i64_shr_u(left: i64, right: i64): i64;
-declare function i64_not(value: i64): i64;
-
 declare function i64_eq(left: i64, right: i64): boolean;
 declare function i64_ne(left: i64, right: i64): boolean;
 declare function i64_gt(left: i64, right: i64): boolean;
