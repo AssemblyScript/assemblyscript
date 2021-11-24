@@ -2311,6 +2311,7 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");
         passes.push("vacuum");
+        passes.push("code-folding");
         passes.push("ssa-nomerge");
         passes.push("local-cse");
         passes.push("remove-unused-brs");
@@ -2329,7 +2330,6 @@ export class Module {
         passes.push("merge-locals");
         passes.push("reorder-locals");
         passes.push("dae-optimizing");
-        passes.push("code-folding");
       }
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
@@ -2400,9 +2400,9 @@ export class Module {
         passes.push("simplify-globals");
         passes.push("vacuum");
       }
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        passes.push("code-folding");
-      }
+      // if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+      //   passes.push("code-folding");
+      // }
       if (optimizeLevel >= 2 && (this.getFeatures() & FeatureFlags.GC) != 0) {
         passes.push("heap2local");
         passes.push("merge-locals");
@@ -2420,6 +2420,7 @@ export class Module {
       passes.push("dae-optimizing"); // reduce arity
       passes.push("inlining-optimizing"); // and inline if possible
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("code-folding");
         passes.push("ssa-nomerge");
         passes.push("rse");
         // move code on early return (after CFG cleanup)
