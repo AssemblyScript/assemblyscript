@@ -2400,9 +2400,6 @@ export class Module {
         passes.push("simplify-globals");
         passes.push("vacuum");
       }
-      // if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-      //   passes.push("code-folding");
-      // }
       if (optimizeLevel >= 2 && (this.getFeatures() & FeatureFlags.GC) != 0) {
         passes.push("heap2local");
         passes.push("merge-locals");
