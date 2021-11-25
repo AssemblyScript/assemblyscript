@@ -355,7 +355,7 @@ export class Parser extends DiagnosticEmitter {
 
         // handle plain exports
         if (flags & CommonFlags.EXPORT) {
-          if (defaultEnd && tn.skipIdentifier(IdentifierHandling.PREFER)) {
+          if (defaultEnd && tn.skipIdentifier()) {
             if (declareEnd) {
               this.error(
                 DiagnosticCode.An_export_assignment_cannot_have_modifiers,
@@ -876,7 +876,7 @@ export class Parser extends DiagnosticEmitter {
       let name = tn.readIdentifier();
       let expression: Expression = Node.createIdentifierExpression(name, tn.range(startPos, tn.pos));
       while (tn.skip(Token.DOT)) {
-        if (tn.skipIdentifier(IdentifierHandling.PREFER)) {
+        if (tn.skipIdentifier()) {
           name = tn.readIdentifier();
           expression = Node.createPropertyAccessExpression(
             expression,
