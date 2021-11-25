@@ -983,6 +983,7 @@ export class Tokenizer extends DiagnosticEmitter {
           // TODO: \uXXXX also support for identifiers
           if (isIdentifierStart(c)) {
             let posBefore = pos;
+            let c0 = text.charCodeAt(pos);
             while (
               ++pos < end &&
               isIdentifierPart(c = text.charCodeAt(pos))
@@ -994,7 +995,7 @@ export class Tokenizer extends DiagnosticEmitter {
               pos - posBefore >= MIN_KEYWORD_LENGTH &&
               pos - posBefore <= MAX_KEYWORD_LENGTH &&
               // Only a non-capitalised token can be a keyword
-              (c = text.charCodeAt(posBefore)) >= CharCode.a && c <= CharCode.z
+              c0 >= CharCode.a && c0 <= CharCode.z
             ) {
               let keywordToken = probeKeywordToken(text.substring(posBefore, pos));
               if (
