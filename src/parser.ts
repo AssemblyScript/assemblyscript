@@ -567,7 +567,7 @@ export class Parser extends DiagnosticEmitter {
         Node.createSimpleTypeName("this", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
-    // 'true'
+    // 'true' | `false`
     } else if (token == Token.TRUE || token == Token.FALSE) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
