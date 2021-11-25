@@ -1705,13 +1705,9 @@ export class Tokenizer extends DiagnosticEmitter {
     // fast pathes for the most common literals
     if (pos - start == 3 && text.charCodeAt(start + 1) == CharCode.DOT) {
       // 0.0 0.1 0.2 ... 0.9 1.0 1.1 ... 9.7 9.8 9.9
-      let c1 = text.charCodeAt(start);
-      if (c1 != CharCode.MINUS && c1 != CharCode.PLUS) {
-        let c2 = text.charCodeAt(start + 2);
-        let d1 = <f64>(c1 - CharCode._0);
-        let d2 = <f64>(c2 - CharCode._0) / 10.0;
-        return d1 + d2;
-      }
+      let d1 = <f64>(text.charCodeAt(start + 0) - CharCode._0);
+      let d2 = <f64>(text.charCodeAt(start + 2) - CharCode._0);
+      return d1 + d2 / 10.0;
     }
     let result = text.substring(start, pos);
     if (hasSep) result = result.replaceAll("_", "");
