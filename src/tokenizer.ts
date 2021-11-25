@@ -1402,6 +1402,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, pos);
   }
 
+  // Test is it integer or float without update of position.
   integerOrFloatToken(): Token {
     var text = this.source.text;
     var pos = this.pos + 1;
@@ -1704,14 +1705,17 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     let pos = this.pos;
-    // fast pathes for most usual literals:
-    //   0.0, 1.0, 2.0 .. 9.0
-    if (
-      pos - start == 3 &&
-      text.charCodeAt(start + 1) == CharCode.DOT &&
-      text.charCodeAt(start + 2) == CharCode._0
-    ) return <f64>(text.charCodeAt(start) - CharCode._0);
-
+    // fast pathes for the most common literals
+    if (pos - start == 3 && text.charCodeAt(start + 1) == CharCode.DOT) {
+      // 0.0 0.1 0.2 ... 0.9 1.0 1.1 ... 9.7 9.8 9.9
+      let c1 = text.charCodeAt(start);
+      if (c1 != CharCode.MINUS && c1 != CharCode.PLUS) {
+        let c2 = text.charCodeAt(start + 2);
+        let d1 = <f64>(c1 - CharCode._0);
+        let d2 = <f64>(c2 - CharCode._0) / 10.0;
+        return d1 + d2;
+      }
+    }
     let result = text.substring(start, pos);
     if (hasSep) result = result.replaceAll("_", "");
     return parseFloat(result);
