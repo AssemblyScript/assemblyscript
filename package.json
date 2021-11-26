@@ -23,8 +23,7 @@
   "dependencies": {
     "binaryen": "102.0.0-nightly.20211118",
     "long": "^5.1.0",
-    "source-map-support": "^0.5.20",
-    "ts-node": "^10.4.0"
+    "source-map-support": "^0.5.20"
   },
   "devDependencies": {
     "@types/node": "^16.11.6",
@@ -36,8 +35,6 @@
     "glob": "^7.2.0",
     "mkdirp": "^1.0.4",
     "physical-cpu-count": "^2.0.0",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^10.4.0",
     "typescript": "~4.5.2"
   },
   "type": "module",
