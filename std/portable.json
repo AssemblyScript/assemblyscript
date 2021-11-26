@@ -5,7 +5,9 @@
     "module": "commonjs",
     "allowJs": true,
     "downlevelIteration": true,
-    "preserveConstEnums": true,
+    "preserveConstEnums": false,
+    "useDefineForClassFields": false,
+    "noPropertyAccessFromIndexSignature": true,
     "typeRoots": [ "types" ],
     "types": [ "portable" ],
     "lib": ["esnext", "esnext.string"]

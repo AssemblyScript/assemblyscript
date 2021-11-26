@@ -4,6 +4,7 @@ require("ts-node").register({
   skipIgnore: true,
   files: true,
   compilerOptions: {
+    preserveConstEnums: true,
     removeComments: false
   }
 });

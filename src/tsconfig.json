@@ -8,9 +8,6 @@
     "allowJs": false,
     "strict": true,
     "skipLibCheck": true,
-    "preserveConstEnums": false,
-    "useDefineForClassFields": false,
-    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true
   },
   "include": [
