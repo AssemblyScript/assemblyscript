@@ -991,7 +991,8 @@ export class Tokenizer extends DiagnosticEmitter {
 
             if (
               identifierHandling != IdentifierHandling.ALWAYS &&
-              pos - posBefore >= MIN_KEYWORD_LENGTH && pos - posBefore <= MAX_KEYWORD_LENGTH
+              pos - posBefore >= MIN_KEYWORD_LENGTH &&
+              pos - posBefore <= MAX_KEYWORD_LENGTH
             ) {
               let keywordToken = probeKeywordToken(text.substring(posBefore, pos));
               if (
