@@ -304,5 +304,5 @@ export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";
 export * from "./extra/ast";
-import * as util from "./util/index";
+import * as util from "./util";
 export { util };

@@ -3,9 +3,19 @@
  * @license Apache-2.0
  */
 
-interface Colors {
-  /** Whether terminal colors are supported. */
-  supported: boolean;
+export const GRAY: string;
+export const RED: string;
+export const GREEN: string;
+export const YELLOW: string;
+export const BLUE: string;
+export const MAGENTA: string;
+export const CYAN: string;
+export const WHITE: string;
+export const RESET: string;
+
+export class Colors {
+  /** Whether terminal colors are enabled. */
+  enabled: boolean;
   /** Colors a string in gray if {@link supported}. */
   gray(text: string): string;
   /** Colors a string in red if {@link supported}. */
@@ -24,32 +34,5 @@ interface Colors {
   white(text: string): string;
 }
 
-interface Exports extends Colors {
-  /** Standard output wrapper. */
-  stdout: Colors;
-  /** Standard error wrapper. */
-  stderr: Colors;
-  /** Creates an instance for the specified stream. */
-  from(stream: Record<string,unknown>, base?: Record<string,unknown>): Colors;
-  /** Gray color escape sequence. */
-  GRAY: string;
-  /** Red color escape sequence. */
-  RED: string;
-  /** Green color escape sequence. */
-  GREEN: string;
-  /** Yellow color escape sequence. */
-  YELLOW: string;
-  /** Blue color escape sequence. */
-  BLUE: string;
-  /** Magenta color escape sequence. */
-  MAGENTA: string;
-  /** Cyan color escape sequence. */
-  CYAN: string;
-  /** White color escape sequence. */
-  WHITE: string;
-  /** Reset color escape sequence. */
-  RESET: string;
-}
-
-declare const colors: Exports;
-export = colors;
+export const stdout: Colors;
+export const stderr: Colors;

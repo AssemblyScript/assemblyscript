@@ -1,6 +1,14 @@
-var fs = require("fs");
+import fs from "fs";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-var messages = require(__dirname + "/../src/diagnosticMessages.json");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+var messages = JSON.parse(
+  fs.readFileSync(
+    path.join(__dirname, "..", "src", "diagnosticMessages.json")
+  )
+);
 
 var header = `/**
  * @fileoverview Generated from diagnosticsMessages.json. Do not edit.
@@ -39,4 +47,8 @@ Object.keys(messages).forEach(text => {
 
 sb.push("    default: return \"\";\n  }\n}\n");
 
-fs.writeFileSync(__dirname + "/../src/diagnosticMessages.generated.ts", sb.join(""), { encoding: "utf8" });
+fs.writeFileSync(
+  path.join(__dirname, "..", "src", "diagnosticMessages.generated.ts"),
+  sb.join(""),
+  { encoding: "utf8" }
+);

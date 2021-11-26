@@ -1,3 +1,5 @@
+// TODO: what about the sdk?
+
 const path = require("path");
 const fs = require("fs");
 const pkg = require("../package-lock.json");

@@ -1,17 +1,18 @@
-module.exports = {
-  platform: "linux",
-  cwd() {
-    return ".";
-  },
-  umask() {
-    return 0;
-  },
-  hrtime,
-  argv: [],
-  exit(code = 0) {
-    throw Error(`exit ${code}`);
-  }
-};
+export const platform = "linux";
+
+export function cwd() {
+  return ".";
+}
+
+export function umask() {
+  return 0;
+}
+
+export const argv = [];
+
+export function exit(code = 0) {
+  throw Error(`exit ${code}`);
+}
 
 // https://github.com/kumavis/browser-process-hrtime v1.0.0
 //
@@ -39,7 +40,7 @@ module.exports = {
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-var performance = global.performance || {};
+var performance = globalThis.performance || {};
 var performanceNow =
   performance.now        ||
   performance.mozNow     ||
@@ -48,7 +49,7 @@ var performanceNow =
   performance.webkitNow  ||
   function(){ return (new Date()).getTime(); };
 
-function hrtime(previousTimestamp) {
+export function hrtime(previousTimestamp) {
   var clocktime = performanceNow.call(performance);
   var seconds = Math.floor(clocktime * 1e-3);
   var nanoseconds = Math.floor(clocktime * 1e6 - seconds * 1e9);

@@ -3,10 +3,9 @@
  * @license Apache-2.0
  */
 
-const fs = require("fs");
-const path = require("path");
+import { fs, path } from "./node.js";
 
-function findFiles(dirname, filter) {
+export function findFiles(dirname, filter) {
   var out = [];
   fs.readdirSync(dirname).forEach(name => {
     if (fs.statSync(path.join(dirname, name)).isDirectory()) {
@@ -18,4 +17,4 @@ function findFiles(dirname, filter) {
   return out;
 }
 
-exports.files = findFiles;
+export default findFiles;

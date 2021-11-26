@@ -1,7 +1,7 @@
-var Diff = require("diff");
-var colors = require("../../cli/util/colors");
+import * as Diff from "diff";
+import * as colors from "../../cli/util/colors.js";
 
-module.exports = function diff(filename, expected, actual) {
+export default function diff(filename, expected, actual) {
   var diff = Diff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 5 });
   if (!diff.hunks.length)
     return null;
@@ -19,12 +19,12 @@ module.exports = function diff(filename, expected, actual) {
     );
     ret.push.apply(ret, hunk.lines.map(line =>
       line.charAt(0) === "+"
-        ? colors.green(line)
+        ? colors.stdout.green(line)
         : line.charAt(0) === "-"
-        ? line = colors.red(line)
+        ? line = colors.stdout.red(line)
         : line
     ));
   }
 
   return ret.join('\n') + '\n';
-};
+}

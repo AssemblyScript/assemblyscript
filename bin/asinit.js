@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
-const path = require("path");
-const colors = require("../cli/util/colors");
-const version = require("../package.json").version;
-const options = require("../cli/util/options");
+import fs from "fs";
+import path from "path";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import colors from "../cli/util/colors.js";
+import options from "../cli/util/options.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const version = require("../package.json").version; // TODO
 
 const npmDefaultTest = "echo \"Error: no test specified\" && exit 1";
 
@@ -79,9 +84,8 @@ function printHelp() {
   process.exit(0);
 }
 
+const compilerDir = path.join(dirname, "..");
 const projectDir = path.resolve(cliOptions.arguments[0]);
-const compilerDir = path.join(__dirname, "..");
-const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
 const tsconfigFile = path.join(assemblyDir, "tsconfig.json");
 const asconfigFile = path.join(projectDir, "asconfig.json");
@@ -356,11 +360,11 @@ function ensurePackageJson() {
       },
       ...(useNode && {
         "dependencies": {
-          "@assemblyscript/loader": "^" + compilerVersion
+          "@assemblyscript/loader": "^" + version
         }
       }),
       "devDependencies": {
-        "assemblyscript": "^" + compilerVersion
+        "assemblyscript": "^" + version
       }
     }, null, 2));
     console.log(colors.green("  Created: ") + packageFile);
@@ -382,13 +386,13 @@ function ensurePackageJson() {
     }
     let dependencies = pkg["dependencies"] || {};
     if (!dependencies["@assemblyscript/loader"] && useNode) {
-      dependencies["@assemblyscript/loader"] = "^" + compilerVersion;
+      dependencies["@assemblyscript/loader"] = "^" + version;
       pkg["dependencies"] = dependencies;
       updated = true;
     }
     let devDependencies = pkg["devDependencies"] || {};
     if (!devDependencies["assemblyscript"]) {
-      devDependencies["assemblyscript"] = "^" + compilerVersion;
+      devDependencies["assemblyscript"] = "^" + version;
       pkg["devDependencies"] = devDependencies;
       updated = true;
     }

@@ -1,11 +1,5 @@
-require("ts-node").register({
-  project: require("path").join(__dirname, "src", "tsconfig.json"),
-  compilerHost: true,
-  skipIgnore: true,
-  files: true,
-  compilerOptions: {
-    removeComments: false
-  }
-});
-require("./src/glue/js");
-module.exports = require("./src");
+import sourceMapSupport from "source-map-support";
+sourceMapSupport.install();
+export * from "./dist/assemblyscript.js";
+import * as assemblyscript from "./dist/assemblyscript.js";
+export default assemblyscript;

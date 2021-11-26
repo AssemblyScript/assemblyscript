@@ -1,2 +1,2 @@
-import "./src/glue/js";
-export * from "./src";
+import "./src/glue/js/index";
+export * from "./src/index";

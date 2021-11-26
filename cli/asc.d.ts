@@ -7,38 +7,26 @@ import { OptionDescription } from "./util/options";
 export { OptionDescription };
 import { Transform } from "./transform";
 
-/** Ready promise resolved once/if the compiler is ready. */
-export const ready: Promise<void>;
-
-/** Whether this is a webpack bundle or not. */
-export const isBundle: boolean;
-
-/** Whether asc runs the sources directly or not. */
-export const isDev: boolean;
-
 /** AssemblyScript version. */
 export const version: string;
 
 /** Available CLI options. */
 export const options: { [key: string]: OptionDescription };
 
-/** Common root used in source maps. */
-export var sourceMapRoot: string;
-
 /** Prefix used for library files. */
-export var libraryPrefix: string;
-
-/** Default Binaryen optimization level. */
-export var defaultOptimizeLevel: number;
-
-/** Default Binaryen shrink level. */
-export var defaultShrinkLevel: number;
+export const libraryPrefix: string;
 
 /** Bundled library files. */
 export const libraryFiles: { [key: string]: string };
 
 /** Bundled definition files. */
 export const definitionFiles: { assembly: string, portable: string };
+
+/** Default Binaryen optimization level. */
+export const defaultOptimizeLevel: number;
+
+/** Default Binaryen shrink level. */
+export const defaultShrinkLevel: number;
 
 /** A compatible output stream. */
 export interface OutputStream {

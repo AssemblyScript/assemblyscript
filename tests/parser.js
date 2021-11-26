@@ -1,10 +1,13 @@
-const fs = require("fs");
-const path = require("path");
-const os = require("os");
-const glob = require("glob");
-const colorsUtil = require("../cli/util/colors");
-const optionsUtil = require("../cli/util/options");
-const diff = require("./util/diff");
+import fs from "fs";
+import path from "path";
+import os from "os";
+import { fileURLToPath } from "url";
+import glob from "glob";
+import colorsUtil from "../cli/util/colors.js";
+import optionsUtil from "../cli/util/options.js";
+import diff from "./util/diff.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config = {
   "create": {
@@ -49,15 +52,7 @@ if (argv.length) {
   }
 }
 
-require("ts-node").register({
-  project: path.join(__dirname, "..", "src", "tsconfig.json"),
-  compilerHost: true,
-  files: true
-});
-require("../src/glue/js");
-
-const { Program, Options } = require("../src");
-const ASTBuilder = require("../src/extra/ast").ASTBuilder;
+import { Program, Options, ASTBuilder } from "../index.js";
 
 var failures = 0;
 
@@ -91,12 +86,12 @@ tests.forEach(filename => {
   }
 
   console.log();
-  if (failed)
-    ++failures;
+  if (failed) ++failures;
 });
 
 if (failures) {
   process.exitCode = 1;
   console.log(colorsUtil.red("ERROR: ") + failures + " parser tests failed");
-} else
+} else {
   console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
+}

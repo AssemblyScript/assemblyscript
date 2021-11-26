@@ -1,13 +1,18 @@
+import fs from "fs";
+import glob from "glob";
+import mkdirp from "mkdirp";
+import os from "os";
+import pathUtil from "path";
+import ts from "typescript";
+import stream from "stream";
+import util from "util";
+import { fileURLToPath } from 'url';
+
+const __dirname = pathUtil.dirname(fileURLToPath(import.meta.url));
+
 // © 2015-2019 SitePen, Inc. New BSD License.
 // see: https://github.com/SitePen/dts-generator
-(function() {
-  const fs = require("fs");
-  const glob = require("glob");
-  const mkdirp = require("mkdirp");
-  const os = require("os");
-  const pathUtil = require("path");
-  const ts = require("typescript");
-
+const generate = (function() {
   // declare some constants so we don't have magic integers without explanation
   const DTSLEN = '.d.ts'.length;
   const filenameToMid = (function () {
@@ -402,13 +407,8 @@
       }
     }
   }
-  exports.default = generate;
+  return generate;
 })();
-
-const path = require("path");
-const fs = require("fs");
-const stream = require("stream");
-const util = require("util");
 
 function OutputStream(options) {
   stream.Writable.call(this, options);
@@ -432,8 +432,8 @@ stdout.write(`declare module 'assemblyscript' {
 }
 `);
 
-module.exports.default({
-  project: path.resolve(__dirname, "..", "src"),
+generate({
+  project: pathUtil.resolve(__dirname, "..", "src"),
   prefix: "assemblyscript",
   exclude: [
     "glue/**",
@@ -445,8 +445,8 @@ module.exports.default({
 
 stdout.write("\n");
 
-module.exports.default({
-  project: path.resolve(__dirname, "..", "std/assembly/shared"),
+generate({
+  project: pathUtil.resolve(__dirname, "..", "std/assembly/shared"),
   prefix: "assemblyscript/std/assembly/shared",
   exclude: [],
   verbose: true,
@@ -456,8 +456,8 @@ module.exports.default({
 
 stdout.write("\n");
 
-module.exports.default({
-  project: path.resolve(__dirname, "..", "src/glue"),
+generate({
+  project: pathUtil.resolve(__dirname, "..", "src/glue"),
   prefix: "assemblyscript/src/glue",
   exclude: [
     "js/index.ts",
@@ -470,7 +470,6 @@ module.exports.default({
 
 var source = stdout.toString().replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
 
-const ts = require("typescript");
 const sourceFile = ts.createSourceFile("assemblyscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
 
 console.log("transforming:");
@@ -497,11 +496,11 @@ const result = ts.transform(sourceFile, [
 ]);
 console.log("  replaced " + numReplaced + " AS types with JS types");
 
-if (!fs.existsSync(path.join(__dirname, "..", "dist"))) {
-  fs.mkdirSync(path.join(__dirname, "..", "dist"));
+if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
+  fs.mkdirSync(pathUtil.join(__dirname, "..", "dist"));
 }
 fs.writeFileSync(
-  path.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
+  pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
   ts.createPrinter().printFile(result.transformed[0]),
   "utf8"
 );

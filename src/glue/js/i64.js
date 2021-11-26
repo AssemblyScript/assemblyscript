@@ -5,7 +5,7 @@
 
 /* eslint-disable no-undef */
 
-const Long = global.Long || require("long");
+import Long from "long";
 
 global.i64_zero    = Long.ZERO;
 global.i64_one     = Long.ONE;

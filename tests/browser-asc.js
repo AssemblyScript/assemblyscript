@@ -1,4 +1,4 @@
-const asc = require("../dist/asc.js");
+import * as asc from "../dist/asc.js";
 
 if (typeof asc.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
 if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");

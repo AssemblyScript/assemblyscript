@@ -24,11 +24,9 @@
  * THE SOFTWARE.
  */
 
-const path = require("path");
-const fs = require("fs");
-const process = require("process"); // ensure shim
+import { fs, path, process } from "./node.js";
 
-module.exports = function mkdirp(p, opts, made) {
+export default function mkdirp(p, opts, made) {
   if (!opts || typeof opts !== "object") {
     opts = { mode: opts };
   }
@@ -59,4 +57,4 @@ module.exports = function mkdirp(p, opts, made) {
     }
   }
   return made;
-};
+}

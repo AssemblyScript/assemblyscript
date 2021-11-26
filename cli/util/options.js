@@ -3,8 +3,10 @@
  * @license Apache-2.0
  */
 
-const path = require("path");
-const colorsUtil = require("./colors");
+import { path, module } from "./node.js";
+import * as colorsUtil from "./colors.js";
+
+const require = module.createRequire(import.meta.url);
 
 // type | meaning
 // -----|---------------
@@ -17,7 +19,7 @@ const colorsUtil = require("./colors");
 // S    | string array
 
 /** Parses the specified command line arguments according to the given configuration. */
-function parse(argv, config, propagateDefaults = true) {
+export function parse(argv, config, propagateDefaults = true) {
   var options = {};
   var unknown = [];
   var args = [];
@@ -93,10 +95,8 @@ function parse(argv, config, propagateDefaults = true) {
   return { options, unknown, arguments: args, trailing };
 }
 
-exports.parse = parse;
-
 /** Generates the help text for the specified configuration. */
-function help(config, options) {
+export function help(config, options) {
   if (!options) options = {};
   var indent = options.indent || 2;
   var padding = options.padding || 24;
@@ -130,17 +130,15 @@ function help(config, options) {
   var hasCategories = false;
   Object.keys(sbCategories).forEach(category => {
     hasCategories = true;
-    sb.push(eol + " " + colorsUtil.gray(category) + eol);
+    sb.push(eol + " " + colorsUtil.stdout.gray(category) + eol);
     sb.push(sbCategories[category].join(eol));
   });
   if (hasCategories) {
-    sb.push(eol + " " + colorsUtil.gray("Other") + eol);
+    sb.push(eol + " " + colorsUtil.stdout.gray("Other") + eol);
   }
   sb.push(sbOther.join(eol));
   return sb.join(eol);
 }
-
-exports.help = help;
 
 /** Sanitizes an option value to be a valid value of the option's type. */
 function sanitizeValue(value, type) {
@@ -172,7 +170,7 @@ function sanitizeValue(value, type) {
 }
 
 /** Merges two sets of options into one, preferring the current over the parent set. */
-function merge(config, currentOptions, parentOptions, parentBaseDir) {
+export function merge(config, currentOptions, parentOptions, parentBaseDir) {
   const mergedOptions = {};
   for (const [key, { type, mutuallyExclusive, isPath, useNodeResolution, cliOnly }] of Object.entries(config)) {
     let currentValue = sanitizeValue(currentOptions[key], type);
@@ -235,9 +233,7 @@ function merge(config, currentOptions, parentOptions, parentBaseDir) {
   return mergedOptions;
 }
 
-exports.merge = merge;
-
-function normalizePath(p) {
+export function normalizePath(p) {
   const parsed = path.parse(p);
   if (!parsed.root) {
     parsed.root = "./";
@@ -245,30 +241,20 @@ function normalizePath(p) {
   return path.format(parsed);
 }
 
-exports.normalizePath = normalizePath;
-
-const dynrequire = typeof __webpack_require__ === "function"
-  ? __non_webpack_require__
-  : require;
-
 /** Resolves a single possibly relative path. Keeps absolute paths, otherwise prepends baseDir. */
-function resolvePath(p, baseDir, useNodeResolution = false) {
+export function resolvePath(p, baseDir, useNodeResolution = false) {
   if (path.isAbsolute(p)) return p;
-  if (useNodeResolution && !p.startsWith(".")) {
-    return dynrequire.resolve(p, { paths: [ baseDir ] });
+  if (useNodeResolution && !p.startsWith(".") && require.resolve) {
+    return require.resolve(p, { paths: [ baseDir ] });
   }
   return normalizePath(path.join(baseDir, p));
 }
 
-exports.resolvePath = resolvePath;
-
 /** Populates default values on a parsed options result. */
-function addDefaults(config, options) {
+export function addDefaults(config, options) {
   for (const [key, { default: defaultValue }] of Object.entries(config)) {
     if (options[key] == null && defaultValue != null) {
       options[key] = defaultValue;
     }
   }
 }
-
-exports.addDefaults = addDefaults;

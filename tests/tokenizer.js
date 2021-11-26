@@ -1,21 +1,13 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { Tokenizer, Token, Source, SourceKind } from "../index.js";
 
-require("ts-node").register({
-  project: path.join(__dirname, "..", "src", "tsconfig.json"),
-  typeCheck: false,
-  transpileOnly: true,
-  compilerHost: true,
-  files: true,
-});
-require("../src/glue/js");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const { Tokenizer, Token } = require("../src/tokenizer");
-const { Source, SourceKind } = require("../src/ast");
-
-var file = process.argv.length > 2 ? process.argv[2] : path.join(__dirname, "..", "src", "tokenizer.ts");
+const file = process.argv.length > 2 ? process.argv[2] : path.join(__dirname, "..", "src", "tokenizer.ts");
 const text = fs.readFileSync(file).toString();
-const tn = new Tokenizer(new Source("compiler.ts", text, SourceKind.ENTRY));
+const tn = new Tokenizer(new Source(SourceKind.ENTRY, "compiler.ts", text));
 
 do {
   let token = tn.next();

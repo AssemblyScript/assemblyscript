@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = { // eslint-disable-line no-undef
   root: true,
   parser: "@typescript-eslint/parser",
   plugins: [

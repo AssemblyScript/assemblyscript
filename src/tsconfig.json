@@ -10,7 +10,8 @@
     "useDefineForClassFields": false,
     "strict": true,
     "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true
+    "noPropertyAccessFromIndexSignature": true,
+    "esModuleInterop": true
   },
   "include": [
     "./**/*.ts"

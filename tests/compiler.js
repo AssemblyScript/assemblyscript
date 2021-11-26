@@ -1,17 +1,26 @@
+import fs from "fs";
+import path from "path";
+import os from "os";
+import v8 from "v8";
+import cluster from "cluster";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import { WASI } from "wasi";
+import glob from "glob";
+import coreCount from "physical-cpu-count";
+import * as colorsUtil from "../cli/util/colors.js";
+import * as optionsUtil from "../cli/util/options.js";
+import diff from "./util/diff.js";
+import { Rtrace } from "../lib/rtrace/index.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+
+global.binaryen = (await import("binaryen")).default;
+global.assemblyscript = (await import("../index.js")).default;
+const asc = (await import("../cli/asc.js"));
+
 const startTime = Date.now();
-const fs  = require("fs");
-const path = require("path");
-const os = require("os");
-const v8 = require("v8");
-const WASI = require("wasi").WASI;
-const glob = require("glob");
-const colorsUtil = require("../cli/util/colors");
-const optionsUtil = require("../cli/util/options");
-const diff = require("./util/diff");
-const asc = require("../cli/asc.js");
-const { Rtrace } = require("../lib/rtrace/umd");
-const cluster = require("cluster");
-const coreCount = require("physical-cpu-count");
 
 const config = {
   "create": {
@@ -55,10 +64,10 @@ const argv = opts.arguments;
 
 if (args.help) {
   console.log([
-    colorsUtil.white("SYNTAX"),
-    "  " + colorsUtil.cyan("npm run test:compiler --") + " [test1, test2 ...] [options]",
+    colorsUtil.stdout.white("SYNTAX"),
+    "  " + colorsUtil.stdout.cyan("npm run test:compiler --") + " [test1, test2 ...] [options]",
     "",
-    colorsUtil.white("OPTIONS"),
+    colorsUtil.stdout.white("OPTIONS"),
     optionsUtil.help(config)
   ].join(os.EOL) + os.EOL);
   process.exit(0);
@@ -72,7 +81,7 @@ var failedMessages = new Map();
 var skippedTests = new Set();
 var skippedMessages = new Map();
 
-const basedir = path.join(__dirname, "compiler");
+const basedir = path.join(dirname, "compiler");
 
 // Gets a list of all relevant tests
 function getTests() {
@@ -80,7 +89,7 @@ function getTests() {
   if (argv.length) { // run matching tests only
     tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
     if (!tests.length) {
-      console.log(colorsUtil.red("FAILURE: ") + colorsUtil.white("No matching tests: " + argv.join(" ") + "\n"));
+      console.log(colorsUtil.stdout.red("FAILURE: ") + colorsUtil.stdout.white("No matching tests: " + argv.join(" ") + "\n"));
       process.exit(1);
     }
   }
@@ -97,9 +106,9 @@ function section(title) {
       const times = process.hrtime(start);
       const time = asc.formatTime(times[0] * 1e9 + times[1]);
       switch (code) {
-        case SUCCESS: console.log("  " + colorsUtil.green ("SUCCESS") + " (" + time + ")\n"); break;
-        default: console.log("  " + colorsUtil.red("FAILURE") + " (" + time + ")\n"); break;
-        case SKIPPED: console.log("  " + colorsUtil.yellow("SKIPPED") + " (" + time + ")\n"); break;
+        case SUCCESS: console.log("  " + colorsUtil.stdout.green ("SUCCESS") + " (" + time + ")\n"); break;
+        default: console.log("  " + colorsUtil.stdout.red("FAILURE") + " (" + time + ")\n"); break;
+        case SKIPPED: console.log("  " + colorsUtil.stdout.yellow("SKIPPED") + " (" + time + ")\n"); break;
       }
     }
   };
@@ -110,7 +119,7 @@ const SKIPPED = 2;
 
 // Runs a single test
 function runTest(basename) {
-  console.log(colorsUtil.white("# compiler/" + basename) + "\n");
+  console.log(colorsUtil.stdout.white("# compiler/" + basename) + "\n");
 
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath)
@@ -149,7 +158,7 @@ function runTest(basename) {
       }
     });
     if (missing_features.length) {
-      console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
+      console.log("- " + colorsUtil.stdout.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
       skippedTests.add(basename);
       skippedMessages.set(basename, "feature not enabled");
       if (cluster.isWorker) process.send({ cmd: "skipped", message: skippedMessages.get(basename) });
@@ -222,7 +231,7 @@ function runTest(basename) {
     var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
       fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
-      console.log("  " + colorsUtil.yellow("Created fixture"));
+      console.log("  " + colorsUtil.stdout.yellow("Created fixture"));
       compareFixture.end(SKIPPED);
     } else {
       let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
@@ -394,7 +403,7 @@ function testInstantiate(basename, binaryBuffer, glue, stderr, wasiOptions) {
       env: {
         memory,
         abort: function(msg, file, line, column) {
-          console.log(colorsUtil.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
+          console.log(colorsUtil.stdout.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
         },
         trace: function(msg, n) {
           console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
@@ -468,93 +477,90 @@ function testInstantiate(basename, binaryBuffer, glue, stderr, wasiOptions) {
 // Evaluates the overall test result
 function evaluateResult() {
   if (skippedTests.size) {
-    console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.size + " compiler tests have been skipped:\n"));
+    console.log(colorsUtil.stdout.yellow("WARNING: ") + colorsUtil.stdout.white(skippedTests.size + " compiler tests have been skipped:\n"));
     skippedTests.forEach(name => {
-      var message = skippedMessages.has(name) ? colorsUtil.gray("[" + skippedMessages.get(name) + "]") : "";
+      var message = skippedMessages.has(name) ? colorsUtil.stdout.gray("[" + skippedMessages.get(name) + "]") : "";
       console.log("  " + name + " " + message);
     });
     console.log();
   }
   if (failedTests.size) {
     process.exitCode = 1;
-    console.log(colorsUtil.red("FAILURE: ") + colorsUtil.white(failedTests.size + " compiler tests had failures:\n"));
+    console.log(colorsUtil.stdout.red("FAILURE: ") + colorsUtil.stdout.white(failedTests.size + " compiler tests had failures:\n"));
     failedTests.forEach(name => {
-      var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
+      var message = failedMessages.has(name) ? colorsUtil.stdout.gray("[" + failedMessages.get(name) + "]") : "";
       console.log("  " + name + " " + message);
     });
     console.log();
   }
   console.log("Time: " + (Date.now() - startTime) + " ms\n");
   if (!process.exitCode) {
-    console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
+    console.log("[ " + colorsUtil.stdout.white("SUCCESS") + " ]");
   }
 }
 
-asc.ready.then(() => {
-
-  // Run tests in parallel if requested
-  if (args.parallel && coreCount > 1) {
-    if (cluster.isWorker) {
-      colorsUtil.supported = true;
-      process.on("message", msg => {
-        if (msg.cmd != "run") throw Error("invalid command: " + msg.cmd);
-        try {
-          runTest(msg.test);
-        } catch (e) {
-          process.send({ cmd: "done", failed: true, message: e.message });
-        }
-      });
-      process.send({ cmd: "ready" });
-    } else {
-      const tests = getTests();
-      // const sizes = new Map();
-      // tests.forEach(name => sizes.set(name, fs.statSync(path.join(basedir, name + ".ts")).size));
-      // tests.sort((a, b) => sizes.get(b) - sizes.get(a));
-      const workers = [];
-      const current = [];
-      const outputs = [];
-      let numWorkers = Math.min(coreCount - 1, tests.length);
-      console.log("Spawning " + numWorkers + " workers ...");
-      cluster.settings.silent = true;
-      let index = 0;
-      for (let i = 0; i < numWorkers; ++i) {
-        let worker = cluster.fork();
-        workers[i] = worker;
-        current[i] = null;
-        outputs[i] = [];
-        worker.process.stdout.on("data", buf => outputs[i].push(buf));
-        worker.process.stderr.on("data", buf => outputs[i].push(buf));
-        worker.on("message", msg => {
-          if (msg.cmd == "done") {
-            process.stdout.write(Buffer.concat(outputs[i]).toString());
-            if (msg.failed) failedTests.add(current[i]);
-            if (msg.message) failedMessages.set(current[i], msg.message);
-          } else if (msg.cmd == "skipped") {
-            process.stdout.write(Buffer.concat(outputs[i]).toString());
-            skippedTests.add(current[i]);
-            if (msg.message) skippedMessages.set(current[i], msg.message);
-          } else if (msg.cmd != "ready") {
-            throw Error("invalid command: " + msg.cmd);
-          }
-          if (index >= tests.length) {
-            workers[i] = null;
-            worker.kill();
-            return;
-          }
-          current[i] = tests[index++];
-          outputs[i] = [];
-          worker.send({ cmd: "run", test: current[i] });
-        });
-        worker.on("disconnect", () => {
-          if (workers[i]) throw Error("worker#" + i + " died unexpectedly");
-          if (!--numWorkers) evaluateResult();
-        });
+// Run tests in parallel if requested
+if (args.parallel && coreCount > 1) {
+  if (cluster.isWorker) {
+    colorsUtil.stdout.enabled = true;
+    process.on("message", msg => {
+      if (msg.cmd != "run") throw Error("invalid command: " + msg.cmd);
+      try {
+        runTest(msg.test);
+      } catch (e) {
+        process.send({ cmd: "done", failed: true, message: e.message });
       }
-    }
-
-  // Otherwise run tests sequentially
+    });
+    process.send({ cmd: "ready" });
   } else {
-    getTests().forEach(runTest);
-    evaluateResult();
+    const tests = getTests();
+    // const sizes = new Map();
+    // tests.forEach(name => sizes.set(name, fs.statSync(path.join(basedir, name + ".ts")).size));
+    // tests.sort((a, b) => sizes.get(b) - sizes.get(a));
+    const workers = [];
+    const current = [];
+    const outputs = [];
+    let numWorkers = Math.min(coreCount - 1, tests.length);
+    console.log("Spawning " + numWorkers + " workers ...");
+    cluster.settings.silent = true;
+    let index = 0;
+    for (let i = 0; i < numWorkers; ++i) {
+      let worker = cluster.fork();
+      workers[i] = worker;
+      current[i] = null;
+      outputs[i] = [];
+      worker.process.stdout.on("data", buf => outputs[i].push(buf));
+      worker.process.stderr.on("data", buf => outputs[i].push(buf));
+      worker.on("message", msg => {
+        if (msg.cmd == "done") {
+          process.stdout.write(Buffer.concat(outputs[i]).toString());
+          if (msg.failed) failedTests.add(current[i]);
+          if (msg.message) failedMessages.set(current[i], msg.message);
+        } else if (msg.cmd == "skipped") {
+          process.stdout.write(Buffer.concat(outputs[i]).toString());
+          skippedTests.add(current[i]);
+          if (msg.message) skippedMessages.set(current[i], msg.message);
+        } else if (msg.cmd != "ready") {
+          throw Error("invalid command: " + msg.cmd);
+        }
+        if (index >= tests.length) {
+          workers[i] = null;
+          worker.kill();
+          return;
+        }
+        current[i] = tests[index++];
+        outputs[i] = [];
+        worker.send({ cmd: "run", test: current[i] });
+      });
+      worker.on("disconnect", () => {
+        if (workers[i]) throw Error("worker#" + i + " died unexpectedly");
+        if (!--numWorkers) evaluateResult();
+      });
+    }
   }
-});
+
+// Otherwise run tests sequentially
+} else {
+  getTests().forEach(runTest);
+  evaluateResult();
+}

@@ -1,18 +1,10 @@
-const path = require("path");
-const assert = require("assert");
+import path from "path";
+import assert from "assert";
+import { util } from "../index.js";
 
-require("ts-node").register({
-  project: path.join(__dirname, "..", "src", "tsconfig.json"),
-  typeCheck: false,
-  transpileOnly: true,
-  compilerHost: true,
-  files: true
-});
-require("../src/glue/js");
-
-const { normalize, resolve } = require("../src/util/path");
+const { normalizePath, resolvePath } = util;
 
 var test = "./Y/./N/./N/../../././../Y/./.";
-assert.strictEqual(normalize(test), path.posix.normalize(test));
+assert.strictEqual(normalizePath(test), path.posix.normalize(test));
 
-assert.strictEqual(resolve("../../..", "lib/util/i64.ts"), "..");
+assert.strictEqual(resolvePath("../../..", "lib/util/i64.ts"), "..");
