@@ -167,7 +167,6 @@
       br $while-continue|0
      end
     end
-    local.get $10
     local.get $3
     local.get $5
     i64.ge_u
@@ -185,6 +184,7 @@
      i64.sub
      local.set $3
     end
+    local.get $10
     local.get $3
     i64.const 11
     i64.shl
@@ -427,7 +427,6 @@
       br $while-continue|0
      end
     end
-    local.get $9
     local.get $3
     local.get $4
     i32.ge_u
@@ -445,6 +444,7 @@
      i32.sub
      local.set $3
     end
+    local.get $9
     local.get $3
     i32.const 8
     i32.shl

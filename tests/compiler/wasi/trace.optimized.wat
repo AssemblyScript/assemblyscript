@@ -2785,8 +2785,6 @@
       select
       i32.store16 offset=4
       local.get $1
-      i32.const 2
-      i32.add
      else
       local.get $0
       i32.const 4
@@ -2886,9 +2884,9 @@
       local.get $0
       local.get $1
       i32.add
-      i32.const 2
-      i32.add
      end
+     i32.const 2
+     i32.add
     end
    end
   end

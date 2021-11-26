@@ -3037,65 +3037,65 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $folding-inner0
-   local.get $0
-   local.get $0
-   f32.ne
+  local.get $0
+  local.get $0
+  f32.ne
+  local.get $1
+  local.get $1
+  f32.ne
+  i32.or
+  if
    local.get $1
-   local.get $1
-   f32.ne
-   i32.or
-   if
-    local.get $1
-    local.get $0
-    f32.add
-    return
-   end
-   local.get $1
-   i32.reinterpret_f32
-   local.tee $3
-   i32.const 1065353216
-   i32.eq
-   if
-    local.get $0
-    call $~lib/math/NativeMathf.atan
-    return
-   end
-   local.get $3
-   i32.const 30
-   i32.shr_u
-   i32.const 2
-   i32.and
    local.get $0
-   i32.reinterpret_f32
-   local.tee $4
-   i32.const 31
-   i32.shr_u
-   i32.or
-   local.set $2
-   local.get $4
-   i32.const 2147483647
-   i32.and
-   local.tee $4
-   i32.eqz
-   if
-    block $break|0
-     block $case3|0
-      block $case2|0
-       block $case1|0
-        local.get $2
-        br_table $case1|0 $case1|0 $case2|0 $case3|0 $break|0
-       end
-       local.get $0
-       return
+   f32.add
+   return
+  end
+  local.get $1
+  i32.reinterpret_f32
+  local.tee $3
+  i32.const 1065353216
+  i32.eq
+  if
+   local.get $0
+   call $~lib/math/NativeMathf.atan
+   return
+  end
+  local.get $3
+  i32.const 30
+  i32.shr_u
+  i32.const 2
+  i32.and
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $4
+  i32.const 31
+  i32.shr_u
+  i32.or
+  local.set $2
+  local.get $4
+  i32.const 2147483647
+  i32.and
+  local.tee $4
+  i32.eqz
+  if
+   block $break|0
+    block $case3|0
+     block $case2|0
+      block $case1|0
+       local.get $2
+       br_table $case1|0 $case1|0 $case2|0 $case3|0 $break|0
       end
-      f32.const 3.1415927410125732
+      local.get $0
       return
      end
-     f32.const -3.1415927410125732
+     f32.const 3.1415927410125732
      return
     end
+    f32.const -3.1415927410125732
+    return
    end
+  end
+  block $folding-inner0
    local.get $3
    i32.const 2147483647
    i32.and
@@ -3116,13 +3116,6 @@
      i32.const 2
      i32.and
      select
-     local.tee $0
-     f32.neg
-     local.get $0
-     local.get $2
-     i32.const 1
-     i32.and
-     select
     else
      f32.const 3.1415927410125732
      f32.const 0
@@ -3130,14 +3123,14 @@
      i32.const 2
      i32.and
      select
-     local.tee $0
-     f32.neg
-     local.get $0
-     local.get $2
-     i32.const 1
-     i32.and
-     select
     end
+    local.tee $0
+    f32.neg
+    local.get $0
+    local.get $2
+    i32.const 1
+    i32.and
+    select
     return
    end
    local.get $4
@@ -4149,13 +4142,13 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $5
+  i32.const 31
+  i32.shr_u
+  local.set $1
   block $folding-inner0
-   local.get $0
-   i32.reinterpret_f32
-   local.tee $5
-   i32.const 31
-   i32.shr_u
-   local.set $1
    local.get $5
    i32.const 2147483647
    i32.and
@@ -7058,7 +7051,6 @@
      br $while-continue|0
     end
    end
-   local.get $10
    local.get $3
    local.get $4
    i64.ge_u
@@ -7076,6 +7068,7 @@
     i64.sub
     local.set $3
    end
+   local.get $10
    local.get $3
    i64.const 11
    i64.shl
@@ -7275,7 +7268,6 @@
     br $while-continue|0
    end
   end
-  local.get $8
   local.get $2
   local.get $3
   i32.ge_u
@@ -7294,6 +7286,7 @@
    i32.sub
    local.set $2
   end
+  local.get $8
   local.get $2
   i32.const 8
   i32.shl
@@ -9571,13 +9564,13 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $6
+  i32.const 31
+  i32.shr_u
+  local.set $1
   block $folding-inner0
-   local.get $0
-   i32.reinterpret_f32
-   local.tee $6
-   i32.const 31
-   i32.shr_u
-   local.set $1
    local.get $6
    i32.const 2147483647
    i32.and
@@ -10639,14 +10632,14 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $6
+  i32.const 31
+  i32.shr_u
+  local.set $1
   block $folding-inner1
    block $folding-inner0
-    local.get $0
-    i32.reinterpret_f32
-    local.tee $6
-    i32.const 31
-    i32.shr_u
-    local.set $1
     local.get $6
     i32.const 2147483647
     i32.and

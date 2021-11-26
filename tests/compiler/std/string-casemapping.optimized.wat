@@ -2046,113 +2046,103 @@
   local.get $2
   i32.const 8
   i32.shr_s
-  local.set $5
-  local.get $3
-  i32.const 2
-  i32.lt_u
-  if
-   i32.const 0
-   local.get $1
-   local.get $3
-   i32.xor
-   i32.sub
-   local.get $5
-   i32.and
-   local.get $0
-   i32.add
-   return
-  end
-  local.get $5
-  i32.const 255
-  i32.and
   local.set $2
-  local.get $5
-  i32.const 8
-  i32.shr_u
-  local.set $3
-  loop $while-continue|0
+  block $folding-inner0
+   local.get $3
+   i32.const 2
+   i32.lt_u
+   br_if $folding-inner0
    local.get $2
-   if
-    local.get $4
-    local.get $2
-    i32.const 1
-    i32.shr_u
-    local.tee $5
+   i32.const 255
+   i32.and
+   local.set $3
+   local.get $2
+   i32.const 8
+   i32.shr_u
+   local.set $2
+   loop $while-continue|0
     local.get $3
-    i32.add
-    i32.const 1
-    i32.shl
-    i32.const 6596
-    i32.add
-    i32.load8_u
-    local.tee $6
-    i32.eq
-    if (result i32)
+    if
+     local.get $4
      local.get $3
-     local.get $5
+     i32.const 1
+     i32.shr_u
+     local.tee $6
+     local.get $2
      i32.add
      i32.const 1
      i32.shl
      i32.const 6596
      i32.add
-     i32.load8_u offset=1
-     i32.const 2
-     i32.shl
-     i32.const 5124
-     i32.add
-     i32.load
-     local.tee $2
-     i32.const 255
-     i32.and
-     local.set $3
-     local.get $2
-     i32.const 8
-     i32.shr_s
-     local.set $2
-     local.get $3
-     i32.const 2
-     i32.lt_u
-     if
-      i32.const 0
-      local.get $1
-      local.get $3
-      i32.xor
-      i32.sub
-      local.get $2
-      i32.and
-      local.get $0
-      i32.add
-      return
-     end
-     local.get $0
-     i32.const 1
-     i32.add
-     local.get $1
-     i32.const 1
-     i32.shl
-     i32.sub
-     return
-    else
-     local.get $4
-     local.get $6
-     i32.lt_u
+     i32.load8_u
+     local.tee $5
+     i32.eq
      if (result i32)
-      local.get $5
-     else
-      local.get $3
-      local.get $5
+      local.get $2
+      local.get $6
       i32.add
+      i32.const 1
+      i32.shl
+      i32.const 6596
+      i32.add
+      i32.load8_u offset=1
+      i32.const 2
+      i32.shl
+      i32.const 5124
+      i32.add
+      i32.load
+      local.tee $2
+      i32.const 255
+      i32.and
       local.set $3
       local.get $2
-      local.get $5
+      i32.const 8
+      i32.shr_s
+      local.set $2
+      local.get $3
+      i32.const 2
+      i32.lt_u
+      br_if $folding-inner0
+      local.get $0
+      i32.const 1
+      i32.add
+      local.get $1
+      i32.const 1
+      i32.shl
       i32.sub
+      return
+     else
+      local.get $4
+      local.get $5
+      i32.lt_u
+      if (result i32)
+       local.get $6
+      else
+       local.get $2
+       local.get $6
+       i32.add
+       local.set $2
+       local.get $3
+       local.get $6
+       i32.sub
+      end
      end
+     local.set $3
+     br $while-continue|0
     end
-    local.set $2
-    br $while-continue|0
    end
+   local.get $0
+   return
   end
+  i32.const 0
+  local.get $1
+  local.get $3
+  i32.xor
+  i32.sub
+  local.get $2
+  i32.and
   local.get $0
+  i32.add
  )
  (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
