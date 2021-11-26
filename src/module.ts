@@ -10,12 +10,12 @@
 
 import { BuiltinNames } from "./builtins";
 import { Target } from "./common";
-import { 
-  isHighSurrogate, 
-  isLowSurrogate, 
-  combineSurrogates, 
-  SURROGATE_HIGH, 
-  SURROGATE_LOW 
+import {
+  isHighSurrogate,
+  isLowSurrogate,
+  combineSurrogates,
+  SURROGATE_HIGH,
+  SURROGATE_LOW
 } from "./util";
 import * as binaryen from "./glue/binaryen";
 
@@ -2306,17 +2306,19 @@ export class Module {
       if (optimizeLevel >= 2) {
         passes.push("once-reduction");
         passes.push("inlining");
+        passes.push("simplify-globals-optimizing");
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");
         passes.push("vacuum");
+        passes.push("code-folding");
         passes.push("ssa-nomerge");
-        passes.push("simplify-globals-optimizing");
         passes.push("local-cse");
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("merge-blocks");
         passes.push("precompute-propagate");
+        passes.push("simplify-globals-optimizing");
       }
       if (optimizeLevel >= 3) {
         passes.push("simplify-locals-nostructure");
@@ -2328,7 +2330,6 @@ export class Module {
         passes.push("merge-locals");
         passes.push("reorder-locals");
         passes.push("dae-optimizing");
-        passes.push("code-folding");
       }
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
@@ -2339,13 +2340,12 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("inlining");
         passes.push("precompute-propagate");
+        passes.push("simplify-globals-optimizing");
       } else {
         passes.push("precompute");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
-        passes.push("simplify-globals-optimizing");
-        passes.push("simplify-globals-optimizing");
       }
       passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
@@ -2400,9 +2400,6 @@ export class Module {
         passes.push("simplify-globals");
         passes.push("vacuum");
       }
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        passes.push("code-folding");
-      }
       if (optimizeLevel >= 2 && (this.getFeatures() & FeatureFlags.GC) != 0) {
         passes.push("heap2local");
         passes.push("merge-locals");
@@ -2412,6 +2409,7 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
+        passes.push("simplify-globals-optimizing");
       } else {
         passes.push("precompute");
       }
@@ -2419,6 +2417,7 @@ export class Module {
       passes.push("dae-optimizing"); // reduce arity
       passes.push("inlining-optimizing"); // and inline if possible
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("code-folding");
         passes.push("ssa-nomerge");
         passes.push("rse");
         // move code on early return (after CFG cleanup)
@@ -2451,6 +2450,7 @@ export class Module {
         }
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
+        passes.push("merge-blocks");
         passes.push("vacuum");
 
         passes.push("optimize-instructions");
@@ -2619,8 +2619,15 @@ export function expandType(type: TypeRef): TypeRef[] {
   var cArr = binaryen._malloc(<usize>arity << 2);
   binaryen._BinaryenTypeExpand(type, cArr);
   var types = new Array<TypeRef>(arity);
-  for (let i: u32 = 0; i < arity; ++i) {
-    types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+  if (!ASC_TARGET) {
+    let ptr = cArr >>> 2;
+    for (let i: u32 = 0; i < arity; ++i) {
+      types[i] = binaryen.HEAPU32[ptr + i];
+    }
+  } else {
+    for (let i: u32 = 0; i < arity; ++i) {
+      types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+    }
   }
   binaryen._free(cArr);
   return types;
