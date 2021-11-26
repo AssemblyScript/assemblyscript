@@ -3715,17 +3715,17 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  local.get $0
+  i32.load offset=4
+  local.set $6
+  local.get $0
+  i32.load offset=8
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner1
-   local.get $0
-   i32.load offset=4
-   local.set $6
-   local.get $0
-   i32.load offset=8
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    block $folding-inner0
     global.get $~lib/memory/__stack_pointer
     i32.const 6900
@@ -4826,11 +4826,11 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 6900
    i32.lt_s

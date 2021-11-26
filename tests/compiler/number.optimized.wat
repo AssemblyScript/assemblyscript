@@ -3362,7 +3362,7 @@
      local.get $0
      i32.const 1
      i32.eq
-     if (result i32)
+     if
       i32.const 3458
       i32.const 101
       i32.store16
@@ -3437,9 +3437,6 @@
       local.get $1
       select
       i32.store16
-      local.get $0
-      i32.const 2
-      i32.add
      else
       i32.const 3460
       i32.const 3458
@@ -3535,9 +3532,11 @@
       local.get $0
       local.get $1
       i32.add
-      i32.const 2
-      i32.add
+      local.set $0
      end
+     local.get $0
+     i32.const 2
+     i32.add
     end
    end
   end
