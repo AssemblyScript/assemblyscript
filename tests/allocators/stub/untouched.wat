@@ -1,19 +1,21 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
- (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 1 funcref)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 76))
+ (global $~lib/memory/__heap_base i32 (i32.const 140))
+ (memory $0 1)
+ (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "heap.alloc" (func $~lib/memory/heap.alloc))
  (export "heap.realloc" (func $~lib/memory/heap.realloc))
  (export "heap.free" (func $~lib/memory/heap.free))
@@ -94,6 +96,11 @@
   i32.const 1073741820
   i32.gt_u
   if
+   i32.const 32
+   i32.const 96
+   i32.const 33
+   i32.const 29
+   call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/rt/stub/offset
@@ -1403,8 +1410,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
-   i32.const 44
+   i32.const 96
+   i32.const 45
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1446,6 +1453,11 @@
     i32.const 1073741820
     i32.gt_u
     if
+     i32.const 32
+     i32.const 96
+     i32.const 52
+     i32.const 33
+     call $~lib/builtins/abort
      unreachable
     end
     local.get $0
@@ -1513,8 +1525,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
-   i32.const 69
+   i32.const 96
+   i32.const 70
    i32.const 3
    call $~lib/builtins/abort
    unreachable

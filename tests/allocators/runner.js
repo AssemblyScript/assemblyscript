@@ -1,4 +1,4 @@
-function runner(exports, runs, allocs) {
+export default function runner(exports, runs, allocs) {
   const alloc = exports["heap.alloc"];
   const free  = exports["heap.free"];
   const reset = exports["heap.reset"];

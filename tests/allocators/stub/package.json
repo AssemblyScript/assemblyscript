@@ -1,5 +1,6 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
     "build:untouched": "node ../../../bin/asc assembly/index.ts -t untouched.wat -b untouched.wasm --runtime stub --sourceMap --measure",

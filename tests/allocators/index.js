@@ -1,10 +1,16 @@
-const fs = require("fs");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import runner from "./runner.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const COMMON_MAX = 1 << 30;
 
 function test(file) {
   console.log("Testing '" + file + "' ...\n");
 
-  const exports = new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(__dirname + "/" + file)), {
+  const exports = new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(dirname + "/" + file)), {
     env: {
       abort(msg, file, line, column) {
         throw Error("Assertion failed: " + (msg ? "'" + getString(msg) + "' " : "") + "at " + getString(file) + ":" + line + ":" + column);
@@ -24,7 +30,7 @@ function test(file) {
     return String.fromCharCode.apply(String, U16.subarray(offset, offset + length));
   }
 
-  require("./runner")(exports, 20, 20000);
+  runner(exports, 20, 20000);
 
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();

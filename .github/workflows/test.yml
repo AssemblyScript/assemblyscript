@@ -125,8 +125,8 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
+    - name: Build
+      run: npm run build
     - name: Test default allocator
       run: |
         cd tests/allocators/default
@@ -150,8 +150,8 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
+    - name: Build
+      run: npm run build
     - name: Test the loader
       run: |
         cd lib/loader
