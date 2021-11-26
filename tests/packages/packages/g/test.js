@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const asc = require("../../../../cli/asc");
+import * as asc from "../../../../cli/asc.js";
 
 const stderr = asc.createMemoryStream();
 asc.main([

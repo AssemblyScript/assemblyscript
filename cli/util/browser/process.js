@@ -40,6 +40,12 @@ export function exit(code = 0) {
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+/* global globalThis */
+
+if (typeof globalThis === "undefined") {
+  globalThis = typeof global !== "undefined" ? global : window; // eslint-disable-line no-global-assign
+}
+
 var performance = globalThis.performance || {};
 var performanceNow =
   performance.now        ||

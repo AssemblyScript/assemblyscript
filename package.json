@@ -63,10 +63,9 @@
     "asinit": "bin/asinit.js"
   },
   "scripts": {
-    "build": "npm run build:lib && npm run build:dts && npm run build:sdk",
+    "build": "npm run build:lib && npm run build:dts",
     "build:lib": "node scripts/build",
     "build:dts": "node scripts/build-dts",
-    "build:sdk": "node scripts/build-sdk",
     "watch": "node scripts/build --watch",
     "clean": "node scripts/clean",
     "check": "npm run check:config && npm run check:import && npm run check:lint",

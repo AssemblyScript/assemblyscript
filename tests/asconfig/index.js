@@ -1,8 +1,11 @@
-const asc = require("../../cli/asc");
-const loader = require("../../lib/loader/umd");
+import path from "path";
+import fs from "fs";
+import { createRequire } from "module";
+import * as asc from "../../cli/asc.js";
+import loader from "../../lib/loader/index.js";
+
+const require = createRequire(import.meta.url);
 const args = process.argv.slice(2);
-const path = require('path');
-const fs = require("fs");
 
 /** @type {string} */
 let stderr;

@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "test": "npm run a && npm run b && npm run c && npm run d && npm run e && npm run f && npm run g && npm run as && npm run h",
     "a": "cd ./packages/a && node ../../../../bin/asc assembly/index.ts --noEmit",

@@ -3,9 +3,9 @@ import path from "path";
 import os from "os";
 import { fileURLToPath } from "url";
 import glob from "glob";
-import colorsUtil from "../cli/util/colors.js";
-import optionsUtil from "../cli/util/options.js";
 import diff from "./util/diff.js";
+import * as colorsUtil from "../cli/util/colors.js";
+import * as optionsUtil from "../cli/util/options.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -29,10 +29,10 @@ const argv = opts.arguments;
 
 if (args.help) {
   console.log([
-    colorsUtil.white("SYNTAX"),
-    "  " + colorsUtil.cyan("npm run test:parser --") + " [test1, test2 ...] [options]",
+    colorsUtil.stdout.white("SYNTAX"),
+    "  " + colorsUtil.stdout.cyan("npm run test:parser --") + " [test1, test2 ...] [options]",
     "",
-    colorsUtil.white("OPTIONS"),
+    colorsUtil.stdout.white("OPTIONS"),
     optionsUtil.help(config)
   ].join(os.EOL) + os.EOL);
   process.exit(0);
@@ -59,7 +59,7 @@ var failures = 0;
 tests.forEach(filename => {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) return;
 
-  console.log(colorsUtil.white("Testing parser/" + filename));
+  console.log(colorsUtil.stdout.white("Testing parser/" + filename));
 
   var failed = false;
   var program = new Program(new Options());
@@ -79,9 +79,9 @@ tests.forEach(filename => {
     if (diffs !== null) {
       failed = true;
       console.log(diffs);
-      console.log(colorsUtil.red("diff ERROR"));
+      console.log(colorsUtil.stdout.red("diff ERROR"));
     } else {
-      console.log(colorsUtil.green("diff OK"));
+      console.log(colorsUtil.stdout.green("diff OK"));
     }
   }
 
@@ -91,7 +91,7 @@ tests.forEach(filename => {
 
 if (failures) {
   process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + failures + " parser tests failed");
+  console.log(colorsUtil.stdout.red("ERROR: ") + failures + " parser tests failed");
 } else {
-  console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
+  console.log("[ " + colorsUtil.stdout.white("SUCCESS") + " ]");
 }

@@ -34,17 +34,11 @@ jobs:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
-    - name: Check sources
-      run: npm run check
-    - name: Test sources
-      run: npm test
-    - name: Build distribution files
+    - name: Build
       run: npm run build
-    - name: Update entry file
-      run: npm run prepare-ci
-    - name: Test distribution
+    - name: Check
+      run: npm run check
+    - name: Test
       run: npm test
     - name: Test browser build
       run: node tests/browser-asc
@@ -59,15 +53,9 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
-    - name: Test sources
-      run: npm test
-    - name: Build distribution files
+    - name: Build
       run: npm run build
-    - name: Update entry file
-      run: npm run prepare-ci
-    - name: Test distribution
+    - name: Test
       run: npm test
     - name: Test browser build
       run: node tests/browser-asc
@@ -82,15 +70,9 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
-    - name: Test sources
-      run: npm test
-    - name: Build distribution files
+    - name: Build
       run: npm run build
-    - name: Update entry file
-      run: npm run prepare-ci
-    - name: Test distribution
+    - name: Test
       run: npm test
     - name: Test browser build
       run: node tests/browser-asc
@@ -105,8 +87,8 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
+    - name: Build
+      run: npm run build
     - name: Bootstrap the compiler
       run: npm run bootstrap
     - name: Run compiler tests (untouched-bootstrap)
@@ -125,8 +107,8 @@ jobs:
         node-version: 18.0.0-v8-canary20211115037fd7ae8d
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
+    - name: Build
+      run: npm run build
     - name: Test experimental features
       env:
         ASC_FEATURES: threads,reference-types,bigint-integration,gc
