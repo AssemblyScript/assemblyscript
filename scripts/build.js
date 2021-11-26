@@ -67,7 +67,7 @@ function bundleFile(filename) {
 class StdlibPlugin {
   name = "stdlib";
   setup(build) {
-    build.onResolve({ filter: /asc\.generated\.js$/ }, args => {
+    build.onResolve({ filter: /\basc\.generated\.js$/ }, args => {
       return {
         path: path.join(args.resolveDir, args.path),
         watchFiles: glob.sync(path.join(dirname, "..", "std", "assembly") + "/**/*.ts")
@@ -78,9 +78,9 @@ class StdlibPlugin {
           ])
       };
     });
-    build.onLoad({ filter: /asc\.generated\.js$/ }, args => {
+    build.onLoad({ filter: /\basc\.generated\.js$/ }, args => {
       const out = [
-        `// GENERATED FILE. DO NOT EDIT.\n`
+        `// GENERATED FILE. DO NOT EDIT.\n\n`
       ];
       const version = require("../package.json").version;
       out.push(
@@ -115,6 +115,63 @@ class StdlibPlugin {
   }
 }
 
+// Diagnostic messages integration
+
+class DiagnosticsPlugin {
+  name = "diagnostics";
+  setup(build) {
+    build.onResolve({ filter: /\bdiagnosticMessages\.generated$/ }, args => {
+      return {
+        path: path.join(args.resolveDir, args.path),
+        watchFiles: [
+          path.join(dirname, "..", "src", "diagnosticMessages.json")
+        ]
+      };
+    });
+    build.onLoad({ filter: /\bdiagnosticMessages\.generated$/ }, args => {
+      const out = [
+        `// GENERATED FILE. DO NOT EDIT.\n\n`
+      ];
+
+      function makeKey(text) {
+        return text.replace(/[^\w]+/g, "_").replace(/_+$/, "");
+      }
+
+      out.push("/** Enum of available diagnostic codes. */\n");
+      out.push("export enum DiagnosticCode {\n");
+
+      var first = true;
+      const messages = JSON.parse(fs.readFileSync(path.join(dirname, "..", "src", "diagnosticMessages.json")));
+      Object.keys(messages).forEach(text => {
+        var key = makeKey(text);
+        if (first)
+          first = false;
+        else {
+          out.push(",\n");
+        }
+        out.push("  " + key + " = " + messages[text]);
+      });
+      
+      out.push("\n}\n\n");
+      out.push("/** Translates a diagnostic code to its respective string. */\n");
+      out.push("export function diagnosticCodeToString(code: DiagnosticCode): string {\n  switch (code) {\n");
+      
+      Object.keys(messages).forEach(text => {
+        out.push("    case " + messages[text] + ": return " + JSON.stringify(text) + ";\n");
+      });
+      
+      out.push("    default: return \"\";\n  }\n}\n");
+      
+      const generated = out.join("");
+      fs.writeFileSync(path.join(dirname, "..", "src", "diagnosticMessages.generated.ts"), generated);
+      return {
+        contents: generated,
+        loader: "ts"
+      };
+    });
+  }
+}
+
 // Build compiler and CLI
 
 const externals = [ "assemblyscript", "binaryen", "long" ];
@@ -136,7 +193,7 @@ esbuild.build({
     js: prelude("The AssemblyScript compiler")
   },
   watch: watch && { onRebuild },
-  plugins: [ new ReportPlugin("AS") ]
+  plugins: [ new DiagnosticsPlugin(), new ReportPlugin("AS") ]
 });
 
 esbuild.build({

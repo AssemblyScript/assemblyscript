@@ -1,7 +1,4 @@
-/**
- * @fileoverview Generated from diagnosticsMessages.json. Do not edit.
- * @license Apache-2.0
- */
+// GENERATED FILE. DO NOT EDIT.
 
 /** Enum of available diagnostic codes. */
 export enum DiagnosticCode {
