@@ -4,7 +4,7 @@
  */
 
 import { Program, Parser, Module } from ".";
-import { OutputStream } from "./cli/index";
+import { OutputStream } from "./asc";
 
 export abstract class Transform {
 

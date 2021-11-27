@@ -533,6 +533,7 @@ function generateCli() {
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
       if (currentModuleId === "transform") {
         if (importedModuleId == ".") return prefix + "/src/index";
+        if (importedModuleId == "./asc") return prefix + "/cli/index";
         if (importedModuleId == "./cli/index") return prefix + "/cli/index";
       }
       if (currentModuleId == "cli/index") {
