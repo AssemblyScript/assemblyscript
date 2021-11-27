@@ -11,30 +11,27 @@ Architecture
 Usage
 -----
 
-Note that using the compiler as a library requires awaiting Binaryen ready state, like so:
-
 ```js
-const binaryen = require("binaryen");
-const assemblyscript = require("assemblyscript");
-binaryen.ready.then(() => {
-  // do something with assemblyscript
-});
+import assemblyscript from "assemblyscript";
+...
 ```
 
 Building
 --------
 
-Note that building the compiler is not necessary if you only want to run it (in development). If not built, `ts-node` is used to run the sources directly.
-
 ### Building to JavaScript
 
-To build the compiler to a JavaScript bundle, run:
+To build the compiler, run:
 
 ```sh
 npm run build
 ```
 
-Uses webpack under the hood, building to `dist/`.
+The rebuild automatically when there are changes, do:
+
+```sh
+npm run watch
+```
 
 ### Building to WebAssembly
 
