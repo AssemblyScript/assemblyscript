@@ -520,8 +520,7 @@ function generateCli() {
   generate({
     baseDir: pathUtil.resolve(__dirname, ".."),
     files: [
-      "cli/index.d.ts",
-      "transform.d.ts"
+      "cli/index.d.ts"
     ],
     externs: [
       "./assemblyscript.generated.d.ts"
@@ -531,12 +530,8 @@ function generateCli() {
     sendMessage: console.log,
     stdout: stdout,
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
-      if (currentModuleId === "transform") {
-        if (importedModuleId == ".") return prefix + "/src/index";
-        if (importedModuleId == "./asc") return prefix + "/cli/index";
-      }
       if (currentModuleId == "cli/index") {
-        if (importedModuleId == "../transform") return prefix + "/transform";
+        if (importedModuleId == "..") return prefix + "/src/index";
       }
       return null;
     }
