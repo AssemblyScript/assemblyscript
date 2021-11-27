@@ -1426,3 +1426,5 @@ function crash(stage, e) {
   ].join(""));
   process.exit(1);
 }
+
+export * as default from "./index.js";
