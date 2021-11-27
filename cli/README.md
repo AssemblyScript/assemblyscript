@@ -32,7 +32,7 @@ asc.main([
 });
 ```
 
-You can also compile a source string directly, for example in a browser environment:
+You can also compile a single source string directly (note that this API has limited functionality):
 
 ```js
 import asc from "assemblyscript/asc";
