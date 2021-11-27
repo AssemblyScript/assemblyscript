@@ -520,17 +520,17 @@ function generateCli() {
     externs: [
       "./assemblyscript.generated.d.ts"
     ],
-    prefix: "types:asc",
+    prefix: "types:assemblyscript",
     verbose: true,
     sendMessage: console.log,
     stdout: stdout,
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
       if (currentModuleId === "transform") {
         if (importedModuleId == ".") return "types:assemblyscript/src/index";
-        if (importedModuleId == "./cli/index") return "types:asc/cli/index";
+        if (importedModuleId == "./cli/index") return "types:assemblyscript/cli/index";
       }
       if (currentModuleId == "cli/index") {
-        if (importedModuleId == "../transform") return "types:asc/transform";
+        if (importedModuleId == "../transform") return "types:assemblyscript/transform";
       }
       return null;
     }
@@ -548,7 +548,7 @@ function generateCli() {
   );
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "asc.d.ts"),
-    `/// <reference path="./asc.generated.d.ts" />\nexport * from "types:asc/cli/index";\nimport * as asc from "types:asc/cli/index";\nexport default asc;\n`
+    `/// <reference path="./asc.generated.d.ts" />\nexport * from "types:assemblyscript/cli/index";\nimport * as asc from "types:assemblyscript/cli/index";\nexport default asc;\n`
   );
 }
 
