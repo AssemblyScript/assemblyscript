@@ -1,2 +1,2 @@
-export * from "./cli/index";
-export { default } from "./cli/index";
+export * from "./dist/asc";
+export { default } from "./dist/asc";

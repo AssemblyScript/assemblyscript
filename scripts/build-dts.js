@@ -504,7 +504,7 @@ function generateSrc() {
   );
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
-    `/// <reference path="./assemblyscript.generated.d.ts" />\nexport * from "assemblyscript/src/index";\n`
+    `/// <reference path="./assemblyscript.generated.d.ts" />\nexport * from "assemblyscript/src/index";\nimport * as assemblyscript from "assemblyscript/src/index";\nexport default assemblyscript;\n`
   );
 }
 
@@ -548,7 +548,7 @@ function generateCli() {
   );
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "asc.d.ts"),
-    `/// <reference path="./asc.generated.d.ts" />\nexport * from "asc/cli/index";\n`
+    `/// <reference path="./asc.generated.d.ts" />\nexport * from "asc/cli/index";\nimport * as asc from "asc/cli/index";\nexport default asc;\n`
   );
 }
 
