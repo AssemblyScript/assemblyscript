@@ -17,12 +17,8 @@ function tryApplyNodeArguments() {
   return false;
 }
 
-var asc;
-
 if (!tryApplyNodeArguments()) {
   sourceMapSupport.install();
-  asc = await import("../dist/asc.js");
+  const asc = await import("../dist/asc.js");
   process.exitCode = asc.main(process.argv.slice(2));
 }
-
-export default asc;
