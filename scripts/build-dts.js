@@ -534,7 +534,6 @@ function generateCli() {
       if (currentModuleId === "transform") {
         if (importedModuleId == ".") return prefix + "/src/index";
         if (importedModuleId == "./asc") return prefix + "/cli/index";
-        if (importedModuleId == "./cli/index") return prefix + "/cli/index";
       }
       if (currentModuleId == "cli/index") {
         if (importedModuleId == "../transform") return prefix + "/transform";
