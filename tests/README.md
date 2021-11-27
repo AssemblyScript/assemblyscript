@@ -122,6 +122,5 @@ Other
 Tests in other directories are not run automatically and do not need to be updated.
 
 * [tests/allocators](./allocators) contains the memory allocator test suite
-* [tests/binaryen](./binaryen) contains various triggers for earlier Binaryen issues
 * [tests/tokenizer](./tokenizer.js) is a visual test for the tokenizer tokenizing itself
 * [tests/util-path](./util-path.js) is a sanity test for the path utility
