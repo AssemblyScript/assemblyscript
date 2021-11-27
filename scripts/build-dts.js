@@ -512,16 +512,31 @@ function generateCli() {
   const stdout = new OutputStream();
 
   generate({
-    project: pathUtil.resolve(__dirname, "..", "cli"),
+    baseDir: pathUtil.resolve(__dirname, ".."),
+    files: [
+      "cli/index.d.ts",
+      "transform.d.ts"
+    ],
+    externs: [
+      "./assemblyscript.generated.d.ts"
+    ],
     prefix: "asc",
     verbose: true,
     sendMessage: console.log,
-    stdout: stdout
+    stdout: stdout,
+    resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
+      if (currentModuleId === "transform") {
+        if (importedModuleId == ".") return "assemblyscript/src/index";
+        if (importedModuleId == "./cli/index") return "asc/cli/index";
+      }
+      if (currentModuleId == "cli/index") {
+        if (importedModuleId == "../transform") return "asc/transform";
+      }
+      return null;
+    }
   });
 
-  const source = stdout.toString()
-    .replace(/\/\/\/ <reference[^>]*>\r?\n/g, "")
-    .replace(/["']asc\/\.\.\/transform["']/g, `"../transform"`);
+  const source = stdout.toString();
   const sourceFile = ts.createSourceFile("asc.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
   const result = transformTypes(sourceFile);
   if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
@@ -533,7 +548,7 @@ function generateCli() {
   );
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "asc.d.ts"),
-    `/// <reference path="./asc.generated.d.ts" />\nexport * from "asc/index";\n`
+    `/// <reference path="./asc.generated.d.ts" />\nexport * from "asc/cli/index";\n`
   );
 }
 
