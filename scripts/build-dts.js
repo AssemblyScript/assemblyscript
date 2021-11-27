@@ -426,81 +426,116 @@ OutputStream.prototype.toString = function () {
   return this.toBuffer().toString("utf8");
 };
 
-const stdout = new OutputStream();
-stdout.write(`declare module 'assemblyscript' {
-    export * from 'assemblyscript/src/index';
-}
-`);
-
-generate({
-  project: pathUtil.resolve(__dirname, "..", "src"),
-  prefix: "assemblyscript",
-  exclude: [
-    "glue/**",
-  ],
-  verbose: true,
-  sendMessage: console.log,
-  stdout: stdout
-});
-
-stdout.write("\n");
-
-generate({
-  project: pathUtil.resolve(__dirname, "..", "std/assembly/shared"),
-  prefix: "assemblyscript/std/assembly/shared",
-  exclude: [],
-  verbose: true,
-  sendMessage: console.log,
-  stdout: stdout
-});
-
-stdout.write("\n");
-
-generate({
-  project: pathUtil.resolve(__dirname, "..", "src/glue"),
-  prefix: "assemblyscript/src/glue",
-  exclude: [
-    "js/index.ts",
-    "js/node.d.ts"
-  ],
-  verbose: true,
-  sendMessage: console.log,
-  stdout: stdout
-});
-
-var source = stdout.toString().replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
-
-const sourceFile = ts.createSourceFile("assemblyscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
-
-console.log("transforming:");
-var numReplaced = 0;
-const result = ts.transform(sourceFile, [
-  function (context) {
-    const visit = node => {
-      node = ts.visitEachChild(node, visit, context);
-      if (ts.isTypeNode(node)) {
-        const name = node.getText(sourceFile);
-        switch (name) {
-          // this is wrong, but works
-          case "bool": ++numReplaced; return ts.createIdentifier("boolean");
-          default: if (!/^(?:Binaryen|Relooper)/.test(name)) break;
-          case "i8": case "i16": case "i32": case "isize":
-          case "u8": case "u16": case "u32": case "usize":
-          case "f32": case "f64": ++numReplaced; return ts.createIdentifier("number");
+function transformTypes(sourceFile) {
+  var numReplaced = 0;
+  console.log("transforming:");
+  var result = ts.transform(sourceFile, [
+    function (context) {
+      const visit = node => {
+        node = ts.visitEachChild(node, visit, context);
+        if (ts.isTypeNode(node)) {
+          const name = node.getText(sourceFile);
+          switch (name) {
+            // this is wrong, but works
+            case "bool": ++numReplaced; return ts.createIdentifier("boolean");
+            default: if (!/^(?:Binaryen|Relooper)/.test(name)) break;
+            case "i8": case "i16": case "i32": case "isize":
+            case "u8": case "u16": case "u32": case "usize":
+            case "f32": case "f64": ++numReplaced; return ts.createIdentifier("number");
+          }
         }
-      }
-      return node;
-    };
-    return node => ts.visitNode(node, visit);
-  }
-]);
-console.log("  replaced " + numReplaced + " AS types with JS types");
-
-if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
-  fs.mkdirSync(pathUtil.join(__dirname, "..", "dist"));
+        return node;
+      };
+      return node => ts.visitNode(node, visit);
+    }
+  ]);
+  console.log("  replaced " + numReplaced + " AS types with TS types");
+  return result;
 }
-fs.writeFileSync(
-  pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
-  ts.createPrinter().printFile(result.transformed[0]),
-  "utf8"
-);
+
+function generateSrc() {
+  const stdout = new OutputStream();
+
+  generate({
+    project: pathUtil.resolve(__dirname, "..", "src"),
+    prefix: "assemblyscript",
+    exclude: [
+      "glue/**",
+    ],
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout
+  });
+
+  stdout.write("\n");
+
+  generate({
+    project: pathUtil.resolve(__dirname, "..", "std/assembly/shared"),
+    prefix: "assemblyscript/std/assembly/shared",
+    exclude: [],
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout
+  });
+
+  stdout.write("\n");
+
+  generate({
+    project: pathUtil.resolve(__dirname, "..", "src/glue"),
+    prefix: "assemblyscript/src/glue",
+    exclude: [
+      "js/index.ts",
+      "js/node.d.ts"
+    ],
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout
+  });
+
+  const source = stdout.toString().replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
+  const sourceFile = ts.createSourceFile("assemblyscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
+  const result = transformTypes(sourceFile);
+  if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
+    fs.mkdirSync(pathUtil.join(__dirname, "..", "dist"));
+  }
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.generated.d.ts"),
+    ts.createPrinter().printFile(result.transformed[0])
+  );
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
+    `/// <reference path="./assemblyscript.generated.d.ts" />\nexport * from "assemblyscript/src/index";\n`
+  );
+}
+
+function generateCli() {
+  const stdout = new OutputStream();
+
+  generate({
+    project: pathUtil.resolve(__dirname, "..", "cli"),
+    prefix: "asc",
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout
+  });
+
+  const source = stdout.toString()
+    .replace(/\/\/\/ <reference[^>]*>\r?\n/g, "")
+    .replace(/["']asc\/\.\.\/transform["']/g, `"../transform"`);
+  const sourceFile = ts.createSourceFile("asc.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
+  const result = transformTypes(sourceFile);
+  if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
+    fs.mkdirSync(pathUtil.join(__dirname, "..", "dist"));
+  }
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "asc.generated.d.ts"),
+    ts.createPrinter().printFile(result.transformed[0])
+  );
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "asc.d.ts"),
+    `/// <reference path="./asc.generated.d.ts" />\nexport * from "asc/index";\n`
+  );
+}
+
+generateSrc();
+generateCli();
