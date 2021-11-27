@@ -67,18 +67,18 @@ function bundleFile(filename) {
 class StdlibPlugin {
   name = "stdlib";
   setup(build) {
-    build.onResolve({ filter: /\basc\.generated\.js$/ }, args => {
+    build.onResolve({ filter: /\bindex\.generated\.js$/ }, args => {
       return {
         path: path.join(args.resolveDir, args.path),
         watchFiles: glob.sync(path.join(dirname, "..", "std", "assembly") + "/**/*.ts")
           .concat([
             path.join(dirname, "..", "package.json"),
-            path.join(dirname, "..", "cli", "asc.json"),
+            path.join(dirname, "..", "cli", "options.json"),
             path.join(dirname, "..", "std", "portable", "index.d.ts")
           ])
       };
     });
-    build.onLoad({ filter: /\basc\.generated\.js$/ }, args => {
+    build.onLoad({ filter: /\bindex\.generated\.js$/ }, args => {
       const out = [
         `// GENERATED FILE. DO NOT EDIT.\n\n`
       ];
@@ -86,7 +86,7 @@ class StdlibPlugin {
       out.push(
         `export const version = ${JSON.stringify(version)};\n`
       );
-      const options = require("../cli/asc.json");
+      const options = require("../cli/options.json");
       out.push(
         `export const options = ${JSON.stringify(options, null, 2)};\n`
       );
@@ -106,7 +106,7 @@ class StdlibPlugin {
         `export const libraryFiles = ${JSON.stringify(libraryFiles, null, 2)};\n`
       );
       const generated = out.join("");
-      fs.writeFileSync(path.join(dirname, "..", "cli", "asc.generated.js"), generated);
+      fs.writeFileSync(path.join(dirname, "..", "cli", "index.generated.js"), generated);
       return {
         contents: generated,
         loader: "js"
@@ -197,7 +197,7 @@ esbuild.build({
 });
 
 esbuild.build({
-  entryPoints: [ "./cli/asc.js" ],
+  entryPoints: [ "./cli/index.js" ],
   bundle: true,
   target: "esnext",
   outfile: "./dist/asc.js",

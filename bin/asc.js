@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import childProcess from "child_process";
+import sourceMapSupport from "source-map-support";
 
 function tryApplyNodeArguments() {
   const argv = process.argv;
@@ -19,9 +20,8 @@ function tryApplyNodeArguments() {
 var asc;
 
 if (!tryApplyNodeArguments()) {
-  global.binaryen = (await import("binaryen")).default;
-  global.assemblyscript = (await import("../index.js")).default;
-  asc = await import("../cli/asc.js");
+  sourceMapSupport.install();
+  asc = await import("../dist/asc.js");
   process.exitCode = asc.main(process.argv.slice(2));
 }
 

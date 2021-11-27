@@ -38,14 +38,14 @@ asc.ready.then(() => {
 Available command line options can also be obtained programmatically:
 
 ```js
-const options = require("assemblyscript/cli/asc.json");
+const options = require("assemblyscript/cli/options.json");
 ...
 ```
 
 You can also compile a source string directly, for example in a browser environment:
 
 ```js
-const asc = require("assemblyscript/cli/asc");
+const asc = require("assemblyscript/cli/index");
 asc.ready.then(() => {
   const { binary, text, stdout, stderr } = asc.compileString(`...`, { optimize: 2 });
 });

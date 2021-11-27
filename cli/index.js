@@ -33,7 +33,7 @@ import fetch from "./util/fetch.js";
 import * as utf8 from "./util/utf8.js";
 import * as colorsUtil from "./util/colors.js";
 import * as optionsUtil from "./util/options.js";
-import * as generated from "./asc.generated.js";
+import * as generated from "./index.generated.js";
 
 import binaryen from "binaryen";
 import assemblyscriptJS from "assemblyscript";

@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
-import * as asc from "../../cli/asc.js";
+import * as asc from "../../cli/index.js";
 import loader from "../../lib/loader/index.js";
 
 const require = createRequire(import.meta.url);

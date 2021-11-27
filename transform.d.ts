@@ -3,8 +3,8 @@
  * @license Apache-2.0
  */
 
-import { Program, Parser, Module } from "..";
-import { OutputStream } from "./asc";
+import { Program, Parser, Module } from ".";
+import { OutputStream } from "./cli/index";
 
 export abstract class Transform {
 

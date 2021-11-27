@@ -16,9 +16,7 @@ import { Rtrace } from "../lib/rtrace/index.js";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 
-global.binaryen = (await import("binaryen")).default;
-global.assemblyscript = (await import("../index.js")).default;
-const asc = (await import("../cli/asc.js"));
+const asc = (await import("../cli/index.js"));
 
 const startTime = Date.now();
 

@@ -5,7 +5,7 @@
 
 import { OptionDescription } from "./util/options";
 export { OptionDescription };
-import { Transform } from "./transform";
+import { Transform } from "../transform";
 
 /** AssemblyScript version. */
 export const version: string;
