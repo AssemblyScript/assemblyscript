@@ -458,7 +458,7 @@ function generateSrc() {
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "src"),
-    prefix: "assemblyscript",
+    prefix: "types:assemblyscript",
     exclude: [
       "glue/**",
     ],
@@ -471,7 +471,7 @@ function generateSrc() {
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "std/assembly/shared"),
-    prefix: "assemblyscript/std/assembly/shared",
+    prefix: "types:assemblyscript/std/assembly/shared",
     exclude: [],
     verbose: true,
     sendMessage: console.log,
@@ -482,7 +482,7 @@ function generateSrc() {
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "src/glue"),
-    prefix: "assemblyscript/src/glue",
+    prefix: "types:assemblyscript/src/glue",
     exclude: [
       "js/index.ts",
       "js/node.d.ts"
@@ -504,7 +504,7 @@ function generateSrc() {
   );
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
-    `/// <reference path="./assemblyscript.generated.d.ts" />\nexport * from "assemblyscript/src/index";\nimport * as assemblyscript from "assemblyscript/src/index";\nexport default assemblyscript;\n`
+    `/// <reference path="./assemblyscript.generated.d.ts" />\nexport * from "types:assemblyscript/src/index";\nimport * as assemblyscript from "types:assemblyscript/src/index";\nexport default assemblyscript;\n`
   );
 }
 
@@ -520,17 +520,17 @@ function generateCli() {
     externs: [
       "./assemblyscript.generated.d.ts"
     ],
-    prefix: "asc",
+    prefix: "types:asc",
     verbose: true,
     sendMessage: console.log,
     stdout: stdout,
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
       if (currentModuleId === "transform") {
-        if (importedModuleId == ".") return "assemblyscript/src/index";
-        if (importedModuleId == "./cli/index") return "asc/cli/index";
+        if (importedModuleId == ".") return "types:assemblyscript/src/index";
+        if (importedModuleId == "./cli/index") return "types:asc/cli/index";
       }
       if (currentModuleId == "cli/index") {
-        if (importedModuleId == "../transform") return "asc/transform";
+        if (importedModuleId == "../transform") return "types:asc/transform";
       }
       return null;
     }
@@ -548,7 +548,7 @@ function generateCli() {
   );
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "asc.d.ts"),
-    `/// <reference path="./asc.generated.d.ts" />\nexport * from "asc/cli/index";\nimport * as asc from "asc/cli/index";\nexport default asc;\n`
+    `/// <reference path="./asc.generated.d.ts" />\nexport * from "types:asc/cli/index";\nimport * as asc from "types:asc/cli/index";\nexport default asc;\n`
   );
 }
 
