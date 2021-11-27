@@ -453,12 +453,14 @@ function transformTypes(sourceFile) {
   return result;
 }
 
+const prefix = "types:assemblyscript";
+
 function generateSrc() {
   const stdout = new OutputStream();
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "src"),
-    prefix: "types:assemblyscript",
+    prefix,
     exclude: [
       "glue/**",
     ],
@@ -471,7 +473,7 @@ function generateSrc() {
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "std/assembly/shared"),
-    prefix: "types:assemblyscript/std/assembly/shared",
+    prefix: prefix + "/std/assembly/shared",
     exclude: [],
     verbose: true,
     sendMessage: console.log,
@@ -482,7 +484,7 @@ function generateSrc() {
 
   generate({
     project: pathUtil.resolve(__dirname, "..", "src/glue"),
-    prefix: "types:assemblyscript/src/glue",
+    prefix: prefix + "/src/glue",
     exclude: [
       "js/index.ts",
       "js/node.d.ts"
@@ -504,7 +506,11 @@ function generateSrc() {
   );
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
-    `/// <reference path="./assemblyscript.generated.d.ts" />\nexport * from "types:assemblyscript/src/index";\nimport * as assemblyscript from "types:assemblyscript/src/index";\nexport default assemblyscript;\n`
+    [ `/// <reference path="./assemblyscript.generated.d.ts" />\n`,
+      `export * from "${prefix}/src/index";\n`,
+      `import * as assemblyscript from "${prefix}/src/index";\n`,
+      `export default assemblyscript;\n`
+    ].join("")
   );
 }
 
@@ -520,17 +526,17 @@ function generateCli() {
     externs: [
       "./assemblyscript.generated.d.ts"
     ],
-    prefix: "types:assemblyscript",
+    prefix,
     verbose: true,
     sendMessage: console.log,
     stdout: stdout,
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
       if (currentModuleId === "transform") {
-        if (importedModuleId == ".") return "types:assemblyscript/src/index";
-        if (importedModuleId == "./cli/index") return "types:assemblyscript/cli/index";
+        if (importedModuleId == ".") return prefix + "/src/index";
+        if (importedModuleId == "./cli/index") return prefix + "/cli/index";
       }
       if (currentModuleId == "cli/index") {
-        if (importedModuleId == "../transform") return "types:assemblyscript/transform";
+        if (importedModuleId == "../transform") return prefix + "/transform";
       }
       return null;
     }
@@ -548,7 +554,11 @@ function generateCli() {
   );
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "asc.d.ts"),
-    `/// <reference path="./asc.generated.d.ts" />\nexport * from "types:assemblyscript/cli/index";\nimport * as asc from "types:assemblyscript/cli/index";\nexport default asc;\n`
+    [ `/// <reference path="./asc.generated.d.ts" />\n`,
+      `export * from "${prefix}/cli/index";\n`,
+      `import * as asc from "${prefix}/cli/index";\n`,
+      `export default asc;\n`
+    ].join("")
   );
 }
 
