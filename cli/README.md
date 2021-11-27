@@ -1,5 +1,5 @@
-Compiler frontend for node.js
-=============================
+Frontend for Node.js
+====================
 
 Usage
 -----
