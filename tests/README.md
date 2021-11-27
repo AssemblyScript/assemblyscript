@@ -119,8 +119,8 @@ Tests for experimental features (usually enabled via the `--enable` CLI flag) ar
 Other
 -----
 
-Tests in other directories are not run automatically and do not need to be updated.
+Tests in other directories are not run automatically and do not need to be updated. There are also:
 
 * [tests/allocators](./allocators) contains the memory allocator test suite
+* [tests/browser](./browser.js) checks typical browser usage via asc's API
 * [tests/tokenizer](./tokenizer.js) is a visual test for the tokenizer tokenizing itself
-* [tests/util-path](./util-path.js) is a sanity test for the path utility
