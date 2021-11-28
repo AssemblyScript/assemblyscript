@@ -4,8 +4,8 @@ import fs from "fs";
 import path from "path";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
-import colors from "../cli/util/colors.js";
-import options from "../cli/util/options.js";
+import { stdout as colors } from "../util/colors.js";
+import * as optionsUtil from "../util/options.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -67,7 +67,7 @@ const asinitOptions = {
   }
 };
 
-const cliOptions = options.parse(process.argv.slice(2), asinitOptions);
+const cliOptions = optionsUtil.parse(process.argv.slice(2), asinitOptions);
 
 if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
 
