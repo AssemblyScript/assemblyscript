@@ -11,9 +11,6 @@
 <script type="module">
 import asc from "../dist/asc.js";
 
-if (typeof asc.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
-if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");
-
 const stdout = asc.createMemoryStream();
 const stderr = asc.createMemoryStream();
 const files = { "module.ts": `export function test(): void {}` };
