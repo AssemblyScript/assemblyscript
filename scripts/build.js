@@ -1,9 +1,11 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import childProcess from "child_process";
 import esbuild from "esbuild";
 import glob from "glob";
 import { createRequire } from "module";
+import { stdout as colors } from "../util/colors.js";
 
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -22,39 +24,28 @@ function prelude(name) {
 
 // Report what's going on
 
-let started = false;
-let startTime = 0;
-
-const INFO = "\u001b[90m";
-const SUCCESS = "\u001b[92m";
-const ERROR = "\u001b[91m";
-const RESET = "\u001b[0m";
-const status = { [INFO]: "INFO", [SUCCESS]: "SUCCESS", [ERROR]: "ERROR" };
-
-function log(KIND, ...args) {
-  console.log(`${new Date().toISOString()} - ${KIND}${status[KIND]}${RESET} -`, ...args);
+function time() {
+  return new Date().toISOString();
 }
 
-function onRebuild(error, result) {
-  const time = Date.now() - startTime;
-  if (error) log(ERROR, `${error.errors.length} errors, ${error.warnings.length} warnings (${time} ms)`);
-  else log(SUCCESS, `${result.errors.length} errors, ${result.warnings.length} warnings (${time} ms)`);
-}
-
-class ReportPlugin {
-  constructor(name) {
-    this.name = name;
-  }
-  setup = (build) => {
-    build.onStart(() => {
-      log(INFO, `Starting new ${this.name} build ...`);
-      startTime = Date.now();
-    });
-    build.onEnd(result => {
-      if (started) return;
-      started = true;
-      onRebuild(Boolean(result.errors && result.errors.length), result);
-    });
+function reporter(name) {
+  return {
+    name: "reporter",
+    setup(build) {
+      let startTime = 0;
+      build.onStart(() => {
+        console.log(`${time()} - ${name} - Starting new build ...`);
+        startTime = Date.now();
+      });
+      build.onEnd(({ errors, warnings }) => {
+        const duration = Date.now() - startTime;
+        if (errors.length) {
+          console.log(`${time()} - ${name} - ${colors.red("ERROR")} - ${errors.length} errors, ${warnings.length} warnings, ${duration} ms`);
+        } else {
+          console.log(`${time()} - ${name} - ${colors.green("SUCCESS")} - ${warnings.length} warnings, ${duration} ms`);
+        }
+      });
+    }
   };
 }
 
@@ -192,8 +183,8 @@ esbuild.build({
   banner: {
     js: prelude("The AssemblyScript compiler")
   },
-  watch: watch && { onRebuild },
-  plugins: [ new DiagnosticsPlugin(), new ReportPlugin("AS") ]
+  watch,
+  plugins: [ new DiagnosticsPlugin(), reporter("src") ]
 });
 
 esbuild.build({
@@ -211,6 +202,45 @@ esbuild.build({
   banner: {
     js: prelude("The AssemblyScript frontend")
   },
-  watch: watch && { onRebuild },
-  plugins: [ new StdlibPlugin(), new ReportPlugin("ASC") ]
+  watch,
+  plugins: [ new StdlibPlugin(), reporter("cli") ]
 });
+
+// Build definitions
+
+var buildingDefinitions = false;
+
+function buildDefinitions() {
+  const startTime = Date.now();
+  const stdout = [];
+  console.log(`${time()} - ${"dts"} - Starting new build ...`);
+  buildingDefinitions = true;
+  childProcess.spawn("node", [ "./build-dts.js" ], {
+    cwd: dirname,
+    stdio: "pipe"
+  }).on("data", data => {
+    stdout.push(data.toString());
+  }).on("error", err => {
+    buildingDefinitions = false;
+    const duration = Date.now() - startTime;
+    console.log(stdout.join(""));
+    console.log(`${time()}  - ${"dts"} - ${colors.red("ERROR")} - had errors, ${duration} ms`);
+  }).on("close", code => {
+    buildingDefinitions = false;
+    if (code) return;
+    const duration = Date.now() - startTime;
+    console.log(`${time()} - ${"dts"} - ${colors.green("SUCCESS")} - no errors, ${duration} ms`);
+  });
+}
+
+if (watch) {
+  console.log("Watching for changes. Press RETURN to rebuild definitions.\n");
+  process.stdin.on("data", data => {
+    if (data == "\r\n" || data == "\n") {
+      process.stdout.write("\u001b[1A");
+      if (!buildingDefinitions) buildDefinitions();
+    }
+  });
+}
+
+buildDefinitions();
