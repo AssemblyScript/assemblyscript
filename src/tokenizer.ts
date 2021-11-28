@@ -1201,7 +1201,11 @@ export class Tokenizer extends DiagnosticEmitter {
       isIdentifierPart(text.charCodeAt(pos))
     );
     this.pos = pos;
-    return text.substring(start, pos);
+    if (pos - start == 1) {
+      return text.charAt(start);
+    } else {
+      return text.substring(start, pos);
+    }
   }
 
   readingTemplateString: bool = false;
