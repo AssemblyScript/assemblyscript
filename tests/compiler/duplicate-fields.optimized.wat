@@ -18,7 +18,7 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $duplicate-fields/foo (mut i32) (i32.const 0))
- (global $duplicate-fields/baz (mut i32) (i32.const 0))
+ (global $duplicate-fields/raz (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17964))
  (memory $0 1)
  (data (i32.const 1036) "<")
@@ -48,7 +48,7 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  global.get $duplicate-fields/baz
+  global.get $duplicate-fields/raz
   local.tee $0
   if
    local.get $0
@@ -2093,15 +2093,16 @@
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0
-   global.set $duplicate-fields/baz
-   global.get $duplicate-fields/baz
+   global.set $duplicate-fields/raz
+   global.get $duplicate-fields/raz
    i32.load offset=4
    i32.load offset=4
-   i32.eqz
+   i32.const 2
+   i32.ne
    if
     i32.const 0
     i32.const 1456
-    i32.const 39
+    i32.const 40
     i32.const 1
     call $~lib/builtins/abort
     unreachable

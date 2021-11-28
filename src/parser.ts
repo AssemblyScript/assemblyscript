@@ -1839,6 +1839,7 @@ export class Parser extends DiagnosticEmitter {
   ): Node | null {
 
     // before:
+    //   'declare'?
     //   ('public' | 'private' | 'protected')?
     //   ('static' | 'abstract')?
     //   'readonly'?
@@ -1869,6 +1870,32 @@ export class Parser extends DiagnosticEmitter {
 
     // implemented methods are virtual
     if (isInterface) flags |= CommonFlags.VIRTUAL;
+
+    var declareStart = 0;
+    var declareEnd = 0;
+    var contextIsAmbient = parent.is(CommonFlags.AMBIENT);
+    if (tn.skip(Token.DECLARE)) {
+      if (isInterface) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "declare"
+        );
+      } else {
+        if (contextIsAmbient) {
+          this.error(
+            DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
+            tn.range()
+          ); // recoverable
+        } else {
+          flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
+          declareStart = tn.tokenPos;
+          declareEnd = tn.pos;
+        }
+      }
+      if (!startPos) startPos = tn.tokenPos;
+    } else if (contextIsAmbient) {
+      flags |= CommonFlags.AMBIENT;
+    }
 
     var accessStart = 0;
     var accessEnd = 0;
@@ -1999,6 +2026,12 @@ export class Parser extends DiagnosticEmitter {
               tn.range(readonlyStart, readonlyEnd), "readonly"
             ); // recoverable
           }
+          if (flags & CommonFlags.DECLARE) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_be_used_here,
+              tn.range(declareStart, declareEnd), "declare"
+            ); // recoverable
+          }
         } else {
           tn.reset(state);
         }
@@ -2108,6 +2141,13 @@ export class Parser extends DiagnosticEmitter {
 
     // method: '(' Parameters (':' Type)? '{' Statement* '}' ';'?
     if (tn.skip(Token.OPENPAREN)) {
+      if (flags & CommonFlags.DECLARE) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(declareStart, declareEnd), "declare"
+        ); // recoverable
+      }
+
       let signatureStart = tn.tokenPos;
       let parameters = this.parseParameters(tn, isConstructor);
       if (!parameters) return null;
@@ -2291,6 +2331,12 @@ export class Parser extends DiagnosticEmitter {
       }
       let initializer: Expression | null = null;
       if (tn.skip(Token.EQUALS)) {
+        if (flags & CommonFlags.AMBIENT) {
+          this.error(
+            DiagnosticCode.Initializers_are_not_allowed_in_ambient_contexts,
+            tn.range()
+          ); // recoverable
+        }
         initializer = this.parseExpression(tn);
         if (!initializer) return null;
       }

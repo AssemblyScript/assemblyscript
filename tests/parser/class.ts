@@ -8,6 +8,7 @@ export class Valid<T> {
   static staticField: i32;
   static void: i32;
   void: i32 = Valid.void;
+  declare declareField: i32;
 }
 export class Invalid<T> {
 
@@ -26,4 +27,11 @@ export class Invalid<T> {
   // 1049: A 'set' accessor must have exactly one parameter.
   // 1095: A 'set' accessor cannot have a return type annotation.
   set instanceSetter<T>(): i32 {}
+
+  // 1039: Initializers are not allowed in ambient contexts.
+  declare declareInitializer: i32 = 1;
+
+  // 1042: 'declare' modifier cannot be used here.
+  // 1183: An implementation cannot be declared in ambient contexts.
+  declare declareMethod(): i32 {}
 }
