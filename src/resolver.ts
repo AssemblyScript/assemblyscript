@@ -3099,30 +3099,6 @@ export class Resolver extends DiagnosticEmitter {
                 let baseField = assert(baseMembers.get(fieldPrototype.name));
                 assert(baseField.kind == ElementKind.FIELD);
                 existingField = <Field>baseField;
-
-                // visibility checks
-                let thisFieldIsPublic = fieldPrototype.isPublic;
-                let existingFieldIsPublic = existingField.isPublic;
-
-                if (thisFieldIsPublic && !existingFieldIsPublic) {
-                  this.errorRelated(
-                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, base.internalName, instance.internalName
-                  );
-                } else if (!thisFieldIsPublic && existingFieldIsPublic) {
-                  this.errorRelated(
-                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, instance.internalName, base.internalName
-                  );
-                } else if (!thisFieldIsPublic && !existingFieldIsPublic) {
-                  this.errorRelated(
-                    DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name
-                  );
-                }
               }
             }
             if (!fieldTypeNode) {
@@ -3156,18 +3132,42 @@ export class Resolver extends DiagnosticEmitter {
             }
             if (!fieldType) break; // did report above
             if (existingField !== null) {
+              // visibility checks
+              let thisFieldIsPublic = fieldPrototype.isPublic;
+              let existingFieldIsPublic = existingField.isPublic;
+              let baseClass = <Class>base;
+
+              if (thisFieldIsPublic && !existingFieldIsPublic) {
+                this.errorRelated(
+                  DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                  fieldPrototype.name, baseClass.internalName, instance.internalName
+                );
+              } else if (!thisFieldIsPublic && existingFieldIsPublic) {
+                this.errorRelated(
+                  DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                  fieldPrototype.name, instance.internalName, baseClass.internalName
+                );
+              } else if (!thisFieldIsPublic && !existingFieldIsPublic) {
+                this.errorRelated(
+                  DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
+                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                  fieldPrototype.name
+                );
+              } 
               // assignability checks
-              if (fieldType.equals(existingField.type) && fieldPrototype.initializerNode === null && !fieldPrototype.is(CommonFlags.DECLARE)) {
+              else if (fieldType.equals(existingField.type) && fieldPrototype.initializerNode === null && !fieldPrototype.is(CommonFlags.DECLARE)) {
                 this.errorRelated(
                   DiagnosticCode.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name, assert(base).internalName
+                  fieldPrototype.name, baseClass.internalName
                 );
               } else if (!fieldType.isStrictlyAssignableTo(existingField.type)) {
                 this.errorRelated(
                   DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name, instance.internalName, assert(base).internalName
+                  fieldPrototype.name, instance.internalName, baseClass.internalName
                 );
               }
             }
