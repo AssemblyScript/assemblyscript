@@ -123,6 +123,7 @@ export enum DiagnosticCode {
   Generic_type_0_requires_1_type_argument_s = 2314,
   Type_0_is_not_generic = 2315,
   Type_0_is_not_assignable_to_type_1 = 2322,
+  Property_0_is_private_in_type_1_but_not_in_type_2 = 2325,
   Index_signature_is_missing_in_type_0 = 2329,
   _this_cannot_be_referenced_in_current_location = 2332,
   _this_cannot_be_referenced_in_constructor_arguments = 2333,
@@ -148,8 +149,10 @@ export enum DiagnosticCode {
   Duplicate_function_implementation = 2393,
   This_overload_signature_is_not_compatible_with_its_implementation_signature = 2394,
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
+  Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2 = 2416,
   A_class_can_only_implement_an_interface = 2422,
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
+  Types_have_separate_declarations_of_a_private_property_0 = 2442,
   Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses = 2445,
   Variable_0_used_before_its_declaration = 2448,
   Cannot_redeclare_block_scoped_variable_0 = 2451,
@@ -170,6 +173,7 @@ export enum DiagnosticCode {
   Expected_0_type_arguments_but_got_1 = 2558,
   Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned = 2564,
   Property_0_is_used_before_being_assigned = 2565,
+  Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration = 2612,
   A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums = 2651,
   Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration = 2673,
   Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
@@ -307,6 +311,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2314: return "Generic type '{0}' requires {1} type argument(s).";
     case 2315: return "Type '{0}' is not generic.";
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
+    case 2325: return "Property '{0}' is private in type '{1}' but not in type '{2}'.";
     case 2329: return "Index signature is missing in type '{0}'.";
     case 2332: return "'this' cannot be referenced in current location.";
     case 2333: return "'this' cannot be referenced in constructor arguments.";
@@ -332,8 +337,10 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2393: return "Duplicate function implementation.";
     case 2394: return "This overload signature is not compatible with its implementation signature.";
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
+    case 2416: return "Property '{0}' in type '{1}' is not assignable to the same property in base type '{2}'.";
     case 2422: return "A class can only implement an interface.";
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
+    case 2442: return "Types have separate declarations of a private property '{0}'.";
     case 2445: return "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.";
     case 2448: return "Variable '{0}' used before its declaration.";
     case 2451: return "Cannot redeclare block-scoped variable '{0}'";
@@ -354,6 +361,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2558: return "Expected {0} type arguments, but got {1}.";
     case 2564: return "Property '{0}' has no initializer and is not assigned in the constructor before 'this' is used or returned.";
     case 2565: return "Property '{0}' is used before being assigned.";
+    case 2612: return "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.";
     case 2651: return "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.";
     case 2673: return "Constructor of class '{0}' is private and only accessible within the class declaration.";
     case 2674: return "Constructor of class '{0}' is protected and only accessible within the class declaration.";

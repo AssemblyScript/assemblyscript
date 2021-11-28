@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2325: Property 'foo' is private in type 'duplicate-field-errors/A' but not in type 'duplicate-field-errors/B'.",
+    "TS2325: Property 'bar' is private in type 'duplicate-field-errors/B' but not in type 'duplicate-field-errors/A'.",
+    "TS2442: Types have separate declarations of a private property 'baz'.",
+    "TS2416: Property 'raz' in type 'duplicate-field-errors/B' is not assignable to the same property in base type 'duplicate-field-errors/A'."
+  ]
+}
