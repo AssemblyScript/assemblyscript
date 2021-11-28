@@ -1036,11 +1036,11 @@ export class Tokenizer extends DiagnosticEmitter {
     maxCompoundLength: i32 = i32.MAX_VALUE
   ): Token {
     var text = this.source.text;
-    if (this.nextToken < 0) {
+    var nextToken = this.nextToken;
+    if (nextToken < 0) {
       let posBefore = this.pos;
       let tokenBefore = this.token;
       let tokenPosBefore = this.tokenPos;
-      let nextToken: Token;
       do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
       while (nextToken == Token.INVALID);
       this.nextToken = nextToken;
@@ -1058,7 +1058,7 @@ export class Tokenizer extends DiagnosticEmitter {
       this.token = tokenBefore;
       this.tokenPos = tokenPosBefore;
     }
-    return this.nextToken;
+    return nextToken;
   }
 
   skipLineComment(text: string, pos: i32, end: i32): i32 {
