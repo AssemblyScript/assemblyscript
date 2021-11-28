@@ -7,10 +7,10 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import { WASI } from "wasi";
 import glob from "glob";
-import coreCount from "physical-cpu-count";
-import * as colorsUtil from "../cli/util/colors.js";
-import * as optionsUtil from "../cli/util/options.js";
-import diff from "./util/diff.js";
+import * as colorsUtil from "../util/colors.js";
+import * as optionsUtil from "../util/options.js";
+import { coreCount, threadCount } from "../util/cpu.js";
+import diff from "../util/diff.js";
 import { Rtrace } from "../lib/rtrace/index.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -519,7 +519,7 @@ if (args.parallel && coreCount > 1) {
     const current = [];
     const outputs = [];
     let numWorkers = Math.min(coreCount - 1, tests.length);
-    console.log("Spawning " + numWorkers + " workers ...");
+    console.log(`Spawning ${numWorkers} workers (assuming ${coreCount} cores, ${threadCount} threads)...`);
     cluster.settings.silent = true;
     let index = 0;
     for (let i = 0; i < numWorkers; ++i) {

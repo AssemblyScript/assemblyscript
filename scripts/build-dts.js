@@ -1,12 +1,12 @@
 import fs from "fs";
 import glob from "glob";
-import mkdirp from "mkdirp";
 import os from "os";
 import pathUtil from "path";
 import ts from "typescript";
 import stream from "stream";
 import util from "util";
 import { fileURLToPath } from 'url';
+import mkdirp from "../util/mkdirp";
 
 const __dirname = pathUtil.dirname(fileURLToPath(import.meta.url));
 

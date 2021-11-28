@@ -1,23 +1,22 @@
 import * as Diff from "diff";
-import * as colors from "../../cli/util/colors.js";
+import * as colors from "./colors.js";
 
 export default function diff(filename, expected, actual) {
   var diff = Diff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 5 });
-  if (!diff.hunks.length)
-    return null;
+  if (!diff.hunks.length) return null;
 
-  var ret = [];
-  ret.push('--- ' + diff.oldHeader);
-  ret.push('+++ ' + diff.newHeader);
+  var out = [];
+  out.push('--- ' + diff.oldHeader);
+  out.push('+++ ' + diff.newHeader);
 
   for (var i = 0; i < diff.hunks.length; i++) {
     var hunk = diff.hunks[i];
-    ret.push(
+    out.push(
       '@@ -' + hunk.oldStart + ',' + hunk.oldLines
       + ' +' + hunk.newStart + ',' + hunk.newLines
       + ' @@'
     );
-    ret.push.apply(ret, hunk.lines.map(line =>
+    out.push.apply(out, hunk.lines.map(line =>
       line.charAt(0) === "+"
         ? colors.stdout.green(line)
         : line.charAt(0) === "-"
@@ -26,5 +25,5 @@ export default function diff(filename, expected, actual) {
     ));
   }
 
-  return ret.join('\n') + '\n';
+  return out.join('\n') + '\n';
 }

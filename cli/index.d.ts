@@ -3,7 +3,7 @@
  * @license Apache-2.0
  */
 
-import { OptionDescription } from "./util/options";
+import { OptionDescription } from "../util/options";
 export { OptionDescription };
 
 /** AssemblyScript version. */

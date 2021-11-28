@@ -3,9 +3,9 @@ import path from "path";
 import os from "os";
 import { fileURLToPath } from "url";
 import glob from "glob";
-import diff from "./util/diff.js";
-import * as colorsUtil from "../cli/util/colors.js";
-import * as optionsUtil from "../cli/util/options.js";
+import diff from "../util/diff.js";
+import * as colorsUtil from "../util/colors.js";
+import * as optionsUtil from "../util/options.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

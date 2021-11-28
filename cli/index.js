@@ -27,12 +27,12 @@
  * in the build step. See dist/asc.js for the bundle.
  */
 
-import { fs, module, path, process } from "./util/node.js";
-import mkdirp from "./util/mkdirp.js";
-import fetch from "./util/fetch.js";
-import * as utf8 from "./util/utf8.js";
-import * as colorsUtil from "./util/colors.js";
-import * as optionsUtil from "./util/options.js";
+import { fs, module, path, process } from "../util/node.js";
+import mkdirp from "../util/mkdirp.js";
+import fetch from "../util/fetch.js";
+import * as utf8 from "../util/utf8.js";
+import * as colorsUtil from "../util/colors.js";
+import * as optionsUtil from "../util/options.js";
 import * as generated from "./index.generated.js";
 
 import binaryen from "binaryen";
