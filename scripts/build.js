@@ -28,7 +28,7 @@ function time() {
   return new Date().toISOString();
 }
 
-function reporter(name) {
+function reportPlugin(name) {
   return {
     name: "reporter",
     setup(build) {
@@ -55,8 +55,8 @@ function bundleFile(filename) {
   return fs.readFileSync(filename, { encoding: "utf8" }).replace(/\r\n/g, "\n");
 }
 
-class StdlibPlugin {
-  name = "stdlib";
+const stdlibPlugin = {
+  name: "stdlib",
   setup(build) {
     build.onResolve({ filter: /\bindex\.generated\.js$/ }, args => {
       return {
@@ -104,12 +104,12 @@ class StdlibPlugin {
       };
     });
   }
-}
+};
 
 // Diagnostic messages integration
 
-class DiagnosticsPlugin {
-  name = "diagnostics";
+const diagnosticsPlugin = {
+  name: "diagnostics",
   setup(build) {
     build.onResolve({ filter: /\bdiagnosticMessages\.generated$/ }, args => {
       return {
@@ -161,7 +161,34 @@ class DiagnosticsPlugin {
       };
     });
   }
-}
+};
+
+// SDK integration
+
+const sdkPlugin = {
+  name: "sdk",
+  setup(build) {
+    build.onEnd(() => {
+      const startTime = Date.now();
+      const stdout = [];
+      console.log(`${time()} - ${"sdk"} - Starting new build ...`);
+      childProcess.spawn("node", [ "./build-sdk.js" ], {
+        cwd: dirname,
+        stdio: "pipe"
+      }).on("data", data => {
+        stdout.push(data.toString());
+      }).on("error", err => {
+        const duration = Date.now() - startTime;
+        console.log(stdout.join(""));
+        console.log(`${time()}  - ${"sdk"} - ${colors.red("ERROR")} (had errors, ${duration} ms)`);
+      }).on("close", code => {
+        if (code) return;
+        const duration = Date.now() - startTime;
+        console.log(`${time()} - ${"sdk"} - ${colors.green("SUCCESS")} (no errors, ${duration} ms)`);
+      });
+    });
+  }
+};
 
 // Build compiler and CLI
 
@@ -184,7 +211,7 @@ esbuild.build({
     js: prelude("The AssemblyScript compiler")
   },
   watch,
-  plugins: [ new DiagnosticsPlugin(), reporter("src") ]
+  plugins: [ diagnosticsPlugin, reportPlugin("src") ]
 });
 
 esbuild.build({
@@ -203,7 +230,7 @@ esbuild.build({
     js: prelude("The AssemblyScript frontend")
   },
   watch,
-  plugins: [ new StdlibPlugin(), reporter("cli") ]
+  plugins: [ stdlibPlugin, sdkPlugin, reportPlugin("cli") ]
 });
 
 // Build definitions
