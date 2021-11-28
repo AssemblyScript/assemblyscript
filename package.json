@@ -56,10 +56,10 @@
     "asinit": "bin/asinit.js"
   },
   "scripts": {
-    "check": "npm run check:config && npm run check:import && npm run check:lint",
+    "check": "npm run check:config && npm run check:import && npm run lint",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "check:import": "tsc --noEmit --target ESNEXT --module es6 --experimentalDecorators tests/import/index",
-    "check:lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
+    "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "build": "node scripts/build",
     "watch": "node scripts/build --watch",
     "test": "npm run test:parser && npm run test:compiler && npm run test:browser && npm run test:packages && npm run test:extension && npm run test:asconfig",

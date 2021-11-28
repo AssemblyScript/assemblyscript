@@ -40,9 +40,9 @@ function reporter(name) {
       build.onEnd(({ errors, warnings }) => {
         const duration = Date.now() - startTime;
         if (errors.length) {
-          console.log(`${time()} - ${name} - ${colors.red("ERROR")} - ${errors.length} errors, ${warnings.length} warnings, ${duration} ms`);
+          console.log(`${time()} - ${name} - ${colors.red("ERROR")} (${errors.length} errors, ${warnings.length} warnings, ${duration} ms)`);
         } else {
-          console.log(`${time()} - ${name} - ${colors.green("SUCCESS")} - ${warnings.length} warnings, ${duration} ms`);
+          console.log(`${time()} - ${name} - ${colors.green("SUCCESS")} (${warnings.length} warnings, ${duration} ms)`);
         }
       });
     }
@@ -224,12 +224,12 @@ function buildDefinitions() {
     buildingDefinitions = false;
     const duration = Date.now() - startTime;
     console.log(stdout.join(""));
-    console.log(`${time()}  - ${"dts"} - ${colors.red("ERROR")} - had errors, ${duration} ms`);
+    console.log(`${time()}  - ${"dts"} - ${colors.red("ERROR")} (had errors, ${duration} ms)`);
   }).on("close", code => {
     buildingDefinitions = false;
     if (code) return;
     const duration = Date.now() - startTime;
-    console.log(`${time()} - ${"dts"} - ${colors.green("SUCCESS")} - no errors, ${duration} ms`);
+    console.log(`${time()} - ${"dts"} - ${colors.green("SUCCESS")} (no errors, ${duration} ms)`);
   });
 }
 
