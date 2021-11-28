@@ -1704,8 +1704,8 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     let pos = this.pos;
-    // fast pathes for the most common literals
     if (pos - start == 3 && text.charCodeAt(start + 1) == CharCode.DOT) {
+      // fast path for the most common literals:
       // 0.0 ... 9.9 with step = 0.1
       let d1 = <f64>(text.charCodeAt(start + 0) - CharCode._0);
       let d2 = <f64>(text.charCodeAt(start + 2) - CharCode._0);
