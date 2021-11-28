@@ -6,7 +6,7 @@ import ts from "typescript";
 import stream from "stream";
 import util from "util";
 import { fileURLToPath } from 'url';
-import mkdirp from "../util/mkdirp";
+import mkdirp from "../util/mkdirp.js";
 
 const __dirname = pathUtil.dirname(fileURLToPath(import.meta.url));
 
