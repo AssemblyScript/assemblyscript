@@ -1202,7 +1202,7 @@ export class Tokenizer extends DiagnosticEmitter {
     );
     this.pos = pos;
     if (pos - start == 1) {
-      return text.charAt(start);
+      return text[start];
     } else {
       return text.substring(start, pos);
     }
