@@ -87,8 +87,6 @@ if (useWasm) {
 }
 
 export {
-  binaryen,
-  assemblyscript,
   loader,
   rtrace
 };

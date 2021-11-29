@@ -472,7 +472,7 @@ function generateSrc() {
   stdout.write("\n");
 
   generate({
-    project: pathUtil.resolve(__dirname, "..", "std/assembly/shared"),
+    project: pathUtil.resolve(__dirname, "..", "std", "assembly", "shared"),
     prefix: prefix + "/std/assembly/shared",
     exclude: [],
     verbose: true,
@@ -483,7 +483,7 @@ function generateSrc() {
   stdout.write("\n");
 
   generate({
-    project: pathUtil.resolve(__dirname, "..", "src/glue"),
+    project: pathUtil.resolve(__dirname, "..", "src", "glue"),
     prefix: prefix + "/src/glue",
     exclude: [
       "js/index.ts",
@@ -520,7 +520,7 @@ function generateCli() {
   generate({
     baseDir: pathUtil.resolve(__dirname, ".."),
     files: [
-      "cli/index.d.ts"
+      pathUtil.resolve(__dirname, "..", "cli", "index.d.ts")
     ],
     externs: [
       "./assemblyscript.generated.d.ts"

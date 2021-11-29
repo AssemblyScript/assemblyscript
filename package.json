@@ -47,6 +47,10 @@
       "import": "./dist/transform.js",
       "types": "./dist/transform.d.ts"
     },
+    "./binaryen": {
+      "import": "./lib/binaryen.js",
+      "types": "./lib/binaryen.d.ts"
+    },
     "./*": "./*"
   },
   "bin": {
@@ -81,6 +85,8 @@
     "dist/",
     "std/",
     "util/",
+    "lib/binaryen.js",
+    "lib/binaryen.d.ts",
     "tsconfig-base.json",
     "NOTICE"
   ],

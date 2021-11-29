@@ -3,7 +3,7 @@
  * @license Apache-2.0
  */
 
-import binaryen from "binaryen";
+import binaryen from "../../lib/binaryen";
 import { Module } from "../module.ts";
 
 Module.prototype.toText = function toText(watFormat = true) {
