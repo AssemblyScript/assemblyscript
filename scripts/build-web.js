@@ -11,7 +11,7 @@ const mainVersion = pkg.version;
 const binaryenVersion = pkg.dependencies.binaryen.version;
 const longVersion = pkg.dependencies.long.version;
 
-const mainUrl = mainVersion === "0.0.0" ? `../` : `https://cdn.jsdelivr.net/npm/assemblyscript@${mainVersion}/`;
+const distUrl = mainVersion === "0.0.0" ? `../dist/` : `https://cdn.jsdelivr.net/npm/assemblyscript@${mainVersion}/dist/`;
 const binaryenUrl = `https://cdn.jsdelivr.net/npm/binaryen@${binaryenVersion}/index.js`;
 const longUrl = `https://cdn.jsdelivr.net/npm/long@${longVersion}/index.js`;
 
@@ -21,12 +21,12 @@ fs.writeFileSync(path.join(dirname, "..", "dist", "web.html"), `<script async sr
   "imports": {
     "binaryen": ${JSON.stringify(binaryenUrl)},
     "long": ${JSON.stringify(longUrl)},
-    "assemblyscript": ${JSON.stringify(mainUrl + "index.js")}
+    "assemblyscript": ${JSON.stringify(distUrl + "assemblyscript.js")}
   }
 }
 </script>
 <script type="module">
-import asc from ${JSON.stringify(mainUrl + "asc.js")};
+import asc from ${JSON.stringify(distUrl + "asc.js")};
 
 const stdout = asc.createMemoryStream();
 const stderr = asc.createMemoryStream();
