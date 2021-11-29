@@ -6,7 +6,7 @@
     "TS2325: Property 'b' is private in type 'duplicate-field-errors/B' but not in type 'duplicate-field-errors/A'.",
     "TS2442: Types have separate declarations of a private property 'c'.",
     "TS2416: Property 'd' in type 'duplicate-field-errors/B' is not assignable to the same property in base type 'duplicate-field-errors/A'.",
-    "TS2612: Property 'e' will overwrite the base property in 'duplicate-field-errors/A'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.",
+    "TS2612: Property 'e' will overwrite the base property in 'duplicate-field-errors/A'. If this is intentional, add an initializer. Otherwise, remove the redundant declaration.",
     "TS2300: Duplicate identifier 'f'.",
     "EOF"
   ]

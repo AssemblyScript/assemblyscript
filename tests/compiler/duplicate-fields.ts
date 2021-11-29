@@ -4,7 +4,7 @@ class A {
 }
 
 class B extends A {
-  declare bar: i32;
+  bar: i32 = 0;
   constructor(bar: i32) { super(bar); this.bar = bar; }
 }
 
