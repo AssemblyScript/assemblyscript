@@ -34,9 +34,9 @@
  (data (i32.const 1436) "<")
  (data (i32.const 1448) "\01\00\00\00&\00\00\00d\00u\00p\00l\00i\00c\00a\00t\00e\00-\00f\00i\00e\00l\00d\00s\00.\00t\00s")
  (data (i32.const 1504) "\t\00\00\00 \00\00\00\00\00\00\00 ")
- (data (i32.const 1532) " \00\00\00\04\00\00\00 ")
- (data (i32.const 1552) "\06")
- (data (i32.const 1564) " \00\00\00\00\00\00\00 \00\00\00\07")
+ (data (i32.const 1532) " \00\00\00\00\00\00\00 \00\00\00\03")
+ (data (i32.const 1556) " ")
+ (data (i32.const 1568) "\05\00\00\00 \00\00\00\06")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -1775,17 +1775,17 @@
   block $folding-inner0
    block $invalid
     block $duplicate-fields/Bar
-     block $duplicate-fields/Foo
-      block $duplicate-fields/B2
-       block $duplicate-fields/A
-        block $duplicate-fields/B
+     block $duplicate-fields/B2
+      block $duplicate-fields/Foo
+       block $duplicate-fields/B
+        block $duplicate-fields/A
          block $~lib/string/String
           block $~lib/arraybuffer/ArrayBuffer
            local.get $0
            i32.const 8
            i32.sub
            i32.load
-           br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $duplicate-fields/B $duplicate-fields/A $duplicate-fields/B2 $folding-inner0 $duplicate-fields/Foo $duplicate-fields/Bar $invalid
+           br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $duplicate-fields/A $duplicate-fields/B $folding-inner0 $duplicate-fields/Foo $duplicate-fields/B2 $duplicate-fields/Bar $invalid
           end
           return
          end
@@ -1795,23 +1795,16 @@
        end
        return
       end
-      local.get $0
-      i32.load
-      local.tee $1
-      if
-       local.get $1
-       call $~lib/rt/itcms/__visit
-      end
-      local.get $0
-      i32.load offset=4
-      local.tee $0
-      if
-       local.get $0
-       call $~lib/rt/itcms/__visit
-      end
       return
      end
-     return
+     local.get $0
+     i32.load
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/itcms/__visit
+     end
+     br $folding-inner0
     end
     return
    end
@@ -1887,14 +1880,14 @@
    i32.const 0
    i32.store
    local.get $0
-   i32.const 8
-   i32.const 3
+   i32.const 4
+   i32.const 4
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
    local.get $0
    i32.const 0
-   i32.store offset=4
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    i32.const 4
@@ -1912,7 +1905,7 @@
    if
     global.get $~lib/memory/__stack_pointer
     i32.const 4
-    i32.const 4
+    i32.const 3
     call $~lib/rt/itcms/__new
     local.tee $0
     i32.store
@@ -1932,7 +1925,7 @@
    i32.store
    local.get $0
    i32.const 10
-   i32.store offset=4
+   i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
@@ -1940,13 +1933,13 @@
    local.get $0
    global.set $duplicate-fields/foo
    global.get $duplicate-fields/foo
-   i32.load offset=4
+   i32.load
    i32.const 10
    i32.ne
    if
     i32.const 0
     i32.const 1456
-    i32.const 13
+    i32.const 15
     i32.const 1
     call $~lib/builtins/abort
     unreachable
@@ -1989,7 +1982,7 @@
    if
     global.get $~lib/memory/__stack_pointer
     i32.const 4
-    i32.const 7
+    i32.const 6
     call $~lib/rt/itcms/__new
     local.tee $1
     i32.store
@@ -2030,14 +2023,14 @@
    i32.const 0
    i32.store
    local.get $0
-   i32.const 8
-   i32.const 5
+   i32.const 4
+   i32.const 7
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
    local.get $0
    i32.const 0
-   i32.store offset=4
+   i32.store
    local.get $0
    i32.const 0
    call $~lib/rt/itcms/__link
@@ -2058,7 +2051,7 @@
    if
     global.get $~lib/memory/__stack_pointer
     i32.const 4
-    i32.const 6
+    i32.const 5
     call $~lib/rt/itcms/__new
     local.tee $0
     i32.store
@@ -2084,7 +2077,7 @@
    i32.store
    local.get $0
    local.get $1
-   i32.store offset=4
+   i32.store
    local.get $0
    local.get $1
    call $~lib/rt/itcms/__link
@@ -2095,14 +2088,14 @@
    local.get $0
    global.set $duplicate-fields/raz
    global.get $duplicate-fields/raz
-   i32.load offset=4
+   i32.load
    i32.load offset=4
    i32.const 2
    i32.ne
    if
     i32.const 0
     i32.const 1456
-    i32.const 40
+    i32.const 43
     i32.const 1
     call $~lib/builtins/abort
     unreachable

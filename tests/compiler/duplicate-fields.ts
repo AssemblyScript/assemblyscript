@@ -8,7 +8,9 @@ class B extends A {
   constructor(bar: i32) { super(bar); this.bar = bar; }
 }
 
-assert(sizeof<B>() == sizeof<i32>());
+assert(offsetof<A>("bar") == 0);
+assert(offsetof<B>("bar") == 0);
+
 const foo = new B(10);
 assert(foo.bar == 10);
 
@@ -34,7 +36,8 @@ class B2 extends A2 {
   constructor(bar: Bar) { super(bar); this.bar = bar; }
 }
 
+assert(offsetof<A2>("bar") == 0);
+assert(offsetof<B2>("bar") == 0);
 
-assert(sizeof<B2>() == sizeof<Bar>());
 const raz = new B2(new Bar(1, 2));
 assert(raz.bar.bar == 2);

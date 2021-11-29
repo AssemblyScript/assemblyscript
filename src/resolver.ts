@@ -3105,7 +3105,6 @@ export class Resolver extends DiagnosticEmitter {
                     fieldPrototype.identifierNode.range, baseField.identifierNode.range,
                     fieldPrototype.name
                   );
-                  break;
                 }
               }
             }
@@ -3181,10 +3180,14 @@ export class Resolver extends DiagnosticEmitter {
             }
             let fieldInstance = new Field(fieldPrototype, instance, fieldType);
             assert(isPowerOf2(fieldType.byteSize));
-            let mask = fieldType.byteSize - 1;
-            if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
-            fieldInstance.memoryOffset = memoryOffset;
-            memoryOffset += fieldType.byteSize;
+            if (existingField !== null) {
+              fieldInstance.memoryOffset = existingField.memoryOffset;
+            } else {
+              let mask = fieldType.byteSize - 1;
+              if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
+              fieldInstance.memoryOffset = memoryOffset;
+              memoryOffset += fieldType.byteSize;
+            }
             instance.add(memberName, fieldInstance); // reports
             break;
           }

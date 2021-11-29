@@ -40,7 +40,7 @@
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00d\00u\00p\00l\00i\00c\00a\00t\00e\00-\00f\00i\00e\00l\00d\00s\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 480) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\07\00\00\00")
+ (data (i32.const 480) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\05\00\00\00 \00\00\00\06\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -2356,7 +2356,7 @@
  (func $duplicate-fields/B#set:bar (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store
  )
  (func $~lib/rt/itcms/__link (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -2438,7 +2438,7 @@
  (func $duplicate-fields/B2#set:bar (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $1
   i32.const 0
@@ -2488,13 +2488,10 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $duplicate-fields/B2~visit (param $0 i32) (param $1 i32)
+ (func $duplicate-fields/A2~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
-  local.get $1
-  call $duplicate-fields/A2~visit
-  local.get $0
-  i32.load offset=4
+  i32.load
   local.tee $2
   if
    local.get $2
@@ -2502,8 +2499,11 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $duplicate-fields/A2~visit (param $0 i32) (param $1 i32)
+ (func $duplicate-fields/B2~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
+  local.get $0
+  local.get $1
+  call $duplicate-fields/A2~visit
   local.get $0
   i32.load
   local.tee $2
@@ -2516,11 +2516,11 @@
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
    block $duplicate-fields/Bar
-    block $duplicate-fields/Foo
-     block $duplicate-fields/A2
-      block $duplicate-fields/B2
-       block $duplicate-fields/A
-        block $duplicate-fields/B
+    block $duplicate-fields/B2
+     block $duplicate-fields/Foo
+      block $duplicate-fields/A2
+       block $duplicate-fields/B
+        block $duplicate-fields/A
          block $~lib/arraybuffer/ArrayBufferView
           block $~lib/string/String
            block $~lib/arraybuffer/ArrayBuffer
@@ -2528,7 +2528,7 @@
             i32.const 8
             i32.sub
             i32.load
-            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $duplicate-fields/B $duplicate-fields/A $duplicate-fields/B2 $duplicate-fields/A2 $duplicate-fields/Foo $duplicate-fields/Bar $invalid
+            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $duplicate-fields/A $duplicate-fields/B $duplicate-fields/A2 $duplicate-fields/Foo $duplicate-fields/B2 $duplicate-fields/Bar $invalid
            end
            return
           end
@@ -2545,14 +2545,14 @@
       end
       local.get $0
       local.get $1
-      call $duplicate-fields/B2~visit
+      call $duplicate-fields/A2~visit
       return
      end
-     local.get $0
-     local.get $1
-     call $duplicate-fields/A2~visit
      return
     end
+    local.get $0
+    local.get $1
+    call $duplicate-fields/B2~visit
     return
    end
    return
@@ -2585,8 +2585,12 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 4
-  i32.const 4
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
   i32.eq
   drop
   memory.size
@@ -2611,20 +2615,24 @@
   call $duplicate-fields/B#constructor
   global.set $duplicate-fields/foo
   global.get $duplicate-fields/foo
-  i32.load offset=4
+  i32.load
   i32.const 10
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 432
-   i32.const 13
+   i32.const 15
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 4
-  i32.const 4
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
   i32.eq
   drop
   i32.const 0
@@ -2640,7 +2648,7 @@
   call $duplicate-fields/B2#constructor
   global.set $duplicate-fields/raz
   global.get $duplicate-fields/raz
-  i32.load offset=4
+  i32.load
   i32.load offset=4
   i32.const 2
   i32.eq
@@ -2648,7 +2656,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 40
+   i32.const 43
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2673,7 +2681,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
-   i32.const 4
+   i32.const 3
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -2706,8 +2714,8 @@
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 3
+   i32.const 4
+   i32.const 4
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -2747,7 +2755,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
-   i32.const 6
+   i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -2780,8 +2788,8 @@
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 5
+   i32.const 4
+   i32.const 7
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -2821,7 +2829,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
-   i32.const 7
+   i32.const 6
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
