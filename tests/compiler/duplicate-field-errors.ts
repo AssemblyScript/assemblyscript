@@ -11,6 +11,7 @@ class A {
     this.d = d;
     this.e = e;
   }
+  f(): void {}
 }
 
 export class B extends A {
@@ -19,8 +20,11 @@ export class B extends A {
   private c: i32;
   public d: i32;
   public e: i32;
-  constructor(a: i32, b: i32, c: i32, d: i32, e: i32) { 
+  public f: i32;
+  constructor(a: i32, b: i32, c: i32, d: i32, e: i32, f: i32) { 
     super(a, b, c, d, e); 
+    ERROR("EOF"); 
   }
 }
+
 

@@ -3097,8 +3097,16 @@ export class Resolver extends DiagnosticEmitter {
               let baseMembers = base.members;
               if (baseMembers !== null && baseMembers.has(fieldPrototype.name)) {
                 let baseField = assert(baseMembers.get(fieldPrototype.name));
-                assert(baseField.kind == ElementKind.FIELD);
-                existingField = <Field>baseField;
+                if (baseField.kind == ElementKind.FIELD) {
+                  existingField = <Field>baseField;
+                } else {
+                  this.errorRelated(
+                    DiagnosticCode.Duplicate_identifier_0,
+                    fieldPrototype.identifierNode.range, baseField.identifierNode.range,
+                    fieldPrototype.name
+                  );
+                  break;
+                }
               }
             }
             if (!fieldTypeNode) {
