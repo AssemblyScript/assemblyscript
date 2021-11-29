@@ -171,7 +171,7 @@
   "Expected {0} type arguments, but got {1}.": 2558,
   "Property '{0}' has no initializer and is not assigned in the constructor before 'this' is used or returned.": 2564,
   "Property '{0}' is used before being assigned.": 2565,
-  "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.": 2612,
+  "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, remove the redundant declaration.": 2612,
   "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
   "Constructor of class '{0}' is private and only accessible within the class declaration.": 2673,
   "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,

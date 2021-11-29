@@ -173,7 +173,7 @@ export enum DiagnosticCode {
   Expected_0_type_arguments_but_got_1 = 2558,
   Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned = 2564,
   Property_0_is_used_before_being_assigned = 2565,
-  Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration = 2612,
+  Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_remove_the_redundant_declaration = 2612,
   A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums = 2651,
   Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration = 2673,
   Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
@@ -361,7 +361,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2558: return "Expected {0} type arguments, but got {1}.";
     case 2564: return "Property '{0}' has no initializer and is not assigned in the constructor before 'this' is used or returned.";
     case 2565: return "Property '{0}' is used before being assigned.";
-    case 2612: return "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.";
+    case 2612: return "Property '{0}' will overwrite the base property in '{1}'. If this is intentional, add an initializer. Otherwise, remove the redundant declaration.";
     case 2651: return "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.";
     case 2673: return "Constructor of class '{0}' is private and only accessible within the class declaration.";
     case 2674: return "Constructor of class '{0}' is protected and only accessible within the class declaration.";
