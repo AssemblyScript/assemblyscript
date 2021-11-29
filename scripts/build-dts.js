@@ -557,5 +557,21 @@ function generateCli() {
   );
 }
 
+function generateTransform() {
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "transform.js"),
+    [
+      `export class Transform {}\n`
+    ].join("")
+  );
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "transform.d.ts"),
+    [
+      `export { Transform } from "./asc";\n`
+    ].join("")
+  );
+}
+
 generateSrc();
 generateCli();
+generateTransform();

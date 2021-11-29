@@ -45,8 +45,8 @@
       "types": "./dist/asc.d.ts"
     },
     "./transform": {
-      "import": "./transform.js",
-      "types": "./transform.d.ts"
+      "import": "./dist/transform.js",
+      "types": "./dist/transform.d.ts"
     },
     "./*": "./*"
   },
