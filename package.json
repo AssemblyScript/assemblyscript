@@ -10,7 +10,6 @@
   ],
   "version": "0.0.0",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
-  "contributors": [],
   "license": "Apache-2.0",
   "homepage": "https://assemblyscript.org",
   "repository": {
@@ -36,12 +35,19 @@
     "typescript": "~4.5.2"
   },
   "type": "module",
-  "main": "./dist/assemblyscript.js",
-  "types": "./dist/assemblyscript.d.ts",
   "exports": {
-    ".": "./dist/assemblyscript.js",
-    "./asc": "./dist/asc.js",
-    "./transform": "./transform.js",
+    ".": {
+      "import": "./dist/assemblyscript.js",
+      "types": "./dist/assemblyscript.d.ts"
+    },
+    "./asc": {
+      "import": "./dist/asc.js",
+      "types": "./dist/asc.d.ts"
+    },
+    "./transform": {
+      "import": "./transform.js",
+      "types": "./transform.d.ts"
+    },
     "./*": "./*"
   },
   "bin": {
