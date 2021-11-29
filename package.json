@@ -39,7 +39,9 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
-    "./": "./index.js",
+    ".": "./index.js",
+    "./asc": "./asc.js",
+    "./transform": "./transform.js",
     "./*": "./*"
   },
   "bin": {
