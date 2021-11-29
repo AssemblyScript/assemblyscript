@@ -82,8 +82,6 @@
     "dist/",
     "std/",
     "util/",
-    "transform.d.ts",
-    "transform.js",
     "tsconfig-base.json",
     "NOTICE"
   ],
