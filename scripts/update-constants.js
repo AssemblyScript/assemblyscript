@@ -3,7 +3,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import binaryen from "../lib/binaryen";
+import binaryen from "../lib/binaryen.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
