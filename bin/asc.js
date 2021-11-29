@@ -19,6 +19,6 @@ function tryApplyNodeArguments() {
 
 if (!tryApplyNodeArguments()) {
   sourceMapSupport.install();
-  const asc = await import("../dist/asc.js");
+  const asc = await import("assemblyscript/asc");
   process.exitCode = asc.main(process.argv.slice(2));
 }

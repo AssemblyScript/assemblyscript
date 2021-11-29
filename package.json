@@ -45,8 +45,8 @@
     "./*": "./*"
   },
   "bin": {
-    "asc": "bin/asc.js",
-    "asinit": "bin/asinit.js"
+    "asc": "./bin/asc.js",
+    "asinit": "./bin/asinit.js"
   },
   "scripts": {
     "check": "npm run check:config && npm run check:import && npm run lint",
@@ -76,10 +76,6 @@
     "dist/",
     "std/",
     "util/",
-    "asc.d.ts",
-    "asc.js",
-    "index.d.ts",
-    "index.js",
     "transform.d.ts",
     "transform.js",
     "tsconfig-base.json",

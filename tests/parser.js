@@ -52,7 +52,7 @@ if (argv.length) {
   }
 }
 
-import { Program, Options, ASTBuilder } from "../index.js";
+import { Program, Options, ASTBuilder } from "assemblyscript";
 
 var failures = 0;
 
