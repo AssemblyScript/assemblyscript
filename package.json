@@ -36,11 +36,11 @@
     "typescript": "~4.5.2"
   },
   "type": "module",
-  "main": "./index.js",
-  "types": "./index.d.ts",
+  "main": "./dist/assemblyscript.js",
+  "types": "./dist/assemblyscript.d.ts",
   "exports": {
-    ".": "./index.js",
-    "./asc": "./asc.js",
+    ".": "./dist/assemblyscript.js",
+    "./asc": "./dist/asc.js",
     "./transform": "./transform.js",
     "./*": "./*"
   },
