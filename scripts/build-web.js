@@ -15,7 +15,7 @@ const mainUrl = mainVersion === "0.0.0" ? `../` : `https://cdn.jsdelivr.net/npm/
 const binaryenUrl = `https://cdn.jsdelivr.net/npm/binaryen@${binaryenVersion}/index.js`;
 const longUrl = `https://cdn.jsdelivr.net/npm/long@${longVersion}/index.js`;
 
-fs.writeFileSync(path.join(dirname, "..", "dist", "sdk.html"), `<script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.3.2/dist/es-module-shims.js"></script>
+fs.writeFileSync(path.join(dirname, "..", "dist", "web.html"), `<script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.3.2/dist/es-module-shims.js"></script>
 <script type="importmap">
 {
   "imports": {

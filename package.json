@@ -36,20 +36,11 @@
     "typescript": "~4.5.2"
   },
   "type": "module",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "exports": {
-    ".": "./index.js",
-    "./std/portable": "./std/portable/index.js",
-    "./lib/loader": {
-      "import": "./lib/loader/index.js",
-      "require": "./lib/loader/umd/index.js"
-    },
-    "./lib/rtrace": {
-      "import": "./lib/rtrace/index.js",
-      "require": "./lib/rtrace/umd/index.js"
-    },
-    "./*": "./*.js"
+    "./": "./index.js",
+    "./*": "./*"
   },
   "bin": {
     "asc": "bin/asc.js",
@@ -79,20 +70,6 @@
     "bootstrap:rtraced": "node bin/asc --config src/asconfig.json --target rtraced && node bin/asc --config src/asconfig.json --target rtraced --wasm out/assemblyscript.rtraced.wasm"
   },
   "files": [
-    "lib/loader/index.d.ts",
-    "lib/loader/index.js",
-    "lib/loader/package.json",
-    "lib/loader/umd/index.d.ts",
-    "lib/loader/umd/index.js",
-    "lib/loader/umd/package.json",
-    "lib/loader/README.md",
-    "lib/rtrace/index.d.ts",
-    "lib/rtrace/index.js",
-    "lib/rtrace/package.json",
-    "lib/rtrace/umd/index.d.ts",
-    "lib/rtrace/umd/index.js",
-    "lib/rtrace/umd/package.json",
-    "lib/rtrace/README.md",
     "bin/",
     "dist/",
     "std/",
@@ -104,11 +81,7 @@
     "transform.d.ts",
     "transform.js",
     "tsconfig-base.json",
-    "LICENSE",
-    "NOTICE",
-    "package.json",
-    "package-lock.json",
-    "README.md"
+    "NOTICE"
   ],
   "funding": {
     "type": "opencollective",

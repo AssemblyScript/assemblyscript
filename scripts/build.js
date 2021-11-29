@@ -163,16 +163,16 @@ const diagnosticsPlugin = {
   }
 };
 
-// SDK integration
+// Web template integration
 
-const sdkPlugin = {
-  name: "sdk",
+const webPlugin = {
+  name: "web",
   setup(build) {
     build.onEnd(() => {
       const startTime = Date.now();
       const stdout = [];
-      console.log(`${time()} - ${"sdk"} - Starting new build ...`);
-      childProcess.spawn("node", [ "./build-sdk.js" ], {
+      console.log(`${time()} - ${"web"} - Starting new build ...`);
+      childProcess.spawn("node", [ "./build-web.js" ], {
         cwd: dirname,
         stdio: "pipe"
       }).on("data", data => {
@@ -180,11 +180,11 @@ const sdkPlugin = {
       }).on("error", err => {
         const duration = Date.now() - startTime;
         console.log(stdout.join(""));
-        console.log(`${time()}  - ${"sdk"} - ${colors.red("ERROR")} (had errors, ${duration} ms)`);
+        console.log(`${time()}  - ${"web"} - ${colors.red("ERROR")} (had errors, ${duration} ms)`);
       }).on("close", code => {
         if (code) return;
         const duration = Date.now() - startTime;
-        console.log(`${time()} - ${"sdk"} - ${colors.green("SUCCESS")} (no errors, ${duration} ms)`);
+        console.log(`${time()} - ${"web"} - ${colors.green("SUCCESS")} (no errors, ${duration} ms)`);
       });
     });
   }
@@ -230,10 +230,10 @@ esbuild.build({
     js: prelude("The AssemblyScript frontend")
   },
   watch,
-  plugins: [ stdlibPlugin, sdkPlugin, reportPlugin("cli") ]
+  plugins: [ stdlibPlugin, webPlugin, reportPlugin("cli") ]
 });
 
-// Build definitions
+// Optionally build definitions (takes a while)
 
 var buildingDefinitions = false;
 
@@ -269,5 +269,10 @@ if (watch) {
     }
   });
 }
+
+console.log(`src : Compiler as a library
+cli : Compiler frontend asc
+dts : TS definition bundles
+web : Example web template\n`);
 
 buildDefinitions();
