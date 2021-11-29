@@ -3,12 +3,12 @@ Library
 
 Additional packages provided by the main package.
 
-| Package | Description
-|---------|------------
-| [loader](./loader) | Loader for AssemblyScript modules
-| [rtrace](./rtrace) | Runtime tracing utility
-| binaryen | Binaryen entrypoint
+| Package                            | Description
+|------------------------------------|-------------------------
+| [@assemblyscript/loader](./loader) | Module loader utility
+| [@assemblyscript/rtrace](./rtrace) | Runtime tracing utility
+| binaryen | Binaryen proxy
 
-The `binaryen.js` package herein is imported accross the code base and proxies
-the npm package by default. It can be replaced to use a custom build. Note that
-unlike the npm package, which remains external, custom builds will be bundled.
+The Binaryen proxy herein is imported accross the code base and forwards the
+`binaryen` npm package by default. It can be modified to use a custom build,
+for example for testing purposes.
