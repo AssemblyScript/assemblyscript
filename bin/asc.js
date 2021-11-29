@@ -1,24 +1,28 @@
 #!/usr/bin/env node
 
 import childProcess from "child_process";
-import sourceMapSupport from "source-map-support";
 
-function tryApplyNodeArguments() {
-  const argv = process.argv;
-  const tail = argv.indexOf("--");
-  if (~tail) {
-    childProcess.spawnSync(
-      argv[0],
-      argv.slice(tail + 1).concat(argv.slice(1, tail)),
-      { stdio: "inherit" }
-    );
-    return true;
+const [ nodePath, thisPath, ...args ] = process.argv;
+const nodeArgs = process.execArgv;
+
+const hasSourceMaps = nodeArgs.includes("--enable-source-maps");
+const hasCustomArgs = args.includes("--");
+
+if (!hasSourceMaps || hasCustomArgs) {
+  if (!hasSourceMaps) {
+    nodeArgs.push("--enable-source-maps");
   }
-  return false;
-}
-
-if (!tryApplyNodeArguments()) {
-  sourceMapSupport.install();
+  if (hasCustomArgs) {
+    const index = args.indexOf("--");
+    nodeArgs.push(...args.slice(index + 1));
+    args.length = index;
+  }
+  childProcess.spawnSync(
+    nodePath,
+    [...nodeArgs, thisPath, ...args],
+    { stdio: "inherit" }
+  );
+} else {
   const asc = await import("../dist/asc.js");
   process.exitCode = asc.main(process.argv.slice(2));
 }

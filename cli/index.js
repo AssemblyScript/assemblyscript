@@ -118,12 +118,6 @@ function setupExtension(ext) {
 
 const defaultExtension = setupExtension(".ts");
 
-// Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
-// useless code fragment on top of an actual error. suppress this:
-if (process.removeAllListeners) {
-  process.removeAllListeners("uncaughtException");
-}
-
 /** Ensures that an object is a wrapper class instead of just a pointer. */
 function __wrap(ptrOrObj, wrapperClass) {
   if (typeof ptrOrObj === "number") {

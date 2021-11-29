@@ -21,8 +21,7 @@
   },
   "dependencies": {
     "binaryen": "102.0.0-nightly.20211126",
-    "long": "^5.1.0",
-    "source-map-support": "^0.5.20"
+    "long": "^5.1.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.6",
