@@ -35,7 +35,7 @@ import * as colorsUtil from "../util/colors.js";
 import * as optionsUtil from "../util/options.js";
 import * as generated from "./index.generated.js";
 
-import binaryen from "binaryen";
+import binaryen from "../lib/binaryen.js";
 import assemblyscriptJS from "assemblyscript";
 import loader from "../lib/loader/index.js";
 import rtrace from "../lib/rtrace/index.js";
