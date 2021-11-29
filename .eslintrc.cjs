@@ -218,8 +218,7 @@ module.exports = { // eslint-disable-line no-undef
 
     {
       files: [
-        "./index.d.ts",
-        "./index.release.d.ts",
+        "./dist/*.d.ts"
       ],
       rules: {
         // Our definitions are complicated, and all attempts to describe them
