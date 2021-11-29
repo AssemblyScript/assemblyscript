@@ -2291,12 +2291,6 @@ export class Parser extends DiagnosticEmitter {
       }
       let initializer: Expression | null = null;
       if (tn.skip(Token.EQUALS)) {
-        if (flags & CommonFlags.AMBIENT) {
-          this.error(
-            DiagnosticCode.Initializers_are_not_allowed_in_ambient_contexts,
-            tn.range()
-          ); // recoverable
-        }
         initializer = this.parseExpression(tn);
         if (!initializer) return null;
       }
