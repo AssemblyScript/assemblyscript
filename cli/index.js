@@ -264,14 +264,14 @@ export async function main(argv, options) {
   const baseDir = path.normalize(opts.baseDir || ".");
 
   // Check if a config file is present
-  let asconfigPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
-  let asconfigFile = path.basename(asconfigPath);
-  let asconfigDir = path.dirname(asconfigPath);
-  let asconfig = await readConfig(asconfigFile, asconfigDir, readFile);
-  let asconfigHasEntries = asconfig != null && Array.isArray(asconfig.entries) && asconfig.entries.length;
+  let configPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
+  let configFile = path.basename(configPath);
+  let configDir = path.dirname(configPath);
+  let config = await getConfig(configFile, configDir, readFile);
+  let configHasEntries = config != null && Array.isArray(config.entries) && config.entries.length;
 
   // Print the help message if requested or no source files are provided
-  if (opts.help || (!argv.length && !asconfigHasEntries)) {
+  if (opts.help || (!argv.length && !configHasEntries)) {
     var out = opts.help ? stdout : stderr;
     var color = opts.help ? colorsUtil.stdout : colorsUtil.stderr;
     out.write([
@@ -300,37 +300,37 @@ export async function main(argv, options) {
 
   // Load additional options from asconfig.json
   const seenAsconfig = new Set();
-  seenAsconfig.add(asconfigPath);
+  seenAsconfig.add(configPath);
   const target = opts.target || "release";
-  while (asconfig) {
+  while (config) {
     // Merge target first
-    if (asconfig.targets) {
-      const targetOptions = asconfig.targets[target];
+    if (config.targets) {
+      const targetOptions = config.targets[target];
       if (targetOptions) {
-        opts = optionsUtil.merge(generated.options, opts, targetOptions, asconfigDir);
+        opts = optionsUtil.merge(generated.options, opts, targetOptions, configDir);
       }
     }
     // Merge general options
-    const generalOptions = asconfig.options;
+    const generalOptions = config.options;
     if (generalOptions) {
-      opts = optionsUtil.merge(generated.options, opts, generalOptions, asconfigDir);
+      opts = optionsUtil.merge(generated.options, opts, generalOptions, configDir);
     }
 
     // Append entries
-    if (asconfig.entries) {
-      for (let entry of asconfig.entries) {
-        argv.push(optionsUtil.resolvePath(entry, asconfigDir));
+    if (config.entries) {
+      for (let entry of config.entries) {
+        argv.push(optionsUtil.resolvePath(entry, configDir));
       }
     }
 
     // Look up extended asconfig and repeat
-    if (asconfig.extends) {
-      asconfigPath = optionsUtil.resolvePath(asconfig.extends, asconfigDir, true);
-      asconfigFile = path.basename(asconfigPath);
-      asconfigDir = path.dirname(asconfigPath);
-      if (seenAsconfig.has(asconfigPath)) break;
-      seenAsconfig.add(asconfigPath);
-      asconfig = await readConfig(asconfigFile, asconfigDir, readFile);
+    if (config.extends) {
+      configPath = optionsUtil.resolvePath(config.extends, configDir, true);
+      configFile = path.basename(configPath);
+      configDir = path.dirname(configPath);
+      if (seenAsconfig.has(configPath)) break;
+      seenAsconfig.add(configPath);
+      config = await getConfig(configFile, configDir, readFile);
     } else {
       break;
     }
@@ -1184,7 +1184,7 @@ function isObject(arg) {
   return toString.call(arg) === "[object Object]";
 }
 
-async function readConfig(file, baseDir, readFile) {
+async function getConfig(file, baseDir, readFile) {
   const contents = await readFile(file, baseDir);
   const location = path.join(baseDir, file);
   if (!contents) return null;
