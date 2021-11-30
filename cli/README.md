@@ -48,7 +48,7 @@ You can also compile a single source string directly (note that this API has lim
 
 ```js
 import asc from "assemblyscript/asc";
-const { binary, text, stdout, stderr } = asc.compileString(`...`, { optimize: 2 });
+const { binary, text, stdout, stderr } = await asc.compileString(`...`, { optimize: 2 });
 ...
 ```
 

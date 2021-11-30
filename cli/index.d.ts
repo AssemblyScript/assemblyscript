@@ -199,19 +199,15 @@ export interface APIResult {
 }
 
 /** Runs the command line utility using the specified arguments array. */
-export function main(argv: string[], options?: APIOptions): Promise<APIResult>;
+export function main(argv: string[] | CompilerOptions, options?: APIOptions): Promise<APIResult>;
 
 /** Convenience function that parses and compiles source strings directly. */
-export function compileString(sources: { [key: string]: string } | string, options?: CompilerOptions): {
-  /** Standard output. */
-  stdout: OutputStream,
-  /** Standard error. */
-  stderr: OutputStream,
+export function compileString(sources: { [key: string]: string } | string, options?: CompilerOptions): Promise<APIResult & {
   /** Emitted binary. */
   binary: Uint8Array | null,
   /** Emitted text format. */
   text: string | null
-}
+}>;
 
 /** Checks diagnostics emitted so far for errors. */
 export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream, reportDiagnostic?: DiagnosticReporter): boolean;

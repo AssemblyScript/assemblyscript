@@ -145,20 +145,11 @@ export const defaultOptimizeLevel = 3;
 /** Default Binaryen shrink level. */
 export const defaultShrinkLevel = 0;
 
-/** Convenience function that parses and compiles source strings directly. */
-export function compileString(sources, options) {
-  if (typeof sources === "string") sources = { [`input${defaultExtension.ext}`]: sources };
-  const output = Object.create({
-    stdout: createMemoryStream(),
-    stderr: createMemoryStream()
-  });
-  var argv = [
-    "--binaryFile", "binary",
-    "--textFile", "text",
-  ];
+/** Converts a configuration object to an arguments array. */
+export function configToArguments(options, argv = []) {
   Object.keys(options || {}).forEach(key => {
-    var val = options[key];
-    var opt = generated.options[key];
+    const val = options[key];
+    const opt = generated.options[key];
     if (opt && opt.type === "b") {
       if (val) argv.push(`--${key}`);
     } else {
@@ -168,18 +159,31 @@ export function compileString(sources, options) {
       else argv.push(`--${key}`, String(val));
     }
   });
-  main(argv.concat(Object.keys(sources)), {
-    stdout: output.stdout,
-    stderr: output.stderr,
+  return argv;
+}
+
+/** Convenience function that parses and compiles source strings directly. */
+export async function compileString(sources, config = {}) {
+  if (typeof sources === "string") sources = { [`input${defaultExtension.ext}`]: sources };
+  var argv = [
+    "--binaryFile", "binary",
+    "--textFile", "text",
+  ];
+  configToArguments(config, argv);
+  const output = {};
+  const result = await main(argv.concat(Object.keys(sources)), {
+    stdout: createMemoryStream(),
+    stderr: createMemoryStream(),
     readFile: name => Object.prototype.hasOwnProperty.call(sources, name) ? sources[name] : null,
     writeFile: (name, contents) => { output[name] = contents; },
     listFiles: () => []
   });
-  return output;
+  return Object.assign(result, output);
 }
 
 /** Runs the command line utility using the specified arguments array. */
 export async function main(argv, options) {
+  if (!Array.isArray(argv)) argv = configToArguments(argv);
   if (!options) options = {};
 
   // Bundle semantic version

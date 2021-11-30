@@ -448,7 +448,7 @@ function evaluateResult(failedTests, skippedTests) {
 }
 
 // Run tests in parallel if requested
-if (args.parallel && coreCount > 1) {
+if (args.parallel && coreCount > 2) {
   if (cluster.isWorker) {
     colors.enabled = true;
     process.on("message", msg => {
