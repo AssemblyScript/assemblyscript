@@ -71,9 +71,12 @@ jobs:
     - name: Test
       run: npm test
   test-bootstrap:
-    name: "Compiler (Bootstrap)"
+    name: "Compiler (Bootstrap, ${{ matrix.target }})"
     runs-on: ubuntu-latest
     needs: check
+    strategy:
+      matrix:
+        target: ["untouched", "optimized"]
     steps:
     - uses: actions/checkout@v1.0.0
     - uses: dcodeIO/setup-node-nvm@master
@@ -83,12 +86,10 @@ jobs:
       run: npm ci --no-audit
     - name: Build
       run: npm run build
-    - name: Bootstrap the compiler
-      run: npm run bootstrap
-    - name: Run compiler tests (untouched-bootstrap)
-      run: npm run test:compiler -- --wasm out/assemblyscript.untouched-bootstrap.wasm
-    - name: Run compiler tests (optimized-bootstrap)
-      run: npm run test:compiler -- --wasm out/assemblyscript.optimized-bootstrap.wasm
+    - name: Bootstrap
+      run: npm run bootstrap:${{ matrix.target }}
+    - name: Test
+      run: npm run test:compiler -- --wasm out/assemblyscript.${{ matrix.target }}-bootstrap.wasm
   test-features:
     name: "Features"
     runs-on: ubuntu-latest
