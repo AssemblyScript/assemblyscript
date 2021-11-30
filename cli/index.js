@@ -1118,16 +1118,17 @@ export async function main(argv, options) {
     }
   }
 
-  module.dispose();
-  if (opts.measure) {
-    printStats(stats, stderr);
-  }
-
   try {
     await Promise.all(pending);
   } catch (err) {
     return prepareResult(err);
   }
+
+  module.dispose();
+  if (opts.measure) {
+    printStats(stats, stderr);
+  }
+
   return prepareResult(null);
 
   async function readFileNode(filename, baseDir) {
@@ -1183,10 +1184,8 @@ export async function main(argv, options) {
   }
 }
 
-const toString = Object.prototype.toString;
-
 function isObject(arg) {
-  return toString.call(arg) === "[object Object]";
+  return Object.prototype.toString.call(arg) === "[object Object]";
 }
 
 async function getConfig(file, baseDir, readFile) {
