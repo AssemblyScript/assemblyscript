@@ -1123,6 +1123,11 @@ export async function main(argv, options) {
     printStats(stats, stderr);
   }
 
+  try {
+    await Promise.all(pending);
+  } catch (err) {
+    return prepareResult(err);
+  }
   return prepareResult(null);
 
   async function readFileNode(filename, baseDir) {
