@@ -673,26 +673,45 @@ export async function main(argv, options) {
     return { sourceText, sourcePath };
   }
 
-  // Parses the backlog of imported files after including entry files
-  async function parseBacklog() {
+  // Gets all pending imported files from the the backlog
+  function getBacklog(paths = []) {
     var internalPath;
     while ((internalPath = __getString(assemblyscript.nextFile(program)))) {
-      let file = await getFile(internalPath, assemblyscript.getDependee(program, internalPath));
-      let begin = stats.begin();
-      stats.parseCount++;
-      if (file) {
-        let textPtr = __pin(__newString(file.sourceText));
-        let pathPtr = __newString(file.sourcePath);
-        assemblyscript.parse(program, textPtr, pathPtr, false);
-        __unpin(textPtr);
-      } else {
-        let textPtr = __newString(null); // no need to pin
-        let pathPtr = __newString(internalPath + extension.ext);
-        assemblyscript.parse(program, textPtr, pathPtr, false);
-      }
-      stats.parseTime += stats.end(begin);
+      paths.push(internalPath);
     }
-    var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
+    return paths;
+  }
+
+  // Parses the backlog of imported files after including entry files
+  async function parseBacklog() {
+    var backlog;
+    while ((backlog = getBacklog()).length) {
+      let files = [];
+      for (let internalPath of backlog) {
+        files.push(
+          getFile(internalPath, assemblyscript.getDependee(program, internalPath))
+        );
+      }
+      files = await Promise.all(files); // parallel
+      for (let i = 0, k = backlog.length; i < k; ++i) {
+        const internalPath = backlog[i];
+        const file = files[i];
+        const begin = stats.begin();
+        stats.parseCount++;
+        if (file) {
+          const textPtr = __pin(__newString(file.sourceText));
+          const pathPtr = __newString(file.sourcePath);
+          assemblyscript.parse(program, textPtr, pathPtr, false);
+          __unpin(textPtr);
+        } else {
+          const textPtr = __newString(null); // no need to pin
+          const pathPtr = __newString(internalPath + extension.ext);
+          assemblyscript.parse(program, textPtr, pathPtr, false);
+        }
+        stats.parseTime += stats.end(begin);
+      }
+    }
+    const numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
     if (numErrors) {
       const err = Error(`${numErrors} parse error(s)`);
       err.stack = err.message; // omit stack
@@ -1121,20 +1140,15 @@ export async function main(argv, options) {
     return prepareResult(err);
   }
 
-  if (opts.measure) {
-    printStats(stats, stderr);
-  }
+  if (opts.measure) stderr.write(stats.toString());
 
   return prepareResult(null);
 
   async function readFileNode(filename, baseDir) {
     let name = path.resolve(baseDir, filename);
     try {
-      let begin = stats.begin();
       stats.readCount++;
-      let text = await fs.promises.readFile(name, "utf8");
-      stats.readTime += stats.end(begin);
-      return text;
+      return await fs.promises.readFile(name, "utf8");
     } catch (e) {
       return null;
     }
@@ -1142,13 +1156,11 @@ export async function main(argv, options) {
 
   async function writeFileNode(filename, contents, baseDir) {
     try {
-      let begin = stats.begin();
       stats.writeCount++;
       const dirPath = path.resolve(baseDir, path.dirname(filename));
       const filePath = path.join(dirPath, path.basename(filename));
       await fs.promises.mkdir(dirPath, { recursive: true });
       await fs.promises.writeFile(filePath, contents);
-      stats.writeTime += stats.end(begin);
       return true;
     } catch (e) {
       return false;
@@ -1156,27 +1168,21 @@ export async function main(argv, options) {
   }
 
   async function listFilesNode(dirname, baseDir) {
-    var files;
     try {
-      let begin = stats.begin();
       stats.readCount++;
-      files = (await fs.promises.readdir(path.join(baseDir, dirname)))
+      return (await fs.promises.readdir(path.join(baseDir, dirname)))
         .filter(file => extension.re_except_d.test(file));
-      stats.readTime += stats.end(begin);
-      return files;
     } catch (e) {
       return null;
     }
   }
 
   function writeStdout(contents) {
-    let begin = stats.begin();
     if (!writeStdout.used) {
       writeStdout.used = true;
       stats.writeCount++;
     }
     stdout.write(contents);
-    stats.writeTime += stats.end(begin);
   }
 }
 
@@ -1273,9 +1279,7 @@ export function checkDiagnostics(program, stderr, reportDiagnostic) {
 }
 
 export class Stats {
-  readTime = 0;
   readCount = 0;
-  writeTime = 0;
   writeCount = 0;
   parseTime = 0;
   parseCount = 0;
@@ -1298,33 +1302,26 @@ export class Stats {
     const hrtime = process.hrtime(begin);
     return hrtime[0] * 1e9 + hrtime[1];
   }
-}
-
-function pad(str, len) {
-  while (str.length < len) str = ` ${str}`;
-  return str;
-}
-
-/** Formats a high resolution time to a human readable string. */
-export function formatTime(time) {
-  return time ? `${(time / 1e6).toFixed(3)} ms` : "n/a";
-}
-
-/** Formats and prints out the contents of a set of stats. */
-export function printStats(stats, output) {
-  const format = (time, count) => `${pad(formatTime(time), 12)}  n=${count}`;
-  (output || process.stdout).write([
-    "I/O Read   : " + format(stats.readTime, stats.readCount),
-    "I/O Write  : " + format(stats.writeTime, stats.writeCount),
-    "Parse      : " + format(stats.parseTime, stats.parseCount),
-    "Initialize : " + format(stats.initializeTime, stats.initializeCount),
-    "Compile    : " + format(stats.compileTime, stats.compileCount),
-    "Emit       : " + format(stats.emitTime, stats.emitCount),
-    "Validate   : " + format(stats.validateTime, stats.validateCount),
-    "Optimize   : " + format(stats.optimizeTime, stats.optimizeCount),
-    "Transform  : " + format(stats.transformTime, stats.transformCount),
-    ""
-  ].join(EOL) + EOL);
+  toString() {
+    const formatTime = time => time ? `${(time / 1e6).toFixed(3)} ms` : "n/a";
+    const keys = Object.keys(this).filter(key => key.endsWith("Time")).map(key => key.substring(0, key.length - 4));
+    const times = keys.map(key => formatTime(this[`${key}Time`]));
+    const counts = keys.map(key => this[`${key}Count`].toString());
+    const keysLen = keys.reduce((current, key) => Math.max(key.length, current), 0);
+    const timesLen = times.reduce((current, time) => Math.max(time.length, current), 0);
+    const countsLen = counts.reduce((current, count) => Math.max(count.length, current), 0);
+    const totalLen = keysLen + timesLen + countsLen + 6;
+    const out = [];
+    out.push(`┌─${"─".repeat(keysLen)}─┬─${"─".repeat(timesLen)}─┬─${"─".repeat(countsLen)}─┐${EOL}`);
+    for (let i = 0, k = keys.length; i < k; ++i) {
+      out.push(`│ ${keys[i].padEnd(keysLen)} │ ${times[i].padStart(timesLen)} │ ${counts[i].padStart(countsLen)} │${EOL}`);
+    }
+    out.push(`├─${"─".repeat(keysLen)}─┴─${"─".repeat(timesLen)}─┴─${"─".repeat(countsLen)}─┤${EOL}`);
+    const readsWrites = `${this.readCount} reads, ${this.writeCount} writes`;
+    out.push(`│ ${readsWrites}${" ".repeat(totalLen - readsWrites.length)} │${EOL}`);
+    out.push(`└─${"─".repeat(totalLen)}─┘${EOL}`);
+    return out.join("");
+  }
 }
 
 var allocBuffer = typeof global !== "undefined" && global.Buffer
