@@ -6,8 +6,9 @@ import glob from "glob";
 import diff from "../util/diff.js";
 import * as colorsUtil from "../util/colors.js";
 import * as optionsUtil from "../util/options.js";
+import { Program, Options, ASTBuilder } from "../dist/assemblyscript.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config = {
   "create": {
@@ -38,7 +39,7 @@ if (args.help) {
   process.exit(0);
 }
 
-const basedir = path.join(__dirname, "parser");
+const basedir = path.join(dirname, "parser");
 
 // Get a list of all tests
 var tests = glob.sync("**/!(_*).ts", { cwd: basedir });
@@ -52,30 +53,28 @@ if (argv.length) {
   }
 }
 
-import { Program, Options, ASTBuilder } from "assemblyscript";
-
 var failures = 0;
 
-tests.forEach(filename => {
-  if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) return;
+for (const filename of tests) {
+  if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) continue;
 
   console.log(colorsUtil.stdout.white("Testing parser/" + filename));
 
-  var failed = false;
-  var program = new Program(new Options());
-  var parser = program.parser;
-  var sourceText = fs.readFileSync(basedir + "/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n");
+  let failed = false;
+  const program = new Program(new Options());
+  const parser = program.parser;
+  const sourceText = fs.readFileSync(basedir + "/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n");
   parser.parseFile(sourceText, filename, true);
-  var serializedSourceText = ASTBuilder.build(program.sources[0]);
-  var actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic +"\n").join("");
-  var fixture = filename + ".fixture.ts";
+  const serializedSourceText = ASTBuilder.build(program.sources[0]);
+  const actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic +"\n").join("");
+  const fixture = filename + ".fixture.ts";
 
   if (args.create) {
     fs.writeFileSync(basedir + "/" + fixture, actual, { encoding: "utf8" });
     console.log("Created\n");
   } else {
-    var expected = fs.readFileSync(basedir + "/" + fixture, { encoding: "utf8" }).replace(/\r\n/g, "\n");
-    var diffs = diff("parser/" + fixture, expected, actual);
+    const expected = fs.readFileSync(basedir + "/" + fixture, { encoding: "utf8" }).replace(/\r\n/g, "\n");
+    const diffs = diff("parser/" + fixture, expected, actual);
     if (diffs !== null) {
       failed = true;
       console.log(diffs);
@@ -87,7 +86,7 @@ tests.forEach(filename => {
 
   console.log();
   if (failed) ++failures;
-});
+}
 
 if (failures) {
   process.exitCode = 1;

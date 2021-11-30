@@ -3,81 +3,71 @@ import * as asc from "../dist/asc.js";
 if (typeof asc.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
 if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");
 
-const stdout = asc.createMemoryStream();
-const stderr = asc.createMemoryStream();
-const files = { "module.ts": `export function test(): void {}` };
+const files = { "index.ts": `export function test(): void {}` };
 
 console.log("# asc --version");
+{
+  const { stdout, stderr } = await asc.main([ "--version" ], {
+    stdout: asc.createMemoryStream(),
+    stderr: asc.createMemoryStream()
+  });
 
-asc.main([
-  "--version"
-], {
-  stdout: stdout,
-  stderr: stderr
-}, err => {
   console.log(">>> STDOUT >>>");
   process.stdout.write(stdout.toString());
-  stdout.reset();
   console.log(">>> STDERR >>>");
   process.stdout.write(stderr.toString());
-  stderr.reset();
-});
+}
 
 console.log("\n# asc --help");
+{
+  const { stdout, stderr } = await asc.main([ "--help" ], {
+    stdout: asc.createMemoryStream(),
+    stderr: asc.createMemoryStream()
+  });
 
-asc.main([
-  "--help"
-], {
-  stdout: stdout,
-  stderr: stderr
-}, err => {
   console.log(">>> STDOUT >>>");
   process.stdout.write(stdout.toString());
-  stdout.reset();
   console.log(">>> STDERR >>>");
   process.stdout.write(stderr.toString());
-  stderr.reset();
-});
+}
 
-console.log("\n# asc module.ts --textFile");
+console.log("\n# asc index.ts --textFile");
+{
+  const { error, stdout, stderr } = await asc.main([ "index.ts", "--textFile" ], {
+    stdout: asc.createMemoryStream(),
+    stderr: asc.createMemoryStream(),
+    readFile: (name, baseDir) => {
+      console.log("readFile: " + name + ", baseDir=" + baseDir);
+      if (Object.prototype.hasOwnProperty.call(files, name)) return files[name];
+      return null;
+    },
+    writeFile: (name, data, baseDir) => {
+      console.log("writeFile: " + name + ", baseDir=" + baseDir);
+    },
+    listFiles: (dirname, baseDir) => {
+      console.log("listFiles: " + dirname + ", baseDir=" + baseDir);
+      return [];
+    }
+  });
 
-asc.main([
-  "module.ts",
-  "--textFile"
-], {
-  stdout: stdout,
-  stderr: stderr,
-  readFile: (name, baseDir) => {
-    console.log("readFile: " + name + ", baseDir=" + baseDir);
-    if (Object.prototype.hasOwnProperty.call(files, name)) return files[name];
-    return null;
-  },
-  writeFile: (name, data, baseDir) => {
-    console.log("writeFile: " + name + ", baseDir=" + baseDir);
-  },
-  listFiles: (dirname, baseDir) => {
-    console.log("listFiles: " + dirname + ", baseDir=" + baseDir);
-    return [];
-  }
-}, err => {
-  if (err) {
+  if (error) {
     console.log(">>> THROWN >>>");
-    console.log(err);
+    console.log(error);
   }
-});
-
-console.log(">>> STDOUT >>>");
-process.stdout.write(stdout.toString());
-console.log(">>> STDERR >>>");
-process.stdout.write(stderr.toString());
+  console.log(">>> STDOUT >>>");
+  process.stdout.write(stdout.toString());
+  console.log(">>> STDERR >>>");
+  process.stdout.write(stderr.toString());
+}
 
 console.log("\n# asc.compileString");
-
-const output = asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, measure: true });
-console.log(">>> .stdout >>>");
-process.stdout.write(output.stdout.toString());
-console.log(">>> .stderr >>>");
-process.stdout.write(output.stderr.toString());
-console.log(">>> .text >>>");
-process.stdout.write(output.text);
-console.log(">>> .binary >>> " + output.binary.length + " bytes");
+{
+  const { stdout, stderr, text, binary } = asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, measure: true });
+  console.log(">>> .stdout >>>");
+  process.stdout.write(stdout.toString());
+  console.log(">>> .stderr >>>");
+  process.stdout.write(stderr.toString());
+  console.log(">>> .text >>>");
+  process.stdout.write(text);
+  console.log(">>> .binary >>> " + binary.length + " bytes");
+}

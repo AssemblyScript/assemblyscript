@@ -186,6 +186,21 @@ export interface APIOptions {
   transforms?: Transform[];
 }
 
+/** Compiler API result. */
+export interface APIResult {
+  /** Error, if any. */
+  error: Error | null;
+  /** Standard output stream. */
+  stdout: OutputStream;
+  /** Standard error stream.  */
+  stderr: OutputStream;
+  /** Statistics. */
+  stats: Stats;
+}
+
+/** Runs the command line utility using the specified arguments array. */
+export function main(argv: string[], options?: APIOptions): Promise<APIResult>;
+
 /** Convenience function that parses and compiles source strings directly. */
 export function compileString(sources: { [key: string]: string } | string, options?: CompilerOptions): {
   /** Standard output. */
@@ -198,33 +213,44 @@ export function compileString(sources: { [key: string]: string } | string, optio
   text: string | null
 }
 
-/** Runs the command line utility using the specified arguments array. */
-export function main(argv: string[], options: APIOptions, callback?: (err: Error | null) => number): number;
-export function main(argv: string[], callback?: (err: Error | null) => number): number;
-
 /** Checks diagnostics emitted so far for errors. */
 export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream, reportDiagnostic?: DiagnosticReporter): boolean;
 
-/** An object of stats for the current task. */
-export interface Stats {
-  readTime: number,
-  readCount: number,
-  writeTime: number,
-  writeCount: number,
-  parseTime: number,
-  parseCount: number,
-  compileTime: number,
-  compileCount: number,
-  emitTime: number,
-  emitCount: number,
-  validateTime: number,
-  validateCount: number,
-  optimizeTime: number,
-  optimizeCount: number
+/** Statistics for the current task. */
+export class Stats {
+  /** Time taken reading files. */
+  readTime: number;
+  /** Number of files read. */
+  readCount: number;
+  /** Time taken writing files. */
+  writeTime: number;
+  /** Number of files written. */
+  writeCount: number;
+  /** Time taken to parse files. */
+  parseTime: number;
+  /** Number of files parsed. */
+  parseCount: number;
+  /** Time taken to compile programs. */
+  compileTime: number;
+  /** Number of programs compiled. */
+  compileCount: number;
+  /** Time taken to emit files. */
+  emitTime: number;
+  /** Number of emitted files. */
+  emitCount: number;
+  /** Time taken to validate modules. */
+  validateTime: number;
+  /** Number of modules validated. */
+  validateCount: number;
+  /** Time taken to optimize modules. */
+  optimizeTime: number;
+  /** Number of modules optimized. */
+  optimizeCount: number;
+  /** Begins measuring execution time. */
+  begin(): number;
+  /** Ends measuring execution time since `begin`. */
+  end(begin: number): number;
 }
-
-/** Creates an empty set of stats. */
-export function createStats(): Stats;
 
 /** Measures the execution time of the specified function.  */
 export function measure(fn: () => void): number;
@@ -241,7 +267,7 @@ export function createMemoryStream(fn?: (chunk: Uint8Array | string) => void): M
 /** Compatible TypeScript compiler options for syntax highlighting etc. */
 export const tscOptions: Record<string,unknown>;
 
-import { Program, Parser, Module } from "..";
+import { Program, Parser, Module } from "../src";
 
 /** Compiler transform base class. */
 export abstract class Transform {

@@ -179,13 +179,8 @@ export function compileString(sources, options) {
 }
 
 /** Runs the command line utility using the specified arguments array. */
-export function main(argv, options, callback) {
-  if (typeof options === "function") {
-    callback = options;
-    options = {};
-  } else if (!options) {
-    options = {};
-  }
+export async function main(argv, options) {
+  if (!options) options = {};
 
   // Bundle semantic version
   let bundleMinorVersion = 0, bundleMajorVersion = 0, bundlePatchVersion = 0;
@@ -201,7 +196,7 @@ export function main(argv, options, callback) {
   const readFile = options.readFile || readFileNode;
   const writeFile = options.writeFile || writeFileNode;
   const listFiles = options.listFiles || listFilesNode;
-  const stats = options.stats || createStats();
+  const stats = options.stats || new Stats();
   let extension = defaultExtension;
 
   // Output must be specified if not present in the environment
@@ -239,29 +234,26 @@ export function main(argv, options, callback) {
     );
   }
 
-  // Use default callback if none is provided
-  if (!callback) callback = function defaultCallback(err) {
-    var code = 0;
-    if (err) {
-      stderr.write(`${colorsUtil.stderr.red("FAILURE ")}${err.stack.replace(/^ERROR: /i, "")}${EOL}`);
-      code = 1;
+  // Prepares the result object
+  var prepareResult = (error, result = {}) => {
+    if (error) {
+      stderr.write(`${colorsUtil.stderr.red("FAILURE ")}${error.stack.replace(/^ERROR: /i, "")}${EOL}`);
     }
-    return code;
+    return Object.assign({ error, stdout, stderr, stats }, result);
   };
 
   // Just print the version if requested
   if (opts.version) {
     stdout.write(`Version ${version}${EOL}`);
-    return callback(null);
+    return prepareResult(null);
   }
 
   // Use another extension if requested
   if (typeof opts.extension === "string") {
-    if (/^\.?[0-9a-zA-Z]{1,14}$/.test(opts.extension)) {
-      extension = setupExtension(opts.extension);
-    } else {
-      return callback(Error(`Invalid extension: ${opts.extension}`));
+    if (!/^\.?[0-9a-zA-Z]{1,14}$/.test(opts.extension)) {
+      throw Error(`Invalid extension: ${opts.extension}`);
     }
+    extension = setupExtension(opts.extension);
   }
 
   // Set up base directory
@@ -292,7 +284,7 @@ export function main(argv, options, callback) {
     ].concat(
       optionsUtil.help(generated.options, 24, EOL)
     ).join(EOL) + EOL);
-    return callback(null);
+    return prepareResult(null);
   }
 
   // I/O must be specified if not present in the environment
@@ -349,7 +341,7 @@ export function main(argv, options, callback) {
       options: opts,
       entries: argv
     }, null, 2));
-    return callback(null);
+    return prepareResult(null);
   }
 
   // create a unique set of values
@@ -390,14 +382,14 @@ export function main(argv, options, callback) {
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);
 
   // Instrument callback to perform GC
-  callback = (function(callback) {
-    return function wrappedCallback(err) {
+  prepareResult = (original => {
+    return function gcBeforePrepareResult(err) {
       __unpin(compilerOptions);
       if (program) __unpin(program);
       __collect();
-      return callback(err);
+      return original(err);
     };
-  })(callback);
+  })(prepareResult);
 
   // Add or override aliases if specified
   if (opts.use) {
@@ -405,11 +397,11 @@ export function main(argv, options, callback) {
     for (let i = 0, k = aliases.length; i < k; ++i) {
       let part = aliases[i];
       let p = part.indexOf("=");
-      if (p < 0) return callback(Error(`Global alias '${part}' is invalid.`));
+      if (p < 0) return prepareResult(Error(`Global alias '${part}' is invalid.`));
       let alias = part.substring(0, p).trim();
       let name = part.substring(p + 1).trim();
       if (!alias.length) {
-        return callback(Error(`Global alias '${part}' is invalid.`));
+        return prepareResult(Error(`Global alias '${part}' is invalid.`));
       }
       {
         let aliasPtr = __pin(__newString(alias));
@@ -427,7 +419,7 @@ export function main(argv, options, callback) {
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
       let flag = assemblyscript[`FEATURE_${toUpperSnakeCase(name)}`];
-      if (!flag) return callback(Error(`Feature '${name}' is unknown.`));
+      if (!flag) return prepareResult(Error(`Feature '${name}' is unknown.`));
       assemblyscript.disableFeature(compilerOptions, flag);
     }
   }
@@ -438,7 +430,7 @@ export function main(argv, options, callback) {
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
       let flag = assemblyscript[`FEATURE_${toUpperSnakeCase(name)}`];
-      if (!flag) return callback(Error(`Feature '${name}' is unknown.`));
+      if (!flag) return prepareResult(Error(`Feature '${name}' is unknown.`));
       assemblyscript.enableFeature(compilerOptions, flag);
     }
   }
@@ -476,7 +468,7 @@ export function main(argv, options, callback) {
           paths: [baseDir, process.cwd()]
         })));
       } catch (e) {
-        return callback(e);
+        return prepareResult(e);
       }
     }
   }
@@ -501,7 +493,7 @@ export function main(argv, options, callback) {
       return new classOrModule();
     });
   } catch (e) {
-    return callback(e);
+    return prepareResult(e);
   }
 
   function applyTransform(name, ...args) {
@@ -509,10 +501,10 @@ export function main(argv, options, callback) {
       let transform = transforms[i];
       if (typeof transform[name] === "function") {
         try {
+          let start = stats.begin();
           stats.transformCount++;
-          stats.transfromTime += measure(() => {
-            transform[name](...args);
-          });
+          transform[name](...args);
+          stats.transformTime += stats.end(start);
         } catch (e) {
           return e;
         }
@@ -523,13 +515,13 @@ export function main(argv, options, callback) {
   // Parse library files
   Object.keys(libraryFiles).forEach(libPath => {
     if (libPath.includes("/")) return; // in sub-directory: imported on demand
+    let begin = stats.begin();
     stats.parseCount++;
-    stats.parseTime += measure(() => {
-      let textPtr = __pin(__newString(libraryFiles[libPath]));
-      let pathPtr = __newString(libraryPrefix + libPath + extension.ext);
-      assemblyscript.parse(program, textPtr, pathPtr, false);
-      __unpin(textPtr);
-    });
+    let textPtr = __pin(__newString(libraryFiles[libPath]));
+    let pathPtr = __newString(libraryPrefix + libPath + extension.ext);
+    assemblyscript.parse(program, textPtr, pathPtr, false);
+    __unpin(textPtr);
+    stats.parseTime += stats.end(begin);
   });
   let customLibDirs = [];
   if (opts.lib) {
@@ -546,20 +538,19 @@ export function main(argv, options, callback) {
       } else {
         libFiles = listFiles(libDir, baseDir) || [];
       }
-      for (let j = 0, l = libFiles.length; j < l; ++j) {
-        let libPath = libFiles[j];
+      for (let libPath of libFiles) {
         let libText = readFile(libPath, libDir);
         if (libText == null) {
-          return callback(Error(`Library file '${libPath}' not found.`));
+          return prepareResult(Error(`Library file '${libPath}' not found.`));
         }
-        stats.parseCount++;
         libraryFiles[libPath.replace(extension.re, "")] = libText;
-        stats.parseTime += measure(() => {
-          let textPtr = __pin(__newString(libText));
-          let pathPtr = __newString(libraryPrefix + libPath);
-          assemblyscript.parse(program, textPtr, pathPtr, false);
-          __unpin(textPtr);
-        });
+        let begin = stats.begin();
+        stats.parseCount++;
+        let textPtr = __pin(__newString(libText));
+        let pathPtr = __newString(libraryPrefix + libPath);
+        assemblyscript.parse(program, textPtr, pathPtr, false);
+        __unpin(textPtr);
+        stats.parseTime += stats.end(begin);
       }
     }
   }
@@ -681,27 +672,25 @@ export function main(argv, options, callback) {
     var internalPath;
     while ((internalPath = __getString(assemblyscript.nextFile(program)))) {
       let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
+      let begin = stats.begin();
+      stats.parseCount++;
       if (file) {
-        stats.parseCount++;
-        stats.parseTime += measure(() => {
-          let textPtr = __pin(__newString(file.sourceText));
-          let pathPtr = __newString(file.sourcePath);
-          assemblyscript.parse(program, textPtr, pathPtr, false);
-          __unpin(textPtr);
-        });
+        let textPtr = __pin(__newString(file.sourceText));
+        let pathPtr = __newString(file.sourcePath);
+        assemblyscript.parse(program, textPtr, pathPtr, false);
+        __unpin(textPtr);
       } else {
-        stats.parseTime += measure(() => {
-          let textPtr = __newString(null); // no need to pin
-          let pathPtr = __newString(internalPath + extension.ext);
-          assemblyscript.parse(program, textPtr, pathPtr, false);
-        });
+        let textPtr = __newString(null); // no need to pin
+        let pathPtr = __newString(internalPath + extension.ext);
+        assemblyscript.parse(program, textPtr, pathPtr, false);
       }
+      stats.parseTime += stats.end(begin);
     }
     var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
     if (numErrors) {
       const err = Error(`${numErrors} parse error(s)`);
       err.stack = err.message; // omit stack
-      return callback(err);
+      return prepareResult(err);
     }
   }
 
@@ -713,17 +702,17 @@ export function main(argv, options, callback) {
     if (runtimeText == null) {
       runtimePath = runtimeName;
       runtimeText = readFile(runtimePath + extension.ext, baseDir);
-      if (runtimeText == null) return callback(Error(`Runtime '${runtimeName}' not found.`));
+      if (runtimeText == null) return prepareResult(Error(`Runtime '${runtimeName}' not found.`));
     } else {
       runtimePath = `~lib/${runtimePath}`;
     }
+    let begin = stats.begin();
     stats.parseCount++;
-    stats.parseTime += measure(() => {
-      let textPtr = __pin(__newString(runtimeText));
-      let pathPtr = __newString(runtimePath + extension.ext);
-      assemblyscript.parse(program, textPtr, pathPtr, true);
-      __unpin(textPtr);
-    });
+    let textPtr = __pin(__newString(runtimeText));
+    let pathPtr = __newString(runtimePath + extension.ext);
+    assemblyscript.parse(program, textPtr, pathPtr, true);
+    __unpin(textPtr);
+    stats.parseTime += stats.end(begin);
   }
 
   // Include entry files
@@ -750,13 +739,13 @@ export function main(argv, options, callback) {
       sourcePath += extension.ext;
     }
 
+    let begin = stats.begin();
     stats.parseCount++;
-    stats.parseTime += measure(() => {
-      let textPtr = __pin(__newString(sourceText));
-      let pathPtr = __newString(sourcePath);
-      assemblyscript.parse(program, textPtr, pathPtr, true);
-      __unpin(textPtr);
-    });
+    let textPtr = __pin(__newString(sourceText));
+    let pathPtr = __newString(sourcePath);
+    assemblyscript.parse(program, textPtr, pathPtr, true);
+    __unpin(textPtr);
+    stats.parseTime += stats.end(begin);
   }
 
   // Parse entry files
@@ -768,7 +757,7 @@ export function main(argv, options, callback) {
   // Call afterParse transform hook
   {
     let error = applyTransform("afterParse", program.parser);
-    if (error) return callback(error);
+    if (error) return prepareResult(error);
   }
 
   // Parse additional files, if any
@@ -781,28 +770,32 @@ export function main(argv, options, callback) {
   if (opts.listFiles) {
     // FIXME: not a proper C-like API
     stderr.write(program.sources.map(s => s.normalizedPath).sort().join(EOL) + EOL);
-    return callback(null);
+    return prepareResult(null);
   }
 
   // Pre-emptively initialize the program
-  stats.initializeCount++;
-  stats.initializeTime += measure(() => {
+  {
+    let begin = stats.begin();
+    stats.initializeCount++;
     try {
       assemblyscript.initializeProgram(program);
     } catch (e) {
       crash("initialize", e);
     }
-  });
+    stats.initializeTime += stats.end(begin);
+  }
 
   // Call afterInitialize transform hook
   {
     let error = applyTransform("afterInitialize", program);
-    if (error) return callback(error);
+    if (error) return prepareResult(error);
   }
 
+  // Compile the program
   var module;
-  stats.compileCount++;
-  stats.compileTime += measure(() => {
+  {
+    let begin = stats.begin();
+    stats.compileCount++;
     try {
       module = assemblyscript.compile(program);
     } catch (e) {
@@ -823,19 +816,20 @@ export function main(argv, options, callback) {
         original.optimize(...args);
       };
     }
-  });
+    stats.compileTime += stats.end(begin);
+  }
   var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
     if (module) module.dispose();
     const err = Error(`${numErrors} compile error(s)`);
     err.stack = err.message; // omit stack
-    return callback(err);
+    return prepareResult(err);
   }
 
   // Call afterCompile transform hook
   {
     let error = applyTransform("afterCompile", module);
-    if (error) return callback(error);
+    if (error) return prepareResult(error);
   }
 
   numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
@@ -843,35 +837,33 @@ export function main(argv, options, callback) {
     if (module) module.dispose();
     const err = Error(`${numErrors} afterCompile error(s)`);
     err.stack = err.message; // omit stack
-    return callback(err);
+    return prepareResult(err);
   }
 
   // Validate the module if requested
   if (!opts.noValidate) {
+    let begin = stats.begin();
     stats.validateCount++;
-    let isValid;
-    stats.validateTime += measure(() => {
-      isValid = module.validate();
-    });
+    let isValid = module.validate();
+    stats.validateTime += stats.end(begin);
     if (!isValid) {
       module.dispose();
-      return callback(Error("validate error"));
+      return prepareResult(Error("validate error"));
     }
   }
 
   // Set Binaryen-specific options
   if (opts.trapMode === "clamp" || opts.trapMode === "js") {
-    stats.optimizeCount++;
-    stats.optimizeTime += measure(() => {
-      try {
-        module.runPasses([`trap-mode-${opts.trapMode}`]);
-      } catch (e) {
-        crash("runPasses", e);
-      }
-    });
+    let begin = stats.begin();
+    try {
+      module.runPasses([`trap-mode-${opts.trapMode}`]);
+    } catch (e) {
+      crash("runPasses", e);
+    }
+    stats.compileTime += stats.end(begin);
   } else if (opts.trapMode !== "allow") {
     module.dispose();
-    return callback(Error("Unsupported trap mode"));
+    return prepareResult(Error("Unsupported trap mode"));
   }
 
   // Optimize the module
@@ -895,9 +887,10 @@ export function main(argv, options, callback) {
     }
   }
 
-  stats.optimizeTime += measure(() => {
-    stats.optimizeCount++;
+  {
+    let begin = stats.begin();
     try {
+      stats.optimizeCount++;
       module.optimize(optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
     } catch (e) {
       crash("optimize", e);
@@ -910,13 +903,16 @@ export function main(argv, options, callback) {
     if (converge) {
       let last;
       try {
+        let begin = stats.begin();
+        stats.emitCount++;
         last = module.emitBinary();
+        stats.emitTime += stats.end(begin);
       } catch (e) {
         crash("emitBinary (converge)", e);
       }
       do {
-        stats.optimizeCount++;
         try {
+          stats.optimizeCount++;
           module.optimize(optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
         } catch (e) {
           crash("optimize (converge)", e);
@@ -928,7 +924,10 @@ export function main(argv, options, callback) {
         }
         let next;
         try {
+          let begin = stats.begin();
+          stats.emitCount++;
           next = module.emitBinary();
+          stats.emitTime += stats.end(begin);
         } catch (e) {
           crash("emitBinary (converge)", e);
         }
@@ -941,7 +940,8 @@ export function main(argv, options, callback) {
         last = next;
       } while (true);
     }
-  });
+    stats.optimizeTime += stats.end(begin);
+  }
 
   // Prepare output
   if (!opts.noEmit) {
@@ -971,21 +971,21 @@ export function main(argv, options, callback) {
           : `./${basename}.map`
         : null;
 
-      let wasm;
+      let begin = stats.begin();
       stats.emitCount++;
-      stats.emitTime += measure(() => {
-        try {
-          wasm = module.emitBinary(sourceMapURL);
-        } catch (e) {
-          crash("emitBinary", e);
-        }
-      });
+      let wasm;
+      try {
+        wasm = module.emitBinary(sourceMapURL);
+      } catch (e) {
+        crash("emitBinary", e);
+      }
+      stats.emitTime += stats.end(begin);
 
       if (opts.binaryFile.length) {
         writeFile(opts.binaryFile, wasm.binary, baseDir);
       } else {
-        writeStdout(wasm.binary);
         hasStdout = true;
+        writeStdout(wasm.binary);
       }
 
       // Post-process source map
@@ -996,7 +996,7 @@ export function main(argv, options, callback) {
           let contents = [];
           map.sources.forEach((name, index) => {
             let text = assemblyscript.getSource(program, __newString(name.replace(extension.re, "")));
-            if (text == null) return callback(Error(`Source of file '${name}' not found.`));
+            if (text == null) return prepareResult(Error(`Source of file '${name}' not found.`));
             contents[index] = text;
           });
           map.sourcesContent = contents;
@@ -1012,86 +1012,63 @@ export function main(argv, options, callback) {
 
     // Write text (also fallback)
     if (opts.textFile != null || !hasOutput) {
+      let begin = stats.begin();
+      stats.emitCount++;
       let out;
-      if (opts.textFile != null && opts.textFile.length) {
+      try {
         // use superset text format when extension is `.wast`.
         // Otherwise use official stack IR format (wat).
-        let wastFormat = opts.textFile.endsWith(".wast");
-        stats.emitCount++;
-        stats.emitTime += measure(() => {
-          try {
-            out = wastFormat
-              ? module.emitText()
-              : module.emitStackIR(true);
-          } catch (e) {
-            crash("emitText", e);
-          }
-        });
+        out = opts.textFile?.endsWith(".wast")
+          ? module.emitText()
+          : module.emitStackIR(true);
+      } catch (e) {
+        crash("emitText", e);
+      }
+      stats.emitTime += stats.end(begin);
+
+      if (opts.textFile != null && opts.textFile.length) {
         writeFile(opts.textFile, out, baseDir);
       } else if (!hasStdout) {
-        stats.emitCount++;
-        stats.emitTime += measure(() => {
-          try {
-            out = module.emitStackIR(true);
-          } catch (e) {
-            crash("emitText", e);
-          }
-        });
+        hasStdout = true;
         writeStdout(out);
       }
     }
 
     // Write WebIDL
     if (opts.idlFile != null) {
+      let begin = stats.begin();
+      stats.emitCount++;
       let idl;
+      try {
+        idl = assemblyscript.buildIDL(program);
+      } catch (e) {
+        crash("buildIDL", e);
+      }
+      stats.emitTime += stats.end(begin);
       if (opts.idlFile.length) {
-        stats.emitCount++;
-        stats.emitTime += measure(() => {
-          try {
-            idl = assemblyscript.buildIDL(program);
-          } catch (e) {
-            crash("buildIDL", e);
-          }
-        });
         writeFile(opts.idlFile, __getString(idl), baseDir);
       } else if (!hasStdout) {
-        stats.emitCount++;
-        stats.emitTime += measure(() => {
-          try {
-            idl = assemblyscript.buildIDL(program);
-          } catch (e) {
-            crash("buildIDL", e);
-          }
-        });
-        writeStdout(__getString(idl));
         hasStdout = true;
+        writeStdout(__getString(idl));
       }
     }
 
     // Write TypeScript definition
     if (opts.tsdFile != null) {
+      let begin = stats.begin();
+      stats.emitCount++;
       let tsd;
+      try {
+        tsd = assemblyscript.buildTSD(program);
+      } catch (e) {
+        crash("buildTSD", e);
+      }
+      stats.emitTime += stats.end(begin);
       if (opts.tsdFile.length) {
-        stats.emitCount++;
-        stats.emitTime += measure(() => {
-          try {
-            tsd = assemblyscript.buildTSD(program);
-          } catch (e) {
-            crash("buildTSD", e);
-          }
-        });
         writeFile(opts.tsdFile, __getString(tsd), baseDir);
       } else if (!hasStdout) {
-        stats.emitCount++;
-        stats.emitTime += measure(() => {
-          try {
-            tsd = assemblyscript.buildTSD(program);
-          } catch (e) {
-            crash("buildTSD", e);
-          }
-        });
-        writeStdout(__getString(tsd));
         hasStdout = true;
+        writeStdout(__getString(tsd));
       }
     }
 
@@ -1100,23 +1077,23 @@ export function main(argv, options, callback) {
       let js;
       if (opts.jsFile.length) {
         stats.emitCount++;
-        stats.emitTime += measure(() => {
-          try {
-            js = module.emitAsmjs();
-          } catch (e) {
-            crash("emitJS", e);
-          }
-        });
+        let begin = stats.begin();
+        try {
+          js = module.emitAsmjs();
+        } catch (e) {
+          crash("emitJS", e);
+        }
+        stats.emitTime += stats.end(begin);
         writeFile(opts.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
-        stats.emitTime += measure(() => {
-          try {
-            js = module.emitAsmjs();
-          } catch (e) {
-            crash("emitJS", e);
-          }
-        });
+        let begin = stats.begin();
+        try {
+          js = module.emitAsmjs();
+        } catch (e) {
+          crash("emitJS", e);
+        }
+        stats.emitTime += stats.end(begin);
         writeStdout(js);
       }
     }
@@ -1127,16 +1104,15 @@ export function main(argv, options, callback) {
     printStats(stats, stderr);
   }
 
-  return callback(null);
+  return prepareResult(null);
 
   function readFileNode(filename, baseDir) {
     let name = path.resolve(baseDir, filename);
     try {
-      let text;
+      let begin = stats.begin();
       stats.readCount++;
-      stats.readTime += measure(() => {
-        text = fs.readFileSync(name, "utf8");
-      });
+      let text = fs.readFileSync(name, "utf8");
+      stats.readTime += stats.end(begin);
       return text;
     } catch (e) {
       return null;
@@ -1145,14 +1121,13 @@ export function main(argv, options, callback) {
 
   function writeFileNode(filename, contents, baseDir) {
     try {
+      let begin = stats.begin();
       stats.writeCount++;
-      stats.writeTime += measure(() => {
-        const dirPath = path.resolve(baseDir, path.dirname(filename));
-        filename = path.basename(filename);
-        const outputFilePath = path.join(dirPath, filename);
-        if (!fs.existsSync(dirPath)) mkdirp(dirPath);
-        fs.writeFileSync(outputFilePath, contents);
-      });
+      const dirPath = path.resolve(baseDir, path.dirname(filename));
+      const filePath = path.join(dirPath, path.basename(filename));
+      if (!fs.existsSync(dirPath)) mkdirp(dirPath);
+      fs.writeFileSync(filePath, contents);
+      stats.writeTime += stats.end(begin);
       return true;
     } catch (e) {
       return false;
@@ -1162,11 +1137,11 @@ export function main(argv, options, callback) {
   function listFilesNode(dirname, baseDir) {
     var files;
     try {
+      let begin = stats.begin();
       stats.readCount++;
-      stats.readTime += measure(() => {
-        files = fs.readdirSync(path.join(baseDir, dirname))
-          .filter(file => extension.re_except_d.test(file));
-      });
+      files = fs.readdirSync(path.join(baseDir, dirname))
+        .filter(file => extension.re_except_d.test(file));
+      stats.readTime += stats.end(begin);
       return files;
     } catch (e) {
       return null;
@@ -1174,13 +1149,13 @@ export function main(argv, options, callback) {
   }
 
   function writeStdout(contents) {
+    let begin = stats.begin();
     if (!writeStdout.used) {
-      stats.writeCount++;
       writeStdout.used = true;
+      stats.writeCount++;
     }
-    stats.writeTime += measure(() => {
-      stdout.write(contents);
-    });
+    stdout.write(contents);
+    stats.writeTime += stats.end(begin);
   }
 }
 
@@ -1278,36 +1253,32 @@ export function checkDiagnostics(program, stderr, reportDiagnostic) {
   return numErrors;
 }
 
-/** Creates an empty set of stats. */
-export function createStats() {
-  return {
-    readTime: 0,
-    readCount: 0,
-    writeTime: 0,
-    writeCount: 0,
-    parseTime: 0,
-    parseCount: 0,
-    initializeTime: 0,
-    initializeCount: 0,
-    compileTime: 0,
-    compileCount: 0,
-    emitTime: 0,
-    emitCount: 0,
-    validateTime: 0,
-    validateCount: 0,
-    optimizeTime: 0,
-    optimizeCount: 0,
-    transformTime: 0,
-    transformCount: 0
-  };
-}
-
-/** Measures the execution time of the specified function.  */
-export function measure(fn) {
-  const start = process.hrtime();
-  fn();
-  const times = process.hrtime(start);
-  return times[0] * 1e9 + times[1];
+export class Stats {
+  readTime = 0;
+  readCount = 0;
+  writeTime = 0;
+  writeCount = 0;
+  parseTime = 0;
+  parseCount = 0;
+  initializeTime = 0;
+  initializeCount = 0;
+  compileTime = 0;
+  compileCount = 0;
+  emitTime = 0;
+  emitCount = 0;
+  validateTime = 0;
+  validateCount = 0;
+  optimizeTime = 0;
+  optimizeCount = 0;
+  transformTime = 0;
+  transformCount = 0;
+  begin() {
+    return process.hrtime();
+  }
+  end(begin) {
+    const hrtime = process.hrtime(begin);
+    return hrtime[0] * 1e9 + hrtime[1];
+  }
 }
 
 function pad(str, len) {

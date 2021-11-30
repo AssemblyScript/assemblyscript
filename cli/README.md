@@ -13,24 +13,36 @@ $> asc --help
 API
 ---
 
-The API accepts the same options as the CLI but also lets you override stdout and stderr and/or provide a callback. Example:
+The API accepts the same options as the CLI but also lets you override stdout and stderr. Example:
 
 ```js
 import asc from "assemblyscript/asc";
-asc.main([
+
+const result = await asc.main([
   "myModule.ts",
   "--binaryFile", "myModule.wasm",
   "--optimize",
   "--sourceMap",
   "--measure"
 ], {
-  stdout: process.stdout,
-  stderr: process.stderr
-}, function(err) {
-  if (err) throw err;
-  ...
+  stdout: asc.createMemoryStream(),
+  stderr: asc.createMemoryStream()
 });
+if (result.error) {
+  console.log("Compilation failed: " + result.error.message);
+} else {
+  console.log(result.stdout.toString());
+}
 ```
+
+The `Result` object has the following structure:
+
+| Property | Description
+|----------|-------------
+| error    | Encountered error, if any
+| stdout   | Reference to stdout
+| stderr   | Reference to stderr
+| stats    | Statistics object
 
 You can also compile a single source string directly (note that this API has limited functionality):
 

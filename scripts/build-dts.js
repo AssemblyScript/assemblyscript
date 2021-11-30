@@ -531,10 +531,10 @@ function generateCli() {
     stdout: stdout,
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
       if (currentModuleId == "cli/index") {
-        if (importedModuleId == "..") return prefix + "/src/index";
+        if (importedModuleId == "../src") return prefix + "/src/index";
       }
       return null;
-    }
+    },
   });
 
   const source = stdout.toString();

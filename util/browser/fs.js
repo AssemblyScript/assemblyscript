@@ -1,2 +1,4 @@
-const fs = {};
+const fs = {
+  promises: {}
+};
 export default fs;

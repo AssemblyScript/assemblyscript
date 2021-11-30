@@ -1,18 +1,19 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { Tokenizer, Token, Source, SourceKind } from "assemblyscript";
+import { Tokenizer, Token, Source, SourceKind } from "../dist/assemblyscript.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const file = process.argv.length > 2 ? process.argv[2] : path.join(__dirname, "..", "src", "tokenizer.ts");
+const file = process.argv.length > 2 ? process.argv[2] : path.join(dirname, "..", "src", "tokenizer.ts");
 const text = fs.readFileSync(file).toString();
-const tn = new Tokenizer(new Source(SourceKind.ENTRY, "compiler.ts", text));
+const source = new Source(SourceKind.ENTRY, "compiler.ts", text);
+const tn = new Tokenizer(source);
 
 do {
-  let token = tn.next();
-  let range = tn.range();
-  process.stdout.write(Token[token] + " @ " + range.line + ":" + range.column);
+  const token = tn.next();
+  const range = tn.range();
+  process.stdout.write(Token[token] + " @ " + source.lineAt(range.start) + ":" + source.columnAt());
   if (token == Token.IDENTIFIER) {
     process.stdout.write(" > " + tn.readIdentifier());
   } else if (token == Token.INTEGERLITERAL) {

@@ -7,10 +7,10 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const COMMON_MAX = 1 << 30;
 
-function test(file) {
+async function test(file) {
   console.log("Testing '" + file + "' ...\n");
 
-  const exports = new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(dirname + "/" + file)), {
+  const { instance: { exports } } = await WebAssembly.instantiate(fs.readFileSync(dirname + "/" + file), {
     env: {
       abort(msg, file, line, column) {
         throw Error("Assertion failed: " + (msg ? "'" + getString(msg) + "' " : "") + "at " + getString(file) + ":" + line + ":" + column);
@@ -19,7 +19,7 @@ function test(file) {
       logi(i) { console.log(i); },
       trace(...args) { console.log("trace", args); }
     }
-  }).exports;
+  });
 
   function getString(ptr) {
     if (!ptr) return "null";
@@ -50,8 +50,8 @@ function test(file) {
 }
 
 if (process.argv.length > 2) {
-  test(process.argv[2] + "/untouched.wasm");
-  test(process.argv[2] + "/optimized.wasm");
+  await test(process.argv[2] + "/untouched.wasm");
+  await test(process.argv[2] + "/optimized.wasm");
 } else {
   console.error("Usage: npm test <allocator>");
   process.exit(1);

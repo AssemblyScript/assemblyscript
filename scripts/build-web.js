@@ -28,20 +28,15 @@ fs.writeFileSync(path.join(dirname, "..", "dist", "web.html"), `<script async sr
 <script type="module">
 import asc from ${JSON.stringify(distUrl + "asc.js")};
 
-const stdout = asc.createMemoryStream();
-const stderr = asc.createMemoryStream();
-
 const files = {
   "index.ts": "export function add(a: i32, b: i32): i32 { return a + b; }"
 };
 
-asc.main([
-  "index.ts",
-  "--textFile",
-  "--optimize"
+const { error, stdout } = await asc.main([
+  "index.ts", "--textFile", "--optimize"
 ], {
-  stdout,
-  stderr,
+  stdout: asc.createMemoryStream(),
+  stderr: asc.createMemoryStream(),
   readFile(name, baseDir) {
     if (Object.prototype.hasOwnProperty.call(files, name)) return files[name];
     return null;
@@ -51,11 +46,9 @@ asc.main([
   listFiles(dirname, baseDir) {
     return [];
   }
-}, err => {
-  if (err) throw err;
-  console.log(stdout.toString());
-  stdout.reset();
-  stderr.reset();
 });
+
+if (error) throw error;
+console.log(stdout.toString());
 </script>
 `);
