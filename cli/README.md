@@ -18,7 +18,7 @@ The API accepts the same options as the CLI but also lets you override stdout an
 ```js
 import asc from "assemblyscript/asc";
 
-const result = await asc.main([
+const { error, stdout } = await asc.main([
   "myModule.ts",
   "--binaryFile", "myModule.wasm",
   "--optimize",
@@ -28,21 +28,21 @@ const result = await asc.main([
   stdout: asc.createMemoryStream(),
   stderr: asc.createMemoryStream()
 });
-if (result.error) {
-  console.log("Compilation failed: " + result.error.message);
+if (error) {
+  console.log("Compilation failed: " + error.message);
 } else {
-  console.log(result.stdout.toString());
+  console.log(stdout.toString());
 }
 ```
 
-The `Result` object has the following structure:
+The result has the following structure:
 
 | Property | Description
 |----------|-------------
 | error    | Encountered error, if any
-| stdout   | Reference to stdout
-| stderr   | Reference to stderr
-| stats    | Statistics object
+| stdout   | Standard output stream
+| stderr   | Standard error stream
+| stats    | Statistics
 
 You can also compile a single source string directly (note that this API has limited functionality):
 

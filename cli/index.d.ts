@@ -188,7 +188,7 @@ export interface APIOptions {
 
 /** Compiler API result. */
 export interface APIResult {
-  /** Error, if any. */
+  /** Encountered error, if any. */
   error: Error | null;
   /** Standard output stream. */
   stdout: OutputStream;
