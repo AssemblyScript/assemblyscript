@@ -21,11 +21,12 @@ jobs:
           printf "\nOK: Distributions files have not been modified.\n";
         fi
   test:
-    name: "Compiler (Linux, node ${{ matrix.node_version }})"
-    runs-on: ubuntu-latest
+    name: "Compiler (${{ matrix.os }}, node ${{ matrix.node_version }})"
+    runs-on: ${{ matrix.os }}-latest
     needs: check
     strategy:
       matrix:
+        os: ["ubuntu", "macos", "windows"]
         node_version: ["current", "lts_latest"]
     steps:
     - uses: actions/checkout@v1.0.0
@@ -40,38 +41,8 @@ jobs:
       run: npm run check
     - name: Test
       run: npm test
-  test-windows:
-    name: "Compiler (Windows, node current)"
-    runs-on: windows-latest
-    needs: check
-    steps:
-    - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Build
-      run: npm run build
-    - name: Test
-      run: npm test
-  test-macos:
-    name: "Compiler (MacOS, node current)"
-    runs-on: macos-latest
-    needs: check
-    steps:
-    - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Build
-      run: npm run build
-    - name: Test
-      run: npm test
-  test-bootstrap:
-    name: "Compiler (Bootstrap, ${{ matrix.target }})"
+  bootstrap:
+    name: "Compiler (bootstrap, ${{ matrix.target }})"
     runs-on: ubuntu-latest
     needs: check
     strategy:
