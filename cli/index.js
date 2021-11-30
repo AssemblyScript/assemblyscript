@@ -48,7 +48,7 @@ var __pin = ptr => ptr;
 var __unpin = _ => undefined;
 var __collect = _ => undefined;
 
-// Use the AS->Wasm variant as an option
+// Use the AS->Wasm variant as an option (experimental)
 const useWasm = process.argv.includes("--wasm");
 if (useWasm) {
   let argPos = process.argv.indexOf("--wasm");
@@ -267,7 +267,7 @@ export async function main(argv, options) {
   let asconfigPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
   let asconfigFile = path.basename(asconfigPath);
   let asconfigDir = path.dirname(asconfigPath);
-  let asconfig = getAsconfig(asconfigFile, asconfigDir, readFile);
+  let asconfig = await readConfig(asconfigFile, asconfigDir, readFile);
   let asconfigHasEntries = asconfig != null && Array.isArray(asconfig.entries) && asconfig.entries.length;
 
   // Print the help message if requested or no source files are provided
@@ -292,7 +292,7 @@ export async function main(argv, options) {
   }
 
   // I/O must be specified if not present in the environment
-  if (!fs.readFileSync) {
+  if (!fs.promises.readFile) {
     if (readFile === readFileNode)   throw Error("'options.readFile' must be specified");
     if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
     if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
@@ -330,7 +330,7 @@ export async function main(argv, options) {
       asconfigDir = path.dirname(asconfigPath);
       if (seenAsconfig.has(asconfigPath)) break;
       seenAsconfig.add(asconfigPath);
-      asconfig = getAsconfig(asconfigFile, asconfigDir, readFile);
+      asconfig = await readConfig(asconfigFile, asconfigDir, readFile);
     } else {
       break;
     }
@@ -540,10 +540,10 @@ export async function main(argv, options) {
         libFiles = [ path.basename(libDir) ];
         libDir = path.dirname(libDir);
       } else {
-        libFiles = listFiles(libDir, baseDir) || [];
+        libFiles = await listFiles(libDir, baseDir) || [];
       }
       for (let libPath of libFiles) {
-        let libText = readFile(libPath, libDir);
+        let libText = await readFile(libPath, libDir);
         if (libText == null) {
           return prepareResult(Error(`Library file '${libPath}' not found.`));
         }
@@ -565,17 +565,17 @@ export async function main(argv, options) {
   const packageBases = new Map();
 
   // Gets the file matching the specified source path, imported at the given dependee path
-  function getFile(internalPath, dependeePath) {
+  async function getFile(internalPath, dependeePath) {
     var sourceText = null; // text reported back to the compiler
     var sourcePath = null; // path reported back to the compiler
 
     // Try file.ext, file/index.ext, file.d.ext
     if (!internalPath.startsWith(libraryPrefix)) {
-      if ((sourceText = readFile(sourcePath = internalPath + extension.ext, baseDir)) == null) {
-        if ((sourceText = readFile(sourcePath = internalPath + "/index" + extension.ext, baseDir)) == null) {
+      if ((sourceText = await readFile(sourcePath = internalPath + extension.ext, baseDir)) == null) {
+        if ((sourceText = await readFile(sourcePath = internalPath + "/index" + extension.ext, baseDir)) == null) {
           // portable d.ext: uses the .js file next to it in JS or becomes an import in Wasm
           sourcePath = internalPath + extension.ext;
-          sourceText = readFile(internalPath + extension.ext_d, baseDir);
+          sourceText = await readFile(internalPath + extension.ext_d, baseDir);
         }
       }
 
@@ -591,11 +591,11 @@ export async function main(argv, options) {
         sourcePath = libraryPrefix + indexName + extension.ext;
       } else { // custom lib dirs
         for (const libDir of customLibDirs) {
-          if ((sourceText = readFile(plainName + extension.ext, libDir)) != null) {
+          if ((sourceText = await readFile(plainName + extension.ext, libDir)) != null) {
             sourcePath = libraryPrefix + plainName + extension.ext;
             break;
           } else {
-            if ((sourceText = readFile(indexName + extension.ext, libDir)) != null) {
+            if ((sourceText = await readFile(indexName + extension.ext, libDir)) != null) {
               sourcePath = libraryPrefix + indexName + extension.ext;
               break;
             }
@@ -630,7 +630,7 @@ export async function main(argv, options) {
                 mainPath = packageMains.get(packageName);
               } else { // evaluate package.json
                 let jsonPath = path.join(currentPath, packageName, "package.json");
-                let jsonText = readFile(jsonPath, baseDir);
+                let jsonText = await readFile(jsonPath, baseDir);
                 if (jsonText != null) {
                   try {
                     let json = JSON.parse(jsonText);
@@ -643,7 +643,7 @@ export async function main(argv, options) {
               }
               const mainDir = path.join(currentPath, packageName, mainPath);
               const plainName = filePath;
-              if ((sourceText = readFile(path.join(mainDir, plainName + extension.ext), baseDir)) != null) {
+              if ((sourceText = await readFile(path.join(mainDir, plainName + extension.ext), baseDir)) != null) {
                 sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension.ext}`;
                 packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
                 if (opts.traceResolution) {
@@ -652,7 +652,7 @@ export async function main(argv, options) {
                 break;
               } else if (!isPackageRoot) {
                 const indexName = `${filePath}/index`;
-                if ((sourceText = readFile(path.join(mainDir, indexName + extension.ext), baseDir)) !== null) {
+                if ((sourceText = await readFile(path.join(mainDir, indexName + extension.ext), baseDir)) !== null) {
                   sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension.ext}`;
                   packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
                   if (opts.traceResolution) {
@@ -672,10 +672,10 @@ export async function main(argv, options) {
   }
 
   // Parses the backlog of imported files after including entry files
-  function parseBacklog() {
+  async function parseBacklog() {
     var internalPath;
     while ((internalPath = __getString(assemblyscript.nextFile(program)))) {
-      let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
+      let file = await getFile(internalPath, assemblyscript.getDependee(program, internalPath));
       let begin = stats.begin();
       stats.parseCount++;
       if (file) {
@@ -705,7 +705,7 @@ export async function main(argv, options) {
     let runtimeText = libraryFiles[runtimePath];
     if (runtimeText == null) {
       runtimePath = runtimeName;
-      runtimeText = readFile(runtimePath + extension.ext, baseDir);
+      runtimeText = await readFile(runtimePath + extension.ext, baseDir);
       if (runtimeText == null) return prepareResult(Error(`Runtime '${runtimeName}' not found.`));
     } else {
       runtimePath = `~lib/${runtimePath}`;
@@ -733,10 +733,10 @@ export async function main(argv, options) {
       : sourcePath;
 
     // Try entryPath.ext, then entryPath/index.ext
-    let sourceText = readFile(sourcePath + extension.ext, baseDir);
+    let sourceText = await readFile(sourcePath + extension.ext, baseDir);
     if (sourceText == null) {
       const path = `${sourcePath}/index${extension.ext}`;
-      sourceText = readFile(path, baseDir);
+      sourceText = await readFile(path, baseDir);
       if (sourceText != null) sourcePath = path;
       else sourcePath += extension.ext;
     } else {
@@ -754,7 +754,7 @@ export async function main(argv, options) {
 
   // Parse entry files
   {
-    let code = parseBacklog();
+    let code = await parseBacklog();
     if (code) return code;
   }
 
@@ -766,7 +766,7 @@ export async function main(argv, options) {
 
   // Parse additional files, if any
   {
-    let code = parseBacklog();
+    let code = await parseBacklog();
     if (code) return code;
   }
 
@@ -947,6 +947,8 @@ export async function main(argv, options) {
     stats.optimizeTime += stats.end(begin);
   }
 
+  const pending = [];
+
   // Prepare output
   if (!opts.noEmit) {
     if (opts.outFile != null) {
@@ -986,7 +988,9 @@ export async function main(argv, options) {
       stats.emitTime += stats.end(begin);
 
       if (opts.binaryFile.length) {
-        writeFile(opts.binaryFile, wasm.binary, baseDir);
+        pending.push(
+          writeFile(opts.binaryFile, wasm.binary, baseDir)
+        );
       } else {
         hasStdout = true;
         writeStdout(wasm.binary);
@@ -998,16 +1002,19 @@ export async function main(argv, options) {
           let map = JSON.parse(wasm.sourceMap);
           map.sourceRoot = `./${basename}`;
           let contents = [];
-          map.sources.forEach((name, index) => {
+          for (let i = 0, k = map.sources.length; i < k; ++i) {
+            let name = map.sources[i];
             let text = assemblyscript.getSource(program, __newString(name.replace(extension.re, "")));
             if (text == null) return prepareResult(Error(`Source of file '${name}' not found.`));
-            contents[index] = text;
-          });
+            contents[i] = text;
+          }
           map.sourcesContent = contents;
-          writeFile(path.join(
-            path.dirname(opts.binaryFile),
-            path.basename(sourceMapURL)
-          ).replace(/^\.\//, ""), JSON.stringify(map), baseDir);
+          pending.push(
+            writeFile(path.join(
+              path.dirname(opts.binaryFile),
+              path.basename(sourceMapURL)
+            ).replace(/^\.\//, ""), JSON.stringify(map), baseDir)
+          );
         } else {
           stderr.write(`Skipped source map (stdout already occupied)${EOL}`);
         }
@@ -1031,7 +1038,9 @@ export async function main(argv, options) {
       stats.emitTime += stats.end(begin);
 
       if (opts.textFile != null && opts.textFile.length) {
-        writeFile(opts.textFile, out, baseDir);
+        pending.push(
+          writeFile(opts.textFile, out, baseDir)
+        );
       } else if (!hasStdout) {
         hasStdout = true;
         writeStdout(out);
@@ -1050,7 +1059,9 @@ export async function main(argv, options) {
       }
       stats.emitTime += stats.end(begin);
       if (opts.idlFile.length) {
-        writeFile(opts.idlFile, __getString(idl), baseDir);
+        pending.push(
+          writeFile(opts.idlFile, __getString(idl), baseDir)
+        );
       } else if (!hasStdout) {
         hasStdout = true;
         writeStdout(__getString(idl));
@@ -1069,7 +1080,9 @@ export async function main(argv, options) {
       }
       stats.emitTime += stats.end(begin);
       if (opts.tsdFile.length) {
-        writeFile(opts.tsdFile, __getString(tsd), baseDir);
+        pending.push(
+          writeFile(opts.tsdFile, __getString(tsd), baseDir)
+        );
       } else if (!hasStdout) {
         hasStdout = true;
         writeStdout(__getString(tsd));
@@ -1088,7 +1101,9 @@ export async function main(argv, options) {
           crash("emitJS", e);
         }
         stats.emitTime += stats.end(begin);
-        writeFile(opts.jsFile, js, baseDir);
+        pending.push(
+          writeFile(opts.jsFile, js, baseDir)
+        );
       } else if (!hasStdout) {
         stats.emitCount++;
         let begin = stats.begin();
@@ -1110,12 +1125,12 @@ export async function main(argv, options) {
 
   return prepareResult(null);
 
-  function readFileNode(filename, baseDir) {
+  async function readFileNode(filename, baseDir) {
     let name = path.resolve(baseDir, filename);
     try {
       let begin = stats.begin();
       stats.readCount++;
-      let text = fs.readFileSync(name, "utf8");
+      let text = await fs.promises.readFile(name, "utf8");
       stats.readTime += stats.end(begin);
       return text;
     } catch (e) {
@@ -1123,14 +1138,14 @@ export async function main(argv, options) {
     }
   }
 
-  function writeFileNode(filename, contents, baseDir) {
+  async function writeFileNode(filename, contents, baseDir) {
     try {
       let begin = stats.begin();
       stats.writeCount++;
       const dirPath = path.resolve(baseDir, path.dirname(filename));
       const filePath = path.join(dirPath, path.basename(filename));
-      if (!fs.existsSync(dirPath)) mkdirp(dirPath);
-      fs.writeFileSync(filePath, contents);
+      if (!await fs.promises.access(dirPath, fs.constants.W_OK)) mkdirp(dirPath);
+      await fs.promises.writeFile(filePath, contents);
       stats.writeTime += stats.end(begin);
       return true;
     } catch (e) {
@@ -1138,12 +1153,12 @@ export async function main(argv, options) {
     }
   }
 
-  function listFilesNode(dirname, baseDir) {
+  async function listFilesNode(dirname, baseDir) {
     var files;
     try {
       let begin = stats.begin();
       stats.readCount++;
-      files = fs.readdirSync(path.join(baseDir, dirname))
+      files = (await fs.promises.readdir(path.join(baseDir, dirname)))
         .filter(file => extension.re_except_d.test(file));
       stats.readTime += stats.end(begin);
       return files;
@@ -1169,8 +1184,8 @@ function isObject(arg) {
   return toString.call(arg) === "[object Object]";
 }
 
-export function getAsconfig(file, baseDir, readFile) {
-  const contents = readFile(file, baseDir);
+async function readConfig(file, baseDir, readFile) {
+  const contents = await readFile(file, baseDir);
   const location = path.join(baseDir, file);
   if (!contents) return null;
 

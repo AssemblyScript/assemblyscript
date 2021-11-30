@@ -175,11 +175,11 @@ export interface APIOptions {
   /** Standard error stream to use. */
   stderr?: OutputStream;
   /** Reads a file from disk (or memory). */
-  readFile?: (filename: string, baseDir: string) => string | null;
+  readFile?: (filename: string, baseDir: string) => string | null | Promise<string | null>;
   /** Writes a file to disk (or memory). */
-  writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void;
+  writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void | Promise<void>;
   /** Lists all files within a directory. */
-  listFiles?: (dirname: string, baseDir: string) => string[] | null;
+  listFiles?: (dirname: string, baseDir: string) => string[] | null | Promise<string[] | null>;
   /** Handler for diagnostic messages. */
   reportDiagnostic?: DiagnosticReporter;
   /** Additional transforms to apply. */
@@ -283,14 +283,14 @@ export abstract class Transform {
   /** Logs a message to console. */
   readonly log: typeof console.log;
 
-  /** Writes a file to disk. */
-  writeFile(filename: string, contents: string | Uint8Array, baseDir: string): boolean;
-
   /** Reads a file from disk. */
-  readFile(filename: string, baseDir: string): string | null;
+  readFile(filename: string, baseDir: string): string | null | Promise<string | null>;
+
+  /** Writes a file to disk. */
+  writeFile(filename: string, contents: string | Uint8Array, baseDir: string): void | Promise<void>;
 
   /** Lists all files in a directory. */
-  listFiles(dirname: string, baseDir: string): string[] | null;
+  listFiles(dirname: string, baseDir: string): string[] | null | Promise<string[] | null>;
 
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void;

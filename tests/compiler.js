@@ -468,7 +468,7 @@ if (args.parallel && coreCount > 2) {
     const current = [];
     const outputs = [];
     let numWorkers = Math.min(coreCount - 1, tests.length);
-    console.log(`Spawning ${numWorkers} workers (assuming ${coreCount} cores, ${threadCount} threads)...`);
+    console.log(`Spawning ${numWorkers} workers (assuming ${coreCount} cores, ${threadCount} threads)...\n`);
     cluster.settings.silent = true;
     let index = 0;
     for (let i = 0; i < numWorkers; ++i) {
