@@ -248,15 +248,6 @@ export class Stats {
   end(begin: number): number;
 }
 
-/** Measures the execution time of the specified function.  */
-export function measure(fn: () => void): number;
-
-/** Formats a high resolution time to a human readable string. */
-export function formatTime(time: number): string;
-
-/** Formats and prints out the contents of a set of stats. */
-export function printStats(stats: Stats, output: OutputStream): void;
-
 /** Creates a memory stream that can be used in place of stdout/stderr. */
 export function createMemoryStream(fn?: (chunk: Uint8Array | string) => void): MemoryStream;
 

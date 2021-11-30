@@ -94,7 +94,7 @@ function section(title) {
     title,
     end(code) {
       const hrtime = process.hrtime(start);
-      const time = asc.formatTime(hrtime[0] * 1e9 + hrtime[1]);
+      const time = `${(hrtime[0] * 1e9 + hrtime[1] / 1e6).toFixed(3)} ms`;
       switch (code) {
         case SUCCESS: console.log("  " + colors.green("SUCCESS") + " (" + time + ")\n"); break;
         default: console.log("  " + colors.red("FAILURE") + " (" + time + ")\n"); break;
