@@ -6,7 +6,6 @@ import ts from "typescript";
 import stream from "stream";
 import util from "util";
 import { fileURLToPath } from 'url';
-import mkdirp from "../util/mkdirp.js";
 
 const __dirname = pathUtil.dirname(fileURLToPath(import.meta.url));
 
@@ -214,7 +213,7 @@ const generate = (function() {
       verboseMessage('exclude:');
       options.exclude.forEach(name => { verboseMessage('  ' + name); });
     }
-    if (!options.stdout) mkdirp.sync(pathUtil.dirname(options.out));
+    if (!options.stdout) fs.mkdirSync(pathUtil.dirname(options.out), { recursive: true });
     /* node.js typings are missing the optional mode in createWriteStream options and therefore
       * in TS 1.6 the strict object literal checking is throwing, therefore a hammer to the nut */
     const output = options.stdout || fs.createWriteStream(options.out, { mode: parseInt('644', 8) });

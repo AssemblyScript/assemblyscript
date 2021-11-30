@@ -28,7 +28,6 @@
  */
 
 import { fs, module, path, process } from "../util/node.js";
-import mkdirp from "../util/mkdirp.js";
 import fetch from "../util/fetch.js";
 import * as utf8 from "../util/utf8.js";
 import * as colorsUtil from "../util/colors.js";
@@ -238,11 +237,14 @@ export async function main(argv, options) {
     );
   }
 
+  var module = null;
+
   // Prepares the result object
   var prepareResult = (error, result = {}) => {
     if (error) {
       stderr.write(`${colorsUtil.stderr.red("FAILURE ")}${error.stack.replace(/^ERROR: /i, "")}${EOL}`);
     }
+    if (module) module.dispose();
     return Object.assign({ error, stdout, stderr, stats }, result);
   };
 
@@ -796,7 +798,6 @@ export async function main(argv, options) {
   }
 
   // Compile the program
-  var module;
   {
     let begin = stats.begin();
     stats.compileCount++;
@@ -824,7 +825,6 @@ export async function main(argv, options) {
   }
   var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
-    if (module) module.dispose();
     const err = Error(`${numErrors} compile error(s)`);
     err.stack = err.message; // omit stack
     return prepareResult(err);
@@ -838,7 +838,6 @@ export async function main(argv, options) {
 
   numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
-    if (module) module.dispose();
     const err = Error(`${numErrors} afterCompile error(s)`);
     err.stack = err.message; // omit stack
     return prepareResult(err);
@@ -851,7 +850,6 @@ export async function main(argv, options) {
     let isValid = module.validate();
     stats.validateTime += stats.end(begin);
     if (!isValid) {
-      module.dispose();
       return prepareResult(Error("validate error"));
     }
   }
@@ -866,7 +864,6 @@ export async function main(argv, options) {
     }
     stats.compileTime += stats.end(begin);
   } else if (opts.trapMode !== "allow") {
-    module.dispose();
     return prepareResult(Error("Unsupported trap mode"));
   }
 
@@ -1124,7 +1121,6 @@ export async function main(argv, options) {
     return prepareResult(err);
   }
 
-  module.dispose();
   if (opts.measure) {
     printStats(stats, stderr);
   }
@@ -1150,7 +1146,7 @@ export async function main(argv, options) {
       stats.writeCount++;
       const dirPath = path.resolve(baseDir, path.dirname(filename));
       const filePath = path.join(dirPath, path.basename(filename));
-      if (!await fs.promises.access(dirPath, fs.constants.W_OK)) mkdirp(dirPath);
+      await fs.promises.mkdir(dirPath, { recursive: true });
       await fs.promises.writeFile(filePath, contents);
       stats.writeTime += stats.end(begin);
       return true;
