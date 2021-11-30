@@ -1312,14 +1312,17 @@ export class Stats {
     const countsLen = counts.reduce((current, count) => Math.max(count.length, current), 0);
     const totalLen = keysLen + timesLen + countsLen + 6;
     const out = [];
-    out.push(`┌─${"─".repeat(keysLen)}─┬─${"─".repeat(timesLen)}─┬─${"─".repeat(countsLen)}─┐${EOL}`);
+    out.push(`╭─${"─".repeat(totalLen)}─╮${EOL}`);
+    const header = `Stats`;
+    out.push(`│ ${header}${" ".repeat(totalLen - header.length)} │${EOL}`);
+    out.push(`╞═${"═".repeat(keysLen)}═╤═${"═".repeat(timesLen)}═╤═${"═".repeat(countsLen)}═╡${EOL}`);
     for (let i = 0, k = keys.length; i < k; ++i) {
       out.push(`│ ${keys[i].padEnd(keysLen)} │ ${times[i].padStart(timesLen)} │ ${counts[i].padStart(countsLen)} │${EOL}`);
     }
     out.push(`├─${"─".repeat(keysLen)}─┴─${"─".repeat(timesLen)}─┴─${"─".repeat(countsLen)}─┤${EOL}`);
     const readsWrites = `${this.readCount} reads, ${this.writeCount} writes`;
     out.push(`│ ${readsWrites}${" ".repeat(totalLen - readsWrites.length)} │${EOL}`);
-    out.push(`└─${"─".repeat(totalLen)}─┘${EOL}`);
+    out.push(`╰─${"─".repeat(totalLen)}─╯${EOL}`);
     return out.join("");
   }
 }
