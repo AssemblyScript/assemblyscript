@@ -1874,30 +1874,37 @@ export class Parser extends DiagnosticEmitter {
     var declareStart = 0;
     var declareEnd = 0;
     var contextIsAmbient = parent.is(CommonFlags.AMBIENT);
-    if (tn.skip(Token.DECLARE)) {
-      if (isInterface) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "declare"
-        );
-      } else {
-        if (contextIsAmbient) {
+    if (tn.peek() == Token.DECLARE) {
+      let state = tn.mark();
+      tn.next();
+      if (tn.peek() != Token.COLON) { // modifier
+        tn.discard(state);
+        if (isInterface) {
           this.error(
-            DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
-            tn.range()
-          ); // recoverable
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(), "declare"
+          );
         } else {
-          this.error(
-            DiagnosticCode.Not_implemented_0,
-            tn.range(), "Ambient fields"
-          ); // recoverable
-          
-          flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
-          declareStart = tn.tokenPos;
-          declareEnd = tn.pos;
+          if (contextIsAmbient) {
+            this.error(
+              DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
+              tn.range()
+            ); // recoverable
+          } else {
+            this.error(
+              DiagnosticCode.Not_implemented_0,
+              tn.range(), "Ambient fields"
+            ); // recoverable
+            
+            flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
+            declareStart = tn.tokenPos;
+            declareEnd = tn.pos;
+          }
         }
+        if (!startPos) startPos = tn.tokenPos;
+      } else { // identifier
+        tn.reset(state);
       }
-      if (!startPos) startPos = tn.tokenPos;
     } else if (contextIsAmbient) {
       flags |= CommonFlags.AMBIENT;
     }
