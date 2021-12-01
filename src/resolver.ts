@@ -3140,23 +3140,29 @@ export class Resolver extends DiagnosticEmitter {
             if (!fieldType) break; // did report above
             if (existingField !== null) {
               // visibility checks
-              let thisFieldIsPublic = fieldPrototype.isPublic;
-              let existingFieldIsPublic = existingField.isPublic;
               let baseClass = <Class>base;
+              let thisFieldIsPubOrProt = !fieldPrototype.is(CommonFlags.PRIVATE);
+              let existingFieldIsPublic = existingField.isPublic;
 
-              if (thisFieldIsPublic && !existingFieldIsPublic) {
+              if (thisFieldIsPubOrProt && !existingFieldIsPublic) {
                 this.errorRelated(
                   DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,
                   fieldPrototype.name, baseClass.internalName, instance.internalName
                 );
-              } else if (!thisFieldIsPublic && existingFieldIsPublic) {
+              } else if (fieldPrototype.is(CommonFlags.PROTECTED) && existingFieldIsPublic) {
+                this.errorRelated(
+                  DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
+                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                  fieldPrototype.name, instance.internalName, baseClass.internalName
+                );
+              } else if (!thisFieldIsPubOrProt && existingFieldIsPublic) {
                 this.errorRelated(
                   DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,
                   fieldPrototype.name, instance.internalName, baseClass.internalName
                 );
-              } else if (!thisFieldIsPublic && !existingFieldIsPublic) {
+              } else if (!thisFieldIsPubOrProt && !existingFieldIsPublic) {
                 this.errorRelated(
                   DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,

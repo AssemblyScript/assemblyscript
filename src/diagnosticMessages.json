@@ -151,6 +151,7 @@
   "A class can only implement an interface.": 2422,
   "A namespace declaration cannot be located prior to a class or function with which it is merged.": 2434,
   "Types have separate declarations of a private property '{0}'.": 2442,
+  "Property '{0}' is protected in type '{1}' but public in type '{2}'.": 2444,
   "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.": 2445,
   "Variable '{0}' used before its declaration.": 2448,
   "Cannot redeclare block-scoped variable '{0}'" : 2451,

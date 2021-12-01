@@ -153,6 +153,7 @@ export enum DiagnosticCode {
   A_class_can_only_implement_an_interface = 2422,
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
   Types_have_separate_declarations_of_a_private_property_0 = 2442,
+  Property_0_is_protected_in_type_1_but_public_in_type_2 = 2444,
   Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses = 2445,
   Variable_0_used_before_its_declaration = 2448,
   Cannot_redeclare_block_scoped_variable_0 = 2451,
@@ -341,6 +342,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2422: return "A class can only implement an interface.";
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
     case 2442: return "Types have separate declarations of a private property '{0}'.";
+    case 2444: return "Property '{0}' is protected in type '{1}' but public in type '{2}'.";
     case 2445: return "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.";
     case 2448: return "Variable '{0}' used before its declaration.";
     case 2451: return "Cannot redeclare block-scoped variable '{0}'";

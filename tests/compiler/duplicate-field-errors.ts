@@ -4,14 +4,16 @@ class A {
   private c: i32;
   public d: i64;
   public e: i32;
-  constructor(a: i32, b: i32, c: i32, d: i64, e: i32) { 
+  public f: i32;
+  constructor(a: i32, b: i32, c: i32, d: i64, e: i32, f: i32) { 
     this.a = a; 
     this.b = b; 
     this.c = c; 
     this.d = d;
     this.e = e;
+    this.f = f;
   }
-  f(): void {}
+  g(): void {}
 }
 
 export class B extends A {
@@ -20,9 +22,10 @@ export class B extends A {
   private c: i32;
   public d: i32;
   public e: i32;
-  public f: i32;
+  public g: i32;
+  protected f: i32;
   constructor(a: i32, b: i32, c: i32, d: i32, e: i32, f: i32) { 
-    super(a, b, c, d, e); 
+    super(a, b, c, d, e, f); 
     ERROR("EOF"); 
   }
 }
