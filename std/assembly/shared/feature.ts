@@ -27,9 +27,7 @@ export const enum Feature {
   /** Garbage collection. */
   GC = 1 << 10, // see: https://github.com/WebAssembly/gc
   /** Memory64. */
-  MEMORY64 = 1 << 11, // see: https://github.com/WebAssembly/memory64
-  /** Finalization. */
-  FINALIZATION = 1 << 12
+  MEMORY64 = 1 << 11 // see: https://github.com/WebAssembly/memory64
 }
 
 /** Gets the name of the specified feature one would specify on the command line. */

@@ -183,8 +183,6 @@ export const FEATURE_GC = Feature.GC;
 /** Memory64. */
 export const FEATURE_MEMORY64 = Feature.MEMORY64;
 
-export const FEATURE_FINALIZATION = Feature.FINALIZATION;
-
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {
   options.features |= feature;

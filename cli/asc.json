@@ -221,7 +221,6 @@
       " threads             Threading and atomic operations.",
       " reference-types     Reference types and operations.",
       " gc                  Garbage collection (WIP).",
-      " finalization        Finalization Registry support.",
       ""
     ],
     "TODO_doesNothingYet": [
