@@ -49,6 +49,8 @@ declare const ASC_SHRINK_LEVEL: i32;
 declare const ASC_FEATURE_MUTABLE_GLOBAL: bool;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
+/** Whether the finalization feature is enabled. */
+declare const ASC_FEATURE_FINALIZATION: bool;
 
 // Builtins
 

@@ -14,6 +14,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   globalScope.ASC_FEATURE_BULK_MEMORY = false;
   globalScope.ASC_FEATURE_SIMD = false;
   globalScope.ASC_FEATURE_THREADS = false;
+  globalScope.ASC_FEATURE_FINALIZATION = false;
 
   var F64 = new Float64Array(1);
   var U64 = new Uint32Array(F64.buffer);
