@@ -9,39 +9,31 @@
 @global @lazy
 export function __finalize(ptr: usize): void {
 
-    // first check to see if a finalization map is currently being cleaned up
-    if (finalizationRegistryMap.has(ptr)) {
-        finalizationRegistryMap.delete(ptr);
-        referenceRegistryCallbackMap.delete(ptr);
-    }
-
     // then check to see if a reference is located on a registry
-    if (referenceRegistryMap.has(ptr)) {
+    if (finalizationRegistryMap.has(ptr)) {
         // get the registry associated
-        let registryPointer = finalizationRegistryMap.get(ptr);
-        // find the callback
-        let callbackPointer = referenceRegistryCallbackMap.get(registryPointer);
-        // call the correct version
-        call_indirect(callbackPointer, ptr);
+        let registry = finalizationRegistryMap.get(ptr);
+
+        // virtual call and handle the pointer
+        registry.handle(ptr);
+
+        // remove it from the registry
         finalizationRegistryMap.delete(ptr);
     }
 }
 
 /** This map is used to keep track of the callback index used. */
 // @ts-ignore: lazy
-@lazy let finalizationRegistryMap = new Map<usize, u32>();
-/** This map is used to keep track of references to registries. */
-// @ts-ignore: lazy
-@lazy let referenceRegistryMap = new Map<usize, usize>();
-/** This map is used to obtain the callback index for the registry itself. */
-// @ts-ignore: lazy
-@lazy let referenceRegistryCallbackMap = new Map<usize, u32>();
+@lazy let finalizationRegistryMap = new Map<usize, BaseFinalizationRegistry>();
+
 
 /** Dummy base class to help pin it with the `pinned` `Set`. */
-class BaseFinalizationRegistry { constructor() {} }
+abstract class BaseFinalizationRegistry {
+  constructor() {}
 
-let pinned = new Set<BaseFinalizationRegistry>()
-
+  /** Just a virtual call handle for handle(ptr: usize). */
+  abstract handle(ptr: usize): void;
+}
 
 /** A finalization Registry object that contains targets and held values. */
 export class FinalizationRegistry<TTarget, THeldValue> extends BaseFinalizationRegistry {
@@ -53,7 +45,6 @@ export class FinalizationRegistry<TTarget, THeldValue> extends BaseFinalizationR
       public callback: (ref: TTarget, data: THeldValue) => void) {
     // Set the reference registry callback
     super();
-    referenceRegistryCallbackMap.set(changetype<usize>(this), this.handle.index);
   }
 
   /**
@@ -70,12 +61,9 @@ export class FinalizationRegistry<TTarget, THeldValue> extends BaseFinalizationR
       }
 
       // set the registry map
-      referenceRegistryMap.set(changetype<usize>(target), changetype<usize>(this));
+      finalizationRegistryMap.set(changetype<usize>(target), this);
       // hold the held value
       this.held.set(target, held);
-
-      // then pin the registry to prevent garbage collection
-      if (!this.pinned) pinned.add(this);
   }
 
   /**
@@ -84,14 +72,13 @@ export class FinalizationRegistry<TTarget, THeldValue> extends BaseFinalizationR
    *
    * @param {TTarget} ref - The reference passed by the __finalize callback.
    */
-  handle(ref: TTarget): void {
+  handle(refPtr: usize): void {
+    let ref = changetype<TTarget>(refPtr);
     // obtain the held value
     let held = this.held.get(ref);
     // call the callback with the ref and the held value
     this.callback(ref, held);
     // delete the held value
     this.held.delete(ref);
-    // if this value has no more held objects, then unpin this registry
-    if (this.pinned && this.held.size == 0) pinned.delete(this);
   }
 }
