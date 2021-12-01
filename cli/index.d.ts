@@ -214,12 +214,8 @@ export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: Outpu
 
 /** Statistics for the current task. */
 export class Stats {
-  /** Time taken reading files. */
-  readTime: number;
   /** Number of files read. */
   readCount: number;
-  /** Time taken writing files. */
-  writeTime: number;
   /** Number of files written. */
   writeCount: number;
   /** Time taken to parse files. */
@@ -246,6 +242,8 @@ export class Stats {
   begin(): number;
   /** Ends measuring execution time since `begin`. */
   end(begin: number): number;
+  /** Returns a string representation. */
+  toString(): string;
 }
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
