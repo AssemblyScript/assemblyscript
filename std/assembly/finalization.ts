@@ -38,7 +38,6 @@ abstract class BaseFinalizationRegistry {
 /** A finalization Registry object that contains targets and held values. */
 export class FinalizationRegistry<TTarget, THeldValue> extends BaseFinalizationRegistry {
   private held = new Map<TTarget, THeldValue>();
-  private pinned = false;
 
   constructor(
       /** The callback for the registry */
