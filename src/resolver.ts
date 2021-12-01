@@ -3140,37 +3140,64 @@ export class Resolver extends DiagnosticEmitter {
             if (!fieldType) break; // did report above
             if (existingField !== null) {
               // visibility checks
-              let baseClass = <Class>base;
-              let thisFieldIsPubOrProt = !fieldPrototype.is(CommonFlags.PRIVATE);
-              let existingFieldIsPublic = existingField.isPublic;
+              /*
+                          existingField visibility on top
+                +==================+=========+===========+=========+
+                | Visibility Table | Private | Protected | Public  |
+                +==================+=========+===========+=========+
+                | Private          | error   | error     | error   |
+                +------------------+---------+-----------+---------+
+                | Protected        | error   | allowed   | error   |
+                +------------------+---------+-----------+---------+
+                | Public           | error   | allowed   | allowed |
+                +------------------+---------+-----------+---------+
+              */
 
-              if (thisFieldIsPubOrProt && !existingFieldIsPublic) {
-                this.errorRelated(
-                  DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name, baseClass.internalName, instance.internalName
-                );
-              } else if (fieldPrototype.is(CommonFlags.PROTECTED) && existingFieldIsPublic) {
-                this.errorRelated(
-                  DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
-                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name, instance.internalName, baseClass.internalName
-                );
-              } else if (!thisFieldIsPubOrProt && existingFieldIsPublic) {
-                this.errorRelated(
-                  DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name, instance.internalName, baseClass.internalName
-                );
-              } else if (!thisFieldIsPubOrProt && !existingFieldIsPublic) {
-                this.errorRelated(
-                  DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
-                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name
-                );
-              } 
+              let baseClass = <Class>base;
+
+              // handle cases row-by-row
+              if (fieldPrototype.is(CommonFlags.PRIVATE)) {
+                if (existingField.is(CommonFlags.PRIVATE)) {
+                  this.errorRelated(
+                    DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name
+                  );
+                } else {
+                  this.errorRelated(
+                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name, instance.internalName, baseClass.internalName
+                  );
+                }
+              } else if (fieldPrototype.is(CommonFlags.PROTECTED)) {
+                if (existingField.is(CommonFlags.PRIVATE)) {
+                  this.errorRelated(
+                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name, baseClass.internalName, instance.internalName
+                  );
+                } else if (!existingField.is(CommonFlags.PROTECTED)) {
+                  // may be implicitly public
+                  this.errorRelated(
+                    DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name, instance.internalName, baseClass.internalName
+                  );
+                }
+              } else {
+                // fieldPrototype is public here
+                if (existingField.is(CommonFlags.PRIVATE)) {
+                  this.errorRelated(
+                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name, baseClass.internalName, instance.internalName
+                  );
+                }
+              }
+
               // assignability checks
-              else if (fieldType.equals(existingField.type) && fieldPrototype.initializerNode === null) {
+              if (fieldType.equals(existingField.type) && fieldPrototype.initializerNode === null) {
                 this.errorRelated(
                   DiagnosticCode.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_remove_the_redundant_declaration,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,

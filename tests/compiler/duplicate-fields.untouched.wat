@@ -26,10 +26,11 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $duplicate-fields/foo (mut i32) (i32.const 0))
  (global $duplicate-fields/raz (mut i32) (i32.const 0))
+ (global $duplicate-fields/B3 i32 (i32.const 9))
  (global $~lib/rt/__rtti_base i32 (i32.const 480))
- (global $~lib/memory/__data_end i32 (i32.const 556))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16940))
- (global $~lib/memory/__heap_base i32 (i32.const 16940))
+ (global $~lib/memory/__data_end i32 (i32.const 572))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16956))
+ (global $~lib/memory/__heap_base i32 (i32.const 16956))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -40,10 +41,14 @@
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00d\00u\00p\00l\00i\00c\00a\00t\00e\00-\00f\00i\00e\00l\00d\00s\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 480) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\05\00\00\00 \00\00\00\06\00\00\00")
+ (data (i32.const 480) "\0b\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\05\00\00\00 \00\00\00\06\00\00\00\00\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
+ (export "B3" (global $duplicate-fields/B3))
  (export "memory" (memory $0))
+ (export "B3#get:bar" (func $export:duplicate-fields/B3#get:bar))
+ (export "B3#set:bar" (func $export:duplicate-fields/B3#set:bar))
+ (export "B3#constructor" (func $export:duplicate-fields/B3#constructor))
  (start $~start)
  (func $duplicate-fields/A#set:bar (param $0 i32) (param $1 i32)
   local.get $0
@@ -2454,6 +2459,28 @@
   local.get $1
   i32.store offset=4
  )
+ (func $duplicate-fields/A3#set:bar (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $duplicate-fields/B3#set:bar (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $duplicate-fields/B3#get:bar (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   global.get $duplicate-fields/foo
@@ -2513,48 +2540,85 @@
    call $~lib/rt/itcms/__visit
   end
  )
+ (func $duplicate-fields/B3~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.get $1
+  call $duplicate-fields/A3~visit
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/itcms/__visit
+  end
+ )
+ (func $duplicate-fields/A3~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/itcms/__visit
+  end
+ )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $duplicate-fields/Bar
-    block $duplicate-fields/B2
-     block $duplicate-fields/Foo
-      block $duplicate-fields/A2
-       block $duplicate-fields/B
-        block $duplicate-fields/A
-         block $~lib/arraybuffer/ArrayBufferView
-          block $~lib/string/String
-           block $~lib/arraybuffer/ArrayBuffer
-            local.get $0
-            i32.const 8
-            i32.sub
-            i32.load
-            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $duplicate-fields/A $duplicate-fields/B $duplicate-fields/A2 $duplicate-fields/Foo $duplicate-fields/B2 $duplicate-fields/Bar $invalid
+   block $duplicate-fields/A3
+    block $duplicate-fields/B3
+     block $duplicate-fields/Bar
+      block $duplicate-fields/B2
+       block $duplicate-fields/Foo
+        block $duplicate-fields/A2
+         block $duplicate-fields/B
+          block $duplicate-fields/A
+           block $~lib/arraybuffer/ArrayBufferView
+            block $~lib/string/String
+             block $~lib/arraybuffer/ArrayBuffer
+              local.get $0
+              i32.const 8
+              i32.sub
+              i32.load
+              br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $duplicate-fields/A $duplicate-fields/B $duplicate-fields/A2 $duplicate-fields/Foo $duplicate-fields/B2 $duplicate-fields/Bar $duplicate-fields/B3 $duplicate-fields/A3 $invalid
+             end
+             return
+            end
+            return
            end
+           local.get $0
+           local.get $1
+           call $~lib/arraybuffer/ArrayBufferView~visit
            return
           end
           return
          end
-         local.get $0
-         local.get $1
-         call $~lib/arraybuffer/ArrayBufferView~visit
          return
         end
+        local.get $0
+        local.get $1
+        call $duplicate-fields/A2~visit
         return
        end
        return
       end
       local.get $0
       local.get $1
-      call $duplicate-fields/A2~visit
+      call $duplicate-fields/B2~visit
       return
      end
      return
     end
     local.get $0
     local.get $1
-    call $duplicate-fields/B2~visit
+    call $duplicate-fields/B3~visit
     return
    end
+   local.get $0
+   local.get $1
+   call $duplicate-fields/A3~visit
    return
   end
   unreachable
@@ -2567,8 +2631,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16960
-   i32.const 17008
+   i32.const 16976
+   i32.const 17024
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2887,5 +2951,141 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+ )
+ (func $duplicate-fields/A3#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.const 10
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
+  local.get $0
+  i32.const 0
+  call $duplicate-fields/A3#set:bar
+  local.get $0
+  local.get $1
+  call $duplicate-fields/A3#set:bar
+  local.get $0
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
+ (func $duplicate-fields/B3#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
+  local.get $0
+  i32.const 0
+  call $duplicate-fields/B3#set:bar
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  local.get $1
+  call $duplicate-fields/A3#constructor
+  local.tee $0
+  i32.store
+  local.get $0
+  local.get $1
+  call $duplicate-fields/B3#set:bar
+  local.get $0
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
+ (func $export:duplicate-fields/B3#get:bar (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $duplicate-fields/B3#get:bar
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $export:duplicate-fields/B3#set:bar (param $0 i32) (param $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  call $duplicate-fields/B3#set:bar
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $export:duplicate-fields/B3#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  call $duplicate-fields/B3#constructor
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
  )
 )
