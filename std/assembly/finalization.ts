@@ -8,22 +8,22 @@
 // @ts-ignore: decorators
 @global @lazy
 export function __finalize(ptr: usize): void {
-    // check to see if this pointer has any registries associated with it
-    if (finalizationRegistryMap.has(ptr)) {
+  // check to see if this pointer has any registries associated with it
+  if (finalizationRegistryMap.has(ptr)) {
 
-      // loop over each one and call the handle callback
-      let registries = finalizationRegistryMap.get(ptr);
-      let length = registries.length;
-      for (let i = 0; i < length; i++) {
-        let registry = unchecked(registries[i]);
+    // loop over each one and call the handle callback
+    let registries = finalizationRegistryMap.get(ptr);
+    let length = registries.length;
+    for (let i = 0; i < length; i++) {
+      let registry = unchecked(registries[i]);
 
-        // let the registry handle it with a virtual call
-        registry.__handle(ptr);
-      }
-
-      // remove it from the registry
-      finalizationRegistryMap.delete(ptr);
+      // let the registry handle it with a virtual call
+      registry.__handle(ptr);
     }
+
+    // remove it from the registry
+    finalizationRegistryMap.delete(ptr);
+  }
 }
 
 /** This map is used to keep track of the callback index used. */
