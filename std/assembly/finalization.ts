@@ -44,7 +44,7 @@ export class FinalizationRegistry<TTarget, THeldValue> extends BaseFinalizationR
    * This holds the held references by pointer. It cannot be by reference because
    * references won't be cleaned up, and it causes a memory leak.
    */
-  private held = new Map<usize, THeldValue>();
+  private held: Map<usize, THeldValue> = new Map<usize, THeldValue>();
 
   constructor(
     /** The callback for the registry */
