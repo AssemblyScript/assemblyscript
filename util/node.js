@@ -1,13 +1,7 @@
 /**
- * @fileoverview Node.js re-exports or shims depending on environment.
+ * @fileoverview Node.js polyfills.
  * @license Apache-2.0
  */
-
-/* global globalThis */
-
-if (typeof globalThis === "undefined") {
-  globalThis = typeof global !== "undefined" ? global : window; // eslint-disable-line no-global-assign
-}
 
 export const isNode = Object.prototype.toString.call(typeof globalThis.process !== 'undefined' ? globalThis.process : 0) === '[object process]';
 

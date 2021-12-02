@@ -40,20 +40,8 @@ export function exit(code = 0) {
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-/* global globalThis */
-
-if (typeof globalThis === "undefined") {
-  globalThis = typeof global !== "undefined" ? global : window; // eslint-disable-line no-global-assign
-}
-
 var performance = globalThis.performance || {};
-var performanceNow =
-  performance.now        ||
-  performance.mozNow     ||
-  performance.msNow      ||
-  performance.oNow       ||
-  performance.webkitNow  ||
-  function(){ return (new Date()).getTime(); };
+var performanceNow = performance.now || function() { return new Date().getTime(); };
 
 export function hrtime(previousTimestamp) {
   var clocktime = performanceNow.call(performance);

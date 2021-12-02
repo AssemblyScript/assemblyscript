@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Web polyfills.
+ * @license Apache-2.0
+ */
+
 import { fs } from "./node.js";
 
 var _fetch = typeof fetch === "function" ? fetch :
@@ -23,4 +28,6 @@ var _fetch = typeof fetch === "function" ? fetch :
     });
   });
 
-export default _fetch;
+export {
+  _fetch as fetch
+};

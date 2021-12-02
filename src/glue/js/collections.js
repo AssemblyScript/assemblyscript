@@ -3,8 +3,6 @@
  * @license Apache-2.0
  */
 
-/* eslint-disable no-undef */
-
 globalThis.Map_keys = function Map_keys(map) {
   return Array.from(map.keys());
 };

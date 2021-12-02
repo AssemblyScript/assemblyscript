@@ -5,7 +5,7 @@ import childProcess from "child_process";
 import esbuild from "esbuild";
 import glob from "glob";
 import { createRequire } from "module";
-import { stdout as colors } from "../util/colors.js";
+import { stdoutColors } from "../util/terminal.js";
 
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -40,9 +40,9 @@ function reportPlugin(name) {
       build.onEnd(({ errors, warnings }) => {
         const duration = Date.now() - startTime;
         if (errors.length) {
-          console.log(`${time()} - ${name} - ${colors.red("ERROR")} (${errors.length} errors, ${warnings.length} warnings, ${duration} ms)`);
+          console.log(`${time()} - ${name} - ${stdoutColors.red("ERROR")} (${errors.length} errors, ${warnings.length} warnings, ${duration} ms)`);
         } else {
-          console.log(`${time()} - ${name} - ${colors.green("SUCCESS")} (${warnings.length} warnings, ${duration} ms)`);
+          console.log(`${time()} - ${name} - ${stdoutColors.green("SUCCESS")} (${warnings.length} warnings, ${duration} ms)`);
         }
       });
     }
@@ -180,11 +180,11 @@ const webPlugin = {
       }).on("error", err => {
         const duration = Date.now() - startTime;
         console.log(stdout.join(""));
-        console.log(`${time()}  - ${"web"} - ${colors.red("ERROR")} (had errors, ${duration} ms)`);
+        console.log(`${time()}  - ${"web"} - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
       }).on("close", code => {
         if (code) return;
         const duration = Date.now() - startTime;
-        console.log(`${time()} - ${"web"} - ${colors.green("SUCCESS")} (no errors, ${duration} ms)`);
+        console.log(`${time()} - ${"web"} - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
       });
     });
   }
@@ -251,12 +251,12 @@ function buildDefinitions() {
     buildingDefinitions = false;
     const duration = Date.now() - startTime;
     console.log(stdout.join(""));
-    console.log(`${time()}  - ${"dts"} - ${colors.red("ERROR")} (had errors, ${duration} ms)`);
+    console.log(`${time()}  - ${"dts"} - ${stdoutColors.red("ERROR")} (had errors, ${duration} ms)`);
   }).on("close", code => {
     buildingDefinitions = false;
     if (code) return;
     const duration = Date.now() - startTime;
-    console.log(`${time()} - ${"dts"} - ${colors.green("SUCCESS")} (no errors, ${duration} ms)`);
+    console.log(`${time()} - ${"dts"} - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
   });
 }
 

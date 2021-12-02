@@ -28,9 +28,9 @@
  */
 
 import { fs, module, path, process } from "../util/node.js";
-import fetch from "../util/fetch.js";
-import * as utf8 from "../util/utf8.js";
-import * as colorsUtil from "../util/colors.js";
+import { fetch } from "../util/web.js";
+import { Colors} from "../util/terminal.js";
+import { utf8 } from "../util/text.js";
 import * as optionsUtil from "../util/options.js";
 import * as generated from "./index.generated.js";
 
@@ -211,12 +211,11 @@ export async function main(argv, options) {
   let opts = optionsResult.options;
   argv = optionsResult.arguments;
 
+  const stdoutColors = new Colors(stdout);
+  const stderrColors = new Colors(stderr);
   if (opts.noColors) {
-    colorsUtil.stdout.enabled =
-    colorsUtil.stderr.enabled = false;
-  } else {
-    colorsUtil.stdout.stream = stdout;
-    colorsUtil.stderr.stream = stderr;
+    stdoutColors.enabled = false;
+    stderrColors.enabled = false;
   }
 
   // Check for unknown options
@@ -224,7 +223,7 @@ export async function main(argv, options) {
   if (unknownOpts.length) {
     unknownOpts.forEach(arg => {
       stderr.write(
-        `${colorsUtil.stderr.yellow("WARNING ")}Unknown option '${arg}'%{EOL}`
+        `${stderrColors.yellow("WARNING ")}Unknown option '${arg}'%{EOL}`
       );
     });
   }
@@ -233,7 +232,7 @@ export async function main(argv, options) {
   const trailingArgv = optionsResult.trailing;
   if (trailingArgv.length) {
     stderr.write(
-      `${colorsUtil.stderr.yellow("WARNING ")}Unsupported trailing arguments: ${trailingArgv.join(" ")}${EOL}`
+      `${stderrColors.yellow("WARNING ")}Unsupported trailing arguments: ${trailingArgv.join(" ")}${EOL}`
     );
   }
 
@@ -242,7 +241,7 @@ export async function main(argv, options) {
   // Prepares the result object
   var prepareResult = (error, result = {}) => {
     if (error) {
-      stderr.write(`${colorsUtil.stderr.red("FAILURE ")}${error.stack.replace(/^ERROR: /i, "")}${EOL}`);
+      stderr.write(`${stderrColors.red("FAILURE ")}${error.stack.replace(/^ERROR: /i, "")}${EOL}`);
     }
     if (module) module.dispose();
     return Object.assign({ error, stdout, stderr, stats }, result);
@@ -275,18 +274,18 @@ export async function main(argv, options) {
   // Print the help message if requested or no source files are provided
   if (opts.help || (!argv.length && !configHasEntries)) {
     var out = opts.help ? stdout : stderr;
-    var color = opts.help ? colorsUtil.stdout : colorsUtil.stderr;
+    var colors = opts.help ? stdoutColors : stderrColors;
     out.write([
-      color.white("SYNTAX"),
-      "  " + color.cyan("asc") + " [entryFile ...] [options]",
+      colors.white("SYNTAX"),
+      "  " + colors.cyan("asc") + " [entryFile ...] [options]",
       "",
-      color.white("EXAMPLES"),
-      "  " + color.cyan("asc") + " hello" + extension.ext,
-      "  " + color.cyan("asc") + " hello" + extension.ext + " -b hello.wasm -t hello.wat",
-      "  " + color.cyan("asc") + " hello1" + extension.ext + " hello2" + extension.ext + " -b -O > hello.wasm",
-      "  " + color.cyan("asc") + " --config asconfig.json --target release",
+      colors.white("EXAMPLES"),
+      "  " + colors.cyan("asc") + " hello" + extension.ext,
+      "  " + colors.cyan("asc") + " hello" + extension.ext + " -b hello.wasm -t hello.wat",
+      "  " + colors.cyan("asc") + " hello1" + extension.ext + " hello2" + extension.ext + " -b -O > hello.wasm",
+      "  " + colors.cyan("asc") + " --config asconfig.json --target release",
       "",
-      color.white("OPTIONS"),
+      colors.white("OPTIONS"),
     ].concat(
       optionsUtil.help(generated.options, 24, EOL)
     ).join(EOL) + EOL);
@@ -1144,6 +1143,7 @@ export async function main(argv, options) {
 
   return prepareResult(null);
 
+  // Default implementation to read files on node
   async function readFileNode(filename, baseDir) {
     let name = path.resolve(baseDir, filename);
     try {
@@ -1154,6 +1154,7 @@ export async function main(argv, options) {
     }
   }
 
+  // Default implementation to write files on node
   async function writeFileNode(filename, contents, baseDir) {
     try {
       stats.writeCount++;
@@ -1167,6 +1168,7 @@ export async function main(argv, options) {
     }
   }
 
+  // Default implementation to list files on node
   async function listFilesNode(dirname, baseDir) {
     try {
       stats.readCount++;
@@ -1177,12 +1179,41 @@ export async function main(argv, options) {
     }
   }
 
+  // Writes to stdout
   function writeStdout(contents) {
     if (!writeStdout.used) {
       writeStdout.used = true;
       stats.writeCount++;
     }
     stdout.write(contents);
+  }
+
+  // Crash handler
+  function crash(stage, e) {
+    const BAR = stdoutColors.red("▌ ");
+    console.error([
+      EOL,
+      BAR, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(", EOL,
+      BAR, EOL,
+      (typeof e.stack === "string"
+        ? [
+            BAR, "Here is the stack trace hinting at the problem, perhaps it's useful?", EOL,
+            BAR, EOL,
+            e.stack.replace(/^/mg, BAR), EOL
+          ]
+        : [
+            BAR, "There is no stack trace. Perhaps a Binaryen exception above / in console?", EOL,
+            BAR, EOL,
+            BAR, "> " + e.stack, EOL
+          ]
+      ).join(""),
+      BAR, EOL,
+      BAR, "If you see where the error is, feel free to send us a pull request. If not,", EOL,
+      BAR, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues", EOL,
+      BAR, EOL,
+      BAR, "Thank you!", EOL
+    ].join(""));
+    process.exit(1);
   }
 }
 
@@ -1380,33 +1411,5 @@ export const tscOptions = {
   types: [],
   allowJs: false
 };
-
-// Gracefully handle crashes
-function crash(stage, e) {
-  const BAR = colorsUtil.stdout.red("▌ ");
-  console.error([
-    EOL,
-    BAR, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(", EOL,
-    BAR, EOL,
-    (typeof e.stack === "string"
-      ? [
-          BAR, "Here is the stack trace hinting at the problem, perhaps it's useful?", EOL,
-          BAR, EOL,
-          e.stack.replace(/^/mg, BAR), EOL
-        ]
-      : [
-          BAR, "There is no stack trace. Perhaps a Binaryen exception above / in console?", EOL,
-          BAR, EOL,
-          BAR, "> " + e.stack, EOL
-        ]
-    ).join(""),
-    BAR, EOL,
-    BAR, "If you see where the error is, feel free to send us a pull request. If not,", EOL,
-    BAR, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues", EOL,
-    BAR, EOL,
-    BAR, "Thank you!", EOL
-  ].join(""));
-  process.exit(1);
-}
 
 export * as default from "./index.js";

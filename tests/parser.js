@@ -3,8 +3,8 @@ import path from "path";
 import os from "os";
 import { fileURLToPath } from "url";
 import glob from "glob";
-import diff from "../util/diff.js";
-import * as colorsUtil from "../util/colors.js";
+import { diff } from "../util/text.js";
+import { stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
 import { Program, Options, ASTBuilder } from "../dist/assemblyscript.js";
 
@@ -30,10 +30,10 @@ const argv = opts.arguments;
 
 if (args.help) {
   console.log([
-    colorsUtil.stdout.white("SYNTAX"),
-    "  " + colorsUtil.stdout.cyan("npm run test:parser --") + " [test1, test2 ...] [options]",
+    stdoutColors.white("SYNTAX"),
+    "  " + stdoutColors.cyan("npm run test:parser --") + " [test1, test2 ...] [options]",
     "",
-    colorsUtil.stdout.white("OPTIONS"),
+    stdoutColors.white("OPTIONS"),
     optionsUtil.help(config)
   ].join(os.EOL) + os.EOL);
   process.exit(0);
@@ -58,7 +58,7 @@ var failures = 0;
 for (const filename of tests) {
   if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) continue;
 
-  console.log(colorsUtil.stdout.white("Testing parser/" + filename));
+  console.log(stdoutColors.white("Testing parser/" + filename));
 
   let failed = false;
   const program = new Program(new Options());
@@ -78,9 +78,9 @@ for (const filename of tests) {
     if (diffs !== null) {
       failed = true;
       console.log(diffs);
-      console.log(colorsUtil.stdout.red("diff ERROR"));
+      console.log(stdoutColors.red("diff ERROR"));
     } else {
-      console.log(colorsUtil.stdout.green("diff OK"));
+      console.log(stdoutColors.green("diff OK"));
     }
   }
 
@@ -90,7 +90,7 @@ for (const filename of tests) {
 
 if (failures) {
   process.exitCode = 1;
-  console.log(colorsUtil.stdout.red("ERROR: ") + failures + " parser tests failed");
+  console.log(stdoutColors.red("ERROR: ") + failures + " parser tests failed");
 } else {
-  console.log("[ " + colorsUtil.stdout.white("SUCCESS") + " ]");
+  console.log("[ " + stdoutColors.white("SUCCESS") + " ]");
 }

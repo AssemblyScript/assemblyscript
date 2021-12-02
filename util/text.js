@@ -1,14 +1,12 @@
 /**
- * @fileoverview UTF-8 utility.
+ * @fileoverview Text utility.
  * @license Apache-2.0
  */
 
-/**
- * Calculates the UTF8 byte length of a string.
- * @param {string} string String
- * @returns {number} Byte length
- */
-export function length(string) {
+import * as Diff from "diff";
+import { stdoutColors } from "./terminal.js";
+
+export function utf8Length(string) {
   var len = 0;
   for (var i = 0, k = string.length; i < k; ++i) {
     let c = string.charCodeAt(i);
@@ -26,14 +24,7 @@ export function length(string) {
   return len;
 }
 
-/**
- * Reads UTF8 bytes as a string.
- * @param {Uint8Array} buffer Source buffer
- * @param {number} start Source start
- * @param {number} end Source end
- * @returns {string} String read
- */
-export function read(buffer, start, end) {
+export function utf8Read(buffer, start, end) {
   var len = end - start;
   if (len < 1) return "";
   var parts = null,
@@ -54,25 +45,18 @@ export function read(buffer, start, end) {
       chunk[i++] = (t & 15) << 12 | (buffer[start++] & 63) << 6 | buffer[start++] & 63;
     }
     if (i >= 8192) {
-      (parts || (parts = [])).push(String.fromCharCode.apply(String, chunk));
+      (parts || (parts = [])).push(String.fromCharCode(...chunk));
       i = 0;
     }
   }
   if (parts) {
-    if (i) parts.push(String.fromCharCode.apply(String, chunk.slice(0, i)));
+    if (i) parts.push(String.fromCharCode(...chunk.slice(0, i)));
     return parts.join("");
   }
-  return String.fromCharCode.apply(String, chunk.slice(0, i));
+  return String.fromCharCode(...chunk.slice(0, i));
 }
 
-/**
- * Writes a string as UTF8 bytes.
- * @param {string} string Source string
- * @param {Uint8Array} buffer Destination buffer
- * @param {number} offset Destination offset
- * @returns {number} Bytes written
- */
-export function write(string, buffer, offset) {
+export function utf8Write(string, buffer, offset) {
   var start = offset;
   for (var i = 0, k = string.length; i < k; ++i) {
     let c1 = string.charCodeAt(i), c2;
@@ -95,4 +79,36 @@ export function write(string, buffer, offset) {
     }
   }
   return offset - start;
+}
+
+export const utf8 = {
+  length: utf8Length,
+  read: utf8Read,
+  write: utf8Write
+};
+
+export function diff(filename, expected, actual) {
+  const diff = Diff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 5 });
+  if (!diff.hunks.length) return null;
+
+  const out = [
+    '--- ' + diff.oldHeader,
+    '+++ ' + diff.newHeader
+  ];
+  for (const hunk of diff.hunks) {
+    out.push(
+      '@@ -' + hunk.oldStart + ',' + hunk.oldLines
+      + ' +' + hunk.newStart + ',' + hunk.newLines
+      + ' @@'
+    );
+    out.push(...hunk.lines.map(line =>
+      line.charAt(0) === "+"
+        ? stdoutColors.green(line)
+        : line.charAt(0) === "-"
+        ? line = stdoutColors.red(line)
+        : line
+    ));
+  }
+
+  return out.join('\n') + '\n';
 }

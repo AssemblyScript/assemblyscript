@@ -7,10 +7,10 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import { WASI } from "wasi";
 import glob from "glob";
-import { stdout as colors } from "../util/colors.js";
+import { stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
 import { coreCount, threadCount } from "../util/cpu.js";
-import diff from "../util/diff.js";
+import { diff } from "../util/text.js";
 import { Rtrace } from "../lib/rtrace/index.js";
 import asc from "../dist/asc.js";
 
@@ -60,10 +60,10 @@ const argv = opts.arguments;
 
 if (args.help) {
   console.log([
-    colors.white("SYNTAX"),
-    "  " + colors.cyan("npm run test:compiler --") + " [test1, test2 ...] [options]",
+    stdoutColors.white("SYNTAX"),
+    "  " + stdoutColors.cyan("npm run test:compiler --") + " [test1, test2 ...] [options]",
     "",
-    colors.white("OPTIONS"),
+    stdoutColors.white("OPTIONS"),
     optionsUtil.help(config)
   ].join(os.EOL) + os.EOL);
   process.exit(0);
@@ -79,7 +79,7 @@ function getTests() {
   if (argv.length) { // run matching tests only
     tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
     if (!tests.length) {
-      console.log(colors.red("FAILURE: ") + colors.white("No matching tests: " + argv.join(" ") + "\n"));
+      console.log(stdoutColors.red("FAILURE: ") + stdoutColors.white("No matching tests: " + argv.join(" ") + "\n"));
       process.exit(1);
     }
   }
@@ -96,9 +96,9 @@ function section(title) {
       const hrtime = process.hrtime(start);
       const time = `${(hrtime[0] * 1e9 + hrtime[1] / 1e6).toFixed(3)} ms`;
       switch (code) {
-        case SUCCESS: console.log("  " + colors.green("SUCCESS") + " (" + time + ")\n"); break;
-        default: console.log("  " + colors.red("FAILURE") + " (" + time + ")\n"); break;
-        case SKIPPED: console.log("  " + colors.yellow("SKIPPED") + " (" + time + ")\n"); break;
+        case SUCCESS: console.log("  " + stdoutColors.green("SUCCESS") + " (" + time + ")\n"); break;
+        default: console.log("  " + stdoutColors.red("FAILURE") + " (" + time + ")\n"); break;
+        case SKIPPED: console.log("  " + stdoutColors.yellow("SKIPPED") + " (" + time + ")\n"); break;
       }
     }
   };
@@ -109,7 +109,7 @@ const SKIPPED = 2;
 
 // Runs a single test
 async function runTest(basename) {
-  console.log(colors.white("# compiler/" + basename) + "\n");
+  console.log(stdoutColors.white("# compiler/" + basename) + "\n");
 
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath) ? require(configPath) : {};
@@ -152,7 +152,7 @@ async function runTest(basename) {
       }
     });
     if (missing_features.length) {
-      console.log("- " + colors.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
+      console.log("- " + stdoutColors.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
       return prepareResult(SKIPPED, "feature not enabled: " + missing_features.join(", "));
     }
   }
@@ -215,7 +215,7 @@ async function runTest(basename) {
     const actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
       fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
-      console.log("  " + colors.yellow("Created fixture"));
+      console.log("  " + stdoutColors.yellow("Created fixture"));
       compareFixture.end(SKIPPED);
     } else {
       const expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
@@ -359,7 +359,7 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
       env: {
         memory,
         abort: function(msg, file, line, column) {
-          console.log(colors.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
+          console.log(stdoutColors.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
         },
         trace: function(msg, n) {
           console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
@@ -427,30 +427,30 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
 // Evaluates the overall test result
 function evaluateResult(failedTests, skippedTests) {
   if (skippedTests.size) {
-    console.log(colors.yellow("WARNING: ") + colors.white(skippedTests.size + " compiler tests have been skipped:\n"));
+    console.log(stdoutColors.yellow("WARNING: ") + stdoutColors.white(skippedTests.size + " compiler tests have been skipped:\n"));
     for (let [name, message] of skippedTests) {
-      console.log("  " + name + " " + colors.gray("[" + (message || "???") + "]"));
+      console.log("  " + name + " " + stdoutColors.gray("[" + (message || "???") + "]"));
     }
     console.log();
   }
   if (failedTests.size) {
     process.exitCode = 1;
-    console.log(colors.red("FAILURE: ") + colors.white(failedTests.size + " compiler tests had failures:\n"));
+    console.log(stdoutColors.red("FAILURE: ") + stdoutColors.white(failedTests.size + " compiler tests had failures:\n"));
     for (let [name, message] of failedTests) {
-      console.log("  " + name + " " + colors.gray("[" + (message || "???") + "]"));
+      console.log("  " + name + " " + stdoutColors.gray("[" + (message || "???") + "]"));
     }
     console.log();
   }
   console.log(`Time: ${(Date.now() - startTime)} ms\n`);
   if (!process.exitCode) {
-    console.log("[ " + colors.white("SUCCESS") + " ]");
+    console.log("[ " + stdoutColors.white("SUCCESS") + " ]");
   }
 }
 
 // Run tests in parallel if requested
 if (args.parallel && coreCount > 2) {
   if (cluster.isWorker) {
-    colors.enabled = true;
+    stdoutColors.enabled = true;
     process.on("message", msg => {
       if (msg.cmd != "run") throw Error("invalid command: " + JSON.stringify(msg));
       runTest(msg.test).then(({ code, message }) => {

@@ -25,12 +25,12 @@ export interface OptionDescription {
 }
 
 /** Configuration object. */
-interface Config {
+export interface Config {
   [key: string]: OptionDescription;
 }
 
 /** Parsing result. */
-interface Result {
+export interface Result {
   /** Parsed options. */
   options: OptionSet,
   /** Unknown options. */
@@ -45,7 +45,7 @@ interface Result {
 export function parse(argv: string[], config: Config, propagateDefaults?: boolean): Result;
 
 /** Help formatting options. */
-interface HelpOptions {
+export interface HelpOptions {
   /** Leading indent. Defaults to 2. */
   indent?: number,
   /** Table padding. Defaults to 24. */
@@ -59,6 +59,9 @@ export function help(config: Config, options?: HelpOptions): string;
 
 /** Merges two sets of options into one, preferring the current over the parent set. */
 export function merge(config: Config, currentOptions: OptionSet, parentOptions: OptionSet, parentBaseDir: string): OptionSet;
+
+/** Normalizes a path. */
+export function normalizePath(path: string): string;
 
 /** Resolves a single relative path. Keeps absolute paths, otherwise prepends baseDir. */
 export function resolvePath(path: string, baseDir: string, useNodeResolution?: boolean): string;

@@ -4,7 +4,7 @@
  */
 
 import { path, module } from "./node.js";
-import * as colorsUtil from "./colors.js";
+import { stdoutColors } from "./terminal.js";
 
 const require = module.createRequire(import.meta.url);
 
@@ -130,11 +130,11 @@ export function help(config, options) {
   var hasCategories = false;
   Object.keys(sbCategories).forEach(category => {
     hasCategories = true;
-    sb.push(eol + " " + colorsUtil.stdout.gray(category) + eol);
+    sb.push(eol + " " + stdoutColors.gray(category) + eol);
     sb.push(sbCategories[category].join(eol));
   });
   if (hasCategories) {
-    sb.push(eol + " " + colorsUtil.stdout.gray("Other") + eol);
+    sb.push(eol + " " + stdoutColors.gray("Other") + eol);
   }
   sb.push(sbOther.join(eol));
   return sb.join(eol);
@@ -233,6 +233,7 @@ export function merge(config, currentOptions, parentOptions, parentBaseDir) {
   return mergedOptions;
 }
 
+/** Normalizes a path. */
 export function normalizePath(p) {
   const parsed = path.parse(p);
   if (!parsed.root) {

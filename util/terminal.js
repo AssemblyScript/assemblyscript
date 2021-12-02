@@ -1,5 +1,5 @@
 /**
- * @fileoverview Terminal colors utility.
+ * @fileoverview Terminal utility.
  * @license Apache-2.0
  */
 
@@ -31,5 +31,5 @@ export class Colors {
   white(text) { return this.enabled ? WHITE + text + RESET : text; }
 }
 
-export const stdout = new Colors(proc.stdout);
-export const stderr = new Colors(proc.stderr);
+export const stdoutColors = new Colors(proc.stdout);
+export const stderrColors = new Colors(proc.stderr);

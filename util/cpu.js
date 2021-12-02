@@ -1,3 +1,8 @@
+/**
+ * @fileoverview CPU utility.
+ * @license Apache-2.0
+ */
+
 // https://www.npmjs.com/package/physical-cpu-count
 
 import os from "os";

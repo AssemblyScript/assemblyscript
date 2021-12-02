@@ -15,9 +15,9 @@ module.exports = { // eslint-disable-line no-undef
     ecmaFeatures: {}
   },
   globals: {
+    "globalThis": "readonly",
     "BigInt64Array": "readonly",
-    "BigUint64Array": "readonly",
-    "__non_webpack_require__": "readonly"
+    "BigUint64Array": "readonly"
   },
 
   // === General rules =========================================================
