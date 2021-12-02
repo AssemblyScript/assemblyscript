@@ -25156,7 +25156,7 @@
   local.get $1
   i64.const 0
   i64.lt_s
-  local.tee $2
+  local.tee $3
   if
    local.get $0
    i32.const 45
@@ -25166,23 +25166,23 @@
    i64.sub
    local.set $1
   end
-  local.get $2
+  local.get $3
   i32.const 1
   i32.shl
   local.get $0
   i32.add
-  local.set $3
+  local.set $4
   local.get $1
   i64.const 10
   i64.lt_u
   if
-   local.get $3
+   local.get $4
    local.get $1
    i32.wrap_i64
    i32.const 48
    i32.or
    i32.store16
-   local.get $2
+   local.get $3
    i32.const 1
    i32.add
    return
@@ -25193,60 +25193,59 @@
   if
    local.get $1
    i32.wrap_i64
-   local.tee $4
-   local.tee $0
+   local.tee $2
    i32.const 100000
    i32.lt_u
    if (result i32)
-    local.get $0
+    local.get $2
     i32.const 100
     i32.lt_u
     if (result i32)
-     local.get $0
+     local.get $2
      i32.const 10
      i32.ge_u
      i32.const 1
      i32.add
     else
-     local.get $0
+     local.get $2
      i32.const 10000
      i32.ge_u
      i32.const 3
      i32.add
-     local.get $0
+     local.get $2
      i32.const 1000
      i32.ge_u
      i32.add
     end
    else
-    local.get $0
+    local.get $2
     i32.const 10000000
     i32.lt_u
     if (result i32)
-     local.get $0
+     local.get $2
      i32.const 1000000
      i32.ge_u
      i32.const 6
      i32.add
     else
-     local.get $0
+     local.get $2
      i32.const 1000000000
      i32.ge_u
      i32.const 8
      i32.add
-     local.get $0
+     local.get $2
      i32.const 100000000
      i32.ge_u
      i32.add
     end
    end
    local.set $0
-   local.get $3
    local.get $4
+   local.get $2
    local.get $0
    call $~lib/util/number/utoa32_dec_lut
   else
-   local.get $3
+   local.get $4
    local.get $1
    local.get $1
    i64.const 1000000000000000
@@ -25302,7 +25301,7 @@
    call $~lib/util/number/utoa64_dec_lut
   end
   local.get $0
-  local.get $2
+  local.get $3
   i32.add
  )
  (func $~lib/typedarray/Int64Array#join (param $0 i32) (result i32)
@@ -25678,68 +25677,56 @@
   if
    local.get $1
    i32.wrap_i64
-<<<<<<< HEAD
    local.tee $3
-   local.tee $0
-=======
-   local.tee $2
->>>>>>> main
    i32.const 100000
    i32.lt_u
    if (result i32)
-    local.get $0
+    local.get $3
     i32.const 100
     i32.lt_u
     if (result i32)
-     local.get $0
+     local.get $3
      i32.const 10
      i32.ge_u
      i32.const 1
      i32.add
     else
-     local.get $0
+     local.get $3
      i32.const 10000
      i32.ge_u
      i32.const 3
      i32.add
-     local.get $0
+     local.get $3
      i32.const 1000
      i32.ge_u
      i32.add
     end
    else
-    local.get $0
+    local.get $3
     i32.const 10000000
     i32.lt_u
     if (result i32)
-     local.get $0
+     local.get $3
      i32.const 1000000
      i32.ge_u
      i32.const 6
      i32.add
     else
-     local.get $0
+     local.get $3
      i32.const 1000000000
      i32.ge_u
      i32.const 8
      i32.add
-     local.get $0
+     local.get $3
      i32.const 100000000
      i32.ge_u
      i32.add
     end
    end
-<<<<<<< HEAD
    local.set $0
    local.get $2
    local.get $3
    local.get $0
-=======
-   local.set $3
-   local.get $0
-   local.get $2
-   local.get $3
->>>>>>> main
    call $~lib/util/number/utoa32_dec_lut
   else
    local.get $2
@@ -25794,17 +25781,10 @@
      i32.add
     end
    end
-<<<<<<< HEAD
    local.tee $0
    call $~lib/util/number/utoa64_dec_lut
   end
   local.get $0
-=======
-   local.tee $3
-   call $~lib/util/number/utoa64_dec_lut
-  end
-  local.get $3
->>>>>>> main
  )
  (func $~lib/typedarray/Uint64Array#join (param $0 i32) (result i32)
   (local $1 i32)
