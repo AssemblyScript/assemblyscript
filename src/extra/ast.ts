@@ -1677,6 +1677,9 @@ export class ASTBuilder {
 
   serializeAccessModifiers(node: DeclarationStatement): void {
     var sb = this.sb;
+    if (node.is(CommonFlags.DECLARE)) {
+      sb.push("declare ");
+    }
     if (node.is(CommonFlags.PUBLIC)) {
       sb.push("public ");
     } else if (node.is(CommonFlags.PRIVATE)) {
