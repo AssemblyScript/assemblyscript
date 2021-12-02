@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "binaryen": "102.0.0-nightly.20211028",
-    "long": "^5.1.0",
+    "long": "^5.2.0",
     "source-map-support": "^0.5.20",
     "ts-node": "^10.4.0"
   },
