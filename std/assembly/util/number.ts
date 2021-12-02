@@ -786,12 +786,12 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
     if (isSigned<T>()) {
       if (sizeof<T>() <= 4) {
         if (<u32>value < 10) {
-          store<u16>(dest, <u32>value | CharCode._0);
+          store<u16>(dest, value | CharCode._0);
           return 1 + sign;
         }
       } else {
         if (<u64>value < 10) {
-          store<u16>(dest, <u32>value | CharCode._0);
+          store<u16>(dest, value | CharCode._0);
           return 1 + sign;
         }
       }

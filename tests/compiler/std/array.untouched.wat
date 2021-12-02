@@ -18779,10 +18779,10 @@
   if
    local.get $3
    local.get $1
-   i32.wrap_i64
    i32.const 48
-   i32.or
-   i32.store16
+   i64.extend_i32_s
+   i64.or
+   i64.store16
    i32.const 1
    local.get $2
    i32.add
