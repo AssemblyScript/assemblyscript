@@ -27,6 +27,18 @@ globalThis.i64_high = function i64_high(value) {
   return value.high;
 };
 
+globalThis.i64_not = function i64_not(value) {
+  return value.not();
+};
+
+globalThis.i64_clz = function i64_clz(value) {
+  return value.clz();
+};
+
+globalThis.i64_ctz = function i64_ctz(value) {
+  return value.ctz();
+};
+
 globalThis.i64_add = function i64_add(left, right) {
   return left.add(right);
 };
@@ -102,10 +114,6 @@ globalThis.i64_shr = function i64_shr(left, right) {
 
 globalThis.i64_shr_u = function i64_shr_u(left, right) {
   return left.shru(right);
-};
-
-globalThis.i64_not = function i64_not(value) {
-  return value.not();
 };
 
 globalThis.i64_eq = function i64_eq(left, right) {
