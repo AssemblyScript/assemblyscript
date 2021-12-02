@@ -64,7 +64,7 @@
     "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "build": "node scripts/build",
     "watch": "node scripts/build --watch",
-    "test": "npm run test:parser && npm run test:compiler --parallel && npm run test:browser && npm run test:packages && npm run test:extension && npm run test:asconfig",
+    "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:packages && npm run test:extension && npm run test:asconfig",
     "test:parser": "node --enable-source-maps tests/parser",
     "test:compiler": "node --enable-source-maps --experimental-wasi-unstable-preview1 --no-warnings tests/compiler",
     "test:browser": "node --enable-source-maps tests/browser",

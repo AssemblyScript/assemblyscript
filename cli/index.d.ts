@@ -29,7 +29,7 @@ export const defaultShrinkLevel: number;
 
 /** A compatible output stream. */
 export interface OutputStream {
-  /** Writes another chunk of data to the stream. */
+  /** Writes a chunk of data to the stream. */
   write(chunk: Uint8Array | string): void;
 }
 

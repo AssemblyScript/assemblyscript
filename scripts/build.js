@@ -81,12 +81,8 @@ const stdlibPlugin = {
       out.push(
         `export const options = ${JSON.stringify(options, null, 2)};\n`
       );
-      const definitionFiles = {
-        assembly: bundleFile(path.join(dirname, "..", "std", "assembly", "index.d.ts")),
-        portable: bundleFile(path.join(dirname, "..", "std", "portable", "index.d.ts"))
-      };
       out.push(
-        `export const definitionFiles = ${JSON.stringify(definitionFiles, null, 2)};\n`
+        `export const libraryPrefix = "~lib/";\n`
       );
       const libraryDir = path.join(dirname, "..", "std", "assembly");
       const libraryFiles = {};
@@ -95,6 +91,13 @@ const stdlibPlugin = {
       }
       out.push(
         `export const libraryFiles = ${JSON.stringify(libraryFiles, null, 2)};\n`
+      );
+      const definitionFiles = {
+        assembly: bundleFile(path.join(dirname, "..", "std", "assembly", "index.d.ts")),
+        portable: bundleFile(path.join(dirname, "..", "std", "portable", "index.d.ts"))
+      };
+      out.push(
+        `export const definitionFiles = ${JSON.stringify(definitionFiles, null, 2)};\n`
       );
       const generated = out.join("");
       fs.writeFileSync(path.join(dirname, "..", "cli", "index.generated.js"), generated);

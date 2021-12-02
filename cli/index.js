@@ -85,11 +85,6 @@ if (useWasm) {
   if (assemblyscript._start) assemblyscript._start();
 }
 
-export {
-  loader,
-  rtrace
-};
-
 const require = module.createRequire(import.meta.url);
 
 const WIN = process.platform === "win32";
@@ -130,7 +125,7 @@ export const version = generated.version;
 export const options = generated.options;
 
 /** Prefix used for library files. */
-export const libraryPrefix = __getString(assemblyscript.LIBRARY_PREFIX.valueOf());
+export const libraryPrefix = generated.libraryPrefix;
 
 /** Bundled library files. */
 export const libraryFiles = generated.libraryFiles;
@@ -1399,14 +1394,14 @@ export function createMemoryStream(fn) {
 /** Compatible TypeScript compiler options for syntax highlighting etc. */
 export const tscOptions = {
   alwaysStrict: true,
+  strictNullChecks: true,
   noImplicitAny: true,
   noImplicitReturns: true,
   noImplicitThis: true,
   noEmitOnError: true,
-  strictNullChecks: true,
+  noPropertyAccessFromIndexSignature: true,
   experimentalDecorators: true,
   target: "esnext",
-  module: "commonjs",
   noLib: true,
   types: [],
   allowJs: false
