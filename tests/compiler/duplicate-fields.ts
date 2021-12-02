@@ -42,15 +42,16 @@ assert(offsetof<B2>("bar") == 0);
 const raz = new B2(new Bar(1, 2));
 assert(raz.bar.bar == 2);
 
-// protected field overriding protected field shouldn't
-// throw an error
+// make sure visibility checks allow these
 
 class A3 {
-  protected bar: Foo;
-  constructor(bar: Foo) { this.bar = bar; }
+  protected protProt: i32;
+  protected protPub: i32;
+  public pubPub: i32;
 }
 
 export class B3 extends A3 {
-  protected bar: Bar;
-  constructor(bar: Bar) { super(bar); this.bar = bar; }
+  protected protProt: i32;
+  public protPub: i32;
+  public pubPub: i32;
 }

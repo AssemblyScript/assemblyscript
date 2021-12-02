@@ -1,33 +1,38 @@
 class A {
-  private a: i32;
-  public b: i32;
-  private c: i32;
-  public d: i64;
-  public e: i32;
-  public f: i32;
-  constructor(a: i32, b: i32, c: i32, d: i64, e: i32, f: i32) { 
-    this.a = a; 
-    this.b = b; 
-    this.c = c; 
-    this.d = d;
-    this.e = e;
-    this.f = f;
-  }
-  g(): void {}
+  private privPriv: i32;
+  private privProt: i32;
+  private privPub: i32;
+
+  // --
+
+  protected protPriv: i32;
+  public pubPriv: i32;
+
+  // --
+
+  public pubProt: i32;
+
+  // --
+
+  method(): void {}
 }
 
 export class B extends A {
-  public a: i32;
-  private b: i32;
-  private c: i32;
-  public d: i32;
-  public e: i32;
-  public g: i32;
-  protected f: i32;
-  constructor(a: i32, b: i32, c: i32, d: i32, e: i32, f: i32) { 
-    super(a, b, c, d, e, f); 
-    ERROR("EOF"); 
-  }
-}
+  private privPriv: i32;
+  protected privProt: i32;
+  public privPub: i32;
 
+  // --
+
+  private protPriv: i32;
+  private pubPriv: i32;
+
+  // --
+
+  protected pubProt: i32;
+
+  // --
+
+  public method: i32;
+}
 

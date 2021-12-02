@@ -3196,14 +3196,8 @@ export class Resolver extends DiagnosticEmitter {
                 }
               }
 
-              // assignability checks
-              if (fieldType.equals(existingField.type) && fieldPrototype.initializerNode === null) {
-                this.errorRelated(
-                  DiagnosticCode.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_remove_the_redundant_declaration,
-                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name, baseClass.internalName
-                );
-              } else if (!fieldType.isStrictlyAssignableTo(existingField.type)) {
+              // assignability
+              if (!fieldType.isStrictlyAssignableTo(existingField.type)) {
                 this.errorRelated(
                   DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,
