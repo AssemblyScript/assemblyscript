@@ -27,6 +27,7 @@ var set: i32;
 var from: i32;
 var keyof: i32;
 var module: i32;
+var declare: i32;
 var readonly: i32;
 var namespace: i32;
 var constructor: i32;

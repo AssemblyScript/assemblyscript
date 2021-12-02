@@ -28,12 +28,12 @@ var set: i32;
 var from: i32;
 var keyof: i32;
 var module: i32;
+var declare: i32;
 var readonly: i32;
 var namespace: i32;
 var constructor: i32;
 
 // -- illegal --
-// var in: i32;
 // var for: i32;
 // var null: i32;
 // var type: i32;
