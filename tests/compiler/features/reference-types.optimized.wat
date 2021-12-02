@@ -16,7 +16,6 @@
  (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
  (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
  (global $features/reference-types/funcGlobal (mut funcref) (ref.null func))
- (global $features/reference-types/externGlobal (mut externref) (ref.null extern))
  (global $features/reference-types/anyGlobal (mut anyref) (ref.null any))
  (memory $0 1)
  (data (i32.const 1036) "L")
@@ -38,6 +37,8 @@
   call $features/reference-types/external
  )
  (func $~start
+  (local $0 externref)
+  (local $1 externref)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -51,11 +52,13 @@
    unreachable
   end
   global.get $features/reference-types/someObject
+  local.tee $0
   call $~lib/bindings/console/log
   global.get $features/reference-types/someKey
+  local.tee $1
   call $~lib/bindings/console/log
-  global.get $features/reference-types/someObject
-  global.get $features/reference-types/someKey
+  local.get $0
+  local.get $1
   call $~lib/bindings/Reflect/get
   call $~lib/bindings/console/log
   call $features/reference-types/somethingReal
@@ -113,19 +116,6 @@
   end
   ref.null func
   global.set $features/reference-types/funcGlobal
-  global.get $features/reference-types/externGlobal
-  ref.is_null
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 79
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  ref.null extern
-  global.set $features/reference-types/externGlobal
   global.get $features/reference-types/anyGlobal
   ref.is_null
   i32.eqz

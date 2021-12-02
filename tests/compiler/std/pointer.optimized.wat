@@ -8,7 +8,6 @@
  (global $std/pointer/add (mut i32) (i32.const 0))
  (global $std/pointer/sub (mut i32) (i32.const 0))
  (global $std/pointer/nextOne (mut i32) (i32.const 0))
- (global $std/pointer/buf (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s")
@@ -1123,8 +1122,6 @@
    unreachable
   end
   i32.const 0
-  global.set $std/pointer/buf
-  i32.const 0
   f32.const 1.100000023841858
   f32.store
   i32.const 4
@@ -1142,8 +1139,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/pointer/buf
-  f32.load offset=4
+  i32.const 4
+  f32.load
   f32.const 1.2000000476837158
   f32.ne
   if
@@ -1154,7 +1151,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/pointer/buf
+  i32.const 0
   f32.load
   f32.const 1.100000023841858
   f32.ne
@@ -1166,8 +1163,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/pointer/buf
-  f32.load offset=4
+  i32.const 4
+  f32.load
   f32.const 1.2000000476837158
   f32.ne
   if
@@ -1202,14 +1199,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/pointer/buf
-  local.tee $0
   i32.const 8
-  i32.add
   f32.const 1.2999999523162842
   f32.store
-  local.get $0
-  f32.load offset=8
+  i32.const 8
+  f32.load
   f32.const 1.2999999523162842
   f32.ne
   if
@@ -1220,8 +1214,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/pointer/buf
-  f32.load offset=8
+  i32.const 8
+  f32.load
   f32.const 1.2999999523162842
   f32.ne
   if
@@ -1244,11 +1238,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/pointer/buf
-  local.tee $0
+  i32.const 0
   f32.const 1.399999976158142
   f32.store
-  local.get $0
+  i32.const 0
   f32.load
   f32.const 1.399999976158142
   f32.ne
