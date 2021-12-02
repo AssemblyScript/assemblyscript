@@ -11267,9 +11267,6 @@
   i32.lt_s
   local.tee $2
   if
-   local.get $0
-   i32.const 45
-   i32.store16
    local.get $1
    i32.const 255
    i32.and
@@ -11277,14 +11274,14 @@
    i32.eq
    if
     local.get $0
-    i32.const 2
-    i32.add
-    i32.const 128
-    i32.const 3
-    call $~lib/util/number/utoa32_dec_lut
+    i64.const 15762813447372845
+    i64.store
     i32.const 4
     return
    end
+   local.get $0
+   i32.const 45
+   i32.store16
    i32.const 0
    local.get $1
    i32.sub
@@ -11452,9 +11449,6 @@
   i32.lt_s
   local.tee $2
   if
-   local.get $0
-   i32.const 45
-   i32.store16
    local.get $1
    i32.const 65535
    i32.and
@@ -11462,14 +11456,17 @@
    i32.eq
    if
     local.get $0
-    i32.const 2
-    i32.add
-    i32.const 32768
-    i32.const 5
-    call $~lib/util/number/utoa32_dec_lut
+    i64.const 15481338470793261
+    i64.store
+    local.get $0
+    i32.const 3670070
+    i32.store offset=8
     i32.const 6
     return
    end
+   local.get $0
+   i32.const 45
+   i32.store16
    i32.const 0
    local.get $1
    i32.sub

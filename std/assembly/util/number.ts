@@ -748,20 +748,35 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
   if (isSigned<T>()) {
     sign = u32(value < 0);
     if (sign) {
-      // @ts-ignore
-      store<u16>(buffer, CharCode.MINUS);
       if (sizeof<T>() == 1) {
         if (value == -0x80) {
-          utoa32_dec_core(buffer + 2, 0x80, 3);
+          // -0x80  ->  -128
+          store<u64>(buffer,
+            <u64>CharCode.MINUS |
+            <u64>(CharCode._0 + 1) << 16 |
+            <u64>(CharCode._0 + 2) << 32 |
+            <u64>(CharCode._0 + 8) << 48
+          );
           return 4;
         }
       }
       if (sizeof<T>() == 2) {
         if (value == -0x8000) {
-          utoa32_dec_core(buffer + 2, 0x8000, 5);
+          // -0x8000  ->  -32768
+          store<u64>(buffer,
+            <u64>CharCode.MINUS |
+            <u64>(CharCode._0 + 3) << 16 |
+            <u64>(CharCode._0 + 2) << 32 |
+            <u64>(CharCode._0 + 7) << 48
+          ); // -327
+          store<u32>(buffer + 8,
+            (CharCode._0 + 6) << 0 |
+            (CharCode._0 + 8) << 16
+          ); // 68
           return 6;
         }
       }
+      store<u16>(buffer, CharCode.MINUS);
       // @ts-ignore
       value = -value;
     }
