@@ -15,7 +15,6 @@ class Foo {
   keyof: i32;
   module: i32;
   delete: i32;
-  declare: i32;
   readonly: i32;
   namespace: i32;
   instanceof: i32;
@@ -29,7 +28,6 @@ var set: i32;
 var from: i32;
 var keyof: i32;
 var module: i32;
-var declare: i32;
 var readonly: i32;
 var namespace: i32;
 var constructor: i32;

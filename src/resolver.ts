@@ -3092,17 +3092,25 @@ export class Resolver extends DiagnosticEmitter {
             let fieldPrototype = <FieldPrototype>member;
             let fieldTypeNode = fieldPrototype.typeNode;
             let fieldType: Type | null = null;
-            // TODO: handle duplicate non-private fields specifically?
-            if (!fieldTypeNode) {
-              if (base) {
-                let baseMembers = base.members;
-                if (baseMembers !== null && baseMembers.has(fieldPrototype.name)) {
-                  let baseField = assert(baseMembers.get(fieldPrototype.name));
-                  if (!baseField.is(CommonFlags.PRIVATE)) {
-                    assert(baseField.kind == ElementKind.FIELD);
-                    fieldType = (<Field>baseField).type;
-                  }
+            let existingField: Field | null = null;
+            if (base) {
+              let baseMembers = base.members;
+              if (baseMembers !== null && baseMembers.has(fieldPrototype.name)) {
+                let baseField = assert(baseMembers.get(fieldPrototype.name));
+                if (baseField.kind == ElementKind.FIELD) {
+                  existingField = <Field>baseField;
+                } else {
+                  this.errorRelated(
+                    DiagnosticCode.Duplicate_identifier_0,
+                    fieldPrototype.identifierNode.range, baseField.identifierNode.range,
+                    fieldPrototype.name
+                  );
                 }
+              }
+            }
+            if (!fieldTypeNode) {
+              if (existingField !== null && !existingField.is(CommonFlags.PRIVATE)) {
+                fieldType = existingField.type;
               }
               if (!fieldType) {
                 if (reportMode == ReportMode.REPORT) {
@@ -3130,12 +3138,83 @@ export class Resolver extends DiagnosticEmitter {
               }
             }
             if (!fieldType) break; // did report above
+            if (existingField !== null) {
+              // visibility checks
+              /*
+                          existingField visibility on top
+                +==================+=========+===========+=========+
+                | Visibility Table | Private | Protected | Public  |
+                +==================+=========+===========+=========+
+                | Private          | error   | error     | error   |
+                +------------------+---------+-----------+---------+
+                | Protected        | error   | allowed   | error   |
+                +------------------+---------+-----------+---------+
+                | Public           | error   | allowed   | allowed |
+                +------------------+---------+-----------+---------+
+              */
+
+              let baseClass = <Class>base;
+
+              // handle cases row-by-row
+              if (fieldPrototype.is(CommonFlags.PRIVATE)) {
+                if (existingField.is(CommonFlags.PRIVATE)) {
+                  this.errorRelated(
+                    DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name
+                  );
+                } else {
+                  this.errorRelated(
+                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name, instance.internalName, baseClass.internalName
+                  );
+                }
+              } else if (fieldPrototype.is(CommonFlags.PROTECTED)) {
+                if (existingField.is(CommonFlags.PRIVATE)) {
+                  this.errorRelated(
+                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name, baseClass.internalName, instance.internalName
+                  );
+                } else if (!existingField.is(CommonFlags.PROTECTED)) {
+                  // may be implicitly public
+                  this.errorRelated(
+                    DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name, instance.internalName, baseClass.internalName
+                  );
+                }
+              } else {
+                // fieldPrototype is public here
+                if (existingField.is(CommonFlags.PRIVATE)) {
+                  this.errorRelated(
+                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                    fieldPrototype.name, baseClass.internalName, instance.internalName
+                  );
+                }
+              }
+
+              // assignability
+              if (!fieldType.isStrictlyAssignableTo(existingField.type)) {
+                this.errorRelated(
+                  DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
+                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                  fieldPrototype.name, instance.internalName, baseClass.internalName
+                );
+              }
+            }
             let fieldInstance = new Field(fieldPrototype, instance, fieldType);
             assert(isPowerOf2(fieldType.byteSize));
-            let mask = fieldType.byteSize - 1;
-            if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
-            fieldInstance.memoryOffset = memoryOffset;
-            memoryOffset += fieldType.byteSize;
+            if (existingField !== null) {
+              fieldInstance.memoryOffset = existingField.memoryOffset;
+            } else {
+              let mask = fieldType.byteSize - 1;
+              if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
+              fieldInstance.memoryOffset = memoryOffset;
+              memoryOffset += fieldType.byteSize;
+            }
             instance.add(memberName, fieldInstance); // reports
             break;
           }
