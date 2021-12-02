@@ -949,12 +949,12 @@
   (local $0 i32)
   (local $1 i32)
   memory.size
-  local.tee $0
+  local.tee $1
   i32.const 0
   i32.le_s
   if (result i32)
    i32.const 1
-   local.get $0
+   local.get $1
    i32.sub
    memory.grow
    i32.const 0
@@ -972,11 +972,11 @@
   i32.const 0
   i32.store
   loop $for-loop|0
-   local.get $1
+   local.get $0
    i32.const 23
    i32.lt_u
    if
-    local.get $1
+    local.get $0
     i32.const 2
     i32.shl
     i32.const 22128
@@ -984,14 +984,14 @@
     i32.const 0
     i32.store offset=4
     i32.const 0
-    local.set $0
+    local.set $1
     loop $for-loop|1
-     local.get $0
+     local.get $1
      i32.const 16
      i32.lt_u
      if
-      local.get $0
       local.get $1
+      local.get $0
       i32.const 4
       i32.shl
       i32.add
@@ -1001,17 +1001,17 @@
       i32.add
       i32.const 0
       i32.store offset=96
-      local.get $0
+      local.get $1
       i32.const 1
       i32.add
-      local.set $0
+      local.set $1
       br $for-loop|1
      end
     end
-    local.get $1
+    local.get $0
     i32.const 1
     i32.add
-    local.set $1
+    local.set $0
     br $for-loop|0
    end
   end
@@ -3865,8 +3865,6 @@
       select
       i32.store16 offset=4
       local.get $1
-      i32.const 2
-      i32.add
      else
       local.get $0
       i32.const 4
@@ -3966,9 +3964,9 @@
       local.get $0
       local.get $1
       i32.add
-      i32.const 2
-      i32.add
      end
+     i32.const 2
+     i32.add
     end
    end
   end
@@ -4796,18 +4794,18 @@
    end
    local.get $2
    call $templateliteral/Ref#toString
-   local.set $3
-   global.get $~lib/memory/__stack_pointer
-   local.get $3
-   i32.store offset=16
-   local.get $0
-   call $templateliteral/Ref#toString
    local.set $1
    global.get $~lib/memory/__stack_pointer
    local.get $1
-   i32.store offset=20
+   i32.store offset=16
+   local.get $0
+   call $templateliteral/Ref#toString
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
    local.get $3
+   i32.store offset=20
    local.get $1
+   local.get $3
    call $~lib/string/String#concat
    local.set $1
    global.get $~lib/memory/__stack_pointer

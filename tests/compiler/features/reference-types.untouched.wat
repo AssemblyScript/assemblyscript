@@ -404,7 +404,7 @@
   call $features/reference-types/testLocal<anyref>
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
-  global.get $features/reference-types/funcGlobalInit
+  global.get $features/reference-types/funcGlobal
   ref.is_null
   if
    i32.const 0

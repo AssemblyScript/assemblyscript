@@ -28,8 +28,10 @@ import {
   isWhiteSpace,
   isIdentifierStart,
   isIdentifierPart,
-  isDecimalDigit,
-  isOctalDigit
+  isDecimal,
+  isOctal,
+  isHighSurrogate,
+  isLowSurrogate
 } from "./util";
 
 /** Named token types. */
@@ -703,7 +705,7 @@ export class Tokenizer extends DiagnosticEmitter {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (isDecimalDigit(chr)) {
+            if (isDecimal(chr)) {
               this.pos = pos - 1;
               return Token.FLOATLITERAL; // expects a call to readFloat
             }
@@ -976,9 +978,9 @@ export class Tokenizer extends DiagnosticEmitter {
             break;
           }
           let start = pos++;
-          if ( // surrogate pair?
-            (c & 0xFC00) == 0xD800 && pos < end &&
-            ((text.charCodeAt(pos)) & 0xFC00) == 0xDC00
+          if (
+            isHighSurrogate(c) && pos < end &&
+            isLowSurrogate(text.charCodeAt(pos))
           ) ++pos;
           this.error(
             DiagnosticCode.Invalid_character,
@@ -1177,7 +1179,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var c = text.charCodeAt(this.pos++);
     switch (c) {
       case CharCode._0: {
-        if (isTaggedTemplate && this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
+        if (isTaggedTemplate && this.pos < end && isDecimal(text.charCodeAt(this.pos))) {
           ++this.pos;
           return text.substring(start, this.pos);
         }
@@ -1216,7 +1218,7 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.LINEFEED:
       case CharCode.LINESEPARATOR:
       case CharCode.PARAGRAPHSEPARATOR: return "";
-      default: return String.fromCharCode(c);
+      default: return String.fromCodePoint(c);
     }
   }
 
@@ -1331,7 +1333,7 @@ export class Tokenizer extends DiagnosticEmitter {
           return this.readOctalInteger();
         }
       }
-      if (isOctalDigit(text.charCodeAt(pos + 1))) {
+      if (isOctal(text.charCodeAt(pos + 1))) {
         let start = pos;
         this.pos = pos + 1;
         let value = this.readOctalInteger();
@@ -1578,7 +1580,7 @@ export class Tokenizer extends DiagnosticEmitter {
         if (
           ++this.pos < end &&
           (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
-          isDecimalDigit(text.charCodeAt(this.pos + 1))
+          isDecimal(text.charCodeAt(this.pos + 1))
         ) {
           ++this.pos;
         }
@@ -1618,7 +1620,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
         ++sepCount;
-      } else if (!isDecimalDigit(c)) {
+      } else if (!isDecimal(c)) {
         break;
       }
       ++pos;
@@ -1677,7 +1679,7 @@ export class Tokenizer extends DiagnosticEmitter {
       return "";
     }
     this.pos = pos;
-    return String.fromCharCode(value);
+    return String.fromCodePoint(value);
   }
 
   checkForIdentifierStartAfterNumericLiteral(): void {
@@ -1739,12 +1741,7 @@ export class Tokenizer extends DiagnosticEmitter {
         ? text.substring(startIfTaggedTemplate, this.pos)
         : "";
     }
-    return value32 < 0x10000
-      ? String.fromCharCode(value32)
-      : String.fromCharCode(
-        ((value32 - 0x10000) >>> 10) | 0xD800,
-        ((value32 - 0x10000) & 1023) | 0xDC00
-      );
+    return String.fromCodePoint(value32);
   }
 }
 
