@@ -1,6 +1,5 @@
 class Foo {
   as: i32;
-  declare: i32;
   delete: i32;
   from: i32;
   for: i32;
@@ -18,7 +17,6 @@ class Foo {
 }
 var as: i32;
 var constructor: i32;
-var declare: i32;
 var from: i32;
 var get: i32;
 var is: i32;
