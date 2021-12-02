@@ -65,6 +65,7 @@ export enum DiagnosticCode {
   A_rest_parameter_must_be_last_in_a_parameter_list = 1014,
   Parameter_cannot_have_question_mark_and_initializer = 1015,
   A_required_parameter_cannot_follow_an_optional_parameter = 1016,
+  _0_modifier_cannot_appear_on_class_elements_of_this_kind = 1031,
   Statements_are_not_allowed_in_ambient_contexts = 1036,
   Initializers_are_not_allowed_in_ambient_contexts = 1039,
   _0_modifier_cannot_be_used_here = 1042,
@@ -249,6 +250,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1014: return "A rest parameter must be last in a parameter list.";
     case 1015: return "Parameter cannot have question mark and initializer.";
     case 1016: return "A required parameter cannot follow an optional parameter.";
+    case 1031: return "'{0}' modifier cannot appear on class elements of this kind.";
     case 1036: return "Statements are not allowed in ambient contexts.";
     case 1039: return "Initializers are not allowed in ambient contexts.";
     case 1042: return "'{0}' modifier cannot be used here.";

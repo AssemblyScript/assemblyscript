@@ -1891,11 +1891,6 @@ export class Parser extends DiagnosticEmitter {
               tn.range()
             ); // recoverable
           } else {
-            this.error(
-              DiagnosticCode.Not_implemented_0,
-              tn.range(), "Ambient fields"
-            ); // recoverable
-            
             flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
             declareStart = tn.tokenPos;
             declareEnd = tn.pos;
@@ -2149,7 +2144,7 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.OPENPAREN)) {
       if (flags & CommonFlags.DECLARE) {
         this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
+          DiagnosticCode._0_modifier_cannot_appear_on_class_elements_of_this_kind,
           tn.range(declareStart, declareEnd), "declare"
         ); // recoverable
       }
@@ -2295,6 +2290,13 @@ export class Parser extends DiagnosticEmitter {
 
     // field: (':' Type)? ('=' Expression)? ';'?
     } else {
+      if (flags & CommonFlags.DECLARE) {
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          tn.range(declareStart, declareEnd), "Ambient fields"
+        ); // recoverable
+      }
+
       if (flags & CommonFlags.ABSTRACT) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,

@@ -29,6 +29,5 @@ export class Invalid<T> {
 // ERROR 100: "Not implemented: Ambient fields" in class.ts(31,3+7)
 // ERROR 100: "Not implemented: Ambient fields" in class.ts(35,3+7)
 // ERROR 1039: "Initializers are not allowed in ambient contexts." in class.ts(35,35+1)
-// ERROR 100: "Not implemented: Ambient fields" in class.ts(40,3+7)
-// ERROR 1042: "'declare' modifier cannot be used here." in class.ts(40,3+7)
-// ERROR 1183: "An implementation cannot be declared in ambient contexts." in class.ts(40,32+1)
+// ERROR 1031: "'declare' modifier cannot appear on class elements of this kind." in class.ts(39,3+7)
+// ERROR 1183: "An implementation cannot be declared in ambient contexts." in class.ts(39,32+1)

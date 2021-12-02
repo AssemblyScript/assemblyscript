@@ -34,8 +34,7 @@ export class Invalid<T> {
   // 1039: Initializers are not allowed in ambient contexts.
   declare declareInitializer: i32 = 0;
 
-  // 100: Not implemented: Ambient fields
-  // 1042: 'declare' modifier cannot be used here.
+  // 1031: 'declare' modifier cannot appear on class elements of this kind.
   // 1183: An implementation cannot be declared in ambient contexts.
   declare declareMethod(): i32 {}
 }
