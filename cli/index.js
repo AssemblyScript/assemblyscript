@@ -964,8 +964,6 @@ export async function main(argv, options) {
     if (opts.outFile != null) {
       if (opts.textFile == null && /\.was?t$/.test(opts.outFile)) {
         opts.textFile = opts.outFile;
-      } else if (opts.jsFile == null && /\.js$/.test(opts.outFile)) {
-        opts.jsFile = opts.outFile;
       } else if (opts.binaryFile == null) {
         opts.binaryFile = opts.outFile;
       }
@@ -974,9 +972,7 @@ export async function main(argv, options) {
     let hasStdout = false;
     let hasOutput = opts.textFile != null
                  || opts.binaryFile != null
-                 || opts.jsFile != null
-                 || opts.tsdFile != null
-                 || opts.idlFile != null;
+                 || opts.tsdFile != null;
 
     // Write binary
     if (opts.binaryFile != null) {
@@ -1057,27 +1053,6 @@ export async function main(argv, options) {
       }
     }
 
-    // Write WebIDL
-    if (opts.idlFile != null) {
-      let begin = stats.begin();
-      stats.emitCount++;
-      let idl;
-      try {
-        idl = assemblyscript.buildIDL(program);
-      } catch (e) {
-        crash("buildIDL", e);
-      }
-      stats.emitTime += stats.end(begin);
-      if (opts.idlFile.length) {
-        pending.push(
-          writeFile(opts.idlFile, __getString(idl), baseDir)
-        );
-      } else if (!hasStdout) {
-        hasStdout = true;
-        writeStdout(__getString(idl));
-      }
-    }
-
     // Write TypeScript definition
     if (opts.tsdFile != null) {
       let begin = stats.begin();
@@ -1096,34 +1071,6 @@ export async function main(argv, options) {
       } else if (!hasStdout) {
         hasStdout = true;
         writeStdout(__getString(tsd));
-      }
-    }
-
-    // Write JS (modifies the binary, so must be last)
-    if (opts.jsFile != null) {
-      let js;
-      if (opts.jsFile.length) {
-        stats.emitCount++;
-        let begin = stats.begin();
-        try {
-          js = module.emitAsmjs();
-        } catch (e) {
-          crash("emitJS", e);
-        }
-        stats.emitTime += stats.end(begin);
-        pending.push(
-          writeFile(opts.jsFile, js, baseDir)
-        );
-      } else if (!hasStdout) {
-        stats.emitCount++;
-        let begin = stats.begin();
-        try {
-          js = module.emitAsmjs();
-        } catch (e) {
-          crash("emitJS", e);
-        }
-        stats.emitTime += stats.end(begin);
-        writeStdout(js);
       }
     }
   }

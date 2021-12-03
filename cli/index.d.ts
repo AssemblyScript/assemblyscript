@@ -98,10 +98,6 @@ export interface CompilerOptions {
   binaryFile?: string;
   /** Specifies the text output file (.wat). */
   textFile?: string;
-  /** Specifies the JavaScript (via wasm2js) output file (.js). */
-  jsFile?: string;
-  /** Specifies the WebIDL output file (.webidl). */
-  idlFile?: string;
   /** Specifies the TypeScript definition output file (.d.ts). */
   tsdFile?: string;
   /** Enables source map generation. Optionally takes the URL. */

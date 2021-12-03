@@ -35,7 +35,7 @@
 
 import { Target, Runtime, Feature } from "./common";
 import { Compiler, Options } from "./compiler";
-import { IDLBuilder, TSDBuilder } from "./definitions";
+import { TSDBuilder } from "./bindings";
 import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
 import { Module } from "./module";
 import { Program } from "./program";
@@ -280,11 +280,6 @@ export function compile(program: Program): Module {
   return new Compiler(program).compile();
 }
 
-/** Builds WebIDL definitions for the specified program. */
-export function buildIDL(program: Program): string {
-  return IDLBuilder.build(program);
-}
-
 /** Builds TypeScript definitions for the specified program. */
 export function buildTSD(program: Program): string {
   return TSDBuilder.build(program);
@@ -294,7 +289,7 @@ export function buildTSD(program: Program): string {
 export * from "./ast";
 export * from "./common";
 export * from "./compiler";
-export * from "./definitions";
+export * from "./bindings";
 export * from "./diagnostics";
 export * from "./flow";
 export * from "./module";

@@ -2,7 +2,6 @@
  * @fileoverview Builders for various definitions describing a module.
  *
  * - TSDBuilder: Creates a TypeScript definition file (.d.ts)
- * - IDLBuilder: Creates a WebIDL interface definition (.webidl)
  *
  * @license Apache-2.0
  */
@@ -23,7 +22,6 @@ import {
   FunctionPrototype,
   Class,
   ClassPrototype,
-  Namespace,
   ConstantValueKind,
   Interface,
   Property,
@@ -176,198 +174,6 @@ export abstract class ExportsWalker {
   abstract visitAlias(name: string, element: Element, originalName: string): void;
 }
 
-/** A WebIDL definitions builder. */
-export class IDLBuilder extends ExportsWalker {
-
-  /** Builds WebIDL definitions for the specified program. */
-  static build(program: Program): string {
-    return new IDLBuilder(program).build();
-  }
-
-  private sb: string[] = [];
-  private indentLevel: i32 = 0;
-
-  /** Constructs a new WebIDL builder. */
-  constructor(program: Program, includePrivate: bool = false) {
-    super(program, includePrivate);
-  }
-
-  visitGlobal(name: string, element: Global): void {
-    var sb = this.sb;
-    var isConst = element.is(CommonFlags.INLINED);
-    indent(sb, this.indentLevel);
-    if (isConst) sb.push("const ");
-    sb.push(this.typeToString(element.type));
-    sb.push(" ");
-    sb.push(name);
-    if (isConst) {
-      switch (element.constantValueKind) {
-        case ConstantValueKind.INTEGER: {
-          sb.push(" = ");
-          sb.push(i64_to_string(element.constantIntegerValue));
-          break;
-        }
-        case ConstantValueKind.FLOAT: {
-          sb.push(" = ");
-          sb.push(element.constantFloatValue.toString());
-          break;
-        }
-        default: assert(false);
-      }
-    }
-    sb.push(";\n");
-  }
-
-  visitEnum(name: string, element: Enum): void {
-    var sb = this.sb;
-    indent(sb, this.indentLevel++);
-    sb.push("interface ");
-    sb.push(name);
-    sb.push(" {\n");
-    var members = element.members;
-    if (members) {
-      // TODO: for (let [memberName, member] of members) {
-      for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
-        let memberName = unchecked(_keys[i]);
-        let member = assert(members.get(memberName));
-        if (member.kind == ElementKind.ENUMVALUE) {
-          let enumValue = <EnumValue>member;
-          let isConst = enumValue.is(CommonFlags.INLINED);
-          indent(sb, this.indentLevel);
-          if (isConst) sb.push("const ");
-          else sb.push("readonly ");
-          sb.push("unsigned long ");
-          sb.push(memberName);
-          if (isConst) {
-            sb.push(" = ");
-            assert(enumValue.constantValueKind == ConstantValueKind.INTEGER);
-            sb.push(i64_low(enumValue.constantIntegerValue).toString());
-          }
-          sb.push(";\n");
-        }
-      }
-      // TODO: for (let member of members.values()) {
-      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-        let member = unchecked(_values[i]);
-        if (member.kind != ElementKind.ENUMVALUE) this.visitElement(member.name, member);
-      }
-    }
-    indent(sb, --this.indentLevel);
-    sb.push("}\n");
-  }
-
-  visitFunction(name: string, element: Function): void {
-    var sb = this.sb;
-    var signature = element.signature;
-    indent(sb, this.indentLevel);
-    sb.push(this.typeToString(signature.returnType));
-    sb.push(" ");
-    sb.push(name);
-    sb.push("(");
-    var parameters = signature.parameterTypes;
-    var numParameters = parameters.length;
-    // var requiredParameters = signature.requiredParameters;
-    for (let i = 0; i < numParameters; ++i) {
-      if (i) sb.push(", ");
-      // if (i >= requiredParameters) sb.push("optional ");
-      sb.push(this.typeToString(parameters[i]));
-      sb.push(" ");
-      sb.push(element.getParameterName(i));
-    }
-    sb.push(");\n");
-    var members = element.members;
-    if (members !== null && members.size > 0) {
-      indent(sb, this.indentLevel);
-      sb.push("interface ");
-      sb.push(element.name);
-      sb.push(" {\n");
-      // TODO: for (let member of members.values()) {
-      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-        let member = unchecked(_values[i]);
-        this.visitElement(member.name, member);
-      }
-      indent(sb, --this.indentLevel);
-      sb.push("}\n");
-    }
-  }
-
-  visitClass(name: string, element: Class): void {
-    var sb = this.sb;
-    indent(sb, this.indentLevel++);
-    sb.push("interface ");
-    sb.push(name);
-    sb.push(" {\n");
-    // TODO
-    indent(sb, --this.indentLevel);
-    sb.push("}\n");
-  }
-
-  visitInterface(name: string, element: Interface): void {
-    this.visitClass(name, element);
-  }
-
-  visitField(name: string, element: Field): void {
-    // TODO
-  }
-
-  visitNamespace(name: string, element: Namespace): void {
-    var sb = this.sb;
-    indent(sb, this.indentLevel++);
-    sb.push("interface ");
-    sb.push(name);
-    sb.push(" {\n");
-    var members = element.members;
-    if (members) {
-      // TODO: for (let member of members.values()) {
-      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-        let member = unchecked(_values[i]);
-        this.visitElement(member.name, member);
-      }
-    }
-    indent(sb, --this.indentLevel);
-    sb.push("}\n");
-  }
-
-  visitAlias(name: string, element: Element, originalName: string): void {
-    // TODO
-  }
-
-  typeToString(type: Type): string {
-    switch (type.kind) {
-      case TypeKind.I8: return "byte";
-      case TypeKind.I16: return "short";
-      case TypeKind.I32: return "long";
-      case TypeKind.I64: return "long long";
-      case TypeKind.ISIZE: return this.program.options.isWasm64 ? "long long" : "long";
-      case TypeKind.U8: return "octet";
-      case TypeKind.U16: return "unsigned short";
-      case TypeKind.U32: return "unsigned long";
-        // ^ TODO: function types
-      case TypeKind.U64: return "unsigned long long";
-      case TypeKind.USIZE: return this.program.options.isWasm64 ? "unsigned long long" : "unsigned long";
-        // ^ TODO: class types
-      case TypeKind.BOOL: return "boolean";
-      case TypeKind.F32: return "unrestricted float";
-      case TypeKind.F64: return "unrestricted double";
-      case TypeKind.VOID: return "void";
-      default: {
-        assert(false);
-        return "";
-      }
-    }
-  }
-
-  build(): string {
-    var sb = this.sb;
-    sb.push("interface ASModule {\n");
-    ++this.indentLevel;
-    this.walk();
-    --this.indentLevel;
-    sb.push("}\n");
-    return sb.join("");
-  }
-}
-
 /** A TypeScript definitions builder. */
 export class TSDBuilder extends ExportsWalker {
 
@@ -379,7 +185,7 @@ export class TSDBuilder extends ExportsWalker {
   private sb: string[] = [];
   private indentLevel: i32 = 0;
 
-  /** Constructs a new WebIDL builder. */
+  /** Constructs a new TypeScript definitions builder. */
   constructor(program: Program, includePrivate: bool = false) {
     super(program, includePrivate);
   }
@@ -640,7 +446,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("export const __rtti_base: usize;\n");
     }
     sb.push("export const __setArgumentsLength: ((n: i32) => void) | undefined;\n");
-    return this.sb.join("");
+    return sb.join("");
   }
 }
 

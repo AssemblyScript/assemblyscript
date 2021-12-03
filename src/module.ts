@@ -2495,10 +2495,6 @@ export class Module {
     throw new Error("not implemented"); // JS glue overrides this
   }
 
-  toAsmjs(): string {
-    throw new Error("not implemented"); // JS glue overrides this
-  }
-
   private cachedStringsToPointers: Map<string,usize> = new Map();
   private cachedPointersToStrings: Map<usize,string | null> = new Map();
 

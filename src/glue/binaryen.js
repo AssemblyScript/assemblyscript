@@ -18,10 +18,6 @@ Module.prototype.toText = function toText(watFormat = true) {
   }
 };
 
-Module.prototype.toAsmjs = function toAsmjs() {
-  return binaryen.wrapModule(this.ref).emitAsmjs();
-};
-
 export const {
   _BinaryenTypeCreate,
   _BinaryenTypeArity,

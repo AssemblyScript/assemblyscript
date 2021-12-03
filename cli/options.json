@@ -89,20 +89,6 @@
     "alias": "t",
     "isPath": true
   },
-  "jsFile": {
-    "category": "Output",
-    "description": "Specifies the JavaScript (via wasm2js) output file (.js).",
-    "type": "s",
-    "alias": "j",
-    "isPath": true
-  },
-  "idlFile": {
-    "category": "Output",
-    "description": "Specifies the WebIDL output file (.webidl).",
-    "type": "s",
-    "alias": "i",
-    "isPath": true
-  },
   "tsdFile": {
     "category": "Output",
     "description": "Specifies the TypeScript definition output file (.d.ts).",
