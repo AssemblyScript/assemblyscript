@@ -12,14 +12,20 @@ grade: stable
 confinement: strict
 apps:
   asc:
-    command: asc
+    command: bin/asc
   asinit:
-    command: asinit
+    command: bin/asinit
 parts:
   assemblyscript:
+    plugin: nodejs
+    nodejs-version: 16.13.1
+    nodejs-package-manager: npm
     source: .
-    plugin: npm
-    npm-node-version: 16.9.1
-architectures: 
-  - build-on: amd64 
+    override-build: |
+      npm install
+      npm run build
+      node ./scripts/prepublish
+      npm prune
+architectures:
+  - build-on: amd64
     run-on: [amd64, armhf, arm64, i386]
