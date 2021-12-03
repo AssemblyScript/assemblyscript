@@ -1,4 +1,1 @@
-const fs = {
-  promises: {}
-};
-export default fs;
+export const promises = {};

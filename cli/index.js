@@ -288,7 +288,7 @@ export async function main(argv, options) {
   }
 
   // I/O must be specified if not present in the environment
-  if (!fs.promises.readFile) {
+  if (!(fs.promises && fs.promises.readFile)) {
     if (readFile === readFileNode)   throw Error("'options.readFile' must be specified");
     if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
     if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
