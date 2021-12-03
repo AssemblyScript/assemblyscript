@@ -269,13 +269,13 @@ export abstract class Transform {
   readonly log: typeof console.log;
 
   /** Reads a file from disk. */
-  readFile(filename: string, baseDir: string): string | null | Promise<string | null>;
+  readFile(filename: string, baseDir: string): (string | null) | Promise<string | null>;
 
   /** Writes a file to disk. */
   writeFile(filename: string, contents: string | Uint8Array, baseDir: string): void | Promise<void>;
 
   /** Lists all files in a directory. */
-  listFiles(dirname: string, baseDir: string): string[] | null | Promise<string[] | null>;
+  listFiles(dirname: string, baseDir: string): (string[] | null) | Promise<string[] | null>;
 
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void | Promise<void>;
