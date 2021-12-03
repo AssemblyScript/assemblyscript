@@ -175,7 +175,7 @@ export interface APIOptions {
   /** Writes a file to disk (or memory). */
   writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void | Promise<void>;
   /** Lists all files within a directory. */
-  listFiles?: (dirname: string, baseDir: string) => string[] | null | Promise<string[] | null>;
+  listFiles?: (dirname: string, baseDir: string) => (string[] | null) | Promise<string[] | null>;
   /** Handler for diagnostic messages. */
   reportDiagnostic?: DiagnosticReporter;
   /** Additional transforms to apply. */
