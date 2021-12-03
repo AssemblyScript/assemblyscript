@@ -76,11 +76,12 @@ if (~wasmPos) {
   });
   const { exports } = await loader.instantiate(await (await fetch(binaryPath)).arrayBuffer(), rtraceInstance.install({ binaryen }));
   assemblyscript = exports;
-  __newString = assemblyscript.__newString;
-  __getString = assemblyscript.__getString;
-  __pin = assemblyscript.__pin;
-  __unpin = assemblyscript.__unpin;
-  __collect = assemblyscript.__collect;
+  ({ __newString,
+    __getString,
+    __pin,
+    __unpin,
+    __collect
+  } = assemblyscript);
   if (assemblyscript._start) assemblyscript._start();
 }
 
