@@ -48,12 +48,11 @@ var __unpin = _ => undefined;
 var __collect = _ => undefined;
 
 // Use the AS->Wasm variant as an option (experimental)
-const useWasm = process.argv.includes("--wasm");
-if (useWasm) {
-  let argPos = process.argv.indexOf("--wasm");
-  let binaryPath = String(process.argv[argPos + 1]);
-  process.argv.splice(argPos, 2);
-  let rtraceInstance = new rtrace.Rtrace({
+const wasmPos = process.argv.indexOf("--wasm");
+if (~wasmPos) {
+  const binaryPath = String(process.argv[wasmPos + 1]);
+  process.argv.splice(wasmPos, 2);
+  const rtraceInstance = new rtrace.Rtrace({
     onerror(err, info) {
       console.log(err, info);
     },
