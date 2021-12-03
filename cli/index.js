@@ -166,8 +166,6 @@ export async function compileString(sources, config = {}) {
   configToArguments(config, argv);
   const output = {};
   const result = await main(argv.concat(Object.keys(sources)), {
-    stdout: createMemoryStream(),
-    stderr: createMemoryStream(),
     readFile: name => Object.prototype.hasOwnProperty.call(sources, name) ? sources[name] : null,
     writeFile: (name, contents) => { output[name] = contents; },
     listFiles: () => []
@@ -189,17 +187,13 @@ export async function main(argv, options) {
     bundlePatchVersion = parseInt(versionParts[2]) | 0;
   }
 
-  const stdout = options.stdout || process.stdout;
-  const stderr = options.stderr || process.stderr;
+  const stdout = options.stdout || createMemoryStream();
+  const stderr = options.stderr || createMemoryStream();
   const readFile = options.readFile || readFileNode;
   const writeFile = options.writeFile || writeFileNode;
   const listFiles = options.listFiles || listFilesNode;
   const stats = options.stats || new Stats();
   let extension = defaultExtension;
-
-  // Output must be specified if not present in the environment
-  if (!stdout) throw Error("'options.stdout' must be specified");
-  if (!stderr) throw Error("'options.stderr' must be specified");
 
   // Parse command line options but do not populate option defaults yet
   const optionsResult = optionsUtil.parse(argv, generated.options, false);

@@ -35,8 +35,6 @@ const files = {
 const { error, stdout } = await asc.main([
   "index.ts", "--textFile", "--optimize"
 ], {
-  stdout: asc.createMemoryStream(),
-  stderr: asc.createMemoryStream(),
   readFile(name, baseDir) {
     if (Object.prototype.hasOwnProperty.call(files, name)) return files[name];
     return null;

@@ -24,6 +24,9 @@ if (!hasSourceMaps || hasCustomArgs) {
   );
 } else {
   const asc = await import("../dist/asc.js");
-  const { error } = await asc.main(process.argv.slice(2));
+  const { error } = await asc.main(process.argv.slice(2), {
+    stdout: process.stdout,
+    stderr: process.stderr
+  });
   if (error) process.exitCode = 1;
 }

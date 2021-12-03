@@ -17,8 +17,7 @@ const { error, stderr } = await asc.main(["assembly/index.ts", "--outFile", "out
     } else if (name !== "output.wasm.map") {
       throw Error("Unexpected output file: " + name);
     }
-  },
-  stderr: asc.createMemoryStream()
+  }
 });
 
 if (error) {

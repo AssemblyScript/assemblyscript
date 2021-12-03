@@ -24,10 +24,7 @@ const { error, stdout } = await asc.main([
   "--optimize",
   "--sourceMap",
   "--measure"
-], {
-  stdout: asc.createMemoryStream(),
-  stderr: asc.createMemoryStream()
-});
+]);
 if (error) {
   console.log("Compilation failed: " + error.message);
 } else {
