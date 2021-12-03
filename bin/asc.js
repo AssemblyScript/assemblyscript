@@ -6,16 +6,15 @@ const [ nodePath, thisPath, ...args ] = process.argv;
 const nodeArgs = process.execArgv;
 
 const hasSourceMaps = nodeArgs.includes("--enable-source-maps");
-const hasCustomArgs = args.includes("--");
+const posCustomArgs = args.indexOf("--");
 
-if (!hasSourceMaps || hasCustomArgs) {
+if (!hasSourceMaps || ~posCustomArgs) {
   if (!hasSourceMaps) {
     nodeArgs.push("--enable-source-maps");
   }
-  if (hasCustomArgs) {
-    const index = args.indexOf("--");
-    nodeArgs.push(...args.slice(index + 1));
-    args.length = index;
+  if (~posCustomArgs) {
+    nodeArgs.push(...args.slice(posCustomArgs + 1));
+    args.length = posCustomArgs;
   }
   childProcess.spawnSync(
     nodePath,
