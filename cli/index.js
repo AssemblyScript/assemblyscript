@@ -27,7 +27,7 @@
  * in the build step. See dist/asc.js for the bundle.
  */
 
-import { fs, module, path, process } from "../util/node.js";
+import { fs, module, path, process, url } from "../util/node.js";
 import { fetch } from "../util/web.js";
 import { Colors} from "../util/terminal.js";
 import { utf8 } from "../util/text.js";
@@ -463,13 +463,30 @@ export async function main(argv, options) {
     let transformArgs = unique(opts.transform);
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
-      try {
-        transforms.push(require(require.resolve(filename, {
-          paths: [baseDir, process.cwd()]
-        })));
-      } catch (e) {
-        return prepareResult(e);
+      let resolved;
+      let transform;
+      if (require.resolve && url.pathToFileURL) {
+        try {
+          resolved = require.resolve(filename, { paths: [process.cwd(), baseDir] });
+          transform = (await import(url.pathToFileURL(resolved))).default;
+        } catch (e1) {
+          try {
+            transform = require(resolved);
+          } catch (e2) {
+            return prepareResult(e1);
+          }
+        }
+      } else {
+        try {
+          transform = (await import(new URL(filename, import.meta.url))).default;
+        } catch (e) {
+          return prepareResult(e);
+        }
       }
+      if (typeof transform !== "function") {
+        return prepareResult(Error("not a transform: " + transformArgs[i]));
+      }
+      transforms.push(transform);
     }
   }
 

@@ -560,7 +560,7 @@ function generateTransform() {
   fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "transform.js"),
     [
-      `export class Transform {}\n`
+      `export function Transform() { /* stub */ }\n`
     ].join("")
   );
   fs.writeFileSync(
