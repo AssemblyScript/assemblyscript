@@ -75,7 +75,7 @@ if (useWasm) {
       }
     }
   });
-  let { exports } = await loader.instantiate(await (await fetch(binaryPath)).arrayBuffer(), rtraceInstance.install({ binaryen }));
+  const { exports } = await loader.instantiate(await (await fetch(binaryPath)).arrayBuffer(), rtraceInstance.install({ binaryen }));
   assemblyscript = exports;
   __newString = assemblyscript.__newString;
   __getString = assemblyscript.__getString;
