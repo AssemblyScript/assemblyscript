@@ -171,7 +171,7 @@ export interface APIOptions {
   /** Standard error stream to use. */
   stderr?: OutputStream;
   /** Reads a file from disk (or memory). */
-  readFile?: (filename: string, baseDir: string) => string | null | Promise<string | null>;
+  readFile?: (filename: string, baseDir: string) => (string | null) | Promise<string | null>;
   /** Writes a file to disk (or memory). */
   writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void | Promise<void>;
   /** Lists all files within a directory. */
