@@ -278,11 +278,11 @@ export abstract class Transform {
   listFiles(dirname: string, baseDir: string): string[] | null | Promise<string[] | null>;
 
   /** Called when parsing is complete, before a program is instantiated from the AST. */
-  afterParse?(parser: Parser): void;
+  afterParse?(parser: Parser): void | Promise<void>;
 
   /** Called after the program is instantiated. */
-  afterInitialize?(program: Program): void;
+  afterInitialize?(program: Program): void | Promise<void>;
 
   /** Called when compilation is complete, before the module is being validated. */
-  afterCompile?(module: Module): void;
+  afterCompile?(module: Module): void | Promise<void>;
 }
