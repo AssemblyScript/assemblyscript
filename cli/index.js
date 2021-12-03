@@ -513,14 +513,14 @@ export async function main(argv, options) {
     return prepareResult(e);
   }
 
-  function applyTransform(name, ...args) {
+  async function applyTransform(name, ...args) {
     for (let i = 0, k = transforms.length; i < k; ++i) {
       let transform = transforms[i];
       if (typeof transform[name] === "function") {
         try {
           let start = stats.begin();
           stats.transformCount++;
-          transform[name](...args);
+          await transform[name](...args);
           stats.transformTime += stats.end(start);
         } catch (e) {
           return e;
@@ -792,7 +792,7 @@ export async function main(argv, options) {
 
   // Call afterParse transform hook
   {
-    let error = applyTransform("afterParse", program.parser);
+    let error = await applyTransform("afterParse", program.parser);
     if (error) return prepareResult(error);
   }
 
@@ -823,7 +823,7 @@ export async function main(argv, options) {
 
   // Call afterInitialize transform hook
   {
-    let error = applyTransform("afterInitialize", program);
+    let error = await applyTransform("afterInitialize", program);
     if (error) return prepareResult(error);
   }
 
@@ -862,7 +862,7 @@ export async function main(argv, options) {
 
   // Call afterCompile transform hook
   {
-    let error = applyTransform("afterCompile", module);
+    let error = await applyTransform("afterCompile", module);
     if (error) return prepareResult(error);
   }
 
