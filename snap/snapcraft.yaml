@@ -1,13 +1,13 @@
 name: assemblyscript
+version: git
 summary: A TypeScript-like language for WebAssembly.
 description: |
   AssemblyScript compiles a variant of TypeScript to WebAssembly using Binaryen.
 
   See the AssemblyScript website for documentation:
   https://www.assemblyscript.org
-type: app
+base: core20
 icon: media/icon.svg
-version: git
 grade: stable
 confinement: strict
 apps:
