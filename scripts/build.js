@@ -29,7 +29,7 @@ function time() {
 }
 
 function reportPlugin(name) {
-  return {
+  const reporter = {
     name: "reporter",
     setup(build) {
       let startTime = 0;
@@ -44,9 +44,11 @@ function reportPlugin(name) {
         } else {
           console.log(`${time()} - ${name} - ${stdoutColors.green("SUCCESS")} (${warnings.length} warnings, ${duration} ms)`);
         }
+        reporter.ran = true;
       });
     }
   };
+  return reporter;
 }
 
 // Standard library integration
@@ -197,6 +199,7 @@ const webPlugin = {
 
 const externals = [ "assemblyscript", "binaryen", "long" ];
 
+const srcReporter = reportPlugin("src");
 esbuild.build({
   tsconfig: "./src/tsconfig.json",
   entryPoints: [ "./src/index-js.ts" ],
@@ -214,9 +217,10 @@ esbuild.build({
     js: prelude("The AssemblyScript compiler")
   },
   watch,
-  plugins: [ diagnosticsPlugin, reportPlugin("src") ]
+  plugins: [ diagnosticsPlugin, srcReporter ]
 });
 
+const cliReporter = reportPlugin("cli");
 esbuild.build({
   entryPoints: [ "./cli/index.js" ],
   bundle: true,
@@ -233,7 +237,7 @@ esbuild.build({
     js: prelude("The AssemblyScript frontend")
   },
   watch,
-  plugins: [ stdlibPlugin, webPlugin, reportPlugin("cli") ]
+  plugins: [ stdlibPlugin, webPlugin, cliReporter ]
 });
 
 // Optionally build definitions (takes a while)
@@ -278,4 +282,10 @@ cli : Compiler frontend asc
 dts : TS definition bundles
 web : Example web template\n`);
 
-buildDefinitions();
+(function defer() {
+  if (srcReporter.ran && cliReporter.ran) {
+    buildDefinitions();
+  } else {
+    setTimeout(defer, 100);
+  }
+})();
