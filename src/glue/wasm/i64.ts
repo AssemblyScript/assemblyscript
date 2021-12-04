@@ -34,6 +34,24 @@ function i64_low(value: i64): i32 {
 
 // @ts-ignore: decorator
 @global @inline
+function i64_not(value: i64): i64 {
+  return ~value;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_clz(value: i64): i32 {
+  return <i32>clz(value);
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_ctz(value: i64): i32 {
+  return <i32>ctz(value);
+}
+
+// @ts-ignore: decorator
+@global @inline
 function i64_high(value: i64): i32 {
   return <i32>(value >>> 32);
 }
@@ -132,12 +150,6 @@ function i64_shr(left: i64, right: i64): i64 {
 @global @inline
 function i64_shr_u(left: i64, right: i64): i64 {
   return left >>> right;
-}
-
-// @ts-ignore: decorator
-@global @inline
-function i64_not(value: i64): i64 {
-  return ~value;
 }
 
 // @ts-ignore: decorator

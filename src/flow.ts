@@ -266,6 +266,26 @@ export class Flow {
   /** Unsets the specified flag or flags. */
   unset(flag: FlowFlags): void { this.flags &= ~flag; }
 
+  deriveConditionalFlags(): FlowFlags {
+    let condiFlags = this.flags & FlowFlags.ANY_CONDITIONAL;
+    if (this.is(FlowFlags.RETURNS)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_RETURNS;
+    }
+    if (this.is(FlowFlags.THROWS)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_THROWS;
+    }
+    if (this.is(FlowFlags.BREAKS)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_BREAKS;
+    }
+    if (this.is(FlowFlags.CONTINUES)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
+    }
+    if (this.is(FlowFlags.ACCESSES_THIS)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
+    }
+    return condiFlags;
+  }
+
   /** Forks this flow to a child flow. */
   fork(resetBreakContext: bool = false): Flow {
     var branch = new Flow(this.parentFunction);
@@ -919,7 +939,7 @@ export class Flow {
         let key = _keys[i];
         let leftFlags = changetype<FieldFlags>(leftFieldFlags.get(key));
         if (
-          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) && 
+          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) &&
           (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.INITIALIZED)
         ) {
           newFieldFlags.set(key, FieldFlags.INITIALIZED);
@@ -1376,6 +1396,7 @@ export class Flow {
           case <u32>TypeRef.I64: { value = getConstValueI64Low(expr); break; } // discards upper bits
           case <u32>TypeRef.F32: { value = i32(getConstValueF32(expr)); break; }
           case <u32>TypeRef.F64: { value = i32(getConstValueF64(expr)); break; }
+          case <u32>TypeRef.V128: return false;
           default: assert(false);
         }
         switch (type.kind) {

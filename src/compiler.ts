@@ -2972,7 +2972,8 @@ export class Compiler extends DiagnosticEmitter {
       if (terminates || isLast || innerFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
         commonCategorical &= innerFlow.flags;
       }
-      commonConditional |= innerFlow.flags & FlowFlags.ANY_CONDITIONAL;
+
+      commonConditional |= innerFlow.deriveConditionalFlags();
 
       // Switch back to the parent flow
       innerFlow.unset(
@@ -3391,14 +3392,16 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     assert(element.is(CommonFlags.INLINED | CommonFlags.RESOLVED));
     var type = element.type;
-    switch (
-      !(constraints & (Constraints.CONV_IMPLICIT | Constraints.CONV_EXPLICIT)) &&
-      type.isIntegerValue &&
-      contextualType.isIntegerValue &&
-      type.size < contextualType.size
-        ? (this.currentType = contextualType).kind // essentially precomputes a (sign-)extension
-        : (this.currentType = type).kind
-    ) {
+    this.currentType = type;
+    switch (type.kind) {
+      case TypeKind.BOOL: {
+        return this.module.i32(
+          element.constantValueKind == ConstantValueKind.INTEGER
+            // @ts-ignore
+            ? <i32>i64_ne(element.constantIntegerValue, i64_zero)
+            : 0
+        );
+      }
       case TypeKind.I8:
       case TypeKind.I16: {
         let shift = type.computeSmallIntegerShift(Type.i32);
@@ -3409,8 +3412,7 @@ export class Compiler extends DiagnosticEmitter {
         ); // recognized by canOverflow
       }
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         let mask = element.type.computeSmallIntegerMask(Type.i32);
         return this.module.i32(
           element.constantValueKind == ConstantValueKind.INTEGER
@@ -3768,6 +3770,10 @@ export class Compiler extends DiagnosticEmitter {
           );
         }
       }
+
+    // v128 to bool
+    } else if (fromType == Type.v128 && toType.isBooleanValue) {
+      expr = this.makeIsTrueish(expr, Type.v128, reportNode);
 
     // int to int
     } else {
@@ -7369,6 +7375,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (operands) this.operandsTostack(signature, operands);
     var expr = module.call_indirect(
+      null, // TODO: handle multiple tables
       module.load(4, false, functionArg, TypeRef.I32), // ._index
       operands,
       signature.paramRefs,
@@ -10330,6 +10337,9 @@ export class Compiler extends DiagnosticEmitter {
             module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
           );
         }
+      }
+      case TypeKind.V128: {
+        return module.unary(UnaryOp.AnyTrueV128, expr);
       }
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:

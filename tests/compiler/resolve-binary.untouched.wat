@@ -1812,7 +1812,8 @@
     drop
     global.get $~lib/rt/itcms/total
     i64.extend_i32_u
-    i64.const 200
+    i32.const 200
+    i64.extend_i32_u
     i64.mul
     i64.const 100
     i64.div_u
@@ -3464,10 +3465,12 @@
    local.set $11
    local.get $11
    i64.const 52
-   i64.const 7
+   i32.const 7
+   i64.extend_i32_s
    i64.sub
    i64.shr_u
-   i64.const 127
+   i32.const 127
+   i64.extend_i32_s
    i64.and
    i32.wrap_i64
    local.set $12
@@ -3790,7 +3793,8 @@
     f64.add
     local.set $28
     local.get $14
-    i64.const 127
+    i32.const 127
+    i64.extend_i32_s
     i64.and
     i64.const 1
     i64.shl
@@ -3801,7 +3805,8 @@
     i64.extend_i32_u
     i64.add
     i64.const 52
-    i64.const 7
+    i32.const 7
+    i64.extend_i32_s
     i64.sub
     i64.shl
     local.set $13

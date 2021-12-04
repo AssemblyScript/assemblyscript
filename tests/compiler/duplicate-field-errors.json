@@ -1,0 +1,13 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2442: Types have separate declarations of a private property 'privPriv'.",
+    "TS2325: Property 'privProt' is private in type 'duplicate-field-errors/A' but not in type 'duplicate-field-errors/B'.",
+    "TS2325: Property 'privPub' is private in type 'duplicate-field-errors/A' but not in type 'duplicate-field-errors/B'.",
+    "TS2325: Property 'protPriv' is private in type 'duplicate-field-errors/B' but not in type 'duplicate-field-errors/A'.",
+    "TS2325: Property 'pubPriv' is private in type 'duplicate-field-errors/B' but not in type 'duplicate-field-errors/A'.",
+    "TS2444: Property 'pubProt' is protected in type 'duplicate-field-errors/B' but public in type 'duplicate-field-errors/A'.",
+    "TS2300: Duplicate identifier 'method'."
+  ]
+}

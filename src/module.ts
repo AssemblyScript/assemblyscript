@@ -10,6 +10,13 @@
 
 import { BuiltinNames } from "./builtins";
 import { Target } from "./common";
+import {
+  isHighSurrogate,
+  isLowSurrogate,
+  combineSurrogates,
+  SURROGATE_HIGH,
+  SURROGATE_LOW
+} from "./util";
 import * as binaryen from "./glue/binaryen";
 
 /** A Binaryen-compatible index. */
@@ -1560,13 +1567,14 @@ export class Module {
   }
 
   call_indirect(
+    tableName: string | null,
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
     params: TypeRef,
     results: TypeRef,
     isReturn: bool = false
   ): ExpressionRef {
-    var cStr = this.allocStringCached("0"); // TODO: multiple tables
+    var cStr = this.allocStringCached(tableName !== null ? tableName : "0");
     var cArr = allocPtrArray(operands);
     var ret = isReturn
       ? binaryen._BinaryenReturnCallIndirect(
@@ -1580,13 +1588,13 @@ export class Module {
   }
 
   return_call_indirect(
-    tableName: string,
+    tableName: string | null,
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
     params: TypeRef,
     results: TypeRef
   ): ExpressionRef {
-    return this.call_indirect(index, operands, params, results, true);
+    return this.call_indirect(tableName, index, operands, params, results, true);
   }
 
   unreachable(): ExpressionRef {
@@ -2299,17 +2307,19 @@ export class Module {
       if (optimizeLevel >= 2) {
         passes.push("once-reduction");
         passes.push("inlining");
+        passes.push("simplify-globals-optimizing");
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");
         passes.push("vacuum");
+        passes.push("code-folding");
         passes.push("ssa-nomerge");
-        passes.push("simplify-globals-optimizing");
         passes.push("local-cse");
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("merge-blocks");
         passes.push("precompute-propagate");
+        passes.push("simplify-globals-optimizing");
       }
       if (optimizeLevel >= 3) {
         passes.push("simplify-locals-nostructure");
@@ -2321,7 +2331,6 @@ export class Module {
         passes.push("merge-locals");
         passes.push("reorder-locals");
         passes.push("dae-optimizing");
-        passes.push("code-folding");
       }
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
@@ -2332,13 +2341,12 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("inlining");
         passes.push("precompute-propagate");
+        passes.push("simplify-globals-optimizing");
       } else {
         passes.push("precompute");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
-        passes.push("simplify-globals-optimizing");
-        passes.push("simplify-globals-optimizing");
       }
       passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
@@ -2393,9 +2401,6 @@ export class Module {
         passes.push("simplify-globals");
         passes.push("vacuum");
       }
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        passes.push("code-folding");
-      }
       if (optimizeLevel >= 2 && (this.getFeatures() & FeatureFlags.GC) != 0) {
         passes.push("heap2local");
         passes.push("merge-locals");
@@ -2405,6 +2410,7 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
+        passes.push("simplify-globals-optimizing");
       } else {
         passes.push("precompute");
       }
@@ -2412,6 +2418,7 @@ export class Module {
       passes.push("dae-optimizing"); // reduce arity
       passes.push("inlining-optimizing"); // and inline if possible
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("code-folding");
         passes.push("ssa-nomerge");
         passes.push("rse");
         // move code on early return (after CFG cleanup)
@@ -2444,6 +2451,7 @@ export class Module {
         }
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
+        passes.push("merge-blocks");
         passes.push("vacuum");
 
         passes.push("optimize-instructions");
@@ -2612,8 +2620,15 @@ export function expandType(type: TypeRef): TypeRef[] {
   var cArr = binaryen._malloc(<usize>arity << 2);
   binaryen._BinaryenTypeExpand(type, cArr);
   var types = new Array<TypeRef>(arity);
-  for (let i: u32 = 0; i < arity; ++i) {
-    types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+  if (!ASC_TARGET) {
+    let ptr = cArr >>> 2;
+    for (let i: u32 = 0; i < arity; ++i) {
+      types[i] = binaryen.HEAPU32[ptr + i];
+    }
+  } else {
+    for (let i: u32 = 0; i < arity; ++i) {
+      types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+    }
   }
   binaryen._free(cArr);
   return types;
@@ -3102,12 +3117,15 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
 function stringLengthUTF8(str: string): usize {
   var len = 0;
   for (let i = 0, k = str.length; i < k; ++i) {
-    let u = str.charCodeAt(i) >>> 0;
-    if (u <= 0x7F) {
+    let c1 = str.charCodeAt(i) >>> 0;
+    if (c1 <= 0x7F) {
       len += 1;
-    } else if (u <= 0x7FF) {
+    } else if (c1 <= 0x7FF) {
       len += 2;
-    } else if (u >= 0xD800 && u <= 0xDFFF && i + 1 < k) {
+    } else if (
+      isHighSurrogate(c1) && i + 1 < k &&
+      isLowSurrogate(str.charCodeAt(i + 1))
+    ) {
       i++;
       len += 4;
     } else {
@@ -3135,29 +3153,27 @@ function allocString(str: string | null): usize {
       }
     }
   } else {
-    // the following is based on Emscripten's stringToUTF8Array
     for (let i = 0, k = str.length; i < k; ++i) {
-      let u = str.charCodeAt(i) >>> 0;
-      if (u <= 0x7F) {
-        binaryen.__i32_store8(idx++, u as u8);
-      } else if (u <= 0x7FF) {
-        binaryen.__i32_store8(idx++, (0xC0 |  (u >>> 6)       ) as u8);
-        binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-      } else if (u >= 0xD800 && u <= 0xDFFF) {
-        if (i + 1 < k) {
-          u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
-        }
-        if (u <= 0xFFFF) {
-          binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-        } else {
-          assert(u <= 0x10FFFF, "Invalid Unicode code point during allocString");
-          binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-          binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-        }
+      let c1 = str.charCodeAt(i) >>> 0, c2: i32;
+      if (c1 <= 0x7F) {
+        binaryen.__i32_store8(idx++, c1 as u8);
+      } else if (c1 <= 0x7FF) {
+        binaryen.__i32_store8(idx++, (0xC0 |  (c1 >>> 6)       ) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ( c1         & 63)) as u8);
+      } else if (
+        isHighSurrogate(c1) && i + 1 < k &&
+        isLowSurrogate(c2 = str.charCodeAt(i + 1))
+      ) {
+        c1 = combineSurrogates(c1, c2);
+        ++i;
+        binaryen.__i32_store8(idx++, (0xF0 |  (c1 >>> 18)      ) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ((c1 >>> 12) & 63)) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ((c1 >>>  6) & 63)) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ( c1         & 63)) as u8);
+      } else {
+        binaryen.__i32_store8(idx++, (0xE0 |  (c1 >>> 12)      ) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ((c1 >>>  6) & 63)) as u8);
+        binaryen.__i32_store8(idx++, (0x80 | ( c1         & 63)) as u8);
       }
     }
   }
@@ -3208,10 +3224,11 @@ export function readString(ptr: usize): string | null {
       arr.push(cp);
     } else {
       let ch = cp - 0x10000;
-      arr.push(0xD800 | (ch >>> 10));
-      arr.push(0xDC00 | (ch & 0x3FF));
+      arr.push(SURROGATE_HIGH | (ch >>> 10));
+      arr.push(SURROGATE_LOW | (ch & 0x3FF));
     }
   }
+  // TODO: implement and use String.fromCodePoints
   return String.fromCharCodes(arr);
 }
 
