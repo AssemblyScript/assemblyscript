@@ -768,7 +768,7 @@ function valuesEqual<T extends ArrayBufferView>(target: T, compare: valueof<T>[]
 
 let setSource1: i32[] = [1, 2, 3];
 let setSource2: f32[] = [4, 5, 6];
-let setSource3: f64[] = [Infinity, NaN, -Infinity];
+let setSource3: f64[] = [NaN, NaN, -0];
 let setSource7: i8[] = [-110, -111, -112];
 
 function testTypedArraySet<T extends ArrayBufferView>(): void {
@@ -812,9 +812,19 @@ function testTypedArraySet<T extends ArrayBufferView>(): void {
     valuesEqual<T>(a, [100, 101, 102, 103, 255, 255, 255, 0, 0, 0]);
   } else {
     // explicitly case the input values to valueof<T>
-    valuesEqual<T>(a, [100, 101, 102, 103, <valueof<T>>1000, <valueof<T>>1001, <valueof<T>>1002, <valueof<T>>-110, <valueof<T>>-111, <valueof<T>>-112]);
+    valuesEqual<T>(a, [
+      100,
+      101,
+      102,
+      103,
+      <valueof<T>>1000,
+      <valueof<T>>1001,
+      <valueof<T>>1002,
+      <valueof<T>>-110,
+      <valueof<T>>-111,
+      <valueof<T>>-112
+    ]);
   }
-
 }
 
 testTypedArraySet<Int8Array>();
@@ -849,7 +859,7 @@ testTypedArraySet<Float64Array>();
   targetClampedArray.set(a, 1);
   targetClampedArray.set(b, 4);
   targetClampedArray.set(c, 8);
-  valuesEqual<Uint8ClampedArray>(targetClampedArray, [0, 255, 0, 0, 0, 100, 10, 255, 255, 0]);
+  valuesEqual<Uint8ClampedArray>(targetClampedArray, [0, 255, 0, 255, 0, 100, 10, 255, 255, 0]);
 
   let d = new Uint32Array(4);
   d[0] = 1;

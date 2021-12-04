@@ -1894,7 +1894,10 @@ function WRAP<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, U>(
+function SET<
+  TArray extends ArrayBufferView, T extends number,
+  UArray extends ArrayBufferView, U extends number
+>(
   target: TArray,
   source: UArray,
   offset: i32 = 0
@@ -1906,29 +1909,41 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
 
   // Uncaught RangeError: offset is out of bounds
   if (offset < 0) throw new RangeError(E_INDEXOUTOFRANGE);
-  if (source.length + offset > target.length) throw new RangeError(E_INDEXOUTOFRANGE);
+
+  let slen = source.length;
+  let tlen = target.length;
+
+  if (slen + offset > tlen) throw new RangeError(E_INDEXOUTOFRANGE);
+
+  let targetDataStart = target.dataStart + (<usize>offset << alignof<T>());
+  let sourceDataStart = source.dataStart;
 
   // if the types align and match, use memory.copy() instead of manual loop
-  if (isInteger<T>() == isInteger<U>() && alignof<T>() == alignof<U>() &&
-    !(target instanceof Uint8ClampedArray && isSigned<U>())) {
-    memory.copy(
-      target.dataStart + (<usize>offset << alignof<T>()),
-      source.dataStart,
-      source.byteLength
-    );
+  if (
+    isInteger<T>() == isInteger<U>() &&
+    alignof<T>() == alignof<U>() &&
+    !(target instanceof Uint8ClampedArray && isSigned<U>())
+  ) {
+    memory.copy(targetDataStart, sourceDataStart, source.byteLength);
   } else {
-    let targetDataStart = target.dataStart + (<usize>offset << alignof<T>());
-    let sourceDataStart = source.dataStart;
-    let count = source.length;
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < slen; i++) {
       // if TArray is Uint8ClampedArray, then values must be clamped
       if (target instanceof Uint8ClampedArray) {
         if (isFloat<U>()) {
           let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
-          store<T>(
-            targetDataStart + (<usize>i << alignof<T>()),
-            isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : <T>0
-          );
+          if (!ASC_FEATURE_NONTRAPPING_F2I) {
+            store<T>(
+              targetDataStart + (<usize>i << alignof<T>()),
+              // @ts-ignore: cast
+              isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : <T>0
+            );
+          } else {
+            store<T>(
+              targetDataStart + (<usize>i << alignof<T>()),
+              // @ts-ignore: cast
+              <T>max<U>(0, min<U>(255, value))
+            );
+          }
         } else {
           let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
           if (!isSigned<U>()) {
@@ -1954,12 +1969,25 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
         // if U is a float, then casting float to int must include a finite check
       } else if (isFloat<U>() && !isFloat<T>()) {
         let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
-        // @ts-ignore: cast to T is valid for numeric types here
-        store<T>(targetDataStart + (<usize>i << alignof<T>()), isFinite<U>(value) ? <T>value : 0);
+
+        if (!ASC_FEATURE_NONTRAPPING_F2I) {
+          store<T>(
+            targetDataStart + (<usize>i << alignof<T>()),
+            // @ts-ignore: cast
+            isFinite<U>(value) ? <T>value : <T>0
+          );
+        } else {
+          store<T>(
+            targetDataStart + (<usize>i << alignof<T>()),
+            // @ts-ignore: cast
+            <T>value
+          );
+        }
       } else if (isFloat<T>() && !isFloat<U>()) {
         // @ts-ignore: In this case the <T> conversion is required
         store<T>(targetDataStart + (<usize>i << alignof<T>()), <T>load<U>(sourceDataStart + (<usize>i << alignof<U>())));
       } else {
+        // @ts-ignore: cast
         store<T>(targetDataStart + (<usize>i << alignof<T>()), load<U>(sourceDataStart + (<usize>i << alignof<U>())));
       }
     }
