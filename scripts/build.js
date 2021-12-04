@@ -29,7 +29,7 @@ function time() {
 }
 
 function reportPlugin(name) {
-  const reporter = {
+  return {
     name: "reporter",
     setup(build) {
       let startTime = 0;
@@ -44,11 +44,9 @@ function reportPlugin(name) {
         } else {
           console.log(`${time()} - ${name} - ${stdoutColors.green("SUCCESS")} (${warnings.length} warnings, ${duration} ms)`);
         }
-        reporter.ran = true;
       });
     }
   };
-  return reporter;
 }
 
 // Standard library integration
