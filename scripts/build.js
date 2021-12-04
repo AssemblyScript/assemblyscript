@@ -199,8 +199,7 @@ const webPlugin = {
 
 const externals = [ "assemblyscript", "binaryen", "long" ];
 
-const srcReporter = reportPlugin("src");
-esbuild.build({
+const srcBuild = esbuild.build({
   tsconfig: "./src/tsconfig.json",
   entryPoints: [ "./src/index-js.ts" ],
   bundle: true,
@@ -217,11 +216,10 @@ esbuild.build({
     js: prelude("The AssemblyScript compiler")
   },
   watch,
-  plugins: [ diagnosticsPlugin, srcReporter ]
+  plugins: [ diagnosticsPlugin, reportPlugin("src") ]
 });
 
-const cliReporter = reportPlugin("cli");
-esbuild.build({
+const cliBuild = esbuild.build({
   entryPoints: [ "./cli/index.js" ],
   bundle: true,
   target: "esnext",
@@ -237,7 +235,7 @@ esbuild.build({
     js: prelude("The AssemblyScript frontend")
   },
   watch,
-  plugins: [ stdlibPlugin, webPlugin, cliReporter ]
+  plugins: [ stdlibPlugin, webPlugin, reportPlugin("cli") ]
 });
 
 // Optionally build definitions (takes a while)
@@ -282,10 +280,5 @@ cli : Compiler frontend asc
 dts : TS definition bundles
 web : Example web template\n`);
 
-(function defer() {
-  if (srcReporter.ran && cliReporter.ran) {
-    buildDefinitions();
-  } else {
-    setTimeout(defer, 100);
-  }
-})();
+await Promise.all([ srcBuild, cliBuild ]);
+buildDefinitions();
