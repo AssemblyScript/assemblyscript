@@ -720,6 +720,28 @@ export class Tokenizer extends DiagnosticEmitter {
               ++pos;
               break;
             }
+            case Token.STRINGLITERAL:
+            case Token.TEMPLATELITERAL: {
+              // FIXME
+              this.pos = pos;
+              return token;
+            }
+            case Token.OPERATOR: {
+              token = this.operatorToken(c, text, pos, end, maxTokenLength);
+              pos = this.pos;
+              if (token == Token.INVALID) continue;
+              return token;
+            }
+            // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
+            case Token.IDENTIFIER: {
+              let posBefore = pos;
+              while (
+                ++pos < end &&
+                isIdentifierPart(c = text.charCodeAt(pos))
+              ) { /* nop */ }
+              this.pos = posBefore;
+              return Token.IDENTIFIER;
+            }
             // `a`..`z`
             case Token.IDENTIFIER_OR_KEYWORD: {
               let posBefore = pos;
@@ -747,16 +769,6 @@ export class Tokenizer extends DiagnosticEmitter {
               this.pos = posBefore;
               return Token.IDENTIFIER;
             }
-            // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
-            case Token.IDENTIFIER: {
-              let posBefore = pos;
-              while (
-                ++pos < end &&
-                isIdentifierPart(c = text.charCodeAt(pos))
-              ) { /* nop */ }
-              this.pos = posBefore;
-              return Token.IDENTIFIER;
-            }
             case Token.FLOAT_OR_INTEGER_LITERAL: {
               // `0.`, `0x`, `0b`, `0o`
               if (c == CharCode._0) {
@@ -778,18 +790,6 @@ export class Tokenizer extends DiagnosticEmitter {
               }
               this.pos = pos;
               return this.integerOrFloatToken();
-            }
-            case Token.STRINGLITERAL:
-            case Token.TEMPLATELITERAL: {
-              // FIXME
-              this.pos = pos;
-              return token;
-            }
-            case Token.OPERATOR: {
-              token = this.operatorToken(c, text, pos, end, maxTokenLength);
-              pos = this.pos;
-              if (token == Token.INVALID) continue;
-              return token;
             }
             // `[`, `{`, `(`, `,`, `:`, `;`, `@` and etc
             default: {
