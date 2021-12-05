@@ -1246,7 +1246,10 @@ export class Tokenizer extends DiagnosticEmitter {
         continue;
       }
       if (quote == CharCode.BACKTICK) {
-        if (c == CharCode.DOLLAR && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OPENBRACE) {
+        if (
+          c == CharCode.DOLLAR && pos + 1 < end &&
+          text.charCodeAt(pos + 1) == CharCode.OPENBRACE
+        ) {
           result += text.substring(start, pos);
           this.readStringEnd = pos;
           this.pos = pos + 2;
@@ -1285,10 +1288,10 @@ export class Tokenizer extends DiagnosticEmitter {
     var c = text.charCodeAt(this.pos++);
     switch (c) {
       case CharCode._0: {
-        if (isTaggedTemplate && this.pos < end && isDecimal(text.charCodeAt(this.pos))) {
-          ++this.pos;
-          return text.substring(start, this.pos);
-        }
+        if (
+          isTaggedTemplate && this.pos < end &&
+          isDecimal(text.charCodeAt(this.pos))
+        ) return text.substring(start, ++this.pos);
         return "\0";
       }
       case CharCode.b: return "\b";
@@ -1316,9 +1319,7 @@ export class Tokenizer extends DiagnosticEmitter {
         if (
           this.pos < end &&
           text.charCodeAt(this.pos) == CharCode.LINEFEED
-        ) {
-          ++this.pos;
-        }
+        ) ++this.pos;
         // fall through
       }
       case CharCode.LINEFEED:
