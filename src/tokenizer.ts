@@ -106,8 +106,6 @@ export const enum Token {
   WITH,         // ES2017
   YIELD,        // ES2017
 
-  LAST_KEYWORD = YIELD,
-
   // punctuation
 
   OPENBRACE,
@@ -178,6 +176,9 @@ export const enum Token {
 
   // meta
 
+  FLOAT_OR_INTEGER_LITERAL,
+  IDENTIFIER_OR_KEYWORD,
+  WHITESPACE,
   INVALID,
   EOF
 }
@@ -187,6 +188,138 @@ export const enum IdentifierHandling {
   PREFER,
   ALWAYS
 }
+
+// from 0-127
+const SINGLE_CHAR_TOKENS: Token[] = [
+  /* 0x00 */ Token.INVALID,
+  /* 0x01 */ Token.INVALID,
+  /* 0x02 */ Token.INVALID,
+  /* 0x03 */ Token.INVALID,
+  /* 0x04 */ Token.INVALID,
+  /* 0x05 */ Token.INVALID,
+  /* 0x06 */ Token.INVALID,
+  /* 0x07 */ Token.INVALID,
+  /* 0x08 */ Token.INVALID,
+  /*   \t */ Token.WHITESPACE,
+  /*   \n */ Token.WHITESPACE,
+  /*   \v */ Token.WHITESPACE,
+  /*   \f */ Token.WHITESPACE,
+  /*   \r */ Token.INVALID,
+  /* 0x0E */ Token.INVALID,
+  /* 0x0F */ Token.INVALID,
+  /* 0x10 */ Token.INVALID,
+  /* 0x11 */ Token.INVALID,
+  /* 0x12 */ Token.INVALID,
+  /* 0x13 */ Token.INVALID,
+  /* 0x14 */ Token.INVALID,
+  /* 0x15 */ Token.INVALID,
+  /* 0x16 */ Token.INVALID,
+  /* 0x17 */ Token.INVALID,
+  /* 0x18 */ Token.INVALID,
+  /* 0x19 */ Token.INVALID,
+  /* 0x1A */ Token.INVALID,
+  /* 0x1B */ Token.INVALID,
+  /* 0x1C */ Token.INVALID,
+  /* 0x1D */ Token.INVALID,
+  /* 0x1E */ Token.INVALID,
+  /* 0x1F */ Token.INVALID,
+  /*  ' ' */ Token.WHITESPACE,
+  /*    ! */ Token.INVALID,
+  /*    " */ Token.STRINGLITERAL,
+  /*    # */ Token.INVALID,
+  /*    $ */ Token.IDENTIFIER,
+  /*    % */ Token.INVALID,
+  /*    & */ Token.INVALID,
+  /*    ' */ Token.STRINGLITERAL,
+  /*    ( */ Token.OPENPAREN,
+  /*    ) */ Token.CLOSEPAREN,
+  /*    * */ Token.INVALID,
+  /*    + */ Token.INVALID,
+  /*    , */ Token.COMMA,
+  /*    - */ Token.INVALID,
+  /*    . */ Token.INVALID,
+  /*    / */ Token.INVALID,
+  /*    0 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    1 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    2 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    3 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    4 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    5 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    6 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    7 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    8 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    9 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    : */ Token.COLON,
+  /*    ; */ Token.SEMICOLON,
+  /*    < */ Token.INVALID,
+  /*    = */ Token.INVALID,
+  /*    > */ Token.INVALID,
+  /*    ? */ Token.INVALID,
+  /*    @ */ Token.AT,
+  /*    A */ Token.IDENTIFIER,
+  /*    B */ Token.IDENTIFIER,
+  /*    C */ Token.IDENTIFIER,
+  /*    D */ Token.IDENTIFIER,
+  /*    E */ Token.IDENTIFIER,
+  /*    F */ Token.IDENTIFIER,
+  /*    G */ Token.IDENTIFIER,
+  /*    H */ Token.IDENTIFIER,
+  /*    I */ Token.IDENTIFIER,
+  /*    J */ Token.IDENTIFIER,
+  /*    K */ Token.IDENTIFIER,
+  /*    L */ Token.IDENTIFIER,
+  /*    M */ Token.IDENTIFIER,
+  /*    N */ Token.IDENTIFIER,
+  /*    O */ Token.IDENTIFIER,
+  /*    P */ Token.IDENTIFIER,
+  /*    Q */ Token.IDENTIFIER,
+  /*    R */ Token.IDENTIFIER,
+  /*    S */ Token.IDENTIFIER,
+  /*    T */ Token.IDENTIFIER,
+  /*    U */ Token.IDENTIFIER,
+  /*    V */ Token.IDENTIFIER,
+  /*    W */ Token.IDENTIFIER,
+  /*    X */ Token.IDENTIFIER,
+  /*    Y */ Token.IDENTIFIER,
+  /*    Z */ Token.IDENTIFIER,
+  /*    [ */ Token.OPENBRACKET,
+  /*    \ */ Token.INVALID,
+  /*    ] */ Token.CLOSEBRACKET,
+  /*    ^ */ Token.INVALID,
+  /*    _ */ Token.IDENTIFIER,
+  /*    ` */ Token.TEMPLATELITERAL,
+  /*    a */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    b */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    c */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    d */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    e */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    f */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    g */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    h */ Token.IDENTIFIER,
+  /*    i */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    j */ Token.IDENTIFIER,
+  /*    k */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    l */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    m */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    n */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    o */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    p */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    q */ Token.IDENTIFIER,
+  /*    r */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    s */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    t */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    u */ Token.IDENTIFIER,
+  /*    v */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    w */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    x */ Token.IDENTIFIER,
+  /*    y */ Token.IDENTIFIER_OR_KEYWORD,
+  /*    z */ Token.IDENTIFIER,
+  /*    { */ Token.OPENBRACE,
+  /*    | */ Token.INVALID,
+  /*    } */ Token.CLOSEBRACE,
+  /*    ~ */ Token.TILDE,
+  /* 0x7F */ Token.INVALID,
+];
 
 export function probeKeywordToken(text: string): Token {
   let len = text.length;
@@ -579,8 +712,8 @@ export class Tokenizer extends DiagnosticEmitter {
           // otherwise fall-through
         }
         // `\n`, `\t`, `\v`, `\f`, ` `
-        case CharCode.LINEFEED:
         case CharCode.TAB:
+        case CharCode.LINEFEED:
         case CharCode.VERTICALTAB:
         case CharCode.FORMFEED:
         case CharCode.SPACE: {
