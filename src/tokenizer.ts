@@ -178,6 +178,7 @@ export const enum Token {
 
   FLOAT_OR_INTEGER_LITERAL,
   IDENTIFIER_OR_KEYWORD,
+  OPERATOR,
   WHITESPACE,
   INVALID,
   EOF
@@ -190,7 +191,7 @@ export const enum IdentifierHandling {
 }
 
 // from 0-127
-const SINGLE_CHAR_TOKENS: Token[] = [
+const BASIC_TOKENS: Token[] = [
   /* 0x00 */ Token.INVALID,
   /* 0x01 */ Token.INVALID,
   /* 0x02 */ Token.INVALID,
@@ -204,7 +205,7 @@ const SINGLE_CHAR_TOKENS: Token[] = [
   /*   \n */ Token.WHITESPACE,
   /*   \v */ Token.WHITESPACE,
   /*   \f */ Token.WHITESPACE,
-  /*   \r */ Token.INVALID,
+  /*   \r */ Token.WHITESPACE,
   /* 0x0E */ Token.INVALID,
   /* 0x0F */ Token.INVALID,
   /* 0x10 */ Token.INVALID,
@@ -224,21 +225,21 @@ const SINGLE_CHAR_TOKENS: Token[] = [
   /* 0x1E */ Token.INVALID,
   /* 0x1F */ Token.INVALID,
   /*  ' ' */ Token.WHITESPACE,
-  /*    ! */ Token.INVALID,
+  /*    ! */ Token.OPERATOR,
   /*    " */ Token.STRINGLITERAL,
   /*    # */ Token.INVALID,
   /*    $ */ Token.IDENTIFIER,
-  /*    % */ Token.INVALID,
-  /*    & */ Token.INVALID,
+  /*    % */ Token.OPERATOR,
+  /*    & */ Token.OPERATOR,
   /*    ' */ Token.STRINGLITERAL,
   /*    ( */ Token.OPENPAREN,
   /*    ) */ Token.CLOSEPAREN,
-  /*    * */ Token.INVALID,
-  /*    + */ Token.INVALID,
+  /*    * */ Token.OPERATOR,
+  /*    + */ Token.OPERATOR,
   /*    , */ Token.COMMA,
-  /*    - */ Token.INVALID,
-  /*    . */ Token.INVALID,
-  /*    / */ Token.INVALID,
+  /*    - */ Token.OPERATOR,
+  /*    . */ Token.OPERATOR,
+  /*    / */ Token.OPERATOR,
   /*    0 */ Token.FLOAT_OR_INTEGER_LITERAL,
   /*    1 */ Token.FLOAT_OR_INTEGER_LITERAL,
   /*    2 */ Token.FLOAT_OR_INTEGER_LITERAL,
@@ -251,10 +252,10 @@ const SINGLE_CHAR_TOKENS: Token[] = [
   /*    9 */ Token.FLOAT_OR_INTEGER_LITERAL,
   /*    : */ Token.COLON,
   /*    ; */ Token.SEMICOLON,
-  /*    < */ Token.INVALID,
-  /*    = */ Token.INVALID,
-  /*    > */ Token.INVALID,
-  /*    ? */ Token.INVALID,
+  /*    < */ Token.OPERATOR,
+  /*    = */ Token.OPERATOR,
+  /*    > */ Token.OPERATOR,
+  /*    ? */ Token.OPERATOR,
   /*    @ */ Token.AT,
   /*    A */ Token.IDENTIFIER,
   /*    B */ Token.IDENTIFIER,
@@ -285,7 +286,7 @@ const SINGLE_CHAR_TOKENS: Token[] = [
   /*    [ */ Token.OPENBRACKET,
   /*    \ */ Token.INVALID,
   /*    ] */ Token.CLOSEBRACKET,
-  /*    ^ */ Token.INVALID,
+  /*    ^ */ Token.OPERATOR,
   /*    _ */ Token.IDENTIFIER,
   /*    ` */ Token.TEMPLATELITERAL,
   /*    a */ Token.IDENTIFIER_OR_KEYWORD,
@@ -315,7 +316,7 @@ const SINGLE_CHAR_TOKENS: Token[] = [
   /*    y */ Token.IDENTIFIER_OR_KEYWORD,
   /*    z */ Token.IDENTIFIER,
   /*    { */ Token.OPENBRACE,
-  /*    | */ Token.INVALID,
+  /*    | */ Token.OPERATOR,
   /*    } */ Token.CLOSEBRACE,
   /*    ~ */ Token.TILDE,
   /* 0x7F */ Token.INVALID,
@@ -702,461 +703,124 @@ export class Tokenizer extends DiagnosticEmitter {
     while (pos < end) {
       this.tokenPos = pos;
       let c = text.charCodeAt(pos);
-      switch (c) {
-        // `\r`, `\r\n`
-        case CharCode.CARRIAGERETURN: {
-          if (!(
-            ++pos < end &&
-            text.charCodeAt(pos) == CharCode.LINEFEED
-          )) break;
-          // otherwise fall-through
+      if (c <= 0x7F) {
+        let token = unchecked(BASIC_TOKENS[c]);
+        // Basic tokens
+        if (token != Token.INVALID) {
+          switch (token) {
+            case Token.WHITESPACE: {
+              // `\r`, `\r\n`
+              if (c == CharCode.CARRIAGERETURN) {
+                if (!(
+                  ++pos < end &&
+                  text.charCodeAt(pos) == CharCode.LINEFEED
+                )) break;
+              }
+              // `\n`, `\t`, `\v`, `\f`, ` `
+              ++pos;
+              break;
+            }
+            case Token.FLOAT_OR_INTEGER_LITERAL: {
+              // `0.`, `0x`, `0b`, `0o`
+              if (c == CharCode._0) {
+                if (pos + 1 < end) {
+                  c = text.charCodeAt(pos + 1);
+                  if (c == CharCode.DOT) {
+                    this.pos = pos;
+                    return Token.FLOATLITERAL;
+                  }
+                  switch (c | 32) {
+                    case CharCode.x:
+                    case CharCode.b:
+                    case CharCode.o: {
+                      this.pos = pos;
+                      return Token.INTEGERLITERAL;
+                    }
+                  }
+                }
+              }
+              this.pos = pos;
+              return this.integerOrFloatToken();
+            }
+            // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
+            case Token.IDENTIFIER: {
+              let posBefore = pos;
+              while (
+                ++pos < end &&
+                isIdentifierPart(c = text.charCodeAt(pos))
+              ) { /* nop */ }
+              this.pos = posBefore;
+              return Token.IDENTIFIER;
+            }
+            // `a`..`z`
+            case Token.IDENTIFIER_OR_KEYWORD: {
+              let posBefore = pos;
+              while (
+                ++pos < end &&
+                isIdentifierPart(c = text.charCodeAt(pos))
+              ) { /* nop */ }
+              if (
+                identifierHandling != IdentifierHandling.ALWAYS &&
+                pos - posBefore >= MIN_KEYWORD_LENGTH &&
+                pos - posBefore <= MAX_KEYWORD_LENGTH
+              ) {
+                let keywordToken = probeKeywordToken(text.substring(posBefore, pos));
+                if (
+                  keywordToken != Token.INVALID &&
+                  !(
+                    identifierHandling == IdentifierHandling.PREFER &&
+                    tokenIsAlsoIdentifier(keywordToken)
+                  )
+                ) {
+                  this.pos = pos;
+                  return keywordToken;
+                }
+              }
+              this.pos = posBefore;
+              return Token.IDENTIFIER;
+            }
+            case Token.STRINGLITERAL:
+            case Token.TEMPLATELITERAL: {
+              // FIXME
+              this.pos = pos;
+              return token;
+            }
+            case Token.OPERATOR: {
+              token = this.operatorToken(c, text, pos, end, maxTokenLength);
+              pos = this.pos;
+              if (token == Token.INVALID) continue;
+              return token;
+            }
+            // `[`, `{`, `(`, `,`, `:`, `;`, `@` and etc
+            default: {
+              this.pos = pos + 1;
+              return token;
+            }
+          }
         }
-        // `\n`, `\t`, `\v`, `\f`, ` `
-        case CharCode.TAB:
-        case CharCode.LINEFEED:
-        case CharCode.VERTICALTAB:
-        case CharCode.FORMFEED:
-        case CharCode.SPACE: {
+      } else {
+        // TODO: \uXXXX also support for identifiers
+        if (isIdentifierStart(c)) {
+          while (
+            ++pos < end &&
+            isIdentifierPart(c = text.charCodeAt(pos))
+          ) { /* nop */ }
+          return Token.IDENTIFIER;
+        } else if (isWhiteSpace(c)) {
           ++pos;
           break;
         }
-        // `!`, `!=`, `!==`
-        case CharCode.EXCLAMATION: {
-          ++pos;
-          if (
-            maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
-          ) {
-            ++pos;
-            if (
-              maxTokenLength > 2 && pos < end &&
-              text.charCodeAt(pos) == CharCode.EQUALS
-            ) {
-              this.pos = pos + 1;
-              return Token.EXCLAMATION_EQUALS_EQUALS;
-            }
-            this.pos = pos;
-            return Token.EXCLAMATION_EQUALS;
-          }
-          this.pos = pos;
-          return Token.EXCLAMATION;
-        }
-        case CharCode.DOUBLEQUOTE:
-        case CharCode.SINGLEQUOTE: {
-          this.pos = pos;
-          return Token.STRINGLITERAL;
-        }
-        case CharCode.BACKTICK: {
-          this.pos = pos;
-          return Token.TEMPLATELITERAL;
-        }
-        // `%`, `%=`
-        case CharCode.PERCENT: {
-          ++pos;
-          if (
-            maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
-          ) {
-            this.pos = pos + 1;
-            return Token.PERCENT_EQUALS;
-          }
-          this.pos = pos;
-          return Token.PERCENT;
-        }
-        // `&`, `&&`, `&=`, `&&=`
-        case CharCode.AMPERSAND: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.EQUALS) {
-              this.pos = pos + 1;
-              return Token.AMPERSAND_EQUALS;
-            }
-            if (c == CharCode.AMPERSAND) {
-              ++pos;
-              if (
-                maxTokenLength > 2 && pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
-              ) {
-                this.pos = pos + 1;
-                return Token.AMPERSAND_AMPERSAND_EQUALS;
-              }
-              this.pos = pos;
-              return Token.AMPERSAND_AMPERSAND;
-            }
-          }
-          this.pos = pos;
-          return Token.AMPERSAND;
-        }
-        case CharCode.OPENPAREN: {
-          this.pos = pos + 1;
-          return Token.OPENPAREN;
-        }
-        case CharCode.CLOSEPAREN: {
-          this.pos = pos + 1;
-          return Token.CLOSEPAREN;
-        }
-        // `*`, `**`, `*=`, `**=`
-        case CharCode.ASTERISK: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.EQUALS) {
-              this.pos = pos + 1;
-              return Token.ASTERISK_EQUALS;
-            }
-            if (c == CharCode.ASTERISK) {
-              ++pos;
-              if (
-                maxTokenLength > 2 && pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
-              ) {
-                this.pos = pos + 1;
-                return Token.ASTERISK_ASTERISK_EQUALS;
-              }
-              this.pos = pos;
-              return Token.ASTERISK_ASTERISK;
-            }
-          }
-          this.pos = pos;
-          return Token.ASTERISK;
-        }
-        // `+`, `++`, `+=`
-        case CharCode.PLUS: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.PLUS) {
-              this.pos = pos + 1;
-              return Token.PLUS_PLUS;
-            }
-            if (c == CharCode.EQUALS) {
-              this.pos = pos + 1;
-              return Token.PLUS_EQUALS;
-            }
-          }
-          this.pos = pos;
-          return Token.PLUS;
-        }
-        case CharCode.COMMA: {
-          this.pos = pos + 1;
-          return Token.COMMA;
-        }
-        // `-`, `-=`, `--`
-        case CharCode.MINUS: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.MINUS) {
-              this.pos = pos + 1;
-              return Token.MINUS_MINUS;
-            }
-            if (c == CharCode.EQUALS) {
-              this.pos = pos + 1;
-              return Token.MINUS_EQUALS;
-            }
-          }
-          this.pos = pos;
-          return Token.MINUS;
-        }
-        // `.`, `.{d}`, `...`
-        case CharCode.DOT: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (isDecimal(c)) {
-              this.pos = pos - 1;
-              return Token.FLOATLITERAL; // expects a call to readFloat
-            }
-            if (
-              maxTokenLength > 2 &&
-              pos + 1 < end && c == CharCode.DOT &&
-              text.charCodeAt(pos + 1) == CharCode.DOT
-            ) {
-              this.pos = pos + 2;
-              return Token.DOT_DOT_DOT;
-            }
-          }
-          this.pos = pos;
-          return Token.DOT;
-        }
-        // `/`, `//`, `/*`, `/=`, `///`
-        case CharCode.SLASH: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.SLASH) { // single-line
-              pos = this.skipLineComment(text, pos, end);
-              break;
-            }
-            if (c == CharCode.ASTERISK) { // multi-line
-              pos = this.skipBlockComment(text, pos, end);
-              break;
-            }
-            if (c == CharCode.EQUALS) {
-              this.pos = pos + 1;
-              return Token.SLASH_EQUALS;
-            }
-          }
-          this.pos = pos;
-          return Token.SLASH;
-        }
-        // `0.`, `0x`, `0b`, `0o`
-        case CharCode._0: {
-          if (pos + 1 < end) {
-            c = text.charCodeAt(pos + 1);
-            if (c == CharCode.DOT) {
-              this.pos = pos;
-              return Token.FLOATLITERAL;
-            }
-            switch (c | 32) {
-              case CharCode.x:
-              case CharCode.b:
-              case CharCode.o: {
-                this.pos = pos;
-                return Token.INTEGERLITERAL;
-              }
-            }
-          }
-          // fall-through
-        }
-        case CharCode._1:
-        case CharCode._2:
-        case CharCode._3:
-        case CharCode._4:
-        case CharCode._5:
-        case CharCode._6:
-        case CharCode._7:
-        case CharCode._8:
-        case CharCode._9: {
-          this.pos = pos;
-          return this.integerOrFloatToken();
-        }
-        case CharCode.COLON: {
-          this.pos = pos + 1;
-          return Token.COLON;
-        }
-        case CharCode.SEMICOLON: {
-          this.pos = pos + 1;
-          return Token.SEMICOLON;
-        }
-        // `<`, `<<`, `<=` `<<=`
-        case CharCode.LESSTHAN: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.LESSTHAN) {
-              ++pos;
-              if (
-                maxTokenLength > 2 &&
-                pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
-              ) {
-                this.pos = pos + 1;
-                return Token.LESSTHAN_LESSTHAN_EQUALS;
-              }
-              this.pos = pos;
-              return Token.LESSTHAN_LESSTHAN;
-            }
-            if (c == CharCode.EQUALS) {
-              this.pos = pos + 1;
-              return Token.LESSTHAN_EQUALS;
-            }
-          }
-          this.pos = pos;
-          return Token.LESSTHAN;
-        }
-        // `=`, `==`, `===`, `=>`
-        case CharCode.EQUALS: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.EQUALS) {
-              ++pos;
-              if (
-                maxTokenLength > 2 &&
-                pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
-              ) {
-                this.pos = pos + 1;
-                return Token.EQUALS_EQUALS_EQUALS;
-              }
-              this.pos = pos;
-              return Token.EQUALS_EQUALS;
-            }
-            if (c == CharCode.GREATERTHAN) {
-              this.pos = pos + 1;
-              return Token.EQUALS_GREATERTHAN;
-            }
-          }
-          this.pos = pos;
-          return Token.EQUALS;
-        }
-        // `>`, `>>`, `>>>`, `>=` `>>=`, `>>>=`
-        case CharCode.GREATERTHAN: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.GREATERTHAN) {
-              ++pos;
-              if (maxTokenLength > 2 && pos < end) {
-                c = text.charCodeAt(pos);
-                if (c == CharCode.GREATERTHAN) {
-                  ++pos;
-                  if (
-                    maxTokenLength > 3 && pos < end &&
-                    text.charCodeAt(pos) == CharCode.EQUALS
-                  ) {
-                    this.pos = pos + 1;
-                    return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS;
-                  }
-                  this.pos = pos;
-                  return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN;
-                }
-                if (c == CharCode.EQUALS) {
-                  this.pos = pos + 1;
-                  return Token.GREATERTHAN_GREATERTHAN_EQUALS;
-                }
-              }
-              this.pos = pos;
-              return Token.GREATERTHAN_GREATERTHAN;
-            }
-            if (c == CharCode.EQUALS) {
-              this.pos = pos + 1;
-              return Token.GREATERTHAN_EQUALS;
-            }
-          }
-          this.pos = pos;
-          return Token.GREATERTHAN;
-        }
-        // `?`, `??`, `??=`
-        case CharCode.QUESTION: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.QUESTION) {
-              ++pos;
-              if (maxTokenLength > 2 && pos < end) {
-                c = text.charCodeAt(pos);
-                if (c == CharCode.EQUALS) {
-                  this.pos = pos + 1;
-                  return Token.QUESTION_QUESTION_EQUALS;
-                }
-              }
-              this.pos = pos;
-              return Token.QUESTION_QUESTION;
-            }
-          }
-          this.pos = pos;
-          return Token.QUESTION;
-        }
-        case CharCode.OPENBRACKET: {
-          this.pos = pos + 1;
-          return Token.OPENBRACKET;
-        }
-        case CharCode.CLOSEBRACKET: {
-          this.pos = pos + 1;
-          return Token.CLOSEBRACKET;
-        }
-        // `^`, `^=`
-        case CharCode.CARET: {
-          ++pos;
-          if (
-            maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
-          ) {
-            this.pos = pos + 1;
-            return Token.CARET_EQUALS;
-          }
-          this.pos = pos;
-          return Token.CARET;
-        }
-        case CharCode.OPENBRACE: {
-          this.pos = pos + 1;
-          return Token.OPENBRACE;
-        }
-        // `|`, `||`, `|=`, `||=`
-        case CharCode.BAR: {
-          ++pos;
-          if (maxTokenLength > 1 && pos < end) {
-            c = text.charCodeAt(pos);
-            if (c == CharCode.EQUALS) {
-              this.pos = pos + 1;
-              return Token.BAR_EQUALS;
-            }
-            if (c == CharCode.BAR) {
-              ++pos;
-              if (
-                maxTokenLength > 2 && pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
-              ) {
-                this.pos = pos + 1;
-                return Token.BAR_BAR_EQUALS;
-              }
-              this.pos = pos;
-              return Token.BAR_BAR;
-            }
-          }
-          this.pos = pos;
-          return Token.BAR;
-        }
-        case CharCode.CLOSEBRACE: {
-          this.pos = pos + 1;
-          return Token.CLOSEBRACE;
-        }
-        case CharCode.TILDE: {
-          this.pos = pos + 1;
-          return Token.TILDE;
-        }
-        case CharCode.AT: {
-          this.pos = pos + 1;
-          return Token.AT;
-        }
-        default: {
-          // TODO: \uXXXX also support for identifiers
-          if (isIdentifierStart(c)) {
-            let posBefore = pos;
-            while (
-              ++pos < end &&
-              isIdentifierPart(c = text.charCodeAt(pos))
-            ) { /* nop */ }
-            // TODO: check valid termination of identifier?
-
-            if (
-              identifierHandling != IdentifierHandling.ALWAYS &&
-              pos - posBefore >= MIN_KEYWORD_LENGTH &&
-              pos - posBefore <= MAX_KEYWORD_LENGTH
-            ) {
-              let keywordToken = probeKeywordToken(text.substring(posBefore, pos));
-              if (
-                keywordToken != Token.INVALID &&
-                !(
-                  identifierHandling == IdentifierHandling.PREFER &&
-                  tokenIsAlsoIdentifier(keywordToken)
-                )
-              ) {
-                this.pos = pos;
-                return keywordToken;
-              }
-            }
-            this.pos = posBefore;
-            return Token.IDENTIFIER;
-          } else if (isWhiteSpace(c)) {
-            ++pos;
-            break;
-          }
-          let start = pos++;
-          if (
-            isHighSurrogate(c) && pos < end &&
-            isLowSurrogate(text.charCodeAt(pos))
-          ) ++pos;
-          this.error(
-            DiagnosticCode.Invalid_character,
-            this.range(start, pos)
-          );
-          this.pos = pos;
-          return Token.INVALID;
-        }
+        let start = pos++;
+        if (
+          isHighSurrogate(c) && pos < end &&
+          isLowSurrogate(text.charCodeAt(pos))
+        ) ++pos;
+        this.error(
+          DiagnosticCode.Invalid_character,
+          this.range(start, pos)
+        );
+        this.pos = pos;
+        return Token.INVALID;
       }
     }
     this.pos = pos;
@@ -1192,6 +856,322 @@ export class Tokenizer extends DiagnosticEmitter {
       this.tokenPos = tokenPosBefore;
     }
     return nextToken;
+  }
+
+  private operatorToken(c: i32, text: string, pos: i32, end: i32, maxTokenLength: i32): Token {
+    // Operator tokens
+    switch (c) {
+      // `!`, `!=`, `!==`
+      case CharCode.EXCLAMATION: {
+        ++pos;
+        if (
+          maxTokenLength > 1 && pos < end &&
+          text.charCodeAt(pos) == CharCode.EQUALS
+        ) {
+          ++pos;
+          if (
+            maxTokenLength > 2 && pos < end &&
+            text.charCodeAt(pos) == CharCode.EQUALS
+          ) {
+            this.pos = pos + 1;
+            return Token.EXCLAMATION_EQUALS_EQUALS;
+          }
+          this.pos = pos;
+          return Token.EXCLAMATION_EQUALS;
+        }
+        this.pos = pos;
+        return Token.EXCLAMATION;
+      }
+      // `%`, `%=`
+      case CharCode.PERCENT: {
+        ++pos;
+        if (
+          maxTokenLength > 1 && pos < end &&
+          text.charCodeAt(pos) == CharCode.EQUALS
+        ) {
+          this.pos = pos + 1;
+          return Token.PERCENT_EQUALS;
+        }
+        this.pos = pos;
+        return Token.PERCENT;
+      }
+      // `&`, `&&`, `&=`, `&&=`
+      case CharCode.AMPERSAND: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.EQUALS) {
+            this.pos = pos + 1;
+            return Token.AMPERSAND_EQUALS;
+          }
+          if (c == CharCode.AMPERSAND) {
+            ++pos;
+            if (
+              maxTokenLength > 2 && pos < end &&
+              text.charCodeAt(pos) == CharCode.EQUALS
+            ) {
+              this.pos = pos + 1;
+              return Token.AMPERSAND_AMPERSAND_EQUALS;
+            }
+            this.pos = pos;
+            return Token.AMPERSAND_AMPERSAND;
+          }
+        }
+        this.pos = pos;
+        return Token.AMPERSAND;
+      }
+      // `*`, `**`, `*=`, `**=`
+      case CharCode.ASTERISK: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.EQUALS) {
+            this.pos = pos + 1;
+            return Token.ASTERISK_EQUALS;
+          }
+          if (c == CharCode.ASTERISK) {
+            ++pos;
+            if (
+              maxTokenLength > 2 && pos < end &&
+              text.charCodeAt(pos) == CharCode.EQUALS
+            ) {
+              this.pos = pos + 1;
+              return Token.ASTERISK_ASTERISK_EQUALS;
+            }
+            this.pos = pos;
+            return Token.ASTERISK_ASTERISK;
+          }
+        }
+        this.pos = pos;
+        return Token.ASTERISK;
+      }
+      // `+`, `++`, `+=`
+      case CharCode.PLUS: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.PLUS) {
+            this.pos = pos + 1;
+            return Token.PLUS_PLUS;
+          }
+          if (c == CharCode.EQUALS) {
+            this.pos = pos + 1;
+            return Token.PLUS_EQUALS;
+          }
+        }
+        this.pos = pos;
+        return Token.PLUS;
+      }
+      // `-`, `-=`, `--`
+      case CharCode.MINUS: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.MINUS) {
+            this.pos = pos + 1;
+            return Token.MINUS_MINUS;
+          }
+          if (c == CharCode.EQUALS) {
+            this.pos = pos + 1;
+            return Token.MINUS_EQUALS;
+          }
+        }
+        this.pos = pos;
+        return Token.MINUS;
+      }
+      // `.`, `.{d}`, `...`
+      case CharCode.DOT: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (isDecimal(c)) {
+            this.pos = pos - 1;
+            return Token.FLOATLITERAL; // expects a call to readFloat
+          }
+          if (
+            maxTokenLength > 2 &&
+            pos + 1 < end && c == CharCode.DOT &&
+            text.charCodeAt(pos + 1) == CharCode.DOT
+          ) {
+            this.pos = pos + 2;
+            return Token.DOT_DOT_DOT;
+          }
+        }
+        this.pos = pos;
+        return Token.DOT;
+      }
+      // `/`, `//`, `/*`, `/=`, `///`
+      case CharCode.SLASH: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.SLASH) { // single-line
+            pos = this.skipLineComment(text, pos, end);
+            break;
+          }
+          if (c == CharCode.ASTERISK) { // multi-line
+            pos = this.skipBlockComment(text, pos, end);
+            break;
+          }
+          if (c == CharCode.EQUALS) {
+            this.pos = pos + 1;
+            return Token.SLASH_EQUALS;
+          }
+        }
+        this.pos = pos;
+        return Token.SLASH;
+      }
+      // `<`, `<<`, `<=` `<<=`
+      case CharCode.LESSTHAN: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.LESSTHAN) {
+            ++pos;
+            if (
+              maxTokenLength > 2 &&
+              pos < end &&
+              text.charCodeAt(pos) == CharCode.EQUALS
+            ) {
+              this.pos = pos + 1;
+              return Token.LESSTHAN_LESSTHAN_EQUALS;
+            }
+            this.pos = pos;
+            return Token.LESSTHAN_LESSTHAN;
+          }
+          if (c == CharCode.EQUALS) {
+            this.pos = pos + 1;
+            return Token.LESSTHAN_EQUALS;
+          }
+        }
+        this.pos = pos;
+        return Token.LESSTHAN;
+      }
+      // `=`, `==`, `===`, `=>`
+      case CharCode.EQUALS: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.EQUALS) {
+            ++pos;
+            if (
+              maxTokenLength > 2 &&
+              pos < end &&
+              text.charCodeAt(pos) == CharCode.EQUALS
+            ) {
+              this.pos = pos + 1;
+              return Token.EQUALS_EQUALS_EQUALS;
+            }
+            this.pos = pos;
+            return Token.EQUALS_EQUALS;
+          }
+          if (c == CharCode.GREATERTHAN) {
+            this.pos = pos + 1;
+            return Token.EQUALS_GREATERTHAN;
+          }
+        }
+        this.pos = pos;
+        return Token.EQUALS;
+      }
+      // `>`, `>>`, `>>>`, `>=` `>>=`, `>>>=`
+      case CharCode.GREATERTHAN: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.GREATERTHAN) {
+            ++pos;
+            if (maxTokenLength > 2 && pos < end) {
+              c = text.charCodeAt(pos);
+              if (c == CharCode.GREATERTHAN) {
+                ++pos;
+                if (
+                  maxTokenLength > 3 && pos < end &&
+                  text.charCodeAt(pos) == CharCode.EQUALS
+                ) {
+                  this.pos = pos + 1;
+                  return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS;
+                }
+                this.pos = pos;
+                return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN;
+              }
+              if (c == CharCode.EQUALS) {
+                this.pos = pos + 1;
+                return Token.GREATERTHAN_GREATERTHAN_EQUALS;
+              }
+            }
+            this.pos = pos;
+            return Token.GREATERTHAN_GREATERTHAN;
+          }
+          if (c == CharCode.EQUALS) {
+            this.pos = pos + 1;
+            return Token.GREATERTHAN_EQUALS;
+          }
+        }
+        this.pos = pos;
+        return Token.GREATERTHAN;
+      }
+      // `?`, `??`, `??=`
+      case CharCode.QUESTION: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.QUESTION) {
+            ++pos;
+            if (maxTokenLength > 2 && pos < end) {
+              c = text.charCodeAt(pos);
+              if (c == CharCode.EQUALS) {
+                this.pos = pos + 1;
+                return Token.QUESTION_QUESTION_EQUALS;
+              }
+            }
+            this.pos = pos;
+            return Token.QUESTION_QUESTION;
+          }
+        }
+        this.pos = pos;
+        return Token.QUESTION;
+      }
+      // `^`, `^=`
+      case CharCode.CARET: {
+        ++pos;
+        if (
+          maxTokenLength > 1 && pos < end &&
+          text.charCodeAt(pos) == CharCode.EQUALS
+        ) {
+          this.pos = pos + 1;
+          return Token.CARET_EQUALS;
+        }
+        this.pos = pos;
+        return Token.CARET;
+      }
+      // `|`, `||`, `|=`, `||=`
+      case CharCode.BAR: {
+        ++pos;
+        if (maxTokenLength > 1 && pos < end) {
+          c = text.charCodeAt(pos);
+          if (c == CharCode.EQUALS) {
+            this.pos = pos + 1;
+            return Token.BAR_EQUALS;
+          }
+          if (c == CharCode.BAR) {
+            ++pos;
+            if (
+              maxTokenLength > 2 && pos < end &&
+              text.charCodeAt(pos) == CharCode.EQUALS
+            ) {
+              this.pos = pos + 1;
+              return Token.BAR_BAR_EQUALS;
+            }
+            this.pos = pos;
+            return Token.BAR_BAR;
+          }
+        }
+        this.pos = pos;
+        return Token.BAR;
+      }
+    }
+    this.pos = pos;
+    return Token.INVALID;
   }
 
   skipLineComment(text: string, pos: i32, end: i32): i32 {
