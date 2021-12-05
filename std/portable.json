@@ -5,7 +5,6 @@
     "module": "commonjs",
     "allowJs": true,
     "downlevelIteration": true,
-    "preserveConstEnums": false,
     "useDefineForClassFields": false,
     "noPropertyAccessFromIndexSignature": true,
     "typeRoots": [ "types" ],

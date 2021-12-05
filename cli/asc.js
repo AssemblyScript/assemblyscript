@@ -102,7 +102,6 @@ function loadAssemblyScriptJS() {
             "../src/glue/js/*": "cjs"
           },
           compilerOptions: {
-            preserveConstEnums: true,
             module: "esnext",
             target: "es2017"
           }
