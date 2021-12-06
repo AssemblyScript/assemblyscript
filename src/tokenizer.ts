@@ -1171,14 +1171,14 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   skipLineComment(text: string, pos: i32, end: i32): i32 {
-    let commentStartPos = pos - 1;
-    let commentKind = CommentKind.LINE;
+    let startPos = pos - 1;
+    let kind = CommentKind.LINE;
     if (
       pos + 1 < end &&
       text.charCodeAt(pos + 1) == CharCode.SLASH
     ) {
       ++pos;
-      commentKind = CommentKind.TRIPLE;
+      kind = CommentKind.TRIPLE;
     }
     while (++pos < end) {
       if (isLineBreak(text.charCodeAt(pos))) {
@@ -1188,9 +1188,9 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     if (this.onComment) {
       this.onComment(
-        commentKind,
-        text.substring(commentStartPos, pos),
-        this.range(commentStartPos, pos)
+        kind,
+        text.substring(startPos, pos),
+        this.range(startPos, pos)
       );
     }
     return pos;
