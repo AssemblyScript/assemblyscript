@@ -324,7 +324,6 @@ const BASIC_TOKENS: Token[] = [
 
 export function scanKeyword(text: string): Token {
   let len = text.length;
-  assert(len);
   switch (text.charCodeAt(0)) {
     case CharCode.a:
       if (len == 2) {
