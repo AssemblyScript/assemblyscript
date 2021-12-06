@@ -585,6 +585,20 @@ export function operatorTokenToString(token: Token): string {
   }
 }
 
+// Test is it integer or float without update of position.
+function integerOrFloatToken(text: string, pos: i32, end: i32): Token {
+  while (pos < end) {
+    let c = text.charCodeAt(pos);
+    if (c == CharCode.DOT || (c | 32) == CharCode.e) {
+      return Token.FLOATLITERAL;
+    }
+    if (c != CharCode._ && !isDecimal(c)) break;
+    // does not validate separator placement (this is done in readXYInteger)
+    pos++;
+  }
+  return Token.INTEGERLITERAL;
+}
+
 export class Range {
 
   source!: Source;
@@ -743,7 +757,7 @@ export class Tokenizer extends DiagnosticEmitter {
                   }
                 }
               }
-              return this.integerOrFloatToken();
+              return integerOrFloatToken(text, pos + 1, end);
             }
             // `a`..`z`
             case Token.IDENTIFIER_OR_KEYWORD: {
@@ -1498,23 +1512,6 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     this.pos = pos;
     return text.substring(start, pos);
-  }
-
-  // Test is it integer or float without update of position.
-  integerOrFloatToken(): Token {
-    var text = this.source.text;
-    var pos = this.pos + 1;
-    var end = this.end;
-    while (pos < end) {
-      let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || (c | 32) == CharCode.e) {
-        return Token.FLOATLITERAL;
-      }
-      if (c != CharCode._ && !isDecimal(c)) break;
-      // does not validate separator placement (this is done in readXYInteger)
-      pos++;
-    }
-    return Token.INTEGERLITERAL;
   }
 
   readInteger(): i64 {
