@@ -1851,12 +1851,14 @@ export class Parser extends DiagnosticEmitter {
       case Token.OPENBRACE:
       case Token.ASTERISK:
       case Token.DOT_DOT_DOT:
+
+      // isLiteralPropertyName
       case Token.STRINGLITERAL:
       case Token.INTEGERLITERAL:
       case Token.IDENTIFIER:
         return true;
     }
-    return tokenIsAlsoIdentifier(tk);
+    return tk <= Token.YIELD;
   }
 
   nextTokenCanFollowDefaultKeyword(tn: Tokenizer): boolean {
@@ -1867,9 +1869,9 @@ export class Parser extends DiagnosticEmitter {
       case Token.INTERFACE:
         return true;
       case Token.ABSTRACT:
-        return tn.peek() == Token.CLASS; // TODO: on same line
+        return tn.peek() == Token.CLASS && !tn.nextTokenOnNewLine;
       // case Token.ASYNC:
-      //   return tn.peek() == Token.FUNCTION; // TODO: on same line
+      //   return tn.peek() == Token.FUNCTION && !tn.nextTokenOnNewLine;
     }
     return false;
   }
@@ -1914,7 +1916,9 @@ export class Parser extends DiagnosticEmitter {
       case Token.SET:
         return this.canFollowModifier(tn.next());
     }
-    return this.canFollowModifier(tn.next()); // TODO: on same line
+
+    tn.peek();
+    return !tn.nextTokenOnNewLine && this.canFollowModifier(tn.next());
   }
 
   private accessStart: i32 = -1;
