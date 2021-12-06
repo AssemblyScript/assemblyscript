@@ -745,16 +745,13 @@ export class Tokenizer extends DiagnosticEmitter {
       let c = text.charCodeAt(pos);
       if (c <= 0x7F) {
         let token = unchecked(BASIC_TOKENS[c]);
-        if (token == Token.INVALID) {
-          this.pos = pos;
-          return Token.INVALID;
-        }
         switch (token) {
           // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
           case Token.IDENTIFIER:
           // `"`, `'`, ```
           case Token.STRINGLITERAL:
           case Token.TEMPLATELITERAL:
+          case Token.INVALID:
             this.pos = pos;
             return token;
           // `0`..`9`, `0.`, `0x`, `0b`, `0o`
