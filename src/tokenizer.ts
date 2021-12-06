@@ -371,11 +371,28 @@ export function scanKeyword(text: string): Token {
       break;
     }
     case CharCode.f: {
-      if (text == "false") return Token.FALSE;
-      if (text == "function") return Token.FUNCTION;
-      if (text == "for") return Token.FOR;
-      if (text == "from") return Token.FROM;
-      if (text == "finally") return Token.FINALLY;
+      switch (text.charCodeAt(1)) {
+        case CharCode.a: {
+          if (text == "false") return Token.FALSE;
+          break;
+        }
+        case CharCode.u: {
+          if (text == "function") return Token.FUNCTION;
+          break;
+        }
+        case CharCode.o: {
+          if (text == "for") return Token.FOR;
+          break;
+        }
+        case CharCode.r: {
+          if (text == "from") return Token.FROM;
+          break;
+        }
+        case CharCode.i: {
+          if (text == "finally") return Token.FINALLY;
+          break;
+        }
+      }
       break;
     }
     case CharCode.g: {
@@ -390,23 +407,24 @@ export function scanKeyword(text: string): Token {
           case CharCode.s: return Token.IS;
         }
         break;
-      }
-      switch (text.charCodeAt(3)) {
-        case CharCode.e: {
-          if (text == "interface") return Token.INTERFACE;
-          break;
-        }
-        case CharCode.l: {
-          if (text == "implements") return Token.IMPLEMENTS;
-          break;
-        }
-        case CharCode.o: {
-          if (text == "import") return Token.IMPORT;
-          break;
-        }
-        case CharCode.t: {
-          if (text == "instanceof") return Token.INSTANCEOF;
-          break;
+      } else if (len >= 6) {
+        switch (text.charCodeAt(3)) {
+          case CharCode.e: {
+            if (text == "interface") return Token.INTERFACE;
+            break;
+          }
+          case CharCode.l: {
+            if (text == "implements") return Token.IMPLEMENTS;
+            break;
+          }
+          case CharCode.o: {
+            if (text == "import") return Token.IMPORT;
+            break;
+          }
+          case CharCode.t: {
+            if (text == "instanceof") return Token.INSTANCEOF;
+            break;
+          }
         }
       }
       break;
@@ -434,10 +452,24 @@ export function scanKeyword(text: string): Token {
       break;
     }
     case CharCode.p: {
-      if (text == "public") return Token.PUBLIC;
-      if (text == "private") return Token.PRIVATE;
-      if (text == "protected") return Token.PROTECTED;
-      if (text == "package") return Token.PACKAGE;
+      switch (text.charCodeAt(2)) {
+        case CharCode.b: {
+          if (text == "public") return Token.PUBLIC;
+          break;
+        }
+        case CharCode.i: {
+          if (text == "private") return Token.PRIVATE;
+          break;
+        }
+        case CharCode.o: {
+          if (text == "protected") return Token.PROTECTED;
+          break;
+        }
+        case CharCode.c: {
+          if (text == "package") return Token.PACKAGE;
+          break;
+        }
+      }
       break;
     }
     case CharCode.r: {
