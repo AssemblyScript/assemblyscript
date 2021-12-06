@@ -78,6 +78,7 @@
   "A 'get' accessor cannot have parameters.": 1054,
   "Enum member must have initializer.": 1061,
   "'{0}' modifier cannot appear on a type member.": 1070,
+  "'{0}' modifier cannot appear on a constructor declaration.": 1089,
   "'{0}' modifier cannot appear on a parameter.": 1090,
   "Type parameters cannot appear on a constructor declaration.": 1092,
   "Type annotation cannot appear on a constructor declaration.": 1093,

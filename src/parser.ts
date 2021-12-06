@@ -2274,19 +2274,19 @@ export class Parser extends DiagnosticEmitter {
         isConstructor = true;
         if (flags & CommonFlags.STATIC) {
           this.error(
-            DiagnosticCode._0_modifier_cannot_be_used_here,
+            DiagnosticCode._0_modifier_cannot_appear_on_a_constructor_declaration,
             tn.range(this.staticStart, this.staticEnd), "static"
           ); // recoverable
         }
         if (flags & CommonFlags.ABSTRACT) {
           this.error(
-            DiagnosticCode._0_modifier_cannot_be_used_here,
+            DiagnosticCode._0_modifier_cannot_appear_on_a_constructor_declaration,
             tn.range(this.abstractStart, this.abstractEnd), "abstract"
           ); // recoverable
         }
         if (flags & CommonFlags.READONLY) {
           this.error(
-            DiagnosticCode._0_modifier_cannot_be_used_here,
+            DiagnosticCode._0_modifier_cannot_appear_on_a_constructor_declaration,
             tn.range(this.readonlyStart, this.readonlyEnd), "readonly"
           ); // recoverable
         }

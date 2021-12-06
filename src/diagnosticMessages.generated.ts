@@ -81,6 +81,7 @@ export enum DiagnosticCode {
   A_get_accessor_cannot_have_parameters = 1054,
   Enum_member_must_have_initializer = 1061,
   _0_modifier_cannot_appear_on_a_type_member = 1070,
+  _0_modifier_cannot_appear_on_a_constructor_declaration = 1089,
   _0_modifier_cannot_appear_on_a_parameter = 1090,
   Type_parameters_cannot_appear_on_a_constructor_declaration = 1092,
   Type_annotation_cannot_appear_on_a_constructor_declaration = 1093,
@@ -279,6 +280,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1054: return "A 'get' accessor cannot have parameters.";
     case 1061: return "Enum member must have initializer.";
     case 1070: return "'{0}' modifier cannot appear on a type member.";
+    case 1089: return "'{0}' modifier cannot appear on a constructor declaration.";
     case 1090: return "'{0}' modifier cannot appear on a parameter.";
     case 1092: return "Type parameters cannot appear on a constructor declaration.";
     case 1093: return "Type annotation cannot appear on a constructor declaration.";
