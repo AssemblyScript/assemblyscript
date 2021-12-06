@@ -748,25 +748,26 @@ export class Tokenizer extends DiagnosticEmitter {
             // `a`..`z`
             case Token.IDENTIFIER_OR_KEYWORD: {
               let posBefore = pos;
-              while (
-                ++pos < end &&
-                isIdentifierPart(text.charCodeAt(pos))
-              ) { /* nop */ }
-              if (
-                identifierHandling != IdentifierHandling.ALWAYS &&
-                pos - posBefore >= MIN_KEYWORD_LENGTH &&
-                pos - posBefore <= MAX_KEYWORD_LENGTH
-              ) {
-                let keywordToken = probeKeywordToken(text.substring(posBefore, pos));
+              if (identifierHandling != IdentifierHandling.ALWAYS) {
+                while (
+                  ++pos < end &&
+                  isIdentifierPart(text.charCodeAt(pos))
+                ) { /* nop */ }
                 if (
-                  keywordToken != Token.INVALID &&
-                  !(
-                    identifierHandling == IdentifierHandling.PREFER &&
-                    tokenIsAlsoIdentifier(keywordToken)
-                  )
+                  pos - posBefore >= MIN_KEYWORD_LENGTH &&
+                  pos - posBefore <= MAX_KEYWORD_LENGTH
                 ) {
-                  this.pos = pos;
-                  return keywordToken;
+                  let keywordToken = probeKeywordToken(text.substring(posBefore, pos));
+                  if (
+                    keywordToken != Token.INVALID &&
+                    !(
+                      identifierHandling == IdentifierHandling.PREFER &&
+                      tokenIsAlsoIdentifier(keywordToken)
+                    )
+                  ) {
+                    this.pos = pos;
+                    return keywordToken;
+                  }
                 }
               }
               this.pos = posBefore;
