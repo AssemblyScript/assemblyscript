@@ -771,16 +771,13 @@ export class Tokenizer extends DiagnosticEmitter {
                   pos - posBefore >= MIN_KEYWORD_LENGTH &&
                   pos - posBefore <= MAX_KEYWORD_LENGTH
                 ) {
-                  let keywordToken = probeKeywordToken(text.substring(posBefore, pos));
-                  if (
-                    keywordToken != Token.INVALID &&
-                    !(
-                      identifierHandling == IdentifierHandling.PREFER &&
-                      tokenIsAlsoIdentifier(keywordToken)
-                    )
-                  ) {
+                  let keyword = probeKeywordToken(text.substring(posBefore, pos));
+                  if (keyword != Token.INVALID && !(
+                    identifierHandling == IdentifierHandling.PREFER &&
+                    tokenIsAlsoIdentifier(keyword)
+                  )) {
                     this.pos = pos;
-                    return keywordToken;
+                    return keyword;
                   }
                 }
               }
