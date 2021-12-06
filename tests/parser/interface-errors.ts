@@ -17,6 +17,7 @@ interface Foo {
   protected c: i32; // ERROR 1042: "'protected' modifier cannot be used here."
   public c: i32; // ERROR 1042: "'public' modifier cannot be used here."
   static d: i32; // ERROR 1042: "'static' modifier cannot be used here."
+  readonly e: i32; // no error
   constructor(): i32; // ERROR 229: "'constructor' keyword cannot be used here." (TS: none?)
   constructor(); // ^ + ERROR 1110: "Type expected."
 }
