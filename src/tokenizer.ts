@@ -190,7 +190,7 @@ export const enum IdentifierHandling {
   ALWAYS
 }
 
-// from 0-127
+// Classify single character tokens (0..127)
 const BASIC_TOKENS: Token[] = [
   /* 0x00 */ Token.INVALID,
   /* 0x01 */ Token.INVALID,
@@ -326,7 +326,7 @@ export function scanKeyword(text: string): Token {
   let len = text.length;
   assert(len);
   switch (text.charCodeAt(0)) {
-    case CharCode.a: {
+    case CharCode.a:
       if (len == 2) {
         if (text.charCodeAt(1) == CharCode.s) return Token.AS;
         break;
@@ -335,24 +335,44 @@ export function scanKeyword(text: string): Token {
       if (text == "async") return Token.ASYNC;
       if (text == "await") return Token.AWAIT;
       break;
-    }
-    case CharCode.b: {
+
+    case CharCode.b:
       if (text == "break") return Token.BREAK;
       break;
-    }
-    case CharCode.c: {
-      if (len <= 5) {
-        if (text == "const") return Token.CONST;
-        if (text == "case") return Token.CASE;
-        if (text == "class") return Token.CLASS;
+
+    case CharCode.c:
+      if (len == 5) {
+        switch (text.charCodeAt(1)) {
+          case CharCode.o:
+            if (text == "const") return Token.CONST;
+            break;
+
+          case CharCode.l:
+            if (text == "class") return Token.CLASS;
+            break;
+
+          case CharCode.a:
+            if (text == "catch") return Token.CATCH;
+            break;
+        }
         break;
       }
-      if (text == "constructor") return Token.CONSTRUCTOR;
-      if (text == "continue") return Token.CONTINUE;
-      if (text == "catch") return Token.CATCH;
+      switch (text.charCodeAt(3)) {
+        case CharCode.e:
+          if (text == "case") return Token.CASE;
+          break;
+
+        case CharCode.s:
+          if (text == "constructor") return Token.CONSTRUCTOR;
+          break;
+
+        case CharCode.t:
+          if (text == "continue") return Token.CONTINUE;
+          break;
+      }
       break;
-    }
-    case CharCode.d: {
+
+    case CharCode.d:
       if (len == 2) {
         if (text.charCodeAt(1) == CharCode.o) return Token.DO;
         break;
@@ -362,44 +382,43 @@ export function scanKeyword(text: string): Token {
       if (text == "delete") return Token.DELETE;
       if (text == "debugger") return Token.DEBUGGER;
       break;
-    }
-    case CharCode.e: {
+
+    case CharCode.e:
       if (text == "else") return Token.ELSE;
       if (text == "export") return Token.EXPORT;
       if (text == "enum") return Token.ENUM;
       if (text == "extends") return Token.EXTENDS;
       break;
-    }
-    case CharCode.f: {
+
+    case CharCode.f:
       switch (text.charCodeAt(1)) {
-        case CharCode.a: {
+        case CharCode.a:
           if (text == "false") return Token.FALSE;
           break;
-        }
-        case CharCode.u: {
+
+        case CharCode.u:
           if (text == "function") return Token.FUNCTION;
           break;
-        }
-        case CharCode.o: {
+
+        case CharCode.o:
           if (text == "for") return Token.FOR;
           break;
-        }
-        case CharCode.r: {
+
+        case CharCode.r:
           if (text == "from") return Token.FROM;
           break;
-        }
-        case CharCode.i: {
+
+        case CharCode.i:
           if (text == "finally") return Token.FINALLY;
           break;
-        }
       }
       break;
-    }
-    case CharCode.g: {
+
+    case CharCode.g:
       if (text == "get") return Token.GET;
       break;
-    }
-    case CharCode.i: {
+
+    case CharCode.i:
       if (len == 2) {
         switch (text.charCodeAt(1)) {
           case CharCode.f: return Token.IF;
@@ -409,81 +428,79 @@ export function scanKeyword(text: string): Token {
         break;
       }
       switch (text.charCodeAt(3)) {
-        case CharCode.e: {
+        case CharCode.e:
           if (text == "interface") return Token.INTERFACE;
           break;
-        }
-        case CharCode.l: {
+
+        case CharCode.l:
           if (text == "implements") return Token.IMPLEMENTS;
           break;
-        }
-        case CharCode.o: {
+
+        case CharCode.o:
           if (text == "import") return Token.IMPORT;
           break;
-        }
-        case CharCode.t: {
+
+        case CharCode.t:
           if (text == "instanceof") return Token.INSTANCEOF;
           break;
-        }
       }
       break;
-    }
-    case CharCode.k: {
+
+    case CharCode.k:
       if (text == "keyof") return Token.KEYOF;
       break;
-    }
-    case CharCode.l: {
+
+    case CharCode.l:
       if (text == "let") return Token.LET;
       break;
-    }
-    case CharCode.m: {
+
+    case CharCode.m:
       if (text == "module") return Token.MODULE;
       break;
-    }
-    case CharCode.n: {
+
+    case CharCode.n:
       if (text == "null") return Token.NULL;
       if (text == "new") return Token.NEW;
       if (text == "namespace") return Token.NAMESPACE;
       break;
-    }
-    case CharCode.o: {
+
+    case CharCode.o:
       if (len == 2 && text.charCodeAt(1) == CharCode.f) return Token.OF;
       break;
-    }
-    case CharCode.p: {
+
+    case CharCode.p:
       switch (text.charCodeAt(2)) {
-        case CharCode.b: {
+        case CharCode.b:
           if (text == "public") return Token.PUBLIC;
           break;
-        }
-        case CharCode.i: {
+
+        case CharCode.i:
           if (text == "private") return Token.PRIVATE;
           break;
-        }
-        case CharCode.o: {
+
+        case CharCode.o:
           if (text == "protected") return Token.PROTECTED;
           break;
-        }
-        case CharCode.c: {
+
+        case CharCode.c:
           if (text == "package") return Token.PACKAGE;
           break;
-        }
       }
       break;
-    }
-    case CharCode.r: {
+
+    case CharCode.r:
       if (text == "return") return Token.RETURN;
       if (text == "readonly") return Token.READONLY;
       break;
-    }
-    case CharCode.s: {
+
+    case CharCode.s:
       if (text == "switch") return Token.SWITCH;
       if (text == "static") return Token.STATIC;
       if (text == "set") return Token.SET;
       if (text == "super") return Token.SUPER;
       break;
-    }
-    case CharCode.t: {
+
+    case CharCode.t:
       if (text == "true") return Token.TRUE;
       if (text == "this") return Token.THIS;
       if (text == "type") return Token.TYPE;
@@ -491,21 +508,20 @@ export function scanKeyword(text: string): Token {
       if (text == "throw") return Token.THROW;
       if (text == "try") return Token.TRY;
       break;
-    }
-    case CharCode.v: {
+
+    case CharCode.v:
       if (text == "var") return Token.VAR;
       if (text == "void") return Token.VOID;
       break;
-    }
-    case CharCode.w: {
+
+    case CharCode.w:
       if (text == "while") return Token.WHILE;
       if (text == "with") return Token.WITH;
       break;
-    }
-    case CharCode.y: {
+
+    case CharCode.y:
       if (text == "yield") return Token.YIELD;
       break;
-    }
   }
   return Token.INVALID;
 }
@@ -730,9 +746,9 @@ export class Tokenizer extends DiagnosticEmitter {
       let c = text.charCodeAt(pos);
       if (c <= 0x7F) {
         let token = unchecked(BASIC_TOKENS[c]);
-        // Basic tokens
         if (token != Token.INVALID) {
           switch (token) {
+            // `\n`, `\t`, `\v`, `\f`, ` `, `\r`, `\r\n`
             case Token.WHITESPACE: {
               // `\r`, `\r\n`
               if (c == CharCode.CARRIAGERETURN) {
@@ -741,34 +757,32 @@ export class Tokenizer extends DiagnosticEmitter {
                   text.charCodeAt(pos) == CharCode.LINEFEED
                 )) break;
               }
-              // `\n`, `\t`, `\v`, `\f`, ` `
               ++pos;
               break;
             }
             // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
             case Token.IDENTIFIER:
+            // `"`, `'`, ```
             case Token.STRINGLITERAL:
-            case Token.TEMPLATELITERAL: {
+            case Token.TEMPLATELITERAL:
               this.pos = pos;
               return token;
-            }
             // `0`..`9`, `0.`, `0x`, `0b`, `0o`
             case Token.DIGIT:
               return this.scanNumber(c, text, pos, end);
-
             // `a`..`z`
             case Token.IDENTIFIER_OR_KEYWORD: {
-              let posBefore = pos;
+              let startPos = pos;
               if (identifierHandling != IdentifierHandling.ALWAYS) {
                 while (
                   ++pos < end &&
                   isIdentifierPart(text.charCodeAt(pos))
                 ) { /* nop */ }
                 if (
-                  pos - posBefore >= MIN_KEYWORD_LENGTH &&
-                  pos - posBefore <= MAX_KEYWORD_LENGTH
+                  pos - startPos >= MIN_KEYWORD_LENGTH &&
+                  pos - startPos <= MAX_KEYWORD_LENGTH
                 ) {
-                  let keyword = scanKeyword(text.substring(posBefore, pos));
+                  let keyword = scanKeyword(text.substring(startPos, pos));
                   if (keyword != Token.INVALID && !(
                     identifierHandling == IdentifierHandling.PREFER &&
                     tokenIsAlsoIdentifier(keyword)
@@ -778,23 +792,23 @@ export class Tokenizer extends DiagnosticEmitter {
                   }
                 }
               }
-              this.pos = posBefore;
+              this.pos = startPos;
               return Token.IDENTIFIER;
             }
+            // `+`, `-`, `*`, `/`, `=`, `>`, ..
             case Token.OPERATOR: {
               token = this.scanOperator(c, text, pos, end, maxTokenLength);
               pos = this.pos;
               if (token == Token.INVALID) continue;
               return token;
             }
-            // `[`, `{`, `(`, `,`, `:`, `;`, `@` and etc
-            default: {
+            // `[`, `{`, `(`, `:`, `;`, `@`, ..
+            default:
               this.pos = pos + 1;
               return token;
-            }
           }
         }
-      } else {
+      } else { // c > 0x7F
         // TODO: \uXXXX also support for identifiers
         if (isIdentifierStart(c)) {
           this.pos = pos;
