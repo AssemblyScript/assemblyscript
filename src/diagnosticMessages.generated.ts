@@ -65,16 +65,23 @@ export enum DiagnosticCode {
   A_rest_parameter_must_be_last_in_a_parameter_list = 1014,
   Parameter_cannot_have_question_mark_and_initializer = 1015,
   A_required_parameter_cannot_follow_an_optional_parameter = 1016,
+  _readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature = 1024,
+  Accessibility_modifier_already_seen = 1028,
+  _0_modifier_must_precede_1_modifier = 1029,
+  _0_modifier_already_seen = 1030,
   _0_modifier_cannot_appear_on_class_elements_of_this_kind = 1031,
   Statements_are_not_allowed_in_ambient_contexts = 1036,
   Initializers_are_not_allowed_in_ambient_contexts = 1039,
   _0_modifier_cannot_be_used_here = 1042,
+  _0_modifier_cannot_appear_on_a_module_or_namespace_element = 1044,
   A_rest_parameter_cannot_be_optional = 1047,
   A_rest_parameter_cannot_have_an_initializer = 1048,
   A_set_accessor_must_have_exactly_one_parameter = 1049,
   A_set_accessor_parameter_cannot_have_an_initializer = 1052,
   A_get_accessor_cannot_have_parameters = 1054,
   Enum_member_must_have_initializer = 1061,
+  _0_modifier_cannot_appear_on_a_type_member = 1070,
+  _0_modifier_cannot_appear_on_a_parameter = 1090,
   Type_parameters_cannot_appear_on_a_constructor_declaration = 1092,
   Type_annotation_cannot_appear_on_a_constructor_declaration = 1093,
   An_accessor_cannot_have_type_parameters = 1094,
@@ -112,6 +119,8 @@ export enum DiagnosticCode {
   Unterminated_Unicode_escape_sequence = 1199,
   Decorators_are_not_valid_here = 1206,
   _abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration = 1242,
+  _0_modifier_cannot_be_used_with_1_modifier = 1243,
+  Abstract_methods_can_only_appear_within_an_abstract_class = 1244,
   Method_0_cannot_have_an_implementation_because_it_is_marked_abstract = 1245,
   A_definite_assignment_assertion_is_not_permitted_in_this_context = 1255,
   A_class_may_only_extend_another_class = 1311,
@@ -254,16 +263,23 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1014: return "A rest parameter must be last in a parameter list.";
     case 1015: return "Parameter cannot have question mark and initializer.";
     case 1016: return "A required parameter cannot follow an optional parameter.";
+    case 1024: return "'readonly' modifier can only appear on a property declaration or index signature.";
+    case 1028: return "Accessibility modifier already seen.";
+    case 1029: return "'{0}' modifier must precede '{1}' modifier.";
+    case 1030: return "'{0}' modifier already seen.";
     case 1031: return "'{0}' modifier cannot appear on class elements of this kind.";
     case 1036: return "Statements are not allowed in ambient contexts.";
     case 1039: return "Initializers are not allowed in ambient contexts.";
     case 1042: return "'{0}' modifier cannot be used here.";
+    case 1044: return "'{0}' modifier cannot appear on a module or namespace element.";
     case 1047: return "A rest parameter cannot be optional.";
     case 1048: return "A rest parameter cannot have an initializer.";
     case 1049: return "A 'set' accessor must have exactly one parameter.";
     case 1052: return "A 'set' accessor parameter cannot have an initializer.";
     case 1054: return "A 'get' accessor cannot have parameters.";
     case 1061: return "Enum member must have initializer.";
+    case 1070: return "'{0}' modifier cannot appear on a type member.";
+    case 1090: return "'{0}' modifier cannot appear on a parameter.";
     case 1092: return "Type parameters cannot appear on a constructor declaration.";
     case 1093: return "Type annotation cannot appear on a constructor declaration.";
     case 1094: return "An accessor cannot have type parameters.";
@@ -301,6 +317,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1199: return "Unterminated Unicode escape sequence.";
     case 1206: return "Decorators are not valid here.";
     case 1242: return "'abstract' modifier can only appear on a class, method, or property declaration.";
+    case 1243: return "'{0}' modifier cannot be used with '{1}' modifier.";
+    case 1244: return "Abstract methods can only appear within an abstract class.";
     case 1245: return "Method '{0}' cannot have an implementation because it is marked abstract.";
     case 1255: return "A definite assignment assertion '!' is not permitted in this context.";
     case 1311: return "A class may only extend another class.";

@@ -19,7 +19,9 @@ import {
   Range,
   CommentHandler,
   IdentifierHandling,
-  isIllegalVariableIdentifier
+  tokenIsAlsoIdentifier,
+  isIllegalVariableIdentifier,
+  isModifier
 } from "./tokenizer";
 
 import {
@@ -96,6 +98,16 @@ class Dependee {
     public source: Source,
     public reportNode: Node
   ) {}
+}
+
+/** Additional information for linting modifiers. */
+const enum ModifierContextFlags {
+  CLASS = 1 << 0,
+  INTERFACE = 1 << 1,
+  MEMBER = 1 << 2,
+  PARAMETER = 1 << 3,
+  TOP_LEVEL = 1 << 4,
+  ABSTRACT_PARENT = 1 << 5,
 }
 
 /** Parser interface. */
@@ -1833,6 +1845,350 @@ export class Parser extends DiagnosticEmitter {
     return Node.createClassExpression(declaration);
   }
 
+  canFollowModifier(tk: Token): boolean {
+    switch (tk) {
+      case Token.OPENBRACKET:
+      case Token.OPENBRACE:
+      case Token.ASTERISK:
+      case Token.DOT_DOT_DOT:
+      case Token.STRINGLITERAL:
+      case Token.INTEGERLITERAL:
+      case Token.IDENTIFIER:
+        return true;
+    }
+    return tokenIsAlsoIdentifier(tk);
+  }
+
+  nextTokenCanFollowDefaultKeyword(tn: Tokenizer): boolean {
+    const tk = tn.next();
+    switch (tk) {
+      case Token.CLASS:
+      case Token.FUNCTION:
+      case Token.INTERFACE:
+        return true;
+      case Token.ABSTRACT:
+        return tn.peek() == Token.CLASS; // TODO: on same line
+      // case Token.ASYNC:
+      //   return tn.peek() == Token.FUNCTION; // TODO: on same line
+    }
+    return false;
+  }
+
+  canFollowExportModifier(tk: Token): boolean {
+    switch (tk) {
+      case Token.ASTERISK:
+      case Token.AS:
+      case Token.OPENBRACE:
+        return false;
+    }
+    return this.canFollowModifier(tk);
+  }
+
+  tokenAfterCanFollowModifier(tn: Tokenizer, modifier: Token): boolean {
+    switch(modifier) {
+      case Token.CONST:
+        return tn.next() == Token.ENUM;
+      case Token.EXPORT: {
+        const tk = tn.next();
+        switch (tk) {
+          case Token.DEFAULT: {
+            const state = tn.mark();
+            const res = this.nextTokenCanFollowDefaultKeyword(tn);
+            tn.reset(state);
+            tn.discard(state);
+            return res;
+          }
+          case Token.TYPE: {
+            const state = tn.mark();
+            const res = this.canFollowExportModifier(tn.next());
+            tn.reset(state);
+            tn.discard(state);
+            return res;
+          }
+        }
+        return this.canFollowExportModifier(tk);
+      }
+      case Token.DEFAULT:
+        return this.nextTokenCanFollowDefaultKeyword(tn);
+      case Token.GET:
+      case Token.SET:
+        return this.canFollowModifier(tn.next());
+    }
+    return this.canFollowModifier(tn.next()); // TODO: on same line
+  }
+
+  private accessStart: i32 = -1;
+  private accessEnd: i32 = -1;
+
+  private exportStart: i32 = -1;
+  private exportEnd: i32 = -1;
+
+  private declareStart: i32 = -1;
+  private declareEnd: i32 = -1;
+  
+  private abstractStart: i32 = -1;
+  private abstractEnd: i32 = -1;
+
+  private staticStart: i32 = -1;
+  private staticEnd: i32 = -1;
+
+  private readonlyStart: i32 = -1;
+  private readonlyEnd: i32 = -1;
+
+  // notice some conditions are omitted because they are not supported
+  parseModifiers(
+    tn: Tokenizer,
+    context: ModifierContextFlags
+  ): CommonFlags {
+    var flags = CommonFlags.NONE;    
+    
+    while (isModifier(tn.peek())) {
+      // check if this modifier is contextual
+      const state = tn.mark();
+      const isActuallyIdentifier = !this.tokenAfterCanFollowModifier(tn, tn.next());
+
+      tn.reset(state);
+      tn.discard(state);
+      
+      if (isActuallyIdentifier)
+        break;      
+
+      const tk = tn.next();
+      switch (tk) {
+        // override?
+        case Token.PUBLIC:
+        case Token.PROTECTED:
+        case Token.PRIVATE: {
+          if (flags & (CommonFlags.PUBLIC | CommonFlags.PROTECTED | CommonFlags.PRIVATE)) {
+            this.error(
+              DiagnosticCode.Accessibility_modifier_already_seen,
+              tn.range()
+            );
+          }
+
+          let visModifier: string;
+          let visFlag: CommonFlags;
+          switch (tk) {
+            case Token.PUBLIC:
+              visModifier = "public";
+              visFlag = CommonFlags.PUBLIC;
+              break;
+            case Token.PROTECTED:
+              visModifier = "protected";
+              visFlag = CommonFlags.PROTECTED;
+              break;
+            case Token.PRIVATE:
+              visModifier = "private";
+              visFlag = CommonFlags.PRIVATE;
+              break;
+          }
+
+          if (context & ModifierContextFlags.INTERFACE) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
+              tn.range(), visModifier
+            );
+          } else if (flags & CommonFlags.STATIC) {
+            this.error(
+              DiagnosticCode._0_modifier_must_precede_1_modifier,
+              tn.range(), visModifier, "static"
+            );
+          } else if (flags & CommonFlags.READONLY) {
+            this.error(
+              DiagnosticCode._0_modifier_must_precede_1_modifier,
+              tn.range(), visModifier, "readonly"
+            );
+          } else if (context & ModifierContextFlags.TOP_LEVEL) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_module_or_namespace_element,
+              tn.range(), visModifier
+            );
+          } else if (flags & CommonFlags.ABSTRACT) {
+            if (tk == Token.PRIVATE) {
+              this.error(
+                DiagnosticCode._0_modifier_cannot_be_used_with_1_modifier,
+                tn.range(), visModifier, "abstract"
+              );
+            } else {
+              this.error(
+                DiagnosticCode._0_modifier_must_precede_1_modifier,
+                tn.range(), visModifier, "abstract"
+              );
+            }
+          } else {
+            flags |= visFlag;
+            this.accessStart = tn.tokenPos;
+            this.accessEnd = tn.pos;
+          }
+          break;
+        }
+
+        case Token.STATIC:
+          if (context & ModifierContextFlags.INTERFACE) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
+              tn.range(), "static"
+            );
+          } else if (flags & CommonFlags.STATIC) {
+            this.error(
+              DiagnosticCode._0_modifier_already_seen,
+              tn.range(), "static"
+            );
+          } else if (flags & CommonFlags.READONLY) {
+            this.error(
+              DiagnosticCode._0_modifier_must_precede_1_modifier,
+              tn.range(), "static", "readonly"
+            );
+          } // async?
+          else if (context & ModifierContextFlags.TOP_LEVEL) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_module_or_namespace_element,
+              tn.range(), "static"
+            );
+          } else if (context & ModifierContextFlags.PARAMETER) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_parameter,
+              tn.range(), "static"
+            );
+          } else if (flags & CommonFlags.ABSTRACT) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_be_used_with_1_modifier,
+              tn.range(), "static", "abstract"
+            );
+          } else {
+            flags |= CommonFlags.STATIC;
+            this.staticStart = tn.tokenPos;
+            this.staticEnd = tn.pos;
+          }
+          break;
+
+        case Token.READONLY:
+          if (flags & CommonFlags.READONLY) {
+            this.error(
+              DiagnosticCode._0_modifier_already_seen,
+              tn.range(), "readonly"
+            );
+          } else if ((context & ModifierContextFlags.MEMBER) == 0) { // doesn't handle all cases, like methods and getters/setters
+            this.error(
+              DiagnosticCode._readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
+              tn.range(), "readonly"
+            );
+          } else {
+            flags |= CommonFlags.READONLY;
+            this.readonlyStart = tn.tokenPos;
+            this.readonlyEnd = tn.pos;
+          }
+          break;
+        
+        case Token.EXPORT:
+          if (context & ModifierContextFlags.INTERFACE) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
+              tn.range(), "export"
+            );
+          } else if (flags & CommonFlags.EXPORT) {
+            this.error(
+              DiagnosticCode._0_modifier_already_seen,
+              tn.range(), "export"
+            );
+          } else if (flags & CommonFlags.DECLARE) {
+            this.error(
+              DiagnosticCode._0_modifier_must_precede_1_modifier,
+              tn.range(), "export", "declare"
+            );
+          } else if (flags & CommonFlags.ABSTRACT) {
+            this.error(
+              DiagnosticCode._0_modifier_must_precede_1_modifier,
+              tn.range(), "export", "abstract"
+            );
+          } else if (context & ModifierContextFlags.MEMBER) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_class_elements_of_this_kind,
+              tn.range(), "export"
+            );
+          } else if (context & ModifierContextFlags.PARAMETER) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_parameter,
+              tn.range(), "export"
+            );
+          } else {
+            flags |= CommonFlags.EXPORT;
+            this.exportStart = tn.tokenPos;
+            this.exportEnd = tn.pos;
+          }
+          break;
+        case Token.DECLARE:
+          if (context & ModifierContextFlags.INTERFACE) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
+              tn.range(), "declare"
+            );
+          } else if (flags & CommonFlags.AMBIENT) {
+            this.error(
+              DiagnosticCode._0_modifier_already_seen,
+              tn.range(), "declare"
+            );
+          } else if (context & ModifierContextFlags.PARAMETER) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_parameter,
+              tn.range(), "declare"
+            );
+          } else {
+            flags |= CommonFlags.AMBIENT | CommonFlags.DECLARE;
+            this.declareStart = tn.tokenPos;
+            this.declareEnd = tn.pos;
+          }
+          break;
+
+        case Token.ABSTRACT:
+          if (context & ModifierContextFlags.INTERFACE) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
+              tn.range(), "abstract"
+            );
+          } else if (flags & CommonFlags.ABSTRACT) {
+            this.error(
+              DiagnosticCode._0_modifier_already_seen,
+              tn.range(), "abstract"
+            );
+          } else if ((flags & ModifierContextFlags.CLASS) == 0 || (flags & ModifierContextFlags.MEMBER)) {
+            if ((flags & ModifierContextFlags.MEMBER) == 0) {
+              this.error(
+                DiagnosticCode._abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration,
+                tn.range()
+              );
+            } else if ((flags & ModifierContextFlags.ABSTRACT_PARENT) == 0) {
+              this.error(
+                DiagnosticCode.Abstract_methods_can_only_appear_within_an_abstract_class,
+                tn.range()
+              );
+            } else if (flags & CommonFlags.STATIC) {
+              this.error(
+                DiagnosticCode._0_modifier_cannot_be_used_with_1_modifier,
+                tn.range(), "static", "abstract"
+              );
+            } else if (flags & CommonFlags.PRIVATE) {
+              this.error(
+                DiagnosticCode._0_modifier_cannot_be_used_with_1_modifier,
+                tn.range(), "private", "abstract"
+              );
+            } // async and override?
+          } else {
+            flags |= CommonFlags.ABSTRACT;
+            this.abstractStart = tn.tokenPos;
+            this.abstractEnd = tn.pos;
+          }
+          break;
+
+        // async?
+        default:
+          assert(false);
+      }
+    }
+
+    return flags;
+  }
+
   parseClassMember(
     tn: Tokenizer,
     parent: ClassDeclaration
@@ -1846,11 +2202,11 @@ export class Parser extends DiagnosticEmitter {
     //   ('get' | 'set')?
     //   Identifier ...
 
+    tn.peek();
+    var startPos = tn.nextTokenPos; 
     var isInterface = parent.kind == NodeKind.INTERFACEDECLARATION;
-    var startPos = 0;
     var decorators: DecoratorNode[] | null = null;
     if (tn.skip(Token.AT)) {
-      startPos = tn.tokenPos;
       do {
         let decorator = this.parseDecorator(tn);
         if (!decorator) break;
@@ -1871,121 +2227,10 @@ export class Parser extends DiagnosticEmitter {
     // implemented methods are virtual
     if (isInterface) flags |= CommonFlags.VIRTUAL;
 
-    var declareStart = 0;
-    var declareEnd = 0;
-    var contextIsAmbient = parent.is(CommonFlags.AMBIENT);
-    if (tn.skip(Token.DECLARE)) {
-      if (isInterface) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "declare"
-        );
-      } else {
-        if (contextIsAmbient) {
-          this.error(
-            DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
-            tn.range()
-          ); // recoverable
-        } else {
-          flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
-          declareStart = tn.tokenPos;
-          declareEnd = tn.pos;
-        }
-      }
-      if (!startPos) startPos = tn.tokenPos;
-    } else if (contextIsAmbient) {
-      flags |= CommonFlags.AMBIENT;
-    }
-
-    var accessStart = 0;
-    var accessEnd = 0;
-    if (tn.skip(Token.PUBLIC)) {
-      if (isInterface) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "public"
-        );
-      } else {
-        flags |= CommonFlags.PUBLIC;
-        accessStart = tn.tokenPos;
-        accessEnd = tn.pos;
-      }
-      if (!startPos) startPos = tn.tokenPos;
-    } else if (tn.skip(Token.PRIVATE)) {
-      if (isInterface) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "private"
-        );
-      } else {
-        flags |= CommonFlags.PRIVATE;
-        accessStart = tn.tokenPos;
-        accessEnd = tn.pos;
-      }
-      if (!startPos) startPos = tn.tokenPos;
-    } else if (tn.skip(Token.PROTECTED)) {
-      if (isInterface) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "protected"
-        );
-      } else {
-        flags |= CommonFlags.PROTECTED;
-        accessStart = tn.tokenPos;
-        accessEnd = tn.pos;
-      }
-      if (!startPos) startPos = tn.tokenPos;
-    }
-
-    var staticStart = 0;
-    var staticEnd = 0;
-    var abstractStart = 0;
-    var abstractEnd = 0;
-    if (tn.skip(Token.STATIC)) {
-      if (isInterface) {
-        this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "static"
-        );
-      } else {
-        flags |= CommonFlags.STATIC;
-        staticStart = tn.tokenPos;
-        staticEnd = tn.pos;
-      }
-      if (!startPos) startPos = tn.tokenPos;
-    } else {
-      flags |= CommonFlags.INSTANCE;
-      if (tn.skip(Token.ABSTRACT)) {
-        if (isInterface || !parent.is(CommonFlags.ABSTRACT)) {
-          this.error(
-            DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(), "abstract"
-          );
-        } else {
-          flags |= CommonFlags.ABSTRACT;
-          abstractStart = tn.tokenPos;
-          abstractEnd = tn.pos;
-        }
-        if (!startPos) startPos = tn.tokenPos;
-      }
-      if (parent.flags & CommonFlags.GENERIC) flags |= CommonFlags.GENERIC_CONTEXT;
-    }
-
-    var readonlyStart = 0;
-    var readonlyEnd = 0;
-    if (tn.peek() == Token.READONLY) {
-      let state = tn.mark();
-      tn.next();
-      if (tn.peek() != Token.COLON) { // modifier
-        tn.discard(state);
-        flags |= CommonFlags.READONLY;
-        readonlyStart = tn.tokenPos;
-        readonlyEnd = tn.pos;
-        if (!startPos) startPos = readonlyStart;
-      } else { // identifier
-        tn.reset(state);
-      }
-    }
+    var contextFlags = ModifierContextFlags.MEMBER | (isInterface ? ModifierContextFlags.INTERFACE : ModifierContextFlags.CLASS);
+    if (parent.flags & CommonFlags.ABSTRACT)
+      contextFlags |= ModifierContextFlags.ABSTRACT_PARENT;
+    flags |= this.parseModifiers(tn, contextFlags);
 
     // check if accessor: ('get' | 'set') ^\n Identifier
     var state = tn.mark();
@@ -2003,13 +2248,6 @@ export class Parser extends DiagnosticEmitter {
           isGetter = true;
           getStart = tn.tokenPos;
           getEnd = tn.pos;
-          if (!startPos) startPos = getStart;
-          if (flags & CommonFlags.READONLY) {
-            this.error(
-              DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(readonlyStart, readonlyEnd), "readonly"
-            ); // recoverable
-          }
         } else {
           tn.reset(state);
         }
@@ -2019,36 +2257,28 @@ export class Parser extends DiagnosticEmitter {
           isSetter = true;
           setStart = tn.tokenPos;
           setEnd = tn.pos;
-          if (!startPos) startPos = setStart;
-          if (flags & CommonFlags.READONLY) {
-            this.error(
-              DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(readonlyStart, readonlyEnd), "readonly"
-            ); // recoverable
-          }
         } else {
           tn.reset(state);
         }
       } else if (tn.skip(Token.CONSTRUCTOR)) {
         flags |= CommonFlags.CONSTRUCTOR;
         isConstructor = true;
-        if (!startPos) startPos = tn.tokenPos;
         if (flags & CommonFlags.STATIC) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(staticStart, staticEnd), "static"
+            tn.range(this.staticStart, this.staticEnd), "static"
           ); // recoverable
         }
         if (flags & CommonFlags.ABSTRACT) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(abstractStart, abstractEnd), "abstract"
+            tn.range(this.abstractStart, this.abstractEnd), "abstract"
           ); // recoverable
         }
         if (flags & CommonFlags.READONLY) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(readonlyStart, readonlyEnd), "readonly"
+            tn.range(this.readonlyStart, this.readonlyEnd), "readonly"
           ); // recoverable
         }
       }
@@ -2065,29 +2295,29 @@ export class Parser extends DiagnosticEmitter {
         if (flags & CommonFlags.PUBLIC) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "public"
+            tn.range(this.accessStart, this.accessEnd), "public"
           ); // recoverable
         } else if (flags & CommonFlags.PROTECTED) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "protected"
+            tn.range(this.accessStart, this.accessEnd), "protected"
           ); // recoverable
         } else if (flags & CommonFlags.PRIVATE) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "protected"
+            tn.range(this.accessStart, this.accessEnd), "protected"
           ); // recoverable
         }
         if (flags & CommonFlags.STATIC) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(staticStart, staticEnd), "static"
+            tn.range(this.staticStart, this.staticEnd), "static"
           ); // recoverable
         }
         if (flags & CommonFlags.ABSTRACT) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(abstractStart, abstractEnd), "abstract"
+            tn.range(this.abstractStart, this.abstractEnd), "abstract"
           ); // recoverable
         }
         let retIndex = this.parseIndexSignature(tn, flags, decorators);
@@ -2095,7 +2325,7 @@ export class Parser extends DiagnosticEmitter {
           if (flags & CommonFlags.READONLY) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(readonlyStart, readonlyEnd), "readonly"
+              tn.range(this.readonlyStart, this.readonlyEnd), "readonly"
             ); // recoverable
           }
           return null;
@@ -2110,7 +2340,6 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-      if (!startPos) startPos = tn.tokenPos;
       name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
     var typeParameters: TypeParameterNode[] | null = null;
@@ -2138,7 +2367,14 @@ export class Parser extends DiagnosticEmitter {
       if (flags & CommonFlags.DECLARE) {
         this.error(
           DiagnosticCode._0_modifier_cannot_appear_on_class_elements_of_this_kind,
-          tn.range(declareStart, declareEnd), "declare"
+          tn.range(this.declareStart, this.declareEnd), "declare"
+        ); // recoverable
+      }
+
+      if (flags & CommonFlags.READONLY) {
+        this.error(
+          DiagnosticCode._readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
+          tn.range(this.readonlyStart, this.readonlyEnd), "readonly"
         ); // recoverable
       }
 
@@ -2286,14 +2522,14 @@ export class Parser extends DiagnosticEmitter {
       if (flags & CommonFlags.DECLARE) {
         this.error(
           DiagnosticCode.Not_implemented_0,
-          tn.range(declareStart, declareEnd), "Ambient fields"
+          tn.range(this.declareStart, this.declareEnd), "Ambient fields"
         ); // recoverable
       }
 
       if (flags & CommonFlags.ABSTRACT) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(abstractStart, abstractEnd), "abstract"
+          tn.range(this.abstractStart, this.abstractEnd), "abstract"
         ); // recoverable
       }
 

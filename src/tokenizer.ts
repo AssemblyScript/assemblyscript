@@ -348,6 +348,51 @@ export function tokenFromKeyword(text: string): Token {
   return Token.INVALID;
 }
 
+export function isModifier(token: Token): bool {
+  switch (token) {
+    case Token.ABSTRACT:
+    case Token.ASYNC:
+    case Token.CONST:
+    case Token.DECLARE:
+    case Token.DEFAULT:
+    case Token.EXPORT:
+    case Token.PUBLIC:
+    case Token.PRIVATE:
+    case Token.PROTECTED:
+    case Token.READONLY:
+    case Token.STATIC: return true;
+    default: return false;
+  }
+}
+
+export function modifierTokenToString(token: Token): string {
+  switch (token) {
+    case Token.ABSTRACT:
+      return "abstract";
+    case Token.ASYNC:
+      return "async";
+    case Token.CONST:
+      return "const";
+    case Token.DECLARE:
+      return "declare";
+    case Token.DEFAULT:
+      return "default";
+    case Token.EXPORT:
+      return "export";
+    case Token.PUBLIC:
+      return "public";
+    case Token.PRIVATE:
+      return "private";
+    case Token.PROTECTED:
+      return "protected";
+    case Token.READONLY:
+      return "readonly";
+    case Token.STATIC: 
+      return "static";
+  }
+  return assert(false);
+}
+
 export function tokenIsAlsoIdentifier(token: Token): bool {
   switch (token) {
     case Token.ABSTRACT:
