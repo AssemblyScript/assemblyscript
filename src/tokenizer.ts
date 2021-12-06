@@ -322,7 +322,7 @@ const BASIC_TOKENS: Token[] = [
   /* 0x7F */ Token.INVALID,
 ];
 
-export function probeKeywordToken(text: string): Token {
+export function scanKeyword(text: string): Token {
   let len = text.length;
   assert(len);
   switch (text.charCodeAt(0)) {
@@ -585,8 +585,8 @@ export function operatorTokenToString(token: Token): string {
   }
 }
 
-// Test is it integer or float without update of position.
-function integerOrFloatToken(text: string, pos: i32, end: i32): Token {
+// Scan and determine is it integer or float without update of position.
+function scanNumber(text: string, pos: i32, end: i32): Token {
   while (pos < end) {
     let c = text.charCodeAt(pos);
     if (c == CharCode.DOT || (c | 32) == CharCode.e) {
@@ -757,7 +757,7 @@ export class Tokenizer extends DiagnosticEmitter {
                   }
                 }
               }
-              return integerOrFloatToken(text, pos + 1, end);
+              return scanNumber(text, pos + 1, end);
             }
             // `a`..`z`
             case Token.IDENTIFIER_OR_KEYWORD: {
@@ -771,7 +771,7 @@ export class Tokenizer extends DiagnosticEmitter {
                   pos - posBefore >= MIN_KEYWORD_LENGTH &&
                   pos - posBefore <= MAX_KEYWORD_LENGTH
                 ) {
-                  let keyword = probeKeywordToken(text.substring(posBefore, pos));
+                  let keyword = scanKeyword(text.substring(posBefore, pos));
                   if (keyword != Token.INVALID && !(
                     identifierHandling == IdentifierHandling.PREFER &&
                     tokenIsAlsoIdentifier(keyword)
@@ -785,7 +785,7 @@ export class Tokenizer extends DiagnosticEmitter {
               return Token.IDENTIFIER;
             }
             case Token.OPERATOR: {
-              token = this.operatorToken(c, text, pos, end, maxTokenLength);
+              token = this.scanOperator(c, text, pos, end, maxTokenLength);
               pos = this.pos;
               if (token == Token.INVALID) continue;
               return token;
@@ -854,7 +854,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return nextToken;
   }
 
-  private operatorToken(c: i32, text: string, pos: i32, end: i32, maxTokenLength: i32): Token {
+  private scanOperator(c: i32, text: string, pos: i32, end: i32, maxTokenLength: i32): Token {
     // Operator tokens
     switch (c) {
       // `!`, `!=`, `!==`
