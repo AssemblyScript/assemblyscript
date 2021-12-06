@@ -2154,13 +2154,13 @@ export class Parser extends DiagnosticEmitter {
               DiagnosticCode._0_modifier_already_seen,
               tn.range(), "abstract"
             );
-          } else if ((flags & ModifierContextFlags.CLASS) == 0 || (flags & ModifierContextFlags.MEMBER)) {
-            if ((flags & ModifierContextFlags.MEMBER) == 0) {
+          } else if ((context & ModifierContextFlags.CLASS) == 0 || (context & ModifierContextFlags.MEMBER)) {
+            if ((context & ModifierContextFlags.MEMBER) == 0) {
               this.error(
                 DiagnosticCode._abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration,
                 tn.range()
               );
-            } else if ((flags & ModifierContextFlags.ABSTRACT_PARENT) == 0) {
+            } else if ((context & ModifierContextFlags.ABSTRACT_PARENT) == 0) {
               this.error(
                 DiagnosticCode.Abstract_methods_can_only_appear_within_an_abstract_class,
                 tn.range()
