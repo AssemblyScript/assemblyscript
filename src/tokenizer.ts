@@ -754,10 +754,10 @@ export class Tokenizer extends DiagnosticEmitter {
                 if (!(
                   ++pos < end &&
                   text.charCodeAt(pos) == CharCode.LINEFEED
-                )) break;
+                )) continue;
               }
               ++pos;
-              break;
+              continue;
             }
             // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
             case Token.IDENTIFIER:
@@ -818,7 +818,7 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         let start = pos++;
         if (
-          isHighSurrogate(c) && pos < end &&
+          pos < end && isHighSurrogate(c) &&
           isLowSurrogate(text.charCodeAt(pos))
         ) ++pos;
         this.error(
