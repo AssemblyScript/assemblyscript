@@ -1197,7 +1197,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   skipBlockComment(text: string, pos: i32, end: i32): i32 {
-    let commentStartPos = pos - 1;
+    let startPos = pos - 1;
     let closed = false;
     while (++pos < end) {
       let c = text.charCodeAt(pos);
@@ -1219,8 +1219,8 @@ export class Tokenizer extends DiagnosticEmitter {
     } else if (this.onComment) {
       this.onComment(
         CommentKind.BLOCK,
-        text.substring(commentStartPos, pos),
-        this.range(commentStartPos, pos)
+        text.substring(startPos, pos),
+        this.range(startPos, pos)
       );
     }
     return pos;
