@@ -1868,9 +1868,9 @@ export class Parser extends DiagnosticEmitter {
       case Token.INTERFACE:
         return true;
       case Token.ABSTRACT:
-        return tn.peek() == Token.CLASS && !tn.nextTokenOnNewLine;
+        return tn.peek(true) == Token.CLASS && !tn.nextTokenOnNewLine;
       // case Token.ASYNC:
-      //   return tn.peek() == Token.FUNCTION && !tn.nextTokenOnNewLine;
+      //   return tn.peek(true) == Token.FUNCTION && !tn.nextTokenOnNewLine;
     }
     return false;
   }
@@ -1916,7 +1916,7 @@ export class Parser extends DiagnosticEmitter {
         return this.canFollowModifier(tn.next());
     }
 
-    tn.peek();
+    tn.peek(true);
     return !tn.nextTokenOnNewLine && this.canFollowModifier(tn.next());
   }
 
