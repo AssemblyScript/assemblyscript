@@ -2176,11 +2176,11 @@ export class Parser extends DiagnosticEmitter {
                 tn.range(), "private", "abstract"
               );
             } // async and override?
-          } else {
-            flags |= CommonFlags.ABSTRACT;
-            this.abstractStart = tn.tokenPos;
-            this.abstractEnd = tn.pos;
           }
+          
+          flags |= CommonFlags.ABSTRACT;
+          this.abstractStart = tn.tokenPos;
+          this.abstractEnd = tn.pos;
           break;
 
         // async?
