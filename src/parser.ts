@@ -2235,6 +2235,12 @@ export class Parser extends DiagnosticEmitter {
       contextFlags |= ModifierContextFlags.ABSTRACT_PARENT;
     flags |= this.parseModifiers(tn, contextFlags);
 
+    if ((flags & CommonFlags.STATIC) == 0) {
+      flags |= CommonFlags.INSTANCE;
+      if (parent.flags & CommonFlags.GENERIC)
+        flags |= CommonFlags.GENERIC_CONTEXT;
+    }
+
     // check if accessor: ('get' | 'set') ^\n Identifier
     var state = tn.mark();
     var isConstructor = false;
