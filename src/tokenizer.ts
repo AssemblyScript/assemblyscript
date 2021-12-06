@@ -756,7 +756,7 @@ export class Tokenizer extends DiagnosticEmitter {
             return token;
           // `0`..`9`, `0.`, `0x`, `0b`, `0o`
           case Token.DIGIT:
-            return this.scanNumber(c, text, pos, end);
+            return this.scanNumber(text, c, pos, end);
           // `a`..`z`
           case Token.MAYBE_KEYWORD:
             return this.scanKeyword(text, pos, end, identifierHandling);
@@ -774,7 +774,7 @@ export class Tokenizer extends DiagnosticEmitter {
           }
           // `+`, `-`, `*`, `/`, `=`, `>`, ..
           case Token.OPERATOR: {
-            token = this.scanOperator(c, text, pos, end, maxTokenLength);
+            token = this.scanOperator(text, c, pos, end, maxTokenLength);
             pos = this.pos;
             if (token == Token.INVALID) continue;
             return token;
@@ -842,7 +842,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   // Scan and determine is it integer or float without update of position.
-  private scanNumber(c: i32, text: string, pos: i32, end: i32): Token {
+  private scanNumber(text: string, c: i32, pos: i32, end: i32): Token {
     this.pos = pos++;
     // `0.`, `0x`, `0b`, `0o`
     if (c == CharCode._0) {
@@ -894,7 +894,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return Token.IDENTIFIER;
   }
 
-  private scanOperator(c: i32, text: string, pos: i32, end: i32, maxTokenLength: i32): Token {
+  private scanOperator(text: string, c: i32, pos: i32, end: i32, maxTokenLength: i32): Token {
     // Operator tokens
     switch (c) {
       // `!`, `!=`, `!==`
