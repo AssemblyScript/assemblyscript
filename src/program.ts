@@ -57,6 +57,7 @@ import {
 } from "./compiler";
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticMessage,
   DiagnosticEmitter
@@ -70,8 +71,7 @@ import {
 } from "./types";
 
 import {
-  Token,
-  Range
+  Token
 } from "./tokenizer";
 
 import {

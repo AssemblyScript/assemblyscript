@@ -22,8 +22,11 @@ import {
 } from "./common";
 
 import {
-  Token,
   Range
+} from "./diagnostics";
+
+import {
+  Token
 } from "./tokenizer";
 
 import {

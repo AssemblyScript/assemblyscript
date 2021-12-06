@@ -12,6 +12,7 @@
  */
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticMessage,
   DiagnosticEmitter
@@ -623,48 +624,6 @@ export function operatorTokenToString(token: Token): string {
       assert(false);
       return "";
     }
-  }
-}
-
-export class Range {
-
-  source!: Source;
-  debugInfoRef: usize = 0;
-
-  constructor(public start: i32, public end: i32) {}
-
-  static join(a: Range, b: Range): Range {
-    if (a.source != b.source) throw new Error("source mismatch");
-    let range = new Range(
-      a.start < b.start ? a.start : b.start,
-      a.end > b.end ? a.end : b.end
-    );
-    range.source = a.source;
-    return range;
-  }
-
-  equals(other: Range): bool {
-    return (
-      this.source == other.source &&
-      this.start == other.start &&
-      this.end == other.end
-    );
-  }
-
-  get atStart(): Range {
-    let range = new Range(this.start, this.start);
-    range.source = this.source;
-    return range;
-  }
-
-  get atEnd(): Range {
-    let range = new Range(this.end, this.end);
-    range.source = this.source;
-    return range;
-  }
-
-  toString(): string {
-    return this.source.text.substring(this.start, this.end);
   }
 }
 
@@ -1815,10 +1774,10 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var end = this.end;
     var start = this.pos;
-    var hasSep = this.scanFloatAndSeparators(false);
+    var hasSep = this.scanFloatPart(false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      hasSep |= this.scanFloatAndSeparators();
+      hasSep |= this.scanFloatPart();
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1830,7 +1789,7 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        hasSep |= this.scanFloatAndSeparators();
+        hasSep |= this.scanFloatPart();
       }
     }
     let pos = this.pos;
@@ -1847,7 +1806,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   /** Scan past one section of a decimal float literal. Returns `1` if separators encountered. */
-  private scanFloatAndSeparators(allowLeadingZeroSep: bool = true): i32 {
+  private scanFloatPart(allowLeadingZeroSep: bool = true): i32 {
     var text = this.source.text;
     var end = this.end;
     var pos = this.pos;

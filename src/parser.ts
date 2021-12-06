@@ -16,13 +16,13 @@ import {
 import {
   Tokenizer,
   Token,
-  Range,
   CommentHandler,
   IdentifierHandling,
   isIllegalVariableIdentifier
 } from "./tokenizer";
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticEmitter,
   DiagnosticMessage

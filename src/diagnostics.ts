@@ -4,10 +4,6 @@
  */
 
 import {
-  Range
-} from "./tokenizer";
-
-import {
   Source
 } from "./ast";
 
@@ -42,6 +38,48 @@ export const enum DiagnosticCategory {
   WARNING,
   /** Error message. */
   ERROR
+}
+
+export class Range {
+
+  source!: Source;
+  debugInfoRef: usize = 0;
+
+  constructor(public start: i32, public end: i32) {}
+
+  static join(a: Range, b: Range): Range {
+    if (a.source != b.source) throw new Error("source mismatch");
+    let range = new Range(
+      a.start < b.start ? a.start : b.start,
+      a.end > b.end ? a.end : b.end
+    );
+    range.source = a.source;
+    return range;
+  }
+
+  equals(other: Range): bool {
+    return (
+      this.source == other.source &&
+      this.start == other.start &&
+      this.end == other.end
+    );
+  }
+
+  get atStart(): Range {
+    let range = new Range(this.start, this.start);
+    range.source = this.source;
+    return range;
+  }
+
+  get atEnd(): Range {
+    let range = new Range(this.end, this.end);
+    range.source = this.source;
+    return range;
+  }
+
+  toString(): string {
+    return this.source.text.substring(this.start, this.end);
+  }
 }
 
 /** Returns the string representation of the specified diagnostic category. */

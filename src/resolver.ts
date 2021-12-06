@@ -12,6 +12,7 @@
  */
 
 import {
+  Range,
   DiagnosticEmitter,
   DiagnosticCode
 } from "./diagnostics";
@@ -43,10 +44,6 @@ import {
 import {
   Flow
 } from "./flow";
-
-import {
-  Range
-} from "./tokenizer";
 
 import {
   FunctionTypeNode,
