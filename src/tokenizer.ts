@@ -1171,8 +1171,8 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   skipLineComment(text: string, pos: i32, end: i32): i32 {
-    let startPos = pos - 1;
-    let kind = CommentKind.LINE;
+    var startPos = pos - 1;
+    var kind = CommentKind.LINE;
     if (
       pos + 1 < end &&
       text.charCodeAt(pos + 1) == CharCode.SLASH
@@ -1197,8 +1197,8 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   skipBlockComment(text: string, pos: i32, end: i32): i32 {
-    let startPos = pos - 1;
-    let closed = false;
+    var startPos = pos - 1;
+    var closed = false;
     while (++pos < end) {
       let c = text.charCodeAt(pos);
       if (
