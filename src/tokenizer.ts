@@ -585,20 +585,6 @@ export function operatorTokenToString(token: Token): string {
   }
 }
 
-// Scan and determine is it integer or float without update of position.
-function scanNumber(text: string, pos: i32, end: i32): Token {
-  while (pos < end) {
-    let c = text.charCodeAt(pos);
-    if (c == CharCode.DOT || (c | 32) == CharCode.e) {
-      return Token.FLOATLITERAL;
-    }
-    if (c != CharCode._ && !isDecimal(c)) break;
-    // does not validate separator placement (this is done in readXYInteger)
-    pos++;
-  }
-  return Token.INTEGERLITERAL;
-}
-
 export class Range {
 
   source!: Source;
@@ -741,24 +727,10 @@ export class Tokenizer extends DiagnosticEmitter {
               this.pos = pos;
               return token;
             }
-            // `0`..`9`
-            case Token.DIGIT: {
-              this.pos = pos;
-              // `0.`, `0x`, `0b`, `0o`
-              if (c == CharCode._0) {
-                if (pos + 1 < end) {
-                  c = text.charCodeAt(pos + 1);
-                  if (c == CharCode.DOT) return Token.FLOATLITERAL;
-                  switch (c | 32) {
-                    case CharCode.x:
-                    case CharCode.b:
-                    case CharCode.o:
-                      return Token.INTEGERLITERAL;
-                  }
-                }
-              }
-              return scanNumber(text, pos + 1, end);
-            }
+            // `0`..`9`, `0.`, `0x`, `0b`, `0o`
+            case Token.DIGIT:
+              return this.scanNumber(c, text, pos, end);
+
             // `a`..`z`
             case Token.IDENTIFIER_OR_KEYWORD: {
               let posBefore = pos;
@@ -852,6 +824,34 @@ export class Tokenizer extends DiagnosticEmitter {
       this.tokenPos = tokenPosBefore;
     }
     return nextToken;
+  }
+
+  // Scan and determine is it integer or float without update of position.
+  private scanNumber(c: i32, text: string, pos: i32, end: i32): Token {
+    this.pos = pos++;
+    // `0.`, `0x`, `0b`, `0o`
+    if (c == CharCode._0) {
+      if (pos < end) {
+        c = text.charCodeAt(pos);
+        if (c == CharCode.DOT) return Token.FLOATLITERAL;
+        switch (c | 32) {
+          case CharCode.x:
+          case CharCode.b:
+          case CharCode.o:
+            return Token.INTEGERLITERAL;
+        }
+      }
+    }
+    while (pos < end) {
+      let c = text.charCodeAt(pos);
+      if (c == CharCode.DOT || (c | 32) == CharCode.e) {
+        return Token.FLOATLITERAL;
+      }
+      if (c != CharCode._ && !isDecimal(c)) break;
+      // does not validate separator placement (this is done in readXYInteger)
+      ++pos;
+    }
+    return Token.INTEGERLITERAL;
   }
 
   private scanOperator(c: i32, text: string, pos: i32, end: i32, maxTokenLength: i32): Token {
