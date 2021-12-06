@@ -750,7 +750,7 @@ export class Tokenizer extends DiagnosticEmitter {
               let posBefore = pos;
               while (
                 ++pos < end &&
-                isIdentifierPart(c = text.charCodeAt(pos))
+                isIdentifierPart(text.charCodeAt(pos))
               ) { /* nop */ }
               if (
                 identifierHandling != IdentifierHandling.ALWAYS &&
