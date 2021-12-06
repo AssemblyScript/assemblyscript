@@ -2537,8 +2537,8 @@ export class Parser extends DiagnosticEmitter {
 
       if (flags & CommonFlags.ABSTRACT) {
         this.error(
-          DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(this.abstractStart, this.abstractEnd), "abstract"
+          DiagnosticCode.Not_implemented_0,
+          tn.range(this.declareStart, this.declareEnd), "Abstract fields"
         ); // recoverable
       }
 
