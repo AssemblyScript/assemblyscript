@@ -762,24 +762,19 @@ export class Tokenizer extends DiagnosticEmitter {
             }
             case Token.NUMERICLITERAL: {
               // `0.`, `0x`, `0b`, `0o`
+              this.pos = pos;
               if (c == CharCode._0) {
                 if (pos + 1 < end) {
                   c = text.charCodeAt(pos + 1);
-                  if (c == CharCode.DOT) {
-                    this.pos = pos;
-                    return Token.FLOATLITERAL;
-                  }
+                  if (c == CharCode.DOT) return Token.FLOATLITERAL;
                   switch (c | 32) {
                     case CharCode.x:
                     case CharCode.b:
-                    case CharCode.o: {
-                      this.pos = pos;
+                    case CharCode.o:
                       return Token.INTEGERLITERAL;
-                    }
                   }
                 }
               }
-              this.pos = pos;
               return this.integerOrFloatToken();
             }
             // `[`, `{`, `(`, `,`, `:`, `;`, `@` and etc
