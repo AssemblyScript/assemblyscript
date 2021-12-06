@@ -179,6 +179,7 @@ export const enum Token {
   DIGIT,
   MAYBE_KEYWORD,
   WHITESPACE,
+  COMMENT_OR_OPERATOR,
   OPERATOR,
   INVALID,
   EOF
@@ -239,7 +240,7 @@ const BASIC_TOKENS: Token[] = [
   /*    , */ Token.COMMA,
   /*    - */ Token.OPERATOR,
   /*    . */ Token.OPERATOR,
-  /*    / */ Token.OPERATOR,
+  /*    / */ Token.COMMENT_OR_OPERATOR,
   /*    0 */ Token.DIGIT,
   /*    1 */ Token.DIGIT,
   /*    2 */ Token.DIGIT,
@@ -772,13 +773,30 @@ export class Tokenizer extends DiagnosticEmitter {
             ++pos;
             continue;
           }
-          // `+`, `-`, `*`, `/`, `=`, `>`, ..
-          case Token.OPERATOR: {
-            token = this.scanOperator(text, c, pos, end, maxTokenLength);
-            pos = this.pos;
-            if (token == Token.INVALID) continue;
-            return token;
+          // `/`, `//`, `/*`, `/=`, `///`
+          case Token.COMMENT_OR_OPERATOR: {
+            ++pos;
+            if (maxTokenLength > 1 && pos < end) {
+              c = text.charCodeAt(pos);
+              if (c == CharCode.SLASH) { // single-line
+                pos = this.skipLineComment(text, pos, end);
+                continue;
+              }
+              if (c == CharCode.ASTERISK) { // multi-line
+                pos = this.skipBlockComment(text, pos, end);
+                continue;
+              }
+              if (c == CharCode.EQUALS) {
+                this.pos = pos + 1;
+                return Token.SLASH_EQUALS;
+              }
+            }
+            this.pos = pos;
+            return Token.SLASH;
           }
+          // `+`, `-`, `*`, `=`, `>`, ..
+          case Token.OPERATOR:
+            return this.scanOperator(text, c, pos, end, maxTokenLength);
           // `[`, `{`, `(`, `:`, `;`, `@`, ..
           default:
             this.pos = pos + 1;
@@ -1035,27 +1053,6 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         this.pos = pos;
         return Token.DOT;
-      }
-      // `/`, `//`, `/*`, `/=`, `///`
-      case CharCode.SLASH: {
-        ++pos;
-        if (maxTokenLength > 1 && pos < end) {
-          c = text.charCodeAt(pos);
-          if (c == CharCode.SLASH) { // single-line
-            pos = this.skipLineComment(text, pos, end);
-            break;
-          }
-          if (c == CharCode.ASTERISK) { // multi-line
-            pos = this.skipBlockComment(text, pos, end);
-            break;
-          }
-          if (c == CharCode.EQUALS) {
-            this.pos = pos + 1;
-            return Token.SLASH_EQUALS;
-          }
-        }
-        this.pos = pos;
-        return Token.SLASH;
       }
       // `<`, `<<`, `<=` `<<=`
       case CharCode.LESSTHAN: {
