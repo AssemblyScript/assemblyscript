@@ -197,7 +197,7 @@ export abstract class Visitor {
   get parentExpressionOrNull(): ExpressionRef {
     var stack = this.stack;
     var length = stack.length;
-    return length ? stack[length - 1] : 0;
+    return length ? unchecked(stack[length - 1]) : 0;
   }
 
   // Expressions
