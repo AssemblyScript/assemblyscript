@@ -745,45 +745,44 @@ export class Tokenizer extends DiagnosticEmitter {
       let c = text.charCodeAt(pos);
       if (c <= 0x7F) {
         let token = unchecked(BASIC_TOKENS[c]);
-        if (token != Token.INVALID) {
-          switch (token) {
-            // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
-            case Token.IDENTIFIER:
-            // `"`, `'`, ```
-            case Token.STRINGLITERAL:
-            case Token.TEMPLATELITERAL:
-              this.pos = pos;
-              return token;
-            // `0`..`9`, `0.`, `0x`, `0b`, `0o`
-            case Token.DIGIT:
-              return this.scanNumber(c, text, pos, end);
-            // `a`..`z`
-            case Token.MAYBE_KEYWORD:
-              return this.scanKeyword(text, pos, end, identifierHandling);
-            // `\n`, `\t`, `\v`, `\f`, ` `, `\r`, `\r\n`
-            case Token.WHITESPACE: {
-              // `\r`, `\r\n`
-              if (c == CharCode.CARRIAGERETURN) {
-                if (!(
-                  ++pos < end &&
-                  text.charCodeAt(pos) == CharCode.LINEFEED
-                )) continue;
-              }
-              ++pos;
-              continue;
+        if (token == Token.INVALID) break;
+        switch (token) {
+          // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
+          case Token.IDENTIFIER:
+          // `"`, `'`, ```
+          case Token.STRINGLITERAL:
+          case Token.TEMPLATELITERAL:
+            this.pos = pos;
+            return token;
+          // `0`..`9`, `0.`, `0x`, `0b`, `0o`
+          case Token.DIGIT:
+            return this.scanNumber(c, text, pos, end);
+          // `a`..`z`
+          case Token.MAYBE_KEYWORD:
+            return this.scanKeyword(text, pos, end, identifierHandling);
+          // `\n`, `\t`, `\v`, `\f`, ` `, `\r`, `\r\n`
+          case Token.WHITESPACE: {
+            // `\r`, `\r\n`
+            if (c == CharCode.CARRIAGERETURN) {
+              if (!(
+                ++pos < end &&
+                text.charCodeAt(pos) == CharCode.LINEFEED
+              )) continue;
             }
-            // `+`, `-`, `*`, `/`, `=`, `>`, ..
-            case Token.OPERATOR: {
-              token = this.scanOperator(c, text, pos, end, maxTokenLength);
-              pos = this.pos;
-              if (token == Token.INVALID) continue;
-              return token;
-            }
-            // `[`, `{`, `(`, `:`, `;`, `@`, ..
-            default:
-              this.pos = pos + 1;
-              return token;
+            ++pos;
+            continue;
           }
+          // `+`, `-`, `*`, `/`, `=`, `>`, ..
+          case Token.OPERATOR: {
+            token = this.scanOperator(c, text, pos, end, maxTokenLength);
+            pos = this.pos;
+            if (token == Token.INVALID) continue;
+            return token;
+          }
+          // `[`, `{`, `(`, `:`, `;`, `@`, ..
+          default:
+            this.pos = pos + 1;
+            return token;
         }
       } else { // c > 0x7F
         // TODO: \uXXXX also support for identifiers
