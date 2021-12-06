@@ -747,18 +747,6 @@ export class Tokenizer extends DiagnosticEmitter {
         let token = unchecked(BASIC_TOKENS[c]);
         if (token != Token.INVALID) {
           switch (token) {
-            // `\n`, `\t`, `\v`, `\f`, ` `, `\r`, `\r\n`
-            case Token.WHITESPACE: {
-              // `\r`, `\r\n`
-              if (c == CharCode.CARRIAGERETURN) {
-                if (!(
-                  ++pos < end &&
-                  text.charCodeAt(pos) == CharCode.LINEFEED
-                )) continue;
-              }
-              ++pos;
-              continue;
-            }
             // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
             case Token.IDENTIFIER:
             // `"`, `'`, ```
@@ -793,6 +781,18 @@ export class Tokenizer extends DiagnosticEmitter {
               }
               this.pos = startPos;
               return Token.IDENTIFIER;
+            }
+            // `\n`, `\t`, `\v`, `\f`, ` `, `\r`, `\r\n`
+            case Token.WHITESPACE: {
+              // `\r`, `\r\n`
+              if (c == CharCode.CARRIAGERETURN) {
+                if (!(
+                  ++pos < end &&
+                  text.charCodeAt(pos) == CharCode.LINEFEED
+                )) continue;
+              }
+              ++pos;
+              continue;
             }
             // `+`, `-`, `*`, `/`, `=`, `>`, ..
             case Token.OPERATOR: {
