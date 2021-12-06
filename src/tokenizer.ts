@@ -407,24 +407,23 @@ export function scanKeyword(text: string): Token {
           case CharCode.s: return Token.IS;
         }
         break;
-      } else if (len >= 6) {
-        switch (text.charCodeAt(3)) {
-          case CharCode.e: {
-            if (text == "interface") return Token.INTERFACE;
-            break;
-          }
-          case CharCode.l: {
-            if (text == "implements") return Token.IMPLEMENTS;
-            break;
-          }
-          case CharCode.o: {
-            if (text == "import") return Token.IMPORT;
-            break;
-          }
-          case CharCode.t: {
-            if (text == "instanceof") return Token.INSTANCEOF;
-            break;
-          }
+      }
+      switch (text.charCodeAt(3)) {
+        case CharCode.e: {
+          if (text == "interface") return Token.INTERFACE;
+          break;
+        }
+        case CharCode.l: {
+          if (text == "implements") return Token.IMPLEMENTS;
+          break;
+        }
+        case CharCode.o: {
+          if (text == "import") return Token.IMPORT;
+          break;
+        }
+        case CharCode.t: {
+          if (text == "instanceof") return Token.INSTANCEOF;
+          break;
         }
       }
       break;
