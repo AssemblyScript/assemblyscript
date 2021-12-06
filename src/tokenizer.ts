@@ -392,8 +392,9 @@ export function modifierTokenToString(token: Token): string {
   }
   return assert(false);
 }
+*/
 
-export function tokenIsAlsoIdentifier(token: Token): bool {
+function tokenIsAlsoIdentifier(token: Token): bool {
   switch (token) {
     case Token.ABSTRACT:
     case Token.AS:
@@ -416,7 +417,6 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     default: return false;
   }
 }
-*/
 
 export function isIllegalVariableIdentifier(name: string): bool {
   assert(name.length);
