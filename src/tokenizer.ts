@@ -789,10 +789,7 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         // TODO: \uXXXX also support for identifiers
         if (isIdentifierStart(c)) {
-          while (
-            ++pos < end &&
-            isIdentifierPart(c = text.charCodeAt(pos))
-          ) { /* nop */ }
+          this.pos = pos;
           return Token.IDENTIFIER;
         } else if (isWhiteSpace(c)) {
           ++pos;
