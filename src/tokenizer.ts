@@ -176,7 +176,7 @@ export const enum Token {
 
   // meta
 
-  FLOAT_OR_INTEGER_LITERAL,
+  NUMERICLITERAL,
   IDENTIFIER_OR_KEYWORD,
   OPERATOR,
   WHITESPACE,
@@ -240,16 +240,16 @@ const BASIC_TOKENS: Token[] = [
   /*    - */ Token.OPERATOR,
   /*    . */ Token.OPERATOR,
   /*    / */ Token.OPERATOR,
-  /*    0 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    1 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    2 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    3 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    4 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    5 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    6 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    7 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    8 */ Token.FLOAT_OR_INTEGER_LITERAL,
-  /*    9 */ Token.FLOAT_OR_INTEGER_LITERAL,
+  /*    0 */ Token.NUMERICLITERAL,
+  /*    1 */ Token.NUMERICLITERAL,
+  /*    2 */ Token.NUMERICLITERAL,
+  /*    3 */ Token.NUMERICLITERAL,
+  /*    4 */ Token.NUMERICLITERAL,
+  /*    5 */ Token.NUMERICLITERAL,
+  /*    6 */ Token.NUMERICLITERAL,
+  /*    7 */ Token.NUMERICLITERAL,
+  /*    8 */ Token.NUMERICLITERAL,
+  /*    9 */ Token.NUMERICLITERAL,
   /*    : */ Token.COLON,
   /*    ; */ Token.SEMICOLON,
   /*    < */ Token.OPERATOR,
@@ -720,9 +720,10 @@ export class Tokenizer extends DiagnosticEmitter {
               ++pos;
               break;
             }
+            // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
+            case Token.IDENTIFIER:
             case Token.STRINGLITERAL:
             case Token.TEMPLATELITERAL: {
-              // FIXME
               this.pos = pos;
               return token;
             }
@@ -731,16 +732,6 @@ export class Tokenizer extends DiagnosticEmitter {
               pos = this.pos;
               if (token == Token.INVALID) continue;
               return token;
-            }
-            // `$`, `_`, `h`, `j`, `q`, `u`, `x`, `z`, `A`..`Z`
-            case Token.IDENTIFIER: {
-              let posBefore = pos;
-              while (
-                ++pos < end &&
-                isIdentifierPart(c = text.charCodeAt(pos))
-              ) { /* nop */ }
-              this.pos = posBefore;
-              return Token.IDENTIFIER;
             }
             // `a`..`z`
             case Token.IDENTIFIER_OR_KEYWORD: {
@@ -769,7 +760,7 @@ export class Tokenizer extends DiagnosticEmitter {
               this.pos = posBefore;
               return Token.IDENTIFIER;
             }
-            case Token.FLOAT_OR_INTEGER_LITERAL: {
+            case Token.NUMERICLITERAL: {
               // `0.`, `0x`, `0b`, `0o`
               if (c == CharCode._0) {
                 if (pos + 1 < end) {
