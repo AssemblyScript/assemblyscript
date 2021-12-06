@@ -328,9 +328,7 @@ export function scanKeyword(text: string): Token {
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
       if (len == 2) {
-        if (text.charCodeAt(1) == CharCode.s) {
-          return Token.AS;
-        }
+        if (text.charCodeAt(1) == CharCode.s) return Token.AS;
         break;
       }
       if (text == "abstract") return Token.ABSTRACT;
@@ -356,9 +354,7 @@ export function scanKeyword(text: string): Token {
     }
     case CharCode.d: {
       if (len == 2) {
-        if (text.charCodeAt(1) == CharCode.o) {
-          return Token.DO;
-        }
+        if (text.charCodeAt(1) == CharCode.o) return Token.DO;
         break;
       }
       if (text == "default") return Token.DEFAULT;
@@ -434,9 +430,7 @@ export function scanKeyword(text: string): Token {
       break;
     }
     case CharCode.o: {
-      if (len == 2 && text.charCodeAt(1) == CharCode.f) {
-        return Token.OF;
-      }
+      if (len == 2 && text.charCodeAt(1) == CharCode.f) return Token.OF;
       break;
     }
     case CharCode.p: {
