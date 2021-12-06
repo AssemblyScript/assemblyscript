@@ -732,7 +732,7 @@ export class Tokenizer extends DiagnosticEmitter {
             ++pos;
             continue;
           }
-          // `/`, `//`, `/*`, `/=`, `///`
+          // `/`, `/=`, `/*`, `//`, `///`
           case Token.COMMENT_OR_OPERATOR: {
             ++pos;
             if (maxTokenLength > 1 && pos < end) {
