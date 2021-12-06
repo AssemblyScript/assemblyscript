@@ -758,30 +758,8 @@ export class Tokenizer extends DiagnosticEmitter {
             case Token.DIGIT:
               return this.scanNumber(c, text, pos, end);
             // `a`..`z`
-            case Token.IDENTIFIER_OR_KEYWORD: {
-              let startPos = pos;
-              if (identifierHandling != IdentifierHandling.ALWAYS) {
-                while (
-                  ++pos < end &&
-                  isIdentifierPart(text.charCodeAt(pos))
-                ) { /* nop */ }
-                if (
-                  pos - startPos >= MIN_KEYWORD_LENGTH &&
-                  pos - startPos <= MAX_KEYWORD_LENGTH
-                ) {
-                  let keyword = scanKeyword(text.substring(startPos, pos));
-                  if (keyword != Token.INVALID && !(
-                    identifierHandling == IdentifierHandling.PREFER &&
-                    tokenIsAlsoIdentifier(keyword)
-                  )) {
-                    this.pos = pos;
-                    return keyword;
-                  }
-                }
-              }
-              this.pos = startPos;
-              return Token.IDENTIFIER;
-            }
+            case Token.IDENTIFIER_OR_KEYWORD:
+              return this.scanKeyword(text, pos, end, identifierHandling);
             // `\n`, `\t`, `\v`, `\f`, ` `, `\r`, `\r\n`
             case Token.WHITESPACE: {
               // `\r`, `\r\n`
@@ -890,6 +868,31 @@ export class Tokenizer extends DiagnosticEmitter {
       ++pos;
     }
     return Token.INTEGERLITERAL;
+  }
+
+  private scanKeyword(text: string, pos: i32, end: i32, identifierHandling: IdentifierHandling): Token {
+    let startPos = pos;
+    if (identifierHandling != IdentifierHandling.ALWAYS) {
+      while (
+        ++pos < end &&
+        isIdentifierPart(text.charCodeAt(pos))
+      ) { /* nop */ }
+      if (
+        pos - startPos >= MIN_KEYWORD_LENGTH &&
+        pos - startPos <= MAX_KEYWORD_LENGTH
+      ) {
+        let keyword = scanKeyword(text.substring(startPos, pos));
+        if (keyword != Token.INVALID && !(
+          identifierHandling == IdentifierHandling.PREFER &&
+          tokenIsAlsoIdentifier(keyword)
+        )) {
+          this.pos = pos;
+          return keyword;
+        }
+      }
+    }
+    this.pos = startPos;
+    return Token.IDENTIFIER;
   }
 
   private scanOperator(c: i32, text: string, pos: i32, end: i32, maxTokenLength: i32): Token {
