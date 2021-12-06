@@ -176,10 +176,10 @@ export const enum Token {
 
   // meta
 
-  NUMERICLITERAL,
+  DIGIT,
+  WHITESPACE,
   IDENTIFIER_OR_KEYWORD,
   OPERATOR,
-  WHITESPACE,
   INVALID,
   EOF
 }
@@ -240,16 +240,16 @@ const BASIC_TOKENS: Token[] = [
   /*    - */ Token.OPERATOR,
   /*    . */ Token.OPERATOR,
   /*    / */ Token.OPERATOR,
-  /*    0 */ Token.NUMERICLITERAL,
-  /*    1 */ Token.NUMERICLITERAL,
-  /*    2 */ Token.NUMERICLITERAL,
-  /*    3 */ Token.NUMERICLITERAL,
-  /*    4 */ Token.NUMERICLITERAL,
-  /*    5 */ Token.NUMERICLITERAL,
-  /*    6 */ Token.NUMERICLITERAL,
-  /*    7 */ Token.NUMERICLITERAL,
-  /*    8 */ Token.NUMERICLITERAL,
-  /*    9 */ Token.NUMERICLITERAL,
+  /*    0 */ Token.DIGIT,
+  /*    1 */ Token.DIGIT,
+  /*    2 */ Token.DIGIT,
+  /*    3 */ Token.DIGIT,
+  /*    4 */ Token.DIGIT,
+  /*    5 */ Token.DIGIT,
+  /*    6 */ Token.DIGIT,
+  /*    7 */ Token.DIGIT,
+  /*    8 */ Token.DIGIT,
+  /*    9 */ Token.DIGIT,
   /*    : */ Token.COLON,
   /*    ; */ Token.SEMICOLON,
   /*    < */ Token.OPERATOR,
@@ -727,11 +727,23 @@ export class Tokenizer extends DiagnosticEmitter {
               this.pos = pos;
               return token;
             }
-            case Token.OPERATOR: {
-              token = this.operatorToken(c, text, pos, end, maxTokenLength);
-              pos = this.pos;
-              if (token == Token.INVALID) continue;
-              return token;
+            // `0`..`9`
+            case Token.DIGIT: {
+              this.pos = pos;
+              // `0.`, `0x`, `0b`, `0o`
+              if (c == CharCode._0) {
+                if (pos + 1 < end) {
+                  c = text.charCodeAt(pos + 1);
+                  if (c == CharCode.DOT) return Token.FLOATLITERAL;
+                  switch (c | 32) {
+                    case CharCode.x:
+                    case CharCode.b:
+                    case CharCode.o:
+                      return Token.INTEGERLITERAL;
+                  }
+                }
+              }
+              return this.integerOrFloatToken();
             }
             // `a`..`z`
             case Token.IDENTIFIER_OR_KEYWORD: {
@@ -760,22 +772,11 @@ export class Tokenizer extends DiagnosticEmitter {
               this.pos = posBefore;
               return Token.IDENTIFIER;
             }
-            case Token.NUMERICLITERAL: {
-              // `0.`, `0x`, `0b`, `0o`
-              this.pos = pos;
-              if (c == CharCode._0) {
-                if (pos + 1 < end) {
-                  c = text.charCodeAt(pos + 1);
-                  if (c == CharCode.DOT) return Token.FLOATLITERAL;
-                  switch (c | 32) {
-                    case CharCode.x:
-                    case CharCode.b:
-                    case CharCode.o:
-                      return Token.INTEGERLITERAL;
-                  }
-                }
-              }
-              return this.integerOrFloatToken();
+            case Token.OPERATOR: {
+              token = this.operatorToken(c, text, pos, end, maxTokenLength);
+              pos = this.pos;
+              if (token == Token.INVALID) continue;
+              return token;
             }
             // `[`, `{`, `(`, `,`, `:`, `;`, `@` and etc
             default: {
