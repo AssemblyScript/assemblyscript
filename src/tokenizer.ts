@@ -177,8 +177,8 @@ export const enum Token {
   // meta
 
   DIGIT,
-  WHITESPACE,
   IDENTIFIER_OR_KEYWORD,
+  WHITESPACE,
   OPERATOR,
   INVALID,
   EOF
