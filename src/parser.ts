@@ -19,7 +19,6 @@ import {
   Range,
   CommentHandler,
   IdentifierHandling,
-  tokenIsAlsoIdentifier,
   isIllegalVariableIdentifier,
   isModifier
 } from "./tokenizer";
