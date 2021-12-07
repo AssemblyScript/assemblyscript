@@ -214,6 +214,7 @@ const srcBuild = esbuild.build({
     js: prelude("The AssemblyScript compiler")
   },
   watch,
+  incremental: watch,
   plugins: [ diagnosticsPlugin, reportPlugin("src") ]
 });
 
