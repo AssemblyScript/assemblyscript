@@ -564,6 +564,12 @@ function generateTransform() {
     ].join("")
   );
   fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "transform.cjs"),
+    [
+      `module.exports = function Transform() { /* stub */ }\n`
+    ].join("")
+  );
+  fs.writeFileSync(
     pathUtil.resolve(__dirname, "..", "dist", "transform.d.ts"),
     [
       `export { Transform } from "./asc";\n`

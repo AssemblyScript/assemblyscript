@@ -1,8 +1,10 @@
-/* global module */
+var Transform = require("../../../dist/transform.cjs");
 
 function MyTransform() {
-  this.log("CJS transform loaded");
+  this.log("Legacy transform loaded");
 }
+
+(MyTransform.prototype = Object.create(Transform.prototype)).constructor = Transform;
 
 MyTransform.prototype.afterParse = function() {
   this.log("- afterParse");
