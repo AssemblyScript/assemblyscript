@@ -59,3 +59,12 @@ function inferDefault<T = Ref>(a: T): T {
 }
 assert(inferDefault(1) == 1);
 assert(inferDefault({ x: 2 }) instanceof Ref);
+
+// issue-2166
+function testfunc1<T>(): void {
+  new Ref2<string>().fn("11", 1);
+}
+class Ref2<T> {
+  fn<U>(a1: T, a2: U): void {}
+}
+testfunc1<i64>();

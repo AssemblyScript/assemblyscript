@@ -2609,12 +2609,8 @@ export class Resolver extends DiagnosticEmitter {
         assert(numClassTypeArguments == classTypeParameters.length);
         for (let i = 0; i < numClassTypeArguments; ++i) {
           let classTypeParameterName = classTypeParameters[i].name.text;
-          if (!ctxTypes.has(classTypeParameterName)) {
-            ctxTypes.set(
-              classTypeParameterName,
-              classTypeArguments[i]
-            );
-          }
+          // override contextual
+          ctxTypes.set(classTypeParameterName, classTypeArguments[i]);
         }
       }
     } else {
