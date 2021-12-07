@@ -72,7 +72,7 @@
     "test:packages": "cd tests/packages && npm run test",
     "test:extension": "cd tests/extension && npm run test",
     "test:asconfig": "cd tests/asconfig && npm run test",
-    "test:transform": "node bin/asc tests/compiler/empty --transform ./tests/transform/index.js --noEmit && node bin/asc tests/compiler/empty --transform ./tests/transform/legacy/index.js --noEmit",
+    "test:transform": "node bin/asc tests/compiler/empty --transform ./tests/transform/index.js --noEmit && node bin/asc tests/compiler/empty --transform ./tests/transform/legacy/index.js --noEmit && node bin/asc tests/compiler/empty --transform ./tests/transform/legacy/superduper.js --noEmit",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "asbuild:untouched": "node bin/asc --config src/asconfig.json --target untouched",
     "asbuild:optimized": "node bin/asc --config src/asconfig.json --target optimized",

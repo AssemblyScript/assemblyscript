@@ -477,7 +477,7 @@ export async function main(argv, options) {
           return prepareResult(e);
         }
       }
-      if (typeof transform !== "function") {
+      if (!transform || (typeof transform !== "function" && typeof transform !== "object")) {
         return prepareResult(Error("not a transform: " + transformArgs[i]));
       }
       transforms.push(transform);
@@ -486,22 +486,21 @@ export async function main(argv, options) {
 
   // Fix up the prototype of the transforms’ constructors and instantiate them.
   try {
-    transforms = transforms.map(classOrModule => {
-      // Except if it’s a legacy module, just pass it through.
-      if (typeof classOrModule !== "function") {
-        return classOrModule;
+    transforms = transforms.map(transform => {
+      if (typeof transform === "function") {
+        Object.assign(transform.prototype, {
+          program,
+          baseDir,
+          stdout,
+          stderr,
+          log: console.error,
+          readFile,
+          writeFile,
+          listFiles
+        });
+        transform = new transform();
       }
-      Object.assign(classOrModule.prototype, {
-        program,
-        baseDir,
-        stdout,
-        stderr,
-        log: console.error,
-        readFile,
-        writeFile,
-        listFiles
-      });
-      return new classOrModule();
+      return transform;
     });
   } catch (e) {
     return prepareResult(e);
