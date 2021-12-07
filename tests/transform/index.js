@@ -1,38 +1,44 @@
 import assert from "assert";
 import { Transform } from "../../dist/transform.js";
 
+var constructorCalled = false;
 var afterParseCalled = false;
 var afterInitializeCalled = false;
 var afterCompileCalled = false;
 
+console.log("Transform loaded");
+
 export default class MyTransform extends Transform {
   constructor() {
+    assert(!constructorCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    constructorCalled = true;
     super();
     check(this);
-    this.log("Transform loaded");
+    this.log("- constructor");
+    assert(constructorCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
   }
   async afterParse() {
     check(this);
-    assert(!afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
     afterParseCalled = true;
     this.log("- afterParse");
     await defer();
     await defer();
     await defer();
     this.log("  complete");
-    assert(afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
   }
   afterInitialize() {
     check(this);
-    assert(afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
     afterInitializeCalled = true;
     this.log("- afterInitialize");
-    assert(afterParseCalled && afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterParseCalled && afterInitializeCalled && !afterCompileCalled);
     return defer();
   }
   afterCompile() {
     check(this);
-    assert(afterParseCalled && afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterParseCalled && afterInitializeCalled && !afterCompileCalled);
     afterCompileCalled = true;
     this.log("- afterCompile");
   }

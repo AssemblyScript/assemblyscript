@@ -1,18 +1,18 @@
-var assert = require("assert");
+import assert from "assert";
 
-exports.afterParse = function(parser) {
+console.log("Simple transform loaded");
+
+export function afterParse(parser) {
   assert(typeof parser === "object" && parser !== null);
   console.log("- afterParse");
-};
+}
 
-exports.afterInitialize = function(program) {
+export function afterInitialize(program) {
   assert(typeof program === "object" && program !== null);
   console.log("- afterInitialize");
-};
+}
 
-exports.afterCompile = function(module) {
+export function afterCompile(module) {
   assert(typeof module === "object" && module !== null);
   console.log("- afterCompile");
-};
-
-console.log("Super duper legacy transform loaded");
+}

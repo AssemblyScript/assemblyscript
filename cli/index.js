@@ -462,7 +462,8 @@ export async function main(argv, options) {
       if (require.resolve && url.pathToFileURL) {
         try {
           resolved = require.resolve(filename, { paths: [process.cwd(), baseDir] });
-          transform = (await import(url.pathToFileURL(resolved))).default;
+          transform = await import(url.pathToFileURL(resolved));
+          if (transform.default) transform = transform.default;
         } catch (e1) {
           try {
             transform = require(resolved);
@@ -472,7 +473,8 @@ export async function main(argv, options) {
         }
       } else {
         try {
-          transform = (await import(new URL(filename, import.meta.url))).default;
+          transform = await import(new URL(filename, import.meta.url));
+          if (transform.default) transform = transform.default;
         } catch (e) {
           return prepareResult(e);
         }
