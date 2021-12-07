@@ -1,4 +1,4 @@
-const assert = require("assert");
+var assert = require("assert");
 
 exports.afterParse = function(parser) {
   assert(typeof parser === "object" && parser !== null);
