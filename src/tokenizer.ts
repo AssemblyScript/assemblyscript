@@ -183,7 +183,7 @@ export const enum Token {
   COMMENT_OR_OPERATOR,
   OPERATOR,
   INVALID,
-  EOF
+  ENDOFFILE
 }
 
 export const enum IdentifierHandling {
@@ -784,7 +784,7 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     this.pos = pos;
-    return Token.EOF;
+    return Token.ENDOFFILE;
   }
 
   peek(
