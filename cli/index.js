@@ -201,7 +201,7 @@ export async function main(argv, options) {
   if (unknownOpts.length) {
     unknownOpts.forEach(arg => {
       stderr.write(
-        `${stderrColors.yellow("WARNING ")}Unknown option '${arg}'%{EOL}`
+        `${stderrColors.yellow("WARNING ")}Unknown option '${arg}'${EOL}`
       );
     });
   }
