@@ -1532,10 +1532,9 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   local.tee $1
    i64.const 0
    i64.store
-   local.get $1
+   local.get $0
    i32.const 0
    i32.store offset=8
    local.get $0
