@@ -54,7 +54,7 @@ console.log("\n# asc index.ts --textFile");
 
 console.log("\n# asc.compileString");
 {
-  const { stdout, stderr, text, binary } = await asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, measure: true });
+  const { stdout, stderr, text, binary } = await asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, stats: true });
   console.log(">>> .stdout >>>");
   process.stdout.write(stdout.toString());
   console.log(">>> .stderr >>>");
