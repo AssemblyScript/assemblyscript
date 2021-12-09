@@ -11,12 +11,6 @@
     "type": "b",
     "alias": "h"
   },
-  "noColors": {
-    "category": "General",
-    "description": "Disables terminal colors.",
-    "type": "b",
-    "default": false
-  },
   "config": {
     "category": "General",
     "description": "Configuration file to apply. CLI arguments take precedence.",
@@ -25,7 +19,7 @@
   },
   "target": {
     "category": "General",
-    "description": "Target configuration to use. Defaults to 'release'.",
+    "description": "Configuration file target to use. Defaults to 'release'.",
     "type": "s",
     "cliOnly": true
   },
@@ -301,6 +295,11 @@
     "type": "s",
     "default": "."
   },
+  "noColors": {
+    "description": "Disables terminal colors.",
+    "type": "b",
+    "default": false
+  },
   "noUnsafe": {
     "description": [
       "Disallows the use of unsafe features in user code.",
@@ -345,16 +344,6 @@
     ],
     "type": "S",
     "isPath": true
-  },
-  "traceResolution": {
-    "description": "Enables tracing of package resolution.",
-    "type": "b",
-    "default": false
-  },
-  "listFiles": {
-    "description": "Lists files to be compiled and exits.",
-    "type": "b",
-    "default": false
   },
   "wasm": {
     "description": "Uses the specified Wasm binary of the compiler.",

@@ -152,10 +152,6 @@ export interface CompilerOptions {
   transform?: string | string[];
   /** Make yourself sad for no good reason. */
   pedantic?: boolean;
-  /** Enables tracing of package resolution. */
-  traceResolution?: boolean;
-  /** Lists files to be compiled and exits. */
-  listFiles?: boolean;
   /** Prints measuring information on I/O and compile times. */
   measure?: boolean;
   /** Disables terminal colors. */

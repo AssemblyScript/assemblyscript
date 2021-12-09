@@ -595,9 +595,6 @@ export async function main(argv, options) {
             const packageName = match[1];
             const filePath = match[2] || "index";
             const basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : ".";
-            if (opts.traceResolution) {
-              stderr.write(`Looking for package '${packageName}' file '${filePath}' relative to '${basePath}'${EOL}`);
-            }
             const paths = [];
             const parts = path.resolve(baseDir, basePath).split(SEP);
             for (let i = parts.length, k = WIN ? 1 : 0; i >= k; --i) {
@@ -607,25 +604,16 @@ export async function main(argv, options) {
             }
             paths.push(...opts.path);
             for (const currentDir of paths.map(p => path.relative(baseDir, p))) {
-              if (opts.traceResolution) {
-                stderr.write(`  in ${path.join(currentDir, packageName)}${EOL}`);
-              }
               const plainName = filePath;
               if ((sourceText = await readFile(path.join(currentDir, packageName, plainName + extension), baseDir)) != null) {
                 sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension}`;
                 packageBases.set(sourcePath.replace(extension_re, ""), path.join(currentDir, packageName));
-                if (opts.traceResolution) {
-                  stderr.write(`  -> ${path.join(currentDir, packageName, plainName + extension)}${EOL}`);
-                }
                 break;
               }
               const indexName = `${filePath}/index`;
               if ((sourceText = await readFile(path.join(currentDir, packageName, indexName + extension), baseDir)) != null) {
                 sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension}`;
                 packageBases.set(sourcePath.replace(extension_re, ""), path.join(currentDir, packageName));
-                if (opts.traceResolution) {
-                  stderr.write(`  -> ${path.join(currentDir, packageName, indexName + extension)}${EOL}`);
-                }
                 break;
               }
             }
@@ -753,13 +741,6 @@ export async function main(argv, options) {
   {
     let code = await parseBacklog();
     if (code) return code;
-  }
-
-  // Print files and exit if listFiles
-  if (opts.listFiles) {
-    // FIXME: not a proper C-like API
-    stderr.write(program.sources.map(s => s.normalizedPath).sort().join(EOL) + EOL);
-    return prepareResult(null);
   }
 
   // Pre-emptively initialize the program
