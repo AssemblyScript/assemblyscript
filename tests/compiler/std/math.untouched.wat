@@ -90,7 +90,7 @@
  (global $~lib/math/NativeMathf.PI f32 (f32.const 3.1415927410125732))
  (global $~lib/math/NativeMathf.SQRT1_2 f32 (f32.const 0.7071067690849304))
  (global $~lib/math/NativeMathf.SQRT2 f32 (f32.const 1.4142135381698608))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
  (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
  (global $~lib/math/res128_hi (mut i64) (i64.const 0))

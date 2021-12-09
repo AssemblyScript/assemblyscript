@@ -1,7 +1,7 @@
 (module
  (type $none_=>_none (func))
  (global $memorybase/staticData i32 (i32.const 1024))
- (global $~lib/ASC_MEMORY_BASE i32 (i32.const 1024))
+ (global $~lib/native/ASC_MEMORY_BASE i32 (i32.const 1024))
  (global $~lib/memory/__data_end i32 (i32.const 1028))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17412))
  (global $~lib/memory/__heap_base i32 (i32.const 17412))

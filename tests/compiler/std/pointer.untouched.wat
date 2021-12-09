@@ -9,7 +9,7 @@
  (global $std/pointer/add (mut i32) (i32.const 0))
  (global $std/pointer/sub (mut i32) (i32.const 0))
  (global $std/pointer/nextOne (mut i32) (i32.const 0))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/pointer/buf (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 60))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))

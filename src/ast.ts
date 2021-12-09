@@ -2342,28 +2342,10 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
 
 /** Mangles an external to an internal path. */
 export function mangleInternalPath(path: string): string {
-  // Normalize index
   if (path.endsWith("/")) {
     path += "index";
-  } else {
-    let dotPos = path.lastIndexOf(".");
-    if (~dotPos) {
-      // Skip over leading `../`
-      let startPos = 0;
-      while (path.startsWith("../", startPos)) startPos += 3;
-      // Strip extension
-      let length = path.length;
-      if (dotPos >= startPos && length - dotPos >= 2) { // at least one char plus dot
-        let pos = dotPos;
-        while (++pos < length) {
-          if (!isAlphaOrDecimal(path.charCodeAt(pos))) {
-            assert(false); // not a valid external path
-            return path;
-          }
-        }
-        return path.substring(0, dotPos);
-      }
-    }
+  } else if (path.endsWith(".ts")) {
+    path = path.substring(0, path.length - 3);
   }
   return path;
 }

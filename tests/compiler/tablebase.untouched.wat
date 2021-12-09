@@ -4,7 +4,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $tablebase/staticFunction i32 (i32.const 32))
- (global $~lib/ASC_TABLE_BASE i32 (i32.const 32))
+ (global $~lib/native/ASC_TABLE_BASE i32 (i32.const 32))
  (global $~lib/memory/__data_end i32 (i32.const 92))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
  (global $~lib/memory/__heap_base i32 (i32.const 16476))

@@ -44,7 +44,7 @@ import {
   GETTER_PREFIX,
   SETTER_PREFIX,
   INNER_DELIMITER,
-  LIBRARY_SUBST,
+  LIBRARY_PREFIX,
   INDEX_SUFFIX,
   STUB_DELIMITER,
   CommonNames,
@@ -430,7 +430,7 @@ export class Program extends DiagnosticEmitter {
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
-    var nativeSource = new Source(SourceKind.LIBRARY_ENTRY, LIBRARY_SUBST + ".wasm", "[native code]");
+    var nativeSource = new Source(SourceKind.LIBRARY_ENTRY, LIBRARY_PREFIX + "native.ts", "[native code]");
     this.nativeSource = nativeSource;
     this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);

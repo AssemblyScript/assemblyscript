@@ -5,7 +5,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $binary/I (mut i64) (i64.const 0))
  (global $~lib/util/math/log_tail (mut f64) (f64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
