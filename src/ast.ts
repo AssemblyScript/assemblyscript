@@ -29,8 +29,7 @@ import {
 import {
   normalizePath,
   resolvePath,
-  CharCode,
-  isAlphaOrDecimal
+  CharCode
 } from "./util";
 
 import {

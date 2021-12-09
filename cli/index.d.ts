@@ -160,8 +160,6 @@ export interface CompilerOptions {
   measure?: boolean;
   /** Disables terminal colors. */
   noColors?: boolean;
-  /** Specifies an alternative file extension. */
-  extension?: string;
 }
 
 /** Compiler API options. */

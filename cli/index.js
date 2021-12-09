@@ -91,24 +91,14 @@ const WIN = process.platform === "win32";
 const EOL = WIN ? "\r\n" : "\n";
 const SEP = WIN ? "\\"   : "/";
 
+const extension = ".ts";
+const extension_d = `.d${extension}`;
+const extension_re = new RegExp("\\" + extension + "$");
+const extension_re_except_d = new RegExp("^(?!.*\\.d\\" + extension + "$).*\\" + extension + "$");
+
 function toUpperSnakeCase(str) {
   return str.replace(/-/g, "_").toUpperCase();
 }
-
-// Sets up an extension with its definition counterpart and relevant regexes.
-function setupExtension(ext) {
-  if (!ext.startsWith(".")) ext = `.${ext}`;
-  return {
-    ext,
-    ext_d: `.d${ext}`,
-    re: new RegExp("\\" + ext + "$"),
-    re_d: new RegExp("\\.d\\" + ext + "$"),
-    re_except_d: new RegExp("^(?!.*\\.d\\" + ext + "$).*\\" + ext + "$"),
-    re_index: new RegExp("(?:^|[\\\\\\/])index\\" + ext + "$")
-  };
-}
-
-const defaultExtension = setupExtension(".ts");
 
 /** Ensures that an object is a wrapper class instead of just a pointer. */
 function __wrap(ptrOrObj, wrapperClass) {
@@ -158,7 +148,7 @@ export function configToArguments(options, argv = []) {
 
 /** Convenience function that parses and compiles source strings directly. */
 export async function compileString(sources, config = {}) {
-  if (typeof sources === "string") sources = { [`input${defaultExtension.ext}`]: sources };
+  if (typeof sources === "string") sources = { [`input${extension}`]: sources };
   var argv = [
     "--binaryFile", "binary",
     "--textFile", "text",
@@ -193,7 +183,6 @@ export async function main(argv, options) {
   const writeFile = options.writeFile || writeFileNode;
   const listFiles = options.listFiles || listFilesNode;
   const stats = options.stats || new Stats();
-  let extension = defaultExtension;
 
   // Parse command line options but do not populate option defaults yet
   const optionsResult = optionsUtil.parse(argv, generated.options, false);
@@ -242,14 +231,6 @@ export async function main(argv, options) {
     return prepareResult(null);
   }
 
-  // Use another extension if requested
-  if (typeof opts.extension === "string") {
-    if (!/^\.?[0-9a-zA-Z]{1,14}$/.test(opts.extension)) {
-      throw Error(`Invalid extension: ${opts.extension}`);
-    }
-    extension = setupExtension(opts.extension);
-  }
-
   // Set up base directory
   const baseDir = path.normalize(opts.baseDir || ".");
 
@@ -269,9 +250,9 @@ export async function main(argv, options) {
       "  " + colors.cyan("asc") + " [entryFile ...] [options]",
       "",
       colors.white("EXAMPLES"),
-      "  " + colors.cyan("asc") + " hello" + extension.ext,
-      "  " + colors.cyan("asc") + " hello" + extension.ext + " -b hello.wasm -t hello.wat",
-      "  " + colors.cyan("asc") + " hello1" + extension.ext + " hello2" + extension.ext + " -b -O > hello.wasm",
+      "  " + colors.cyan("asc") + " hello" + extension,
+      "  " + colors.cyan("asc") + " hello" + extension + " -b hello.wasm -t hello.wat",
+      "  " + colors.cyan("asc") + " hello1" + extension + " hello2" + extension + " -b -O > hello.wasm",
       "  " + colors.cyan("asc") + " --config asconfig.json --target release",
       "",
       colors.white("OPTIONS"),
@@ -530,7 +511,7 @@ export async function main(argv, options) {
     let begin = stats.begin();
     stats.parseCount++;
     let textPtr = __pin(__newString(libraryFiles[libPath]));
-    let pathPtr = __newString(libraryPrefix + libPath + extension.ext);
+    let pathPtr = __newString(libraryPrefix + libPath + extension);
     assemblyscript.parse(program, textPtr, pathPtr, false);
     __unpin(textPtr);
     stats.parseTime += stats.end(begin);
@@ -544,7 +525,7 @@ export async function main(argv, options) {
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
       let libDir = customLibDirs[i];
       let libFiles;
-      if (libDir.endsWith(extension.ext)) {
+      if (libDir.endsWith(extension)) {
         libFiles = [ path.basename(libDir) ];
         libDir = path.dirname(libDir);
       } else {
@@ -555,7 +536,7 @@ export async function main(argv, options) {
         if (libText == null) {
           return prepareResult(Error(`Library file '${libPath}' not found.`));
         }
-        libraryFiles[libPath.replace(extension.re, "")] = libText;
+        libraryFiles[libPath.replace(extension_re, "")] = libText;
         let begin = stats.begin();
         stats.parseCount++;
         let textPtr = __pin(__newString(libText));
@@ -578,11 +559,11 @@ export async function main(argv, options) {
 
     // Try file.ext, file/index.ext, file.d.ext
     if (!internalPath.startsWith(libraryPrefix)) {
-      if ((sourceText = await readFile(sourcePath = internalPath + extension.ext, baseDir)) == null) {
-        if ((sourceText = await readFile(sourcePath = internalPath + "/index" + extension.ext, baseDir)) == null) {
+      if ((sourceText = await readFile(sourcePath = internalPath + extension, baseDir)) == null) {
+        if ((sourceText = await readFile(sourcePath = internalPath + "/index" + extension, baseDir)) == null) {
           // portable d.ext: uses the .js file next to it in JS or becomes an import in Wasm
-          sourcePath = internalPath + extension.ext;
-          sourceText = await readFile(internalPath + extension.ext_d, baseDir);
+          sourcePath = internalPath + extension;
+          sourceText = await readFile(internalPath + extension_d, baseDir);
         }
       }
 
@@ -592,18 +573,18 @@ export async function main(argv, options) {
       const indexName = `${plainName}/index`;
       if (Object.prototype.hasOwnProperty.call(libraryFiles, plainName)) {
         sourceText = libraryFiles[plainName];
-        sourcePath = libraryPrefix + plainName + extension.ext;
+        sourcePath = libraryPrefix + plainName + extension;
       } else if (Object.prototype.hasOwnProperty.call(libraryFiles, indexName)) {
         sourceText = libraryFiles[indexName];
-        sourcePath = libraryPrefix + indexName + extension.ext;
+        sourcePath = libraryPrefix + indexName + extension;
       } else { // custom lib dirs
         for (const libDir of customLibDirs) {
-          if ((sourceText = await readFile(plainName + extension.ext, libDir)) != null) {
-            sourcePath = libraryPrefix + plainName + extension.ext;
+          if ((sourceText = await readFile(plainName + extension, libDir)) != null) {
+            sourcePath = libraryPrefix + plainName + extension;
             break;
           } else {
-            if ((sourceText = await readFile(indexName + extension.ext, libDir)) != null) {
-              sourcePath = libraryPrefix + indexName + extension.ext;
+            if ((sourceText = await readFile(indexName + extension, libDir)) != null) {
+              sourcePath = libraryPrefix + indexName + extension;
               break;
             }
           }
@@ -630,20 +611,20 @@ export async function main(argv, options) {
                 stderr.write(`  in ${path.join(currentDir, packageName)}${EOL}`);
               }
               const plainName = filePath;
-              if ((sourceText = await readFile(path.join(currentDir, packageName, plainName + extension.ext), baseDir)) != null) {
-                sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension.ext}`;
-                packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentDir, packageName));
+              if ((sourceText = await readFile(path.join(currentDir, packageName, plainName + extension), baseDir)) != null) {
+                sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension}`;
+                packageBases.set(sourcePath.replace(extension_re, ""), path.join(currentDir, packageName));
                 if (opts.traceResolution) {
-                  stderr.write(`  -> ${path.join(currentDir, packageName, plainName + extension.ext)}${EOL}`);
+                  stderr.write(`  -> ${path.join(currentDir, packageName, plainName + extension)}${EOL}`);
                 }
                 break;
               }
               const indexName = `${filePath}/index`;
-              if ((sourceText = await readFile(path.join(currentDir, packageName, indexName + extension.ext), baseDir)) != null) {
-                sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension.ext}`;
-                packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentDir, packageName));
+              if ((sourceText = await readFile(path.join(currentDir, packageName, indexName + extension), baseDir)) != null) {
+                sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension}`;
+                packageBases.set(sourcePath.replace(extension_re, ""), path.join(currentDir, packageName));
                 if (opts.traceResolution) {
-                  stderr.write(`  -> ${path.join(currentDir, packageName, indexName + extension.ext)}${EOL}`);
+                  stderr.write(`  -> ${path.join(currentDir, packageName, indexName + extension)}${EOL}`);
                 }
                 break;
               }
@@ -689,7 +670,7 @@ export async function main(argv, options) {
           __unpin(textPtr);
         } else {
           const textPtr = __newString(null); // no need to pin
-          const pathPtr = __newString(internalPath + extension.ext);
+          const pathPtr = __newString(internalPath + extension);
           assemblyscript.parse(program, textPtr, pathPtr, false);
         }
         stats.parseTime += stats.end(begin);
@@ -710,7 +691,7 @@ export async function main(argv, options) {
     let runtimeText = libraryFiles[runtimePath];
     if (runtimeText == null) {
       runtimePath = runtimeName;
-      runtimeText = await readFile(runtimePath + extension.ext, baseDir);
+      runtimeText = await readFile(runtimePath + extension, baseDir);
       if (runtimeText == null) return prepareResult(Error(`Runtime '${runtimeName}' not found.`));
     } else {
       runtimePath = `~lib/${runtimePath}`;
@@ -718,7 +699,7 @@ export async function main(argv, options) {
     let begin = stats.begin();
     stats.parseCount++;
     let textPtr = __pin(__newString(runtimeText));
-    let pathPtr = __newString(runtimePath + extension.ext);
+    let pathPtr = __newString(runtimePath + extension);
     assemblyscript.parse(program, textPtr, pathPtr, true);
     __unpin(textPtr);
     stats.parseTime += stats.end(begin);
@@ -729,7 +710,7 @@ export async function main(argv, options) {
     const filename = argv[i];
     let sourcePath = String(filename)
       .replace(/\\/g, "/")
-      .replace(extension.re, "")
+      .replace(extension_re, "")
       .replace(/[\\/]$/, "");
 
     // Setting the path to relative path
@@ -738,14 +719,14 @@ export async function main(argv, options) {
       : sourcePath;
 
     // Try entryPath.ext, then entryPath/index.ext
-    let sourceText = await readFile(sourcePath + extension.ext, baseDir);
+    let sourceText = await readFile(sourcePath + extension, baseDir);
     if (sourceText == null) {
-      const path = `${sourcePath}/index${extension.ext}`;
+      const path = `${sourcePath}/index${extension}`;
       sourceText = await readFile(path, baseDir);
       if (sourceText != null) sourcePath = path;
-      else sourcePath += extension.ext;
+      else sourcePath += extension;
     } else {
-      sourcePath += extension.ext;
+      sourcePath += extension;
     }
 
     let begin = stats.begin();
@@ -1000,7 +981,7 @@ export async function main(argv, options) {
           let contents = [];
           for (let i = 0, k = map.sources.length; i < k; ++i) {
             let name = map.sources[i];
-            let text = assemblyscript.getSource(program, __newString(name.replace(extension.re, "")));
+            let text = assemblyscript.getSource(program, __newString(name.replace(extension_re, "")));
             if (text == null) return prepareResult(Error(`Source of file '${name}' not found.`));
             contents[i] = text;
           }
@@ -1105,7 +1086,7 @@ export async function main(argv, options) {
     try {
       stats.readCount++;
       return (await fs.promises.readdir(path.join(baseDir, dirname)))
-        .filter(file => extension.re_except_d.test(file));
+        .filter(file => extension_re_except_d.test(file));
     } catch (e) {
       return null;
     }
