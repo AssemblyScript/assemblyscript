@@ -653,9 +653,8 @@ export async function main(argv, options) {
     while ((backlog = getBacklog()).length) {
       let files = [];
       for (let internalPath of backlog) {
-        files.push(
-          getFile(internalPath, assemblyscript.getDependee(program, internalPath))
-        );
+        const dependee = __getString(assemblyscript.getDependee(program, __newString(internalPath)));
+        files.push(getFile(internalPath, dependee)); // queue
       }
       files = await Promise.all(files); // parallel
       for (let i = 0, k = backlog.length; i < k; ++i) {
