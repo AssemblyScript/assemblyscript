@@ -318,8 +318,8 @@
     "type": "b",
     "default": false
   },
-  "measure": {
-    "description": "Prints measuring information on I/O and compile times.",
+  "stats": {
+    "description": "Prints statistics on I/O and compile times.",
     "type": "b",
     "default": false
   },
@@ -367,5 +367,6 @@
   "-O2z": { "value": { "optimizeLevel": 2, "shrinkLevel": 2 } },
   "-O3z": { "value": { "optimizeLevel": 3, "shrinkLevel": 2 } },
   "-Ospeed": { "value": { "optimizeLevel": 3, "shrinkLevel": 0 } },
-  "-Osize": { "value": { "optimizeLevel": 0, "shrinkLevel": 2, "converge": true } }
+  "-Osize": { "value": { "optimizeLevel": 0, "shrinkLevel": 2, "converge": true } },
+  "--measure": { "value": { "stats": true } }
 }

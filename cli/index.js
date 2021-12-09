@@ -1032,7 +1032,7 @@ export async function main(argv, options) {
     return prepareResult(err);
   }
 
-  if (opts.measure) stderr.write(stats.toString());
+  if (opts.stats) stderr.write(stats.toString());
 
   return prepareResult(null);
 
