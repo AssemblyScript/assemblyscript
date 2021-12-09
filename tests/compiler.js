@@ -75,7 +75,9 @@ const basedir = path.join(dirname, "compiler");
 
 // Gets a list of all relevant tests
 function getTests() {
-  var tests = glob.sync("**/!(_*).ts", { cwd: basedir }).map(name => name.replace(/\.ts$/, ""));
+  var tests = glob.sync("**/!(_*).ts", { cwd: basedir })
+    .map(name => name.replace(/\.ts$/, ""))
+    .filter(name => !name.includes("node_modules"));
   if (argv.length) { // run matching tests only
     tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
     if (!tests.length) {

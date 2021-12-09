@@ -569,7 +569,6 @@ export async function main(argv, options) {
   opts.path = opts.path || [];
 
   // Maps package names to parent directory
-  const packageMains = new Map();
   const packageBases = new Map();
 
   // Gets the file matching the specified source path, imported at the given dependee path
@@ -613,12 +612,8 @@ export async function main(argv, options) {
           const match = internalPath.match(/^~lib\/((?:@[^/]+\/)?[^/]+)(?:\/(.+))?/); // ~lib/(pkg)/(path), ~lib/(@org/pkg)/(path)
           if (match) {
             const packageName = match[1];
-            const isPackageRoot = match[2] === undefined;
-            const filePath = isPackageRoot ? "index" : match[2];
-            const basePath = packageBases.has(dependeePath)
-              ? packageBases.get(dependeePath)
-              : ".";
-
+            const filePath = match[2] || "index";
+            const basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : ".";
             if (opts.traceResolution) {
               stderr.write(`Looking for package '${packageName}' file '${filePath}' relative to '${basePath}'${EOL}`);
             }
@@ -629,45 +624,28 @@ export async function main(argv, options) {
                 paths.push(`${parts.slice(0, i).join(SEP)}${SEP}node_modules`);
               }
             }
-            for (const currentPath of paths.concat(...opts.path).map(p => path.relative(baseDir, p))) {
+            paths.push(...opts.path);
+            for (const currentDir of paths.map(p => path.relative(baseDir, p))) {
               if (opts.traceResolution) {
-                stderr.write(`  in ${path.join(currentPath, packageName)}${EOL}`);
+                stderr.write(`  in ${path.join(currentDir, packageName)}${EOL}`);
               }
-              let mainPath = "assembly";
-              if (packageMains.has(packageName)) { // use cached
-                mainPath = packageMains.get(packageName);
-              } else { // evaluate package.json
-                let jsonPath = path.join(currentPath, packageName, "package.json");
-                let jsonText = await readFile(jsonPath, baseDir);
-                if (jsonText != null) {
-                  try {
-                    let json = JSON.parse(jsonText);
-                    if (typeof json.ascMain === "string") {
-                      mainPath = json.ascMain.replace(extension.re_index, "");
-                      packageMains.set(packageName, mainPath);
-                    }
-                  } catch (e) { /* nop */ }
-                }
-              }
-              const mainDir = path.join(currentPath, packageName, mainPath);
               const plainName = filePath;
-              if ((sourceText = await readFile(path.join(mainDir, plainName + extension.ext), baseDir)) != null) {
+              if ((sourceText = await readFile(path.join(currentDir, packageName, plainName + extension.ext), baseDir)) != null) {
                 sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension.ext}`;
-                packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
+                packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentDir, packageName));
                 if (opts.traceResolution) {
-                  stderr.write(`  -> ${path.join(mainDir, plainName + extension.ext)}${EOL}`);
+                  stderr.write(`  -> ${path.join(currentDir, packageName, plainName + extension.ext)}${EOL}`);
                 }
                 break;
-              } else if (!isPackageRoot) {
-                const indexName = `${filePath}/index`;
-                if ((sourceText = await readFile(path.join(mainDir, indexName + extension.ext), baseDir)) !== null) {
-                  sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension.ext}`;
-                  packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
-                  if (opts.traceResolution) {
-                    stderr.write(`  -> ${path.join(mainDir, indexName + extension.ext)}${EOL}`);
-                  }
-                  break;
+              }
+              const indexName = `${filePath}/index`;
+              if ((sourceText = await readFile(path.join(currentDir, packageName, indexName + extension.ext), baseDir)) != null) {
+                sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension.ext}`;
+                packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentDir, packageName));
+                if (opts.traceResolution) {
+                  stderr.write(`  -> ${path.join(currentDir, packageName, indexName + extension.ext)}${EOL}`);
                 }
+                break;
               }
             }
           }

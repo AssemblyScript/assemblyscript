@@ -2106,7 +2106,7 @@ export class ImportStatement extends Statement {
     } else { // absolute in library
       if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
     }
-    this.internalPath = normalizedPath;
+    this.internalPath = mangleInternalPath(normalizedPath);
   }
 
   /** Internal path being referenced. */
@@ -2342,6 +2342,7 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
 
 /** Mangles an external to an internal path. */
 export function mangleInternalPath(path: string): string {
+  if (path.endsWith("/")) path += "index";
   var pos = path.lastIndexOf(".");
   var len = path.length;
   if (pos >= 0 && len - pos >= 2) { // at least one char plus dot
@@ -2354,7 +2355,6 @@ export function mangleInternalPath(path: string): string {
     }
     return path.substring(0, pos);
   }
-  assert(false); // not an external path
   return path;
 }
 
