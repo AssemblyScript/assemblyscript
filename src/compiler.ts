@@ -7832,10 +7832,10 @@ export class Compiler extends DiagnosticEmitter {
 
         if (typeParameterNodes !== null && typeParameterNodes.length != 0) {
           this.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            expression.range, typeParameterNodes.length.toString(), "0"
+            DiagnosticCode.Type_argument_expected,
+            expression.range
           );
-          return module.unreachable();
+          break; // also diagnose 'not a value at runtime'
         }
 
         let functionInstance = this.resolver.resolveFunction(
@@ -7856,10 +7856,10 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.error(
-      DiagnosticCode.Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime,
+      DiagnosticCode.Expression_does_not_compile_to_a_value_at_runtime,
       expression.range
     );
-    return this.module.unreachable();
+    return module.unreachable();
   }
 
   private compileInstanceOfExpression(
@@ -9207,7 +9207,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.error(
-      DiagnosticCode.Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime,
+      DiagnosticCode.Expression_does_not_compile_to_a_value_at_runtime,
       expression.range
     );
     return this.module.unreachable();
