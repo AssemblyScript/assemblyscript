@@ -234,6 +234,7 @@ const cliBuild = esbuild.build({
     js: prelude("The AssemblyScript frontend")
   },
   watch,
+  incremental: watch,
   plugins: [ stdlibPlugin, webPlugin, reportPlugin("cli") ]
 });
 
