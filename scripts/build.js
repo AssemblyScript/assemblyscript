@@ -195,47 +195,36 @@ const webPlugin = {
 
 // Build compiler and CLI
 
-const externals = [ "assemblyscript", "binaryen", "long" ];
-
-const srcBuild = esbuild.build({
-  tsconfig: "./src/tsconfig.json",
-  entryPoints: [ "./src/index-js.ts" ],
-  bundle: true,
+const common = {
   target: "esnext",
-  outfile: "./dist/assemblyscript.js",
   platform: "node",
   format: "esm",
+  external: [ "assemblyscript", "binaryen", "long" ],
+  legalComments: "none",
+  bundle: true,
   sourcemap: true,
-  external: externals,
   treeShaking: true,
   minify: true,
-  legalComments: "none",
-  banner: {
-    js: prelude("The AssemblyScript compiler")
-  },
   watch,
-  incremental: watch,
-  plugins: [ diagnosticsPlugin, reportPlugin("src") ]
+  incremental: watch
+};
+
+const srcBuild = esbuild.build({
+  entryPoints: [ "./src/index-js.ts" ],
+  tsconfig: "./src/tsconfig.json",
+  outfile: "./dist/assemblyscript.js",
+  banner: { js: prelude("The AssemblyScript compiler") },
+  plugins: [ diagnosticsPlugin, reportPlugin("src") ],
+  ...common
 });
 
 const cliBuild = esbuild.build({
   entryPoints: [ "./cli/index.js" ],
-  bundle: true,
-  target: "esnext",
+  tsconfig: "./cli/tsconfig.json",
   outfile: "./dist/asc.js",
-  platform: "node",
-  format: "esm",
-  sourcemap: true,
-  external: externals,
-  treeShaking: true,
-  minify: true,
-  legalComments: "none",
-  banner: {
-    js: prelude("The AssemblyScript frontend")
-  },
-  watch,
-  incremental: watch,
-  plugins: [ stdlibPlugin, webPlugin, reportPlugin("cli") ]
+  banner: { js: prelude("The AssemblyScript frontend") },
+  plugins: [ stdlibPlugin, webPlugin, reportPlugin("cli") ],
+  ...common
 });
 
 // Optionally build definitions (takes a while)
