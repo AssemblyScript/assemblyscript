@@ -89,6 +89,7 @@ function testUTF8EncodeNullTerminated(): void {
   assert(load<u8>(ptr, 8) == 0xAD);
   assert(load<u8>(ptr, 9) == 0xA2);
   assert(load<u8>(ptr, 10) == 0x00);
+  assert(String.UTF8.encode("aaaaaaaaaaaaaaaaaaaaaaaaaaa\0", true));
 }
 testUTF8EncodeNullTerminated();
 
