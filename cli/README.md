@@ -23,7 +23,7 @@ const { error, stdout } = await asc.main([
   "--binaryFile", "myModule.wasm",
   "--optimize",
   "--sourceMap",
-  "--measure"
+  "--stats"
 ]);
 if (error) {
   console.log("Compilation failed: " + error.message);
