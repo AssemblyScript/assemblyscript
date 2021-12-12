@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:untouched && npm run build:optimized",
-    "build:untouched": "node ../../../bin/asc assembly/index.ts -t untouched.wat -b untouched.wasm --sourceMap --measure --debug",
+    "build:untouched": "node ../../../bin/asc assembly/index.ts -t untouched.wat -b untouched.wasm --sourceMap --stats --debug",
     "build:optimized": "node ../../../bin/asc assembly/index.ts -t optimized.wat -b optimized.wasm --sourceMap --measure --noAssert --optimize"
   }
 }
