@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
@@ -3223,194 +3223,7 @@
     i32.const 8
     i32.add
     global.set $~lib/memory/__stack_pointer
-    global.get $~lib/memory/__stack_pointer
-    i32.const 8
-    i32.sub
-    global.set $~lib/memory/__stack_pointer
-    global.get $~lib/memory/__stack_pointer
-    i32.const 22620
-    i32.lt_s
-    br_if $folding-inner1
-    global.get $~lib/memory/__stack_pointer
-    local.tee $0
-    i64.const 0
-    i64.store
-    local.get $0
-    i32.const 1056
-    i32.store
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $0
-    i32.const 1056
-    i32.const 1
-    call $~lib/string/String.UTF8.encode@varargs
-    local.tee $0
-    i32.store offset=4
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load offset=16
-    i32.const 11
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 80
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u
-    i32.const 240
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 81
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=1
-    i32.const 144
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 82
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=2
-    i32.const 144
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 83
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=3
-    i32.const 183
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 84
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=4
-    i32.const 104
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 85
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=5
-    i32.const 105
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 86
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=6
-    i32.const 240
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 87
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=7
-    i32.const 164
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 88
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=8
-    i32.const 173
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 89
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=9
-    i32.const 162
-    i32.ne
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 90
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    i32.load8_u offset=10
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 91
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    global.get $~lib/memory/__stack_pointer
-    i32.const 1824
-    i32.store
-    i32.const 2
-    global.set $~argumentsLength
-    i32.const 1824
-    i32.const 1
-    call $~lib/string/String.UTF8.encode@varargs
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 1088
-     i32.const 92
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    global.get $~lib/memory/__stack_pointer
-    i32.const 8
-    i32.add
-    global.set $~lib/memory/__stack_pointer
+    call $std/string-encoding/testUTF8EncodeNullTerminated
     global.get $~lib/memory/__stack_pointer
     i32.const 12
     i32.sub
@@ -3457,43 +3270,6 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 99
-     i32.const 3
-     call $~lib/builtins/abort
-     unreachable
-    end
-    global.get $~lib/memory/__stack_pointer
-    local.tee $0
-    i32.const 1904
-    i32.store offset=4
-    i32.const 1904
-    i32.const 0
-    i32.const 1
-    call $~lib/string/String.UTF8.encode
-    local.set $1
-    global.get $~lib/memory/__stack_pointer
-    local.get $1
-    i32.store
-    local.get $0
-    local.get $1
-    local.get $1
-    i32.const 20
-    i32.sub
-    i32.load offset=16
-    i32.const 0
-    call $~lib/string/String.UTF8.decodeUnsafe
-    local.tee $0
-    i32.store offset=8
-    global.get $~lib/memory/__stack_pointer
-    i32.const 1936
-    i32.store offset=4
-    local.get $0
-    i32.const 1936
-    call $~lib/string/String.__eq
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 1088
      i32.const 101
      i32.const 3
      call $~lib/builtins/abort
@@ -3501,6 +3277,43 @@
     end
     global.get $~lib/memory/__stack_pointer
     local.tee $0
+    i32.const 1904
+    i32.store offset=4
+    i32.const 1904
+    i32.const 0
+    i32.const 1
+    call $~lib/string/String.UTF8.encode
+    local.set $1
+    global.get $~lib/memory/__stack_pointer
+    local.get $1
+    i32.store
+    local.get $0
+    local.get $1
+    local.get $1
+    i32.const 20
+    i32.sub
+    i32.load offset=16
+    i32.const 0
+    call $~lib/string/String.UTF8.decodeUnsafe
+    local.tee $0
+    i32.store offset=8
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1936
+    i32.store offset=4
+    local.get $0
+    i32.const 1936
+    call $~lib/string/String.__eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 1088
+     i32.const 103
+     i32.const 3
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
     i32.const 1968
     i32.store offset=4
     i32.const 1968
@@ -3531,7 +3344,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 104
+     i32.const 106
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -3568,7 +3381,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 106
+     i32.const 108
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -3624,7 +3437,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 112
+     i32.const 114
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -3686,7 +3499,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 118
+     i32.const 120
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -3702,7 +3515,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 120
+     i32.const 122
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -3724,7 +3537,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 122
+     i32.const 124
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -3740,7 +3553,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 124
+     i32.const 126
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -3763,7 +3576,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 125
+     i32.const 127
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -3794,7 +3607,7 @@
     if
      i32.const 0
      i32.const 1088
-     i32.const 127
+     i32.const 129
      i32.const 3
      call $~lib/builtins/abort
      unreachable
@@ -4074,6 +3887,218 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $std/string-encoding/testUTF8EncodeNullTerminated
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 16
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 22620
+  i32.lt_s
+  if
+   i32.const 39024
+   i32.const 39072
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $0
+  i64.const 0
+  i64.store
+  local.get $0
+  i64.const 0
+  i64.store offset=8
+  local.get $0
+  i32.const 1056
+  i32.store
+  i32.const 2
+  global.set $~argumentsLength
+  local.get $0
+  i32.const 1056
+  i32.const 1
+  call $~lib/string/String.UTF8.encode@varargs
+  local.tee $0
+  i32.store offset=4
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 11
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 80
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u
+  i32.const 240
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 81
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=1
+  i32.const 144
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 82
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=2
+  i32.const 144
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 83
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=3
+  i32.const 183
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 84
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=4
+  i32.const 104
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 85
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=5
+  i32.const 105
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 86
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=6
+  i32.const 240
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 87
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=7
+  i32.const 164
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 88
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=8
+  i32.const 173
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 89
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=9
+  i32.const 162
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 90
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load8_u offset=10
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 91
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $0
+  i32.const 1824
+  i32.store offset=8
+  i32.const 2
+  global.set $~argumentsLength
+  local.get $0
+  i32.const 1824
+  i32.const 1
+  call $~lib/string/String.UTF8.encode@varargs
+  local.tee $0
+  i32.store offset=12
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1824
+  i32.const 1
+  call $~lib/string/String.UTF8.byteLength
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 94
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 16
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $std/string-encoding/testUTF8DecodeUnsafe
   (local $0 i32)
   (local $1 i32)
@@ -4136,7 +4161,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 136
+   i32.const 138
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4160,7 +4185,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 137
+   i32.const 139
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4184,7 +4209,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 138
+   i32.const 140
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4210,7 +4235,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 139
+   i32.const 141
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4236,7 +4261,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 140
+   i32.const 142
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4262,7 +4287,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 141
+   i32.const 143
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4288,7 +4313,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 143
+   i32.const 145
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4314,7 +4339,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 144
+   i32.const 146
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4340,7 +4365,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 145
+   i32.const 147
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4400,7 +4425,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 151
+   i32.const 153
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4427,7 +4452,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 153
+   i32.const 155
    i32.const 3
    call $~lib/builtins/abort
    unreachable
