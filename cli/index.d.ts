@@ -153,7 +153,7 @@ export interface CompilerOptions {
   /** Make yourself sad for no good reason. */
   pedantic?: boolean;
   /** Prints measuring information on I/O and compile times. */
-  measure?: boolean;
+  stats?: boolean;
   /** Disables terminal colors. */
   noColors?: boolean;
 }
