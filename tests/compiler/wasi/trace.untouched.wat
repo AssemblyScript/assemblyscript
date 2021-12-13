@@ -206,6 +206,16 @@
      i32.const 1
      i32.add
      local.set $6
+     local.get $3
+     local.get $8
+     i32.eqz
+     i32.and
+     if
+      local.get $6
+      local.get $2
+      i32.sub
+      return
+     end
     else
      local.get $8
      i32.const 2048
@@ -339,7 +349,7 @@
         if
          i32.const 80
          i32.const 144
-         i32.const 739
+         i32.const 741
          i32.const 49
          call $~lib/wasi/index/abort
          unreachable

@@ -709,6 +709,8 @@ export namespace String {
         if (c1 < 128) {
           store<u8>(bufOff, c1);
           bufOff++;
+          // @ts-ignore: cast
+          if (nullTerminated & !c1) return bufOff - buf;
         } else if (c1 < 2048) {
           let b0 = c1 >> 6 | 192;
           let b1 = c1 & 63 | 128;
