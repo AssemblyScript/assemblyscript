@@ -41,7 +41,6 @@ import {
 import {
   indent
 } from "./util";
-import { ExportNames } from ".";
 
 /** Walker base class. */
 export abstract class ExportsWalker {
