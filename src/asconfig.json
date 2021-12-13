@@ -8,7 +8,7 @@
     "exportRuntime": true,
     "initialMemory": 768,
     "runtime": "incremental",
-    "measure": true
+    "stats": true
   },
   "targets": {
     "untouched": {
