@@ -24,7 +24,7 @@
  (elem $0 (i32.const 1))
  (export "test" (func $wasi/abort/test))
  (export "memory" (memory $0))
- (export "_start" (func $~start))
+ (export "_initialize" (func $~start))
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1

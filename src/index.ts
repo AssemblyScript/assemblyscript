@@ -118,9 +118,9 @@ export function setGlobalAlias(options: Options, alias: string, name: string): v
   globalAliases.set(alias, name);
 }
 
-/** Sets the `explicitStart` option. */
-export function setExplicitStart(options: Options, explicitStart: bool): void {
-  options.explicitStart = explicitStart;
+/** Sets the `exportStart` option. */
+export function setExportStart(options: Options, exportStart: string | null): void {
+  options.exportStart = exportStart;
 }
 
 /** Sets the `noUnsafe` option. */

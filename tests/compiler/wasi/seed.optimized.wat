@@ -9,7 +9,7 @@
  (memory $0 1)
  (export "test" (func $wasi/seed/test))
  (export "memory" (memory $0))
- (export "_start" (func $~start))
+ (export "_initialize" (func $~start))
  (func $wasi/seed/test (result f64)
   (local $0 i64)
   (local $1 i64)

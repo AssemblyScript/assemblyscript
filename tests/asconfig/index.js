@@ -10,7 +10,7 @@ const args = process.argv.slice(2);
 /** @type {Uint8Array} */
 let binary;
 
-const { error, stderr } = await asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart", ...args], {
+const { error, stderr } = await asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--exportStart", "_start", ...args], {
   writeFile(name, contents) {
     if (name === "output.wasm") {
       binary = contents;

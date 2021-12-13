@@ -41,6 +41,7 @@ import {
 import {
   indent
 } from "./util";
+import { ExportNames } from ".";
 
 /** Walker base class. */
 export abstract class ExportsWalker {
@@ -435,8 +436,11 @@ export class TSDBuilder extends ExportsWalker {
     if (options.exportTable) {
       sb.push("export const table: WebAssembly.Table;\n");
     }
-    if (options.explicitStart) {
-      sb.push("export function _start(): void;\n");
+    let exportStart = options.exportStart || null;
+    if (exportStart !== null) {
+      sb.push("export function ");
+      sb.push(exportStart);
+      sb.push("(): void;\n");
     }
     if (options.exportRuntime) {
       sb.push("export function __new(size: usize, id: u32): usize;\n");

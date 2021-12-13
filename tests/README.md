@@ -81,7 +81,7 @@ and post instantiation of the module, with the following export signatures:
 * **preInstantiate**(imports: `object`, exports: `object`): `void`<br />
   Can be used to populate imports with functionality required by the test. Note that `exports` is an
   empty object that will be populated with the actual exports after instantiation. Useful if an import
-  needs to call an export (usually in combination with the `--explicitStart` flag).
+  needs to call an export (usually in combination with the `--exportStart` flag).
 
 * **postInstantiate**(instance: `WebAssembly.Instance`): `void`<br />
   Can be used to execute custom test logic once the module is ready. Throwing an error will fail the

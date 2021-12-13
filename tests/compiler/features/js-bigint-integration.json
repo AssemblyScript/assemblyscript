@@ -3,6 +3,6 @@
     "bigint-integration"
   ],
   "asc_flags": [
-    "--explicitStart"
+    "--exportStart", "_start"
   ]
 }

@@ -21,7 +21,7 @@
  (elem $0 (i32.const 1))
  (export "test" (func $wasi/seed/test))
  (export "memory" (memory $0))
- (export "_start" (func $~start))
+ (export "_initialize" (func $~start))
  (func $~lib/wasi/index/seed (result f64)
   (local $0 i64)
   loop $do-loop|0

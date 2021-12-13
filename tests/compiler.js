@@ -298,7 +298,7 @@ async function runTest(basename) {
       "--binaryFile", // -> stdout
       "--debug",
       "--use", "ASC_RTRACE=1",
-      "--explicitStart",
+      "--exportStart", "_initialize",
       // "--runPasses", "instrument-memory"
     ];
     if (asc_flags) cmd.push(...asc_flags);
@@ -395,8 +395,11 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
       const code = wasi.start(instance);
       console.log("  [wasi exit] code=" + code);
     } else if (exports._start) {
-      console.log("  [call start]");
+      console.log("  [call _start]");
       exports._start();
+    } else if (exports._initialize) {
+      console.log("  [call _initialize]");
+      exports._initialize();
     }
     if (glue.postStart) {
       console.log("  [call postStart]");

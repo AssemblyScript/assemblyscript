@@ -130,8 +130,8 @@ export interface CompilerOptions {
   importTable?: boolean;
   /** Exports the function table as 'table'. */
   exportTable?: boolean;
-  /** Exports an explicit start function to be called manually. */
-  explicitStart?: boolean;
+  /** Exports the start function instead of calling it implicitly. */
+  exportStart?: string;
   /** "Adds one or multiple paths to custom library components. */
   lib?: string | string[];
   /** Adds one or multiple paths to package resolution. */

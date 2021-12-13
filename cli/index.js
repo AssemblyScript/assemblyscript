@@ -82,7 +82,7 @@ if (~wasmPos) {
     __unpin,
     __collect
   } = assemblyscript);
-  if (assemblyscript._start) assemblyscript._start();
+  if (assemblyscript._initialize) assemblyscript._initialize();
 }
 
 const require = module.createRequire(import.meta.url);
@@ -343,7 +343,7 @@ export async function main(argv, options) {
   assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  assemblyscript.setExplicitStart(compilerOptions, opts.explicitStart);
+  assemblyscript.setExportStart(compilerOptions, __newString(typeof opts.exportStart === "string" ? opts.exportStart : null));
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, opts.sourceMap != null);

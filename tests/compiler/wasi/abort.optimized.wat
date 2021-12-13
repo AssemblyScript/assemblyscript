@@ -17,7 +17,7 @@
  (data (i32.const 1208) "\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s")
  (export "test" (func $wasi/abort/test))
  (export "memory" (memory $0))
- (export "_start" (func $~start))
+ (export "_initialize" (func $~start))
  (func $~lib/string/String.UTF8.encodeUnsafe@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)

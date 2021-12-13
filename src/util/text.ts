@@ -263,6 +263,17 @@ export function isIdentifierPart(c: i32): bool {
          && lookupInUnicodeMap(c as u16, unicodeIdentifierPart);
 }
 
+/** Tests if the specified string is a valid identifer. */
+export function isIdentifier(str: string): bool {
+  var len = str.length;
+  if (!len) return false;
+  if (!isIdentifierStart(str.charCodeAt(0))) return false;
+  for (let i = 1; i < len; ++i) {
+    if (!isIdentifierPart(str.charCodeAt(i))) return false;
+  }
+  return true;
+}
+
 // storing as u16 to save memory
 const unicodeIdentifierStart: u16[] = [
   170, 170, 181, 181, 186, 186, 192, 214, 216, 246, 248, 705, 710, 721, 736,

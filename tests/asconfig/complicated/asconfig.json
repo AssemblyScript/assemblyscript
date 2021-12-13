@@ -4,7 +4,7 @@
       "optimize": true,
       "exportRuntime": true,
       "initialMemory": 30,
-      "explicitStart": true,
+      "exportStart": "_start",
       "stats": true,
       "pedantic": true,
       "sourceMap": true

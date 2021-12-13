@@ -138,7 +138,7 @@
   },
   "zeroFilledMemory": {
     "category": "Features",
-    "description": "Assume that imported memory is zero filled. Requires importMemory.",
+    "description": "Assume imported memory is zeroed. Requires importMemory.",
     "type": "b",
     "default": false
   },
@@ -153,6 +153,15 @@
     "description": "Exports the function table as 'table'.",
     "type": "b",
     "default": false
+  },
+  "exportStart": {
+    "category": "Features",
+    "description": [
+      "Exports the start function using the specified name instead",
+      "of calling it implicitly. Useful for WASI or to obtain the",
+      "exported memory before executing any code accessing it."
+    ],
+    "type": "s"
   },
   "runtime": {
     "category": "Features",
@@ -183,12 +192,6 @@
     ],
     "default": 0,
     "type": "i"
-  },
-  "explicitStart": {
-    "category": "Features",
-    "description": "Exports an explicit '_start' function to call.",
-    "type": "b",
-    "default": false
   },
   "enable": {
     "category": "Features",

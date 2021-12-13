@@ -5,7 +5,7 @@ A tiny utility to sanitize the AssemblyScript runtime. Records allocations and f
 Instructions
 ------------
 
-Compile your module that uses the full or half runtime with `-use ASC_RTRACE=1 --explicitStart` and include an instance of this module as the import named `rtrace`.
+Compile your module that uses the full or half runtime with `-use ASC_RTRACE=1 --exportStart _initialize` and include an instance of this module as the import named `rtrace`.
 
 ```js
 const rtrace = new Rtrace({
@@ -17,7 +17,7 @@ const rtrace = new Rtrace({
   },
   getMemory() {
     // obtain the module's memory,
-    // e.g. with --explicitStart:
+    // e.g. using --exportStart:
     return instance.exports.memory;
   }
 });
@@ -27,7 +27,7 @@ const { module, instance } = await WebAssembly.instantiate(...,
     ...imports...
   })
 );
-instance.exports._start();
+instance.exports._initialize();
 ...
 
 if (rtrace.active) {

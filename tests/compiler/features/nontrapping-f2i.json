@@ -3,6 +3,6 @@
     "nontrapping-f2i"
   ],
   "asc_flags": [
-    "--explicitStart"
+    "--exportStart", "_start"
   ]
 }

@@ -197,7 +197,8 @@ import {
   uniqueMap,
   isPowerOf2,
   v128_zero,
-  readI32
+  readI32,
+  isIdentifier
 } from "./util";
 
 import {
@@ -235,8 +236,8 @@ export class Options {
   exportTable: bool = false;
   /** If true, generates information necessary for source maps. */
   sourceMap: bool = false;
-  /** If true, generates an explicit start function. */
-  explicitStart: bool = false;
+  /** If given, exports the start function instead of calling it implicitly. */
+  exportStart: string | null = null;
   /** Static memory start offset. */
   memoryBase: u32 = 0;
   /** Static table start offset. */
@@ -338,8 +339,6 @@ export const enum RuntimeFeatures {
 
 /** Exported names of compiler-generated elements. */
 export namespace ExportNames {
-  /** Name of the explicit start function, if applicable. */
-  export const start = "_start"; // match WASI
   /** Name of the argumentsLength varargs helper global. */
   export const argumentsLength = "__argumentsLength";
   /** Name of the alternative argumentsLength setter function. */
@@ -401,6 +400,8 @@ export class Compiler extends DiagnosticEmitter {
   doneModuleExports: Set<Element> = new Set();
   /** Shadow stack reference. */
   shadowStack!: ShadowStackPass;
+  /** Whether the module has custom function exports. */
+  hasCustomFunctionExports: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -735,10 +736,15 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = program.isWasi || options.explicitStart;
-    if (!startIsEmpty || explicitStart) {
+    var exportStart = options.exportStart;
+    if (program.isWasi && !exportStart) {
+      // Try to do the right thing for WASI. If the module has custom function
+      // exports it is likely a reactor, otherwise it is likely a command.
+      exportStart = this.hasCustomFunctionExports ? "_initialize" : "_start";
+    }
+    if (!startIsEmpty || exportStart !== null) {
       let signature = startFunctionInstance.signature;
-      if (!startIsEmpty && explicitStart) {
+      if (!startIsEmpty && exportStart !== null) {
         module.addGlobal(BuiltinNames.started, TypeRef.I32, true, module.i32(0));
         startFunctionBody.unshift(
           module.global_set(BuiltinNames.started, module.i32(1))
@@ -758,8 +764,17 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(startFunctionBody)
       );
       startFunctionInstance.finalize(module, funcRef);
-      if (!explicitStart) module.setStart(funcRef);
-      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
+      if (exportStart === null) module.setStart(funcRef);
+      else {
+        if (!isIdentifier(exportStart) || module.hasExport(exportStart)) {
+          this.error(
+            DiagnosticCode.Start_function_name_0_is_invalid_or_conflicts_with_another_export,
+            this.program.nativeRange, exportStart
+          );
+        } else {
+          module.addFunctionExport(startFunctionInstance.internalName, exportStart);
+        }
+      }
     }
 
     // Run custom passes
@@ -899,6 +914,7 @@ export class Compiler extends DiagnosticEmitter {
             let exportName = prefix + name;
             if (!module.hasExport(exportName)) {
               module.addFunctionExport(functionInstance.internalName, exportName);
+              this.hasCustomFunctionExports = true;
               if (signature.hasManagedOperands) {
                 this.shadowStack.noteExport(exportName, signature.getManagedOperandIndices());
               }
