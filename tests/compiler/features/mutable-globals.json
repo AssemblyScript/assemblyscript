@@ -1,7 +1,4 @@
 {
-  "features": [
-    "mutable-globals"
-  ],
   "asc_flags": [
     "--exportStart", "_start"
   ]

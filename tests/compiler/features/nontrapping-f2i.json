@@ -1,7 +1,4 @@
 {
-  "features": [
-    "nontrapping-f2i"
-  ],
   "asc_flags": [
     "--exportStart", "_start"
   ]

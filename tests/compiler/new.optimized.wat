@@ -1259,6 +1259,11 @@
   local.get $1
   i32.const 20
   i32.add
+  local.tee $0
+  i32.const 0
+  i32.const 0
+  memory.fill
+  local.get $0
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid

@@ -1233,6 +1233,11 @@
   local.get $1
   i32.const 20
   i32.add
+  local.tee $0
+  i32.const 0
+  i32.const 0
+  memory.fill
+  local.get $0
  )
  (func $start:instanceof-class
   (local $0 i32)

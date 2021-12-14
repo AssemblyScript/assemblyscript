@@ -4563,7 +4563,7 @@
   f64.convert_i64_u
   f64.mul
   f64.add
-  i64.trunc_f64_u
+  i64.trunc_sat_f64_u
   local.set $18
   local.get $31
   local.get $33
@@ -4956,7 +4956,7 @@
     local.get $5
     global.set $~lib/math/rempio2_y1
     local.get $7
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2|inlined.0
    end
    local.get $4
@@ -5556,7 +5556,7 @@
     f64.sub
     global.set $~lib/math/rempio2f_y
     local.get $6
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2f|inlined.0
    end
    local.get $10
@@ -5850,7 +5850,7 @@
    local.get $0
    f64.copysign
    f64.add
-   i32.trunc_f64_s
+   i32.trunc_sat_f64_s
    local.get $2
    i32.const 1072734898
    i32.lt_u
@@ -6558,7 +6558,7 @@
    local.get $0
    f32.copysign
    f32.add
-   i32.trunc_f32_s
+   i32.trunc_sat_f32_s
    local.get $2
    i32.const 1065686418
    i32.lt_u
@@ -12518,7 +12518,7 @@
     local.get $6
     global.set $~lib/math/rempio2_y1
     local.get $8
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2|inlined.1
    end
    local.get $5
@@ -13110,7 +13110,7 @@
     f64.sub
     global.set $~lib/math/rempio2f_y
     local.get $7
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2f|inlined.1
    end
    local.get $10
@@ -14081,7 +14081,7 @@
     local.get $15
     global.set $~lib/math/rempio2_y1
     local.get $11
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2|inlined.2
    end
    local.get $6
@@ -14592,7 +14592,7 @@
     f64.sub
     global.set $~lib/math/rempio2f_y
     local.get $10
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2f|inlined.2
    end
    local.get $12
@@ -15457,7 +15457,7 @@
     local.get $6
     global.set $~lib/math/rempio2_y1
     local.get $9
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2|inlined.3
    end
    local.get $5
@@ -15708,7 +15708,7 @@
   i64.le_u
   if
    local.get $0
-   i32.trunc_f64_s
+   i32.trunc_sat_f64_s
    local.set $1
   else
    local.get $3

@@ -71,7 +71,7 @@ export namespace TypeRef {
 export enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
   Atomics = 1 /* _BinaryenFeatureAtomics */,
-  MutableGloabls = 2 /* _BinaryenFeatureMutableGlobals */,
+  MutableGlobals = 2 /* _BinaryenFeatureMutableGlobals */,
   TruncSat = 4 /* _BinaryenFeatureNontrappingFPToInt */,
   SIMD = 8 /* _BinaryenFeatureSIMD128 */,
   BulkMemory = 16 /* _BinaryenFeatureBulkMemory */,

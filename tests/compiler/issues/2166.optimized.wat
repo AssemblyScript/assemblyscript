@@ -1228,6 +1228,11 @@
   local.get $1
   i32.const 20
   i32.add
+  local.tee $0
+  i32.const 0
+  i32.const 0
+  memory.fill
+  local.get $0
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

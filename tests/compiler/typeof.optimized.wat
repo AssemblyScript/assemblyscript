@@ -1807,11 +1807,15 @@
    i32.add
    i32.add
    global.set $~lib/rt/itcms/total
-   local.get $1
    local.get $0
    i32.const 20
    i32.add
    local.tee $0
+   i32.const 0
+   i32.const 0
+   memory.fill
+   local.get $1
+   local.get $0
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4

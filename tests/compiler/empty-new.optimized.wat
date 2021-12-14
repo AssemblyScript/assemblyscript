@@ -1270,6 +1270,12 @@
   i32.add
   i32.add
   global.set $~lib/rt/itcms/total
+  local.get $0
+  i32.const 20
+  i32.add
+  i32.const 0
+  i32.const 0
+  memory.fill
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)
