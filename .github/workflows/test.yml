@@ -77,9 +77,9 @@ jobs:
       run: npm run build
     - name: Test experimental features
       env:
-        ASC_FEATURES: threads,reference-types,bigint-integration,gc
+        ASC_FEATURES: threads,reference-types,gc,exception-handling
       run: |
-        npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads std-wasi/process std-wasi/crypto
+        npm run test:compiler features/threads features/reference-types features/gc features/exception-handling
   runtimes:
     name: "Runtimes"
     runs-on: ubuntu-latest
