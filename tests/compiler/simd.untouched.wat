@@ -1652,7 +1652,7 @@
   i32.store
   local.get $0
   v128.load32_zero
-  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x0000002a
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -1676,7 +1676,7 @@
   i64.store
   local.get $0
   v128.load64_zero
-  v128.const i32x4 0x00000000 0x00000000 0x0000002a 0x00000000
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -2254,7 +2254,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $7
   i8x16.popcnt
   v128.const i32x4 0x02010100 0x03020201 0x03020201 0x04030302
   i8x16.eq
@@ -2265,8 +2265,8 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 263
-   i32.const 3
+   i32.const 262
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -2919,20 +2919,12 @@
   v128.const i32x4 0xc001ffff 0xffff7ffd 0xffff8000 0x8000bfff
   v128.const i32x4 0xc000ffff 0x80000001 0x00018000 0xfff6c000
   i16x8.q15mulr_sat_s
-  v128.const i32x4 0x20000000 0x00010001 0x00007fff 0x00012001
+  v128.const i32x4 0x20000000 0x00010001 0x00007fff 0x000a2001
   i8x16.eq
   i8x16.all_true
   i32.const 0
   i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 160
-   i32.const 404
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   local.get $0
   i16x8.extadd_pairwise_i8x16_s
   drop

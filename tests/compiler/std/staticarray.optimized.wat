@@ -4336,8 +4336,8 @@
    call $~lib/rt/itcms/__new
    local.tee $2
    i32.const 2592
-   v128.load align=1
-   v128.store align=1
+   i32.const 16
+   memory.copy
    local.get $2
    i32.store offset=16
    i32.const 1
@@ -6089,8 +6089,8 @@
    call $~lib/rt/itcms/__new
    local.tee $1
    i32.const 3664
-   v128.load align=1
-   v128.store align=1
+   i32.const 16
+   memory.copy
    local.get $1
    i32.store offset=28
    i32.const 0

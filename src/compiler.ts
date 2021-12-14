@@ -248,8 +248,7 @@ export class Options {
   features: Feature = Feature.MUTABLE_GLOBALS
                     | Feature.SIGN_EXTENSION
                     | Feature.NONTRAPPING_F2I
-                    | Feature.BULK_MEMORY
-                    | Feature.SIMD;
+                    | Feature.BULK_MEMORY;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */

@@ -1124,7 +1124,7 @@
   i32.store
   local.get $0
   v128.load32_zero
-  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x0000002a
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
   i8x16.eq
   i8x16.all_true
   i32.eqz
@@ -1153,7 +1153,7 @@
   i64.store
   local.get $0
   v128.load64_zero
-  v128.const i32x4 0x00000000 0x00000000 0x0000002a 0x00000000
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
   i8x16.eq
   i8x16.all_true
   i32.eqz
@@ -1167,11 +1167,167 @@
   end
   local.get $0
   call $~lib/rt/tlsf/__free
-  i32.const 0
-  i32.const 1184
-  i32.const 263
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   call $~lib/rt/tlsf/initialize
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  i32.const 16
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 4
+  i32.add
+  local.tee $0
+  i32.const 1
+  i32.store8
+  local.get $0
+  i32.const 2
+  i32.store8 offset=1
+  local.get $0
   i32.const 3
-  call $~lib/builtins/abort
-  unreachable
+  i32.store8 offset=2
+  local.get $0
+  i32.const 4
+  i32.store8 offset=3
+  local.get $0
+  i32.const 5
+  i32.store8 offset=4
+  local.get $0
+  i32.const 6
+  i32.store8 offset=5
+  local.get $0
+  i32.const 7
+  i32.store8 offset=6
+  local.get $0
+  i32.const 255
+  i32.store8 offset=7
+  local.get $0
+  v128.load8x8_s align=1
+  v128.const i32x4 0x00020001 0x00040003 0x00060005 0xffff0007
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 392
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  v128.load8x8_u align=1
+  v128.const i32x4 0x00020001 0x00040003 0x00060005 0x00ff0007
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 397
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   call $~lib/rt/tlsf/initialize
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  i32.const 16
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 4
+  i32.add
+  local.tee $0
+  i32.const 1
+  i32.store16
+  local.get $0
+  i32.const 2
+  i32.store16 offset=2
+  local.get $0
+  i32.const 3
+  i32.store16 offset=4
+  local.get $0
+  i32.const 65535
+  i32.store16 offset=6
+  local.get $0
+  v128.load16x4_s align=2
+  v128.const i32x4 0x00000001 0x00000002 0x00000003 0xffffffff
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 523
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  v128.load16x4_u align=2
+  v128.const i32x4 0x00000001 0x00000002 0x00000003 0x0000ffff
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 528
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   call $~lib/rt/tlsf/initialize
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  i32.const 16
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 4
+  i32.add
+  local.tee $0
+  i32.const 1
+  i32.store
+  local.get $0
+  i32.const -1
+  i32.store offset=4
+  local.get $0
+  v128.load32x2_s align=4
+  v128.const i32x4 0x00000001 0x00000000 0xffffffff 0xffffffff
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 582
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  v128.load32x2_u align=4
+  v128.const i32x4 0x00000001 0x00000000 0xffffffff 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 587
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
  )
 )

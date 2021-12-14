@@ -199,6 +199,7 @@
       "Enables WebAssembly features being disabled by default.",
       "",
       " threads             Threading and atomic operations.",
+      " simd                SIMD types and operations.",
       " reference-types     Reference types and operations.",
       " gc                  Garbage collection (WIP).",
       ""
@@ -221,7 +222,6 @@
       " sign-extension      Sign-extension operations",
       " nontrapping-f2i     Non-trapping float to integer ops.",
       " bulk-memory         Bulk memory operations.",
-      " simd                SIMD types and operations.",
       ""
     ],
     "type": "S",
