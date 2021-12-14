@@ -88,15 +88,23 @@ function getTests() {
   return tests;
 }
 
+function measureStart() {
+  return process.hrtime();
+}
+
+function measureEnd(start) {
+  const hrtime = process.hrtime(start);
+  return `${(hrtime[0] * 1e9 + hrtime[1] / 1e6).toFixed(3)} ms`;
+}
+
 // Starts a new section within a test
 function section(title) {
-  const start = process.hrtime();
+  const start = measureStart();
   console.log("- " + title);
   return {
     title,
     end(code) {
-      const hrtime = process.hrtime(start);
-      const time = `${(hrtime[0] * 1e9 + hrtime[1] / 1e6).toFixed(3)} ms`;
+      const time = measureEnd(start);
       switch (code) {
         case SUCCESS: console.log("  " + stdoutColors.green("SUCCESS") + " (" + time + ")\n"); break;
         default: console.log("  " + stdoutColors.red("FAILURE") + " (" + time + ")\n"); break;
@@ -379,31 +387,42 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
     });
 
     if (glue.preInstantiate) {
-      console.log("  [call preInstantiate]");
+      console.log("  [invoke glue.preInstantiate]");
+      const start = measureStart();
       glue.preInstantiate(imports, exports);
+      console.log("  [return glue.preInstantiate] " + measureEnd(start));
     }
     const wasi = wasiOptions ? new WASI(wasiOptions) : null;
     if (wasi) imports.wasi_snapshot_preview1 = wasi.wasiImport;
     const { instance } = await WebAssembly.instantiate(binaryBuffer, imports);
     Object.setPrototypeOf(exports, instance.exports);
     if (glue.postInstantiate) {
-      console.log("  [call postInstantiate]");
+      console.log("  [invoke glue.postInstantiate]");
+      const start = measureStart();
       glue.postInstantiate(instance);
+      console.log("  [return glue.postInstantiate] " + measureEnd(start));
     }
     if (wasi) {
-      console.log("  [wasi start]");
+      console.log("  [invoke wasi.start]");
+      const start = measureStart();
       const code = wasi.start(instance);
-      console.log("  [wasi exit] code=" + code);
+      console.log("  [return wasi.start] code=" + code + ", " + measureEnd(start));
     } else if (exports._start) {
-      console.log("  [call _start]");
+      console.log("  [invoke exports._start]");
+      const start = measureStart();
       exports._start();
+      console.log("  [return exports._start] " + measureEnd(start));
     } else if (exports._initialize) {
-      console.log("  [call _initialize]");
+      console.log("  [invoke exports._initialize]");
+      const start = measureStart();
       exports._initialize();
+      console.log("  [return exports._initialize] " + measureEnd(start));
     }
     if (glue.postStart) {
-      console.log("  [call postStart]");
+      console.log("  [invoke glue.postStart]");
+      const start = measureStart();
       glue.postStart(instance);
+      console.log("  [return glue.postStart] " + measureEnd(start));
     }
     const leakCount = rtrace.check();
     if (leakCount) {
