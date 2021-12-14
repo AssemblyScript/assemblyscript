@@ -1,6 +1,6 @@
 exports.preInstantiate = function(imports, exports) {
   const externalValue = 9007199254740991n;
-  imports["js-bigint-integration"] = {
+  imports["bigint-integration"] = {
     externalValue,
     getExternalValue: function() {
       return externalValue;

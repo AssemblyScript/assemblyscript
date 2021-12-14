@@ -12,8 +12,8 @@
  (data (i32.const 1048) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1100) "<")
  (data (i32.const 1112) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1164) "<")
- (data (i32.const 1176) "\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s")
+ (data (i32.const 1164) ",")
+ (data (i32.const 1176) "\01\00\00\00\0e\00\00\00s\00i\00m\00d\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -547,10 +547,10 @@
   if
    unreachable
   end
-  i32.const 17616
+  i32.const 17600
   i32.const 0
   i32.store
-  i32.const 19184
+  i32.const 19168
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -561,7 +561,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 17616
+    i32.const 17600
     i32.add
     i32.const 0
     i32.store offset=4
@@ -579,7 +579,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 17616
+      i32.const 17600
       i32.add
       i32.const 0
       i32.store offset=96
@@ -597,13 +597,13 @@
     br $for-loop|0
    end
   end
-  i32.const 17616
-  i32.const 19188
+  i32.const 17600
+  i32.const 19172
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 17616
+  i32.const 17600
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
@@ -929,7 +929,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 17612
+  i32.const 17596
   i32.lt_u
   if
    return

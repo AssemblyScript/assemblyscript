@@ -17,13 +17,13 @@
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
- (global $~lib/memory/__data_end i32 (i32.const 204))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16588))
- (global $~lib/memory/__heap_base i32 (i32.const 16588))
+ (global $~lib/memory/__data_end i32 (i32.const 188))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16572))
+ (global $~lib/memory/__heap_base i32 (i32.const 16572))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 140) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00s\00i\00m\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -1457,7 +1457,7 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $features/simd/test_v128
+ (func $simd/test_v128
   (local $0 i32)
   v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
   v128.any_true
@@ -1693,7 +1693,7 @@
   local.get $0
   call $~lib/rt/tlsf/__free
  )
- (func $features/simd/test_i8x16
+ (func $simd/test_i8x16
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -2271,7 +2271,7 @@
    unreachable
   end
  )
- (func $features/simd/test_i16x8
+ (func $simd/test_i16x8
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -2956,7 +2956,7 @@
   i16x8.extmul_high_i8x16_u
   drop
  )
- (func $features/simd/test_i32x4
+ (func $simd/test_i32x4
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -3553,7 +3553,7 @@
   i32x4.extmul_high_i16x8_u
   drop
  )
- (func $features/simd/test_i64x2
+ (func $simd/test_i64x2
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -3830,7 +3830,7 @@
   i64x2.extmul_high_i32x4_u
   drop
  )
- (func $features/simd/test_f32x4
+ (func $simd/test_f32x4
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -4239,7 +4239,7 @@
   f32x4.demote_f64x2_zero
   drop
  )
- (func $features/simd/test_f64x2
+ (func $simd/test_f64x2
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -4634,26 +4634,26 @@
   f64x2.promote_low_f32x4
   drop
  )
- (func $features/simd/test_const (result v128)
+ (func $simd/test_const (result v128)
   (local $0 v128)
   v128.const i32x4 0x00000001 0x00000001 0x00000001 0x00000001
   local.set $0
   local.get $0
  )
- (func $start:features/simd
+ (func $start:simd
   i32.const 1
   drop
-  call $features/simd/test_v128
-  call $features/simd/test_i8x16
-  call $features/simd/test_i16x8
-  call $features/simd/test_i32x4
-  call $features/simd/test_i64x2
-  call $features/simd/test_f32x4
-  call $features/simd/test_f64x2
-  call $features/simd/test_const
+  call $simd/test_v128
+  call $simd/test_i8x16
+  call $simd/test_i16x8
+  call $simd/test_i32x4
+  call $simd/test_i64x2
+  call $simd/test_f32x4
+  call $simd/test_f64x2
+  call $simd/test_const
   drop
  )
  (func $~start
-  call $start:features/simd
+  call $start:simd
  )
 )

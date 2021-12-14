@@ -21,7 +21,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $start:features/nontrapping-f2i
+ (func $start:nontrapping-f2i
   global.get $~lib/builtins/f32.MAX_VALUE
   i32.trunc_sat_f32_s
   global.get $~lib/builtins/i32.MAX_VALUE
@@ -158,6 +158,6 @@
   end
   i32.const 1
   global.set $~started
-  call $start:features/nontrapping-f2i
+  call $start:nontrapping-f2i
  )
 )
