@@ -168,6 +168,9 @@ export async function main(argv, options) {
   if (!Array.isArray(argv)) argv = configToArguments(argv);
   if (!options) options = {};
 
+  const stats = options.stats || new Stats();
+  const statsBegin = stats.begin();
+
   // Bundle semantic version
   let bundleMinorVersion = 0, bundleMajorVersion = 0, bundlePatchVersion = 0;
   const versionParts = (version || "").split(".");
@@ -182,7 +185,6 @@ export async function main(argv, options) {
   const readFile = options.readFile || readFileNode;
   const writeFile = options.writeFile || writeFileNode;
   const listFiles = options.listFiles || listFilesNode;
-  const stats = options.stats || new Stats();
 
   // Parse command line options but do not populate option defaults yet
   const optionsResult = optionsUtil.parse(argv, generated.options, false);
@@ -222,6 +224,7 @@ export async function main(argv, options) {
       stderr.write(`${stderrColors.red("FAILURE ")}${error.stack.replace(/^ERROR: /i, "")}${EOL}`);
     }
     if (module) module.dispose();
+    if (!stats.total) stats.total = stats.end(statsBegin);
     return Object.assign({ error, stdout, stderr, stats }, result);
   };
 
@@ -1033,6 +1036,7 @@ export async function main(argv, options) {
     return prepareResult(err);
   }
 
+  stats.total = stats.end(statsBegin);
   if (opts.stats) stderr.write(stats.toString());
 
   return prepareResult(null);
@@ -1245,6 +1249,8 @@ export class Stats {
       out.push(`│ ${keys[i].padEnd(keysLen)} │ ${times[i].padStart(timesLen)} │ ${counts[i].padStart(countsLen)} │${EOL}`);
     }
     out.push(`├─${"─".repeat(keysLen)}─┴─${"─".repeat(timesLen)}─┴─${"─".repeat(countsLen)}─┤${EOL}`);
+    const totalTime = `Took ${formatTime(this.total)}`;
+    out.push(`│ ${totalTime}${" ".repeat(totalLen - totalTime.length)} │${EOL}`);
     const readsWrites = `${this.readCount} reads, ${this.writeCount} writes`;
     out.push(`│ ${readsWrites}${" ".repeat(totalLen - readsWrites.length)} │${EOL}`);
     out.push(`╰─${"─".repeat(totalLen)}─╯${EOL}`);
