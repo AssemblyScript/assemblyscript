@@ -2657,7 +2657,7 @@ export function isConstZero(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
   var type = getExpressionType(expr);
   if (type == TypeRef.I32) return getConstValueI32(expr) == 0;
-  if (type == TypeRef.I64) return getConstValueI64Low(expr) == 0 && getConstValueI64High(expr) == 0;
+  if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) == 0;
   if (type == TypeRef.F32) return getConstValueF32(expr) == 0;
   if (type == TypeRef.F64) return getConstValueF64(expr) == 0;
   return false;
@@ -2667,7 +2667,7 @@ export function isConstNonZero(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
   var type = getExpressionType(expr);
   if (type == TypeRef.I32) return getConstValueI32(expr) != 0;
-  if (type == TypeRef.I64) return getConstValueI64Low(expr) != 0 || getConstValueI64High(expr) != 0;
+  if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) != 0;
   if (type == TypeRef.F32) return getConstValueF32(expr) != 0;
   if (type == TypeRef.F64) return getConstValueF64(expr) != 0;
   return false;
