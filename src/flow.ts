@@ -1264,8 +1264,7 @@ export class Flow {
           this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff); // !(!value) -> value must have been true
         } else if (name == BuiltinNames.tostack) {
           assert(getCallOperandCount(expr) == 1);
-          let value = getCallOperandAt(expr, 0);
-          this.inheritNonnullIfFalse(value, iff);
+          this.inheritNonnullIfFalse(getCallOperandAt(expr, 0), iff);
         }
         break;
       }
