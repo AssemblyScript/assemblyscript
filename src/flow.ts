@@ -243,7 +243,7 @@ export class Flow {
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
-    return this.inlineFunction !== null;
+    return this.inlineFunction != null;
   }
 
   /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
@@ -341,7 +341,7 @@ export class Flow {
     }
     var local: Local;
     if (except) {
-      if (temps !== null && temps.length > 0) {
+      if (temps && temps.length > 0) {
         for (let i = 0, k = temps.length; i < k; ++i) {
           if (!except.has(temps[i].index)) {
             local = temps[i];
@@ -357,7 +357,7 @@ export class Flow {
       }
       local = parentFunction.addLocal(type);
     } else {
-      if (temps !== null && temps.length > 0) {
+      if (temps && temps.length > 0) {
         local = assert(temps.pop());
         local.type = type;
         local.flags = CommonFlags.NONE;
@@ -453,7 +453,7 @@ export class Flow {
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
     var scopedLocals = this.scopedLocals;
-    if (scopedLocals !== null && scopedLocals.has(name)) return assert(scopedLocals.get(name));
+    if (scopedLocals && scopedLocals.has(name)) return assert(scopedLocals.get(name));
     return null;
   }
 
@@ -560,7 +560,7 @@ export class Flow {
     var current: Flow | null = this;
     do {
       let scope = current.scopedLocals;
-      if (scope !== null && scope.has(name)) return assert(scope.get(name));
+      if (scope && scope.has(name)) return assert(scope.get(name));
       current = current.parent;
     } while (current);
     var localsByName = this.parentFunction.localsByName;
@@ -623,7 +623,7 @@ export class Flow {
             // guaranteed by super
             field.parent != actualClass ||
             // has field initializer
-            field.initializerNode !== null ||
+            field.initializerNode ||
             // is initialized as a ctor parameter
             field.prototype.parameterIndex != -1 ||
             // is safe to initialize with zero
@@ -760,7 +760,7 @@ export class Flow {
 
     if (thisFlags & FlowFlags.CONTINUES) { // nothing can change that
       newFlags |= FlowFlags.CONTINUES;
-    } else if (other.continueLabel === this.continueLabel) {
+    } else if (other.continueLabel == this.continueLabel) {
       if (otherFlags & FlowFlags.CONTINUES) {
         newFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
       } else {
@@ -962,9 +962,9 @@ export class Flow {
     var numThisLocalFlags = before.localFlags.length;
     var numOtherLocalFlags = after.localFlags.length;
     var parentFunction = before.parentFunction;
-    assert(parentFunction === after.parentFunction);
+    assert(parentFunction == after.parentFunction);
     var localsByIndex = parentFunction.localsByIndex;
-    assert(localsByIndex === after.parentFunction.localsByIndex);
+    assert(localsByIndex == after.parentFunction.localsByIndex);
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       let local = localsByIndex[i];
       let type = local.type;

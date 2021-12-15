@@ -261,7 +261,7 @@ export class Type {
   /** Tests if this type represents a class. */
   get isClass(): bool {
     return this.isInternalReference
-      ? this.classReference !== null
+      ? this.classReference != null
       : false;
   }
 
@@ -300,7 +300,7 @@ export class Type {
   /** Tests if this type represents a function. */
   get isFunction(): bool {
     return this.isInternalReference
-      ? this.signatureReference !== null
+      ? this.signatureReference != null
       : false;
   }
 
@@ -316,7 +316,7 @@ export class Type {
     if (this.isInternalReference) {
       let classReference = this.classReference;
       if (classReference) return !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
-      return this.signatureReference !== null; // function references are managed
+      return this.signatureReference != null; // function references are managed
     }
     return false;
   }

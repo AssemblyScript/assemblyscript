@@ -804,7 +804,7 @@ function builtin_isString(ctx: BuiltinContext): ExpressionRef {
   if (!type) return module.unreachable();
   var classReference = type.getClass();
   return module.i32(
-    classReference !== null && classReference.isAssignableTo(compiler.program.stringInstance)
+    classReference && classReference.isAssignableTo(compiler.program.stringInstance)
       ? 1
       : 0
   );
@@ -820,7 +820,7 @@ function builtin_isArray(ctx: BuiltinContext): ExpressionRef {
   if (!type) return module.unreachable();
   var classReference = type.getClass();
   return module.i32(
-    classReference !== null && classReference.extends(compiler.program.arrayPrototype)
+    classReference && classReference.extends(compiler.program.arrayPrototype)
       ? 1
       : 0
   );
@@ -836,7 +836,7 @@ function builtin_isArrayLike(ctx: BuiltinContext): ExpressionRef {
   if (!type) return module.unreachable();
   var classReference = type.getClass();
   return module.i32(
-    classReference !== null && classReference.isArrayLike
+    classReference && classReference.isArrayLike
       ? 1
       : 0
   );
@@ -880,7 +880,7 @@ function builtin_isDefined(ctx: BuiltinContext): ExpressionRef {
     Type.auto,
     ReportMode.SWALLOW
   );
-  return module.i32(element !== null ? 1 : 0);
+  return module.i32(element ? 1 : 0);
 }
 builtins.set(BuiltinNames.isDefined, builtin_isDefined);
 
@@ -1024,7 +1024,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     }
     let fieldName = (<StringLiteralExpression>firstOperand).value;
     let classMembers = classReference.members;
-    if (classMembers !== null && classMembers.has(fieldName)) {
+    if (classMembers && classMembers.has(fieldName)) {
       let member = assert(classMembers.get(fieldName));
       if (member.kind == ElementKind.FIELD) {
         return contextualUsize(compiler, i64_new((<Field>member).memoryOffset), contextualType);
@@ -1077,7 +1077,7 @@ function builtin_idof(ctx: BuiltinContext): ExpressionRef {
     return module.i32(signatureReference.id);
   }
   let classReference = type.getClassOrWrapper(compiler.program);
-  if (classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+  if (classReference && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
     return module.i32(classReference.id);
   }
   compiler.error(
@@ -2886,7 +2886,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
   var numOperands = operands.length;
   var usizeType = compiler.options.usizeType;
   var offset: i64;
-  if (typeArguments !== null && typeArguments.length > 0) { // data<T>(values[, align])
+  if (typeArguments && typeArguments.length > 0) { // data<T>(values[, align])
     let elementType = typeArguments[0];
     if (!elementType.isValue) {
       compiler.error(
@@ -9477,7 +9477,7 @@ export function compileVisitGlobals(compiler: Compiler): void {
     let globalType = global.type;
     let classReference = globalType.getClass();
     if (
-      classReference !== null &&
+      classReference &&
       !classReference.hasDecorator(DecoratorFlags.UNMANAGED) &&
       global.is(CommonFlags.COMPILED)
     ) {
@@ -9585,7 +9585,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
       for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
         let member = unchecked(_values[j]);
         if (member.kind == ElementKind.FIELD) {
-          if ((<Field>member).parent === instance) {
+          if ((<Field>member).parent == instance) {
             let fieldType = (<Field>member).type;
             if (fieldType.isManaged) {
               let fieldOffset = (<Field>member).memoryOffset;
@@ -9741,7 +9741,7 @@ export function compileRTTI(compiler: Compiler): void {
     assert(instanceId == lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isPointerfree) flags |= TypeinfoFlags.POINTERFREE;
-    if (instance !== abvInstance && instance.extends(abvPrototype)) {
+    if (instance != abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAYBUFFERVIEW;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
@@ -9807,7 +9807,7 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
 
   // if (__instanceof(ref, ID[i])) return true
   var instances = prototype.instances;
-  if (instances !== null && instances.size > 0) {
+  if (instances && instances.size > 0) {
     // TODO: for (let instance of instances.values()) {
     for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
       let instance = unchecked(_values[i]);
@@ -9853,7 +9853,7 @@ function evaluateConstantType(ctx: BuiltinContext): Type | null {
     return typeArguments[0];
   }
   if (operands.length == 1) { // optional type argument
-    if (typeArguments !== null && typeArguments.length > 0) {
+    if (typeArguments && typeArguments.length > 0) {
       if (typeArguments.length > 1) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
@@ -9867,7 +9867,7 @@ function evaluateConstantType(ctx: BuiltinContext): Type | null {
     }
     return compiler.currentType;
   }
-  if (typeArguments !== null && typeArguments.length > 1) {
+  if (typeArguments && typeArguments.length > 1) {
     compiler.error(
       DiagnosticCode.Expected_0_type_arguments_but_got_1,
       ctx.reportNode.typeArgumentsRange, "1", typeArguments.length.toString()

@@ -102,9 +102,9 @@ export class DiagnosticMessage {
     arg2: string | null = null
   ): DiagnosticMessage {
     var message = diagnosticCodeToString(code);
-    if (arg0 !== null) message = message.replace("{0}", arg0);
-    if (arg1 !== null) message = message.replace("{1}", arg1);
-    if (arg2 !== null) message = message.replace("{2}", arg2);
+    if (arg0 != null) message = message.replace("{0}", arg0);
+    if (arg1 != null) message = message.replace("{1}", arg1);
+    if (arg2 != null) message = message.replace("{2}", arg2);
     return new DiagnosticMessage(code, category, message);
   }
 

@@ -1574,7 +1574,7 @@ export class Module {
     results: TypeRef,
     isReturn: bool = false
   ): ExpressionRef {
-    var cStr = this.allocStringCached(tableName !== null ? tableName : "0");
+    var cStr = this.allocStringCached(tableName != null ? tableName : "0");
     var cArr = allocPtrArray(operands);
     var ret = isReturn
       ? binaryen._BinaryenReturnCallIndirect(
@@ -2499,7 +2499,7 @@ export class Module {
   private cachedPointersToStrings: Map<usize,string | null> = new Map();
 
   allocStringCached(str: string | null): usize {
-    if (str === null) return 0;
+    if (str == null) return 0;
     var cached = this.cachedStringsToPointers;
     if (cached.has(str)) return changetype<usize>(cached.get(str));
     var ptr = allocString(str);
@@ -3109,11 +3109,11 @@ function stringLengthUTF8(str: string): usize {
 }
 
 function allocString(str: string | null): usize {
-  if (str === null) return 0;
+  if (str == null) return 0;
   var len = stringLengthUTF8(str);
   var ptr = binaryen._malloc(len + 1) >>> 0;
   var idx = ptr;
-  if (len === str.length) {
+  if (len == str.length) {
     // fast path when all chars are ascii
     for (let i = 0, k = str.length; i < k; ++i) {
       let u = str.charCodeAt(i) >>> 0;

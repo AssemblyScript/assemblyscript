@@ -218,8 +218,8 @@ export enum OperatorKind {
   BITWISE_SHL,            // a << b
   BITWISE_SHR,            // a >> b
   BITWISE_SHR_U,          // a >>> b
-  EQ,                     // a == b
-  NE,                     // a != b
+  EQ,                     // a == b, a === b
+  NE,                     // a != b, a !== b
   GT,                     // a > b
   GE,                     // a >= b
   LT,                     // a < b
@@ -238,7 +238,6 @@ export enum OperatorKind {
   POSTFIX_DEC             // a--
 
   // not overridable:
-  // IDENTITY             // a === b
   // LOGICAL_AND          // a && b
   // LOGICAL_OR           // a || b
 }
@@ -1230,7 +1229,7 @@ export class Program extends DiagnosticEmitter {
             file.ensureExport(exportName, element);
           } else {
             let globalElement = this.lookup(localName);
-            if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
+            if (globalElement && isDeclaredElement(globalElement.kind)) { // export { memory }
               file.ensureExport(exportName, <DeclaredElement>globalElement);
             } else {
               this.error(
@@ -1497,7 +1496,7 @@ export class Program extends DiagnosticEmitter {
                   }
                 }
                 let baseSetter = baseProperty.setterPrototype;
-                if (baseSetter !== null && thisProperty.setterPrototype !== null) {
+                if (baseSetter && thisProperty.setterPrototype) {
                   baseSetter.set(CommonFlags.VIRTUAL);
                   let thisSetter = thisProperty.setterPrototype;
                   if (thisSetter) {
@@ -1675,7 +1674,7 @@ export class Program extends DiagnosticEmitter {
       // user has multiple global elements of the same name in different files,
       // which might result in unexpected shared symbols accross files. considering
       // this a wonky feature for now that we might want to revisit later.
-      if (existing !== element) {
+      if (existing != element) {
         let merged = tryMerge(existing, element);
         if (!merged) {
           if (isDeclaredElement(existing.kind)) {
@@ -1868,7 +1867,7 @@ export class Program extends DiagnosticEmitter {
             this.initializeProperty(methodDeclaration, element);
           } else {
             let method = this.initializeMethod(methodDeclaration, element);
-            if (method !== null && methodDeclaration.name.kind == NodeKind.CONSTRUCTOR) {
+            if (method && methodDeclaration.name.kind == NodeKind.CONSTRUCTOR) {
               element.constructorPrototype = method;
             }
           }
@@ -2023,7 +2022,7 @@ export class Program extends DiagnosticEmitter {
     var name = declaration.name.text;
     if (declaration.is(CommonFlags.STATIC)) {
       let parentMembers = parent.members;
-      if (parentMembers !== null && parentMembers.has(name)) {
+      if (parentMembers && parentMembers.has(name)) {
         let element = assert(parentMembers.get(name));
         if (element.kind == ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
       } else {
@@ -2033,7 +2032,7 @@ export class Program extends DiagnosticEmitter {
       }
     } else {
       let parentMembers = parent.instanceMembers;
-      if (parentMembers !== null && parentMembers.has(name)) {
+      if (parentMembers && parentMembers.has(name)) {
         let element = assert(parentMembers.get(name));
         if (element.kind == ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
       } else {
@@ -2192,7 +2191,7 @@ export class Program extends DiagnosticEmitter {
       return;
     }
     // local element, i.e. export { foo [as bar] }
-    if (foreignPath === null) {
+    if (foreignPath == null) {
 
       // resolve right away if the local element already exists
       if (element = localFile.getMember(localName)) {
@@ -2789,7 +2788,7 @@ export abstract class Element {
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
       let existing = assert(members.get(name));
-      if (existing.parent !== this) {
+      if (existing.parent != this) {
         // override non-own element
       } else {
         let merged = tryMerge(existing, element);
@@ -3090,7 +3089,7 @@ export class File extends Element {
   /** Looks up the export of the specified name. */
   lookupExport(name: string): DeclaredElement | null {
     var exports = this.exports;
-    if (exports !== null && exports.has(name)) return assert(exports.get(name));
+    if (exports && exports.has(name)) return assert(exports.get(name));
     var exportsStar = this.exportsStar;
     if (exportsStar) {
       for (let i = 0, k = exportsStar.length; i < k; ++i) {
@@ -3517,7 +3516,7 @@ export class FunctionPrototype extends DeclaredElement {
   /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Function | null {
     var instances = this.instances;
-    if (instances !== null && instances.has(instanceKey)) return assert(instances.get(instanceKey));
+    if (instances && instances.has(instanceKey)) return assert(instances.get(instanceKey));
     return null;
   }
 
@@ -3665,7 +3664,7 @@ export class Function extends TypedElement {
     // if it has a name, check previously as this method will throw otherwise
     var localIndex = this.signature.parameterTypes.length + this.additionalLocals.length;
     if (this.is(CommonFlags.INSTANCE)) ++localIndex;
-    var localName = name !== null
+    var localName = name != null
       ? name
       : "var$" + localIndex.toString();
     if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
@@ -3823,7 +3822,7 @@ export class Field extends VariableLikeElement {
   /** Gets the internal name of the respective getter function. */
   get internalGetterName(): string {
     var cached = this._internalGetterName;
-    if (cached === null) this._internalGetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+    if (cached == null) this._internalGetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
     return cached;
   }
   private _internalGetterName: string | null = null;
@@ -3831,7 +3830,7 @@ export class Field extends VariableLikeElement {
   /** Gets the internal name of the respective setter function. */
   get internalSetterName(): string {
     var cached = this._internalSetterName;
-    if (cached === null) this._internalSetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
+    if (cached == null) this._internalSetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
     return cached;
   }
   private _internalSetterName: string | null = null;
@@ -4048,8 +4047,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Tests if this prototype is of a builtin array type (Array/TypedArray). */
   get isBuiltinArray(): bool {
     var arrayBufferViewInstance = this.program.arrayBufferViewInstance;
-    return arrayBufferViewInstance !== null
-        && this.extends(arrayBufferViewInstance.prototype);
+    return arrayBufferViewInstance && this.extends(arrayBufferViewInstance.prototype);
   }
 
   /** Tests if this prototype extends the specified. */
@@ -4060,7 +4058,7 @@ export class ClassPrototype extends DeclaredElement {
       // cannot directly or indirectly extend itself
       if (seen.has(current)) break;
       seen.add(current);
-      if (current === basePtototype) return true;
+      if (current == basePtototype) return true;
       current = current.basePrototype;
     } while (current);
     return false;
@@ -4103,7 +4101,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Class | null {
     var instances = this.instances;
-    if (instances !== null && instances.has(instanceKey)) return <Class>instances.get(instanceKey);
+    if (instances && instances.has(instanceKey)) return <Class>instances.get(instanceKey);
     return null;
   }
 
@@ -4166,15 +4164,16 @@ export class Class extends TypedElement {
   get isArrayLike(): bool {
     if (this.isBuiltinArray) return true;
     var lengthField = this.getMember("length");
-    return lengthField !== null && (
+    if (!lengthField) return false;
+    return (
       lengthField.kind == ElementKind.FIELD ||
       (
         lengthField.kind == ElementKind.PROPERTY_PROTOTYPE &&
-        (<PropertyPrototype>lengthField).getterPrototype !== null // TODO: resolve & check type?
+        (<PropertyPrototype>lengthField).getterPrototype != null // TODO: resolve & check type?
       )
     ) && (
-      this.lookupOverload(OperatorKind.INDEXED_GET) !== null ||
-      this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) !== null
+      this.lookupOverload(OperatorKind.INDEXED_GET) != null ||
+      this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) != null
     );
   }
 
@@ -4226,7 +4225,7 @@ export class Class extends TypedElement {
           contextualTypeArguments.set(typeParameters[i].name.text, typeArguments[i]);
         }
       }
-    } else if (typeParameters !== null && typeParameters.length > 0) {
+    } else if (typeParameters && typeParameters.length > 0) {
       throw new Error("type argument count mismatch");
     }
     registerConcreteElement(program, this);
@@ -4349,7 +4348,7 @@ export class Class extends TypedElement {
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
     var member = this.getMember(name);
-    if (member !== null && member.kind == ElementKind.FIELD) {
+    if (member && member.kind == ElementKind.FIELD) {
       let fieldInstance = <Field>member;
       let offset = baseOffset + fieldInstance.memoryOffset;
       let typeKind = fieldInstance.type.kind;
@@ -4424,7 +4423,7 @@ export class Class extends TypedElement {
   getTypeArgumentsTo(extendedPrototype: ClassPrototype): Type[] | null {
     var current: Class | null = this;
     do {
-      if (current.prototype === extendedPrototype) return current.typeArguments;
+      if (current.prototype == extendedPrototype) return current.typeArguments;
       current = current.base;
     } while (current);
     return null;
@@ -4443,7 +4442,7 @@ export class Class extends TypedElement {
       return this.getTypeArgumentsTo(staticArrayPrototype)![0];
     }
     var abvInstance = program.arrayBufferViewInstance;
-    while (current.base !== abvInstance) {
+    while (current.base != abvInstance) {
       current = assert(current.base);
     }
     var prototype = current.prototype;
@@ -4520,7 +4519,7 @@ export class Class extends TypedElement {
         let extendee = _values[i];
         if (exceptIfMember) {
           let instanceMembers = extendee.prototype.instanceMembers;
-          if (instanceMembers !== null && instanceMembers.has(exceptIfMember)) continue;
+          if (instanceMembers && instanceMembers.has(exceptIfMember)) continue;
         }
         out.add(extendee);
         extendee.getAllExtendees(exceptIfMember, out);
@@ -4581,7 +4580,7 @@ function registerConcreteElement(program: Program, element: Element): void {
 function tryMerge(older: Element, newer: Element): DeclaredElement | null {
   // NOTE: some of the following cases are not supported by TS, not sure why exactly.
   // suggesting to just merge what seems to be possible for now and revisit later.
-  assert(older.program === newer.program);
+  assert(older.program == newer.program);
   if (newer.members) return null;
   var merged: DeclaredElement | null = null;
   switch (older.kind) {

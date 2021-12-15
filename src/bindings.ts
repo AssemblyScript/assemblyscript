@@ -291,7 +291,7 @@ export class TSDBuilder extends ExportsWalker {
     }
     sb.push(name);
     var base = element.base;
-    if (base !== null && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
+    if (base && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
       sb.push(" extends ");
       let extendsNode = assert(element.prototype.extendsNode);
       sb.push(extendsNode.name.identifier.text); // TODO: fqn?
@@ -346,7 +346,7 @@ export class TSDBuilder extends ExportsWalker {
 
   visitNamespace(name: string, element: Element): void {
     var members = element.members;
-    if (members !== null && members.size > 0) {
+    if (members && members.size > 0) {
       let sb = this.sb;
       indent(sb, this.indentLevel++);
       sb.push("export namespace ");
@@ -436,7 +436,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("export const table: WebAssembly.Table;\n");
     }
     let exportStart = options.exportStart || null;
-    if (exportStart !== null) {
+    if (exportStart) {
       sb.push("export function ");
       sb.push(exportStart);
       sb.push("(): void;\n");

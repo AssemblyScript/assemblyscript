@@ -2353,7 +2353,7 @@ export function mangleInternalPath(path: string): string {
 export function isTypeOmitted(type: TypeNode): bool {
   if (type.kind == NodeKind.NAMEDTYPE) {
     let name = (<NamedTypeNode>type).name;
-    return !(name.next !== null || name.identifier.text.length > 0);
+    return !(name.next || name.identifier.text.length > 0);
   }
   return false;
 }

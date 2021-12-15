@@ -745,9 +745,9 @@ export class Compiler extends DiagnosticEmitter {
       // exports it is likely a reactor, otherwise it is likely a command.
       exportStart = this.hasCustomFunctionExports ? "_initialize" : "_start";
     }
-    if (!startIsEmpty || exportStart !== null) {
+    if (!startIsEmpty || exportStart != null) {
       let signature = startFunctionInstance.signature;
-      if (!startIsEmpty && exportStart !== null) {
+      if (!startIsEmpty && exportStart != null) {
         module.addGlobal(BuiltinNames.started, TypeRef.I32, true, module.i32(0));
         startFunctionBody.unshift(
           module.global_set(BuiltinNames.started, module.i32(1))
@@ -767,7 +767,7 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(startFunctionBody)
       );
       startFunctionInstance.finalize(module, funcRef);
-      if (exportStart === null) module.setStart(funcRef);
+      if (exportStart == null) module.setStart(funcRef);
       else {
         if (!isIdentifier(exportStart) || module.hasExport(exportStart)) {
           this.error(
@@ -821,7 +821,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FUNCTION_PROTOTYPE: {
         let functionPrototype = <FunctionPrototype>element;
         let functionInstances = functionPrototype.instances;
-        if (functionInstances !== null && functionInstances.size > 0) {
+        if (functionInstances && functionInstances.size > 0) {
           // TODO: for (let instance of instances.values()) {
           for (let _values = Map_values(functionInstances), i = 0, k = _values.length; i < k; ++i) {
             let instance = unchecked(_values[i]);
@@ -845,7 +845,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS_PROTOTYPE: {
         let classPrototype = <ClassPrototype>element;
         let classInstances = classPrototype.instances;
-        if (classInstances !== null && classInstances.size > 0) {
+        if (classInstances && classInstances.size > 0) {
           // TODO: for (let instance of instances.values()) {
           for (let _values = Map_values(classInstances), i = 0, k = _values.length; i < k; ++i) {
             let instance = unchecked(_values[i]);
@@ -1722,7 +1722,7 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // check that super has been called if this is a derived class
-      if (classInstance.base !== null && !flow.is(FlowFlags.CALLS_SUPER)) {
+      if (classInstance.base && !flow.is(FlowFlags.CALLS_SUPER)) {
         this.error(
           DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
           instance.prototype.declaration.range
@@ -1920,7 +1920,7 @@ export class Compiler extends DiagnosticEmitter {
     if (setterInstance) {
       let ret = this.compileFunction(setterInstance);
       let getterInstance = instance.getterInstance;
-      if (getterInstance !== null && getterInstance.is(CommonFlags.COMPILED) && setterInstance.is(CommonFlags.COMPILED)) {
+      if (getterInstance && getterInstance.is(CommonFlags.COMPILED) && setterInstance.is(CommonFlags.COMPILED)) {
         instance.set(CommonFlags.COMPILED);
       }
       return ret;
@@ -2163,7 +2163,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.FIELDDECLARATION: {
         let element = this.program.getElementByDeclaration(<FieldDeclaration>statement);
-        if (element !== null && element.kind == ElementKind.GLOBAL) { // static
+        if (element && element.kind == ElementKind.GLOBAL) { // static
           if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileGlobal(<Global>element);
         }
         break;
@@ -2171,7 +2171,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.EXPORT: {
         let exportStatement = <ExportStatement>statement;
         let internalPath = exportStatement.internalPath;
-        if (internalPath !== null) {
+        if (internalPath != null) {
           this.compileFileByPath(internalPath, assert(exportStatement.path));
         }
         break;
@@ -6014,7 +6014,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // Cannot assign to readonly fields except in constructors if there's no initializer
         if (fieldInstance.is(CommonFlags.READONLY)) {
-          if (!isConstructor || initializerNode !== null) {
+          if (!isConstructor || initializerNode) {
             this.error(
               DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
               valueExpression.range, fieldInstance.internalName
@@ -6468,7 +6468,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let classInstance = <Class>target;
         let typeArguments = classInstance.getTypeArgumentsTo(this.program.functionPrototype);
-        if (typeArguments !== null && typeArguments.length > 0) {
+        if (typeArguments && typeArguments.length > 0) {
           let ftype = typeArguments[0];
           signature = ftype.getSignature();
           functionArg = this.compileExpression(expression.expression, ftype, Constraints.CONV_IMPLICIT);
@@ -7843,7 +7843,7 @@ export class Compiler extends DiagnosticEmitter {
         let functionPrototype = <FunctionPrototype>target;
         let typeParameterNodes = functionPrototype.typeParameterNodes;
 
-        if (typeParameterNodes !== null && typeParameterNodes.length != 0) {
+        if (typeParameterNodes && typeParameterNodes.length != 0) {
           this.error(
             DiagnosticCode.Type_argument_expected,
             expression.range
@@ -7888,7 +7888,7 @@ export class Compiler extends DiagnosticEmitter {
       let namedType = <NamedTypeNode>isType;
       if (!(namedType.isNullable || namedType.hasTypeArguments)) {
         let element = this.resolver.resolveTypeName(namedType.name, flow.actualFunction, ReportMode.SWALLOW);
-        if (element !== null && element.kind == ElementKind.CLASS_PROTOTYPE) {
+        if (element && element.kind == ElementKind.CLASS_PROTOTYPE) {
           let prototype = <ClassPrototype>element;
           if (prototype.is(CommonFlags.GENERIC)) {
             return this.makeInstanceofClass(expression, prototype);
@@ -8161,7 +8161,7 @@ export class Compiler extends DiagnosticEmitter {
     var stringInstance = this.program.stringInstance;
     var stringType = stringInstance.type;
 
-    if (tag === null) {
+    if (!tag) {
       // Shortcut if just a (multi-line) string
       if (numParts == 1) {
         return this.ensureStaticString(parts[0]);
@@ -8291,7 +8291,7 @@ export class Compiler extends DiagnosticEmitter {
           let parameterTypes = instance.signature.parameterTypes;
           if (parameterTypes.length) {
             let first = parameterTypes[0].getClass();
-            if (first !== null && !first.extends(tsaArrayInstance.prototype)) {
+            if (first && !first.extends(tsaArrayInstance.prototype)) {
               arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ stringType ]));
             }
           }
@@ -8359,7 +8359,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // handle static arrays
     let contextualClass = contextualType.getClass();
-    if (contextualClass !== null && contextualClass.extends(program.staticArrayPrototype)) {
+    if (contextualClass && contextualClass.extends(program.staticArrayPrototype)) {
       return this.compileStaticArrayLiteral(expression, contextualType, constraints);
     }
 
@@ -8685,7 +8685,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberKey = _keys[i];
         let member = assert(members.get(memberKey));
-        if (member !== null && member.kind == ElementKind.FIELD) {
+        if (member && member.kind == ElementKind.FIELD) {
           omittedFields.add(<Field>member); // incl. private/protected
         }
       }
@@ -8846,7 +8846,7 @@ export class Compiler extends DiagnosticEmitter {
     var classReference: Class | null;
     if (
       !typeArguments &&
-      (classReference = contextualType.classReference) !== null &&
+      (classReference = contextualType.classReference) &&
       classReference.prototype == classPrototype &&
       classReference.is(CommonFlags.GENERIC)
     ) {
@@ -9340,7 +9340,7 @@ export class Compiler extends DiagnosticEmitter {
           let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
           if (overload) {
             let isInstance = overload.is(CommonFlags.INSTANCE);
-            if (tempLocal !== null && !isInstance) { // revert: static overload simply returns
+            if (tempLocal && !isInstance) { // revert: static overload simply returns
               getValue = getLocalSetValue(getValue);
               flow.freeTempLocal(tempLocal);
               tempLocal = null;
@@ -9429,7 +9429,7 @@ export class Compiler extends DiagnosticEmitter {
           let overload = classReference.lookupOverload(OperatorKind.POSTFIX_DEC);
           if (overload) {
             let isInstance = overload.is(CommonFlags.INSTANCE);
-            if (tempLocal !== null && !isInstance) { // revert: static overload simply returns
+            if (tempLocal && !isInstance) { // revert: static overload simply returns
               getValue = getLocalSetValue(getValue);
               flow.freeTempLocal(tempLocal);
               tempLocal = null;
@@ -9978,7 +9978,7 @@ export class Compiler extends DiagnosticEmitter {
               } else {
                 let classReference = type.getClass();
                 if (classReference) {
-                  if (classReference.prototype === stringInstance.prototype) {
+                  if (classReference.prototype == stringInstance.prototype) {
                     typeString = "string";
                   } else {
                     typeString = "object";
@@ -10526,7 +10526,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var stringInstance = program.stringInstance;
     var messageArg: ExpressionRef;
-    if (message !== null) {
+    if (message) {
       messageArg = this.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT);
     } else {
       messageArg = this.makeZero(stringInstance.type, codeLocation);
@@ -10653,7 +10653,7 @@ function mangleImportName(
   var program = element.program;
   var decorator = assert(findDecorator(DecoratorKind.EXTERNAL, declaration.decorators));
   var args = decorator.args;
-  if (args !== null && args.length > 0) {
+  if (args && args.length > 0) {
     let arg = args[0];
     // if one argument is given, override just the element name
     // if two arguments are given, override both module and element name
