@@ -324,7 +324,7 @@ export class Type {
   /** Tests if this is a class type explicitly annotated as unmanaged. */
   get isUnmanaged(): bool {
     var classReference = this.classReference;
-    return classReference !== null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
+    return classReference != null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
   }
 
   /** Gets the corresponding non-nullable type. */
@@ -812,8 +812,8 @@ export class Signature {
     // check `this` type
     var thisThisType = this.thisType;
     var otherThisType = other.thisType;
-    if (thisThisType !== null) {
-      if (otherThisType === null || !thisThisType.equals(otherThisType)) return false;
+    if (thisThisType) {
+      if (!otherThisType || !thisThisType.equals(otherThisType)) return false;
     } else if (otherThisType) {
       return false;
     }
@@ -840,8 +840,8 @@ export class Signature {
     // check `this` type
     var thisThisType = this.thisType;
     var targetThisType = target.thisType;
-    if (thisThisType !== null) {
-      if (targetThisType === null || !thisThisType.isAssignableTo(targetThisType)) return false;
+    if (thisThisType) {
+      if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) return false;
     } else if (targetThisType) {
       return false;
     }

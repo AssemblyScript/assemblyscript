@@ -7400,13 +7400,8 @@
   local.get $0
   call $~lib/staticarray/StaticArray<i32>#get:length
   local.set $2
-  i32.const 0
   local.get $1
   call $~lib/staticarray/StaticArray<i32>#get:length
-  local.get $1
-  i32.const 0
-  i32.eq
-  select
   local.set $3
   local.get $2
   local.get $3
@@ -7678,13 +7673,8 @@
   local.get $0
   call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
   local.set $2
-  i32.const 0
   local.get $1
   call $~lib/array/Array<~lib/string/String>#get:length
-  local.get $1
-  i32.const 0
-  i32.eq
-  select
   local.set $3
   local.get $2
   local.get $3

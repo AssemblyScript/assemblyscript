@@ -499,7 +499,7 @@ export class ASTBuilder {
         indent(sb, this.indentLevel);
         let name = names[i];
         let value = values[i];
-        if (name === value) {
+        if (name == value) {
           this.visitNode(name);
         } else {
           this.visitNode(name);
@@ -970,7 +970,7 @@ export class ASTBuilder {
     var indexSignature = node.indexSignature;
     var members = node.members;
     var numMembers = members.length;
-    if (indexSignature !== null || numMembers) {
+    if (indexSignature || numMembers) {
       sb.push(" {\n");
       let indentLevel = ++this.indentLevel;
       if (indexSignature) {

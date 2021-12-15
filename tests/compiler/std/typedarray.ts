@@ -297,7 +297,7 @@ testInstantiate(5);
   assert(subsliced.byteLength == 4);
 
   let copy = arr.slice();
-  assert(copy !== arr);
+  assert(copy != arr);
   assert(copy.length == arr.length);
   assert(copy.byteOffset == arr.byteOffset);
   assert(copy.byteLength == arr.byteLength);

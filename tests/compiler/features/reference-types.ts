@@ -48,20 +48,20 @@ if(somethingNull()) {
 
 // Explicit null checks (don’t work yet)
 /*
-if(somethingReal() !== null) {
+if(somethingReal() != null) {
   // nop
 } else {
   assert(false);
 }
-if(somethingReal() === null) {
+if(somethingReal() == null) {
   assert(false);
 }
-if(somethingNull() === null) {
+if(somethingNull() == null) {
   // nop
 } else {
   assert(false);
 }
-if(somethingNull() !== null) {
+if(somethingNull() != null) {
   assert(false);
 }
 */

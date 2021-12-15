@@ -6412,9 +6412,6 @@
   i32.load offset=16
   i32.const 2
   i32.shr_u
-  i32.const 0
-  local.get $1
-  select
   local.tee $2
   i32.add
   local.tee $4
@@ -6680,9 +6677,6 @@
   local.tee $5
   local.get $1
   i32.load offset=12
-  i32.const 0
-  local.get $1
-  select
   local.tee $3
   i32.add
   local.tee $4

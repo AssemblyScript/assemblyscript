@@ -4069,16 +4069,13 @@ export class Compiler extends DiagnosticEmitter {
         leftType = this.currentType;
 
         // check operator overload
-        if (operator == Token.EQUALS_EQUALS) { // can't overload '==='
-          let classReference = leftType.getClassOrWrapper(this.program);
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.EQ);
-            if (overload) {
-              expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-              break;
-            }
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.EQ);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
+            break;
           }
-          // fall back to compare by value
         }
 
         rightExpr = this.compileExpression(right, leftType);
@@ -4108,16 +4105,13 @@ export class Compiler extends DiagnosticEmitter {
         leftType = this.currentType;
 
         // check operator overload
-        if (operator == Token.EXCLAMATION_EQUALS) { // can't overload '!=='
-          let classReference = leftType.getClass();
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.NE);
-            if (overload) {
-              expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-              break;
-            }
+        let classReference = leftType.getClass();
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.NE);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
+            break;
           }
-          // fall back to compare by value
         }
 
         rightExpr = this.compileExpression(right, leftType);

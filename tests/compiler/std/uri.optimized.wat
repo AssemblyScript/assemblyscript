@@ -2783,7 +2783,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 2080
-  i32.store
+  i32.store offset=8
   i32.const 2080
   i32.const 2076
   i32.load
@@ -2791,8 +2791,17 @@
   i32.shr_u
   i32.const 1068
   call $~lib/util/uri/encode
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
   i32.const 2112
-  i32.eq
+  i32.store offset=4
+  local.get $0
+  i32.const 2112
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    i32.const 0
    i32.const 1712
@@ -2803,7 +2812,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 2160
-  i32.store
+  i32.store offset=8
   i32.const 2160
   i32.const 2156
   i32.load
@@ -2811,8 +2820,17 @@
   i32.shr_u
   i32.const 1068
   call $~lib/util/uri/encode
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
   i32.const 2192
-  i32.eq
+  i32.store offset=4
+  local.get $0
+  i32.const 2192
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    i32.const 0
    i32.const 1712

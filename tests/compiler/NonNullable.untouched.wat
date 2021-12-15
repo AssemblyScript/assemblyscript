@@ -203,6 +203,15 @@
    unreachable
   end
  )
+ (func $NonNullable/safetyCheck<~lib/string/String|null> (param $0 i32)
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__ne
+  if
+   local.get $0
+   call $NonNullable/assertNonNull<~lib/string/String>
+  end
+ )
  (func $~start
   call $start:NonNullable
  )
@@ -218,45 +227,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $NonNullable/safetyCheck<~lib/string/String|null> (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  call $~lib/string/String.__ne
-  if
-   local.get $0
-   local.tee $1
-   if (result i32)
-    local.get $1
-   else
-    i32.const 256
-    i32.const 64
-    i32.const 14
-    i32.const 35
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.store
-   local.get $2
-   call $NonNullable/assertNonNull<~lib/string/String>
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $start:NonNullable
   (local $0 i32)

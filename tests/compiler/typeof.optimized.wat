@@ -24,10 +24,10 @@
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\0c\00\00\00n\00u\00m\00b\00e\00r")
- (data (i32.const 1068) "\1c")
- (data (i32.const 1080) "\01\00\00\00\0c\00\00\00o\00b\00j\00e\00c\00t")
- (data (i32.const 1100) ",")
- (data (i32.const 1112) "\01\00\00\00\12\00\00\00t\00y\00p\00e\00o\00f\00.\00t\00s")
+ (data (i32.const 1068) ",")
+ (data (i32.const 1080) "\01\00\00\00\12\00\00\00t\00y\00p\00e\00o\00f\00.\00t\00s")
+ (data (i32.const 1116) "\1c")
+ (data (i32.const 1128) "\01\00\00\00\0c\00\00\00o\00b\00j\00e\00c\00t")
  (data (i32.const 1148) ",")
  (data (i32.const 1160) "\01\00\00\00\10\00\00\00f\00u\00n\00c\00t\00i\00o\00n")
  (data (i32.const 1196) ",")
@@ -1204,18 +1204,75 @@
    i64.const 0
    i64.store
    local.get $0
-   i32.const 1088
+   i32.const 1056
    i32.store
    local.get $0
-   i32.const 1088
+   i32.const 1056
    i32.store offset=4
-   i32.const 1088
-   i32.const 1088
+   i32.const 1056
+   i32.const 1056
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
+    i32.const 1
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 1136
+   i32.store
+   local.get $0
+   i32.const 1136
+   i32.store offset=4
+   i32.const 1136
+   i32.const 1136
+   call $~lib/string/String.__eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1088
+    i32.const 11
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 1136
+   i32.store
+   local.get $0
+   i32.const 1136
+   i32.store offset=4
+   i32.const 1136
+   i32.const 1136
+   call $~lib/string/String.__eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1088
+    i32.const 12
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 1136
+   i32.store
+   local.get $0
+   i32.const 1136
+   i32.store offset=4
+   i32.const 1136
+   i32.const 1136
+   call $~lib/string/String.__eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1088
     i32.const 13
     i32.const 1
     call $~lib/builtins/abort
@@ -1223,18 +1280,18 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1088
+   i32.const 1168
    i32.store
    local.get $0
-   i32.const 1088
+   i32.const 1168
    i32.store offset=4
-   i32.const 1088
-   i32.const 1088
+   i32.const 1168
+   i32.const 1168
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 14
     i32.const 1
     call $~lib/builtins/abort
@@ -1242,18 +1299,18 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1088
+   i32.const 1168
    i32.store
    local.get $0
-   i32.const 1088
+   i32.const 1168
    i32.store offset=4
-   i32.const 1088
-   i32.const 1088
+   i32.const 1168
+   i32.const 1168
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 15
     i32.const 1
     call $~lib/builtins/abort
@@ -1261,37 +1318,18 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1168
+   i32.const 1216
    i32.store
    local.get $0
-   i32.const 1168
+   i32.const 1216
    i32.store offset=4
-   i32.const 1168
-   i32.const 1168
+   i32.const 1216
+   i32.const 1216
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
-    i32.const 16
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   i32.const 1168
-   i32.store
-   local.get $0
-   i32.const 1168
-   i32.store offset=4
-   i32.const 1168
-   i32.const 1168
-   call $~lib/string/String.__eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 17
     i32.const 1
     call $~lib/builtins/abort
@@ -1299,18 +1337,37 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1216
+   i32.const 1136
    i32.store
    local.get $0
-   i32.const 1216
+   i32.const 1136
    i32.store offset=4
-   i32.const 1216
-   i32.const 1216
+   i32.const 1136
+   i32.const 1136
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
+    i32.const 18
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 1056
+   i32.store
+   local.get $0
+   i32.const 1056
+   i32.store offset=4
+   i32.const 1056
+   i32.const 1056
+   call $~lib/string/String.__eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1088
     i32.const 19
     i32.const 1
     call $~lib/builtins/abort
@@ -1318,18 +1375,18 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1088
+   i32.const 1056
    i32.store
    local.get $0
-   i32.const 1088
+   i32.const 1056
    i32.store offset=4
-   i32.const 1088
-   i32.const 1088
+   i32.const 1056
+   i32.const 1056
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 20
     i32.const 1
     call $~lib/builtins/abort
@@ -1348,7 +1405,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 21
     i32.const 1
     call $~lib/builtins/abort
@@ -1356,18 +1413,18 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1056
+   i32.const 1296
    i32.store
    local.get $0
-   i32.const 1056
+   i32.const 1296
    i32.store offset=4
-   i32.const 1056
-   i32.const 1056
+   i32.const 1296
+   i32.const 1296
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 22
     i32.const 1
     call $~lib/builtins/abort
@@ -1375,56 +1432,37 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1056
+   i32.const 1216
    i32.store
    local.get $0
-   i32.const 1056
+   i32.const 1216
    i32.store offset=4
-   i32.const 1056
-   i32.const 1056
+   i32.const 1216
+   i32.const 1216
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
-    i32.const 23
+    i32.const 1088
+    i32.const 25
     i32.const 1
     call $~lib/builtins/abort
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1296
+   i32.const 1056
    i32.store
    local.get $0
-   i32.const 1296
+   i32.const 1056
    i32.store offset=4
-   i32.const 1296
-   i32.const 1296
+   i32.const 1056
+   i32.const 1056
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
-    i32.const 24
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   i32.const 1216
-   i32.store
-   local.get $0
-   i32.const 1216
-   i32.store offset=4
-   i32.const 1216
-   i32.const 1216
-   call $~lib/string/String.__eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 27
     i32.const 1
     call $~lib/builtins/abort
@@ -1443,7 +1481,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 29
     i32.const 1
     call $~lib/builtins/abort
@@ -1462,7 +1500,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 31
     i32.const 1
     call $~lib/builtins/abort
@@ -1481,7 +1519,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 33
     i32.const 1
     call $~lib/builtins/abort
@@ -1489,18 +1527,18 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1056
+   i32.const 1296
    i32.store
    local.get $0
-   i32.const 1056
+   i32.const 1296
    i32.store offset=4
-   i32.const 1056
-   i32.const 1056
+   i32.const 1296
+   i32.const 1296
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 35
     i32.const 1
     call $~lib/builtins/abort
@@ -1508,38 +1546,19 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 1296
+   i32.const 1168
    i32.store
    local.get $0
-   i32.const 1296
+   i32.const 1168
    i32.store offset=4
-   i32.const 1296
-   i32.const 1296
+   i32.const 1168
+   i32.const 1168
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
     i32.const 37
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   i32.const 1168
-   i32.store
-   local.get $0
-   i32.const 1168
-   i32.store offset=4
-   i32.const 1168
-   i32.const 1168
-   call $~lib/string/String.__eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1120
-    i32.const 39
     i32.const 1
     call $~lib/builtins/abort
     unreachable
@@ -1824,19 +1843,19 @@
    local.get $0
    global.set $typeof/c
    global.get $~lib/memory/__stack_pointer
-   i32.const 1088
+   i32.const 1136
    i32.store
    global.get $~lib/memory/__stack_pointer
-   i32.const 1088
+   i32.const 1136
    i32.store offset=4
-   i32.const 1088
-   i32.const 1088
+   i32.const 1136
+   i32.const 1136
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
-    i32.const 41
+    i32.const 1088
+    i32.const 39
     i32.const 1
     call $~lib/builtins/abort
     unreachable
@@ -1854,8 +1873,8 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
-    i32.const 42
+    i32.const 1088
+    i32.const 40
     i32.const 1
     call $~lib/builtins/abort
     unreachable
@@ -1873,46 +1892,46 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1120
+    i32.const 1088
+    i32.const 44
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 1760
+   i32.store
+   local.get $0
+   i32.const 1760
+   i32.store offset=4
+   i32.const 1760
+   i32.const 1760
+   call $~lib/string/String.__eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1088
+    i32.const 45
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 1760
+   i32.store
+   local.get $0
+   i32.const 1760
+   i32.store offset=4
+   i32.const 1760
+   i32.const 1760
+   call $~lib/string/String.__eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1088
     i32.const 46
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   i32.const 1760
-   i32.store
-   local.get $0
-   i32.const 1760
-   i32.store offset=4
-   i32.const 1760
-   i32.const 1760
-   call $~lib/string/String.__eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1120
-    i32.const 47
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   i32.const 1760
-   i32.store
-   local.get $0
-   i32.const 1760
-   i32.store offset=4
-   i32.const 1760
-   i32.const 1760
-   call $~lib/string/String.__eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1120
-    i32.const 48
     i32.const 1
     call $~lib/builtins/abort
     unreachable

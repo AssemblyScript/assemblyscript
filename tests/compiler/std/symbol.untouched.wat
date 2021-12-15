@@ -3988,8 +3988,13 @@
   call $~lib/symbol/_Symbol.keyFor
   global.set $std/symbol/key2
   global.get $std/symbol/key1
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
   i32.const 0
-  i32.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -4000,8 +4005,13 @@
    unreachable
   end
   global.get $std/symbol/key2
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
   i32.const 0
-  i32.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0

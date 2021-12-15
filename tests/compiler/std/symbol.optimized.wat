@@ -3529,7 +3529,14 @@
   global.get $std/symbol/sym2
   call $~lib/symbol/_Symbol.keyFor
   global.set $std/symbol/key2
+  global.get $~lib/memory/__stack_pointer
   global.get $std/symbol/key1
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    i32.const 0
    i32.const 1088
@@ -3538,7 +3545,14 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/memory/__stack_pointer
   global.get $std/symbol/key2
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    i32.const 0
    i32.const 1088

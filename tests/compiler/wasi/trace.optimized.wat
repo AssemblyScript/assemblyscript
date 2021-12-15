@@ -233,6 +233,13 @@
   i64.store
   local.get $0
   if (result i32)
+   i32.const 0
+  else
+   i32.const 1
+  end
+  if (result i32)
+   i32.const 19
+  else
    local.get $0
    i32.const 20
    i32.sub
@@ -248,8 +255,6 @@
    call $~lib/string/String.UTF8.encodeUnsafe@varargs
    i32.const 19
    i32.add
-  else
-   i32.const 19
   end
   local.tee $0
   i32.const 544106784
@@ -259,6 +264,12 @@
   i32.add
   local.set $0
   local.get $1
+  if (result i32)
+   i32.const 0
+  else
+   i32.const 1
+  end
+  i32.eqz
   if
    local.get $1
    i32.const 20

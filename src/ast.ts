@@ -824,7 +824,7 @@ export abstract class TypeNode extends Node {
       let namedTypeNode = <NamedTypeNode>changetype<TypeNode>(this); // TS
       if (!namedTypeNode.name.next) {
         let typeArgumentNodes = namedTypeNode.typeArguments;
-        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+        if (typeArgumentNodes && typeArgumentNodes.length > 0) {
           for (let i = 0, k = typeArgumentNodes.length; i < k; ++i) {
             if (typeArgumentNodes[i].hasGenericComponent(typeParameterNodes)) return true;
           }
@@ -843,7 +843,7 @@ export abstract class TypeNode extends Node {
       }
       if (functionTypeNode.returnType.hasGenericComponent(typeParameterNodes)) return true;
       let explicitThisType = functionTypeNode.explicitThisType;
-      if (explicitThisType !== null && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
+      if (explicitThisType && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
     } else {
       assert(false);
     }
@@ -883,7 +883,7 @@ export class NamedTypeNode extends TypeNode {
   /** Checks if this type node has type arguments. */
   get hasTypeArguments(): bool {
     var typeArguments = this.typeArguments;
-    return typeArguments !== null && typeArguments.length > 0;
+    return typeArguments != null && typeArguments.length > 0;
   }
 }
 
@@ -1339,7 +1339,7 @@ export class NewExpression extends Expression {
   get typeArgumentsRange(): Range {
     var typeArguments = this.typeArguments;
     var numTypeArguments: i32;
-    if (typeArguments !== null && (numTypeArguments = typeArguments.length) > 0) {
+    if (typeArguments && (numTypeArguments = typeArguments.length) > 0) {
       return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
     }
     return this.typeName.range;

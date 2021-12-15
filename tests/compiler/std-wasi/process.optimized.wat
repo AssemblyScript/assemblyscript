@@ -153,6 +153,128 @@
  (data (i32.const 7360) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02A\00\00\00\00\00\00\10A\82")
  (export "memory" (memory $0))
  (export "_start" (func $~start))
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  local.get $1
+  i32.const 1
+  i32.shl
+  local.get $0
+  i32.add
+  local.tee $1
+  i32.const 7
+  i32.and
+  local.get $2
+  i32.const 7
+  i32.and
+  i32.or
+  i32.eqz
+  local.get $3
+  i32.const 4
+  i32.ge_u
+  i32.and
+  if
+   loop $do-loop|0
+    local.get $1
+    i64.load
+    local.get $2
+    i64.load
+    i64.eq
+    if
+     local.get $1
+     i32.const 8
+     i32.add
+     local.set $1
+     local.get $2
+     i32.const 8
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 4
+     i32.sub
+     local.tee $3
+     i32.const 4
+     i32.ge_u
+     br_if $do-loop|0
+    end
+   end
+  end
+  loop $while-continue|1
+   local.get $3
+   local.tee $0
+   i32.const 1
+   i32.sub
+   local.set $3
+   local.get $0
+   if
+    local.get $1
+    i32.load16_u
+    local.tee $0
+    local.get $2
+    i32.load16_u
+    local.tee $4
+    i32.ne
+    if
+     local.get $0
+     local.get $4
+     i32.sub
+     return
+    end
+    local.get $1
+    i32.const 2
+    i32.add
+    local.set $1
+    local.get $2
+    i32.const 2
+    i32.add
+    local.set $2
+    br $while-continue|1
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $0
+  local.get $1
+  i32.eq
+  if
+   i32.const 1
+   return
+  end
+  local.get $1
+  i32.const 0
+  local.get $0
+  select
+  i32.eqz
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
+  local.tee $2
+  local.get $1
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.const 0
+  local.get $1
+  local.get $2
+  call $~lib/util/string/compareImpl
+  i32.eqz
+ )
  (func $~lib/string/String.UTF8.encodeUnsafe@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -346,7 +468,11 @@
   i64.const 9071471065260641
   i64.store
   local.get $0
+  i32.const 0
+  call $~lib/string/String.__eq
   if (result i32)
+   i32.const 19
+  else
    local.get $0
    i32.const 20
    i32.sub
@@ -362,8 +488,6 @@
    call $~lib/string/String.UTF8.encodeUnsafe@varargs
    i32.const 19
    i32.add
-  else
-   i32.const 19
   end
   local.tee $0
   i32.const 544106784
@@ -373,6 +497,9 @@
   i32.add
   local.set $0
   local.get $1
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    local.get $1
    i32.const 20
@@ -2773,85 +2900,6 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__link
   end
  )
- (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  local.get $1
-  i32.const 1
-  i32.shl
-  local.get $0
-  i32.add
-  local.tee $1
-  i32.const 7
-  i32.and
-  local.get $2
-  i32.const 7
-  i32.and
-  i32.or
-  i32.eqz
-  local.get $3
-  i32.const 4
-  i32.ge_u
-  i32.and
-  if
-   loop $do-loop|0
-    local.get $1
-    i64.load
-    local.get $2
-    i64.load
-    i64.eq
-    if
-     local.get $1
-     i32.const 8
-     i32.add
-     local.set $1
-     local.get $2
-     i32.const 8
-     i32.add
-     local.set $2
-     local.get $3
-     i32.const 4
-     i32.sub
-     local.tee $3
-     i32.const 4
-     i32.ge_u
-     br_if $do-loop|0
-    end
-   end
-  end
-  loop $while-continue|1
-   local.get $3
-   local.tee $0
-   i32.const 1
-   i32.sub
-   local.set $3
-   local.get $0
-   if
-    local.get $1
-    i32.load16_u
-    local.tee $0
-    local.get $2
-    i32.load16_u
-    local.tee $4
-    i32.ne
-    if
-     local.get $0
-     local.get $4
-     i32.sub
-     return
-    end
-    local.get $1
-    i32.const 2
-    i32.add
-    local.set $1
-    local.get $2
-    i32.const 2
-    i32.add
-    local.set $2
-    br $while-continue|1
-   end
-  end
-  i32.const 0
- )
  (func $~lib/util/hash/HASH<~lib/string/String> (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -3396,7 +3444,6 @@
  )
  (func $~lib/map/Map<~lib/string/String,~lib/string/String>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  (local $4 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -3431,56 +3478,20 @@
    if
     local.get $0
     i32.load offset=8
-    local.tee $4
+    local.tee $2
     i32.const 1
     i32.and
     if (result i32)
      i32.const 0
     else
-     block $__inlined_func$~lib/string/String.__eq (result i32)
-      global.get $~lib/memory/__stack_pointer
-      local.get $0
-      i32.load
-      local.tee $3
-      i32.store
-      i32.const 1
-      local.get $1
-      local.get $3
-      i32.eq
-      br_if $__inlined_func$~lib/string/String.__eq
-      drop
-      i32.const 0
-      local.get $1
-      i32.const 0
-      local.get $3
-      select
-      i32.eqz
-      br_if $__inlined_func$~lib/string/String.__eq
-      drop
-      i32.const 0
-      local.get $3
-      i32.const 20
-      i32.sub
-      i32.load offset=16
-      i32.const 1
-      i32.shr_u
-      local.tee $2
-      local.get $1
-      i32.const 20
-      i32.sub
-      i32.load offset=16
-      i32.const 1
-      i32.shr_u
-      i32.ne
-      br_if $__inlined_func$~lib/string/String.__eq
-      drop
-      local.get $3
-      i32.const 0
-      local.get $1
-      local.get $2
-      call $~lib/util/string/compareImpl
-      i32.eqz
-     end
+     global.get $~lib/memory/__stack_pointer
+     local.get $0
+     i32.load
+     local.tee $3
+     i32.store
+     local.get $3
+     local.get $1
+     call $~lib/string/String.__eq
     end
     if
      global.get $~lib/memory/__stack_pointer
@@ -3490,7 +3501,7 @@
      local.get $0
      return
     end
-    local.get $4
+    local.get $2
     i32.const -2
     i32.and
     local.set $0

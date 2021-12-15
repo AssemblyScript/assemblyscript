@@ -1,46 +1,23 @@
 (module
- (type $none_=>_i32 (func (result i32)))
  (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/memory/__data_end i32 (i32.const 92))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
- (global $~lib/memory/__heap_base i32 (i32.const 16476))
+ (global $~lib/memory/__data_end i32 (i32.const 44))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16428))
+ (global $~lib/memory/__heap_base i32 (i32.const 16428))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\007\001\004\00.\00t\00s\00")
- (data (i32.const 60) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\003\002\00\00\00\00\00\00\00")
+ (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $issues/1714/a_i64_i32<i64,i32> (result i32)
-  i32.const 8
-  i32.const 4
-  i32.eq
- )
- (func $issues/1714/foo<i32,i64> (result i32)
-  call $issues/1714/a_i64_i32<i64,i32>
-  i32.const 1
-  i32.eq
- )
- (func $issues/1714/bar<i32,f64> (result i32)
-  i32.const 0
-  drop
-  i32.const 80
- )
- (func $issues/1714/bar<f64,i32> (result i32)
-  i32.const 1
-  drop
-  call $issues/1714/bar<i32,f64>
-  return
- )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 20
@@ -196,69 +173,108 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
+ (func $~lib/string/String.__ne (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  call $~lib/string/String.__eq
+  i32.eqz
+ )
+ (func $~lib/string/String.__not (param $0 i32) (result i32)
+  local.get $0
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $0
+   call $~lib/string/String#get:length
+   i32.eqz
+  end
+ )
+ (func $start:std/string-nonnull
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 32
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__ne
+  if
+   local.get $0
+   call $~lib/string/String#get:length
+   drop
+  end
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__ne
+  if
+   local.get $0
+   call $~lib/string/String#get:length
+   drop
+  end
+  local.get $0
+  if
+   local.get $0
+   call $~lib/string/String#get:length
+   drop
+  end
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__eq
+  if
+   nop
+  else
+   local.get $0
+   call $~lib/string/String#get:length
+   drop
+  end
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__eq
+  if
+   nop
+  else
+   local.get $0
+   call $~lib/string/String#get:length
+   drop
+  end
+  local.get $0
+  call $~lib/string/String.__not
+  if
+   nop
+  else
+   local.get $0
+   call $~lib/string/String#get:length
+   drop
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~start
-  call $start:issues/1714
+  call $start:std/string-nonnull
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
+   i32.const 16448
    i32.const 16496
-   i32.const 16544
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $start:issues/1714
-  (local $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  call $issues/1714/foo<i32,i64>
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 9
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  call $issues/1714/bar<f64,i32>
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  i32.const 80
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 18
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
 )

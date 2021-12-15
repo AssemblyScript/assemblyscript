@@ -30,18 +30,6 @@ assert(
   "true"
 );
 
-// identity
-assert(
-  ("a" === "a").toString()
-  ==
-  "true"
-);
-assert(
-  ("a" !== "a").toString()
-  ==
-  "false"
-);
-
 // assignment
 var a: i32;
 var f: f64;
@@ -350,4 +338,4 @@ assert(
   ==
   bar2
 );
-assert(bar === bar2);
+assert(bar == bar2);

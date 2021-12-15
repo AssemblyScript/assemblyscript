@@ -2627,6 +2627,11 @@
   local.get $0
   i32.const 0
   i32.ne
+  if (result i32)
+   i32.const 1
+  else
+   i32.const 0
+  end
  )
  (func $std/array/Ref#set:v (param $0 i32) (param $1 i32)
   local.get $0
@@ -2634,7 +2639,14 @@
   i32.store
  )
  (func $~lib/array/Array.isArray<std/array/Ref> (param $0 i32) (result i32)
+  local.get $0
   i32.const 0
+  i32.ne
+  if (result i32)
+   i32.const 0
+  else
+   i32.const 0
+  end
  )
  (func $~lib/arraybuffer/ArrayBufferView#set:buffer (param $0 i32) (param $1 i32)
   local.get $0
@@ -2656,18 +2668,37 @@
   i32.store offset=8
  )
  (func $~lib/array/Array.isArray<~lib/typedarray/Uint8Array> (param $0 i32) (result i32)
+  local.get $0
   i32.const 0
+  i32.ne
+  if (result i32)
+   i32.const 0
+  else
+   i32.const 0
+  end
  )
  (func $~lib/array/Array.isArray<i32> (param $0 i32) (result i32)
   i32.const 0
  )
  (func $~lib/array/Array.isArray<~lib/string/String> (param $0 i32) (result i32)
+  local.get $0
   i32.const 0
+  i32.ne
+  if (result i32)
+   i32.const 0
+  else
+   i32.const 0
+  end
  )
  (func $~lib/array/Array.isArray<~lib/array/Array<i32>> (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
+  if (result i32)
+   i32.const 1
+  else
+   i32.const 0
+  end
  )
  (func $~lib/rt/__newBuffer (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -35708,13 +35739,8 @@
   local.get $0
   i32.load offset=12
   local.set $2
-  i32.const 0
   local.get $1
   i32.load offset=12
-  local.get $1
-  i32.const 0
-  i32.eq
-  select
   local.set $3
   local.get $2
   local.get $3
@@ -40953,13 +40979,8 @@
   local.get $0
   i32.load offset=12
   local.set $2
-  i32.const 0
   local.get $1
   i32.load offset=12
-  local.get $1
-  i32.const 0
-  i32.eq
-  select
   local.set $3
   local.get $2
   local.get $3
@@ -41478,13 +41499,8 @@
   local.get $0
   i32.load offset=12
   local.set $2
-  i32.const 0
   local.get $1
   i32.load offset=12
-  local.get $1
-  i32.const 0
-  i32.eq
-  select
   local.set $3
   local.get $2
   local.get $3
@@ -41987,13 +42003,8 @@
   local.get $0
   i32.load offset=12
   local.set $2
-  i32.const 0
   local.get $1
   i32.load offset=12
-  local.get $1
-  i32.const 0
-  i32.eq
-  select
   local.set $3
   local.get $2
   local.get $3

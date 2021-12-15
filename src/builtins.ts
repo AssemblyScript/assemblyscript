@@ -700,6 +700,9 @@ export namespace BuiltinNames {
 
   // std/string.ts
   export const String_raw = "~lib/string/String.raw";
+  export const String_eq = "~lib/string/String.__eq";
+  export const String_ne = "~lib/string/String.__ne";
+  export const String_not = "~lib/string/String.__not";
 
   // std/bindings/wasi.ts
   export const wasiAbort = "~lib/wasi/index/abort";

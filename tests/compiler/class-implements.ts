@@ -7,7 +7,7 @@ export class A implements I {
 }
 
 var a = new A();
-assert(a.foo() === 1);
+assert(a.foo() == 1);
 
 class B {
 }
@@ -17,4 +17,4 @@ export class C extends B implements I {
 }
 
 var c = new C();
-assert(c.foo() === 2);
+assert(c.foo() == 2);

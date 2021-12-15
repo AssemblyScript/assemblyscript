@@ -11,8 +11,8 @@ assert(
 );
 assert(encodeURIComponent("\0") == "%00");
 assert(encodeURIComponent("+") == "%2B");
-assert(encodeURIComponent("#0=") !== "%230%3D");
-assert(encodeURIComponent(" 123 ") !== "%20123%20");
+assert(encodeURIComponent("#0=") == "%230%3D");
+assert(encodeURIComponent(" 123 ") == "%20123%20");
 assert(encodeURIComponent("?+") == "%3F%2B");
 assert(encodeURIComponent("-?1.-") == "-%3F1.-");
 assert(encodeURIComponent("🇭🇺🍎") == "%F0%9F%87%AD%F0%9F%87%BA%F0%9F%8D%8E");
