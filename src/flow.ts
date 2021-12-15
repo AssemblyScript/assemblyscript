@@ -64,10 +64,11 @@ import {
   getCallTarget,
   getLocalSetIndex,
   getIfCondition,
-  getConstValueI64High,
   getUnaryValue,
   getCallOperandAt,
-  getCallOperandCount
+  getCallOperandCount,
+  isConstZero,
+  isConstNonZero
 } from "./module";
 
 import {
@@ -1052,17 +1053,11 @@ export class Flow {
       }
       case ExpressionId.If: {
         let ifFalse = getIfFalse(expr);
-        if (!ifFalse) break;
-        if (getExpressionId(ifFalse) == ExpressionId.Const) {
+        if (ifFalse && isConstZero(ifFalse)) {
           // Logical AND: (if (condition ifTrue 0))
           // the only way this had become true is if condition and ifTrue are true
-          if (
-            (getExpressionType(ifFalse) == TypeRef.I32 && getConstValueI32(ifFalse) == 0) ||
-            (getExpressionType(ifFalse) == TypeRef.I64 && getConstValueI64Low(ifFalse) == 0 && getConstValueI64High(ifFalse) == 0)
-          ) {
-            this.inheritNonnullIfTrue(getIfCondition(expr), iff);
-            this.inheritNonnullIfTrue(getIfTrue(expr), iff);
-          }
+          this.inheritNonnullIfTrue(getIfCondition(expr), iff);
+          this.inheritNonnullIfTrue(getIfTrue(expr), iff);
         }
         break;
       }
@@ -1078,42 +1073,24 @@ export class Flow {
       }
       case ExpressionId.Binary: {
         switch (getBinaryOp(expr)) {
-          case BinaryOp.EqI32: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
-              this.inheritNonnullIfTrue(right, iff); // TRUE == right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
-              this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
-            }
-            break;
-          }
+          case BinaryOp.EqI32:
           case BinaryOp.EqI64: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
+            if (isConstNonZero(left)) {
               this.inheritNonnullIfTrue(right, iff); // TRUE == right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 && getConstValueI64High(right) != 0)) {
+            } else if (isConstNonZero(right)) {
               this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
             }
             break;
           }
-          case BinaryOp.NeI32: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
-              this.inheritNonnullIfTrue(right, iff); // FALSE != right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
-              this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
-            }
-            break;
-          }
+          case BinaryOp.NeI32:
           case BinaryOp.NeI64: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
+            if (isConstZero(left)) {
               this.inheritNonnullIfTrue(right, iff); // FALSE != right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
+            } else if (isConstZero(right)) {
               this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
             }
             break;
@@ -1128,18 +1105,18 @@ export class Flow {
           assert(getCallOperandCount(expr) == 2);
           let left = getCallOperandAt(expr, 0);
           let right = getCallOperandAt(expr, 1);
-          if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
+          if (isConstNonZero(left)) {
             this.inheritNonnullIfTrue(right, iff); // TRUE == right -> right must have been true
-          } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
+          } else if (isConstNonZero(right)) {
             this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
           }
         } else if (name == BuiltinNames.String_ne) {
           assert(getCallOperandCount(expr) == 2);
           let left = getCallOperandAt(expr, 0);
           let right = getCallOperandAt(expr, 1);
-          if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
+          if (isConstZero(left)) {
             this.inheritNonnullIfTrue(right, iff); // FALSE != right -> right must have been true
-          } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
+          } else if (isConstZero(right)) {
             this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
           }
         } else if (name == BuiltinNames.String_not) {
@@ -1175,62 +1152,36 @@ export class Flow {
       }
       case ExpressionId.If: {
         let ifTrue = getIfTrue(expr);
-        if (getExpressionId(ifTrue) == ExpressionId.Const) {
-          let ifFalse = getIfFalse(expr);
-          if (!ifFalse) break;
+        let ifFalse = getIfFalse(expr);
+        if (ifFalse && isConstNonZero(ifTrue)) {
           // Logical OR: (if (condition 1 ifFalse))
           // the only way this had become false is if condition and ifFalse are false
-          let exprType = getExpressionType(ifTrue);
-          if (
-            (exprType == TypeRef.I32 && getConstValueI32(ifTrue) != 0) ||
-            (exprType == TypeRef.I64 && (getConstValueI64Low(ifTrue) != 0 || getConstValueI64High(ifTrue) != 0))
-          ) {
-            this.inheritNonnullIfFalse(getIfCondition(expr), iff);
-            this.inheritNonnullIfFalse(getIfFalse(expr), iff);
-          }
-
+          this.inheritNonnullIfFalse(getIfCondition(expr), iff);
+          this.inheritNonnullIfFalse(getIfFalse(expr), iff);
         }
         break;
       }
       case ExpressionId.Binary: {
         switch (getBinaryOp(expr)) {
           // remember: we want to know how the _entire_ expression became FALSE (!)
-          case BinaryOp.EqI32: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
-              this.inheritNonnullIfTrue(right, iff); // !(FALSE == right) -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
-              this.inheritNonnullIfTrue(left, iff); // !(left == FALSE) -> left must have been true
-            }
-            break;
-          }
+          case BinaryOp.EqI32:
           case BinaryOp.EqI64: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
+            if (isConstZero(left)) {
               this.inheritNonnullIfTrue(right, iff); // !(FALSE == right) -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
+            } else if (isConstZero(right)) {
               this.inheritNonnullIfTrue(left, iff); // !(left == FALSE) -> left must have been true
             }
             break;
           }
-          case BinaryOp.NeI32: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
-              this.inheritNonnullIfTrue(right, iff); // !(TRUE != right) -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
-              this.inheritNonnullIfTrue(left, iff); // !(left != TRUE) -> left must have been true
-            }
-            break;
-          }
+          case BinaryOp.NeI32:
           case BinaryOp.NeI64: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
+            if (isConstNonZero(left)) {
               this.inheritNonnullIfTrue(right, iff); // !(TRUE != right) -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 || getConstValueI64High(right) != 0)) {
+            } else if (isConstNonZero(right)) {
               this.inheritNonnullIfTrue(left, iff); // !(left != TRUE) -> left must have been true
             }
             break;
@@ -1245,18 +1196,18 @@ export class Flow {
           assert(getCallOperandCount(expr) == 2);
           let left = getCallOperandAt(expr, 0);
           let right = getCallOperandAt(expr, 1);
-          if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
+          if (isConstZero(left)) {
             this.inheritNonnullIfTrue(right, iff); // !(FALSE == right) -> right must have been true
-          } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
+          } else if (isConstZero(right)) {
             this.inheritNonnullIfTrue(left, iff); // !(left == FALSE) -> left must have been true
           }
         } else if (name == BuiltinNames.String_ne) {
           assert(getCallOperandCount(expr) == 2);
           let left = getCallOperandAt(expr, 0);
           let right = getCallOperandAt(expr, 1);
-          if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
+          if (isConstNonZero(left)) {
             this.inheritNonnullIfTrue(right, iff); // !(TRUE != right) -> right must have been true
-          } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
+          } else if (isConstNonZero(right)) {
             this.inheritNonnullIfTrue(left, iff); // !(left != TRUE) -> left must have been true
           }
         } else if (name == BuiltinNames.String_not) {
