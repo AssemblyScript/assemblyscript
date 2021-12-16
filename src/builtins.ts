@@ -73,7 +73,8 @@ import {
   getConstValueF64,
   getLocalGetIndex,
   createType,
-  ExpressionRunnerFlags
+  ExpressionRunnerFlags,
+  mustPreserveSideEffects
 } from "./module";
 
 import {
@@ -744,10 +745,10 @@ export const function_builtins = new Map<string,(ctx: BuiltinContext) => Express
 function builtin_isInteger(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.isIntegerValue ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.isIntegerValue ? 1 : 0));
 }
 builtins.set(BuiltinNames.isInteger, builtin_isInteger);
 
@@ -755,10 +756,10 @@ builtins.set(BuiltinNames.isInteger, builtin_isInteger);
 function builtin_isFloat(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.isFloatValue ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.isFloatValue ? 1 : 0));
 }
 builtins.set(BuiltinNames.isFloat, builtin_isFloat);
 
@@ -766,10 +767,10 @@ builtins.set(BuiltinNames.isFloat, builtin_isFloat);
 function builtin_isBoolean(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.isBooleanValue ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.isBooleanValue ? 1 : 0));
 }
 builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
 
@@ -777,10 +778,10 @@ builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
 function builtin_isSigned(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.isSignedIntegerValue ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.isSignedIntegerValue ? 1 : 0));
 }
 builtins.set(BuiltinNames.isSigned, builtin_isSigned);
 
@@ -788,10 +789,10 @@ builtins.set(BuiltinNames.isSigned, builtin_isSigned);
 function builtin_isReference(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.isReference ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.isReference ? 1 : 0));
 }
 builtins.set(BuiltinNames.isReference, builtin_isReference);
 
@@ -799,14 +800,16 @@ builtins.set(BuiltinNames.isReference, builtin_isReference);
 function builtin_isString(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
   var classReference = type.getClass();
-  return module.i32(
-    classReference && classReference.isAssignableTo(compiler.program.stringInstance)
-      ? 1
-      : 0
+  return reifyConstantType(ctx, 
+    module.i32(
+      classReference && classReference.isAssignableTo(compiler.program.stringInstance)
+        ? 1
+        : 0
+    )
   );
 }
 builtins.set(BuiltinNames.isString, builtin_isString);
@@ -815,14 +818,16 @@ builtins.set(BuiltinNames.isString, builtin_isString);
 function builtin_isArray(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
   var classReference = type.getClass();
-  return module.i32(
-    classReference && classReference.extends(compiler.program.arrayPrototype)
-      ? 1
-      : 0
+  return reifyConstantType(ctx,
+    module.i32(
+      classReference && classReference.extends(compiler.program.arrayPrototype)
+        ? 1
+        : 0
+    )
   );
 }
 builtins.set(BuiltinNames.isArray, builtin_isArray);
@@ -831,14 +836,16 @@ builtins.set(BuiltinNames.isArray, builtin_isArray);
 function builtin_isArrayLike(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
   var classReference = type.getClass();
-  return module.i32(
-    classReference && classReference.isArrayLike
-      ? 1
-      : 0
+  return reifyConstantType(ctx,
+    module.i32(
+      classReference && classReference.isArrayLike
+        ? 1
+        : 0
+    )
   );
 }
 builtins.set(BuiltinNames.isArrayLike, builtin_isArrayLike);
@@ -847,10 +854,10 @@ builtins.set(BuiltinNames.isArrayLike, builtin_isArrayLike);
 function builtin_isFunction(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.isFunction ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.isFunction ? 1 : 0));
 }
 builtins.set(BuiltinNames.isFunction, builtin_isFunction);
 
@@ -858,15 +865,19 @@ builtins.set(BuiltinNames.isFunction, builtin_isFunction);
 function builtin_isNullable(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.isNullableReference ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.isNullableReference ? 1 : 0));
 }
 builtins.set(BuiltinNames.isNullable, builtin_isNullable);
 
 // isDefined(expression) -> bool
 function builtin_isDefined(ctx: BuiltinContext): ExpressionRef {
+  // Note that `isDefined` neither compiles nor evaluates the given expression
+  // but exclusively performs a check whether it can be compiled in theory.
+  // This is not exactly unsafe due to only seemingly having side effects which
+  // actually never happen, but may confuse tooling unaware of its semantics.
   var compiler = ctx.compiler;
   var module = compiler.module;
   compiler.currentType = Type.bool;
@@ -895,7 +906,13 @@ function builtin_isConstant(ctx: BuiltinContext): ExpressionRef {
   ) return module.unreachable();
   var expr = compiler.compileExpression(ctx.operands[0], Type.auto);
   compiler.currentType = Type.bool;
-  return module.i32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
+  if (!mustPreserveSideEffects(expr, module.ref)) {
+    return module.i32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
+  }
+  return module.block(null, [
+    module.maybeDrop(expr),
+    module.i32(0)
+  ], getExpressionType(expr));
 }
 builtins.set(BuiltinNames.isConstant, builtin_isConstant);
 
@@ -903,10 +920,10 @@ builtins.set(BuiltinNames.isConstant, builtin_isConstant);
 function builtin_isManaged(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.isManaged ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.isManaged ? 1 : 0));
 }
 builtins.set(BuiltinNames.isManaged, builtin_isManaged);
 
@@ -914,10 +931,10 @@ builtins.set(BuiltinNames.isManaged, builtin_isManaged);
 function builtin_isVoid(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.kind == TypeKind.VOID ? 1 : 0);
+  return reifyConstantType(ctx, module.i32(type.kind == TypeKind.VOID ? 1 : 0));
 }
 builtins.set(BuiltinNames.isVoid, builtin_isVoid);
 
@@ -925,7 +942,7 @@ builtins.set(BuiltinNames.isVoid, builtin_isVoid);
 function builtin_lengthof(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.i32;
   if (!type) return module.unreachable();
   var signatureReference = type.signatureReference;
@@ -936,7 +953,7 @@ function builtin_lengthof(ctx: BuiltinContext): ExpressionRef {
     );
     return module.unreachable();
   }
-  return module.i32(signatureReference.parameterTypes.length);
+  return reifyConstantType(ctx, module.i32(signatureReference.parameterTypes.length));
 }
 builtins.set(BuiltinNames.lengthof, builtin_lengthof);
 
@@ -1044,7 +1061,7 @@ builtins.set(BuiltinNames.offsetof, builtin_offsetof);
 function builtin_nameof(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var resultType = evaluateConstantType(ctx);
+  var resultType = checkConstantType(ctx);
   if (!resultType) {
     compiler.currentType = compiler.program.stringInstance.type;
     return module.unreachable();
@@ -1061,7 +1078,7 @@ function builtin_nameof(ctx: BuiltinContext): ExpressionRef {
   } else {
     value = resultType.toString();
   }
-  return compiler.ensureStaticString(value);
+  return reifyConstantType(ctx, compiler.ensureStaticString(value));
 }
 builtins.set(BuiltinNames.nameof, builtin_nameof);
 
@@ -1069,16 +1086,16 @@ builtins.set(BuiltinNames.nameof, builtin_nameof);
 function builtin_idof(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  var type = evaluateConstantType(ctx);
+  var type = checkConstantType(ctx);
   compiler.currentType = Type.u32;
   if (!type) return module.unreachable();
   let signatureReference = type.getSignature();
   if (signatureReference) {
-    return module.i32(signatureReference.id);
+    return reifyConstantType(ctx, module.i32(signatureReference.id));
   }
   let classReference = type.getClassOrWrapper(compiler.program);
   if (classReference && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
-    return module.i32(classReference.id);
+    return reifyConstantType(ctx, module.i32(classReference.id));
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -3896,7 +3913,7 @@ function builtin_v128_shuffle(ctx: BuiltinContext): ExpressionRef {
   if (type.isValue) {
     let laneWidth = type.byteSize;
     let laneCount = 16 / laneWidth;
-    assert(isInteger(laneCount) && isPowerOf2(laneCount));
+    assert(Number.isInteger(laneCount) && isPowerOf2(laneCount));
     if (
       checkArgsRequired(ctx, 2 + laneCount)
     ) {
@@ -9837,11 +9854,14 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
 
 // Helpers
 
-/** Evaluates the constant type of a type argument *or* expression. */
-function evaluateConstantType(ctx: BuiltinContext): Type | null {
+var checkConstantType_expr: ExpressionRef = 0;
+
+/** Checks the constant type of a type argument *or* expression. */
+function checkConstantType(ctx: BuiltinContext): Type | null {
   var compiler = ctx.compiler;
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments;
+  checkConstantType_expr = 0;
   if (operands.length == 0) { // requires type argument
     if (!typeArguments || typeArguments.length != 1) {
       compiler.error(
@@ -9861,9 +9881,9 @@ function evaluateConstantType(ctx: BuiltinContext): Type | null {
         );
         return null;
       }
-      compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT);
+      checkConstantType_expr = compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT);
     } else {
-      compiler.compileExpression(operands[0], Type.auto);
+      checkConstantType_expr = compiler.compileExpression(operands[0], Type.auto);
     }
     return compiler.currentType;
   }
@@ -9878,6 +9898,18 @@ function evaluateConstantType(ctx: BuiltinContext): Type | null {
     ctx.reportNode.argumentsRange, "1", operands.length.toString()
   );
   return null;
+}
+
+/** Reifies a constant type check potentially involving an expression. */
+function reifyConstantType(ctx: BuiltinContext, expr: ExpressionRef): ExpressionRef {
+  var module = ctx.compiler.module;
+  if (checkConstantType_expr && mustPreserveSideEffects(checkConstantType_expr, module.ref)) {
+    expr = module.block(null, [
+      module.maybeDrop(checkConstantType_expr),
+      expr
+    ], getExpressionType(expr));
+  }
+  return expr;
 }
 
 /** Evaluates a compile-time constant immediate offset argument.*/

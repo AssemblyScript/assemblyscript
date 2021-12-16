@@ -1472,6 +1472,17 @@ export class Module {
     return binaryen._BinaryenDrop(this.ref, expression);
   }
 
+  /** Drops an expression if it evaluates to a value. */
+  maybeDrop(
+    expression: ExpressionRef
+  ): ExpressionRef {
+    var type = binaryen._BinaryenExpressionGetType(expression);
+    if (type != TypeRef.None && type != TypeRef.Unreachable) {
+      return binaryen._BinaryenDrop(this.ref, expression);
+    }
+    return expression;
+  }
+
   maybeDropCondition(condition: ExpressionRef, result: ExpressionRef): ExpressionRef {
     // FIXME: This is necessary because Binaryen's ExpressionRunner bails early
     // when encountering a local with an unknown value. This helper only drops
@@ -3039,8 +3050,8 @@ export function getSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffe
   return binaryen._BinaryenExpressionGetSideEffects(expr, module);
 }
 
-export function hasSideEffects(expr: ExpressionRef, module: ModuleRef): bool {
-  return getSideEffects(expr, module) != SideEffects.None;
+export function mustPreserveSideEffects(expr: ExpressionRef, module: ModuleRef): bool {
+  return (getSideEffects(expr, module) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != SideEffects.None;
 }
 
 // helpers

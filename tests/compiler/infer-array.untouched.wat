@@ -41,9 +41,9 @@
  (data (i32.const 352) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 380) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 444) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 492) ",\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@\00\00\00\00")
- (data (i32.const 540) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\ff\ff\ff\ff\00\00\00\00")
- (data (i32.const 572) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00i\00n\00f\00e\00r\00-\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 492) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00i\00n\00f\00e\00r\00-\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 540) ",\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@\00\00\00\00")
+ (data (i32.const 588) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\ff\ff\ff\ff\00\00\00\00")
  (data (i32.const 620) ",\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@\00\00\00\00")
  (data (i32.const 668) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
  (data (i32.const 700) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00")
@@ -2419,33 +2419,93 @@
   call $~lib/rt/__newArray
   local.tee $1
   i32.store
-  i32.const 1
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<i32>#__get
   drop
   i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 3
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<i32>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 4
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 3
   i32.const 3
   i32.const 4
-  i32.const 512
+  i32.const 560
   call $~lib/rt/__newArray
   local.tee $0
   i32.store offset=4
-  i32.const 1
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<f64>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 8
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 2
   i32.const 2
   i32.const 5
-  i32.const 560
+  i32.const 608
   call $~lib/rt/__newArray
   local.tee $1
   i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<u32>#__get
+  drop
   i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 12
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<u32>#__get
   drop
   i32.const 0
   i32.eqz
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 13
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $1
   i32.const 1
   call $~lib/array/Array<u32>#__get
@@ -2454,7 +2514,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 592
+   i32.const 512
    i32.const 14
    i32.const 3
    call $~lib/builtins/abort
@@ -2468,8 +2528,20 @@
   call $~lib/rt/__newArray
   local.tee $0
   i32.store offset=4
-  i32.const 1
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<f64>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 18
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 3
   i32.const 2
@@ -2478,8 +2550,20 @@
   call $~lib/rt/__newArray
   local.tee $1
   i32.store
-  i32.const 1
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<f32>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 22
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $1
   i32.const 1
   call $~lib/array/Array<f32>#__get
@@ -2519,8 +2603,20 @@
   local.get $3
   local.tee $4
   i32.store offset=12
-  i32.const 1
+  local.get $4
+  i32.const 0
+  call $~lib/array/Array<infer-array/Ref|null>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 30
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $infer-array/Ref#constructor
@@ -2556,8 +2652,20 @@
   local.get $1
   local.tee $3
   i32.store offset=8
+  local.get $3
   i32.const 1
+  call $~lib/array/Array<infer-array/Ref|null>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 36
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $infer-array/Ref#constructor
@@ -2588,8 +2696,20 @@
   local.get $0
   local.tee $4
   i32.store offset=12
-  i32.const 1
+  local.get $4
+  i32.const 0
+  call $~lib/array/Array<infer-array/Ref|null>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 41
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 2
   i32.const 2
@@ -2598,8 +2718,20 @@
   call $~lib/rt/__newArray
   local.tee $3
   i32.store offset=8
-  i32.const 1
+  local.get $3
+  i32.const 0
+  call $~lib/array/Array<~lib/string/String|null>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 45
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 1
   i32.const 2
@@ -2608,11 +2740,35 @@
   call $~lib/rt/__newArray
   local.tee $4
   i32.store offset=12
+  local.get $4
+  i32.const 0
+  call $~lib/array/Array<usize>#__get
+  drop
   i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 49
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  i32.const 0
+  call $~lib/array/Array<usize>#__get
   drop
   i32.const 0
   i32.eqz
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 50
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 2
   i32.const 2
@@ -2621,11 +2777,35 @@
   call $~lib/rt/__newArray
   local.tee $0
   i32.store offset=4
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<usize>#__get
+  drop
   i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 52
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<usize>#__get
   drop
   i32.const 0
   i32.eqz
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 53
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 2
   i32.const 2
@@ -2634,11 +2814,35 @@
   call $~lib/rt/__newArray
   local.tee $4
   i32.store offset=12
+  local.get $4
+  i32.const 0
+  call $~lib/array/Array<i32>#__get
+  drop
   i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 57
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  i32.const 0
+  call $~lib/array/Array<i32>#__get
   drop
   i32.const 0
   i32.eqz
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 58
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 2
   i32.const 2
@@ -2647,11 +2851,35 @@
   call $~lib/rt/__newArray
   local.tee $3
   i32.store offset=8
+  local.get $3
+  i32.const 0
+  call $~lib/array/Array<i32>#__get
+  drop
   i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 60
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $3
+  i32.const 0
+  call $~lib/array/Array<i32>#__get
   drop
   i32.const 0
   i32.eqz
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 61
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 2
@@ -2685,8 +2913,20 @@
   local.get $3
   local.tee $4
   i32.store offset=12
-  i32.const 1
+  local.get $4
+  i32.const 0
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   drop
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 65
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
   i32.eqz
   drop
