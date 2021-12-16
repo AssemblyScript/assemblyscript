@@ -1020,7 +1020,7 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
 export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: string): string {
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
-  var value: T; // except string
+  var value: T;
   if (!lastIndex) {
     value = load<T>(dataStart);
     // @ts-ignore: type
