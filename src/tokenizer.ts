@@ -352,7 +352,6 @@ export function isModifier(token: Token): bool {
   switch (token) {
     case Token.ABSTRACT:
     case Token.ASYNC:
-    case Token.CONST:
     case Token.DECLARE:
     case Token.DEFAULT:
     case Token.EXPORT:

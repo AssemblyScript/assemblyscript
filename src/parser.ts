@@ -101,12 +101,11 @@ class Dependee {
 
 /** Additional information for linting modifiers. */
 const enum ModifierContextFlags {
-  CLASS = 1 << 0,
-  INTERFACE = 1 << 1,
-  MEMBER = 1 << 2,
-  PARAMETER = 1 << 3,
-  TOP_LEVEL = 1 << 4,
-  ABSTRACT_PARENT = 1 << 5,
+  CLASS_MEMBER = 1 << 0,
+  INTERFACE_MEMBER = 1 << 1,
+  PARAMETER = 1 << 2,
+  TOP_LEVEL = 1 << 3,
+  ABSTRACT_PARENT = 1 << 4,
 }
 
 /** Parser interface. */
@@ -204,7 +203,7 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     namespace: NamespaceDeclaration | null = null
   ): Statement | null {
-    var flags = CommonFlags.NONE;
+    var flags = namespace ? (namespace.flags & CommonFlags.AMBIENT) : CommonFlags.NONE;
     var startPos = -1;
 
     // check decorators
@@ -221,45 +220,20 @@ export class Parser extends DiagnosticEmitter {
     }
 
     // check modifiers
-    var exportStart = 0;
-    var exportEnd = 0;
-    var defaultStart = 0;
-    var defaultEnd = 0;
-    if (tn.skip(Token.EXPORT)) {
-      if (startPos < 0) startPos = tn.tokenPos;
-      flags |= CommonFlags.EXPORT;
-      exportStart = tn.tokenPos;
-      exportEnd = tn.pos;
-      if (tn.skip(Token.DEFAULT)) {
-        defaultStart = tn.tokenPos;
-        defaultEnd = tn.pos;
-      }
-    }
-
-    var declareStart = 0;
-    var declareEnd = 0;
-    var contextIsAmbient = namespace != null && namespace.is(CommonFlags.AMBIENT);
-    if (tn.skip(Token.DECLARE)) {
-      if (contextIsAmbient) {
-        this.error(
-          DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
-          tn.range()
-        ); // recoverable
-      } else {
-        if (startPos < 0) startPos = tn.tokenPos;
-        declareStart = startPos;
-        declareEnd = tn.pos;
-        flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
-      }
-    } else if (contextIsAmbient) {
-      flags |= CommonFlags.AMBIENT;
-    }
+    flags |= this.parseModifiers(tn, ModifierContextFlags.TOP_LEVEL);
 
     // parse the statement
     var statement: Statement | null = null;
 
     // handle declarations
     var first = tn.peek();
+    if (first != Token.CLASS && (flags & CommonFlags.ABSTRACT)) {
+      this.error(
+        DiagnosticCode._abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration,
+        tn.range(this.abstractStart, this.abstractEnd)
+      );
+    }
+
     if (startPos < 0) startPos = tn.nextTokenPos;
     switch (first) {
       case Token.CONST: {
@@ -291,33 +265,6 @@ export class Parser extends DiagnosticEmitter {
         statement = this.parseFunction(tn, flags, decorators, startPos);
         decorators = null;
         break;
-      }
-      case Token.ABSTRACT: {
-        let state = tn.mark();
-        tn.next();
-        let abstractStart = tn.tokenPos;
-        let abstractEnd = tn.pos;
-        let next = tn.peek(true);
-        if (tn.nextTokenOnNewLine) {
-          tn.reset(state);
-          statement = this.parseStatement(tn, true);
-          break;
-        }
-        if (next != Token.CLASS) {
-          if (next == Token.INTERFACE) {
-            this.error(
-              DiagnosticCode._abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration,
-              tn.range(abstractStart, abstractEnd)
-            );
-          }
-          tn.reset(state);
-          statement = this.parseStatement(tn, true);
-          break;
-        } else {
-          tn.discard(state);
-        }
-        flags |= CommonFlags.ABSTRACT;
-        // fall through
       }
       case Token.CLASS:
       case Token.INTERFACE: {
@@ -362,41 +309,37 @@ export class Parser extends DiagnosticEmitter {
         }
         break;
       }
-      default: {
-
+      case Token.EXPORT: {
+        tn.next();
         // handle plain exports
-        if (flags & CommonFlags.EXPORT) {
-          if (defaultEnd && tn.skipIdentifier(IdentifierHandling.PREFER)) {
-            if (declareEnd) {
+        if (tn.skip(Token.DEFAULT)) {
+          let defaultStart = tn.tokenPos;
+          let defaultEnd = tn.pos;
+          if (tn.skipIdentifier(IdentifierHandling.PREFER)) {
+            if (flags & CommonFlags.DECLARE) {
               this.error(
                 DiagnosticCode.An_export_assignment_cannot_have_modifiers,
-                tn.range(declareStart, declareEnd)
+                tn.range(this.declareStart, this.declareEnd)
               );
             }
             statement = this.parseExportDefaultAlias(tn, startPos, defaultStart, defaultEnd);
-            defaultStart = defaultEnd = 0; // consume
-          } else {
-            statement = this.parseExport(tn, startPos, (flags & CommonFlags.DECLARE) != 0);
           }
-
-        // handle non-declaration statements
         } else {
-          if (exportEnd) {
-            this.error(
-              DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(exportStart, exportEnd), "export"
-            ); // recoverable
-          }
-          if (declareEnd) {
-            this.error(
-              DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(declareStart, declareEnd), "declare"
-            ); // recoverable
-          }
-          if (!namespace) {
-            statement = this.parseStatement(tn, true);
-          } // TODO: else?
+          statement = this.parseExport(tn, startPos, (flags & CommonFlags.DECLARE) != 0);
         }
+        break;
+      }
+      default: {
+        // handle non-declaration statements
+        if (flags & CommonFlags.DECLARE) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(this.declareStart, this.declareEnd), "declare"
+          ); // recoverable
+        }
+        if (!namespace) {
+          statement = this.parseStatement(tn, true);
+        } // TODO: else?
         break;
       }
     }
@@ -412,7 +355,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     // check if this an `export default` declaration
-    if (defaultEnd && statement !== null) {
+    if ((flags & CommonFlags.DEFAULT) && statement !== null) {
       switch (statement.kind) {
         case NodeKind.ENUMDECLARATION:
         case NodeKind.FUNCTIONDECLARATION:
@@ -424,7 +367,7 @@ export class Parser extends DiagnosticEmitter {
         default: {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(defaultStart, defaultEnd), "default"
+            tn.range(this.defaultStart, this.defaultEnd), "default"
           );
         }
       }
@@ -1886,6 +1829,7 @@ export class Parser extends DiagnosticEmitter {
   }
 
   tokenAfterCanFollowModifier(tn: Tokenizer, modifier: Token): boolean {
+    // we should be in lookahead here
     switch(modifier) {
       case Token.CONST:
         return tn.next() == Token.ENUM;
@@ -1893,17 +1837,17 @@ export class Parser extends DiagnosticEmitter {
         const tk = tn.next();
         switch (tk) {
           case Token.DEFAULT: {
-            const state = tn.mark();
+            // const state = tn.mark();
             const res = this.nextTokenCanFollowDefaultKeyword(tn);
-            tn.reset(state);
-            tn.discard(state);
+            // tn.reset(state);
+            // tn.discard(state);
             return res;
           }
           case Token.TYPE: {
-            const state = tn.mark();
+            // const state = tn.mark();
             const res = this.canFollowExportModifier(tn.next());
-            tn.reset(state);
-            tn.discard(state);
+            // tn.reset(state);
+            // tn.discard(state);
             return res;
           }
         }
@@ -1916,8 +1860,7 @@ export class Parser extends DiagnosticEmitter {
         return this.canFollowModifier(tn.next());
     }
 
-    tn.peek(true);
-    return !tn.nextTokenOnNewLine && this.canFollowModifier(tn.next());
+    return this.canFollowModifier(tn.peek(true)) && !tn.nextTokenOnNewLine;
   }
 
   private accessStart: i32 = -1;
@@ -1925,6 +1868,9 @@ export class Parser extends DiagnosticEmitter {
 
   private exportStart: i32 = -1;
   private exportEnd: i32 = -1;
+
+  private defaultStart: i32 = -1;
+  private defaultEnd: i32 = -1;
 
   private declareStart: i32 = -1;
   private declareEnd: i32 = -1;
@@ -1943,7 +1889,8 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     context: ModifierContextFlags
   ): CommonFlags {
-    var flags = CommonFlags.NONE;    
+    const memberFlag = ModifierContextFlags.INTERFACE_MEMBER | ModifierContextFlags.CLASS_MEMBER;
+    var flags = CommonFlags.NONE;
     
     while (isModifier(tn.peek())) {
       // check if this modifier is contextual
@@ -1986,7 +1933,7 @@ export class Parser extends DiagnosticEmitter {
               break;
           }
 
-          if (context & ModifierContextFlags.INTERFACE) {
+          if (context & ModifierContextFlags.INTERFACE_MEMBER) {
             this.error(
               DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
               tn.range(), visModifier
@@ -2027,7 +1974,7 @@ export class Parser extends DiagnosticEmitter {
         }
 
         case Token.STATIC:
-          if (context & ModifierContextFlags.INTERFACE) {
+          if (context & ModifierContextFlags.INTERFACE_MEMBER) {
             this.error(
               DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
               tn.range(), "static"
@@ -2071,7 +2018,7 @@ export class Parser extends DiagnosticEmitter {
               DiagnosticCode._0_modifier_already_seen,
               tn.range(), "readonly"
             );
-          } else if ((context & ModifierContextFlags.MEMBER) == 0) { // doesn't handle all cases, like methods and getters/setters
+          } else if ((context & memberFlag) == 0) { // doesn't handle all cases, like methods and getters/setters
             this.error(
               DiagnosticCode._readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
               tn.range(), "readonly"
@@ -2084,7 +2031,7 @@ export class Parser extends DiagnosticEmitter {
           break;
         
         case Token.EXPORT:
-          if (context & ModifierContextFlags.INTERFACE) {
+          if (context & ModifierContextFlags.INTERFACE_MEMBER) {
             this.error(
               DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
               tn.range(), "export"
@@ -2104,7 +2051,7 @@ export class Parser extends DiagnosticEmitter {
               DiagnosticCode._0_modifier_must_precede_1_modifier,
               tn.range(), "export", "abstract"
             );
-          } else if (context & ModifierContextFlags.MEMBER) {
+          } else if (context & ModifierContextFlags.CLASS_MEMBER) {
             this.error(
               DiagnosticCode._0_modifier_cannot_appear_on_class_elements_of_this_kind,
               tn.range(), "export"
@@ -2120,8 +2067,18 @@ export class Parser extends DiagnosticEmitter {
             this.exportEnd = tn.pos;
           }
           break;
+        case Token.DEFAULT:
+          if ((flags & CommonFlags.EXPORT) == 0) {
+            this.error(
+              DiagnosticCode._0_modifier_must_precede_1_modifier,
+              tn.range(), "export", "default"
+            );
+          }
+
+          flags |= CommonFlags.DEFAULT;
+          break;
         case Token.DECLARE:
-          if (context & ModifierContextFlags.INTERFACE) {
+          if (context & ModifierContextFlags.INTERFACE_MEMBER) {
             this.error(
               DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
               tn.range(), "declare"
@@ -2144,7 +2101,7 @@ export class Parser extends DiagnosticEmitter {
           break;
 
         case Token.ABSTRACT:
-          if (context & ModifierContextFlags.INTERFACE) {
+          if (context & ModifierContextFlags.INTERFACE_MEMBER) {
             this.error(
               DiagnosticCode._0_modifier_cannot_appear_on_a_type_member,
               tn.range(), "abstract"
@@ -2154,8 +2111,9 @@ export class Parser extends DiagnosticEmitter {
               DiagnosticCode._0_modifier_already_seen,
               tn.range(), "abstract"
             );
-          } else if ((context & ModifierContextFlags.CLASS) == 0 || (context & ModifierContextFlags.MEMBER)) {
-            if ((context & ModifierContextFlags.MEMBER) == 0) {
+          } else if ((context & ModifierContextFlags.TOP_LEVEL) == 0) { 
+            if ((context & memberFlag) == 0) {
+              // TOP_LEVEL case is handled in parseTopLevelStatement
               this.error(
                 DiagnosticCode._abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration,
                 tn.range()
@@ -2177,7 +2135,7 @@ export class Parser extends DiagnosticEmitter {
               );
             } // async and override?
           }
-          
+
           flags |= CommonFlags.ABSTRACT;
           this.abstractStart = tn.tokenPos;
           this.abstractEnd = tn.pos;
@@ -2230,7 +2188,7 @@ export class Parser extends DiagnosticEmitter {
     // implemented methods are virtual
     if (isInterface) flags |= CommonFlags.VIRTUAL;
 
-    var contextFlags = ModifierContextFlags.MEMBER | (isInterface ? ModifierContextFlags.INTERFACE : ModifierContextFlags.CLASS);
+    var contextFlags = isInterface ? ModifierContextFlags.INTERFACE_MEMBER : ModifierContextFlags.CLASS_MEMBER;
     if (parent.flags & CommonFlags.ABSTRACT)
       contextFlags |= ModifierContextFlags.ABSTRACT_PARENT;
     flags |= this.parseModifiers(tn, contextFlags);

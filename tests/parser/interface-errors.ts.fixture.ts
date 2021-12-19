@@ -1,4 +1,3 @@
-abstract;
 interface Foo {
 }
 abstract;
