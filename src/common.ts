@@ -14,7 +14,7 @@ export enum CommonFlags {
   IMPORT = 1 << 0,
   /** Has an `export` modifier. */
   EXPORT = 1 << 1,
-  /** Has an `default` modifier. */
+  /** Has a `default` modifier. */
   DEFAULT = 1 << 2,
   /** Has a `declare` modifier. */
   DECLARE = 1 << 3,
