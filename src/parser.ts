@@ -1318,7 +1318,7 @@ export class Parser extends DiagnosticEmitter {
         identifier,
         type,
         initializer,
-        new Range(startPos, tn.pos)
+        tn.range(startPos, tn.pos)
       );
       param.flags |= accessFlags;
       return param;
