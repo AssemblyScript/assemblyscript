@@ -2466,7 +2466,7 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
 
-      if (flags & CommonFlags.ABSTRACT) {
+      if ((flags & CommonFlags.ABSTRACT) && !isInterface) {
         this.error(
           DiagnosticCode.Not_implemented_0,
           tn.range(this.declareStart, this.declareEnd), "Abstract fields"
