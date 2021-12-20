@@ -25,36 +25,36 @@ abstract class B {
 public var a = 1;
 public let b = 1;
 public const c = 1;
-public const enum C {};
-public enum D {};
-public function d(): void {};
-public class E {};
-public interface F {};
-public namespace G {};
+public const enum C {}
+public enum D {}
+public function d(): void {}
+public class E {}
+public interface F {}
+public namespace G {}
 public type H = null;
 public export default e;
 public export { f };
 protected var g = 1;
 protected let h = 1;
 protected const i = 1;
-protected const enum I {};
-protected enum J {};
-protected function j(): void {};
-protected class K {};
-protected interface L {};
-protected namespace M {};
+protected const enum I {}
+protected enum J {}
+protected function j(): void {}
+protected class K {}
+protected interface L {}
+protected namespace M {}
 protected type N = null;
 protected export default k;
 protected export { l };
 private var m = 1;
 private let n = 1;
 private const o = 1;
-private const enum O {};
-private enum P {};
-private function p(): void {};
-private class Q {};
-private interface R {};
-private namespace S {};
+private const enum O {}
+private enum P {}
+private function p(): void {}
+private class Q {}
+private interface R {}
+private namespace S {}
 private type T = null;
 private export default q;
 private export { r };
@@ -72,12 +72,12 @@ abstract class V {
 static var s = 1;
 static let t = 1;
 static const u = 1;
-static const enum W {};
-static enum X {};
-static function v(): void {};
-static class Y {};
-static interface Z {};
-static namespace AB {};
+static const enum W {}
+static enum X {}
+static function v(): void {}
+static class Y {}
+static interface Z {}
+static namespace AB {}
 static type BB = null;
 static export default w;
 static export { x };
@@ -88,11 +88,23 @@ class CB {
   readonly set c(d: void) {}
   readonly e(): void {}
 }
+readonly var y = 1;
+readonly let z = 1;
+readonly const ab = 1;
+readonly const enum DB {}
+readonly enum EB {}
+readonly function bb(): void {}
+readonly class FB {}
+readonly interface GB {}
+readonly namespace HB {}
+readonly type IB = null;
+readonly export default cb;
+readonly export { db };
 // export
-export export class DB {};
-declare export class EB {};
-abstract export class FB {};
-class GB {
+export export class JB {}
+declare export class KB {}
+abstract export class LB {}
+class MB {
   export a: void;
   export get b(): boolean { return false; }
   export set c(d: void) {}
@@ -101,40 +113,40 @@ class GB {
 }
 // default?
 // declare
-declare declare class HB {};
-class IB {
+declare declare class NB {}
+class OB {
   constructor(declare a: void) {}
 }
 // private identifier?
 // abstract
-abstract abstract class JB {};
-abstract var y = 1;
-abstract let z = 1;
-abstract const ab = 1;
-abstract const enum KB {};
-abstract enum LB {};
-abstract function bb(): void {};
-abstract interface MB {};
-abstract namespace NB {};
-abstract type OB = null;
-abstract export default cb;
-abstract export { db };
-abstract class PB {
+abstract abstract class PB {}
+abstract var eb = 1;
+abstract let fb = 1;
+abstract const gb = 1;
+abstract const enum QB {}
+abstract enum RB {}
+abstract function hb(): void {}
+abstract interface SB {}
+abstract namespace TB {}
+abstract type UB = null;
+abstract export default ib;
+abstract export { jb };
+abstract class VB {
   abstract static a: void;
   abstract private b: void;
   constructor(abstract c: void) {}
 }
 // private identifier?
 // async?
-class QB {
+class WB {
   static constructor() {}
 }
-class RB {
+class XB {
   readonly constructor() {}
 }
-abstract class SB {
+abstract class YB {
   abstract constructor();
 }
-declare import eb from "";
-export if (true) {};
-export while (true) {};
+declare import kb from "";
+export if (true) {}
+export while (true) {}

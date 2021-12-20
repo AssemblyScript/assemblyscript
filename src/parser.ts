@@ -2320,7 +2320,7 @@ export class Parser extends DiagnosticEmitter {
       if (flags & CommonFlags.READONLY) {
         this.error(
           DiagnosticCode._readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
-          tn.range(this.readonlyStart, this.readonlyEnd), "readonly"
+          tn.range(this.readonlyStart, this.readonlyEnd)
         ); // recoverable
       }
 
