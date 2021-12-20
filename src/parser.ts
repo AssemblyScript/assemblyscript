@@ -2021,7 +2021,7 @@ export class Parser extends DiagnosticEmitter {
           } else if ((context & memberFlag) == 0) { // doesn't handle all cases, like methods and getters/setters
             this.error(
               DiagnosticCode._readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
-              tn.range(), "readonly"
+              tn.range()
             );
           } else {
             flags |= CommonFlags.READONLY;
@@ -2240,12 +2240,6 @@ export class Parser extends DiagnosticEmitter {
           this.error(
             DiagnosticCode._0_modifier_cannot_appear_on_a_constructor_declaration,
             tn.range(this.abstractStart, this.abstractEnd), "abstract"
-          ); // recoverable
-        }
-        if (flags & CommonFlags.READONLY) {
-          this.error(
-            DiagnosticCode._0_modifier_cannot_appear_on_a_constructor_declaration,
-            tn.range(this.readonlyStart, this.readonlyEnd), "readonly"
           ); // recoverable
         }
       }
