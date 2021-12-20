@@ -32,59 +32,50 @@ interface F {
 }
 ;
 namespace G {}
-import {
-  default as e
-} from "";
 type H = null;
 export {
-  f as default
+  e as default
 };
 export {
-  g
+  f
 };
-var h = 1;
-let i = 1;
-const j = 1;
+var g = 1;
+let h = 1;
+const i = 1;
 const enum I {}
 enum J {}
-function k(): void {}
+function j(): void {}
 class K {}
 ;
 interface L {
 }
 ;
 namespace M {}
-import {
-  default as l
-} from "";
 type N = null;
 export {
-  m as default
+  k as default
 };
 export {
-  n
+  l
 };
-var o = 1;
-let p = 1;
-const q = 1;
+var m = 1;
+let n = 1;
+const o = 1;
 const enum O {}
 enum P {}
-function r(): void {}
+function p(): void {}
 class Q {}
 ;
 interface R {
 }
 ;
 namespace S {}
-import {
-  default as s
-} from "";
 type T = null;
 export {
-  t as default
+  q as default
 };
 export {
-  u
+  r
 };
 class U {
   static a: void;
@@ -95,27 +86,24 @@ abstract class V {
   abstract a: void;
   static b: void;
 }
-var v = 1;
-let w = 1;
-const x = 1;
+var s = 1;
+let t = 1;
+const u = 1;
 const enum W {}
 enum X {}
-function y(): void {}
+function v(): void {}
 class Y {}
 ;
 interface Z {
 }
 ;
 namespace AB {}
-import {
-  default as z
-} from "";
 type BB = null;
 export {
-  ab as default
+  w as default
 };
 export {
-  bb
+  x
 };
 class CB {
   readonly a: void;
@@ -147,25 +135,22 @@ class IB {
 }
 abstract class JB {}
 ;
-var cb = 1;
-let db = 1;
-const eb = 1;
+var y = 1;
+let z = 1;
+const ab = 1;
 const enum KB {}
 enum LB {}
-abstract function fb(): void {}
+abstract function bb(): void {}
 interface MB {
 }
 ;
 namespace NB {}
-import {
-  default as gb
-} from "";
 type OB = null;
 export {
-  hb as default
+  cb as default
 };
 export {
-  ib
+  db
 };
 abstract class PB {
   abstract a: void;
@@ -182,8 +167,10 @@ abstract class SB {
   abstract constructor();
 }
 import {
-  default as jb
+  default as eb
 } from "";
+if (true) {}
+while (true) {}
 // ERROR 1028: "Accessibility modifier already seen." in modifier-errors.ts(4,10+6)
 // ERROR 1028: "Accessibility modifier already seen." in modifier-errors.ts(5,13+6)
 // ERROR 1028: "Accessibility modifier already seen." in modifier-errors.ts(6,11+6)
@@ -217,7 +204,7 @@ import {
 // ERROR 1044: "'public' modifier cannot appear on a module or namespace element." in modifier-errors.ts(34,1+6)
 // ERROR 1044: "'public' modifier cannot appear on a module or namespace element." in modifier-errors.ts(35,1+6)
 // ERROR 1044: "'public' modifier cannot appear on a module or namespace element." in modifier-errors.ts(36,1+6)
-// ERROR 1044: "'public' modifier cannot appear on a module or namespace element." in modifier-errors.ts(37,1+6)
+// ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(37,1+9)
 // ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(38,1+9)
 // ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(39,1+9)
 // ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(40,1+9)
@@ -229,8 +216,8 @@ import {
 // ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(46,1+9)
 // ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(47,1+9)
 // ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(48,1+9)
-// ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(49,1+9)
-// ERROR 1044: "'protected' modifier cannot appear on a module or namespace element." in modifier-errors.ts(50,1+9)
+// ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(49,1+7)
+// ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(50,1+7)
 // ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(51,1+7)
 // ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(52,1+7)
 // ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(53,1+7)
@@ -241,16 +228,16 @@ import {
 // ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(58,1+7)
 // ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(59,1+7)
 // ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(60,1+7)
-// ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(61,1+7)
-// ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(62,1+7)
-// ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(63,1+7)
-// ERROR 1030: "'static' modifier already seen." in modifier-errors.ts(67,10+6)
-// ERROR 1029: "'static' modifier must precede 'readonly' modifier." in modifier-errors.ts(68,12+6)
-// ERROR 1090: "'static' modifier cannot appear on a parameter." in modifier-errors.ts(69,15+6)
-// ERROR 1243: "'static' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(72,12+6)
-// ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(72,19+1)
-// ERROR 1243: "'static' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(73,10+8)
-// ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(73,19+1)
+// ERROR 1030: "'static' modifier already seen." in modifier-errors.ts(64,10+6)
+// ERROR 1029: "'static' modifier must precede 'readonly' modifier." in modifier-errors.ts(65,12+6)
+// ERROR 1090: "'static' modifier cannot appear on a parameter." in modifier-errors.ts(66,15+6)
+// ERROR 1243: "'static' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(69,12+6)
+// ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(69,19+1)
+// ERROR 1243: "'static' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(70,10+8)
+// ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(70,19+1)
+// ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(72,1+6)
+// ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(73,1+6)
+// ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(74,1+6)
 // ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(75,1+6)
 // ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(76,1+6)
 // ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(77,1+6)
@@ -260,42 +247,43 @@ import {
 // ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(81,1+6)
 // ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(82,1+6)
 // ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(83,1+6)
-// ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(84,1+6)
-// ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(85,1+6)
-// ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(86,1+6)
-// ERROR 1044: "'static' modifier cannot appear on a module or namespace element." in modifier-errors.ts(87,1+6)
-// ERROR 1030: "'readonly' modifier already seen." in modifier-errors.ts(90,12+8)
-// ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(91,3+8)
-// ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(92,3+8)
-// ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(93,3+8)
-// ERROR 1030: "'export' modifier already seen." in modifier-errors.ts(96,8+6)
-// ERROR 1029: "'export' modifier must precede 'declare' modifier." in modifier-errors.ts(97,9+6)
-// ERROR 1029: "'export' modifier must precede 'abstract' modifier." in modifier-errors.ts(98,10+6)
-// ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(100,3+6)
-// ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(101,3+6)
-// ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(102,3+6)
-// ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(103,3+6)
-// ERROR 1090: "'export' modifier cannot appear on a parameter." in modifier-errors.ts(104,15+6)
-// ERROR 1030: "'declare' modifier already seen." in modifier-errors.ts(108,9+7)
-// ERROR 1090: "'declare' modifier cannot appear on a parameter." in modifier-errors.ts(110,15+7)
-// ERROR 1030: "'abstract' modifier already seen." in modifier-errors.ts(114,10+8)
+// ERROR 1030: "'readonly' modifier already seen." in modifier-errors.ts(86,12+8)
+// ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(87,3+8)
+// ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(88,3+8)
+// ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(89,3+8)
+// ERROR 1030: "'export' modifier already seen." in modifier-errors.ts(92,8+6)
+// ERROR 1029: "'export' modifier must precede 'declare' modifier." in modifier-errors.ts(93,9+6)
+// ERROR 1029: "'export' modifier must precede 'abstract' modifier." in modifier-errors.ts(94,10+6)
+// ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(96,3+6)
+// ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(97,3+6)
+// ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(98,3+6)
+// ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(99,3+6)
+// ERROR 1090: "'export' modifier cannot appear on a parameter." in modifier-errors.ts(100,15+6)
+// ERROR 1030: "'declare' modifier already seen." in modifier-errors.ts(104,9+7)
+// ERROR 1090: "'declare' modifier cannot appear on a parameter." in modifier-errors.ts(106,15+7)
+// ERROR 1030: "'abstract' modifier already seen." in modifier-errors.ts(110,10+8)
+// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(111,1+8)
+// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(112,1+8)
+// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(113,1+8)
+// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(114,1+8)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(115,1+8)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(116,1+8)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(117,1+8)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(118,1+8)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(119,1+8)
+// ERROR 1146: "Declaration expected." in modifier-errors.ts(119,10+14)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(120,1+8)
+// ERROR 1146: "Declaration expected." in modifier-errors.ts(120,10+17)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(121,1+8)
-// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(122,1+8)
-// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(123,1+8)
-// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(124,1+8)
-// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(125,1+8)
-// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(126,1+8)
-// ERROR 1243: "'static' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(128,12+6)
-// ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(108,1+7)
-// ERROR 1243: "'private' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(129,12+7)
-// ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(108,1+7)
-// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(130,15+8)
-// ERROR 1089: "'static' modifier cannot appear on a constructor declaration." in modifier-errors.ts(135,3+6)
-// ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(138,3+8)
-// ERROR 1089: "'abstract' modifier cannot appear on a constructor declaration." in modifier-errors.ts(141,3+8)
+// ERROR 1146: "Declaration expected." in modifier-errors.ts(121,10+13)
+// ERROR 1243: "'static' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(123,12+6)
+// ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(104,1+7)
+// ERROR 1243: "'private' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(124,12+7)
+// ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(104,1+7)
+// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(125,15+8)
+// ERROR 1089: "'static' modifier cannot appear on a constructor declaration." in modifier-errors.ts(130,3+6)
+// ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(133,3+8)
+// ERROR 1089: "'abstract' modifier cannot appear on a constructor declaration." in modifier-errors.ts(136,3+8)
+// ERROR 1191: "An import declaration cannot have modifiers." in modifier-errors.ts(138,9+18)
+// ERROR 1146: "Declaration expected." in modifier-errors.ts(139,8+13)
+// ERROR 1146: "Declaration expected." in modifier-errors.ts(140,8+16)

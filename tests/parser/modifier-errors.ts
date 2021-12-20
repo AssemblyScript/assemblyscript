@@ -31,36 +31,33 @@ public function d(): void {};
 public class E {};
 public interface F {};
 public namespace G {};
-public import e from "";
 public type H = null;
-public export default f;
-public export { g };
-protected var h = 1;
-protected let i = 1;
-protected const j = 1;
+public export default e;
+public export { f };
+protected var g = 1;
+protected let h = 1;
+protected const i = 1;
 protected const enum I {};
 protected enum J {};
-protected function k(): void {};
+protected function j(): void {};
 protected class K {};
 protected interface L {};
 protected namespace M {};
-protected import l from "";
 protected type N = null;
-protected export default m;
-protected export { n };
-private var o = 1;
-private let p = 1;
-private const q = 1;
+protected export default k;
+protected export { l };
+private var m = 1;
+private let n = 1;
+private const o = 1;
 private const enum O {};
 private enum P {};
-private function r(): void {};
+private function p(): void {};
 private class Q {};
 private interface R {};
 private namespace S {};
-private import s from "";
 private type T = null;
-private export default t;
-private export { u };
+private export default q;
+private export { r };
 // private identifier?
 // static
 class U {
@@ -72,19 +69,18 @@ abstract class V {
   abstract static a: void;
   static abstract b: void;
 }
-static var v = 1;
-static let w = 1;
-static const x = 1;
+static var s = 1;
+static let t = 1;
+static const u = 1;
 static const enum W {};
 static enum X {};
-static function y(): void {};
+static function v(): void {};
 static class Y {};
 static interface Z {};
 static namespace AB {};
-static import z from "";
 static type BB = null;
-static export default ab;
-static export { bb };
+static export default w;
+static export { x };
 // readonly
 class CB {
   readonly readonly a: void;
@@ -112,18 +108,17 @@ class IB {
 // private identifier?
 // abstract
 abstract abstract class JB {};
-abstract var cb = 1;
-abstract let db = 1;
-abstract const eb = 1;
+abstract var y = 1;
+abstract let z = 1;
+abstract const ab = 1;
 abstract const enum KB {};
 abstract enum LB {};
-abstract function fb(): void {};
+abstract function bb(): void {};
 abstract interface MB {};
 abstract namespace NB {};
-abstract import gb from "";
 abstract type OB = null;
-abstract export default hb;
-abstract export { ib };
+abstract export default cb;
+abstract export { db };
 abstract class PB {
   abstract static a: void;
   abstract private b: void;
@@ -140,4 +135,6 @@ class RB {
 abstract class SB {
   abstract constructor();
 }
-declare import jb from "";
+declare import eb from "";
+export if (true) {};
+export while (true) {};

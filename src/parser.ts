@@ -220,7 +220,8 @@ export class Parser extends DiagnosticEmitter {
     }
 
     // check modifiers
-    flags |= this.parseModifiers(tn, ModifierContextFlags.TOP_LEVEL);
+    const modifierFlags = this.parseModifiers(tn, ModifierContextFlags.TOP_LEVEL);
+    flags |= modifierFlags;
 
     // parse the statement
     var statement: Statement | null = null;
@@ -354,22 +355,25 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    // check if this an `export default` declaration
-    if ((flags & CommonFlags.DEFAULT) && statement !== null) {
+    if (modifierFlags != 0 && statement !== null) {
       switch (statement.kind) {
         case NodeKind.ENUMDECLARATION:
         case NodeKind.FUNCTIONDECLARATION:
         case NodeKind.CLASSDECLARATION:
         case NodeKind.INTERFACEDECLARATION:
-        case NodeKind.NAMESPACEDECLARATION: {
-          return Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
-        }
-        default: {
+        case NodeKind.NAMESPACEDECLARATION:
+          if (flags & CommonFlags.DEFAULT)
+            return Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
+        case NodeKind.VARIABLE:
+          break;
+        case NodeKind.IMPORT:
           this.error(
-            DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(this.defaultStart, this.defaultEnd), "default"
+            DiagnosticCode.An_import_declaration_cannot_have_modifiers,
+            tn.range(startPos, tn.pos)
           );
-        }
+          break;
+        default:
+          this.error(DiagnosticCode.Declaration_expected, statement.range);
       }
     }
     return statement;

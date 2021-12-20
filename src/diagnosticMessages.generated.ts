@@ -116,6 +116,7 @@ export enum DiagnosticCode {
   Octal_digit_expected = 1178,
   An_implementation_cannot_be_declared_in_ambient_contexts = 1183,
   The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer = 1190,
+  An_import_declaration_cannot_have_modifiers = 1191,
   An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive = 1198,
   Unterminated_Unicode_escape_sequence = 1199,
   Decorators_are_not_valid_here = 1206,
@@ -315,6 +316,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1178: return "Octal digit expected.";
     case 1183: return "An implementation cannot be declared in ambient contexts.";
     case 1190: return "The variable declaration of a 'for...of' statement cannot have an initializer.";
+    case 1191: return "An import declaration cannot have modifiers.";
     case 1198: return "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.";
     case 1199: return "Unterminated Unicode escape sequence.";
     case 1206: return "Decorators are not valid here.";

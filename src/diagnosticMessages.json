@@ -113,6 +113,7 @@
   "Octal digit expected.": 1178,
   "An implementation cannot be declared in ambient contexts.": 1183,
   "The variable declaration of a 'for...of' statement cannot have an initializer.": 1190,
+  "An import declaration cannot have modifiers.": 1191,
   "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": 1198,
   "Unterminated Unicode escape sequence.": 1199,
   "Decorators are not valid here.": 1206,
