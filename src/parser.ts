@@ -364,7 +364,9 @@ export class Parser extends DiagnosticEmitter {
         case NodeKind.NAMESPACEDECLARATION:
           if (flags & CommonFlags.DEFAULT)
             return Node.createExportDefaultStatement(<DeclarationStatement>statement, tn.range(startPos, tn.pos));
+        case NodeKind.TYPEDECLARATION:
         case NodeKind.VARIABLE:
+        case NodeKind.EXPORT:
           break;
         case NodeKind.IMPORT:
           this.error(
