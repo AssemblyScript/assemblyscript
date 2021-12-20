@@ -89,6 +89,7 @@ export {
 class U {
   static a: void;
   readonly b: void;
+  constructor(c: void) {}
 }
 abstract class V {
   abstract a: void;
@@ -137,10 +138,13 @@ class GB {
   }
   set c(d: void) {}
   e(): void {}
+  constructor(f: void) {}
 }
 declare class HB {}
 ;
-class IB {}
+class IB {
+  constructor(a: void) {}
+}
 abstract class JB {}
 ;
 var cb = 1;
@@ -166,6 +170,7 @@ export {
 abstract class PB {
   abstract a: void;
   abstract b: void;
+  constructor(c: void) {}
 }
 class QB {
   static constructor() {}
@@ -241,7 +246,7 @@ import {
 // ERROR 1044: "'private' modifier cannot appear on a module or namespace element." in modifier-errors.ts(63,1+7)
 // ERROR 1030: "'static' modifier already seen." in modifier-errors.ts(67,10+6)
 // ERROR 1029: "'static' modifier must precede 'readonly' modifier." in modifier-errors.ts(68,12+6)
-// ERROR 1003: "Identifier expected." in modifier-errors.ts(69,14+1)
+// ERROR 1090: "'static' modifier cannot appear on a parameter." in modifier-errors.ts(69,15+6)
 // ERROR 1243: "'static' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(72,12+6)
 // ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(72,19+1)
 // ERROR 1243: "'static' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(73,10+8)
@@ -270,8 +275,9 @@ import {
 // ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(101,3+6)
 // ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(102,3+6)
 // ERROR 1031: "'export' modifier cannot appear on class elements of this kind." in modifier-errors.ts(103,3+6)
-// ERROR 1003: "Identifier expected." in modifier-errors.ts(104,14+1)
+// ERROR 1090: "'export' modifier cannot appear on a parameter." in modifier-errors.ts(104,15+6)
 // ERROR 1030: "'declare' modifier already seen." in modifier-errors.ts(108,9+7)
+// ERROR 1090: "'declare' modifier cannot appear on a parameter." in modifier-errors.ts(110,15+7)
 // ERROR 1030: "'abstract' modifier already seen." in modifier-errors.ts(114,10+8)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(115,1+8)
 // ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(116,1+8)
@@ -289,6 +295,7 @@ import {
 // ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(108,1+7)
 // ERROR 1243: "'private' modifier cannot be used with 'abstract' modifier." in modifier-errors.ts(129,12+7)
 // ERROR 100: "Not implemented: Abstract fields" in modifier-errors.ts(108,1+7)
+// ERROR 1242: "'abstract' modifier can only appear on a class, method, or property declaration." in modifier-errors.ts(130,15+8)
 // ERROR 1089: "'static' modifier cannot appear on a constructor declaration." in modifier-errors.ts(135,3+6)
 // ERROR 1024: "'readonly' modifier can only appear on a property declaration or index signature." in modifier-errors.ts(138,3+8)
 // ERROR 1089: "'abstract' modifier cannot appear on a constructor declaration." in modifier-errors.ts(141,3+8)

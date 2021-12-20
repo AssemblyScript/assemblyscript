@@ -1250,47 +1250,26 @@ export class Parser extends DiagnosticEmitter {
   ): ParameterNode | null {
 
     // before: ('public' | 'private' | 'protected' | '...')? Identifier '?'? (':' Type)? ('=' Expression)?
+    
+    tn.peek();
+    var startPos = tn.nextTokenPos; 
+    var accessFlags: CommonFlags = CommonFlags.NONE;
+    if (isConstructor) {
+      accessFlags = this.parseModifiers(tn, ModifierContextFlags.PARAMETER);
+    }
 
     var isRest = false;
     var isOptional = false;
-    var startRange: Range | null = null;
-    var accessFlags: CommonFlags = CommonFlags.NONE;
-    if (isConstructor) {
-      if (tn.skip(Token.PUBLIC)) {
-        startRange = tn.range();
-        accessFlags |= CommonFlags.PUBLIC;
-      } else if (tn.skip(Token.PROTECTED)) {
-        startRange = tn.range();
-        accessFlags |= CommonFlags.PROTECTED;
-      } else if (tn.skip(Token.PRIVATE)) {
-        startRange = tn.range();
-        accessFlags |= CommonFlags.PRIVATE;
-      }
-      if (tn.peek() == Token.READONLY) {
-        let state = tn.mark();
-        tn.next();
-        if (tn.peek() != Token.COLON) { // modifier
-          tn.discard(state);
-          if (!startRange) startRange = tn.range();
-          accessFlags |= CommonFlags.READONLY;
-        } else { // identifier
-          tn.reset(state);
-        }
-      }
-    }
     if (tn.skip(Token.DOT_DOT_DOT)) {
       if (accessFlags) {
         this.error(
           DiagnosticCode.A_parameter_property_cannot_be_declared_using_a_rest_parameter,
           tn.range()
         );
-      } else {
-        startRange = tn.range();
       }
       isRest = true;
     }
     if (tn.skipIdentifier()) {
-      if (!isRest) startRange = tn.range();
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let type: TypeNode | null = null;
       if (isOptional = tn.skip(Token.QUESTION)) {
@@ -1335,7 +1314,7 @@ export class Parser extends DiagnosticEmitter {
         identifier,
         type,
         initializer,
-        Range.join(assert(startRange), tn.range())
+        new Range(startPos, tn.pos)
       );
       param.flags |= accessFlags;
       return param;
@@ -2018,7 +1997,7 @@ export class Parser extends DiagnosticEmitter {
               DiagnosticCode._0_modifier_already_seen,
               tn.range(), "readonly"
             );
-          } else if ((context & memberFlag) == 0) { // doesn't handle all cases, like methods and getters/setters
+          } else if ((context & (memberFlag | ModifierContextFlags.PARAMETER)) == 0) { // doesn't handle all cases, like methods and getters/setters
             this.error(
               DiagnosticCode._readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature,
               tn.range()
