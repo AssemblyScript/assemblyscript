@@ -291,7 +291,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
         value: function at(index) {
           return this[index >= 0 ? index : index + this.length];
         },
-        enumerable: true
+        configurable: true
       });
     }
 
@@ -303,7 +303,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
           }
           return -1;
         },
-        enumerable: true
+        configurable: true
       });
     }
 
@@ -312,7 +312,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
         value: function wrap(buffer, byteOffset, length) {
           return new Ctr(buffer, byteOffset, length);
         },
-        enumerable: true
+        configurable: true
       });
     }
   });
