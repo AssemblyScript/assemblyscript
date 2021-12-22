@@ -20,7 +20,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19732))
  (memory $0 1)
- (data (i32.const 1036) "\1c")
+ (data (i32.const 1036) "\1c\00\00\00\03")
  (data (i32.const 1052) "\08\00\00\00\01")
  (data (i32.const 1068) "<")
  (data (i32.const 1080) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
