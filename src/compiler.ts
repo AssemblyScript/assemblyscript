@@ -2041,6 +2041,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayBufferInstance = program.arrayBufferInstance;
     var buf = arrayBufferInstance.createBuffer(values.length * elementType.byteSize);
     this.program.OBJECTInstance.writeField("rtId", id, buf, 0); // use specified rtId
+    this.program.OBJECTInstance.writeField("gcInfo", 3, buf, 0); // static buffer as transparent
     this.writeStaticBuffer(buf, program.totalOverhead, elementType, values);
     return this.addRuntimeMemorySegment(buf);
   }
