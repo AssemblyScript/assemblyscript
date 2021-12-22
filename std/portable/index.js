@@ -107,8 +107,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   globalScope["clz"] = Math.clz32;
 
   globalScope["ctz"] = function ctz(value) {
-    var c = Math.clz32(value & -value);
-    return value ? 31 - c : c;
+    return 32 - Math.clz32(~value & (value - 1));
   };
 
   globalScope["popcnt"] = function popcnt(value) {
