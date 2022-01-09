@@ -12,15 +12,15 @@
     "stats": true
   },
   "targets": {
-    "untouched": {
-      "outFile": "../build/assemblyscript.untouched.wasm",
-      "textFile": "../build/assemblyscript.untouched.wast",
+    "debug": {
+      "outFile": "../build/assemblyscript.debug.wasm",
+      "textFile": "../build/assemblyscript.debug.wast",
       "debug": true,
       "sourceMap": true
     },
-    "optimized": {
-      "outFile": "../build/assemblyscript.optimized.wasm",
-      "textFile": "../build/assemblyscript.optimized.wast",
+    "release": {
+      "outFile": "../build/assemblyscript.release.wasm",
+      "textFile": "../build/assemblyscript.release.wast",
       "optimizeLevel": 3,
       "shrinkLevel": 0
     },
@@ -31,15 +31,15 @@
       "use": "ASC_RTRACE=1",
       "runPasses": []
     },
-    "untouched-bootstrap": {
-      "outFile": "../build/assemblyscript.untouched-bootstrap.wasm",
-      "textFile": "../build/assemblyscript.untouched-bootstrap.wast",
+    "debug-bootstrap": {
+      "outFile": "../build/assemblyscript.debug-bootstrap.wasm",
+      "textFile": "../build/assemblyscript.debug-bootstrap.wast",
       "debug": true,
       "sourceMap": true
     },
-    "optimized-bootstrap": {
-      "outFile": "../build/assemblyscript.optimized-bootstrap.wasm",
-      "textFile": "../build/assemblyscript.optimized-bootstrap.wast",
+    "release-bootstrap": {
+      "outFile": "../build/assemblyscript.release-bootstrap.wasm",
+      "textFile": "../build/assemblyscript.release-bootstrap.wast",
       "optimizeLevel": 3,
       "shrinkLevel": 0
     }

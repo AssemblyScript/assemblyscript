@@ -117,7 +117,7 @@ export class JSBuilder extends ExportsWalker {
   private needsLowerInternref: bool = false;
   private needsRetain: bool = false;
   private needsRelease: bool = false;
-  private needsNull: bool = false;
+  private needsNotNull: bool = false;
 
   private deferredLifts: Set<Element> = new Set();
   private deferredLowers: Set<Element> = new Set();
@@ -485,7 +485,8 @@ export class JSBuilder extends ExportsWalker {
 
     sb.push(""); // placeholder
     indent(sb, this.indentLevel++);
-    sb.push("export async function instantiate(module, imports = {}) {\n");
+    if (!this.esm) sb.push("export ");
+    sb.push("async function instantiate(module, imports = {}) {\n");
     const insertPos = sb.push("") - 1;
 
     // Instrument module imports. Keeps raw (JS) imports on the respective
@@ -793,7 +794,7 @@ export class JSBuilder extends ExportsWalker {
   }
 `);
     }
-    if (this.needsNull) {
+    if (this.needsNotNull) {
       sb.push(`  function __notnull() {
     throw TypeError("non-nullable value must not be null");
   }
@@ -1026,7 +1027,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(name);
       sb.push(")");
       if (!type.is(TypeFlags.NULLABLE)) {
-        this.needsNull = true;
+        this.needsNotNull = true;
         sb.push(" || __notnull()");
       }
     } else {

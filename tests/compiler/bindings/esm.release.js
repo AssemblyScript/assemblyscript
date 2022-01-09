@@ -1,4 +1,4 @@
-export async function instantiate(module, imports = {}) {
+async function instantiate(module, imports = {}) {
   const adaptedImports = {
     env: Object.assign(Object.create(globalThis), {
       trace(message, n, a0, a1, a2, a3, a4) {
@@ -368,4 +368,4 @@ export const {
       : WebAssembly.compile(await (await import("node:fs/promises")).readFile(url))
   ), {
   }
-))(new URL("esm.optimized.wasm", import.meta.url));
+))(new URL("esm.release.wasm", import.meta.url));

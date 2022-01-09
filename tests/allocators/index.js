@@ -50,8 +50,8 @@ async function test(file) {
 }
 
 if (process.argv.length > 2) {
-  await test(process.argv[2] + "/untouched.wasm");
-  await test(process.argv[2] + "/optimized.wasm");
+  await test(process.argv[2] + "/debug.wasm");
+  await test(process.argv[2] + "/release.wasm");
 } else {
   console.error("Usage: npm test <allocator>");
   process.exit(1);

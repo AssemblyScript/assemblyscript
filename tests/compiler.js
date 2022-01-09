@@ -144,7 +144,7 @@ async function runTest(basename) {
   // Makes sure to reset the environment after
   function prepareResult(code, message = null) {
     if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
-    if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".untouched.wasm"), err => { /* nop */ });
+    if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".debug.wasm"), err => { /* nop */ });
     return { code, message };
   }
 
@@ -179,7 +179,7 @@ async function runTest(basename) {
     config.asc_flags.forEach(flag => { asc_flags.push(...flag.split(" ")); });
   }
 
-  // Build untouched
+  // Build debug
   {
     const cmd = [
       basename + ".ts",
@@ -188,9 +188,9 @@ async function runTest(basename) {
       "--textFile" // -> stdout
     ];
     if (asc_flags) cmd.push(...asc_flags);
-    cmd.push("--outFile", basename + ".untouched.wasm");
+    cmd.push("--outFile", basename + ".debug.wasm");
     if (args.noColors) cmd.push("--noColors");
-    const compileUntouched = section("compile untouched");
+    const compileDebug = section("compile debug");
     const { error } = await asc.main(cmd, { stdout, stderr });
 
     let expectStderr = config.stderr;
@@ -199,12 +199,12 @@ async function runTest(basename) {
       stderr.write(error.stack);
       stderr.write("\n---\n");
       if (expectStderr) {
-        compileUntouched.end(SKIPPED);
+        compileDebug.end(SKIPPED);
       } else {
-        compileUntouched.end(FAILURE);
+        compileDebug.end(FAILURE);
       }
     } else {
-      compileUntouched.end(SUCCESS);
+      compileDebug.end(SUCCESS);
     }
 
     // check expected stderr patterns in order
@@ -234,18 +234,18 @@ async function runTest(basename) {
     const compareFixture = section("compare fixture");
     const actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
-      fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
+      fs.writeFileSync(path.join(basedir, basename + ".debug.wat"), actual, { encoding: "utf8" });
       console.log("  " + stdoutColors.yellow("Created fixture"));
       compareFixture.end(SKIPPED);
     } else {
-      const expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
+      const expected = fs.readFileSync(path.join(basedir, basename + ".debug.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
       if (args.noDiff) {
         if (expected != actual) {
           compareFixture.end(FAILURE);
           return prepareResult(FAILURE, "fixture mismatch");
         }
       } else {
-        let diffs = diff(basename + ".untouched.wat", expected, actual);
+        let diffs = diff(basename + ".debug.wat", expected, actual);
         if (diffs !== null) {
           console.log(diffs);
           compareFixture.end(FAILURE);
@@ -262,7 +262,7 @@ async function runTest(basename) {
   const gluePath = path.join(basedir, basename + ".js");
   const glue = fs.existsSync(gluePath) ? await import(pathToFileURL(gluePath)) : {};
 
-  // Build optimized
+  // Build release
   {
     const cmd = [
       basename + ".ts",
@@ -271,38 +271,38 @@ async function runTest(basename) {
       "-O"
     ];
     if (asc_flags) cmd.push(...asc_flags);
-    if (args.create) cmd.push("--textFile", basename + ".optimized.wat");
+    if (args.create) cmd.push("--textFile", basename + ".release.wat");
     if (args.noColors) cmd.push("--noColors");
-    const compileOptimized = section("compile optimized");
+    const compileRelease = section("compile release");
     const { error } = await asc.main(cmd, { stdout: stdout, stderr: stderr });
 
     if (error) {
       stderr.write("---\n");
       stderr.write(error.stack);
       stderr.write("\n---\n");
-      compileOptimized.end(FAILURE);
+      compileRelease.end(FAILURE);
       return prepareResult(FAILURE, error.message);
     }
-    compileOptimized.end(SUCCESS);
+    compileRelease.end(SUCCESS);
 
-    const untouchedBuffer = fs.readFileSync(path.join(basedir, basename + ".untouched.wasm"));
-    const optimizedBuffer = stdout.toBuffer();
-    const instantiateUntouched = section("instantiate untouched");
+    const debugBuffer = fs.readFileSync(path.join(basedir, basename + ".debug.wasm"));
+    const releaseBuffer = stdout.toBuffer();
+    const instantiateDebug = section("instantiate debug");
     if (config.skipInstantiate) {
-      instantiateUntouched.end(SKIPPED);
+      instantiateDebug.end(SKIPPED);
     } else {
 
-      if (!await testInstantiate(untouchedBuffer, glue, stderr, config.asc_wasi)) {
-        instantiateUntouched.end(FAILURE);
-        return prepareResult(FAILURE, "instantiate error (untouched)");
+      if (!await testInstantiate(debugBuffer, glue, stderr, config.asc_wasi)) {
+        instantiateDebug.end(FAILURE);
+        return prepareResult(FAILURE, "instantiate error (debug)");
       }
-      instantiateUntouched.end(SUCCESS);
-      const instantiateOptimized = section("instantiate optimized");
-      if (!await testInstantiate(optimizedBuffer, glue, stderr, config.asc_wasi)) {
-        instantiateOptimized.end(FAILURE);
-        return prepareResult(FAILURE, "instantiate error (optimized)");
+      instantiateDebug.end(SUCCESS);
+      const instantiateRelease = section("instantiate release");
+      if (!await testInstantiate(releaseBuffer, glue, stderr, config.asc_wasi)) {
+        instantiateRelease.end(FAILURE);
+        return prepareResult(FAILURE, "instantiate error (release)");
       }
-      instantiateOptimized.end(SUCCESS);
+      instantiateRelease.end(SUCCESS);
     }
   }
 

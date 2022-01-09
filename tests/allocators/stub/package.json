@@ -2,8 +2,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run build:untouched && npm run build:optimized",
-    "build:untouched": "node ../../../bin/asc assembly/index.ts -t untouched.wat -o untouched.wasm --runtime stub --sourceMap --stats",
-    "build:optimized": "node ../../../bin/asc assembly/index.ts -t optimized.wat -o optimized.wasm --runtime stub --sourceMap --stats --noAssert --optimize"
+    "build": "npm run build:debug && npm run build:release",
+    "build:debug": "node ../../../bin/asc assembly/index.ts -t debug.wat -o debug.wasm --runtime stub --sourceMap --stats",
+    "build:release": "node ../../../bin/asc assembly/index.ts -t release.wat -o release.wasm --runtime stub --sourceMap --stats --noAssert --optimize"
   }
 }

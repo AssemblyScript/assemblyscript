@@ -7,37 +7,37 @@ function assert(c) {
 (async () => {
   var module;
 
-  module = await exports.instantiate(fetch("./build/untouched.wasm"));
+  module = await exports.instantiate(fetch("./build/debug.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiate(await fetch("./build/untouched.wasm"));
+  module = await exports.instantiate(await fetch("./build/debug.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiate((await fetch("./build/untouched.wasm")).arrayBuffer());
+  module = await exports.instantiate((await fetch("./build/debug.wasm")).arrayBuffer());
   assert(module.memory);
 
-  module = await exports.instantiate(await (await fetch("./build/untouched.wasm")).arrayBuffer());
+  module = await exports.instantiate(await (await fetch("./build/debug.wasm")).arrayBuffer());
   assert(module.memory);
 
-  module = await exports.instantiateStreaming(fetch("./build/untouched.wasm"));
+  module = await exports.instantiateStreaming(fetch("./build/debug.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiateStreaming(await fetch("./build/untouched.wasm"));
+  module = await exports.instantiateStreaming(await fetch("./build/debug.wasm"));
   assert(module.memory);
 
   var instantiateStreaming = WebAssembly.instantiateStreaming;
   delete WebAssembly.instantiateStreaming;
 
-  module = await exports.instantiate(fetch("./build/untouched.wasm"));
+  module = await exports.instantiate(fetch("./build/debug.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiate(await fetch("./build/untouched.wasm"));
+  module = await exports.instantiate(await fetch("./build/debug.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiateStreaming(fetch("./build/untouched.wasm"));
+  module = await exports.instantiateStreaming(fetch("./build/debug.wasm"));
   assert(module.memory);
 
-  module = await exports.instantiateStreaming(await fetch("./build/untouched.wasm"));
+  module = await exports.instantiateStreaming(await fetch("./build/debug.wasm"));
   assert(module.memory);
 
   WebAssembly.instantiateStreaming = instantiateStreaming;

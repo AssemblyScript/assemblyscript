@@ -7,7 +7,7 @@ export function preInstantiate(imports, exports) {
   // env.mutableGlobal = new WebAssembly.Global({ value: "i32", mutable: true}, 42);
 }
 
-// run only once on untouched
+// run only once on debug build
 var ran = false;
 
 export async function postInstantiate(instance) {
@@ -16,7 +16,7 @@ export async function postInstantiate(instance) {
     return;
   }
   ran = true;
-  const exports = await import(new URL("esm.untouched.js", import.meta.url));
+  const exports = await import(new URL("esm.debug.js", import.meta.url));
 
   assert.strictEqual(exports.plainGlobal.value, 1);
 

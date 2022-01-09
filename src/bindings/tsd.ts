@@ -53,10 +53,16 @@ export class TSDBuilder extends ExportsWalker {
     var sb = this.sb;
     var tsType = this.toTypeScriptType(element.type, Mode.EXPORT);
     indent(sb, this.indentLevel);
-    sb.push("/** ");
+    sb.push("/**\n");
+    indent(sb, this.indentLevel);
+    sb.push(" * ");
     sb.push(element.internalName);
-    sb.push(": ");
+    sb.push("\n");
+    indent(sb, this.indentLevel);
+    sb.push(" * @type `");
     sb.push(element.type.toString());
+    sb.push("`\n");
+    indent(sb, this.indentLevel);    
     sb.push(" */\n");
     indent(sb, this.indentLevel);
     sb.push("export ");
@@ -87,8 +93,14 @@ export class TSDBuilder extends ExportsWalker {
   visitEnum(name: string, element: Enum): void {
     var sb = this.sb;
     indent(sb, this.indentLevel);
-    sb.push("/** ");
+    sb.push("/**\n");
+    indent(sb, this.indentLevel);
+    sb.push(" * ");
     sb.push(element.internalName);
+    sb.push("\n");
+    indent(sb, this.indentLevel);
+    sb.push(" * @type `i32`\n");
+    indent(sb, this.indentLevel);
     sb.push(" */\n");
     indent(sb, this.indentLevel++);
     sb.push("export ");
@@ -116,9 +128,28 @@ export class TSDBuilder extends ExportsWalker {
     var sb = this.sb;
     var signature = element.signature;
     indent(sb, this.indentLevel);
-    sb.push("/** ");
+    sb.push("/**\n");
+    indent(sb, this.indentLevel);
+    sb.push("  * ");
     sb.push(element.internalName);
-    sb.push(element.signature.toString());
+    sb.push("\n");
+    var parameterTypes = signature.parameterTypes;
+    var numParameters = parameterTypes.length;
+    for (let i = 0; i < numParameters; ++i) {
+      indent(sb, this.indentLevel);
+      sb.push("  * @param ");
+      sb.push(element.getParameterName(i));
+      sb.push(" `");
+      sb.push(parameterTypes[i].toString());
+      sb.push("`\n");
+    }
+    var returnType = signature.returnType;
+    if (returnType != Type.void) {
+      indent(sb, this.indentLevel);
+      sb.push("  * @returns `");
+      sb.push(returnType.toString());
+      sb.push("`\n");
+    }
     sb.push(" */\n");
     indent(sb, this.indentLevel);
     sb.push("export ");
@@ -126,18 +157,16 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("function ");
     sb.push(name);
     sb.push("(");
-    var parameters = signature.parameterTypes;
-    var numParameters = parameters.length;
     var requiredParameters = signature.requiredParameters;
     for (let i = 0; i < numParameters; ++i) {
       if (i) sb.push(", ");
       sb.push(element.getParameterName(i));
       if (i >= requiredParameters) sb.push("?");
       sb.push(": ");
-      sb.push(this.toTypeScriptType(parameters[i], Mode.IMPORT));
+      sb.push(this.toTypeScriptType(parameterTypes[i], Mode.IMPORT));
     }
     sb.push("): ");
-    sb.push(this.toTypeScriptType(signature.returnType, Mode.EXPORT));
+    sb.push(this.toTypeScriptType(returnType, Mode.EXPORT));
     sb.push(";\n");
   }
 
@@ -301,9 +330,9 @@ export class TSDBuilder extends ExportsWalker {
 
   makeRecordType(clazz: Class, mode: Mode): string {
     var sb = new Array<string>();
-    sb.push("/** ");
+    sb.push("/** `");
     sb.push(clazz.internalName);
-    sb.push(" */\n");
+    sb.push("` */\n");
     sb.push("declare interface __Record");
     sb.push(clazz.id.toString());
     sb.push("<TUndefined> {\n");
@@ -337,9 +366,9 @@ export class TSDBuilder extends ExportsWalker {
 
   makeInternrefType(clazz: Class): string {
     var sb = new Array<string>();
-    sb.push("/** ");
+    sb.push("/** `");
     sb.push(clazz.internalName);
-    sb.push(" */\n");
+    sb.push("` */\n");
     sb.push("declare class __Internref");
     sb.push(clazz.id.toString());
     sb.push(" extends Number {\n");

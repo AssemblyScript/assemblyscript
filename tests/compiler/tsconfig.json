@@ -1,11 +1,13 @@
 {
   "extends": "../../std/assembly.json",
   "compilerOptions": {
-    "module": "ES6",
-    "target": "esnext",
-    "lib": ["ESNext"]
+    "module": "ES6"
   },
   "include": [
     "./**/*.ts"
+  ],
+  "exclude": [
+    "./**/*.d.ts",
+    "./**/_*.ts"
   ]
 }
