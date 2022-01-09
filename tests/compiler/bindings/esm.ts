@@ -120,14 +120,15 @@ import { console } from "bindings/dom";
 
 console.log("42 from console.log");
 
-@external("env", "globalThis")
-declare const immutableGlobal: externref;
+// @ts-ignore
+@external("env", "globalThis") declare const immutableGlobal: externref;
 immutableGlobal;
 
-@external("env", "globalThis.globalThis")
-declare const immutableGlobalNested: externref;
+// @ts-ignore
+@external("env", "globalThis.globalThis") declare const immutableGlobalNested: externref;
 immutableGlobalNested;
 
+// @ts-ignore
 @external("env", "Date#getTimezoneOffset")
 @external.js("return new Date().getTimezoneOffset();")
 declare function Date_getTimezoneOffset(): i32;
