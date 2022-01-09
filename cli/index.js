@@ -860,7 +860,7 @@ export async function main(argv, options) {
       : null;
     let basename = hasFileOutput
       ? path.basename(basepath)
-      : null;
+      : "output";
 
     assemblyscript.setBasenameHint(compilerOptions, basename);
 
