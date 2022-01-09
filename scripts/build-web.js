@@ -21,12 +21,13 @@ fs.writeFileSync(path.join(dirname, "..", "dist", "web.html"), `<script async sr
   "imports": {
     "binaryen": ${JSON.stringify(binaryenUrl)},
     "long": ${JSON.stringify(longUrl)},
-    "assemblyscript": ${JSON.stringify(distUrl + "assemblyscript.js")}
+    "assemblyscript": ${JSON.stringify(distUrl + "assemblyscript.js")},
+    "assemblyscript/asc": ${JSON.stringify(distUrl + "asc.js")}
   }
 }
 </script>
 <script type="module">
-import asc from ${JSON.stringify(distUrl + "asc.js")};
+import asc from "assemblyscript/asc";
 
 const files = {
   "index.ts": "export function add(a: i32, b: i32): i32 { return a + b; }"

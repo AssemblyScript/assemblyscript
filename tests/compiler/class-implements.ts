@@ -2,7 +2,7 @@ interface I {
   foo(): i32;
 }
 
-export class A implements I {
+class A implements I {
   foo(): i32 { return 1; }
 }
 
@@ -12,7 +12,7 @@ assert(a.foo() == 1);
 class B {
 }
 
-export class C extends B implements I {
+class C extends B implements I {
   foo(): i32 { return 2; }
 }
 

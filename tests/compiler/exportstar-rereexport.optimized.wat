@@ -1,6 +1,5 @@
 (module
  (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_none (func (param i32)))
@@ -10,7 +9,6 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
- (global $export/c i32 (i32.const 3))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -48,26 +46,8 @@
  (export "renamed_renamed_b" (global $export/b))
  (export "default" (func $export-default/theDefault))
  (export "renamed_default" (func $export-default/theDefault))
- (export "exportstar.add" (func $export/add))
- (export "exportstar.sub" (func $export/sub))
- (export "exportstar.renamed_mul" (func $export/mul))
- (export "exportstar.a" (global $export/a))
- (export "exportstar.b" (global $export/b))
- (export "exportstar.renamed_c" (global $export/c))
- (export "exportstar.ns.two" (func $export-default/theDefault))
- (export "exportstar.default.two" (func $export-default/theDefault))
  (export "memory" (memory $0))
  (start $~start)
- (func $export/add (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.add
- )
- (func $export/mul (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.mul
- )
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
   (local $1 i32)
@@ -1045,11 +1025,6 @@
  )
  (func $export-default/theDefault
   nop
- )
- (func $export/sub (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.sub
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid

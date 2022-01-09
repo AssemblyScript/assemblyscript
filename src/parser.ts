@@ -193,7 +193,7 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     namespace: NamespaceDeclaration | null = null
   ): Statement | null {
-    var flags = CommonFlags.NONE;
+    var flags = namespace ? namespace.flags & CommonFlags.AMBIENT : CommonFlags.NONE;
     var startPos = -1;
 
     // check decorators

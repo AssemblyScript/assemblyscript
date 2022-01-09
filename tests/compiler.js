@@ -4,10 +4,10 @@ import os from "os";
 import v8 from "v8";
 import cluster from "cluster";
 import { createRequire } from "module";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import { WASI } from "wasi";
 import glob from "glob";
-import { stdoutColors } from "../util/terminal.js";
+import { stderrColors, stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
 import { coreCount, threadCount } from "../util/cpu.js";
 import { diff } from "../util/text.js";
@@ -38,6 +38,12 @@ const config = {
     ],
     "type": "b"
   },
+  "noColors": {
+    "description": [
+      "Disables terminal colors."
+    ],
+    "type": "b"
+  },
   "rtraceVerbose": {
     "description": [
       "Enables verbose rtrace output."
@@ -58,6 +64,9 @@ const opts = optionsUtil.parse(process.argv.slice(2), config);
 const args = opts.options;
 const argv = opts.arguments;
 
+stdoutColors.enabled = process.stdout.isTTY && !args.noColors;
+stderrColors.enabled = process.stderr.isTTY && !args.noColors;
+
 if (args.help) {
   console.log([
     stdoutColors.white("SYNTAX"),
@@ -77,7 +86,7 @@ const basedir = path.join(dirname, "compiler");
 function getTests() {
   var tests = glob.sync("**/!(_*).ts", { cwd: basedir })
     .map(name => name.replace(/\.ts$/, ""))
-    .filter(name => !name.includes("node_modules"));
+    .filter(name => !name.endsWith(".d") && !name.includes("node_modules"));
   if (argv.length) { // run matching tests only
     tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
     if (!tests.length) {
@@ -94,7 +103,7 @@ function measureStart() {
 
 function measureEnd(start) {
   const hrtime = process.hrtime(start);
-  return `${(hrtime[0] * 1e9 + hrtime[1] / 1e6).toFixed(3)} ms`;
+  return `${(hrtime[0] * 1e3 + hrtime[1] / 1e6).toFixed(3)} ms`;
 }
 
 // Starts a new section within a test
@@ -179,7 +188,8 @@ async function runTest(basename) {
       "--textFile" // -> stdout
     ];
     if (asc_flags) cmd.push(...asc_flags);
-    cmd.push("--binaryFile", basename + ".untouched.wasm");
+    cmd.push("--outFile", basename + ".untouched.wasm");
+    if (args.noColors) cmd.push("--noColors");
     const compileUntouched = section("compile untouched");
     const { error } = await asc.main(cmd, { stdout, stderr });
 
@@ -250,18 +260,19 @@ async function runTest(basename) {
   stderr.length = 0;
 
   const gluePath = path.join(basedir, basename + ".js");
-  const glue = fs.existsSync(gluePath) ? require(gluePath) : {};
+  const glue = fs.existsSync(gluePath) ? await import(pathToFileURL(gluePath)) : {};
 
   // Build optimized
   {
     const cmd = [
       basename + ".ts",
       "--baseDir", basedir,
-      "--binaryFile", // -> stdout
+      "--outFile", // -> stdout
       "-O"
     ];
     if (asc_flags) cmd.push(...asc_flags);
     if (args.create) cmd.push("--textFile", basename + ".optimized.wat");
+    if (args.noColors) cmd.push("--noColors");
     const compileOptimized = section("compile optimized");
     const { error } = await asc.main(cmd, { stdout: stdout, stderr: stderr });
 
@@ -303,7 +314,7 @@ async function runTest(basename) {
     const cmd = [
       basename + ".ts",
       "--baseDir", basedir,
-      "--binaryFile", // -> stdout
+      "--outFile", // -> stdout
       "--debug",
       "--use", "ASC_RTRACE=1",
       "--exportStart", "_initialize",
@@ -366,7 +377,7 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
     });
 
     const imports = rtrace.install({
-      env: {
+      env: Object.assign({}, globalThis, {
         memory,
         abort: function(msg, file, line, column) {
           console.log(stdoutColors.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
@@ -379,8 +390,11 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
         },
         visit: function() {
           // override in tests
+        },
+        "Date#getTimezoneOffset"() {
+          return new Date().getTimezoneOffset();
         }
-      },
+      }),
       Math,
       Date,
       Reflect
@@ -389,7 +403,7 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
     if (glue.preInstantiate) {
       console.log("  [invoke glue.preInstantiate]");
       const start = measureStart();
-      glue.preInstantiate(imports, exports);
+      await glue.preInstantiate(imports, exports);
       console.log("  [return glue.preInstantiate] " + measureEnd(start));
     }
     const wasi = wasiOptions ? new WASI(wasiOptions) : null;
@@ -399,7 +413,7 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
     if (glue.postInstantiate) {
       console.log("  [invoke glue.postInstantiate]");
       const start = measureStart();
-      glue.postInstantiate(instance);
+      await glue.postInstantiate(instance);
       console.log("  [return glue.postInstantiate] " + measureEnd(start));
     }
     if (wasi) {
@@ -474,9 +488,10 @@ function evaluateResult(failedTests, skippedTests) {
 // Run tests in parallel if requested
 if (args.parallel && coreCount > 2) {
   if (cluster.isWorker) {
-    stdoutColors.enabled = true;
     process.on("message", msg => {
       if (msg.cmd != "run") throw Error("invalid command: " + JSON.stringify(msg));
+      stdoutColors.enabled = !msg.noColors;
+      stderrColors.enabled = !msg.noColors;
       runTest(msg.test).then(({ code, message }) => {
         process.send({ code, message });
       }, err => {
@@ -518,7 +533,7 @@ if (args.parallel && coreCount > 2) {
         }
         current[i] = tests[index++];
         outputs[i] = [];
-        worker.send({ cmd: "run", test: current[i] });
+        worker.send({ cmd: "run", test: current[i], noColors: !stdoutColors.enabled });
       });
       worker.on("disconnect", () => {
         if (workers[i]) throw Error(`worker#${i} died unexpectedly`);

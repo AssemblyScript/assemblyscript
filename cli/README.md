@@ -20,7 +20,7 @@ import asc from "assemblyscript/asc";
 
 const { error, stdout } = await asc.main([
   "myModule.ts",
-  "--binaryFile", "myModule.wasm",
+  "--outFile", "myModule.wasm",
   "--optimize",
   "--sourceMap",
   "--stats"

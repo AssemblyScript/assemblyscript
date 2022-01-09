@@ -2313,6 +2313,7 @@ export abstract class i31 { // FIXME: usage of 'new' requires a class :(
 
 // @ts-ignore: decorator
 @external("env", "abort")
+@external.js("throw Error(`${message} in ${fileName}:${lineNumber}:${columnNumber}`);")
 declare function abort(
   message?: string | null,
   fileName?: string | null,
@@ -2322,6 +2323,7 @@ declare function abort(
 
 // @ts-ignore: decorator
 @external("env", "trace")
+@external.js("console.log(message, ...[a0, a1, a2, a3, a4].slice(0, n));")
 declare function trace(
   message: string,
   n?: i32,

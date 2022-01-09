@@ -64,31 +64,30 @@
 
   "outFile": {
     "category": "Output",
-    "description": "Specifies the output file. File extension indicates format.",
+    "description": "Specifies the WebAssembly output file (.wasm).",
     "type": "s",
     "alias": "o",
     "isPath": true
   },
-  "binaryFile": {
-    "category": "Output",
-    "description": "Specifies the binary output file (.wasm).",
-    "type": "s",
-    "alias": "b",
-    "isPath": true
-  },
   "textFile": {
     "category": "Output",
-    "description": "Specifies the text output file (.wat).",
+    "description": "Specifies the WebAssembly text output file (.wat).",
     "type": "s",
     "alias": "t",
     "isPath": true
   },
-  "tsdFile": {
+  "bindings": {
     "category": "Output",
-    "description": "Specifies the TypeScript definition output file (.d.ts).",
-    "type": "s",
-    "alias": "d",
-    "isPath": true
+    "description": [
+      "Specifies the bindings to generate (.js + .d.ts).",
+      "",
+      "  esm  JavaScript bindings & typings for ESM integration.",
+      "  raw  Like esm, but exports just the instantiate function.",
+      "       Useful where modules are meant to be instantiated",
+      "       multiple times or non-ESM imports must be provided."
+    ],
+    "type": "S",
+    "alias": "b"
   },
 
   "sourceMap": {

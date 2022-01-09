@@ -60,7 +60,7 @@ jobs:
     - name: Bootstrap
       run: npm run bootstrap:${{ matrix.target }}
     - name: Test
-      run: npm run test:compiler -- --wasm out/assemblyscript.${{ matrix.target }}-bootstrap.wasm
+      run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target }}-bootstrap.js
   features:
     name: "Features"
     runs-on: ubuntu-latest

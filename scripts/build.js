@@ -199,7 +199,11 @@ const common = {
   target: "esnext",
   platform: "node",
   format: "esm",
-  external: [ "assemblyscript", "binaryen", "long" ],
+  external: [
+    "assemblyscript",
+    "binaryen",
+    "long"
+  ],
   legalComments: "none",
   bundle: true,
   sourcemap: true,
@@ -210,7 +214,7 @@ const common = {
 };
 
 const srcBuild = esbuild.build({
-  entryPoints: [ "./src/index-js.ts" ],
+  entryPoints: [ "./src/index.ts" ],
   tsconfig: "./src/tsconfig.json",
   outfile: "./dist/assemblyscript.js",
   banner: { js: prelude("The AssemblyScript compiler") },

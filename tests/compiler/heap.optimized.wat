@@ -1,12 +1,10 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $heap/ptr (mut i32) (i32.const 0))
@@ -15,14 +13,6 @@
  (data (i32.const 1048) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1100) "<")
  (data (i32.const 1112) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1164) "<")
- (data (i32.const 1176) "\01\00\00\00\1e\00\00\00N\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
- (data (i32.const 1228) ",")
- (data (i32.const 1240) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s")
- (export "heap.alloc" (func $~lib/memory/heap.alloc))
- (export "heap.realloc" (func $~lib/memory/heap.realloc))
- (export "heap.free" (func $~lib/memory/heap.free))
- (export "heap.reset" (func $~lib/memory/heap.reset))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -556,10 +546,10 @@
   if
    unreachable
   end
-  i32.const 17664
+  i32.const 17552
   i32.const 0
   i32.store
-  i32.const 19232
+  i32.const 19120
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -570,7 +560,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 17664
+    i32.const 17552
     i32.add
     i32.const 0
     i32.store offset=4
@@ -588,7 +578,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 17664
+      i32.const 17552
       i32.add
       i32.const 0
       i32.store offset=96
@@ -606,13 +596,13 @@
     br $for-loop|0
    end
   end
-  i32.const 17664
-  i32.const 19236
+  i32.const 17552
+  i32.const 19124
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 17664
+  i32.const 17552
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
@@ -945,18 +935,6 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $1
  )
- (func $~lib/memory/heap.alloc (param $0 i32) (result i32)
-  global.get $~lib/rt/tlsf/ROOT
-  i32.eqz
-  if
-   call $~lib/rt/tlsf/initialize
-  end
-  global.get $~lib/rt/tlsf/ROOT
-  local.get $0
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 4
-  i32.add
- )
  (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
@@ -987,9 +965,10 @@
   end
   local.get $1
  )
- (func $~lib/rt/tlsf/moveBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/moveBlock (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $0
-  local.get $2
+  i32.const 32
   call $~lib/rt/tlsf/allocateBlock
   local.tee $2
   i32.const 4
@@ -1003,7 +982,7 @@
   i32.and
   memory.copy
   local.get $1
-  i32.const 17660
+  i32.const 17548
   i32.ge_u
   if
    local.get $1
@@ -1018,49 +997,62 @@
   end
   local.get $2
  )
- (func $~lib/memory/heap.realloc (param $0 i32) (param $1 i32) (result i32)
+ (func $~start
+  (local $0 i32)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   call $~lib/rt/tlsf/initialize
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  i32.const 16
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 4
+  i32.add
+  global.set $heap/ptr
+  global.get $heap/ptr
+  local.set $0
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  i32.const 17660
+  i32.const 17548
   i32.lt_u
   if
    global.get $~lib/rt/tlsf/ROOT
    local.get $0
    call $~lib/rt/tlsf/checkUsedBlock
-   local.get $1
    call $~lib/rt/tlsf/moveBlock
    local.set $0
   else
    block $__inlined_func$~lib/rt/tlsf/reallocateBlock
     global.get $~lib/rt/tlsf/ROOT
-    local.set $2
+    local.set $3
     local.get $0
     call $~lib/rt/tlsf/checkUsedBlock
     local.set $0
-    local.get $1
+    i32.const 32
     call $~lib/rt/tlsf/prepareSize
-    local.tee $3
+    local.tee $5
     local.get $0
     i32.load
-    local.tee $4
+    local.tee $1
     i32.const -4
     i32.and
-    local.tee $6
+    local.tee $4
     i32.le_u
     if
-     local.get $2
-     local.get $0
      local.get $3
+     local.get $0
+     local.get $5
      call $~lib/rt/tlsf/prepareBlock
      br $__inlined_func$~lib/rt/tlsf/reallocateBlock
     end
@@ -1072,43 +1064,42 @@
     i32.const -4
     i32.and
     i32.add
-    local.tee $5
+    local.tee $2
     i32.load
-    local.tee $7
+    local.tee $6
     i32.const 1
     i32.and
     if
-     local.get $3
-     local.get $6
+     local.get $5
+     local.get $4
      i32.const 4
      i32.add
-     local.get $7
+     local.get $6
      i32.const -4
      i32.and
      i32.add
-     local.tee $6
+     local.tee $4
      i32.le_u
      if
+      local.get $3
       local.get $2
-      local.get $5
       call $~lib/rt/tlsf/removeBlock
       local.get $0
-      local.get $6
       local.get $4
+      local.get $1
       i32.const 3
       i32.and
       i32.or
       i32.store
-      local.get $2
-      local.get $0
       local.get $3
+      local.get $0
+      local.get $5
       call $~lib/rt/tlsf/prepareBlock
       br $__inlined_func$~lib/rt/tlsf/reallocateBlock
      end
     end
-    local.get $2
+    local.get $3
     local.get $0
-    local.get $1
     call $~lib/rt/tlsf/moveBlock
     local.set $0
    end
@@ -1116,11 +1107,10 @@
   local.get $0
   i32.const 4
   i32.add
- )
- (func $~lib/memory/heap.free (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 17660
+  global.set $heap/ptr
+  global.get $heap/ptr
+  local.tee $0
+  i32.const 17548
   i32.ge_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1140,32 +1130,5 @@
    local.get $0
    call $~lib/rt/tlsf/insertBlock
   end
- )
- (func $~lib/memory/heap.reset
-  i32.const 1184
-  i32.const 1248
-  i32.const 109
-  i32.const 7
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $~start
-  global.get $~lib/rt/tlsf/ROOT
-  i32.eqz
-  if
-   call $~lib/rt/tlsf/initialize
-  end
-  global.get $~lib/rt/tlsf/ROOT
-  i32.const 16
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 4
-  i32.add
-  global.set $heap/ptr
-  global.get $heap/ptr
-  i32.const 32
-  call $~lib/memory/heap.realloc
-  global.set $heap/ptr
-  global.get $heap/ptr
-  call $~lib/memory/heap.free
  )
 )

@@ -56,10 +56,7 @@ import {
 
 import {
   CommonFlags,
-  INSTANCE_DELIMITER,
   STATIC_DELIMITER,
-  GETTER_PREFIX,
-  SETTER_PREFIX,
   INDEX_SUFFIX,
   CommonNames,
   Feature,
@@ -74,6 +71,7 @@ import {
   Class,
   Element,
   ElementKind,
+  DeclaredElement,
   Enum,
   Field,
   FunctionPrototype,
@@ -119,6 +117,7 @@ import {
   AssertionKind,
   SourceKind,
   FunctionTypeNode,
+  DecoratorNode,
 
   Statement,
   BlockStatement,
@@ -211,6 +210,7 @@ import {
 
 /** Compiler options. */
 export class Options {
+  constructor() { /* as internref */ }
 
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
@@ -270,6 +270,8 @@ export class Options {
   optimizeLevelHint: i32 = 0;
   /** Hinted shrink level. Not applied by the compiler itself. */
   shrinkLevelHint: i32 = 0;
+  /** Hinted basename. */
+  basenameHint: string = "output";
 
   /** Tests if the target is WASM64 or, otherwise, WASM32. */
   get isWasm64(): bool {
@@ -488,15 +490,8 @@ export class Compiler extends DiagnosticEmitter {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.compileFile(file);
-        this.compileExports(file);
+        this.compileModuleExports(file);
       }
-    }
-
-    // set up module exports
-    // TODO: for (let file of this.program.filesByName.values()) {
-    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
-      let file = unchecked(_values[i]);
-      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
 
     // compile and export runtime if requested
@@ -793,114 +788,38 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Exports ==================================================================================
 
-  /** Applies the respective module exports for the specified file. */
-  private ensureModuleExports(file: File): void {
+  /** Compiles the respective module exports for the specified entry file. */
+  private compileModuleExports(file: File): void {
     var exports = file.exports;
     if (exports) {
       // TODO: for (let [elementName, element] of exports) {
       for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
         let elementName = unchecked(_keys[i]);
         let element = assert(exports.get(elementName));
-        this.ensureModuleExport(elementName, element);
+        this.compileModuleExport(elementName, element);
       }
     }
     var exportsStar = file.exportsStar;
     if (exportsStar)  {
       for (let i = 0, k = exportsStar.length; i < k; ++i) {
-        this.ensureModuleExports(exportsStar[i]);
+        this.compileModuleExports(exportsStar[i]);
       }
     }
   }
 
-  /** Applies the respective module export(s) for the specified element. */
-  private ensureModuleExport(name: string, element: Element, prefix: string = ""): void {
+  /** Compiles the respective module export(s) for the specified element. */
+  private compileModuleExport(name: string, element: DeclaredElement, prefix: string = ""): void {
     var module = this.module;
     switch (element.kind) {
-
-      // traverse instances
       case ElementKind.FUNCTION_PROTOTYPE: {
+        // obtain the default instance
         let functionPrototype = <FunctionPrototype>element;
-        let functionInstances = functionPrototype.instances;
-        if (functionInstances && functionInstances.size > 0) {
-          // TODO: for (let instance of instances.values()) {
-          for (let _values = Map_values(functionInstances), i = 0, k = _values.length; i < k; ++i) {
-            let instance = unchecked(_values[i]);
-            let instanceName = name;
-            if (instance.is(CommonFlags.GENERIC)) {
-              let fullName = instance.internalName;
-              instanceName += fullName.substring(fullName.lastIndexOf("<"));
-            }
-            this.ensureModuleExport(instanceName, instance, prefix);
+        if (!functionPrototype.is(CommonFlags.GENERIC)) {
+          let functionInstance = this.resolver.resolveFunction(functionPrototype, null);
+          if (functionInstance) {
+            this.compileModuleExport(name, functionInstance, prefix);
           }
-        } else if (functionPrototype.is(CommonFlags.GENERIC)) {
-          if (this.options.pedantic) {
-            this.pedantic(
-              DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
-              functionPrototype.identifierNode.range
-            );
-          }
-        }
-        break;
-      }
-      case ElementKind.CLASS_PROTOTYPE: {
-        let classPrototype = <ClassPrototype>element;
-        let classInstances = classPrototype.instances;
-        if (classInstances && classInstances.size > 0) {
-          // TODO: for (let instance of instances.values()) {
-          for (let _values = Map_values(classInstances), i = 0, k = _values.length; i < k; ++i) {
-            let instance = unchecked(_values[i]);
-            let instanceName = name;
-            if (instance.is(CommonFlags.GENERIC)) {
-              let fullName = instance.internalName;
-              instanceName += fullName.substring(fullName.lastIndexOf("<"));
-            }
-            this.ensureModuleExport(instanceName, instance, prefix);
-          }
-        } else if (classPrototype.is(CommonFlags.GENERIC)) {
-          if (this.options.pedantic) {
-            this.pedantic(
-              DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
-              classPrototype.identifierNode.range
-            );
-          }
-        }
-        break;
-      }
-      case ElementKind.PROPERTY_PROTOTYPE: {
-        let propertyInstance = (<PropertyPrototype>element).instance;
-        if (propertyInstance) this.ensureModuleExport(name, propertyInstance, prefix);
-        break;
-      }
-
-      // export concrete elements
-      case ElementKind.GLOBAL: {
-        let global = <Global>element;
-        let isConst = global.is(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
-        if (!isConst && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-          this.error(
-            DiagnosticCode.Cannot_export_a_mutable_global,
-            global.identifierNode.range
-          );
-        } else if (global.is(CommonFlags.COMPILED)) {
-          let exportName = prefix + name;
-          if (!module.hasExport(exportName)) {
-            module.addGlobalExport(element.internalName, exportName);
-          }
-        }
-        break;
-      }
-      case ElementKind.ENUMVALUE: {
-        let enumValue = <EnumValue>element;
-        if (!enumValue.isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-          this.error(
-            DiagnosticCode.Cannot_export_a_mutable_global,
-            enumValue.identifierNode.range
-          );
-        } else if (enumValue.is(CommonFlags.COMPILED)) {
-          let exportName = prefix + name;
-          if (!module.hasExport(exportName)) {
-            module.addGlobalExport(element.internalName, exportName);
-          }
+          return;
         }
         break;
       }
@@ -913,6 +832,7 @@ export class Compiler extends DiagnosticEmitter {
             functionInstance = this.ensureVarargsStub(functionInstance);
             this.runtimeFeatures |= RuntimeFeatures.setArgumentsLength;
           }
+          this.compileFunction(functionInstance);
           if (functionInstance.is(CommonFlags.COMPILED)) {
             let exportName = prefix + name;
             if (!module.hasExport(exportName)) {
@@ -922,100 +842,69 @@ export class Compiler extends DiagnosticEmitter {
                 this.shadowStack.noteExport(exportName, signature.getManagedOperandIndices());
               }
             }
+            return;
           }
         }
         break;
       }
-      case ElementKind.PROPERTY: {
-        let propertyInstance = <Property>element;
-        let getterInstance = propertyInstance.getterInstance;
-        if (getterInstance) this.ensureModuleExport(GETTER_PREFIX + name, getterInstance, prefix);
-        let setterInstance = propertyInstance.setterInstance;
-        if (setterInstance) this.ensureModuleExport(SETTER_PREFIX + name, setterInstance, prefix);
-        break;
-      }
-      case ElementKind.FIELD: {
-        let fieldInstance = <Field>element;
-        if (element.is(CommonFlags.COMPILED)) {
-          let getterExportName = prefix + GETTER_PREFIX + name;
-          if (this.compileFieldGetter(fieldInstance) && !module.hasExport(getterExportName)) {
-            module.addFunctionExport(fieldInstance.internalGetterName, getterExportName);
-            let signature = fieldInstance.internalGetterSignature;
-            if (signature.hasManagedOperands) {
-              this.shadowStack.noteExport(getterExportName, signature.getManagedOperandIndices());
-            }
-          }
-          if (!element.is(CommonFlags.READONLY)) {
-            let setterExportName = prefix + SETTER_PREFIX + name;
-            if (this.compileFieldSetter(fieldInstance) && !module.hasExport(setterExportName)) {
-              module.addFunctionExport(fieldInstance.internalSetterName, setterExportName);
-              let signature = fieldInstance.internalSetterSignature;
-              if (signature.hasManagedOperands) {
-                this.shadowStack.noteExport(setterExportName, signature.getManagedOperandIndices());
-              }
-            }
-          }
+      case ElementKind.GLOBAL: {
+        let global = <Global>element;
+        let isConst = global.is(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
+        if (!isConst && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+          this.warning(
+            DiagnosticCode.Feature_0_is_not_enabled,
+            global.identifierNode.range, "mutable-globals"
+          );
+          return;
         }
-        break;
-      }
-      case ElementKind.CLASS: {
-        let classInstance = <Class>element;
-        // make the class name itself represent its runtime id
-        if (!classInstance.type.isUnmanaged) {
-          let module = this.module;
-          let internalName = classInstance.internalName;
-
-          if (!this.doneModuleExports.has(element)) {
-            module.addGlobal(internalName, TypeRef.I32, false, module.i32(classInstance.id));
-            this.doneModuleExports.add(element);
-          }
-
+        this.compileGlobal(global);
+        if (global.is(CommonFlags.COMPILED)) {
           let exportName = prefix + name;
           if (!module.hasExport(exportName)) {
-            module.addGlobalExport(internalName, exportName);
+            module.addGlobalExport(element.internalName, exportName);
           }
+          return;
         }
         break;
       }
-
-      // just traverse members below
-      case ElementKind.ENUM:
-      case ElementKind.INTERFACE_PROTOTYPE:
-      case ElementKind.NAMESPACE:
-      case ElementKind.TYPEDEFINITION:
-      case ElementKind.INDEXSIGNATURE: break;
-
-      default: assert(false); // unexpected module export
-    }
-
-    // traverse members
-    var members = element.members;
-    if (members) {
-      let subPrefix = prefix + name + (element.kind == ElementKind.CLASS
-        ? INSTANCE_DELIMITER
-        : STATIC_DELIMITER
-      );
-      if (element.kind == ElementKind.NAMESPACE) {
-        let implicitExport = element.is(CommonFlags.SCOPED);
-        // TODO: for (let [memberName, member] of members) {
-        for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
-          let memberName = unchecked(_keys[i]);
-          let member = assert(members.get(memberName));
-          if (implicitExport || member.is(CommonFlags.EXPORT)) {
-            this.ensureModuleExport(memberName, member, subPrefix);
+      case ElementKind.ENUM: {
+        this.compileEnum(<Enum>element);
+        let members = element.members;
+        if (members) {
+          let subPrefix = prefix + name + STATIC_DELIMITER;
+          for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+            let memberName = unchecked(_keys[i]);
+            let member = assert(members.get(memberName));
+            if (!member.is(CommonFlags.PRIVATE)) {
+              this.compileModuleExport(memberName, member, subPrefix);
+            }
           }
         }
-      } else {
-        // TODO: for (let [memberName, member] of members) {
-        for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
-          let memberName = unchecked(_keys[i]);
-          let member = assert(members.get(memberName));
-          if (!member.is(CommonFlags.PRIVATE)) {
-            this.ensureModuleExport(memberName, member, subPrefix);
-          }
+        return;
+      }
+      case ElementKind.ENUMVALUE: {
+        let enumValue = <EnumValue>element;
+        if (!enumValue.isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+          this.error(
+            DiagnosticCode.Feature_0_is_not_enabled,
+            enumValue.identifierNode.range, "mutable-globals"
+          );
+          return;
         }
+        if (enumValue.is(CommonFlags.COMPILED)) {
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(element.internalName, exportName);
+          }
+          return;
+        }
+        break;
       }
     }
+    this.warning(
+      DiagnosticCode.Only_variables_functions_and_enums_become_WebAssembly_module_exports,
+      element.identifierNode.range
+    );
   }
 
   // === Elements =================================================================================
@@ -1065,26 +954,6 @@ export class Compiler extends DiagnosticEmitter {
           let element = unchecked(_values[i]);
           this.compileElement(element);
         }
-      }
-    }
-  }
-
-  /** Compiles a file's exports. */
-  compileExports(file: File): void {
-    var exports = file.exports;
-    if (exports) {
-      // TODO: for (let element of exports.values()) {
-      for (let _values = Map_values(exports), i = 0, k = _values.length; i < k; ++i) {
-        let element = unchecked(_values[i]);
-        if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileElement(element);
-      }
-    }
-    var exportsStar = file.exportsStar;
-    if (exportsStar) {
-      for (let i = 0, k = exportsStar.length; i < k; ++i) {
-        let exportStar = unchecked(exportsStar[i]);
-        this.compileFile(exportStar);
-        this.compileExports(exportStar);
       }
     }
   }
@@ -1244,8 +1113,8 @@ export class Compiler extends DiagnosticEmitter {
 
       // Constant global or mutable globals enabled
       if (isDeclaredConstant || this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-        global.set(CommonFlags.MODULE_IMPORT);
         mangleImportName(global, global.declaration);
+        this.program.markModuleImport(mangleImportName_moduleName, mangleImportName_elementName, global);
         module.addGlobalImport(
           global.internalName,
           mangleImportName_moduleName,
@@ -1559,14 +1428,22 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-      // cannot have an annotated external name
-      if (instance.hasDecorator(DecoratorFlags.EXTERNAL)) {
+      // cannot have an annotated external name or code
+      if (instance.hasAnyDecorator(DecoratorFlags.EXTERNAL | DecoratorFlags.EXTERNAL_JS)) {
         let decoratorNodes = instance.decoratorNodes;
-        let decorator = assert(findDecorator(DecoratorKind.EXTERNAL, decoratorNodes));
-        this.error(
-          DiagnosticCode.Decorator_0_is_not_valid_here,
-          decorator.range, "external"
-        );
+        let decorator: DecoratorNode | null;
+        if (decorator = findDecorator(DecoratorKind.EXTERNAL, decoratorNodes)) {
+          this.error(
+            DiagnosticCode.Decorator_0_is_not_valid_here,
+            decorator.range, "external"
+          );
+        }
+        if (decorator = findDecorator(DecoratorKind.EXTERNAL_JS, decoratorNodes)) {
+          this.error(
+            DiagnosticCode.Decorator_0_is_not_valid_here,
+            decorator.range, "external.js"
+          );
+        }
       }
 
       // compile body in this function's context
@@ -1592,8 +1469,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // imported function
     } else if (instance.is(CommonFlags.AMBIENT)) {
-      instance.set(CommonFlags.MODULE_IMPORT);
       mangleImportName(instance, declarationNode); // TODO: check for duplicates
+      this.program.markModuleImport(mangleImportName_moduleName, mangleImportName_elementName, instance);
       module.addFunctionImport(
         instance.internalName,
         mangleImportName_moduleName,

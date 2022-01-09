@@ -475,6 +475,10 @@ export class Program extends DiagnosticEmitter {
   managedClasses: Map<i32,Class> = new Map();
   /** A set of unique function signatures contained in the program, by id. */
   uniqueSignatures: Signature[] = new Array<Signature>(0);
+  /** Module exports. */
+  moduleExports: Map<string,Element> = new Map();
+  /** Module imports. */
+  moduleImports: Map<string,Map<string,Element>> = new Map();
 
   // Standard library
 
@@ -1615,6 +1619,20 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Marks an element as a module import. */
+  markModuleImport(moduleName: string, name: string, element: Element): void {
+    element.set(CommonFlags.MODULE_IMPORT);
+    var moduleImports = this.moduleImports;
+    var module: Map<string,Element>;
+    if (moduleImports.has(moduleName)) {
+      module = assert(moduleImports.get(moduleName));
+    } else {
+      module = new Map();
+      moduleImports.set(moduleName, module);
+    }
+    module.set(name, element);
+  }
+
   /** Registers a native type with the program. */
   private registerNativeType(name: string, type: Type): void {
     var element = new TypeDefinition(
@@ -2364,7 +2382,7 @@ export class Program extends DiagnosticEmitter {
     var name = declaration.name.text;
     var validDecorators = DecoratorFlags.UNSAFE | DecoratorFlags.BUILTIN;
     if (declaration.is(CommonFlags.AMBIENT)) {
-      validDecorators |= DecoratorFlags.EXTERNAL;
+      validDecorators |= DecoratorFlags.EXTERNAL | DecoratorFlags.EXTERNAL_JS;
     } else {
       validDecorators |= DecoratorFlags.INLINE;
       if (declaration.range.source.isLibrary || declaration.is(CommonFlags.EXPORT)) {
@@ -2577,7 +2595,7 @@ export class Program extends DiagnosticEmitter {
       let declaration = declarations[i];
       let name = declaration.name.text;
       let acceptedFlags = DecoratorFlags.GLOBAL | DecoratorFlags.LAZY;
-      if (declaration.is(CommonFlags.DECLARE)) {
+      if (declaration.is(CommonFlags.AMBIENT)) {
         acceptedFlags |= DecoratorFlags.EXTERNAL;
       }
       if (declaration.is(CommonFlags.CONST)) {
@@ -2681,12 +2699,14 @@ export enum DecoratorFlags {
   INLINE = 1 << 6,
   /** Is using a different external name. */
   EXTERNAL = 1 << 7,
+  /** Has external JavaScript code. */
+  EXTERNAL_JS = 1 << 8,
   /** Is a builtin. */
-  BUILTIN = 1 << 8,
+  BUILTIN = 1 << 9,
   /** Is compiled lazily. */
-  LAZY = 1 << 9,
+  LAZY = 1 << 10,
   /** Is considered unsafe code. */
-  UNSAFE = 1 << 10
+  UNSAFE = 1 << 11
 }
 
 export namespace DecoratorFlags {
@@ -2703,6 +2723,7 @@ export namespace DecoratorFlags {
       case DecoratorKind.FINAL: return DecoratorFlags.FINAL;
       case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
       case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
+      case DecoratorKind.EXTERNAL_JS: return DecoratorFlags.EXTERNAL_JS;
       case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
       case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
       case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
@@ -2768,6 +2789,8 @@ export abstract class Element {
   unset(flag: CommonFlags): void {this.flags &= ~flag; }
   /** Tests if this element has a specific decorator flag or flags. */
   hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
+  /** Tests if this element has any of the specified decorator flags. */
+  hasAnyDecorator(flags: DecoratorFlags): bool { return (this.decoratorFlags & flags) != 0; }
 
   /** Get the member with the specified name, if any. */
   getMember(name: string): DeclaredElement | null {

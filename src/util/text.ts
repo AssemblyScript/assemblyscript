@@ -451,3 +451,98 @@ export function indent(sb: string[], level: i32): void {
     sb.push(indentX1);
   }
 }
+
+/** Escapes a string using the specified kind of quote. */
+export function escapeString(str: string, quote: CharCode): string {
+  var sb = new Array<string>();
+  var off = 0;
+  var i = 0;
+  for (let k = str.length; i < k;) {
+    switch (str.charCodeAt(i)) {
+      case CharCode.NULL: {
+        if (i > off) sb.push(str.substring(off, off = i + 1));
+        sb.push("\\0");
+        off = ++i;
+        break;
+      }
+      case CharCode.BACKSPACE: {
+        if (i > off) sb.push(str.substring(off, i));
+        off = ++i;
+        sb.push("\\b");
+        break;
+      }
+      case CharCode.TAB: {
+        if (i > off) sb.push(str.substring(off, i));
+        off = ++i;
+        sb.push("\\t");
+        break;
+      }
+      case CharCode.LINEFEED: {
+        if (i > off) sb.push(str.substring(off, i));
+        off = ++i;
+        sb.push("\\n");
+        break;
+      }
+      case CharCode.VERTICALTAB: {
+        if (i > off) sb.push(str.substring(off, i));
+        off = ++i;
+        sb.push("\\v");
+        break;
+      }
+      case CharCode.FORMFEED: {
+        if (i > off) sb.push(str.substring(off, i));
+        off = ++i;
+        sb.push("\\f");
+        break;
+      }
+      case CharCode.CARRIAGERETURN: {
+        if (i > off) sb.push(str.substring(off, i));
+        sb.push("\\r");
+        off = ++i;
+        break;
+      }
+      case CharCode.DOUBLEQUOTE: {
+        if (quote == CharCode.DOUBLEQUOTE) {
+          if (i > off) sb.push(str.substring(off, i));
+          sb.push("\\\"");
+          off = ++i;
+        } else {
+          ++i;
+        }
+        break;
+      }
+      case CharCode.SINGLEQUOTE: {
+        if (quote == CharCode.SINGLEQUOTE) {
+          if (i > off) sb.push(str.substring(off, i));
+          sb.push("\\'");
+          off = ++i;
+        } else {
+          ++i;
+        }
+        break;
+      }
+      case CharCode.BACKSLASH: {
+        if (i > off) sb.push(str.substring(off, i));
+        sb.push("\\\\");
+        off = ++i;
+        break;
+      }
+      case CharCode.BACKTICK: {
+        if (quote == CharCode.BACKTICK) {
+          if (i > off) sb.push(str.substring(off, i));
+          sb.push("\\`");
+          off = ++i;
+        } else {
+          ++i;
+        }
+        break;
+      }
+      default: {
+        ++i;
+        break;
+      }
+    }
+  }
+  if (i > off) sb.push(str.substring(off, i));
+  return sb.join("");
+}

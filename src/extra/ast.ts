@@ -95,7 +95,8 @@ import {
 
 import {
   CharCode,
-  indent
+  indent,
+  escapeString
 } from "../util";
 
 import {
@@ -678,101 +679,8 @@ export class ASTBuilder {
   visitStringLiteral(str: string): void {
     var sb = this.sb;
     sb.push("\"");
-    this.visitRawString(str, CharCode.DOUBLEQUOTE);
+    sb.push(escapeString(str, CharCode.DOUBLEQUOTE));
     sb.push("\"");
-  }
-
-  private visitRawString(str: string, quote: CharCode): void {
-    var sb = this.sb;
-    var off = 0;
-    var i = 0;
-    for (let k = str.length; i < k;) {
-      switch (str.charCodeAt(i)) {
-        case CharCode.NULL: {
-          if (i > off) sb.push(str.substring(off, off = i + 1));
-          sb.push("\\0");
-          off = ++i;
-          break;
-        }
-        case CharCode.BACKSPACE: {
-          if (i > off) sb.push(str.substring(off, i));
-          off = ++i;
-          sb.push("\\b");
-          break;
-        }
-        case CharCode.TAB: {
-          if (i > off) sb.push(str.substring(off, i));
-          off = ++i;
-          sb.push("\\t");
-          break;
-        }
-        case CharCode.LINEFEED: {
-          if (i > off) sb.push(str.substring(off, i));
-          off = ++i;
-          sb.push("\\n");
-          break;
-        }
-        case CharCode.VERTICALTAB: {
-          if (i > off) sb.push(str.substring(off, i));
-          off = ++i;
-          sb.push("\\v");
-          break;
-        }
-        case CharCode.FORMFEED: {
-          if (i > off) sb.push(str.substring(off, i));
-          off = ++i;
-          sb.push("\\f");
-          break;
-        }
-        case CharCode.CARRIAGERETURN: {
-          if (i > off) sb.push(str.substring(off, i));
-          sb.push("\\r");
-          off = ++i;
-          break;
-        }
-        case CharCode.DOUBLEQUOTE: {
-          if (quote == CharCode.DOUBLEQUOTE) {
-            if (i > off) sb.push(str.substring(off, i));
-            sb.push("\\\"");
-            off = ++i;
-          } else {
-            ++i;
-          }
-          break;
-        }
-        case CharCode.SINGLEQUOTE: {
-          if (quote == CharCode.SINGLEQUOTE) {
-            if (i > off) sb.push(str.substring(off, i));
-            sb.push("\\'");
-            off = ++i;
-          } else {
-            ++i;
-          }
-          break;
-        }
-        case CharCode.BACKSLASH: {
-          if (i > off) sb.push(str.substring(off, i));
-          sb.push("\\\\");
-          off = ++i;
-          break;
-        }
-        case CharCode.BACKTICK: {
-          if (quote == CharCode.BACKTICK) {
-            if (i > off) sb.push(str.substring(off, i));
-            sb.push("\\`");
-            off = ++i;
-          } else {
-            ++i;
-          }
-          break;
-        }
-        default: {
-          ++i;
-          break;
-        }
-      }
-    }
-    if (i > off) sb.push(str.substring(off, i));
   }
 
   visitStringLiteralExpression(node: StringLiteralExpression): void {
@@ -786,13 +694,13 @@ export class ASTBuilder {
     var expressions = node.expressions;
     if (tag) this.visitNode(tag);
     sb.push("`");
-    this.visitRawString(parts[0], CharCode.BACKTICK);
+    sb.push(escapeString(parts[0], CharCode.BACKTICK));
     assert(parts.length == expressions.length + 1);
     for (let i = 0, k = expressions.length; i < k; ++i) {
       sb.push("${");
       this.visitNode(expressions[i]);
       sb.push("}");
-      this.visitRawString(parts[i + 1], CharCode.BACKTICK);
+      sb.push(escapeString(parts[i + 1], CharCode.BACKTICK));
     }
     sb.push("`");
   }

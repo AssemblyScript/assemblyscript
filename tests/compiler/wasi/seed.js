@@ -1,7 +1,9 @@
+import crypto from "crypto";
+
 var memory;
 var failed;
 
-exports.preInstantiate = function(imports, exports) {
+export function preInstantiate(imports, exports) {
   imports["wasi_snapshot_preview1"] = {
     fd_write: function(fd, iov, iov_len, nptr) {
       if (fd != 2) failed = "unexpected fd: " + fd;
@@ -14,14 +16,14 @@ exports.preInstantiate = function(imports, exports) {
       console.log("exit: " + code);
     },
     random_get: function(buf, len) {
-      new Uint8Array(memory.buffer, buf, len).set(require("crypto").randomBytes(len));
+      new Uint8Array(memory.buffer, buf, len).set(crypto.randomBytes(len));
     }
   };
-};
+}
 
-exports.postInstantiate = function(instance) {
+export function postInstantiate(instance) {
   const exports = instance.exports;
   memory = exports.memory;
   console.log("Math.random = " + exports.test());
   if (failed) throw Error(failed);
-};
+}

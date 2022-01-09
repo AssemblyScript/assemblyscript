@@ -1,8 +1,7 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -20,7 +19,6 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $duplicate-fields/foo (mut i32) (i32.const 0))
  (global $duplicate-fields/raz (mut i32) (i32.const 0))
- (global $duplicate-fields/B3 i32 (i32.const 9))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17980))
  (memory $0 1)
  (data (i32.const 1036) "<")
@@ -39,15 +37,7 @@
  (data (i32.const 1532) " \00\00\00\00\00\00\00 \00\00\00\03")
  (data (i32.const 1556) " ")
  (data (i32.const 1568) "\05\00\00\00 \00\00\00\06\00\00\00 \00\00\00\n\00\00\00 ")
- (export "B3" (global $duplicate-fields/B3))
  (export "memory" (memory $0))
- (export "B3#get:protProt" (func $export:duplicate-fields/B3#get:protProt))
- (export "B3#set:protProt" (func $export:duplicate-fields/B3#set:protProt))
- (export "B3#get:protPub" (func $export:duplicate-fields/B3#get:protPub))
- (export "B3#set:protPub" (func $export:duplicate-fields/B3#set:protPub))
- (export "B3#get:pubPub" (func $export:duplicate-fields/B3#get:pubPub))
- (export "B3#set:pubPub" (func $export:duplicate-fields/B3#set:pubPub))
- (export "B3#constructor" (func $export:duplicate-fields/B3#constructor))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
@@ -1863,205 +1853,6 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   return
-  end
-  i32.const 18000
-  i32.const 18048
-  i32.const 1
-  i32.const 1
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $export:duplicate-fields/B3#get:protProt (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1596
-  i32.lt_s
-  if
-   i32.const 18000
-   i32.const 18048
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  local.get $0
-  i32.store
-  local.get $0
-  i32.load
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:duplicate-fields/B3#set:protProt (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1596
-  i32.lt_s
-  if
-   i32.const 18000
-   i32.const 18048
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $2
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store
-  local.get $2
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:duplicate-fields/B3#get:protPub (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1596
-  i32.lt_s
-  if
-   i32.const 18000
-   i32.const 18048
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  local.get $0
-  i32.store
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:duplicate-fields/B3#set:protPub (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1596
-  i32.lt_s
-  if
-   i32.const 18000
-   i32.const 18048
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $2
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $2
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:duplicate-fields/B3#get:pubPub (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1596
-  i32.lt_s
-  if
-   i32.const 18000
-   i32.const 18048
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  local.get $0
-  i32.store
-  local.get $0
-  i32.load offset=8
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:duplicate-fields/B3#set:pubPub (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1596
-  i32.lt_s
-  if
-   i32.const 18000
-   i32.const 18048
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $2
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=8
-  local.get $2
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:duplicate-fields/B3#constructor (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1596
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $1
-   local.get $0
-   i32.store
-   local.get $1
-   i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -2069,18 +1860,15 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
+   local.tee $0
    i32.const 0
    i32.store
    local.get $0
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 12
-    i32.const 9
-    call $~lib/rt/itcms/__new
-    local.tee $0
-    i32.store
-   end
+   i32.const 12
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    i32.const 4
@@ -2136,7 +1924,6 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
    return
   end
   i32.const 18000

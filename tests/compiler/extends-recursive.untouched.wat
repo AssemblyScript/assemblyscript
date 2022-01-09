@@ -23,7 +23,6 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $extends-recursive/Child i32 (i32.const 3))
  (global $~lib/rt/__rtti_base i32 (i32.const 416))
  (global $~lib/memory/__data_end i32 (i32.const 460))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16844))
@@ -40,11 +39,7 @@
  (data (i32.const 416) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
- (export "Child" (global $extends-recursive/Child))
  (export "memory" (memory $0))
- (export "Child#get:child" (func $export:extends-recursive/Parent#get:child))
- (export "Child#set:child" (func $export:extends-recursive/Parent#set:child))
- (export "Child#constructor" (func $export:extends-recursive/Child#constructor))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
   local.get $0
@@ -2195,9 +2190,27 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $extends-recursive/Parent#get:child (param $0 i32) (result i32)
-  local.get $0
-  i32.load
+ (func $start:extends-recursive
+  memory.size
+  i32.const 16
+  i32.shl
+  global.get $~lib/memory/__heap_base
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 144
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 176
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/toSpace
+  i32.const 320
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/fromSpace
+  i32.const 0
+  call $extends-recursive/Child#constructor
+  drop
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
@@ -2270,23 +2283,7 @@
   unreachable
  )
  (func $~start
-  memory.size
-  i32.const 16
-  i32.shl
-  global.get $~lib/memory/__heap_base
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 144
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 176
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 320
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/fromSpace
+  call $start:extends-recursive
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
@@ -2358,64 +2355,6 @@
   local.tee $0
   i32.store
   local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:extends-recursive/Parent#get:child (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $extends-recursive/Parent#get:child
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:extends-recursive/Parent#set:child (param $0 i32) (param $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.get $1
-  call $extends-recursive/Parent#set:child
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:extends-recursive/Child#constructor (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $extends-recursive/Child#constructor
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4

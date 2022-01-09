@@ -1,47 +1,45 @@
 {
   "entries": [
     "./glue/wasm/index.ts",
-    "./index.ts"
+    "./index-wasm.ts"
   ],
   "options": {
     "exportStart": "_initialize",
     "exportRuntime": true,
     "initialMemory": 768,
     "runtime": "incremental",
+    "bindings": [ "ts" ],
     "stats": true
   },
   "targets": {
     "untouched": {
-      "binaryFile": "../out/assemblyscript.untouched.wasm",
-      "textFile": "../out/assemblyscript.untouched.wast",
-      "tsdFile": "../out/assemblyscript.d.ts",
-      "debug": true
+      "outFile": "../build/assemblyscript.untouched.wasm",
+      "textFile": "../build/assemblyscript.untouched.wast",
+      "debug": true,
+      "sourceMap": true
     },
     "optimized": {
-      "binaryFile": "../out/assemblyscript.optimized.wasm",
-      "textFile": "../out/assemblyscript.optimized.wast",
-      "tsdFile": "../out/assemblyscript.d.ts",
+      "outFile": "../build/assemblyscript.optimized.wasm",
+      "textFile": "../build/assemblyscript.optimized.wast",
       "optimizeLevel": 3,
       "shrinkLevel": 0
     },
     "rtraced": {
-      "binaryFile": "../out/assemblyscript.rtraced.wasm",
-      "textFile": "../out/assemblyscript.rtraced.wast",
-      "tsdFile": "../out/assemblyscript.d.ts",
+      "outFile": "../build/assemblyscript.rtraced.wasm",
+      "textFile": "../build/assemblyscript.rtraced.wast",
       "debug": true,
       "use": "ASC_RTRACE=1",
       "runPasses": []
     },
     "untouched-bootstrap": {
-      "binaryFile": "../out/assemblyscript.untouched-bootstrap.wasm",
-      "textFile": "../out/assemblyscript.untouched-bootstrap.wast",
-      "tsdFile": "../out/assemblyscript.d.ts",
-      "debug": true
+      "outFile": "../build/assemblyscript.untouched-bootstrap.wasm",
+      "textFile": "../build/assemblyscript.untouched-bootstrap.wast",
+      "debug": true,
+      "sourceMap": true
     },
     "optimized-bootstrap": {
-      "binaryFile": "../out/assemblyscript.optimized-bootstrap.wasm",
-      "textFile": "../out/assemblyscript.optimized-bootstrap.wast",
-      "tsdFile": "../out/assemblyscript.d.ts",
+      "outFile": "../build/assemblyscript.optimized-bootstrap.wasm",
+      "textFile": "../build/assemblyscript.optimized-bootstrap.wast",
       "optimizeLevel": 3,
       "shrinkLevel": 0
     }

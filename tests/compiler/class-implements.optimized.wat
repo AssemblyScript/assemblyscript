@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -19,8 +19,6 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $class-implements/a (mut i32) (i32.const 0))
  (global $class-implements/c (mut i32) (i32.const 0))
- (global $class-implements/A i32 (i32.const 3))
- (global $class-implements/C i32 (i32.const 5))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17948))
  (memory $0 1)
  (data (i32.const 1036) "<")
@@ -37,13 +35,7 @@
  (data (i32.const 1448) "\01\00\00\00&\00\00\00c\00l\00a\00s\00s\00-\00i\00m\00p\00l\00e\00m\00e\00n\00t\00s\00.\00t\00s")
  (data (i32.const 1504) "\07\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1532) " \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\06\00\00\00 ")
- (export "A" (global $class-implements/A))
- (export "C" (global $class-implements/C))
  (export "memory" (memory $0))
- (export "A#foo" (func $export:class-implements/A#foo))
- (export "A#constructor" (func $export:class-implements/A#constructor))
- (export "C#foo" (func $export:class-implements/C#foo))
- (export "C#constructor" (func $export:class-implements/C#constructor))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
@@ -1286,108 +1278,7 @@
   unreachable
  )
  (func $~start
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1564
-  i32.lt_s
-  if
-   i32.const 17968
-   i32.const 18016
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  memory.size
-  i32.const 16
-  i32.shl
-  i32.const 17948
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 1172
-  i32.const 1168
-  i32.store
-  i32.const 1176
-  i32.const 1168
-  i32.store
-  i32.const 1168
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 1204
-  i32.const 1200
-  i32.store
-  i32.const 1208
-  i32.const 1200
-  i32.store
-  i32.const 1200
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 1348
-  i32.const 1344
-  i32.store
-  i32.const 1352
-  i32.const 1344
-  i32.store
-  i32.const 1344
-  global.set $~lib/rt/itcms/fromSpace
-  i32.const 0
-  call $class-implements/A#constructor
-  global.set $class-implements/a
-  global.get $~lib/memory/__stack_pointer
-  global.get $class-implements/a
-  i32.store
-  i32.const 0
-  call $class-implements/C#constructor
-  global.set $class-implements/c
-  global.get $~lib/memory/__stack_pointer
-  global.get $class-implements/c
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $class-implements/A#constructor (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1564
-  i32.lt_s
-  if
-   i32.const 17968
-   i32.const 18016
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 3
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
- (func $class-implements/C#constructor (param $0 i32) (result i32)
+  (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1399,17 +1290,84 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store
+   memory.size
+   i32.const 16
+   i32.shl
+   i32.const 17948
+   i32.sub
+   i32.const 1
+   i32.shr_u
+   global.set $~lib/rt/itcms/threshold
+   i32.const 1172
+   i32.const 1168
+   i32.store
+   i32.const 1176
+   i32.const 1168
+   i32.store
+   i32.const 1168
+   global.set $~lib/rt/itcms/pinSpace
+   i32.const 1204
+   i32.const 1200
+   i32.store
+   i32.const 1208
+   i32.const 1200
+   i32.store
+   i32.const 1200
+   global.set $~lib/rt/itcms/toSpace
+   i32.const 1348
+   i32.const 1344
+   i32.store
+   i32.const 1352
+   i32.const 1344
+   i32.store
+   i32.const 1344
+   global.set $~lib/rt/itcms/fromSpace
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1564
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
    i32.const 0
    i32.store
    local.get $0
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 5
-    call $~lib/rt/itcms/__new
-    local.tee $0
-    i32.store
-   end
+   i32.const 3
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
+   global.set $class-implements/a
+   global.get $~lib/memory/__stack_pointer
+   global.get $class-implements/a
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1564
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    i32.const 4
@@ -1443,6 +1401,14 @@
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0
+   global.set $class-implements/c
+   global.get $~lib/memory/__stack_pointer
+   global.get $class-implements/c
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
    return
   end
   i32.const 17968
@@ -1451,112 +1417,6 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
- )
- (func $export:class-implements/A#foo (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1564
-  i32.lt_s
-  if
-   i32.const 17968
-   i32.const 18016
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  local.get $0
-  i32.store
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  i32.const 1
- )
- (func $export:class-implements/A#constructor (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1564
-  i32.lt_s
-  if
-   i32.const 17968
-   i32.const 18016
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $class-implements/A#constructor
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:class-implements/C#foo (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1564
-  i32.lt_s
-  if
-   i32.const 17968
-   i32.const 18016
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.tee $1
-  local.get $0
-  i32.store
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  i32.const 2
- )
- (func $export:class-implements/C#constructor (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1564
-  i32.lt_s
-  if
-   i32.const 17968
-   i32.const 18016
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $class-implements/C#constructor
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)

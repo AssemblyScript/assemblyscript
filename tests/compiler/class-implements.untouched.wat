@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -25,8 +25,6 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $class-implements/a (mut i32) (i32.const 0))
  (global $class-implements/c (mut i32) (i32.const 0))
- (global $class-implements/A i32 (i32.const 3))
- (global $class-implements/C i32 (i32.const 5))
  (global $~lib/rt/__rtti_base i32 (i32.const 480))
  (global $~lib/memory/__data_end i32 (i32.const 540))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16924))
@@ -44,13 +42,7 @@
  (data (i32.const 480) "\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\06\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
- (export "A" (global $class-implements/A))
- (export "C" (global $class-implements/C))
  (export "memory" (memory $0))
- (export "A#foo" (func $export:class-implements/A#foo))
- (export "A#constructor" (func $export:class-implements/A#constructor))
- (export "C#foo" (func $export:class-implements/C#foo))
- (export "C#constructor" (func $export:class-implements/C#constructor))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
   local.get $0
@@ -2370,82 +2362,6 @@
   local.tee $0
   i32.store
   local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:class-implements/A#foo (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $class-implements/A#foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:class-implements/A#constructor (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $class-implements/A#constructor
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:class-implements/C#foo (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $class-implements/C#foo
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:class-implements/C#constructor (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $class-implements/C#constructor
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4

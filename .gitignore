@@ -1,7 +1,7 @@
 node_modules/
 *debug.*
 dist/
-out/
+build/
 raw/
 .history
 *.backup

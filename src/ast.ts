@@ -975,6 +975,7 @@ export enum DecoratorKind {
   FINAL,
   INLINE,
   EXTERNAL,
+  EXTERNAL_JS,
   BUILTIN,
   LAZY,
   UNSAFE
@@ -1039,6 +1040,13 @@ export namespace DecoratorKind {
             case CharCode.p: {
               if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
               if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
+              break;
+            }
+          }
+        } else if (nameStr == "external") {
+          switch (propStr.charCodeAt(0)) {
+            case CharCode.j: {
+              if (propStr == "js") return DecoratorKind.EXTERNAL_JS;
               break;
             }
           }

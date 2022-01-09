@@ -1236,14 +1236,6 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(mapResult[3] == 3);
 }
 
-// export extended arrays
-
-export class ArrayU32 extends Array<u32> {}
-export class ArrayU8 extends Array<u8> {}
-export class ArrayStr extends Array<string> {}
-// FIXME: Fails on 'sort' due to operators '>', '<'
-// export class ArrayArrayI32 extends Array<Array<i32>> {}
-
 // Unleak globals
 arr = changetype<Array<i32>>(0);
 inputStabArr = changetype<Array<Dim>>(0);

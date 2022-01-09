@@ -122,7 +122,7 @@ export class DiagnosticMessage {
     var otherRelatedRange = other.relatedRange;
     if (thisRelatedRange) {
       if (!otherRelatedRange || !thisRelatedRange.equals(otherRelatedRange)) return false;
-    } else if (otherRange) {
+    } else if (otherRelatedRange) {
       return false;
     }
     return this.message == other.message;

@@ -275,15 +275,15 @@ function ensureAsconfigJson() {
     fs.writeFileSync(asconfigFile, JSON.stringify({
       targets: {
         debug: {
-          // -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
-          binaryFile: "build/untouched.wasm",
+          // -o build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+          outFile: "build/untouched.wasm",
           textFile: "build/untouched.wat",
           sourceMap: true,
           debug: true
         },
         release: {
-          // -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
-          binaryFile: "build/optimized.wasm",
+          // -o build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+          outFile: "build/optimized.wasm",
           textFile: "build/optimized.wat",
           sourceMap: true,
           optimizeLevel: 3,

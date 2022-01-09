@@ -4,10 +4,10 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
@@ -34,13 +34,10 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $reexport/car (mut i32) (i32.const 0))
- (global $exports/Car i32 (i32.const 3))
- (global $~argumentsLength (mut i32) (i32.const 0))
- (global $exports/vehicles.Car i32 (i32.const 4))
  (global $~lib/rt/__rtti_base i32 (i32.const 464))
- (global $~lib/memory/__data_end i32 (i32.const 508))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16892))
- (global $~lib/memory/__heap_base i32 (i32.const 16892))
+ (global $~lib/memory/__data_end i32 (i32.const 500))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16884))
+ (global $~lib/memory/__heap_base i32 (i32.const 16884))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00r\00e\00e\00x\00p\00o\00r\00t\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 60) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -51,7 +48,7 @@
  (data (i32.const 316) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 368) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 396) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 464) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 464) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
  (export "add" (func $export/add))
@@ -62,57 +59,11 @@
  (export "renamed_b" (global $export/b))
  (export "renamed_c" (global $export/c))
  (export "rerenamed_c" (global $export/c))
- (export "Car" (global $exports/Car))
- (export "Car.TIRES" (global $exports/Car.TIRES))
- (export "Car.getNumTires" (func $exports/Car.getNumTires))
  (export "renamed_add" (func $export/add))
  (export "rerenamed_sub" (func $export/mul))
- (export "renamed_ns.two" (func $export/ns.two))
- (export "exportstar.add" (func $export/add))
- (export "exportstar.sub" (func $export/sub))
- (export "exportstar.renamed_mul" (func $export/mul))
- (export "exportstar.a" (global $export/a))
- (export "exportstar.b" (global $export/b))
- (export "exportstar.renamed_c" (global $export/c))
- (export "exportstar.ns.two" (func $export/ns.two))
- (export "exportstar.default.two" (func $export/ns.two))
- (export "ExportsNamespace.add" (func $exports/add))
- (export "ExportsNamespace.subOpt" (func $exports/subOpt@varargs))
- (export "ExportsNamespace.math.sub" (func $exports/math.sub))
- (export "ExportsNamespace.Animal.CAT" (global $exports/Animal.CAT))
- (export "ExportsNamespace.Animal.DOG" (global $exports/Animal.DOG))
- (export "ExportsNamespace.animals.Animal.CAT" (global $exports/animals.Animal.CAT))
- (export "ExportsNamespace.animals.Animal.DOG" (global $exports/animals.Animal.DOG))
- (export "ExportsNamespace.Car" (global $exports/Car))
- (export "ExportsNamespace.Car.TIRES" (global $exports/Car.TIRES))
- (export "ExportsNamespace.Car.getNumTires" (func $exports/Car.getNumTires))
- (export "ExportsNamespace.vehicles.Car" (global $exports/vehicles.Car))
- (export "ExportsNamespace.vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
- (export "ExportsNamespace.vehicles.Car.getNumTires" (func $exports/vehicles.Car.getNumTires))
- (export "ExportsNamespace.outer.inner.a" (global $exports/outer.inner.a))
- (export "ExportsNamespace.renamed_mul" (func $export/mul))
  (export "default" (func $export-default/theDefault))
  (export "renamed_default" (func $export-default/theDefault))
  (export "memory" (memory $0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
- (export "Car#get:doors" (func $export:exports/Car#get:doors))
- (export "Car#set:doors" (func $export:exports/Car#set:doors))
- (export "Car#constructor" (func $export:exports/Car#constructor@varargs))
- (export "Car#get:numDoors" (func $export:exports/Car#get:numDoors))
- (export "Car#set:numDoors" (func $export:exports/Car#set:numDoors))
- (export "Car#openDoors" (func $export:exports/Car#openDoors))
- (export "ExportsNamespace.Car#get:doors" (func $export:exports/Car#get:doors))
- (export "ExportsNamespace.Car#set:doors" (func $export:exports/Car#set:doors))
- (export "ExportsNamespace.Car#constructor" (func $export:exports/Car#constructor@varargs))
- (export "ExportsNamespace.Car#get:numDoors" (func $export:exports/Car#get:numDoors))
- (export "ExportsNamespace.Car#set:numDoors" (func $export:exports/Car#set:numDoors))
- (export "ExportsNamespace.Car#openDoors" (func $export:exports/Car#openDoors))
- (export "ExportsNamespace.vehicles.Car#get:doors" (func $export:exports/vehicles.Car#get:doors))
- (export "ExportsNamespace.vehicles.Car#set:doors" (func $export:exports/vehicles.Car#set:doors))
- (export "ExportsNamespace.vehicles.Car#constructor" (func $export:exports/vehicles.Car#constructor@varargs))
- (export "ExportsNamespace.vehicles.Car#get:numDoors" (func $export:exports/vehicles.Car#get:numDoors))
- (export "ExportsNamespace.vehicles.Car#set:numDoors" (func $export:exports/vehicles.Car#set:numDoors))
- (export "ExportsNamespace.vehicles.Car#openDoors" (func $export:exports/vehicles.Car#openDoors))
  (start $~start)
  (func $export/add (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -2215,113 +2166,8 @@
   local.get $1
   i32.sub
  )
- (func $exports/Car.getNumTires (result i32)
-  global.get $exports/Car.TIRES
- )
- (func $exports/Car#get:doors (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $exports/Car#set:numDoors (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $exports/Car#set:doors
- )
- (func $exports/Car#openDoors (param $0 i32)
-  nop
- )
- (func $export/ns.one
-  nop
- )
- (func $export/ns.two
-  nop
- )
- (func $exports/subOpt (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.sub
- )
- (func $exports/math.sub (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.sub
- )
- (func $exports/vehicles.Car.getNumTires (result i32)
-  global.get $exports/vehicles.Car.TIRES
- )
- (func $exports/vehicles.Car#set:doors (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store
- )
- (func $exports/vehicles.Car#get:doors (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $exports/vehicles.Car#get:numDoors (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $exports/vehicles.Car#set:numDoors (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $exports/vehicles.Car#set:doors
- )
- (func $exports/vehicles.Car#openDoors (param $0 i32)
-  nop
- )
  (func $export-default/theDefault
   nop
- )
- (func $exports/Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 2
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $exports/Car#constructor
- )
- (func $exports/subOpt@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $exports/subOpt
- )
- (func $exports/vehicles.Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 2
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $exports/vehicles.Car#constructor
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
@@ -2352,35 +2198,28 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $exports/vehicles.Car
-    block $exports/Car
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $exports/Car $exports/vehicles.Car $invalid
-       end
-       return
+   block $exports/Car
+    block $~lib/arraybuffer/ArrayBufferView
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $exports/Car $invalid
       end
       return
      end
-     local.get $0
-     local.get $1
-     call $~lib/arraybuffer/ArrayBufferView~visit
      return
     end
+    local.get $0
+    local.get $1
+    call $~lib/arraybuffer/ArrayBufferView~visit
     return
    end
    return
   end
   unreachable
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~start
   call $start:reexport
@@ -2521,255 +2360,5 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
- )
- (func $exports/vehicles.Car#constructor (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  local.get $0
-  local.get $1
-  call $exports/vehicles.Car#set:doors
-  local.get $0
-  local.get $1
-  call $exports/vehicles.Car#set:doors
-  local.get $0
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
- )
- (func $export:exports/Car#get:doors (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $exports/Car#get:doors
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:exports/Car#set:doors (param $0 i32) (param $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  call $exports/Car#set:doors
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:exports/Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  call $exports/Car#constructor@varargs
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
- )
- (func $export:exports/Car#get:numDoors (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $exports/Car#get:numDoors
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:exports/Car#set:numDoors (param $0 i32) (param $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  call $exports/Car#set:numDoors
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:exports/Car#openDoors (param $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $exports/Car#openDoors
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:exports/vehicles.Car#get:doors (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $exports/vehicles.Car#get:doors
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:exports/vehicles.Car#set:doors (param $0 i32) (param $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  call $exports/vehicles.Car#set:doors
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:exports/vehicles.Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  call $exports/vehicles.Car#constructor@varargs
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
- )
- (func $export:exports/vehicles.Car#get:numDoors (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $exports/vehicles.Car#get:numDoors
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $export:exports/vehicles.Car#set:numDoors (param $0 i32) (param $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  local.get $1
-  call $exports/vehicles.Car#set:numDoors
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $export:exports/vehicles.Car#openDoors (param $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $exports/vehicles.Car#openDoors
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
 )

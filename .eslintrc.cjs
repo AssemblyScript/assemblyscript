@@ -19,7 +19,12 @@ module.exports = {
   globals: {
     "globalThis": "readonly",
     "BigInt64Array": "readonly",
-    "BigUint64Array": "readonly"
+    "BigUint64Array": "readonly",
+    "WebAssembly": "readonly",
+    "FinalizationRegistry": "readonly",
+    "fetch": "readonly",
+    "URL": "readonly",
+    "console": "readonly"
   },
 
   // === General rules =========================================================

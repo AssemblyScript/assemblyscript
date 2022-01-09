@@ -92,14 +92,12 @@ export interface CompilerOptions {
   converge?: boolean;
   /** Specifies the base directory of input and output files. */
   baseDir?: string;
-  /** Specifies the output file. File extension indicates format. */
+  /** Specifies the WebAssembly output file (.wasm). */
   outFile?: string;
-  /** Specifies the binary output file (.wasm). */
-  binaryFile?: string;
-  /** Specifies the text output file (.wat). */
+  /** Specifies the WebAssembly text output file (.wat). */
   textFile?: string;
-  /** Specifies the TypeScript definition output file (.d.ts). */
-  tsdFile?: string;
+  /** Specified the bindings to generate. */
+  bindings?: string[];
   /** Enables source map generation. Optionally takes the URL. */
   sourceMap?: boolean | string;
   /** Specifies the runtime variant to include in the program. */
@@ -200,7 +198,7 @@ export function compileString(sources: { [key: string]: string } | string, optio
 }>;
 
 /** Checks diagnostics emitted so far for errors. */
-export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream, reportDiagnostic?: DiagnosticReporter): boolean;
+export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream, reportDiagnostic?: DiagnosticReporter, useColors?: boolean): boolean;
 
 /** Statistics for the current task. */
 export class Stats {
