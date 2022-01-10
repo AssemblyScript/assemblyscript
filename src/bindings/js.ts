@@ -796,7 +796,7 @@ export class JSBuilder extends ExportsWalker {
     }
     if (this.needsNotNull) {
       sb.push(`  function __notnull() {
-    throw TypeError("non-nullable value must not be null");
+    throw TypeError("value must not be null");
   }
 `);
     }

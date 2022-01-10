@@ -51,18 +51,11 @@ export class TSDBuilder extends ExportsWalker {
 
   visitGlobal(name: string, element: Global): void {
     var sb = this.sb;
-    var tsType = this.toTypeScriptType(element.type, Mode.EXPORT);
+    var type = element.type;
+    var tsType = this.toTypeScriptType(type, Mode.EXPORT);
     indent(sb, this.indentLevel);
-    sb.push("/**\n");
-    indent(sb, this.indentLevel);
-    sb.push(" * ");
+    sb.push("/** ");
     sb.push(element.internalName);
-    sb.push("\n");
-    indent(sb, this.indentLevel);
-    sb.push(" * @type `");
-    sb.push(element.type.toString());
-    sb.push("`\n");
-    indent(sb, this.indentLevel);    
     sb.push(" */\n");
     indent(sb, this.indentLevel);
     sb.push("export ");
@@ -71,9 +64,9 @@ export class TSDBuilder extends ExportsWalker {
     sb.push(name);
     sb.push(": {\n");
     indent(sb, ++this.indentLevel);
-    sb.push("valueOf(): ");
-    sb.push(tsType);
-    sb.push(";\n");
+    sb.push("/** @type `");
+    sb.push(type.toString());
+    sb.push("` */\n");
     indent(sb, this.indentLevel);
     sb.push("get value(): ");
     sb.push(tsType);
@@ -93,14 +86,8 @@ export class TSDBuilder extends ExportsWalker {
   visitEnum(name: string, element: Enum): void {
     var sb = this.sb;
     indent(sb, this.indentLevel);
-    sb.push("/**\n");
-    indent(sb, this.indentLevel);
-    sb.push(" * ");
+    sb.push("/** ");
     sb.push(element.internalName);
-    sb.push("\n");
-    indent(sb, this.indentLevel);
-    sb.push(" * @type `i32`\n");
-    indent(sb, this.indentLevel);
     sb.push(" */\n");
     indent(sb, this.indentLevel++);
     sb.push("export ");
@@ -116,6 +103,8 @@ export class TSDBuilder extends ExportsWalker {
         let member = assert(members.get(memberName));
         if (member.kind != ElementKind.ENUMVALUE) continue;
         indent(sb, this.indentLevel);
+        sb.push("/** @type `i32` */\n");
+        indent(sb, this.indentLevel);
         sb.push(memberName);
         sb.push(",\n");
       }
@@ -130,14 +119,14 @@ export class TSDBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push("/**\n");
     indent(sb, this.indentLevel);
-    sb.push("  * ");
+    sb.push(" * ");
     sb.push(element.internalName);
     sb.push("\n");
     var parameterTypes = signature.parameterTypes;
     var numParameters = parameterTypes.length;
     for (let i = 0; i < numParameters; ++i) {
       indent(sb, this.indentLevel);
-      sb.push("  * @param ");
+      sb.push(" * @param ");
       sb.push(element.getParameterName(i));
       sb.push(" `");
       sb.push(parameterTypes[i].toString());
@@ -146,10 +135,11 @@ export class TSDBuilder extends ExportsWalker {
     var returnType = signature.returnType;
     if (returnType != Type.void) {
       indent(sb, this.indentLevel);
-      sb.push("  * @returns `");
+      sb.push(" * @returns `");
       sb.push(returnType.toString());
       sb.push("`\n");
     }
+    indent(sb, this.indentLevel);
     sb.push(" */\n");
     indent(sb, this.indentLevel);
     sb.push("export ");
@@ -206,7 +196,8 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(deferredTypes[i]);
     }
     if (!this.esm) {
-      sb.push("export function instantiate(module: WebAssembly.Module, imports: {\n");
+      sb.push("/** Instantiates the compiled WebAssembly module with the given imports. */\n");
+      sb.push("export declare function instantiate(module: WebAssembly.Module, imports: {\n");
       let moduleImports = this.program.moduleImports;
       for (let _keys = Map_keys(moduleImports), i = 0, k = _keys.length; i < k; ++i) {
         let moduleName = _keys[i];
@@ -322,6 +313,9 @@ export class TSDBuilder extends ExportsWalker {
         return "void";
       }
       if (type.isNumericValue) {
+        if (type.isLongIntegerValue) {
+          return "bigint";
+        }
         return "number";
       }
     }
@@ -330,25 +324,26 @@ export class TSDBuilder extends ExportsWalker {
 
   makeRecordType(clazz: Class, mode: Mode): string {
     var sb = new Array<string>();
-    sb.push("/** `");
-    sb.push(clazz.internalName);
-    sb.push("` */\n");
-    sb.push("declare interface __Record");
-    sb.push(clazz.id.toString());
-    sb.push("<TUndefined> {\n");
     var members = clazz.members;
+    sb.push("/** ");
+    sb.push(clazz.internalName);
+    sb.push(" */\ndeclare interface __Record");
+    sb.push(clazz.id.toString());
+    sb.push("<TOmittable> {\n");
     if (members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
         if (member.kind != ElementKind.FIELD) continue;
         let field = <Field>member;
-        sb.push("  ");
+        sb.push("  /** @type `");
+        sb.push(field.type.toString());
+        sb.push("` */\n  ");
         sb.push(field.name);
         sb.push(": ");
         sb.push(this.toTypeScriptType(field.type, mode));
         if (this.fieldAcceptsUndefined(field.type)) {
-          sb.push(" | TUndefined");
+          sb.push(" | TOmittable");
         }
         sb.push(";\n");
       }
@@ -366,15 +361,15 @@ export class TSDBuilder extends ExportsWalker {
 
   makeInternrefType(clazz: Class): string {
     var sb = new Array<string>();
-    sb.push("/** `");
+    sb.push("/** ");
     sb.push(clazz.internalName);
-    sb.push("` */\n");
+    sb.push(" */\n");
     sb.push("declare class __Internref");
     sb.push(clazz.id.toString());
     sb.push(" extends Number {\n");
     var base: Class | null = clazz;
     do {
-      sb.push("  __id");
+      sb.push("  private __nominal");
       sb.push(base.id.toString());
       sb.push(": symbol;\n");
       base = base.base;

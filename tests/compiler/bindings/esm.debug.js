@@ -338,7 +338,7 @@ async function instantiate(module, imports = {}) {
     }
   }
   function __notnull() {
-    throw TypeError("non-nullable value must not be null");
+    throw TypeError("value must not be null");
   }
   exports._start();
   return adaptedExports;
