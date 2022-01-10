@@ -158,7 +158,7 @@ export class Array<T> {
     var ptr = this.dataStart;
     var len = this.length_;
     start = start < 0 ? max(len + start, 0) : min(start, len);
-    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+    end = end < 0 ? max(len + end, 0) : min(end, len);
     if (isManaged<T>()) {
       for (; start < end; ++start) {
         store<usize>(ptr + (<usize>start << alignof<T>()), changetype<usize>(value));
@@ -273,9 +273,9 @@ export class Array<T> {
 
     end = min<i32>(end, len);
 
-    var to    = target < 0 ? max(len + target, 0) : min(target, len);
-    var from  = start < 0 ? max(len + start, 0) : min(start, len);
-    var last  = end < 0 ? max(len + end, 0) : min(end, len);
+    var to = target < 0 ? max(len + target, 0) : min(target, len);
+    var from = start < 0 ? max(len + start, 0) : min(start, len);
+    var last = end < 0 ? max(len + end, 0) : min(end, len);
     var count = min(last - from, len - to);
 
     memory.copy( // is memmove
@@ -393,7 +393,7 @@ export class Array<T> {
   slice(start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
     var len = this.length_;
     start = start < 0 ? max(start + len, 0) : min(start, len);
-    end   = end   < 0 ? max(end   + len, 0) : min(end  , len);
+    end = end < 0 ? max(end + len, 0) : min(end, len);
     len = max(end - start, 0);
     var slice = changetype<Array<T>>(__newArray(len, alignof<T>(), idof<Array<T>>()));
     var sliceBase = slice.dataStart;
@@ -415,12 +415,12 @@ export class Array<T> {
 
   splice(start: i32, deleteCount: i32 = i32.MAX_VALUE): Array<T> {
     var len = this.length_;
-    start       = start < 0 ? max<i32>(len + start, 0) : min<i32>(start, len);
+    start = start < 0 ? max<i32>(len + start, 0) : min<i32>(start, len);
     deleteCount = max<i32>(min<i32>(deleteCount, len - start), 0);
-    var result  = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>()));
+    var result = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>()));
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
-    var thisBase  = thisStart + (<usize>start << alignof<T>());
+    var thisBase = thisStart + (<usize>start << alignof<T>());
     memory.copy(
       resultStart,
       thisBase,
@@ -451,12 +451,12 @@ export class Array<T> {
   join(separator: string = ","): string {
     var ptr = this.dataStart;
     var len = this.length_;
-    if (isBoolean<T>())   return joinBooleanArray(ptr, len, separator);
-    if (isInteger<T>())   return joinIntegerArray<T>(ptr, len, separator);
-    if (isFloat<T>())     return joinFloatArray<T>(ptr, len, separator);
+    if (isBoolean<T>()) return joinBooleanArray(ptr, len, separator);
+    if (isInteger<T>()) return joinIntegerArray<T>(ptr, len, separator);
+    if (isFloat<T>()) return joinFloatArray<T>(ptr, len, separator);
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (isString<T>())  return joinStringArray(ptr, len, separator);
+      if (isString<T>()) return joinStringArray(ptr, len, separator);
     }
     // For rest objects and arrays use general join routine
     if (isReference<T>()) return joinReferenceArray<T>(ptr, len, separator);
@@ -527,6 +527,22 @@ export class Array<T> {
 
   toString(): string {
     return this.join();
+  }
+
+  static from<T>(array: Array<T> | T extends { length: number } ? T : never): Array<T> {
+    if (isArray<T>(array)) {
+      let arr = new Array<T>();
+      array?.forEach(a => arr.push(a));
+      return arr;
+    }
+    // case of Array.from({..., length: number})
+    const inputArray = <T extends { length: number } ? T : never>array;
+    const length = inputArray.length;
+    let arr = new Array<T>(length);
+    for (let i = 0; i < length; ++i) {
+      arr.push(undefined!);
+    }
+    return arr;
   }
 
   // RT integration

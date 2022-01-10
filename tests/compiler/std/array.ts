@@ -36,7 +36,7 @@ var arr = new Array<i32>();
 // Array.isArray ///////////////////////////////////////////////////////////////////////////////////
 
 class Ref {
-  constructor(public v: i32 = 0) {}
+  constructor(public v: i32 = 0) { }
   toString(): string {
     return "[object Object]";
   }
@@ -963,7 +963,7 @@ function createReverseOrderedNestedArray(size: i32): Array<Array<i32>> {
 }
 
 class Proxy<T> {
-  constructor(public x: T) {}
+  constructor(public x: T) { }
 }
 
 class Dim {
@@ -982,29 +982,29 @@ function createReverseOrderedElementsArray(size: i32): Array<Proxy<i32>> {
 const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-,.+/\\[]{}()<>*&$%^@#!?";
 
 let inputStabArr: Array<Dim> = [
-  { height: 100, width: 80  },
-  { height: 90,  width: 90  },
-  { height: 70,  width: 95  },
+  { height: 100, width: 80 },
+  { height: 90, width: 90 },
+  { height: 70, width: 95 },
   { height: 100, width: 100 },
-  { height: 80,  width: 110 },
+  { height: 80, width: 110 },
   { height: 110, width: 115 },
   { height: 100, width: 120 },
-  { height: 70,  width: 125 },
-  { height: 70,  width: 130 },
+  { height: 70, width: 125 },
+  { height: 70, width: 130 },
   { height: 100, width: 135 },
-  { height: 75,  width: 140 },
-  { height: 70,  width: 140 }
+  { height: 75, width: 140 },
+  { height: 70, width: 140 }
 ];
 
 let outputStabArr: Array<Dim> = [
-  { height: 70,  width: 95  },
-  { height: 70,  width: 125 },
-  { height: 70,  width: 130 },
-  { height: 70,  width: 140 },
-  { height: 75,  width: 140 },
-  { height: 80,  width: 110 },
-  { height: 90,  width: 90  },
-  { height: 100, width: 80  },
+  { height: 70, width: 95 },
+  { height: 70, width: 125 },
+  { height: 70, width: 130 },
+  { height: 70, width: 140 },
+  { height: 75, width: 140 },
+  { height: 80, width: 110 },
+  { height: 90, width: 90 },
+  { height: 100, width: 80 },
   { height: 100, width: 100 },
   { height: 100, width: 120 },
   { height: 100, width: 135 },
@@ -1078,9 +1078,9 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   let reversed4: i32[] = [3, 2, 1, 0];
   let expected4: i32[] = [0, 1, 2, 3];
 
-  let reversed64    = createReverseOrderedArray(64);
-  let reversed128   = createReverseOrderedArray(128);
-  let reversed1024  = createReverseOrderedArray(1024);
+  let reversed64 = createReverseOrderedArray(64);
+  let reversed128 = createReverseOrderedArray(128);
+  let reversed1024 = createReverseOrderedArray(1024);
   let reversed10000 = createReverseOrderedArray(10000);
 
   let randomized512 = createRandomOrderedArray(512);
@@ -1118,7 +1118,7 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 // Test sorting with custom comparator
 
 {
-  let randomized64  = createRandomOrderedArray(64);
+  let randomized64 = createRandomOrderedArray(64);
   let randomized257 = createRandomOrderedArray(257);
 
   assertSorted<i32>(randomized64, (a: i32, b: i32) => a - b);
@@ -1143,7 +1143,7 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 // Test sorting strings
 
 {
-  let randomStringsActual:   (string | null)[] = ["a", "b", "a", "ab", "ba", "", null];
+  let randomStringsActual: (string | null)[] = ["a", "b", "a", "ab", "ba", "", null];
   let randomStringsExpected: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null];
 
   assertSorted<string | null>(randomStringsActual);
@@ -1157,7 +1157,7 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 {
   assert((<bool[]>[true, false]).join() == "true,false");
-  assert((<i32[]>[1,-2,-3]).join("") == "1-2-3");
+  assert((<i32[]>[1, -2, -3]).join("") == "1-2-3");
   assert((<u32[]>[1, 2, 3]).join("-") == "1-2-3");
   assert((<i32[]>[i32.MIN_VALUE, i32.MIN_VALUE]).join("__") == "-2147483648__-2147483648");
   assert((<f64[]>[0.0, 1.0, -2.0, NaN, -Infinity, Infinity]).join(", ") == "0.0, 1.0, -2.0, NaN, -Infinity, Infinity");
@@ -1173,8 +1173,8 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 {
   let arr0: i32[] = [];
   let arr1: i32[] = [1];
-  let arr2: i32[] = [1,2];
-  let arr3: i32[] = [0,1,2,3];
+  let arr2: i32[] = [1, 2];
+  let arr3: i32[] = [0, 1, 2, 3];
 
   assert(arr0.toString() == "");
   assert(arr1.toString() == "1");
@@ -1191,10 +1191,10 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(arrStr.toString() == ",a,a,ab,b,ba,");
   assert((<Array<string | null>>["1", "2", null, "4"]).toString() == "1,2,,4");
 
-  let subarr32: i32[][] = [[1,2], [3,4]];
+  let subarr32: i32[][] = [[1, 2], [3, 4]];
   assert(subarr32.toString() == "1,2,3,4");
 
-  let subarr8: u8[][] = [[1,2], [3,4]];
+  let subarr8: u8[][] = [[1, 2], [3, 4]];
   assert(subarr8.toString() == "1,2,3,4");
 
   let subarrU32: u32[][][] = [[[1]]];
@@ -1236,11 +1236,29 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(mapResult[3] == 3);
 }
 
+// array#from
+{
+  let other = new Array<i32>();
+  other.push(1);
+  other.push(2);
+  other.push(3);
+  const res = Array.from(other);
+  assert(res.length == 3);
+
+  // case of Array.from({length: number})
+  const result = Array.from({ length: 3 });
+  assert(result.length == 3);
+  assert(result[0] == undefined);
+  assert(result[1] == undefined);
+  assert(result[2] == undefined);
+
+}
+
 // export extended arrays
 
-export class ArrayU32 extends Array<u32> {}
-export class ArrayU8 extends Array<u8> {}
-export class ArrayStr extends Array<string> {}
+export class ArrayU32 extends Array<u32> { }
+export class ArrayU8 extends Array<u8> { }
+export class ArrayStr extends Array<string> { }
 // FIXME: Fails on 'sort' due to operators '>', '<'
 // export class ArrayArrayI32 extends Array<Array<i32>> {}
 

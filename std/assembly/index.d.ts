@@ -1718,6 +1718,7 @@ declare class Array<T> {
   reverse(): this;
   /** Flattens an array of arrays. If any null entries exist in the array, they are ignored, unlike JavaScript's version of Array#flat(). */
   flat(): T extends unknown[] ? T : never;
+  from(array: Array<T>): this;
   toString(): string;
 }
 
@@ -1935,10 +1936,10 @@ interface Function {
   /** Returns a string representation of this function. */
   toString(): string;
 }
-interface IArguments {}
-interface RegExp {}
+interface IArguments { }
+interface RegExp { }
 
-declare class Map<K,V> {
+declare class Map<K, V> {
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): this;
@@ -2119,7 +2120,7 @@ declare namespace process {
   /** Array of command line arguments passed to the binary upon instantiation. */
   export const argv: string[];
   /** Map of variables in the binary's user environment. */
-  export const env: Map<string,string>;
+  export const env: Map<string, string>;
   /** Process exit code to use when the process exits gracefully. Defaults to `0`. */
   export var exitCode: i32;
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
@@ -2191,23 +2192,23 @@ interface TypedPropertyDescriptor<T> {
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token:
   "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
-  ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+  ">>" | ">>>" | "<<" | "&" | "|" | "^" | "+" | "-" | "*" | "**" | "/" | "%"
 ): (
-  target: any,
-  propertyKey: string,
-  descriptor: TypedPropertyDescriptor<any>
-) => TypedPropertyDescriptor<any> | void;
+    target: any,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<any>
+  ) => TypedPropertyDescriptor<any> | void;
 
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
   export function binary(token:
     "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
-    ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+    ">>" | ">>>" | "<<" | "&" | "|" | "^" | "+" | "-" | "*" | "**" | "/" | "%"
   ): (
-    target: any,
-    propertyKey: string,
-    descriptor: TypedPropertyDescriptor<any>
-  ) => TypedPropertyDescriptor<any> | void;
+      target: any,
+      propertyKey: string,
+      descriptor: TypedPropertyDescriptor<any>
+    ) => TypedPropertyDescriptor<any> | void;
   /** Annotates a method as an unary prefix operator overload for the specified `token`. */
   export function prefix(token: "!" | "~" | "+" | "-" | "++" | "--"): (
     target: any,
