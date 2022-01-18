@@ -26,7 +26,7 @@ jobs:
     needs: check
     strategy:
       matrix:
-        os: ["ubuntu", "macos", "windows"]
+        os: ["ubuntu", "macos"]
         node_version: ["current", "lts_latest"]
     steps:
     - uses: actions/checkout@v1.0.0
@@ -34,9 +34,7 @@ jobs:
       with:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
-      run: |
-        npm i npm@8.3.0 -g
-        npm ci --no-audit
+      run: npm ci --no-audit
     - name: Build
       run: npm run build
     - name: Check
