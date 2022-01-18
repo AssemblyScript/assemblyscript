@@ -34,7 +34,9 @@ jobs:
       with:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
-      run: npm ci --no-audit
+      run: |
+        npm i npm@latest -g
+        npm ci --no-audit
     - name: Build
       run: npm run build
     - name: Check
