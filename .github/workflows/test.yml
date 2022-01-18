@@ -27,6 +27,7 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu", "macos"]
+        # TODO: re-enable "windows", see https://github.com/npm/cli/issues/4234
         node_version: ["current", "lts_latest"]
     steps:
     - uses: actions/checkout@v1.0.0
