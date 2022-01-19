@@ -21,11 +21,13 @@ jobs:
           printf "\nOK: Distributions files have not been modified.\n";
         fi
   test:
-    name: "Compiler (Linux, node ${{ matrix.node_version }})"
-    runs-on: ubuntu-latest
+    name: "Compiler (${{ matrix.os }}, node ${{ matrix.node_version }})"
+    runs-on: ${{ matrix.os }}-latest
     needs: check
     strategy:
       matrix:
+        # TODO: re-enable "windows", see https://github.com/npm/cli/issues/4234
+        os: ["ubuntu", "macos"]
         node_version: ["current", "lts_latest"]
     steps:
     - uses: actions/checkout@v1.0.0
@@ -38,52 +40,6 @@ jobs:
       run: npm run clean
     - name: Check sources
       run: npm run check
-    - name: Test sources
-      run: npm test
-    - name: Build distribution files
-      run: npm run build
-    - name: Update entry file
-      run: npm run prepare-ci
-    - name: Test distribution
-      run: npm test
-    - name: Test browser build
-      run: node tests/browser-asc
-  test-windows:
-    name: "Compiler (Windows, node current)"
-    runs-on: windows-latest
-    needs: check
-    steps:
-    - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
-    - name: Test sources
-      run: npm test
-    - name: Build distribution files
-      run: npm run build
-    - name: Update entry file
-      run: npm run prepare-ci
-    - name: Test distribution
-      run: npm test
-    - name: Test browser build
-      run: node tests/browser-asc
-  test-macos:
-    name: "Compiler (MacOS, node current)"
-    runs-on: macos-latest
-    needs: check
-    steps:
-    - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
     - name: Test sources
       run: npm test
     - name: Build distribution files
