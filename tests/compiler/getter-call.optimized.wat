@@ -33,7 +33,7 @@
  (data (i32.const 1448) "\04\00\00\00\08\00\00\00\01")
  (data (i32.const 1472) "\05\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1500) " ")
- (table $0 2 funcref)
+ (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $getter-call/C#get:x~anonymous|0)
  (export "test" (func $getter-call/test))
  (export "memory" (memory $0))

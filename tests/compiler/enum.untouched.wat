@@ -36,7 +36,7 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
  (memory $0 0)
- (table $0 1 funcref)
+ (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "Implicit.ZERO" (global $enum/Implicit.ZERO))
  (export "Implicit.ONE" (global $enum/Implicit.ONE))

@@ -178,7 +178,7 @@
  (data (i32.const 6844) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\001\002\003\00\00\00\00\00\00\00")
  (data (i32.const 6876) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\002\003\004\00\00\00\00\00")
  (data (i32.const 6912) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\02\82\00\00\00\00\00")
- (table $0 1 funcref)
+ (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -234,6 +234,16 @@
      i32.const 1
      i32.add
      local.set $6
+     local.get $3
+     local.get $8
+     i32.eqz
+     i32.and
+     if
+      local.get $6
+      local.get $2
+      i32.sub
+      return
+     end
     else
      local.get $8
      i32.const 2048
@@ -367,7 +377,7 @@
         if
          i32.const 160
          i32.const 224
-         i32.const 739
+         i32.const 741
          i32.const 49
          call $~lib/wasi/index/abort
          unreachable

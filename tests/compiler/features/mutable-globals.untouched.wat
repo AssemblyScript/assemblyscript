@@ -10,7 +10,7 @@
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00m\00u\00t\00a\00b\00l\00e\00-\00g\00l\00o\00b\00a\00l\00s\00.\00t\00s\00\00\00\00\00\00\00")
- (table $0 1 funcref)
+ (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "external" (global $features/mutable-globals/external))
  (export "internal" (global $features/mutable-globals/internal))

@@ -52,7 +52,7 @@
  (data (i32.const 1736) "\08\00\00\00\08\00\00\00\08")
  (data (i32.const 1760) "\t\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1812) " ")
- (table $0 9 funcref)
+ (table $0 9 9 funcref)
  (elem $0 (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|0 $start:function-call~anonymous|2 $start:function-call~anonymous|2 $start:function-call~fn2|4 $function-call/Foo#fnVoid $start:function-call~fn2|4 $function-call/Foo#fnRet)
  (export "memory" (memory $0))
  (start $~start)

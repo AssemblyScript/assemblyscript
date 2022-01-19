@@ -71,7 +71,7 @@
  (data (i32.const 4572) "\1c")
  (data (i32.const 4584) "\03\00\00\00\08\00\00\00\04")
  (data (i32.const 4608) "\04\00\00\00 \00\00\00\00\00\00\00 ")
- (table $0 5 funcref)
+ (table $0 5 5 funcref)
  (elem $0 (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
  (export "memory" (memory $0))
  (start $~start)

@@ -10,7 +10,7 @@
  (global $~lib/memory/__heap_base i32 (i32.const 16428))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00a\00b\00i\00.\00t\00s\00")
- (table $0 1 funcref)
+ (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "exported" (func $abi/exported))
  (export "exportedExported" (func $abi/exportedExported))

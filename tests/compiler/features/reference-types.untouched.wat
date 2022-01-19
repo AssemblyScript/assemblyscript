@@ -27,7 +27,7 @@
  (global $~lib/memory/__heap_base i32 (i32.const 16476))
  (memory $0 1)
  (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s\00\00\00\00\00\00\00")
- (table $0 1 funcref)
+ (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (elem declare func $features/reference-types/someFunc)
  (export "external" (func $features/reference-types/external))
