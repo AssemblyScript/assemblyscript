@@ -738,6 +738,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   // calculate value
   // @ts-ignore: type
   var num: T = 0;
+  var initial = len - 1;
   while (len--) {
     code = <u32>load<u16>(ptr);
     if (code - CharCode._0 < 10) {
@@ -748,7 +749,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
       code -= CharCode.a - 10;
     }
     if (code >= <u32>radix) {
-      if (!num) {
+      if (initial == len) {
         if (isFloat<T>()) {
           // @ts-ignore: cast
           return <T>NaN;

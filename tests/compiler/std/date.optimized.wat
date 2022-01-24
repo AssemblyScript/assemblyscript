@@ -3959,20 +3959,21 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
   i32.const 1
   i32.shr_u
-  local.tee $2
+  local.tee $1
   i32.eqz
   if
    i32.const 0
    return
   end
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.load16_u
   local.set $0
   loop $while-continue|0
@@ -4039,21 +4040,21 @@
     i32.const 0
    end
    if
-    local.get $1
+    local.get $2
     i32.const 2
     i32.add
-    local.tee $1
+    local.tee $2
     i32.load16_u
     local.set $0
-    local.get $2
+    local.get $1
     i32.const 1
     i32.sub
-    local.set $2
+    local.set $1
     br $while-continue|0
    end
   end
   i32.const 1
-  local.set $5
+  local.set $4
   local.get $0
   i32.const 43
   i32.eq
@@ -4062,10 +4063,10 @@
   i32.eq
   i32.or
   if (result i32)
-   local.get $2
+   local.get $1
    i32.const 1
    i32.sub
-   local.tee $2
+   local.tee $1
    i32.eqz
    if
     i32.const 0
@@ -4077,18 +4078,18 @@
    i32.const 45
    i32.eq
    select
-   local.set $5
-   local.get $1
+   local.set $4
+   local.get $2
    i32.const 2
    i32.add
-   local.tee $1
+   local.tee $2
    i32.load16_u
   else
    local.get $0
   end
   i32.const 48
   i32.eq
-  local.get $2
+  local.get $1
   i32.const 2
   i32.gt_s
   i32.and
@@ -4096,7 +4097,7 @@
    block $break|1
     block $case2|1
      block $case1|1
-      local.get $1
+      local.get $2
       i32.load16_u offset=2
       i32.const 32
       i32.or
@@ -4114,38 +4115,38 @@
        br_if $case2|1
        br $break|1
       end
-      local.get $1
+      local.get $2
       i32.const 4
       i32.add
-      local.set $1
-      local.get $2
+      local.set $2
+      local.get $1
       i32.const 2
       i32.sub
-      local.set $2
+      local.set $1
       i32.const 2
       local.set $3
       br $break|1
      end
-     local.get $1
+     local.get $2
      i32.const 4
      i32.add
-     local.set $1
-     local.get $2
+     local.set $2
+     local.get $1
      i32.const 2
      i32.sub
-     local.set $2
+     local.set $1
      i32.const 8
      local.set $3
      br $break|1
     end
-    local.get $1
+    local.get $2
     i32.const 4
     i32.add
-    local.set $1
-    local.get $2
+    local.set $2
+    local.get $1
     i32.const 2
     i32.sub
-    local.set $2
+    local.set $1
     i32.const 16
     local.set $3
    end
@@ -4155,16 +4156,20 @@
   local.get $3
   select
   local.set $3
+  local.get $1
+  i32.const 1
+  i32.sub
+  local.set $6
   loop $while-continue|2
    block $while-break|2
-    local.get $2
+    local.get $1
     local.tee $0
     i32.const 1
     i32.sub
-    local.set $2
+    local.set $1
     local.get $0
     if
-     local.get $1
+     local.get $2
      i32.load16_u
      local.tee $0
      i32.const 48
@@ -4202,8 +4207,9 @@
      local.get $3
      i32.ge_u
      if
-      local.get $4
-      i32.eqz
+      local.get $1
+      local.get $6
+      i32.eq
       if
        i32.const 0
        return
@@ -4212,14 +4218,14 @@
      end
      local.get $0
      local.get $3
-     local.get $4
+     local.get $5
      i32.mul
      i32.add
-     local.set $4
-     local.get $1
+     local.set $5
+     local.get $2
      i32.const 2
      i32.add
-     local.set $1
+     local.set $2
      br $while-continue|2
     end
    end
