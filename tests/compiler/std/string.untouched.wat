@@ -4882,6 +4882,7 @@
   (local $5 i32)
   (local $6 f64)
   (local $7 f64)
+  (local $8 i32)
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -5089,6 +5090,10 @@
   end
   f64.const 0
   local.set $7
+  local.get $2
+  i32.const 1
+  i32.sub
+  local.set $8
   block $while-break|2
    loop $while-continue|2
     local.get $2
@@ -5150,15 +5155,9 @@
      local.get $1
      i32.ge_u
      if
-      local.get $7
-      i64.reinterpret_f64
-      i64.const 1
-      i64.shl
-      i64.const 2
-      i64.sub
-      i64.const -9007199254740994
-      i64.le_u
-      i32.eqz
+      local.get $8
+      local.get $2
+      i32.eq
       if
        i32.const 1
        drop
@@ -5210,6 +5209,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -5417,6 +5417,10 @@
   end
   i32.const 0
   local.set $7
+  local.get $2
+  i32.const 1
+  i32.sub
+  local.set $8
   block $while-break|2
    loop $while-continue|2
     local.get $2
@@ -5478,8 +5482,9 @@
      local.get $1
      i32.ge_u
      if
-      local.get $7
-      i32.eqz
+      local.get $8
+      local.get $2
+      i32.eq
       if
        i32.const 0
        drop
@@ -5518,6 +5523,7 @@
   (local $5 i32)
   (local $6 i64)
   (local $7 i64)
+  (local $8 i32)
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -5725,6 +5731,10 @@
   end
   i64.const 0
   local.set $7
+  local.get $2
+  i32.const 1
+  i32.sub
+  local.set $8
   block $while-break|2
    loop $while-continue|2
     local.get $2
@@ -5786,10 +5796,9 @@
      local.get $1
      i32.ge_u
      if
-      local.get $7
-      i64.const 0
-      i64.ne
-      i32.eqz
+      local.get $8
+      local.get $2
+      i32.eq
       if
        i32.const 0
        drop
