@@ -34,3 +34,20 @@
 <p align="center">
   <a href="https://assemblyscript.org/#sponsors"><img src="https://assemblyscript.org/sponsors.svg" alt="Sponsor logos" width="720" /></a>
 </p>
+
+## Development instructions
+
+A development environment can be set up by cloning the repository:
+
+```sh
+git clone https://github.com/AssemblyScript/assemblyscript.git
+cd assemblyscript
+npm install
+npm link
+```
+
+The link step is optional and makes the development instance available globally. The full process is documented as part of the repository:
+
+* [Compiler instructions](./src)
+* [Runtime instructions](./std/assembly/rt)
+* [Test instructions](./tests)
