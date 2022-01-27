@@ -101,7 +101,6 @@ const gitignoreFile = path.join(buildDir, ".gitignore");
 const packageFile = path.join(projectDir, "package.json");
 
 const indexHtml = path.join(projectDir, "index.html");
-const indexFile = path.join(projectDir, "index.js");
 const testsIndexFile = path.join(testsDir, "index.js");
 
 const basePaths = [
@@ -115,7 +114,6 @@ const basePaths = [
 ];
 
 const nodePaths = [
-  [indexFile, "Main file loading the WebAssembly module and exporting its exports."],
   [testsIndexFile, "Example test to check that your module is indeed working."]
 ];
 
@@ -159,7 +157,6 @@ function createProject(answer) {
   ensureAsconfigJson();
 
   if (useNode) {
-    ensureIndexJs();
     ensureTestsDirectory();
     ensureTestsIndexJs();
   }
@@ -355,6 +352,9 @@ function ensurePackageJson() {
   if (!fs.existsSync(packageFile)) {
     fs.writeFileSync(packageFile, JSON.stringify({
       "type": "module",
+      "exports": {
+        ".": "./build/release.js"
+      },
       "scripts": {
         "asbuild:debug": buildDebug,
         "asbuild:release": buildRelease,
@@ -373,6 +373,11 @@ function ensurePackageJson() {
     if (!pkg["type"]) {
       pkg["type"] = "module";
       updated = true;
+    }
+    if (!pkg["exports"]) {
+      pkg["exports"] = {
+        ".": "./build/release.js"
+      };
     }
     if (!scripts["asbuild"]) {
       scripts["asbuild:debug"] = buildDebug;
@@ -398,19 +403,6 @@ function ensurePackageJson() {
     } else {
       console.log(stdoutColors.yellow("  Exists: ") + packageFile);
     }
-  }
-  console.log();
-}
-
-function ensureIndexJs() {
-  console.log("- Making sure that 'index.js' exists...");
-  if (!fs.existsSync(indexFile)) {
-    fs.writeFileSync(indexFile, [
-      "export * from \"./build/release.js\";"
-    ].join("\n") + "\n");
-    console.log(stdoutColors.green("  Created: ") + indexFile);
-  } else {
-    console.log(stdoutColors.yellow("  Exists: ") + indexFile);
   }
   console.log();
 }
