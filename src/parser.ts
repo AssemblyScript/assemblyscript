@@ -86,6 +86,7 @@ import {
   VariableDeclaration,
   VoidStatement,
   WhileStatement,
+  ModuleDeclaration,
 
   mangleInternalPath
 } from "./ast";
@@ -115,6 +116,8 @@ export class Parser extends DiagnosticEmitter {
   dependees: Map<string, Dependee> = new Map();
   /** An array of parsed sources. */
   sources: Source[];
+  /** Current overridden module name. */
+  currentModuleName: string | null = null;
 
   /** Constructs a new parser. */
   constructor(
@@ -173,6 +176,7 @@ export class Parser extends DiagnosticEmitter {
 
     this.sources.push(source);
     this.currentSource = source;
+    this.currentModuleName = null;
 
     // tokenize and parse
     var tn = new Tokenizer(source, this.diagnostics);
@@ -345,6 +349,18 @@ export class Parser extends DiagnosticEmitter {
           tn.discard(state);
           statement = this.parseTypeDeclaration(tn, flags, decorators, startPos);
           decorators = null;
+        } else {
+          tn.reset(state);
+          statement = this.parseStatement(tn, true);
+        }
+        break;
+      }
+      case Token.MODULE: { // also identifier
+        let state = tn.mark();
+        tn.next();
+        if (tn.peek(true) == Token.STRINGLITERAL && !tn.nextTokenOnNewLine) {
+          tn.discard(state);
+          statement = this.parseModuleDeclaration(tn, flags);
         } else {
           tn.reset(state);
           statement = this.parseStatement(tn, true);
@@ -917,6 +933,7 @@ export class Parser extends DiagnosticEmitter {
     do {
       let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
       if (!declaration) return null;
+      declaration.overriddenModuleName = this.currentModuleName;
       declarations.push(declaration);
     } while (tn.skip(Token.COMMA));
 
@@ -1048,6 +1065,7 @@ export class Parser extends DiagnosticEmitter {
       members,
       tn.range(startPos, tn.pos)
     );
+    ret.overriddenModuleName = this.currentModuleName;
     tn.skip(Token.SEMICOLON);
     return ret;
   }
@@ -1522,6 +1540,7 @@ export class Parser extends DiagnosticEmitter {
       ArrowKind.NONE,
       tn.range(startPos, tn.pos)
     );
+    ret.overriddenModuleName = this.currentModuleName;
     tn.skip(Token.SEMICOLON);
     return ret;
   }
@@ -1772,6 +1791,7 @@ export class Parser extends DiagnosticEmitter {
       } while (!tn.skip(Token.CLOSEBRACE));
     }
     declaration.range.end = tn.pos;
+    declaration.overriddenModuleName = this.currentModuleName;
     return declaration;
   }
 
@@ -2476,6 +2496,7 @@ export class Parser extends DiagnosticEmitter {
           }
         }
         declaration.range.end = tn.pos;
+        declaration.overriddenModuleName = this.currentModuleName;
         tn.skip(Token.SEMICOLON);
         return declaration;
       } else {
@@ -3487,6 +3508,7 @@ export class Parser extends DiagnosticEmitter {
           tn.range(startPos, tn.pos)
         );
         tn.skip(Token.SEMICOLON);
+        ret.overriddenModuleName = this.currentModuleName;
         return ret;
       } else {
         this.error(
@@ -3501,6 +3523,22 @@ export class Parser extends DiagnosticEmitter {
       );
     }
     return null;
+  }
+
+  parseModuleDeclaration(
+    tn: Tokenizer,
+    flags: CommonFlags
+  ): ModuleDeclaration | null {
+
+    // at 'module': StringLiteral ';'?
+
+    var startPos = tn.tokenPos;
+    assert(tn.next() == Token.STRINGLITERAL); // checked earlier
+    var moduleName = tn.readString();
+    var ret = Node.createModuleDeclaration(moduleName, flags, tn.range(startPos, tn.pos));
+    this.currentModuleName = moduleName;
+    tn.skip(Token.SEMICOLON);
+    return ret;
   }
 
   parseVoidStatement(

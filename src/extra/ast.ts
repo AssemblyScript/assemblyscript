@@ -65,6 +65,7 @@ import {
   TryStatement,
   VariableStatement,
   WhileStatement,
+  ModuleDeclaration,
 
   DeclarationStatement,
   ClassDeclaration,
@@ -287,6 +288,10 @@ export class ASTBuilder {
       }
       case NodeKind.WHILE: {
         this.visitWhileStatement(<WhileStatement>node);
+        break;
+      }
+      case NodeKind.MODULE: {
+        this.visitModuleDeclaration(<ModuleDeclaration>node);
         break;
       }
 
@@ -1469,6 +1474,16 @@ export class ASTBuilder {
     }
     sb.push(" = ");
     this.visitTypeNode(node.type);
+  }
+
+  visitModuleDeclaration(node: ModuleDeclaration): void {
+    var sb = this.sb;
+    if (node.flags & CommonFlags.DECLARE) {
+      sb.push("declare ");
+    }
+    sb.push("module \"");
+    sb.push(escapeString(node.moduleName, CharCode.DOUBLEQUOTE));
+    sb.push("\"");
   }
 
   visitVariableDeclaration(node: VariableDeclaration): void {

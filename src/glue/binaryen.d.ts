@@ -7,6 +7,7 @@
  *
  * @license Apache-2.0
  */
+module "binaryen";
 
 export type Index = u32;
 export type ExpressionId = i32;

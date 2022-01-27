@@ -99,6 +99,7 @@ export enum NodeKind {
   VARIABLE,
   VOID,
   WHILE,
+  MODULE,
 
   // declaration statements
   CLASSDECLARATION,
@@ -710,6 +711,14 @@ export abstract class Node {
     range: Range
   ): TypeDeclaration {
     return new TypeDeclaration(name, decorators, flags, typeParameters, type, range);
+  }
+
+  static createModuleDeclaration(
+    name: string,
+    flags: CommonFlags,
+    range: Range
+  ): ModuleDeclaration {
+    return new ModuleDeclaration(name, flags, range);
   }
 
   static createVariableStatement(
@@ -1701,6 +1710,8 @@ export abstract class DeclarationStatement extends Statement {
   ) {
     super(kind, range);
   }
+  /** Overridden module name from preceeding `module` statement. */
+  public overriddenModuleName: string | null = null;
 
   /** Tests if this node has the specified flag or flags. */
   is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
@@ -2253,6 +2264,20 @@ export class TryStatement extends Statement {
     range: Range
   ) {
     super(NodeKind.TRY, range);
+  }
+}
+
+/** Represents a `module` statement. */
+export class ModuleDeclaration extends Statement {
+  constructor(
+    /** Module name. */
+    public moduleName: string,
+    /** Common flags indicating specific traits. */
+    public flags: CommonFlags,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.MODULE, range);
   }
 }
 

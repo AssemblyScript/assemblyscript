@@ -2160,6 +2160,10 @@ export class Compiler extends DiagnosticEmitter {
         stmt = module.unreachable();
         break;
       }
+      case NodeKind.MODULE: {
+        stmt = module.nop();
+        break;
+      }
       default: {
         assert(false);
         stmt = module.unreachable();
@@ -10525,6 +10529,10 @@ function mangleImportName(
   mangleImportName_elementName = mangleInternalName(
     element.name, element.parent, element.is(CommonFlags.INSTANCE), true
   );
+  // override module name if a `module` statement is present
+  let overriddenModuleName = declaration.overriddenModuleName;
+  if (overriddenModuleName) mangleImportName_moduleName = overriddenModuleName;
+
   if (!element.hasDecorator(DecoratorFlags.EXTERNAL)) return;
 
   var program = element.program;
