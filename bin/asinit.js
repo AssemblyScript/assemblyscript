@@ -292,7 +292,9 @@ function ensureAsconfigJson() {
           noAssert: false
         }
       },
-      options: {}
+      options: {
+        bindings: "esm"
+      }
     }, null, 2));
     console.log(stdoutColors.green("  Created: ") + asconfigFile);
   } else {
@@ -352,17 +354,13 @@ function ensurePackageJson() {
   const buildAll = commands[pm].run + " asbuild:debug && " + commands[pm].run + " asbuild:release";
   if (!fs.existsSync(packageFile)) {
     fs.writeFileSync(packageFile, JSON.stringify({
+      "type": "module",
       "scripts": {
         "asbuild:debug": buildDebug,
         "asbuild:release": buildRelease,
         "asbuild": buildAll,
         ...(useNode && {"test": "node tests"})
       },
-      ...(useNode && {
-        "dependencies": {
-          "@assemblyscript/loader": "^" + version
-        }
-      }),
       "devDependencies": {
         "assemblyscript": "^" + version
       }
@@ -372,6 +370,10 @@ function ensurePackageJson() {
     let pkg = JSON.parse(fs.readFileSync(packageFile));
     let scripts = pkg.scripts || {};
     let updated = false;
+    if (!pkg["type"]) {
+      pkg["type"] = "module";
+      updated = true;
+    }
     if (!scripts["asbuild"]) {
       scripts["asbuild:debug"] = buildDebug;
       scripts["asbuild:release"] = buildRelease;
@@ -382,12 +384,6 @@ function ensurePackageJson() {
     if (!scripts["test"] || scripts["test"] == npmDefaultTest && useNode) {
       scripts["test"] = "node tests";
       pkg["scripts"] = scripts;
-      updated = true;
-    }
-    let dependencies = pkg["dependencies"] || {};
-    if (!dependencies["@assemblyscript/loader"] && useNode) {
-      dependencies["@assemblyscript/loader"] = "^" + version;
-      pkg["dependencies"] = dependencies;
       updated = true;
     }
     let devDependencies = pkg["devDependencies"] || {};
@@ -409,17 +405,8 @@ function ensurePackageJson() {
 function ensureIndexJs() {
   console.log("- Making sure that 'index.js' exists...");
   if (!fs.existsSync(indexFile)) {
-    // since node.js v13.2.0 or v12.17.0 we can use ESM without flags
-    const ver = process.versions.node.split('.');
-    const maj = parseInt(ver[0]);
-    const min = parseInt(ver[1]);
-    const supportESM = maj >= 14 || (maj == 13 && min >= 2) || (maj == 12 && min >= 17);
     fs.writeFileSync(indexFile, [
-      "const fs = require(\"fs\");",
-      "const loader = require(\"@assemblyscript/loader" + (supportESM ? "" : "/umd") + "\");",
-      "const imports = { /* imports go here */ };",
-      "const wasmModule = loader.instantiateSync(fs.readFileSync(__dirname + \"/build/release.wasm\"), imports);",
-      "module.exports = wasmModule.exports;"
+      "export * from \"./build/release.js\";"
     ].join("\n") + "\n");
     console.log(stdoutColors.green("  Created: ") + indexFile);
   } else {
@@ -443,9 +430,9 @@ function ensureTestsIndexJs() {
   console.log("- Making sure that 'tests/index.js' exists...");
   if (!fs.existsSync(testsIndexFile)) {
     fs.writeFileSync(testsIndexFile, [
-      "const assert = require(\"assert\");",
-      "const myModule = require(\"..\");",
-      "assert.strictEqual(myModule.add(1, 2), 3);",
+      "import assert from \"assert\";",
+      "import { add } from \"../build/debug.js\";",
+      "assert.strictEqual(add(1, 2), 3);",
       "console.log(\"ok\");"
     ].join("\n") + "\n");
     console.log(stdoutColors.green("  Created: ") + testsIndexFile);
@@ -462,18 +449,9 @@ function ensureIndexHtml() {
       "<!DOCTYPE html>",
       "<html lang=\"en\">",
       "  <head>",
-      "    <script src=\"https://cdn.jsdelivr.net/npm/@assemblyscript/loader/umd/index.js\"></script>",
-      "    <script>",
-      "      const imports = {",
-      "        /* imports go here */",
-      "      };",
-      "",
-      "      loader",
-      "        .instantiateStreaming(fetch(\"build/release.wasm\"), imports)",
-      "        .then(wasmModule => {",
-      "          const { add } = wasmModule.exports;",
-      "          document.body.innerText = add(1, 2);",
-      "        });",
+      "    <script type=\"module\">",
+      "    import { add } from \"./build/release.js\";",
+      "    document.body.innerText = add(1, 2);",
       "    </script>",
       "  </head>",
       "  <body></body>",

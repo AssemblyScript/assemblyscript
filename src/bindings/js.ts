@@ -493,6 +493,7 @@ export class JSBuilder extends ExportsWalker {
     // prototypes and overrides selectively where instrumentation is required.
     indent(sb, this.indentLevel++);
     sb.push("const adaptedImports = {\n");
+    let sbLengthBefore = sb.length;
     for (let _keys = Map_keys(moduleImports), i = 0, k = _keys.length; i < k; ++i) {
       let moduleName = _keys[i];
       let moduleId = this.ensureModuleId(moduleName);
@@ -545,8 +546,14 @@ export class JSBuilder extends ExportsWalker {
         sb.push("}),\n");
       }
     }
-    indent(sb, --this.indentLevel);
-    sb.push("};\n");
+    --this.indentLevel;
+    let hasAdaptedImports = sb.length > sbLengthBefore;
+    if (hasAdaptedImports) {
+      indent(sb, this.indentLevel);
+      sb.push("};\n");
+    } else {
+      sb.length = sbLengthBefore - 2; // incl. indent
+    }
 
     var mappings = this.importMappings;
     var map = new Array<string>();
@@ -573,17 +580,39 @@ export class JSBuilder extends ExportsWalker {
     sb[insertPos] = map.join("");
 
     indent(sb, this.indentLevel);
-    sb.push("const { exports } = await WebAssembly.instantiate(module, adaptedImports);\n");
+    sb.push("const { exports } = await WebAssembly.instantiate(module");
+    if (hasAdaptedImports) {
+      sb.push(", adaptedImports);\n");
+    } else {
+      sb.push(", imports);\n");
+    }
     indent(sb, this.indentLevel);
     sb.push("const memory = exports.memory || imports.env.memory;\n");
     indent(sb, this.indentLevel++);
     sb.push("const adaptedExports = Object.setPrototypeOf({\n");
+    sbLengthBefore = sb.length;
 
     // Instrument module exports. Keeps raw (Wasm) exports on the prototype and
     // overrides selectively where instrumentation is required.
     this.walk();
-    indent(sb, --this.indentLevel);
-    sb.push("}, exports);\n");
+    --this.indentLevel;
+    let hasAdaptedExports = sb.length > sbLengthBefore;
+    if (hasAdaptedExports) {
+      indent(sb, this.indentLevel);
+      sb.push("}, exports);\n");
+    } else {
+      if (
+        this.needsLiftBuffer || this.needsLowerBuffer ||
+        this.needsLiftString || this.needsLowerString ||
+        this.needsLiftArray || this.needsLowerArray ||
+        this.needsLiftTypedArray || this.needsLowerTypedArray ||
+        this.needsLiftStaticArray
+      ) {
+        sb.length = sbLengthBefore - 2; // skip adaptedExports + 1x indent
+      } else {
+        sb.length = sbLengthBefore - 4; // skip memory and adaptedExports + 2x indent
+      }
+    }
 
     // Add external JS code fragments
     var deferredCode = this.deferredCode;
@@ -806,7 +835,11 @@ export class JSBuilder extends ExportsWalker {
       sb.push(`  exports.${exportStart}();\n`);
     }
 
-    sb.push("  return adaptedExports;\n}\n");
+    if (hasAdaptedExports) {
+      sb.push("  return adaptedExports;\n}\n");
+    } else {
+      sb.push("  return exports;\n}\n");
+    }
     --this.indentLevel;
     assert(this.indentLevel == 0);
 
