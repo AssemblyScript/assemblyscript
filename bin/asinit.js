@@ -353,7 +353,10 @@ function ensurePackageJson() {
     fs.writeFileSync(packageFile, JSON.stringify({
       "type": "module",
       "exports": {
-        ".": "./build/release.js"
+        ".": {
+          "import": "./build/release.js",
+          "types": "./build/release.d.ts"
+        }
       },
       "scripts": {
         "asbuild:debug": buildDebug,
@@ -376,7 +379,10 @@ function ensurePackageJson() {
     }
     if (!pkg["exports"]) {
       pkg["exports"] = {
-        ".": "./build/release.js"
+        ".": {
+          "import": "./build/release.js",
+          "types": "./build/release.d.ts"
+        }
       };
     }
     if (!scripts["asbuild"]) {
