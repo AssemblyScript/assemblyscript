@@ -204,7 +204,7 @@ function createProject(answer) {
     ] : []),
     "The AssemblyScript documentation covers all the details:",
     "",
-    "  https://docs.assemblyscript.org",
+    "  https://www.assemblyscript.org",
     "",
     "Have a nice day!"
   ].join("\n"));
