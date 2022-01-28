@@ -332,9 +332,8 @@ function ensureGitignore() {
   console.log("- Making sure that 'build/.gitignore' is set up...");
   if (!fs.existsSync(gitignoreFile)) {
     fs.writeFileSync(gitignoreFile, [
-      "*.wasm",
-      "*.wasm.map",
-      "*.asm.js"
+      "*",
+      "!.gitignore"
     ].join("\n") + "\n");
     console.log(stdoutColors.green("  Created: ") + gitignoreFile);
   } else {
@@ -446,13 +445,13 @@ function ensureIndexHtml() {
     fs.writeFileSync(indexHtml, [
       "<!DOCTYPE html>",
       "<html lang=\"en\">",
-      "  <head>",
-      "    <script type=\"module\">",
-      "    import { add } from \"./build/release.js\";",
-      "    document.body.innerText = add(1, 2);",
-      "    </script>",
-      "  </head>",
-      "  <body></body>",
+      "<head>",
+      "<script type=\"module\">",
+      "import { add } from \"./build/release.js\";",
+      "document.body.innerText = add(1, 2);",
+      "</script>",
+      "</head>",
+      "<body></body>",
       "</html>",
     ].join("\n") + "\n");
     console.log(stdoutColors.green("  Created: ") + indexHtml);
