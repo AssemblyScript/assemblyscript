@@ -43,27 +43,18 @@ if (typeof process.env.npm_config_user_agent === "string") {
 const asinitOptions = {
   "help": {
     "category": "General",
-    "description": "Prints a help message.",
+    "description": "Prints this help message.",
     "type": "b",
     "alias": "h"
   },
   "yes": {
     "category": "General",
-    "description": "Answers all questions with their default option for non-interactive usage.",
+    "description": [
+      "Answers all questions with their default option",
+      "for non-interactive usage."
+    ],
     "type": "b",
     "alias": "y"
-  },
-  "web": {
-    "category": "General",
-    "description": "Adds an index.html file that can load your module. (Disables node without --node/-n flag)",
-    "type": "b",
-    "alias": "w"
-  },
-  "node": {
-    "category": "General",
-    "description": "Re-enables node files when using the --web/-w flag",
-    "type": "b",
-    "alias": "n"
   }
 };
 
@@ -71,15 +62,19 @@ const cliOptions = optionsUtil.parse(process.argv.slice(2), asinitOptions);
 
 if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
 
-const useWeb = cliOptions.options.web;
-const useNode = cliOptions.options.node || !useWeb;
-
 function printHelp() {
   console.log([
     "Sets up a new AssemblyScript project or updates an existing one.",
-    "For example, to create a new project in the current directory:",
     "",
+    stdoutColors.white("SYNTAX"),
+    "  " + stdoutColors.cyan("asinit") + " directory [options]",
+    "",
+    stdoutColors.white("EXAMPLES"),
     "  " + stdoutColors.cyan("asinit") + " .",
+    "  " + stdoutColors.cyan("asinit") + " ./newProject -y",
+    "",
+    stdoutColors.white("OPTIONS"),
+    optionsUtil.help(asinitOptions, { noCategories: true })
   ].join("\n"));
   process.exit(0);
 }
@@ -100,30 +95,20 @@ const testsDir = path.join(projectDir, "tests");
 const gitignoreFile = path.join(buildDir, ".gitignore");
 const packageFile = path.join(projectDir, "package.json");
 
-const indexHtml = path.join(projectDir, "index.html");
+const indexHtmlFile = path.join(projectDir, "index.html");
 const testsIndexFile = path.join(testsDir, "index.js");
 
-const basePaths = [
+const paths = [
   [assemblyDir, "Directory holding the AssemblyScript sources being compiled to WebAssembly."],
   [tsconfigFile, "TypeScript configuration inheriting recommended AssemblyScript settings."],
   [entryFile, "Example entry file being compiled to WebAssembly to get you started."],
   [buildDir, "Build artifact directory where compiled WebAssembly files are stored."],
   [gitignoreFile, "Git configuration that excludes compiled binaries from source control."],
   [asconfigFile, "Configuration file defining both a 'debug' and a 'release' target."],
-  [packageFile, "Package info containing the necessary commands to compile to WebAssembly."]
+  [packageFile, "Package info containing the necessary commands to compile to WebAssembly."],
+  [testsIndexFile, "Stater test to check that the module is functioning."],
+  [indexHtmlFile, "Starter HTML file that loads the module in a browser."]
 ];
-
-const nodePaths = [
-  [testsIndexFile, "Example test to check that your module is indeed working."]
-];
-
-const webPaths = [
-  [indexHtml, "Starter HTML file that loads your module."]
-];
-
-const paths = basePaths;
-if (useNode) Array.prototype.push.apply(paths, nodePaths);
-if (useWeb) Array.prototype.push.apply(paths, webPaths);
 
 const formatPath = filePath => "./" + path.relative(projectDir, filePath).replace(/\\/g, "/");
 
@@ -155,15 +140,9 @@ function createProject(answer) {
   ensureGitignore();
   ensurePackageJson();
   ensureAsconfigJson();
-
-  if (useNode) {
-    ensureTestsDirectory();
-    ensureTestsIndexJs();
-  }
-
-  if (useWeb) {
-    ensureIndexHtml();
-  }
+  ensureTestsDirectory();
+  ensureTestsIndexJs();
+  ensureIndexHtml();
 
   console.log([
     stdoutColors.green("Done!"),
@@ -196,12 +175,10 @@ function createProject(answer) {
     "  ^ The optimized WebAssembly module using default optimization settings.",
     "    You can change the optimization settings in '" + stdoutColors.cyan("package.json")+ "'.",
     "",
-    ...(useNode ? [
-      "To run the tests, do:",
-      "",
-      stdoutColors.white("  " + commands[pm].test),
-      ""
-    ] : []),
+    "To run the tests, do:",
+    "",
+    stdoutColors.white("  " + commands[pm].test),
+    "",
     "The AssemblyScript documentation covers all the details:",
     "",
     "  https://www.assemblyscript.org",
@@ -361,7 +338,8 @@ function ensurePackageJson() {
         "asbuild:debug": buildDebug,
         "asbuild:release": buildRelease,
         "asbuild": buildAll,
-        ...(useNode && {"test": "node tests"})
+        "test": "node tests",
+        "start": "npx serve ."
       },
       "devDependencies": {
         "assemblyscript": "^" + version
@@ -391,8 +369,13 @@ function ensurePackageJson() {
       pkg["scripts"] = scripts;
       updated = true;
     }
-    if (!scripts["test"] || scripts["test"] == npmDefaultTest && useNode) {
+    if (!scripts["test"] || scripts["test"] == npmDefaultTest) {
       scripts["test"] = "node tests";
+      pkg["scripts"] = scripts;
+      updated = true;
+    }
+    if (!scripts["start"]) {
+      scripts["start"] = "npx serve .",
       pkg["scripts"] = scripts;
       updated = true;
     }
@@ -441,8 +424,8 @@ function ensureTestsIndexJs() {
 
 function ensureIndexHtml() {
   console.log("- Making sure that 'index.html' exists...");
-  if (!fs.existsSync(indexHtml)) {
-    fs.writeFileSync(indexHtml, [
+  if (!fs.existsSync(indexHtmlFile)) {
+    fs.writeFileSync(indexHtmlFile, [
       "<!DOCTYPE html>",
       "<html lang=\"en\">",
       "<head>",
@@ -454,9 +437,9 @@ function ensureIndexHtml() {
       "<body></body>",
       "</html>",
     ].join("\n") + "\n");
-    console.log(stdoutColors.green("  Created: ") + indexHtml);
+    console.log(stdoutColors.green("  Created: ") + indexHtmlFile);
   } else {
-    console.log(stdoutColors.yellow("  Exists: ") + indexHtml);
+    console.log(stdoutColors.yellow("  Exists: ") + indexHtmlFile);
   }
   console.log();
 }

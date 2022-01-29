@@ -133,7 +133,7 @@ export function help(config, options) {
     sb.push(eol + " " + stdoutColors.gray(category) + eol);
     sb.push(sbCategories[category].join(eol));
   });
-  if (hasCategories) {
+  if (hasCategories && sbOther.length) {
     sb.push(eol + " " + stdoutColors.gray("Other") + eol);
   }
   sb.push(sbOther.join(eol));

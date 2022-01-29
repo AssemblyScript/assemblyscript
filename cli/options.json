@@ -258,7 +258,7 @@
 
   "transform": {
     "category": "API",
-    "description": "Specifies the path to a custom transform to 'require'.",
+    "description": "Specifies the path to a custom transform to load.",
     "type": "S",
     "isPath": true,
     "useNodeResolution": true
