@@ -2336,6 +2336,7 @@ declare function trace(
 
 // @ts-ignore: decorator
 @external("env", "seed")
+@external.js("return Date.now() * Math.random();")
 declare function seed(): f64;
 
 /* eslint-enable @typescript-eslint/no-unused-vars */

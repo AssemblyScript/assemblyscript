@@ -3129,7 +3129,7 @@
      local.get $7
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 3248
-     i32.const 178
+     i32.const 211
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -3158,7 +3158,7 @@
   if
    i32.const 0
    i32.const 3248
-   i32.const 184
+   i32.const 217
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -3188,7 +3188,7 @@
    local.get $10
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3248
-   i32.const 189
+   i32.const 222
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -4216,6 +4216,8 @@
  (func $~lib/process/process.hrtime (result i64)
   (local $0 i32)
   i32.const 1
+  drop
+  i32.const 1
   i64.const 0
   global.get $~lib/bindings/wasi/tempbuf
   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
@@ -4227,13 +4229,14 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3248
-   i32.const 57
-   i32.const 14
+   i32.const 75
+   i32.const 16
    call $~lib/wasi/index/abort
    unreachable
   end
   global.get $~lib/bindings/wasi/tempbuf
   i64.load
+  return
  )
  (func $~lib/map/MapEntry<~lib/string/String,u64>#set:value (param $0 i32) (param $1 i64)
   local.get $0
@@ -5197,6 +5200,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 1
+  drop
   local.get $0
   i32.eqz
   if
@@ -5238,6 +5243,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   local.get $1
@@ -5267,6 +5274,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   local.get $1
@@ -5304,6 +5313,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   local.get $1
@@ -5341,6 +5352,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   local.get $1
@@ -5378,6 +5391,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   local.get $1
@@ -5491,6 +5506,8 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   global.get $~lib/console/timers
@@ -5626,6 +5643,8 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   global.get $~lib/console/timers
@@ -5681,6 +5700,8 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   global.get $~lib/console/timers

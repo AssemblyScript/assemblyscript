@@ -3595,6 +3595,8 @@
  )
  (func $~lib/crypto/crypto.getRandomValues (param $0 i32)
   (local $1 i32)
+  i32.const 1
+  drop
   local.get $0
   i32.load
   local.get $0
@@ -3611,8 +3613,8 @@
    local.get $1
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3696
-   i32.const 9
    i32.const 14
+   i32.const 16
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -4288,7 +4290,7 @@
      local.get $7
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 5696
-     i32.const 178
+     i32.const 211
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -4317,7 +4319,7 @@
   if
    i32.const 0
    i32.const 5696
-   i32.const 184
+   i32.const 217
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -4347,7 +4349,7 @@
    local.get $10
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 5696
-   i32.const 189
+   i32.const 222
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -4572,6 +4574,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   local.get $1

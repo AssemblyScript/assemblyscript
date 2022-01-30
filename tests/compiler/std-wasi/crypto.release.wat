@@ -2392,8 +2392,8 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4720
-   i32.const 9
    i32.const 14
+   i32.const 16
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -3068,7 +3068,7 @@
      local.get $0
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 6720
-     i32.const 178
+     i32.const 211
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -3173,7 +3173,7 @@
   if
    i32.const 0
    i32.const 6720
-   i32.const 184
+   i32.const 217
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -3199,7 +3199,7 @@
    local.get $1
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 6720
-   i32.const 189
+   i32.const 222
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable

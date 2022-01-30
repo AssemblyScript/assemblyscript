@@ -3127,7 +3127,7 @@
      local.get $7
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 3200
-     i32.const 178
+     i32.const 211
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -3156,7 +3156,7 @@
   if
    i32.const 0
    i32.const 3200
-   i32.const 184
+   i32.const 217
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -3186,7 +3186,7 @@
    local.get $10
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 189
+   i32.const 222
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -4679,6 +4679,8 @@
  )
  (func $~lib/process/process.time (result i64)
   (local $0 i32)
+  i32.const 1
+  drop
   i32.const 0
   i64.const 1000000
   global.get $~lib/bindings/wasi/tempbuf
@@ -4691,8 +4693,8 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 51
-   i32.const 14
+   i32.const 65
+   i32.const 16
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -4700,6 +4702,7 @@
   i64.load
   i64.const 1000000
   i64.div_u
+  return
  )
  (func $~lib/util/number/utoa32_dec_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -5248,6 +5251,8 @@
  (func $~lib/process/process.hrtime (result i64)
   (local $0 i32)
   i32.const 1
+  drop
+  i32.const 1
   i64.const 0
   global.get $~lib/bindings/wasi/tempbuf
   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
@@ -5259,13 +5264,14 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 57
-   i32.const 14
+   i32.const 75
+   i32.const 16
    call $~lib/wasi/index/abort
    unreachable
   end
   global.get $~lib/bindings/wasi/tempbuf
   i64.load
+  return
  )
  (func $~lib/number/U64#toString (param $0 i64) (param $1 i32) (result i32)
   local.get $0
@@ -5273,6 +5279,8 @@
   call $~lib/util/number/utoa64
  )
  (func $~lib/process/process.exit (param $0 i32)
+  i32.const 1
+  drop
   local.get $0
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
@@ -5301,7 +5309,7 @@
   if
    i32.const 3760
    i32.const 3200
-   i32.const 135
+   i32.const 168
    i32.const 7
    call $~lib/wasi/index/abort
    unreachable
@@ -5333,7 +5341,7 @@
    local.get $4
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 140
+   i32.const 173
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable
@@ -5622,6 +5630,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  i32.const 1
+  drop
   global.get $~lib/process/process.stdout
   local.set $1
   local.get $1
@@ -5741,6 +5751,8 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store offset=8
+  i32.const 1
+  drop
   global.get $~lib/bindings/wasi/tempbuf
   global.get $~lib/bindings/wasi/tempbuf
   i32.const 4
@@ -5754,8 +5766,8 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 85
-   i32.const 12
+   i32.const 114
+   i32.const 14
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -5789,8 +5801,8 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 92
-   i32.const 12
+   i32.const 121
+   i32.const 14
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -5891,6 +5903,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $12
+  return
  )
  (func $~lib/map/Map<~lib/string/String,~lib/string/String>#keys (param $0 i32) (result i32)
   (local $1 i32)
@@ -6578,6 +6591,8 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  i32.const 1
+  drop
   global.get $~lib/bindings/wasi/tempbuf
   global.get $~lib/bindings/wasi/tempbuf
   i32.const 4
@@ -6591,8 +6606,8 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 64
-   i32.const 12
+   i32.const 89
+   i32.const 14
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -6626,8 +6641,8 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 71
-   i32.const 12
+   i32.const 96
+   i32.const 14
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -6686,6 +6701,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $12
+  return
  )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

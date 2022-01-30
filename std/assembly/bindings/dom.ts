@@ -121,17 +121,42 @@ export declare namespace Date {
 }
 
 export declare namespace console {
+  @external("env", "console.assert")
+  export function assert(condition: bool, message: string): void;
   @external("env", "console.log")
   export function log(text: string): void;
+  @external("env", "console.debug")
+  export function debug(text: string): void;
   @external("env", "console.info")
   export function info(text: string): void;
   @external("env", "console.warn")
   export function warn(text: string): void;
   @external("env", "console.error")
   export function error(text: string): void;
+  @external("env", "console.time")
+  export function time(label: string): void;
+  @external("env", "console.timeLog")
+  export function timeLog(label: string): void;
+  @external("env", "console.timeEnd")
+  export function timeEnd(label: string): void;
 }
 
 export declare namespace document {
   @external("env", "document.getElementById")
   export function getElementById(id: string): externref;
+}
+
+export declare namespace performance {
+  @external("env", "performance.now")
+  export function now(): f64;
+}
+
+export namespace crypto {
+  export function getRandomValues(array: Uint8Array): void {
+    let values = getRandomValuesN(array.length);
+    array.set(values);
+  }
+  @external("env", "crypto.getRandomValuesN")
+  @external.js("let a = new Uint8Array(n); crypto.getRandomValues(a); return a;")
+  export declare function getRandomValuesN(n: u32): Uint8Array;
 }

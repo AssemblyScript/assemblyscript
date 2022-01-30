@@ -2,86 +2,126 @@ import {
   process
 } from "./process";
 
+import {
+  console as binding
+} from "./bindings/dom";
+
 // @ts-ignore: decorator
 @lazy var timers = new Map<string,u64>();
 
 export namespace console {
 
   export function assert<T>(condition: T, message: string = ""): void {
-    if (!condition) {
-      let stderr = process.stderr;
-      stderr.write("Assertion failed: ");
-      stderr.write(message);
-      stderr.write("\n");
+    if (isDefined(ASC_WASI)) {
+      if (!condition) {
+        let stderr = process.stderr;
+        stderr.write("Assertion failed: ");
+        stderr.write(message);
+        stderr.write("\n");
+      }
+    } else {
+      binding.assert(!!condition, message);
     }
   }
 
   export function log(message: string = ""): void {
-    var stdout = process.stdout;
-    stdout.write(message);
-    stdout.write("\n");
+    if (isDefined(ASC_WASI)) {
+      let stdout = process.stdout;
+      stdout.write(message);
+      stdout.write("\n");
+    } else {
+      binding.log(message);
+    }
   }
 
   export function debug(message: string = ""): void {
-    var stdout = process.stdout;
-    stdout.write("Debug: ");
-    stdout.write(message);
-    stdout.write("\n");
+    if (isDefined(ASC_WASI)) {
+      let stdout = process.stdout;
+      stdout.write("Debug: ");
+      stdout.write(message);
+      stdout.write("\n");
+    } else {
+      binding.debug(message);
+    }
   }
 
   export function info(message: string = ""): void {
-    var stdout = process.stdout;
-    stdout.write("Info: ");
-    stdout.write(message);
-    stdout.write("\n");
+    if (isDefined(ASC_WASI)) {
+      let stdout = process.stdout;
+      stdout.write("Info: ");
+      stdout.write(message);
+      stdout.write("\n");
+    } else {
+      binding.info(message);
+    }
   }
 
   export function warn(message: string = ""): void {
-    var stdout = process.stdout;
-    stdout.write("Warning: ");
-    stdout.write(message);
-    stdout.write("\n");
+    if (isDefined(ASC_WASI)) {
+      let stdout = process.stdout;
+      stdout.write("Warning: ");
+      stdout.write(message);
+      stdout.write("\n");
+    } else {
+      binding.warn(message);
+    }
   }
 
   export function error(message: string = ""): void {
-    var stdout = process.stdout;
-    stdout.write("Error: ");
-    stdout.write(message);
-    stdout.write("\n");
+    if (isDefined(ASC_WASI)) {
+      let stdout = process.stdout;
+      stdout.write("Error: ");
+      stdout.write(message);
+      stdout.write("\n");
+    } else {
+      binding.error(message);
+    }
   }
 
   export function time(label: string = "default"): void {
-    var stdout = process.stdout;
-    if (timers.has(label)) {
-      stdout.write("Warning: Label '");
-      stdout.write(label);
-      stdout.write("' already exists for console.time()\n");
-      return;
+    if (isDefined(ASC_WASI)) {
+      let stdout = process.stdout;
+      if (timers.has(label)) {
+        stdout.write("Warning: Label '");
+        stdout.write(label);
+        stdout.write("' already exists for console.time()\n");
+        return;
+      }
+      timers.set(label, process.hrtime());
+    } else {
+      binding.time(label);
     }
-    timers.set(label, process.hrtime());
   }
 
   export function timeLog(label: string = "default"): void {
-    var stdout = process.stdout;
-    if (!timers.has(label)) {
-      stdout.write("Warning: No such label '");
-      stdout.write(label);
-      stdout.write("' for console.timeLog()\n");
-      return;
+    if (isDefined(ASC_WASI)) {
+      let stdout = process.stdout;
+      if (!timers.has(label)) {
+        stdout.write("Warning: No such label '");
+        stdout.write(label);
+        stdout.write("' for console.timeLog()\n");
+        return;
+      }
+      timeLogImpl(label);
+    } else {
+      binding.timeLog(label);
     }
-    timeLogImpl(label);
   }
 
   export function timeEnd(label: string = "default"): void {
-    var stdout = process.stdout;
-    if (!timers.has(label)) {
-      stdout.write("Warning: No such label '");
-      stdout.write(label);
-      stdout.write("' for console.timeEnd()\n");
-      return;
+    if (isDefined(ASC_WASI)) {
+      let stdout = process.stdout;
+      if (!timers.has(label)) {
+        stdout.write("Warning: No such label '");
+        stdout.write(label);
+        stdout.write("' for console.timeEnd()\n");
+        return;
+      }
+      timeLogImpl(label);
+      timers.delete(label);
+    } else {
+      binding.timeEnd(label);
     }
-    timeLogImpl(label);
-    timers.delete(label);
   }
 }
 
@@ -96,5 +136,4 @@ function timeLogImpl(label: string): void {
   stdout.write(": ");
   stdout.write(millisStr);
   stdout.write("ms\n");
-  // __dispose(changetype<usize>(millisStr));
 }
