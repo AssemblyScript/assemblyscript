@@ -9051,7 +9051,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     assert(ctorInstance.is(CommonFlags.CONSTRUCTOR));
     var parent = ctorInstance.parent;
-    assert(parent.kind == ElementKind.CLASS);
+    assert(parent.kind == ElementKind.CLASS || parent.kind == ElementKind.INTERFACE);
     var classInstance = <Class>parent;
     if (classInstance.type.isUnmanaged || ctorInstance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect(
