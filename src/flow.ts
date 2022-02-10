@@ -604,7 +604,7 @@ export class Flow {
     var actualFunction = this.actualFunction;
     assert(actualFunction.is(CommonFlags.CONSTRUCTOR));
     var actualParent = actualFunction.parent;
-    assert(actualParent.kind == ElementKind.CLASS || actualParent.kind == ElementKind.INTERFACE);
+    assert(actualParent.kind == ElementKind.CLASS);
     var actualClass = <Class>actualParent;
     this.thisFieldFlags = new Map();
     var members = actualClass.members;
