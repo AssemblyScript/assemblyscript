@@ -8629,6 +8629,13 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
+    if (classReference.kind == ElementKind.INTERFACE) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        expression.range, "Interface hidden classes"
+      );
+      return module.unreachable();
+    }
     var classType = classReference.type;
     this.currentType = classType.nonNullableType;
     if (classReference.is(CommonFlags.ABSTRACT)) {
