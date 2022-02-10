@@ -18,7 +18,7 @@ export async function instantiate(module, imports = {}) {
         // bindings/esm/immutableGlobalNested: externref
         globalThis.globalThis
       )(),
-      "Date#getTimezoneOffset"() {
+      "Date.getTimezoneOffset"() {
         // bindings/esm/Date_getTimezoneOffset() => i32
         return (() => {
           // @external.js

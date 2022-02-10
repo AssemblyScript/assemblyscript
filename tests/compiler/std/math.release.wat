@@ -20,46 +20,46 @@
  (type $i64_i64_i64_i64_i64_=>_none (func (param i64 i64 i64 i64 i64)))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (import "Math" "E" (global $~lib/bindings/Math/E f64))
- (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
- (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
- (import "Math" "LOG2E" (global $~lib/bindings/Math/LOG2E f64))
- (import "Math" "PI" (global $~lib/bindings/Math/PI f64))
- (import "Math" "SQRT1_2" (global $~lib/bindings/Math/SQRT1_2 f64))
- (import "Math" "SQRT2" (global $~lib/bindings/Math/SQRT2 f64))
+ (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
+ (import "env" "Math.LN2" (global $~lib/bindings/dom/Math.LN2 f64))
+ (import "env" "Math.LN10" (global $~lib/bindings/dom/Math.LN10 f64))
+ (import "env" "Math.LOG2E" (global $~lib/bindings/dom/Math.LOG2E f64))
+ (import "env" "Math.PI" (global $~lib/bindings/dom/Math.PI f64))
+ (import "env" "Math.SQRT1_2" (global $~lib/bindings/dom/Math.SQRT1_2 f64))
+ (import "env" "Math.SQRT2" (global $~lib/bindings/dom/Math.SQRT2 f64))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "Math" "abs" (func $~lib/bindings/Math/abs (param f64) (result f64)))
- (import "Math" "acos" (func $~lib/bindings/Math/acos (param f64) (result f64)))
- (import "Math" "acosh" (func $~lib/bindings/Math/acosh (param f64) (result f64)))
- (import "Math" "asin" (func $~lib/bindings/Math/asin (param f64) (result f64)))
- (import "Math" "asinh" (func $~lib/bindings/Math/asinh (param f64) (result f64)))
- (import "Math" "atan" (func $~lib/bindings/Math/atan (param f64) (result f64)))
- (import "Math" "atanh" (func $~lib/bindings/Math/atanh (param f64) (result f64)))
- (import "Math" "atan2" (func $~lib/bindings/Math/atan2 (param f64 f64) (result f64)))
- (import "Math" "cbrt" (func $~lib/bindings/Math/cbrt (param f64) (result f64)))
- (import "Math" "ceil" (func $~lib/bindings/Math/ceil (param f64) (result f64)))
- (import "Math" "cos" (func $~lib/bindings/Math/cos (param f64) (result f64)))
- (import "Math" "cosh" (func $~lib/bindings/Math/cosh (param f64) (result f64)))
- (import "Math" "exp" (func $~lib/bindings/Math/exp (param f64) (result f64)))
- (import "Math" "expm1" (func $~lib/bindings/Math/expm1 (param f64) (result f64)))
- (import "Math" "pow" (func $~lib/bindings/Math/pow (param f64 f64) (result f64)))
- (import "Math" "floor" (func $~lib/bindings/Math/floor (param f64) (result f64)))
- (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
- (import "Math" "log10" (func $~lib/bindings/Math/log10 (param f64) (result f64)))
- (import "Math" "log1p" (func $~lib/bindings/Math/log1p (param f64) (result f64)))
- (import "Math" "log2" (func $~lib/bindings/Math/log2 (param f64) (result f64)))
- (import "Math" "max" (func $~lib/bindings/Math/max (param f64 f64) (result f64)))
- (import "Math" "min" (func $~lib/bindings/Math/min (param f64 f64) (result f64)))
+ (import "env" "Math.abs" (func $~lib/bindings/dom/Math.abs (param f64) (result f64)))
+ (import "env" "Math.acos" (func $~lib/bindings/dom/Math.acos (param f64) (result f64)))
+ (import "env" "Math.acosh" (func $~lib/bindings/dom/Math.acosh (param f64) (result f64)))
+ (import "env" "Math.asin" (func $~lib/bindings/dom/Math.asin (param f64) (result f64)))
+ (import "env" "Math.asinh" (func $~lib/bindings/dom/Math.asinh (param f64) (result f64)))
+ (import "env" "Math.atan" (func $~lib/bindings/dom/Math.atan (param f64) (result f64)))
+ (import "env" "Math.atanh" (func $~lib/bindings/dom/Math.atanh (param f64) (result f64)))
+ (import "env" "Math.atan2" (func $~lib/bindings/dom/Math.atan2 (param f64 f64) (result f64)))
+ (import "env" "Math.cbrt" (func $~lib/bindings/dom/Math.cbrt (param f64) (result f64)))
+ (import "env" "Math.ceil" (func $~lib/bindings/dom/Math.ceil (param f64) (result f64)))
+ (import "env" "Math.cos" (func $~lib/bindings/dom/Math.cos (param f64) (result f64)))
+ (import "env" "Math.cosh" (func $~lib/bindings/dom/Math.cosh (param f64) (result f64)))
+ (import "env" "Math.exp" (func $~lib/bindings/dom/Math.exp (param f64) (result f64)))
+ (import "env" "Math.expm1" (func $~lib/bindings/dom/Math.expm1 (param f64) (result f64)))
+ (import "env" "Math.pow" (func $~lib/bindings/dom/Math.pow (param f64 f64) (result f64)))
+ (import "env" "Math.floor" (func $~lib/bindings/dom/Math.floor (param f64) (result f64)))
+ (import "env" "Math.log" (func $~lib/bindings/dom/Math.log (param f64) (result f64)))
+ (import "env" "Math.log10" (func $~lib/bindings/dom/Math.log10 (param f64) (result f64)))
+ (import "env" "Math.log1p" (func $~lib/bindings/dom/Math.log1p (param f64) (result f64)))
+ (import "env" "Math.log2" (func $~lib/bindings/dom/Math.log2 (param f64) (result f64)))
+ (import "env" "Math.max" (func $~lib/bindings/dom/Math.max (param f64 f64) (result f64)))
+ (import "env" "Math.min" (func $~lib/bindings/dom/Math.min (param f64 f64) (result f64)))
  (import "math" "mod" (func $std/math/mod (param f64 f64) (result f64)))
- (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
+ (import "env" "Math.random" (func $~lib/bindings/dom/Math.random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
- (import "Math" "sign" (func $~lib/bindings/Math/sign (param f64) (result f64)))
- (import "Math" "sin" (func $~lib/bindings/Math/sin (param f64) (result f64)))
- (import "Math" "sinh" (func $~lib/bindings/Math/sinh (param f64) (result f64)))
- (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
- (import "Math" "tan" (func $~lib/bindings/Math/tan (param f64) (result f64)))
- (import "Math" "tanh" (func $~lib/bindings/Math/tanh (param f64) (result f64)))
- (import "Math" "trunc" (func $~lib/bindings/Math/trunc (param f64) (result f64)))
+ (import "env" "Math.sign" (func $~lib/bindings/dom/Math.sign (param f64) (result f64)))
+ (import "env" "Math.sin" (func $~lib/bindings/dom/Math.sin (param f64) (result f64)))
+ (import "env" "Math.sinh" (func $~lib/bindings/dom/Math.sinh (param f64) (result f64)))
+ (import "env" "Math.sqrt" (func $~lib/bindings/dom/Math.sqrt (param f64) (result f64)))
+ (import "env" "Math.tan" (func $~lib/bindings/dom/Math.tan (param f64) (result f64)))
+ (import "env" "Math.tanh" (func $~lib/bindings/dom/Math.tanh (param f64) (result f64)))
+ (import "env" "Math.trunc" (func $~lib/bindings/dom/Math.trunc (param f64) (result f64)))
  (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
  (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
  (global $~lib/math/res128_hi (mut i64) (i64.const 0))
@@ -1395,7 +1395,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/acosh
+   call $~lib/bindings/dom/Math.acosh
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -2138,7 +2138,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/asinh
+   call $~lib/bindings/dom/Math.asinh
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -2683,7 +2683,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/atanh
+   call $~lib/bindings/dom/Math.atanh
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -2947,7 +2947,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $~lib/bindings/Math/atan2
+   call $~lib/bindings/dom/Math.atan2
    local.get $2
    local.get $3
    call $std/math/check<f64>
@@ -3248,7 +3248,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/cbrt
+   call $~lib/bindings/dom/Math.cbrt
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -5050,7 +5050,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/cosh
+   call $~lib/bindings/dom/Math.cosh
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -5671,7 +5671,7 @@
   if (result i32)
    f64.const 2
    local.get $0
-   call $~lib/bindings/Math/pow
+   call $~lib/bindings/dom/Math.pow
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -6251,7 +6251,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/log10
+   call $~lib/bindings/dom/Math.log10
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -6792,7 +6792,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $~lib/bindings/Math/max
+   call $~lib/bindings/dom/Math.max
    local.get $2
    f64.const 0
    call $std/math/check<f64>
@@ -6810,7 +6810,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $~lib/bindings/Math/min
+   call $~lib/bindings/dom/Math.min
    local.get $2
    f64.const 0
    call $std/math/check<f64>
@@ -7971,7 +7971,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $~lib/bindings/Math/pow
+   call $~lib/bindings/dom/Math.pow
    local.get $2
    local.get $3
    call $std/math/check<f64>
@@ -8582,7 +8582,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/sign
+   call $~lib/bindings/dom/Math.sign
    local.get $1
    f64.const 0
    call $std/math/check<f64>
@@ -10014,7 +10014,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/sinh
+   call $~lib/bindings/dom/Math.sinh
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -11001,7 +11001,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/tanh
+   call $~lib/bindings/dom/Math.tanh
    local.get $1
    local.get $2
    call $std/math/check<f64>
@@ -12086,7 +12086,7 @@
   (local $5 f32)
   (local $6 i64)
   f64.const 2.718281828459045
-  global.get $~lib/bindings/Math/E
+  global.get $~lib/bindings/dom/Math.E
   f64.const 0
   call $std/math/check<f64>
   i32.eqz
@@ -12099,7 +12099,7 @@
    unreachable
   end
   f64.const 0.6931471805599453
-  global.get $~lib/bindings/Math/LN2
+  global.get $~lib/bindings/dom/Math.LN2
   f64.const 0
   call $std/math/check<f64>
   i32.eqz
@@ -12112,7 +12112,7 @@
    unreachable
   end
   f64.const 2.302585092994046
-  global.get $~lib/bindings/Math/LN10
+  global.get $~lib/bindings/dom/Math.LN10
   f64.const 0
   call $std/math/check<f64>
   i32.eqz
@@ -12125,7 +12125,7 @@
    unreachable
   end
   f64.const 1.4426950408889634
-  global.get $~lib/bindings/Math/LOG2E
+  global.get $~lib/bindings/dom/Math.LOG2E
   f64.const 0
   call $std/math/check<f64>
   i32.eqz
@@ -12138,7 +12138,7 @@
    unreachable
   end
   f64.const 3.141592653589793
-  global.get $~lib/bindings/Math/PI
+  global.get $~lib/bindings/dom/Math.PI
   f64.const 0
   call $std/math/check<f64>
   i32.eqz
@@ -12151,7 +12151,7 @@
    unreachable
   end
   f64.const 0.7071067811865476
-  global.get $~lib/bindings/Math/SQRT1_2
+  global.get $~lib/bindings/dom/Math.SQRT1_2
   f64.const 0
   call $std/math/check<f64>
   i32.eqz
@@ -12164,7 +12164,7 @@
    unreachable
   end
   f64.const 1.4142135623730951
-  global.get $~lib/bindings/Math/SQRT2
+  global.get $~lib/bindings/dom/Math.SQRT2
   f64.const 0
   call $std/math/check<f64>
   i32.eqz
@@ -12177,7 +12177,7 @@
    unreachable
   end
   f32.const 2.7182817459106445
-  global.get $~lib/bindings/Math/E
+  global.get $~lib/bindings/dom/Math.E
   f32.demote_f64
   f32.const 0
   call $std/math/check<f32>
@@ -12191,7 +12191,7 @@
    unreachable
   end
   f32.const 0.6931471824645996
-  global.get $~lib/bindings/Math/LN2
+  global.get $~lib/bindings/dom/Math.LN2
   f32.demote_f64
   f32.const 0
   call $std/math/check<f32>
@@ -12205,7 +12205,7 @@
    unreachable
   end
   f32.const 2.3025851249694824
-  global.get $~lib/bindings/Math/LN10
+  global.get $~lib/bindings/dom/Math.LN10
   f32.demote_f64
   f32.const 0
   call $std/math/check<f32>
@@ -12219,7 +12219,7 @@
    unreachable
   end
   f32.const 1.4426950216293335
-  global.get $~lib/bindings/Math/LOG2E
+  global.get $~lib/bindings/dom/Math.LOG2E
   f32.demote_f64
   f32.const 0
   call $std/math/check<f32>
@@ -12233,7 +12233,7 @@
    unreachable
   end
   f32.const 3.1415927410125732
-  global.get $~lib/bindings/Math/PI
+  global.get $~lib/bindings/dom/Math.PI
   f32.demote_f64
   f32.const 0
   call $std/math/check<f32>
@@ -12247,7 +12247,7 @@
    unreachable
   end
   f32.const 0.7071067690849304
-  global.get $~lib/bindings/Math/SQRT1_2
+  global.get $~lib/bindings/dom/Math.SQRT1_2
   f32.demote_f64
   f32.const 0
   call $std/math/check<f32>
@@ -12261,7 +12261,7 @@
    unreachable
   end
   f32.const 1.4142135381698608
-  global.get $~lib/bindings/Math/SQRT2
+  global.get $~lib/bindings/dom/Math.SQRT2
   f32.demote_f64
   f32.const 0
   call $std/math/check<f32>
@@ -13092,7 +13092,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 8.06684839057968
    f64.const 0
    call $std/math/check<f64>
@@ -13114,7 +13114,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 4.345239849338305
    f64.const 0
    call $std/math/check<f64>
@@ -13136,7 +13136,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 8.38143342755525
    f64.const 0
    call $std/math/check<f64>
@@ -13158,7 +13158,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 6.531673581913484
    f64.const 0
    call $std/math/check<f64>
@@ -13180,7 +13180,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 9.267056966972586
    f64.const 0
    call $std/math/check<f64>
@@ -13202,7 +13202,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 0.6619858980995045
    f64.const 0
    call $std/math/check<f64>
@@ -13224,7 +13224,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 0.4066039223853553
    f64.const 0
    call $std/math/check<f64>
@@ -13246,7 +13246,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 0.5617597462207241
    f64.const 0
    call $std/math/check<f64>
@@ -13268,7 +13268,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 0.7741522965913037
    f64.const 0
    call $std/math/check<f64>
@@ -13290,7 +13290,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 0.6787637026394024
    f64.const 0
    call $std/math/check<f64>
@@ -13312,7 +13312,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -13334,7 +13334,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -13356,7 +13356,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -13378,7 +13378,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -13400,7 +13400,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -13422,7 +13422,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -13444,7 +13444,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -13688,7 +13688,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -13711,7 +13711,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -13734,7 +13734,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -13757,7 +13757,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -13780,7 +13780,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -13803,7 +13803,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 0.8473310828433507
    f64.const -0.41553276777267456
    call $std/math/check<f64>
@@ -13826,7 +13826,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 1.989530071088669
    f64.const 0.4973946213722229
    call $std/math/check<f64>
@@ -13849,7 +13849,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 0.9742849645674904
    f64.const -0.4428897500038147
    call $std/math/check<f64>
@@ -13872,7 +13872,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 0.6854215158636222
    f64.const -0.12589527666568756
    call $std/math/check<f64>
@@ -13895,7 +13895,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 2.316874138205964
    f64.const -0.17284949123859406
    call $std/math/check<f64>
@@ -13918,7 +13918,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 1.5707963267948966
    f64.const -0.27576595544815063
    call $std/math/check<f64>
@@ -13941,7 +13941,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 3.141592653589793
    f64.const -0.27576595544815063
    call $std/math/check<f64>
@@ -13964,7 +13964,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -13987,7 +13987,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000000000000002
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -14010,7 +14010,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.0000000000000002
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -14033,7 +14033,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -14056,7 +14056,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -14079,7 +14079,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -14102,7 +14102,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.5309227209592985
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 2.1304853799705463
    f64.const 0.1391008496284485
    call $std/math/check<f64>
@@ -14125,7 +14125,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.4939556746399746
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    f64.const 1.0541629875851946
    f64.const 0.22054767608642578
    call $std/math/check<f64>
@@ -14949,7 +14949,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -14972,7 +14972,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -14995,7 +14995,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -15018,7 +15018,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -15041,7 +15041,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -15064,7 +15064,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const 0.7234652439515459
    f64.const -0.13599912822246552
    call $std/math/check<f64>
@@ -15087,7 +15087,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const -0.41873374429377225
    f64.const -0.09264230728149414
    call $std/math/check<f64>
@@ -15110,7 +15110,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const 0.5965113622274062
    f64.const -0.10864213854074478
    call $std/math/check<f64>
@@ -15133,7 +15133,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const 0.8853748109312743
    f64.const -0.4256366193294525
    call $std/math/check<f64>
@@ -15156,7 +15156,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const -0.7460778114110673
    f64.const 0.13986606895923615
    call $std/math/check<f64>
@@ -15179,7 +15179,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const 1.5707963267948966
    f64.const -0.27576595544815063
    call $std/math/check<f64>
@@ -15202,7 +15202,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const -1.5707963267948966
    f64.const 0.27576595544815063
    call $std/math/check<f64>
@@ -15225,7 +15225,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -15248,7 +15248,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -15271,7 +15271,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000000000000002
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -15294,7 +15294,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.0000000000000002
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -15317,7 +15317,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -15340,7 +15340,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -15363,7 +15363,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -15386,7 +15386,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5073043929119148
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    f64.const 0.5320538997772349
    f64.const -0.16157317161560059
    call $std/math/check<f64>
@@ -16079,7 +16079,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const -1.4474613762633468
    f64.const 0.14857111871242523
    call $std/math/check<f64>
@@ -16102,7 +16102,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 1.344597927114538
    f64.const -0.08170335739850998
    call $std/math/check<f64>
@@ -16125,7 +16125,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const -1.4520463463295539
    f64.const -0.07505480200052261
    call $std/math/check<f64>
@@ -16148,7 +16148,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const -1.4188758658752532
    f64.const -0.057633496820926666
    call $std/math/check<f64>
@@ -16171,7 +16171,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 1.463303145448706
    f64.const 0.1606956422328949
    call $std/math/check<f64>
@@ -16194,7 +16194,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 0.5847550670238325
    f64.const 0.4582556486129761
    call $std/math/check<f64>
@@ -16217,7 +16217,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const -0.3861864177552131
    f64.const -0.2574281692504883
    call $std/math/check<f64>
@@ -16240,7 +16240,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 0.5118269531628881
    f64.const -0.11444277316331863
    call $std/math/check<f64>
@@ -16263,7 +16263,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 0.6587802431653822
    f64.const -0.11286488175392151
    call $std/math/check<f64>
@@ -16286,7 +16286,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const -0.5963307826973472
    f64.const -0.2182842344045639
    call $std/math/check<f64>
@@ -16309,7 +16309,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -16332,7 +16332,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -16355,7 +16355,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 0.7853981633974483
    f64.const -0.27576595544815063
    call $std/math/check<f64>
@@ -16378,7 +16378,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const -0.7853981633974483
    f64.const 0.27576595544815063
    call $std/math/check<f64>
@@ -16401,7 +16401,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 1.5707963267948966
    f64.const -0.27576595544815063
    call $std/math/check<f64>
@@ -16424,7 +16424,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const -1.5707963267948966
    f64.const 0.27576595544815063
    call $std/math/check<f64>
@@ -16447,7 +16447,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -16470,7 +16470,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6929821535674624
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    f64.const 0.6060004555152562
    f64.const -0.17075790464878082
    call $std/math/check<f64>
@@ -19004,7 +19004,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -8
    f64.const 0
    call $std/math/check<f64>
@@ -19026,7 +19026,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 5
    f64.const 0
    call $std/math/check<f64>
@@ -19048,7 +19048,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -8
    f64.const 0
    call $std/math/check<f64>
@@ -19070,7 +19070,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -6
    f64.const 0
    call $std/math/check<f64>
@@ -19092,7 +19092,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 10
    f64.const 0
    call $std/math/check<f64>
@@ -19114,7 +19114,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19136,7 +19136,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19158,7 +19158,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19180,7 +19180,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19202,7 +19202,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19224,7 +19224,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -19246,7 +19246,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -19268,7 +19268,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -19290,7 +19290,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -19312,7 +19312,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19334,7 +19334,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19356,7 +19356,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -19378,7 +19378,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19400,7 +19400,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.5
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19422,7 +19422,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000152587890625
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 2
    f64.const 0
    call $std/math/check<f64>
@@ -19444,7 +19444,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.0000152587890625
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -19466,7 +19466,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9999923706054688
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19488,7 +19488,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.9999923706054688
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19510,7 +19510,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.888609052210118e-31
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19532,7 +19532,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.888609052210118e-31
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19554,7 +19554,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -19576,7 +19576,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -19598,7 +19598,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -19620,7 +19620,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -19642,7 +19642,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19664,7 +19664,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19686,7 +19686,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -19708,7 +19708,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19730,7 +19730,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.5
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19752,7 +19752,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000152587890625
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 2
    f64.const 0
    call $std/math/check<f64>
@@ -19774,7 +19774,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.0000152587890625
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -19796,7 +19796,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9999923706054688
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19818,7 +19818,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.9999923706054688
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19840,7 +19840,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.888609052210118e-31
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -19862,7 +19862,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.888609052210118e-31
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19884,7 +19884,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -19906,7 +19906,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -19928,7 +19928,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -19950,7 +19950,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -19972,7 +19972,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -19994,7 +19994,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -20016,7 +20016,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -20038,7 +20038,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -20060,7 +20060,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.5
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -20082,7 +20082,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000152587890625
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 2
    f64.const 0
    call $std/math/check<f64>
@@ -20104,7 +20104,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.0000152587890625
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -20126,7 +20126,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9999923706054688
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -20148,7 +20148,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.9999923706054688
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -20170,7 +20170,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.888609052210118e-31
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -20192,7 +20192,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.888609052210118e-31
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -20930,7 +20930,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.21126281599887137
    f64.const -0.10962469130754471
    call $std/math/check<f64>
@@ -20953,7 +20953,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.35895602297578955
    f64.const -0.10759828239679337
    call $std/math/check<f64>
@@ -20976,7 +20976,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.503333091765516
    f64.const -0.021430473774671555
    call $std/math/check<f64>
@@ -20999,7 +20999,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9692853212503283
    f64.const -0.4787876307964325
    call $std/math/check<f64>
@@ -21022,7 +21022,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9875878064788627
    f64.const 0.4880668818950653
    call $std/math/check<f64>
@@ -21045,7 +21045,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.7887730869248576
    f64.const 0.12708666920661926
    call $std/math/check<f64>
@@ -21068,7 +21068,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9184692397007294
    f64.const -0.26120713353157043
    call $std/math/check<f64>
@@ -21091,7 +21091,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.8463190467415896
    f64.const -0.302586168050766
    call $std/math/check<f64>
@@ -21114,7 +21114,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.7150139289952383
    f64.const -0.08537746220827103
    call $std/math/check<f64>
@@ -21137,7 +21137,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.7783494994757447
    f64.const 0.30890750885009766
    call $std/math/check<f64>
@@ -21160,7 +21160,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -21183,7 +21183,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -21206,7 +21206,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -21229,7 +21229,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -21252,7 +21252,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -21275,7 +21275,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.5403023058681398
    f64.const 0.4288286566734314
    call $std/math/check<f64>
@@ -21298,7 +21298,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.4161468365471424
    f64.const -0.35859397053718567
    call $std/math/check<f64>
@@ -21321,7 +21321,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9899924966004454
    f64.const 0.3788451552391052
    call $std/math/check<f64>
@@ -21344,7 +21344,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.6536436208636119
    f64.const -0.23280560970306396
    call $std/math/check<f64>
@@ -21367,7 +21367,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.28366218546322625
    f64.const -0.3277357816696167
    call $std/math/check<f64>
@@ -21390,7 +21390,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.1
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9950041652780258
    f64.const 0.49558526277542114
    call $std/math/check<f64>
@@ -21413,7 +21413,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.2
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9800665778412416
    f64.const -0.02407640963792801
    call $std/math/check<f64>
@@ -21436,7 +21436,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.3
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.955336489125606
    f64.const -0.37772229313850403
    call $std/math/check<f64>
@@ -21459,7 +21459,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.4
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9210609940028851
    f64.const 0.25818485021591187
    call $std/math/check<f64>
@@ -21482,7 +21482,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.8775825618903728
    f64.const 0.3839152157306671
    call $std/math/check<f64>
@@ -21505,7 +21505,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.3641409746639015e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -21528,7 +21528,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.1820704873319507e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -21551,7 +21551,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5e-324
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -21574,7 +21574,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5e-324
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -21597,7 +21597,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -3.14
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9999987317275395
    f64.const 0.3855516016483307
    call $std/math/check<f64>
@@ -21620,7 +21620,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 8988465674311579538646525e283
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.826369834614148
    f64.const -0.3695965111255646
    call $std/math/check<f64>
@@ -21643,7 +21643,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862315708145274e284
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9999876894265599
    f64.const 0.23448343575000763
    call $std/math/check<f64>
@@ -21666,7 +21666,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8988465674311579538646525e283
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.826369834614148
    f64.const -0.3695965111255646
    call $std/math/check<f64>
@@ -21689,7 +21689,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.14
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9999987317275395
    f64.const 0.3855516016483307
    call $std/math/check<f64>
@@ -21712,7 +21712,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.1415
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9999999957076562
    f64.const -0.30608975887298584
    call $std/math/check<f64>
@@ -21735,7 +21735,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.141592
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9999999999997864
    f64.const 0.15403328835964203
    call $std/math/check<f64>
@@ -21758,7 +21758,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.14159265
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -1
    f64.const -0.02901807427406311
    call $std/math/check<f64>
@@ -21781,7 +21781,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.1415926535
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -1
    f64.const -1.8155848010792397e-05
    call $std/math/check<f64>
@@ -21804,7 +21804,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.141592653589
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -1
    f64.const -1.4169914130945926e-09
    call $std/math/check<f64>
@@ -21827,7 +21827,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.14159265358979
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -1
    f64.const -2.350864897985184e-14
    call $std/math/check<f64>
@@ -21850,7 +21850,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.141592653589793
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -1
    f64.const -3.377158741883318e-17
    call $std/math/check<f64>
@@ -21873,7 +21873,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.57
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 7.963267107332633e-04
    f64.const 0.2968159317970276
    call $std/math/check<f64>
@@ -21896,7 +21896,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.570796
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 3.2679489653813835e-07
    f64.const -0.32570895552635193
    call $std/math/check<f64>
@@ -21919,7 +21919,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.5707963267
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 9.489659630678013e-11
    f64.const -0.27245646715164185
    call $std/math/check<f64>
@@ -21942,7 +21942,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.57079632679489
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 6.722570487708307e-15
    f64.const -0.10747683793306351
    call $std/math/check<f64>
@@ -21965,7 +21965,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.5707963267948966
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 6.123233995736766e-17
    f64.const 0.12148229777812958
    call $std/math/check<f64>
@@ -21988,7 +21988,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6700635199486106
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.7837822193016158
    f64.const -0.07278502732515335
    call $std/math/check<f64>
@@ -22011,7 +22011,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5343890189437553
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.8605799719039517
    f64.const -0.48434028029441833
    call $std/math/check<f64>
@@ -22034,7 +22034,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.43999702754890085
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9047529293001976
    f64.const 0.029777472838759422
    call $std/math/check<f64>
@@ -22057,7 +22057,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9902840844687313
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.5484523364480768
    f64.const 0.19765280187129974
    call $std/math/check<f64>
@@ -22080,7 +22080,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.45381447534338915
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.8987813902263783
    f64.const -0.017724866047501564
    call $std/math/check<f64>
@@ -22103,7 +22103,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.4609888813583589
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.8956130474713057
    f64.const 0.36449819803237915
    call $std/math/check<f64>
@@ -22126,7 +22126,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9285434097956422
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.5990009794292984
    f64.const -0.2899416387081146
    call $std/math/check<f64>
@@ -22149,7 +22149,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9109092124488352
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.6130276692774378
    f64.const -0.49353134632110596
    call $std/math/check<f64>
@@ -22172,7 +22172,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.8328600650359556
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.6727624710046357
    f64.const -0.36606088280677795
    call $std/math/check<f64>
@@ -22195,7 +22195,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9536201252203433
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.5787346183487084
    f64.const -0.17089833319187164
    call $std/math/check<f64>
@@ -22218,7 +22218,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.8726590065457699
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.6427919144259047
    f64.const -0.2744986116886139
    call $std/math/check<f64>
@@ -22241,7 +22241,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.18100447535968447
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9836633656884893
    f64.const 3.0195272993296385e-03
    call $std/math/check<f64>
@@ -22264,7 +22264,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.356194490349839
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.7071067812979126
    f64.const -0.48278746008872986
    call $std/math/check<f64>
@@ -22287,7 +22287,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.356194490372272
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.7071067813137752
    f64.const -0.4866050183773041
    call $std/math/check<f64>
@@ -22310,7 +22310,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.3561944902251115
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.707106781209717
    f64.const -0.3533952236175537
    call $std/math/check<f64>
@@ -22333,7 +22333,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.3561944903149996
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.7071067812732775
    f64.const -0.41911986470222473
    call $std/math/check<f64>
@@ -22356,7 +22356,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.3561944903603527
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.707106781305347
    f64.const -0.4706200063228607
    call $std/math/check<f64>
@@ -22379,7 +22379,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.3561944903826197
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.7071067813210922
    f64.const -0.30618351697921753
    call $std/math/check<f64>
@@ -22402,7 +22402,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.356194490371803
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.7071067813134436
    f64.const -0.30564820766448975
    call $std/math/check<f64>
@@ -22425,7 +22425,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.356194490399931
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.7071067813333329
    f64.const -0.38845571875572205
    call $std/math/check<f64>
@@ -22448,7 +22448,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.356194490260191
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.707106781234522
    f64.const -0.23796851933002472
    call $std/math/check<f64>
@@ -22471,7 +22471,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.3561944904043153
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.7071067813364332
    f64.const -0.3274589478969574
    call $std/math/check<f64>
@@ -22494,7 +22494,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.0943951024759446
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.5000000000716629
    f64.const -0.41711342334747314
    call $std/math/check<f64>
@@ -22517,7 +22517,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.09439510243324
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.5000000000346797
    f64.const -0.3566164970397949
    call $std/math/check<f64>
@@ -22540,7 +22540,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.0943951025133885
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.5000000001040902
    f64.const -0.2253485918045044
    call $std/math/check<f64>
@@ -22563,7 +22563,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.0943951025466707
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.5000000001329135
    f64.const -0.12982259690761566
    call $std/math/check<f64>
@@ -22586,7 +22586,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.094395102413896
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.5000000000179272
    f64.const -0.15886764228343964
    call $std/math/check<f64>
@@ -22609,7 +22609,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.0943951024223404
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.5000000000252403
    f64.const -0.266656756401062
    call $std/math/check<f64>
@@ -22632,7 +22632,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.0943951024960477
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.5000000000890726
    f64.const -0.4652077853679657
    call $std/math/check<f64>
@@ -22655,7 +22655,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.0943951025173315
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.500000000107505
    f64.const -0.46710994839668274
    call $std/math/check<f64>
@@ -22678,7 +22678,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.094395102405924
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.5000000000110234
    f64.const -0.2469603717327118
    call $std/math/check<f64>
@@ -22701,7 +22701,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.094395102428558
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.500000000030625
    f64.const -0.3799441158771515
    call $std/math/check<f64>
@@ -22724,7 +22724,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 8.513210770864056
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.6125076939987759
    f64.const 0.4989966154098511
    call $std/math/check<f64>
@@ -22747,7 +22747,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 6.802886129801017
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.8679677961345452
    f64.const 0.4972165524959564
    call $std/math/check<f64>
@@ -22770,7 +22770,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.171925393086408
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9682027440424544
    f64.const -0.49827584624290466
    call $std/math/check<f64>
@@ -22793,7 +22793,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 8.854690112888573
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.8418535663818527
    f64.const 0.4974979758262634
    call $std/math/check<f64>
@@ -22816,7 +22816,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.213510813859608
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9777659802838506
    f64.const -0.4995604455471039
    call $std/math/check<f64>
@@ -22839,7 +22839,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.782449081542151
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.07147156381293339
    f64.const 0.49858126044273376
    call $std/math/check<f64>
@@ -22862,7 +22862,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.500261332273616
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.34639017633458113
    f64.const -0.4996210038661957
    call $std/math/check<f64>
@@ -22885,7 +22885,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.121739418731588
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.9544341297541811
    f64.const 0.4982815086841583
    call $std/math/check<f64>
@@ -22908,7 +22908,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 6.784954020476316
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.8767332233166646
    f64.const -0.4988083839416504
    call $std/math/check<f64>
@@ -22931,7 +22931,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 8.770846542666664
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const -0.7936984117400705
    f64.const 0.4999682903289795
    call $std/math/check<f64>
@@ -22954,7 +22954,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.313225746154785e-10
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0.001953125
    call $std/math/check<f64>
@@ -22977,7 +22977,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -9.313225746154785e-10
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0.001953125
    call $std/math/check<f64>
@@ -23000,7 +23000,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072014e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23023,7 +23023,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072014e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23046,7 +23046,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5e-324
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23069,7 +23069,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5e-324
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23092,7 +23092,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23115,7 +23115,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23138,7 +23138,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1e-323
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23161,7 +23161,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.4e-323
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23184,7 +23184,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5.562684646268003e-309
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23207,7 +23207,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.1125369292536007e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23230,7 +23230,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072004e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23253,7 +23253,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507201e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23276,7 +23276,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507202e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23299,7 +23299,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072024e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23322,7 +23322,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.4501477170144003e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23345,7 +23345,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.450147717014403e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23368,7 +23368,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.450147717014406e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23391,7 +23391,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 8.900295434028806e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23414,7 +23414,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.450580596923828e-09
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0.125
    call $std/math/check<f64>
@@ -23437,7 +23437,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.4901161193847656e-08
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9999999999999999
    f64.const -1.850372590034581e-17
    call $std/math/check<f64>
@@ -23460,7 +23460,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.470348358154297e-08
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.999999999999999
    f64.const -1.4988010832439613e-15
    call $std/math/check<f64>
@@ -23483,7 +23483,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1e-323
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23506,7 +23506,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.4e-323
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23529,7 +23529,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5.562684646268003e-309
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23552,7 +23552,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.1125369292536007e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23575,7 +23575,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072004e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23598,7 +23598,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.225073858507201e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23621,7 +23621,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.225073858507202e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23644,7 +23644,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072024e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23667,7 +23667,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.4501477170144003e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23690,7 +23690,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.450147717014403e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23713,7 +23713,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.450147717014406e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23736,7 +23736,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.900295434028806e-308
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -23759,7 +23759,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.450580596923828e-09
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 1
    f64.const 0.125
    call $std/math/check<f64>
@@ -23782,7 +23782,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.4901161193847656e-08
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.9999999999999999
    f64.const -1.850372590034581e-17
    call $std/math/check<f64>
@@ -23805,7 +23805,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.470348358154297e-08
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    f64.const 0.999999999999999
    f64.const -1.4988010832439613e-15
    call $std/math/check<f64>
@@ -23824,7 +23824,7 @@
   f64.const 1.5707963267948966
   call $~lib/math/NativeMath.cos
   f64.const 1.5707963267948966
-  call $~lib/bindings/Math/cos
+  call $~lib/bindings/dom/Math.cos
   f64.ne
   if
    i32.const 0
@@ -23837,7 +23837,7 @@
   f64.const 3.141592653589793
   call $~lib/math/NativeMath.cos
   f64.const 3.141592653589793
-  call $~lib/bindings/Math/cos
+  call $~lib/bindings/dom/Math.cos
   f64.ne
   if
    i32.const 0
@@ -23850,7 +23850,7 @@
   f64.const 3141592653589793231804887e66
   call $~lib/math/NativeMath.cos
   f64.const 3141592653589793231804887e66
-  call $~lib/bindings/Math/cos
+  call $~lib/bindings/dom/Math.cos
   f64.ne
   if
    i32.const 0
@@ -25411,7 +25411,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 3.137706068161745e-04
    f64.const -0.2599197328090668
    call $std/math/check<f64>
@@ -25434,7 +25434,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 77.11053017112141
    f64.const -0.02792675793170929
    call $std/math/check<f64>
@@ -25457,7 +25457,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.290813384916323e-04
    f64.const -0.24974334239959717
    call $std/math/check<f64>
@@ -25480,7 +25480,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1.4565661260931588e-03
    f64.const -0.4816822409629822
    call $std/math/check<f64>
@@ -25503,7 +25503,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 10583.558245524993
    f64.const 0.17696762084960938
    call $std/math/check<f64>
@@ -25526,7 +25526,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1.9386384525571998
    f64.const -0.4964246451854706
    call $std/math/check<f64>
@@ -25549,7 +25549,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 0.6659078892838025
    f64.const -0.10608318448066711
    call $std/math/check<f64>
@@ -25572,7 +25572,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1.7537559518626311
    f64.const -0.39162111282348633
    call $std/math/check<f64>
@@ -25595,7 +25595,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.1687528885129246
    f64.const -0.2996125817298889
    call $std/math/check<f64>
@@ -25618,7 +25618,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 0.5072437089402843
    f64.const 0.47261738777160645
    call $std/math/check<f64>
@@ -25641,7 +25641,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -25664,7 +25664,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -25687,7 +25687,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.718281828459045
    f64.const -0.3255307376384735
    call $std/math/check<f64>
@@ -25710,7 +25710,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 0.36787944117144233
    f64.const 0.22389651834964752
    call $std/math/check<f64>
@@ -25733,7 +25733,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -25756,7 +25756,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -25779,7 +25779,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -25802,7 +25802,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0397214889526365
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.828429155876411
    f64.const 0.18803080916404724
    call $std/math/check<f64>
@@ -25825,7 +25825,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.0397214889526365
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 0.35355313670217847
    f64.const 0.2527272403240204
    call $std/math/check<f64>
@@ -25848,7 +25848,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0397210121154785
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.8284278071766122
    f64.const -0.4184139370918274
    call $std/math/check<f64>
@@ -25871,7 +25871,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0397214889526367
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.8284291558764116
    f64.const -0.22618377208709717
    call $std/math/check<f64>
@@ -25894,7 +25894,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5e-324
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -25917,7 +25917,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5e-324
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -25940,7 +25940,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 709.782712893384
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1797693134862273196746681e284
    f64.const -0.10568465292453766
    call $std/math/check<f64>
@@ -25963,7 +25963,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 709.7827128933841
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -25986,7 +25986,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -745.1332191019411
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 5e-324
    f64.const 0.5
    call $std/math/check<f64>
@@ -26009,7 +26009,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -745.1332191019412
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 0
    f64.const -0.5
    call $std/math/check<f64>
@@ -26032,7 +26032,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -708.3964185322641
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.2250738585072626e-308
    f64.const 0.26172348856925964
    call $std/math/check<f64>
@@ -26055,7 +26055,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -708.3964185322642
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.2250738585070097e-308
    f64.const 2.2250738585070097e-308
    call $std/math/check<f64>
@@ -26078,7 +26078,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5006933289508785
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1.6498647732549399
    f64.const 0.5
    call $std/math/check<f64>
@@ -26101,7 +26101,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.628493326460252
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1.8747837631658781
    f64.const 0.5
    call $std/math/check<f64>
@@ -26124,7 +26124,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.837522455340574
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.3106351774748006
    f64.const -0.5
    call $std/math/check<f64>
@@ -26147,7 +26147,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.8504909932810999
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 2.3407958848710777
    f64.const 0.5
    call $std/math/check<f64>
@@ -26170,7 +26170,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.6270060846924657
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 5.088617001442459
    f64.const 0.5
    call $std/math/check<f64>
@@ -26193,7 +26193,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.6744336219614115
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 5.335772228886831
    f64.const 0.5
    call $std/math/check<f64>
@@ -26216,7 +26216,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 6.657914718791208
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 778.924964819056
    f64.const 0.5
    call $std/math/check<f64>
@@ -26239,7 +26239,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 11.022872793631722
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 61259.41271820104
    f64.const 0.5
    call $std/math/check<f64>
@@ -26262,7 +26262,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 11.411195701885317
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 90327.36165653409
    f64.const 0.5
    call $std/math/check<f64>
@@ -26285,7 +26285,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 11.794490387560606
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 132520.20290772576
    f64.const 0.5
    call $std/math/check<f64>
@@ -26308,7 +26308,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 412.83872756953286
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 1965989977109266413433084e155
    f64.const 0.5
    call $std/math/check<f64>
@@ -26331,7 +26331,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 510.87569028483415
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 7421526272656495968225491e197
    f64.const -0.5
    call $std/math/check<f64>
@@ -26354,7 +26354,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.6589841439772853e-14
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 0.9999999999999735
    f64.const 0.5
    call $std/math/check<f64>
@@ -26377,7 +26377,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.7144952952085447e-14
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    f64.const 0.9999999999999728
    f64.const -0.5
    call $std/math/check<f64>
@@ -26736,7 +26736,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -0.9996862293931839
    f64.const -0.2760058343410492
    call $std/math/check<f64>
@@ -26759,7 +26759,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const 76.11053017112141
    f64.const -0.02792675793170929
    call $std/math/check<f64>
@@ -26782,7 +26782,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -0.9997709186615084
    f64.const 0.10052496194839478
    call $std/math/check<f64>
@@ -26805,7 +26805,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -0.9985434338739069
    f64.const -0.27437829971313477
    call $std/math/check<f64>
@@ -26828,7 +26828,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const 10582.558245524993
    f64.const 0.17696762084960938
    call $std/math/check<f64>
@@ -26851,7 +26851,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const 0.9386384525571999
    f64.const 0.007150684483349323
    call $std/math/check<f64>
@@ -26874,7 +26874,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -0.3340921107161975
    f64.const -0.21216636896133423
    call $std/math/check<f64>
@@ -26897,7 +26897,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const 0.7537559518626312
    f64.const 0.21675777435302734
    call $std/math/check<f64>
@@ -26920,7 +26920,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const 1.1687528885129248
    f64.const 0.4007748067378998
    call $std/math/check<f64>
@@ -26943,7 +26943,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -0.4927562910597158
    f64.const -0.05476519837975502
    call $std/math/check<f64>
@@ -26966,7 +26966,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -26989,7 +26989,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -27012,7 +27012,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const 1.7182818284590453
    f64.const 0.348938524723053
    call $std/math/check<f64>
@@ -27035,7 +27035,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -0.6321205588285577
    f64.const 0.11194825917482376
    call $std/math/check<f64>
@@ -27058,7 +27058,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -27081,7 +27081,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -27104,7 +27104,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -27127,7 +27127,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507201e-308
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const 2.225073858507201e-308
    f64.const 0
    call $std/math/check<f64>
@@ -27150,7 +27150,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.225073858507201e-308
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    f64.const -2.225073858507201e-308
    f64.const 0
    call $std/math/check<f64>
@@ -27995,7 +27995,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -9
    f64.const 0
    call $std/math/check<f64>
@@ -28017,7 +28017,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 4
    f64.const 0
    call $std/math/check<f64>
@@ -28039,7 +28039,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -9
    f64.const 0
    call $std/math/check<f64>
@@ -28061,7 +28061,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -7
    f64.const 0
    call $std/math/check<f64>
@@ -28083,7 +28083,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 9
    f64.const 0
    call $std/math/check<f64>
@@ -28105,7 +28105,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -28127,7 +28127,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -28149,7 +28149,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -28171,7 +28171,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -28193,7 +28193,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -28215,7 +28215,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -28237,7 +28237,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -28259,7 +28259,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -28281,7 +28281,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -28303,7 +28303,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -28325,7 +28325,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -28347,7 +28347,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -28369,7 +28369,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -28391,7 +28391,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.5
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -28413,7 +28413,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000152587890625
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -28435,7 +28435,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.0000152587890625
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -2
    f64.const 0
    call $std/math/check<f64>
@@ -28457,7 +28457,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9999923706054688
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -28479,7 +28479,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.9999923706054688
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -28501,7 +28501,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.888609052210118e-31
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -28523,7 +28523,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.888609052210118e-31
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -29711,7 +29711,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -29734,7 +29734,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const 1.4690809584224322
    f64.const -0.3412533402442932
    call $std/math/check<f64>
@@ -29757,7 +29757,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -29780,7 +29780,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -29803,7 +29803,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const 2.2264658498795615
    f64.const 0.3638114035129547
    call $std/math/check<f64>
@@ -29826,7 +29826,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const -0.4125110252365137
    f64.const -0.29108747839927673
    call $std/math/check<f64>
@@ -29849,7 +29849,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -29872,7 +29872,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const -0.5766810183195862
    f64.const -0.10983199626207352
    call $std/math/check<f64>
@@ -29895,7 +29895,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const -0.2559866591263865
    f64.const -0.057990044355392456
    call $std/math/check<f64>
@@ -29918,7 +29918,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -29941,7 +29941,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -29964,7 +29964,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -29987,7 +29987,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.888609052210118e-31
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -30010,7 +30010,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -30033,7 +30033,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -30056,7 +30056,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -30079,7 +30079,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -30102,7 +30102,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -30817,7 +30817,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -30840,7 +30840,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const 1.6762064170601734
    f64.const 0.46188199520111084
    call $std/math/check<f64>
@@ -30863,7 +30863,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -30886,7 +30886,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -30909,7 +30909,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const 2.3289404168523826
    f64.const -0.411114901304245
    call $std/math/check<f64>
@@ -30932,7 +30932,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const 0.5080132114992477
    f64.const -0.29306045174598694
    call $std/math/check<f64>
@@ -30955,7 +30955,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const -0.5218931811663979
    f64.const -0.25825726985931396
    call $std/math/check<f64>
@@ -30978,7 +30978,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const 0.4458132279488102
    f64.const -0.13274887204170227
    call $std/math/check<f64>
@@ -31001,7 +31001,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const 0.5733227294648414
    f64.const 0.02716583013534546
    call $std/math/check<f64>
@@ -31024,7 +31024,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const -1.1355782978128564
    f64.const 0.2713092863559723
    call $std/math/check<f64>
@@ -31047,7 +31047,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -31070,7 +31070,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -31093,7 +31093,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.888609052210118e-31
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const -7.888609052210118e-31
    f64.const 1.7763568394002505e-15
    call $std/math/check<f64>
@@ -31116,7 +31116,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const 0.6931471805599453
    f64.const -0.2088811695575714
    call $std/math/check<f64>
@@ -31139,7 +31139,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -31162,7 +31162,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -31185,7 +31185,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31208,7 +31208,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31497,7 +31497,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31520,7 +31520,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const 2.1194358133804485
    f64.const -0.10164877772331238
    call $std/math/check<f64>
@@ -31543,7 +31543,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31566,7 +31566,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31589,7 +31589,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const 3.2121112403298744
    f64.const -0.15739446878433228
    call $std/math/check<f64>
@@ -31612,7 +31612,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const -0.5951276104207402
    f64.const 0.3321485221385956
    call $std/math/check<f64>
@@ -31635,7 +31635,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31658,7 +31658,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const -0.8319748453044644
    f64.const 0.057555437088012695
    call $std/math/check<f64>
@@ -31681,7 +31681,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const -0.36931068365537134
    f64.const -0.19838279485702515
    call $std/math/check<f64>
@@ -31704,7 +31704,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31727,7 +31727,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -31750,7 +31750,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -31773,7 +31773,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.888609052210118e-31
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31796,7 +31796,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -31819,7 +31819,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31842,7 +31842,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -31865,7 +31865,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -31888,7 +31888,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -43955,7 +43955,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/bindings/Math/random
+  call $~lib/bindings/dom/Math.random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
   loop $for-loop|0
@@ -44024,7 +44024,7 @@
     br $for-loop|0
    end
   end
-  call $~lib/bindings/Math/random
+  call $~lib/bindings/dom/Math.random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
@@ -47278,7 +47278,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -0.9774292928781227
    f64.const -0.14564912021160126
    call $std/math/check<f64>
@@ -47301,7 +47301,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -0.9333544736965718
    f64.const -0.08813747018575668
    call $std/math/check<f64>
@@ -47324,7 +47324,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -0.8640924711706304
    f64.const -0.11743883043527603
    call $std/math/check<f64>
@@ -47347,7 +47347,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -0.24593894772615374
    f64.const -0.12697851657867432
    call $std/math/check<f64>
@@ -47370,7 +47370,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 0.15706789772028007
    f64.const -0.029550159350037575
    call $std/math/check<f64>
@@ -47393,7 +47393,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 0.6146844860113447
    f64.const -0.09976737946271896
    call $std/math/check<f64>
@@ -47416,7 +47416,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -0.39549242182823696
    f64.const -0.3668774962425232
    call $std/math/check<f64>
@@ -47439,7 +47439,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 0.5326763286672376
    f64.const -0.3550407588481903
    call $std/math/check<f64>
@@ -47462,7 +47462,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 0.6991102068649779
    f64.const -0.427672415971756
    call $std/math/check<f64>
@@ -47485,7 +47485,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -0.6278312326301215
    f64.const -0.3828115463256836
    call $std/math/check<f64>
@@ -47508,7 +47508,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.313225746154785e-10
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 9.313225746154785e-10
    f64.const 6.510416860692203e-04
    call $std/math/check<f64>
@@ -47531,7 +47531,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -9.313225746154785e-10
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -9.313225746154785e-10
    f64.const -6.510416860692203e-04
    call $std/math/check<f64>
@@ -47554,7 +47554,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072014e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 2.2250738585072014e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47577,7 +47577,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072014e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -2.2250738585072014e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47600,7 +47600,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5e-324
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 5e-324
    f64.const 0
    call $std/math/check<f64>
@@ -47623,7 +47623,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5e-324
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -5e-324
    f64.const 0
    call $std/math/check<f64>
@@ -47646,7 +47646,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -47669,7 +47669,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -47692,7 +47692,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507202e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 2.225073858507202e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47715,7 +47715,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072024e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 2.2250738585072024e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47738,7 +47738,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.4501477170144003e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 4.4501477170144003e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47761,7 +47761,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.450147717014403e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 4.450147717014403e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47784,7 +47784,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.450147717014406e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 4.450147717014406e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47807,7 +47807,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 8.900295434028806e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 8.900295434028806e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47830,7 +47830,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.1175870895385742e-08
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 1.1175870895385742e-08
    f64.const 0.140625
    call $std/math/check<f64>
@@ -47853,7 +47853,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.4901161193847656e-08
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 1.4901161193847656e-08
    f64.const 0.1666666716337204
    call $std/math/check<f64>
@@ -47876,7 +47876,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.225073858507202e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -2.225073858507202e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47899,7 +47899,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072024e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -2.2250738585072024e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47922,7 +47922,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.4501477170144003e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -4.4501477170144003e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47945,7 +47945,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.450147717014403e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -4.450147717014403e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47968,7 +47968,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.450147717014406e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -4.450147717014406e-308
    f64.const 0
    call $std/math/check<f64>
@@ -47991,7 +47991,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.900295434028806e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -8.900295434028806e-308
    f64.const 0
    call $std/math/check<f64>
@@ -48014,7 +48014,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.1175870895385742e-08
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -1.1175870895385742e-08
    f64.const -0.140625
    call $std/math/check<f64>
@@ -48037,7 +48037,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.4901161193847656e-08
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -1.4901161193847656e-08
    f64.const -0.1666666716337204
    call $std/math/check<f64>
@@ -48060,7 +48060,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.4901161193847656e-08
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -1.4901161193847656e-08
    f64.const -0.1666666716337204
    call $std/math/check<f64>
@@ -48083,7 +48083,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1e-323
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 1e-323
    f64.const 0
    call $std/math/check<f64>
@@ -48106,7 +48106,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.4e-323
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 4.4e-323
    f64.const 0
    call $std/math/check<f64>
@@ -48129,7 +48129,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5.562684646268003e-309
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 5.562684646268003e-309
    f64.const 0
    call $std/math/check<f64>
@@ -48152,7 +48152,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.1125369292536007e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 1.1125369292536007e-308
    f64.const 0
    call $std/math/check<f64>
@@ -48175,7 +48175,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072004e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 2.2250738585072004e-308
    f64.const 0
    call $std/math/check<f64>
@@ -48198,7 +48198,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507201e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 2.225073858507201e-308
    f64.const 0
    call $std/math/check<f64>
@@ -48221,7 +48221,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1e-323
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -1e-323
    f64.const 0
    call $std/math/check<f64>
@@ -48244,7 +48244,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.4e-323
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -4.4e-323
    f64.const 0
    call $std/math/check<f64>
@@ -48267,7 +48267,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5.562684646268003e-309
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -5.562684646268003e-309
    f64.const 0
    call $std/math/check<f64>
@@ -48290,7 +48290,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.1125369292536007e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -1.1125369292536007e-308
    f64.const 0
    call $std/math/check<f64>
@@ -48313,7 +48313,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072004e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -2.2250738585072004e-308
    f64.const 0
    call $std/math/check<f64>
@@ -48336,7 +48336,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.225073858507201e-308
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -2.225073858507201e-308
    f64.const 0
    call $std/math/check<f64>
@@ -48359,7 +48359,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -48382,7 +48382,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -48405,7 +48405,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -48428,7 +48428,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -48451,7 +48451,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -48470,7 +48470,7 @@
   f64.const 1.5707963267948966
   call $~lib/math/NativeMath.sin
   f64.const 1.5707963267948966
-  call $~lib/bindings/Math/sin
+  call $~lib/bindings/dom/Math.sin
   f64.ne
   if
    i32.const 0
@@ -48483,7 +48483,7 @@
   f64.const 3.141592653589793
   call $~lib/math/NativeMath.sin
   f64.const 3.141592653589793
-  call $~lib/bindings/Math/sin
+  call $~lib/bindings/dom/Math.sin
   f64.ne
   if
    i32.const 0
@@ -50031,7 +50031,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50053,7 +50053,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 2.0845238903256313
    f64.const -0.07180261611938477
    call $std/math/check<f64>
@@ -50075,7 +50075,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50097,7 +50097,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50119,7 +50119,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 3.0441841217266385
    f64.const -0.01546262577176094
    call $std/math/check<f64>
@@ -50141,7 +50141,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 0.8136251582267503
    f64.const -0.08618157356977463
    call $std/math/check<f64>
@@ -50163,7 +50163,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50185,7 +50185,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 0.7495063350104014
    f64.const -0.0981396734714508
    call $std/math/check<f64>
@@ -50207,7 +50207,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 0.879859248170583
    f64.const -0.37124353647232056
    call $std/math/check<f64>
@@ -50229,7 +50229,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50251,7 +50251,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50273,7 +50273,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -50295,7 +50295,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50317,7 +50317,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -50339,7 +50339,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -50361,7 +50361,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -50383,7 +50383,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50405,7 +50405,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 2
    f64.const 0
    call $std/math/check<f64>
@@ -50427,7 +50427,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1e-323
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 3.1434555694052576e-162
    f64.const 0.43537619709968567
    call $std/math/check<f64>
@@ -50449,7 +50449,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.5e-323
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 3.849931087076416e-162
    f64.const -0.45194002985954285
    call $std/math/check<f64>
@@ -50471,7 +50471,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5e-324
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 2.2227587494850775e-162
    f64.const 0
    call $std/math/check<f64>
@@ -50493,7 +50493,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5e-324
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50515,7 +50515,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9999999999999999
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 0.9999999999999999
    f64.const -0.5
    call $std/math/check<f64>
@@ -50537,7 +50537,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.9999999999999998
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.414213562373095
    f64.const -0.21107041835784912
    call $std/math/check<f64>
@@ -50559,7 +50559,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000000000000002
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1
    f64.const -0.5
    call $std/math/check<f64>
@@ -50581,7 +50581,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.0000000000000004
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4142135623730951
    f64.const -0.27173060178756714
    call $std/math/check<f64>
@@ -50603,7 +50603,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000000000000002
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1
    f64.const -0.5
    call $std/math/check<f64>
@@ -50625,7 +50625,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9999999999999999
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 0.9999999999999999
    f64.const -0.5
    call $std/math/check<f64>
@@ -50647,7 +50647,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1797693134862315708145274e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -50669,7 +50669,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862315708145274e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994259561100831e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50691,7 +50691,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 179769313486231490980915e285
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 134078079299425926338769e131
    f64.const -0.5
    call $std/math/check<f64>
@@ -50713,7 +50713,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862314111473026e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994258965674548e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50735,7 +50735,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862313313136902e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994258667961407e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50757,7 +50757,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862312514800778e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994258370248265e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50779,7 +50779,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862311716464655e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994258072535124e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50801,7 +50801,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862310918128531e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994257774821982e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50823,7 +50823,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862310119792407e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994257477108841e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50845,7 +50845,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862309321456283e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994257179395699e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50867,7 +50867,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862308523120159e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994256881682558e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50889,7 +50889,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1797693134862307724784036e284
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1340780792994256583969417e130
    f64.const -0.5
    call $std/math/check<f64>
@@ -50911,7 +50911,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507203e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400417e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -50933,7 +50933,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507205e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400423e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -50955,7 +50955,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507207e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.491668146240043e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -50977,7 +50977,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507209e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400437e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -50999,7 +50999,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507211e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400443e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51021,7 +51021,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072127e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.491668146240045e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51043,7 +51043,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072147e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400457e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51065,7 +51065,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072167e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400463e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51087,7 +51087,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072187e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.491668146240047e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51109,7 +51109,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072207e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400476e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51131,7 +51131,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072226e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400483e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51153,7 +51153,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072246e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.491668146240049e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51175,7 +51175,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072266e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400496e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51197,7 +51197,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072286e-308
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4916681462400503e-154
    f64.const -0.5
    call $std/math/check<f64>
@@ -51219,7 +51219,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 92.35130391890645
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.609958580499006
    f64.const 0.4998137056827545
    call $std/math/check<f64>
@@ -51241,7 +51241,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 93.3599596388916
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.662295774757238
    f64.const -0.49979978799819946
    call $std/math/check<f64>
@@ -51263,7 +51263,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 95.42049628886124
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.76834153215689
    f64.const -0.49997270107269287
    call $std/math/check<f64>
@@ -51285,7 +51285,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 95.87916941885449
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.791790919890728
    f64.const 0.4998766779899597
    call $std/math/check<f64>
@@ -51307,7 +51307,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 96.84804174884022
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.841140266698785
    f64.const 0.499801903963089
    call $std/math/check<f64>
@@ -51329,7 +51329,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 97.43639050883155
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.87098731175517
    f64.const 0.4997696280479431
    call $std/math/check<f64>
@@ -51351,7 +51351,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 97.50957979883047
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.874693909120955
    f64.const 0.49999818205833435
    call $std/math/check<f64>
@@ -51373,7 +51373,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 97.80496893882612
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.88963947466368
    f64.const -0.4999580681324005
    call $std/math/check<f64>
@@ -51395,7 +51395,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 98.2751822888192
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.913383997849534
    f64.const 0.49979931116104126
    call $std/math/check<f64>
@@ -51417,7 +51417,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 99.47293564880155
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.973611966023219
    f64.const -0.4999540448188782
    call $std/math/check<f64>
@@ -51439,7 +51439,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 100.57047130878539
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 10.028483001370914
    f64.const -0.49996453523635864
    call $std/math/check<f64>
@@ -51461,7 +51461,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 100.60954608878481
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 10.030431002144665
    f64.const 0.49975672364234924
    call $std/math/check<f64>
@@ -51483,7 +51483,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 100.67909109878379
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 10.033897104255344
    f64.const -0.4997771382331848
    call $std/math/check<f64>
@@ -51505,7 +51505,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 101.12268095877725
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 10.055977374615422
    f64.const 0.49988678097724915
    call $std/math/check<f64>
@@ -51527,7 +51527,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 101.3027691287746
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 10.064927676281366
    f64.const 0.4999105632305145
    call $std/math/check<f64>
@@ -51549,7 +51549,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.45932313565507e-307
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 4.9591563149945874e-154
    f64.const -0.4998999834060669
    call $std/math/check<f64>
@@ -51571,7 +51571,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5.610957305180409e-307
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 7.490632353266584e-154
    f64.const -0.4999343752861023
    call $std/math/check<f64>
@@ -51593,7 +51593,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5.8073887977408524e-307
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 7.62062254526548e-154
    f64.const -0.49989569187164307
    call $std/math/check<f64>
@@ -51615,7 +51615,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.026137080471427e-307
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 8.382205605013174e-154
    f64.const 0.49980640411376953
    call $std/math/check<f64>
@@ -51637,7 +51637,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 8.438697769194972e-307
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 9.186238495268328e-154
    f64.const -0.4999065697193146
    call $std/math/check<f64>
@@ -51659,7 +51659,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.1607792515836795e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.0773946591586944e-153
    f64.const -0.49997684359550476
    call $std/math/check<f64>
@@ -51681,7 +51681,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.2827413827423193e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.1325817333606962e-153
    f64.const -0.4999513030052185
    call $std/math/check<f64>
@@ -51703,7 +51703,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.7116604596087457e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.3083044216117078e-153
    f64.const -0.49986395239830017
    call $std/math/check<f64>
@@ -51725,7 +51725,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.038173251686994e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4276460526639628e-153
    f64.const 0.4998403787612915
    call $std/math/check<f64>
@@ -51747,7 +51747,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.171572060856931e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.4736254818836879e-153
    f64.const 0.4999290406703949
    call $std/math/check<f64>
@@ -51769,7 +51769,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.4681399631804094e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.5710314965589996e-153
    f64.const 0.49989044666290283
    call $std/math/check<f64>
@@ -51791,7 +51791,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.5175533964200588e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.5866799918131124e-153
    f64.const -0.4997701048851013
    call $std/math/check<f64>
@@ -51813,7 +51813,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.6461505468829625e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.6266992797941982e-153
    f64.const 0.4998672902584076
    call $std/math/check<f64>
@@ -51835,7 +51835,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 3.8167076367720413e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 1.9536395872248397e-153
    f64.const 0.49983471632003784
    call $std/math/check<f64>
@@ -51857,7 +51857,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.5743220778562766e-306
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    f64.const 2.1387664851161936e-153
    f64.const 0.49985939264297485
    call $std/math/check<f64>
@@ -52296,7 +52296,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 4.626603542401633
    f64.const -0.2727603316307068
    call $std/math/check<f64>
@@ -52319,7 +52319,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 2.600191705822202
    f64.const 0.2651003301143646
    call $std/math/check<f64>
@@ -52342,7 +52342,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 1.7167408328741052
    f64.const -0.24687519669532776
    call $std/math/check<f64>
@@ -52365,7 +52365,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -0.2537322523453725
    f64.const -0.4679703712463379
    call $std/math/check<f64>
@@ -52388,7 +52388,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -0.15904195727191958
    f64.const -0.06704077869653702
    call $std/math/check<f64>
@@ -52411,7 +52411,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 0.7792919106910434
    f64.const -0.038056135177612305
    call $std/math/check<f64>
@@ -52434,7 +52434,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -0.43059952879543656
    f64.const -0.09242714196443558
    call $std/math/check<f64>
@@ -52457,7 +52457,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 0.62940368731874
    f64.const -0.321913480758667
    call $std/math/check<f64>
@@ -52480,7 +52480,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 0.9777574652949645
    f64.const -0.1966651827096939
    call $std/math/check<f64>
@@ -52503,7 +52503,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -0.8066186630209123
    f64.const -0.067665696144104
    call $std/math/check<f64>
@@ -52526,7 +52526,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.313225746154785e-10
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 9.313225746154785e-10
    f64.const -1.3020833721384406e-03
    call $std/math/check<f64>
@@ -52549,7 +52549,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -9.313225746154785e-10
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -9.313225746154785e-10
    f64.const 1.3020833721384406e-03
    call $std/math/check<f64>
@@ -52572,7 +52572,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072014e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 2.2250738585072014e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52595,7 +52595,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072014e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -2.2250738585072014e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52618,7 +52618,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5e-324
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 5e-324
    f64.const 0
    call $std/math/check<f64>
@@ -52641,7 +52641,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5e-324
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -5e-324
    f64.const 0
    call $std/math/check<f64>
@@ -52664,7 +52664,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -52687,7 +52687,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -52710,7 +52710,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7853981633974483
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 0.9999999999999999
    f64.const -0.4484681189060211
    call $std/math/check<f64>
@@ -52733,7 +52733,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.7853981633974483
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -0.9999999999999999
    f64.const 0.4484681189060211
    call $std/math/check<f64>
@@ -52756,7 +52756,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507202e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 2.225073858507202e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52779,7 +52779,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072024e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 2.2250738585072024e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52802,7 +52802,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.4501477170144003e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 4.4501477170144003e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52825,7 +52825,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.450147717014403e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 4.450147717014403e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52848,7 +52848,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.450147717014406e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 4.450147717014406e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52871,7 +52871,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 8.900295434028806e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 8.900295434028806e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52894,7 +52894,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.1175870895385742e-08
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 1.1175870895385742e-08
    f64.const -0.28125
    call $std/math/check<f64>
@@ -52917,7 +52917,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.4901161193847656e-08
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 1.4901161193847656e-08
    f64.const -0.3333333432674408
    call $std/math/check<f64>
@@ -52940,7 +52940,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.225073858507202e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -2.225073858507202e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52963,7 +52963,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072024e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -2.2250738585072024e-308
    f64.const 0
    call $std/math/check<f64>
@@ -52986,7 +52986,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.4501477170144003e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -4.4501477170144003e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53009,7 +53009,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.450147717014403e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -4.450147717014403e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53032,7 +53032,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.450147717014406e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -4.450147717014406e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53055,7 +53055,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.900295434028806e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -8.900295434028806e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53078,7 +53078,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.1175870895385742e-08
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -1.1175870895385742e-08
    f64.const 0.28125
    call $std/math/check<f64>
@@ -53101,7 +53101,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.4901161193847656e-08
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -1.4901161193847656e-08
    f64.const 0.3333333432674408
    call $std/math/check<f64>
@@ -53124,7 +53124,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1e-323
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 1e-323
    f64.const 0
    call $std/math/check<f64>
@@ -53147,7 +53147,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.4e-323
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 4.4e-323
    f64.const 0
    call $std/math/check<f64>
@@ -53170,7 +53170,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 5.562684646268003e-309
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 5.562684646268003e-309
    f64.const 0
    call $std/math/check<f64>
@@ -53193,7 +53193,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.1125369292536007e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 1.1125369292536007e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53216,7 +53216,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.2250738585072004e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 2.2250738585072004e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53239,7 +53239,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 2.225073858507201e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 2.225073858507201e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53262,7 +53262,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1e-323
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -1e-323
    f64.const 0
    call $std/math/check<f64>
@@ -53285,7 +53285,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -4.4e-323
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -4.4e-323
    f64.const 0
    call $std/math/check<f64>
@@ -53308,7 +53308,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -5.562684646268003e-309
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -5.562684646268003e-309
    f64.const 0
    call $std/math/check<f64>
@@ -53331,7 +53331,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.1125369292536007e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -1.1125369292536007e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53354,7 +53354,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.2250738585072004e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -2.2250738585072004e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53377,7 +53377,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -2.225073858507201e-308
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -2.225073858507201e-308
    f64.const 0
    call $std/math/check<f64>
@@ -53396,7 +53396,7 @@
   f64.const 2.3283064365386963e-10
   call $~lib/math/NativeMath.tan
   f64.const 2.3283064365386963e-10
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53409,7 +53409,7 @@
   f64.const -2.3283064365386963e-10
   call $~lib/math/NativeMath.tan
   f64.const -2.3283064365386963e-10
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53422,7 +53422,7 @@
   f64.const 0.6875
   call $~lib/math/NativeMath.tan
   f64.const 0.6875
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53435,7 +53435,7 @@
   f64.const -0.6875
   call $~lib/math/NativeMath.tan
   f64.const -0.6875
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53448,7 +53448,7 @@
   f64.const 0.39269908169872414
   call $~lib/math/NativeMath.tan
   f64.const 0.39269908169872414
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53461,7 +53461,7 @@
   f64.const 0.6743358
   call $~lib/math/NativeMath.tan
   f64.const 0.6743358
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53474,7 +53474,7 @@
   f64.const 3.725290298461914e-09
   call $~lib/math/NativeMath.tan
   f64.const 3.725290298461914e-09
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53487,7 +53487,7 @@
   f64.const 1.5707963267948966
   call $~lib/math/NativeMath.tan
   f64.const 1.5707963267948966
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53500,7 +53500,7 @@
   f64.const 0.5
   call $~lib/math/NativeMath.tan
   f64.const 0.5
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53513,7 +53513,7 @@
   f64.const 1.107148717794091
   call $~lib/math/NativeMath.tan
   f64.const 1.107148717794091
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53526,7 +53526,7 @@
   f64.const 5.497787143782138
   call $~lib/math/NativeMath.tan
   f64.const 5.497787143782138
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53539,7 +53539,7 @@
   f64.const 7.0685834705770345
   call $~lib/math/NativeMath.tan
   f64.const 7.0685834705770345
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53552,7 +53552,7 @@
   f64.const 1647099.3291652855
   call $~lib/math/NativeMath.tan
   f64.const 1647099.3291652855
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53565,7 +53565,7 @@
   f64.const 1647097.7583689587
   call $~lib/math/NativeMath.tan
   f64.const 1647097.7583689587
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53578,7 +53578,7 @@
   f64.const 1329227995784915872903807e12
   call $~lib/math/NativeMath.tan
   f64.const 1329227995784915872903807e12
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53591,7 +53591,7 @@
   f64.const -1329227995784915872903807e12
   call $~lib/math/NativeMath.tan
   f64.const -1329227995784915872903807e12
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.ne
   if
    i32.const 0
@@ -53608,7 +53608,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -53631,7 +53631,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -53654,7 +53654,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -53677,7 +53677,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -53700,7 +53700,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -54826,7 +54826,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.06684839057968
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -8
    f64.const 0
    call $std/math/check<f64>
@@ -54848,7 +54848,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 4.345239849338305
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 4
    f64.const 0
    call $std/math/check<f64>
@@ -54870,7 +54870,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -8.38143342755525
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -8
    f64.const 0
    call $std/math/check<f64>
@@ -54892,7 +54892,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -6.531673581913484
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -6
    f64.const 0
    call $std/math/check<f64>
@@ -54914,7 +54914,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 9.267056966972586
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 9
    f64.const 0
    call $std/math/check<f64>
@@ -54936,7 +54936,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.6619858980995045
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -54958,7 +54958,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.4066039223853553
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -54980,7 +54980,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5617597462207241
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -55002,7 +55002,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.7741522965913037
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -55024,7 +55024,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.6787637026394024
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -55046,7 +55046,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const nan:0x8000000000000
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const nan:0x8000000000000
    f64.const 0
    call $std/math/check<f64>
@@ -55068,7 +55068,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const inf
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const inf
    f64.const 0
    call $std/math/check<f64>
@@ -55090,7 +55090,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -inf
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -inf
    f64.const 0
    call $std/math/check<f64>
@@ -55112,7 +55112,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -55134,7 +55134,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -55156,7 +55156,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -55178,7 +55178,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -55200,7 +55200,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.5
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -55222,7 +55222,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.5
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -55244,7 +55244,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 1.0000152587890625
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 1
    f64.const 0
    call $std/math/check<f64>
@@ -55266,7 +55266,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -1.0000152587890625
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -1
    f64.const 0
    call $std/math/check<f64>
@@ -55288,7 +55288,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 0.9999923706054688
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -55310,7 +55310,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -0.9999923706054688
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -0
    f64.const 0
    call $std/math/check<f64>
@@ -55332,7 +55332,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const 7.888609052210118e-31
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const 0
    f64.const 0
    call $std/math/check<f64>
@@ -55354,7 +55354,7 @@
   call $std/math/check<f64>
   if (result i32)
    f64.const -7.888609052210118e-31
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    f64.const -0
    f64.const 0
    call $std/math/check<f64>

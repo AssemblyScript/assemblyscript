@@ -22,7 +22,7 @@
  (type $i32_i64_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i64 i32 i64 i32) (result i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
+ (import "env" "Math.random" (func $~lib/bindings/dom/Math.random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -21800,7 +21800,7 @@
    i32.const 3
    call $~lib/array/Array<i32>#push
    i64.const -7046029254386353131
-   call $~lib/bindings/Math/random
+   call $~lib/bindings/dom/Math.random
    i64.reinterpret_f64
    local.tee $5
    local.get $5

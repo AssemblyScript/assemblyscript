@@ -11,23 +11,6 @@ export function internal(a: externref): externref {
   return d;
 }
 
-// can use reflection to work with externref values
-
-import * as Reflect from "bindings/Reflect";
-
-declare const someObject: externref;
-declare const someKey: externref;
-
-assert(Reflect.has(someObject, someKey));
-
-// can call JS bindings with externref values
-
-import * as console from "bindings/console";
-
-console.log(someObject);
-console.log(someKey);
-console.log(Reflect.get(someObject, someKey));
-
 // Truthiness conversion
 if(!somethingReal()) {
   assert(false);

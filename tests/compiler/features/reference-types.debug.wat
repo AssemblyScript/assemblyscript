@@ -2,17 +2,9 @@
  (type $none_=>_none (func))
  (type $none_=>_externref (func (result externref)))
  (type $externref_=>_externref (func (param externref) (result externref)))
- (type $externref_externref_=>_i32 (func (param externref externref) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $externref_=>_none (func (param externref)))
- (type $externref_externref_=>_externref (func (param externref externref) (result externref)))
- (import "reference-types" "someObject" (global $features/reference-types/someObject externref))
- (import "reference-types" "someKey" (global $features/reference-types/someKey externref))
- (import "Reflect" "has" (func $~lib/bindings/Reflect/has (param externref externref) (result i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "console" "log" (func $~lib/bindings/console/log (param externref)))
- (import "Reflect" "get" (func $~lib/bindings/Reflect/get (param externref externref) (result externref)))
  (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
  (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
  (global $features/reference-types/funcGlobal (mut funcref) (ref.null func))
@@ -47,7 +39,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 94
+   i32.const 77
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -62,7 +54,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 96
+   i32.const 79
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -77,7 +69,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 98
+   i32.const 81
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -94,7 +86,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 94
+   i32.const 77
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -109,7 +101,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 96
+   i32.const 79
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -124,7 +116,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 98
+   i32.const 81
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -141,7 +133,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 94
+   i32.const 77
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -156,7 +148,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 96
+   i32.const 79
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -171,7 +163,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 98
+   i32.const 81
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -182,28 +174,6 @@
  )
  (func $start:features/reference-types
   (local $0 funcref)
-  global.get $features/reference-types/someObject
-  global.get $features/reference-types/someKey
-  call $~lib/bindings/Reflect/has
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 21
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $features/reference-types/someObject
-  call $~lib/bindings/console/log
-  global.get $features/reference-types/someKey
-  call $~lib/bindings/console/log
-  global.get $features/reference-types/someObject
-  global.get $features/reference-types/someKey
-  call $~lib/bindings/Reflect/get
-  call $~lib/bindings/console/log
   call $features/reference-types/somethingReal
   ref.is_null
   i32.eqz
@@ -214,7 +184,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 33
+    i32.const 16
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -232,7 +202,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 38
+    i32.const 21
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -249,7 +219,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 43
+    i32.const 26
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -264,7 +234,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 46
+    i32.const 29
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -278,7 +248,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 72
+   i32.const 55
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -293,7 +263,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 74
+   i32.const 57
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -308,7 +278,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 76
+   i32.const 59
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -321,7 +291,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 79
+   i32.const 62
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -336,7 +306,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 81
+   i32.const 64
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -351,7 +321,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 83
+   i32.const 66
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -364,7 +334,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 86
+   i32.const 69
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -379,7 +349,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 88
+   i32.const 71
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -394,7 +364,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 90
+   i32.const 73
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -409,7 +379,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 108
+   i32.const 91
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -421,7 +391,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 110
+   i32.const 93
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -434,7 +404,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 113
+    i32.const 96
     i32.const 3
     call $~lib/builtins/abort
     unreachable

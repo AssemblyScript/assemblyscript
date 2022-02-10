@@ -129,7 +129,7 @@ immutableGlobal;
 immutableGlobalNested;
 
 // @ts-ignore
-@external("env", "Date#getTimezoneOffset")
+@external("env", "Date.getTimezoneOffset")
 @external.js("return new Date().getTimezoneOffset();")
 declare function Date_getTimezoneOffset(): i32;
 

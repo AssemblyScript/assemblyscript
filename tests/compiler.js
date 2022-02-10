@@ -376,6 +376,21 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
       }
     });
 
+    function toEnv(name, ref) {
+      let env = {};
+      for (let key of Object.getOwnPropertyNames(ref)) env[`${name}.${key}`] = ref[key];
+      let prototype = ref.prototype;
+      if (prototype) {
+        for (const key of Object.getOwnPropertyNames(prototype)) {
+          const original = prototype[key];
+          env[`${name}#${key}`] = (thisArg, ...args) => {
+            return original.apply(thisArg, args);
+          };
+        }
+      }
+      return env;
+    }
+
     const imports = rtrace.install({
       env: Object.assign({}, globalThis, {
         memory,
@@ -391,13 +406,13 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
         visit: function() {
           // override in tests
         },
-        "Date#getTimezoneOffset"() {
+        "Date.getTimezoneOffset"() {
+          // @external.js in bindings tests
           return new Date().getTimezoneOffset();
-        }
-      }),
-      Math,
-      Date,
-      Reflect
+        },
+        ...toEnv("Date", Date),
+        ...toEnv("Math", Math)
+      })
     });
 
     if (glue.preInstantiate) {

@@ -1843,6 +1843,11 @@ declare class Object {
   static is<T>(value1: T, value2: T): bool;
 }
 
+declare namespace performance {
+  /** Gets a high resolution timestamp measured in milliseconds. */
+  export function now(): f64;
+}
+
 declare class Date {
   /** Returns the UTC timestamp in milliseconds of the specified date. */
   static UTC(

@@ -28,46 +28,46 @@
  (type $i64_i64_i64_i64_i64_i32_=>_i32 (func (param i64 i64 i64 i64 i64 i32) (result i32)))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (import "Math" "E" (global $~lib/bindings/Math/E f64))
- (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
- (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
- (import "Math" "LOG2E" (global $~lib/bindings/Math/LOG2E f64))
- (import "Math" "PI" (global $~lib/bindings/Math/PI f64))
- (import "Math" "SQRT1_2" (global $~lib/bindings/Math/SQRT1_2 f64))
- (import "Math" "SQRT2" (global $~lib/bindings/Math/SQRT2 f64))
+ (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
+ (import "env" "Math.LN2" (global $~lib/bindings/dom/Math.LN2 f64))
+ (import "env" "Math.LN10" (global $~lib/bindings/dom/Math.LN10 f64))
+ (import "env" "Math.LOG2E" (global $~lib/bindings/dom/Math.LOG2E f64))
+ (import "env" "Math.PI" (global $~lib/bindings/dom/Math.PI f64))
+ (import "env" "Math.SQRT1_2" (global $~lib/bindings/dom/Math.SQRT1_2 f64))
+ (import "env" "Math.SQRT2" (global $~lib/bindings/dom/Math.SQRT2 f64))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "Math" "abs" (func $~lib/bindings/Math/abs (param f64) (result f64)))
- (import "Math" "acos" (func $~lib/bindings/Math/acos (param f64) (result f64)))
- (import "Math" "acosh" (func $~lib/bindings/Math/acosh (param f64) (result f64)))
- (import "Math" "asin" (func $~lib/bindings/Math/asin (param f64) (result f64)))
- (import "Math" "asinh" (func $~lib/bindings/Math/asinh (param f64) (result f64)))
- (import "Math" "atan" (func $~lib/bindings/Math/atan (param f64) (result f64)))
- (import "Math" "atanh" (func $~lib/bindings/Math/atanh (param f64) (result f64)))
- (import "Math" "atan2" (func $~lib/bindings/Math/atan2 (param f64 f64) (result f64)))
- (import "Math" "cbrt" (func $~lib/bindings/Math/cbrt (param f64) (result f64)))
- (import "Math" "ceil" (func $~lib/bindings/Math/ceil (param f64) (result f64)))
- (import "Math" "cos" (func $~lib/bindings/Math/cos (param f64) (result f64)))
- (import "Math" "cosh" (func $~lib/bindings/Math/cosh (param f64) (result f64)))
- (import "Math" "exp" (func $~lib/bindings/Math/exp (param f64) (result f64)))
- (import "Math" "expm1" (func $~lib/bindings/Math/expm1 (param f64) (result f64)))
- (import "Math" "pow" (func $~lib/bindings/Math/pow (param f64 f64) (result f64)))
- (import "Math" "floor" (func $~lib/bindings/Math/floor (param f64) (result f64)))
- (import "Math" "log" (func $~lib/bindings/Math/log (param f64) (result f64)))
- (import "Math" "log10" (func $~lib/bindings/Math/log10 (param f64) (result f64)))
- (import "Math" "log1p" (func $~lib/bindings/Math/log1p (param f64) (result f64)))
- (import "Math" "log2" (func $~lib/bindings/Math/log2 (param f64) (result f64)))
- (import "Math" "max" (func $~lib/bindings/Math/max (param f64 f64) (result f64)))
- (import "Math" "min" (func $~lib/bindings/Math/min (param f64 f64) (result f64)))
+ (import "env" "Math.abs" (func $~lib/bindings/dom/Math.abs (param f64) (result f64)))
+ (import "env" "Math.acos" (func $~lib/bindings/dom/Math.acos (param f64) (result f64)))
+ (import "env" "Math.acosh" (func $~lib/bindings/dom/Math.acosh (param f64) (result f64)))
+ (import "env" "Math.asin" (func $~lib/bindings/dom/Math.asin (param f64) (result f64)))
+ (import "env" "Math.asinh" (func $~lib/bindings/dom/Math.asinh (param f64) (result f64)))
+ (import "env" "Math.atan" (func $~lib/bindings/dom/Math.atan (param f64) (result f64)))
+ (import "env" "Math.atanh" (func $~lib/bindings/dom/Math.atanh (param f64) (result f64)))
+ (import "env" "Math.atan2" (func $~lib/bindings/dom/Math.atan2 (param f64 f64) (result f64)))
+ (import "env" "Math.cbrt" (func $~lib/bindings/dom/Math.cbrt (param f64) (result f64)))
+ (import "env" "Math.ceil" (func $~lib/bindings/dom/Math.ceil (param f64) (result f64)))
+ (import "env" "Math.cos" (func $~lib/bindings/dom/Math.cos (param f64) (result f64)))
+ (import "env" "Math.cosh" (func $~lib/bindings/dom/Math.cosh (param f64) (result f64)))
+ (import "env" "Math.exp" (func $~lib/bindings/dom/Math.exp (param f64) (result f64)))
+ (import "env" "Math.expm1" (func $~lib/bindings/dom/Math.expm1 (param f64) (result f64)))
+ (import "env" "Math.pow" (func $~lib/bindings/dom/Math.pow (param f64 f64) (result f64)))
+ (import "env" "Math.floor" (func $~lib/bindings/dom/Math.floor (param f64) (result f64)))
+ (import "env" "Math.log" (func $~lib/bindings/dom/Math.log (param f64) (result f64)))
+ (import "env" "Math.log10" (func $~lib/bindings/dom/Math.log10 (param f64) (result f64)))
+ (import "env" "Math.log1p" (func $~lib/bindings/dom/Math.log1p (param f64) (result f64)))
+ (import "env" "Math.log2" (func $~lib/bindings/dom/Math.log2 (param f64) (result f64)))
+ (import "env" "Math.max" (func $~lib/bindings/dom/Math.max (param f64 f64) (result f64)))
+ (import "env" "Math.min" (func $~lib/bindings/dom/Math.min (param f64 f64) (result f64)))
  (import "math" "mod" (func $std/math/mod (param f64 f64) (result f64)))
- (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
+ (import "env" "Math.random" (func $~lib/bindings/dom/Math.random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
- (import "Math" "sign" (func $~lib/bindings/Math/sign (param f64) (result f64)))
- (import "Math" "sin" (func $~lib/bindings/Math/sin (param f64) (result f64)))
- (import "Math" "sinh" (func $~lib/bindings/Math/sinh (param f64) (result f64)))
- (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
- (import "Math" "tan" (func $~lib/bindings/Math/tan (param f64) (result f64)))
- (import "Math" "tanh" (func $~lib/bindings/Math/tanh (param f64) (result f64)))
- (import "Math" "trunc" (func $~lib/bindings/Math/trunc (param f64) (result f64)))
+ (import "env" "Math.sign" (func $~lib/bindings/dom/Math.sign (param f64) (result f64)))
+ (import "env" "Math.sin" (func $~lib/bindings/dom/Math.sin (param f64) (result f64)))
+ (import "env" "Math.sinh" (func $~lib/bindings/dom/Math.sinh (param f64) (result f64)))
+ (import "env" "Math.sqrt" (func $~lib/bindings/dom/Math.sqrt (param f64) (result f64)))
+ (import "env" "Math.tan" (func $~lib/bindings/dom/Math.tan (param f64) (result f64)))
+ (import "env" "Math.tanh" (func $~lib/bindings/dom/Math.tanh (param f64) (result f64)))
+ (import "env" "Math.trunc" (func $~lib/bindings/dom/Math.trunc (param f64) (result f64)))
  (global $std/math/js i32 (i32.const 1))
  (global $std/math/INEXACT i32 (i32.const 1))
  (global $std/math/INVALID i32 (i32.const 2))
@@ -616,7 +616,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/abs
+   call $~lib/bindings/dom/Math.abs
    local.get $1
    local.get $2
    local.get $3
@@ -846,7 +846,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/acos
+   call $~lib/bindings/dom/Math.acos
    local.get $1
    local.get $2
    local.get $3
@@ -1692,7 +1692,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/acosh
+   call $~lib/bindings/dom/Math.acosh
    local.get $1
    local.get $2
    local.get $3
@@ -2323,7 +2323,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/asin
+   call $~lib/bindings/dom/Math.asin
    local.get $1
    local.get $2
    local.get $3
@@ -2523,7 +2523,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/asinh
+   call $~lib/bindings/dom/Math.asinh
    local.get $1
    local.get $2
    local.get $3
@@ -2888,7 +2888,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/atan
+   call $~lib/bindings/dom/Math.atan
    local.get $1
    local.get $2
    local.get $3
@@ -3207,7 +3207,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/atanh
+   call $~lib/bindings/dom/Math.atanh
    local.get $1
    local.get $2
    local.get $3
@@ -3597,7 +3597,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $~lib/bindings/Math/atan2
+   call $~lib/bindings/dom/Math.atan2
    local.get $2
    local.get $3
    local.get $4
@@ -4044,7 +4044,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/cbrt
+   call $~lib/bindings/dom/Math.cbrt
    local.get $1
    local.get $2
    local.get $3
@@ -4189,7 +4189,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/ceil
+   call $~lib/bindings/dom/Math.ceil
    local.get $1
    local.get $2
    local.get $3
@@ -5138,7 +5138,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/cos
+   call $~lib/bindings/dom/Math.cos
    local.get $1
    local.get $2
    local.get $3
@@ -6477,7 +6477,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/cosh
+   call $~lib/bindings/dom/Math.cosh
    local.get $1
    local.get $2
    local.get $3
@@ -7020,7 +7020,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/exp
+   call $~lib/bindings/dom/Math.exp
    local.get $1
    local.get $2
    local.get $3
@@ -7046,7 +7046,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/expm1
+   call $~lib/bindings/dom/Math.expm1
    local.get $1
    local.get $2
    local.get $3
@@ -7342,7 +7342,7 @@
   if (result i32)
    f64.const 2
    local.get $0
-   call $~lib/bindings/Math/pow
+   call $~lib/bindings/dom/Math.pow
    local.get $1
    local.get $2
    local.get $3
@@ -7495,7 +7495,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/floor
+   call $~lib/bindings/dom/Math.floor
    local.get $1
    local.get $2
    local.get $3
@@ -7872,7 +7872,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/log
+   call $~lib/bindings/dom/Math.log
    local.get $1
    local.get $2
    local.get $3
@@ -8158,7 +8158,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/log10
+   call $~lib/bindings/dom/Math.log10
    local.get $1
    local.get $2
    local.get $3
@@ -8384,7 +8384,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/log1p
+   call $~lib/bindings/dom/Math.log1p
    local.get $1
    local.get $2
    local.get $3
@@ -8763,7 +8763,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/log2
+   call $~lib/bindings/dom/Math.log2
    local.get $1
    local.get $2
    local.get $3
@@ -8972,7 +8972,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $~lib/bindings/Math/max
+   call $~lib/bindings/dom/Math.max
    local.get $2
    local.get $3
    local.get $4
@@ -9013,7 +9013,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $~lib/bindings/Math/min
+   call $~lib/bindings/dom/Math.min
    local.get $2
    local.get $3
    local.get $4
@@ -10569,7 +10569,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $~lib/bindings/Math/pow
+   call $~lib/bindings/dom/Math.pow
    local.get $2
    local.get $3
    local.get $4
@@ -11477,7 +11477,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/sign
+   call $~lib/bindings/dom/Math.sign
    local.get $1
    local.get $2
    local.get $3
@@ -12698,7 +12698,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/sin
+   call $~lib/bindings/dom/Math.sin
    local.get $1
    local.get $2
    local.get $3
@@ -13436,7 +13436,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/sinh
+   call $~lib/bindings/dom/Math.sinh
    local.get $1
    local.get $2
    local.get $3
@@ -13558,7 +13558,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/sqrt
+   call $~lib/bindings/dom/Math.sqrt
    local.get $1
    local.get $2
    local.get $3
@@ -14116,7 +14116,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/tan
+   call $~lib/bindings/dom/Math.tan
    local.get $1
    local.get $2
    local.get $3
@@ -14885,7 +14885,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/tanh
+   call $~lib/bindings/dom/Math.tanh
    local.get $1
    local.get $2
    local.get $3
@@ -15000,7 +15000,7 @@
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   call $~lib/bindings/Math/trunc
+   call $~lib/bindings/dom/Math.trunc
    local.get $1
    local.get $2
    local.get $3
@@ -16298,7 +16298,7 @@
   f32.eq
   drop
   global.get $~lib/math/NativeMath.E
-  global.get $~lib/bindings/Math/E
+  global.get $~lib/bindings/dom/Math.E
   f64.const 0
   i32.const 0
   call $std/math/check<f64>
@@ -16312,7 +16312,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMath.LN2
-  global.get $~lib/bindings/Math/LN2
+  global.get $~lib/bindings/dom/Math.LN2
   f64.const 0
   i32.const 0
   call $std/math/check<f64>
@@ -16326,7 +16326,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMath.LN10
-  global.get $~lib/bindings/Math/LN10
+  global.get $~lib/bindings/dom/Math.LN10
   f64.const 0
   i32.const 0
   call $std/math/check<f64>
@@ -16340,7 +16340,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMath.LOG2E
-  global.get $~lib/bindings/Math/LOG2E
+  global.get $~lib/bindings/dom/Math.LOG2E
   f64.const 0
   i32.const 0
   call $std/math/check<f64>
@@ -16354,7 +16354,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMath.PI
-  global.get $~lib/bindings/Math/PI
+  global.get $~lib/bindings/dom/Math.PI
   f64.const 0
   i32.const 0
   call $std/math/check<f64>
@@ -16368,7 +16368,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMath.SQRT1_2
-  global.get $~lib/bindings/Math/SQRT1_2
+  global.get $~lib/bindings/dom/Math.SQRT1_2
   f64.const 0
   i32.const 0
   call $std/math/check<f64>
@@ -16382,7 +16382,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMath.SQRT2
-  global.get $~lib/bindings/Math/SQRT2
+  global.get $~lib/bindings/dom/Math.SQRT2
   f64.const 0
   i32.const 0
   call $std/math/check<f64>
@@ -16396,7 +16396,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMathf.E
-  global.get $~lib/bindings/Math/E
+  global.get $~lib/bindings/dom/Math.E
   f32.demote_f64
   f32.const 0
   i32.const 0
@@ -16411,7 +16411,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMathf.LN2
-  global.get $~lib/bindings/Math/LN2
+  global.get $~lib/bindings/dom/Math.LN2
   f32.demote_f64
   f32.const 0
   i32.const 0
@@ -16426,7 +16426,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMathf.LN10
-  global.get $~lib/bindings/Math/LN10
+  global.get $~lib/bindings/dom/Math.LN10
   f32.demote_f64
   f32.const 0
   i32.const 0
@@ -16441,7 +16441,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMathf.LOG2E
-  global.get $~lib/bindings/Math/LOG2E
+  global.get $~lib/bindings/dom/Math.LOG2E
   f32.demote_f64
   f32.const 0
   i32.const 0
@@ -16456,7 +16456,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMathf.PI
-  global.get $~lib/bindings/Math/PI
+  global.get $~lib/bindings/dom/Math.PI
   f32.demote_f64
   f32.const 0
   i32.const 0
@@ -16471,7 +16471,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMathf.SQRT1_2
-  global.get $~lib/bindings/Math/SQRT1_2
+  global.get $~lib/bindings/dom/Math.SQRT1_2
   f32.demote_f64
   f32.const 0
   i32.const 0
@@ -16486,7 +16486,7 @@
    unreachable
   end
   global.get $~lib/math/NativeMathf.SQRT2
-  global.get $~lib/bindings/Math/SQRT2
+  global.get $~lib/bindings/dom/Math.SQRT2
   f32.demote_f64
   f32.const 0
   i32.const 0
@@ -26244,7 +26244,7 @@
   global.get $std/math/kPI
   f64.const 2
   f64.div
-  call $~lib/bindings/Math/cos
+  call $~lib/bindings/dom/Math.cos
   f64.eq
   i32.eqz
   if
@@ -26266,7 +26266,7 @@
   f64.mul
   f64.const 2
   f64.div
-  call $~lib/bindings/Math/cos
+  call $~lib/bindings/dom/Math.cos
   f64.eq
   i32.eqz
   if
@@ -26284,7 +26284,7 @@
   f64.const 1.e+90
   global.get $std/math/kPI
   f64.mul
-  call $~lib/bindings/Math/cos
+  call $~lib/bindings/dom/Math.cos
   f64.eq
   i32.eqz
   if
@@ -47200,7 +47200,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/bindings/Math/random
+  call $~lib/bindings/dom/Math.random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
@@ -47241,7 +47241,7 @@
     br $for-loop|0
    end
   end
-  call $~lib/bindings/Math/random
+  call $~lib/bindings/dom/Math.random
   i64.reinterpret_f64
   local.set $3
   local.get $3
@@ -51688,7 +51688,7 @@
   global.get $std/math/kPI
   f64.const 2
   f64.div
-  call $~lib/bindings/Math/sin
+  call $~lib/bindings/dom/Math.sin
   f64.eq
   i32.eqz
   if
@@ -51710,7 +51710,7 @@
   f64.mul
   f64.const 2
   f64.div
-  call $~lib/bindings/Math/sin
+  call $~lib/bindings/dom/Math.sin
   f64.eq
   i32.eqz
   if
@@ -55691,7 +55691,7 @@
   f64.const 2.3283064365386963e-10
   call $~lib/math/NativeMath.tan
   f64.const 2.3283064365386963e-10
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55705,7 +55705,7 @@
   f64.const -2.3283064365386963e-10
   call $~lib/math/NativeMath.tan
   f64.const -2.3283064365386963e-10
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55723,7 +55723,7 @@
   f64.const 11
   f64.const 16
   f64.div
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55741,7 +55741,7 @@
   f64.const -11
   f64.const 16
   f64.div
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55755,7 +55755,7 @@
   f64.const 0.39269908169872414
   call $~lib/math/NativeMath.tan
   f64.const 0.39269908169872414
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55769,7 +55769,7 @@
   f64.const 0.6743358
   call $~lib/math/NativeMath.tan
   f64.const 0.6743358
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55783,7 +55783,7 @@
   f64.const 3.725290298461914e-09
   call $~lib/math/NativeMath.tan
   f64.const 3.725290298461914e-09
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55801,7 +55801,7 @@
   global.get $std/math/kPI
   f64.const 2
   f64.div
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55815,7 +55815,7 @@
   f64.const 0.5
   call $~lib/math/NativeMath.tan
   f64.const 0.5
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55829,7 +55829,7 @@
   f64.const 1.107148717794091
   call $~lib/math/NativeMath.tan
   f64.const 1.107148717794091
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55851,7 +55851,7 @@
   f64.div
   global.get $std/math/kPI
   f64.mul
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55873,7 +55873,7 @@
   f64.div
   global.get $std/math/kPI
   f64.mul
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55895,7 +55895,7 @@
   f64.div
   global.get $std/math/kPI
   f64.mul
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55917,7 +55917,7 @@
   f64.div
   global.get $std/math/kPI
   f64.mul
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55931,7 +55931,7 @@
   global.get $std/math/kTwo120
   call $~lib/math/NativeMath.tan
   global.get $std/math/kTwo120
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if
@@ -55947,7 +55947,7 @@
   call $~lib/math/NativeMath.tan
   global.get $std/math/kTwo120
   f64.neg
-  call $~lib/bindings/Math/tan
+  call $~lib/bindings/dom/Math.tan
   f64.eq
   i32.eqz
   if

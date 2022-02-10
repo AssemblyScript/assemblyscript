@@ -31,7 +31,7 @@
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
+ (import "env" "Math.random" (func $~lib/bindings/dom/Math.random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -28873,7 +28873,7 @@
   i32.const 3
   call $~lib/array/Array<i32>#push
   drop
-  call $~lib/bindings/Math/random
+  call $~lib/bindings/dom/Math.random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
   global.get $~lib/memory/__stack_pointer

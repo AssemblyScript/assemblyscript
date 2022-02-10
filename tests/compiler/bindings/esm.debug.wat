@@ -19,7 +19,7 @@
  (import "env" "globalThis.globalThis" (global $bindings/esm/immutableGlobalNested externref))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
- (import "env" "Date#getTimezoneOffset" (func $bindings/esm/Date_getTimezoneOffset (result i32)))
+ (import "env" "Date.getTimezoneOffset" (func $bindings/esm/Date_getTimezoneOffset (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $bindings/esm/plainGlobal i32 (i32.const 1))
  (global $bindings/esm/plainMutableGlobal (mut i32) (i32.const 2))
