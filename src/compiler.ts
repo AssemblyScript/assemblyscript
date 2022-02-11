@@ -8629,6 +8629,8 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
+    var classType = classReference.type;
+    this.currentType = classType.nonNullableType;
     if (classReference.kind == ElementKind.INTERFACE) {
       this.error(
         DiagnosticCode.Not_implemented_0,
@@ -8636,8 +8638,6 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
-    var classType = classReference.type;
-    this.currentType = classType.nonNullableType;
     if (classReference.is(CommonFlags.ABSTRACT)) {
       this.error(
         DiagnosticCode.Cannot_create_an_instance_of_an_abstract_class,
