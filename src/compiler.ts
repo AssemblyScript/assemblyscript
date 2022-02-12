@@ -9668,6 +9668,9 @@ export class Compiler extends DiagnosticEmitter {
           Constraints.NONE
         );
 
+        if (getExpressionId(expr) == ExpressionId.Unreachable) 
+          return expr;
+
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
@@ -9738,6 +9741,9 @@ export class Compiler extends DiagnosticEmitter {
           contextualType.exceptVoid,
           Constraints.NONE
         );
+
+        if (getExpressionId(expr) == ExpressionId.Unreachable) 
+          return expr;
 
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);

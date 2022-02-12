@@ -1,0 +1,11 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS234: Expression does not compile to a value at runtime.",
+    "AS234: Expression does not compile to a value at runtime.",
+    "AS234: Expression does not compile to a value at runtime.",
+    "AS234: Expression does not compile to a value at runtime.",
+    "EOF"
+  ]
+}
