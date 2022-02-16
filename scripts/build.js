@@ -4,10 +4,9 @@ import { fileURLToPath } from "url";
 import childProcess from "child_process";
 import esbuild from "esbuild";
 import glob from "glob";
-import { createRequire } from "module";
 import { stdoutColors } from "../util/terminal.js";
+import { pkg } from "../util/pkg.js";
 
-const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const watch = process.argv[2] === "--watch";
 
@@ -73,13 +72,12 @@ const stdlibPlugin = {
       const out = [
         `// GENERATED FILE. DO NOT EDIT.\n\n`
       ];
-      const version = require("../package.json").version;
       out.push(
-        `export const version = ${JSON.stringify(version)};\n`
+        `export const version = "${pkg.version}";\n`
       );
-      const options = require("../cli/options.json");
+      const options = fs.readFileSync("cli/options.json").toString();
       out.push(
-        `export const options = ${JSON.stringify(options, null, 2)};\n`
+        `export const options = ${options};\n`
       );
       out.push(
         `export const libraryPrefix = "~lib/";\n`
@@ -108,6 +106,9 @@ const stdlibPlugin = {
     });
   }
 };
+
+
+console.log('3333333333333333333333333');
 
 // Diagnostic messages integration
 
@@ -212,6 +213,7 @@ const common = {
   watch,
   incremental: watch
 };
+console.log('222222222222222222222222222');
 
 const srcBuild = esbuild.build({
   entryPoints: [ "./src/index.ts" ],
@@ -257,6 +259,8 @@ function buildDefinitions() {
     console.log(`${time()} - ${"dts"} - ${stdoutColors.green("SUCCESS")} (no errors, ${duration} ms)`);
   });
 }
+
+console.log('1111111111111111111');
 
 if (watch) {
   console.log("Watching for changes. Press RETURN to rebuild definitions.\n");

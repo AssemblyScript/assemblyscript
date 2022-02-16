@@ -402,24 +402,15 @@ export async function main(argv, options) {
       let filename = transformArgs[i].trim();
       let resolved;
       let transform;
-      if (require.resolve) {
+      try {
+        resolved = require.resolve(filename, { paths: [process.cwd(), baseDir] });
+        transform = await import(url.pathToFileURL(resolved));
+        if (transform.default) transform = transform.default;
+      } catch (e1) {
         try {
-          resolved = require.resolve(filename, { paths: [process.cwd(), baseDir] });
-          transform = await import(url.pathToFileURL(resolved));
-          if (transform.default) transform = transform.default;
-        } catch (e1) {
-          try {
-            transform = require(resolved);
-          } catch (e2) {
-            return prepareResult(e1);
-          }
-        }
-      } else {
-        try {
-          transform = await import(new URL(filename, import.meta.url));
-          if (transform.default) transform = transform.default;
-        } catch (e) {
-          return prepareResult(e);
+          transform = require(resolved);
+        } catch (e2) {
+          return prepareResult(e1);
         }
       }
       if (!transform || (typeof transform !== "function" && typeof transform !== "object")) {

@@ -1,15 +1,13 @@
 import path from "path";
 import fs from "fs";
-import { createRequire } from "module";
 import { fileURLToPath } from "url";
+import { pkglock } from "../util/pkglock.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
-const pkg = require("../package-lock.json");
 
-const mainVersion = pkg.version;
-const binaryenVersion = pkg.dependencies.binaryen.version;
-const longVersion = pkg.dependencies.long.version;
+const mainVersion = pkglock.version;
+const binaryenVersion = pkglock.dependencies.binaryen.version;
+const longVersion = pkglock.dependencies.long.version;
 
 const distUrl = mainVersion === "0.0.0" ? `../dist/` : `https://cdn.jsdelivr.net/npm/assemblyscript@${mainVersion}/dist/`;
 const binaryenUrl = `https://cdn.jsdelivr.net/npm/binaryen@${binaryenVersion}/index.js`;

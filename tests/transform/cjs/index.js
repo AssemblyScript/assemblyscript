@@ -1,6 +1,6 @@
 const Transform = require("../../../dist/transform.cjs");
 
-console.log("CommonJS transform loaded");
+console.log("CommonJS transform loaded"); // TODO destroy CJS
 
 class MyTransform extends Transform {
   constructor() {

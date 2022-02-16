@@ -1,9 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { createRequire } from "module";
 import { fileURLToPath } from "url";
+import { pkg as _pkg } from "../util/pkg.js";
 
-const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const reset = process.argv[2] === "--reset";
@@ -17,8 +16,7 @@ if (reset) {
     path.join(dirname, "..", "package.json.backup")
   );
 } else {
-  const pkg = require("../package.json");
-  if (!pkg.scripts) throw Error("already modified");
+  const pkg = { ..._pkg };
   delete pkg.scripts;
   delete pkg.devDependencies;
   fs.copyFileSync(

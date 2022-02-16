@@ -3,7 +3,6 @@ import path from "path";
 import os from "os";
 import v8 from "v8";
 import cluster from "cluster";
-import { createRequire } from "module";
 import { fileURLToPath, pathToFileURL } from "url";
 import { WASI } from "wasi";
 import glob from "glob";
@@ -15,7 +14,6 @@ import { Rtrace } from "../lib/rtrace/index.js";
 import asc from "../dist/asc.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
 const startTime = Date.now();
 
 const config = {
@@ -79,7 +77,7 @@ if (args.help) {
 }
 
 const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
-const featuresConfig = require("./features.json");
+const featuresConfig = JSON.parse((await fs.promises.readFile("tests/features.json")).toString());
 const basedir = path.join(dirname, "compiler");
 
 // Gets a list of all relevant tests
@@ -131,7 +129,7 @@ async function runTest(basename) {
   console.log(stdoutColors.white("# compiler/" + basename) + "\n");
 
   const configPath = path.join(basedir, basename + ".json");
-  const config = fs.existsSync(configPath) ? require(configPath) : {};
+  const config = fs.existsSync(configPath) ? JSON.parse((await fs.promises.readFile(configPath)).toString()) : {};
   const stdout = asc.createMemoryStream();
   const stderr = asc.createMemoryStream(chunk => process.stderr.write(chunk.toString().replace(/^(?!$)/mg, "  ")));
   stderr.isTTY = true;

@@ -2,14 +2,13 @@
 
 import fs from "fs";
 import path from "path";
-import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import { stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
+import { pkg } from "../util/pkg.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
-const version = require("../package.json").version; // TODO
+const { version } = pkg;
 
 const npmDefaultTest = "echo \"Error: no test specified\" && exit 1";
 
@@ -190,7 +189,7 @@ function createProject(answer) {
 if (cliOptions.options.yes) {
   createProject("y");
 } else {
-  const rl = require("readline").createInterface({
+  const rl = (await import("readline")).createInterface({
     input: process.stdin,
     output: process.stdout
   });

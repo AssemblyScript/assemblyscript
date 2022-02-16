@@ -1,10 +1,8 @@
 import path from "path";
 import fs from "fs";
-import { createRequire } from "module";
 import asc from "../../dist/asc.js";
 import loader from "../../lib/loader/index.js";
 
-const require = createRequire(import.meta.url);
 const args = process.argv.slice(2);
 
 /** @type {Uint8Array} */
@@ -31,7 +29,7 @@ const stderrString = stderr.toString();
 if (fs.existsSync(jsonPath) && stderrString) {
   const actualRes = JSON.parse(stderrString);
   const actual = actualRes.options;
-  const expected = require(jsonPath).options;
+  const expected = JSON.parse((await fs.promises.readFile(jsonPath)).toString()).options;
   let errored = false;
   for (let name of Object.getOwnPropertyNames(expected)) {
     if (actual[name] !== expected[name]) {

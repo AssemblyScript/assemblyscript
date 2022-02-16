@@ -4,7 +4,7 @@
  */
 
 declare const global: Record<string,unknown>;
-declare function require(name: string): unknown;
+declare function require(name: string): unknown; // TODO obliterate require
 declare namespace console {
   function log(...args: unknown[]): void;
 }
