@@ -8525,6 +8525,13 @@ export class Compiler extends DiagnosticEmitter {
     }
     var classType = classReference.type;
     this.currentType = classType.nonNullableType;
+    if (classReference.kind == ElementKind.INTERFACE) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        expression.range, "Interface hidden classes"
+      );
+      return module.unreachable();
+    }
     if (classReference.is(CommonFlags.ABSTRACT)) {
       this.error(
         DiagnosticCode.Cannot_create_an_instance_of_an_abstract_class,
