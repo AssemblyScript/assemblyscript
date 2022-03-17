@@ -483,6 +483,7 @@ exports.main = function main(argv, options, callback) {
   })(callback);
 
   // Add or override aliases if specified
+  var useFunctionName = [];
   if (opts.use) {
     let aliases = opts.use;
     for (let i = 0, k = aliases.length; i < k; ++i) {
@@ -491,6 +492,7 @@ exports.main = function main(argv, options, callback) {
       if (p < 0) return callback(Error(`Global alias '${part}' is invalid.`));
       let alias = part.substring(0, p).trim();
       let name = part.substring(p + 1).trim();
+      useFunctionName.push(name)
       if (!alias.length) {
         return callback(Error(`Global alias '${part}' is invalid.`));
       }
@@ -852,6 +854,35 @@ exports.main = function main(argv, options, callback) {
       assemblyscript.parse(program, textPtr, pathPtr, true);
       __unpin(textPtr);
     });
+  }
+
+  // Include --use related files
+  if (opts.use) {
+    for (let i = 0,k = useFunctionName.length; i < k; i++) {
+      const filename = useFunctionName[i];
+      let sourcePath = String(filename)
+        .replace(/\\/g, "/")
+        .replace(/[\\/]$/, "");
+      if (sourcePath.startsWith("~lib")) {
+        continue;
+      }
+      sourcePath = sourcePath.slice(0, sourcePath.lastIndexOf("/"));
+      sourcePath = path.isAbsolute(sourcePath)
+        ? path.relative(baseDir, sourcePath).replace(/\\/g, "/")
+        : sourcePath;
+      sourcePath += extension.ext;
+      let sourceText = readFile(sourcePath, baseDir);
+      if (sourceText == null) {
+        return callback(Error(`Source of file '${sourcePath}' not found.`));
+      }
+      stats.parseCount++;
+      stats.parseTime += measure(() => {
+        let textPtr = __pin(__newString(sourceText));
+        let pathPtr = __newString(sourcePath);
+        assemblyscript.parse(program, textPtr, pathPtr, false);
+        __unpin(textPtr);
+      });
+    }
   }
 
   // Parse entry files
