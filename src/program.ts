@@ -1412,7 +1412,7 @@ export class Program extends DiagnosticEmitter {
           if (elementsByName.has(name)) {
             elementsByName.set(alias, assert(elementsByName.get(name)));
           } else {
-            throw new Error("no such global element: " + name);
+            this.error(DiagnosticCode.no_such_global_element_0, null, name);
           }
         }
       }

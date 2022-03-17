@@ -185,6 +185,7 @@ export enum DiagnosticCode {
   Property_0_is_missing_in_type_1_but_required_in_type_2 = 2741,
   Type_0_has_no_call_signatures = 2757,
   File_0_not_found = 6054,
+  no_such_global_element_0 = 6055,
   Numeric_separators_are_not_allowed_here = 6188,
   Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
   _super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class = 17009,
@@ -374,6 +375,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2741: return "Property '{0}' is missing in type '{1}' but required in type '{2}'.";
     case 2757: return "Type '{0}' has no call signatures.";
     case 6054: return "File '{0}' not found.";
+    case 6055: return "no such global element: '{0}'";
     case 6188: return "Numeric separators are not allowed here.";
     case 6189: return "Multiple consecutive numeric separators are not permitted.";
     case 17009: return "'super' must be called before accessing 'this' in the constructor of a derived class.";

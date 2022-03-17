@@ -184,6 +184,7 @@
   "Type '{0}' has no call signatures.": 2757,
 
   "File '{0}' not found.": 6054,
+  "no such global element: '{0}'":6055,
   "Numeric separators are not allowed here.": 6188,
   "Multiple consecutive numeric separators are not permitted.": 6189,
   "'super' must be called before accessing 'this' in the constructor of a derived class.": 17009,
