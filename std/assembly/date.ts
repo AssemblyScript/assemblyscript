@@ -169,7 +169,7 @@ export class Date {
   }
 
   setUTCMonth(month: i32): void {
-    if (this.month == month) return;
+    if (this.month == month + 1) return;
     var ms = euclidRem(this.epochMillis, MILLIS_PER_DAY);
     this.setTime(i64(daysSinceEpoch(this.year, month + 1, this.day)) * MILLIS_PER_DAY + ms);
   }
