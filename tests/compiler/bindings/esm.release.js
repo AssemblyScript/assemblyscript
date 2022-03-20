@@ -1,6 +1,6 @@
 async function instantiate(module, imports = {}) {
   const adaptedImports = {
-    env: Object.assign(Object.create(globalThis), {
+    env: Object.assign(Object.create(globalThis), imports.env || {}, {
       trace(message, n, a0, a1, a2, a3, a4) {
         // ~lib/builtins/trace(~lib/string/String, i32?, f64?, f64?, f64?, f64?, f64?) => void
         message = __liftString(message >>> 0);
@@ -14,10 +14,18 @@ async function instantiate(module, imports = {}) {
         text = __liftString(text >>> 0);
         console.log(text);
       },
-      "globalThis.globalThis": (() =>
+      "Math.E": (
+        // ~lib/bindings/dom/Math.E: f64
+        Math.E
+      ),
+      "Math.log": (
+        // ~lib/bindings/dom/Math.log(f64) => f64
+        Math.log
+      ),
+      "globalThis.globalThis": (
         // bindings/esm/immutableGlobalNested: externref
         globalThis.globalThis
-      )(),
+      ),
       "Date.getTimezoneOffset"() {
         // bindings/esm/Date_getTimezoneOffset() => i32
         return (() => {

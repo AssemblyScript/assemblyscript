@@ -2,7 +2,7 @@
 
 A tiny module loader that makes working with AssemblyScript modules as convenient as it gets without sacrificing efficiency. It about mirrors the relevant parts of the WebAssembly API while also providing utility to allocate and read strings, arrays and classes.
 
-**DEPRECATION NOTICE:** The loader has been deprecated in AssemblyScript 0.20. It will likely continue to work for a while, but it is recommended to switch to the new static bindings generation.
+**DEPRECATION NOTICE:** The loader has been deprecated in AssemblyScript 0.20. It will likely continue to work for a while, but it is recommended to switch to the new [static bindings](https://www.assemblyscript.org/compiler.html#host-bindings) generation.
 
 ## Example
 

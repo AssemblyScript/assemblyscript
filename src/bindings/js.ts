@@ -227,7 +227,7 @@ export class JSBuilder extends ExportsWalker {
     }
     let moduleId = this.ensureModuleId(moduleName);
     if (isPlainValue(type, Mode.IMPORT)) {
-      sb.push("(() =>\n");
+      sb.push("(\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
       sb.push(element.internalName);
@@ -243,7 +243,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(name);
       sb.push("\n");
       indent(sb, this.indentLevel);
-      sb.push(")()");
+      sb.push(")");
     } else {
       sb.push("{\n");
       indent(sb, ++this.indentLevel);
@@ -272,10 +272,21 @@ export class JSBuilder extends ExportsWalker {
       sb.push("\"");
     }
     if (isPlainFunction(signature, Mode.IMPORT) && !code) {
-      sb.push(": ");
-      sb.push(moduleName);
-      sb.push(".");
+      sb.push(": (\n");
+      indent(sb, this.indentLevel + 1);
+      sb.push("// ");
+      sb.push(element.internalName);
+      sb.push(element.signature.toString());
+      sb.push("\n");
+      indent(sb, this.indentLevel + 1);
+      if (moduleName != "env") {
+        sb.push(moduleName);
+        sb.push(".");
+      }
       sb.push(name);
+      sb.push("\n");
+      indent(sb, this.indentLevel);
+      sb.push(")");
     } else {
       sb.push("(");
       let parameterTypes = signature.parameterTypes;
@@ -514,7 +525,11 @@ export class JSBuilder extends ExportsWalker {
         sb.push("__module");
         sb.push(moduleId.toString());
       }
-      sb.push("), {\n");
+      sb.push("), ");
+      if (moduleName == "env") {
+        sb.push("imports.env || {}, ");
+      }
+      sb.push("{\n");
       ++this.indentLevel;
       let numInstrumented = 0;
       for (let _keys2 = Map_keys(module), j = 0, l = _keys2.length; j < l; ++j) {
@@ -523,7 +538,7 @@ export class JSBuilder extends ExportsWalker {
         if (elem.kind == ElementKind.FUNCTION) {
           let func = <Function>elem;
           let code = this.getExternalCode(func);
-          if (!isPlainFunction(func.signature, Mode.IMPORT) || code) {
+          if (!isPlainFunction(func.signature, Mode.IMPORT) || !isIdentifier(name) || code) {
             this.makeFunctionImport(moduleName, name, <Function>elem, code);
             ++numInstrumented;
           }
@@ -538,8 +553,12 @@ export class JSBuilder extends ExportsWalker {
       --this.indentLevel;
       if (!numInstrumented) {
         sb.length = resetPos;
-        sb.push(": __module");
-        sb.push(moduleId.toString());
+        if (moduleName == "env") {
+          sb.push(": Object.assign(Object.create(globalThis), imports.env || {})");
+        } else {
+          sb.push(": __module");
+          sb.push(moduleId.toString());
+        }
         sb.push(",\n");
       } else {
         indent(sb, this.indentLevel);

@@ -56,7 +56,7 @@ globalThis.i64_pow = function i64_pow(left, right) {
   var rightHi = right.high;
   if (rightHi <= 0) {
     if (rightHi < 0) {
-      if (left.eq(global.i64_neg_one)) {
+      if (left.eq(globalThis.i64_neg_one)) {
         return rightLo & 1 ? left : Long.ONE;
       }
       return left.eq(Long.ONE) ? left : Long.ZERO;
@@ -180,7 +180,7 @@ globalThis.i64_is_f64 = function i64_is_f64(value) {
 };
 
 globalThis.i64_to_f32 = function i64_to_f32(value) {
-  return global.Math.fround(value.toNumber());
+  return globalThis.Math.fround(value.toNumber());
 };
 
 globalThis.i64_to_f64 = function i64_to_f64(value) {

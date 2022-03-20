@@ -116,9 +116,11 @@ export function internrefFunction(a: NonPlainObject, b: NonPlainObject): NonPlai
 
 trace("trace", 1, 42);
 
-import { console } from "bindings/dom";
+import { console, Math } from "bindings/dom";
 
 console.log("42 from console.log");
+
+Math.log(Math.E);
 
 // @ts-ignore
 @external("env", "globalThis") declare const immutableGlobal: externref;

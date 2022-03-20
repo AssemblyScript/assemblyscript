@@ -14,10 +14,15 @@ export async function instantiate(module, imports = {}) {
         text = __liftString(text >>> 0);
         console.log(text);
       },
-      "globalThis.globalThis": (() =>
+      "Math.E": (
+        // ~lib/bindings/dom/Math.E: f64
+        Math.E
+      ),
+      "Math.log": Math.log,
+      "globalThis.globalThis": (
         // bindings/esm/immutableGlobalNested: externref
         globalThis.globalThis
-      )(),
+      ),
       "Date.getTimezoneOffset"() {
         // bindings/esm/Date_getTimezoneOffset() => i32
         return (() => {

@@ -10,15 +10,18 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $f64_=>_f64 (func (param f64) (result f64)))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_f32_=>_none (func (param i32 f32)))
  (type $i32_f64_=>_none (func (param i32 f64)))
+ (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
  (import "env" "globalThis" (global $bindings/esm/immutableGlobal externref))
  (import "env" "globalThis.globalThis" (global $bindings/esm/immutableGlobalNested externref))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
+ (import "env" "Math.log" (func $~lib/bindings/dom/Math.log (param f64) (result f64)))
  (import "env" "Date.getTimezoneOffset" (func $bindings/esm/Date_getTimezoneOffset (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $bindings/esm/plainGlobal i32 (i32.const 1))
@@ -3200,6 +3203,9 @@
   i32.store
   local.get $0
   call $~lib/bindings/dom/console.log
+  global.get $~lib/bindings/dom/Math.E
+  call $~lib/bindings/dom/Math.log
+  drop
   global.get $bindings/esm/immutableGlobal
   drop
   global.get $bindings/esm/immutableGlobalNested
