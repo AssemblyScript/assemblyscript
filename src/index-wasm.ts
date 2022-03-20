@@ -171,6 +171,12 @@ export const FEATURE_MULTI_VALUE = Feature.MULTI_VALUE;
 export const FEATURE_GC = Feature.GC;
 /** Memory64. */
 export const FEATURE_MEMORY64 = Feature.MEMORY64;
+/** Function references. */
+export const FEATURE_FUNCTION_REFERENCES = Feature.FUNCTION_REFERENCES;
+/** Relaxed SIMD. */
+export const FEATURE_RELAXED_SIMD = Feature.RELAXED_SIMD;
+/** Extended const expressions. */
+export const FEATURE_EXTENDED_CONST = Feature.EXTENDED_CONST;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

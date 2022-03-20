@@ -1,6 +1,6 @@
 export async function instantiate(module, imports = {}) {
   const adaptedImports = {
-    env: Object.assign(Object.create(globalThis), {
+    env: Object.assign(Object.create(globalThis), imports.env || {}, {
       trace(message, n, a0, a1, a2, a3, a4) {
         // ~lib/builtins/trace(~lib/string/String, i32?, f64?, f64?, f64?, f64?, f64?) => void
         message = __liftString(message >>> 0);
@@ -18,7 +18,10 @@ export async function instantiate(module, imports = {}) {
         // ~lib/bindings/dom/Math.E: f64
         Math.E
       ),
-      "Math.log": Math.log,
+      "Math.log": (
+        // ~lib/bindings/dom/Math.log(f64) => f64
+        Math.log
+      ),
       "globalThis.globalThis": (
         // bindings/esm/immutableGlobalNested: externref
         globalThis.globalThis
