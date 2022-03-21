@@ -12,7 +12,7 @@ const HL_SIZE = FL_BITS * SL_SIZE;
 var exports;
 var ROOT;
 var U32;
-fetch("untouched.wasm").then(result => 
+fetch("debug.wasm").then(result => 
   result.arrayBuffer()
 ).then(buffer =>
   WebAssembly.instantiate(buffer, {
@@ -27,7 +27,7 @@ fetch("untouched.wasm").then(result =>
   })
 ).then(result => {
   exports = result.instance.exports;
-  if (exports._start) exports._start();
+  if (exports._initialize) exports._initialize();
   U32 = new Uint32Array(exports.memory.buffer);
   var first = exports.__alloc(255);
   exports.__free(first);

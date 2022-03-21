@@ -1,6 +1,6 @@
 {
   "name": "assemblyscript",
-  "description": "Definitely not a TypeScript to WebAssembly compiler.",
+  "description": "A TypeScript-like language for WebAssembly.",
   "keywords": [
     "typescript",
     "webassembly",
@@ -10,7 +10,6 @@
   ],
   "version": "0.0.0",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
-  "contributors": [],
   "license": "Apache-2.0",
   "homepage": "https://assemblyscript.org",
   "repository": {
@@ -21,110 +20,77 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "102.0.0-nightly.20211028",
-    "long": "^5.2.0",
-    "source-map-support": "^0.5.20",
-    "ts-node": "^10.4.0"
+    "binaryen": "106.0.0-nightly.20220320",
+    "long": "^5.2.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "diff": "^5.0.0",
+    "esbuild": "^0.14.1",
     "eslint": "^8.2.0",
     "glob": "^7.2.0",
-    "mkdirp": "^1.0.4",
-    "physical-cpu-count": "^2.0.0",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^10.4.0",
-    "typescript": "~4.5.2",
-    "webpack": "^5.64.1",
-    "webpack-cli": "^4.9.1"
+    "typescript": "~4.5.2"
   },
-  "type": "commonjs",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "type": "module",
   "exports": {
-    ".": "./index.js",
-    "./std/portable": "./std/portable/index.js",
-    "./lib/loader": {
-      "import": "./lib/loader/index.js",
-      "require": "./lib/loader/umd/index.js"
+    ".": {
+      "import": "./dist/assemblyscript.js",
+      "types": "./dist/assemblyscript.d.ts"
     },
-    "./lib/rtrace": {
-      "import": "./lib/rtrace/index.js",
-      "require": "./lib/rtrace/umd/index.js"
+    "./asc": {
+      "import": "./dist/asc.js",
+      "types": "./dist/asc.d.ts"
     },
-    "./*": "./*.js",
-    "./cli/asc": "./cli/asc.js",
-    "./cli/transform": "./cli/transform.js",
-    "./cli/util/options": "./cli/util/options.js",
-    "./dist/assemblyscript": "./dist/assemblyscript.js",
-    "./dist/asc": "./dist/asc.js"
+    "./transform": {
+      "import": "./dist/transform.js",
+      "require": "./dist/transform.cjs",
+      "types": "./dist/transform.d.ts"
+    },
+    "./binaryen": {
+      "import": "./lib/binaryen.js",
+      "types": "./lib/binaryen.d.ts"
+    },
+    "./*": "./*"
   },
   "bin": {
-    "asc": "bin/asc",
-    "asinit": "bin/asinit"
+    "asc": "./bin/asc.js",
+    "asinit": "./bin/asinit.js"
   },
   "scripts": {
-    "build": "npm run build:bundle && npm run build:dts && npm run build:sdk",
-    "build:bundle": "webpack --config webpack.config.js",
-    "build:dts": "node scripts/build-dts && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index-release",
-    "build:sdk": "node scripts/build-sdk",
-    "clean": "node scripts/clean",
-    "check": "npm run check:config && npm run check:require && npm run check:lint",
+    "check": "npm run check:config && npm run check:import && npm run lint",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
-    "check:require": "tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index",
-    "check:lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
-    "test": "npm run test:parser && npm run test:compiler && npm run test:packages && npm run test:extension && npm run test:asconfig",
-    "test:parser": "node tests/parser",
-    "test:compiler": "node --experimental-wasi-unstable-preview1 tests/compiler",
-    "test:packages": "cd tests/packages && npm run test",
-    "test:extension": "cd tests/extension && npm run test",
+    "check:import": "tsc --noEmit --target ESNEXT --module es6 --experimentalDecorators tests/import/index",
+    "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
+    "build": "node scripts/build",
+    "watch": "node scripts/build --watch",
+    "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:asconfig && npm run test:transform",
+    "test:parser": "node --enable-source-maps tests/parser",
+    "test:compiler": "node --enable-source-maps --experimental-wasi-unstable-preview1 --no-warnings tests/compiler",
+    "test:browser": "node --enable-source-maps tests/browser",
     "test:asconfig": "cd tests/asconfig && npm run test",
-    "make": "npm run clean && npm test && npm run build && npm test",
-    "all": "npm run check && npm run make",
-    "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
-    "prepare-ci": "node scripts/prepublish --prepare-for-ci",
-    "prepublishOnly": "node scripts/prepublish",
-    "postpublish": "node scripts/postpublish",
-    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
-    "asbuild:untouched": "node bin/asc --config src/asconfig.json --target untouched",
-    "asbuild:optimized": "node bin/asc --config src/asconfig.json --target optimized",
+    "test:transform": "npm run test:transform:esm && npm run test:transform:cjs",
+    "test:transform:esm": "node bin/asc tests/compiler/empty --transform ./tests/transform/index.js --noEmit && node bin/asc tests/compiler/empty --transform ./tests/transform/simple.js --noEmit",
+    "test:transform:cjs": "node bin/asc tests/compiler/empty --transform ./tests/transform/cjs/index.js --noEmit && node bin/asc tests/compiler/empty --transform ./tests/transform/cjs/simple.js --noEmit",
+    "asbuild": "npm run asbuild:debug && npm run asbuild:release",
+    "asbuild:debug": "node bin/asc --config src/asconfig.json --target debug",
+    "asbuild:release": "node bin/asc --config src/asconfig.json --target release",
     "asbuild:rtraced": "node bin/asc --config src/asconfig.json --target rtraced",
-    "bootstrap": "npm run bootstrap:untouched && npm run bootstrap:optimized",
-    "bootstrap:untouched": "node bin/asc --config src/asconfig.json --target untouched && node bin/asc --config src/asconfig.json --target untouched-bootstrap --wasm out/assemblyscript.untouched.wasm && node bin/asc --config src/asconfig.json --target untouched-bootstrap --wasm out/assemblyscript.untouched-bootstrap.wasm && git --no-pager diff --no-index out/assemblyscript.untouched.wast out/assemblyscript.untouched-bootstrap.wast",
-    "bootstrap:optimized": "node bin/asc --config src/asconfig.json --target optimized && node bin/asc --config src/asconfig.json --target optimized-bootstrap --wasm out/assemblyscript.optimized.wasm && node bin/asc --config src/asconfig.json --target optimized-bootstrap --wasm out/assemblyscript.optimized-bootstrap.wasm && git --no-pager diff --no-index out/assemblyscript.optimized.wast out/assemblyscript.optimized-bootstrap.wast",
-    "bootstrap:rtraced": "node bin/asc --config src/asconfig.json --target rtraced && node bin/asc --config src/asconfig.json --target rtraced --wasm out/assemblyscript.rtraced.wasm",
-    "astest": "ts-node tests/bootstrap"
+    "bootstrap": "npm run bootstrap:debug && npm run bootstrap:release",
+    "bootstrap:debug": "node bin/asc --config src/asconfig.json --target debug && node bin/asc --config src/asconfig.json --target debug-bootstrap --wasm ./build/assemblyscript.debug.js && node bin/asc --config src/asconfig.json --target debug-bootstrap --wasm ./build/assemblyscript.debug-bootstrap.js && git --no-pager diff --no-index build/assemblyscript.debug.wast build/assemblyscript.debug-bootstrap.wast",
+    "bootstrap:release": "node bin/asc --config src/asconfig.json --target release && node bin/asc --config src/asconfig.json --target release-bootstrap --wasm ./build/assemblyscript.release.js && node bin/asc --config src/asconfig.json --target release-bootstrap --wasm ./build/assemblyscript.release-bootstrap.js && git --no-pager diff --no-index build/assemblyscript.release.wast build/assemblyscript.release-bootstrap.wast",
+    "bootstrap:rtraced": "node bin/asc --config src/asconfig.json --target rtraced && node bin/asc --config src/asconfig.json --target rtraced --wasm ./build/assemblyscript.rtraced.js"
   },
-  "releaseFiles": [
-    "lib/loader/index.d.ts",
-    "lib/loader/index.js",
-    "lib/loader/package.json",
-    "lib/loader/umd/index.d.ts",
-    "lib/loader/umd/index.js",
-    "lib/loader/umd/package.json",
-    "lib/loader/README.md",
-    "lib/rtrace/index.d.ts",
-    "lib/rtrace/index.js",
-    "lib/rtrace/package.json",
-    "lib/rtrace/umd/index.d.ts",
-    "lib/rtrace/umd/index.js",
-    "lib/rtrace/umd/package.json",
-    "lib/rtrace/README.md",
+  "files": [
     "bin/",
-    "cli/",
     "dist/",
-    "index.d.ts",
-    "index.js",
-    "LICENSE",
-    "NOTICE",
-    "package.json",
-    "package-lock.json",
-    "README.md",
     "std/",
-    "tsconfig-base.json"
+    "util/",
+    "lib/binaryen.js",
+    "lib/binaryen.d.ts",
+    "tsconfig-base.json",
+    "NOTICE"
   ],
   "funding": {
     "type": "opencollective",

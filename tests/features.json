@@ -1,21 +1,4 @@
 {
-  "mutable-globals": {
-  },
-  "bigint-integration": {
-  },
-  "nontrapping-f2i": {
-    "asc_flags": [
-      "--enable nontrapping-f2i"
-    ]
-  },
-  "simd": {
-    "asc_flags": [
-      "--enable simd"
-    ],
-    "v8_flags": [
-      "--experimental-wasm-simd"
-    ]
-  },
   "threads": {
     "asc_flags": [
       "--enable threads"

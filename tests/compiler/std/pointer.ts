@@ -21,7 +21,7 @@
   @inline set value(value: T) {
     if (isReference<T>()) {
       if (isManaged<T>()) ERROR("Unsafe unmanaged set of a managed object");
-      if (value === null) {
+      if (value == null) {
         memory.fill(changetype<usize>(this), 0, offsetof<T>());
       } else {
         memory.copy(changetype<usize>(this), changetype<usize>(value), offsetof<T>());
@@ -91,7 +91,7 @@ assert(sub.offset == 16);
 
 assert(one.offset == 8);
 var nextOne = ++one;
-assert(nextOne === one);
+assert(nextOne == one);
 assert(one.offset == 16);
 
 assert(two.offset == 24);

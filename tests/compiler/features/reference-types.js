@@ -1,4 +1,4 @@
-exports.preInstantiate = function(imports, exports) {
+export function preInstantiate(imports, exports) {
   imports.Reflect = Reflect;
   imports.console = {
     log: function(ref) {
@@ -20,4 +20,4 @@ exports.preInstantiate = function(imports, exports) {
     },
     someKey: "theKey"
   };
-};
+}

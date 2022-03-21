@@ -107,17 +107,17 @@ import { Array } from "./array";
   }
 
   @operator("==") private static __eq(left: String | null, right: String | null): bool {
-    if (left === right) return true;
-    if (left === null || right === null) return false;
-    var leftLength = left.length;
-    if (leftLength != right.length) return false;
+    if (changetype<usize>(left) == changetype<usize>(right)) return true;
+    if (changetype<usize>(left) == 0 || changetype<usize>(right) == 0) return false;
+    var leftLength = changetype<string>(left).length;
+    if (leftLength != changetype<string>(right).length) return false;
     // @ts-ignore: string <-> String
     return !compareImpl(left, 0, right, 0, leftLength);
   }
 
   @operator.prefix("!")
   private static __not(str: String | null): bool {
-    return str === null || !str.length;
+    return changetype<usize>(str) == 0 || !changetype<string>(str).length;
   }
 
   @operator("!=")
@@ -126,7 +126,7 @@ import { Array } from "./array";
   }
 
   @operator(">") private static __gt(left: String, right: String): bool {
-    if (left === right) return false;
+    if (changetype<usize>(left) == changetype<usize>(right)) return false;
     var leftLength  = left.length;
     if (!leftLength) return false;
     var rightLength = right.length;
@@ -141,7 +141,7 @@ import { Array } from "./array";
   }
 
   @operator("<") private static __lt(left: String, right: String): bool {
-    if (left === right) return false;
+    if (changetype<usize>(left) == changetype<usize>(right)) return false;
     var rightLength = right.length;
     if (!rightLength) return false;
     var leftLength  = left.length;
@@ -187,7 +187,7 @@ import { Array } from "./array";
 
   // TODO: implement full locale comparison with locales and Collator options
   localeCompare(other: String): i32 {
-    if (other === this) return 0; // compare pointers
+    if (changetype<usize>(other) == changetype<usize>(this)) return 0;
     var len: isize = this.length;
     var otherLen: isize = other.length;
     if (otherLen != len) return select(1, -1, len > otherLen);
@@ -468,9 +468,9 @@ import { Array } from "./array";
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     if (!limit) return changetype<String[]>(__newArray(0, alignof<String>(), idof<Array<String>>()));
-    if (separator === null) return [this];
+    if (changetype<usize>(separator) == 0) return [ this ];
     var length: isize = this.length;
-    var sepLen = separator.length;
+    var sepLen = changetype<string>(separator).length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
       if (!length) return changetype<String[]>(__newArray(0, alignof<String>(), idof<Array<String>>()));
@@ -494,7 +494,7 @@ import { Array } from "./array";
     }
     var result = changetype<String[]>(__newArray(0, alignof<String>(), idof<Array<String>>()));
     var end = 0, start = 0, i = 0;
-    while (~(end = this.indexOf(separator, start))) {
+    while (~(end = this.indexOf(changetype<string>(separator), start))) {
       let len = end - start;
       if (len > 0) {
         let out = changetype<String>(__new(<usize>len << 1, idof<String>()));

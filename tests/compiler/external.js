@@ -1,4 +1,4 @@
-exports.preInstantiate = function(imports, exports) {
+export function preInstantiate(imports, exports) {
   imports.external = {
     foo: function() { /* nop */ },
     "foo.bar": function() { /* nop */ },
@@ -8,4 +8,4 @@ exports.preInstantiate = function(imports, exports) {
     baz: function() { /* nop */ },
     "var": 3
   };
-};
+}

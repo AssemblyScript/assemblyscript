@@ -1,6 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "test": "node ../index.js --optimizeLevel 3"
+    "test": "node --enable-source-maps ../index.js --optimizeLevel 3"
   }
 }
