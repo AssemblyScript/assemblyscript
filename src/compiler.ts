@@ -39,6 +39,7 @@ import {
   getConstValueI64High,
   getConstValueF32,
   getConstValueF64,
+  getConstValueV128,
   getBlockChildCount,
   getBlockChildAt,
   getBlockName,
@@ -193,6 +194,7 @@ import {
   writeI64,
   writeF32,
   writeF64,
+  writeV128,
   uniqueMap,
   isPowerOf2,
   v128_zero,
@@ -1927,6 +1929,20 @@ export class Compiler extends DiagnosticEmitter {
           writeF64(getConstValueF64(value), buf, pos);
           pos += 8;
         }
+        break;
+      }
+      case <u32>TypeRef.V128: {
+        for (let i = 0; i < length; ++i) {
+          let value = values[i];
+          assert(getExpressionType(value) == elementTypeRef);
+          assert(getExpressionId(value) == ExpressionId.Const);
+          writeV128(getConstValueV128(value), buf, pos);
+          pos += 16;
+        }
+        break;
+      }
+      case <u32>TypeRef.None: {
+        // nothing to write
         break;
       }
       default: assert(false);
@@ -8269,11 +8285,15 @@ export class Compiler extends DiagnosticEmitter {
       let elementExpression = expressions[i];
       if (elementExpression.kind != NodeKind.OMITTED) {
         let expr = this.compileExpression(<Expression>elementExpression, elementType, Constraints.CONV_IMPLICIT);
-        let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
-        if (precomp) {
-          expr = precomp;
-        } else {
+        if (getExpressionType(expr) != elementType.toRef()) {
           isStatic = false;
+        } else {
+          let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+          if (precomp) {
+            expr = precomp;
+          } else {
+            isStatic = false;
+          }
         }
         values[i] = expr;
       } else {

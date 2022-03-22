@@ -2665,6 +2665,17 @@ export function getConstValueF64(expr: ExpressionRef): f64 {
   return binaryen._BinaryenConstGetValueF64(expr);
 }
 
+export function getConstValueV128(expr: ExpressionRef): Uint8Array {
+  let cArr = binaryen._malloc(16);
+  binaryen._BinaryenConstGetValueV128(expr, cArr);
+  let out = new Uint8Array(16);
+  for (let i = 0; i < 16; ++i) {
+    out[i] = binaryen.__i32_load8_u(cArr + i);
+  }
+  binaryen._free(cArr);
+  return out;
+}
+
 export function isConstZero(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
   var type = getExpressionType(expr);
