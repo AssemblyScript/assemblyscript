@@ -1421,7 +1421,7 @@ export class Program extends DiagnosticEmitter {
           if (elementsByName.has(name)) {
             elementsByName.set(alias, assert(elementsByName.get(name)));
           } else {
-            throw new Error("no such global element: " + name);
+            this.error(DiagnosticCode.Element_0_not_found, null, name);
           }
         }
       }
