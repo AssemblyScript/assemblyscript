@@ -1452,7 +1452,10 @@ export class Module {
         }
       }
       let singleType = getExpressionType(single);
-      assert(singleType == TypeRef.Unreachable || singleType == type);
+      if (singleType != TypeRef.Unreachable && singleType != type) {
+        // can happen when there was a diagnostic prior
+        return this.unreachable();
+      }
       return single;
     }
     return this.block(null, stmts, type);
