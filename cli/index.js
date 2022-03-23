@@ -416,7 +416,10 @@ export async function main(argv, options) {
         }
       } else {
         try {
-          transform = await import(new URL(filename, import.meta.url));
+          // FIXME: see https://github.com/guybedford/es-module-shims/issues/275
+          const baseUrl = import.meta.url;
+          baseUrl.hash = baseUrl.hash; // eslint-disable-line
+          transform = await import(new URL(filename, baseUrl));
           if (transform.default) transform = transform.default;
         } catch (e) {
           return prepareResult(e);
