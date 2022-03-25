@@ -26,7 +26,8 @@
  (global $resolve-binary/foo (mut i32) (i32.const 0))
  (global $resolve-binary/bar (mut i32) (i32.const 0))
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 27644))
+ (global $resolve-binary/baz (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 27652))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\08\00\00\00t\00r\00u\00e")
@@ -90,7 +91,7 @@
  (data (i32.const 11116) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00d\00i\00v")
  (data (i32.const 11148) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00r\00e\00m")
  (data (i32.const 11180) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00p\00o\00w")
- (data (i32.const 11216) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 11216) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
@@ -226,6 +227,12 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $resolve-binary/bar2
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+  global.get $resolve-binary/baz
   local.tee $0
   if
    local.get $0
@@ -808,10 +815,10 @@
   if
    unreachable
   end
-  i32.const 27648
+  i32.const 27664
   i32.const 0
   i32.store
-  i32.const 29216
+  i32.const 29232
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -822,7 +829,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 27648
+    i32.const 27664
     i32.add
     i32.const 0
     i32.store offset=4
@@ -840,7 +847,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 27648
+      i32.const 27664
       i32.add
       i32.const 0
       i32.store offset=96
@@ -858,13 +865,13 @@
     br $for-loop|0
    end
   end
-  i32.const 27648
-  i32.const 29220
+  i32.const 27664
+  i32.const 29236
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 27648
+  i32.const 27664
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (result i32)
@@ -949,7 +956,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 27644
+      i32.const 27652
       i32.lt_u
       if
        local.get $0
@@ -1049,7 +1056,7 @@
      unreachable
     end
     local.get $0
-    i32.const 27644
+    i32.const 27652
     i32.lt_u
     if
      local.get $0
@@ -1072,7 +1079,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 27644
+     i32.const 27652
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1677,11 +1684,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 11260
+  i32.const 11268
   i32.lt_s
   if
-   i32.const 27664
-   i32.const 27712
+   i32.const 27680
+   i32.const 27728
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2544,11 +2551,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 11260
+  i32.const 11268
   i32.lt_s
   if
-   i32.const 27664
-   i32.const 27712
+   i32.const 27680
+   i32.const 27728
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2682,27 +2689,30 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
-   block $resolve-binary/Bar
-    block $resolve-binary/Foo
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $resolve-binary/Foo $resolve-binary/Bar $invalid
+   block $resolve-binary/Baz
+    block $resolve-binary/Bar
+     block $resolve-binary/Foo
+      block $~lib/arraybuffer/ArrayBufferView
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $resolve-binary/Foo $resolve-binary/Bar $resolve-binary/Baz $invalid
+        end
+        return
        end
        return
       end
-      return
-     end
-     local.get $0
-     i32.load
-     local.tee $0
-     if
       local.get $0
-      call $byn-split-outlined-A$~lib/rt/itcms/__visit
+      i32.load
+      local.tee $0
+      if
+       local.get $0
+       call $byn-split-outlined-A$~lib/rt/itcms/__visit
+      end
+      return
      end
      return
     end
@@ -2724,7 +2734,7 @@
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 11260
+   i32.const 11268
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -2848,7 +2858,7 @@
    memory.size
    i32.const 16
    i32.shl
-   i32.const 27644
+   i32.const 27652
    i32.sub
    i32.const 1
    i32.shr_u
@@ -3607,7 +3617,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 11260
+   i32.const 11268
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -4014,13 +4024,51 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 11268
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 0
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
+   global.set $resolve-binary/baz
+   global.get $~lib/memory/__stack_pointer
+   global.get $resolve-binary/baz
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   local.tee $1
+   local.get $0
+   i32.store
+   local.get $1
+   local.get $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
    i32.const 20
    i32.add
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 27664
-  i32.const 27712
+  i32.const 27680
+  i32.const 27728
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -4033,11 +4081,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 11260
+  i32.const 11268
   i32.lt_s
   if
-   i32.const 27664
-   i32.const 27712
+   i32.const 27680
+   i32.const 27728
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4102,7 +4150,7 @@
     if
      i32.const 0
      local.get $1
-     i32.const 27644
+     i32.const 27652
      i32.lt_u
      local.get $1
      i32.load offset=8
