@@ -2582,7 +2582,7 @@ export class Module {
     var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
     var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
-      if (!this.isConstExpression(precomp)) return expr;
+      if (!this.isConstExpression(precomp)) return 0;
       assert(getExpressionType(precomp) == getExpressionType(expr));
     }
     return precomp;
