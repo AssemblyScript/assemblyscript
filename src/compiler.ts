@@ -5735,14 +5735,15 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var rightType: Type;
+    var signature = operatorInstance.signature;
+    var parameterTypes = signature.parameterTypes;
     if (operatorInstance.is(CommonFlags.INSTANCE)) {
-      assert(leftType.isStrictlyAssignableTo(operatorInstance.signature.parameterTypes[0]));
-      let classInstance = assert(operatorInstance.parent); assert(classInstance.kind == ElementKind.CLASS);
-      rightType = operatorInstance.signature.parameterTypes[0];
+      leftExpr = this.convertExpression(leftExpr, leftType, assert(signature.thisType), false, left);
+      rightType = parameterTypes[0];
     } else {
-      rightType = operatorInstance.signature.parameterTypes[1];
+      leftExpr = this.convertExpression(leftExpr, leftType, parameterTypes[0], false, left);
+      rightType = parameterTypes[1];
     }
-    leftExpr = this.convertExpression(leftExpr, leftType, operatorInstance.signature.parameterTypes[0], false, left);
     var rightExpr = this.compileExpression(right, rightType, Constraints.CONV_IMPLICIT);
     return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
   }

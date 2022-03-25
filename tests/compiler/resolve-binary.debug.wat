@@ -1,7 +1,7 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -45,10 +45,11 @@
  (global $resolve-binary/foo (mut i32) (i32.const 0))
  (global $resolve-binary/bar (mut i32) (i32.const 0))
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
+ (global $resolve-binary/baz (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 10192))
- (global $~lib/memory/__data_end i32 (i32.const 10236))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 26620))
- (global $~lib/memory/__heap_base i32 (i32.const 26620))
+ (global $~lib/memory/__data_end i32 (i32.const 10244))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 26628))
+ (global $~lib/memory/__heap_base i32 (i32.const 26628))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00\00\00\00\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00\00\00")
@@ -95,7 +96,7 @@
  (data (i32.const 10092) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00d\00i\00v\00\00\00\00\00\00\00")
  (data (i32.const 10124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00r\00e\00m\00\00\00\00\00\00\00")
  (data (i32.const 10156) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00p\00o\00w\00\00\00\00\00\00\00")
- (data (i32.const 10192) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 10192) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -5255,6 +5256,18 @@
  (func $resolve-binary/Bar#self (param $0 i32) (result i32)
   local.get $0
  )
+ (func $resolve-binary/Baz#add (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+ )
+ (func $resolve-binary/Baz#sub (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+ )
+ (func $resolve-binary/Baz.mul (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+ )
+ (func $resolve-binary/Baz.div (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+ )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   global.get $resolve-binary/foo
@@ -5272,6 +5285,13 @@
    call $~lib/rt/itcms/__visit
   end
   global.get $resolve-binary/bar2
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $resolve-binary/baz
   local.tee $1
   if
    local.get $1
@@ -5304,24 +5324,27 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $resolve-binary/Bar
-    block $resolve-binary/Foo
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $resolve-binary/Foo $resolve-binary/Bar $invalid
+   block $resolve-binary/Baz
+    block $resolve-binary/Bar
+     block $resolve-binary/Foo
+      block $~lib/arraybuffer/ArrayBufferView
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $resolve-binary/Foo $resolve-binary/Bar $resolve-binary/Baz $invalid
+        end
+        return
        end
        return
       end
+      local.get $0
+      local.get $1
+      call $~lib/arraybuffer/ArrayBufferView~visit
       return
      end
-     local.get $0
-     local.get $1
-     call $~lib/arraybuffer/ArrayBufferView~visit
      return
     end
     return
@@ -5338,8 +5361,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 26640
-   i32.const 26688
+   i32.const 26656
+   i32.const 26704
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6909,6 +6932,85 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  call $resolve-binary/Baz#constructor
+  global.set $resolve-binary/baz
+  global.get $resolve-binary/baz
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 42
+  call $resolve-binary/Baz#add
+  i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 363
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-binary/baz
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 42
+  call $resolve-binary/Baz#sub
+  global.get $resolve-binary/baz
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 366
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-binary/baz
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 42
+  call $resolve-binary/Baz.mul
+  i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 369
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-binary/baz
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 42
+  call $resolve-binary/Baz.div
+  global.get $resolve-binary/baz
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 372
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.add
@@ -7208,6 +7310,34 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
+  local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $resolve-binary/Baz#constructor (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
