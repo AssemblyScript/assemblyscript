@@ -136,7 +136,6 @@
   date.setUTCDate(31);
 
   // feb on leap year
-  trace("", 1, <f64>date.getTime());
   date.setUTCFullYear(2024);
   date.setUTCMonth(1);
   assert(date.getUTCMonth() == 2); // overflows to march due to day=31
