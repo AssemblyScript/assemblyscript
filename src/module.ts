@@ -2582,10 +2582,33 @@ export class Module {
     var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
     var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
-      assert(getExpressionId(precomp) == ExpressionId.Const);
+      if (!this.isConstExpression(precomp)) return expr;
       assert(getExpressionType(precomp) == getExpressionType(expr));
     }
     return precomp;
+  }
+
+  isConstExpression(expr: ExpressionRef, features: FeatureFlags = 0): bool {
+    switch (getExpressionId(expr)) {
+      case ExpressionId.Const:
+      case ExpressionId.RefNull:
+      case ExpressionId.RefFunc:
+      case ExpressionId.I31New: return true;
+      case ExpressionId.Binary: {
+        if (this.getFeatures() & FeatureFlags.ExtendedConst) {
+          switch (getBinaryOp(expr)) {
+            case BinaryOp.AddI32:
+            case BinaryOp.SubI32:
+            case BinaryOp.MulI32:
+            case BinaryOp.AddI64:
+            case BinaryOp.SubI64:
+            case BinaryOp.MulI64: return this.isConstExpression(getBinaryLeft(expr)) && this.isConstExpression(getBinaryRight(expr));
+          }
+        }
+        break;
+      }
+    }
+    return false;
   }
 
   // source map generation

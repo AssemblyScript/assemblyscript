@@ -907,7 +907,7 @@ function builtin_isConstant(ctx: BuiltinContext): ExpressionRef {
   var expr = compiler.compileExpression(ctx.operands[0], Type.auto);
   compiler.currentType = Type.bool;
   if (!mustPreserveSideEffects(expr, module.ref)) {
-    return module.i32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
+    return module.i32(module.isConstExpression(expr) ? 1 : 0);
   }
   return module.block(null, [
     module.maybeDrop(expr),
