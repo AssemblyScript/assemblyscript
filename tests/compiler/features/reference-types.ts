@@ -99,3 +99,8 @@ assert(otherFuncGlobal);
 // can assign any reference type to anyref
 
 anyGlobal = funcGlobal;
+
+// constant globals
+
+export const a: externref = null;
+export const b: funcref = null;

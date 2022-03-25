@@ -1158,16 +1158,14 @@ export class Compiler extends DiagnosticEmitter {
         this.currentFlow = previousFlow;
       }
 
-      // If not a constant, attempt to precompute
-      if (getExpressionId(initExpr) != ExpressionId.Const) {
+      // If not a constant expression, attempt to precompute
+      if (!module.isConstExpression(initExpr)) {
         if (isDeclaredConstant) {
-          if (getExpressionId(initExpr) != ExpressionId.Const) {
-            let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
-            if (precomp) {
-              initExpr = precomp;
-            } else {
-              initializeInStart = true;
-            }
+          let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+          if (precomp) {
+            initExpr = precomp;
+          } else {
+            initializeInStart = true;
           }
         } else {
           initializeInStart = true;

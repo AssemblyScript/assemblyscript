@@ -13,7 +13,9 @@
  (global $features/reference-types/externGlobalInit (mut externref) (ref.null extern))
  (global $features/reference-types/anyGlobal (mut anyref) (ref.null any))
  (global $features/reference-types/anyGlobalInit (mut anyref) (ref.null any))
- (global $features/reference-types/otherFuncGlobal (mut funcref) (ref.null func))
+ (global $features/reference-types/otherFuncGlobal (mut funcref) (ref.func $features/reference-types/someFunc))
+ (global $features/reference-types/a externref (ref.null extern))
+ (global $features/reference-types/b funcref (ref.null func))
  (global $~lib/memory/__data_end i32 (i32.const 92))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
  (global $~lib/memory/__heap_base i32 (i32.const 16476))
@@ -26,6 +28,8 @@
  (export "somethingReal" (func $features/reference-types/somethingReal))
  (export "somethingNull" (func $features/reference-types/somethingNull))
  (export "internal" (func $features/reference-types/internal))
+ (export "a" (global $features/reference-types/a))
+ (export "b" (global $features/reference-types/b))
  (export "memory" (memory $0))
  (start $~start)
  (func $features/reference-types/testLocal<funcref>
@@ -268,8 +272,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.null func
-  global.set $features/reference-types/funcGlobalInit
   global.get $features/reference-types/funcGlobalInit
   ref.is_null
   i32.eqz
@@ -311,8 +313,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.null extern
-  global.set $features/reference-types/externGlobalInit
   global.get $features/reference-types/externGlobalInit
   ref.is_null
   i32.eqz
@@ -354,8 +354,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.null any
-  global.set $features/reference-types/anyGlobalInit
   global.get $features/reference-types/anyGlobalInit
   ref.is_null
   i32.eqz
@@ -384,8 +382,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.func $features/reference-types/someFunc
-  global.set $features/reference-types/otherFuncGlobal
   global.get $features/reference-types/otherFuncGlobal
   ref.is_null
   if
