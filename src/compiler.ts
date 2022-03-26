@@ -7756,6 +7756,13 @@ export class Compiler extends DiagnosticEmitter {
           uniqueMap<string,Type>(flow.contextualTypeArguments)
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
+        if (functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range, "First-class built-ins"
+          );
+          return module.unreachable();
+        }
         if (contextualType.isExternalReference) {
           this.currentType = Type.funcref;
           return module.ref_func(functionInstance.internalName, TypeRef.Funcref); // TODO
