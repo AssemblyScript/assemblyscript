@@ -1,10 +1,14 @@
-const fs = require("fs");
-const path = require("path");
-const os = require("os");
-const glob = require("glob");
-const colorsUtil = require("../cli/util/colors");
-const optionsUtil = require("../cli/util/options");
-const diff = require("./util/diff");
+import fs from "fs";
+import path from "path";
+import os from "os";
+import { fileURLToPath } from "url";
+import glob from "glob";
+import { diff } from "../util/text.js";
+import { stdoutColors } from "../util/terminal.js";
+import * as optionsUtil from "../util/options.js";
+import { Program, Options, ASTBuilder } from "../dist/assemblyscript.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config = {
   "create": {
@@ -26,16 +30,16 @@ const argv = opts.arguments;
 
 if (args.help) {
   console.log([
-    colorsUtil.white("SYNTAX"),
-    "  " + colorsUtil.cyan("npm run test:parser --") + " [test1, test2 ...] [options]",
+    stdoutColors.white("SYNTAX"),
+    "  " + stdoutColors.cyan("npm run test:parser --") + " [test1, test2 ...] [options]",
     "",
-    colorsUtil.white("OPTIONS"),
+    stdoutColors.white("OPTIONS"),
     optionsUtil.help(config)
   ].join(os.EOL) + os.EOL);
   process.exit(0);
 }
 
-const basedir = path.join(__dirname, "parser");
+const basedir = path.join(dirname, "parser");
 
 // Get a list of all tests
 var tests = glob.sync("**/!(_*).ts", { cwd: basedir });
@@ -49,54 +53,44 @@ if (argv.length) {
   }
 }
 
-require("ts-node").register({
-  project: path.join(__dirname, "..", "src", "tsconfig.json"),
-  compilerHost: true,
-  files: true
-});
-require("../src/glue/js");
-
-const { Program, Options } = require("../src");
-const ASTBuilder = require("../src/extra/ast").ASTBuilder;
-
 var failures = 0;
 
-tests.forEach(filename => {
-  if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) return;
+for (const filename of tests) {
+  if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) continue;
 
-  console.log(colorsUtil.white("Testing parser/" + filename));
+  console.log(stdoutColors.white("Testing parser/" + filename));
 
-  var failed = false;
-  var program = new Program(new Options());
-  var parser = program.parser;
-  var sourceText = fs.readFileSync(basedir + "/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n");
+  let failed = false;
+  const program = new Program(new Options());
+  const parser = program.parser;
+  const sourceText = fs.readFileSync(basedir + "/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n");
   parser.parseFile(sourceText, filename, true);
-  var serializedSourceText = ASTBuilder.build(program.sources[0]);
-  var actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic +"\n").join("");
-  var fixture = filename + ".fixture.ts";
+  const serializedSourceText = ASTBuilder.build(program.sources[0]);
+  const actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic +"\n").join("");
+  const fixture = filename + ".fixture.ts";
 
   if (args.create) {
     fs.writeFileSync(basedir + "/" + fixture, actual, { encoding: "utf8" });
     console.log("Created\n");
   } else {
-    var expected = fs.readFileSync(basedir + "/" + fixture, { encoding: "utf8" }).replace(/\r\n/g, "\n");
-    var diffs = diff("parser/" + fixture, expected, actual);
+    const expected = fs.readFileSync(basedir + "/" + fixture, { encoding: "utf8" }).replace(/\r\n/g, "\n");
+    const diffs = diff("parser/" + fixture, expected, actual);
     if (diffs !== null) {
       failed = true;
       console.log(diffs);
-      console.log(colorsUtil.red("diff ERROR"));
+      console.log(stdoutColors.red("diff ERROR"));
     } else {
-      console.log(colorsUtil.green("diff OK"));
+      console.log(stdoutColors.green("diff OK"));
     }
   }
 
   console.log();
-  if (failed)
-    ++failures;
-});
+  if (failed) ++failures;
+}
 
 if (failures) {
   process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + failures + " parser tests failed");
-} else
-  console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
+  console.log(stdoutColors.red("ERROR: ") + failures + " parser tests failed");
+} else {
+  console.log("[ " + stdoutColors.white("SUCCESS") + " ]");
+}

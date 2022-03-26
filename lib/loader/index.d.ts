@@ -24,9 +24,6 @@ export interface ASUtil {
   memory?: WebAssembly.Memory;
   table?: WebAssembly.Table;
 
-  /** Explicit start function, if requested. */
-  _start(): void;
-
   /** Copies a string's value from the module's memory. */
   __getString(ptr: number): string;
   /** Copies an ArrayBuffer's value from the module's memory. */

@@ -1,8 +1,0 @@
-{
-  "features": [
-    "mutable-globals"
-  ],
-  "asc_flags": [
-    "--explicitStart"
-  ]
-}

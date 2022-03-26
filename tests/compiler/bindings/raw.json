@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--exportRuntime",
+    "--exportStart _start",
+    "--bindings raw"
+  ],
+  "features": [
+    "reference-types"
+  ]
+}

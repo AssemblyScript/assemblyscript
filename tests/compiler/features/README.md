@@ -1,1 +1,1 @@
-Test cases for post-MVP WebAssembly features.
+Test cases for future WebAssembly features.

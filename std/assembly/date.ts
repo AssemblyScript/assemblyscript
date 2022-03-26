@@ -1,5 +1,5 @@
 import { E_INVALIDDATE } from "util/error";
-import { now as Date_now } from "./bindings/Date";
+import { Date as Date_binding } from "./bindings/dom";
 
 // @ts-ignore: decorator
 @inline const
@@ -33,7 +33,7 @@ export class Date {
   }
 
   @inline static now(): i64 {
-    return <i64>Date_now();
+    return <i64>Date_binding.now();
   }
 
   // It can parse only ISO 8601 inputs like YYYY-MM-DDTHH:MM:SS.000Z
