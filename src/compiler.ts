@@ -7761,6 +7761,7 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Not_implemented_0,
             expression.range, "First-class built-ins"
           );
+          this.currentType = functionInstance.type;
           return module.unreachable();
         }
         if (contextualType.isExternalReference) {
