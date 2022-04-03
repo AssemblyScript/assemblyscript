@@ -137,6 +137,14 @@ export declare function mul<T>(left: T, right: T): T;
 export declare function div<T>(left: T, right: T): T;
 
 // @ts-ignore: decorator
+@builtin
+export declare function eq<T>(left: T, right: T): i32;
+
+// @ts-ignore: decorator
+@builtin
+export declare function ne<T>(left: T, right: T): i32;
+
+// @ts-ignore: decorator
 @unsafe @builtin
 export declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 
