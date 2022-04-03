@@ -161,6 +161,8 @@ export namespace BuiltinNames {
   export const reinterpret = "~lib/builtins/reinterpret";
   export const sqrt = "~lib/builtins/sqrt";
   export const trunc = "~lib/builtins/trunc";
+  export const eq = "~lib/builtins/eq";
+  export const ne = "~lib/builtins/ne";
   export const load = "~lib/builtins/load";
   export const store = "~lib/builtins/store";
   export const atomic_load = "~lib/builtins/atomic.load";
@@ -257,6 +259,15 @@ export namespace BuiltinNames {
   export const i64_div_u = "~lib/builtins/i64.div_u";
   export const f32_div = "~lib/builtins/f32.div";
   export const f64_div = "~lib/builtins/f64.div";
+
+  export const i32_eq = "~lib/builtins/i32.eq";
+  export const i64_eq = "~lib/builtins/i64.eq";
+  export const f32_eq = "~lib/builtins/f32.eq";
+  export const f64_eq = "~lib/builtins/f64.eq";
+  export const i32_ne = "~lib/builtins/i32.ne";
+  export const i64_ne = "~lib/builtins/i64.ne";
+  export const f32_ne = "~lib/builtins/f32.ne";
+  export const f64_ne = "~lib/builtins/f64.ne";
 
   export const i32_load8_s = "~lib/builtins/i32.load8_s";
   export const i32_load8_u = "~lib/builtins/i32.load8_u";
@@ -2435,6 +2446,116 @@ function builtin_div(ctx: BuiltinContext): ExpressionRef {
   return module.unreachable();
 }
 builtins.set(BuiltinNames.div, builtin_div);
+
+// eq<T?>(left: T, right: T) -> i32
+function builtin_eq(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2)) {
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var left = operands[0];
+  var arg0 = typeArguments
+    ? compiler.compileExpression(
+        left,
+        typeArguments[0],
+        Constraints.CONV_IMPLICIT
+      )
+    : compiler.compileExpression(operands[0], Type.auto);
+  var type = compiler.currentType;
+  if (type.isValue) {
+    let arg1: ExpressionRef;
+    if (!typeArguments && left.isNumericLiteral) {
+      // prefer right type
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type
+      );
+      if (compiler.currentType != type) {
+        arg0 = compiler.compileExpression(
+          left,
+          (type = compiler.currentType),
+          Constraints.CONV_IMPLICIT
+        );
+      }
+    } else {
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.CONV_IMPLICIT
+      );
+    }
+    if (type.isNumericValue) {
+      compiler.currentType = Type.i32;
+      return compiler.makeEq(arg0, arg1, type, ctx.reportNode);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "eq",
+    type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.eq, builtin_eq);
+
+// ne<T?>(left: T, right: T) -> i32
+function builtin_ne(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2)) {
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var left = operands[0];
+  var arg0 = typeArguments
+    ? compiler.compileExpression(
+        left,
+        typeArguments[0],
+        Constraints.CONV_IMPLICIT
+      )
+    : compiler.compileExpression(operands[0], Type.auto);
+  var type = compiler.currentType;
+  if (type.isValue) {
+    let arg1: ExpressionRef;
+    if (!typeArguments && left.isNumericLiteral) {
+      // prefer right type
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type
+      );
+      if (compiler.currentType != type) {
+        arg0 = compiler.compileExpression(
+          left,
+          (type = compiler.currentType),
+          Constraints.CONV_IMPLICIT
+        );
+      }
+    } else {
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.CONV_IMPLICIT
+      );
+    }
+    if (type.isNumericValue) {
+      compiler.currentType = Type.i32;
+      return compiler.makeNe(arg0, arg1, type, ctx.reportNode);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "ne",
+    type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.ne, builtin_ne);
 
 // === Atomics ================================================================================
 
@@ -6564,6 +6685,78 @@ function builtin_f64_div(ctx: BuiltinContext): ExpressionRef {
   return builtin_div(ctx);
 }
 builtins.set(BuiltinNames.f64_div, builtin_f64_div);
+
+// i32.eq -> eq<i32>
+function builtin_i32_eq(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_eq(ctx);
+}
+builtins.set(BuiltinNames.i32_eq, builtin_i32_eq);
+
+// i64.eq -> eq<i64>
+function builtin_i64_eq(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.i32;
+  return builtin_eq(ctx);
+}
+builtins.set(BuiltinNames.i64_eq, builtin_i64_eq);
+
+// f32.eq -> eq<f32>
+function builtin_f32_eq(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_eq(ctx);
+}
+builtins.set(BuiltinNames.f32_eq, builtin_f32_eq);
+
+// f64.eq -> eq<f64>
+function builtin_f64_eq(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.i32;
+  return builtin_eq(ctx);
+}
+builtins.set(BuiltinNames.f64_eq, builtin_f64_eq);
+
+// i32.ne -> ne<i32>
+function builtin_i32_ne(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_ne(ctx);
+}
+builtins.set(BuiltinNames.i32_ne, builtin_i32_ne);
+
+// i64.ne -> ne<i64>
+function builtin_i64_ne(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.i64;
+  return builtin_ne(ctx);
+}
+builtins.set(BuiltinNames.i64_ne, builtin_i64_ne);
+
+// f32.ne -> ne<f32>
+function builtin_f32_ne(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_ne(ctx);
+}
+builtins.set(BuiltinNames.f32_ne, builtin_f32_ne);
+
+// f64.ne-> ne<f64>
+function builtin_f64_ne(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.i64;
+  return builtin_ne(ctx);
+}
+builtins.set(BuiltinNames.f64_ne, builtin_f64_ne);
 
 // i32.load8_s -> <i32>load<i8>
 function builtin_i32_load8_s(ctx: BuiltinContext): ExpressionRef {

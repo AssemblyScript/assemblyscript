@@ -52,6 +52,10 @@ l = add<i8>(1, 2); assert(l == 3);
 l = sub<i8>(2, 1); assert(l == 1);
 l = mul<i8>(1, 2); assert(l == 2);
 l = div<i8>(6, 2); assert(l == 3);
+i = eq<i8>(1, 1); assert(i == 1);
+i = eq<i8>(1, 0); assert(i == 0);
+i = ne<i8>(1, 1); assert(i == 0);
+i = ne<i8>(1, 0); assert(i == 1);
 
 var v: u8;
 v = rotl<u8>(<u8>0b10001111, 3); assert(v == 0b01111100);
@@ -73,6 +77,10 @@ add<i32>(1, 2);
 sub<i32>(2, 1);
 mul<i32>(1, 2);
 div<i32>(6, 2);
+eq<i32>(1, 1);
+eq<i32>(1, 0);
+ne<i32>(1, 1);
+ne<i32>(1, 0);
 
 i = clz<i32>(1);
 i = ctz<i32>(1);
@@ -86,6 +94,11 @@ i = add<i32>(1, 2); assert(i == 3);
 i = sub<i32>(2, 1); assert(i == 1);
 i = mul<i32>(2, 3); assert(i == 6);
 i = div<i32>(6, 2); assert(i == 3);
+i = eq<i32>(1, 1); assert(i == 1);
+i = eq<i32>(1, 0); assert(i == 0);
+i = ne<i32>(1, 1); assert(i == 0);
+i = ne<i32>(1, 0); assert(i == 1);
+
 var I: i64;
 
 clz<i64>(1);
@@ -107,6 +120,10 @@ I = add<i64>(1, 2); assert(I == 3);
 I = sub<i64>(2, 1); assert(I == 1);
 I = mul<i64>(2, 3); assert(I == 6);
 I = div<i64>(6, 2); assert(I == 3);
+i = eq<i64>(1, 1); assert(i == 1);
+i = eq<i64>(1, 0); assert(i == 0);
+i = ne<i64>(1, 1); assert(i == 0);
+i = ne<i64>(1, 0); assert(i == 1);
 
 // floats
 
@@ -145,6 +162,10 @@ f = min<f32>(1.25, 2.5);
 f = nearest<f32>(1.25);
 f = sqrt<f32>(1.25);
 f = trunc<f32>(1.25);
+i = eq<f32>(1.5, 1.5); assert(i == 1);
+i = eq<f32>(1.5, 2.5); assert(i == 0);
+i = ne<f32>(1.5, 1.5); assert(i == 0);
+i = ne<f32>(1.5, 2.5); assert(i == 1);
 b = isNaN<f32>(1.25);
 b = isFinite<f32>(1.25);
 
@@ -167,6 +188,10 @@ min<f64>(1.25, 2.5);
 nearest<f64>(1.25);
 sqrt<f64>(1.25);
 trunc<f64>(1.25);
+eq<f64>(1.5, 1.5);
+eq<f64>(1.5, 2.5);
+ne<f64>(1.5, 1.5);
+ne<f64>(1.5, 2.5);
 assert(isNaN<f64>(1.25) == false);
 assert(isNaN<f64>(NaN) == true);
 assert(isFinite<f64>(1.25) == true);
@@ -189,6 +214,10 @@ F = min<f64>(1.25, 2.5);
 F = nearest<f64>(1.25);
 F = sqrt<f64>(1.25);
 F = trunc<f64>(1.25);
+i = eq<f64>(1.5, 1.5); assert(i == 1);
+i = eq<f64>(1.5, 2.5); assert(i == 0);
+i = ne<f64>(1.5, 1.5); assert(i == 0);
+i = ne<f64>(1.5, 2.5); assert(i == 1);
 b = isNaN<f64>(1.25);
 b = isFinite<f64>(1.25);
 
