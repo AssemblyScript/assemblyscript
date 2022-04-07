@@ -1697,7 +1697,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.readHexadecimalEscape(4, startIfTaggedTemplate);
   }
 
-  hasNoExpressionInLine(): bool {
+  hasNoMoreExpressionInLine(): bool {
     let pos = this.pos;
     const end = this.end;
     do {
