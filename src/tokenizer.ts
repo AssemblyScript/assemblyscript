@@ -1697,6 +1697,18 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.readHexadecimalEscape(4, startIfTaggedTemplate);
   }
 
+  hasNoExpressionInLine(): bool {
+    let pos = this.pos;
+    const end = this.end;
+    do {
+      const c = this.source.text.charCodeAt(pos);
+      if (isLineBreak(c)) return true;
+      if (!isWhiteSpace(c)) break;
+      pos++;
+    } while (pos < end);
+    return pos === end;
+  }
+
   private readExtendedUnicodeEscape(startIfTaggedTemplate: i32 = -1): string {
     var start = this.pos;
     var value = this.readHexInteger();

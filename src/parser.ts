@@ -938,7 +938,12 @@ export class Parser extends DiagnosticEmitter {
     } while (tn.skip(Token.COMMA));
 
     var ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
-    tn.skip(Token.SEMICOLON);
+    if (!tn.skip(Token.SEMICOLON) && !isFor && !tn.hasNoExpressionInLine()) {
+      this.error(
+        DiagnosticCode.Unexpected_token,
+        tn.range()
+      );
+    }
     return ret;
   }
 
@@ -1115,7 +1120,12 @@ export class Parser extends DiagnosticEmitter {
     }
 
     var ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
-    tn.skip(Token.SEMICOLON);
+    if (!tn.skip(Token.SEMICOLON) && !tn.hasNoExpressionInLine()) {
+      this.error(
+        DiagnosticCode.Unexpected_token,
+        tn.range()
+      );
+    }
     return ret;
   }
 
