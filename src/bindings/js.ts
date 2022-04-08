@@ -950,7 +950,7 @@ export class JSBuilder extends ExportsWalker {
   /** Lifts a WebAssembly value to a JavaScript value. */
   makeLiftFromValue(name: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
-      const clazz = assert(type.getClass());
+      const clazz = assert(type.getClassOrWrapper(this.program));
       if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
         sb.push("__liftBuffer(");
         this.needsLiftBuffer = true;
