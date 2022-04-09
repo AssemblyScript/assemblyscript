@@ -730,8 +730,8 @@ export class Compiler extends DiagnosticEmitter {
     module.addFunctionTable(
       "0",
       tableSize,
-      // use fixed size for non-imported tables
-      options.importTable ? Module.UNLIMITED_TABLE : tableSize,
+      // use fixed size for non-imported and non-exported tables
+      options.importTable || options.exportTable ? Module.UNLIMITED_TABLE : tableSize,
       functionTableNames,
       module.i32(tableBase)
     );
