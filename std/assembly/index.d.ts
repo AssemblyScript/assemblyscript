@@ -1887,7 +1887,7 @@ declare class Date {
   getUTCMilliseconds(): i32;
 
   setUTCFullYear(value: i32): void;
-  setUTCMonth(value: i32): void;
+  setUTCMonth(value: i32, day?: i32): void;
   setUTCDate(value: i32): void;
   setUTCHours(value: i32): void;
   setUTCMinutes(value: i32): void;
