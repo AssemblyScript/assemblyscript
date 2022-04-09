@@ -25,7 +25,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "type": "module",
-  "main": "index.js",
+  "main": "./umd/index.js",
   "types": "index.d.ts",
   "exports": {
     "import": "./index.js",
