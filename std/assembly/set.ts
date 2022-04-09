@@ -94,7 +94,7 @@ export class Set<T> {
 
   @operator("[]")
   has(key: T): bool {
-    return this.find(key, HASH<T>(key)) !== null;
+    return this.find(key, HASH<T>(key)) != null;
   }
 
   add(key: T): this {

@@ -1,5 +1,5 @@
 class OuterClass {}
-export namespace Outer {
+namespace Outer {
   export class InnerClass {}
   export namespace Inner {
     export class EvenInnerClass {}

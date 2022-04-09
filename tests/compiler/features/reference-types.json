@@ -1,7 +1,6 @@
 {
   "features": [
     "reference-types",
-    "exception-handling",
     "gc"
   ],
   "asc_flags": [

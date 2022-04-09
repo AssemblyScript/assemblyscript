@@ -71,7 +71,7 @@ export namespace TypeRef {
 export enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
   Atomics = 1 /* _BinaryenFeatureAtomics */,
-  MutableGloabls = 2 /* _BinaryenFeatureMutableGlobals */,
+  MutableGlobals = 2 /* _BinaryenFeatureMutableGlobals */,
   TruncSat = 4 /* _BinaryenFeatureNontrappingFPToInt */,
   SIMD = 8 /* _BinaryenFeatureSIMD128 */,
   BulkMemory = 16 /* _BinaryenFeatureBulkMemory */,
@@ -82,9 +82,10 @@ export enum FeatureFlags {
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
-  TypedFunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
+  FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
-  All = 32767 /* _BinaryenFeatureAll */
+  ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
+  All = 65535 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
@@ -1451,7 +1452,10 @@ export class Module {
         }
       }
       let singleType = getExpressionType(single);
-      assert(singleType == TypeRef.Unreachable || singleType == type);
+      if (singleType != TypeRef.Unreachable && singleType != type) {
+        // can happen when there was a diagnostic prior
+        return this.unreachable();
+      }
       return single;
     }
     return this.block(null, stmts, type);
@@ -1470,6 +1474,17 @@ export class Module {
     expression: ExpressionRef
   ): ExpressionRef {
     return binaryen._BinaryenDrop(this.ref, expression);
+  }
+
+  /** Drops an expression if it evaluates to a value. */
+  maybeDrop(
+    expression: ExpressionRef
+  ): ExpressionRef {
+    var type = binaryen._BinaryenExpressionGetType(expression);
+    if (type != TypeRef.None && type != TypeRef.Unreachable) {
+      return binaryen._BinaryenDrop(this.ref, expression);
+    }
+    return expression;
   }
 
   maybeDropCondition(condition: ExpressionRef, result: ExpressionRef): ExpressionRef {
@@ -1574,7 +1589,7 @@ export class Module {
     results: TypeRef,
     isReturn: bool = false
   ): ExpressionRef {
-    var cStr = this.allocStringCached(tableName !== null ? tableName : "0");
+    var cStr = this.allocStringCached(tableName != null ? tableName : "0");
     var cArr = allocPtrArray(operands);
     var ret = isReturn
       ? binaryen._BinaryenReturnCallIndirect(
@@ -2495,15 +2510,11 @@ export class Module {
     throw new Error("not implemented"); // JS glue overrides this
   }
 
-  toAsmjs(): string {
-    throw new Error("not implemented"); // JS glue overrides this
-  }
-
   private cachedStringsToPointers: Map<string,usize> = new Map();
   private cachedPointersToStrings: Map<usize,string | null> = new Map();
 
   allocStringCached(str: string | null): usize {
-    if (str === null) return 0;
+    if (str == null) return 0;
     var cached = this.cachedStringsToPointers;
     if (cached.has(str)) return changetype<usize>(cached.get(str));
     var ptr = allocString(str);
@@ -2571,10 +2582,33 @@ export class Module {
     var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
     var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
-      assert(getExpressionId(precomp) == ExpressionId.Const);
+      if (!this.isConstExpression(precomp)) return 0;
       assert(getExpressionType(precomp) == getExpressionType(expr));
     }
     return precomp;
+  }
+
+  isConstExpression(expr: ExpressionRef, features: FeatureFlags = 0): bool {
+    switch (getExpressionId(expr)) {
+      case ExpressionId.Const:
+      case ExpressionId.RefNull:
+      case ExpressionId.RefFunc:
+      case ExpressionId.I31New: return true;
+      case ExpressionId.Binary: {
+        if (this.getFeatures() & FeatureFlags.ExtendedConst) {
+          switch (getBinaryOp(expr)) {
+            case BinaryOp.AddI32:
+            case BinaryOp.SubI32:
+            case BinaryOp.MulI32:
+            case BinaryOp.AddI64:
+            case BinaryOp.SubI64:
+            case BinaryOp.MulI64: return this.isConstExpression(getBinaryLeft(expr)) && this.isConstExpression(getBinaryRight(expr));
+          }
+        }
+        break;
+      }
+    }
+    return false;
   }
 
   // source map generation
@@ -2620,15 +2654,8 @@ export function expandType(type: TypeRef): TypeRef[] {
   var cArr = binaryen._malloc(<usize>arity << 2);
   binaryen._BinaryenTypeExpand(type, cArr);
   var types = new Array<TypeRef>(arity);
-  if (!ASC_TARGET) {
-    let ptr = cArr >>> 2;
-    for (let i: u32 = 0; i < arity; ++i) {
-      types[i] = binaryen.HEAPU32[ptr + i];
-    }
-  } else {
-    for (let i: u32 = 0; i < arity; ++i) {
-      types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
-    }
+  for (let i: u32 = 0; i < arity; ++i) {
+    types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
   }
   binaryen._free(cArr);
   return types;
@@ -2664,13 +2691,34 @@ export function getConstValueF64(expr: ExpressionRef): f64 {
   return binaryen._BinaryenConstGetValueF64(expr);
 }
 
+export function getConstValueV128(expr: ExpressionRef): Uint8Array {
+  let cArr = binaryen._malloc(16);
+  binaryen._BinaryenConstGetValueV128(expr, cArr);
+  let out = new Uint8Array(16);
+  for (let i = 0; i < 16; ++i) {
+    out[i] = binaryen.__i32_load8_u(cArr + i);
+  }
+  binaryen._free(cArr);
+  return out;
+}
+
 export function isConstZero(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
   var type = getExpressionType(expr);
   if (type == TypeRef.I32) return getConstValueI32(expr) == 0;
-  if (type == TypeRef.I64) return getConstValueI64Low(expr) == 0 && getConstValueI64High(expr) == 0;
+  if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) == 0;
   if (type == TypeRef.F32) return getConstValueF32(expr) == 0;
   if (type == TypeRef.F64) return getConstValueF64(expr) == 0;
+  return false;
+}
+
+export function isConstNonZero(expr: ExpressionRef): bool {
+  if (getExpressionId(expr) != ExpressionId.Const) return false;
+  var type = getExpressionType(expr);
+  if (type == TypeRef.I32) return getConstValueI32(expr) != 0;
+  if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) != 0;
+  if (type == TypeRef.F32) return getConstValueF32(expr) != 0;
+  if (type == TypeRef.F64) return getConstValueF64(expr) != 0;
   return false;
 }
 
@@ -3040,8 +3088,8 @@ export function getSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffe
   return binaryen._BinaryenExpressionGetSideEffects(expr, module);
 }
 
-export function hasSideEffects(expr: ExpressionRef, module: ModuleRef): bool {
-  return getSideEffects(expr, module) != SideEffects.None;
+export function mustPreserveSideEffects(expr: ExpressionRef, module: ModuleRef): bool {
+  return (getSideEffects(expr, module) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != SideEffects.None;
 }
 
 // helpers
@@ -3051,12 +3099,8 @@ function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
   var len = u8s.length;
   var ptr = binaryen._malloc(len);
-  if (!ASC_TARGET) {
-    binaryen.HEAPU8.set(u8s, ptr);
-  } else {
-    for (let i = 0; i < len; ++i) {
-      binaryen.__i32_store8(ptr + i, u8s[i]);
-    }
+  for (let i = 0; i < len; ++i) {
+    binaryen.__i32_store8(ptr + i, u8s[i]);
   }
   return ptr;
 }
@@ -3065,15 +3109,11 @@ function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
   var len = i32s.length;
   var ptr = binaryen._malloc(len << 2);
-  if (!ASC_TARGET) {
-    binaryen.HEAP32.set(i32s, ptr >>> 2);
-  } else {
-    var idx = ptr;
-    for (let i = 0; i < len; ++i) {
-      let val = i32s[i];
-      binaryen.__i32_store(idx, val);
-      idx += 4;
-    }
+  var idx = ptr;
+  for (let i = 0; i < len; ++i) {
+    let val = i32s[i];
+    binaryen.__i32_store(idx, val);
+    idx += 4;
   }
   return ptr;
 }
@@ -3082,15 +3122,11 @@ function allocU32Array(u32s: u32[] | null): usize {
   if (!u32s) return 0;
   var len = u32s.length;
   var ptr = binaryen._malloc(len << 2);
-  if (!ASC_TARGET) {
-    binaryen.HEAPU32.set(u32s, ptr >>> 2);
-  } else {
-    var idx = ptr;
-    for (let i = 0; i < len; ++i) {
-      let val = u32s[i];
-      binaryen.__i32_store(idx, val);
-      idx += 4;
-    }
+  var idx = ptr;
+  for (let i = 0; i < len; ++i) {
+    let val = u32s[i];
+    binaryen.__i32_store(idx, val);
+    idx += 4;
   }
   return ptr;
 }
@@ -3101,15 +3137,11 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
   assert(ASC_TARGET != Target.WASM64);
   var len = ptrs.length;
   var ptr = binaryen._malloc(len << 2);
-  if (!ASC_TARGET) {
-    binaryen.HEAPU32.set(ptrs, ptr >>> 2);
-  } else {
-    var idx = ptr;
-    for (let i = 0, k = len; i < k; ++i) {
-      let val = ptrs[i];
-      binaryen.__i32_store(idx, <i32>val);
-      idx += 4;
-    }
+  var idx = ptr;
+  for (let i = 0, k = len; i < k; ++i) {
+    let val = ptrs[i];
+    binaryen.__i32_store(idx, <i32>val);
+    idx += 4;
   }
   return ptr;
 }
@@ -3136,21 +3168,15 @@ function stringLengthUTF8(str: string): usize {
 }
 
 function allocString(str: string | null): usize {
-  if (str === null) return 0;
+  if (str == null) return 0;
   var len = stringLengthUTF8(str);
   var ptr = binaryen._malloc(len + 1) >>> 0;
   var idx = ptr;
-  if (len === str.length) {
+  if (len == str.length) {
     // fast path when all chars are ascii
-    if (!ASC_TARGET) {
-      for (let i = 0, k = str.length; i < k; ++i) {
-        binaryen.HEAPU8[idx++] = str.charCodeAt(i);
-      }
-    } else {
-      for (let i = 0, k = str.length; i < k; ++i) {
-        let u = str.charCodeAt(i) >>> 0;
-        binaryen.__i32_store8(idx++, u as u8);
-      }
+    for (let i = 0, k = str.length; i < k; ++i) {
+      let u = str.charCodeAt(i) >>> 0;
+      binaryen.__i32_store8(idx++, u as u8);
     }
   } else {
     for (let i = 0, k = str.length; i < k; ++i) {
@@ -3182,15 +3208,11 @@ function allocString(str: string | null): usize {
 }
 
 function readBuffer(ptr: usize, len: i32): Uint8Array {
-  if (!ASC_TARGET) {
-    return binaryen.HEAPU8.slice(ptr, ptr + len);
-  } else {
-    var ret = new Uint8Array(len);
-    for (let i = 0; i < len; ++i) {
-      ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
-    }
-    return ret;
+  var ret = new Uint8Array(len);
+  for (let i = 0; i < len; ++i) {
+    ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
   }
+  return ret;
 }
 
 export function readString(ptr: usize): string | null {

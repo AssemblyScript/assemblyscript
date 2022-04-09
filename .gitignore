@@ -1,10 +1,11 @@
-npm-debug.*
-dist/
-docs/
 node_modules/
-out/
+*debug.log
+dist/
+build/
 raw/
 .history
 *.backup
 .vscode
 .idea
+cli/index.generated.js
+src/diagnosticMessages.generated.ts

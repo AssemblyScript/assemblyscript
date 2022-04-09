@@ -1,4 +1,4 @@
-import * as JSMath from "./bindings/Math";
+import { Math as JSMath } from "./bindings/dom";
 export { JSMath };
 
 import {

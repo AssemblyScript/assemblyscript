@@ -1,5 +1,5 @@
-Compiler frontend for node.js
-=============================
+Frontend for Node.js
+====================
 
 Usage
 -----
@@ -13,41 +13,46 @@ $> asc --help
 API
 ---
 
-The API accepts the same options as the CLI but also lets you override stdout and stderr and/or provide a callback. Example:
+The API accepts the same options as the CLI but also lets you override stdout and stderr. Example:
 
 ```js
-const asc = require("assemblyscript/cli/asc");
-asc.ready.then(() => {
-  asc.main([
-    "myModule.ts",
-    "--binaryFile", "myModule.wasm",
-    "--optimize",
-    "--sourceMap",
-    "--measure"
-  ], {
-    stdout: process.stdout,
-    stderr: process.stderr
-  }, function(err) {
-    if (err)
-      throw err;
-    ...
-  });
-});
+import asc from "assemblyscript/asc";
+
+const { error, stdout } = await asc.main([
+  "myModule.ts",
+  "--outFile", "myModule.wasm",
+  "--optimize",
+  "--sourceMap",
+  "--stats"
+]);
+if (error) {
+  console.log("Compilation failed: " + error.message);
+} else {
+  console.log(stdout.toString());
+}
 ```
+
+The result has the following structure:
+
+| Property | Description
+|----------|-------------
+| error    | Encountered error, if any
+| stdout   | Standard output stream
+| stderr   | Standard error stream
+| stats    | Statistics
+
+You can also compile a single source string directly (note that this API has limited functionality):
+
+```js
+import asc from "assemblyscript/asc";
+const { binary, text, stdout, stderr } = await asc.compileString(`...`, { optimize: 2 });
+...
+```
+
 
 Available command line options can also be obtained programmatically:
 
 ```js
-const options = require("assemblyscript/cli/asc.json");
-...
-```
-
-You can also compile a source string directly, for example in a browser environment:
-
-```js
-const asc = require("assemblyscript/cli/asc");
-asc.ready.then(() => {
-  const { binary, text, stdout, stderr } = asc.compileString(`...`, { optimize: 2 });
-});
+import { options } from "assemblyscript/asc";
 ...
 ```
