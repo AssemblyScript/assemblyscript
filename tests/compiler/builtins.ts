@@ -86,6 +86,7 @@ i = add<i32>(1, 2); assert(i == 3);
 i = sub<i32>(2, 1); assert(i == 1);
 i = mul<i32>(2, 3); assert(i == 6);
 i = div<i32>(6, 2); assert(i == 3);
+
 var I: i64;
 
 clz<i64>(1);
@@ -118,6 +119,10 @@ abs<f32>(1.25);
 ceil<f32>(1.25);
 copysign<f32>(1.25, 2.5);
 floor<f32>(1.25);
+add<f32>(1.5, 2.5);
+sub<f32>(2.5, 1.5);
+mul<f32>(1.5, 2.0);
+div<f32>(1.5, 0.5);
 max<f32>(1.25, 2.5);
 min<f32>(1.25, 2.5);
 nearest<f32>(1.25);
