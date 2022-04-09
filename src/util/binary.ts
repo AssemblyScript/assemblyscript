@@ -87,3 +87,14 @@ export function writeF64(value: f64, buffer: Uint8Array, offset: i32): void {
   writeI32(i64_low(valueI64), buffer, offset);
   writeI32(i64_high(valueI64), buffer, offset + 4);
 }
+
+/** Reads a 128-bit vector from the specified buffer. */
+export function readV128(buffer: Uint8Array, offset: i32): Uint8Array {
+  return buffer.slice(offset, offset + 16);
+}
+
+/** Writes a 128-bit vector to the specified buffer. */
+export function writeV128(value: Uint8Array, buffer: Uint8Array, offset: i32): void {
+  assert(value.length == 16);
+  buffer.set(value, offset);
+}

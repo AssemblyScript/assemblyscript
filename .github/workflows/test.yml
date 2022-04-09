@@ -20,14 +20,14 @@ jobs:
         else
           printf "\nOK: Distributions files have not been modified.\n";
         fi
-  test:
+  compiler:
     name: "Compiler (${{ matrix.os }}, node ${{ matrix.node_version }})"
     runs-on: ${{ matrix.os }}-latest
     needs: check
     strategy:
       matrix:
-        # TODO: re-enable "windows", see https://github.com/npm/cli/issues/4234
         os: ["ubuntu", "macos"]
+        # TODO: re-enable "windows", see https://github.com/npm/cli/issues/4234
         node_version: ["current", "lts_latest"]
     steps:
     - uses: actions/checkout@v1.0.0
@@ -36,24 +36,19 @@ jobs:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
-    - name: Check sources
-      run: npm run check
-    - name: Test sources
-      run: npm test
-    - name: Build distribution files
+    - name: Build
       run: npm run build
-    - name: Update entry file
-      run: npm run prepare-ci
-    - name: Test distribution
+    - name: Check
+      run: npm run check
+    - name: Test
       run: npm test
-    - name: Test browser build
-      run: node tests/browser-asc
-  test-bootstrap:
-    name: "Compiler (Bootstrap)"
+  bootstrap:
+    name: "Bootstrap (${{ matrix.target }})"
     runs-on: ubuntu-latest
     needs: check
+    strategy:
+      matrix:
+        target: ["debug", "release"]
     steps:
     - uses: actions/checkout@v1.0.0
     - uses: dcodeIO/setup-node-nvm@master
@@ -61,15 +56,13 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
-    - name: Bootstrap the compiler
-      run: npm run bootstrap
-    - name: Run compiler tests (untouched-bootstrap)
-      run: npm run test:compiler -- --wasm out/assemblyscript.untouched-bootstrap.wasm
-    - name: Run compiler tests (optimized-bootstrap)
-      run: npm run test:compiler -- --wasm out/assemblyscript.optimized-bootstrap.wasm
-  test-features:
+    - name: Build
+      run: npm run build
+    - name: Bootstrap
+      run: npm run bootstrap:${{ matrix.target }}
+    - name: Test
+      run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target }}-bootstrap.js
+  features:
     name: "Features"
     runs-on: ubuntu-latest
     needs: check
@@ -81,14 +74,14 @@ jobs:
         node-version: 18.0.0-v8-canary20211115037fd7ae8d
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
+    - name: Build
+      run: npm run build
     - name: Test experimental features
       env:
-        ASC_FEATURES: threads,reference-types,bigint-integration,gc
+        ASC_FEATURES: threads,reference-types,gc,exception-handling
       run: |
-        npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads std-wasi/process std-wasi/crypto
-  test-runtimes:
+        npm run test:compiler features/threads features/reference-types features/gc features/exception-handling
+  runtimes:
     name: "Runtimes"
     runs-on: ubuntu-latest
     needs: check
@@ -99,8 +92,8 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
+    - name: Build
+      run: npm run build
     - name: Test default allocator
       run: |
         cd tests/allocators/default
@@ -113,7 +106,7 @@ jobs:
         npm run build
         cd ..
         npm test stub
-  test-loader:
+  loader:
     name: "Loader"
     runs-on: ubuntu-latest
     needs: check
@@ -124,8 +117,8 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
+    - name: Build
+      run: npm run build
     - name: Test the loader
       run: |
         cd lib/loader

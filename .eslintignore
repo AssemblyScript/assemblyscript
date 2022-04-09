@@ -1,8 +1,7 @@
 dist/
-docs/
 lib/binaryen.js
 lib/parse/index.js
-out/
+build/
 raw/
 tests/parser/
 

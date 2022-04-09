@@ -144,7 +144,7 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
 // @ts-ignore: decorator
 @inline
 export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
-  if (dest === src) return;
+  if (dest == src) return;
   if (ASC_SHRINK_LEVEL < 1) {
     if (src - dest - n <= -(n << 1)) {
       memcpy(dest, src, n);

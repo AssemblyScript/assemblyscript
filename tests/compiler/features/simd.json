@@ -1,8 +1,0 @@
-{
-  "features": [
-    "simd"
-  ],
-  "asc_flags": [
-  ],
-  "skipInstantiate": true
-}

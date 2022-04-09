@@ -81,7 +81,7 @@ and post instantiation of the module, with the following export signatures:
 * **preInstantiate**(imports: `object`, exports: `object`): `void`<br />
   Can be used to populate imports with functionality required by the test. Note that `exports` is an
   empty object that will be populated with the actual exports after instantiation. Useful if an import
-  needs to call an export (usually in combination with the `--explicitStart` flag).
+  needs to call an export (usually in combination with the `--exportStart` flag).
 
 * **postInstantiate**(instance: `WebAssembly.Instance`): `void`<br />
   Can be used to execute custom test logic once the module is ready. Throwing an error will fail the
@@ -119,9 +119,8 @@ Tests for experimental features (usually enabled via the `--enable` CLI flag) ar
 Other
 -----
 
-Tests in other directories are not run automatically and do not need to be updated.
+Tests in other directories are not run automatically and do not need to be updated. There are also:
 
 * [tests/allocators](./allocators) contains the memory allocator test suite
-* [tests/binaryen](./binaryen) contains various triggers for earlier Binaryen issues
+* [tests/browser](./browser.js) checks typical browser usage via asc's API
 * [tests/tokenizer](./tokenizer.js) is a visual test for the tokenizer tokenizing itself
-* [tests/util-path](./util-path.js) is a sanity test for the path utility

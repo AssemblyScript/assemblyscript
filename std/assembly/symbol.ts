@@ -74,7 +74,7 @@ import { Map } from "./map";
   }
 
   static keyFor(sym: symbol): string | null {
-    return idToString !== null && idToString.has(changetype<usize>(sym))
+    return idToString != null && idToString.has(changetype<usize>(sym))
       ? idToString.get(changetype<usize>(sym))
       : null;
   }
@@ -95,7 +95,7 @@ import { Map } from "./map";
       case 10: { str = "toStringTag"; break; }
       case 11: { str = "unscopables"; break; }
       default: {
-        if (idToString !== null && idToString.has(id)) str = idToString.get(id);
+        if (idToString != null && idToString.has(id)) str = idToString.get(id);
         break;
       }
     }

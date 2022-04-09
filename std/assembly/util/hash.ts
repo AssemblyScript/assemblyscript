@@ -69,7 +69,7 @@ function mix(h: u32, key: u32): u32 {
 // @ts-ignore: decorator
 @inline
 function hashStr(key: string): u32 {
-  if (key === null) return XXH32_SEED;
+  if (changetype<usize>(key) == 0) return XXH32_SEED;
 
   var h: u32 = key.length << 1;
   var len: usize = h;

@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--explicitStart"
+    "--exportStart", "_start"
   ],
   "asc_wasi": {
     "args": [
@@ -14,8 +14,5 @@
       "THIRDENV": "thirdEnv"
     },
     "returnOnExit": true
-  },
-  "features": [
-    "bigint-integration"
-  ]
+  }
 }

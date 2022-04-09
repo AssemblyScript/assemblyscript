@@ -30,18 +30,6 @@ assert(
   "true"
 );
 
-// identity
-assert(
-  ("a" === "a").toString()
-  ==
-  "true"
-);
-assert(
-  ("a" !== "a").toString()
-  ==
-  "false"
-);
-
 // assignment
 var a: i32;
 var f: f64;
@@ -350,4 +338,37 @@ assert(
   ==
   bar2
 );
-assert(bar === bar2);
+assert(bar == bar2);
+
+// overload with varying right type
+class Baz {
+  @operator("+")
+  add(other: i32): i32 {
+    return other;
+  }
+  @operator("-")
+  sub(other: i32): Baz {
+    return this;
+  }
+  @operator("*")
+  static mul(left: Baz, right: i32): i32 {
+    return right;
+  }
+  @operator("/")
+  static div(left: Baz, right: i32): Baz {
+    return left;
+  }
+}
+var baz = new Baz();
+assert(
+  (baz + 42) == 42
+);
+assert(
+  (baz - 42) == baz
+);
+assert(
+  (baz * 42) == 42
+);
+assert(
+  (baz / 42) == baz
+);

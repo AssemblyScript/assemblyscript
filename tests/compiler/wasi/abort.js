@@ -1,7 +1,7 @@
 var memory;
 var failed;
 
-exports.preInstantiate = function(imports, exports) {
+export function preInstantiate(imports, exports) {
   imports["wasi_snapshot_preview1"] = {
     fd_write: function(fd, iov, iov_len, nptr) {
       if (fd != 2) failed = "unexpected fd: " + fd;
@@ -15,9 +15,9 @@ exports.preInstantiate = function(imports, exports) {
     }
   };
   if (failed) throw Error(failed);
-};
+}
 
-exports.postInstantiate = function(instance) {
+export function postInstantiate(instance) {
   const exports = instance.exports;
   memory = exports.memory;
   var thrown = false;
@@ -28,4 +28,4 @@ exports.postInstantiate = function(instance) {
   }
   if (!thrown) failed = "unexpected missing throw";
   if (failed) throw Error(failed);
-};
+}

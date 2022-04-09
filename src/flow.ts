@@ -64,8 +64,11 @@ import {
   getCallTarget,
   getLocalSetIndex,
   getIfCondition,
-  getConstValueI64High,
-  getUnaryValue
+  getUnaryValue,
+  getCallOperandAt,
+  getCallOperandCount,
+  isConstZero,
+  isConstNonZero
 } from "./module";
 
 import {
@@ -83,6 +86,10 @@ import {
 import {
   uniqueMap
 } from "./util";
+
+import {
+  BuiltinNames
+} from "./builtins";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
@@ -237,7 +244,7 @@ export class Flow {
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
-    return this.inlineFunction !== null;
+    return this.inlineFunction != null;
   }
 
   /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
@@ -335,7 +342,7 @@ export class Flow {
     }
     var local: Local;
     if (except) {
-      if (temps !== null && temps.length > 0) {
+      if (temps && temps.length > 0) {
         for (let i = 0, k = temps.length; i < k; ++i) {
           if (!except.has(temps[i].index)) {
             local = temps[i];
@@ -351,7 +358,7 @@ export class Flow {
       }
       local = parentFunction.addLocal(type);
     } else {
-      if (temps !== null && temps.length > 0) {
+      if (temps && temps.length > 0) {
         local = assert(temps.pop());
         local.type = type;
         local.flags = CommonFlags.NONE;
@@ -447,7 +454,7 @@ export class Flow {
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
     var scopedLocals = this.scopedLocals;
-    if (scopedLocals !== null && scopedLocals.has(name)) return assert(scopedLocals.get(name));
+    if (scopedLocals && scopedLocals.has(name)) return assert(scopedLocals.get(name));
     return null;
   }
 
@@ -554,7 +561,7 @@ export class Flow {
     var current: Flow | null = this;
     do {
       let scope = current.scopedLocals;
-      if (scope !== null && scope.has(name)) return assert(scope.get(name));
+      if (scope && scope.has(name)) return assert(scope.get(name));
       current = current.parent;
     } while (current);
     var localsByName = this.parentFunction.localsByName;
@@ -617,7 +624,7 @@ export class Flow {
             // guaranteed by super
             field.parent != actualClass ||
             // has field initializer
-            field.initializerNode !== null ||
+            field.initializerNode ||
             // is initialized as a ctor parameter
             field.prototype.parameterIndex != -1 ||
             // is safe to initialize with zero
@@ -754,7 +761,7 @@ export class Flow {
 
     if (thisFlags & FlowFlags.CONTINUES) { // nothing can change that
       newFlags |= FlowFlags.CONTINUES;
-    } else if (other.continueLabel === this.continueLabel) {
+    } else if (other.continueLabel == this.continueLabel) {
       if (otherFlags & FlowFlags.CONTINUES) {
         newFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
       } else {
@@ -956,9 +963,9 @@ export class Flow {
     var numThisLocalFlags = before.localFlags.length;
     var numOtherLocalFlags = after.localFlags.length;
     var parentFunction = before.parentFunction;
-    assert(parentFunction === after.parentFunction);
+    assert(parentFunction == after.parentFunction);
     var localsByIndex = parentFunction.localsByIndex;
-    assert(localsByIndex === after.parentFunction.localsByIndex);
+    assert(localsByIndex == after.parentFunction.localsByIndex);
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       let local = localsByIndex[i];
       let type = local.type;
@@ -1046,17 +1053,11 @@ export class Flow {
       }
       case ExpressionId.If: {
         let ifFalse = getIfFalse(expr);
-        if (!ifFalse) break;
-        if (getExpressionId(ifFalse) == ExpressionId.Const) {
+        if (ifFalse && isConstZero(ifFalse)) {
           // Logical AND: (if (condition ifTrue 0))
           // the only way this had become true is if condition and ifTrue are true
-          if (
-            (getExpressionType(ifFalse) == TypeRef.I32 && getConstValueI32(ifFalse) == 0) ||
-            (getExpressionType(ifFalse) == TypeRef.I64 && getConstValueI64Low(ifFalse) == 0 && getConstValueI64High(ifFalse) == 0)
-          ) {
-            this.inheritNonnullIfTrue(getIfCondition(expr), iff);
-            this.inheritNonnullIfTrue(getIfTrue(expr), iff);
-          }
+          this.inheritNonnullIfTrue(getIfCondition(expr), iff);
+          this.inheritNonnullIfTrue(getIfTrue(expr), iff);
         }
         break;
       }
@@ -1072,46 +1073,58 @@ export class Flow {
       }
       case ExpressionId.Binary: {
         switch (getBinaryOp(expr)) {
-          case BinaryOp.EqI32: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
-              this.inheritNonnullIfTrue(right, iff); // TRUE == right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
-              this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
-            }
-            break;
-          }
+          case BinaryOp.EqI32:
           case BinaryOp.EqI64: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
+            if (isConstNonZero(left)) {
               this.inheritNonnullIfTrue(right, iff); // TRUE == right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 && getConstValueI64High(right) != 0)) {
+            } else if (isConstNonZero(right)) {
               this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
             }
             break;
           }
-          case BinaryOp.NeI32: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
-              this.inheritNonnullIfTrue(right, iff); // FALSE != right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
-              this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
-            }
-            break;
-          }
+          case BinaryOp.NeI32:
           case BinaryOp.NeI64: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
+            if (isConstZero(left)) {
               this.inheritNonnullIfTrue(right, iff); // FALSE != right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
+            } else if (isConstZero(right)) {
               this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
             }
             break;
           }
+        }
+        break;
+      }
+      case ExpressionId.Call: {
+        // handle string eq/ne/not overloads
+        let name = getCallTarget(expr);
+        if (name == BuiltinNames.String_eq) {
+          assert(getCallOperandCount(expr) == 2);
+          let left = getCallOperandAt(expr, 0);
+          let right = getCallOperandAt(expr, 1);
+          if (isConstNonZero(left)) {
+            this.inheritNonnullIfTrue(right, iff); // TRUE == right -> right must have been true
+          } else if (isConstNonZero(right)) {
+            this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
+          }
+        } else if (name == BuiltinNames.String_ne) {
+          assert(getCallOperandCount(expr) == 2);
+          let left = getCallOperandAt(expr, 0);
+          let right = getCallOperandAt(expr, 1);
+          if (isConstZero(left)) {
+            this.inheritNonnullIfTrue(right, iff); // FALSE != right -> right must have been true
+          } else if (isConstZero(right)) {
+            this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
+          }
+        } else if (name == BuiltinNames.String_not) {
+          assert(getCallOperandCount(expr) == 1);
+          this.inheritNonnullIfFalse(getCallOperandAt(expr, 0), iff); // !value -> value must have been false
+        } else if (name == BuiltinNames.tostack) {
+          assert(getCallOperandCount(expr) == 1);
+          this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff);
         }
         break;
       }
@@ -1139,66 +1152,70 @@ export class Flow {
       }
       case ExpressionId.If: {
         let ifTrue = getIfTrue(expr);
-        if (getExpressionId(ifTrue) == ExpressionId.Const) {
-          let ifFalse = getIfFalse(expr);
-          if (!ifFalse) break;
+        let ifFalse = getIfFalse(expr);
+        if (ifFalse && isConstNonZero(ifTrue)) {
           // Logical OR: (if (condition 1 ifFalse))
           // the only way this had become false is if condition and ifFalse are false
-          let exprType = getExpressionType(ifTrue);
-          if (
-            (exprType == TypeRef.I32 && getConstValueI32(ifTrue) != 0) ||
-            (exprType == TypeRef.I64 && (getConstValueI64Low(ifTrue) != 0 || getConstValueI64High(ifTrue) != 0))
-          ) {
-            this.inheritNonnullIfFalse(getIfCondition(expr), iff);
-            this.inheritNonnullIfFalse(getIfFalse(expr), iff);
-          }
-
+          this.inheritNonnullIfFalse(getIfCondition(expr), iff);
+          this.inheritNonnullIfFalse(getIfFalse(expr), iff);
         }
         break;
       }
       case ExpressionId.Binary: {
         switch (getBinaryOp(expr)) {
           // remember: we want to know how the _entire_ expression became FALSE (!)
-          case BinaryOp.EqI32: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) == 0) {
-              this.inheritNonnullIfTrue(right, iff); // FALSE == right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) == 0) {
-              this.inheritNonnullIfTrue(left, iff); // left == FALSE -> left must have been true
-            }
-            break;
-          }
+          case BinaryOp.EqI32:
           case BinaryOp.EqI64: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI64Low(left) == 0 && getConstValueI64High(left) == 0) {
-              this.inheritNonnullIfTrue(right, iff); // FALSE == right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI64Low(right) == 0 && getConstValueI64High(right) == 0) {
-              this.inheritNonnullIfTrue(left, iff); // left == FALSE -> left must have been true
+            if (isConstZero(left)) {
+              this.inheritNonnullIfTrue(right, iff); // !(FALSE == right) -> right must have been true
+            } else if (isConstZero(right)) {
+              this.inheritNonnullIfTrue(left, iff); // !(left == FALSE) -> left must have been true
             }
             break;
           }
-          case BinaryOp.NeI32: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && getConstValueI32(left) != 0) {
-              this.inheritNonnullIfTrue(right, iff); // TRUE != right -> right must have been true
-            } else if (getExpressionId(right) == ExpressionId.Const && getConstValueI32(right) != 0) {
-              this.inheritNonnullIfTrue(left, iff); // left != TRUE -> left must have been true
-            }
-            break;
-          }
+          case BinaryOp.NeI32:
           case BinaryOp.NeI64: {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
-            if (getExpressionId(left) == ExpressionId.Const && (getConstValueI64Low(left) != 0 || getConstValueI64High(left) != 0)) {
-              this.inheritNonnullIfTrue(right, iff); // TRUE != right -> right must have been true for this to become false
-            } else if (getExpressionId(right) == ExpressionId.Const && (getConstValueI64Low(right) != 0 || getConstValueI64High(right) != 0)) {
-              this.inheritNonnullIfTrue(left, iff); // left != TRUE -> left must have been true for this to become false
+            if (isConstNonZero(left)) {
+              this.inheritNonnullIfTrue(right, iff); // !(TRUE != right) -> right must have been true
+            } else if (isConstNonZero(right)) {
+              this.inheritNonnullIfTrue(left, iff); // !(left != TRUE) -> left must have been true
             }
             break;
           }
+        }
+        break;
+      }
+      case ExpressionId.Call: {
+        // handle string eq/ne/not overloads
+        let name = getCallTarget(expr);
+        if (name == BuiltinNames.String_eq) {
+          assert(getCallOperandCount(expr) == 2);
+          let left = getCallOperandAt(expr, 0);
+          let right = getCallOperandAt(expr, 1);
+          if (isConstZero(left)) {
+            this.inheritNonnullIfTrue(right, iff); // !(FALSE == right) -> right must have been true
+          } else if (isConstZero(right)) {
+            this.inheritNonnullIfTrue(left, iff); // !(left == FALSE) -> left must have been true
+          }
+        } else if (name == BuiltinNames.String_ne) {
+          assert(getCallOperandCount(expr) == 2);
+          let left = getCallOperandAt(expr, 0);
+          let right = getCallOperandAt(expr, 1);
+          if (isConstNonZero(left)) {
+            this.inheritNonnullIfTrue(right, iff); // !(TRUE != right) -> right must have been true
+          } else if (isConstNonZero(right)) {
+            this.inheritNonnullIfTrue(left, iff); // !(left != TRUE) -> left must have been true
+          }
+        } else if (name == BuiltinNames.String_not) {
+          assert(getCallOperandCount(expr) == 1);
+          this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff); // !(!value) -> value must have been true
+        } else if (name == BuiltinNames.tostack) {
+          assert(getCallOperandCount(expr) == 1);
+          this.inheritNonnullIfFalse(getCallOperandAt(expr, 0), iff);
         }
         break;
       }

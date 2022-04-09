@@ -39,6 +39,7 @@ import {
   getConstValueI64High,
   getConstValueF32,
   getConstValueF64,
+  getConstValueV128,
   getBlockChildCount,
   getBlockChildAt,
   getBlockName,
@@ -56,10 +57,7 @@ import {
 
 import {
   CommonFlags,
-  INSTANCE_DELIMITER,
   STATIC_DELIMITER,
-  GETTER_PREFIX,
-  SETTER_PREFIX,
   INDEX_SUFFIX,
   CommonNames,
   Feature,
@@ -74,6 +72,7 @@ import {
   Class,
   Element,
   ElementKind,
+  DeclaredElement,
   Enum,
   Field,
   FunctionPrototype,
@@ -119,6 +118,7 @@ import {
   AssertionKind,
   SourceKind,
   FunctionTypeNode,
+  DecoratorNode,
 
   Statement,
   BlockStatement,
@@ -194,10 +194,12 @@ import {
   writeI64,
   writeF32,
   writeF64,
+  writeV128,
   uniqueMap,
   isPowerOf2,
   v128_zero,
-  readI32
+  readI32,
+  isIdentifier
 } from "./util";
 
 import {
@@ -210,6 +212,7 @@ import {
 
 /** Compiler options. */
 export class Options {
+  constructor() { /* as internref */ }
 
   /** WebAssembly target. Defaults to {@link Target.WASM32}. */
   target: Target = Target.WASM32;
@@ -235,8 +238,8 @@ export class Options {
   exportTable: bool = false;
   /** If true, generates information necessary for source maps. */
   sourceMap: bool = false;
-  /** If true, generates an explicit start function. */
-  explicitStart: bool = false;
+  /** If given, exports the start function instead of calling it implicitly. */
+  exportStart: string | null = null;
   /** Static memory start offset. */
   memoryBase: u32 = 0;
   /** Static table start offset. */
@@ -244,7 +247,10 @@ export class Options {
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
   /** Features to activate by default. These are the finished proposals. */
-  features: Feature = Feature.MUTABLE_GLOBALS | Feature.SIGN_EXTENSION;
+  features: Feature = Feature.MUTABLE_GLOBALS
+                    | Feature.SIGN_EXTENSION
+                    | Feature.NONTRAPPING_F2I
+                    | Feature.BULK_MEMORY;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
@@ -266,6 +272,8 @@ export class Options {
   optimizeLevelHint: i32 = 0;
   /** Hinted shrink level. Not applied by the compiler itself. */
   shrinkLevelHint: i32 = 0;
+  /** Hinted basename. */
+  basenameHint: string = "output";
 
   /** Tests if the target is WASM64 or, otherwise, WASM32. */
   get isWasm64(): bool {
@@ -338,8 +346,6 @@ export const enum RuntimeFeatures {
 
 /** Exported names of compiler-generated elements. */
 export namespace ExportNames {
-  /** Name of the explicit start function, if applicable. */
-  export const start = "_start"; // match WASI
   /** Name of the argumentsLength varargs helper global. */
   export const argumentsLength = "__argumentsLength";
   /** Name of the alternative argumentsLength setter function. */
@@ -401,6 +407,8 @@ export class Compiler extends DiagnosticEmitter {
   doneModuleExports: Set<Element> = new Set();
   /** Shadow stack reference. */
   shadowStack!: ShadowStackPass;
+  /** Whether the module has custom function exports. */
+  hasCustomFunctionExports: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -428,7 +436,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var featureFlags: FeatureFlags = 0;
     if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
-    if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
+    if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGlobals;
     if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.TruncSat;
     if (options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
     if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD;
@@ -439,6 +447,9 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.MULTI_VALUE)) featureFlags |= FeatureFlags.MultiValue;
     if (options.hasFeature(Feature.GC)) featureFlags |= FeatureFlags.GC;
     if (options.hasFeature(Feature.MEMORY64)) featureFlags |= FeatureFlags.Memory64;
+    if (options.hasFeature(Feature.FUNCTION_REFERENCES)) featureFlags |= FeatureFlags.FunctionReferences;
+    if (options.hasFeature(Feature.RELAXED_SIMD)) featureFlags |= FeatureFlags.RelaxedSIMD;
+    if (options.hasFeature(Feature.EXTENDED_CONST)) featureFlags |= FeatureFlags.ExtendedConst;
     module.setFeatures(featureFlags);
 
     // set up the main start function
@@ -484,15 +495,8 @@ export class Compiler extends DiagnosticEmitter {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.compileFile(file);
-        this.compileExports(file);
+        this.compileModuleExports(file);
       }
-    }
-
-    // set up module exports
-    // TODO: for (let file of this.program.filesByName.values()) {
-    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
-      let file = unchecked(_values[i]);
-      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
 
     // compile and export runtime if requested
@@ -743,10 +747,15 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = program.isWasi || options.explicitStart;
-    if (!startIsEmpty || explicitStart) {
+    var exportStart = options.exportStart;
+    if (program.isWasi && !exportStart) {
+      // Try to do the right thing for WASI. If the module has custom function
+      // exports it is likely a reactor, otherwise it is likely a command.
+      exportStart = this.hasCustomFunctionExports ? "_initialize" : "_start";
+    }
+    if (!startIsEmpty || exportStart != null) {
       let signature = startFunctionInstance.signature;
-      if (!startIsEmpty && explicitStart) {
+      if (!startIsEmpty && exportStart != null) {
         module.addGlobal(BuiltinNames.started, TypeRef.I32, true, module.i32(0));
         startFunctionBody.unshift(
           module.global_set(BuiltinNames.started, module.i32(1))
@@ -766,8 +775,17 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(startFunctionBody)
       );
       startFunctionInstance.finalize(module, funcRef);
-      if (!explicitStart) module.setStart(funcRef);
-      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
+      if (exportStart == null) module.setStart(funcRef);
+      else {
+        if (!isIdentifier(exportStart) || module.hasExport(exportStart)) {
+          this.error(
+            DiagnosticCode.Start_function_name_0_is_invalid_or_conflicts_with_another_export,
+            this.program.nativeRange, exportStart
+          );
+        } else {
+          module.addFunctionExport(startFunctionInstance.internalName, exportStart);
+        }
+      }
     }
 
     // Run custom passes
@@ -783,114 +801,38 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Exports ==================================================================================
 
-  /** Applies the respective module exports for the specified file. */
-  private ensureModuleExports(file: File): void {
+  /** Compiles the respective module exports for the specified entry file. */
+  private compileModuleExports(file: File): void {
     var exports = file.exports;
     if (exports) {
       // TODO: for (let [elementName, element] of exports) {
       for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
         let elementName = unchecked(_keys[i]);
         let element = assert(exports.get(elementName));
-        this.ensureModuleExport(elementName, element);
+        this.compileModuleExport(elementName, element);
       }
     }
     var exportsStar = file.exportsStar;
     if (exportsStar)  {
       for (let i = 0, k = exportsStar.length; i < k; ++i) {
-        this.ensureModuleExports(exportsStar[i]);
+        this.compileModuleExports(exportsStar[i]);
       }
     }
   }
 
-  /** Applies the respective module export(s) for the specified element. */
-  private ensureModuleExport(name: string, element: Element, prefix: string = ""): void {
+  /** Compiles the respective module export(s) for the specified element. */
+  private compileModuleExport(name: string, element: DeclaredElement, prefix: string = ""): void {
     var module = this.module;
     switch (element.kind) {
-
-      // traverse instances
       case ElementKind.FUNCTION_PROTOTYPE: {
+        // obtain the default instance
         let functionPrototype = <FunctionPrototype>element;
-        let functionInstances = functionPrototype.instances;
-        if (functionInstances !== null && functionInstances.size > 0) {
-          // TODO: for (let instance of instances.values()) {
-          for (let _values = Map_values(functionInstances), i = 0, k = _values.length; i < k; ++i) {
-            let instance = unchecked(_values[i]);
-            let instanceName = name;
-            if (instance.is(CommonFlags.GENERIC)) {
-              let fullName = instance.internalName;
-              instanceName += fullName.substring(fullName.lastIndexOf("<"));
-            }
-            this.ensureModuleExport(instanceName, instance, prefix);
+        if (!functionPrototype.is(CommonFlags.GENERIC)) {
+          let functionInstance = this.resolver.resolveFunction(functionPrototype, null);
+          if (functionInstance) {
+            this.compileModuleExport(name, functionInstance, prefix);
           }
-        } else if (functionPrototype.is(CommonFlags.GENERIC)) {
-          if (this.options.pedantic) {
-            this.pedantic(
-              DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
-              functionPrototype.identifierNode.range
-            );
-          }
-        }
-        break;
-      }
-      case ElementKind.CLASS_PROTOTYPE: {
-        let classPrototype = <ClassPrototype>element;
-        let classInstances = classPrototype.instances;
-        if (classInstances !== null && classInstances.size > 0) {
-          // TODO: for (let instance of instances.values()) {
-          for (let _values = Map_values(classInstances), i = 0, k = _values.length; i < k; ++i) {
-            let instance = unchecked(_values[i]);
-            let instanceName = name;
-            if (instance.is(CommonFlags.GENERIC)) {
-              let fullName = instance.internalName;
-              instanceName += fullName.substring(fullName.lastIndexOf("<"));
-            }
-            this.ensureModuleExport(instanceName, instance, prefix);
-          }
-        } else if (classPrototype.is(CommonFlags.GENERIC)) {
-          if (this.options.pedantic) {
-            this.pedantic(
-              DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
-              classPrototype.identifierNode.range
-            );
-          }
-        }
-        break;
-      }
-      case ElementKind.PROPERTY_PROTOTYPE: {
-        let propertyInstance = (<PropertyPrototype>element).instance;
-        if (propertyInstance) this.ensureModuleExport(name, propertyInstance, prefix);
-        break;
-      }
-
-      // export concrete elements
-      case ElementKind.GLOBAL: {
-        let global = <Global>element;
-        let isConst = global.is(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
-        if (!isConst && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-          this.error(
-            DiagnosticCode.Cannot_export_a_mutable_global,
-            global.identifierNode.range
-          );
-        } else if (global.is(CommonFlags.COMPILED)) {
-          let exportName = prefix + name;
-          if (!module.hasExport(exportName)) {
-            module.addGlobalExport(element.internalName, exportName);
-          }
-        }
-        break;
-      }
-      case ElementKind.ENUMVALUE: {
-        let enumValue = <EnumValue>element;
-        if (!enumValue.isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-          this.error(
-            DiagnosticCode.Cannot_export_a_mutable_global,
-            enumValue.identifierNode.range
-          );
-        } else if (enumValue.is(CommonFlags.COMPILED)) {
-          let exportName = prefix + name;
-          if (!module.hasExport(exportName)) {
-            module.addGlobalExport(element.internalName, exportName);
-          }
+          return;
         }
         break;
       }
@@ -903,108 +845,79 @@ export class Compiler extends DiagnosticEmitter {
             functionInstance = this.ensureVarargsStub(functionInstance);
             this.runtimeFeatures |= RuntimeFeatures.setArgumentsLength;
           }
+          this.compileFunction(functionInstance);
           if (functionInstance.is(CommonFlags.COMPILED)) {
             let exportName = prefix + name;
             if (!module.hasExport(exportName)) {
               module.addFunctionExport(functionInstance.internalName, exportName);
+              this.hasCustomFunctionExports = true;
               if (signature.hasManagedOperands) {
                 this.shadowStack.noteExport(exportName, signature.getManagedOperandIndices());
               }
             }
+            return;
           }
         }
         break;
       }
-      case ElementKind.PROPERTY: {
-        let propertyInstance = <Property>element;
-        let getterInstance = propertyInstance.getterInstance;
-        if (getterInstance) this.ensureModuleExport(GETTER_PREFIX + name, getterInstance, prefix);
-        let setterInstance = propertyInstance.setterInstance;
-        if (setterInstance) this.ensureModuleExport(SETTER_PREFIX + name, setterInstance, prefix);
-        break;
-      }
-      case ElementKind.FIELD: {
-        let fieldInstance = <Field>element;
-        if (element.is(CommonFlags.COMPILED)) {
-          let getterExportName = prefix + GETTER_PREFIX + name;
-          if (this.compileFieldGetter(fieldInstance) && !module.hasExport(getterExportName)) {
-            module.addFunctionExport(fieldInstance.internalGetterName, getterExportName);
-            let signature = fieldInstance.internalGetterSignature;
-            if (signature.hasManagedOperands) {
-              this.shadowStack.noteExport(getterExportName, signature.getManagedOperandIndices());
-            }
-          }
-          if (!element.is(CommonFlags.READONLY)) {
-            let setterExportName = prefix + SETTER_PREFIX + name;
-            if (this.compileFieldSetter(fieldInstance) && !module.hasExport(setterExportName)) {
-              module.addFunctionExport(fieldInstance.internalSetterName, setterExportName);
-              let signature = fieldInstance.internalSetterSignature;
-              if (signature.hasManagedOperands) {
-                this.shadowStack.noteExport(setterExportName, signature.getManagedOperandIndices());
-              }
-            }
-          }
+      case ElementKind.GLOBAL: {
+        let global = <Global>element;
+        let isConst = global.is(CommonFlags.CONST) || global.is(CommonFlags.STATIC | CommonFlags.READONLY);
+        if (!isConst && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+          this.warning(
+            DiagnosticCode.Feature_0_is_not_enabled,
+            global.identifierNode.range, "mutable-globals"
+          );
+          return;
         }
-        break;
-      }
-      case ElementKind.CLASS: {
-        let classInstance = <Class>element;
-        // make the class name itself represent its runtime id
-        if (!classInstance.type.isUnmanaged) {
-          let module = this.module;
-          let internalName = classInstance.internalName;
-
-          if (!this.doneModuleExports.has(element)) {
-            module.addGlobal(internalName, TypeRef.I32, false, module.i32(classInstance.id));
-            this.doneModuleExports.add(element);
-          }
-
+        this.compileGlobal(global);
+        if (global.is(CommonFlags.COMPILED)) {
           let exportName = prefix + name;
           if (!module.hasExport(exportName)) {
-            module.addGlobalExport(internalName, exportName);
+            module.addGlobalExport(element.internalName, exportName);
           }
+          return;
         }
         break;
       }
-
-      // just traverse members below
-      case ElementKind.ENUM:
-      case ElementKind.INTERFACE_PROTOTYPE:
-      case ElementKind.NAMESPACE:
-      case ElementKind.TYPEDEFINITION:
-      case ElementKind.INDEXSIGNATURE: break;
-
-      default: assert(false); // unexpected module export
-    }
-
-    // traverse members
-    var members = element.members;
-    if (members) {
-      let subPrefix = prefix + name + (element.kind == ElementKind.CLASS
-        ? INSTANCE_DELIMITER
-        : STATIC_DELIMITER
-      );
-      if (element.kind == ElementKind.NAMESPACE) {
-        let implicitExport = element.is(CommonFlags.SCOPED);
-        // TODO: for (let [memberName, member] of members) {
-        for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
-          let memberName = unchecked(_keys[i]);
-          let member = assert(members.get(memberName));
-          if (implicitExport || member.is(CommonFlags.EXPORT)) {
-            this.ensureModuleExport(memberName, member, subPrefix);
+      case ElementKind.ENUM: {
+        this.compileEnum(<Enum>element);
+        let members = element.members;
+        if (members) {
+          let subPrefix = prefix + name + STATIC_DELIMITER;
+          for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+            let memberName = unchecked(_keys[i]);
+            let member = assert(members.get(memberName));
+            if (!member.is(CommonFlags.PRIVATE)) {
+              this.compileModuleExport(memberName, member, subPrefix);
+            }
           }
         }
-      } else {
-        // TODO: for (let [memberName, member] of members) {
-        for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
-          let memberName = unchecked(_keys[i]);
-          let member = assert(members.get(memberName));
-          if (!member.is(CommonFlags.PRIVATE)) {
-            this.ensureModuleExport(memberName, member, subPrefix);
-          }
+        return;
+      }
+      case ElementKind.ENUMVALUE: {
+        let enumValue = <EnumValue>element;
+        if (!enumValue.isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+          this.error(
+            DiagnosticCode.Feature_0_is_not_enabled,
+            enumValue.identifierNode.range, "mutable-globals"
+          );
+          return;
         }
+        if (enumValue.is(CommonFlags.COMPILED)) {
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(element.internalName, exportName);
+          }
+          return;
+        }
+        break;
       }
     }
+    this.warning(
+      DiagnosticCode.Only_variables_functions_and_enums_become_WebAssembly_module_exports,
+      element.identifierNode.range
+    );
   }
 
   // === Elements =================================================================================
@@ -1054,26 +967,6 @@ export class Compiler extends DiagnosticEmitter {
           let element = unchecked(_values[i]);
           this.compileElement(element);
         }
-      }
-    }
-  }
-
-  /** Compiles a file's exports. */
-  compileExports(file: File): void {
-    var exports = file.exports;
-    if (exports) {
-      // TODO: for (let element of exports.values()) {
-      for (let _values = Map_values(exports), i = 0, k = _values.length; i < k; ++i) {
-        let element = unchecked(_values[i]);
-        if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileElement(element);
-      }
-    }
-    var exportsStar = file.exportsStar;
-    if (exportsStar) {
-      for (let i = 0, k = exportsStar.length; i < k; ++i) {
-        let exportStar = unchecked(exportsStar[i]);
-        this.compileFile(exportStar);
-        this.compileExports(exportStar);
       }
     }
   }
@@ -1233,8 +1126,8 @@ export class Compiler extends DiagnosticEmitter {
 
       // Constant global or mutable globals enabled
       if (isDeclaredConstant || this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-        global.set(CommonFlags.MODULE_IMPORT);
         mangleImportName(global, global.declaration);
+        this.program.markModuleImport(mangleImportName_moduleName, mangleImportName_elementName, global);
         module.addGlobalImport(
           global.internalName,
           mangleImportName_moduleName,
@@ -1273,16 +1166,14 @@ export class Compiler extends DiagnosticEmitter {
         this.currentFlow = previousFlow;
       }
 
-      // If not a constant, attempt to precompute
-      if (getExpressionId(initExpr) != ExpressionId.Const) {
+      // If not a constant expression, attempt to precompute
+      if (!module.isConstExpression(initExpr)) {
         if (isDeclaredConstant) {
-          if (getExpressionId(initExpr) != ExpressionId.Const) {
-            let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
-            if (precomp) {
-              initExpr = precomp;
-            } else {
-              initializeInStart = true;
-            }
+          let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+          if (precomp) {
+            initExpr = precomp;
+          } else {
+            initializeInStart = true;
           }
         } else {
           initializeInStart = true;
@@ -1548,14 +1439,22 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-      // cannot have an annotated external name
-      if (instance.hasDecorator(DecoratorFlags.EXTERNAL)) {
+      // cannot have an annotated external name or code
+      if (instance.hasAnyDecorator(DecoratorFlags.EXTERNAL | DecoratorFlags.EXTERNAL_JS)) {
         let decoratorNodes = instance.decoratorNodes;
-        let decorator = assert(findDecorator(DecoratorKind.EXTERNAL, decoratorNodes));
-        this.error(
-          DiagnosticCode.Decorator_0_is_not_valid_here,
-          decorator.range, "external"
-        );
+        let decorator: DecoratorNode | null;
+        if (decorator = findDecorator(DecoratorKind.EXTERNAL, decoratorNodes)) {
+          this.error(
+            DiagnosticCode.Decorator_0_is_not_valid_here,
+            decorator.range, "external"
+          );
+        }
+        if (decorator = findDecorator(DecoratorKind.EXTERNAL_JS, decoratorNodes)) {
+          this.error(
+            DiagnosticCode.Decorator_0_is_not_valid_here,
+            decorator.range, "external.js"
+          );
+        }
       }
 
       // compile body in this function's context
@@ -1581,8 +1480,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // imported function
     } else if (instance.is(CommonFlags.AMBIENT)) {
-      instance.set(CommonFlags.MODULE_IMPORT);
       mangleImportName(instance, declarationNode); // TODO: check for duplicates
+      this.program.markModuleImport(mangleImportName_moduleName, mangleImportName_elementName, instance);
       module.addFunctionImport(
         instance.internalName,
         mangleImportName_moduleName,
@@ -1711,7 +1610,7 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // check that super has been called if this is a derived class
-      if (classInstance.base !== null && !flow.is(FlowFlags.CALLS_SUPER)) {
+      if (classInstance.base && !flow.is(FlowFlags.CALLS_SUPER)) {
         this.error(
           DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
           instance.prototype.declaration.range
@@ -1909,7 +1808,7 @@ export class Compiler extends DiagnosticEmitter {
     if (setterInstance) {
       let ret = this.compileFunction(setterInstance);
       let getterInstance = instance.getterInstance;
-      if (getterInstance !== null && getterInstance.is(CommonFlags.COMPILED) && setterInstance.is(CommonFlags.COMPILED)) {
+      if (getterInstance && getterInstance.is(CommonFlags.COMPILED) && setterInstance.is(CommonFlags.COMPILED)) {
         instance.set(CommonFlags.COMPILED);
       }
       return ret;
@@ -2038,6 +1937,20 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
+      case <u32>TypeRef.V128: {
+        for (let i = 0; i < length; ++i) {
+          let value = values[i];
+          assert(getExpressionType(value) == elementTypeRef);
+          assert(getExpressionId(value) == ExpressionId.Const);
+          writeV128(getConstValueV128(value), buf, pos);
+          pos += 16;
+        }
+        break;
+      }
+      case <u32>TypeRef.None: {
+        // nothing to write
+        break;
+      }
       default: assert(false);
     }
     return pos;
@@ -2152,7 +2065,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.FIELDDECLARATION: {
         let element = this.program.getElementByDeclaration(<FieldDeclaration>statement);
-        if (element !== null && element.kind == ElementKind.GLOBAL) { // static
+        if (element && element.kind == ElementKind.GLOBAL) { // static
           if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileGlobal(<Global>element);
         }
         break;
@@ -2160,7 +2073,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.EXPORT: {
         let exportStatement = <ExportStatement>statement;
         let internalPath = exportStatement.internalPath;
-        if (internalPath !== null) {
+        if (internalPath != null) {
           this.compileFileByPath(internalPath, assert(exportStatement.path));
         }
         break;
@@ -2270,6 +2183,10 @@ export class Compiler extends DiagnosticEmitter {
           "Inner type alias"
         );
         stmt = module.unreachable();
+        break;
+      }
+      case NodeKind.MODULE: {
+        stmt = module.nop();
         break;
       }
       default: {
@@ -4058,16 +3975,13 @@ export class Compiler extends DiagnosticEmitter {
         leftType = this.currentType;
 
         // check operator overload
-        if (operator == Token.EQUALS_EQUALS) { // can't overload '==='
-          let classReference = leftType.getClassOrWrapper(this.program);
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.EQ);
-            if (overload) {
-              expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-              break;
-            }
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.EQ);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
+            break;
           }
-          // fall back to compare by value
         }
 
         rightExpr = this.compileExpression(right, leftType);
@@ -4097,16 +4011,13 @@ export class Compiler extends DiagnosticEmitter {
         leftType = this.currentType;
 
         // check operator overload
-        if (operator == Token.EXCLAMATION_EQUALS) { // can't overload '!=='
-          let classReference = leftType.getClass();
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.NE);
-            if (overload) {
-              expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
-              break;
-            }
+        let classReference = leftType.getClass();
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.NE);
+          if (overload) {
+            expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
+            break;
           }
-          // fall back to compare by value
         }
 
         rightExpr = this.compileExpression(right, leftType);
@@ -5830,14 +5741,15 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var rightType: Type;
+    var signature = operatorInstance.signature;
+    var parameterTypes = signature.parameterTypes;
     if (operatorInstance.is(CommonFlags.INSTANCE)) {
-      assert(leftType.isStrictlyAssignableTo(operatorInstance.signature.parameterTypes[0]));
-      let classInstance = assert(operatorInstance.parent); assert(classInstance.kind == ElementKind.CLASS);
-      rightType = operatorInstance.signature.parameterTypes[0];
+      leftExpr = this.convertExpression(leftExpr, leftType, assert(signature.thisType), false, left);
+      rightType = parameterTypes[0];
     } else {
-      rightType = operatorInstance.signature.parameterTypes[1];
+      leftExpr = this.convertExpression(leftExpr, leftType, parameterTypes[0], false, left);
+      rightType = parameterTypes[1];
     }
-    leftExpr = this.convertExpression(leftExpr, leftType, operatorInstance.signature.parameterTypes[0], false, left);
     var rightExpr = this.compileExpression(right, rightType, Constraints.CONV_IMPLICIT);
     return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
   }
@@ -6009,7 +5921,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // Cannot assign to readonly fields except in constructors if there's no initializer
         if (fieldInstance.is(CommonFlags.READONLY)) {
-          if (!isConstructor || initializerNode !== null) {
+          if (!isConstructor || initializerNode) {
             this.error(
               DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
               valueExpression.range, fieldInstance.internalName
@@ -6463,7 +6375,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let classInstance = <Class>target;
         let typeArguments = classInstance.getTypeArgumentsTo(this.program.functionPrototype);
-        if (typeArguments !== null && typeArguments.length > 0) {
+        if (typeArguments && typeArguments.length > 0) {
           let ftype = typeArguments[0];
           signature = ftype.getSignature();
           functionArg = this.compileExpression(expression.expression, ftype, Constraints.CONV_IMPLICIT);
@@ -7838,7 +7750,7 @@ export class Compiler extends DiagnosticEmitter {
         let functionPrototype = <FunctionPrototype>target;
         let typeParameterNodes = functionPrototype.typeParameterNodes;
 
-        if (typeParameterNodes !== null && typeParameterNodes.length != 0) {
+        if (typeParameterNodes && typeParameterNodes.length != 0) {
           this.error(
             DiagnosticCode.Type_argument_expected,
             expression.range
@@ -7852,6 +7764,14 @@ export class Compiler extends DiagnosticEmitter {
           uniqueMap<string,Type>(flow.contextualTypeArguments)
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
+        if (functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range, "First-class built-ins"
+          );
+          this.currentType = functionInstance.type;
+          return module.unreachable();
+        }
         if (contextualType.isExternalReference) {
           this.currentType = Type.funcref;
           return module.ref_func(functionInstance.internalName, TypeRef.Funcref); // TODO
@@ -7883,7 +7803,7 @@ export class Compiler extends DiagnosticEmitter {
       let namedType = <NamedTypeNode>isType;
       if (!(namedType.isNullable || namedType.hasTypeArguments)) {
         let element = this.resolver.resolveTypeName(namedType.name, flow.actualFunction, ReportMode.SWALLOW);
-        if (element !== null && element.kind == ElementKind.CLASS_PROTOTYPE) {
+        if (element && element.kind == ElementKind.CLASS_PROTOTYPE) {
           let prototype = <ClassPrototype>element;
           if (prototype.is(CommonFlags.GENERIC)) {
             return this.makeInstanceofClass(expression, prototype);
@@ -8156,7 +8076,7 @@ export class Compiler extends DiagnosticEmitter {
     var stringInstance = this.program.stringInstance;
     var stringType = stringInstance.type;
 
-    if (tag === null) {
+    if (!tag) {
       // Shortcut if just a (multi-line) string
       if (numParts == 1) {
         return this.ensureStaticString(parts[0]);
@@ -8286,7 +8206,7 @@ export class Compiler extends DiagnosticEmitter {
           let parameterTypes = instance.signature.parameterTypes;
           if (parameterTypes.length) {
             let first = parameterTypes[0].getClass();
-            if (first !== null && !first.extends(tsaArrayInstance.prototype)) {
+            if (first && !first.extends(tsaArrayInstance.prototype)) {
               arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ stringType ]));
             }
           }
@@ -8354,7 +8274,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // handle static arrays
     let contextualClass = contextualType.getClass();
-    if (contextualClass !== null && contextualClass.extends(program.staticArrayPrototype)) {
+    if (contextualClass && contextualClass.extends(program.staticArrayPrototype)) {
       return this.compileStaticArrayLiteral(expression, contextualType, constraints);
     }
 
@@ -8380,11 +8300,15 @@ export class Compiler extends DiagnosticEmitter {
       let elementExpression = expressions[i];
       if (elementExpression.kind != NodeKind.OMITTED) {
         let expr = this.compileExpression(<Expression>elementExpression, elementType, Constraints.CONV_IMPLICIT);
-        let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
-        if (precomp) {
-          expr = precomp;
-        } else {
+        if (getExpressionType(expr) != elementType.toRef()) {
           isStatic = false;
+        } else {
+          let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+          if (precomp) {
+            expr = precomp;
+          } else {
+            isStatic = false;
+          }
         }
         values[i] = expr;
       } else {
@@ -8639,6 +8563,13 @@ export class Compiler extends DiagnosticEmitter {
     }
     var classType = classReference.type;
     this.currentType = classType.nonNullableType;
+    if (classReference.kind == ElementKind.INTERFACE) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        expression.range, "Interface hidden classes"
+      );
+      return module.unreachable();
+    }
     if (classReference.is(CommonFlags.ABSTRACT)) {
       this.error(
         DiagnosticCode.Cannot_create_an_instance_of_an_abstract_class,
@@ -8680,7 +8611,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberKey = _keys[i];
         let member = assert(members.get(memberKey));
-        if (member !== null && member.kind == ElementKind.FIELD) {
+        if (member && member.kind == ElementKind.FIELD) {
           omittedFields.add(<Field>member); // incl. private/protected
         }
       }
@@ -8841,7 +8772,7 @@ export class Compiler extends DiagnosticEmitter {
     var classReference: Class | null;
     if (
       !typeArguments &&
-      (classReference = contextualType.classReference) !== null &&
+      (classReference = contextualType.classReference) &&
       classReference.prototype == classPrototype &&
       classReference.is(CommonFlags.GENERIC)
     ) {
@@ -9335,7 +9266,7 @@ export class Compiler extends DiagnosticEmitter {
           let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
           if (overload) {
             let isInstance = overload.is(CommonFlags.INSTANCE);
-            if (tempLocal !== null && !isInstance) { // revert: static overload simply returns
+            if (tempLocal && !isInstance) { // revert: static overload simply returns
               getValue = getLocalSetValue(getValue);
               flow.freeTempLocal(tempLocal);
               tempLocal = null;
@@ -9424,7 +9355,7 @@ export class Compiler extends DiagnosticEmitter {
           let overload = classReference.lookupOverload(OperatorKind.POSTFIX_DEC);
           if (overload) {
             let isInstance = overload.is(CommonFlags.INSTANCE);
-            if (tempLocal !== null && !isInstance) { // revert: static overload simply returns
+            if (tempLocal && !isInstance) { // revert: static overload simply returns
               getValue = getLocalSetValue(getValue);
               flow.freeTempLocal(tempLocal);
               tempLocal = null;
@@ -9973,7 +9904,7 @@ export class Compiler extends DiagnosticEmitter {
               } else {
                 let classReference = type.getClass();
                 if (classReference) {
-                  if (classReference.prototype === stringInstance.prototype) {
+                  if (classReference.prototype == stringInstance.prototype) {
                     typeString = "string";
                   } else {
                     typeString = "object";
@@ -10521,7 +10452,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var stringInstance = program.stringInstance;
     var messageArg: ExpressionRef;
-    if (message !== null) {
+    if (message) {
       messageArg = this.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT);
     } else {
       messageArg = this.makeZero(stringInstance.type, codeLocation);
@@ -10643,12 +10574,16 @@ function mangleImportName(
   mangleImportName_elementName = mangleInternalName(
     element.name, element.parent, element.is(CommonFlags.INSTANCE), true
   );
+  // override module name if a `module` statement is present
+  let overriddenModuleName = declaration.overriddenModuleName;
+  if (overriddenModuleName) mangleImportName_moduleName = overriddenModuleName;
+
   if (!element.hasDecorator(DecoratorFlags.EXTERNAL)) return;
 
   var program = element.program;
   var decorator = assert(findDecorator(DecoratorKind.EXTERNAL, declaration.decorators));
   var args = decorator.args;
-  if (args !== null && args.length > 0) {
+  if (args && args.length > 0) {
     let arg = args[0];
     // if one argument is given, override just the element name
     // if two arguments are given, override both module and element name

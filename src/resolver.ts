@@ -191,9 +191,9 @@ export class Resolver extends DiagnosticEmitter {
     // Look up in contextual types if a simple type
     if (isSimpleType) {
       let simpleName = nameNode.identifier.text;
-      if (ctxTypes !== null && ctxTypes.has(simpleName)) {
+      if (ctxTypes && ctxTypes.has(simpleName)) {
         let type = assert(ctxTypes.get(simpleName));
-        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+        if (typeArgumentNodes && typeArgumentNodes.length > 0) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_is_not_generic,
@@ -227,7 +227,7 @@ export class Resolver extends DiagnosticEmitter {
 
       // Handle enums (become i32)
       if (element.kind == ElementKind.ENUM) {
-        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+        if (typeArgumentNodes && typeArgumentNodes.length > 0) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_is_not_generic,
@@ -270,7 +270,7 @@ export class Resolver extends DiagnosticEmitter {
 
       // Shortcut already resolved (mostly builtins)
       if (element.is(CommonFlags.RESOLVED)) {
-        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+        if (typeArgumentNodes && typeArgumentNodes.length > 0) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_is_not_generic,
@@ -314,7 +314,7 @@ export class Resolver extends DiagnosticEmitter {
           reportMode
         );
         if (!typeArguments) return null;
-      } else if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+      } else if (typeArgumentNodes && typeArgumentNodes.length > 0) {
         this.error(
           DiagnosticCode.Type_0_is_not_generic,
           node.range, nameNode.identifier.text
@@ -805,14 +805,14 @@ export class Resolver extends DiagnosticEmitter {
     if (node.kind == NodeKind.NAMEDTYPE) {
       let namedTypeNode = <NamedTypeNode>node;
       let typeArgumentNodes = namedTypeNode.typeArguments;
-      if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) { // foo<T>(bar: Array<T>)
+      if (typeArgumentNodes && typeArgumentNodes.length > 0) { // foo<T>(bar: Array<T>)
         let classReference = type.classReference;
         if (classReference) {
           let classPrototype = this.resolveTypeName(namedTypeNode.name, ctxFlow.actualFunction);
           if (!classPrototype || classPrototype.kind != ElementKind.CLASS_PROTOTYPE) return;
           if (classReference.prototype == <ClassPrototype>classPrototype) {
             let typeArguments = classReference.typeArguments;
-            if (typeArguments !== null && typeArguments.length == typeArgumentNodes.length) {
+            if (typeArguments && typeArguments.length == typeArgumentNodes.length) {
               for (let i = 0, k = typeArguments.length; i < k; ++i) {
                 this.propagateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxFlow, ctxTypes, typeParameterNames);
               }
@@ -832,7 +832,7 @@ export class Resolver extends DiagnosticEmitter {
     } else if (node.kind == NodeKind.FUNCTIONTYPE) { // foo<T>(bar: (baz: T) => i32))
       let functionTypeNode = <FunctionTypeNode>node;
       let parameterNodes = functionTypeNode.parameters;
-      if (parameterNodes !== null && parameterNodes.length > 0) {
+      if (parameterNodes && parameterNodes.length > 0) {
         let signatureReference = type.signatureReference;
         if (signatureReference) {
           let parameterTypes = signatureReference.parameterTypes;
@@ -2120,7 +2120,7 @@ export class Resolver extends DiagnosticEmitter {
       }
     }
     var parent: Element | null = ctxFlow.actualFunction.parent;
-    if (parent !== null && parent.kind == ElementKind.CLASS) {
+    if (parent && parent.kind == ElementKind.CLASS) {
       let base = (<Class>parent).base;
       if (base) {
         this.currentThisExpression = null;
@@ -2193,7 +2193,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       case LiteralKind.ARRAY: {
         let classReference = ctxType.getClass();
-        if (classReference !== null && classReference.prototype == this.program.arrayPrototype) {
+        if (classReference && classReference.prototype == this.program.arrayPrototype) {
           return this.getElementOfType(ctxType);
         }
         // otherwise infer, ignoring ctxType
@@ -2350,7 +2350,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       case ElementKind.CLASS: {
         let typeArguments = (<Class>target).getTypeArgumentsTo(this.program.functionPrototype);
-        if (typeArguments !== null && typeArguments.length > 0) {
+        if (typeArguments && typeArguments.length > 0) {
           let ftype = typeArguments[0];
           let signatureReference = assert(ftype.signatureReference);
           return signatureReference.returnType;
@@ -2623,8 +2623,8 @@ export class Resolver extends DiagnosticEmitter {
     var signatureNode = prototype.functionTypeNode;
     var typeParameterNodes = prototype.typeParameterNodes;
     var numFunctionTypeArguments: i32;
-    if (typeArguments !== null && (numFunctionTypeArguments = typeArguments.length) > 0) {
-      assert(typeParameterNodes !== null && numFunctionTypeArguments == typeParameterNodes.length);
+    if (typeArguments && (numFunctionTypeArguments = typeArguments.length) > 0) {
+      assert(typeParameterNodes && numFunctionTypeArguments == typeParameterNodes.length);
       for (let i = 0; i < numFunctionTypeArguments; ++i) {
         ctxTypes.set(
           (<TypeParameterNode[]>typeParameterNodes)[i].name.text,
@@ -2801,7 +2801,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Otherwise make sure that no type arguments have been specified
     } else {
-      if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+      if (typeArgumentNodes && typeArgumentNodes.length > 0) {
         if (reportMode == ReportMode.REPORT) {
           this.error(
             DiagnosticCode.Type_0_is_not_generic,
@@ -2919,7 +2919,7 @@ export class Resolver extends DiagnosticEmitter {
       }
     } else {
       let typeParameterNodes = prototype.typeParameterNodes;
-      assert(!(typeParameterNodes !== null && typeParameterNodes.length > 0));
+      assert(!(typeParameterNodes && typeParameterNodes.length > 0));
     }
     instance.contextualTypeArguments = ctxTypes;
 
@@ -3091,7 +3091,7 @@ export class Resolver extends DiagnosticEmitter {
             let existingField: Field | null = null;
             if (base) {
               let baseMembers = base.members;
-              if (baseMembers !== null && baseMembers.has(fieldPrototype.name)) {
+              if (baseMembers && baseMembers.has(fieldPrototype.name)) {
                 let baseField = assert(baseMembers.get(fieldPrototype.name));
                 if (baseField.kind == ElementKind.FIELD) {
                   existingField = <Field>baseField;
@@ -3105,7 +3105,7 @@ export class Resolver extends DiagnosticEmitter {
               }
             }
             if (!fieldTypeNode) {
-              if (existingField !== null && !existingField.is(CommonFlags.PRIVATE)) {
+              if (existingField && !existingField.is(CommonFlags.PRIVATE)) {
                 fieldType = existingField.type;
               }
               if (!fieldType) {
@@ -3134,7 +3134,7 @@ export class Resolver extends DiagnosticEmitter {
               }
             }
             if (!fieldType) break; // did report above
-            if (existingField !== null) {
+            if (existingField) {
               // visibility checks
               /*
                           existingField visibility on top
@@ -3203,7 +3203,7 @@ export class Resolver extends DiagnosticEmitter {
             }
             let fieldInstance = new Field(fieldPrototype, instance, fieldType);
             assert(isPowerOf2(fieldType.byteSize));
-            if (existingField !== null) {
+            if (existingField) {
               fieldInstance.memoryOffset = existingField.memoryOffset;
             } else {
               let mask = fieldType.byteSize - 1;
@@ -3243,7 +3243,7 @@ export class Resolver extends DiagnosticEmitter {
         );
       } else {
         let propertySetter = property.setterInstance;
-        if (propertySetter !== null && !propertyGetter.visibilityEquals(propertySetter)) {
+        if (propertySetter && !propertyGetter.visibilityEquals(propertySetter)) {
           this.errorRelated(
             DiagnosticCode.Getter_and_setter_accessors_do_not_agree_in_visibility,
             propertyGetter.identifierNode.range, propertySetter.identifierNode.range
@@ -3273,7 +3273,7 @@ export class Resolver extends DiagnosticEmitter {
       // Link _own_ constructor if present
       {
         let ctorPrototype = instance.getMember(CommonNames.constructor);
-        if (ctorPrototype !== null && ctorPrototype.parent === instance) {
+        if (ctorPrototype && ctorPrototype.parent == instance) {
           assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
           let ctorInstance = this.resolveFunction(
             <FunctionPrototype>ctorPrototype,
@@ -3367,13 +3367,13 @@ export class Resolver extends DiagnosticEmitter {
     // pending classes being resolved.
     for (let _values = Set_values(pendingClasses), i = 0, k = _values.length; i < k; ++i) {
       let pending = _values[i];
-      let dependsOnInstance = pending.base === instance;
+      let dependsOnInstance = pending.base == instance;
       let interfaces = pending.interfaces;
       if (interfaces) {
         let anyPending = false;
         for (let _values2 = Set_values(interfaces), j = 0, l = _values2.length; j < l; ++j) {
           let iface = _values2[j];
-          if (iface === instance) dependsOnInstance = true;
+          if (iface == instance) dependsOnInstance = true;
           else if (pendingClasses.has(iface)) anyPending = true;
         }
         if (anyPending) continue;
@@ -3413,7 +3413,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Otherwise make sure that no type arguments have been specified
     } else {
-      if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+      if (typeArgumentNodes && typeArgumentNodes.length > 0) {
         if (reportMode == ReportMode.REPORT) {
           this.error(
             DiagnosticCode.Type_0_is_not_generic,

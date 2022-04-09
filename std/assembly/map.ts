@@ -96,7 +96,7 @@ export class Map<K,V> {
   }
 
   has(key: K): bool {
-    return this.find(key, HASH<K>(key)) !== null;
+    return this.find(key, HASH<K>(key)) != null;
   }
 
   @operator("[]")
