@@ -1,26 +1,19 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { Tokenizer, Token, Source, SourceKind } from "../dist/assemblyscript.js";
 
-require("ts-node").register({
-  project: path.join(__dirname, "..", "src", "tsconfig.json"),
-  typeCheck: false,
-  transpileOnly: true,
-  compilerHost: true,
-  files: true,
-});
-require("../src/glue/js");
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const { Tokenizer, Token } = require("../src/tokenizer");
-const { Source, SourceKind } = require("../src/ast");
-
-var file = process.argv.length > 2 ? process.argv[2] : path.join(__dirname, "..", "src", "tokenizer.ts");
+const file = process.argv.length > 2 ? process.argv[2] : path.join(dirname, "..", "src", "tokenizer.ts");
 const text = fs.readFileSync(file).toString();
-const tn = new Tokenizer(new Source("compiler.ts", text, SourceKind.ENTRY));
+const source = new Source(SourceKind.ENTRY, "compiler.ts", text);
+const tn = new Tokenizer(source);
 
 do {
-  let token = tn.next();
-  let range = tn.range();
-  process.stdout.write(Token[token] + " @ " + range.line + ":" + range.column);
+  const token = tn.next();
+  const range = tn.range();
+  process.stdout.write(Token[token] + " @ " + source.lineAt(range.start) + ":" + source.columnAt());
   if (token == Token.IDENTIFIER) {
     process.stdout.write(" > " + tn.readIdentifier());
   } else if (token == Token.INTEGERLITERAL) {

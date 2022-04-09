@@ -982,15 +982,14 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
   var value: string;
   for (let i = 0; i < length; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
-    // @ts-ignore: type
-    if (value !== null) estLen += value.length;
+    if (changetype<usize>(value) != 0) estLen += value.length;
   }
   var offset = 0;
   var sepLen = separator.length;
   var result = changetype<string>(__new((estLen + sepLen * lastIndex) << 1, idof<string>()));
   for (let i = 0; i < lastIndex; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
-    if (value !== null) {
+    if (changetype<usize>(value) != 0) {
       let valueLen = value.length;
       memory.copy(
         changetype<usize>(result) + (<usize>offset << 1),
@@ -1009,7 +1008,7 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
     }
   }
   value = load<string>(dataStart + (<usize>lastIndex << alignof<string>()));
-  if (value !== null) {
+  if (changetype<usize>(value) != 0) {
     memory.copy(
       changetype<usize>(result) + (<usize>offset << 1),
       changetype<usize>(value),
@@ -1026,19 +1025,19 @@ export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: 
   if (!lastIndex) {
     value = load<T>(dataStart);
     // @ts-ignore: type
-    return value !== null ? value.toString() : "";
+    return value != null ? value.toString() : "";
   }
   var result = "";
   var sepLen = separator.length;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
     // @ts-ignore: type
-    if (value !== null) result += value.toString();
+    if (value != null) result += value.toString();
     if (sepLen) result += separator;
   }
   value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
   // @ts-ignore: type
-  if (value !== null) result += value.toString();
+  if (value != null) result += value.toString();
   return result;
 }
 

@@ -92,6 +92,12 @@ declare const ASC_FEATURE_MULTI_VALUE: bool;
 declare const ASC_FEATURE_GC: bool;
 /** Whether the memory64 feature is enabled. */
 declare const ASC_FEATURE_MEMORY64: bool;
+/** Whether the function references feature is enabled. */
+declare const ASC_FEATURE_FUNCTION_REFERENCES: bool;
+/** Whether the relaxed SIMD feature is enabled. */
+declare const ASC_FEATURE_RELAXED_SIMD: bool;
+/** Whether the extended const expression feature is enabled. */
+declare const ASC_FEATURE_EXTENDED_CONST: bool;
 /** Major version of the compiler. */
 declare const ASC_VERSION_MAJOR: i32;
 /** Minor version of the compiler. */
@@ -1369,6 +1375,10 @@ declare class _Float {
   toString(radix?: number): string;
 }
 
+declare class Boolean {
+  toString(radix?: number): string;
+}
+
 /** Backing class of signed 8-bit integers. */
 declare const I8: typeof _Integer;
 /** Backing class of signed 16-bit integers. */
@@ -1393,6 +1403,8 @@ declare const Usize: typeof _Integer;
 declare const F32: typeof _Float;
 /** Backing class of 64-bit floating-point values. */
 declare const F64: typeof _Float;
+/** Alias of F64. */
+declare const Number: typeof F64;
 
 // User-defined diagnostic macros
 
@@ -1837,6 +1849,11 @@ declare class Object {
   static is<T>(value1: T, value2: T): bool;
 }
 
+declare namespace performance {
+  /** Gets a high resolution timestamp measured in milliseconds. */
+  export function now(): f64;
+}
+
 declare class Date {
   /** Returns the UTC timestamp in milliseconds of the specified date. */
   static UTC(
@@ -1870,7 +1887,7 @@ declare class Date {
   getUTCMilliseconds(): i32;
 
   setUTCFullYear(value: i32): void;
-  setUTCMonth(value: i32): void;
+  setUTCMonth(value: i32, day?: i32): void;
   setUTCDate(value: i32): void;
   setUTCHours(value: i32): void;
   setUTCMinutes(value: i32): void;
@@ -1914,14 +1931,6 @@ declare class SyntaxError extends Error { }
 
 /** Class for indicating an error when a global URI handling function was used in a wrong way. */
 declare class URIError extends Error { }
-
-interface Boolean {
-  toString(radix?: number): string;
-}
-
-interface Number {
-  toString(radix?: number): string;
-}
 
 interface Function {
   /** Function table index. */
@@ -2238,7 +2247,11 @@ declare function inline(...args: any[]): any;
 declare function unsafe(...args: any[]): any;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(...args: any[]): any;
+declare function external(name: string): any;
+declare function external(moduleName: string, name: string): any;
+declare namespace external {
+  function js(code: string): any;
+}
 
 /** Annotates a global for lazy compilation. */
 declare function lazy(...args: any[]): any;

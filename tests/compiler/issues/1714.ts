@@ -15,4 +15,4 @@ function bar<T1,T2>(): string { // T1=f64, T2=i32
   return nameof<T1>(); // iff T1 == i32
 }
 
-assert(bar<f64, i32>() === "i32");
+assert(bar<f64, i32>() == "i32");

@@ -1,9 +1,0 @@
-{
-  "name": "@assemblyscript/webpack",
-  "version": "0.5.0",
-  "description": "webpack loader for AssemblyScript modules.",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "@protobufjs/base64": "^1.1.2"
-  }
-}

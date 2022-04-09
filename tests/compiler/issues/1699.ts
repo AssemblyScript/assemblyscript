@@ -12,8 +12,8 @@ function test(): void {
       testinstances[n] = testinstance;
     }
   }
-  assert(testinstances[0] === testinstances[1]);
-  assert(testinstances[2] !== testinstances[1]);
+  assert(testinstances[0] == testinstances[1]);
+  assert(testinstances[2] != testinstances[1]);
 }
 
 test();

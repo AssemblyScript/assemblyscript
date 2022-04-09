@@ -47,6 +47,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
+        node ./scripts/prepublish
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
           npx aspublish
         fi
@@ -59,3 +60,4 @@ jobs:
           npm publish --access public
         fi
         cd ../..
+        node ./scripts/prepublish --reset

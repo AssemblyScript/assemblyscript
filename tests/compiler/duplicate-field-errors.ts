@@ -17,7 +17,7 @@ class A {
   method(): void {}
 }
 
-export class B extends A {
+class B extends A {
   private privPriv: i32;
   protected privProt: i32;
   public privPub: i32;
@@ -36,3 +36,7 @@ export class B extends A {
   public method: i32;
 }
 
+export function test(): void {
+  new A();
+  new B();
+}

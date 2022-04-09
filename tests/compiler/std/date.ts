@@ -131,17 +131,20 @@
   date.setUTCDate(30);
 
   // jan has 31 days
-  date.setUTCMonth(1);
+  date.setUTCMonth(0);
   date.setUTCDate(1);
   date.setUTCDate(31);
 
   // feb on leap year
   date.setUTCFullYear(2024);
-  date.setUTCMonth(2);
+  date.setUTCMonth(1);
+  assert(date.getUTCMonth() == 2); // overflows to march due to day=31
   date.setUTCDate(1);
   date.setUTCDate(29);
+  date.setUTCMonth(1);
 
-  assert(date.getTime() == 1711674191274);
+  assert(date.getTime() == 1709168591274);
+  assert(date.getUTCMonth() == 1);
   assert(date.getUTCDate() == 29);
   assert(date.getUTCMinutes() == 3);
   assert(date.getUTCSeconds() == 11);
@@ -202,15 +205,18 @@
   assert(date.getUTCMonth() == 2);
   assert(date.getTime() == 7899941177818720);
   // test boundaries
-  date.setUTCMonth(1);
-  date.setUTCMonth(12);
-  assert(date.getTime() == 7899967616218720);
+  date.setUTCMonth(0);
+  assert(date.getTime() == 7899936080218720);
+  date.setUTCMonth(11);
+  assert(date.getTime() == 7899964937818720);
 
   // test out of boundaries
-  date.setUTCMonth(0);
-  assert(date.getTime() == 7899967616218720);
-  date.setUTCMonth(13);
-  assert(date.getTime() == 7900001830618720);
+  date.setUTCMonth(-1);
+  assert(date.getUTCMonth() == 11);
+  assert(date.getTime() == 7899933401818720);
+  date.setUTCMonth(12);
+  assert(date.getUTCMonth() == 0);
+  assert(date.getTime() == 7899936080218720);
 }
 
 // Date#setUTCFullYear /////////////////////////////////////////////////////////////////////////////
