@@ -36,7 +36,7 @@
  (data (i32.const 1464) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1520) "\07\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1556) " \00\00\00\00\00\00\00 \00\00\00\06\00\00\00 ")
- (table $0 2 funcref)
+ (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $inlining/func_fe~anonymous|0)
  (export "test" (func $inlining/test))
  (export "memory" (memory $0))

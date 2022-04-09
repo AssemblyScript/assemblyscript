@@ -33,7 +33,7 @@
  (data (i32.const 206) "\01")
  (data (i32.const 207) "\01")
  (data (i32.const 208) "\01")
- (table $0 1 funcref)
+ (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
