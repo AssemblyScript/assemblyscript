@@ -20,7 +20,7 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
   if (!len) {
     len = a.length;
     if (len != b.length) return false;
-    if (a === b) return true;
+    if (a == b) return true;
   }
   for (let i = 0; i < len; i++) {
     if (isFloat<T>()) {
@@ -525,7 +525,7 @@ var i: i32;
   assert(spliced2[0]!.v == 1);
 
   assert(refArr2.length == 2);
-  assert(refArr2[0] === null);
+  assert(refArr2[0] == null);
   assert(refArr2[1]!.v == 2);
 }
 
@@ -1235,14 +1235,6 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(mapResult[2] == 2);
   assert(mapResult[3] == 3);
 }
-
-// export extended arrays
-
-export class ArrayU32 extends Array<u32> {}
-export class ArrayU8 extends Array<u8> {}
-export class ArrayStr extends Array<string> {}
-// FIXME: Fails on 'sort' due to operators '>', '<'
-// export class ArrayArrayI32 extends Array<Array<i32>> {}
 
 // Unleak globals
 arr = changetype<Array<i32>>(0);

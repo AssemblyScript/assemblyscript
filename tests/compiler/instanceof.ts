@@ -72,4 +72,4 @@ assert(  an instanceof A);        // TS: !=null is an instance of A
 assert(  an instanceof A | null); // AS: !=null is an instance of A | null
 
 // TODO: keep track of nullability during flows, so this becomes precomputable:
-// assert(an !== null && an instanceof A);
+// assert(an != null && an instanceof A);

@@ -39,7 +39,7 @@ export class StaticArray<T> {
 
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T> {
     var sourceLen = source.length;
-    var otherLen = select(0, other.length, other === null);
+    var otherLen = other.length;
     var outLen = sourceLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
     var out = changetype<StaticArray<T>>(__new(<usize>outLen << alignof<T>(), idof<StaticArray<T>>()));
@@ -228,7 +228,7 @@ export class StaticArray<T> {
 
   concat(other: Array<T>): Array<T> {
     var thisLen = this.length;
-    var otherLen = select(0, other.length, other === null);
+    var otherLen = other.length;
     var outLen = thisLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
     var out = changetype<Array<T>>(__newArray(outLen, alignof<T>(), idof<Array<T>>()));

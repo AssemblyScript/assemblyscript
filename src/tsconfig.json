@@ -1,13 +1,17 @@
 {
   "extends": "../std/portable.json",
   "compilerOptions": {
-    "outDir": "../out",
+    "outDir": "../build",
     "types" : ["node"],
     "allowJs": false,
     "sourceMap": true,
     "skipLibCheck": true,
     "target": "esnext",
-    "strict": true
+    "useDefineForClassFields": false,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "esModuleInterop": true
   },
   "include": [
     "./**/*.ts"

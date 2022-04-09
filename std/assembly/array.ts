@@ -28,7 +28,7 @@ function ensureCapacity(array: usize, newSize: usize, alignLog2: u32, canGrow: b
     if (ASC_RUNTIME != Runtime.Incremental) {
       memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     }
-    if (newData !== oldData) { // oldData has been free'd
+    if (newData != oldData) { // oldData has been free'd
       store<usize>(array, newData, offsetof<ArrayBufferView>("buffer"));
       store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
       __link(array, changetype<usize>(newData), false);
@@ -56,7 +56,7 @@ export class Array<T> {
   private length_: i32;
 
   static isArray<U>(value: U): bool {
-    return isReference<U>() ? builtin_isArray(value) && value !== null : false;
+    return isReference<U>() ? changetype<usize>(value) != 0 && builtin_isArray(value) : false;
   }
 
   static create<T>(capacity: i32 = 0): Array<T> {
@@ -239,7 +239,7 @@ export class Array<T> {
 
   concat(other: Array<T>): Array<T> {
     var thisLen = this.length_;
-    var otherLen = select(0, other.length_, other === null);
+    var otherLen = other.length_;
     var outLen = thisLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
     var out = changetype<Array<T>>(__newArray(outLen, alignof<T>(), idof<Array<T>>()));

@@ -1,4 +1,6 @@
 class Parent {
   child: Child | null = null;
 }
-export class Child extends Parent { }
+class Child extends Parent { }
+
+new Child();

@@ -15,8 +15,8 @@ export function viaThis(): u32 {
   return x.viaThis;
 }
 
-assert(normal() === 4);
-assert(viaThis() === 4);
+assert(normal() == 4);
+assert(viaThis() == 4);
 
 x = changetype<X>(0); // unleak
 

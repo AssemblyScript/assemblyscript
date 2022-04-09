@@ -1,6 +1,4 @@
-assert(typeof 1 === "number"); // static string === static string precomputes
-
-// non-precomputed
+assert(typeof 1 == "number");
 
 class SomeClass {
   static someStaticMethod(): void {}

@@ -29,8 +29,7 @@ import {
 import {
   normalizePath,
   resolvePath,
-  CharCode,
-  isTrivialAlphanum
+  CharCode
 } from "./util";
 
 import {
@@ -100,6 +99,7 @@ export enum NodeKind {
   VARIABLE,
   VOID,
   WHILE,
+  MODULE,
 
   // declaration statements
   CLASSDECLARATION,
@@ -713,6 +713,14 @@ export abstract class Node {
     return new TypeDeclaration(name, decorators, flags, typeParameters, type, range);
   }
 
+  static createModuleDeclaration(
+    name: string,
+    flags: CommonFlags,
+    range: Range
+  ): ModuleDeclaration {
+    return new ModuleDeclaration(name, flags, range);
+  }
+
   static createVariableStatement(
     decorators: DecoratorNode[] | null,
     declarations: VariableDeclaration[],
@@ -825,7 +833,7 @@ export abstract class TypeNode extends Node {
       let namedTypeNode = <NamedTypeNode>changetype<TypeNode>(this); // TS
       if (!namedTypeNode.name.next) {
         let typeArgumentNodes = namedTypeNode.typeArguments;
-        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+        if (typeArgumentNodes && typeArgumentNodes.length > 0) {
           for (let i = 0, k = typeArgumentNodes.length; i < k; ++i) {
             if (typeArgumentNodes[i].hasGenericComponent(typeParameterNodes)) return true;
           }
@@ -844,7 +852,7 @@ export abstract class TypeNode extends Node {
       }
       if (functionTypeNode.returnType.hasGenericComponent(typeParameterNodes)) return true;
       let explicitThisType = functionTypeNode.explicitThisType;
-      if (explicitThisType !== null && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
+      if (explicitThisType && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
     } else {
       assert(false);
     }
@@ -884,7 +892,7 @@ export class NamedTypeNode extends TypeNode {
   /** Checks if this type node has type arguments. */
   get hasTypeArguments(): bool {
     var typeArguments = this.typeArguments;
-    return typeArguments !== null && typeArguments.length > 0;
+    return typeArguments != null && typeArguments.length > 0;
   }
 }
 
@@ -976,6 +984,7 @@ export enum DecoratorKind {
   FINAL,
   INLINE,
   EXTERNAL,
+  EXTERNAL_JS,
   BUILTIN,
   LAZY,
   UNSAFE
@@ -1040,6 +1049,13 @@ export namespace DecoratorKind {
             case CharCode.p: {
               if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
               if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
+              break;
+            }
+          }
+        } else if (nameStr == "external") {
+          switch (propStr.charCodeAt(0)) {
+            case CharCode.j: {
+              if (propStr == "js") return DecoratorKind.EXTERNAL_JS;
               break;
             }
           }
@@ -1340,7 +1356,7 @@ export class NewExpression extends Expression {
   get typeArgumentsRange(): Range {
     var typeArguments = this.typeArguments;
     var numTypeArguments: i32;
-    if (typeArguments !== null && (numTypeArguments = typeArguments.length) > 0) {
+    if (typeArguments && (numTypeArguments = typeArguments.length) > 0) {
       return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
     }
     return this.typeName.range;
@@ -1694,6 +1710,8 @@ export abstract class DeclarationStatement extends Statement {
   ) {
     super(kind, range);
   }
+  /** Overridden module name from preceeding `module` statement. */
+  public overriddenModuleName: string | null = null;
 
   /** Tests if this node has the specified flag or flags. */
   is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
@@ -2106,7 +2124,7 @@ export class ImportStatement extends Statement {
     } else { // absolute in library
       if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
     }
-    this.internalPath = normalizedPath;
+    this.internalPath = mangleInternalPath(normalizedPath);
   }
 
   /** Internal path being referenced. */
@@ -2249,6 +2267,20 @@ export class TryStatement extends Statement {
   }
 }
 
+/** Represents a `module` statement. */
+export class ModuleDeclaration extends Statement {
+  constructor(
+    /** Module name. */
+    public moduleName: string,
+    /** Common flags indicating specific traits. */
+    public flags: CommonFlags,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.MODULE, range);
+  }
+}
+
 /** Represents a `type` declaration. */
 export class TypeDeclaration extends DeclarationStatement {
   constructor(
@@ -2342,19 +2374,11 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
 
 /** Mangles an external to an internal path. */
 export function mangleInternalPath(path: string): string {
-  var pos = path.lastIndexOf(".");
-  var len = path.length;
-  if (pos >= 0 && len - pos >= 2) { // at least one char plus dot
-    let cur = pos;
-    while (++cur < len) {
-      if (!isTrivialAlphanum(path.charCodeAt(cur))) {
-        assert(false); // not a valid external path
-        return path;
-      }
-    }
-    return path.substring(0, pos);
+  if (path.endsWith("/")) {
+    path += "index";
+  } else if (path.endsWith(".ts")) {
+    path = path.substring(0, path.length - 3);
   }
-  assert(false); // not an external path
   return path;
 }
 
@@ -2362,7 +2386,7 @@ export function mangleInternalPath(path: string): string {
 export function isTypeOmitted(type: TypeNode): bool {
   if (type.kind == NodeKind.NAMEDTYPE) {
     let name = (<NamedTypeNode>type).name;
-    return !(name.next !== null || name.identifier.text.length > 0);
+    return !(name.next || name.identifier.text.length > 0);
   }
   return false;
 }

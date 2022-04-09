@@ -1,29 +1,29 @@
 /**
  * @fileoverview Shadow stack instrumentation for a precise GC.
- * 
+ *
  * Instruments function arguments and local assignments marked with a 'tostack'
  * call to also do stores to a shadow stack of managed values only.
- * 
+ *
  * Consider a simple call to a function looking like the following, taking
  * managed arguments, plus assigning managed values to locals:
- * 
+ *
  *   function foo(a: Obj, b: Obj): Obj {
  *     var c = __tostack(a) // slot 2
  *     __collect()
  *     return b
  *   }
- *   
+ *
  *   foo(__tostack(a), __tostack(b)) // slot 0, 1
- * 
+ *
  * At the call to `__collect()` the 32-bit stack frame of the function is:
- * 
+ *
  *   Offset | Value stored
  *   -------|----------------------------
  *      0   | First managed argument 'a'
  *      4   | Second managed argument 'b'
  *   -------|----------------------------
  *      8   | First managed local 'c'
- * 
+ *
  * We are splitting the frame in two halves as annotated since both halves are
  * only known separately for indirect calls, with the first half becoming an
  * extension of the calling function's stack frame by means of treating the
@@ -31,22 +31,22 @@
  * arguments stay a bit longer on the stack than usually, but we also don't have
  * to modify the stack pointer pre-call at all this way. The caller's amended
  * stack frame when assuming one managed local may look like this:
- * 
+ *
  *   Offset | Value stored
  *   -------|----------------------------
  *      0   | First managed local '?'
  *      4   | Extended with first managed argument 'a'
  *      8   | Extended with second managed argument 'b'
- * 
+ *
  * with the callee's stack frame becoming just:
- * 
+ *
  *   Offset | Value stored
  *   -------|----------------------------
  *      0   | First managed local 'c'
- * 
+ *
  * Instrumentation added below looks about like the following, with the stack
  * growing downwards and 't' and 'r' being new temporary locals:
- * 
+ *
  *   // callee frameSize = 1 * sizeof<usize>()
  *   function foo(a: usize, b: usize): usize {
  *     memory.fill(__stack_pointer -= frameSize, 0, frameSize)
@@ -56,7 +56,7 @@
  *     __stack_pointer += frameSize
  *     return r
  *   }
- * 
+ *
  *   // caller frameSize = (numLocalSlots + 2 [by extension]) * sizeof<usize>()
  *   (
  *     r = foo(
@@ -69,14 +69,14 @@
  *     ),
  *     r
  *   )
- * 
+ *
  * Also note that we have to `memory.fill` the second half because the first
  * assignment to a local may happen at a later point within the function. The
  * invariant we need to maintain for a precise GC is that it only sees zeroes
  * or valid pointers, but never an invalid pointer left on the stack earlier.
  * Since most frames are small, we unroll a sequence of `store`s up to a frame
  * size of 16 bytes, and `memory.fill`, if available, beyond.
- * 
+ *
  * @license Apache-2.0
  */
 
@@ -155,7 +155,10 @@ type TempMap = Map<TypeRef,LocalIndex>;
 
 /** Attempts to match the `__tostack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
 function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
-  if (_BinaryenExpressionGetId(expr) == ExpressionId.Call && module.readStringCached(_BinaryenCallGetTarget(expr)) == BuiltinNames.tostack) {
+  if (
+    _BinaryenExpressionGetId(expr) == ExpressionId.Call &&
+    module.readStringCached(_BinaryenCallGetTarget(expr)) == BuiltinNames.tostack
+  ) {
     assert(_BinaryenCallGetNumOperands(expr) == 1);
     return _BinaryenCallGetOperandAt(expr, 0);
   }
@@ -320,7 +323,10 @@ export class ShadowStackPass extends Pass {
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.global_get(BuiltinNames.data_end, this.ptrType)
           ),
-          this.compiler.makeStaticAbort(this.compiler.ensureStaticString("stack overflow"), this.compiler.program.nativeSource)
+          this.compiler.makeStaticAbort(
+            this.compiler.ensureStaticString("stack overflow"),
+            this.compiler.program.nativeSource
+          )
         )
       );
     }
@@ -579,7 +585,7 @@ export class ShadowStackPass extends Pass {
       );
       // memory.fill(__stack_pointer, 0, frameSize)
       this.makeStackFill(frameSize, stmts);
-      
+
       // Handle implicit return
       let body = _BinaryenFunctionGetBody(func);
       let bodyType = _BinaryenExpressionGetType(body);

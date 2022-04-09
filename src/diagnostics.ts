@@ -102,9 +102,9 @@ export class DiagnosticMessage {
     arg2: string | null = null
   ): DiagnosticMessage {
     var message = diagnosticCodeToString(code);
-    if (arg0 !== null) message = message.replace("{0}", arg0);
-    if (arg1 !== null) message = message.replace("{1}", arg1);
-    if (arg2 !== null) message = message.replace("{2}", arg2);
+    if (arg0 != null) message = message.replace("{0}", arg0);
+    if (arg1 != null) message = message.replace("{1}", arg1);
+    if (arg2 != null) message = message.replace("{2}", arg2);
     return new DiagnosticMessage(code, category, message);
   }
 
@@ -122,7 +122,7 @@ export class DiagnosticMessage {
     var otherRelatedRange = other.relatedRange;
     if (thisRelatedRange) {
       if (!otherRelatedRange || !thisRelatedRange.equals(otherRelatedRange)) return false;
-    } else if (otherRange) {
+    } else if (otherRelatedRange) {
       return false;
     }
     return this.message == other.message;

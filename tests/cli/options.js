@@ -1,5 +1,5 @@
-const assert = require("assert");
-const optionsUtil = require("../../cli/util/options");
+import assert from "assert";
+import * as optionsUtil from "../../cli/util/options.js";
 
 const config = {
   "enable": {
@@ -33,10 +33,10 @@ assert.deepStrictEqual(merged.enable, ["c"]);
 assert.deepStrictEqual(merged.disable, ["a", "b"]);
 
 // Populating defaults should work after the fact
-merged = optionsUtil.addDefaults(config, {});
+optionsUtil.addDefaults(config, merged = {});
 assert.deepStrictEqual(merged.other, ["x"]);
 
-merged = optionsUtil.addDefaults(config, { other: ["y"] });
+optionsUtil.addDefaults(config, merged = { other: ["y"] });
 assert.deepStrictEqual(merged.other, ["y"]);
 
 // Complete usage test

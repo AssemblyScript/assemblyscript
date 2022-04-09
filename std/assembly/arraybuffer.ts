@@ -31,7 +31,7 @@ export abstract class ArrayBufferView {
 
   static isView<T>(value: T): bool {
     if (isNullable<T>()) {
-      if (value === null) return false;
+      if (changetype<usize>(value) == 0) return false;
     }
     if (value instanceof Int8Array) return true;
     if (value instanceof Uint8Array) return true;

@@ -27,7 +27,13 @@ export const enum Feature {
   /** Garbage collection. */
   GC = 1 << 10, // see: https://github.com/WebAssembly/gc
   /** Memory64. */
-  MEMORY64 = 1 << 11 // see: https://github.com/WebAssembly/memory64
+  MEMORY64 = 1 << 11, // see: https://github.com/WebAssembly/memory64
+  /** Function references. */
+  FUNCTION_REFERENCES = 1 << 12, // see: https://github.com/WebAssembly/function-references
+  /** Relaxed SIMD. */
+  RELAXED_SIMD = 1 << 13, // see: https://github.com/WebAssembly/relaxed-simd
+  /** Extended const expressions. */
+  EXTENDED_CONST = 1 << 14 // see: https://github.com/WebAssembly/extended-const
 }
 
 /** Gets the name of the specified feature one would specify on the command line. */

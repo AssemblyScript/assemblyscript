@@ -1,14 +1,15 @@
 // Updates the Binaryen constants in src/module.ts
 
-const fs = require("fs");
-const path = require("path");
-const binaryen = require("binaryen");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import binaryen from "../lib/binaryen.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const srcfile = path.join(__dirname, "..", "src", "module.ts");
-var src = fs.readFileSync(srcfile, "utf8");
-
-binaryen.ready.then(() => {
-  src = src.replace(/(?:enum|namespace) (\w+) \{([^}]*)\}/g, function($0) {
+var src = fs.readFileSync(srcfile, "utf8")
+  .replace(/(?:enum|namespace) (\w+) \{([^}]*)\}/g, function($0) {
     return $0.replace(/(\w+)[ ]+=[ ]+([^,;\n]+)/g, function($0, key, val) {
       var match = val.match(/\b(_(?:Binaryen|Relooper|ExpressionRunner)\w+)\b/);
       if (match) {
@@ -21,5 +22,4 @@ binaryen.ready.then(() => {
       return $0;
     });
   });
-  fs.writeFileSync(srcfile, src, "utf8");
-});
+fs.writeFileSync(srcfile, src, "utf8");

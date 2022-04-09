@@ -1,13 +1,17 @@
+import fs from "fs";
+import glob from "glob";
+import os from "os";
+import pathUtil from "path";
+import ts from "typescript";
+import stream from "stream";
+import util from "util";
+import { fileURLToPath } from 'url';
+
+const __dirname = pathUtil.dirname(fileURLToPath(import.meta.url));
+
 // © 2015-2019 SitePen, Inc. New BSD License.
 // see: https://github.com/SitePen/dts-generator
-(function() {
-  const fs = require("fs");
-  const glob = require("glob");
-  const mkdirp = require("mkdirp");
-  const os = require("os");
-  const pathUtil = require("path");
-  const ts = require("typescript");
-
+const generate = (function() {
   // declare some constants so we don't have magic integers without explanation
   const DTSLEN = '.d.ts'.length;
   const filenameToMid = (function () {
@@ -209,7 +213,7 @@
       verboseMessage('exclude:');
       options.exclude.forEach(name => { verboseMessage('  ' + name); });
     }
-    if (!options.stdout) mkdirp.sync(pathUtil.dirname(options.out));
+    if (!options.stdout) fs.mkdirSync(pathUtil.dirname(options.out), { recursive: true });
     /* node.js typings are missing the optional mode in createWriteStream options and therefore
       * in TS 1.6 the strict object literal checking is throwing, therefore a hammer to the nut */
     const output = options.stdout || fs.createWriteStream(options.out, { mode: parseInt('644', 8) });
@@ -402,13 +406,8 @@
       }
     }
   }
-  exports.default = generate;
+  return generate;
 })();
-
-const path = require("path");
-const fs = require("fs");
-const stream = require("stream");
-const util = require("util");
 
 function OutputStream(options) {
   stream.Writable.call(this, options);
@@ -426,82 +425,158 @@ OutputStream.prototype.toString = function () {
   return this.toBuffer().toString("utf8");
 };
 
-const stdout = new OutputStream();
-stdout.write(`declare module 'assemblyscript' {
-    export * from 'assemblyscript/src/index';
-}
-`);
-
-module.exports.default({
-  project: path.resolve(__dirname, "..", "src"),
-  prefix: "assemblyscript",
-  exclude: [
-    "glue/**",
-  ],
-  verbose: true,
-  sendMessage: console.log,
-  stdout: stdout
-});
-
-stdout.write("\n");
-
-module.exports.default({
-  project: path.resolve(__dirname, "..", "std/assembly/shared"),
-  prefix: "assemblyscript/std/assembly/shared",
-  exclude: [],
-  verbose: true,
-  sendMessage: console.log,
-  stdout: stdout
-});
-
-stdout.write("\n");
-
-module.exports.default({
-  project: path.resolve(__dirname, "..", "src/glue"),
-  prefix: "assemblyscript/src/glue",
-  exclude: [
-    "js/index.ts",
-    "js/node.d.ts"
-  ],
-  verbose: true,
-  sendMessage: console.log,
-  stdout: stdout
-});
-
-var source = stdout.toString().replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
-
-const ts = require("typescript");
-const sourceFile = ts.createSourceFile("assemblyscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
-
-console.log("transforming:");
-var numReplaced = 0;
-const result = ts.transform(sourceFile, [
-  function (context) {
-    const visit = node => {
-      node = ts.visitEachChild(node, visit, context);
-      if (ts.isTypeNode(node)) {
-        const name = node.getText(sourceFile);
-        switch (name) {
-          // this is wrong, but works
-          case "bool": ++numReplaced; return ts.createIdentifier("boolean");
-          default: if (!/^(?:Binaryen|Relooper)/.test(name)) break;
-          case "i8": case "i16": case "i32": case "isize":
-          case "u8": case "u16": case "u32": case "usize":
-          case "f32": case "f64": ++numReplaced; return ts.createIdentifier("number");
+function transformTypes(sourceFile) {
+  var numReplaced = 0;
+  console.log("transforming:");
+  var result = ts.transform(sourceFile, [
+    function (context) {
+      const visit = node => {
+        node = ts.visitEachChild(node, visit, context);
+        if (ts.isTypeNode(node)) {
+          const name = node.getText(sourceFile);
+          switch (name) {
+            // this is wrong, but works
+            case "bool": ++numReplaced; return ts.createIdentifier("boolean");
+            default: if (!/^(?:Binaryen|Relooper)/.test(name)) break;
+            case "i8": case "i16": case "i32": case "isize":
+            case "u8": case "u16": case "u32": case "usize":
+            case "f32": case "f64": ++numReplaced; return ts.createIdentifier("number");
+          }
         }
-      }
-      return node;
-    };
-    return node => ts.visitNode(node, visit);
-  }
-]);
-console.log("  replaced " + numReplaced + " AS types with JS types");
-
-if (!fs.existsSync(path.join(__dirname, "..", "dist"))) {
-  fs.mkdirSync(path.join(__dirname, "..", "dist"));
+        return node;
+      };
+      return node => ts.visitNode(node, visit);
+    }
+  ]);
+  console.log("  replaced " + numReplaced + " AS types with TS types");
+  return result;
 }
-fs.writeFileSync(
-  path.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
-  ts.createPrinter().printFile(result.transformed[0]),
-  "utf8"
-);
+
+const prefix = "types:assemblyscript";
+
+function generateSrc() {
+  const stdout = new OutputStream();
+
+  generate({
+    project: pathUtil.resolve(__dirname, "..", "src"),
+    prefix,
+    exclude: [
+      "glue/**",
+    ],
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout
+  });
+
+  stdout.write("\n");
+
+  generate({
+    project: pathUtil.resolve(__dirname, "..", "std", "assembly", "shared"),
+    prefix: prefix + "/std/assembly/shared",
+    exclude: [],
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout
+  });
+
+  stdout.write("\n");
+
+  generate({
+    project: pathUtil.resolve(__dirname, "..", "src", "glue"),
+    prefix: prefix + "/src/glue",
+    exclude: [
+      "js/index.ts",
+      "js/node.d.ts"
+    ],
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout
+  });
+
+  const source = stdout.toString().replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
+  const sourceFile = ts.createSourceFile("assemblyscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
+  const result = transformTypes(sourceFile);
+  if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
+    fs.mkdirSync(pathUtil.join(__dirname, "..", "dist"));
+  }
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.generated.d.ts"),
+    ts.createPrinter().printFile(result.transformed[0])
+  );
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
+    [ `/// <reference path="./assemblyscript.generated.d.ts" />\n`,
+      `export * from "${prefix}/src/index";\n`,
+      `import * as assemblyscript from "${prefix}/src/index";\n`,
+      `export default assemblyscript;\n`
+    ].join("")
+  );
+}
+
+function generateCli() {
+  const stdout = new OutputStream();
+
+  generate({
+    baseDir: pathUtil.resolve(__dirname, ".."),
+    files: [
+      pathUtil.resolve(__dirname, "..", "cli", "index.d.ts")
+    ],
+    externs: [
+      "./assemblyscript.generated.d.ts"
+    ],
+    prefix,
+    verbose: true,
+    sendMessage: console.log,
+    stdout: stdout,
+    resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
+      if (currentModuleId == "cli/index") {
+        if (importedModuleId == "../src") return prefix + "/src/index";
+      }
+      return null;
+    },
+  });
+
+  const source = stdout.toString();
+  const sourceFile = ts.createSourceFile("asc.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
+  const result = transformTypes(sourceFile);
+  if (!fs.existsSync(pathUtil.join(__dirname, "..", "dist"))) {
+    fs.mkdirSync(pathUtil.join(__dirname, "..", "dist"));
+  }
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "asc.generated.d.ts"),
+    ts.createPrinter().printFile(result.transformed[0])
+  );
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "asc.d.ts"),
+    [ `/// <reference path="./asc.generated.d.ts" />\n`,
+      `export * from "${prefix}/cli/index";\n`,
+      `import * as asc from "${prefix}/cli/index";\n`,
+      `export default asc;\n`
+    ].join("")
+  );
+}
+
+function generateTransform() {
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "transform.js"),
+    [
+      `export function Transform() { /* stub */ }\n`
+    ].join("")
+  );
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "transform.cjs"),
+    [
+      `module.exports = function Transform() { /* stub */ }\n`
+    ].join("")
+  );
+  fs.writeFileSync(
+    pathUtil.resolve(__dirname, "..", "dist", "transform.d.ts"),
+    [
+      `export { Transform } from "./asc";\n`
+    ].join("")
+  );
+}
+
+generateSrc();
+generateCli();
+generateTransform();
