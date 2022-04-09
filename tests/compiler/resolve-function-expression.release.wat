@@ -52,7 +52,7 @@
  (data (i32.const 3388) "\1c")
  (data (i32.const 3400) "\01\00\00\00\04\00\00\004\002")
  (data (i32.const 3424) "\04\00\00\00 \00\00\00\00\00\00\00 ")
- (table $0 4 funcref)
+ (table $0 4 4 funcref)
  (elem $0 (i32.const 1) $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
  (export "memory" (memory $0))
  (start $~start)

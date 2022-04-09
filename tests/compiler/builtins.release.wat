@@ -65,7 +65,7 @@
  (data (i32.const 1976) "\0b\00\00\00\08\00\00\00\02")
  (data (i32.const 1996) "\1c")
  (data (i32.const 2008) "\0c\00\00\00\08\00\00\00\03")
- (table $0 4 funcref)
+ (table $0 4 4 funcref)
  (elem $0 (i32.const 1) $start:builtins~anonymous|0 $start:builtins~anonymous|1 $start:builtins~anonymous|2)
  (export "test" (func $start:builtins~anonymous|1))
  (export "memory" (memory $0))

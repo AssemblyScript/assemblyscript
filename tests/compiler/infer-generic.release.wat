@@ -42,7 +42,7 @@
  (data (i32.const 1616) "\08\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1644) "\02\19")
  (data (i32.const 1660) " ")
- (table $0 2 funcref)
+ (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $start:infer-generic~anonymous|0)
  (export "test1" (func $infer-generic/test1))
  (export "memory" (memory $0))

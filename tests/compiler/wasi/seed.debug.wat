@@ -17,7 +17,7 @@
  (global $~lib/memory/__heap_base i32 (i32.const 16416))
  (memory $0 1)
  (data (i32.const 16) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 1 funcref)
+ (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "test" (func $wasi/seed/test))
  (export "memory" (memory $0))

@@ -9,7 +9,7 @@
  (data (i32.const 1048) "\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s")
  (data (i32.const 1100) "\1c")
  (data (i32.const 1112) "\03\00\00\00\08\00\00\00\01")
- (table $0 2 funcref)
+ (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $call-optional/opt@varargs)
  (export "memory" (memory $0))
  (start $~start)

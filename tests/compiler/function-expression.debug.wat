@@ -64,7 +64,7 @@
  (data (i32.const 1020) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1052) "\1c\00\00\00\00\00\00\00\00\00\00\00\t\00\00\00\08\00\00\00\13\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1088) "\n\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 20 funcref)
+ (table $0 20 20 funcref)
  (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $function-expression/semanticallyAnonymous~fnDecl $function-expression/semanticallyAnonymous~fnDecl|0)
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
  (export "memory" (memory $0))
