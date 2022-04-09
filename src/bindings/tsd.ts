@@ -236,7 +236,7 @@ export class TSDBuilder extends ExportsWalker {
   toTypeScriptType(type: Type, mode: Mode): string {
     if (type.isInternalReference) {
       const sb = new Array<string>();
-      const clazz = assert(type.getClass());
+      const clazz = assert(type.getClassOrWrapper(this.program));
       if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
         sb.push("ArrayBuffer");
       } else if (clazz.extends(this.program.stringInstance.prototype)) {
