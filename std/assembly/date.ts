@@ -1,5 +1,5 @@
 import { E_INVALIDDATE } from "util/error";
-import { now as Date_now } from "./bindings/Date";
+import { Date as Date_binding } from "./bindings/dom";
 
 // @ts-ignore: decorator
 @inline const
@@ -33,7 +33,7 @@ export class Date {
   }
 
   @inline static now(): i64 {
-    return <i64>Date_now();
+    return <i64>Date_binding.now();
   }
 
   // It can parse only ISO 8601 inputs like YYYY-MM-DDTHH:MM:SS.000Z
@@ -168,10 +168,10 @@ export class Date {
     this.setTime(i64(daysSinceEpoch(this.year, this.month, day)) * MILLIS_PER_DAY + ms);
   }
 
-  setUTCMonth(month: i32): void {
-    if (this.month == month) return;
+  setUTCMonth(month: i32, day: i32 = this.day): void {
+    if (this.month == month + 1) return;
     var ms = euclidRem(this.epochMillis, MILLIS_PER_DAY);
-    this.setTime(i64(daysSinceEpoch(this.year, month + 1, this.day)) * MILLIS_PER_DAY + ms);
+    this.setTime(i64(daysSinceEpoch(this.year, month + 1, day)) * MILLIS_PER_DAY + ms);
   }
 
   setUTCFullYear(year: i32): void {

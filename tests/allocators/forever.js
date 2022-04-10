@@ -1,4 +1,4 @@
-var child_process = require("child_process");
+import child_process from "child_process";
 
 // restarts the test forever, that is, until an issue is detected
 

@@ -31,11 +31,11 @@ function abort( // eslint-disable-line @typescript-eslint/no-unused-vars
   changetype<iovec>(iovPtr).buf = bufPtr;
   var ptr = bufPtr;
   store<u64>(ptr, 0x203A74726F6261); ptr += 7; // 'abort: '
-  if (message !== null) {
+  if (message != null) {
     ptr += String.UTF8.encodeUnsafe(changetype<usize>(message), message.length, ptr);
   }
   store<u32>(ptr, 0x206E6920); ptr += 4; // ' in '
-  if (fileName !== null) {
+  if (fileName != null) {
     ptr += String.UTF8.encodeUnsafe(changetype<usize>(fileName), fileName.length, ptr);
   }
   store<u8>(ptr++, 0x28); // (

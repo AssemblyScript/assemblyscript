@@ -1,4 +1,4 @@
-exports.preInstantiate = function preInstantiate(imports) {
+export function preInstantiate(imports) {
   imports.string_casemapping = {
     toUpperCaseFromIndex: function toUpperCaseFromIndex(index, codePointIndex) {
       const code = String.fromCodePoint(index).toUpperCase().codePointAt(codePointIndex|0);
@@ -9,4 +9,4 @@ exports.preInstantiate = function preInstantiate(imports) {
       return code !== undefined ? code : -1;
     }
   };
-};
+}

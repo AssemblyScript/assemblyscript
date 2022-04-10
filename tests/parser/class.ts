@@ -26,4 +26,15 @@ export class Invalid<T> {
   // 1049: A 'set' accessor must have exactly one parameter.
   // 1095: A 'set' accessor cannot have a return type annotation.
   set instanceSetter<T>(): i32 {}
+
+  // 100: Not implemented: Ambient fields
+  declare declareField: i32;
+
+  // 100: Not implemented: Ambient fields
+  // 1039: Initializers are not allowed in ambient contexts.
+  declare declareInitializer: i32 = 0;
+
+  // 1031: 'declare' modifier cannot appear on class elements of this kind.
+  // 1183: An implementation cannot be declared in ambient contexts.
+  declare declareMethod(): i32 {}
 }
