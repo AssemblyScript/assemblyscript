@@ -34,7 +34,7 @@ declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
 /** A 128-bit vector. */
-declare type v128 = _V128;
+declare type v128 = V128;
 /** Function reference. */
 declare type funcref = object | null;
 /** External reference. */
@@ -1377,12 +1377,13 @@ declare class _Float {
 
 /** Pseudo-class representing the backing class of vector type. */
 /** @internal */
-declare class _V128 {
-  /** Converts this vector set to a string. */
+declare class Boolean {
   toString(radix?: number): string;
 }
 
-declare class Boolean {
+/** @internal */
+declare class V128 {
+  /** Converts this vector set to a string. */
   toString(radix?: number): string;
 }
 
@@ -1412,8 +1413,6 @@ declare const F32: typeof _Float;
 declare const F64: typeof _Float;
 /** Alias of F64. */
 declare const Number: typeof F64;
-/** Backing class of 128-bit vector values. */
-declare const V128: typeof _V128;
 
 // User-defined diagnostic macros
 
