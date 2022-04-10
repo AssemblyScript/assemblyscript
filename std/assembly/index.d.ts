@@ -1376,12 +1376,11 @@ declare class _Float {
 }
 
 /** Pseudo-class representing the backing class of vector type. */
-/** @internal */
+
 declare class Boolean {
   toString(radix?: number): string;
 }
 
-/** @internal */
 declare class V128 {
   /** Converts this vector set to a string. */
   toString(radix?: number): string;
