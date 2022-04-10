@@ -6735,7 +6735,7 @@ builtins.set(BuiltinNames.i32_ne, builtin_i32_ne);
 function builtin_i64_ne(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
-  ctx.contextualType = Type.i64;
+  ctx.contextualType = Type.i32;
   return builtin_ne(ctx);
 }
 builtins.set(BuiltinNames.i64_ne, builtin_i64_ne);
