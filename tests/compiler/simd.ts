@@ -759,6 +759,13 @@ export function test_vars_f64x2_full(a: f64, b: f64): v128 {
   return f64x2(a, b);
 }
 
+function test_stringify(): void {
+  var a = f64x2(1.5, 2.5);
+  assert(a.toString() == "0 0 0 0 0 0 -8 63 0 0 0 0 0 0 4 64");
+  var b = i8x16.splat(-1);
+  assert(b.toString(16) == "ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff");
+}
+
 if (ASC_FEATURE_SIMD) {
   test_v128();
   test_i8x16();
@@ -768,4 +775,5 @@ if (ASC_FEATURE_SIMD) {
   test_f32x4();
   test_f64x2();
   test_const();
+  test_stringify();
 }
