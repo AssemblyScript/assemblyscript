@@ -1946,7 +1946,9 @@ interface Function {
   /** Returns a string representation of this function. */
   toString(): string;
 }
-interface IArguments {}
+interface IArguments {
+  length: i32;
+}
 interface RegExp {}
 
 declare class Map<K,V> {
@@ -2257,3 +2259,9 @@ declare namespace external {
 
 /** Annotates a global for lazy compilation. */
 declare function lazy(...args: any[]): any;
+
+/** Global arguments namespace for information about function calls. */
+declare namespace arguments {
+  /** The number of arguments passed to the function call. */
+  export const length: i32;
+}

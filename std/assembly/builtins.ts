@@ -1,3 +1,5 @@
+import { I32 } from "number";
+
 type auto = i32;
 
 // @ts-ignore: decorator
@@ -2338,5 +2340,19 @@ declare function trace(
 @external("env", "seed")
 @external.js("return Date.now() * Math.random();")
 declare function seed(): f64;
+
+@final
+export class arguments {
+  // @ts-ignore: builtin
+
+  public static get length(): i32 {
+    return arguments.getArgumentsLength();
+  }
+
+  @builtin
+  public static getArgumentsLength(): i32 {
+    return unreachable();
+  }
+}
 
 /* eslint-enable @typescript-eslint/no-unused-vars */
