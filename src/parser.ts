@@ -4314,7 +4314,7 @@ export class Parser extends DiagnosticEmitter {
   private checkRuleCompleted(
     tn: Tokenizer,
     isFor: bool = false
-  ) {
+  ): void {
     if (!tn.skip(Token.SEMICOLON) && !isFor && tn.checkOffendingToken()) {
       this.error(
         DiagnosticCode.Unexpected_token,
