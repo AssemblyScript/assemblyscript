@@ -938,7 +938,7 @@ export class Parser extends DiagnosticEmitter {
     } while (tn.skip(Token.COMMA));
 
     var ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
-    if (!tn.skip(Token.SEMICOLON) && !isFor && !tn.hasNoMoreExpressionInLine()) {
+    if (!tn.skip(Token.SEMICOLON) && !isFor && tn.checkOffendingToken()) {
       this.error(
         DiagnosticCode.Unexpected_token,
         tn.range()
@@ -1120,7 +1120,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     var ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
-    if (!tn.skip(Token.SEMICOLON) && !tn.hasNoMoreExpressionInLine()) {
+    if (!tn.skip(Token.SEMICOLON) && tn.checkOffendingToken()) {
       this.error(
         DiagnosticCode.Unexpected_token,
         tn.range()

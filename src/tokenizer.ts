@@ -1697,15 +1697,15 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.readHexadecimalEscape(4, startIfTaggedTemplate);
   }
 
-  hasNoMoreExpressionInLine(): bool {
+  checkOffendingToken(): bool {
     let pos = this.pos;
     while (pos < this.end) {
       const c = this.source.text.charCodeAt(pos);
-      if (isLineBreak(c) || c === CharCode.CLOSEBRACE || c === CharCode.CLOSEPAREN) return true;
+      if (isLineBreak(c) || c === CharCode.CLOSEBRACE || c === CharCode.CLOSEPAREN) return false;
       if (!isWhiteSpace(c)) break;
       pos++;
     }
-    return pos === this.end;
+    return pos !== this.end;
   }
 
   private readExtendedUnicodeEscape(startIfTaggedTemplate: i32 = -1): string {
