@@ -1,8 +1,15 @@
-function add(y: i32): i32 {
+function failLet(y: i32): i32 {
   let x = y 234;
   return x + y;
 }
 
-function foo(): i32 {
+function failReturn(): i32 {
   return 123 456;
+}
+
+function successCloseBrace(): i32 {
+  return 123 }
+
+function successCloseParen(): i32 {
+  return ( 123 )
 }

@@ -1699,14 +1699,13 @@ export class Tokenizer extends DiagnosticEmitter {
 
   hasNoMoreExpressionInLine(): bool {
     let pos = this.pos;
-    const end = this.end;
-    do {
+    while (pos < this.end) {
       const c = this.source.text.charCodeAt(pos);
-      if (isLineBreak(c)) return true;
+      if (isLineBreak(c) || c === CharCode.CLOSEBRACE || c === CharCode.CLOSEPAREN) return true;
       if (!isWhiteSpace(c)) break;
       pos++;
-    } while (pos < end);
-    return pos === end;
+    }
+    return pos === this.end;
   }
 
   private readExtendedUnicodeEscape(startIfTaggedTemplate: i32 = -1): string {
