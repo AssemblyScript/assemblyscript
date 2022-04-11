@@ -15,7 +15,7 @@
  (data (i32.const 1240) "\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 1276) "|")
  (data (i32.const 1288) "\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
- (table $0 1 funcref)
+ (table $0 1 1 funcref)
  (export "memory" (memory $0))
  (export "testVar" (func $export:assert-nonnull/testVar))
  (export "testObj" (func $export:assert-nonnull/testObj))

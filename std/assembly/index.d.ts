@@ -1504,6 +1504,8 @@ declare class ArrayBuffer {
 declare class DataView {
   /** The `buffer` accessor property represents the `ArrayBuffer` or `SharedArrayBuffer` referenced by the `DataView` at construction time. */
   readonly buffer: ArrayBuffer;
+  /** Returns raw pointer to data storage including offset (unsafe). */
+  readonly dataStart: usize;
   /** The `byteLength` accessor property represents the length (in bytes) of this view from the start of its `ArrayBuffer` or `SharedArrayBuffer`. */
   readonly byteLength: i32;
   /** The `byteOffset` accessor property represents the offset (in bytes) of this view from the start of its `ArrayBuffer` or `SharedArrayBuffer`. */
@@ -1887,7 +1889,7 @@ declare class Date {
   getUTCMilliseconds(): i32;
 
   setUTCFullYear(value: i32): void;
-  setUTCMonth(value: i32): void;
+  setUTCMonth(value: i32, day?: i32): void;
   setUTCDate(value: i32): void;
   setUTCHours(value: i32): void;
   setUTCMinutes(value: i32): void;

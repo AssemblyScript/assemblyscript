@@ -725,7 +725,16 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0, k = functionTable.length; i < k; ++i) {
       functionTableNames[i] = functionTable[i].internalName;
     }
-    module.addFunctionTable("0", tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTableNames, module.i32(tableBase));
+
+    var tableSize = tableBase + functionTable.length;
+    module.addFunctionTable(
+      "0",
+      tableSize,
+      // use fixed size for non-imported and non-exported tables
+      options.importTable || options.exportTable ? Module.UNLIMITED_TABLE : tableSize,
+      functionTableNames,
+      module.i32(tableBase)
+    );
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {

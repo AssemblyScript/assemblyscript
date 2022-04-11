@@ -703,6 +703,62 @@ function test_const(): v128 {
   return one;                 // should not inline
 }
 
+export function test_vars_i8x16_partial(a: i8, b: i8, c: i8): v128 {
+  return i8x16(0, 1, a, 3, 4, 5, b, 7, 8, 9, 10, 11, 12, 13, 14, c);
+}
+
+export function test_vars_i8x16_full(
+  a: i8, b: i8, c: i8, d: i8,
+  e: i8, f: i8, g: i8, h: i8,
+  i: i8, k: i8, l: i8, m: i8,
+  n: i8, o: i8, p: i8, q: i8
+): v128 {
+  return i8x16(a, b, c, d, e, f, g, h, i, k, l, m, n, o, p, q);
+}
+
+export function test_vars_i16x8_partial(a: i16, b: i16, c: i16): v128 {
+  return i16x8(0, 1, a, 3, b, 5, 6, c);
+}
+
+export function test_vars_i16x8_full(
+  a: i16, b: i16, c: i16, d: i16,
+  e: i16, f: i16, g: i16, h: i16
+): v128 {
+  return i16x8(a, b, c, d, e, f, g, h);
+}
+
+export function test_vars_i32x4_partial(a: i32, b: i32, c: i32): v128 {
+  return i32x4(0, a, b, c);
+}
+
+export function test_vars_i32x4_full(a: i32, b: i32, c: i32, d: i32): v128 {
+  return i32x4(a, b, c, d);
+}
+
+export function test_vars_i64x2_partial(a: i64): v128 {
+  return i64x2(0, a);
+}
+
+export function test_vars_i64x2_full(a: i64, b: i64): v128 {
+  return i64x2(a, b);
+}
+
+export function test_vars_f32x4_partial(a: f32, b: f32, c: f32): v128 {
+  return f32x4(0, a, b, c);
+}
+
+export function test_vars_f32x4_full(a: f32, b: f32, c: f32, d: f32): v128 {
+  return f32x4(a, b, c, d);
+}
+
+export function test_vars_f64x2_partial(a: f64): v128 {
+  return f64x2(0, a);
+}
+
+export function test_vars_f64x2_full(a: f64, b: f64): v128 {
+  return f64x2(a, b);
+}
+
 if (ASC_FEATURE_SIMD) {
   test_v128();
   test_i8x16();

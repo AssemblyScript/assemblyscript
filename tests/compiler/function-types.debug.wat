@@ -19,7 +19,7 @@
  (data (i32.const 108) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 140) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 172) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 5 funcref)
+ (table $0 5 5 funcref)
  (elem $0 (i32.const 1) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/addI32)
  (export "memory" (memory $0))
  (start $~start)
