@@ -938,12 +938,7 @@ export class Parser extends DiagnosticEmitter {
     } while (tn.skip(Token.COMMA));
 
     var ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
-    if (!tn.skip(Token.SEMICOLON) && !isFor && tn.checkOffendingToken()) {
-      this.error(
-        DiagnosticCode.Unexpected_token,
-        tn.range()
-      );
-    }
+    this.checkRuleCompleted(tn, isFor);
     return ret;
   }
 
@@ -1120,12 +1115,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     var ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
-    if (!tn.skip(Token.SEMICOLON) && tn.checkOffendingToken()) {
-      this.error(
-        DiagnosticCode.Unexpected_token,
-        tn.range()
-      );
-    }
+    this.checkRuleCompleted(tn);
     return ret;
   }
 
@@ -3386,7 +3376,7 @@ export class Parser extends DiagnosticEmitter {
     var expression = this.parseExpression(tn);
     if (!expression) return null;
     var ret = Node.createThrowStatement(expression, tn.range(startPos, tn.pos));
-    tn.skip(Token.SEMICOLON);
+    this.checkRuleCompleted(tn);
     return ret;
   }
 
@@ -4319,6 +4309,18 @@ export class Parser extends DiagnosticEmitter {
       potentiallyGeneric = false;
     }
     return expr;
+  }
+
+  private checkRuleCompleted(
+    tn: Tokenizer,
+    isFor: bool = false
+  ) {
+    if (!tn.skip(Token.SEMICOLON) && !isFor && tn.checkOffendingToken()) {
+      this.error(
+        DiagnosticCode.Unexpected_token,
+        tn.range()
+      );
+    }
   }
 
   /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */

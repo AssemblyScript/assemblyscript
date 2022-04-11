@@ -7,6 +7,10 @@ function failReturn(): i32 {
   return 123 456;
 }
 
+function failThrow(): i32 {
+  throw 123 456;
+}
+
 function successCloseBrace(): i32 {
   return 123 }
 
