@@ -1,1 +1,1 @@
-typeof / /
+typeof / /;
