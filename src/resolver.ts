@@ -2249,6 +2249,14 @@ export class Resolver extends DiagnosticEmitter {
         }
         return null;
       }
+      case LiteralKind.REGEXP: {
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          node.range,
+          "Regular expressions"
+        );
+        return null;
+      }
     }
     assert(false);
     return null;
