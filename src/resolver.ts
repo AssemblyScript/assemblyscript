@@ -1013,11 +1013,9 @@ export class Resolver extends DiagnosticEmitter {
     if (this.resolvingExpressions.includes(node)) return null;
 
     this.resolvingExpressions.push(node);
-    try {
-      return this.unsafeResolveExpression(node, ctxFlow, ctxType, reportMode);
-    } finally {
-      this.resolvingExpressions.pop();
-    }
+    const resolved = this.unsafeResolveExpression(node, ctxFlow, ctxType, reportMode);
+    this.resolvingExpressions.pop();
+    return resolved;
   }
 
   /** Resolves an expression to its static type. (may cause stack overflow) */
