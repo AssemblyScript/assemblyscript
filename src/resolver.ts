@@ -996,6 +996,9 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
+  /** resolving expressions */
+  private resolvingExpressions: Expression[] = [];
+
   /** Resolves an expression to its static type. */
   resolveExpression(
     /** The expression to resolve. */
@@ -1005,6 +1008,23 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual type. */
     ctxType: Type = Type.auto,
     /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    if (this.resolvingExpressions.includes(node)) return null;
+
+    this.resolvingExpressions.push(node);
+    try {
+      return this.unsafeResolveExpression(node, ctxFlow, ctxType, reportMode);
+    } finally {
+      this.resolvingExpressions.pop();
+    }
+  }
+
+  /** Resolves an expression to its static type. (may cause stack overflow) */
+  private unsafeResolveExpression(
+    node: Expression,
+    ctxFlow: Flow,
+    ctxType: Type = Type.auto,
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
     while (node.kind == NodeKind.PARENTHESIZED) { // skip
