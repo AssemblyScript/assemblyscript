@@ -997,7 +997,7 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   /** resolving expressions */
-  private resolvingExpressions: Expression[] = [];
+  private resolvingExpressions: Set<Expression> = new Set();
 
   /** Resolves an expression to its static type. */
   resolveExpression(
@@ -1010,11 +1010,11 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    if (this.resolvingExpressions.includes(node)) return null;
+    if (this.resolvingExpressions.has(node)) return null;
 
-    this.resolvingExpressions.push(node);
+    this.resolvingExpressions.add(node);
     const resolved = this.unsafeResolveExpression(node, ctxFlow, ctxType, reportMode);
-    this.resolvingExpressions.pop();
+    this.resolvingExpressions.delete(node);
     return resolved;
   }
 
