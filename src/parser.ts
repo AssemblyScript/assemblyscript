@@ -3804,8 +3804,17 @@ export class Parser extends DiagnosticEmitter {
             name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
           }
           names.push(name);
+
           if (tn.skip(Token.COLON)) {
             let value = this.parseExpression(tn, Precedence.COMMA + 1);
+            if (!value) return null;
+            values.push(value);
+          } else if (tn.skip(Token.OPENPAREN)) {
+            const signatureStart = tn.pos;
+            const parameters = this.parseParameters(tn);
+            if (!parameters) return null;
+            const noname = Node.createEmptyIdentifierExpression(tn.range(tn.pos));
+            const value = this.parseFunctionExpressionCommon(tn, noname, parameters, this.parseParametersThis, ArrowKind.NONE, startPos, signatureStart);
             if (!value) return null;
             values.push(value);
           } else if (!name.isQuoted) {
