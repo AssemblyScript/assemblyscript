@@ -8598,6 +8598,7 @@ export class Compiler extends DiagnosticEmitter {
     var names = expression.names;
     var numNames = names.length;
     var values = expression.values;
+    var methods = expression.methods;
     var members = classReference.members;
     var hasErrors = false;
     var exprs = new Array<ExpressionRef>();
@@ -8605,6 +8606,7 @@ export class Compiler extends DiagnosticEmitter {
     var tempLocal = flow.getTempLocal(classType);
     var classTypeRef = classType.toRef();
     assert(numNames == values.length);
+    assert(numNames == methods.length);
 
     // Assume all class fields will be omitted, and add them to our omitted list
     var omittedFields = new Set<Field>();
@@ -8649,7 +8651,20 @@ export class Compiler extends DiagnosticEmitter {
       let fieldInstance = <Field>member;
       let fieldType = fieldInstance.type;
 
-      let expr = this.compileExpression(values[i], fieldType, Constraints.CONV_IMPLICIT);
+      let value = values[i];
+      let method = methods[i];
+      if (value == null && method != null) {
+        value = new FunctionExpression(method);
+      }
+      if (value == null) {
+        this.error(
+          DiagnosticCode.Property_0_does_not_exist_on_type_1,
+          names[i].range, memberName, classType.toString()
+        );
+        hasErrors = true;
+        continue;
+      }
+      let expr = this.compileExpression(value, fieldType, Constraints.CONV_IMPLICIT);
       exprs.push(
         module.call(fieldInstance.internalSetterName, [
           module.local_get(tempLocal.index, classTypeRef),

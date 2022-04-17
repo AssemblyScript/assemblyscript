@@ -330,10 +330,11 @@ export abstract class Node {
 
   static createObjectLiteralExpression(
     names: IdentifierExpression[],
-    values: Expression[],
+    values: (Expression | null)[],
+    methods: (MethodDeclaration | null)[],
     range: Range
   ): ObjectLiteralExpression {
-    return new ObjectLiteralExpression(names, values, range);
+    return new ObjectLiteralExpression(names, values, methods, range);
   }
 
   static createOmittedExpression(
@@ -1390,7 +1391,9 @@ export class ObjectLiteralExpression extends LiteralExpression {
     /** Field names. */
     public names: IdentifierExpression[],
     /** Field values. */
-    public values: Expression[],
+    public values: (Expression | null)[],
+    /** Methods. */
+    public methods: (MethodDeclaration | null)[],
     /** Source range. */
     range: Range
   ) {

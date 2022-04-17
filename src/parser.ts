@@ -90,6 +90,7 @@ import {
 
   mangleInternalPath
 } from "./ast";
+import { MethodDeclaration } from ".";
 
 /** Represents a dependee. */
 class Dependee {
@@ -3787,9 +3788,34 @@ export class Parser extends DiagnosticEmitter {
       case Token.OPENBRACE: {
         let startPos = tn.tokenPos;
         let names = new Array<IdentifierExpression>();
-        let values = new Array<Expression>();
+        let values = new Array<Expression | null>();
+        let methods = new Array<MethodDeclaration | null>();
         let name: IdentifierExpression;
         while (!tn.skip(Token.CLOSEBRACE)) {
+          // getter/setter
+          let state = tn.mark();
+          let isGetter = false;
+          let getStart = 0;
+          let isSetter = false;
+          let setStart = 0;
+          if (tn.skip(Token.GET)) {
+            if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+              isGetter = true;
+              getStart = tn.tokenPos;
+              if (!startPos) startPos = getStart;
+            } else {
+              tn.reset(state);
+            }
+          } else if (tn.skip(Token.SET)) {
+            if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+              isSetter = true;
+              setStart = tn.tokenPos;
+              if (!startPos) startPos = setStart;
+            } else {
+              tn.reset(state);
+            }
+          }
+
           if (!tn.skipIdentifier()) {
             if (!tn.skip(Token.STRINGLITERAL)) {
               this.error(
@@ -3805,20 +3831,90 @@ export class Parser extends DiagnosticEmitter {
           }
           names.push(name);
 
-          if (tn.skip(Token.COLON)) {
+          if (tn.skip(Token.OPENPAREN)) {
+            // method
+            let signatureStart = tn.tokenPos;
+            let parameters = this.parseParameters(tn);
+            if (!parameters) return null;
+            let thisType = this.parseParametersThis;
+            if (isGetter) {
+              if (parameters.length) {
+                this.error(
+                  DiagnosticCode.A_get_accessor_cannot_have_parameters,
+                  name.range
+                );
+              }
+            } else if (isSetter) {
+              if (parameters.length != 1) {
+                this.error(
+                  DiagnosticCode.A_set_accessor_must_have_exactly_one_parameter,
+                  name.range
+                );
+              }
+              if (parameters.length > 0 && parameters[0].initializer) {
+                this.error(
+                  DiagnosticCode.A_set_accessor_parameter_cannot_have_an_initializer,
+                  name.range
+                );
+              }
+            }
+
+            let returnType: TypeNode | null = null;
+            if (tn.skip(Token.COLON)) {
+              if (isSetter) {
+                this.error(
+                  DiagnosticCode.A_set_accessor_cannot_have_a_return_type_annotation,
+                  tn.range()
+                );
+              }
+              returnType = this.parseType(tn, isSetter || name.kind == NodeKind.CONSTRUCTOR);
+              if (!returnType) return null;
+            } else {
+              returnType = Node.createOmittedType(tn.range(tn.pos));
+              if (!isSetter && name.kind != NodeKind.CONSTRUCTOR) {
+                this.error(
+                  DiagnosticCode.Type_expected,
+                  returnType.range
+                ); // recoverable
+              }
+            }
+
+            let signature = Node.createFunctionType(
+              parameters,
+              returnType,
+              thisType,
+              false,
+              tn.range(signatureStart, tn.pos)
+            );
+
+            let body: Statement | null = null;
+            if (tn.skip(Token.OPENBRACE)) {
+              body = this.parseBlockStatement(tn, false);
+              if (!body) return null;
+            }
+
+            let method = Node.createMethodDeclaration(
+              name,
+              null,
+              0,
+              null,
+              signature,
+              body,
+              tn.range(startPos, tn.pos)
+            );
+            if (!method) return null;
+
+            values.push(null);
+            methods.push(method);
+          } else if (tn.skip(Token.COLON)) {
+            // property
             let value = this.parseExpression(tn, Precedence.COMMA + 1);
             if (!value) return null;
             values.push(value);
-          } else if (tn.skip(Token.OPENPAREN)) {
-            const signatureStart = tn.pos;
-            const parameters = this.parseParameters(tn);
-            if (!parameters) return null;
-            const noname = Node.createEmptyIdentifierExpression(tn.range(tn.pos));
-            const value = this.parseFunctionExpressionCommon(tn, noname, parameters, this.parseParametersThis, ArrowKind.NONE, startPos, signatureStart);
-            if (!value) return null;
-            values.push(value);
+            methods.push(null);
           } else if (!name.isQuoted) {
             values.push(name);
+            methods.push(null);
           } else {
             this.error(
               DiagnosticCode._0_expected,
@@ -3838,7 +3934,7 @@ export class Parser extends DiagnosticEmitter {
             }
           }
         }
-        return Node.createObjectLiteralExpression(names, values, tn.range(startPos, tn.pos));
+        return Node.createObjectLiteralExpression(names, values, methods, tn.range(startPos, tn.pos));
       }
       // AssertionExpression (unary prefix)
       case Token.LESSTHAN: {

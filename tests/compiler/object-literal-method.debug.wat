@@ -1,8 +1,8 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -25,10 +25,11 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $object-literal-method/obj1 (mut i32) (i32.const 0))
  (global $object-literal-method/obj2 (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 480))
- (global $~lib/memory/__data_end i32 (i32.const 524))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16908))
- (global $~lib/memory/__heap_base i32 (i32.const 16908))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 560))
+ (global $~lib/memory/__data_end i32 (i32.const 604))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16988))
+ (global $~lib/memory/__heap_base i32 (i32.const 16988))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -40,12 +41,13 @@
  (data (i32.const 352) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 380) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 444) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 480) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 476) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\000\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00-\00m\00e\00t\00h\00o\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 560) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 3 3 funcref)
- (elem $0 (i32.const 1) $start:object-literal-method~anonymous|0 $start:object-literal-method~anonymous|1)
+ (elem $0 (i32.const 1) $start:object-literal-method~add|0 $start:object-literal-method~anonymous|1)
  (export "memory" (memory $0))
  (start $~start)
- (func $start:object-literal-method~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
+ (func $start:object-literal-method~add|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
@@ -2252,6 +2254,44 @@
   call $object-literal-method/SomeClass#set:add
   local.get $1
   global.set $object-literal-method/obj2
+  i32.const 21
+  i32.const 21
+  i32.const 2
+  global.set $~argumentsLength
+  global.get $object-literal-method/obj1
+  i32.load
+  i32.load
+  call_indirect $0 (type $i32_i32_=>_i32)
+  i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 496
+   i32.const 17
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 21
+  i32.const 21
+  i32.const 2
+  global.set $~argumentsLength
+  global.get $object-literal-method/obj2
+  i32.load
+  i32.load
+  call_indirect $0 (type $i32_i32_=>_i32)
+  i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 496
+   i32.const 18
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -2355,8 +2395,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16928
-   i32.const 16976
+   i32.const 17008
+   i32.const 17056
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

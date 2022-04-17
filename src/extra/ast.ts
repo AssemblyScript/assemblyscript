@@ -492,25 +492,38 @@ export class ASTBuilder {
     var sb = this.sb;
     var names = node.names;
     var values = node.values;
+    var methods = node.methods;
     var numElements = names.length;
     assert(numElements == values.length);
+    assert(numElements == methods.length);
     if (numElements) {
       sb.push("{\n");
       indent(sb, ++this.indentLevel);
-      this.visitNode(names[0]);
-      sb.push(": ");
-      this.visitNode(values[0]);
+      assert(values[0] != null || methods[0] != null);
+      if (values[0] != null) {
+        this.visitNode(names[0]);
+        sb.push(": ");
+        this.visitNode(values[0]);
+      } else if (methods[0] != null) {
+        this.visitNode(methods[0]);
+      }
       for (let i = 1; i < numElements; ++i) {
         sb.push(",\n");
         indent(sb, this.indentLevel);
         let name = names[i];
         let value = values[i];
+        let method = methods[i];
+        assert(value != null || method != null);
         if (name == value) {
           this.visitNode(name);
         } else {
-          this.visitNode(name);
-          sb.push(": ");
-          this.visitNode(value);
+          if (value != null) {
+            this.visitNode(name);
+            sb.push(": ");
+            this.visitNode(value);
+          } else if (method != null) {
+            this.visitNode(method);
+          }
         }
       }
       sb.push("\n");
