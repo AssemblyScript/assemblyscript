@@ -8654,6 +8654,15 @@ export class Compiler extends DiagnosticEmitter {
       let value = values[i];
       let method = methods[i];
       if (value == null && method != null) {
+        if (method.flags & CommonFlags.GET || method.flags & CommonFlags.SET) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            names[i].range,
+            'Getter/setter in object literal' 
+          );
+          hasErrors = true;
+          continue;
+        }
         value = new FunctionExpression(method);
       }
       if (value == null) {

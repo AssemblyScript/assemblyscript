@@ -3798,8 +3798,10 @@ export class Parser extends DiagnosticEmitter {
           let getStart = 0;
           let isSetter = false;
           let setStart = 0;
+          let flags = 0;
           if (tn.skip(Token.GET)) {
             if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+              flags |= CommonFlags.GET;
               isGetter = true;
               getStart = tn.tokenPos;
               if (!startPos) startPos = getStart;
@@ -3808,6 +3810,7 @@ export class Parser extends DiagnosticEmitter {
             }
           } else if (tn.skip(Token.SET)) {
             if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
+              flags |= CommonFlags.SET;
               isSetter = true;
               setStart = tn.tokenPos;
               if (!startPos) startPos = setStart;
@@ -3896,7 +3899,7 @@ export class Parser extends DiagnosticEmitter {
             let method = Node.createMethodDeclaration(
               name,
               null,
-              0,
+              flags,
               null,
               signature,
               body,
