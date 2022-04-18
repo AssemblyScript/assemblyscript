@@ -72,6 +72,8 @@ import {
   ImportDeclaration,
   ImportStatement,
   IndexSignatureNode,
+  MethodDeclaration,
+  ModuleDeclaration,
   NamespaceDeclaration,
   ParameterNode,
   ParameterKind,
@@ -86,11 +88,9 @@ import {
   VariableDeclaration,
   VoidStatement,
   WhileStatement,
-  ModuleDeclaration,
 
   mangleInternalPath
 } from "./ast";
-import { MethodDeclaration } from ".";
 
 /** Represents a dependee. */
 class Dependee {
