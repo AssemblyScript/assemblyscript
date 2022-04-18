@@ -1,0 +1,7 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS236: Circular inheritance"
+  ]
+}

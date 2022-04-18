@@ -1442,6 +1442,7 @@ export class Program extends DiagnosticEmitter {
     // TODO: make this work with interfaaces as well
     var thisInstanceMembers = thisPrototype.instanceMembers;
     if (thisInstanceMembers) {
+      const prototypesSeen = new Set<ClassPrototype>();
       do {
         let baseInstanceMembers = basePrototype.instanceMembers;
         if (baseInstanceMembers) {
@@ -1526,8 +1527,16 @@ export class Program extends DiagnosticEmitter {
             }
           }
         }
+        prototypesSeen.add(basePrototype);
         let nextPrototype = basePrototype.basePrototype;
         if (!nextPrototype) break;
+        if (prototypesSeen.has(nextPrototype)) {
+          this.error(
+            DiagnosticCode.Circular_inheritance,
+            nextPrototype.identifierNode.range,
+          );
+          break;
+        }
         basePrototype = nextPrototype;
       } while (true);
     }
