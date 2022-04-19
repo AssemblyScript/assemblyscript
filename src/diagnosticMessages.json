@@ -46,7 +46,6 @@
   "Property '{0}' is always assigned before being used.": 233,
   "Expression does not compile to a value at runtime.": 234,
   "Only variables, functions and enums become WebAssembly module exports.": 235,
-  "Circular inheritance": 236,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,

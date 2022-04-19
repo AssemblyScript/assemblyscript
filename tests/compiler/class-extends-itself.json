@@ -2,6 +2,6 @@
   "asc_flags": [
   ],
   "stderr": [
-    "AS236: Circular inheritance"
+    "TS2506: 'Foo' is referenced directly or indirectly in its own base expression."
   ]
 }

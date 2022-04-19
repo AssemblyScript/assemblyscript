@@ -1532,8 +1532,9 @@ export class Program extends DiagnosticEmitter {
         if (!nextPrototype) break;
         if (prototypesSeen.has(nextPrototype)) {
           this.error(
-            DiagnosticCode.Circular_inheritance,
+            DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
             nextPrototype.identifierNode.range,
+            nextPrototype.identifierNode.text,
           );
           break;
         }
