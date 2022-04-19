@@ -2565,13 +2565,6 @@ export class Program extends DiagnosticEmitter {
           this.initializeVariables(<VariableStatement>member, original);
           break;
         }
-        case NodeKind.EXPORT: {
-          this.error(
-            DiagnosticCode.A_default_export_can_only_be_used_in_an_ECMAScript_style_module,
-            member.range,
-          );
-          break;
-        }
         default: assert(false); // namespace member expected
       }
     }

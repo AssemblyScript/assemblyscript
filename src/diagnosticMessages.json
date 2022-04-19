@@ -114,7 +114,7 @@
   "A definite assignment assertion '!' is not permitted in this context.": 1255,
   "A class may only extend another class.": 1311,
   "A parameter property cannot be declared using a rest parameter.": 1317,
-  "A default export can only be used in an ECMAScript-style module.": 1319,
+  "A default export can only be used in a module.": 1319,
   "An identifier or keyword cannot immediately follow a numeric literal.": 1351,
 
   "Duplicate identifier '{0}'.": 2300,

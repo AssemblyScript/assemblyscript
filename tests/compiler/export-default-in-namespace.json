@@ -1,7 +1,0 @@
-{
-  "asc_flags": [
-   ],
-  "stderr": [
-    "TS1319: A default export can only be used in an ECMAScript-style module."
-  ]
-}
