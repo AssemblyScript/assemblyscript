@@ -1,0 +1,7 @@
+{
+  "asc_flags": [
+   ],
+  "stderr": [
+    "TS1319: A default export can only be used in a module."
+  ]
+}
