@@ -2483,8 +2483,16 @@ export class Parser extends DiagnosticEmitter {
         );
         while (!tn.skip(Token.CLOSEBRACE)) {
           let member = this.parseTopLevelStatement(tn, declaration);
-          if (member) members.push(member);
-          else {
+          if (member) {
+            if (member.kind == NodeKind.EXPORT) {
+              this.error(
+                DiagnosticCode.A_default_export_can_only_be_used_in_a_module,
+                member.range,
+              );
+              return null;
+            }
+            members.push(member);
+          } else {
             this.skipStatement(tn);
             if (tn.skip(Token.ENDOFFILE)) {
               this.error(
