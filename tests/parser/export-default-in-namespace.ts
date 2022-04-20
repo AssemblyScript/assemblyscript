@@ -1,3 +1,3 @@
 namespace Foo {
-  export default foo;
+  export default bar;
 }
