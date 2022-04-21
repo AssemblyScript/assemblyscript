@@ -1,13 +1,13 @@
 class A implements Foo, Bar {
-    foo(): void {}
+  foo(): void {}
 }
 
 interface Foo {
-    foo(): void;
+  foo(): void;
 }
 
 interface Bar {
-    foo(): void;
+  foo(): void;
 }
 
 new A();
