@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig-base.json",
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
+    "../node_modules/**/assembly/global.d.ts"
   ]
 }
