@@ -835,15 +835,17 @@ export class Signature {
   }
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
-  isAssignableTo(target: Signature, requireSameSize: bool = false): bool {
+  isAssignableTo(target: Signature, requireSameSize: bool = false, isInterface: bool = false): bool {
 
-    // check `this` type
-    var thisThisType = this.thisType;
-    var targetThisType = target.thisType;
-    if (thisThisType) {
-      if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) return false;
-    } else if (targetThisType) {
-      return false;
+    if (!isInterface) {
+      // check `this` type
+      var thisThisType = this.thisType;
+      var targetThisType = target.thisType;
+      if (thisThisType) {
+        if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) return false;
+      } else if (targetThisType) {
+        return false;
+      }
     }
 
     // check rest parameter

@@ -2950,6 +2950,12 @@ export abstract class DeclaredElement extends Element {
         case ElementKind.FUNCTION: {
           return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
         }
+        case ElementKind.FUNCTION_PROTOTYPE: {
+          let selfFunc = this.program.resolver.resolveFunction(<FunctionPrototype>self, null);
+          let baseFunc = this.program.resolver.resolveFunction(<FunctionPrototype>base, null);
+          if (!selfFunc || !baseFunc) return false;
+          return selfFunc.signature.isAssignableTo(baseFunc.signature, true, /* interface */ true);
+        }
         case ElementKind.PROPERTY: {
           let selfProperty = <Property>self;
           let baseProperty = <Property>base;
