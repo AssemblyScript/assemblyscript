@@ -1405,6 +1405,7 @@ declare const F32: typeof _Float;
 declare const F64: typeof _Float;
 /** Alias of F64. */
 declare const Number: typeof F64;
+declare type Number = typeof F64;
 
 // User-defined diagnostic macros
 
