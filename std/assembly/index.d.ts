@@ -2152,10 +2152,10 @@ declare namespace process {
   export const argv: string[];
   /** Map of variables in the binary's user environment. */
   export const env: Map<string,string>;
-  /** Process exit code to use when the process exits gracefully. Defaults to `0`. */
-  export var exitCode: i32;
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
   export function exit(code?: i32): void;
+  /** `exit()`’s default value. Defaults to `0`. */
+  export var exitCode: i32;
   /** Stream connected to `stdin` (fd `0`). */
   export const stdin: ReadableStream;
   /** Stream connected to `stdout` (fd `1`). */
