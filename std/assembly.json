@@ -13,5 +13,8 @@
         "./assembly/*"
       ]
     }
-  }
+  },
+  "include": [
+    "../../../node_modules/**/assembly/global.d.ts"
+  ]
 }
