@@ -147,6 +147,10 @@ declare function sub<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 declare function mul<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 /** Computes the quotient of two integers or floats. */
 declare function div<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Return 1 if two numbers are equal to each other, 0 otherwise. */
+declare function eq<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
+/** Return 0 if two numbers are equal to each other, 1 otherwise. */
+declare function ne<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
@@ -338,6 +342,10 @@ declare namespace i32 {
   export function div_s(left: i32, right: i32): i32;
   /** Computes the unsigned quotient of two 32-bit integers. */
   export function div_u(left: i32, right: i32): i32;
+  /** Return 1 two 32-bit inegers are equal to each other, 0 otherwise. */
+  export function eq(left: i32, right: i32): i32;
+  /** Return 0 two 32-bit inegers are equal to each other, 1 otherwise. */
+  export function ne(left: i32, right: i32): i32;
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -458,6 +466,10 @@ declare namespace i64 {
   export function div_s(left: i64, right: i64): i64;
   /** Computes the unsigned quotient of two 64-bit integers. */
   export function div_u(left: i64, right: i64): i64;
+  /** Return 1 two 64-bit inegers are equal to each other, 0 otherwise. */
+  export function eq(left: i64, right: i64): i32;
+  /** Return 0 two 64-bit inegers are equal to each other, 1 otherwise. */
+  export function ne(left: i64, right: i64): i32;
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -625,6 +637,10 @@ declare namespace f32 {
   export function mul(left: f32, right: f32): f32;
   /** Computes the quotient of two 32-bit floats. */
   export function div(left: f32, right: f32): f32;
+  /** Return 1 two 32-bit floats are equal to each other, 0 otherwise. */
+  export function eq(left: f32, right: f32): i32;
+  /** Return 0 two 32-bit floats are equal to each other, 1 otherwise. */
+  export function ne(left: f32, right: f32): i32;
   /** Computes the absolute value of a 32-bit float. */
   export function abs(value: f32): f32;
   /** Determines the maximum of two 32-bit floats. If either operand is `NaN`, returns `NaN`. */
@@ -679,6 +695,10 @@ declare namespace f64 {
   export function mul(left: f64, right: f64): f64;
   /** Computes the quotient of two 64-bit floats. */
   export function div(left: f64, right: f64): f64;
+  /** Return 1 two 64-bit floats are equal to each other, 0 otherwise. */
+  export function eq(left: f64, right: f64): i32;
+  /** Return 0 two 32-bit floats are equal to each other, 1 otherwise. */
+  export function ne(left: f64, right: f64): i32;
   /** Computes the absolute value of a 64-bit float. */
   export function abs(value: f64): f64;
   /** Determines the maximum of two 64-bit floats. If either operand is `NaN`, returns `NaN`. */
@@ -1405,6 +1425,7 @@ declare const F32: typeof _Float;
 declare const F64: typeof _Float;
 /** Alias of F64. */
 declare const Number: typeof F64;
+declare type Number = typeof F64;
 
 // User-defined diagnostic macros
 
@@ -2131,10 +2152,10 @@ declare namespace process {
   export const argv: string[];
   /** Map of variables in the binary's user environment. */
   export const env: Map<string,string>;
-  /** Process exit code to use when the process exits gracefully. Defaults to `0`. */
-  export var exitCode: i32;
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
   export function exit(code?: i32): void;
+  /** `exit()`’s default value. Defaults to `0`. */
+  export var exitCode: i32;
   /** Stream connected to `stdin` (fd `0`). */
   export const stdin: ReadableStream;
   /** Stream connected to `stdout` (fd `1`). */
