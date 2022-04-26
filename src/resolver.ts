@@ -1010,11 +1010,11 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    if (this.resolvingExpressions.has(node)) return null;
-
-    this.resolvingExpressions.add(node);
+    const resolvingExpressions = this.resolvingExpressions;
+    if (resolvingExpressions.has(node)) return null;
+    resolvingExpressions.add(node);
     const resolved = this.unsafeResolveExpression(node, ctxFlow, ctxType, reportMode);
-    this.resolvingExpressions.delete(node);
+    resolvingExpressions.delete(node);
     return resolved;
   }
 
