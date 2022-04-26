@@ -1013,7 +1013,7 @@ export class Resolver extends DiagnosticEmitter {
     const resolvingExpressions = this.resolvingExpressions;
     if (resolvingExpressions.has(node)) return null;
     resolvingExpressions.add(node);
-    const resolved = this.unsafeResolveExpression(node, ctxFlow, ctxType, reportMode);
+    const resolved = this.doResolveExpression(node, ctxFlow, ctxType, reportMode);
     resolvingExpressions.delete(node);
     return resolved;
   }
