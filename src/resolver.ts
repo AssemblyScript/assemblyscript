@@ -2258,7 +2258,6 @@ export class Resolver extends DiagnosticEmitter {
           );
         }
         return null;
-        return null;
       }
     }
     assert(false);
