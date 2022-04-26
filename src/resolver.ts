@@ -1019,7 +1019,7 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   /** Resolves an expression to its static type. (may cause stack overflow) */
-  private unsafeResolveExpression(
+  private doResolveExpression(
     node: Expression,
     ctxFlow: Flow,
     ctxType: Type = Type.auto,
