@@ -634,6 +634,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _stringInstance: Class | null = null;
 
+  /** Gets the standard `RegExp` instance. */
+  get regexpInstance(): Class {
+    var cached = this._regexpInstance;
+    if (!cached) this._regexpInstance = cached = this.requireClass(CommonNames.RegExp);
+    return cached;
+  }
+  private _regexpInstance: Class | null = null;
+
   /** Gets the standard `Object` instance. */
   get objectInstance(): Class {
     var cached = this._objectInstance;

@@ -2,6 +2,6 @@
   "asc_flags": [
   ],
   "stderr": [
-    "AS100: Not implemented: Regular expressions"
+    "TS2329: Index signature is missing in type '~lib/regexp/RegExp'"
   ]
 }

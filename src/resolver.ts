@@ -2191,6 +2191,9 @@ export class Resolver extends DiagnosticEmitter {
       case LiteralKind.TEMPLATE: {
         return this.program.stringInstance;
       }
+      case LiteralKind.REGEXP: {
+        return this.program.regexpInstance;
+      }
       case LiteralKind.ARRAY: {
         let classReference = ctxType.getClass();
         if (classReference && classReference.prototype == this.program.arrayPrototype) {
@@ -2245,16 +2248,6 @@ export class Resolver extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Expression_cannot_be_represented_by_a_type,
             node.range
-          );
-        }
-        return null;
-      }
-      case LiteralKind.REGEXP: {
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Not_implemented_0,
-            node.range,
-            "Regular expressions"
           );
         }
         return null;
