@@ -643,17 +643,18 @@ export async function main(argv, options) {
 
   // Include entry files
   for (let i = 0, k = argv.length; i < k; ++i) {
-    const filename = argv[i];
-    let sourcePath = String(filename)
-      .replace(/\\/g, "/")
-      .replace(extension_re, "")
-      .replace(/[\\/]$/, "");
+    const filename = String(argv[i]);
 
     // Setting the path to relative path
-    sourcePath = path.isAbsolute(sourcePath)
-      ? path.relative(baseDir, sourcePath).replace(/\\/g, "/")
-      : sourcePath;
+    let sourcePath = path.isAbsolute(filename)
+      ? path.relative(baseDir, filename)
+      : path.normalize(filename);
 
+    sourcePath = sourcePath
+      .replace(/\\/g, "/")
+      .replace(extension_re, "")
+      .replace(/\/$/, "");
+    
     // Try entryPath.ext, then entryPath/index.ext
     let sourceText = await readFile(sourcePath + extension, baseDir);
     if (sourceText == null) {
