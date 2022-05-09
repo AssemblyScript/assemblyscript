@@ -415,7 +415,7 @@
     if
      i32.const 0
      i32.const 1232
-     i32.const 159
+     i32.const 169
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -432,6 +432,57 @@
     br $while-continue|0
    end
   end
+ )
+ (func $~lib/rt/itcms/Object#unlink (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  i32.load offset=4
+  i32.const -4
+  i32.and
+  local.tee $1
+  i32.eqz
+  if
+   i32.const 0
+   local.get $0
+   i32.const 33012
+   i32.lt_u
+   local.get $0
+   i32.load offset=8
+   select
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1232
+    i32.const 127
+    i32.const 18
+    call $~lib/builtins/abort
+    unreachable
+   end
+   return
+  end
+  local.get $0
+  i32.load offset=8
+  local.tee $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1232
+   i32.const 131
+   i32.const 16
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
+  i32.store offset=8
+  local.get $0
+  local.get $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  local.get $1
+  i32.or
+  i32.store offset=4
  )
  (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
   (local $1 i32)
@@ -456,61 +507,13 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink
-   local.get $0
-   i32.load offset=4
-   i32.const -4
-   i32.and
-   local.tee $1
-   i32.eqz
-   if
-    i32.const 0
-    local.get $0
-    i32.const 33012
-    i32.lt_u
-    local.get $0
-    i32.load offset=8
-    select
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 1232
-     i32.const 127
-     i32.const 18
-     call $~lib/builtins/abort
-     unreachable
-    end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink
-   end
-   local.get $0
-   i32.load offset=8
-   local.tee $2
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1232
-    i32.const 131
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   local.get $2
-   i32.store offset=8
-   local.get $2
-   local.get $2
-   i32.load offset=4
-   i32.const 3
-   i32.and
-   local.get $1
-   i32.or
-   i32.store offset=4
-  end
+  local.get $0
+  call $~lib/rt/itcms/Object#unlink
   global.get $~lib/rt/itcms/toSpace
-  local.set $2
+  local.set $1
   local.get $0
   i32.load offset=12
-  local.tee $1
+  local.tee $2
   i32.const 1
   i32.le_u
   if (result i32)
@@ -518,7 +521,7 @@
   else
    i32.const 16000
    i32.load
-   local.get $1
+   local.get $2
    i32.lt_u
    if
     i32.const 1360
@@ -528,7 +531,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $1
+   local.get $2
    i32.const 3
    i32.shl
    i32.const 16004
@@ -538,11 +541,11 @@
    i32.and
   end
   local.set $3
-  local.get $2
+  local.get $1
   i32.load offset=8
-  local.set $1
+  local.set $2
   local.get $0
-  local.get $2
+  local.get $1
   global.get $~lib/rt/itcms/white
   i32.eqz
   i32.const 2
@@ -551,17 +554,17 @@
   i32.or
   i32.store offset=4
   local.get $0
-  local.get $1
+  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $1
+  local.get $2
+  local.get $2
   i32.load offset=4
   i32.const 3
   i32.and
   local.get $0
   i32.or
   i32.store offset=4
-  local.get $2
+  local.get $1
   local.get $0
   i32.store offset=8
  )
@@ -1381,7 +1384,7 @@
     if
      i32.const 0
      i32.const 1232
-     i32.const 228
+     i32.const 238
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -1754,7 +1757,7 @@
   if
    i32.const 1168
    i32.const 1232
-   i32.const 260
+   i32.const 270
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -46875,7 +46878,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $1
                                        i32.store offset=4
-                                       loop $for-loop|01
+                                       loop $for-loop|018
                                         local.get $4
                                         local.get $15
                                         i32.gt_s
@@ -46901,7 +46904,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|01
+                                         br $for-loop|018
                                         end
                                        end
                                        local.get $2
@@ -47018,7 +47021,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $1
                                        i32.store offset=4
-                                       loop $for-loop|03
+                                       loop $for-loop|020
                                         local.get $4
                                         local.get $15
                                         i32.gt_s
@@ -47044,7 +47047,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|03
+                                         br $for-loop|020
                                         end
                                        end
                                        local.get $2
@@ -47161,7 +47164,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $1
                                        i32.store offset=4
-                                       loop $for-loop|07
+                                       loop $for-loop|023
                                         local.get $4
                                         local.get $15
                                         i32.gt_s
@@ -47187,7 +47190,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|07
+                                         br $for-loop|023
                                         end
                                        end
                                        local.get $2
@@ -47309,7 +47312,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $2
                                        i32.store offset=4
-                                       loop $for-loop|011
+                                       loop $for-loop|025
                                         local.get $7
                                         local.get $15
                                         i32.gt_s
@@ -47338,7 +47341,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|011
+                                         br $for-loop|025
                                         end
                                        end
                                        local.get $4
@@ -47460,7 +47463,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $2
                                        i32.store offset=4
-                                       loop $for-loop|016
+                                       loop $for-loop|028
                                         local.get $7
                                         local.get $15
                                         i32.gt_s
@@ -47489,7 +47492,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|016
+                                         br $for-loop|028
                                         end
                                        end
                                        local.get $4
@@ -47611,7 +47614,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $2
                                        i32.store offset=4
-                                       loop $for-loop|019
+                                       loop $for-loop|030
                                         local.get $7
                                         local.get $15
                                         i32.gt_s
@@ -47640,7 +47643,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|019
+                                         br $for-loop|030
                                         end
                                        end
                                        local.get $4
@@ -47762,7 +47765,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $2
                                        i32.store offset=4
-                                       loop $for-loop|023
+                                       loop $for-loop|033
                                         local.get $7
                                         local.get $15
                                         i32.gt_s
@@ -47791,7 +47794,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|023
+                                         br $for-loop|033
                                         end
                                        end
                                        local.get $4
@@ -47913,7 +47916,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $1
                                        i32.store offset=4
-                                       loop $for-loop|026
+                                       loop $for-loop|035
                                         local.get $5
                                         local.get $15
                                         i32.gt_s
@@ -47942,7 +47945,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|026
+                                         br $for-loop|035
                                         end
                                        end
                                        local.get $3
@@ -48064,7 +48067,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $1
                                        i32.store offset=4
-                                       loop $for-loop|029
+                                       loop $for-loop|038
                                         local.get $5
                                         local.get $15
                                         i32.gt_s
@@ -48093,7 +48096,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|029
+                                         br $for-loop|038
                                         end
                                        end
                                        local.get $3
@@ -48215,7 +48218,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $1
                                        i32.store offset=4
-                                       loop $for-loop|033
+                                       loop $for-loop|040
                                         local.get $5
                                         local.get $15
                                         i32.gt_s
@@ -48244,7 +48247,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|033
+                                         br $for-loop|040
                                         end
                                        end
                                        local.get $3
@@ -48366,7 +48369,7 @@
                                        call $~lib/rt/itcms/__new
                                        local.tee $1
                                        i32.store offset=4
-                                       loop $for-loop|036
+                                       loop $for-loop|043
                                         local.get $5
                                         local.get $15
                                         i32.gt_s
@@ -48395,7 +48398,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $for-loop|036
+                                         br $for-loop|043
                                         end
                                        end
                                        local.get $3
@@ -48495,7 +48498,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|01638
+                                       loop $for-loop|044
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -48520,7 +48523,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|01638
+                                         br $for-loop|044
                                         end
                                        end
                                        i32.const 0
@@ -48615,7 +48618,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|018
+                                       loop $for-loop|045
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -48640,7 +48643,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|018
+                                         br $for-loop|045
                                         end
                                        end
                                        i32.const 0
@@ -48659,7 +48662,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|0419
+                                       loop $for-loop|0446
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -48684,7 +48687,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0419
+                                         br $for-loop|0446
                                         end
                                        end
                                        i32.const 0
@@ -48723,7 +48726,7 @@
                                       i32.const 2
                                       i32.const 6
                                       call $~lib/typedarray/Uint8ClampedArray#__set
-                                      block $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.020 (result i32)
+                                      block $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.047 (result i32)
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 4432
                                        i32.store offset=4
@@ -48735,7 +48738,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|021
+                                       loop $for-loop|048
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -48754,20 +48757,20 @@
                                          i32.const 4432
                                          i32.load
                                          call_indirect $0 (type $i32_i32_i32_=>_i32)
-                                         br_if $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.020
+                                         br_if $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.047
                                          drop
                                          local.get $5
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|021
+                                         br $for-loop|048
                                         end
                                        end
                                        i32.const 0
                                       end
                                       i32.eqz
                                       br_if $folding-inner23
-                                      block $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0122 (result i32)
+                                      block $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0149 (result i32)
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 4464
                                        i32.store offset=4
@@ -48779,7 +48782,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|0423
+                                       loop $for-loop|0450
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -48798,13 +48801,13 @@
                                          i32.const 4464
                                          i32.load
                                          call_indirect $0 (type $i32_i32_i32_=>_i32)
-                                         br_if $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0122
+                                         br_if $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0149
                                          drop
                                          local.get $5
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0423
+                                         br $for-loop|0450
                                         end
                                        end
                                        i32.const 0
@@ -48857,7 +48860,7 @@
                                        i32.const 1
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|024
+                                       loop $for-loop|051
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -48884,7 +48887,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|024
+                                         br $for-loop|051
                                         end
                                        end
                                        i32.const 0
@@ -48905,7 +48908,7 @@
                                        i32.const 1
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|0425
+                                       loop $for-loop|0452
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -48932,7 +48935,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0425
+                                         br $for-loop|0452
                                         end
                                        end
                                        i32.const 0
@@ -48985,7 +48988,7 @@
                                        i32.const 1
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|02639
+                                       loop $for-loop|053
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -49012,7 +49015,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|02639
+                                         br $for-loop|053
                                         end
                                        end
                                        i32.const 0
@@ -49033,7 +49036,7 @@
                                        i32.const 1
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|0427
+                                       loop $for-loop|0454
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -49060,7 +49063,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0427
+                                         br $for-loop|0454
                                         end
                                        end
                                        i32.const 0
@@ -49113,7 +49116,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|028
+                                       loop $for-loop|055
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -49140,7 +49143,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|028
+                                         br $for-loop|055
                                         end
                                        end
                                        i32.const 0
@@ -49161,7 +49164,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|0429
+                                       loop $for-loop|0456
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -49188,7 +49191,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0429
+                                         br $for-loop|0456
                                         end
                                        end
                                        i32.const 0
@@ -49241,7 +49244,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|030
+                                       loop $for-loop|057
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -49268,7 +49271,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|030
+                                         br $for-loop|057
                                         end
                                        end
                                        i32.const 0
@@ -49289,7 +49292,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|0431
+                                       loop $for-loop|0458
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -49316,7 +49319,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0431
+                                         br $for-loop|0458
                                         end
                                        end
                                        i32.const 0
@@ -49369,7 +49372,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|03340
+                                       loop $for-loop|060
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -49396,7 +49399,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|03340
+                                         br $for-loop|060
                                         end
                                        end
                                        i32.const 0
@@ -49417,7 +49420,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|0434
+                                       loop $for-loop|0461
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -49444,7 +49447,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0434
+                                         br $for-loop|0461
                                         end
                                        end
                                        i32.const 0
@@ -49497,7 +49500,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|035
+                                       loop $for-loop|062
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -49524,7 +49527,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|035
+                                         br $for-loop|062
                                         end
                                        end
                                        i32.const 0
@@ -49545,7 +49548,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|0436
+                                       loop $for-loop|0463
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -49572,7 +49575,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0436
+                                         br $for-loop|0463
                                         end
                                        end
                                        i32.const 0
@@ -49625,7 +49628,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|038
+                                       loop $for-loop|065
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -49652,7 +49655,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|038
+                                         br $for-loop|065
                                         end
                                        end
                                        i32.const 0
@@ -49673,7 +49676,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|0439
+                                       loop $for-loop|0466
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -49700,7 +49703,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0439
+                                         br $for-loop|0466
                                         end
                                        end
                                        i32.const 0
@@ -49753,7 +49756,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|040
+                                       loop $for-loop|067
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -49780,7 +49783,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|040
+                                         br $for-loop|067
                                         end
                                        end
                                        i32.const 0
@@ -49801,7 +49804,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|0441
+                                       loop $for-loop|0468
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -49828,7 +49831,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0441
+                                         br $for-loop|0468
                                         end
                                        end
                                        i32.const 0
@@ -49879,7 +49882,7 @@
                                       i32.load offset=8
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
-                                       loop $for-loop|043
+                                       loop $for-loop|069
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -49900,7 +49903,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|043
+                                         br $for-loop|069
                                         end
                                        end
                                        i32.const -1
@@ -49922,7 +49925,7 @@
                                       i32.load offset=8
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.01
-                                       loop $for-loop|0444
+                                       loop $for-loop|0470
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -49943,7 +49946,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0444
+                                         br $for-loop|0470
                                         end
                                        end
                                        i32.const -1
@@ -49998,7 +50001,7 @@
                                       i32.load offset=8
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
-                                       loop $for-loop|045
+                                       loop $for-loop|072
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50019,7 +50022,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|045
+                                         br $for-loop|072
                                         end
                                        end
                                        i32.const -1
@@ -50041,7 +50044,7 @@
                                       i32.load offset=8
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.01
-                                       loop $for-loop|0446
+                                       loop $for-loop|0473
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50062,7 +50065,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0446
+                                         br $for-loop|0473
                                         end
                                        end
                                        i32.const -1
@@ -50116,8 +50119,8 @@
                                       local.get $3
                                       i32.load offset=8
                                       local.set $1
-                                      block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.047
-                                       loop $for-loop|048
+                                      block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.074
+                                       loop $for-loop|075
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50133,12 +50136,12 @@
                                          i32.const 5136
                                          i32.load
                                          call_indirect $0 (type $i32_i32_i32_=>_i32)
-                                         br_if $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.047
+                                         br_if $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.074
                                          local.get $5
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|048
+                                         br $for-loop|075
                                         end
                                        end
                                        i32.const -1
@@ -50159,8 +50162,8 @@
                                       local.get $3
                                       i32.load offset=8
                                       local.set $1
-                                      block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0149
-                                       loop $for-loop|0450
+                                      block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0176
+                                       loop $for-loop|0477
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50176,12 +50179,12 @@
                                          i32.const 5168
                                          i32.load
                                          call_indirect $0 (type $i32_i32_i32_=>_i32)
-                                         br_if $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0149
+                                         br_if $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0176
                                          local.get $5
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0450
+                                         br $for-loop|0477
                                         end
                                        end
                                        i32.const -1
@@ -50238,7 +50241,7 @@
                                       i32.shr_u
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
-                                       loop $for-loop|051
+                                       loop $for-loop|078
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50261,7 +50264,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|051
+                                         br $for-loop|078
                                         end
                                        end
                                        i32.const -1
@@ -50285,7 +50288,7 @@
                                       i32.shr_u
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.01
-                                       loop $for-loop|0452
+                                       loop $for-loop|0479
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50308,7 +50311,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0452
+                                         br $for-loop|0479
                                         end
                                        end
                                        i32.const -1
@@ -50365,7 +50368,7 @@
                                       i32.shr_u
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
-                                       loop $for-loop|053
+                                       loop $for-loop|080
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50388,7 +50391,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|053
+                                         br $for-loop|080
                                         end
                                        end
                                        i32.const -1
@@ -50412,7 +50415,7 @@
                                       i32.shr_u
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.01
-                                       loop $for-loop|0454
+                                       loop $for-loop|0481
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50435,7 +50438,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0454
+                                         br $for-loop|0481
                                         end
                                        end
                                        i32.const -1
@@ -50492,7 +50495,7 @@
                                       i32.shr_u
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
-                                       loop $for-loop|055
+                                       loop $for-loop|082
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50515,7 +50518,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|055
+                                         br $for-loop|082
                                         end
                                        end
                                        i32.const -1
@@ -50539,7 +50542,7 @@
                                       i32.shr_u
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.01
-                                       loop $for-loop|0456
+                                       loop $for-loop|0483
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50562,7 +50565,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0456
+                                         br $for-loop|0483
                                         end
                                        end
                                        i32.const -1
@@ -50619,7 +50622,7 @@
                                       i32.shr_u
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0
-                                       loop $for-loop|057
+                                       loop $for-loop|084
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50642,7 +50645,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|057
+                                         br $for-loop|084
                                         end
                                        end
                                        i32.const -1
@@ -50666,7 +50669,7 @@
                                       i32.shr_u
                                       local.set $1
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.01
-                                       loop $for-loop|0458
+                                       loop $for-loop|0485
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -50689,7 +50692,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0458
+                                         br $for-loop|0485
                                         end
                                        end
                                        i32.const -1
@@ -50746,7 +50749,7 @@
                                       i32.shr_u
                                       local.set $0
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
-                                       loop $for-loop|060
+                                       loop $for-loop|087
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -50769,7 +50772,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|060
+                                         br $for-loop|087
                                         end
                                        end
                                        i32.const -1
@@ -50793,7 +50796,7 @@
                                       i32.shr_u
                                       local.set $0
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.01
-                                       loop $for-loop|0461
+                                       loop $for-loop|0488
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -50816,7 +50819,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0461
+                                         br $for-loop|0488
                                         end
                                        end
                                        i32.const -1
@@ -50873,7 +50876,7 @@
                                       i32.shr_u
                                       local.set $0
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0
-                                       loop $for-loop|062
+                                       loop $for-loop|089
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -50896,7 +50899,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|062
+                                         br $for-loop|089
                                         end
                                        end
                                        i32.const -1
@@ -50920,7 +50923,7 @@
                                       i32.shr_u
                                       local.set $0
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.01
-                                       loop $for-loop|0463
+                                       loop $for-loop|0490
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -50943,7 +50946,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0463
+                                         br $for-loop|0490
                                         end
                                        end
                                        i32.const -1
@@ -51000,7 +51003,7 @@
                                       i32.shr_u
                                       local.set $0
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
-                                       loop $for-loop|065
+                                       loop $for-loop|092
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -51023,7 +51026,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|065
+                                         br $for-loop|092
                                         end
                                        end
                                        i32.const -1
@@ -51047,7 +51050,7 @@
                                       i32.shr_u
                                       local.set $0
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.01
-                                       loop $for-loop|0466
+                                       loop $for-loop|0493
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -51070,7 +51073,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0466
+                                         br $for-loop|0493
                                         end
                                        end
                                        i32.const -1
@@ -51127,7 +51130,7 @@
                                       i32.shr_u
                                       local.set $0
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
-                                       loop $for-loop|067
+                                       loop $for-loop|094
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -51150,7 +51153,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|067
+                                         br $for-loop|094
                                         end
                                        end
                                        i32.const -1
@@ -51174,7 +51177,7 @@
                                       i32.shr_u
                                       local.set $0
                                       block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.01
-                                       loop $for-loop|0468
+                                       loop $for-loop|0495
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -51197,7 +51200,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0468
+                                         br $for-loop|0495
                                         end
                                        end
                                        i32.const -1
@@ -51252,7 +51255,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
-                                       loop $for-loop|069
+                                       loop $for-loop|097
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51273,7 +51276,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|069
+                                         br $for-loop|097
                                         end
                                        end
                                        i32.const -1
@@ -51295,7 +51298,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int8Array,i8>|inlined.01
-                                       loop $for-loop|0470
+                                       loop $for-loop|0498
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51316,7 +51319,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0470
+                                         br $for-loop|0498
                                         end
                                        end
                                        i32.const -1
@@ -51371,7 +51374,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
-                                       loop $for-loop|072
+                                       loop $for-loop|099
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51392,7 +51395,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|072
+                                         br $for-loop|099
                                         end
                                        end
                                        i32.const -1
@@ -51414,7 +51417,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.01
-                                       loop $for-loop|0473
+                                       loop $for-loop|04100
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51435,7 +51438,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0473
+                                         br $for-loop|04100
                                         end
                                        end
                                        i32.const -1
@@ -51489,8 +51492,8 @@
                                       i32.const 1
                                       i32.sub
                                       local.set $5
-                                      block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.074
-                                       loop $for-loop|075
+                                      block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0101
+                                       loop $for-loop|0102
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51506,12 +51509,12 @@
                                          i32.const 5840
                                          i32.load
                                          call_indirect $0 (type $i32_i32_i32_=>_i32)
-                                         br_if $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.074
+                                         br_if $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0101
                                          local.get $5
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|075
+                                         br $for-loop|0102
                                         end
                                        end
                                        i32.const -1
@@ -51532,8 +51535,8 @@
                                       i32.const 1
                                       i32.sub
                                       local.set $5
-                                      block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0176
-                                       loop $for-loop|0477
+                                      block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.01103
+                                       loop $for-loop|04104
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51549,12 +51552,12 @@
                                          i32.const 5872
                                          i32.load
                                          call_indirect $0 (type $i32_i32_i32_=>_i32)
-                                         br_if $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0176
+                                         br_if $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.01103
                                          local.get $5
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0477
+                                         br $for-loop|04104
                                         end
                                        end
                                        i32.const -1
@@ -51611,7 +51614,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
-                                       loop $for-loop|078
+                                       loop $for-loop|0105
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51634,7 +51637,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|078
+                                         br $for-loop|0105
                                         end
                                        end
                                        i32.const -1
@@ -51658,7 +51661,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int16Array,i16>|inlined.01
-                                       loop $for-loop|0479
+                                       loop $for-loop|04106
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51681,7 +51684,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0479
+                                         br $for-loop|04106
                                         end
                                        end
                                        i32.const -1
@@ -51738,7 +51741,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
-                                       loop $for-loop|080
+                                       loop $for-loop|0107
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51761,7 +51764,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|080
+                                         br $for-loop|0107
                                         end
                                        end
                                        i32.const -1
@@ -51785,7 +51788,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.01
-                                       loop $for-loop|0481
+                                       loop $for-loop|04108
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51808,7 +51811,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0481
+                                         br $for-loop|04108
                                         end
                                        end
                                        i32.const -1
@@ -51865,7 +51868,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
-                                       loop $for-loop|082
+                                       loop $for-loop|0109
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51888,7 +51891,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|082
+                                         br $for-loop|0109
                                         end
                                        end
                                        i32.const -1
@@ -51912,7 +51915,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int32Array,i32>|inlined.01
-                                       loop $for-loop|0483
+                                       loop $for-loop|04110
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -51935,7 +51938,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0483
+                                         br $for-loop|04110
                                         end
                                        end
                                        i32.const -1
@@ -51992,7 +51995,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0
-                                       loop $for-loop|084
+                                       loop $for-loop|0112
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52015,7 +52018,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|084
+                                         br $for-loop|0112
                                         end
                                        end
                                        i32.const -1
@@ -52039,7 +52042,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.01
-                                       loop $for-loop|0485
+                                       loop $for-loop|04113
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52062,7 +52065,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0485
+                                         br $for-loop|04113
                                         end
                                        end
                                        i32.const -1
@@ -52119,7 +52122,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
-                                       loop $for-loop|087
+                                       loop $for-loop|0114
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52142,7 +52145,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|087
+                                         br $for-loop|0114
                                         end
                                        end
                                        i32.const -1
@@ -52166,7 +52169,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int64Array,i64>|inlined.01
-                                       loop $for-loop|0488
+                                       loop $for-loop|04115
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52189,7 +52192,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0488
+                                         br $for-loop|04115
                                         end
                                        end
                                        i32.const -1
@@ -52246,7 +52249,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0
-                                       loop $for-loop|089
+                                       loop $for-loop|0116
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52269,7 +52272,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|089
+                                         br $for-loop|0116
                                         end
                                        end
                                        i32.const -1
@@ -52293,7 +52296,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.01
-                                       loop $for-loop|0490
+                                       loop $for-loop|04117
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52316,7 +52319,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0490
+                                         br $for-loop|04117
                                         end
                                        end
                                        i32.const -1
@@ -52373,7 +52376,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
-                                       loop $for-loop|092
+                                       loop $for-loop|0118
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52396,7 +52399,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|092
+                                         br $for-loop|0118
                                         end
                                        end
                                        i32.const -1
@@ -52420,7 +52423,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float32Array,f32>|inlined.01
-                                       loop $for-loop|0493
+                                       loop $for-loop|04119
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52443,7 +52446,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0493
+                                         br $for-loop|04119
                                         end
                                        end
                                        i32.const -1
@@ -52500,7 +52503,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
-                                       loop $for-loop|094
+                                       loop $for-loop|0120
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52523,7 +52526,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|094
+                                         br $for-loop|0120
                                         end
                                        end
                                        i32.const -1
@@ -52547,7 +52550,7 @@
                                       i32.sub
                                       local.set $5
                                       block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float64Array,f64>|inlined.01
-                                       loop $for-loop|0495
+                                       loop $for-loop|04121
                                         local.get $5
                                         i32.const 0
                                         i32.ge_s
@@ -52570,7 +52573,7 @@
                                          i32.const 1
                                          i32.sub
                                          local.set $5
-                                         br $for-loop|0495
+                                         br $for-loop|04121
                                         end
                                        end
                                        i32.const -1
@@ -52625,7 +52628,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|097
+                                       loop $for-loop|0122
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -52651,7 +52654,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|097
+                                         br $for-loop|0122
                                         end
                                        end
                                        i32.const 1
@@ -52670,7 +52673,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|0498
+                                       loop $for-loop|04123
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -52696,7 +52699,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0498
+                                         br $for-loop|04123
                                         end
                                        end
                                        i32.const 1
@@ -52747,7 +52750,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|099
+                                       loop $for-loop|0124
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -52773,7 +52776,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|099
+                                         br $for-loop|0124
                                         end
                                        end
                                        i32.const 1
@@ -52792,7 +52795,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|04100
+                                       loop $for-loop|04125
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -52818,7 +52821,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04100
+                                         br $for-loop|04125
                                         end
                                        end
                                        i32.const 1
@@ -52857,7 +52860,7 @@
                                       i32.const 2
                                       i32.const 6
                                       call $~lib/typedarray/Uint8ClampedArray#__set
-                                      block $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0101 (result i32)
+                                      block $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0126 (result i32)
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 6544
                                        i32.store offset=4
@@ -52869,7 +52872,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|0102
+                                       loop $for-loop|0127
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -52889,20 +52892,20 @@
                                          i32.load
                                          call_indirect $0 (type $i32_i32_i32_=>_i32)
                                          i32.eqz
-                                         br_if $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0101
+                                         br_if $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0126
                                          drop
                                          local.get $5
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0102
+                                         br $for-loop|0127
                                         end
                                        end
                                        i32.const 1
                                       end
                                       i32.eqz
                                       br_if $folding-inner29
-                                      block $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.01103 (result i32)
+                                      block $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.01128 (result i32)
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 6576
                                        i32.store offset=4
@@ -52914,7 +52917,7 @@
                                        local.get $3
                                        i32.load offset=8
                                        local.set $1
-                                       loop $for-loop|04104
+                                       loop $for-loop|04129
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -52934,13 +52937,13 @@
                                          i32.load
                                          call_indirect $0 (type $i32_i32_i32_=>_i32)
                                          i32.eqz
-                                         br_if $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.01103
+                                         br_if $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.01128
                                          drop
                                          local.get $5
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04104
+                                         br $for-loop|04129
                                         end
                                        end
                                        i32.const 1
@@ -52993,7 +52996,7 @@
                                        i32.const 1
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|0105
+                                       loop $for-loop|0130
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -53021,7 +53024,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0105
+                                         br $for-loop|0130
                                         end
                                        end
                                        i32.const 1
@@ -53042,7 +53045,7 @@
                                        i32.const 1
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|04106
+                                       loop $for-loop|04131
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -53070,7 +53073,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04106
+                                         br $for-loop|04131
                                         end
                                        end
                                        i32.const 1
@@ -53123,7 +53126,7 @@
                                        i32.const 1
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|0107
+                                       loop $for-loop|0132
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -53151,7 +53154,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0107
+                                         br $for-loop|0132
                                         end
                                        end
                                        i32.const 1
@@ -53172,7 +53175,7 @@
                                        i32.const 1
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|04108
+                                       loop $for-loop|04133
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -53200,7 +53203,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04108
+                                         br $for-loop|04133
                                         end
                                        end
                                        i32.const 1
@@ -53253,7 +53256,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|0109
+                                       loop $for-loop|0134
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -53281,7 +53284,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0109
+                                         br $for-loop|0134
                                         end
                                        end
                                        i32.const 1
@@ -53302,7 +53305,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|04110
+                                       loop $for-loop|04135
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -53330,7 +53333,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04110
+                                         br $for-loop|04135
                                         end
                                        end
                                        i32.const 1
@@ -53383,7 +53386,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|0112
+                                       loop $for-loop|0136
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -53411,7 +53414,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0112
+                                         br $for-loop|0136
                                         end
                                        end
                                        i32.const 1
@@ -53432,7 +53435,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $1
-                                       loop $for-loop|04113
+                                       loop $for-loop|04137
                                         local.get $1
                                         local.get $5
                                         i32.gt_s
@@ -53460,7 +53463,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04113
+                                         br $for-loop|04137
                                         end
                                        end
                                        i32.const 1
@@ -53513,7 +53516,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|0114
+                                       loop $for-loop|0138
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -53541,7 +53544,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0114
+                                         br $for-loop|0138
                                         end
                                        end
                                        i32.const 1
@@ -53562,7 +53565,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|04115
+                                       loop $for-loop|04139
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -53590,7 +53593,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04115
+                                         br $for-loop|04139
                                         end
                                        end
                                        i32.const 1
@@ -53643,7 +53646,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|0116
+                                       loop $for-loop|0140
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -53671,7 +53674,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0116
+                                         br $for-loop|0140
                                         end
                                        end
                                        i32.const 1
@@ -53692,7 +53695,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|04117
+                                       loop $for-loop|04141
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -53720,7 +53723,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04117
+                                         br $for-loop|04141
                                         end
                                        end
                                        i32.const 1
@@ -53773,7 +53776,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|0118
+                                       loop $for-loop|0142
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -53801,7 +53804,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0118
+                                         br $for-loop|0142
                                         end
                                        end
                                        i32.const 1
@@ -53822,7 +53825,7 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|04119
+                                       loop $for-loop|04143
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -53850,7 +53853,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04119
+                                         br $for-loop|04143
                                         end
                                        end
                                        i32.const 1
@@ -53903,7 +53906,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|0120
+                                       loop $for-loop|0144
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -53931,7 +53934,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|0120
+                                         br $for-loop|0144
                                         end
                                        end
                                        i32.const 1
@@ -53952,7 +53955,7 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.set $0
-                                       loop $for-loop|04121
+                                       loop $for-loop|04145
                                         local.get $0
                                         local.get $5
                                         i32.gt_s
@@ -53980,7 +53983,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $5
-                                         br $for-loop|04121
+                                         br $for-loop|04145
                                         end
                                        end
                                        i32.const 1
@@ -54055,7 +54058,7 @@
                                       local.get $4
                                       i32.load offset=8
                                       local.set $2
-                                      loop $for-loop|0116122
+                                      loop $for-loop|0116146
                                        local.get $1
                                        local.get $2
                                        i32.lt_s
@@ -54075,7 +54078,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $1
-                                        br $for-loop|0116122
+                                        br $for-loop|0116146
                                        end
                                       end
                                       global.get $std/typedarray/forEachCallCount
@@ -54454,7 +54457,7 @@
                                       i32.const 1
                                       i32.shr_u
                                       local.set $2
-                                      loop $for-loop|0138
+                                      loop $for-loop|0138147
                                        local.get $1
                                        local.get $2
                                        i32.lt_s
@@ -54476,7 +54479,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $1
-                                        br $for-loop|0138
+                                        br $for-loop|0138147
                                        end
                                       end
                                       global.get $std/typedarray/forEachCallCount
@@ -55111,7 +55114,7 @@
                                       call $~lib/typedarray/Int8Array#constructor
                                       local.tee $0
                                       i32.store offset=8
-                                      loop $for-loop|0123
+                                      loop $for-loop|0149
                                        local.get $2
                                        local.get $5
                                        i32.gt_s
@@ -55134,7 +55137,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $5
-                                        br $for-loop|0123
+                                        br $for-loop|0149
                                        end
                                       end
                                       local.get $1
@@ -55243,7 +55246,7 @@
                                       call $~lib/typedarray/Uint8Array#constructor
                                       local.tee $0
                                       i32.store offset=8
-                                      loop $for-loop|0124
+                                      loop $for-loop|0150
                                        local.get $2
                                        local.get $5
                                        i32.gt_s
@@ -55268,7 +55271,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $5
-                                        br $for-loop|0124
+                                        br $for-loop|0150
                                        end
                                       end
                                       local.get $1
@@ -55278,7 +55281,7 @@
                                       call $~lib/util/bytes/REVERSE<u8>
                                       i32.const 0
                                       local.set $5
-                                      loop $for-loop|1125
+                                      loop $for-loop|1151
                                        local.get $2
                                        local.get $5
                                        i32.gt_s
@@ -55301,7 +55304,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $5
-                                        br $for-loop|1125
+                                        br $for-loop|1151
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -55377,7 +55380,7 @@
                                       call $~lib/typedarray/Uint8ClampedArray#constructor
                                       local.tee $0
                                       i32.store offset=8
-                                      loop $for-loop|0126
+                                      loop $for-loop|0152
                                        local.get $2
                                        local.get $5
                                        i32.gt_s
@@ -55402,7 +55405,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $5
-                                        br $for-loop|0126
+                                        br $for-loop|0152
                                        end
                                       end
                                       local.get $1
@@ -55412,7 +55415,7 @@
                                       call $~lib/util/bytes/REVERSE<u8>
                                       i32.const 0
                                       local.set $5
-                                      loop $for-loop|1127
+                                      loop $for-loop|1153
                                        local.get $2
                                        local.get $5
                                        i32.gt_s
@@ -55435,7 +55438,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $5
-                                        br $for-loop|1127
+                                        br $for-loop|1153
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -55542,7 +55545,7 @@
                                       drop
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|1128
+                                      loop $for-loop|1154
                                        local.get $2
                                        local.get $15
                                        i32.gt_s
@@ -55564,7 +55567,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|1128
+                                        br $for-loop|1154
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -55637,7 +55640,7 @@
                                       i32.store offset=8
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|021129
+                                      loop $for-loop|021
                                        local.get $2
                                        local.get $15
                                        i32.gt_s
@@ -55662,7 +55665,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|021129
+                                        br $for-loop|021
                                        end
                                       end
                                       local.get $1
@@ -55766,7 +55769,7 @@
                                       i32.store offset=8
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|02941
+                                      loop $for-loop|029
                                        local.get $11
                                        local.get $15
                                        i32.gt_s
@@ -55787,7 +55790,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|02941
+                                        br $for-loop|029
                                        end
                                       end
                                       i32.const 0
@@ -55902,7 +55905,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $3
-                                       loop $while-continue|0131
+                                       loop $while-continue|0156
                                         local.get $1
                                         local.get $4
                                         i32.lt_u
@@ -55933,7 +55936,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $1
-                                         br $while-continue|0131
+                                         br $while-continue|0156
                                         end
                                        end
                                       end
@@ -56042,7 +56045,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $3
-                                       loop $while-continue|0133
+                                       loop $while-continue|0158
                                         local.get $0
                                         local.get $4
                                         i32.lt_u
@@ -56073,7 +56076,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $0
-                                         br $while-continue|0133
+                                         br $while-continue|0158
                                         end
                                        end
                                       end
@@ -56132,7 +56135,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $3
-                                       loop $while-continue|0135
+                                       loop $while-continue|0160
                                         local.get $1
                                         local.get $4
                                         i32.lt_u
@@ -56163,7 +56166,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $1
-                                         br $while-continue|0135
+                                         br $while-continue|0160
                                         end
                                        end
                                       end
@@ -56227,7 +56230,7 @@
                                       i32.store offset=8
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|045136
+                                      loop $for-loop|045161
                                        local.get $9
                                        local.get $15
                                        i32.gt_s
@@ -56250,7 +56253,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|045136
+                                        br $for-loop|045161
                                        end
                                       end
                                       i32.const 0
@@ -56274,7 +56277,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $2
-                                       loop $while-continue|0137
+                                       loop $while-continue|0162
                                         local.get $0
                                         local.get $3
                                         i32.lt_u
@@ -56305,7 +56308,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $0
-                                         br $while-continue|0137
+                                         br $while-continue|0162
                                         end
                                        end
                                       end
@@ -56365,7 +56368,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $2
-                                       loop $while-continue|0139
+                                       loop $while-continue|0164
                                         local.get $1
                                         local.get $3
                                         i32.lt_u
@@ -56396,7 +56399,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $1
-                                         br $while-continue|0139
+                                         br $while-continue|0164
                                         end
                                        end
                                       end
@@ -56460,7 +56463,7 @@
                                       i32.store offset=8
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|053140
+                                      loop $for-loop|053165
                                        local.get $9
                                        local.get $15
                                        i32.gt_s
@@ -56483,7 +56486,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|053140
+                                        br $for-loop|053165
                                        end
                                       end
                                       i32.const 0
@@ -56507,7 +56510,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $2
-                                       loop $while-continue|0142
+                                       loop $while-continue|0167
                                         local.get $0
                                         local.get $3
                                         i32.lt_u
@@ -56538,7 +56541,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $0
-                                         br $while-continue|0142
+                                         br $while-continue|0167
                                         end
                                        end
                                       end
@@ -56598,7 +56601,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $2
-                                       loop $while-continue|0144
+                                       loop $while-continue|0169
                                         local.get $1
                                         local.get $3
                                         i32.lt_u
@@ -56629,7 +56632,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $1
-                                         br $while-continue|0144
+                                         br $while-continue|0169
                                         end
                                        end
                                       end
@@ -56740,7 +56743,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $2
-                                       loop $while-continue|0145
+                                       loop $while-continue|0170
                                         local.get $0
                                         local.get $3
                                         i32.lt_u
@@ -56771,7 +56774,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $0
-                                         br $while-continue|0145
+                                         br $while-continue|0170
                                         end
                                        end
                                       end
@@ -56831,7 +56834,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $2
-                                       loop $while-continue|0147
+                                       loop $while-continue|0172
                                         local.get $1
                                         local.get $3
                                         i32.lt_u
@@ -56862,7 +56865,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $1
-                                         br $while-continue|0147
+                                         br $while-continue|0172
                                         end
                                        end
                                       end
@@ -56926,7 +56929,7 @@
                                       i32.store offset=8
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|069148
+                                      loop $for-loop|069173
                                        local.get $9
                                        local.get $15
                                        i32.gt_s
@@ -56949,7 +56952,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|069148
+                                        br $for-loop|069173
                                        end
                                       end
                                       i32.const 0
@@ -56973,7 +56976,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $2
-                                       loop $while-continue|0149
+                                       loop $while-continue|0174
                                         local.get $0
                                         local.get $3
                                         i32.lt_u
@@ -57004,7 +57007,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $0
-                                         br $while-continue|0149
+                                         br $while-continue|0174
                                         end
                                        end
                                       end
@@ -57065,7 +57068,7 @@
                                        i32.const 1
                                        i32.sub
                                        local.set $2
-                                       loop $while-continue|0151
+                                       loop $while-continue|0176
                                         local.get $1
                                         local.get $3
                                         i32.lt_u
@@ -57096,7 +57099,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $1
-                                         br $while-continue|0151
+                                         br $while-continue|0176
                                         end
                                        end
                                       end
@@ -57168,7 +57171,7 @@
                                        local.get $4
                                        i32.load offset=4
                                        local.set $2
-                                       loop $while-continue|0152
+                                       loop $while-continue|0177
                                         local.get $0
                                         local.get $3
                                         i32.lt_s
@@ -57187,7 +57190,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $0
-                                         br $while-continue|0152
+                                         br $while-continue|0177
                                         end
                                        end
                                        i32.const -1
@@ -57222,7 +57225,7 @@
                                        local.get $4
                                        i32.load offset=4
                                        local.set $0
-                                       loop $while-continue|0153
+                                       loop $while-continue|0178
                                         local.get $1
                                         local.get $15
                                         i32.gt_s
@@ -57247,7 +57250,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $15
-                                         br $while-continue|0153
+                                         br $while-continue|0178
                                         end
                                        end
                                        i32.const 0
@@ -57288,7 +57291,7 @@
                                        local.get $4
                                        i32.load offset=4
                                        local.set $2
-                                       loop $while-continue|0154
+                                       loop $while-continue|0179
                                         local.get $0
                                         local.get $3
                                         i32.lt_s
@@ -57307,7 +57310,7 @@
                                          i32.const 1
                                          i32.add
                                          local.set $0
-                                         br $while-continue|0154
+                                         br $while-continue|0179
                                         end
                                        end
                                        i32.const -1
@@ -58588,7 +58591,7 @@
                                       i32.store offset=4
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|092155
+                                      loop $for-loop|092180
                                        local.get $3
                                        local.get $15
                                        i32.gt_s
@@ -58605,7 +58608,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|092155
+                                        br $for-loop|092180
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -58688,7 +58691,7 @@
                                       i32.store offset=4
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|0102156
+                                      loop $for-loop|0102181
                                        local.get $5
                                        local.get $15
                                        i32.gt_s
@@ -58705,7 +58708,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|0102156
+                                        br $for-loop|0102181
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -58827,7 +58830,7 @@
                                       i32.store offset=4
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|0112158
+                                      loop $for-loop|0112182
                                        local.get $5
                                        local.get $15
                                        i32.gt_s
@@ -58843,7 +58846,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|0112158
+                                        br $for-loop|0112182
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -58967,7 +58970,7 @@
                                       i32.store offset=4
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|0122
+                                      loop $for-loop|0122183
                                        local.get $5
                                        local.get $15
                                        i32.gt_s
@@ -58984,7 +58987,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|0122
+                                        br $for-loop|0122183
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -59059,7 +59062,7 @@
                                       i32.store offset=16
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|1127161
+                                      loop $for-loop|1127
                                        local.get $5
                                        local.get $15
                                        i32.gt_s
@@ -59076,7 +59079,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|1127161
+                                        br $for-loop|1127
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -59108,7 +59111,7 @@
                                       i32.store offset=4
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|0132
+                                      loop $for-loop|0132184
                                        local.get $5
                                        local.get $15
                                        i32.gt_s
@@ -59123,7 +59126,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|0132
+                                        br $for-loop|0132184
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -59247,7 +59250,7 @@
                                       i32.store offset=4
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|0142
+                                      loop $for-loop|0142185
                                        local.get $5
                                        local.get $15
                                        i32.gt_s
@@ -59262,7 +59265,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|0142
+                                        br $for-loop|0142185
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -59386,7 +59389,7 @@
                                       i32.store offset=4
                                       i32.const 0
                                       local.set $15
-                                      loop $for-loop|0152
+                                      loop $for-loop|0152186
                                        local.get $5
                                        local.get $15
                                        i32.gt_s
@@ -59402,7 +59405,7 @@
                                         i32.const 1
                                         i32.add
                                         local.set $15
-                                        br $for-loop|0152
+                                        br $for-loop|0152186
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
@@ -60406,11 +60409,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of1170
-                                        block $0of1171
-                                         block $outOfRange172
+                                       block $1of1189
+                                        block $0of1190
+                                         block $outOfRange191
                                           global.get $~argumentsLength
-                                          br_table $0of1171 $1of1170 $outOfRange172
+                                          br_table $0of1190 $1of1189 $outOfRange191
                                          end
                                          unreachable
                                         end
@@ -60532,11 +60535,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of1174
-                                        block $0of1175
-                                         block $outOfRange176
+                                       block $1of1193
+                                        block $0of1194
+                                         block $outOfRange195
                                           global.get $~argumentsLength
-                                          br_table $0of1175 $1of1174 $outOfRange176
+                                          br_table $0of1194 $1of1193 $outOfRange195
                                          end
                                          unreachable
                                         end
@@ -60658,11 +60661,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of144
-                                        block $0of145
-                                         block $outOfRange46
+                                       block $1of121
+                                        block $0of122
+                                         block $outOfRange23
                                           global.get $~argumentsLength
-                                          br_table $0of145 $1of144 $outOfRange46
+                                          br_table $0of122 $1of121 $outOfRange23
                                          end
                                          unreachable
                                         end
@@ -60788,11 +60791,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of148
-                                        block $0of149
-                                         block $outOfRange50
+                                       block $1of126
+                                        block $0of127
+                                         block $outOfRange28
                                           global.get $~argumentsLength
-                                          br_table $0of149 $1of148 $outOfRange50
+                                          br_table $0of127 $1of126 $outOfRange28
                                          end
                                          unreachable
                                         end
@@ -60918,11 +60921,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of152
-                                        block $0of153
-                                         block $outOfRange54
+                                       block $1of131
+                                        block $0of132
+                                         block $outOfRange33
                                           global.get $~argumentsLength
-                                          br_table $0of153 $1of152 $outOfRange54
+                                          br_table $0of132 $1of131 $outOfRange33
                                          end
                                          unreachable
                                         end
@@ -61048,11 +61051,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of156
-                                        block $0of157
-                                         block $outOfRange58
+                                       block $1of136
+                                        block $0of137
+                                         block $outOfRange38
                                           global.get $~argumentsLength
-                                          br_table $0of157 $1of156 $outOfRange58
+                                          br_table $0of137 $1of136 $outOfRange38
                                          end
                                          unreachable
                                         end
@@ -61178,11 +61181,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of160
-                                        block $0of161
-                                         block $outOfRange62
+                                       block $1of141
+                                        block $0of142
+                                         block $outOfRange43
                                           global.get $~argumentsLength
-                                          br_table $0of161 $1of160 $outOfRange62
+                                          br_table $0of142 $1of141 $outOfRange43
                                          end
                                          unreachable
                                         end
@@ -61308,11 +61311,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of164
-                                        block $0of165
-                                         block $outOfRange66
+                                       block $1of145
+                                        block $0of146
+                                         block $outOfRange47
                                           global.get $~argumentsLength
-                                          br_table $0of165 $1of164 $outOfRange66
+                                          br_table $0of146 $1of145 $outOfRange47
                                          end
                                          unreachable
                                         end
@@ -61438,11 +61441,11 @@
                                        global.get $~lib/memory/__stack_pointer
                                        i32.const 0
                                        i32.store
-                                       block $1of168
-                                        block $0of169
-                                         block $outOfRange70
+                                       block $1of149
+                                        block $0of150
+                                         block $outOfRange51
                                           global.get $~argumentsLength
-                                          br_table $0of169 $1of168 $outOfRange70
+                                          br_table $0of150 $1of149 $outOfRange51
                                          end
                                          unreachable
                                         end
@@ -64292,12 +64295,13 @@
   end
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__link (param $0 i32) (param $1 i32)
+  (local $2 i32)
   local.get $0
   i32.eqz
   if
    i32.const 0
    i32.const 1232
-   i32.const 294
+   i32.const 304
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -64323,8 +64327,39 @@
    i32.eqz
    i32.eq
    if
-    local.get $1
-    call $~lib/rt/itcms/Object#makeGray
+    global.get $~lib/rt/itcms/state
+    i32.const 1
+    i32.eq
+    if
+     local.get $1
+     call $~lib/rt/itcms/Object#makeGray
+    else
+     local.get $1
+     call $~lib/rt/itcms/Object#unlink
+     global.get $~lib/rt/itcms/fromSpace
+     local.tee $0
+     i32.load offset=8
+     local.set $2
+     local.get $1
+     global.get $~lib/rt/itcms/white
+     local.get $0
+     i32.or
+     i32.store offset=4
+     local.get $1
+     local.get $2
+     i32.store offset=8
+     local.get $2
+     local.get $2
+     i32.load offset=4
+     i32.const 3
+     i32.and
+     local.get $1
+     i32.or
+     i32.store offset=4
+     local.get $0
+     local.get $1
+     i32.store offset=8
+    end
    else
     global.get $~lib/rt/itcms/state
     i32.const 1

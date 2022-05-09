@@ -14,17 +14,17 @@
  (type $i32_f32_=>_none (func (param i32 f32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -38,8 +38,8 @@
  (data (i32.const 128) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 156) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
  (data (i32.const 220) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data (i32.const 268) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data (i32.const 336) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 272) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 300) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 368) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 396) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 460) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
@@ -257,6 +257,22 @@
   end
   call $~lib/rt/itcms/Object#linkTo
  )
+ (func $~lib/rt/itcms/Object#needScan (param $0 i32)
+  global.get $~lib/rt/itcms/state
+  i32.const 1
+  i32.eq
+  if
+   local.get $0
+   call $~lib/rt/itcms/Object#makeGray
+  else
+   local.get $0
+   call $~lib/rt/itcms/Object#unlink
+   local.get $0
+   global.get $~lib/rt/itcms/fromSpace
+   global.get $~lib/rt/itcms/white
+   call $~lib/rt/itcms/Object#linkTo
+  end
+ )
  (func $~lib/rt/itcms/__link (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -273,7 +289,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 294
+   i32.const 304
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -302,10 +318,10 @@
     local.get $2
     if
      local.get $4
-     call $~lib/rt/itcms/Object#makeGray
+     call $~lib/rt/itcms/Object#needScan
     else
      local.get $3
-     call $~lib/rt/itcms/Object#makeGray
+     call $~lib/rt/itcms/Object#needScan
     end
    else
     local.get $5
@@ -362,7 +378,7 @@
     if
      i32.const 0
      i32.const 80
-     i32.const 159
+     i32.const 169
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1581,7 +1597,7 @@
     if
      i32.const 0
      i32.const 80
-     i32.const 228
+     i32.const 238
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -1686,7 +1702,7 @@
   i32.const 1073741820
   i32.gt_u
   if
-   i32.const 288
+   i32.const 320
    i32.const 416
    i32.const 458
    i32.const 29
@@ -2162,9 +2178,9 @@
   i32.const 1073741804
   i32.ge_u
   if
-   i32.const 288
+   i32.const 320
    i32.const 80
-   i32.const 260
+   i32.const 270
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -2801,7 +2817,7 @@
   i32.const 176
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 288
+  i32.const 320
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -3345,6 +3361,9 @@
   i32.const 128
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/toSpace
+  i32.const 272
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/fromSpace
   memory.size
   i32.const 16
   i32.shl
@@ -3353,12 +3372,9 @@
   i32.const 1
   i32.shr_u
   global.set $~lib/rt/itcms/threshold
-  i32.const 336
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
   i32.const 368
   call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/fromSpace
+  global.set $~lib/rt/itcms/pinSpace
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $object-literal/Managed#constructor

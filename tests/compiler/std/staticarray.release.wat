@@ -1,8 +1,8 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
@@ -189,7 +189,7 @@
     if
      i32.const 0
      i32.const 1408
-     i32.const 159
+     i32.const 169
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -206,6 +206,57 @@
     br $while-continue|0
    end
   end
+ )
+ (func $~lib/rt/itcms/Object#unlink (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  i32.load offset=4
+  i32.const -4
+  i32.and
+  local.tee $1
+  i32.eqz
+  if
+   i32.const 0
+   local.get $0
+   i32.const 20252
+   i32.lt_u
+   local.get $0
+   i32.load offset=8
+   select
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1408
+    i32.const 127
+    i32.const 18
+    call $~lib/builtins/abort
+    unreachable
+   end
+   return
+  end
+  local.get $0
+  i32.load offset=8
+  local.tee $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1408
+   i32.const 131
+   i32.const 16
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
+  i32.store offset=8
+  local.get $0
+  local.get $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  local.get $1
+  i32.or
+  i32.store offset=4
  )
  (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
   (local $1 i32)
@@ -230,61 +281,13 @@
    local.get $1
    global.set $~lib/rt/itcms/iter
   end
-  block $__inlined_func$~lib/rt/itcms/Object#unlink
-   local.get $0
-   i32.load offset=4
-   i32.const -4
-   i32.and
-   local.tee $1
-   i32.eqz
-   if
-    i32.const 0
-    local.get $0
-    i32.const 20252
-    i32.lt_u
-    local.get $0
-    i32.load offset=8
-    select
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 1408
-     i32.const 127
-     i32.const 18
-     call $~lib/builtins/abort
-     unreachable
-    end
-    br $__inlined_func$~lib/rt/itcms/Object#unlink
-   end
-   local.get $0
-   i32.load offset=8
-   local.tee $2
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1408
-    i32.const 131
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   local.get $2
-   i32.store offset=8
-   local.get $2
-   local.get $2
-   i32.load offset=4
-   i32.const 3
-   i32.and
-   local.get $1
-   i32.or
-   i32.store offset=4
-  end
+  local.get $0
+  call $~lib/rt/itcms/Object#unlink
   global.get $~lib/rt/itcms/toSpace
-  local.set $2
+  local.set $1
   local.get $0
   i32.load offset=12
-  local.tee $1
+  local.tee $2
   i32.const 1
   i32.le_u
   if (result i32)
@@ -292,7 +295,7 @@
   else
    i32.const 3728
    i32.load
-   local.get $1
+   local.get $2
    i32.lt_u
    if
     i32.const 1088
@@ -302,7 +305,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $1
+   local.get $2
    i32.const 3
    i32.shl
    i32.const 3732
@@ -312,11 +315,11 @@
    i32.and
   end
   local.set $3
-  local.get $2
+  local.get $1
   i32.load offset=8
-  local.set $1
+  local.set $2
   local.get $0
-  local.get $2
+  local.get $1
   global.get $~lib/rt/itcms/white
   i32.eqz
   i32.const 2
@@ -325,17 +328,17 @@
   i32.or
   i32.store offset=4
   local.get $0
-  local.get $1
+  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $1
+  local.get $2
+  local.get $2
   i32.load offset=4
   i32.const 3
   i32.and
   local.get $0
   i32.or
   i32.store offset=4
-  local.get $2
+  local.get $1
   local.get $0
   i32.store offset=8
  )
@@ -1155,7 +1158,7 @@
     if
      i32.const 0
      i32.const 1408
-     i32.const 228
+     i32.const 238
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -1528,7 +1531,7 @@
   if
    i32.const 1344
    i32.const 1408
-   i32.const 260
+   i32.const 270
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1634,22 +1637,6 @@
   local.get $0
   memory.fill
   local.get $1
- )
- (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  i32.const 2
-  i32.shl
-  local.get $0
-  i32.add
-  local.get $2
-  i32.store
-  local.get $2
-  if
-   local.get $0
-   local.get $2
-   i32.const 1
-   call $byn-split-outlined-A$~lib/rt/itcms/__link
-  end
  )
  (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -3186,13 +3173,27 @@
    local.tee $6
    i32.store offset=4
    local.get $6
-   i32.const 0
    call $std/staticarray/Ref#constructor
-   call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
+   local.tee $7
+   i32.store
+   local.get $7
+   if
+    local.get $6
+    local.get $7
+    i32.const 1
+    call $byn-split-outlined-A$~lib/rt/itcms/__link
+   end
    local.get $6
-   i32.const 1
    call $std/staticarray/Ref#constructor
-   call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
+   local.tee $7
+   i32.store offset=4
+   local.get $7
+   if
+    local.get $6
+    local.get $7
+    i32.const 1
+    call $byn-split-outlined-A$~lib/rt/itcms/__link
+   end
    local.get $6
    global.set $std/staticarray/arr4
    i32.const 0
@@ -4365,7 +4366,7 @@
     i32.lt_s
     select
     local.set $1
-    loop $while-continue|01
+    loop $while-continue|02
      local.get $1
      i32.const 0
      i32.ge_s
@@ -4383,7 +4384,7 @@
       i32.const 1
       i32.sub
       local.set $1
-      br $while-continue|01
+      br $while-continue|02
      end
     end
     i32.const -1
@@ -4404,7 +4405,7 @@
    global.set $~argumentsLength
    i32.const -1
    local.set $1
-   block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf6
+   block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf7
     local.get $2
     i32.const 20
     i32.sub
@@ -4413,7 +4414,7 @@
     i32.shr_u
     local.tee $0
     i32.eqz
-    br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf6
+    br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf7
     local.get $0
     local.get $0
     i32.add
@@ -4425,7 +4426,7 @@
     i32.lt_s
     select
     local.set $1
-    loop $while-continue|07
+    loop $while-continue|08
      local.get $1
      i32.const 0
      i32.ge_s
@@ -4438,12 +4439,12 @@
       i32.load
       i32.const 7
       i32.eq
-      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf6
+      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf7
       local.get $1
       i32.const 1
       i32.sub
       local.set $1
-      br $while-continue|07
+      br $while-continue|08
      end
     end
     i32.const -1
@@ -4462,7 +4463,7 @@
    end
    i32.const -1
    local.set $1
-   block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf8
+   block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf9
     local.get $2
     i32.const 20
     i32.sub
@@ -4471,7 +4472,7 @@
     i32.shr_u
     local.tee $0
     i32.eqz
-    br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf8
+    br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf9
     local.get $0
     i32.const 1
     i32.sub
@@ -4494,7 +4495,7 @@
       i32.load
       i32.const 2
       i32.eq
-      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf8
+      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf9
       local.get $1
       i32.const 1
       i32.sub
@@ -6108,11 +6109,11 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
-   block $1of114
-    block $0of115
-     block $outOfRange16
+   block $1of115
+    block $0of116
+     block $outOfRange17
       global.get $~argumentsLength
-      br_table $0of115 $1of114 $outOfRange16
+      br_table $0of116 $1of115 $outOfRange17
      end
      unreachable
     end
@@ -7015,7 +7016,7 @@
   if
    i32.const 0
    i32.const 1408
-   i32.const 294
+   i32.const 304
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -7046,7 +7047,40 @@
     local.get $1
     local.get $2
     select
-    call $~lib/rt/itcms/Object#makeGray
+    local.set $0
+    global.get $~lib/rt/itcms/state
+    i32.const 1
+    i32.eq
+    if
+     local.get $0
+     call $~lib/rt/itcms/Object#makeGray
+    else
+     local.get $0
+     call $~lib/rt/itcms/Object#unlink
+     global.get $~lib/rt/itcms/fromSpace
+     local.tee $1
+     i32.load offset=8
+     local.set $2
+     local.get $0
+     global.get $~lib/rt/itcms/white
+     local.get $1
+     i32.or
+     i32.store offset=4
+     local.get $0
+     local.get $2
+     i32.store offset=8
+     local.get $2
+     local.get $2
+     i32.load offset=4
+     i32.const 3
+     i32.and
+     local.get $0
+     i32.or
+     i32.store offset=4
+     local.get $1
+     local.get $0
+     i32.store offset=8
+    end
    else
     global.get $~lib/rt/itcms/state
     i32.const 1

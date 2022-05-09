@@ -146,7 +146,7 @@
     if
      i32.const 0
      i32.const 208
-     i32.const 159
+     i32.const 169
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1531,7 +1531,7 @@
     if
      i32.const 0
      i32.const 208
-     i32.const 228
+     i32.const 238
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -2114,7 +2114,7 @@
   if
    i32.const 144
    i32.const 208
-   i32.const 260
+   i32.const 270
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -2157,6 +2157,22 @@
   memory.fill
   local.get $3
  )
+ (func $~lib/rt/itcms/Object#needScan (param $0 i32)
+  global.get $~lib/rt/itcms/state
+  i32.const 1
+  i32.eq
+  if
+   local.get $0
+   call $~lib/rt/itcms/Object#makeGray
+  else
+   local.get $0
+   call $~lib/rt/itcms/Object#unlink
+   local.get $0
+   global.get $~lib/rt/itcms/fromSpace
+   global.get $~lib/rt/itcms/white
+   call $~lib/rt/itcms/Object#linkTo
+  end
+ )
  (func $~lib/rt/itcms/__link (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2173,7 +2189,7 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 294
+   i32.const 304
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -2202,10 +2218,10 @@
     local.get $2
     if
      local.get $4
-     call $~lib/rt/itcms/Object#makeGray
+     call $~lib/rt/itcms/Object#needScan
     else
      local.get $3
-     call $~lib/rt/itcms/Object#makeGray
+     call $~lib/rt/itcms/Object#needScan
     end
    else
     local.get $5
