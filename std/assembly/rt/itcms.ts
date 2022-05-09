@@ -148,6 +148,16 @@ function initLazy(space: Object): Object {
     this.unlink();
     this.linkTo(toSpace, this.isPointerfree ? i32(!white) : gray);
   }
+
+  /** Marks this object need to be scanned */
+  needScan(): void {
+    if (state == STATE_MARK) {
+      this.makeGray();
+    } else {
+      this.unlink();
+      this.linkTo(fromSpace, white);
+    }
+  }
 }
 
 /** Visits all objects considered to be program roots. */
@@ -301,10 +311,10 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
       if (expectMultiple) {
         // Move the barrier "backward". Suitable for containers receiving multiple stores.
         // Avoids a barrier for subsequent objects stored into the same container.
-        parent.makeGray();
+        parent.needScan();
       } else {
         // Move the barrier "forward". Suitable for objects receiving isolated stores.
-        child.makeGray();
+        child.needScan();
       }
     } else if (parentColor == transparent && state == STATE_MARK) {
       // Pinned objects are considered 'black' during the mark phase.
@@ -350,15 +360,7 @@ export function __unpin(ptr: usize): void {
   if (obj.color != transparent) {
     throw new Error(E_NOT_PINNED);
   }
-  if (state == STATE_MARK) {
-    // We may be right at the point after marking roots for the second time and
-    // entering the sweep phase, in which case the object would be missed if it
-    // is not only pinned but also a root. Make sure it isn't missed.
-    obj.makeGray();
-  } else {
-    obj.unlink();
-    obj.linkTo(fromSpace, white);
-  }
+  obj.needScan();
 }
 
 // @ts-ignore: decorator
