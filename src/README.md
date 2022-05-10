@@ -27,6 +27,16 @@ To build the compiler, run:
 npm run build
 ```
 
+To build the debug version, run:  
+```sh
+npm run build:debug
+```
+
+To build the release version, run:  
+```sh
+npm run build:release
+```
+
 The rebuild automatically when there are changes, do:
 
 ```sh

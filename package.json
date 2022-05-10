@@ -64,6 +64,8 @@
     "check:import": "tsc --noEmit --target ESNEXT --module es6 --experimentalDecorators tests/import/index",
     "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "build": "node scripts/build",
+    "build:debug": "node scripts/build --debug",
+    "build:release": "node scripts/build --release",
     "watch": "node scripts/build --watch",
     "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:asconfig && npm run test:transform",
     "test:parser": "node --enable-source-maps tests/parser",
