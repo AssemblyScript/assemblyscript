@@ -10,6 +10,7 @@ import { stdoutColors } from "../util/terminal.js";
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const watch = process.argv[2] === "--watch";
+const debug = process.argv[2] === "--debug";
 
 function prelude(name) {
   return [
@@ -206,9 +207,9 @@ const common = {
   ],
   legalComments: "none",
   bundle: true,
-  sourcemap: true,
+  sourcemap: debug,
   treeShaking: true,
-  minify: true,
+  minify: !debug,
   watch,
   incremental: watch
 };

@@ -27,6 +27,11 @@ To build the compiler, run:
 npm run build
 ```
 
+To build the debug version (with source map and un-minified js files), run:  
+```sh
+npm run build:debug
+```
+
 The rebuild automatically when there are changes, do:
 
 ```sh
