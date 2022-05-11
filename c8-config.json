@@ -1,0 +1,8 @@
+{
+    "reporter": [
+        "html",
+        "text"
+    ],
+    "reportsDirectory": "./coverage",
+    "all": true
+}
