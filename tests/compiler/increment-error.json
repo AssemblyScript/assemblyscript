@@ -1,0 +1,32 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS234: Expression does not compile to a value at runtime.", "++Foo;",
+    "TS2469: The '++' operator cannot be applied to type 'void'.", "++Foo;",
+    "AS234: Expression does not compile to a value at runtime.", "Foo += 1;",
+    "TS2469: The '+' operator cannot be applied to type 'void'.", "Foo += 1;",
+    "AS234: Expression does not compile to a value at runtime.", "Foo--;",
+    "TS2469: The '--' operator cannot be applied to type 'void'.", "Foo--;",
+    "AS234: Expression does not compile to a value at runtime.", "--Foo;",
+    "TS2469: The '--' operator cannot be applied to type 'void'.", "--Foo;",
+    "AS234: Expression does not compile to a value at runtime.", "Foo -= 1;",
+    "TS2469: The '-' operator cannot be applied to type 'void'.", "Foo -= 1;",
+    "AS234: Expression does not compile to a value at runtime.", "Array++;",
+    "TS2469: The '++' operator cannot be applied to type 'void'.", "Array++;",
+    "AS234: Expression does not compile to a value at runtime.", "++Array;",
+    "TS2469: The '++' operator cannot be applied to type 'void'.", "++Array;",
+    "AS234: Expression does not compile to a value at runtime.", "Array += 1;",
+    "TS2469: The '+' operator cannot be applied to type 'void'.", "Array += 1;",
+    "AS234: Expression does not compile to a value at runtime.", "Array--;",
+    "TS2469: The '--' operator cannot be applied to type 'void'.", "Array--;",
+    "AS234: Expression does not compile to a value at runtime.", "--Array;",
+    "TS2469: The '--' operator cannot be applied to type 'void'.", "--Array;",
+    "AS234: Expression does not compile to a value at runtime.", "Array -= 1;",
+    "TS2469: The '-' operator cannot be applied to type 'void'.", "Array -= 1;",
+    "EOF"
+  ]
+}
+
+
+ 

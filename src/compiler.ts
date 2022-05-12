@@ -9237,12 +9237,9 @@ export class Compiler extends DiagnosticEmitter {
     // make a getter for the expression (also obtains the type)
     var getValue = this.compileExpression( // reports
       expression.operand,
-      contextualType.exceptVoid,
+      contextualType,
       Constraints.NONE
     );
-
-    // shortcut if compiling the getter already failed
-    if (getExpressionId(getValue) == ExpressionId.Unreachable) return getValue;
 
     // if the value isn't dropped, a temp. local is required to remember the original value,
     // except if a static overload is found, which reverses the use of a temp. (see below)
@@ -9597,7 +9594,7 @@ export class Compiler extends DiagnosticEmitter {
         compound = true;
         expr = this.compileExpression(
           expression.operand,
-          contextualType.exceptVoid,
+          contextualType,
           Constraints.NONE
         );
 
@@ -9668,7 +9665,7 @@ export class Compiler extends DiagnosticEmitter {
         compound = true;
         expr = this.compileExpression(
           expression.operand,
-          contextualType.exceptVoid,
+          contextualType,
           Constraints.NONE
         );
 
