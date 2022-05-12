@@ -19,10 +19,9 @@ Array--;
 --Array;
 Array -= 1;
 
-const a = (Foo += 1);
-
-const b = (Foo++);
-const c = (++Foo);
+const a = (Foo++);
+const b = (++Foo);
+const c = (Foo += 1);
 
 const d = (Foo--);
 const e = (--Foo);
