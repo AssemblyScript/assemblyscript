@@ -9447,6 +9447,17 @@ export class Compiler extends DiagnosticEmitter {
       return module.unreachable();
     }
 
+    // check assignability
+    var targetType = resolver.getTypeOfElement(target);
+    if (!targetType) targetType = Type.void;
+    if (!this.currentType.isStrictlyAssignableTo(targetType)) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        expression.range, this.currentType.toString(), targetType.toString()
+      );
+      return module.unreachable();
+    }
+
     // simplify if dropped anyway
     if (!tempLocal) {
       return this.makeAssignment(
@@ -9834,6 +9845,18 @@ export class Compiler extends DiagnosticEmitter {
     var resolver = this.resolver;
     var target = resolver.lookupExpression(expression.operand, this.currentFlow);
     if (!target) return module.unreachable();
+    
+    // check assignability
+    var targetType = resolver.getTypeOfElement(target);
+    if (!targetType) targetType = Type.void;
+    if (!this.currentType.isStrictlyAssignableTo(targetType)) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        expression.range, this.currentType.toString(), targetType.toString()
+      );
+      return module.unreachable();
+    }
+
     return this.makeAssignment(
       target,
       expr,

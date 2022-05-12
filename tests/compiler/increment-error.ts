@@ -19,4 +19,22 @@ Array--;
 --Array;
 Array -= 1;
 
+const a = (Foo += 1);
+
+const b = (Foo++);
+const c = (++Foo);
+
+const d = (Foo--);
+const e = (--Foo);
+const f = (Foo -= 1);
+
+
+const g = (Array++);
+const h = (++Array);
+const i = (Array += 1);
+
+const j = (Array--);
+const k = (--Array);
+const l = (Array -= 1);
+
 ERROR("EOF"); 

@@ -24,9 +24,30 @@
     "TS2469: The '--' operator cannot be applied to type 'void'.", "--Array;",
     "AS234: Expression does not compile to a value at runtime.", "Array -= 1;",
     "TS2469: The '-' operator cannot be applied to type 'void'.", "Array -= 1;",
+    "AS234: Expression does not compile to a value at runtime.", "const a = (Foo += 1);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const a = (Foo += 1);",
+    "AS234: Expression does not compile to a value at runtime.", "const b = (Foo++);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const b = (Foo++);",
+    "AS234: Expression does not compile to a value at runtime.", "const c = (++Foo);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const c = (++Foo);",
+    "AS234: Expression does not compile to a value at runtime.", "const d = (Foo--);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const d = (Foo--);",
+    "AS234: Expression does not compile to a value at runtime.", "const e = (--Foo);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const e = (--Foo);",
+    "AS234: Expression does not compile to a value at runtime.", "const f = (Foo -= 1);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const f = (Foo -= 1);",
+    "AS234: Expression does not compile to a value at runtime.", "const g = (Array++);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const g = (Array++);",
+    "AS234: Expression does not compile to a value at runtime.", "const h = (++Array);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const h = (++Array);",
+    "AS234: Expression does not compile to a value at runtime.", "const i = (Array += 1);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const i = (Array += 1);",
+    "AS234: Expression does not compile to a value at runtime.", "const j = (Array--);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const j = (Array--);",
+    "AS234: Expression does not compile to a value at runtime.", "const k = (--Array);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const k = (--Array);",
+    "AS234: Expression does not compile to a value at runtime.", "const l = (Array -= 1);",
+    "TS2322: Type 'i32' is not assignable to type 'void'.", "const l = (Array -= 1);",
     "EOF"
   ]
 }
-
-
- 
