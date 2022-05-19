@@ -14,3 +14,5 @@ obj.a(1);
 
 // Everything
 id(a)[0](b)(c).a(d)(e)[1](f)(g);
+// ERROR 1003: "Identifier expected."
+obj.(b ? f : g)();

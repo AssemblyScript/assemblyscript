@@ -8,3 +8,4 @@ function a<T, U=i32, V>(): T {
   return 0;
 }
 // ERROR 2706: "Required type parameters may not follow optional type parameters." in optional-typeparameters.ts(3,20+1)
+// ERROR 1003: "Identifier expected." in optional-typeparameters.ts(4,16+10)

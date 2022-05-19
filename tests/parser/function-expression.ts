@@ -14,3 +14,7 @@ var e = (a: i32, b: i32): i32 => {
   ;
 };
 var f = (a: i32): i32 => a;
+// ERROR 1005: "'(' expected."
+var g = function:void{
+  ;
+};

@@ -37,4 +37,26 @@ export class Invalid<T> {
   // 1031: 'declare' modifier cannot appear on class elements of this kind.
   // 1183: An implementation cannot be declared in ambient contexts.
   declare declareMethod(): i32 {}
+
+  // ERROR 1042: "'readonly' modifier cannot be used here."
+  readonly get name():i32 {}
+  // ERROR 1049: "A 'set' accessor must have exactly one parameter."
+  // ERROR 1042: "'readonly' modifier cannot be used here."
+  // ERROR 1095: "A 'set' accessor cannot have a return type annotation."
+  readonly set name():i32 {}
+
+  // ERROR 1042: "'static' modifier cannot be used here."
+  static constructor(a: i32) {}
+
+  // ERROR 1042: "'abstract' modifier cannot be used here."
+  abstract constructor(a: i32) {}
+
+  // ERROR 1042: "'readonly' modifier cannot be used here."
+  readonly constructor(a: i32) {}
+}
+
+
+export abstract class Invalid<T> { 
+  // ERROR 1245: "Method 'constructor' cannot have an implementation because it is marked abstract."
+  abstract constructor(a: i32) {}
 }
