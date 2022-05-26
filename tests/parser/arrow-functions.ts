@@ -9,3 +9,7 @@ x => x;
 // not an array function
 (b ? x : y);
 (b ? f : g)();
+
+(b ? x | y);
+// ERROR 1005: "')' expected."
+(x: i32 => x;

@@ -62,4 +62,9 @@ export class ExternalString {
   equals(other: String): bool {
     return unreachable();
   }
+  trimStartError(): String {
+    return unreachable();
+  }
 }
+// ERROR 1005: "']' expected." in string-binding.ts(52,45+13)
+// ERROR 1003: "Identifier expected." in string-binding.ts(52,45+13)

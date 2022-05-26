@@ -48,4 +48,7 @@ export class ExternalString {
   @binding(BindingCall.THIS, [ BindingType.OBJECT_HANDLE ], BindingType.PASS_THRU)
   @operator("==")
   equals(other: String): bool { return unreachable(); }
+  // ERROR 1005: "']' expected."
+  @binding(BindingCall.THIS, [, BindingType.OBJECT_HANDLE)
+  trimStartError(): String { return unreachable(); }
 }

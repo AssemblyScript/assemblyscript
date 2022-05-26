@@ -107,3 +107,5 @@ b;
 // ERROR 1125: "Hexadecimal digit expected." in literals.ts(94,4+1)
 // ERROR 1125: "Hexadecimal digit expected." in literals.ts(94,12+1)
 // ERROR 1125: "Hexadecimal digit expected." in literals.ts(94,16+1)
+// ERROR 1002: "Unterminated string literal." in literals.ts(102,6+3)
+// ERROR 1005: "'}' expected." in literals.ts(102,6+3)

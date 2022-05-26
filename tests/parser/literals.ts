@@ -98,3 +98,5 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 5 c;
 6.7 d;
 a b;
+// ERROR 1005: "'}' expected." 
+`a${b`;
