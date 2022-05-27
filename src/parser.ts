@@ -2095,7 +2095,7 @@ export class Parser extends DiagnosticEmitter {
         } else if (flags & CommonFlags.PRIVATE) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "protected"
+            tn.range(accessStart, accessEnd), "private"
           ); // recoverable
         }
         if (flags & CommonFlags.STATIC) {

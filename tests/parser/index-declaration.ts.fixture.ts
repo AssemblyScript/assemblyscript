@@ -29,7 +29,7 @@ class O {}
 // ERROR 1003: "Identifier expected." in index-declaration.ts(39,10+1)
 // ERROR 1042: "'protected' modifier cannot be used here." in index-declaration.ts(43,3+9)
 // ERROR 1003: "Identifier expected." in index-declaration.ts(43,13+1)
-// ERROR 1042: "'protected' modifier cannot be used here." in index-declaration.ts(47,3+7)
+// ERROR 1042: "'private' modifier cannot be used here." in index-declaration.ts(47,3+7)
 // ERROR 1003: "Identifier expected." in index-declaration.ts(47,11+1)
 // ERROR 1042: "'static' modifier cannot be used here." in index-declaration.ts(51,3+6)
 // ERROR 1003: "Identifier expected." in index-declaration.ts(51,10+1)
