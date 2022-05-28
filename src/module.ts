@@ -60,10 +60,10 @@ export namespace TypeRef {
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
   export const Funcref: TypeRef = 7 /* _BinaryenTypeFuncref */;
   export const Externref: TypeRef = 8 /* _BinaryenTypeExternref */;
-  export const Anyref: TypeRef = 9 /* _BinaryenTypeAnyref */;
-  export const Eqref: TypeRef = 10 /* _BinaryenTypeEqref */;
-  export const I31ref: TypeRef = 11 /* _BinaryenTypeI31ref */;
-  export const Dataref: TypeRef = 12 /* _BinaryenTypeDataref */;
+  export const Anyref: TypeRef = 8 /* _BinaryenTypeAnyref */;
+  export const Eqref: TypeRef = 9 /* _BinaryenTypeEqref */;
+  export const I31ref: TypeRef = 10 /* _BinaryenTypeI31ref */;
+  export const Dataref: TypeRef = 11 /* _BinaryenTypeDataref */;
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
@@ -85,7 +85,7 @@ export enum FeatureFlags {
   FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
-  All = 65535 /* _BinaryenFeatureAll */
+  All = 57343 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
@@ -845,7 +845,7 @@ export enum BinaryOp {
   /** i16x8.narrow_i32x4_u */
   NarrowU32x4ToU16x8 = 194 /* _BinaryenNarrowUVecI32x4ToVecI16x8 */,
   /** i8x16.swizzle */
-  SwizzleI8x16 = 195 /* _BinaryenSwizzleVec8x16 */,
+  SwizzleI8x16 = 195 /* _BinaryenSwizzleVecI8x16 */,
 
   _last = SwizzleI8x16,
 

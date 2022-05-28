@@ -1,20 +1,20 @@
 (module
  (type $none_=>_none (func))
- (type $none_=>_externref (func (result externref)))
- (type $externref_=>_externref (func (param externref) (result externref)))
+ (type $none_=>_anyref (func (result anyref)))
+ (type $anyref_=>_anyref (func (param anyref) (result anyref)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
+ (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result anyref)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
- (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
+ (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result anyref)))
+ (import "reference-types" "external" (func $features/reference-types/external (param anyref) (result anyref)))
  (global $features/reference-types/funcGlobal (mut funcref) (ref.null func))
  (global $features/reference-types/funcGlobalInit (mut funcref) (ref.null func))
- (global $features/reference-types/externGlobal (mut externref) (ref.null extern))
- (global $features/reference-types/externGlobalInit (mut externref) (ref.null extern))
+ (global $features/reference-types/externGlobal (mut anyref) (ref.null any))
+ (global $features/reference-types/externGlobalInit (mut anyref) (ref.null any))
  (global $features/reference-types/anyGlobal (mut anyref) (ref.null any))
  (global $features/reference-types/anyGlobalInit (mut anyref) (ref.null any))
  (global $features/reference-types/otherFuncGlobal (mut funcref) (ref.func $features/reference-types/someFunc))
- (global $features/reference-types/a externref (ref.null extern))
+ (global $features/reference-types/a anyref (ref.null any))
  (global $features/reference-types/b funcref (ref.null func))
  (global $~lib/memory/__data_end i32 (i32.const 92))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
@@ -80,8 +80,8 @@
   end
  )
  (func $features/reference-types/testLocal<externref>
-  (local $0 externref)
-  (local $1 externref)
+  (local $0 anyref)
+  (local $1 anyref)
   local.get $0
   ref.is_null
   i32.eqz
@@ -95,7 +95,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.null extern
+  ref.null any
   local.set $0
   local.get $0
   ref.is_null
@@ -110,7 +110,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.null extern
+  ref.null any
   local.set $1
   local.get $1
   ref.is_null
@@ -298,7 +298,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.null extern
+  ref.null any
   global.set $features/reference-types/externGlobal
   global.get $features/reference-types/externGlobal
   ref.is_null
@@ -409,10 +409,10 @@
   global.get $features/reference-types/funcGlobal
   global.set $features/reference-types/anyGlobal
  )
- (func $features/reference-types/internal (param $0 externref) (result externref)
-  (local $1 externref)
-  (local $2 externref)
-  (local $3 externref)
+ (func $features/reference-types/internal (param $0 anyref) (result anyref)
+  (local $1 anyref)
+  (local $2 anyref)
+  (local $3 anyref)
   local.get $0
   call $features/reference-types/external
   local.set $1
