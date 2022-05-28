@@ -71,7 +71,7 @@ jobs:
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
-        node-version: 18.0.0-v8-canary20211115037fd7ae8d
+        node-version: 19.0.0-v8-canary2022052811308b5fb3
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Build
@@ -114,7 +114,7 @@ jobs:
     - uses: actions/checkout@v1.0.0
     - uses: dcodeIO/setup-node-nvm@master
       with:
-        node-version: current
+        node-version: 18
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Build

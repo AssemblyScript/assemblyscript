@@ -1,4 +1,4 @@
-// can use externref as a parameter or return type
+// can use anyref as a parameter or return type
 
 export declare function external(a: anyref): anyref;
 export declare function somethingReal(): anyref;
