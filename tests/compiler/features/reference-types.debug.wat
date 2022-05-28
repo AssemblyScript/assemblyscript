@@ -406,8 +406,6 @@
     unreachable
    end
   end
-  global.get $features/reference-types/funcGlobal
-  global.set $features/reference-types/anyGlobal
  )
  (func $features/reference-types/internal (param $0 anyref) (result anyref)
   (local $1 anyref)

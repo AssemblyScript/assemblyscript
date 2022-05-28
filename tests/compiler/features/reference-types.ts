@@ -96,10 +96,6 @@ assert(otherFuncGlobal);
   assert(funcLocal);
 }
 
-// can assign any reference type to anyref
-
-anyGlobal = funcGlobal;
-
 // constant globals
 
 export const a: externref = null;

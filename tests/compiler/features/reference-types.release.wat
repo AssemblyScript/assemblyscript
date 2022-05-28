@@ -8,7 +8,6 @@
  (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result anyref)))
  (import "reference-types" "external" (func $features/reference-types/external (param anyref) (result anyref)))
  (global $features/reference-types/funcGlobal (mut funcref) (ref.null func))
- (global $features/reference-types/anyGlobal (mut anyref) (ref.null any))
  (global $features/reference-types/a anyref (ref.null any))
  (global $features/reference-types/b funcref (ref.null func))
  (memory $0 1)
@@ -88,22 +87,7 @@
   end
   ref.null func
   global.set $features/reference-types/funcGlobal
-  global.get $features/reference-types/anyGlobal
-  ref.is_null
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 69
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  ref.null any
-  global.set $features/reference-types/anyGlobal
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
-  ref.func $features/reference-types/someFunc
-  global.set $features/reference-types/anyGlobal
  )
 )
