@@ -872,7 +872,7 @@ export class JSBuilder extends ExportsWalker {
 } = await (async url => instantiate(
   await (async () => {
     try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)) }
-    catch (e) { return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url)) }
+    catch { return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url)) }
   })(), {
 `);
       let needsMaybeDefault = false;
