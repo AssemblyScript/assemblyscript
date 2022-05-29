@@ -50,8 +50,10 @@ class A3 {
   public pubPub: i32;
 }
 
-export class B3 extends A3 {
+class B3 extends A3 {
   protected protProt: i32;
   public protPub: i32;
   public pubPub: i32;
 }
+
+new B3();

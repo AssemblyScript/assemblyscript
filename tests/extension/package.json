@@ -1,6 +1,0 @@
-{
-  "scripts": {
-    "test": "npm run asbuild",
-    "asbuild": "node ../../bin/asc assembly/index.as --extension .as --noEmit"
-  }
-}

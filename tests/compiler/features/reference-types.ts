@@ -1,32 +1,15 @@
-// can use externref as a parameter or return type
+// can use anyref as a parameter or return type
 
-export declare function external(a: externref): externref;
-export declare function somethingReal(): externref;
-export declare function somethingNull(): externref;
+export declare function external(a: anyref): anyref;
+export declare function somethingReal(): anyref;
+export declare function somethingNull(): anyref;
 
-export function internal(a: externref): externref {
+export function internal(a: anyref): anyref {
   const b = external(a);
   let c = external(b);
   var d = external(c);
   return d;
 }
-
-// can use reflection to work with externref values
-
-import * as Reflect from "bindings/Reflect";
-
-declare const someObject: externref;
-declare const someKey: externref;
-
-assert(Reflect.has(someObject, someKey));
-
-// can call JS bindings with externref values
-
-import * as console from "bindings/console";
-
-console.log(someObject);
-console.log(someKey);
-console.log(Reflect.get(someObject, someKey));
 
 // Truthiness conversion
 if(!somethingReal()) {
@@ -48,20 +31,20 @@ if(somethingNull()) {
 
 // Explicit null checks (don’t work yet)
 /*
-if(somethingReal() !== null) {
+if(somethingReal() != null) {
   // nop
 } else {
   assert(false);
 }
-if(somethingReal() === null) {
+if(somethingReal() == null) {
   assert(false);
 }
-if(somethingNull() === null) {
+if(somethingNull() == null) {
   // nop
 } else {
   assert(false);
 }
-if(somethingNull() !== null) {
+if(somethingNull() != null) {
   assert(false);
 }
 */
@@ -74,13 +57,6 @@ funcGlobal = null;
 assert(!funcGlobal);
 var funcGlobalInit: funcref = null;
 assert(!funcGlobalInit);
-
-var externGlobal: externref;
-assert(!externGlobal);
-externGlobal = null;
-assert(!externGlobal);
-var externGlobalInit: externref = null;
-assert(!externGlobalInit);
 
 var anyGlobal: anyref;
 assert(!anyGlobal);
@@ -98,7 +74,6 @@ function testLocal<T>(): void {
   assert(!localInit);
 }
 testLocal<funcref>();
-testLocal<externref>();
 testLocal<anyref>();
 
 // funcref can represent function references
@@ -113,6 +88,7 @@ assert(otherFuncGlobal);
   assert(funcLocal);
 }
 
-// can assign any reference type to anyref
+// constant globals
 
-anyGlobal = funcGlobal;
+export const a: anyref = null;
+export const b: funcref = null;

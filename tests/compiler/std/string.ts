@@ -133,6 +133,9 @@ assert(parseInt("2badnum") == 2);
 
 assert(parseInt(" \t\n1") == 1);
 assert(parseInt(" \t\n0x02") == 2);
+assert(parseInt("0 abc") == 0);
+assert(parseInt("1 abc") == 1);
+assert(parseInt(" \t\n0 abc") == 0);
 assert(isNaN(parseInt("")));
 assert(isNaN(parseInt("-")));
 assert(isNaN(parseInt("+")));

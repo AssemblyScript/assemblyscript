@@ -44,7 +44,7 @@ export function COMPARATOR<T>(): Comparator<T> {
     }
   } else if (isString<T>()) {
     return (a, b) => {
-      if (a === b || a === null || b === null) return 0;
+      if (changetype<usize>(a) == changetype<usize>(b) || changetype<usize>(a) == 0 || changetype<usize>(b) == 0) return 0;
       var alen = changetype<string>(a).length;
       var blen = changetype<string>(b).length;
       if (!(alen | blen)) return 0;

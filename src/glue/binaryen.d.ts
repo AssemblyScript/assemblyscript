@@ -7,6 +7,7 @@
  *
  * @license Apache-2.0
  */
+module "binaryen";
 
 export type Index = u32;
 export type ExpressionId = i32;
@@ -642,11 +643,6 @@ export declare function _BinaryenGetAllowInliningFunctionsWithLoops(): bool;
 export declare function _BinaryenSetAllowInliningFunctionsWithLoops(enabled: bool): void;
 
 // Helpers
-
-// Binaryen.js only (ASC_TARGET = 0)
-export declare const HEAPU8:  Uint8Array;
-export declare const HEAPU32: Uint32Array;
-export declare const HEAP32:  Int32Array;
 
 export declare function _malloc(size: usize): usize;
 export declare function _free(ptr: usize): void;

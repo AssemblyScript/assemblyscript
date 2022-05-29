@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "private": true,
   "scripts": {
     "test": "npm run test:use-consts && npm run test:target && npm run test:entry-points && npm run test:complicated && npm run test:extends",

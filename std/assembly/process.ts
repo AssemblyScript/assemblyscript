@@ -15,6 +15,15 @@ import {
 } from "bindings/wasi";
 
 import {
+  Date as Date_binding,
+  performance as performance_binding
+} from "bindings/dom";
+
+import {
+  process as process_binding
+} from "bindings/node";
+
+import {
   E_INDEXOUTOFRANGE
 } from "util/error";
 
@@ -36,7 +45,11 @@ export namespace process {
   @lazy export var exitCode = 0;
 
   export function exit(code: i32 = exitCode): void {
-    proc_exit(code);
+    if (isDefined(ASC_WASI)) {
+      proc_exit(code);
+    } else {
+      process_binding.exit(code);
+    }
   }
 
   // @ts-ignore: decorator
@@ -47,63 +60,83 @@ export namespace process {
   @lazy export const stderr = changetype<WritableStream>(2);
 
   export function time(): i64 {
-    var err = clock_time_get(clockid.REALTIME, 1000000, tempbuf);
-    if (err) throw new Error(errnoToString(err));
-    return load<u64>(tempbuf) / 1000000;
+    if (isDefined(ASC_WASI)) {
+      let err = clock_time_get(clockid.REALTIME, 1000000, tempbuf);
+      if (err) throw new Error(errnoToString(err));
+      return load<u64>(tempbuf) / 1000000;
+    } else {
+      return Date_binding.now();
+    }
   }
 
   export function hrtime(): u64 {
-    var err = clock_time_get(clockid.MONOTONIC, 0, tempbuf);
-    if (err) throw new Error(errnoToString(err));
-    return load<u64>(tempbuf);
+    if (isDefined(ASC_WASI)) {
+      let err = clock_time_get(clockid.MONOTONIC, 0, tempbuf);
+      if (err) throw new Error(errnoToString(err));
+      return load<u64>(tempbuf);
+    } else {
+      let now = performance_binding.now();
+      let millis = <u64>now;
+      let fraction = now - <f64>millis;
+      return millis * 1000000 + <u64>(fraction * 1000000);
+    }
   }
 }
 
 function lazyArgv(): string[] {
-  var err = args_sizes_get(tempbuf, tempbuf + sizeof<usize>());
-  if (err) throw new Error(errnoToString(err));
-  var count = load<usize>(tempbuf);
-  var ptrsSize = count * sizeof<usize>();
-  var dataSize = load<usize>(tempbuf, sizeof<usize>());
-  var bufSize = ptrsSize + dataSize;
-  var buf = __alloc(bufSize);
-  err = args_get(buf, buf + ptrsSize);
-  if (err) throw new Error(errnoToString(err));
-  var count32 = <i32>count;
-  var argv = new Array<string>(count32);
-  for (let i = 0; i < count32; ++i) {
-    let ptr = load<usize>(buf + i * sizeof<usize>());
-    let str = String.UTF8.decodeUnsafe(ptr, ptr + bufSize - buf, true);
-    argv[i] = str;
+  if (isDefined(ASC_WASI)) {
+    let err = args_sizes_get(tempbuf, tempbuf + sizeof<usize>());
+    if (err) throw new Error(errnoToString(err));
+    let count = load<usize>(tempbuf);
+    let ptrsSize = count * sizeof<usize>();
+    let dataSize = load<usize>(tempbuf, sizeof<usize>());
+    let bufSize = ptrsSize + dataSize;
+    let buf = __alloc(bufSize);
+    err = args_get(buf, buf + ptrsSize);
+    if (err) throw new Error(errnoToString(err));
+    let count32 = <i32>count;
+    let argv = new Array<string>(count32);
+    for (let i = 0; i < count32; ++i) {
+      let ptr = load<usize>(buf + i * sizeof<usize>());
+      let str = String.UTF8.decodeUnsafe(ptr, ptr + bufSize - buf, true);
+      argv[i] = str;
+    }
+    __free(buf);
+    return argv;
+  } else {
+    return process_binding.argv;
   }
-  __free(buf);
-  return argv;
 }
 
 function lazyEnv(): Map<string,string> {
-  var err = environ_sizes_get(tempbuf, tempbuf + 4);
-  if (err) throw new Error(errnoToString(err));
-  var count = load<usize>(tempbuf);
-  var ptrsSize = count * sizeof<usize>();
-  var dataSize = load<usize>(tempbuf, sizeof<usize>());
-  var bufSize = ptrsSize + dataSize;
-  var buf = __alloc(bufSize);
-  err = environ_get(buf, buf + ptrsSize);
-  if (err) throw new Error(errnoToString(err));
-  var env = new Map<string,string>();
-  for (let i: usize = 0; i < count; ++i) {
-    let ptr = load<usize>(buf + i * sizeof<usize>());
-    let str = String.UTF8.decodeUnsafe(ptr, ptr + bufSize - buf, true);
-    let pos = str.indexOf("=");
-    if (~pos) {
-      env.set(str.substring(0, pos), str.substring(pos + 1));
-      // __dispose(changetype<usize>(str));
-    } else {
-      env.set(str, "");
+  if (isDefined(ASC_WASI)) {
+    let err = environ_sizes_get(tempbuf, tempbuf + 4);
+    if (err) throw new Error(errnoToString(err));
+    let count = load<usize>(tempbuf);
+    let ptrsSize = count * sizeof<usize>();
+    let dataSize = load<usize>(tempbuf, sizeof<usize>());
+    let bufSize = ptrsSize + dataSize;
+    let buf = __alloc(bufSize);
+    err = environ_get(buf, buf + ptrsSize);
+    if (err) throw new Error(errnoToString(err));
+    let env = new Map<string,string>();
+    for (let i: usize = 0; i < count; ++i) {
+      let ptr = load<usize>(buf + i * sizeof<usize>());
+      let str = String.UTF8.decodeUnsafe(ptr, ptr + bufSize - buf, true);
+      let pos = str.indexOf("=");
+      if (~pos) {
+        env.set(str.substring(0, pos), str.substring(pos + 1));
+        // __dispose(changetype<usize>(str));
+      } else {
+        env.set(str, "");
+      }
     }
+    __free(buf);
+    return env;
+  } else {
+    // TODO: What about Node?
+    return new Map();
   }
-  __free(buf);
-  return env;
 }
 
 @unmanaged

@@ -92,6 +92,12 @@ declare const ASC_FEATURE_MULTI_VALUE: bool;
 declare const ASC_FEATURE_GC: bool;
 /** Whether the memory64 feature is enabled. */
 declare const ASC_FEATURE_MEMORY64: bool;
+/** Whether the function references feature is enabled. */
+declare const ASC_FEATURE_FUNCTION_REFERENCES: bool;
+/** Whether the relaxed SIMD feature is enabled. */
+declare const ASC_FEATURE_RELAXED_SIMD: bool;
+/** Whether the extended const expression feature is enabled. */
+declare const ASC_FEATURE_EXTENDED_CONST: bool;
 /** Major version of the compiler. */
 declare const ASC_VERSION_MAJOR: i32;
 /** Minor version of the compiler. */
@@ -141,6 +147,10 @@ declare function sub<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 declare function mul<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 /** Computes the quotient of two integers or floats. */
 declare function div<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Return 1 if two numbers are equal to each other, 0 otherwise. */
+declare function eq<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
+/** Return 0 if two numbers are equal to each other, 1 otherwise. */
+declare function ne<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
@@ -332,6 +342,10 @@ declare namespace i32 {
   export function div_s(left: i32, right: i32): i32;
   /** Computes the unsigned quotient of two 32-bit integers. */
   export function div_u(left: i32, right: i32): i32;
+  /** Return 1 two 32-bit inegers are equal to each other, 0 otherwise. */
+  export function eq(left: i32, right: i32): i32;
+  /** Return 0 two 32-bit inegers are equal to each other, 1 otherwise. */
+  export function ne(left: i32, right: i32): i32;
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -452,6 +466,10 @@ declare namespace i64 {
   export function div_s(left: i64, right: i64): i64;
   /** Computes the unsigned quotient of two 64-bit integers. */
   export function div_u(left: i64, right: i64): i64;
+  /** Return 1 two 64-bit inegers are equal to each other, 0 otherwise. */
+  export function eq(left: i64, right: i64): i32;
+  /** Return 0 two 64-bit inegers are equal to each other, 1 otherwise. */
+  export function ne(left: i64, right: i64): i32;
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -619,6 +637,10 @@ declare namespace f32 {
   export function mul(left: f32, right: f32): f32;
   /** Computes the quotient of two 32-bit floats. */
   export function div(left: f32, right: f32): f32;
+  /** Return 1 two 32-bit floats are equal to each other, 0 otherwise. */
+  export function eq(left: f32, right: f32): i32;
+  /** Return 0 two 32-bit floats are equal to each other, 1 otherwise. */
+  export function ne(left: f32, right: f32): i32;
   /** Computes the absolute value of a 32-bit float. */
   export function abs(value: f32): f32;
   /** Determines the maximum of two 32-bit floats. If either operand is `NaN`, returns `NaN`. */
@@ -673,6 +695,10 @@ declare namespace f64 {
   export function mul(left: f64, right: f64): f64;
   /** Computes the quotient of two 64-bit floats. */
   export function div(left: f64, right: f64): f64;
+  /** Return 1 two 64-bit floats are equal to each other, 0 otherwise. */
+  export function eq(left: f64, right: f64): i32;
+  /** Return 0 two 32-bit floats are equal to each other, 1 otherwise. */
+  export function ne(left: f64, right: f64): i32;
   /** Computes the absolute value of a 64-bit float. */
   export function abs(value: f64): f64;
   /** Determines the maximum of two 64-bit floats. If either operand is `NaN`, returns `NaN`. */
@@ -1369,6 +1395,10 @@ declare class _Float {
   toString(radix?: number): string;
 }
 
+declare class Boolean {
+  toString(radix?: number): string;
+}
+
 /** Backing class of signed 8-bit integers. */
 declare const I8: typeof _Integer;
 /** Backing class of signed 16-bit integers. */
@@ -1393,6 +1423,9 @@ declare const Usize: typeof _Integer;
 declare const F32: typeof _Float;
 /** Backing class of 64-bit floating-point values. */
 declare const F64: typeof _Float;
+/** Alias of F64. */
+declare const Number: typeof F64;
+declare type Number = _Float;
 
 // User-defined diagnostic macros
 
@@ -1492,6 +1525,8 @@ declare class ArrayBuffer {
 declare class DataView {
   /** The `buffer` accessor property represents the `ArrayBuffer` or `SharedArrayBuffer` referenced by the `DataView` at construction time. */
   readonly buffer: ArrayBuffer;
+  /** Returns raw pointer to data storage including offset (unsafe). */
+  readonly dataStart: usize;
   /** The `byteLength` accessor property represents the length (in bytes) of this view from the start of its `ArrayBuffer` or `SharedArrayBuffer`. */
   readonly byteLength: i32;
   /** The `byteOffset` accessor property represents the offset (in bytes) of this view from the start of its `ArrayBuffer` or `SharedArrayBuffer`. */
@@ -1837,6 +1872,11 @@ declare class Object {
   static is<T>(value1: T, value2: T): bool;
 }
 
+declare namespace performance {
+  /** Gets a high resolution timestamp measured in milliseconds. */
+  export function now(): f64;
+}
+
 declare class Date {
   /** Returns the UTC timestamp in milliseconds of the specified date. */
   static UTC(
@@ -1870,7 +1910,7 @@ declare class Date {
   getUTCMilliseconds(): i32;
 
   setUTCFullYear(value: i32): void;
-  setUTCMonth(value: i32): void;
+  setUTCMonth(value: i32, day?: i32): void;
   setUTCDate(value: i32): void;
   setUTCHours(value: i32): void;
   setUTCMinutes(value: i32): void;
@@ -1914,14 +1954,6 @@ declare class SyntaxError extends Error { }
 
 /** Class for indicating an error when a global URI handling function was used in a wrong way. */
 declare class URIError extends Error { }
-
-interface Boolean {
-  toString(radix?: number): string;
-}
-
-interface Number {
-  toString(radix?: number): string;
-}
 
 interface Function {
   /** Function table index. */
@@ -2120,10 +2152,10 @@ declare namespace process {
   export const argv: string[];
   /** Map of variables in the binary's user environment. */
   export const env: Map<string,string>;
-  /** Process exit code to use when the process exits gracefully. Defaults to `0`. */
-  export var exitCode: i32;
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
   export function exit(code?: i32): void;
+  /** `exit()`’s default value. Defaults to `0`. */
+  export var exitCode: i32;
   /** Stream connected to `stdin` (fd `0`). */
   export const stdin: ReadableStream;
   /** Stream connected to `stdout` (fd `1`). */
@@ -2238,7 +2270,11 @@ declare function inline(...args: any[]): any;
 declare function unsafe(...args: any[]): any;
 
 /** Annotates an explicit external name of a function or global. */
-declare function external(...args: any[]): any;
+declare function external(name: string): any;
+declare function external(moduleName: string, name: string): any;
+declare namespace external {
+  function js(code: string): any;
+}
 
 /** Annotates a global for lazy compilation. */
 declare function lazy(...args: any[]): any;

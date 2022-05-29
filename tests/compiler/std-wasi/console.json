@@ -1,13 +1,10 @@
 {
   "asc_flags": [
-    "--explicitStart"
+    "--exportStart", "_start"
   ],
   "asc_wasi": {
     "args": [],
     "env": {},
     "returnOnExit": true
-  },
-  "features": [
-    "bigint-integration"
-  ]
+  }
 }
