@@ -193,7 +193,9 @@ import { Array } from "./array";
     if (otherLen != len) return select(1, -1, len > otherLen);
     if (!otherLen) return 0; // "" == ""
     // @ts-ignore: string <-> String
-    return compareImpl(this, 0, other, 0, otherLen);
+    let res = compareImpl(this, 0, other, 0, otherLen);
+    // normalize to [-1, 1] range
+    return i32(res > 0) - i32(res < 0);
   }
 
   startsWith(search: String, start: i32 = 0): bool {
