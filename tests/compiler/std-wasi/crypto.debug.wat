@@ -504,7 +504,7 @@
         if
          i32.const 32
          i32.const 96
-         i32.const 741
+         i32.const 743
          i32.const 49
          call $~lib/wasi/index/abort
          unreachable
