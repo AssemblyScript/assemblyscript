@@ -19,7 +19,8 @@ import {
   Range,
   CommentHandler,
   IdentifierHandling,
-  isIllegalVariableIdentifier
+  isIllegalVariableIdentifier,
+  State
 } from "./tokenizer";
 
 import {
@@ -322,13 +323,9 @@ export class Parser extends DiagnosticEmitter {
       case Token.NAMESPACE: {
         let state = tn.mark();
         tn.next();
-        if (tn.peek(false, IdentifierHandling.PREFER) == Token.IDENTIFIER) {
-          tn.discard(state);
-          statement = this.parseNamespace(tn, flags, decorators, startPos);
+        statement = this.parseNamespace(tn, flags, decorators, startPos, state);
+        if (statement instanceof NamespaceDeclaration) {
           decorators = null;
-        } else {
-          tn.reset(state);
-          statement = this.parseStatement(tn, true);
         }
         break;
       }
@@ -2465,13 +2462,15 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     flags: CommonFlags,
     decorators: DecoratorNode[] | null,
-    startPos: i32
-  ): NamespaceDeclaration | null {
+    startPos: i32,
+    state: State
+  ): Statement | null {
 
     // at 'namespace': Identifier '{' (Variable | Function)* '}'
 
     if (tn.skipIdentifier()) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      tn.discard(state);
       if (tn.skip(Token.OPENBRACE)) {
         let members = new Array<Statement>();
         let declaration = Node.createNamespaceDeclaration(
@@ -2506,10 +2505,13 @@ export class Parser extends DiagnosticEmitter {
         );
       }
     } else {
+      tn.reset(state);
+      let statement = this.parseStatement(tn, true);
       this.error(
         DiagnosticCode.Identifier_expected,
         tn.range()
       );
+      return statement;
     }
     return null;
   }

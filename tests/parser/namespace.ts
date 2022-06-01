@@ -13,4 +13,5 @@ declare namespace A {
       var aVar: i32;
     }
   }
+  namespace { var aVar: i32;}  // ERROR 1003: "Identifier expected."
 }

@@ -7,7 +7,7 @@ class AClass {
 type type = i32;
 var type: i32;
 type = 123;
-
+// ERROR 1003: "Identifier expected."
 namespace namespace {}
 var namespace: i32;
 namespace = 123;

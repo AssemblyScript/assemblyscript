@@ -12,3 +12,4 @@ namespace = 123;
 abstract class AClass {}
 var abstract: i32;
 abstract = 123;
+// ERROR 1003: "Identifier expected." in reserved-keywords.ts(13,16+1)
