@@ -188,12 +188,14 @@ import { Array } from "./array";
   // TODO: implement full locale comparison with locales and Collator options
   localeCompare(other: String): i32 {
     if (changetype<usize>(other) == changetype<usize>(this)) return 0;
-    var len: isize = this.length;
-    var otherLen: isize = other.length;
-    if (otherLen != len) return select(1, -1, len > otherLen);
-    if (!otherLen) return 0; // "" == ""
+    var alen = this.length;
+    var blen = other.length;
     // @ts-ignore: string <-> String
-    let res = compareImpl(this, 0, other, 0, otherLen);
+    var res = compareImpl(this, 0, other, 0, <usize>min(alen, blen));
+    if (!res) {
+      if (alen != blen) res = alen - blen;
+      else return res;
+    }
     // normalize to [-1, 1] range
     return i32(res > 0) - i32(res < 0);
   }
