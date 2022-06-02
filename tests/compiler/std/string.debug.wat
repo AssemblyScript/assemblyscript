@@ -3304,21 +3304,14 @@
   call $~lib/util/string/compareImpl
   local.set $6
   local.get $6
-  i32.eqz
-  if
+  if (result i32)
+   local.get $6
+  else
    local.get $2
    local.get $3
-   i32.ne
-   if
-    local.get $2
-    local.get $3
-    i32.sub
-    local.set $6
-   else
-    local.get $6
-    return
-   end
+   i32.sub
   end
+  local.set $6
   local.get $6
   i32.const 0
   i32.gt_s
@@ -24756,7 +24749,7 @@
   if
    i32.const 12832
    i32.const 304
-   i32.const 337
+   i32.const 334
    i32.const 7
    call $~lib/builtins/abort
    unreachable

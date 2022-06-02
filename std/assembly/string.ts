@@ -192,10 +192,7 @@ import { Array } from "./array";
     var blen = other.length;
     // @ts-ignore: string <-> String
     var res = compareImpl(this, 0, other, 0, <usize>min(alen, blen));
-    if (!res) {
-      if (alen != blen) res = alen - blen;
-      else return res;
-    }
+    res = res ? res : alen - blen;
     // normalize to [-1, 1] range
     return i32(res > 0) - i32(res < 0);
   }

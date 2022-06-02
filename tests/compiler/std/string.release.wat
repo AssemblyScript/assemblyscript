@@ -2785,22 +2785,12 @@
   select
   call $~lib/util/string/compareImpl
   local.tee $0
-  i32.eqz
-  if
-   local.get $1
-   local.get $2
-   i32.ne
-   if (result i32)
-    local.get $2
-    local.get $1
-    i32.sub
-   else
-    local.get $0
-    return
-   end
-   local.set $0
-  end
+  local.get $2
+  local.get $1
+  i32.sub
   local.get $0
+  select
+  local.tee $0
   i32.const 0
   i32.gt_s
   local.get $0
@@ -21786,7 +21776,7 @@
   if
    i32.const 13856
    i32.const 1328
-   i32.const 337
+   i32.const 334
    i32.const 7
    call $~lib/builtins/abort
    unreachable
