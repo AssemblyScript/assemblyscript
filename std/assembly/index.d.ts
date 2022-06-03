@@ -348,8 +348,11 @@ declare namespace i32 {
   export function eq(left: i32, right: i32): i32;
   /** Return 0 if two 32-bit integers are equal to each other, 1 otherwise. */
   export function ne(left: i32, right: i32): i32;
-  /** Compute the remaining between two 32-bit positive integers. */
-  export function rem(left: i32, right: i32): i32;
+  /** Compute the remaining between two 32-bit signed positive integers. */
+  export function rem_s(left: i32, right: i32): i32;
+  /** Compute the remaining between two 32-bit unsigned positive integers. */
+  export function rem_u(left: u32, right: u32): u32;
+
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -474,8 +477,11 @@ declare namespace i64 {
   export function eq(left: i64, right: i64): i32;
   /** Return 0 if two 64-bit integers are equal to each other, 1 otherwise. */
   export function ne(left: i64, right: i64): i32;
-  /** Compute the remaining between two 64-bit positive integers. */
-  export function rem(left: i64, right: i64): i64;
+  /** Compute the remaining between two 64-bit signed positive integers. */
+  export function rem_s(left: i64, right: i64): i64;
+  /** Compute the remaining between two 64-bit unsigned positive integers. */
+  export function rem_u(left: u64, right: u64): u64;
+
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */

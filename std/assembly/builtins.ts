@@ -356,7 +356,11 @@ export namespace i32 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function rem(left: i32, right: i32): i32;
+  export declare function rem_s(left: i32, right: i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_u(left: u32, right: u32): u32;
 
   // @ts-ignore: decorator
   @builtin
@@ -611,7 +615,11 @@ export namespace i64 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function rem(left: i64, right: i64): i64;
+  export declare function rem_s(left: i64, right: i64): i64;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_u(left: u64, right: u64): u64;
 
   // @ts-ignore: decorator
   @builtin

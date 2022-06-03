@@ -270,8 +270,10 @@ export namespace BuiltinNames {
   export const f32_ne = "~lib/builtins/f32.ne";
   export const f64_ne = "~lib/builtins/f64.ne";
 
-  export const i32_rem = "~lib/builtins/i32.rem";
-  export const i64_rem = "~lib/builtins/i64.rem";
+  export const i32_rem_s = "~lib/builtins/i32.rem_s";
+  export const i32_rem_u = "~lib/builtins/i32.rem_u";
+  export const i64_rem_s = "~lib/builtins/i64.rem_s";
+  export const i64_rem_u = "~lib/builtins/i64.rem_u";
 
   export const i32_load8_s = "~lib/builtins/i32.load8_s";
   export const i32_load8_u = "~lib/builtins/i32.load8_u";
@@ -6696,23 +6698,41 @@ function builtin_f64_trunc(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64_trunc, builtin_f64_trunc);
 
-// i32.rem -> rem<i32>
-function builtin_i32_rem(ctx: BuiltinContext): ExpressionRef {
+// i32.rem_s -> rem<i32>
+function builtin_i32_rem_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
   ctx.contextualType = Type.i32;
   return builtin_rem(ctx);
 }
-builtins.set(BuiltinNames.i32_rem, builtin_i32_rem);
+builtins.set(BuiltinNames.i32_rem_s, builtin_i32_rem_s);
 
-// i64.rem -> rem<i64>
-function builtin_i64_rem(ctx: BuiltinContext): ExpressionRef {
+// i32.rem_u -> rem<u32>
+function builtin_i32_rem_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.u32;
+  return builtin_rem(ctx);
+}
+builtins.set(BuiltinNames.i32_rem_u, builtin_i32_rem_u);
+
+// i64.rem_s -> rem<i64>
+function builtin_i64_rem_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
   ctx.contextualType = Type.i64;
   return builtin_rem(ctx);
 }
-builtins.set(BuiltinNames.i64_rem, builtin_i64_rem);
+builtins.set(BuiltinNames.i64_rem_s, builtin_i64_rem_s);
+
+// i64.rem_u -> rem<u64>
+function builtin_i64_rem_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u64 ];
+  ctx.contextualType = Type.u64;
+  return builtin_rem(ctx);
+}
+builtins.set(BuiltinNames.i64_rem_u, builtin_i64_rem_u);
 
 // i32.add -> add<i32>
 function builtin_i32_add(ctx: BuiltinContext): ExpressionRef {

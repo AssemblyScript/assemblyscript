@@ -340,6 +340,8 @@ I = load<i16>(8);
 I = load<i32>(8);
 I = load<i64>(8);
 
+u = i32.rem_u(15, 4); assert(u == 3);
+
 var U: u64;
 U = load<u8>(8);
 U = load<u16>(8);
@@ -356,6 +358,8 @@ store<i32>(8, <i64>1);
 store<i64>(8, <i64>1);
 
 store<i64>(8, <i32>1); // must extend
+
+U = i64.rem_u(15, 4); assert(U == 3);
 
 // reinterpretation
 
