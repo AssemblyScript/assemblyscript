@@ -2974,6 +2974,40 @@
   i32.const 1
   i32.eq
   drop
+  i32.const 0
+  i32.const 1
+  i32.le_s
+  drop
+  i32.const 1
+  drop
+  local.get $1
+  i32.const 0
+  i32.eq
+  local.get $1
+  i32.const -1
+  i32.eq
+  i32.or
+  if
+   local.get $2
+   local.get $3
+   i32.lt_s
+   if
+    local.get $4
+    local.get $2
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $1
+    local.get $3
+    local.get $2
+    i32.sub
+    i32.const 2
+    i32.shl
+    memory.fill
+   end
+   local.get $0
+   return
+  end
   loop $for-loop|0
    local.get $2
    local.get $3
@@ -7688,7 +7722,7 @@
   if
    i32.const 656
    i32.const 128
-   i32.const 233
+   i32.const 261
    i32.const 60
    call $~lib/builtins/abort
    unreachable
