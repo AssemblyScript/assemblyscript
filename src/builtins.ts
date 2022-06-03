@@ -163,6 +163,7 @@ export namespace BuiltinNames {
   export const trunc = "~lib/builtins/trunc";
   export const eq = "~lib/builtins/eq";
   export const ne = "~lib/builtins/ne";
+  export const rem = "~lib/builtins/rem";
   export const load = "~lib/builtins/load";
   export const store = "~lib/builtins/store";
   export const atomic_load = "~lib/builtins/atomic.load";
@@ -268,6 +269,9 @@ export namespace BuiltinNames {
   export const i64_ne = "~lib/builtins/i64.ne";
   export const f32_ne = "~lib/builtins/f32.ne";
   export const f64_ne = "~lib/builtins/f64.ne";
+
+  export const i32_rem = "~lib/builtins/i32.rem";
+  export const i64_rem = "~lib/builtins/i64.rem";
 
   export const i32_load8_s = "~lib/builtins/i32.load8_s";
   export const i32_load8_u = "~lib/builtins/i32.load8_u";
@@ -815,7 +819,7 @@ function builtin_isString(ctx: BuiltinContext): ExpressionRef {
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
   var classReference = type.getClass();
-  return reifyConstantType(ctx, 
+  return reifyConstantType(ctx,
     module.i32(
       classReference && classReference.isAssignableTo(compiler.program.stringInstance)
         ? 1
@@ -2230,6 +2234,60 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
   return module.store(type.byteSize, arg0, arg1, inType.toRef(), immOffset, immAlign);
 }
 builtins.set(BuiltinNames.store, builtin_store);
+
+// rem<T?>(left: T, right: T) -> T
+function builtin_rem(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2)) {
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var left = operands[0];
+  var arg0 = typeArguments
+    ? compiler.compileExpression(
+        left,
+        typeArguments[0],
+        Constraints.CONV_IMPLICIT
+      )
+    : compiler.compileExpression(operands[0], Type.auto);
+  var type = compiler.currentType;
+  if (type.isIntegerValue) {
+    let arg1: ExpressionRef;
+    if (!typeArguments && left.isNumericLiteral) {
+      // prefer right type
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type
+      );
+      if (compiler.currentType != type) {
+        arg0 = compiler.compileExpression(
+          left,
+          (type = compiler.currentType),
+          Constraints.CONV_IMPLICIT
+        );
+      }
+    } else {
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.CONV_IMPLICIT
+      );
+    }
+    if (type.isIntegerValue) {
+      return compiler.makeRem(arg0, arg1, type, ctx.reportNode);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "rem",
+    type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.rem, builtin_rem);
 
 // add<T?>(left: T, right: T) -> T
 function builtin_add(ctx: BuiltinContext): ExpressionRef {
@@ -6637,6 +6695,24 @@ function builtin_f64_trunc(ctx: BuiltinContext): ExpressionRef {
   return builtin_trunc(ctx);
 }
 builtins.set(BuiltinNames.f64_trunc, builtin_f64_trunc);
+
+// i32.rem -> rem<i32>
+function builtin_i32_rem(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_rem(ctx);
+}
+builtins.set(BuiltinNames.i32_rem, builtin_i32_rem);
+
+// i64.rem -> rem<i64>
+function builtin_i64_rem(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.i64;
+  return builtin_rem(ctx);
+}
+builtins.set(BuiltinNames.i64_rem, builtin_i64_rem);
 
 // i32.add -> add<i32>
 function builtin_i32_add(ctx: BuiltinContext): ExpressionRef {
