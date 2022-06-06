@@ -151,7 +151,7 @@ declare function div<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 declare function eq<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
 /** Return 0 if two numbers are equal to each other, 1 otherwise. */
 declare function ne<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
-/** Computes the rem of two positive integers. */
+/** Computes the remainder of two integers. */
 declare function rem<T extends i32 | i64>(left: T, right: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
@@ -348,9 +348,9 @@ declare namespace i32 {
   export function eq(left: i32, right: i32): i32;
   /** Return 0 if two 32-bit integers are equal to each other, 1 otherwise. */
   export function ne(left: i32, right: i32): i32;
-  /** Compute the remaining between two 32-bit signed positive integers. */
+  /** Computes the signed remainder of two 32-bit integers. */
   export function rem_s(left: i32, right: i32): i32;
-  /** Compute the remaining between two 32-bit unsigned positive integers. */
+  /** Computes the unsigned remainder of two 32-bit integers. */
   export function rem_u(left: u32, right: u32): u32;
 
   /** Atomic 32-bit integer operations. */
@@ -477,9 +477,9 @@ declare namespace i64 {
   export function eq(left: i64, right: i64): i32;
   /** Return 0 if two 64-bit integers are equal to each other, 1 otherwise. */
   export function ne(left: i64, right: i64): i32;
-  /** Compute the remaining between two 64-bit signed positive integers. */
+  /** Computes the signed remainder of two 64-bit integers. */
   export function rem_s(left: i64, right: i64): i64;
-  /** Compute the remaining between two 64-bit unsigned positive integers. */
+  /** Computes the unsigned remainder of two 64-bit integers. */
   export function rem_u(left: u64, right: u64): u64;
 
   /** Atomic 64-bit integer operations. */
