@@ -9246,6 +9246,8 @@ export class Compiler extends DiagnosticEmitter {
       Constraints.NONE
     );
 
+    trace("hi");
+
     // if the value isn't dropped, a temp. local is required to remember the original value,
     // except if a static overload is found, which reverses the use of a temp. (see below)
     var tempLocal: Local | null = null;
