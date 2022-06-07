@@ -85,9 +85,13 @@ assert("a".localeCompare("") == 1);
 assert("".localeCompare("a") == -1);
 assert("null".localeCompare("null") == 0);
 assert("abc".localeCompare("abd") == -1);
+assert("abc".localeCompare("abf") == -1);
 assert("abd".localeCompare("abc") == 1);
+assert("abz".localeCompare("abc") == 1);
 assert("abcd".localeCompare("abc") == 1);
+assert("abz".localeCompare("abdd") == 1);
 assert("abc".localeCompare("abcd") == -1);
+assert("abdd".localeCompare("abz") == -1);
 assert("".localeCompare("   ") == -1);
 assert("\0".localeCompare("") == 1);
 
@@ -559,6 +563,10 @@ assert(itoa32(0x7ffffffe, 10) == "2147483646");
 assert(itoa32(0x7fffffff, 10) == "2147483647");
 assert(itoa32(0x80000000, 10) == "-2147483648");
 assert(itoa32(0xffffffff, 10) == "-1");
+
+assert(itoa32(i8.MIN_VALUE,  10) == "-128");
+assert(itoa32(i16.MIN_VALUE, 10) == "-32768");
+assert(itoa32(i32.MIN_VALUE, 10) == "-2147483648");
 
 assert(utoa32(0, 10) == "0");
 assert(utoa32(1000, 10) == "1000");
