@@ -564,6 +564,10 @@ assert(itoa32(0x7fffffff, 10) == "2147483647");
 assert(itoa32(0x80000000, 10) == "-2147483648");
 assert(itoa32(0xffffffff, 10) == "-1");
 
+assert(itoa32(i8.MIN_VALUE,  10) == "-128");
+assert(itoa32(i16.MIN_VALUE, 10) == "-32768");
+assert(itoa32(i32.MIN_VALUE, 10) == "-2147483648");
+
 assert(utoa32(0, 10) == "0");
 assert(utoa32(1000, 10) == "1000");
 assert(utoa32(0x7fffffff, 10) == "2147483647");
