@@ -1571,6 +1571,34 @@ function FILL<TArray extends ArrayBufferView, T extends number>(
   if (sizeof<T>() == 1) {
     if (start < end) memory.fill(ptr + <usize>start, <u8>value, <usize>(end - start));
   } else {
+    if (ASC_SHRINK_LEVEL <= 1) {
+      if (isInteger<T>()) {
+        // @ts-ignore
+        if (value == <T>0 | value == <T>-1) {
+          if (start < end) {
+            memory.fill(
+              ptr + (<usize>start << alignof<T>()),
+              u8(value),
+              <usize>(end - start) << alignof<T>()
+            );
+          }
+          return array;
+        }
+      } else if (isFloat<T>()) {
+        // for floating non-negative zeros we can use fast memory.fill
+        if ((sizeof<T>() == 4 && reinterpret<u32>(f32(value)) == 0) ||
+            (sizeof<T>() == 8 && reinterpret<u64>(f64(value)) == 0)) {
+          if (start < end) {
+            memory.fill(
+              ptr + (<usize>start << alignof<T>()),
+              0,
+              <usize>(end - start) << alignof<T>()
+            );
+          }
+          return array;
+        }
+      }
+    }
     for (; start < end; ++start) {
       store<T>(ptr + (<usize>start << alignof<T>()), value);
     }

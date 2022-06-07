@@ -25,6 +25,7 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
   for (let i = 0; i < len; i++) {
     if (isFloat<T>()) {
       if (isNaN(a[i]) && isNaN(b[i])) continue;
+      if (Math.signbit(a[i]) != Math.signbit(b[i])) return false;
     }
     if (a[i] != b[i]) return false;
   }
@@ -70,6 +71,9 @@ class Ref {
 
   arr8.fill(0, 1, 0);
   assert(isArraysEqual<u8>(arr8, [1, 1, 0, 2, 2]));
+
+  arr8.fill(<u8>-1);
+  assert(isArraysEqual<u8>(arr8, [<u8>-1, <u8>-1, <u8>-1, <u8>-1, <u8>-1]));
 }
 
 {
@@ -89,6 +93,34 @@ class Ref {
 
   arr32.fill(0, 1, 0);
   assert(isArraysEqual<u32>(arr32, [1, 1, 0, 2, 2]));
+
+  arr32.fill(-1);
+  assert(isArraysEqual<u32>(arr32, [-1, -1, -1, -1, -1]));
+}
+
+{
+  let arrf32: f32[] = [0.5, 1.0, 1.5, 2.5, 3.0];
+
+  arrf32.fill(1.0, 1, 3);
+  assert(isArraysEqual<f32>(arrf32, [0.5, 1., 1., 2.5, 3.]));
+
+  arrf32.fill(0.0);
+  assert(isArraysEqual<f32>(arrf32, [0., 0., 0., 0., 0.]));
+
+  arrf32.fill(1.0, 0, -3);
+  assert(isArraysEqual<f32>(arrf32, [1., 1., 0., 0., 0.]));
+
+  arrf32.fill(2.0, -2);
+  assert(isArraysEqual<f32>(arrf32, [1., 1., 0., 2., 2.]));
+
+  arrf32.fill(0.0, 1, 0);
+  assert(isArraysEqual<f32>(arrf32, [1., 1., 0., 2., 2.]));
+
+  arrf32.fill(-1.0);
+  assert(isArraysEqual<f32>(arrf32, [-1., -1., -1., -1., -1.]));
+
+  arrf32.fill(-0.0);
+  assert(isArraysEqual<f32>(arrf32, [-0., -0., -0., -0., -0.]));
 }
 
 // Array#push/pop //////////////////////////////////////////////////////////////////////////////////

@@ -173,6 +173,34 @@ export class Array<T> {
         );
       }
     } else {
+      if (ASC_SHRINK_LEVEL <= 1) {
+        if (isInteger<T>()) {
+          // @ts-ignore
+          if (value == <T>0 | value == <T>-1) {
+            if (start < end) {
+              memory.fill(
+                ptr + (<usize>start << alignof<T>()),
+                u8(value),
+                <usize>(end - start) << alignof<T>()
+              );
+            }
+            return this;
+          }
+        } else if (isFloat<T>()) {
+          // for floating non-negative zeros we can use fast memory.fill
+          if ((sizeof<T>() == 4 && reinterpret<u32>(f32(value)) == 0) ||
+              (sizeof<T>() == 8 && reinterpret<u64>(f64(value)) == 0)) {
+            if (start < end) {
+              memory.fill(
+                ptr + (<usize>start << alignof<T>()),
+                0,
+                <usize>(end - start) << alignof<T>()
+              );
+            }
+            return this;
+          }
+        }
+      }
       for (; start < end; ++start) {
         store<T>(ptr + (<usize>start << alignof<T>()), value);
       }
