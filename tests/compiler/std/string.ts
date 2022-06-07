@@ -85,9 +85,13 @@ assert("a".localeCompare("") == 1);
 assert("".localeCompare("a") == -1);
 assert("null".localeCompare("null") == 0);
 assert("abc".localeCompare("abd") == -1);
+assert("abc".localeCompare("abf") == -1);
 assert("abd".localeCompare("abc") == 1);
+assert("abz".localeCompare("abc") == 1);
 assert("abcd".localeCompare("abc") == 1);
+assert("abz".localeCompare("abdd") == 1);
 assert("abc".localeCompare("abcd") == -1);
+assert("abdd".localeCompare("abz") == -1);
 assert("".localeCompare("   ") == -1);
 assert("\0".localeCompare("") == 1);
 
