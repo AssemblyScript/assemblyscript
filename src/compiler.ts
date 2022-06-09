@@ -8147,6 +8147,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       let arrayInstance = assert(this.resolver.resolveClass(this.program.staticArrayPrototype, [ stringType ]));
       let segment = this.addStaticBuffer(stringType, values, arrayInstance.id);
+      this.program.OBJECTInstance.writeField("gcInfo", 3, segment.buffer, 0); // use transparent gcinfo
       let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
