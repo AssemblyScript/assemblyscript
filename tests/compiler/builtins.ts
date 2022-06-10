@@ -107,6 +107,8 @@ i = eq<i32>(1, 1); assert(i == 1);
 i = eq<i32>(1, 0); assert(i == 0);
 i = ne<i32>(1, 1); assert(i == 0);
 i = ne<i32>(1, 0); assert(i == 1);
+i = rem<i32>(1, 3); assert(i == 1);
+i = rem<i32>(15, 4); assert(i == 3);
 
 var I: i64;
 
@@ -143,6 +145,8 @@ i = eq<i64>(1, 1); assert(i == 1);
 i = eq<i64>(1, 0); assert(i == 0);
 i = ne<i64>(1, 1); assert(i == 0);
 i = ne<i64>(1, 0); assert(i == 1);
+I = rem<i64>(1, 3); assert(I == 1);
+I = rem<i64>(15, 4); assert(I == 3);
 
 // floats
 
@@ -336,6 +340,8 @@ I = load<i16>(8);
 I = load<i32>(8);
 I = load<i64>(8);
 
+u = i32.rem_u(15, 4); assert(u == 3);
+
 var U: u64;
 U = load<u8>(8);
 U = load<u16>(8);
@@ -352,6 +358,8 @@ store<i32>(8, <i64>1);
 store<i64>(8, <i64>1);
 
 store<i64>(8, <i32>1); // must extend
+
+U = i64.rem_u(15, 4); assert(U == 3);
 
 // reinterpretation
 
