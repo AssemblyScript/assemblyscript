@@ -447,7 +447,6 @@ export class Flow {
       }
       default: throw new Error("concrete type expected");
     }
-    assert(local.index >= 0);
     temps.push(local);
   }
 

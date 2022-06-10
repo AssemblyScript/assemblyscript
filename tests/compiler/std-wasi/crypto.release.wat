@@ -2604,6 +2604,7 @@
   end
  )
  (func $~lib/util/number/itoa_buffered<u8> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
   i32.const 255
   i32.and
@@ -2620,60 +2621,61 @@
    i32.const 1
    return
   end
-  local.get $0
   local.get $1
   i32.const 255
   i32.and
-  local.tee $0
-  local.get $0
+  local.tee $2
   i32.const 100000
   i32.lt_u
   if (result i32)
-   local.get $0
+   local.get $2
    i32.const 100
    i32.lt_u
    if (result i32)
-    local.get $0
+    local.get $2
     i32.const 10
     i32.ge_u
     i32.const 1
     i32.add
    else
-    local.get $0
+    local.get $2
     i32.const 10000
     i32.ge_u
     i32.const 3
     i32.add
-    local.get $0
+    local.get $2
     i32.const 1000
     i32.ge_u
     i32.add
    end
   else
-   local.get $0
+   local.get $2
    i32.const 10000000
    i32.lt_u
    if (result i32)
-    local.get $0
+    local.get $2
     i32.const 1000000
     i32.ge_u
     i32.const 6
     i32.add
    else
-    local.get $0
+    local.get $2
     i32.const 1000000000
     i32.ge_u
     i32.const 8
     i32.add
-    local.get $0
+    local.get $2
     i32.const 100000000
     i32.ge_u
     i32.add
    end
   end
-  local.tee $0
-  call $~lib/util/number/utoa32_dec_lut
+  local.set $1
   local.get $0
+  local.get $2
+  local.get $1
+  call $~lib/util/number/utoa32_dec_lut
+  local.get $1
  )
  (func $~lib/typedarray/Uint8Array#join (param $0 i32) (result i32)
   (local $1 i32)
@@ -3715,7 +3717,7 @@
   if
    i32.const 1472
    i32.const 1680
-   i32.const 1870
+   i32.const 1898
    i32.const 5
    call $~lib/wasi/index/abort
    unreachable
@@ -3734,7 +3736,7 @@
    else
     i32.const 1168
     i32.const 1680
-    i32.const 1879
+    i32.const 1907
     i32.const 7
     call $~lib/wasi/index/abort
     unreachable
@@ -3749,7 +3751,7 @@
    if
     i32.const 1168
     i32.const 1680
-    i32.const 1884
+    i32.const 1912
     i32.const 7
     call $~lib/wasi/index/abort
     unreachable
