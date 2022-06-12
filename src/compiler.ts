@@ -2858,10 +2858,10 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.freeTempLocal(tempLocal);
 
     // otherwise br to default respectively out of the switch if there is no default case
-    breaks[breakIndex] = module.br((defaultIndex >= 0
-      ? `case${defaultIndex}`
-      : "break"
-    ) + "|" + context);
+    breaks[breakIndex] = module.br(defaultIndex >= 0
+      ? `case${defaultIndex}|${context}`
+      : `break|${context}`
+    );
 
     // nest blocks in order
     var currentBlock = module.block(`case0|${context}`, breaks, TypeRef.None);
