@@ -3850,7 +3850,7 @@ export class Field extends VariableLikeElement {
   get internalGetterName(): string {
     var cached = this._internalGetterName;
     if (cached == null) {
-      this._internalGetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+      this._internalGetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${GETTER_PREFIX}${this.name}`;
     }
     return cached;
   }
@@ -3860,7 +3860,7 @@ export class Field extends VariableLikeElement {
   get internalSetterName(): string {
     var cached = this._internalSetterName;
     if (cached == null) {
-      this._internalSetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
+      this._internalSetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${SETTER_PREFIX}${this.name}`;
     }
     return cached;
   }
