@@ -2896,12 +2896,12 @@ export class Resolver extends DiagnosticEmitter {
     if (instance) return instance;
 
     // Otherwise create
-    var nameInclTypeParamters = prototype.name;
-    if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
+    var nameInclTypeParameters = prototype.name;
+    if (instanceKey.length) nameInclTypeParameters += "<" + instanceKey + ">";
     if (prototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
-      instance = new Interface(nameInclTypeParamters, <InterfacePrototype>prototype, typeArguments);
+      instance = new Interface(nameInclTypeParameters, <InterfacePrototype>prototype, typeArguments);
     } else {
-      instance = new Class(nameInclTypeParamters, prototype, typeArguments);
+      instance = new Class(nameInclTypeParameters, prototype, typeArguments);
     }
     prototype.setResolvedInstance(instanceKey, instance);
     var pendingClasses = this.resolveClassPending;
