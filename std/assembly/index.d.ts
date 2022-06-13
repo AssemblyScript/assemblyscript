@@ -1802,7 +1802,7 @@ declare class StaticArray<T> {
 /** Class representing a sequence of characters. */
 declare class String {
   static fromCharCode(ls: i32, hs?: i32): string;
-  static fromCharCodes(arr: u16[]): string;
+  static fromCharCodes(arr: i32[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
   static raw(parts: TemplateStringsArray, ...args: any[]): string;
