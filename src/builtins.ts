@@ -9956,7 +9956,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   var base = instance.base;
   if (base) {
     body.push(
-      module.call(base.internalName + "~visit", [
+      module.call(`${base.internalName}~visit`, [
         module.local_get(0, sizeTypeRef), // this
         module.local_get(1, TypeRef.I32)  // cookie
       ], TypeRef.None)
@@ -10035,7 +10035,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   }
 
   // Create the visitor function
-  instance.visitRef = module.addFunction(instance.internalName + "~visit",
+  instance.visitRef = module.addFunction(`${instance.internalName}~visit`,
     createType([sizeTypeRef, TypeRef.I32]),
     TypeRef.None,
     needsTempValue ? [ sizeTypeRef ] : null,
@@ -10073,7 +10073,7 @@ export function compileVisitMembers(compiler: Compiler): void {
       cases[i] = module.return();
     } else {
       cases[i] = module.block(null, [
-        module.call(instance.internalName + "~visit", [
+        module.call(`${instance.internalName}~visit`, [
           module.local_get(0, sizeTypeRef), // this
           module.local_get(1, TypeRef.I32)  // cookie
         ], TypeRef.None),
@@ -10252,7 +10252,13 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
     )
   );
 
-  module.addFunction(prototype.internalName + "~instanceof", sizeTypeRef, TypeRef.I32, null, module.flatten(stmts));
+  module.addFunction(
+    `${prototype.internalName}~instanceof`,
+    sizeTypeRef,
+    TypeRef.I32,
+    null,
+    module.flatten(stmts)
+  );
 }
 
 // Helpers

@@ -309,7 +309,7 @@ declare const JSMath: typeof Math;
 
 declare interface StringConstructor {
   /** Equivalent to calling `String.fromCharCode` with multiple arguments. */
-  fromCharCodes(arr: u16[]): string;
+  fromCharCodes(arr: i32[]): string;
   /** Equivalent to calling `String.fromCodePoint` with multiple arguments. */
   fromCodePoints(arr: i32[]): string;
 }

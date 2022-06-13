@@ -1543,8 +1543,8 @@ export class Program extends DiagnosticEmitter {
   /** Requires that a global library element of the specified kind is present and returns it. */
   private require(name: string, kind: ElementKind): Element {
     var element = this.lookup(name);
-    if (!element) throw new Error("Missing standard library component: " + name);
-    if (element.kind != kind) throw Error("Invalid standard library component kind: " + name);
+    if (!element) throw new Error(`Missing standard library component: ${name}`);
+    if (element.kind != kind) throw Error(`Invalid standard library component kind: ${name}`);
     return element;
   }
 
@@ -1557,7 +1557,7 @@ export class Program extends DiagnosticEmitter {
   requireClass(name: string): Class {
     var prototype = this.require(name, ElementKind.CLASS_PROTOTYPE);
     var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
-    if (!resolved) throw new Error("Invalid standard library class: " + name);
+    if (!resolved) throw new Error(`Invalid standard library class: ${name}`);
     return resolved;
   }
 
@@ -1565,7 +1565,7 @@ export class Program extends DiagnosticEmitter {
   requireFunction(name: string, typeArguments: Type[] | null = null): Function {
     var prototype = <FunctionPrototype>this.require(name, ElementKind.FUNCTION_PROTOTYPE);
     var resolved = this.resolver.resolveFunction(prototype, typeArguments);
-    if (!resolved) throw new Error("Invalid standard library function: " + name);
+    if (!resolved) throw new Error(`Invalid standard library function: ${name}`);
     return resolved;
   }
 
@@ -2873,7 +2873,7 @@ export abstract class Element {
 
   /** Returns a string representation of this element. */
   toString(): string {
-    return this.internalName + ", kind=" + this.kind.toString();
+    return `${this.internalName}, kind=${this.kind}`;
   }
 }
 
@@ -3049,7 +3049,7 @@ export class File extends Element {
     assert(!program.filesByName.has(this.internalName));
     program.filesByName.set(this.internalName, this);
     var startFunction = this.program.makeNativeFunction(
-      "start:" + this.internalName,
+      `start:${this.internalName}`,
       new Signature(program, null, Type.void),
       this
     );
@@ -3693,9 +3693,7 @@ export class Function extends TypedElement {
     // if it has a name, check previously as this method will throw otherwise
     var localIndex = this.signature.parameterTypes.length + this.additionalLocals.length;
     if (this.is(CommonFlags.INSTANCE)) ++localIndex;
-    var localName = name != null
-      ? name
-      : "var$" + localIndex.toString();
+    var localName = name != null ? name : `var$${localIndex}`;
     if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
     var local = new Local(
       localName,
@@ -3851,7 +3849,9 @@ export class Field extends VariableLikeElement {
   /** Gets the internal name of the respective getter function. */
   get internalGetterName(): string {
     var cached = this._internalGetterName;
-    if (cached == null) this._internalGetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+    if (cached == null) {
+      this._internalGetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${GETTER_PREFIX}${this.name}`;
+    }
     return cached;
   }
   private _internalGetterName: string | null = null;
@@ -3859,7 +3859,9 @@ export class Field extends VariableLikeElement {
   /** Gets the internal name of the respective setter function. */
   get internalSetterName(): string {
     var cached = this._internalSetterName;
-    if (cached == null) this._internalSetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
+    if (cached == null) {
+      this._internalSetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${SETTER_PREFIX}${this.name}`;
+    }
     return cached;
   }
   private _internalSetterName: string | null = null;
@@ -3867,7 +3869,9 @@ export class Field extends VariableLikeElement {
   /** Gets the signature of the respective getter function. */
   get internalGetterSignature(): Signature {
     var cached = this._internalGetterSignature;
-    if (!cached) this._internalGetterSignature = cached = new Signature(this.program, null, this.type, this.thisType);
+    if (!cached) {
+      this._internalGetterSignature = cached = new Signature(this.program, null, this.type, this.thisType);
+    }
     return cached;
   }
   private _internalGetterSignature: Signature | null = null;
@@ -3875,7 +3879,9 @@ export class Field extends VariableLikeElement {
   /** Gets the signature of the respective setter function. */
   get internalSetterSignature(): Signature {
     var cached = this._internalSetterSignature;
-    if (!cached) this._internalGetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
+    if (!cached) {
+      this._internalGetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
+    }
     return cached;
   }
   private _internalSetterSignature: Signature | null = null;
@@ -4720,7 +4726,12 @@ function copyMembers(src: Element, dest: Element): void {
 }
 
 /** Mangles the internal name of an element with the specified name that is a child of the given parent. */
-export function mangleInternalName(name: string, parent: Element, isInstance: bool, asGlobal: bool = false): string {
+export function mangleInternalName(
+  name: string,
+  parent: Element,
+  isInstance: bool,
+  asGlobal: bool = false
+): string {
   switch (parent.kind) {
     case ElementKind.FILE: {
       if (asGlobal) return name;
@@ -4737,8 +4748,10 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
       // fall-through
     }
     default: {
-      return mangleInternalName(parent.name, parent.parent, parent.is(CommonFlags.INSTANCE), asGlobal)
-           + (isInstance ? INSTANCE_DELIMITER : STATIC_DELIMITER) + name;
+      return (
+        mangleInternalName(parent.name, parent.parent, parent.is(CommonFlags.INSTANCE), asGlobal) +
+        (isInstance ? INSTANCE_DELIMITER : STATIC_DELIMITER) + name
+      );
     }
   }
 }
@@ -4749,7 +4762,7 @@ var cachedDefaultParameterNames: string[] = [];
 /** Gets the cached default parameter name for the specified index. */
 export function getDefaultParameterName(index: i32): string {
   for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
-    cachedDefaultParameterNames.push("$" + i.toString());
+    cachedDefaultParameterNames.push(`$${i}`);
   }
   return cachedDefaultParameterNames[index];
 }
