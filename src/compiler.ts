@@ -3114,18 +3114,19 @@ export class Compiler extends DiagnosticEmitter {
       let isScoped = declaration.isAny(CommonFlags.LET | CommonFlags.CONST) || flow.isInline;  
 
       let constraints: Constraints = Constraints.NONE;
-      let type: Type | null = Type.auto;
+      let type: Type = Type.auto;
       let initExpr: ExpressionRef = 0;
 
       // Resolve type if annotated
       let typeNode = declaration.type;
       if (typeNode) {
-        type = resolver.resolveType( // reports
+        let typeOrNull = resolver.resolveType( // reports
           typeNode,
           flow.actualFunction,
           uniqueMap(flow.contextualTypeArguments)
         );
-        if (!type) continue;
+        if (!typeOrNull) continue;
+        type = typeOrNull;
         this.checkTypeSupported(type, typeNode);
         constraints = Constraints.CONV_IMPLICIT;
       }
@@ -3146,7 +3147,7 @@ export class Compiler extends DiagnosticEmitter {
           let arr = (<ArrayLiteralExpression>pattern);
           let elementExpressions = arr.elementExpressions;
           let pendingElements = this.pendingElements;
-          let dummies = new Array();
+          let dummies = new Array<Local>();
           for (let i = 0, l = elementExpressions.length; i < l; ++i) {
             let element: Expression = elementExpressions[i];
             let identifierNode: IdentifierExpression;

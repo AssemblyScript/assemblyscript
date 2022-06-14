@@ -3954,7 +3954,7 @@ export class Parser extends DiagnosticEmitter {
     return Node.createObjectLiteralExpression(names, values, tn.range(startPos, tn.pos));
   }
 
-  parseBindingPattern(tn: Tokenizer) {
+  parseBindingPattern(tn: Tokenizer): Expression | null {
     if (!tn.skipIdentifier()) {
       let startPos = tn.tokenPos;
 
