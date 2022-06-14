@@ -1487,7 +1487,7 @@ export class ASTBuilder {
   }
 
   visitVariableDeclaration(node: VariableDeclaration): void {
-    this.visitIdentifierExpression(node.name);
+    this.visitNode(node);
     var type = node.type;
     var sb = this.sb;
     if (node.flags & CommonFlags.DEFINITELY_ASSIGNED) {
