@@ -3956,15 +3956,13 @@ export class Parser extends DiagnosticEmitter {
 
   parseBindingPattern(tn: Tokenizer): Expression | null {
     if (!tn.skipIdentifier()) {
-      let startPos = tn.tokenPos;
-
       switch (tn.peek()) {
         case Token.OPENBRACKET:
           tn.next();
-          return this.parseArrayLiteral(tn, startPos);
+          return this.parseArrayLiteral(tn, tn.tokenPos);
         case Token.OPENBRACE:
           tn.next();
-          return this.parseObjectLiteral(tn, startPos);
+          return this.parseObjectLiteral(tn, tn.tokenPos);
         default: 
           this.error(
             DiagnosticCode.Identifier_expected,
