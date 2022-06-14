@@ -841,17 +841,24 @@ export class Program extends DiagnosticEmitter {
     return blockSize;
   }
 
+  /** Creates a native identifier expression. */
+  makeNativeIdentifier(
+    /** The simple name of the variable */
+    name: string
+  ): IdentifierExpression {
+    return Node.createIdentifierExpression(name, this.nativeSource.range);
+  }
+
   /** Creates a native variable declaration. */
   makeNativeVariableDeclaration(
-    /** The simple name of the variable */
-    name: string,
+    /** The identifier expression to use. */
+    name: IdentifierExpression,
     /** Flags indicating specific traits, e.g. `CONST`. */
     flags: CommonFlags = CommonFlags.NONE
   ): VariableDeclaration {
     var range = this.nativeSource.range;
     return Node.createVariableDeclaration(
-      Node.createIdentifierExpression(name, range),
-      null, flags, null, null, range
+      name, null, flags, null, null, range
     );
   }
 
@@ -1665,13 +1672,14 @@ export class Program extends DiagnosticEmitter {
   /** Registers a constant integer value within the global scope. */
   registerConstantInteger(name: string, type: Type, value: i64): void {
     assert(type.isIntegerInclReference);
-    var declaration = this.makeNativeVariableDeclaration(name, CommonFlags.CONST | CommonFlags.EXPORT);
+    var identifierNode = this.makeNativeIdentifier(name);
+    var declaration = this.makeNativeVariableDeclaration(identifierNode, CommonFlags.CONST | CommonFlags.EXPORT);
     assert(declaration.name.kind == NodeKind.IDENTIFIER);
     var global = new Global(
       name,
       this.nativeFile,
       DecoratorFlags.NONE,
-      <IdentifierExpression>declaration.name,
+      identifierNode,
       declaration
     );
     global.setConstantIntegerValue(value, type);
@@ -1681,13 +1689,14 @@ export class Program extends DiagnosticEmitter {
   /** Registers a constant float value within the global scope. */
   private registerConstantFloat(name: string, type: Type, value: f64): void {
     assert(type.isFloatValue);
-    var declaration = this.makeNativeVariableDeclaration(name, CommonFlags.CONST | CommonFlags.EXPORT);
+    var identifierNode = this.makeNativeIdentifier(name);
+    var declaration = this.makeNativeVariableDeclaration(identifierNode, CommonFlags.CONST | CommonFlags.EXPORT);
     assert(declaration.name.kind == NodeKind.IDENTIFIER);
     var global = new Global(
       name,
       this.nativeFile,
       DecoratorFlags.NONE,
-      <IdentifierExpression>declaration.name,
+      identifierNode,
       declaration
     );
     global.setConstantFloatValue(value, type);
@@ -3319,9 +3328,9 @@ export abstract class VariableLikeElement extends TypedElement {
     /** Parent element, usually a file, namespace or class. */
     parent: Element,
     /** Identifier that might be a part of a binding pattern. */
-    identifierNode: IdentifierExpression,
+    identifierNode: IdentifierExpression = parent.program.makeNativeIdentifier(name),
     /** Declaration reference. Creates a native declaration if omitted. */
-    declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
+    declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(identifierNode)
   ) {
     super(
       kind,
@@ -3410,14 +3419,10 @@ export class Global extends VariableLikeElement {
     /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags,
     /** Identifier that might be a part of a binding pattern. */
-    identifierNode: IdentifierExpression | null = null,
+    identifierNode: IdentifierExpression = parent.program.makeNativeIdentifier(name),
     /** Declaration reference. Creates a native declaration if omitted. */
-    declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
+    declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(identifierNode)
   ) {
-    if (identifierNode == null) {
-      assert(declaration.name.kind == NodeKind.IDENTIFIER);
-      identifierNode = <IdentifierExpression>declaration.name;
-    }
     super(
       ElementKind.GLOBAL,
       name,
@@ -3459,9 +3464,9 @@ export class Local extends VariableLikeElement {
     /** Parent function. */
     parent: Function,
     /** Identifier that might be a part of a binding pattern. */
-    identifierNode: IdentifierExpression | null = null,
+    identifierNode: IdentifierExpression = parent.program.makeNativeIdentifier(name),
     /** Declaration reference. */
-    declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
+    declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(identifierNode)
   ) {
     if (identifierNode == null) {
       assert(declaration.name.kind == NodeKind.IDENTIFIER);
@@ -3735,9 +3740,8 @@ export class Function extends TypedElement {
     if (this.is(CommonFlags.INSTANCE)) ++localIndex;
     var localName = name != null ? name : `var$${localIndex}`;
     if (!declaration) {
-      declaration = this.program.makeNativeVariableDeclaration(localName);
-      assert(declaration.name.kind == NodeKind.IDENTIFIER);
-      identifierNode = <IdentifierExpression>declaration.name;
+      identifierNode = this.program.makeNativeIdentifier(localName);
+      declaration = this.program.makeNativeVariableDeclaration(identifierNode);
     }
     var local = new Local(
       localName,
@@ -4054,7 +4058,8 @@ export class IndexSignature extends TypedElement {
     /** Parent class. */
     parent: Class
   ) {
-    let declaration = parent.program.makeNativeVariableDeclaration("[]"); // is fine
+    var identifierNode = parent.program.makeNativeIdentifier("[]");
+    var declaration = parent.program.makeNativeVariableDeclaration(identifierNode); // is fine
     assert(declaration.name.kind == NodeKind.IDENTIFIER);
     super(
       ElementKind.INDEXSIGNATURE,
@@ -4062,7 +4067,7 @@ export class IndexSignature extends TypedElement {
       parent.internalName + "[]",
       parent.program,
       parent,
-      <IdentifierExpression>declaration.name,
+      identifierNode,
       declaration
     );
   }
