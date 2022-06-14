@@ -3734,7 +3734,11 @@ export class Function extends TypedElement {
     var localIndex = this.signature.parameterTypes.length + this.additionalLocals.length;
     if (this.is(CommonFlags.INSTANCE)) ++localIndex;
     var localName = name != null ? name : `var$${localIndex}`;
-    if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
+    if (!declaration) {
+      declaration = this.program.makeNativeVariableDeclaration(localName);
+      assert(declaration.name.kind == NodeKind.IDENTIFIER);
+      identifierNode = <IdentifierExpression>declaration.name;
+    }
     var local = new Local(
       localName,
       localIndex,
