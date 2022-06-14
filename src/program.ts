@@ -3468,10 +3468,6 @@ export class Local extends VariableLikeElement {
     /** Declaration reference. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(identifierNode)
   ) {
-    if (identifierNode == null) {
-      assert(declaration.name.kind == NodeKind.IDENTIFIER);
-      identifierNode = <IdentifierExpression>declaration.name;
-    }
     super(
       ElementKind.LOCAL,
       name,
