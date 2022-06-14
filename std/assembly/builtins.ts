@@ -145,6 +145,10 @@ export declare function eq<T>(left: T, right: T): i32;
 export declare function ne<T>(left: T, right: T): i32;
 
 // @ts-ignore: decorator
+@builtin
+export declare function rem<T>(left: T, right: T): T;
+
+// @ts-ignore: decorator
 @unsafe @builtin
 export declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 
@@ -349,6 +353,14 @@ export namespace i32 {
   // @ts-ignore: decorator
   @builtin
   export declare function ne(left: i32, right:i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_s(left: i32, right: i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_u(left: u32, right: u32): u32;
 
   // @ts-ignore: decorator
   @builtin
@@ -600,6 +612,14 @@ export namespace i64 {
   // @ts-ignore: decorator
   @builtin
   export declare function ne(left: i64, right:i64): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_s(left: i64, right: i64): i64;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function rem_u(left: u64, right: u64): u64;
 
   // @ts-ignore: decorator
   @builtin

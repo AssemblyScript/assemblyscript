@@ -207,7 +207,7 @@ export class Flow {
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
     var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
-    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
+    flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }
@@ -447,7 +447,6 @@ export class Flow {
       }
       default: throw new Error("concrete type expected");
     }
-    assert(local.index >= 0);
     temps.push(local);
   }
 
@@ -1507,7 +1506,7 @@ export class Flow {
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESSES_THIS");
     if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
-    return "Flow(" + this.actualFunction.toString() + ")[" + levels.toString() + "] " + sb.join(" ");
+    return `Flow(${this.actualFunction})[${levels}] ${sb.join(" ")}`;
   }
 }
 

@@ -151,6 +151,8 @@ declare function div<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 declare function eq<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
 /** Return 0 if two numbers are equal to each other, 1 otherwise. */
 declare function ne<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
+/** Computes the remainder of two integers. */
+declare function rem<T extends i32 | i64>(left: T, right: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
@@ -342,10 +344,15 @@ declare namespace i32 {
   export function div_s(left: i32, right: i32): i32;
   /** Computes the unsigned quotient of two 32-bit integers. */
   export function div_u(left: i32, right: i32): i32;
-  /** Return 1 two 32-bit inegers are equal to each other, 0 otherwise. */
+  /** Return 1 if two 32-bit integers are equal to each other, 0 otherwise. */
   export function eq(left: i32, right: i32): i32;
-  /** Return 0 two 32-bit inegers are equal to each other, 1 otherwise. */
+  /** Return 0 if two 32-bit integers are equal to each other, 1 otherwise. */
   export function ne(left: i32, right: i32): i32;
+  /** Computes the signed remainder of two 32-bit integers. */
+  export function rem_s(left: i32, right: i32): i32;
+  /** Computes the unsigned remainder of two 32-bit integers. */
+  export function rem_u(left: u32, right: u32): u32;
+
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -466,10 +473,15 @@ declare namespace i64 {
   export function div_s(left: i64, right: i64): i64;
   /** Computes the unsigned quotient of two 64-bit integers. */
   export function div_u(left: i64, right: i64): i64;
-  /** Return 1 two 64-bit inegers are equal to each other, 0 otherwise. */
+  /** Return 1 if two 64-bit integers are equal to each other, 0 otherwise. */
   export function eq(left: i64, right: i64): i32;
-  /** Return 0 two 64-bit inegers are equal to each other, 1 otherwise. */
+  /** Return 0 if two 64-bit integers are equal to each other, 1 otherwise. */
   export function ne(left: i64, right: i64): i32;
+  /** Computes the signed remainder of two 64-bit integers. */
+  export function rem_s(left: i64, right: i64): i64;
+  /** Computes the unsigned remainder of two 64-bit integers. */
+  export function rem_u(left: u64, right: u64): u64;
+
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -1790,7 +1802,7 @@ declare class StaticArray<T> {
 /** Class representing a sequence of characters. */
 declare class String {
   static fromCharCode(ls: i32, hs?: i32): string;
-  static fromCharCodes(arr: u16[]): string;
+  static fromCharCodes(arr: i32[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
   static raw(parts: TemplateStringsArray, ...args: any[]): string;

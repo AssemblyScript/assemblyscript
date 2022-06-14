@@ -2342,11 +2342,11 @@ export class Compiler extends DiagnosticEmitter {
     var flowBefore = flow.fork();
     this.currentFlow = flow;
 
-    var breakLabel = "do-break|" + label;
+    var breakLabel = `do-break|${label}`;
     flow.breakLabel = breakLabel;
-    var continueLabel = "do-continue|" + label;
+    var continueLabel = `do-continue|${label}`;
     flow.continueLabel = continueLabel;
-    var loopLabel = "do-loop|" + label;
+    var loopLabel = `do-loop|${label}`;
 
     // Compile the body (always executes)
     var bodyFlow = flow.fork();
@@ -2488,11 +2488,11 @@ export class Compiler extends DiagnosticEmitter {
     var flow = outerFlow.fork(/* resetBreakContext */ true);
     this.currentFlow = flow;
 
-    var breakLabel = "for-break" + label;
+    var breakLabel = `for-break${label}`;
     flow.breakLabel = breakLabel;
-    var continueLabel = "for-continue|" + label;
+    var continueLabel = `for-continue|${label}`;
     flow.continueLabel = continueLabel;
-    var loopLabel = "for-loop|" + label;
+    var loopLabel = `for-loop|${label}`;
 
     // Compile initializer if present
     var initializer = statement.initializer;
@@ -2843,7 +2843,7 @@ export class Compiler extends DiagnosticEmitter {
       let case_ = cases[i];
       let label = case_.label;
       if (label) {
-        breaks[breakIndex++] = module.br("case" + i.toString() + "|" + context,
+        breaks[breakIndex++] = module.br(`case${i}|${context}`,
           module.binary(BinaryOp.EqI32,
             module.local_get(tempLocalIndex, TypeRef.I32),
             this.compileExpression(label, Type.u32,
@@ -2859,13 +2859,13 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.freeTempLocal(tempLocal);
 
     // otherwise br to default respectively out of the switch if there is no default case
-    breaks[breakIndex] = module.br((defaultIndex >= 0
-      ? "case" + defaultIndex.toString()
-      : "break"
-    ) + "|" + context);
+    breaks[breakIndex] = module.br(defaultIndex >= 0
+      ? `case${defaultIndex}|${context}`
+      : `break|${context}`
+    );
 
     // nest blocks in order
-    var currentBlock = module.block("case0|" + context, breaks, TypeRef.None);
+    var currentBlock = module.block(`case0|${context}`, breaks, TypeRef.None);
     var commonCategorical = FlowFlags.ANY_CATEGORICAL;
     var commonConditional = 0;
     for (let i = 0; i < numCases; ++i) {
@@ -2876,11 +2876,11 @@ export class Compiler extends DiagnosticEmitter {
       // Each switch case initiates a new branch
       let innerFlow = outerFlow.fork();
       this.currentFlow = innerFlow;
-      let breakLabel = "break|" + context;
+      let breakLabel = `break|${context}`;
       innerFlow.breakLabel = breakLabel;
 
       let isLast = i == numCases - 1;
-      let nextLabel = isLast ? breakLabel : "case" + (i + 1).toString() + "|" + context;
+      let nextLabel = isLast ? breakLabel : `case${i + 1}|${context}`;
       let stmts = new Array<ExpressionRef>(1 + numStatements);
       stmts[0] = currentBlock;
       let count = 1;
@@ -3341,9 +3341,9 @@ export class Compiler extends DiagnosticEmitter {
     var flowBefore = flow.fork();
     this.currentFlow = flow;
 
-    var breakLabel = "while-break|" + label;
+    var breakLabel = `while-break|${label}`;
     flow.breakLabel = breakLabel;
-    var continueLabel = "while-continue|" + label;
+    var continueLabel = `while-continue|${label}`;
     flow.continueLabel = continueLabel;
 
     // Precompute the condition
@@ -6959,10 +6959,9 @@ export class Compiler extends DiagnosticEmitter {
     // create a br_table switching over the number of optional parameters provided
     var numNames = numOptional + 1; // incl. outer block
     var names = new Array<string>(numNames);
-    var ofN = "of" + numOptional.toString();
+    var ofN = `of${numOptional}`;
     for (let i = 0; i < numNames; ++i) {
-      let label = i.toString() + ofN;
-      names[i] = label;
+      names[i] = `${i}${ofN}`;
     }
     var argumentsLength = this.ensureArgumentsLength();
     var table = module.block(names[0], [
@@ -7520,7 +7519,7 @@ export class Compiler extends DiagnosticEmitter {
     var isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
     var prototype = new FunctionPrototype(
       isSemanticallyAnonymous
-        ? (isNamed ? declaration.name.text + "|" : "anonymous|") + (actualFunction.nextAnonymousId++).toString()
+        ? `${isNamed ? declaration.name.text : "anonymous"}|${actualFunction.nextAnonymousId++}`
         : declaration.name.text,
       actualFunction,
       declaration,
@@ -8121,7 +8120,7 @@ export class Compiler extends DiagnosticEmitter {
       // dynamic check against all possible concrete ids
       } else if (prototype.extends(classReference.prototype)) {
         this.pendingClassInstanceOf.add(prototype);
-        return module.call(prototype.internalName + "~instanceof", [ expr ], TypeRef.I32);
+        return module.call(`${prototype.internalName}~instanceof`, [ expr ], TypeRef.I32);
       }
     }
 
@@ -8294,6 +8293,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       let arrayInstance = assert(this.resolver.resolveClass(this.program.staticArrayPrototype, [ stringType ]));
       let segment = this.addStaticBuffer(stringType, values, arrayInstance.id);
+      this.program.OBJECTInstance.writeField("gcInfo", 3, segment.buffer, 0); // use transparent gcinfo
       let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
