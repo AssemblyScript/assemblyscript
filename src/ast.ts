@@ -730,7 +730,7 @@ export abstract class Node {
   }
 
   static createVariableDeclaration(
-    name: IdentifierExpression,
+    name: Expression,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
     type: TypeNode | null,

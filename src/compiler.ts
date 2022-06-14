@@ -3146,7 +3146,7 @@ export class Compiler extends DiagnosticEmitter {
           let arr = (<ArrayLiteralExpression>pattern);
           let elementExpressions = arr.elementExpressions;
           let pendingElements = this.pendingElements;
-          let dummies = new Array(elementExpressions.length);
+          let dummies = new Array();
           for (let i = 0, l = elementExpressions.length; i < l; ++i) {
             let element: Expression = elementExpressions[i];
             let identifierNode: IdentifierExpression;

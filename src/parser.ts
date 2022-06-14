@@ -90,7 +90,10 @@ import {
 
   mangleInternalPath,
   ArrayLiteralExpression,
-  ObjectLiteralExpression
+  ObjectLiteralExpression,
+  LiteralKind,
+  LiteralExpression,
+  BinaryExpression
 } from "./ast";
 
 /** Represents a dependee. */
@@ -921,38 +924,6 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseBindingName(
-    tn: Tokenizer
-  ): Expression | null {
-    if (!tn.skipIdentifier()) {
-      let startPos = tn.range().start;
-
-      switch (tn.peek()) {
-        case Token.OPENBRACKET:
-          tn.next();
-          return this.parseArrayLiteral(tn, startPos);
-        case Token.OPENBRACE:
-          tn.next();
-          return this.parseObjectLiteral(tn, startPos);
-        default: 
-          this.error(
-            DiagnosticCode.Identifier_expected,
-            tn.range()
-          );
-          return null;
-      }
-    } else {
-      var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-      if (isIllegalVariableIdentifier(name.text)) {
-        this.error(
-          DiagnosticCode.Identifier_expected,
-          name.range
-        );
-      }
-      return name;
-    }
-  }
-
   parseVariable(
     tn: Tokenizer,
     flags: CommonFlags,
@@ -985,20 +956,16 @@ export class Parser extends DiagnosticEmitter {
 
     // before: Identifier (':' Type)? ('=' Expression)?
 
-    if (!tn.skipIdentifier()) {
+    var name = this.parseBindingPattern(tn);
+    if (!name) return null;
+    if (!this.checkBindingPattern(name)) {
       this.error(
-        DiagnosticCode.Identifier_expected,
-        tn.range()
+        DiagnosticCode.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
+        name.range
       );
       return null;
     }
-    var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-    if (isIllegalVariableIdentifier(identifier.text)) {
-      this.error(
-        DiagnosticCode.Identifier_expected,
-        identifier.range
-      );
-    }
+
     var flags = parentFlags;
     if (tn.skip(Token.EXCLAMATION)) {
       flags |= CommonFlags.DEFINITELY_ASSIGNED;
@@ -1024,7 +991,7 @@ export class Parser extends DiagnosticEmitter {
         if (!(flags & CommonFlags.AMBIENT)) {
           this.error(
             DiagnosticCode._const_declarations_must_be_initialized,
-            identifier.range
+            name.range
           ); // recoverable
         }
       } else if (!type) { // neither type nor initializer
@@ -1034,7 +1001,7 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
     }
-    var range = Range.join(identifier.range, tn.range());
+    var range = Range.join(name.range, tn.range());
     if (initializer && (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
@@ -1042,7 +1009,7 @@ export class Parser extends DiagnosticEmitter {
       );
     }
     return Node.createVariableDeclaration(
-      identifier,
+      name,
       parentDecorators,
       flags,
       type,
@@ -3987,6 +3954,87 @@ export class Parser extends DiagnosticEmitter {
     return Node.createObjectLiteralExpression(names, values, tn.range(startPos, tn.pos));
   }
 
+  parseBindingPattern(tn: Tokenizer) {
+    if (!tn.skipIdentifier()) {
+      let startPos = tn.tokenPos;
+
+      switch (tn.peek()) {
+        case Token.OPENBRACKET:
+          tn.next();
+          return this.parseArrayLiteral(tn, startPos);
+        case Token.OPENBRACE:
+          tn.next();
+          return this.parseObjectLiteral(tn, startPos);
+        default: 
+          this.error(
+            DiagnosticCode.Identifier_expected,
+            tn.range()
+          );
+          return null;
+      }
+    } else {
+      var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      if (isIllegalVariableIdentifier(name.text)) {
+        this.error(
+          DiagnosticCode.Identifier_expected,
+          name.range
+        );
+      }
+      return name;
+    }
+  }
+
+  checkBindingPattern(expr: Expression): bool {
+    function checkElement(elem: Expression): bool {
+      var elemKind = elem.kind;
+      if (elemKind == NodeKind.IDENTIFIER) {
+        return true;
+      } else if (elemKind == NodeKind.BINARY) {
+        let binaryElem = <BinaryExpression>elem;
+        if (binaryElem.operator != Token.EQUALS) {
+          return false;
+        }
+        if (binaryElem.left.kind != NodeKind.IDENTIFIER) {
+          return false;
+        }
+      }
+      return false;
+    }
+
+    switch (expr.kind) {
+      case NodeKind.IDENTIFIER:
+      case NodeKind.PROPERTYACCESS:
+      case NodeKind.ELEMENTACCESS:
+        return true;
+      case NodeKind.LITERAL: {
+        let literalKind = (<LiteralExpression>expr).literalKind;
+        if (literalKind == LiteralKind.ARRAY) {
+          let arr = <ArrayLiteralExpression>expr;
+          let elementExpressions = arr.elementExpressions;
+          for (let i = 0, l = elementExpressions.length; i < l; ++i) {
+            let elem: Expression = elementExpressions[i];
+            if (elem.kind == NodeKind.OMITTED) {
+              continue;
+            } else if (!checkElement(elem)) {
+              return false;
+            }
+          }
+          return true;
+        } else if (literalKind == LiteralKind.OBJECT) {
+          let obj = <ObjectLiteralExpression>expr;
+          let values = obj.values;
+          for (let i = 0, l = values.length; i < l; ++i) {
+            if (!checkElement(values[i])) {
+              return false;
+            }
+          }
+          return true;
+        } 
+      }
+    }
+    return false;
+  }
+
   tryParseTypeArgumentsBeforeArguments(
     tn: Tokenizer
   ): TypeNode[] | null {
@@ -4218,6 +4266,13 @@ export class Parser extends DiagnosticEmitter {
         }
         // BinaryExpression (right associative)
         case Token.EQUALS:
+          if (!this.checkBindingPattern(expr)) {
+            this.error(
+              DiagnosticCode.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
+              expr.range
+            );
+            return null;
+          }
         case Token.PLUS_EQUALS:
         case Token.MINUS_EQUALS:
         case Token.ASTERISK_ASTERISK_EQUALS:
