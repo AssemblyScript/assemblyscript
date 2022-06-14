@@ -1700,7 +1700,7 @@ export abstract class DeclarationStatement extends Statement {
     /** Declaration node kind. */
     kind: NodeKind,
     /** Simple name being declared. */
-    public name: IdentifierExpression,
+    public name: Expression,
     /** Array of decorators, if any. */
     public decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1743,7 +1743,7 @@ export abstract class VariableLikeDeclarationStatement extends DeclarationStatem
     /** Variable-like declaration node kind. */
     kind: NodeKind,
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1787,7 +1787,7 @@ export class BreakStatement extends Statement {
 export class ClassDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    public name: IdentifierExpression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1855,7 +1855,7 @@ export class EmptyStatement extends Statement {
 export class EnumDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    public name: IdentifierExpression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1873,7 +1873,7 @@ export class EnumDeclaration extends DeclarationStatement {
 export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    public name: IdentifierExpression,
     /** Common flags indicating specific traits. */
     flags: CommonFlags,
     /** Initializer expression, if any. */
@@ -1969,7 +1969,7 @@ export class ExpressionStatement extends Statement {
 export class FieldDeclaration extends VariableLikeDeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    public name: IdentifierExpression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2035,7 +2035,7 @@ export const enum ArrowKind {
 export class FunctionDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    public name: IdentifierExpression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2095,7 +2095,7 @@ export class IfStatement extends Statement {
 export class ImportDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    public name: IdentifierExpression,
     /** Identifier being imported. */
     public foreignName: IdentifierExpression,
     /** Source range. */
@@ -2183,7 +2183,7 @@ export class MethodDeclaration extends FunctionDeclaration {
 export class NamespaceDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    public name: IdentifierExpression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2285,7 +2285,7 @@ export class ModuleDeclaration extends Statement {
 export class TypeDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    public name: IdentifierExpression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2305,7 +2305,7 @@ export class TypeDeclaration extends DeclarationStatement {
 export class VariableDeclaration extends VariableLikeDeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */

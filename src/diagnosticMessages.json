@@ -104,6 +104,7 @@
   "Interface declaration cannot have 'implements' clause.": 1176,
   "Binary digit expected.": 1177,
   "Octal digit expected.": 1178,
+  "A destructuring declaration must have an initializer.": 1182,
   "An implementation cannot be declared in ambient contexts.": 1183,
   "The variable declaration of a 'for...of' statement cannot have an initializer.": 1190,
   "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": 1198,

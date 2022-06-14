@@ -1665,11 +1665,14 @@ export class Program extends DiagnosticEmitter {
   /** Registers a constant integer value within the global scope. */
   registerConstantInteger(name: string, type: Type, value: i64): void {
     assert(type.isIntegerInclReference);
+    var declaration = this.makeNativeVariableDeclaration(name, CommonFlags.CONST | CommonFlags.EXPORT);
+    assert(declaration.name.kind == NodeKind.IDENTIFIER);
     var global = new Global(
       name,
       this.nativeFile,
       DecoratorFlags.NONE,
-      this.makeNativeVariableDeclaration(name, CommonFlags.CONST | CommonFlags.EXPORT)
+      <IdentifierExpression>declaration.name,
+      declaration
     );
     global.setConstantIntegerValue(value, type);
     this.nativeFile.add(name, global);
@@ -1678,11 +1681,14 @@ export class Program extends DiagnosticEmitter {
   /** Registers a constant float value within the global scope. */
   private registerConstantFloat(name: string, type: Type, value: f64): void {
     assert(type.isFloatValue);
+    var declaration = this.makeNativeVariableDeclaration(name, CommonFlags.CONST | CommonFlags.EXPORT);
+    assert(declaration.name.kind == NodeKind.IDENTIFIER);
     var global = new Global(
       name,
       this.nativeFile,
       DecoratorFlags.NONE,
-      this.makeNativeVariableDeclaration(name, CommonFlags.CONST | CommonFlags.EXPORT)
+      <IdentifierExpression>declaration.name,
+      declaration
     );
     global.setConstantFloatValue(value, type);
     this.nativeFile.add(name, global);
@@ -1928,6 +1934,7 @@ export class Program extends DiagnosticEmitter {
         name,
         parent,
         this.checkDecorators(decorators, acceptedFlags),
+        declaration.name,
         declaration
       );
       if (!parent.add(name, element)) return;
@@ -2599,7 +2606,7 @@ export class Program extends DiagnosticEmitter {
     var declarations = statement.declarations;
     for (let i = 0, k = declarations.length; i < k; ++i) {
       let declaration = declarations[i];
-      let name = declaration.name.text;
+      let nameNode = declaration.name;
       let acceptedFlags = DecoratorFlags.GLOBAL | DecoratorFlags.LAZY;
       if (declaration.is(CommonFlags.AMBIENT)) {
         acceptedFlags |= DecoratorFlags.EXTERNAL;
@@ -2607,13 +2614,24 @@ export class Program extends DiagnosticEmitter {
       if (declaration.is(CommonFlags.CONST)) {
         acceptedFlags |= DecoratorFlags.INLINE;
       }
-      let element = new Global(
-        name,
-        parent,
-        this.checkDecorators(declaration.decorators, acceptedFlags),
-        declaration
-      );
-      if (!parent.add(name, element)) continue; // reports
+      switch (nameNode.kind) {
+        case NodeKind.LITERAL: {
+          this.error(DiagnosticCode.Not_implemented_0, declaration.range, "Global array/object destructuring");
+          break;
+        }
+        case NodeKind.IDENTIFIER: {
+          let identifierNode = <IdentifierExpression>nameNode;
+          let name = identifierNode.text;
+          let element = new Global(
+            name,
+            parent,
+            this.checkDecorators(declaration.decorators, acceptedFlags),
+            identifierNode,
+            declaration
+          );
+          if (!parent.add(name, element)) continue; // reports
+        }
+      }
     }
   }
 
@@ -2900,6 +2918,8 @@ export abstract class DeclaredElement extends Element {
     program: Program,
     /** Parent element. */
     parent: Element | null,
+    /** The element's identifier. */
+    public identifierNode: IdentifierExpression,
     /** Declaration reference. */
     public declaration: DeclarationStatement
   ) {
@@ -2918,11 +2938,6 @@ export abstract class DeclaredElement extends Element {
   /** Tests if this element is a library element. */
   get isDeclaredInLibrary(): bool {
     return this.declaration.range.source.isLibrary;
-  }
-
-  /** Gets the associated identifier node. */
-  get identifierNode(): IdentifierExpression {
-    return this.declaration.name;
   }
 
   /** Gets the signature node, if applicable, along the identifier node. */
@@ -3004,10 +3019,12 @@ export abstract class TypedElement extends DeclaredElement {
     program: Program,
     /** Parent element. */
     parent: Element | null,
+    /** Associated identifier. */
+    identifierNode: IdentifierExpression,
     /** Declaration reference. */
     declaration: DeclarationStatement
   ) {
-    super(kind, name, internalName, program, parent, declaration);
+    super(kind, name, internalName, program, parent, identifierNode, declaration);
     typedElements.add(kind);
   }
 
@@ -3187,6 +3204,7 @@ export class TypeDefinition extends TypedElement {
       mangleInternalName(name, parent, false),
       parent.program,
       parent,
+      declaration.name,
       declaration
     );
     this.decoratorFlags = decoratorFlags;
@@ -3223,6 +3241,7 @@ export class Namespace extends DeclaredElement {
       mangleInternalName(name, parent, false),
       parent.program,
       parent,
+      declaration.name,
       declaration
     );
     this.decoratorFlags = decoratorFlags;
@@ -3256,6 +3275,7 @@ export class Enum extends TypedElement {
       mangleInternalName(name, parent, false),
       parent.program,
       parent,
+      declaration.name,
       declaration
     );
     this.decoratorFlags = decoratorFlags;
@@ -3298,6 +3318,8 @@ export abstract class VariableLikeElement extends TypedElement {
     name: string,
     /** Parent element, usually a file, namespace or class. */
     parent: Element,
+    /** Identifier that might be a part of a binding pattern. */
+    identifierNode: IdentifierExpression,
     /** Declaration reference. Creates a native declaration if omitted. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
   ) {
@@ -3307,6 +3329,7 @@ export abstract class VariableLikeElement extends TypedElement {
       mangleInternalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
+      identifierNode,
       declaration
     );
     this.flags = declaration.flags;
@@ -3359,6 +3382,7 @@ export class EnumValue extends VariableLikeElement {
       ElementKind.ENUMVALUE,
       name,
       parent,
+      declaration.name,
       declaration
     );
     this.decoratorFlags = decoratorFlags;
@@ -3385,13 +3409,20 @@ export class Global extends VariableLikeElement {
     parent: Element,
     /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags,
+    /** Identifier that might be a part of a binding pattern. */
+    identifierNode: IdentifierExpression | null = null,
     /** Declaration reference. Creates a native declaration if omitted. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
   ) {
+    if (identifierNode == null) {
+      assert(declaration.name.kind == NodeKind.IDENTIFIER);
+      identifierNode = <IdentifierExpression>declaration.name;
+    }
     super(
       ElementKind.GLOBAL,
       name,
       parent,
+      identifierNode,
       declaration
     );
     this.decoratorFlags = decoratorFlags;
@@ -3427,13 +3458,20 @@ export class Local extends VariableLikeElement {
     type: Type,
     /** Parent function. */
     parent: Function,
+    /** Identifier that might be a part of a binding pattern. */
+    identifierNode: IdentifierExpression | null = null,
     /** Declaration reference. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
   ) {
+    if (identifierNode == null) {
+      assert(declaration.name.kind == NodeKind.IDENTIFIER);
+      identifierNode = <IdentifierExpression>declaration.name;
+    }
     super(
       ElementKind.LOCAL,
       name,
       parent,
+      identifierNode,
       declaration
     );
     this.originalName = name;
@@ -3476,7 +3514,7 @@ export class FunctionPrototype extends DeclaredElement {
     /** Parent element, usually a file, namespace or class (if a method). */
     parent: Element,
     /** Declaration reference. */
-    declaration: FunctionDeclaration,
+    public declaration: FunctionDeclaration,
     /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags = DecoratorFlags.NONE
   ) {
@@ -3486,6 +3524,7 @@ export class FunctionPrototype extends DeclaredElement {
       mangleInternalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
+      declaration.name,
       declaration
     );
     this.decoratorFlags = decoratorFlags;
@@ -3614,6 +3653,7 @@ export class Function extends TypedElement {
       mangleInternalName(nameInclTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
       prototype.program,
       prototype.parent,
+      prototype.identifierNode,
       prototype.declaration
     );
     this.prototype = prototype;
@@ -3689,19 +3729,24 @@ export class Function extends TypedElement {
   }
 
   /** Adds a local of the specified type, with an optional name. */
-  addLocal(type: Type, name: string | null = null, declaration: VariableDeclaration | null = null): Local {
+  addLocal(type: Type, name: string | null = null, identifierNode: IdentifierExpression | null = null, declaration: VariableDeclaration | null = null): Local {
     // if it has a name, check previously as this method will throw otherwise
     var localIndex = this.signature.parameterTypes.length + this.additionalLocals.length;
     if (this.is(CommonFlags.INSTANCE)) ++localIndex;
     var localName = name != null
       ? name
       : "var$" + localIndex.toString();
-    if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
+    if (!declaration) {
+      declaration = this.program.makeNativeVariableDeclaration(localName);
+      assert(declaration.name.kind == NodeKind.IDENTIFIER);
+      identifierNode = <IdentifierExpression>declaration.name;
+    }
     var local = new Local(
       localName,
       localIndex,
       type,
       this,
+      assert(identifierNode),
       declaration
     );
     if (name) {
@@ -3785,6 +3830,7 @@ export class FieldPrototype extends DeclaredElement {
       mangleInternalName(name, parent, assert(declaration.is(CommonFlags.INSTANCE))),
       parent.program,
       parent,
+      declaration.name,
       declaration
     );
     this.decoratorFlags = decoratorFlags;
@@ -3831,6 +3877,7 @@ export class Field extends VariableLikeElement {
       ElementKind.FIELD,
       prototype.name,
       parent,
+      prototype.identifierNode,
       <VariableLikeDeclarationStatement>prototype.declaration
     );
     this.prototype = prototype;
@@ -3909,6 +3956,7 @@ export class PropertyPrototype extends DeclaredElement {
       mangleInternalName(name, parent, firstDeclaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
+      firstDeclaration.name,
       firstDeclaration
     );
     this.flags &= ~(CommonFlags.GET | CommonFlags.SET);
@@ -3972,6 +4020,7 @@ export class Property extends VariableLikeElement {
       ElementKind.PROPERTY,
       prototype.name,
       parent,
+      prototype.identifierNode,
       Node.createVariableDeclaration(
         prototype.identifierNode,
         null,
@@ -3999,13 +4048,16 @@ export class IndexSignature extends TypedElement {
     /** Parent class. */
     parent: Class
   ) {
+    let declaration = parent.program.makeNativeVariableDeclaration("[]"); // is fine
+    assert(declaration.name.kind == NodeKind.IDENTIFIER);
     super(
       ElementKind.INDEXSIGNATURE,
       "[]",
       parent.internalName + "[]",
       parent.program,
       parent,
-      parent.program.makeNativeVariableDeclaration("[]") // is fine
+      <IdentifierExpression>declaration.name,
+      declaration
     );
   }
 
@@ -4055,6 +4107,7 @@ export class ClassPrototype extends DeclaredElement {
       mangleInternalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
+      declaration.name,
       declaration
     );
     this.decoratorFlags = decoratorFlags;
@@ -4222,6 +4275,7 @@ export class Class extends TypedElement {
       mangleInternalName(nameInclTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
       prototype.program,
       prototype.parent,
+      prototype.identifierNode,
       prototype.declaration
     );
     var program = this.program;
