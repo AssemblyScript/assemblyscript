@@ -1615,7 +1615,7 @@ function SLICE<TArray extends ArrayBufferView, T>(
 ): TArray {
   var len = array.length;
   start  = start < 0 ? max(start + len, 0) : min(start, len);
-  end    = end   < 0 ? max(end   + len, 0) : min(end  , len);
+  end    = end   < 0 ? max(end   + len, 0) : min(end, len);
   len = max(end - start, 0);
   var slice = instantiate<TArray>(len);
   memory.copy(

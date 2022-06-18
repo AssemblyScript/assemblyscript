@@ -9,7 +9,7 @@ class B<T, V> extends A<T> {
   }
 }
 
-class C extends A<string>{}
+class C extends A<string> {}
 
 let v = new B<i32, f64>();
 let v2 = new B<i32, string>();

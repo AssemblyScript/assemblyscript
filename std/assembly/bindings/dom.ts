@@ -102,7 +102,7 @@ export declare namespace Reflect {
   export function set(target: externref, propertyKey: string, value: externref): externref;
   @external("env", "Reflect.setWithReceiver")
   @external.js("return Reflect.set(target, propertyKey, value, receiver);")
-  export function setWithReceiver(target: externref, propertyKey: string, value: externref , receiver: externref): externref;
+  export function setWithReceiver(target: externref, propertyKey: string, value: externref, receiver: externref): externref;
   @external("env", "Reflect.apply")
   export function apply(target: externref, thisArgument: externref, argumentsList: externref): externref;
 }

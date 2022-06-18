@@ -64,8 +64,7 @@ import { Map } from "./map";
   static readonly unscopables: symbol = changetype<symbol>(11);
 
   static for(key: string): symbol {
-    if (!stringToId) { stringToId = new Map(); idToString = new Map(); }
-    else if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
+    if (!stringToId) { stringToId = new Map(); idToString = new Map(); } else if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
     var id = nextId++;
     if (!id) unreachable(); // out of ids
     stringToId.set(key, id);

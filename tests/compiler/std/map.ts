@@ -1,5 +1,5 @@
-function testNumeric<K extends number,V extends number>(): void {
-  var map = new Map<K,V>();
+function testNumeric<K extends number, V extends number>(): void {
+  var map = new Map<K, V>();
 
   // insert new
   for (let k: K = 0; k < 100; ++k) {
@@ -60,15 +60,15 @@ function testNumeric<K extends number,V extends number>(): void {
   assert(map.size == 0);
 }
 
-testNumeric<i8,i32>();
-testNumeric<u8,i32>();
-testNumeric<i16,i32>();
-testNumeric<u16,i32>();
-testNumeric<i32,i32>();
-testNumeric<u32,i32>();
-testNumeric<i64,i32>();
-testNumeric<u64,i32>();
-testNumeric<f32,i32>();
-testNumeric<f64,i32>();
+testNumeric<i8, i32>();
+testNumeric<u8, i32>();
+testNumeric<i16, i32>();
+testNumeric<u16, i32>();
+testNumeric<i32, i32>();
+testNumeric<u32, i32>();
+testNumeric<i64, i32>();
+testNumeric<u64, i32>();
+testNumeric<f32, i32>();
+testNumeric<f64, i32>();
 
 __collect();

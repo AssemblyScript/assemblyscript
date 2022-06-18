@@ -146,7 +146,7 @@ assert(a.x == 3 && a.y == 5);
 
 // check subtraction
 var s1 = new Tester(2, 3);
-var s2 = new Tester(2,-3);
+var s2 = new Tester(2, -3);
 var s  = s1 - s2;
 assert(s.x == 0 && s.y == 6);
 
@@ -225,7 +225,7 @@ var gte  = gte1 >= gte2;
 assert(gte == true);
 
 // check less
-var le1 = new Tester(5,-1);
+var le1 = new Tester(5, -1);
 var le2 = new Tester(6, 6);
 var le  = le1 < le2;
 assert(le == true);

@@ -232,11 +232,11 @@ export class Flow {
   /** The label we break to when encountering a break statement. */
   breakLabel: string | null = null;
   /** Scoped local variables. */
-  scopedLocals: Map<string,Local> | null = null;
+  scopedLocals: Map<string, Local> | null = null;
   /** Local flags. */
   localFlags: LocalFlags[] = [];
   /** Field flags on `this`. Constructors only. */
-  thisFieldFlags: Map<Field,FieldFlags> | null = null;
+  thisFieldFlags: Map<Field, FieldFlags> | null = null;
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null = null;
   /** The label we break to when encountering a return statement, when inlining. */
@@ -260,7 +260,7 @@ export class Flow {
   }
 
   /** Gets the current contextual type arguments. */
-  get contextualTypeArguments(): Map<string,Type> | null {
+  get contextualTypeArguments(): Map<string, Type> | null {
     return this.actualFunction.contextualTypeArguments;
   }
 
@@ -313,7 +313,7 @@ export class Flow {
     branch.localFlags = this.localFlags.slice();
     if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
-      branch.thisFieldFlags = uniqueMap<Field,FieldFlags>(thisFieldFlags);
+      branch.thisFieldFlags = uniqueMap<Field, FieldFlags>(thisFieldFlags);
     } else {
       assert(!this.thisFieldFlags);
     }
@@ -357,14 +357,12 @@ export class Flow {
         }
       }
       local = parentFunction.addLocal(type);
+    } else if (temps && temps.length > 0) {
+      local = assert(temps.pop());
+      local.type = type;
+      local.flags = CommonFlags.NONE;
     } else {
-      if (temps && temps.length > 0) {
-        local = assert(temps.pop());
-        local.type = type;
-        local.flags = CommonFlags.NONE;
-      } else {
-        local = parentFunction.addLocal(type);
-      }
+      local = parentFunction.addLocal(type);
     }
     this.unsetLocalFlag(local.index, ~0);
     return local;
@@ -939,7 +937,7 @@ export class Flow {
     // field flags (currently only INITIALIZED, so can simplify)
     var leftFieldFlags = left.thisFieldFlags;
     if (leftFieldFlags) {
-      let newFieldFlags = new Map<Field,FieldFlags>();
+      let newFieldFlags = new Map<Field, FieldFlags>();
       let rightFieldFlags = assert(right.thisFieldFlags);
       for (let _keys = Map_keys(leftFieldFlags), i = 0, k = _keys.length; i < k; ++i) {
         let key = _keys[i];

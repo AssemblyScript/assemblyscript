@@ -1189,7 +1189,7 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 {
   assert((<bool[]>[true, false]).join() == "true,false");
-  assert((<i32[]>[1,-2,-3]).join("") == "1-2-3");
+  assert((<i32[]>[1, -2, -3]).join("") == "1-2-3");
   assert((<u32[]>[1, 2, 3]).join("-") == "1-2-3");
   assert((<i32[]>[i32.MIN_VALUE, i32.MIN_VALUE]).join("__") == "-2147483648__-2147483648");
   assert((<f64[]>[0.0, 1.0, -2.0, NaN, -Infinity, Infinity]).join(", ") == "0.0, 1.0, -2.0, NaN, -Infinity, Infinity");
@@ -1205,8 +1205,8 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 {
   let arr0: i32[] = [];
   let arr1: i32[] = [1];
-  let arr2: i32[] = [1,2];
-  let arr3: i32[] = [0,1,2,3];
+  let arr2: i32[] = [1, 2];
+  let arr3: i32[] = [0, 1, 2, 3];
 
   assert(arr0.toString() == "");
   assert(arr1.toString() == "1");
@@ -1229,10 +1229,10 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(arrStr.toString() == ",a,a,ab,b,ba,");
   assert((<Array<string | null>>["1", "2", null, "4"]).toString() == "1,2,,4");
 
-  let subarr32: i32[][] = [[1,2], [3,4]];
+  let subarr32: i32[][] = [[1, 2], [3, 4]];
   assert(subarr32.toString() == "1,2,3,4");
 
-  let subarr8: u8[][] = [[1,2], [3,4]];
+  let subarr8: u8[][] = [[1, 2], [3, 4]];
   assert(subarr8.toString() == "1,2,3,4");
 
   let subarrU32: u32[][][] = [[[1]]];

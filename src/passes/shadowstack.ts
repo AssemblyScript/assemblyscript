@@ -150,8 +150,8 @@ import {
 
 type LocalIndex = Index;
 type SlotIndex = Index;
-type SlotMap = Map<LocalIndex,SlotIndex>;
-type TempMap = Map<TypeRef,LocalIndex>;
+type SlotMap = Map<LocalIndex, SlotIndex>;
+type TempMap = Map<TypeRef, LocalIndex>;
 
 /** Attempts to match the `__tostack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
 function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
@@ -184,7 +184,7 @@ export class ShadowStackPass extends Pass {
   /** Temporary locals, per function. */
   tempMaps: Map<FunctionRef, TempMap> = new Map();
   /** Exports (with managed operands) map. */
-  exportMap: Map<string,i32[]> = new Map();
+  exportMap: Map<string, i32[]> = new Map();
   /** Compiler reference. */
   compiler: Compiler;
 

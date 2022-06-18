@@ -108,7 +108,7 @@ function lazyArgv(): string[] {
   }
 }
 
-function lazyEnv(): Map<string,string> {
+function lazyEnv(): Map<string, string> {
   if (isDefined(ASC_WASI)) {
     let err = environ_sizes_get(tempbuf, tempbuf + 4);
     if (err) throw new Error(errnoToString(err));
@@ -119,7 +119,7 @@ function lazyEnv(): Map<string,string> {
     let buf = __alloc(bufSize);
     err = environ_get(buf, buf + ptrsSize);
     if (err) throw new Error(errnoToString(err));
-    let env = new Map<string,string>();
+    let env = new Map<string, string>();
     for (let i: usize = 0; i < count; ++i) {
       let ptr = load<usize>(buf + i * sizeof<usize>());
       let str = String.UTF8.decodeUnsafe(ptr, ptr + bufSize - buf, true);

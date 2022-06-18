@@ -1682,8 +1682,7 @@ export class Source extends Node {
       else if (pos < unchecked(lineCache[m + 1])) {
         this.lineColumn = pos - s + 1;
         return m + 1;
-      }
-      else l = m + 1;
+      } else l = m + 1;
     }
     return assert(0);
   }

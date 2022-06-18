@@ -1900,17 +1900,15 @@ export class Parser extends DiagnosticEmitter {
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "declare"
         );
+      } else if (contextIsAmbient) {
+        this.error(
+          DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
+          tn.range()
+        ); // recoverable
       } else {
-        if (contextIsAmbient) {
-          this.error(
-            DiagnosticCode.A_declare_modifier_cannot_be_used_in_an_already_ambient_context,
-            tn.range()
-          ); // recoverable
-        } else {
-          flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
-          declareStart = tn.tokenPos;
-          declareEnd = tn.pos;
-        }
+        flags |= CommonFlags.DECLARE | CommonFlags.AMBIENT;
+        declareStart = tn.tokenPos;
+        declareEnd = tn.pos;
       }
       if (!startPos) startPos = tn.tokenPos;
     } else if (contextIsAmbient) {
@@ -4388,7 +4386,7 @@ export class Parser extends DiagnosticEmitter {
         }
         case Token.TEMPLATELITERAL: {
           tn.readString();
-          while(tn.readingTemplateString){
+          while(tn.readingTemplateString) {
             this.skipBlock(tn);
             tn.readString(CharCode.BACKTICK);
           }

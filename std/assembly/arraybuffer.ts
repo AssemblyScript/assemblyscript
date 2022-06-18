@@ -64,7 +64,7 @@ export abstract class ArrayBufferView {
   slice(begin: i32 = 0, end: i32 = BLOCK_MAXSIZE): ArrayBuffer {
     var length = this.byteLength;
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
-    end   = end   < 0 ? max(length + end  , 0) : min(end  , length);
+    end   = end   < 0 ? max(length + end, 0) : min(end, length);
     var outSize = <usize>max(end - begin, 0);
     var out = changetype<ArrayBuffer>(__new(outSize, idof<ArrayBuffer>()));
     memory.copy(changetype<usize>(out), changetype<usize>(this) + <usize>begin, outSize);

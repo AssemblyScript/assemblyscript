@@ -245,7 +245,7 @@ export class Options {
   /** Static table start offset. */
   tableBase: u32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
-  globalAliases: Map<string,string> | null = null;
+  globalAliases: Map<string, string> | null = null;
   /** Features to activate by default. These are the finished proposals. */
   features: Feature = Feature.MUTABLE_GLOBALS
                     | Feature.SIGN_EXTENSION
@@ -386,7 +386,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Memory segments being compiled. */
   memorySegments: MemorySegment[] = [];
   /** Map of already compiled static string segments. */
-  stringSegments: Map<string,MemorySegment> = new Map();
+  stringSegments: Map<string, MemorySegment> = new Map();
   /** Function table being compiled. First elem is blank. */
   functionTable: Function[] = [];
   /** Arguments length helper global. */
@@ -425,14 +425,12 @@ export class Compiler extends DiagnosticEmitter {
     if (options.memoryBase) {
       this.memoryOffset = i64_new(options.memoryBase);
       module.setLowMemoryUnused(false);
+    } else if (!options.lowMemoryLimit && options.optimizeLevelHint >= 2) {
+      this.memoryOffset = i64_new(1024);
+      module.setLowMemoryUnused(true);
     } else {
-      if (!options.lowMemoryLimit && options.optimizeLevelHint >= 2) {
-        this.memoryOffset = i64_new(1024);
-        module.setLowMemoryUnused(true);
-      } else {
-        this.memoryOffset = i64_new(8);
-        module.setLowMemoryUnused(false);
-      }
+      this.memoryOffset = i64_new(8);
+      module.setLowMemoryUnused(false);
     }
     var featureFlags: FeatureFlags = 0;
     if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
@@ -777,15 +775,13 @@ export class Compiler extends DiagnosticEmitter {
       );
       startFunctionInstance.finalize(module, funcRef);
       if (exportStart == null) module.setStart(funcRef);
-      else {
-        if (!isIdentifier(exportStart) || module.hasExport(exportStart)) {
-          this.error(
-            DiagnosticCode.Start_function_name_0_is_invalid_or_conflicts_with_another_export,
-            this.program.nativeRange, exportStart
-          );
-        } else {
-          module.addFunctionExport(startFunctionInstance.internalName, exportStart);
-        }
+      else if (!isIdentifier(exportStart) || module.hasExport(exportStart)) {
+        this.error(
+          DiagnosticCode.Start_function_name_0_is_invalid_or_conflicts_with_another_export,
+          this.program.nativeRange, exportStart
+        );
+      } else {
+        module.addFunctionExport(startFunctionInstance.internalName, exportStart);
       }
     }
 
@@ -1239,12 +1235,10 @@ export class Compiler extends DiagnosticEmitter {
       }
 
     // Initialize to zero if there's no initializer
+    } else if (global.is(CommonFlags.INLINED)) {
+      initExpr = this.compileInlineConstant(global, global.type, Constraints.PREFER_STATIC);
     } else {
-      if (global.is(CommonFlags.INLINED)) {
-        initExpr = this.compileInlineConstant(global, global.type, Constraints.PREFER_STATIC);
-      } else {
-        initExpr = this.makeZero(type, global.declaration);
-      }
+      initExpr = this.makeZero(type, global.declaration);
     }
 
     var internalName = global.internalName;
@@ -3631,23 +3625,21 @@ export class Compiler extends DiagnosticEmitter {
           }
 
         // f64 to int
-        } else {
-          if (toType.isBooleanValue) {
-            expr = this.makeIsTrueish(expr, Type.f64, reportNode);
-          } else if (toType.isSignedIntegerValue) {
-            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
-            if (toType.isLongIntegerValue) {
-              expr = module.unary(saturating ? UnaryOp.TruncSatF64ToI64 : UnaryOp.TruncF64ToI64, expr);
-            } else {
-              expr = module.unary(saturating ? UnaryOp.TruncSatF64ToI32 : UnaryOp.TruncF64ToI32, expr);
-            }
+        } else if (toType.isBooleanValue) {
+          expr = this.makeIsTrueish(expr, Type.f64, reportNode);
+        } else if (toType.isSignedIntegerValue) {
+          let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
+          if (toType.isLongIntegerValue) {
+            expr = module.unary(saturating ? UnaryOp.TruncSatF64ToI64 : UnaryOp.TruncF64ToI64, expr);
           } else {
-            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
-            if (toType.isLongIntegerValue) {
-              expr = module.unary(saturating ? UnaryOp.TruncSatF64ToU64 : UnaryOp.TruncF64ToU64, expr);
-            } else {
-              expr = module.unary(saturating ? UnaryOp.TruncSatF64ToU32 : UnaryOp.TruncF64ToU32, expr);
-            }
+            expr = module.unary(saturating ? UnaryOp.TruncSatF64ToI32 : UnaryOp.TruncF64ToI32, expr);
+          }
+        } else {
+          let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
+          if (toType.isLongIntegerValue) {
+            expr = module.unary(saturating ? UnaryOp.TruncSatF64ToU64 : UnaryOp.TruncF64ToU64, expr);
+          } else {
+            expr = module.unary(saturating ? UnaryOp.TruncSatF64ToU32 : UnaryOp.TruncF64ToU32, expr);
           }
         }
 
@@ -3679,22 +3671,20 @@ export class Compiler extends DiagnosticEmitter {
         }
 
       // int to f64
-      } else {
-        if (fromType.isLongIntegerValue) {
-          expr = module.unary(
+      } else if (fromType.isLongIntegerValue) {
+        expr = module.unary(
             fromType.isSignedIntegerValue
               ? UnaryOp.ConvertI64ToF64
               : UnaryOp.ConvertU64ToF64,
             expr
-          );
-        } else {
-          expr = module.unary(
+        );
+      } else {
+        expr = module.unary(
             fromType.isSignedIntegerValue
               ? UnaryOp.ConvertI32ToF64
               : UnaryOp.ConvertU32ToF64,
             expr
-          );
-        }
+        );
       }
 
     // v128 to bool
@@ -3729,13 +3719,11 @@ export class Compiler extends DiagnosticEmitter {
             expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
           }
         // same size
-        } else {
-          if (!explicit && !this.options.isWasm64 && fromType.isVaryingIntegerValue && !toType.isVaryingIntegerValue) {
-            this.warning(
-              DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
-              reportNode.range, fromType.toString(), toType.toString()
-            );
-          }
+        } else if (!explicit && !this.options.isWasm64 && fromType.isVaryingIntegerValue && !toType.isVaryingIntegerValue) {
+          this.warning(
+            DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
+            reportNode.range, fromType.toString(), toType.toString()
+          );
         }
       }
     }
@@ -6465,7 +6453,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(typeParameterNodes),
         typeArgumentNodes,
         this.currentFlow.actualFunction.parent,
-        uniqueMap<string,Type>(this.currentFlow.contextualTypeArguments), // don't update
+        uniqueMap<string, Type>(this.currentFlow.contextualTypeArguments), // don't update
         expression
       );
     }
@@ -7761,7 +7749,7 @@ export class Compiler extends DiagnosticEmitter {
         let functionInstance = this.resolver.resolveFunction(
           functionPrototype,
           null,
-          uniqueMap<string,Type>(flow.contextualTypeArguments)
+          uniqueMap<string, Type>(flow.contextualTypeArguments)
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
@@ -8195,7 +8183,7 @@ export class Compiler extends DiagnosticEmitter {
           let instance = this.resolver.resolveFunction(
             <FunctionPrototype>target,
             null,
-            uniqueMap<string,Type>(),
+            uniqueMap<string, Type>(),
             ReportMode.SWALLOW
           );
           if (!instance) break;
@@ -8781,14 +8769,14 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,
-        uniqueMap<string,Type>(flow.contextualTypeArguments)
+        uniqueMap<string, Type>(flow.contextualTypeArguments)
       );
     } else {
       classInstance = this.resolver.resolveClassInclTypeArguments(
         classPrototype,
         typeArguments,
         flow.actualFunction.parent, // relative to caller
-        uniqueMap<string,Type>(flow.contextualTypeArguments),
+        uniqueMap<string, Type>(flow.contextualTypeArguments),
         expression
       );
     }

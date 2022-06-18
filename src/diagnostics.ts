@@ -255,7 +255,7 @@ export abstract class DiagnosticEmitter {
   /** Diagnostic messages emitted so far. */
   diagnostics: DiagnosticMessage[];
   /** Diagnostic messages already seen, by range. */
-  private seen: Map<Source,Map<i32,DiagnosticMessage[]>> = new Map();
+  private seen: Map<Source, Map<i32, DiagnosticMessage[]>> = new Map();
 
   /** Initializes this diagnostic emitter. */
   protected constructor(diagnostics: DiagnosticMessage[] | null = null) {
@@ -294,7 +294,7 @@ export abstract class DiagnosticEmitter {
           seenInSource.set(range.start, [ message ]);
         }
       } else {
-        let seenInSource = new Map<i32,DiagnosticMessage[]>();
+        let seenInSource = new Map<i32, DiagnosticMessage[]>();
         seenInSource.set(range.start, [ message ]);
         seen.set(range.source, seenInSource);
       }

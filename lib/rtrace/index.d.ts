@@ -58,7 +58,7 @@ export declare class Rtrace  {
   readonly heapBase: number;
 
   /** Installs Rtrace on the specified imports object. */
-  install(imports: Record<string,Record<string,unknown>>): Record<string,Record<string,unknown>>;
+  install(imports: Record<string, Record<string, unknown>>): Record<string, Record<string, unknown>>;
 
   /** Checks if there are any leaks and emits them via `oninfo`. Returns the number of live blocks. */
   check(): number;

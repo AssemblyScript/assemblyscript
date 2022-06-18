@@ -462,23 +462,23 @@ export class Program extends DiagnosticEmitter {
   // Lookup maps
 
   /** Files by unique internal name. */
-  filesByName: Map<string,File> = new Map();
+  filesByName: Map<string, File> = new Map();
   /** Elements by unique internal name in element space. */
-  elementsByName: Map<string,Element> = new Map();
+  elementsByName: Map<string, Element> = new Map();
   /** Elements by declaration. */
-  elementsByDeclaration: Map<DeclarationStatement,DeclaredElement> = new Map();
+  elementsByDeclaration: Map<DeclarationStatement, DeclaredElement> = new Map();
   /** Element instances by unique internal name. */
-  instancesByName: Map<string,Element> = new Map();
+  instancesByName: Map<string, Element> = new Map();
   /** Classes wrapping basic types like `i32`. */
-  wrapperClasses: Map<Type,Class> = new Map();
+  wrapperClasses: Map<Type, Class> = new Map();
   /** Managed classes contained in the program, by id. */
-  managedClasses: Map<i32,Class> = new Map();
+  managedClasses: Map<i32, Class> = new Map();
   /** A set of unique function signatures contained in the program, by id. */
   uniqueSignatures: Signature[] = new Array<Signature>(0);
   /** Module exports. */
-  moduleExports: Map<string,Element> = new Map();
+  moduleExports: Map<string, Element> = new Map();
   /** Module imports. */
-  moduleImports: Map<string,Map<string,Element>> = new Map();
+  moduleImports: Map<string, Map<string, Element>> = new Map();
 
   // Standard library
 
@@ -1073,8 +1073,8 @@ export class Program extends DiagnosticEmitter {
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
-    var queuedExports = new Map<File,Map<string,QueuedExport>>();
-    var queuedExportsStar = new Map<File,QueuedExportStar[]>();
+    var queuedExports = new Map<File, Map<string, QueuedExport>>();
+    var queuedExportsStar = new Map<File, QueuedExportStar[]>();
     var queuedExtends = new Array<ClassPrototype>();
     var queuedImplements = new Array<ClassPrototype>();
 
@@ -1629,7 +1629,7 @@ export class Program extends DiagnosticEmitter {
   markModuleImport(moduleName: string, name: string, element: Element): void {
     element.set(CommonFlags.MODULE_IMPORT);
     var moduleImports = this.moduleImports;
-    var module: Map<string,Element>;
+    var module: Map<string, Element>;
     if (moduleImports.has(moduleName)) {
       module = assert(moduleImports.get(moduleName));
     } else {
@@ -1745,7 +1745,7 @@ export class Program extends DiagnosticEmitter {
     /** The other file. */
     foreignFile: File,
     /** So far queued exports. */
-    queuedExports: Map<File,Map<string,QueuedExport>>
+    queuedExports: Map<File, Map<string, QueuedExport>>
   ): DeclaredElement | null {
     do {
       // check if already resolved
@@ -2091,14 +2091,12 @@ export class Program extends DiagnosticEmitter {
         );
         return;
       }
-    } else {
-      if (property.setterPrototype) {
-        this.error(
-          DiagnosticCode.Duplicate_property_0,
-          declaration.name.range, name
-        );
-        return;
-      }
+    } else if (property.setterPrototype) {
+      this.error(
+        DiagnosticCode.Duplicate_property_0,
+        declaration.name.range, name
+      );
+      return;
     }
     var element = new FunctionPrototype(
       (isGetter ? GETTER_PREFIX : SETTER_PREFIX) + name,
@@ -2167,9 +2165,9 @@ export class Program extends DiagnosticEmitter {
     /** Parent file. */
     parent: File,
     /** So far queued `export`s. */
-    queuedExports: Map<File,Map<string,QueuedExport>>,
+    queuedExports: Map<File, Map<string, QueuedExport>>,
     /** So far queued `export *`s. */
-    queuedExportsStar: Map<File,QueuedExportStar[]>
+    queuedExportsStar: Map<File, QueuedExportStar[]>
   ): void {
     var members = statement.members;
     if (members) { // export { foo, bar } [from "./baz"]
@@ -2200,7 +2198,7 @@ export class Program extends DiagnosticEmitter {
     /** Path to the other file, if present. */
     foreignPath: string | null,
     /** So far queued `export`s. */
-    queuedExports: Map<File,Map<string,QueuedExport>>
+    queuedExports: Map<File, Map<string, QueuedExport>>
   ): void {
     var localName = member.localName.text;
     var foreignName = member.exportedName.text;
@@ -2223,7 +2221,7 @@ export class Program extends DiagnosticEmitter {
 
       // otherwise queue it
       } else {
-        let queued: Map<string,QueuedExport>;
+        let queued: Map<string, QueuedExport>;
         if (queuedExports.has(localFile)) queued = assert(queuedExports.get(localFile));
         else queuedExports.set(localFile, queued = new Map());
         queued.set(foreignName, new QueuedExport(
@@ -2235,7 +2233,7 @@ export class Program extends DiagnosticEmitter {
 
     // foreign element, i.e. export { foo } from "./bar"
     } else {
-      let queued: Map<string,QueuedExport>;
+      let queued: Map<string, QueuedExport>;
       if (queuedExports.has(localFile)) queued = assert(queuedExports.get(localFile));
       else queuedExports.set(localFile, queued = new Map());
       queued.set(foreignName, new QueuedExport(
@@ -2287,17 +2285,15 @@ export class Program extends DiagnosticEmitter {
     if (element) {
       let exports = parent.exports;
       if (!exports) parent.exports = exports = new Map();
-      else {
-        if (exports.has("default")) {
-          let existing = assert(exports.get("default"));
-          this.errorRelated(
-            DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range,
-            existing.declaration.name.range,
-            "default"
-          );
-          return;
-        }
+      else if (exports.has("default")) {
+        let existing = assert(exports.get("default"));
+        this.errorRelated(
+          DiagnosticCode.Duplicate_identifier_0,
+          declaration.name.range,
+          existing.declaration.name.range,
+          "default"
+        );
+        return;
       }
       exports.set("default", element);
     }
@@ -2312,7 +2308,7 @@ export class Program extends DiagnosticEmitter {
     /** So far queued `import`s. */
     queuedImports: QueuedImport[],
     /** So far queued `export`s. */
-    queuedExports: Map<File,Map<string,QueuedExport>>
+    queuedExports: Map<File, Map<string, QueuedExport>>
   ): void {
     var declarations = statement.declarations;
     if (declarations) { // import { foo [as bar] } from "./baz"
@@ -2352,7 +2348,7 @@ export class Program extends DiagnosticEmitter {
     /** So far queued `import`s. */
     queuedImports: QueuedImport[],
     /** So far queued `export`s. */
-    queuedExports: Map<File,Map<string,QueuedExport>>
+    queuedExports: Map<File, Map<string, QueuedExport>>
   ): void {
     var foreignPathAlt = foreignPath.endsWith(INDEX_SUFFIX) // strip or add index depending on what's already present
       ? foreignPath.substring(0, foreignPath.length - INDEX_SUFFIX.length)
@@ -2748,7 +2744,7 @@ export abstract class Element {
   /** Decorator flags indicating annotated traits. */
   decoratorFlags: DecoratorFlags = DecoratorFlags.NONE;
   /** Member elements. */
-  members: Map<string,DeclaredElement> | null = null;
+  members: Map<string, DeclaredElement> | null = null;
   /** Shadowing type in type space, if any. */
   shadowType: TypeDefinition | null = null;
 
@@ -2792,7 +2788,7 @@ export abstract class Element {
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
   /** Unsets the specific flag or flags. */
-  unset(flag: CommonFlags): void {this.flags &= ~flag; }
+  unset(flag: CommonFlags): void { this.flags &= ~flag; }
   /** Tests if this element has a specific decorator flag or flags. */
   hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
   /** Tests if this element has any of the specified decorator flags. */
@@ -3023,7 +3019,7 @@ export abstract class TypedElement extends DeclaredElement {
 export class File extends Element {
 
   /** File exports. */
-  exports: Map<string,DeclaredElement> | null = null;
+  exports: Map<string, DeclaredElement> | null = null;
   /** File re-exports. */
   exportsStar: File[] | null = null;
   /** Top-level start function of this file. */
@@ -3462,12 +3458,12 @@ export class FunctionPrototype extends DeclaredElement {
   /** Operator kind, if an overload. */
   operatorKind: OperatorKind = OperatorKind.INVALID;
   /** Already resolved instances. */
-  instances: Map<string,Function> | null = null;
+  instances: Map<string, Function> | null = null;
   /** Methods overloading this one, if any. These are unbound. */
   overloads: Set<FunctionPrototype> | null = null;
 
   /** Clones of this prototype that are bound to specific classes. */
-  private boundPrototypes: Map<Class,FunctionPrototype> | null = null;
+  private boundPrototypes: Map<Class, FunctionPrototype> | null = null;
 
   /** Constructs a new function prototype. */
   constructor(
@@ -3566,7 +3562,7 @@ export class Function extends TypedElement {
   /** Function signature. */
   signature: Signature;
   /** Map of locals by name. */
-  localsByName: Map<string,Local> = new Map();
+  localsByName: Map<string, Local> = new Map();
   /** Array of locals by index. */
   localsByIndex: Local[] = [];
   /** List of additional non-parameter locals. */
@@ -3574,7 +3570,7 @@ export class Function extends TypedElement {
   /** Concrete type arguments. */
   typeArguments: Type[] | null;
   /** Contextual type arguments. */
-  contextualTypeArguments: Map<string,Type> | null;
+  contextualTypeArguments: Map<string, Type> | null;
   /** Default control flow. */
   flow!: Flow;
   /** Remembered debug locations. */
@@ -3606,7 +3602,7 @@ export class Function extends TypedElement {
     /** Concrete signature. */
     signature: Signature, // pre-resolved
     /** Contextual type arguments inherited from its parent class, if any. */
-    contextualTypeArguments: Map<string,Type> | null = null
+    contextualTypeArguments: Map<string, Type> | null = null
   ) {
     super(
       ElementKind.FUNCTION,
@@ -3898,7 +3894,7 @@ export class PropertyPrototype extends DeclaredElement {
   instance: Property | null = null;
 
   /** Clones of this prototype that are bound to specific classes. */
-  private boundPrototypes: Map<Class,PropertyPrototype> | null = null;
+  private boundPrototypes: Map<Class, PropertyPrototype> | null = null;
 
   /** Constructs a new property prototype. */
   constructor(
@@ -4030,7 +4026,7 @@ export class IndexSignature extends TypedElement {
 export class ClassPrototype extends DeclaredElement {
 
   /** Instance member prototypes. */
-  instanceMembers: Map<string,DeclaredElement> | null = null;
+  instanceMembers: Map<string, DeclaredElement> | null = null;
   /** Base class prototype, if applicable. */
   basePrototype: ClassPrototype | null = null;
   /** Interface prototypes, if applicable. */
@@ -4040,7 +4036,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Operator overload prototypes. */
   overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
   /** Already resolved instances. */
-  instances: Map<string,Class> | null = null;
+  instances: Map<string, Class> | null = null;
   /** Classes extending this class. */
   extendees: Set<ClassPrototype> = new Set();
 
@@ -4161,13 +4157,13 @@ export class Class extends TypedElement {
   /** Implemented interfaces, if applicable. */
   interfaces: Set<Interface> | null = null;
   /** Contextual type arguments for fields and methods. */
-  contextualTypeArguments: Map<string,Type> | null = null;
+  contextualTypeArguments: Map<string, Type> | null = null;
   /** Current member memory offset. */
   nextMemoryOffset: u32 = 0;
   /** Constructor instance. */
   constructorInstance: Function | null = null;
   /** Operator overloads. */
-  overloads: Map<OperatorKind,Function> | null = null;
+  overloads: Map<OperatorKind, Function> | null = null;
   /** Index signature, if present. */
   indexSignature: IndexSignature | null = null;
   /** Unique class id. */

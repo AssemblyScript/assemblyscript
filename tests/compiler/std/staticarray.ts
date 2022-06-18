@@ -1,7 +1,7 @@
 import { OBJECT, TOTAL_OVERHEAD } from "rt/common";
 
 // from contextual type
-const arr1: StaticArray<i32> = [1,2,3];
+const arr1: StaticArray<i32> = [1, 2, 3];
 assert(arr1[1] == 2);
 assert(arr1.length == 3);
 arr1[1] = 4;
@@ -9,7 +9,7 @@ assert(arr1[1] == 4);
 assert(changetype<OBJECT>(changetype<usize>(arr1) - TOTAL_OVERHEAD).rtId == idof<StaticArray<i32>>());
 
 // from assertion
-const arr2 = [1,2,3] as StaticArray<i32>;
+const arr2 = [1, 2, 3] as StaticArray<i32>;
 assert(arr2[1] == 2);
 assert(arr2.length == 3);
 arr2[1] = 4;
@@ -17,7 +17,7 @@ assert(arr2[1] == 4);
 
 // unique copy
 function test(): StaticArray<i32> {
-  return [5,6,7];
+  return [5, 6, 7];
 }
 var arr3 = test();
 assert(arr3[0] == 5);

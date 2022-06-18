@@ -113,7 +113,7 @@ function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/s
 // @ts-ignore: decorator
 @inline
 function umuldi(u: u64, v: u64): u64 {
-  var u1: u64 , v1: u64, w0: u64, w1: u64, t: u64;
+  var u1: u64, v1: u64, w0: u64, w1: u64, t: u64;
 
   u1 = u & 0xFFFFFFFF;
   v1 = v & 0xFFFFFFFF;
@@ -596,14 +596,12 @@ export namespace NativeMath {
           id = 1;
           x = (x - 1.0) / (x + 1.0);
         }
+      } else if (ix < 0x40038000) {
+        id = 2;
+        x = (x - 1.5) / (1.0 + 1.5 * x);
       } else {
-        if (ix < 0x40038000) {
-          id = 2;
-          x = (x - 1.5) / (1.0 + 1.5 * x);
-        } else {
-          id = 3;
-          x = -1.0 / x;
-        }
+        id = 3;
+        x = -1.0 / x;
       }
     }
     z = x * x;
@@ -2113,14 +2111,12 @@ export namespace NativeMathf {
           id = 1;
           x = (x - 1.0) / (x + 1.0);
         }
+      } else if (ix < 0x401C0000) {
+        id = 2;
+        x = (x - 1.5) / (1.0 + 1.5 * x);
       } else {
-        if (ix < 0x401C0000) {
-          id = 2;
-          x = (x - 1.5) / (1.0 + 1.5 * x);
-        } else {
-          id = 3;
-          x = -1.0 / x;
-        }
+        id = 3;
+        x = -1.0 / x;
       }
     }
     z = x * x;
@@ -3134,8 +3130,7 @@ export function ipow32(x: i32, e: i32): i32 {
     if (e <= 0) {
       if (x == -1) return select<i32>(-1, 1, e & 1);
       return i32(e == 0) | i32(x == 1);
-    }
-    else if (e == 1) return x;
+    } else if (e == 1) return x;
     else if (e == 2) return x * x;
     else if (e < 32) {
       let log = 32 - clz(e);
@@ -3186,8 +3181,7 @@ export function ipow64(x: i64, e: i64): i64 {
     if (e <= 0) {
       if (x == -1) return select<i64>(-1, 1, e & 1);
       return i64(e == 0) | i64(x == 1);
-    }
-    else if (e == 1) return x;
+    } else if (e == 1) return x;
     else if (e == 2) return x * x;
     else if (e < 64) {
       let log = 64 - <i32>clz(e);

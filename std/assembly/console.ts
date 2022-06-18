@@ -7,7 +7,7 @@ import {
 } from "./bindings/dom";
 
 // @ts-ignore: decorator
-@lazy var timers = new Map<string,u64>();
+@lazy var timers = new Map<string, u64>();
 
 export namespace console {
 

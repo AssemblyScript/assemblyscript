@@ -45,8 +45,8 @@ function memmove(dest: usize, src: usize, n: usize): usize {
 }
 
 const base: usize = 8;
-store<u64>(base     , 0x1111111111111111);
-store<u64>(base + 8 , 0x2222222222222222);
+store<u64>(base, 0x1111111111111111);
+store<u64>(base + 8, 0x2222222222222222);
 store<u64>(base + 16, 0x3333333333333333);
 store<u64>(base + 24, 0x4444444444444444);
 

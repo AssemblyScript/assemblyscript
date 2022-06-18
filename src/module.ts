@@ -2510,8 +2510,8 @@ export class Module {
     throw new Error("not implemented"); // JS glue overrides this
   }
 
-  private cachedStringsToPointers: Map<string,usize> = new Map();
-  private cachedPointersToStrings: Map<usize,string | null> = new Map();
+  private cachedStringsToPointers: Map<string, usize> = new Map();
+  private cachedPointersToStrings: Map<usize, string | null> = new Map();
 
   allocStringCached(str: string | null): usize {
     if (str == null) return 0;

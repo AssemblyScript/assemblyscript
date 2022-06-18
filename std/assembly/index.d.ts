@@ -1982,7 +1982,7 @@ interface Function {
 interface IArguments {}
 interface RegExp {}
 
-declare class Map<K,V> {
+declare class Map<K, V> {
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): this;
@@ -2163,7 +2163,7 @@ declare namespace process {
   /** Array of command line arguments passed to the binary upon instantiation. */
   export const argv: string[];
   /** Map of variables in the binary's user environment. */
-  export const env: Map<string,string>;
+  export const env: Map<string, string>;
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
   export function exit(code?: i32): void;
   /** `exit()`’s default value. Defaults to `0`. */
