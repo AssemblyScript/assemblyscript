@@ -12,7 +12,7 @@ export default function runner(exports, runs, allocs) {
     size = (size + 3) & ~3;
     var ptr = alloc(size, 0);
     if (!ptr) throw Error();
-    if ((ptr & 15) != 0) throw Error("invalid alignment: " + (ptr & 15) + " on " + ptr);
+    if ((ptr & 15) !== 0) throw Error("invalid alignment: " + (ptr & 15) + " on " + ptr);
     if (ptrs.indexOf(ptr) >= 0) throw Error("duplicate pointer");
     if (fill) fill(ptr, ptr % 16, size);
     ptrs.push(ptr);

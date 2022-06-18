@@ -61,9 +61,9 @@ globalThis.i64_pow = function i64_pow(left, right) {
       }
       return left.eq(Long.ONE) ? left : Long.ZERO;
     }
-    if (rightLo == 0) return Long.ONE;
-    if (rightLo == 1) return left;
-    if (rightLo == 2) return left.mul(left);
+    if (rightLo === 0) return Long.ONE;
+    if (rightLo === 1) return left;
+    if (rightLo === 2) return left.mul(left);
   }
   var result = Long.ONE;
   while (rightLo | rightHi) {
@@ -129,7 +129,7 @@ globalThis.i64_gt = function i64_gt(left, right) {
 };
 
 globalThis.i64_align = function i64_align(value, alignment) {
-  assert(alignment && (alignment & (alignment - 1)) == 0);
+  assert(alignment && (alignment & (alignment - 1)) === 0);
   var mask = Long.fromInt(alignment - 1);
   return value.add(mask).and(mask.not());
 };

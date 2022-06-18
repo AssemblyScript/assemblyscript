@@ -515,8 +515,8 @@ function generateCli() {
     sendMessage: console.log,
     stdout: stdout,
     resolveModuleImport: ({ importedModuleId, currentModuleId }) => {
-      if (currentModuleId == "cli/index") {
-        if (importedModuleId == "../src") return prefix + "/src/index";
+      if (currentModuleId === "cli/index") {
+        if (importedModuleId === "../src") return prefix + "/src/index";
       }
       return null;
     },

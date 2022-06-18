@@ -369,7 +369,7 @@ function ensurePackageJson() {
       pkg["scripts"] = scripts;
       updated = true;
     }
-    if (!scripts["test"] || scripts["test"] == npmDefaultTest) {
+    if (!scripts["test"] || scripts["test"] === npmDefaultTest) {
       scripts["test"] = "node tests";
       pkg["scripts"] = scripts;
       updated = true;

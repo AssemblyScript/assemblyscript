@@ -14,15 +14,15 @@ do {
   const token = tn.next();
   const range = tn.range();
   process.stdout.write(Token[token] + " @ " + source.lineAt(range.start) + ":" + source.columnAt());
-  if (token == Token.IDENTIFIER) {
+  if (token === Token.IDENTIFIER) {
     process.stdout.write(" > " + tn.readIdentifier());
-  } else if (token == Token.INTEGERLITERAL) {
+  } else if (token === Token.INTEGERLITERAL) {
     process.stdout.write(" > " + tn.readInteger());
-  } else if (token == Token.FLOATLITERAL) {
+  } else if (token === Token.FLOATLITERAL) {
     process.stdout.write(" > " + tn.readFloat());
-  } else if (token == Token.STRINGLITERAL) {
+  } else if (token === Token.STRINGLITERAL) {
     process.stdout.write(" > " + tn.readString());
-  } else if (token == Token.ENDOFFILE) {
+  } else if (token === Token.ENDOFFILE) {
     process.stdout.write("\n");
     break;
   } else {

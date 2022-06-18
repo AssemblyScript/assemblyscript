@@ -261,11 +261,11 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   }
 
   function defaultComparator(a, b) {
-    if (a == b) {
-      if (a != 0) return 0;
+    if (a === b) {
+      if (a !== 0) return 0;
       a = 1 / a, b = 1 / b;
     } else {
-      var nanA = a != a, nanB = b != b;
+      var nanA = a !== a, nanB = b !== b;
       if (nanA | nanB) return nanA - nanB;
       if (a == null) a = String(a);
       if (b == null) b = String(b);
@@ -306,7 +306,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
       });
     }
 
-    if (Ctr != Array) {
+    if (Ctr !== Array) {
       Object.defineProperty(Ctr, "wrap", {
         value: function wrap(buffer, byteOffset, length) {
           return new Ctr(buffer, byteOffset, length);

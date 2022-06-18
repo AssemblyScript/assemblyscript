@@ -211,7 +211,7 @@ export async function instantiate(module, imports = {}) {
       h: new BigUint64Array(memory.buffer)[pointer + 24 >>> 3],
       i: new Int32Array(memory.buffer)[pointer + 32 >>> 2],
       j: new Uint32Array(memory.buffer)[pointer + 36 >>> 2],
-      k: new Uint8Array(memory.buffer)[pointer + 40 >>> 0] != 0,
+      k: new Uint8Array(memory.buffer)[pointer + 40 >>> 0] !== 0,
       l: new Float32Array(memory.buffer)[pointer + 44 >>> 2],
       m: new Float64Array(memory.buffer)[pointer + 48 >>> 3],
       n: __liftString(new Uint32Array(memory.buffer)[pointer + 56 >>> 2]),

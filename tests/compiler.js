@@ -240,7 +240,7 @@ async function runTest(basename) {
     } else {
       const expected = fs.readFileSync(path.join(basedir, basename + ".debug.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
       if (args.noDiff) {
-        if (expected != actual) {
+        if (expected !== actual) {
           compareFixture.end(FAILURE);
           return prepareResult(FAILURE, "fixture mismatch");
         }
@@ -504,7 +504,7 @@ function evaluateResult(failedTests, skippedTests) {
 if (args.parallel && coreCount > 2) {
   if (cluster.isWorker) {
     process.on("message", msg => {
-      if (msg.cmd != "run") throw Error("invalid command: " + JSON.stringify(msg));
+      if (msg.cmd !== "run") throw Error("invalid command: " + JSON.stringify(msg));
       stdoutColors.enabled = !msg.noColors;
       stderrColors.enabled = !msg.noColors;
       runTest(msg.test).then(({ code, message }) => {

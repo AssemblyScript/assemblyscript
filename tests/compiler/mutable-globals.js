@@ -6,6 +6,6 @@ export function preInstantiate(imports, exports) {
 export function postStart(instance) {
   // adds 10 to both
   const exports = instance.exports;
-  if (exports.external.valueOf() != 133) throw Error("unexpected value");
-  if (exports.internal.valueOf() != 134) throw Error("unexpected value");
+  if (exports.external.valueOf() !== 133) throw Error("unexpected value");
+  if (exports.internal.valueOf() !== 134) throw Error("unexpected value");
 }

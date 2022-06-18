@@ -47,6 +47,7 @@ module.exports = {
       ]
     }],
 
+    "eqeqeq": ["error", "smart"],
     "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "comma-spacing": ["error", { "before": false, "after": true }],
     "block-spacing": "error",
@@ -203,6 +204,8 @@ module.exports = {
         "std/assembly/**/*.ts"
       ],
       rules: {
+        "eqeqeq": "off",
+
         // We are implementing with --noLib, so we shadow all the time
         "no-shadow-restricted-names": "off",
 
@@ -248,12 +251,14 @@ module.exports = {
     {
       files: [
         "./tests/compiler/**/*.ts",
+        "./tests/asconfig/**/*.ts",
         "./lib/loader/tests/assembly/**/*.ts"
       ],
       rules: {
         // Tests typically include unusual code patterns on purpose. This is
         // very likely not an extensive list, but covers what's there so far.
         "no-empty": "off",
+        "eqeqeq": "off",
         "no-cond-assign": "off",
         "no-compare-neg-zero": "off",
         "no-inner-declarations": "off",

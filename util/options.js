@@ -40,7 +40,7 @@ export function parse(argv, config, propagateDefaults = true) {
   // iterate over argv
   for (var i = 0, k = (argv = argv.slice()).length; i < k; ++i) {
     let arg = argv[i];
-    if (arg == "--") { ++i; break; }
+    if (arg === "--") { ++i; break; }
     let match = /^(?:(-\w)(?:=(.*))?|(--\w{2,})(?:=(.*))?)$/.exec(arg), option, key;
     if (match) {
       if (config[arg]) option = config[key = arg]; // exact
@@ -51,7 +51,7 @@ export function parse(argv, config, propagateDefaults = true) {
         option = config[key = match[3].substring(2)];
         if (option && match[4] != null) argv[i--] = match[4];
       }
-    } else if (arg.charCodeAt(0) == 45) {
+    } else if (arg.charCodeAt(0) === 45) {
       option = config[key = arg]; // exact
     } else {
       args.push(arg);  // argument
@@ -64,7 +64,7 @@ export function parse(argv, config, propagateDefaults = true) {
       } else if (option.type == null || option.type === "b") {
         // boolean flag not taking a value
         options[key] = true;
-      } else if (i + 1 < argv.length && argv[i + 1].charCodeAt(0) != 45) {
+      } else if (i + 1 < argv.length && argv[i + 1].charCodeAt(0) !== 45) {
         // non-boolean with given value
         switch (option.type) {
           case "i": options[key] = parseInt(argv[++i], 10); break;

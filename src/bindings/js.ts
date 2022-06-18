@@ -190,7 +190,7 @@ export class JSBuilder extends ExportsWalker {
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let value = _values[i];
-        if (value.kind != ElementKind.ENUMVALUE) continue;
+        if (value.kind !== ElementKind.ENUMVALUE) continue;
         indent(sb, this.indentLevel);
         sb.push("values[values.");
         sb.push(value.name);
@@ -235,7 +235,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(element.type.toString());
       sb.push("\n");
       indent(sb, this.indentLevel + 1);
-      if (moduleName != "env") {
+      if (moduleName !== "env") {
         sb.push("__module");
         sb.push(moduleId.toString());
         sb.push(".");
@@ -279,7 +279,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(element.signature.toString());
       sb.push("\n");
       indent(sb, this.indentLevel + 1);
-      if (moduleName != "env") {
+      if (moduleName !== "env") {
         sb.push(moduleName);
         sb.push(".");
       }
@@ -321,7 +321,7 @@ export class JSBuilder extends ExportsWalker {
         indentText(code, 1, expr);
         expr.push("\n})()");
       } else {
-        if (moduleName != "env") {
+        if (moduleName !== "env") {
           expr.push("__module");
           expr.push(moduleId.toString());
           expr.push(".");
@@ -336,7 +336,7 @@ export class JSBuilder extends ExportsWalker {
       indentText(code, this.indentLevel, expr, true);
       code = expr.join("");
       indent(sb, this.indentLevel);
-      if (signature.returnType != Type.void) {
+      if (signature.returnType !== Type.void) {
         sb.push("return ");
         this.makeLowerToValue(code, signature.returnType, sb);
         sb.push(";\n");
@@ -411,7 +411,7 @@ export class JSBuilder extends ExportsWalker {
         expr.push(element.getParameterName(i));
       }
       expr.push(")");
-      if (signature.returnType != Type.void) {
+      if (signature.returnType !== Type.void) {
         indent(sb, this.indentLevel);
         sb.push("return ");
         this.makeLiftFromValue(expr.join(""), signature.returnType, sb);
@@ -468,16 +468,16 @@ export class JSBuilder extends ExportsWalker {
     let decorator = findDecorator(DecoratorKind.EXTERNAL_JS, element.decoratorNodes);
     if (decorator) {
       let args = decorator.args;
-      if (args && args.length == 1) {
+      if (args && args.length === 1) {
         let codeArg = args[0];
-        if (codeArg.kind == NodeKind.LITERAL) {
+        if (codeArg.kind === NodeKind.LITERAL) {
           let literal = <LiteralExpression>codeArg;
-          if (literal.literalKind == LiteralKind.STRING) {
+          if (literal.literalKind === LiteralKind.STRING) {
             return (<StringLiteralExpression>literal).value;
           }
-          if (literal.literalKind == LiteralKind.TEMPLATE) {
+          if (literal.literalKind === LiteralKind.TEMPLATE) {
             let parts = (<TemplateLiteralExpression>literal).parts;
-            if (parts.length == 1) {
+            if (parts.length === 1) {
               return parts[0];
             }
           }
@@ -519,14 +519,14 @@ export class JSBuilder extends ExportsWalker {
       }
       let resetPos = sb.length;
       sb.push(": Object.assign(Object.create(");
-      if (moduleName == "env") {
+      if (moduleName === "env") {
         sb.push("globalThis");
       } else {
         sb.push("__module");
         sb.push(moduleId.toString());
       }
       sb.push("), ");
-      if (moduleName == "env") {
+      if (moduleName === "env") {
         sb.push("imports.env || {}, ");
       }
       sb.push("{\n");
@@ -535,14 +535,14 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys2 = Map_keys(module), j = 0, l = _keys2.length; j < l; ++j) {
         let name = _keys2[j];
         let elem = assert(module.get(name));
-        if (elem.kind == ElementKind.FUNCTION) {
+        if (elem.kind === ElementKind.FUNCTION) {
           let func = <Function>elem;
           let code = this.getExternalCode(func);
           if (!isPlainFunction(func.signature, Mode.IMPORT) || !isIdentifier(name) || code) {
             this.makeFunctionImport(moduleName, name, <Function>elem, code);
             ++numInstrumented;
           }
-        } else if (elem.kind == ElementKind.GLOBAL) {
+        } else if (elem.kind === ElementKind.GLOBAL) {
           let global = <Global>elem;
           if (!isPlainValue(global.type, Mode.IMPORT) || !isIdentifier(name)) {
             this.makeGlobalImport(moduleName, name, global);
@@ -553,7 +553,7 @@ export class JSBuilder extends ExportsWalker {
       --this.indentLevel;
       if (!numInstrumented) {
         sb.length = resetPos;
-        if (moduleName == "env") {
+        if (moduleName === "env") {
           sb.push(": Object.assign(Object.create(globalThis), imports.env || {})");
         } else {
           sb.push(": __module");
@@ -578,7 +578,7 @@ export class JSBuilder extends ExportsWalker {
     var map = new Array<string>();
     for (let _keys = Map_keys(mappings), i = 0, k = _keys.length; i < k; ++i) {
       let moduleName = _keys[i];
-      if (moduleName == "env") {
+      if (moduleName === "env") {
         map.push("  const env = imports.env;\n");
       } else {
         let moduleId = <i32>mappings.get(moduleName);
@@ -857,7 +857,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push("  return exports;\n}\n");
     }
     --this.indentLevel;
-    assert(this.indentLevel == 0);
+    assert(this.indentLevel === 0);
 
     if (this.esm) {
       sb.push("export const {\n  ");
@@ -879,7 +879,7 @@ export class JSBuilder extends ExportsWalker {
       let importExpr = new Array<string>();
       for (let _keys = Map_keys(mappings), i = 0, k = _keys.length; i < k; ++i) {
         let moduleName = _keys[i];
-        if (moduleName == "env") {
+        if (moduleName === "env") {
           indent(sb, 2);
           sb.push("env: globalThis,\n");
         } else {
@@ -920,7 +920,7 @@ export class JSBuilder extends ExportsWalker {
   }
 
   ensureModuleId(moduleName: string): i32 {
-    if (moduleName == "env") return -1;
+    if (moduleName === "env") return -1;
     var importMap = this.importMappings;
     let moduleId = importMap.has(moduleName)
       ? i32(importMap.get(moduleName))
@@ -939,7 +939,7 @@ export class JSBuilder extends ExportsWalker {
         if (member.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED)) return false;
         if (member.is(CommonFlags.CONSTRUCTOR)) {
           // a generated constructor is ok
-          if (member.declaration.range != this.program.nativeRange) return false;
+          if (member.declaration.range !== this.program.nativeRange) return false;
         }
       }
     }
@@ -974,9 +974,9 @@ export class JSBuilder extends ExportsWalker {
         this.needsLiftStaticArray = true;
       } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {
         sb.push("__liftTypedArray(");
-        if (clazz.name == "Uint64Array") {
+        if (clazz.name === "Uint64Array") {
           sb.push("BigUint64Array");
-        } else if (clazz.name == "Int64Array") {
+        } else if (clazz.name === "Int64Array") {
           sb.push("BigInt64Array");
         } else {
           sb.push(clazz.name); // TODO: what if extended?
@@ -1006,10 +1006,10 @@ export class JSBuilder extends ExportsWalker {
       sb.push(")");
     } else {
       sb.push(name);
-      if (type.isUnsignedIntegerValue && type.size == 32) {
+      if (type.isUnsignedIntegerValue && type.size === 32) {
         sb.push(" >>> 0");
-      } else if (type == Type.bool) {
-        sb.push(" != 0");
+      } else if (type === Type.bool) {
+        sb.push(" !== 0");
       }
     }
   }
@@ -1047,9 +1047,9 @@ export class JSBuilder extends ExportsWalker {
       } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__lowerTypedArray(");
-        if (valueType == Type.u64) {
+        if (valueType === Type.u64) {
           sb.push("BigUint64Array");
-        } else if (valueType == Type.i64) {
+        } else if (valueType === Type.i64) {
           sb.push("BigInt64Array");
         } else {
           sb.push(clazz.name); // TODO: what if extended?
@@ -1083,9 +1083,9 @@ export class JSBuilder extends ExportsWalker {
       }
     } else {
       sb.push(name); // basic value
-      if (type.isIntegerValue && type.size == 64) {
+      if (type.isIntegerValue && type.size === 64) {
         sb.push(" || 0n");
-      } else if (type == Type.bool) {
+      } else if (type === Type.bool) {
         // may be stored to an Uint8Array, make sure to store 1/0
         sb.push(" ? 1 : 0");
       }
@@ -1105,25 +1105,25 @@ export class JSBuilder extends ExportsWalker {
       expr.push(" >>> 2]");
       this.makeLiftFromValue(expr.join(""), valueType, sb);
     } else {
-      if (valueType == Type.i8) {
+      if (valueType === Type.i8) {
         sb.push("new Int8Array(memory.buffer)[");
-      } else if (valueType == Type.u8 || valueType == Type.bool) {
+      } else if (valueType === Type.u8 || valueType === Type.bool) {
         sb.push("new Uint8Array(memory.buffer)[");
-      } else if (valueType == Type.i16) {
+      } else if (valueType === Type.i16) {
         sb.push("new Int16Array(memory.buffer)[");
-      } else if (valueType == Type.u16) {
+      } else if (valueType === Type.u16) {
         sb.push("new Uint16Array(memory.buffer)[");
-      } else if (valueType == Type.i32 || valueType == Type.isize32) {
+      } else if (valueType === Type.i32 || valueType === Type.isize32) {
         sb.push("new Int32Array(memory.buffer)[");
-      } else if (valueType == Type.u32 || valueType == Type.usize32) {
+      } else if (valueType === Type.u32 || valueType === Type.usize32) {
         sb.push("new Uint32Array(memory.buffer)[");
-      } else if (valueType == Type.i64 || valueType == Type.isize64) {
+      } else if (valueType === Type.i64 || valueType === Type.isize64) {
         sb.push("new BigInt64Array(memory.buffer)[");
-      } else if (valueType == Type.u64 || valueType == Type.usize64) {
+      } else if (valueType === Type.u64 || valueType === Type.usize64) {
         sb.push("new BigUint64Array(memory.buffer)[");
-      } else if (valueType == Type.f32) {
+      } else if (valueType === Type.f32) {
         sb.push("new Float32Array(memory.buffer)[");
-      } else if (valueType == Type.f64) {
+      } else if (valueType === Type.f64) {
         sb.push("new Float64Array(memory.buffer)[");
       } else {
         sb.push("{ throw Error(\"unsupported type\"); }");
@@ -1133,8 +1133,8 @@ export class JSBuilder extends ExportsWalker {
       sb.push(" >>> ");
       sb.push(valueType.alignLog2.toString());
       sb.push("]");
-      if (valueType == Type.bool) {
-        sb.push(" != 0");
+      if (valueType === Type.bool) {
+        sb.push(" !== 0");
       }
     }
   }
@@ -1150,25 +1150,25 @@ export class JSBuilder extends ExportsWalker {
     }
     if (valueType.isInternalReference) {
       sb.push("new Uint32Array(memory.buffer)[");
-    } else if (valueType == Type.i8) {
+    } else if (valueType === Type.i8) {
       sb.push("new Int8Array(memory.buffer)[");
-    } else if (valueType == Type.u8 || valueType == Type.bool) {
+    } else if (valueType === Type.u8 || valueType === Type.bool) {
       sb.push("new Uint8Array(memory.buffer)[");
-    } else if (valueType == Type.i16) {
+    } else if (valueType === Type.i16) {
       sb.push("new Int16Array(memory.buffer)[");
-    } else if (valueType == Type.u16) {
+    } else if (valueType === Type.u16) {
       sb.push("new Uint16Array(memory.buffer)[");
-    } else if (valueType == Type.i32 || valueType == Type.isize32) {
+    } else if (valueType === Type.i32 || valueType === Type.isize32) {
       sb.push("new Int32Array(memory.buffer)[");
-    } else if (valueType == Type.u32 || valueType == Type.usize32) {
+    } else if (valueType === Type.u32 || valueType === Type.usize32) {
       sb.push("new Uint32Array(memory.buffer)[");
-    } else if (valueType == Type.i64 || valueType == Type.isize64) {
+    } else if (valueType === Type.i64 || valueType === Type.isize64) {
       sb.push("new BigInt64Array(memory.buffer)[");
-    } else if (valueType == Type.u64 || valueType == Type.usize64) {
+    } else if (valueType === Type.u64 || valueType === Type.usize64) {
       sb.push("new BigUint64Array(memory.buffer)[");
-    } else if (valueType == Type.f32) {
+    } else if (valueType === Type.f32) {
       sb.push("new Float32Array(memory.buffer)[");
-    } else if (valueType == Type.f64) {
+    } else if (valueType === Type.f64) {
       sb.push("new Float64Array(memory.buffer)[");
     } else {
       if (skipTail) {
@@ -1208,7 +1208,7 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.FIELD) continue;
+        if (member.kind !== ElementKind.FIELD) continue;
         let field = <Field>member;
         indent(sb, this.indentLevel);
         sb.push(field.name);
@@ -1250,7 +1250,7 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.FIELD) continue;
+        if (member.kind !== ElementKind.FIELD) continue;
         let field = <Field>member;
         indent(sb, this.indentLevel);
         this.makeLowerToMemory(field.type, sb, "pointer + " + field.memoryOffset.toString(), "value." + memberName);
@@ -1275,23 +1275,23 @@ enum Mode {
 }
 
 function isPlainValue(type: Type, kind: Mode): bool {
-  if (kind == Mode.IMPORT) {
+  if (kind === Mode.IMPORT) {
     // requires coercion of undefined to 0n
-    if (type.isIntegerValue && type.size == 64) return false;
+    if (type.isIntegerValue && type.size === 64) return false;
     // may be stored to an Uint8Array, make sure to store 1/0
-    if (type == Type.bool) return false;
+    if (type === Type.bool) return false;
   } else {
     // requires coercion from signed to unsigned
-    if (type.isUnsignedIntegerValue && type.size == 32) return false;
+    if (type.isUnsignedIntegerValue && type.size === 32) return false;
     // requires coercion from 1/0 to true/false
-    if (type == Type.bool) return false;
+    if (type === Type.bool) return false;
   }
   return !type.isInternalReference;
 }
 
 function isPlainFunction(signature: Signature, mode: Mode): bool {
   var parameterTypes = signature.parameterTypes;
-  var inverseMode = mode == Mode.IMPORT ? Mode.EXPORT : Mode.IMPORT;
+  var inverseMode = mode === Mode.IMPORT ? Mode.EXPORT : Mode.IMPORT;
   for (let i = 0, k = parameterTypes.length; i < k; ++i) {
     if (!isPlainValue(parameterTypes[i], inverseMode)) return false;
   }
@@ -1304,7 +1304,7 @@ function indentText(text: string, indentLevel: i32, sb: string[], butFirst: bool
   var length = text.length;
   var pos = 0;
   while (pos < length) {
-    if (text.charCodeAt(pos) == CharCode.LINEFEED) {
+    if (text.charCodeAt(pos) === CharCode.LINEFEED) {
       if (butFirst) butFirst = false;
       else indent(sb, indentLevel);
       sb.push(text.substring(lineStart, lineStart = pos + 1));

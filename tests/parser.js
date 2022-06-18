@@ -56,7 +56,7 @@ if (argv.length) {
 var failures = 0;
 
 for (const filename of tests) {
-  if (filename.charAt(0) == "_" || filename.endsWith(".fixture.ts")) continue;
+  if (filename.charAt(0) === "_" || filename.endsWith(".fixture.ts")) continue;
 
   console.log(stdoutColors.white("Testing parser/" + filename));
 

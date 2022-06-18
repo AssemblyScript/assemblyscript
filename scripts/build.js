@@ -145,17 +145,17 @@ const diagnosticsPlugin = {
         }
         out.push("  " + key + " = " + messages[text]);
       });
-      
+
       out.push("\n}\n\n");
       out.push("/** Translates a diagnostic code to its respective string. */\n");
       out.push("export function diagnosticCodeToString(code: DiagnosticCode): string {\n  switch (code) {\n");
-      
+
       Object.keys(messages).forEach(text => {
         out.push("    case " + messages[text] + ": return " + JSON.stringify(text) + ";\n");
       });
-      
+
       out.push("    default: return \"\";\n  }\n}\n");
-      
+
       const generated = out.join("");
       fs.writeFileSync(path.join(dirname, "..", "src", "diagnosticMessages.generated.ts"), generated);
       return {
@@ -261,7 +261,7 @@ function buildDefinitions() {
 if (watch) {
   console.log("Watching for changes. Press RETURN to rebuild definitions.\n");
   process.stdin.on("data", data => {
-    if (data == "\r\n" || data == "\n") {
+    if (data === "\r\n" || data === "\n") {
       process.stdout.write("\u001b[1A");
       if (!buildingDefinitions) buildDefinitions();
     }

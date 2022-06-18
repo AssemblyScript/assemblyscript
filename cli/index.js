@@ -317,7 +317,7 @@ export async function main(argv, options) {
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
   assemblyscript.setBundleVersion(compilerOptions, bundleMajorVersion, bundleMinorVersion, bundlePatchVersion);
-  if (!opts.stackSize && opts.runtime == "incremental") {
+  if (!opts.stackSize && opts.runtime === "incremental") {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);
@@ -889,7 +889,7 @@ export async function main(argv, options) {
       }
 
       // Post-process source map
-      if (wasm.sourceMap != "") {
+      if (wasm.sourceMap !== "") {
         if (opts.outFile.length) {
           let map = JSON.parse(wasm.sourceMap);
           map.sourceRoot = `./${basename}`;

@@ -10,7 +10,7 @@ export function preInstantiate(imports, exports) {
 
 export function postInstantiate(instance) {
   const exports = instance.exports;
-  const internalValue = exports.internalValue;
-  if (internalValue != 9007199254740991n) throw Error("unexpected value");
-  if (exports.getInternalValue() != internalValue) throw Error("unexpected value");
+  const internalValue = exports.internalValue.valueOf();
+  if (internalValue !== 9007199254740991n) throw Error("unexpected value");
+  if (exports.getInternalValue() !== internalValue) throw Error("unexpected value");
 }
