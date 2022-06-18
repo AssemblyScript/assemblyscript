@@ -23,8 +23,8 @@ export function normalizePath(path: string): string {
 
   // trim leading './'
   while (pos + 1 < len &&
-    path.charCodeAt(pos) == CharCode.DOT &&
-    path.charCodeAt(pos + 1) == separator
+    path.charCodeAt(pos) === CharCode.DOT &&
+    path.charCodeAt(pos + 1) === separator
   ) {
     pos += 2;
   }
@@ -41,14 +41,14 @@ export function normalizePath(path: string): string {
 
     // we are only interested in '/.' sequences ...
     if (
-      path.charCodeAt(pos) == separator &&
-      path.charCodeAt(pos + 1) == CharCode.DOT
+      path.charCodeAt(pos) === separator &&
+      path.charCodeAt(pos + 1) === CharCode.DOT
     ) {
       // '/.' ( '/' | $ )
-      atEnd = pos + 2 == len;
+      atEnd = pos + 2 === len;
       if (atEnd ||
         pos + 2 < len &&
-        path.charCodeAt(pos + 2) == separator
+        path.charCodeAt(pos + 2) === separator
       ) {
         path = atEnd
           ? path.substring(0, pos)
@@ -58,19 +58,19 @@ export function normalizePath(path: string): string {
       }
 
       // '/.' ( './' | '.' $ )
-      atEnd = pos + 3 == len;
-      if (atEnd && path.charCodeAt(pos + 2) == CharCode.DOT ||
+      atEnd = pos + 3 === len;
+      if (atEnd && path.charCodeAt(pos + 2) === CharCode.DOT ||
         pos + 3 < len &&
-        path.charCodeAt(pos + 2) == CharCode.DOT &&
-        path.charCodeAt(pos + 3) == separator
+        path.charCodeAt(pos + 2) === CharCode.DOT &&
+        path.charCodeAt(pos + 3) === separator
       ) {
         // find preceeding '/'
         let ipos = pos;
         while (--ipos >= 0) {
-          if (path.charCodeAt(ipos) == separator) {
-            if (pos - ipos != 3 ||
-              path.charCodeAt(ipos + 1) != CharCode.DOT ||
-              path.charCodeAt(ipos + 2) != CharCode.DOT
+          if (path.charCodeAt(ipos) === separator) {
+            if (pos - ipos !== 3 ||
+              path.charCodeAt(ipos + 1) !== CharCode.DOT ||
+              path.charCodeAt(ipos + 2) !== CharCode.DOT
             ) { // exclude '..' itself
               path = atEnd
                 ? path.substring(0, ipos)
@@ -84,9 +84,9 @@ export function normalizePath(path: string): string {
 
         // if there's no preceeding '/', trim start if non-empty
         if (ipos < 0 && pos > 0) {
-          if (pos != 2 ||
-            path.charCodeAt(0) != CharCode.DOT ||
-            path.charCodeAt(1) != CharCode.DOT
+          if (pos !== 2 ||
+            path.charCodeAt(0) !== CharCode.DOT ||
+            path.charCodeAt(1) !== CharCode.DOT
           ) { // exclude '..' itself
             path = path.substring(pos + 4);
             len = path.length;
@@ -114,13 +114,13 @@ export function resolvePath(normalizedPath: string, origin: string): string {
 export function dirname(normalizedPath: string): string {
   var pos = normalizedPath.length;
   if (pos <= 1) {
-    if (pos == 0) return ".";
-    if (normalizedPath.charCodeAt(0) == separator) {
+    if (pos === 0) return ".";
+    if (normalizedPath.charCodeAt(0) === separator) {
       return normalizedPath;
     }
   }
   while (--pos > 0) {
-    if (normalizedPath.charCodeAt(pos) == separator) {
+    if (normalizedPath.charCodeAt(pos) === separator) {
       return normalizedPath.substring(0, pos);
     }
   }

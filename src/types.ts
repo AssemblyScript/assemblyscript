@@ -148,7 +148,7 @@ export class Type {
 
   /** Returns the closest int type representing this type. */
   get intType(): Type {
-    if (this == Type.auto) return this; // keep auto as a hint
+    if (this === Type.auto) return this; // keep auto as a hint
     switch (this.kind) {
       case TypeKind.I8: return Type.i8;
       case TypeKind.I16: return Type.i16;
@@ -156,12 +156,12 @@ export class Type {
       case TypeKind.I32: return Type.i32;
       case TypeKind.F64:
       case TypeKind.I64: return Type.i64;
-      case TypeKind.ISIZE: return this.size == 64 ? Type.isize64 : Type.isize32;
+      case TypeKind.ISIZE: return this.size === 64 ? Type.isize64 : Type.isize32;
       case TypeKind.U8: return Type.u8;
       case TypeKind.U16: return Type.u16;
       case TypeKind.U32: return Type.u32;
       case TypeKind.U64: return Type.u64;
-      case TypeKind.USIZE: return this.size == 64 ? Type.usize64 : Type.usize32;
+      case TypeKind.USIZE: return this.size === 64 ? Type.usize64 : Type.usize32;
       case TypeKind.BOOL:
       default: return Type.i32;
     }
@@ -169,7 +169,7 @@ export class Type {
 
   /** Substitutes this type with the auto type if this type is void. */
   get exceptVoid(): Type {
-    if (this.kind == TypeKind.VOID) return Type.auto;
+    if (this.kind === TypeKind.VOID) return Type.auto;
     return this;
   }
 
@@ -230,7 +230,7 @@ export class Type {
 
   /** Tests if this type represents a boolean value. */
   get isBooleanValue(): bool {
-    return this == Type.bool;
+    return this === Type.bool;
   }
 
   /** Tests if this type represents a vector value. */
@@ -352,9 +352,9 @@ export class Type {
   }
 
   /** Tests if this type has (all of) the specified flags. */
-  is(flags: TypeFlags): bool { return (this.flags & flags) == flags; }
+  is(flags: TypeFlags): bool { return (this.flags & flags) === flags; }
   /** Tests if this type has any of the specified flags. */
-  isAny(flags: TypeFlags): bool { return (this.flags & flags) != 0; }
+  isAny(flags: TypeFlags): bool { return (this.flags & flags) !== 0; }
 
   /** Composes the respective nullable type of this type. */
   asNullable(): Type {
@@ -372,12 +372,12 @@ export class Type {
 
   /** Tests if this type equals the specified. */
   equals(other: Type): bool {
-    if (this.kind != other.kind) return false;
+    if (this.kind !== other.kind) return false;
     if (this.isReference) {
       return (
-        this.classReference == other.classReference &&
-        this.signatureReference == other.signatureReference &&
-        this.isNullableReference == other.isNullableReference
+        this.classReference === other.classReference &&
+        this.signatureReference === other.signatureReference &&
+        this.isNullableReference === other.isNullableReference
       );
     }
     return true;
@@ -400,7 +400,7 @@ export class Type {
             if (targetFunction = target.getSignature()) {
               return currentFunction.isAssignableTo(targetFunction);
             }
-          } else if (this.isExternalReference && (this.kind == target.kind || (target.kind == TypeKind.ANYREF && this.kind != TypeKind.EXTERNREF))) {
+          } else if (this.isExternalReference && (this.kind === target.kind || (target.kind === TypeKind.ANYREF && this.kind !== TypeKind.EXTERNREF))) {
             return true;
           }
         }
@@ -411,13 +411,13 @@ export class Type {
           if (
             !signednessIsRelevant ||
             this.isBooleanValue || // a bool (0 or 1) can be safely assigned to all sorts of integers
-            this.isSignedIntegerValue == target.isSignedIntegerValue
+            this.isSignedIntegerValue === target.isSignedIntegerValue
           ) {
             return this.size <= target.size;
           }
-        } else if (target.kind == TypeKind.F32) {
+        } else if (target.kind === TypeKind.F32) {
           return this.size <= 23; // mantissa bits
-        } else if (target.kind == TypeKind.F64) {
+        } else if (target.kind === TypeKind.F64) {
           return this.size <= 52; // ^
         }
       } else if (this.isFloatValue) {
@@ -426,7 +426,7 @@ export class Type {
         }
       } else if (this.isVectorValue) {
         if (target.isVectorValue) {
-          return this.size == target.size;
+          return this.size === target.size;
         }
       }
     }
@@ -439,12 +439,12 @@ export class Type {
     else if (target.isReference) return false;
     // not dealing with references from here on
     if (this.isIntegerValue) {
-      return target.isIntegerValue && target.size == this.size && (
+      return target.isIntegerValue && target.size === this.size && (
         !signednessIsRelevant ||
-        this.isSignedIntegerValue == target.isSignedIntegerValue
+        this.isSignedIntegerValue === target.isSignedIntegerValue
       );
     }
-    return this.kind == target.kind;
+    return this.kind === target.kind;
   }
 
   /** Tests if a value of this type can be changed to the target type using `changetype`. */
@@ -452,9 +452,9 @@ export class Type {
     // special in that it allows integer references as well
     if (this.is(TypeFlags.INTEGER) && target.is(TypeFlags.INTEGER)) {
       let size = this.size;
-      return size == target.size && (size >= 32 || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED));
+      return size === target.size && (size >= 32 || this.is(TypeFlags.SIGNED) === target.is(TypeFlags.SIGNED));
     }
-    return this.kind == target.kind;
+    return this.kind === target.kind;
   }
 
   /** Determines the common denominator type of two types, if there is any. */
@@ -522,7 +522,7 @@ export class Type {
       case TypeKind.U32:
       case TypeKind.BOOL: return TypeRef.I32;
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: if (this.size != 64) return TypeRef.I32;
+      case TypeKind.USIZE: if (this.size !== 64) return TypeRef.I32;
       case TypeKind.I64:
       case TypeKind.U64: return TypeRef.I64;
       case TypeKind.F32: return TypeRef.F32;
@@ -817,13 +817,13 @@ export class Signature {
     }
 
     // check rest parameter
-    if (this.hasRest != other.hasRest) return false;
+    if (this.hasRest !== other.hasRest) return false;
 
     // check parameter types
     var thisParameterTypes = this.parameterTypes;
     var otherParameterTypes = other.parameterTypes;
     var numParameters = thisParameterTypes.length;
-    if (numParameters != otherParameterTypes.length) return false;
+    if (numParameters !== otherParameterTypes.length) return false;
     for (let i = 0; i < numParameters; ++i) {
       if (!thisParameterTypes[i].equals(otherParameterTypes[i])) return false;
     }
@@ -845,13 +845,13 @@ export class Signature {
     }
 
     // check rest parameter
-    if (this.hasRest != target.hasRest) return false; // TODO
+    if (this.hasRest !== target.hasRest) return false; // TODO
 
     // check parameter types
     var thisParameterTypes = this.parameterTypes;
     var targetParameterTypes = target.parameterTypes;
     var numParameters = thisParameterTypes.length;
-    if (numParameters != targetParameterTypes.length) return false; // TODO
+    if (numParameters !== targetParameterTypes.length) return false; // TODO
     for (let i = 0; i < numParameters; ++i) {
       let thisParameterType = thisParameterTypes[i];
       let targetParameterType = targetParameterTypes[i];
@@ -861,7 +861,7 @@ export class Signature {
     // check return type
     var thisReturnType = this.returnType;
     var targetReturnType = target.returnType;
-    return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
+    return thisReturnType === targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
   }
 
   /** Tests if this signature has at least one managed operand. */
@@ -917,9 +917,9 @@ export class Signature {
       let restIndex = this.hasRest ? numParameters - 1 : -1;
       for (let i = 0; i < numParameters; ++i, ++index) {
         if (index) sb.push(validWat ? "%2C" : ", ");
-        if (i == restIndex) sb.push("...");
+        if (i === restIndex) sb.push("...");
         sb.push(parameters[i].toString(validWat));
-        if (i >= optionalStart && i != restIndex) sb.push("?");
+        if (i >= optionalStart && i !== restIndex) sb.push("?");
       }
     }
     sb.push(validWat ? "%29=>" : ") => ");

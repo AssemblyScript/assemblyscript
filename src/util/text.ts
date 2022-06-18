@@ -185,7 +185,7 @@ export const SURROGATE_LOW = 0xDC00;
 export function isSurrogate(c: i32): bool {
   // F800: 11111 0 0000000000 Mask
   // D800: 11011 X XXXXXXXXXX Any surrogate
-  return (c & 0xF800) == SURROGATE_HIGH;
+  return (c & 0xF800) === SURROGATE_HIGH;
 }
 
 /** Tests if a surrogate is a high (lead) surrogate. */
@@ -204,14 +204,14 @@ export function isSurrogateLow(c: i32): bool {
 export function isHighSurrogate(c: i32): bool {
   // FC00: 11111 1 0000000000 Mask
   // D800: 11011 0 XXXXXXXXXX High/Lead surrogate
-  return (c & 0xFC00) == SURROGATE_HIGH;
+  return (c & 0xFC00) === SURROGATE_HIGH;
 }
 
 /** Tests if a code unit or code point is a low (trail) surrogate. */
 export function isLowSurrogate(c: i32): bool {
   // FC00: 11111 1 0000000000 Mask
   // DC00: 11011 1 XXXXXXXXXX Low/Trail surrogate
-  return (c & 0xFC00) == SURROGATE_LOW;
+  return (c & 0xFC00) === SURROGATE_LOW;
 }
 
 /** Converts a surrogate pair to its respective code point. */
@@ -248,8 +248,8 @@ export function isAlphaOrDecimal(c: i32): bool {
 /** Tests if the specified character code is a valid start of an identifier. */
 export function isIdentifierStart(c: i32): bool {
   return isAlpha(c)
-      || c == CharCode._
-      || c == CharCode.DOLLAR
+      || c === CharCode._
+      || c === CharCode.DOLLAR
       || c >= 170 && c <= 65500
          && lookupInUnicodeMap(c as u16, unicodeIdentifierStart);
 }
@@ -257,8 +257,8 @@ export function isIdentifierStart(c: i32): bool {
 /** Tests if the specified character code is a valid part of an identifier. */
 export function isIdentifierPart(c: i32): bool {
   return isAlphaOrDecimal(c)
-      || c == CharCode._
-      || c == CharCode.DOLLAR
+      || c === CharCode._
+      || c === CharCode.DOLLAR
       || c >= 170 && c <= 65500
          && lookupInUnicodeMap(c as u16, unicodeIdentifierPart);
 }
@@ -502,7 +502,7 @@ export function escapeString(str: string, quote: CharCode): string {
         break;
       }
       case CharCode.DOUBLEQUOTE: {
-        if (quote == CharCode.DOUBLEQUOTE) {
+        if (quote === CharCode.DOUBLEQUOTE) {
           if (i > off) sb.push(str.substring(off, i));
           sb.push("\\\"");
           off = ++i;
@@ -512,7 +512,7 @@ export function escapeString(str: string, quote: CharCode): string {
         break;
       }
       case CharCode.SINGLEQUOTE: {
-        if (quote == CharCode.SINGLEQUOTE) {
+        if (quote === CharCode.SINGLEQUOTE) {
           if (i > off) sb.push(str.substring(off, i));
           sb.push("\\'");
           off = ++i;
@@ -528,7 +528,7 @@ export function escapeString(str: string, quote: CharCode): string {
         break;
       }
       case CharCode.BACKTICK: {
-        if (quote == CharCode.BACKTICK) {
+        if (quote === CharCode.BACKTICK) {
           if (i > off) sb.push(str.substring(off, i));
           sb.push("\\`");
           off = ++i;

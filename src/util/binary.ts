@@ -95,6 +95,6 @@ export function readV128(buffer: Uint8Array, offset: i32): Uint8Array {
 
 /** Writes a 128-bit vector to the specified buffer. */
 export function writeV128(value: Uint8Array, buffer: Uint8Array, offset: i32): void {
-  assert(value.length == 16);
+  assert(value.length === 16);
   buffer.set(value, offset);
 }
