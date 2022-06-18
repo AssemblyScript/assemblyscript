@@ -757,13 +757,13 @@ export abstract class Node {
 
   /** Tests if this node is a literal of the specified kind. */
   isLiteralKind(literalKind: LiteralKind): bool {
-    return this.kind == NodeKind.LITERAL
-        && (<LiteralExpression>changetype<Node>(this)).literalKind == literalKind; // TS
+    return this.kind === NodeKind.LITERAL
+        && (<LiteralExpression>changetype<Node>(this)).literalKind === literalKind; // TS
   }
 
   /** Tests if this node is a literal of a numeric kind (float or integer). */
   get isNumericLiteral(): bool {
-    if (this.kind == NodeKind.LITERAL) {
+    if (this.kind === NodeKind.LITERAL) {
       switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
         case LiteralKind.FLOAT:
         case LiteralKind.INTEGER: return true;
@@ -792,12 +792,12 @@ export abstract class Node {
 
   private isAccessOn(kind: NodeKind): bool {
     let node = changetype<Node>(this);
-    if (node.kind == NodeKind.CALL) {
+    if (node.kind === NodeKind.CALL) {
       node = (<CallExpression>node).expression;
     }
-    if (node.kind == NodeKind.PROPERTYACCESS) {
+    if (node.kind === NodeKind.PROPERTYACCESS) {
       let target = (<PropertyAccessExpression>node).expression;
-      if (target.kind == kind) return true;
+      if (target.kind === kind) return true;
     }
     return false;
   }
@@ -829,7 +829,7 @@ export abstract class TypeNode extends Node {
 
   /** Tests if this type has a generic component matching one of the given type parameters. */
   hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool {
-    if (this.kind == NodeKind.NAMEDTYPE) {
+    if (this.kind === NodeKind.NAMEDTYPE) {
       let namedTypeNode = <NamedTypeNode>changetype<TypeNode>(this); // TS
       if (!namedTypeNode.name.next) {
         let typeArgumentNodes = namedTypeNode.typeArguments;
@@ -840,11 +840,11 @@ export abstract class TypeNode extends Node {
         } else {
           let name = namedTypeNode.name.identifier.text;
           for (let i = 0, k = typeParameterNodes.length; i < k; ++i) {
-            if (typeParameterNodes[i].name.text == name) return true;
+            if (typeParameterNodes[i].name.text === name) return true;
           }
         }
       }
-    } else if (this.kind == NodeKind.FUNCTIONTYPE) {
+    } else if (this.kind === NodeKind.FUNCTIONTYPE) {
       let functionTypeNode = <FunctionTypeNode>changetype<TypeNode>(this); // TS
       let parameterNodes = functionTypeNode.parameters;
       for (let i = 0, k = parameterNodes.length; i < k; ++i) {
@@ -963,9 +963,9 @@ export class ParameterNode extends Node {
   flags: CommonFlags = CommonFlags.NONE;
 
   /** Tests if this node has the specified flag or flags. */
-  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
+  is(flag: CommonFlags): bool { return (this.flags & flag) === flag; }
   /** Tests if this node has one of the specified flags. */
-  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
+  isAny(flag: CommonFlags): bool { return (this.flags & flag) !== 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
 }
@@ -994,68 +994,68 @@ export namespace DecoratorKind {
 
   /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
   export function fromNode(nameNode: Expression): DecoratorKind {
-    if (nameNode.kind == NodeKind.IDENTIFIER) {
+    if (nameNode.kind === NodeKind.IDENTIFIER) {
       let nameStr = (<IdentifierExpression>nameNode).text;
       assert(nameStr.length);
       switch (nameStr.charCodeAt(0)) {
         case CharCode.b: {
-          if (nameStr == "builtin") return DecoratorKind.BUILTIN;
+          if (nameStr === "builtin") return DecoratorKind.BUILTIN;
           break;
         }
         case CharCode.e: {
-          if (nameStr == "external") return DecoratorKind.EXTERNAL;
+          if (nameStr === "external") return DecoratorKind.EXTERNAL;
           break;
         }
         case CharCode.f: {
-          if (nameStr == "final") return DecoratorKind.FINAL;
+          if (nameStr === "final") return DecoratorKind.FINAL;
           break;
         }
         case CharCode.g: {
-          if (nameStr == "global") return DecoratorKind.GLOBAL;
+          if (nameStr === "global") return DecoratorKind.GLOBAL;
           break;
         }
         case CharCode.i: {
-          if (nameStr == "inline") return DecoratorKind.INLINE;
+          if (nameStr === "inline") return DecoratorKind.INLINE;
           break;
         }
         case CharCode.l: {
-          if (nameStr == "lazy") return DecoratorKind.LAZY;
+          if (nameStr === "lazy") return DecoratorKind.LAZY;
           break;
         }
         case CharCode.o: {
-          if (nameStr == "operator") return DecoratorKind.OPERATOR;
+          if (nameStr === "operator") return DecoratorKind.OPERATOR;
           break;
         }
         case CharCode.u: {
-          if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
-          if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
+          if (nameStr === "unmanaged") return DecoratorKind.UNMANAGED;
+          if (nameStr === "unsafe") return DecoratorKind.UNSAFE;
           break;
         }
       }
-    } else if (nameNode.kind == NodeKind.PROPERTYACCESS) {
+    } else if (nameNode.kind === NodeKind.PROPERTYACCESS) {
       let propertyAccessNode = <PropertyAccessExpression>nameNode;
       let expression = propertyAccessNode.expression;
-      if (expression.kind == NodeKind.IDENTIFIER) {
+      if (expression.kind === NodeKind.IDENTIFIER) {
         let nameStr = (<IdentifierExpression>expression).text;
         assert(nameStr.length);
         let propStr = propertyAccessNode.property.text;
         assert(propStr.length);
-        if (nameStr == "operator") {
+        if (nameStr === "operator") {
           switch (propStr.charCodeAt(0)) {
             case CharCode.b: {
-              if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
+              if (propStr === "binary") return DecoratorKind.OPERATOR_BINARY;
               break;
             }
             case CharCode.p: {
-              if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
-              if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
+              if (propStr === "prefix") return DecoratorKind.OPERATOR_PREFIX;
+              if (propStr === "postfix") return DecoratorKind.OPERATOR_POSTFIX;
               break;
             }
           }
-        } else if (nameStr == "external") {
+        } else if (nameStr === "external") {
           switch (propStr.charCodeAt(0)) {
             case CharCode.j: {
-              if (propStr == "js") return DecoratorKind.EXTERNAL_JS;
+              if (propStr === "js") return DecoratorKind.EXTERNAL_JS;
               break;
             }
           }
@@ -1644,13 +1644,13 @@ export class Source extends Node {
 
   /** Checks if this source represents native code. */
   get isNative(): bool {
-    return this.internalPath == LIBRARY_SUBST;
+    return this.internalPath === LIBRARY_SUBST;
   }
 
   /** Checks if this source is part of the (standard) library. */
   get isLibrary(): bool {
     var kind = this.sourceKind;
-    return kind == SourceKind.LIBRARY || kind == SourceKind.LIBRARY_ENTRY;
+    return kind === SourceKind.LIBRARY || kind === SourceKind.LIBRARY_ENTRY;
   }
 
   /** Cached line starts. */
@@ -1669,7 +1669,7 @@ export class Source extends Node {
       let off = 0;
       let end = text.length;
       while (off < end) {
-        if (text.charCodeAt(off++) == CharCode.LINEFEED) lineCache.push(off);
+        if (text.charCodeAt(off++) === CharCode.LINEFEED) lineCache.push(off);
       }
       lineCache.push(0x7fffffff);
     }
@@ -1713,9 +1713,9 @@ export abstract class DeclarationStatement extends Statement {
   public overriddenModuleName: string | null = null;
 
   /** Tests if this node has the specified flag or flags. */
-  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
+  is(flag: CommonFlags): bool { return (this.flags & flag) === flag; }
   /** Tests if this node has one of the specified flags. */
-  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
+  isAny(flag: CommonFlags): bool { return (this.flags & flag) !== 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
 }
@@ -2365,7 +2365,7 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
   if (decorators) {
     for (let i = 0, k = decorators.length; i < k; ++i) {
       let decorator = decorators[i];
-      if (decorator.decoratorKind == kind) return decorator;
+      if (decorator.decoratorKind === kind) return decorator;
     }
   }
   return null;
@@ -2383,7 +2383,7 @@ export function mangleInternalPath(path: string): string {
 
 /** Tests if the specified type node represents an omitted type. */
 export function isTypeOmitted(type: TypeNode): bool {
-  if (type.kind == NodeKind.NAMEDTYPE) {
+  if (type.kind === NodeKind.NAMEDTYPE) {
     let name = (<NamedTypeNode>type).name;
     return !(name.next || name.identifier.text.length > 0);
   }

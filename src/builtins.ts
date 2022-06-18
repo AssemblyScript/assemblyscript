@@ -951,7 +951,7 @@ function builtin_isVoid(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.kind == TypeKind.VOID ? 1 : 0));
+  return reifyConstantType(ctx, module.i32(type.kind === TypeKind.VOID ? 1 : 0));
 }
 builtins.set(BuiltinNames.isVoid, builtin_isVoid);
 
@@ -1007,7 +1007,7 @@ function builtin_alignof(ctx: BuiltinContext): ExpressionRef {
   ) return module.unreachable();
   var type = ctx.typeArguments![0];
   var byteSize = type.byteSize;
-  if (!isPowerOf2(byteSize)) { // implies == 0
+  if (!isPowerOf2(byteSize)) { // implies === 0
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, "alignof", type.toString()
@@ -1040,7 +1040,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
       if (contextualType.isIntegerValue && contextualType.size <= 32) {
         compiler.currentType = Type.u32;
       }
-    } else if (contextualType.isIntegerValue && contextualType.size == 64) {
+    } else if (contextualType.isIntegerValue && contextualType.size === 64) {
       compiler.currentType = Type.u64;
     }
     return module.unreachable();
@@ -1058,7 +1058,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     let classMembers = classReference.members;
     if (classMembers && classMembers.has(fieldName)) {
       let member = assert(classMembers.get(fieldName));
-      if (member.kind == ElementKind.FIELD) {
+      if (member.kind === ElementKind.FIELD) {
         return contextualUsize(compiler, i64_new((<Field>member).memoryOffset), contextualType);
       }
     }
@@ -1436,7 +1436,7 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32: {
         let flow = compiler.currentFlow;
 
-        // possibly overflows, e.g. abs<i8>(-128) == 128
+        // possibly overflows, e.g. abs<i8>(-128) === 128
         let temp1 = flow.getTempLocal(Type.i32);
         let temp2 = flow.getTempLocal(Type.i32);
         // (x + (x >> 31)) ^ (x >> 31)
@@ -1544,7 +1544,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
     let arg1: ExpressionRef;
     if (!typeArguments && left.isNumericLiteral) { // prefer right type
       arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
       }
     } else {
@@ -1576,7 +1576,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.F32: return module.binary(BinaryOp.MaxF32, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.MaxF64, arg0, arg1);
     }
-    if (op as i32 != -1) {
+    if (op as i32 !== -1) {
       let flow = compiler.currentFlow;
       let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
@@ -1624,7 +1624,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
     let arg1: ExpressionRef;
     if (!typeArguments && left.isNumericLiteral) { // prefer right type
       arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
       }
     } else {
@@ -1656,7 +1656,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.F32: return module.binary(BinaryOp.MinF32, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.MinF64, arg0, arg1);
     }
-    if (op as i32 != -1) {
+    if (op as i32 !== -1) {
       let flow = compiler.currentFlow;
       let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
@@ -1994,9 +1994,9 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.USIZE: {
         return module.maybeDropCondition(arg0, module.i32(0));
       }
-      // (t = arg0) != t
+      // (t = arg0) !== t
       case TypeKind.F32: {
-        if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+        if (getExpressionId(arg0) === ExpressionId.LocalGet) {
           return module.binary(BinaryOp.NeF32,
             arg0,
             module.local_get(getLocalGetIndex(arg0), TypeRef.F32)
@@ -2012,7 +2012,7 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
         return ret;
       }
       case TypeKind.F64: {
-        if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+        if (getExpressionId(arg0) === ExpressionId.LocalGet) {
           return module.binary(BinaryOp.NeF64,
             arg0,
             module.local_get(getLocalGetIndex(arg0), TypeRef.F64)
@@ -2070,9 +2070,9 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.USIZE: {
         return module.maybeDropCondition(arg0, module.i32(1));
       }
-      // (t = arg0) - t == 0
+      // (t = arg0) - t === 0
       case TypeKind.F32: {
-        if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+        if (getExpressionId(arg0) === ExpressionId.LocalGet) {
           return module.binary(BinaryOp.EqF32,
             module.binary(BinaryOp.SubF32,
               arg0,
@@ -2094,7 +2094,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
         return ret;
       }
       case TypeKind.F64: {
-        if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+        if (getExpressionId(arg0) === ExpressionId.LocalGet) {
           return module.binary(BinaryOp.EqF64,
             module.binary(BinaryOp.SubF64,
               arg0,
@@ -2140,7 +2140,7 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
   var contextualType = ctx.contextualType;
   var type = typeArguments![0];
   var outType = (
-    contextualType != Type.auto &&
+    contextualType !== Type.auto &&
     type.isIntegerValue &&
     contextualType.isIntegerValue &&
     contextualType.size > type.size
@@ -2155,7 +2155,7 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = outType;
       return module.unreachable();
     }
-    if (numOperands == 3) {
+    if (numOperands === 3) {
       immAlign = evaluateImmediateAlign(operands[2], immAlign, compiler); // reports
       if (immAlign < 0) {
         compiler.currentType = outType;
@@ -2222,7 +2222,7 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = Type.void;
       return module.unreachable();
     }
-    if (numOperands == 4) {
+    if (numOperands === 4) {
       immAlign = evaluateImmediateAlign(operands[3], immAlign, compiler); // reports
       if (immAlign < 0) {
         compiler.currentType = Type.void;
@@ -2261,7 +2261,7 @@ function builtin_rem(ctx: BuiltinContext): ExpressionRef {
         operands[1],
         type
       );
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
@@ -2315,7 +2315,7 @@ function builtin_add(ctx: BuiltinContext): ExpressionRef {
         operands[1],
         type
       );
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
@@ -2369,7 +2369,7 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
         operands[1],
         type
       );
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
@@ -2423,7 +2423,7 @@ function builtin_mul(ctx: BuiltinContext): ExpressionRef {
         operands[1],
         type
       );
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
@@ -2477,7 +2477,7 @@ function builtin_div(ctx: BuiltinContext): ExpressionRef {
         operands[1],
         type
       );
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
@@ -2531,7 +2531,7 @@ function builtin_eq(ctx: BuiltinContext): ExpressionRef {
         operands[1],
         type
       );
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
@@ -2586,7 +2586,7 @@ function builtin_ne(ctx: BuiltinContext): ExpressionRef {
         operands[1],
         type
       );
-      if (compiler.currentType != type) {
+      if (compiler.currentType !== type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
@@ -2644,7 +2644,7 @@ function builtin_atomic_load(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
-  var immOffset = operands.length == 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
+  var immOffset = operands.length === 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
   if (immOffset < 0) {
     compiler.currentType = outType;
     return module.unreachable();
@@ -2706,7 +2706,7 @@ function builtin_atomic_store(ctx: BuiltinContext): ExpressionRef {
     arg1 = compiler.convertExpression(arg1, inType, type, false, operands[1]);
     inType = type;
   }
-  var immOffset = operands.length == 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
+  var immOffset = operands.length === 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
   if (immOffset < 0) {
     compiler.currentType = Type.void;
     return module.unreachable();
@@ -2764,7 +2764,7 @@ function builtin_atomic_binary(ctx: BuiltinContext, op: AtomicRMWOp, opName: str
     arg1 = compiler.convertExpression(arg1, inType, type, false, operands[1]);
     inType = type;
   }
-  var immOffset = operands.length == 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
+  var immOffset = operands.length === 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
   if (immOffset < 0) {
     compiler.currentType = inType;
     return module.unreachable();
@@ -2862,7 +2862,7 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
     arg2 = compiler.convertExpression(arg2, inType, type, false, operands[2]);
     inType = type;
   }
-  var immOffset = operands.length == 4 ? evaluateImmediateOffset(operands[3], compiler) : 0; // reports
+  var immOffset = operands.length === 4 ? evaluateImmediateOffset(operands[3], compiler) : 0; // reports
   if (immOffset < 0) {
     compiler.currentType = inType;
     return module.unreachable();
@@ -2889,7 +2889,7 @@ function builtin_atomic_wait(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments![0];
   var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
-  var arg2 = operands.length == 3
+  var arg2 = operands.length === 3
     ? compiler.compileExpression(operands[2], Type.i64, Constraints.CONV_IMPLICIT)
     : module.i64(-1, -1); // Infinite timeout
   compiler.currentType = Type.i32;
@@ -2923,7 +2923,7 @@ function builtin_atomic_notify(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
-  var arg1 = operands.length == 2
+  var arg1 = operands.length === 2
     ? compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT)
     : module.i32(-1); // Inifinity count of waiters
   compiler.currentType = Type.i32;
@@ -3093,7 +3093,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
       return module.unreachable();
     }
     let valuesOperand = operands[0];
-    if (valuesOperand.kind != NodeKind.LITERAL || (<LiteralExpression>valuesOperand).literalKind != LiteralKind.ARRAY) {
+    if (valuesOperand.kind !== NodeKind.LITERAL || (<LiteralExpression>valuesOperand).literalKind !== LiteralKind.ARRAY) {
       compiler.error(
         DiagnosticCode.Array_literal_expected,
         operands[0].range
@@ -3107,7 +3107,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     let isStatic = true;
     for (let i = 0; i < numElements; ++i) {
       let elementExpression = expressions[i];
-      if (elementExpression.kind != NodeKind.OMITTED) {
+      if (elementExpression.kind !== NodeKind.OMITTED) {
         let expr = compiler.compileExpression(elementExpression, elementType, Constraints.CONV_IMPLICIT);
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
         if (precomp) {
@@ -3129,7 +3129,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
       return module.unreachable();
     }
     let align = elementType.byteSize;
-    if (numOperands == 2) {
+    if (numOperands === 2) {
       align = evaluateImmediateAlign(operands[1], align, compiler); // reports
       if (align < 0) {
         compiler.currentType = usizeType;
@@ -3137,7 +3137,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
       }
     }
     let buf = new Uint8Array(numElements * elementType.byteSize);
-    assert(compiler.writeStaticBuffer(buf, 0, elementType, exprs) == buf.byteLength);
+    assert(compiler.writeStaticBuffer(buf, 0, elementType, exprs) === buf.byteLength);
     offset = compiler.addAlignedMemorySegment(buf, align).offset;
   } else { // data(size[, align])
     let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
@@ -3160,7 +3160,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
       return module.unreachable();
     }
     let align = 16;
-    if (numOperands == 2) {
+    if (numOperands === 2) {
       align = evaluateImmediateAlign(operands[1], align, compiler); // reports
       if (align < 0) {
         compiler.currentType = usizeType;
@@ -3171,7 +3171,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
   }
   // FIXME: what if recompiles happen? recompiles are bad.
   compiler.currentType = usizeType;
-  if (usizeType == Type.usize32) {
+  if (usizeType === Type.usize32) {
     assert(!i64_high(offset));
     return module.i32(i64_low(offset));
   } else {
@@ -3302,9 +3302,9 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
   }
 
   // otherwise call abort if the assertion is false-ish
-  var abort = compiler.makeAbort(operands.length == 2 ? operands[1] : null, ctx.reportNode);
+  var abort = compiler.makeAbort(operands.length === 2 ? operands[1] : null, ctx.reportNode);
   compiler.currentType = type.nonNullableType;
-  if (contextualType == Type.void) { // simplify if dropped anyway
+  if (contextualType === Type.void) { // simplify if dropped anyway
     compiler.currentType = Type.void;
     switch (type.kind) {
       case TypeKind.I8:
@@ -3533,7 +3533,7 @@ function builtin_diagnostic(ctx: BuiltinContext, category: DiagnosticCategory): 
       ? operands[0].range.toString()
       : reportNode.range.toString()
   );
-  return category == DiagnosticCategory.ERROR
+  return category === DiagnosticCategory.ERROR
     ? module.unreachable()
     : module.nop();
 }
@@ -3562,11 +3562,11 @@ builtins.set(BuiltinNames.INFO, builtin_info);
 function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var parent = ctx.prototype.parent;
-  assert(parent.kind == ElementKind.CLASS);
+  assert(parent.kind === ElementKind.CLASS);
   var classInstance = <Class>parent;
-  assert(classInstance.prototype == compiler.program.functionPrototype);
+  assert(classInstance.prototype === compiler.program.functionPrototype);
   var typeArguments = assert(classInstance.typeArguments);
-  assert(typeArguments.length == 1);
+  assert(typeArguments.length === 1);
   var ftype = typeArguments[0];
   var signature = assert(ftype.getSignature());
   var returnType = signature.returnType;
@@ -3583,14 +3583,14 @@ function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
   var thisArg: usize = 0;
   if (thisType) {
     thisArg = compiler.compileExpression(thisOperand, thisType, Constraints.CONV_IMPLICIT);
-  } else if (thisOperand.kind != NodeKind.NULL) {
+  } else if (thisOperand.kind !== NodeKind.NULL) {
     compiler.error(
       DiagnosticCode._this_cannot_be_referenced_in_current_location,
       thisOperand.range
     );
     return compiler.module.unreachable();
   }
-  return compiler.compileCallIndirect(signature, functionArg, ctx.operands, ctx.reportNode, thisArg, ctx.contextualType == Type.void);
+  return compiler.compileCallIndirect(signature, functionArg, ctx.operands, ctx.reportNode, thisArg, ctx.contextualType === Type.void);
 }
 function_builtins.set("call", builtin_function_call);
 
@@ -3735,12 +3735,12 @@ function builtin_i8x16(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.v128;
-  if (numVars == 0) {
+  if (numVars === 0) {
     // all constants
     return module.v128(bytes);
   } else {
     let vec: ExpressionRef;
-    let fullVars = numVars == 16;
+    let fullVars = numVars === 16;
     if (fullVars) {
       // all variants
       vec = module.unary(UnaryOp.SplatI8x16, vars[0]);
@@ -3785,12 +3785,12 @@ function builtin_i16x8(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.v128;
-  if (numVars == 0) {
+  if (numVars === 0) {
     // all constants
     return module.v128(bytes);
   } else {
     let vec: ExpressionRef;
-    let fullVars = numVars == 8;
+    let fullVars = numVars === 8;
     if (fullVars) {
       // all variants
       vec = module.unary(UnaryOp.SplatI16x8, vars[0]);
@@ -3835,12 +3835,12 @@ function builtin_i32x4(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.v128;
-  if (numVars == 0) {
+  if (numVars === 0) {
     // all constants
     return module.v128(bytes);
   } else {
     let vec: ExpressionRef;
-    let fullVars = numVars == 4;
+    let fullVars = numVars === 4;
     if (fullVars) {
       // all variants
       vec = module.unary(UnaryOp.SplatI32x4, vars[0]);
@@ -3887,12 +3887,12 @@ function builtin_i64x2(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.v128;
-  if (numVars == 0) {
+  if (numVars === 0) {
     // all constants
     return module.v128(bytes);
   } else {
     let vec: ExpressionRef;
-    let fullVars = numVars == 2;
+    let fullVars = numVars === 2;
     if (fullVars) {
       // all variants
       vec = module.unary(UnaryOp.SplatI64x2, vars[0]);
@@ -3937,12 +3937,12 @@ function builtin_f32x4(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.v128;
-  if (numVars == 0) {
+  if (numVars === 0) {
     // all constants
     return module.v128(bytes);
   } else {
     let vec: ExpressionRef;
-    let fullVars = numVars == 4;
+    let fullVars = numVars === 4;
     if (fullVars) {
       // all variants
       vec = module.unary(UnaryOp.SplatF32x4, vars[0]);
@@ -3987,12 +3987,12 @@ function builtin_f64x2(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.v128;
-  if (numVars == 0) {
+  if (numVars === 0) {
     // all constants
     return module.v128(bytes);
   } else {
     let vec: ExpressionRef;
-    let fullVars = numVars == 2;
+    let fullVars = numVars === 2;
     if (fullVars) {
       // all variants
       vec = module.unary(UnaryOp.SplatF64x2, vars[0]);
@@ -4342,7 +4342,7 @@ function builtin_v128_load_splat(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = Type.v128;
       return module.unreachable();
     }
-    if (numOperands == 3) {
+    if (numOperands === 3) {
       immAlign = evaluateImmediateAlign(operands[2], immAlign, compiler); // reports
       if (immAlign < 0) {
         compiler.currentType = Type.v128;
@@ -4410,7 +4410,7 @@ function builtin_v128_load_ext(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = Type.v128;
       return module.unreachable();
     }
-    if (numOperands == 3) {
+    if (numOperands === 3) {
       immAlign = evaluateImmediateAlign(operands[2], immAlign, compiler); // reports
       if (immAlign < 0) {
         compiler.currentType = Type.v128;
@@ -4467,7 +4467,7 @@ function builtin_v128_load_zero(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = Type.v128;
       return module.unreachable();
     }
-    if (numOperands == 3) {
+    if (numOperands === 3) {
       immAlign = evaluateImmediateAlign(operands[2], immAlign, compiler); // reports
       if (immAlign < 0) {
         compiler.currentType = Type.v128;
@@ -4530,7 +4530,7 @@ function builtin_v128_load_lane(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = Type.v128;
       return module.unreachable();
     }
-    if (numOperands == 5) {
+    if (numOperands === 5) {
       immAlign = evaluateImmediateAlign(operands[4], immAlign, compiler); // reports
       if (immAlign < 0) {
         compiler.currentType = Type.v128;
@@ -4605,7 +4605,7 @@ function builtin_v128_store_lane(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = Type.v128;
       return module.unreachable();
     }
-    if (numOperands == 5) {
+    if (numOperands === 5) {
       immAlign = evaluateImmediateAlign(operands[4], immAlign, compiler); // reports
       if (immAlign < 0) {
         compiler.currentType = Type.v128;
@@ -9890,7 +9890,7 @@ export function compileVisitGlobals(compiler: Compiler): void {
   // TODO: for (let element of compiler.program.elementsByName.values()) {
   for (let _values = Map_values(compiler.program.elementsByName), i = 0, k = _values.length; i < k; ++i) {
     let element = unchecked(_values[i]);
-    if (element.kind != ElementKind.GLOBAL) continue;
+    if (element.kind !== ElementKind.GLOBAL) continue;
     let global = <Global>element;
     let globalType = global.type;
     let classReference = globalType.getClass();
@@ -9920,7 +9920,7 @@ export function compileVisitGlobals(compiler: Compiler): void {
             ),
             module.call(visitInstance.internalName, [
               module.local_get(1, sizeTypeRef), // tempRef != null
-              module.local_get(0, TypeRef.I32) // cookie
+              module.local_get(0, TypeRef.I32)  // cookie
             ], TypeRef.None)
           )
         );
@@ -9967,7 +9967,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   if (instance.isDeclaredInLibrary) {
     let visitPrototype = instance.getMember("__visit");
     if (visitPrototype) {
-      assert(visitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      assert(visitPrototype.kind === ElementKind.FUNCTION_PROTOTYPE);
       let visitInstance = program.resolver.resolveFunction(<FunctionPrototype>visitPrototype, null);
       if (!visitInstance || !compiler.compileFunction(visitInstance)) {
         body.push(
@@ -9977,9 +9977,9 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
         let visitSignature = visitInstance.signature;
         let visitThisType = assert(visitSignature.thisType);
         assert(
-          visitSignature.parameterTypes.length == 1 &&
-          visitSignature.parameterTypes[0] == Type.u32 &&
-          visitSignature.returnType == Type.void &&
+          visitSignature.parameterTypes.length === 1 &&
+          visitSignature.parameterTypes[0] === Type.u32 &&
+          visitSignature.returnType === Type.void &&
           instance.type.isStrictlyAssignableTo(visitThisType) // incl. implemented on super
         );
         body.push(
@@ -10002,8 +10002,8 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
       // TODO: for (let member of members.values()) {
       for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
         let member = unchecked(_values[j]);
-        if (member.kind == ElementKind.FIELD) {
-          if ((<Field>member).parent == instance) {
+        if (member.kind === ElementKind.FIELD) {
+          if ((<Field>member).parent === instance) {
             let fieldType = (<Field>member).type;
             if (fieldType.isManaged) {
               let fieldOffset = (<Field>member).memoryOffset;
@@ -10064,7 +10064,7 @@ export function compileVisitMembers(compiler: Compiler): void {
   var nextId = 0;
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
     let instanceId = _keys[i];
-    assert(instanceId == nextId++);
+    assert(instanceId === nextId++);
     let instance = assert(managedClasses.get(instanceId));
     names[i] = instance.internalName;
     if (instance.isPointerfree) {
@@ -10086,7 +10086,7 @@ export function compileVisitMembers(compiler: Compiler): void {
     module.switch(names, "invalid",
       // load<u32>(changetype<usize>(this) - 8)
       module.load(4, false,
-        sizeTypeRef == TypeRef.I64
+        sizeTypeRef === TypeRef.I64
           ? module.binary(BinaryOp.SubI64,
               module.local_get(0, sizeTypeRef),
               module.i64(8)
@@ -10156,10 +10156,10 @@ export function compileRTTI(compiler: Compiler): void {
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
     let instanceId = unchecked(_keys[i]);
     let instance = assert(managedClasses.get(instanceId));
-    assert(instanceId == lastId++);
+    assert(instanceId === lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isPointerfree) flags |= TypeinfoFlags.POINTERFREE;
-    if (instance != abvInstance && instance.extends(abvPrototype)) {
+    if (instance !== abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAYBUFFERVIEW;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
@@ -10169,12 +10169,12 @@ export function compileRTTI(compiler: Compiler): void {
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
     } else if (instance.extends(setPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(setPrototype));
-      assert(typeArguments.length == 1);
+      assert(typeArguments.length === 1);
       flags |= TypeinfoFlags.SET;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
     } else if (instance.extends(mapPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(mapPrototype));
-      assert(typeArguments.length == 2);
+      assert(typeArguments.length === 2);
       flags |= TypeinfoFlags.MAP;
       flags |= TypeinfoFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1]);
@@ -10188,10 +10188,10 @@ export function compileRTTI(compiler: Compiler): void {
     let base = instance.base;
     writeI32(base ? base.id : 0, data, off); off += 4;
   }
-  assert(off == size);
+  assert(off === size);
   var usizeType = program.options.usizeType;
   var segment = compiler.addAlignedMemorySegment(data);
-  if (usizeType.size == 8) {
+  if (usizeType.size === 8) {
     let offset = segment.offset;
     module.addGlobal(BuiltinNames.rtti_base, TypeRef.I64, false, module.i64(i64_low(offset), i64_high(offset)));
   } else {
@@ -10212,7 +10212,7 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
   stmts.push(
     module.if(
       module.unary(
-        sizeTypeRef == TypeRef.I64
+        sizeTypeRef === TypeRef.I64
           ? UnaryOp.EqzI64
           : UnaryOp.EqzI32,
         module.local_get(0, sizeTypeRef)
@@ -10269,8 +10269,8 @@ function checkConstantType(ctx: BuiltinContext): Type | null {
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments;
   checkConstantType_expr = 0;
-  if (operands.length == 0) { // requires type argument
-    if (!typeArguments || typeArguments.length != 1) {
+  if (operands.length === 0) { // requires type argument
+    if (!typeArguments || typeArguments.length !== 1) {
       compiler.error(
         DiagnosticCode.Expected_0_type_arguments_but_got_1,
         ctx.reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
@@ -10279,7 +10279,7 @@ function checkConstantType(ctx: BuiltinContext): Type | null {
     }
     return typeArguments[0];
   }
-  if (operands.length == 1) { // optional type argument
+  if (operands.length === 1) { // optional type argument
     if (typeArguments && typeArguments.length > 0) {
       if (typeArguments.length > 1) {
         compiler.error(
@@ -10327,7 +10327,7 @@ function evaluateImmediateOffset(expression: Expression, compiler: Compiler): i3
     let expr = compiler.compileExpression(expression, Type.usize64, Constraints.CONV_IMPLICIT);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
-      assert(getConstValueI64High(precomp) == 0); // TODO
+      assert(getConstValueI64High(precomp) === 0); // TODO
       value = getConstValueI64Low(precomp);
     } else {
       compiler.error(
@@ -10392,7 +10392,7 @@ function checkTypeRequired(ctx: BuiltinContext, setCurrentTypeOnError: bool = fa
   var typeArguments = ctx.typeArguments;
   if (typeArguments) {
     let numTypeArguments = typeArguments.length;
-    if (numTypeArguments == 1) return 0;
+    if (numTypeArguments === 1) return 0;
     assert(numTypeArguments); // invalid if 0, must not be set at all instead
     if (setCurrentTypeOnError) compiler.currentType = typeArguments[0];
     compiler.error(
@@ -10414,7 +10414,7 @@ function checkTypeOptional(ctx: BuiltinContext, setCurrentTypeOnError: bool = fa
   if (typeArguments) {
     let compiler = ctx.compiler;
     let numTypeArguments = typeArguments.length;
-    if (numTypeArguments == 1) return 0;
+    if (numTypeArguments === 1) return 0;
     assert(numTypeArguments); // invalid if 0, must not be set at all instead
     if (setCurrentTypeOnError) compiler.currentType = typeArguments[0];
     compiler.error(
@@ -10443,7 +10443,7 @@ function checkTypeAbsent(ctx: BuiltinContext): i32 {
 /** Checks a call that requires a fixed number of arguments. Returns `1` on error. */
 function checkArgsRequired(ctx: BuiltinContext, expected: i32): i32 {
   var operands = ctx.operands;
-  if (operands.length != expected) {
+  if (operands.length !== expected) {
     ctx.compiler.error(
       DiagnosticCode.Expected_0_arguments_but_got_1,
       ctx.reportNode.range, expected.toString(), operands.length.toString()
@@ -10477,7 +10477,7 @@ function checkArgsOptional(ctx: BuiltinContext, expectedMinimum: i32, expectedMa
 function contextualUsize(compiler: Compiler, value: i64, contextualType: Type): ExpressionRef {
   var module = compiler.module;
   // Check if contextual type fits
-  if (contextualType != Type.auto && contextualType.isIntegerValue) {
+  if (contextualType !== Type.auto && contextualType.isIntegerValue) {
     switch (contextualType.kind) {
       case TypeKind.I32: {
         if (i64_is_i32(value)) {
