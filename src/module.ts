@@ -1100,7 +1100,7 @@ export class Module {
     /** Architecture-dependent size type. */
     public sizeType: TypeRef
   ) {
-    assert(sizeType == TypeRef.I32 || sizeType == TypeRef.I64);
+    assert(sizeType === TypeRef.I32 || sizeType === TypeRef.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
   }
 
@@ -1133,26 +1133,26 @@ export class Module {
 
   // isize<T>(value: T): ExpressionRef {
   //   if (i64_is(value)) {
-  //     if (this.sizeType == TypeRef.I64) {
+  //     if (this.sizeType === TypeRef.I64) {
   //       return this.i64(i64_low(value), i64_high(value));
   //     }
   //     assert(i64_is_i32(value));
   //     return this.i32(i64_low(value));
   //   }
-  //   return this.sizeType == TypeRef.I64
+  //   return this.sizeType === TypeRef.I64
   //     ? this.i64(i32(value), i32(value) < 0 ? -1 : 0)
   //     : this.i32(i32(value));
   // }
 
   usize<T>(value: T): ExpressionRef {
     if (i64_is(value)) {
-      if (this.sizeType == TypeRef.I64) {
+      if (this.sizeType === TypeRef.I64) {
         return this.i64(i64_low(value), i64_high(value));
       }
       assert(i64_is_u32(value));
       return this.i32(i64_low(value));
     }
-    return this.sizeType == TypeRef.I64
+    return this.sizeType === TypeRef.I64
       ? this.i64(i32(value))
       : this.i32(i32(value));
   }
@@ -1170,7 +1170,7 @@ export class Module {
   }
 
   v128(bytes: Uint8Array): ExpressionRef {
-    assert(bytes.length == 16);
+    assert(bytes.length === 16);
     var out = this.lit;
     for (let i = 0; i < 16; ++i) {
       binaryen.__i32_store8(out + i, bytes[i]);
@@ -1194,7 +1194,7 @@ export class Module {
     value: ExpressionRef
   ): ExpressionRef {
     if (op > UnaryOp._last) {
-      let isWam64 = this.sizeType == TypeRef.I64;
+      let isWam64 = this.sizeType === TypeRef.I64;
       switch (op) {
         case UnaryOp.ClzSize: return this.unary(isWam64 ? UnaryOp.ClzI64 : UnaryOp.ClzI32, value);
         case UnaryOp.CtzSize: return this.unary(isWam64 ? UnaryOp.CtzI64 : UnaryOp.CtzI32, value);
@@ -1212,7 +1212,7 @@ export class Module {
     right: ExpressionRef
   ): ExpressionRef {
     if (op > BinaryOp._last) {
-      let isWasm64 = this.sizeType == TypeRef.I64;
+      let isWasm64 = this.sizeType === TypeRef.I64;
       switch (op) {
         case BinaryOp.AddSize: return this.binary(isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32, left, right);
         case BinaryOp.SubSize: return this.binary(isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32, left, right);
@@ -1273,7 +1273,7 @@ export class Module {
   tostack(value: ExpressionRef): ExpressionRef {
     if (this.useShadowStack) {
       let type = binaryen._BinaryenExpressionGetType(value);
-      assert(type == TypeRef.I32 || type == TypeRef.Unreachable);
+      assert(type === TypeRef.I32 || type === TypeRef.Unreachable);
       return this.call(BuiltinNames.tostack, [ value ], type);
     }
     return value;
@@ -1285,7 +1285,7 @@ export class Module {
     isManaged: bool,
     type: TypeRef = TypeRef.Auto,
   ): ExpressionRef {
-    if (type == TypeRef.Auto) type = binaryen._BinaryenExpressionGetType(value);
+    if (type === TypeRef.Auto) type = binaryen._BinaryenExpressionGetType(value);
     if (isManaged && this.useShadowStack) {
       value = this.tostack(value);
     }
@@ -1440,8 +1440,8 @@ export class Module {
     type: TypeRef = TypeRef.None
   ): ExpressionRef {
     var length = stmts.length;
-    if (length == 0) return this.nop(); // usually filtered out again
-    if (length == 1) {
+    if (length === 0) return this.nop(); // usually filtered out again
+    if (length === 1) {
       let single = stmts[0];
       switch (getExpressionId(single)) {
         case ExpressionId.Return:
@@ -1452,7 +1452,7 @@ export class Module {
         }
       }
       let singleType = getExpressionType(single);
-      if (singleType != TypeRef.Unreachable && singleType != type) {
+      if (singleType !== TypeRef.Unreachable && singleType !== type) {
         // can happen when there was a diagnostic prior
         return this.unreachable();
       }
@@ -1481,7 +1481,7 @@ export class Module {
     expression: ExpressionRef
   ): ExpressionRef {
     var type = binaryen._BinaryenExpressionGetType(expression);
-    if (type != TypeRef.None && type != TypeRef.Unreachable) {
+    if (type !== TypeRef.None && type !== TypeRef.Unreachable) {
       return binaryen._BinaryenDrop(this.ref, expression);
     }
     return expression;
@@ -1492,7 +1492,7 @@ export class Module {
     // when encountering a local with an unknown value. This helper only drops
     // the pre-evaluated condition if it has relevant side effects.
     // see WebAssembly/binaryen#1237
-    if ((getSideEffects(condition, this.ref) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != 0) {
+    if ((getSideEffects(condition, this.ref) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) !== 0) {
       return this.block(null, [
         this.drop(condition),
         result
@@ -1721,7 +1721,7 @@ export class Module {
     vec2: ExpressionRef,
     mask: Uint8Array
   ): ExpressionRef {
-    assert(mask.length == 16);
+    assert(mask.length === 16);
     var cArr = allocU8Array(mask);
     var ret = binaryen._BinaryenSIMDShuffle(this.ref, vec1, vec2, cArr);
     binaryen._free(cArr);
@@ -1891,7 +1891,7 @@ export class Module {
 
   hasFunction(name: string): bool {
     var cStr = this.allocStringCached(name);
-    return binaryen._BinaryenGetFunction(this.ref, cStr) != 0;
+    return binaryen._BinaryenGetFunction(this.ref, cStr) !== 0;
   }
 
   private hasTemporaryFunction: bool = false;
@@ -1979,7 +1979,7 @@ export class Module {
 
   hasExport(externalName: string): bool {
     var cStr = this.allocStringCached(externalName);
-    return binaryen._BinaryenGetExport(this.ref, cStr) != 0;
+    return binaryen._BinaryenGetExport(this.ref, cStr) !== 0;
   }
 
   // imports
@@ -2073,7 +2073,7 @@ export class Module {
       let offset = segment.offset;
       segs[i] = allocU8Array(buffer);
       psvs[i] = 0; // no passive segments currently
-      offs[i] = target == Target.WASM64
+      offs[i] = target === Target.WASM64
         ? this.i64(i64_low(offset), i64_high(offset))
         : this.i32(i64_low(offset));
       sizs[i] = buffer.length;
@@ -2292,7 +2292,7 @@ export class Module {
     this.clearPassArguments();
 
     // Tweak inlining limits based on optimization levels
-    if (optimizeLevel >= 2 && shrinkLevel == 0) {
+    if (optimizeLevel >= 2 && shrinkLevel === 0) {
       this.setAlwaysInlineMaxSize(12);
       this.setFlexibleInlineMaxSize(70);
       this.setOneCallerInlineMaxSize(200);
@@ -2416,7 +2416,7 @@ export class Module {
         passes.push("simplify-globals");
         passes.push("vacuum");
       }
-      if (optimizeLevel >= 2 && (this.getFeatures() & FeatureFlags.GC) != 0) {
+      if (optimizeLevel >= 2 && (this.getFeatures() & FeatureFlags.GC) !== 0) {
         passes.push("heap2local");
         passes.push("merge-locals");
         passes.push("local-subtyping");
@@ -2482,7 +2482,7 @@ export class Module {
   }
 
   validate(): bool {
-    return binaryen._BinaryenModuleValidate(this.ref) == 1;
+    return binaryen._BinaryenModuleValidate(this.ref) === 1;
   }
 
   interpret(): void {
@@ -2525,7 +2525,7 @@ export class Module {
   readStringCached(ptr: usize): string | null {
     // Binaryen internalizes names, so using this method where it's safe can
     // avoid quite a bit of unnecessary garbage.
-    if (ptr == 0) return null;
+    if (ptr === 0) return null;
     var cached = this.cachedPointersToStrings;
     if (cached.has(ptr)) return changetype<string>(cached.get(ptr));
     var str = readString(ptr);
@@ -2583,7 +2583,7 @@ export class Module {
     var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
       if (!this.isConstExpression(precomp)) return 0;
-      assert(getExpressionType(precomp) == getExpressionType(expr));
+      assert(getExpressionType(precomp) === getExpressionType(expr));
     }
     return precomp;
   }
@@ -2703,22 +2703,22 @@ export function getConstValueV128(expr: ExpressionRef): Uint8Array {
 }
 
 export function isConstZero(expr: ExpressionRef): bool {
-  if (getExpressionId(expr) != ExpressionId.Const) return false;
+  if (getExpressionId(expr) !== ExpressionId.Const) return false;
   var type = getExpressionType(expr);
-  if (type == TypeRef.I32) return getConstValueI32(expr) == 0;
-  if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) == 0;
-  if (type == TypeRef.F32) return getConstValueF32(expr) == 0;
-  if (type == TypeRef.F64) return getConstValueF64(expr) == 0;
+  if (type === TypeRef.I32) return getConstValueI32(expr) === 0;
+  if (type === TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) === 0;
+  if (type === TypeRef.F32) return getConstValueF32(expr) === 0;
+  if (type === TypeRef.F64) return getConstValueF64(expr) === 0;
   return false;
 }
 
 export function isConstNonZero(expr: ExpressionRef): bool {
-  if (getExpressionId(expr) != ExpressionId.Const) return false;
+  if (getExpressionId(expr) !== ExpressionId.Const) return false;
   var type = getExpressionType(expr);
-  if (type == TypeRef.I32) return getConstValueI32(expr) != 0;
-  if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) != 0;
-  if (type == TypeRef.F32) return getConstValueF32(expr) != 0;
-  if (type == TypeRef.F64) return getConstValueF64(expr) != 0;
+  if (type === TypeRef.I32) return getConstValueI32(expr) !== 0;
+  if (type === TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) !== 0;
+  if (type === TypeRef.F32) return getConstValueF32(expr) !== 0;
+  if (type === TypeRef.F64) return getConstValueF64(expr) !== 0;
   return false;
 }
 
@@ -3008,7 +3008,7 @@ export class SwitchBuilder {
 
   /** Links the default branch. */
   addDefault(code: ExpressionRef[]): void {
-    assert(this.defaultIndex == -1);
+    assert(this.defaultIndex === -1);
     var cases = this.cases;
     this.defaultIndex = cases.length;
     cases.push(code);
@@ -3089,7 +3089,7 @@ export function getSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffe
 }
 
 export function mustPreserveSideEffects(expr: ExpressionRef, module: ModuleRef): bool {
-  return (getSideEffects(expr, module) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != SideEffects.None;
+  return (getSideEffects(expr, module) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) !== SideEffects.None;
 }
 
 // helpers
@@ -3134,7 +3134,7 @@ function allocU32Array(u32s: u32[] | null): usize {
 export function allocPtrArray(ptrs: usize[] | null): usize {
   if (!ptrs) return 0;
   // TODO: WASM64
-  assert(ASC_TARGET != Target.WASM64);
+  assert(ASC_TARGET !== Target.WASM64);
   var len = ptrs.length;
   var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
@@ -3172,7 +3172,7 @@ function allocString(str: string | null): usize {
   var len = stringLengthUTF8(str);
   var ptr = binaryen._malloc(len + 1) >>> 0;
   var idx = ptr;
-  if (len == str.length) {
+  if (len === str.length) {
     // fast path when all chars are ascii
     for (let i = 0, k = str.length; i < k; ++i) {
       let u = str.charCodeAt(i) >>> 0;
@@ -3227,16 +3227,16 @@ export function readString(ptr: usize): string | null {
       continue;
     }
     u1 = binaryen.__i32_load8_u(ptr++) & 63;
-    if ((cp & 0xE0) == 0xC0) {
+    if ((cp & 0xE0) === 0xC0) {
       arr.push(((cp & 31) << 6) | u1);
       continue;
     }
     u2 = binaryen.__i32_load8_u(ptr++) & 63;
-    if ((cp & 0xF0) == 0xE0) {
+    if ((cp & 0xF0) === 0xE0) {
       cp = ((cp & 15) << 12) | (u1 << 6) | u2;
     } else {
       u3 = binaryen.__i32_load8_u(ptr++) & 63;
-      if ((cp & 0xF8) == 0xF0) {
+      if ((cp & 0xF8) === 0xF0) {
         cp = ((cp & 7) << 18) | (u1 << 12) | (u2 << 6) | u3;
       } else {
         assert(false, "Invalid UTF8 sequence during readString");
@@ -3267,7 +3267,7 @@ export class BinaryModule {
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
 export function needsExplicitUnreachable(expr: ExpressionRef): bool {
   // not applicable if pushing a value to the stack
-  if (binaryen._BinaryenExpressionGetType(expr) != TypeRef.Unreachable) {
+  if (binaryen._BinaryenExpressionGetType(expr) !== TypeRef.Unreachable) {
     return false;
   }
 
@@ -3275,7 +3275,7 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
     case ExpressionId.Unreachable:
     case ExpressionId.Return: return false;
     case ExpressionId.Break: {
-      return binaryen._BinaryenBreakGetCondition(expr) != 0;
+      return binaryen._BinaryenBreakGetCondition(expr) !== 0;
     }
     case ExpressionId.Block: {
       if (!binaryen._BinaryenBlockGetName(expr)) { // can't break out of it

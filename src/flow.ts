@@ -265,9 +265,9 @@ export class Flow {
   }
 
   /** Tests if this flow has the specified flag or flags. */
-  is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
+  is(flag: FlowFlags): bool { return (this.flags & flag) === flag; }
   /** Tests if this flow has one of the specified flags. */
-  isAny(flag: FlowFlags): bool { return (this.flags & flag) != 0; }
+  isAny(flag: FlowFlags): bool { return (this.flags & flag) !== 0; }
   /** Sets the specified flag or flags. */
   set(flag: FlowFlags): void { this.flags |= flag; }
   /** Unsets the specified flag or flags. */
@@ -534,7 +534,7 @@ export class Flow {
     var scopedLocals = assert(this.scopedLocals);
     assert(scopedLocals.has(name));
     let local = assert(scopedLocals.get(name));
-    assert(local.index == -1);
+    assert(local.index === -1);
     scopedLocals.delete(name);
   }
 
@@ -577,14 +577,14 @@ export class Flow {
   isLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
     var localFlags = this.localFlags;
-    return index < localFlags.length && (unchecked(localFlags[index]) & flag) == flag;
+    return index < localFlags.length && (unchecked(localFlags[index]) & flag) === flag;
   }
 
   /** Tests if the local at the specified index has any of the specified flags. */
   isAnyLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
     var localFlags = this.localFlags;
-    return index < localFlags.length && (unchecked(localFlags[index]) & flag) != 0;
+    return index < localFlags.length && (unchecked(localFlags[index]) & flag) !== 0;
   }
 
   /** Sets the specified flag or flags on the local at the specified index. */
@@ -608,22 +608,22 @@ export class Flow {
     var actualFunction = this.actualFunction;
     assert(actualFunction.is(CommonFlags.CONSTRUCTOR));
     var actualParent = actualFunction.parent;
-    assert(actualParent.kind == ElementKind.CLASS);
+    assert(actualParent.kind === ElementKind.CLASS);
     var actualClass = <Class>actualParent;
     this.thisFieldFlags = new Map();
     var members = actualClass.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
-        if (member.kind == ElementKind.FIELD) {
+        if (member.kind === ElementKind.FIELD) {
           let field = <Field>member;
           if (
             // guaranteed by super
-            field.parent != actualClass ||
+            field.parent !== actualClass ||
             // has field initializer
             field.initializerNode ||
             // is initialized as a ctor parameter
-            field.prototype.parameterIndex != -1 ||
+            field.prototype.parameterIndex !== -1 ||
             // is safe to initialize with zero
             field.type.isAny(TypeFlags.VALUE | TypeFlags.NULLABLE)
           ) {
@@ -638,7 +638,7 @@ export class Flow {
   isThisFieldFlag(field: Field, flag: FieldFlags): bool {
     var fieldFlags = this.thisFieldFlags;
     if (fieldFlags != null && fieldFlags.has(field)) {
-      return (changetype<FieldFlags>(fieldFlags.get(field)) & flag) == flag;
+      return (changetype<FieldFlags>(fieldFlags.get(field)) & flag) === flag;
     }
     return false;
   }
@@ -687,18 +687,18 @@ export class Flow {
 
   /** Inherits flags of another flow into this one, i.e. a finished inner block. */
   inherit(other: Flow): void {
-    assert(other.parentFunction == this.parentFunction);
-    assert(other.parent == this); // currently the case, but might change
+    assert(other.parentFunction === this.parentFunction);
+    assert(other.parent === this); // currently the case, but might change
     var otherFlags = other.flags;
 
     // respective inner flags are irrelevant if contexts differ
-    if (this.breakLabel != other.breakLabel) {
+    if (this.breakLabel !== other.breakLabel) {
       if (otherFlags & (FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
         otherFlags &= ~FlowFlags.TERMINATES;
       }
       otherFlags &= ~(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS);
     }
-    if (this.continueLabel != other.continueLabel) {
+    if (this.continueLabel !== other.continueLabel) {
       otherFlags &= ~(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
     }
 
@@ -709,7 +709,7 @@ export class Flow {
 
   /** Inherits flags of a conditional branch joining again with this one, i.e. then without else. */
   inheritBranch(other: Flow, conditionKind: ConditionKind = ConditionKind.UNKNOWN): void {
-    assert(other.parentFunction == this.parentFunction);
+    assert(other.parentFunction === this.parentFunction);
     switch (conditionKind) {
       case ConditionKind.TRUE: this.inherit(other); // always executes
       case ConditionKind.FALSE: return;             // never executes
@@ -746,7 +746,7 @@ export class Flow {
 
     if (thisFlags & FlowFlags.BREAKS) { // nothing can change that
       newFlags |= FlowFlags.BREAKS;
-    } else if (other.breakLabel == this.breakLabel) {
+    } else if (other.breakLabel === this.breakLabel) {
       if (otherFlags & FlowFlags.BREAKS) {
         newFlags |= FlowFlags.CONDITIONALLY_BREAKS;
       } else {
@@ -758,7 +758,7 @@ export class Flow {
 
     if (thisFlags & FlowFlags.CONTINUES) { // nothing can change that
       newFlags |= FlowFlags.CONTINUES;
-    } else if (other.continueLabel == this.continueLabel) {
+    } else if (other.continueLabel === this.continueLabel) {
       if (otherFlags & FlowFlags.CONTINUES) {
         newFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
       } else {
@@ -813,8 +813,8 @@ export class Flow {
 
   /** Inherits mutual flags of two alternate branches becoming this one, i.e. then with else. */
   inheritMutual(left: Flow, right: Flow): void {
-    assert(left.parentFunction == right.parentFunction);
-    assert(left.parentFunction == this.parentFunction);
+    assert(left.parentFunction === right.parentFunction);
+    assert(left.parentFunction === this.parentFunction);
     // This differs from the previous method in that no flags are guaranteed
     // to happen unless it is the case in both flows.
 
@@ -943,7 +943,7 @@ export class Flow {
         let key = _keys[i];
         let leftFlags = changetype<FieldFlags>(leftFieldFlags.get(key));
         if (
-          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) &&
+          (leftFlags & FieldFlags.INITIALIZED) !== 0 && rightFieldFlags.has(key) &&
           (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.INITIALIZED)
         ) {
           newFieldFlags.set(key, FieldFlags.INITIALIZED);
@@ -960,9 +960,9 @@ export class Flow {
     var numThisLocalFlags = before.localFlags.length;
     var numOtherLocalFlags = after.localFlags.length;
     var parentFunction = before.parentFunction;
-    assert(parentFunction == after.parentFunction);
+    assert(parentFunction === after.parentFunction);
     var localsByIndex = parentFunction.localsByIndex;
-    assert(localsByIndex == after.parentFunction.localsByIndex);
+    assert(localsByIndex === after.parentFunction.localsByIndex);
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       let local = localsByIndex[i];
       let type = local.type;
@@ -985,10 +985,10 @@ export class Flow {
     var numThisLocalFlags = this.localFlags.length;
     var numOtherLocalFlags = other.localFlags.length;
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
-      if (this.isLocalFlag(i, LocalFlags.WRAPPED) != other.isLocalFlag(i, LocalFlags.WRAPPED)) {
+      if (this.isLocalFlag(i, LocalFlags.WRAPPED) !== other.isLocalFlag(i, LocalFlags.WRAPPED)) {
         this.unsetLocalFlag(i, LocalFlags.WRAPPED); // assume not wrapped
       }
-      if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
+      if (this.isLocalFlag(i, LocalFlags.NONNULL) !== other.isLocalFlag(i, LocalFlags.NONNULL)) {
         this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
       }
     }
@@ -1098,8 +1098,8 @@ export class Flow {
       case ExpressionId.Call: {
         // handle string eq/ne/not overloads
         let name = getCallTarget(expr);
-        if (name == BuiltinNames.String_eq) {
-          assert(getCallOperandCount(expr) == 2);
+        if (name === BuiltinNames.String_eq) {
+          assert(getCallOperandCount(expr) === 2);
           let left = getCallOperandAt(expr, 0);
           let right = getCallOperandAt(expr, 1);
           if (isConstNonZero(left)) {
@@ -1107,8 +1107,8 @@ export class Flow {
           } else if (isConstNonZero(right)) {
             this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
           }
-        } else if (name == BuiltinNames.String_ne) {
-          assert(getCallOperandCount(expr) == 2);
+        } else if (name === BuiltinNames.String_ne) {
+          assert(getCallOperandCount(expr) === 2);
           let left = getCallOperandAt(expr, 0);
           let right = getCallOperandAt(expr, 1);
           if (isConstZero(left)) {
@@ -1116,11 +1116,11 @@ export class Flow {
           } else if (isConstZero(right)) {
             this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
           }
-        } else if (name == BuiltinNames.String_not) {
-          assert(getCallOperandCount(expr) == 1);
+        } else if (name === BuiltinNames.String_not) {
+          assert(getCallOperandCount(expr) === 1);
           this.inheritNonnullIfFalse(getCallOperandAt(expr, 0), iff); // !value -> value must have been false
-        } else if (name == BuiltinNames.tostack) {
-          assert(getCallOperandCount(expr) == 1);
+        } else if (name === BuiltinNames.tostack) {
+          assert(getCallOperandCount(expr) === 1);
           this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff);
         }
         break;
@@ -1189,8 +1189,8 @@ export class Flow {
       case ExpressionId.Call: {
         // handle string eq/ne/not overloads
         let name = getCallTarget(expr);
-        if (name == BuiltinNames.String_eq) {
-          assert(getCallOperandCount(expr) == 2);
+        if (name === BuiltinNames.String_eq) {
+          assert(getCallOperandCount(expr) === 2);
           let left = getCallOperandAt(expr, 0);
           let right = getCallOperandAt(expr, 1);
           if (isConstZero(left)) {
@@ -1198,8 +1198,8 @@ export class Flow {
           } else if (isConstZero(right)) {
             this.inheritNonnullIfTrue(left, iff); // !(left == FALSE) -> left must have been true
           }
-        } else if (name == BuiltinNames.String_ne) {
-          assert(getCallOperandCount(expr) == 2);
+        } else if (name === BuiltinNames.String_ne) {
+          assert(getCallOperandCount(expr) === 2);
           let left = getCallOperandAt(expr, 0);
           let right = getCallOperandAt(expr, 1);
           if (isConstNonZero(left)) {
@@ -1207,11 +1207,11 @@ export class Flow {
           } else if (isConstNonZero(right)) {
             this.inheritNonnullIfTrue(left, iff); // !(left != TRUE) -> left must have been true
           }
-        } else if (name == BuiltinNames.String_not) {
-          assert(getCallOperandCount(expr) == 1);
+        } else if (name === BuiltinNames.String_not) {
+          assert(getCallOperandCount(expr) === 1);
           this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff); // !(!value) -> value must have been true
-        } else if (name == BuiltinNames.tostack) {
-          assert(getCallOperandCount(expr) == 1);
+        } else if (name === BuiltinNames.tostack) {
+          assert(getCallOperandCount(expr) === 1);
           this.inheritNonnullIfFalse(getCallOperandAt(expr, 0), iff);
         }
         break;
@@ -1251,7 +1251,7 @@ export class Flow {
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
         let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
-        assert(global.kind == ElementKind.GLOBAL || global.kind == ElementKind.ENUMVALUE);
+        assert(global.kind === ElementKind.GLOBAL || global.kind === ElementKind.ENUMVALUE);
         return canConversionOverflow((<TypedElement>global).type, type);
       }
 
@@ -1296,20 +1296,20 @@ export class Flow {
           case BinaryOp.MulI32: {
             return !(
               (
-                getExpressionId(operand = getBinaryLeft(expr)) == ExpressionId.Const &&
+                getExpressionId(operand = getBinaryLeft(expr)) === ExpressionId.Const &&
                 (
-                  getConstValueI32(operand) == 0 ||
+                  getConstValueI32(operand) === 0 ||
                   (
-                    getConstValueI32(operand) == 1 &&
+                    getConstValueI32(operand) === 1 &&
                     !this.canOverflow(getBinaryRight(expr), type)
                   )
                 )
               ) || (
-                getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+                getExpressionId(operand = getBinaryRight(expr)) === ExpressionId.Const &&
                 (
-                  getConstValueI32(operand) == 0 ||
+                  getConstValueI32(operand) === 0 ||
                   (
-                    getConstValueI32(operand) == 1 &&
+                    getConstValueI32(operand) === 1 &&
                     !this.canOverflow(getBinaryLeft(expr), type)
                   )
                 )
@@ -1325,12 +1325,12 @@ export class Flow {
             return !(
               (
                 (
-                  getExpressionId(operand = getBinaryLeft(expr)) == ExpressionId.Const &&
+                  getExpressionId(operand = getBinaryLeft(expr)) === ExpressionId.Const &&
                   getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
                 ) || !this.canOverflow(operand, type)
               ) || (
                 (
-                  getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+                  getExpressionId(operand = getBinaryRight(expr)) === ExpressionId.Const &&
                   getConstValueI32(operand) <= type.computeSmallIntegerMask(Type.i32)
                 ) || !this.canOverflow(operand, type)
               )
@@ -1340,7 +1340,7 @@ export class Flow {
           // overflows if the shift doesn't clear potential garbage bits
           case BinaryOp.ShlI32: {
             let shift = 32 - type.size;
-            return getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const
+            return getExpressionId(operand = getBinaryRight(expr)) !== ExpressionId.Const
                 || getConstValueI32(operand) < shift;
           }
 
@@ -1348,7 +1348,7 @@ export class Flow {
           case BinaryOp.ShrI32: {
             let shift = 32 - type.size;
             return this.canOverflow(getBinaryLeft(expr), type) && (
-              getExpressionId(operand = getBinaryRight(expr)) != ExpressionId.Const ||
+              getExpressionId(operand = getBinaryRight(expr)) !== ExpressionId.Const ||
               getConstValueI32(operand) < shift
             );
           }
@@ -1359,12 +1359,12 @@ export class Flow {
             let shift = 32 - type.size;
             return type.isSignedIntegerValue
               ? !(
-                  getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+                  getExpressionId(operand = getBinaryRight(expr)) === ExpressionId.Const &&
                   getConstValueI32(operand) > shift // must clear MSB
                 )
               : this.canOverflow(getBinaryLeft(expr), type) &&
                 !(
-                  getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
+                  getExpressionId(operand = getBinaryRight(expr)) === ExpressionId.Const &&
                   getConstValueI32(operand) >= shift // can leave MSB
                 );
           }
@@ -1418,7 +1418,7 @@ export class Flow {
           case TypeKind.I16: return value < <i32>i16.MIN_VALUE || value > <i32>i16.MAX_VALUE;
           case TypeKind.U8: return value < 0 || value > <i32>u8.MAX_VALUE;
           case TypeKind.U16: return value < 0 || value > <i32>u16.MAX_VALUE;
-          case TypeKind.BOOL: return (value & ~1) != 0;
+          case TypeKind.BOOL: return (value & ~1) !== 0;
         }
         break;
       }
@@ -1466,7 +1466,7 @@ export class Flow {
         let instanceName = assert(getCallTarget(expr));
         if (instancesByName.has(instanceName)) {
           let instance = assert(instancesByName.get(instanceName));
-          assert(instance.kind == ElementKind.FUNCTION);
+          assert(instance.kind === ElementKind.FUNCTION);
           let functionInstance = <Function>instance;
           let returnType = functionInstance.signature.returnType;
           return !functionInstance.flow.is(FlowFlags.RETURNS_WRAPPED)
@@ -1513,7 +1513,7 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
   return toType.isShortIntegerValue && (
     !fromType.isIntegerValue ||                                    // i.e. float to small int
     fromType.size > toType.size ||                                 // larger int to small int
-    fromType.isSignedIntegerValue != toType.isSignedIntegerValue   // signedness mismatch
+    fromType.isSignedIntegerValue !== toType.isSignedIntegerValue   // signedness mismatch
   );
 }
 

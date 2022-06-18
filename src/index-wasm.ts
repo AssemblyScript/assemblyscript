@@ -273,17 +273,17 @@ export function getSourceNormalizedPath(source: Source): string {
 
 /** Tests whether a diagnostic is informatory. */
 export function isInfo(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.INFO;
+  return message.category === DiagnosticCategory.INFO;
 }
 
 /** Tests whether a diagnostic is a warning. */
 export function isWarning(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.WARNING;
+  return message.category === DiagnosticCategory.WARNING;
 }
 
 /** Tests whether a diagnostic is an error. */
 export function isError(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.ERROR;
+  return message.category === DiagnosticCategory.ERROR;
 }
 
 // Parser

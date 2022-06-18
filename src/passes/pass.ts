@@ -502,7 +502,7 @@ export abstract class Visitor {
         for (let i: Index = 0, n = _BinaryenBlockGetNumChildren(expr); i < n; ++i) {
           this.visit(_BinaryenBlockGetChildAt(expr, i));
         }
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitBlock(expr);
         break;
       }
@@ -512,7 +512,7 @@ export abstract class Visitor {
         this.visit(_BinaryenIfGetIfTrue(expr));
         let ifFalse = _BinaryenIfGetIfFalse(expr);
         if (ifFalse) this.visit(ifFalse);
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitIf(expr);
         break;
       }
@@ -521,7 +521,7 @@ export abstract class Visitor {
         let name = _BinaryenLoopGetName(expr);
         if (name) this.visitLabel(name);
         this.visit(_BinaryenLoopGetBody(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitLoop(expr);
         break;
       }
@@ -532,7 +532,7 @@ export abstract class Visitor {
         if (condition) this.visit(condition);
         let value = _BinaryenBreakGetValue(expr);
         if (value) this.visit(value);
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitBreak(expr);
         break;
       }
@@ -547,7 +547,7 @@ export abstract class Visitor {
         this.visit(_BinaryenSwitchGetCondition(expr));
         let value = _BinaryenSwitchGetValue(expr);
         if (value) this.visit(value);
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSwitch(expr);
         break;
       }
@@ -559,7 +559,7 @@ export abstract class Visitor {
         for (let i: Index = 0; i < numOperands; ++i) {
           this.visit(_BinaryenCallGetOperandAt(expr, i));
         }
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitCall(expr);
         break;
       }
@@ -570,14 +570,14 @@ export abstract class Visitor {
         for (let i: Index = 0, k = _BinaryenCallIndirectGetNumOperands(expr); i < k; ++i) {
           this.visit(_BinaryenCallIndirectGetOperandAt(expr, i));
         }
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitCallIndirect(expr);
         break;
       }
       case ExpressionId.LocalGet: {
         this.stack.push(expr);
         this.visitIndex(_BinaryenLocalGetGetIndex(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitLocalGet(expr);
         break;
       }
@@ -585,14 +585,14 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visitIndex(_BinaryenLocalSetGetIndex(expr));
         this.visit(_BinaryenLocalSetGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitLocalSet(expr);
         break;
       }
       case ExpressionId.GlobalGet: {
         this.stack.push(expr);
         this.visitName(_BinaryenGlobalGetGetName(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitGlobalGet(expr);
         break;
       }
@@ -600,14 +600,14 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visitName(_BinaryenGlobalSetGetName(expr));
         this.visit(_BinaryenGlobalSetGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitGlobalSet(expr);
         break;
       }
       case ExpressionId.Load: {
         this.stack.push(expr);
         this.visit(_BinaryenLoadGetPtr(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitLoad(expr);
         break;
       }
@@ -615,7 +615,7 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenStoreGetPtr(expr));
         this.visit(_BinaryenStoreGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitStore(expr);
         break;
       }
@@ -626,7 +626,7 @@ export abstract class Visitor {
       case ExpressionId.Unary: {
         this.stack.push(expr);
         this.visit(_BinaryenUnaryGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitUnary(expr);
         break;
       }
@@ -634,7 +634,7 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenBinaryGetLeft(expr));
         this.visit(_BinaryenBinaryGetRight(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitBinary(expr);
         break;
       }
@@ -643,14 +643,14 @@ export abstract class Visitor {
         this.visit(_BinaryenSelectGetIfTrue(expr));
         this.visit(_BinaryenSelectGetIfFalse(expr));
         this.visit(_BinaryenSelectGetCondition(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSelect(expr);
         break;
       }
       case ExpressionId.Drop: {
         this.stack.push(expr);
         this.visit(_BinaryenDropGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitDrop(expr);
         break;
       }
@@ -659,7 +659,7 @@ export abstract class Visitor {
         if (value) {
           this.stack.push(expr);
           this.visit(value);
-          assert(this.stack.pop() == expr);
+          assert(this.stack.pop() === expr);
         }
         this.visitReturn(expr);
         break;
@@ -671,7 +671,7 @@ export abstract class Visitor {
       case ExpressionId.MemoryGrow: {
         this.stack.push(expr);
         this.visit(_BinaryenMemoryGrowGetDelta(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitMemoryGrow(expr);
         break;
       }
@@ -687,7 +687,7 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenAtomicRMWGetPtr(expr));
         this.visit(_BinaryenAtomicRMWGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitAtomicRMW(expr);
         break;
       }
@@ -696,7 +696,7 @@ export abstract class Visitor {
         this.visit(_BinaryenAtomicCmpxchgGetPtr(expr));
         this.visit(_BinaryenAtomicCmpxchgGetExpected(expr));
         this.visit(_BinaryenAtomicCmpxchgGetReplacement(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitAtomicCmpxchg(expr);
         break;
       }
@@ -705,7 +705,7 @@ export abstract class Visitor {
         this.visit(_BinaryenAtomicWaitGetPtr(expr));
         this.visit(_BinaryenAtomicWaitGetExpected(expr));
         this.visit(_BinaryenAtomicWaitGetTimeout(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitAtomicWait(expr);
         break;
       }
@@ -713,7 +713,7 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenAtomicNotifyGetPtr(expr));
         this.visit(_BinaryenAtomicNotifyGetNotifyCount(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitAtomicNotify(expr);
         break;
       }
@@ -724,7 +724,7 @@ export abstract class Visitor {
       case ExpressionId.SIMDExtract: {
         this.stack.push(expr);
         this.visit(_BinaryenSIMDExtractGetVec(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSIMDExtract(expr);
         break;
       }
@@ -732,7 +732,7 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenSIMDReplaceGetVec(expr));
         this.visit(_BinaryenSIMDReplaceGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSIMDReplace(expr);
         break;
       }
@@ -740,7 +740,7 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenSIMDShuffleGetLeft(expr));
         this.visit(_BinaryenSIMDShuffleGetRight(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSIMDShuffle(expr);
         break;
       }
@@ -749,7 +749,7 @@ export abstract class Visitor {
         this.visit(_BinaryenSIMDTernaryGetA(expr));
         this.visit(_BinaryenSIMDTernaryGetB(expr));
         this.visit(_BinaryenSIMDTernaryGetC(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSIMDTernary(expr);
         break;
       }
@@ -757,14 +757,14 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenSIMDShiftGetVec(expr));
         this.visit(_BinaryenSIMDShiftGetShift(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSIMDShift(expr);
         break;
       }
       case ExpressionId.SIMDLoad: {
         this.stack.push(expr);
         this.visit(_BinaryenSIMDLoadGetPtr(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSIMDLoad(expr);
         break;
       }
@@ -772,7 +772,7 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenSIMDLoadStoreLaneGetPtr(expr));
         this.visit(_BinaryenSIMDLoadStoreLaneGetVec(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitSIMDLoadStoreLane(expr);
         break;
       }
@@ -781,7 +781,7 @@ export abstract class Visitor {
         this.visit(_BinaryenMemoryInitGetDest(expr));
         this.visit(_BinaryenMemoryInitGetOffset(expr));
         this.visit(_BinaryenMemoryInitGetSize(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitMemoryInit(expr);
         break;
       }
@@ -794,7 +794,7 @@ export abstract class Visitor {
         this.visit(_BinaryenMemoryCopyGetDest(expr));
         this.visit(_BinaryenMemoryCopyGetSource(expr));
         this.visit(_BinaryenMemoryCopyGetSize(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitMemoryCopy(expr);
         break;
       }
@@ -803,7 +803,7 @@ export abstract class Visitor {
         this.visit(_BinaryenMemoryFillGetDest(expr));
         this.visit(_BinaryenMemoryFillGetValue(expr));
         this.visit(_BinaryenMemoryFillGetSize(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitMemoryFill(expr);
         break;
       }
@@ -818,14 +818,14 @@ export abstract class Visitor {
       case ExpressionId.RefIs: {
         this.stack.push(expr);
         this.visit(_BinaryenRefIsGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitRefIs(expr);
         break;
       }
       case ExpressionId.RefFunc: {
         this.stack.push(expr);
         this.visitName(_BinaryenRefFuncGetFunc(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitRefFunc(expr);
         break;
       }
@@ -833,7 +833,7 @@ export abstract class Visitor {
         this.stack.push(expr);
         this.visit(_BinaryenRefEqGetLeft(expr));
         this.visit(_BinaryenRefEqGetRight(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitRefEq(expr);
         break;
       }
@@ -844,7 +844,7 @@ export abstract class Visitor {
         for (let i: Index = 0; i < numCatchBodies; ++i) {
           this.visit(_BinaryenTryGetCatchBodyAt(expr, i));
         }
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitTry(expr);
         break;
       }
@@ -855,7 +855,7 @@ export abstract class Visitor {
         for (let i: Index = 0; i < numOperands; ++i) {
           this.visit(_BinaryenThrowGetOperandAt(expr, i));
         }
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitThrow(expr);
         break;
       }
@@ -870,7 +870,7 @@ export abstract class Visitor {
           for (let i: Index = 0; i < numOperands; ++i) {
             this.visit(_BinaryenTupleMakeGetOperandAt(expr, i));
           }
-          assert(this.stack.pop() == expr);
+          assert(this.stack.pop() === expr);
         }
         this.visitTupleMake(expr);
         break;
@@ -878,119 +878,119 @@ export abstract class Visitor {
       case ExpressionId.TupleExtract: {
         this.stack.push(expr);
         this.visit(_BinaryenTupleExtractGetTuple(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitTupleExtract(expr);
         break;
       }
       case ExpressionId.I31New: {
         this.stack.push(expr);
         this.visit(_BinaryenI31NewGetValue(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitI31New(expr);
         break;
       }
       case ExpressionId.I31Get: {
         this.stack.push(expr);
         this.visit(_BinaryenI31GetGetI31(expr));
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitI31Get(expr);
         break;
       }
       case ExpressionId.CallRef: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitCallRef(expr);
         break;
       }
       case ExpressionId.RefTest: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitRefTest(expr);
         break;
       }
       case ExpressionId.RefCast: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitRefCast(expr);
         break;
       }
       case ExpressionId.BrOn: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitBrOn(expr);
         break;
       }
       case ExpressionId.RttCanon: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitRttCanon(expr);
         break;
       }
       case ExpressionId.RttSub: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitRttSub(expr);
         break;
       }
       case ExpressionId.StructNew: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitStructNew(expr);
         break;
       }
       case ExpressionId.StructGet: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitStructGet(expr);
         break;
       }
       case ExpressionId.StructSet: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitStructSet(expr);
         break;
       }
       case ExpressionId.ArrayNew: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitArrayNew(expr);
         break;
       }
       case ExpressionId.ArrayGet: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitArrayGet(expr);
         break;
       }
       case ExpressionId.ArraySet: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitArraySet(expr);
         break;
       }
       case ExpressionId.ArrayLen: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitArrayLen(expr);
         break;
       }
       case ExpressionId.RefAs: {
         this.stack.push(expr);
         assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        assert(this.stack.pop() === expr);
         this.visitRefAs(expr);
         break;
       }
@@ -1073,7 +1073,7 @@ export abstract class Pass extends Visitor {
     var search = this.currentExpression;
     var func = this.currentFunction;
     var body = _BinaryenFunctionGetBody(func);
-    if (body == search) {
+    if (body === search) {
       _BinaryenFunctionSetBody(func, replacement);
     } else {
       var parent = assert(this.parentExpressionOrNull);
@@ -1098,7 +1098,7 @@ export function replaceChild(
       let numChildren = _BinaryenBlockGetNumChildren(parent);
       for (let i: Index = 0; i < numChildren; ++i) {
         let child = _BinaryenBlockGetChildAt(parent, i);
-        if (child == search) {
+        if (child === search) {
           _BinaryenBlockSetChildAt(parent, i, replacement);
           return child;
         }
@@ -1107,17 +1107,17 @@ export function replaceChild(
     }
     case ExpressionId.If: {
       let condition = _BinaryenIfGetCondition(parent);
-      if (condition == search) {
+      if (condition === search) {
         _BinaryenIfSetCondition(parent, replacement);
         return condition;
       }
       let ifTrue = _BinaryenIfGetIfTrue(parent);
-      if (ifTrue == search) {
+      if (ifTrue === search) {
         _BinaryenIfSetIfTrue(parent, replacement);
         return ifTrue;
       }
       let ifFalse = _BinaryenIfGetIfFalse(parent);
-      if (ifFalse == search) {
+      if (ifFalse === search) {
         _BinaryenIfSetIfFalse(parent, replacement);
         return ifFalse;
       }
@@ -1125,7 +1125,7 @@ export function replaceChild(
     }
     case ExpressionId.Loop: {
       let body = _BinaryenLoopGetBody(parent);
-      if (body == search) {
+      if (body === search) {
         _BinaryenLoopSetBody(parent, replacement);
         return body;
       }
@@ -1133,12 +1133,12 @@ export function replaceChild(
     }
     case ExpressionId.Break: {
       let condition = _BinaryenBreakGetCondition(parent);
-      if (condition == search) {
+      if (condition === search) {
         _BinaryenBreakSetCondition(parent, replacement);
         return condition;
       }
       let value = _BinaryenBreakGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenBreakSetValue(parent, replacement);
         return value;
       }
@@ -1146,12 +1146,12 @@ export function replaceChild(
     }
     case ExpressionId.Switch: {
       let condition = _BinaryenSwitchGetCondition(parent);
-      if (condition == search) {
+      if (condition === search) {
         _BinaryenSwitchSetCondition(parent, replacement);
         return condition;
       }
       let value = _BinaryenSwitchGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenSwitchSetValue(parent, replacement);
         return value;
       }
@@ -1161,7 +1161,7 @@ export function replaceChild(
       let numOperands = _BinaryenCallGetNumOperands(parent);
       for (let i: Index = 0; i < numOperands; ++i) {
         let operand = _BinaryenCallGetOperandAt(parent, i);
-        if (operand == search) {
+        if (operand === search) {
           _BinaryenCallSetOperandAt(parent, i, replacement);
           return operand;
         }
@@ -1170,14 +1170,14 @@ export function replaceChild(
     }
     case ExpressionId.CallIndirect: {
       let target = _BinaryenCallIndirectGetTarget(parent);
-      if (target == search) {
+      if (target === search) {
         _BinaryenCallIndirectSetTarget(parent, replacement);
         return target;
       }
       let numOperands = _BinaryenCallIndirectGetNumOperands(parent);
       for (let i: Index = 0; i < numOperands; ++i) {
         let operand = _BinaryenCallIndirectGetOperandAt(parent, i);
-        if (operand == search) {
+        if (operand === search) {
           _BinaryenCallIndirectSetOperandAt(parent, i, replacement);
           return operand;
         }
@@ -1189,7 +1189,7 @@ export function replaceChild(
     }
     case ExpressionId.LocalSet: {
       let value = _BinaryenLocalSetGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenLocalSetSetValue(parent, replacement);
         return value;
       }
@@ -1200,7 +1200,7 @@ export function replaceChild(
     }
     case ExpressionId.GlobalSet: {
       let value = _BinaryenGlobalSetGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenGlobalSetSetValue(parent, replacement);
         return value;
       }
@@ -1208,7 +1208,7 @@ export function replaceChild(
     }
     case ExpressionId.Load: {
       let ptr = _BinaryenLoadGetPtr(parent);
-      if (ptr == search) {
+      if (ptr === search) {
         _BinaryenLoadSetPtr(parent, replacement);
         return ptr;
       }
@@ -1216,12 +1216,12 @@ export function replaceChild(
     }
     case ExpressionId.Store: {
       let ptr = _BinaryenStoreGetPtr(parent);
-      if (ptr == search) {
+      if (ptr === search) {
         _BinaryenStoreSetPtr(parent, replacement);
         return ptr;
       }
       let value = _BinaryenStoreGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenStoreSetValue(parent, replacement);
         return value;
       }
@@ -1232,7 +1232,7 @@ export function replaceChild(
     }
     case ExpressionId.Unary: {
       let value = _BinaryenUnaryGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenUnarySetValue(parent, replacement);
         return value;
       }
@@ -1240,12 +1240,12 @@ export function replaceChild(
     }
     case ExpressionId.Binary: {
       let left = _BinaryenBinaryGetLeft(parent);
-      if (left == search) {
+      if (left === search) {
         _BinaryenBinarySetLeft(parent, replacement);
         return left;
       }
       let right = _BinaryenBinaryGetRight(parent);
-      if (right == search) {
+      if (right === search) {
         _BinaryenBinarySetRight(parent, replacement);
         return right;
       }
@@ -1253,17 +1253,17 @@ export function replaceChild(
     }
     case ExpressionId.Select: {
       let ifTrue = _BinaryenSelectGetIfTrue(parent);
-      if (ifTrue == search) {
+      if (ifTrue === search) {
         _BinaryenSelectSetIfTrue(parent, replacement);
         return ifTrue;
       }
       let ifFalse = _BinaryenSelectGetIfFalse(parent);
-      if (ifFalse == search) {
+      if (ifFalse === search) {
         _BinaryenSelectSetIfFalse(parent, replacement);
         return ifFalse;
       }
       let condition = _BinaryenSelectGetCondition(parent);
-      if (condition == search) {
+      if (condition === search) {
         _BinaryenSelectSetCondition(parent, replacement);
         return condition;
       }
@@ -1271,7 +1271,7 @@ export function replaceChild(
     }
     case ExpressionId.Drop: {
       let value = _BinaryenDropGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenDropSetValue(parent, replacement);
         return value;
       }
@@ -1279,7 +1279,7 @@ export function replaceChild(
     }
     case ExpressionId.Return: {
       let value = _BinaryenReturnGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenReturnSetValue(parent, replacement);
         return value;
       }
@@ -1290,7 +1290,7 @@ export function replaceChild(
     }
     case ExpressionId.MemoryGrow: {
       let delta = _BinaryenMemoryGrowGetDelta(parent);
-      if (delta == search) {
+      if (delta === search) {
         _BinaryenMemoryGrowSetDelta(parent, replacement);
         return delta;
       }
@@ -1304,12 +1304,12 @@ export function replaceChild(
     }
     case ExpressionId.AtomicRMW: {
       let ptr = _BinaryenAtomicRMWGetPtr(parent);
-      if (ptr == search) {
+      if (ptr === search) {
         _BinaryenAtomicRMWSetPtr(parent, replacement);
         return ptr;
       }
       let value = _BinaryenAtomicRMWGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenAtomicRMWSetValue(parent, replacement);
         return value;
       }
@@ -1317,17 +1317,17 @@ export function replaceChild(
     }
     case ExpressionId.AtomicCmpxchg: {
       let ptr = _BinaryenAtomicCmpxchgGetPtr(parent);
-      if (ptr == search) {
+      if (ptr === search) {
         _BinaryenAtomicCmpxchgSetPtr(parent, replacement);
         return ptr;
       }
       let expected = _BinaryenAtomicCmpxchgGetExpected(parent);
-      if (expected == search) {
+      if (expected === search) {
         _BinaryenAtomicCmpxchgSetExpected(parent, replacement);
         return expected;
       }
       let repl = _BinaryenAtomicCmpxchgGetReplacement(parent);
-      if (repl == search) {
+      if (repl === search) {
         _BinaryenAtomicCmpxchgSetReplacement(parent, replacement);
         return repl;
       }
@@ -1335,17 +1335,17 @@ export function replaceChild(
     }
     case ExpressionId.AtomicWait: {
       let ptr = _BinaryenAtomicWaitGetPtr(parent);
-      if (ptr == search) {
+      if (ptr === search) {
         _BinaryenAtomicWaitSetPtr(parent, replacement);
         return ptr;
       }
       let expected = _BinaryenAtomicWaitGetExpected(parent);
-      if (expected == search) {
+      if (expected === search) {
         _BinaryenAtomicWaitSetExpected(parent, replacement);
         return expected;
       }
       let timeout = _BinaryenAtomicWaitGetTimeout(parent);
-      if (timeout == search) {
+      if (timeout === search) {
         _BinaryenAtomicWaitSetTimeout(parent, replacement);
         return timeout;
       }
@@ -1353,12 +1353,12 @@ export function replaceChild(
     }
     case ExpressionId.AtomicNotify: {
       let ptr = _BinaryenAtomicNotifyGetPtr(parent);
-      if (ptr == search) {
+      if (ptr === search) {
         _BinaryenAtomicNotifySetPtr(parent, replacement);
         return ptr;
       }
       let notifyCount = _BinaryenAtomicNotifyGetNotifyCount(parent);
-      if (notifyCount == search) {
+      if (notifyCount === search) {
         _BinaryenAtomicNotifySetNotifyCount(parent, replacement);
         return notifyCount;
       }
@@ -1369,7 +1369,7 @@ export function replaceChild(
     }
     case ExpressionId.SIMDExtract: {
       let vec = _BinaryenSIMDExtractGetVec(parent);
-      if (vec == search) {
+      if (vec === search) {
         _BinaryenSIMDExtractSetVec(parent, replacement);
         return vec;
       }
@@ -1377,12 +1377,12 @@ export function replaceChild(
     }
     case ExpressionId.SIMDReplace: {
       let vec = _BinaryenSIMDReplaceGetVec(parent);
-      if (vec == search) {
+      if (vec === search) {
         _BinaryenSIMDReplaceSetVec(parent, replacement);
         return vec;
       }
       let value = _BinaryenSIMDReplaceGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenSIMDReplaceSetValue(parent, replacement);
         return value;
       }
@@ -1390,12 +1390,12 @@ export function replaceChild(
     }
     case ExpressionId.SIMDShuffle: {
       let left = _BinaryenSIMDShuffleGetLeft(parent);
-      if (left == search) {
+      if (left === search) {
         _BinaryenSIMDShuffleSetLeft(parent, replacement);
         return left;
       }
       let right = _BinaryenSIMDShuffleGetRight(parent);
-      if (right == search) {
+      if (right === search) {
         _BinaryenSIMDShuffleSetRight(parent, replacement);
         return right;
       }
@@ -1403,17 +1403,17 @@ export function replaceChild(
     }
     case ExpressionId.SIMDTernary: {
       let a = _BinaryenSIMDTernaryGetA(parent);
-      if (a == search) {
+      if (a === search) {
         _BinaryenSIMDTernarySetA(parent, replacement);
         return a;
       }
       let b = _BinaryenSIMDTernaryGetB(parent);
-      if (b == search) {
+      if (b === search) {
         _BinaryenSIMDTernarySetB(parent, replacement);
         return b;
       }
       let c = _BinaryenSIMDTernaryGetC(parent);
-      if (c == search) {
+      if (c === search) {
         _BinaryenSIMDTernarySetC(parent, replacement);
         return c;
       }
@@ -1421,12 +1421,12 @@ export function replaceChild(
     }
     case ExpressionId.SIMDShift: {
       let vec = _BinaryenSIMDShiftGetVec(parent);
-      if (vec == search) {
+      if (vec === search) {
         _BinaryenSIMDShiftSetVec(parent, replacement);
         return vec;
       }
       let shift = _BinaryenSIMDShiftGetShift(parent);
-      if (shift == search) {
+      if (shift === search) {
         _BinaryenSIMDShiftSetShift(parent, replacement);
         return shift;
       }
@@ -1434,7 +1434,7 @@ export function replaceChild(
     }
     case ExpressionId.SIMDLoad: {
       let ptr = _BinaryenSIMDLoadGetPtr(parent);
-      if (ptr == search) {
+      if (ptr === search) {
         _BinaryenSIMDLoadSetPtr(parent, replacement);
         return ptr;
       }
@@ -1442,12 +1442,12 @@ export function replaceChild(
     }
     case ExpressionId.SIMDLoadStoreLane: {
       let ptr = _BinaryenSIMDLoadStoreLaneGetPtr(parent);
-      if (ptr == search) {
+      if (ptr === search) {
         _BinaryenSIMDLoadStoreLaneSetPtr(parent, replacement);
         return ptr;
       }
       let vec = _BinaryenSIMDLoadStoreLaneGetVec(parent);
-      if (vec == search) {
+      if (vec === search) {
         _BinaryenSIMDLoadStoreLaneSetVec(parent, replacement);
         return ptr;
       }
@@ -1455,17 +1455,17 @@ export function replaceChild(
     }
     case ExpressionId.MemoryInit: {
       let dest = _BinaryenMemoryInitGetDest(parent);
-      if (dest == search) {
+      if (dest === search) {
         _BinaryenMemoryInitSetDest(parent, replacement);
         return dest;
       }
       let offset = _BinaryenMemoryInitGetOffset(parent);
-      if (offset == search) {
+      if (offset === search) {
         _BinaryenMemoryInitSetOffset(parent, replacement);
         return offset;
       }
       let size = _BinaryenMemoryInitGetSize(parent);
-      if (size == search) {
+      if (size === search) {
         _BinaryenMemoryInitSetSize(parent, replacement);
         return size;
       }
@@ -1476,17 +1476,17 @@ export function replaceChild(
     }
     case ExpressionId.MemoryCopy: {
       let dest = _BinaryenMemoryCopyGetDest(parent);
-      if (dest == search) {
+      if (dest === search) {
         _BinaryenMemoryCopySetDest(parent, replacement);
         return dest;
       }
       let source = _BinaryenMemoryCopyGetSource(parent);
-      if (source == search) {
+      if (source === search) {
         _BinaryenMemoryCopySetSource(parent, replacement);
         return source;
       }
       let size = _BinaryenMemoryCopyGetSize(parent);
-      if (size == search) {
+      if (size === search) {
         _BinaryenMemoryCopySetSize(parent, replacement);
         return size;
       }
@@ -1494,17 +1494,17 @@ export function replaceChild(
     }
     case ExpressionId.MemoryFill: {
       let dest = _BinaryenMemoryFillGetDest(parent);
-      if (dest == search) {
+      if (dest === search) {
         _BinaryenMemoryFillSetDest(parent, replacement);
         return dest;
       }
       let value = _BinaryenMemoryFillGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenMemoryFillSetValue(parent, replacement);
         return value;
       }
       let size = _BinaryenMemoryFillGetSize(parent);
-      if (size == search) {
+      if (size === search) {
         _BinaryenMemoryFillSetSize(parent, replacement);
         return size;
       }
@@ -1518,7 +1518,7 @@ export function replaceChild(
     }
     case ExpressionId.RefIs: {
       let value = _BinaryenRefIsGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenRefIsSetValue(parent, replacement);
         return value;
       }
@@ -1529,12 +1529,12 @@ export function replaceChild(
     }
     case ExpressionId.RefEq: {
       let left = _BinaryenRefEqGetLeft(parent);
-      if (left == search) {
+      if (left === search) {
         _BinaryenRefEqSetLeft(parent, replacement);
         return left;
       }
       let right = _BinaryenRefEqGetRight(parent);
-      if (right == search) {
+      if (right === search) {
         _BinaryenRefEqSetRight(parent, replacement);
         return right;
       }
@@ -1542,14 +1542,14 @@ export function replaceChild(
     }
     case ExpressionId.Try: {
       let body = _BinaryenTryGetBody(parent);
-      if (body == search) {
+      if (body === search) {
         _BinaryenTrySetBody(parent, replacement);
         return body;
       }
       let numCatchBodies = _BinaryenTryGetNumCatchBodies(parent);
       for (let i: Index = 0; i < numCatchBodies; ++i) {
         let catchBody = _BinaryenTryGetCatchBodyAt(parent, i);
-        if (catchBody == search) {
+        if (catchBody === search) {
           _BinaryenTrySetCatchBodyAt(parent, i, replacement);
           return catchBody;
         }
@@ -1560,7 +1560,7 @@ export function replaceChild(
       let numOperands = _BinaryenThrowGetNumOperands(parent);
       for (let i: Index = 0; i < numOperands; ++i) {
         let operand = _BinaryenThrowGetOperandAt(parent, i);
-        if (operand == search) {
+        if (operand === search) {
           _BinaryenThrowSetOperandAt(parent, i, replacement);
           return operand;
         }
@@ -1574,7 +1574,7 @@ export function replaceChild(
       let numOperands = _BinaryenTupleMakeGetNumOperands(parent);
       for (let i: Index = 0; i < numOperands; ++i) {
         let operand = _BinaryenTupleMakeGetOperandAt(parent, i);
-        if (operand == search) {
+        if (operand === search) {
           _BinaryenTupleMakeSetOperandAt(parent, i, replacement);
           return operand;
         }
@@ -1583,7 +1583,7 @@ export function replaceChild(
     }
     case ExpressionId.TupleExtract: {
       let tuple = _BinaryenTupleExtractGetTuple(parent);
-      if (tuple == search) {
+      if (tuple === search) {
         _BinaryenTupleExtractSetTuple(parent, replacement);
         return tuple;
       }
@@ -1591,7 +1591,7 @@ export function replaceChild(
     }
     case ExpressionId.I31New: {
       let value = _BinaryenI31NewGetValue(parent);
-      if (value == search) {
+      if (value === search) {
         _BinaryenI31NewSetValue(parent, replacement);
         return value;
       }
@@ -1599,7 +1599,7 @@ export function replaceChild(
     }
     case ExpressionId.I31Get: {
       let i31Expr = _BinaryenI31GetGetI31(parent);
-      if (i31Expr == search) {
+      if (i31Expr === search) {
         _BinaryenI31GetSetI31(parent, replacement);
         return i31Expr;
       }

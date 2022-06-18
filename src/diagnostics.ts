@@ -110,7 +110,7 @@ export class DiagnosticMessage {
 
   /** Tests if this message equals the specified. */
   equals(other: DiagnosticMessage): bool {
-    if (this.code != other.code) return false;
+    if (this.code !== other.code) return false;
     var thisRange = this.range;
     var otherRange = other.range;
     if (thisRange) {
@@ -125,7 +125,7 @@ export class DiagnosticMessage {
     } else if (otherRelatedRange) {
       return false;
     }
-    return this.message == other.message;
+    return this.message === other.message;
   }
 
   /** Adds a source range to this message. */
@@ -234,12 +234,12 @@ function formatDiagnosticContext(range: Range): string {
     start++;
   }
   if (isColorsEnabled()) sb.push(COLOR_RED);
-  if (range.start == range.end) {
+  if (range.start === range.end) {
     sb.push("^");
   } else {
     while (start++ < range.end) {
       if (isLineBreak(text.charCodeAt(start))) {
-        sb.push(start == range.start + 1 ? "^" : "~");
+        sb.push(start === range.start + 1 ? "^" : "~");
         break;
       }
       sb.push("~");

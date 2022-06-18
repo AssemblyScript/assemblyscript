@@ -101,7 +101,7 @@ export class TSDBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.ENUMVALUE) continue;
+        if (member.kind !== ElementKind.ENUMVALUE) continue;
         indent(sb, this.indentLevel);
         sb.push("/** @type `i32` */\n");
         indent(sb, this.indentLevel);
@@ -133,7 +133,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("`\n");
     }
     var returnType = signature.returnType;
-    if (returnType != Type.void) {
+    if (returnType !== Type.void) {
       indent(sb, this.indentLevel);
       sb.push(" * @returns `");
       sb.push(returnType.toString());
@@ -226,7 +226,7 @@ export class TSDBuilder extends ExportsWalker {
         if (member.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED)) return false;
         if (member.is(CommonFlags.CONSTRUCTOR)) {
           // a generated constructor is ok
-          if (member.declaration.range != this.program.nativeRange) return false;
+          if (member.declaration.range !== this.program.nativeRange) return false;
         }
       }
     }
@@ -251,29 +251,29 @@ export class TSDBuilder extends ExportsWalker {
         sb.push(">");
       } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {
         const valueType = clazz.getArrayValueType();
-        if (valueType == Type.i8) {
+        if (valueType === Type.i8) {
           sb.push("Int8Array");
-        } else if (valueType == Type.u8) {
+        } else if (valueType === Type.u8) {
           if (clazz.extends(this.program.uint8ClampedArrayPrototype)) {
             sb.push("Uint8ClampedArray");
           } else {
             sb.push("Uint8Array");
           }
-        } else if (valueType == Type.i16) {
+        } else if (valueType === Type.i16) {
           sb.push("Int16Array");
-        } else if (valueType == Type.u16) {
+        } else if (valueType === Type.u16) {
           sb.push("Uint16Array");
-        } else if (valueType == Type.i32) {
+        } else if (valueType === Type.i32) {
           sb.push("Int32Array");
-        } else if (valueType == Type.u32) {
+        } else if (valueType === Type.u32) {
           sb.push("Uint32Array");
-        } else if (valueType == Type.i64) {
+        } else if (valueType === Type.i64) {
           sb.push("BigInt64Array");
-        } else if (valueType == Type.u64) {
+        } else if (valueType === Type.u64) {
           sb.push("BigUint64Array");
-        } else if (valueType == Type.f32) {
+        } else if (valueType === Type.f32) {
           sb.push("Float32Array");
-        } else if (valueType == Type.f64) {
+        } else if (valueType === Type.f64) {
           sb.push("Float64Array");
         } else {
           sb.push("unknown");
@@ -285,13 +285,13 @@ export class TSDBuilder extends ExportsWalker {
           typeName = assert(seenObjectTypes.get(clazz));
           sb.push(typeName);
           if (this.isPlainObject(clazz)) {
-            sb.push(mode == Mode.EXPORT ? "<never>" : "<undefined>");
+            sb.push(mode === Mode.EXPORT ? "<never>" : "<undefined>");
           }
         } else {
           if (this.isPlainObject(clazz)) {
             typeName = "__Record" + clazz.id.toString();
             sb.push(typeName);
-            sb.push(mode == Mode.EXPORT ? "<never>" : "<undefined>");
+            sb.push(mode === Mode.EXPORT ? "<never>" : "<undefined>");
             this.deferredTypings.push(this.makeRecordType(clazz, mode));
           } else {
             typeName = "__Internref" + clazz.id.toString();
@@ -306,10 +306,10 @@ export class TSDBuilder extends ExportsWalker {
       }
       return sb.join("");
     } else {
-      if (type == Type.bool) {
+      if (type === Type.bool) {
         return "boolean";
       }
-      if (type == Type.void) {
+      if (type === Type.void) {
         return "void";
       }
       if (type.isNumericValue) {
@@ -334,7 +334,7 @@ export class TSDBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.FIELD) continue;
+        if (member.kind !== ElementKind.FIELD) continue;
         let field = <Field>member;
         sb.push("  /** @type `");
         sb.push(field.type.toString());

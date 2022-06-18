@@ -493,7 +493,7 @@ export class ASTBuilder {
     var names = node.names;
     var values = node.values;
     var numElements = names.length;
-    assert(numElements == values.length);
+    assert(numElements === values.length);
     if (numElements) {
       sb.push("{\n");
       indent(sb, ++this.indentLevel);
@@ -505,7 +505,7 @@ export class ASTBuilder {
         indent(sb, this.indentLevel);
         let name = names[i];
         let value = values[i];
-        if (name == value) {
+        if (name === value) {
           this.visitNode(name);
         } else {
           this.visitNode(name);
@@ -625,7 +625,7 @@ export class ASTBuilder {
         this.sb.push("function");
       }
     } else {
-      assert(declaration.name.text.length == 0);
+      assert(declaration.name.text.length === 0);
     }
     this.visitFunctionCommon(declaration);
   }
@@ -700,7 +700,7 @@ export class ASTBuilder {
     if (tag) this.visitNode(tag);
     sb.push("`");
     sb.push(escapeString(parts[0], CharCode.BACKTICK));
-    assert(parts.length == expressions.length + 1);
+    assert(parts.length === expressions.length + 1);
     for (let i = 0, k = expressions.length; i < k; ++i) {
       sb.push("${");
       this.visitNode(expressions[i]);
@@ -777,16 +777,16 @@ export class ASTBuilder {
     var sb = this.sb;
     if (
       !sb.length ||                     // leading EmptyStatement
-      node.kind == NodeKind.VARIABLE || // potentially assigns a FunctionExpression
-      node.kind == NodeKind.EXPRESSION  // potentially assigns a FunctionExpression
+      node.kind === NodeKind.VARIABLE || // potentially assigns a FunctionExpression
+      node.kind === NodeKind.EXPRESSION  // potentially assigns a FunctionExpression
     ) {
       sb.push(";\n");
     } else {
       let last = sb[sb.length - 1];
       let lastCharPos = last.length - 1;
       if (lastCharPos >= 0 && (
-        last.charCodeAt(lastCharPos) == CharCode.CLOSEBRACE ||
-        last.charCodeAt(lastCharPos) == CharCode.SEMICOLON)
+        last.charCodeAt(lastCharPos) === CharCode.CLOSEBRACE ||
+        last.charCodeAt(lastCharPos) === CharCode.SEMICOLON)
       ) {
         sb.push("\n");
       } else {
@@ -892,7 +892,7 @@ export class ASTBuilder {
       }
       for (let i = 0, k = members.length; i < k; ++i) {
         let member = members[i];
-        if (member.kind != NodeKind.FIELDDECLARATION || (<FieldDeclaration>member).parameterIndex < 0) {
+        if (member.kind !== NodeKind.FIELDDECLARATION || (<FieldDeclaration>member).parameterIndex < 0) {
           indent(sb, indentLevel);
           this.visitNodeAndTerminate(member);
         }
@@ -908,7 +908,7 @@ export class ASTBuilder {
     var sb = this.sb;
     sb.push("do ");
     this.visitNode(node.statement);
-    if (node.statement.kind == NodeKind.BLOCK) {
+    if (node.statement.kind === NodeKind.BLOCK) {
       sb.push(" while (");
     } else {
       sb.push(";\n");
@@ -972,7 +972,7 @@ export class ASTBuilder {
 
   visitExportMember(node: ExportMember): void {
     this.visitIdentifierExpression(node.localName);
-    if (node.exportedName.text != node.localName.text) {
+    if (node.exportedName.text !== node.localName.text) {
       this.sb.push(" as ");
       this.visitIdentifierExpression(node.exportedName);
     }
@@ -1140,9 +1140,9 @@ export class ASTBuilder {
         sb.push(">");
       }
     }
-    if (node.arrowKind == ArrowKind.ARROW_SINGLE) {
+    if (node.arrowKind === ArrowKind.ARROW_SINGLE) {
       let parameters = signature.parameters;
-      assert(parameters.length == 1);
+      assert(parameters.length === 1);
       assert(!signature.explicitThisType);
       this.serializeParameter(parameters[0]);
     } else {
@@ -1167,7 +1167,7 @@ export class ASTBuilder {
     var returnType = signature.returnType;
     if (node.arrowKind) {
       if (body) {
-        if (node.arrowKind == ArrowKind.ARROW_SINGLE) {
+        if (node.arrowKind === ArrowKind.ARROW_SINGLE) {
           assert(isTypeOmitted(returnType));
         } else if (isTypeOmitted(returnType)) {
           sb.push(")");
@@ -1206,12 +1206,12 @@ export class ASTBuilder {
     sb.push(") ");
     var ifTrue = node.ifTrue;
     this.visitNode(ifTrue);
-    if (ifTrue.kind != NodeKind.BLOCK) {
+    if (ifTrue.kind !== NodeKind.BLOCK) {
       sb.push(";\n");
     }
     var ifFalse = node.ifFalse;
     if (ifFalse) {
-      if (ifTrue.kind == NodeKind.BLOCK) {
+      if (ifTrue.kind === NodeKind.BLOCK) {
         sb.push(" else ");
       } else {
         sb.push("else ");
@@ -1224,7 +1224,7 @@ export class ASTBuilder {
     var externalName = node.foreignName;
     var name = node.name;
     this.visitIdentifierExpression(externalName);
-    if (externalName.text != name.text) {
+    if (externalName.text !== name.text) {
       this.sb.push(" as ");
       this.visitIdentifierExpression(name);
     }
@@ -1527,7 +1527,7 @@ export class ASTBuilder {
     sb.push("while (");
     this.visitNode(node.condition);
     var statement = node.statement;
-    if (statement.kind == NodeKind.EMPTY) {
+    if (statement.kind === NodeKind.EMPTY) {
       sb.push(")");
     } else {
       sb.push(") ");
@@ -1566,14 +1566,14 @@ export class ASTBuilder {
     if (implicitFieldDeclaration) {
       this.serializeAccessModifiers(implicitFieldDeclaration);
     }
-    if (kind == ParameterKind.REST) {
+    if (kind === ParameterKind.REST) {
       sb.push("...");
     }
     this.visitIdentifierExpression(node.name);
     var type = node.type;
     var initializer = node.initializer;
     if (type) {
-      if (kind == ParameterKind.OPTIONAL && !initializer) sb.push("?");
+      if (kind === ParameterKind.OPTIONAL && !initializer) sb.push("?");
       if (!isTypeOmitted(type)) {
         sb.push(": ");
         this.visitTypeNode(type);

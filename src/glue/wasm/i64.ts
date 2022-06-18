@@ -17,7 +17,7 @@
 // @ts-ignore: decorator
 @global @inline
 function i64_is<T>(value: T): bool {
-  return isInteger<T>() && sizeof<T>() == 8;
+  return isInteger<T>() && sizeof<T>() === 8;
 }
 
 // @ts-ignore: decorator
@@ -78,11 +78,11 @@ function i64_mul(left: i64, right: i64): i64 {
 @global
 function i64_pow(left: i64, right: i64): i64 {
   if (right <= 0) {
-    if (left == -1) return select<i64>(-1, 1, right & 1);
-    return i64(right == 0) | i64(left == 1);
+    if (left === -1) return select<i64>(-1, 1, right & 1);
+    return i64(right === 0) | i64(left === 1);
   }
-  if (right == 1) return left;
-  if (right == 2) return left * left;
+  if (right === 1) return left;
+  if (right === 2) return left * left;
   var result: i64 = 1;
   while (right) {
     if (right & 1) result *= left;
@@ -155,13 +155,13 @@ function i64_shr_u(left: i64, right: i64): i64 {
 // @ts-ignore: decorator
 @global @inline
 function i64_eq(left: i64, right: i64): bool {
-  return left == right;
+  return left === right;
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_ne(left: i64, right: i64): bool {
-  return left != right;
+  return left !== right;
 }
 
 // @ts-ignore: decorator
@@ -174,7 +174,7 @@ function i64_gt(left: i64, right: i64): bool {
 @global @inline
 function i64_align(value: i64, alignment: i64): i64 {
   var mask: i64 = alignment - 1;
-  assert(alignment && (alignment & mask) == 0);
+  assert(alignment && (alignment & mask) === 0);
   return (value + mask) & ~mask;
 }
 
@@ -217,7 +217,7 @@ function i64_is_u32(value: i64): bool {
 // @ts-ignore: decorator
 @global @inline
 function i64_is_bool(value: i64): bool {
-  return (value & ~1) == 0;
+  return (value & ~1) === 0;
 }
 
 // @ts-ignore: decorator
