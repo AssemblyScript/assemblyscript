@@ -252,67 +252,67 @@ export namespace OperatorKind {
       case DecoratorKind.OPERATOR_BINARY: {
         switch (arg.charCodeAt(0)) {
           case CharCode.OPENBRACKET: {
-            if (arg == "[]") return OperatorKind.INDEXED_GET;
-            if (arg == "[]=") return OperatorKind.INDEXED_SET;
+            if (arg === "[]") return OperatorKind.INDEXED_GET;
+            if (arg === "[]=") return OperatorKind.INDEXED_SET;
             break;
           }
           case CharCode.OPENBRACE: {
-            if (arg == "{}") return OperatorKind.UNCHECKED_INDEXED_GET;
-            if (arg == "{}=") return OperatorKind.UNCHECKED_INDEXED_SET;
+            if (arg === "{}") return OperatorKind.UNCHECKED_INDEXED_GET;
+            if (arg === "{}=") return OperatorKind.UNCHECKED_INDEXED_SET;
             break;
           }
           case CharCode.PLUS: {
-            if (arg == "+") return OperatorKind.ADD;
+            if (arg === "+") return OperatorKind.ADD;
             break;
           }
           case CharCode.MINUS: {
-            if (arg == "-") return OperatorKind.SUB;
+            if (arg === "-") return OperatorKind.SUB;
             break;
           }
           case CharCode.ASTERISK: {
-            if (arg == "*") return OperatorKind.MUL;
-            if (arg == "**") return OperatorKind.POW;
+            if (arg === "*") return OperatorKind.MUL;
+            if (arg === "**") return OperatorKind.POW;
             break;
           }
           case CharCode.SLASH: {
-            if (arg == "/") return OperatorKind.DIV;
+            if (arg === "/") return OperatorKind.DIV;
             break;
           }
           case CharCode.PERCENT: {
-            if (arg == "%") return OperatorKind.REM;
+            if (arg === "%") return OperatorKind.REM;
             break;
           }
           case CharCode.AMPERSAND: {
-            if (arg == "&") return OperatorKind.BITWISE_AND;
+            if (arg === "&") return OperatorKind.BITWISE_AND;
             break;
           }
           case CharCode.BAR: {
-            if (arg == "|") return OperatorKind.BITWISE_OR;
+            if (arg === "|") return OperatorKind.BITWISE_OR;
             break;
           }
           case CharCode.CARET: {
-            if (arg == "^") return OperatorKind.BITWISE_XOR;
+            if (arg === "^") return OperatorKind.BITWISE_XOR;
             break;
           }
           case CharCode.EQUALS: {
-            if (arg == "==") return OperatorKind.EQ;
+            if (arg === "==") return OperatorKind.EQ;
             break;
           }
           case CharCode.EXCLAMATION: {
-            if (arg == "!=") return OperatorKind.NE;
+            if (arg === "!=") return OperatorKind.NE;
             break;
           }
           case CharCode.GREATERTHAN: {
-            if (arg == ">") return OperatorKind.GT;
-            if (arg == ">=") return OperatorKind.GE;
-            if (arg == ">>") return OperatorKind.BITWISE_SHR;
-            if (arg == ">>>") return OperatorKind.BITWISE_SHR_U;
+            if (arg === ">") return OperatorKind.GT;
+            if (arg === ">=") return OperatorKind.GE;
+            if (arg === ">>") return OperatorKind.BITWISE_SHR;
+            if (arg === ">>>") return OperatorKind.BITWISE_SHR_U;
             break;
           }
           case CharCode.LESSTHAN: {
-            if (arg == "<") return OperatorKind.LT;
-            if (arg == "<=") return OperatorKind.LE;
-            if (arg == "<<") return OperatorKind.BITWISE_SHL;
+            if (arg === "<") return OperatorKind.LT;
+            if (arg === "<=") return OperatorKind.LE;
+            if (arg === "<<") return OperatorKind.BITWISE_SHL;
             break;
           }
         }
@@ -321,21 +321,21 @@ export namespace OperatorKind {
       case DecoratorKind.OPERATOR_PREFIX: {
         switch (arg.charCodeAt(0)) {
           case CharCode.PLUS: {
-            if (arg == "+") return OperatorKind.PLUS;
-            if (arg == "++") return OperatorKind.PREFIX_INC;
+            if (arg === "+") return OperatorKind.PLUS;
+            if (arg === "++") return OperatorKind.PREFIX_INC;
             break;
           }
           case CharCode.MINUS: {
-            if (arg == "-") return OperatorKind.MINUS;
-            if (arg == "--") return OperatorKind.PREFIX_DEC;
+            if (arg === "-") return OperatorKind.MINUS;
+            if (arg === "--") return OperatorKind.PREFIX_DEC;
             break;
           }
           case CharCode.EXCLAMATION: {
-            if (arg == "!") return OperatorKind.NOT;
+            if (arg === "!") return OperatorKind.NOT;
             break;
           }
           case CharCode.TILDE: {
-            if (arg == "~") return OperatorKind.BITWISE_NOT;
+            if (arg === "~") return OperatorKind.BITWISE_NOT;
             break;
           }
         }
@@ -344,11 +344,11 @@ export namespace OperatorKind {
       case DecoratorKind.OPERATOR_POSTFIX: {
         switch (arg.charCodeAt(0)) {
           case CharCode.PLUS: {
-            if (arg == "++") return OperatorKind.POSTFIX_INC;
+            if (arg === "++") return OperatorKind.POSTFIX_INC;
             break;
           }
           case CharCode.MINUS: {
-            if (arg == "--") return OperatorKind.POSTFIX_DEC;
+            if (arg === "--") return OperatorKind.POSTFIX_DEC;
             break;
           }
         }
@@ -653,7 +653,7 @@ export class Program extends DiagnosticEmitter {
   /** Gets the standard `abort` instance, if not explicitly disabled. */
   get abortInstance(): Function | null {
     var prototype = this.lookup(CommonNames.abort);
-    if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
+    if (!prototype || prototype.kind !== ElementKind.FUNCTION_PROTOTYPE) return null;
     return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
@@ -783,7 +783,7 @@ export class Program extends DiagnosticEmitter {
     var sources = this.sources;
     for (let i = 0; i < sources.length; ++i) {
       let source = sources[i];
-      if (source.internalPath == internalPath) return source.text;
+      if (source.internalPath === internalPath) return source.text;
     }
     return null;
   }
@@ -835,7 +835,7 @@ export class Program extends DiagnosticEmitter {
     if (blockSize < blockMinsize) blockSize = blockMinsize;
     const blockMaxsize = 1 << 30; // 1 << (FL_BITS + SB_BITS - 1), exclusive
     const tagsMask = 3;
-    if (blockSize >= blockMaxsize || (blockSize & tagsMask) != 0) {
+    if (blockSize >= blockMaxsize || (blockSize & tagsMask) !== 0) {
       throw new Error("invalid block size");
     }
     return blockSize;
@@ -1254,9 +1254,9 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
-    assert(this.arrayBufferInstance.id == 0);
-    assert(this.stringInstance.id == 1);
-    assert(this.arrayBufferViewInstance.id == 2);
+    assert(this.arrayBufferInstance.id === 0);
+    assert(this.stringInstance.id === 1);
+    assert(this.arrayBufferViewInstance.id === 2);
 
     // register classes backing basic types
     this.registerWrapperClass(Type.i8, CommonNames.I8);
@@ -1291,8 +1291,8 @@ export class Program extends DiagnosticEmitter {
       let extendsNode = assert(thisPrototype.extendsNode); // must be present if in queuedExtends
       let baseElement = resolver.resolveTypeName(extendsNode.name, thisPrototype.parent);
       if (!baseElement) continue;
-      if (thisPrototype.kind == ElementKind.CLASS_PROTOTYPE) {
-        if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
+      if (thisPrototype.kind === ElementKind.CLASS_PROTOTYPE) {
+        if (baseElement.kind === ElementKind.CLASS_PROTOTYPE) {
           let basePrototype = <ClassPrototype>baseElement;
           if (basePrototype.hasDecorator(DecoratorFlags.FINAL)) {
             this.error(
@@ -1301,7 +1301,7 @@ export class Program extends DiagnosticEmitter {
             );
           }
           if (
-            basePrototype.hasDecorator(DecoratorFlags.UNMANAGED) !=
+            basePrototype.hasDecorator(DecoratorFlags.UNMANAGED) !==
             thisPrototype.hasDecorator(DecoratorFlags.UNMANAGED)
           ) {
             this.error(
@@ -1316,8 +1316,8 @@ export class Program extends DiagnosticEmitter {
             extendsNode.range
           );
         }
-      } else if (thisPrototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
-        if (baseElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
+      } else if (thisPrototype.kind === ElementKind.INTERFACE_PROTOTYPE) {
+        if (baseElement.kind === ElementKind.INTERFACE_PROTOTYPE) {
           thisPrototype.basePrototype = <InterfacePrototype>baseElement;
         } else {
           this.error(
@@ -1336,7 +1336,7 @@ export class Program extends DiagnosticEmitter {
         let implementsNode = implementsNodes[j];
         let interfaceElement = resolver.resolveTypeName(implementsNode.name, thisPrototype.parent);
         if (!interfaceElement) continue;
-        if (interfaceElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
+        if (interfaceElement.kind === ElementKind.INTERFACE_PROTOTYPE) {
           let interfacePrototype = <InterfacePrototype>interfaceElement;
           let interfacePrototypes = thisPrototype.interfacePrototypes;
           if (!interfacePrototypes) thisPrototype.interfacePrototypes = interfacePrototypes = new Array();
@@ -1431,7 +1431,7 @@ export class Program extends DiagnosticEmitter {
     // TODO: for (let file of this.filesByName.values()) {
     for (let _values = Map_values(this.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
-      if (file.source.sourceKind == SourceKind.USER_ENTRY) {
+      if (file.source.sourceKind === SourceKind.USER_ENTRY) {
         this.markModuleExports(file);
       }
     }
@@ -1453,8 +1453,8 @@ export class Program extends DiagnosticEmitter {
             ) {
               let baseMember = assert(baseInstanceMembers.get(thisMember.name));
               if (
-                thisMember.kind == ElementKind.FUNCTION_PROTOTYPE &&
-                baseMember.kind == ElementKind.FUNCTION_PROTOTYPE
+                thisMember.kind === ElementKind.FUNCTION_PROTOTYPE &&
+                baseMember.kind === ElementKind.FUNCTION_PROTOTYPE
               ) {
                 let thisMethod = <FunctionPrototype>thisMember;
                 let baseMethod = <FunctionPrototype>baseMember;
@@ -1476,8 +1476,8 @@ export class Program extends DiagnosticEmitter {
                   }
                 }
               } else if (
-                thisMember.kind == ElementKind.PROPERTY_PROTOTYPE &&
-                baseMember.kind == ElementKind.PROPERTY_PROTOTYPE
+                thisMember.kind === ElementKind.PROPERTY_PROTOTYPE &&
+                baseMember.kind === ElementKind.PROPERTY_PROTOTYPE
               ) {
                 let thisProperty = <PropertyPrototype>thisMember;
                 let baseProperty = <PropertyPrototype>baseMember;
@@ -1544,7 +1544,7 @@ export class Program extends DiagnosticEmitter {
   private require(name: string, kind: ElementKind): Element {
     var element = this.lookup(name);
     if (!element) throw new Error(`Missing standard library component: ${name}`);
-    if (element.kind != kind) throw Error(`Invalid standard library component kind: ${name}`);
+    if (element.kind !== kind) throw Error(`Invalid standard library component kind: ${name}`);
     return element;
   }
 
@@ -1656,7 +1656,7 @@ export class Program extends DiagnosticEmitter {
     var wrapperClasses = this.wrapperClasses;
     assert(!type.isInternalReference && !wrapperClasses.has(type));
     var element = assert(this.lookup(className));
-    assert(element.kind == ElementKind.CLASS_PROTOTYPE);
+    assert(element.kind === ElementKind.CLASS_PROTOTYPE);
     var classElement = assert(this.resolver.resolveClass(<ClassPrototype>element, null));
     classElement.wrappedType = type;
     wrapperClasses.set(type, classElement);
@@ -1698,7 +1698,7 @@ export class Program extends DiagnosticEmitter {
       // user has multiple global elements of the same name in different files,
       // which might result in unexpected shared symbols accross files. considering
       // this a wonky feature for now that we might want to revisit later.
-      if (existing != element) {
+      if (existing !== element) {
         let merged = tryMerge(existing, element);
         if (!merged) {
           if (isDeclaredElement(existing.kind)) {
@@ -1801,7 +1801,7 @@ export class Program extends DiagnosticEmitter {
         let kind = DecoratorKind.fromNode(decorator.name);
         let flag = DecoratorFlags.fromKind(kind);
         if (flag) {
-          if (flag == DecoratorFlags.BUILTIN) {
+          if (flag === DecoratorFlags.BUILTIN) {
             if (!(acceptedFlags & flag) && !decorator.range.source.isLibrary) {
               this.error(
                 DiagnosticCode.Decorator_0_is_not_valid_here,
@@ -1891,7 +1891,7 @@ export class Program extends DiagnosticEmitter {
             this.initializeProperty(methodDeclaration, element);
           } else {
             let method = this.initializeMethod(methodDeclaration, element);
-            if (method && methodDeclaration.name.kind == NodeKind.CONSTRUCTOR) {
+            if (method && methodDeclaration.name.kind === NodeKind.CONSTRUCTOR) {
               element.constructorPrototype = method;
             }
           }
@@ -1919,7 +1919,7 @@ export class Program extends DiagnosticEmitter {
       acceptedFlags |= DecoratorFlags.EXTERNAL;
     }
     if (declaration.is(CommonFlags.STATIC)) { // global variable
-      assert(parent.kind != ElementKind.INTERFACE_PROTOTYPE);
+      assert(parent.kind !== ElementKind.INTERFACE_PROTOTYPE);
       acceptedFlags |= DecoratorFlags.LAZY;
       if (declaration.is(CommonFlags.READONLY)) {
         acceptedFlags |= DecoratorFlags.INLINE;
@@ -1968,7 +1968,7 @@ export class Program extends DiagnosticEmitter {
       this.checkDecorators(declaration.decorators, acceptedFlags)
     );
     if (isStatic) { // global function
-      assert(declaration.name.kind != NodeKind.CONSTRUCTOR);
+      assert(declaration.name.kind !== NodeKind.CONSTRUCTOR);
       if (!parent.add(name, element)) return null;
     } else if (!parent.addInstance(name, element)) { // actual instance method
       return null;
@@ -1996,12 +1996,12 @@ export class Program extends DiagnosticEmitter {
           case DecoratorKind.OPERATOR_POSTFIX: {
             let args = decorator.args;
             let numArgs = args ? args.length : 0;
-            if (numArgs == 1) {
+            if (numArgs === 1) {
               let firstArg = (<Expression[]>decorator.args)[0];
               if (firstArg.isLiteralKind(LiteralKind.STRING)) {
                 let text = (<StringLiteralExpression>firstArg).value;
                 let kind = OperatorKind.fromDecorator(decorator.decoratorKind, text);
-                if (kind == OperatorKind.INVALID) {
+                if (kind === OperatorKind.INVALID) {
                   this.error(
                     DiagnosticCode._0_is_not_a_valid_operator,
                     firstArg.range, text
@@ -2048,7 +2048,7 @@ export class Program extends DiagnosticEmitter {
       let parentMembers = parent.members;
       if (parentMembers && parentMembers.has(name)) {
         let element = assert(parentMembers.get(name));
-        if (element.kind == ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
+        if (element.kind === ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
       } else {
         let element = new PropertyPrototype(name, parent, declaration);
         if (!parent.add(name, element)) return null;
@@ -2058,7 +2058,7 @@ export class Program extends DiagnosticEmitter {
       let parentMembers = parent.instanceMembers;
       if (parentMembers && parentMembers.has(name)) {
         let element = assert(parentMembers.get(name));
-        if (element.kind == ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
+        if (element.kind === ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
       } else {
         let element = new PropertyPrototype(name, parent, declaration);
         if (!parent.addInstance(name, element)) return null;
@@ -2392,7 +2392,7 @@ export class Program extends DiagnosticEmitter {
       }
     }
     if (!declaration.is(CommonFlags.INSTANCE)) {
-      if (parent.kind != ElementKind.CLASS_PROTOTYPE) {
+      if (parent.kind !== ElementKind.CLASS_PROTOTYPE) {
         validDecorators |= DecoratorFlags.GLOBAL;
       }
     }
@@ -2564,7 +2564,7 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // namespace member expected
       }
     }
-    if (original != element) copyMembers(original, element); // keep original parent
+    if (original !== element) copyMembers(original, element); // keep original parent
     return element;
   }
 
@@ -2631,9 +2631,9 @@ export class Program extends DiagnosticEmitter {
   //   var current: Class | null = target;
   //   var arrayPrototype = this.arrayPrototype;
   //   do {
-  //     if (current.prototype == arrayPrototype) { // Array<T>
+  //     if (current.prototype === arrayPrototype) { // Array<T>
   //       let typeArguments = assert(current.typeArguments);
-  //       assert(typeArguments.length == 1);
+  //       assert(typeArguments.length === 1);
   //       return typeArguments[0];
   //     }
   //   } while (current = current.base);
@@ -2767,7 +2767,7 @@ export abstract class Element {
     if (parent) {
       this.parent = parent;
     } else {
-      assert(this.kind == ElementKind.FILE);
+      assert(this.kind === ElementKind.FILE);
       this.parent = this; // special case to keep this.parent non-nullable
     }
   }
@@ -2777,22 +2777,22 @@ export abstract class Element {
     var current: Element = this;
     do {
       current = current.parent;
-      if (current.kind == ElementKind.FILE) return <File>current;
+      if (current.kind === ElementKind.FILE) return <File>current;
     } while (true);
   }
 
   /** Tests if this element has a specific flag or flags. */
-  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
+  is(flag: CommonFlags): bool { return (this.flags & flag) === flag; }
   /** Tests if this element has any of the specified flags. */
-  isAny(flags: CommonFlags): bool { return (this.flags & flags) != 0; }
+  isAny(flags: CommonFlags): bool { return (this.flags & flags) !== 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
   /** Unsets the specific flag or flags. */
   unset(flag: CommonFlags): void { this.flags &= ~flag; }
   /** Tests if this element has a specific decorator flag or flags. */
-  hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
+  hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) === flag; }
   /** Tests if this element has any of the specified decorator flags. */
-  hasAnyDecorator(flags: DecoratorFlags): bool { return (this.decoratorFlags & flags) != 0; }
+  hasAnyDecorator(flags: DecoratorFlags): bool { return (this.decoratorFlags & flags) !== 0; }
 
   /** Get the member with the specified name, if any. */
   getMember(name: string): DeclaredElement | null {
@@ -2813,7 +2813,7 @@ export abstract class Element {
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
       let existing = assert(members.get(name));
-      if (existing.parent != this) {
+      if (existing.parent !== this) {
         // override non-own element
       } else {
         let merged = tryMerge(existing, element);
@@ -2842,7 +2842,7 @@ export abstract class Element {
     }
     members.set(name, element);
     var program = this.program;
-    if (element.kind != ElementKind.FUNCTION_PROTOTYPE || !(<FunctionPrototype>element).isBound) {
+    if (element.kind !== ElementKind.FUNCTION_PROTOTYPE || !(<FunctionPrototype>element).isBound) {
       // prefer unbound prototypes in global lookup maps
       program.elementsByName.set(element.internalName, element);
       program.elementsByDeclaration.set(originalDeclaration, element);
@@ -2862,9 +2862,9 @@ export abstract class Element {
 
   /** Checks if the visibility of this element equals the specified. */
   visibilityEquals(other: Element): bool {
-    if (this.isPublic == other.isPublic) return true;
+    if (this.isPublic === other.isPublic) return true;
     const vis = CommonFlags.PRIVATE | CommonFlags.PROTECTED;
-    return (this.flags & vis) == (other.flags & vis);
+    return (this.flags & vis) === (other.flags & vis);
   }
 
   /** Returns a string representation of this element. */
@@ -2925,7 +2925,7 @@ export abstract class DeclaredElement extends Element {
   get identifierAndSignatureRange(): Range {
     var declaration = this.declaration;
     var identifierNode = declaration.name;
-    if (declaration.kind == NodeKind.FUNCTIONDECLARATION || declaration.kind == NodeKind.METHODDECLARATION) {
+    if (declaration.kind === NodeKind.FUNCTIONDECLARATION || declaration.kind === NodeKind.METHODDECLARATION) {
       let signatureNode = (<FunctionDeclaration>declaration).signature;
       return Range.join(identifierNode.range, signatureNode.range);
     }
@@ -2941,7 +2941,7 @@ export abstract class DeclaredElement extends Element {
   isCompatibleOverride(base: DeclaredElement): bool {
     var self: DeclaredElement = this; // TS
     var kind = self.kind;
-    if (kind == base.kind) {
+    if (kind === base.kind) {
       switch (kind) {
         case ElementKind.FUNCTION: {
           return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
@@ -3094,7 +3094,7 @@ export class File extends Element {
     var exports = this.exports;
     if (!exports) this.exports = exports = new Map();
     exports.set(name, element);
-    if (this.source.sourceKind == SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
+    if (this.source.sourceKind === SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
 
     // Also, add to the namespaces that capture our exports
     for(let i = 0; i < this.aliasNamespaces.length; i++) {
@@ -3434,7 +3434,7 @@ export class Local extends VariableLikeElement {
     );
     this.originalName = name;
     this.index = index;
-    assert(type != Type.void);
+    assert(type !== Type.void);
     this.setType(type);
   }
 
@@ -3511,8 +3511,8 @@ export class FunctionPrototype extends DeclaredElement {
   get isBound(): bool {
     var parent = this.parent;
     var parentKind = parent.kind;
-    if (parentKind == ElementKind.PROPERTY_PROTOTYPE) parentKind = parent.parent.kind;
-    return parentKind == ElementKind.CLASS || parentKind == ElementKind.INTERFACE;
+    if (parentKind === ElementKind.PROPERTY_PROTOTYPE) parentKind = parent.parent.kind;
+    return parentKind === ElementKind.CLASS || parentKind === ElementKind.INTERFACE;
   }
 
   /** Creates a clone of this prototype that is bound to a concrete class instead. */
@@ -3523,7 +3523,7 @@ export class FunctionPrototype extends DeclaredElement {
     if (!boundPrototypes) this.boundPrototypes = boundPrototypes = new Map();
     else if (boundPrototypes.has(classInstance)) return assert(boundPrototypes.get(classInstance));
     var declaration = this.declaration;
-    assert(declaration.kind == NodeKind.METHODDECLARATION);
+    assert(declaration.kind === NodeKind.METHODDECLARATION);
     var bound = new FunctionPrototype(
       this.name,
       classInstance, // !
@@ -3663,8 +3663,8 @@ export class Function extends TypedElement {
   /** Gets the class or interface this function belongs to, if an instance method. */
   getClassOrInterface(): Class | null {
     var parent = this.parent;
-    if (parent.kind == ElementKind.PROPERTY) parent = parent.parent;
-    if (parent.kind == ElementKind.CLASS || parent.kind == ElementKind.INTERFACE) {
+    if (parent.kind === ElementKind.PROPERTY) parent = parent.parent;
+    if (parent.kind === ElementKind.CLASS || parent.kind === ElementKind.INTERFACE) {
       return <Class>parent;
     }
     return null;
@@ -3830,7 +3830,7 @@ export class Field extends VariableLikeElement {
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
-    assert(type != Type.void);
+    assert(type !== Type.void);
     this.setType(type);
     registerConcreteElement(this.program, this);
   }
@@ -3838,7 +3838,7 @@ export class Field extends VariableLikeElement {
   /** Gets the field's `this` type. */
   get thisType(): Type {
     var parent = this.parent;
-    assert(parent.kind == ElementKind.CLASS);
+    assert(parent.kind === ElementKind.CLASS);
     return (<Class>parent).type;
   }
 
@@ -3933,7 +3933,7 @@ export class PropertyPrototype extends DeclaredElement {
     if (!boundPrototypes) this.boundPrototypes = boundPrototypes = new Map();
     else if (boundPrototypes.has(classInstance)) return assert(boundPrototypes.get(classInstance));
     var firstDeclaration = this.declaration;
-    assert(firstDeclaration.kind == NodeKind.METHODDECLARATION);
+    assert(firstDeclaration.kind === NodeKind.METHODDECLARATION);
     var bound = new PropertyPrototype(
       this.name,
       classInstance, // !
@@ -4089,7 +4089,7 @@ export class ClassPrototype extends DeclaredElement {
       // cannot directly or indirectly extend itself
       if (seen.has(current)) break;
       seen.add(current);
-      if (current == basePtototype) return true;
+      if (current === basePtototype) return true;
       current = current.basePrototype;
     } while (current);
     return false;
@@ -4197,9 +4197,9 @@ export class Class extends TypedElement {
     var lengthField = this.getMember("length");
     if (!lengthField) return false;
     return (
-      lengthField.kind == ElementKind.FIELD ||
+      lengthField.kind === ElementKind.FIELD ||
       (
-        lengthField.kind == ElementKind.PROPERTY_PROTOTYPE &&
+        lengthField.kind === ElementKind.PROPERTY_PROTOTYPE &&
         (<PropertyPrototype>lengthField).getterPrototype != null // TODO: resolve & check type?
       )
     ) && (
@@ -4246,7 +4246,7 @@ export class Class extends TypedElement {
     var typeParameters = prototype.typeParameterNodes;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
-      if (!typeParameters || numTypeArguments != typeParameters.length) {
+      if (!typeParameters || numTypeArguments !== typeParameters.length) {
         throw new Error("type argument count mismatch");
       }
       if (numTypeArguments) {
@@ -4302,8 +4302,8 @@ export class Class extends TypedElement {
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
     do {
-      if (current == target) return true;
-      if (target.kind == ElementKind.INTERFACE) {
+      if (current === target) return true;
+      if (target.kind === ElementKind.INTERFACE) {
         let interfaces = current.interfaces;
         if (interfaces) {
           for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
@@ -4348,7 +4348,7 @@ export class Class extends TypedElement {
   /** Gets the method of the specified name, resolved with the given type arguments. */
   getMethod(name: string, typeArguments: Type[] | null = null): Function | null {
     var member = this.getMember(name);
-    if (member && member.kind == ElementKind.FUNCTION_PROTOTYPE) {
+    if (member && member.kind === ElementKind.FUNCTION_PROTOTYPE) {
       return this.program.resolver.resolveFunction(<FunctionPrototype>member, typeArguments);
     }
     return null;
@@ -4357,7 +4357,7 @@ export class Class extends TypedElement {
   /** Calculates the memory offset of the specified field. */
   offsetof(fieldName: string): u32 {
     var member = assert(this.getMember(fieldName));
-    assert(member.kind == ElementKind.FIELD);
+    assert(member.kind === ElementKind.FIELD);
     return (<Field>member).memoryOffset;
   }
 
@@ -4379,7 +4379,7 @@ export class Class extends TypedElement {
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
     var member = this.getMember(name);
-    if (member && member.kind == ElementKind.FIELD) {
+    if (member && member.kind === ElementKind.FIELD) {
       let fieldInstance = <Field>member;
       let offset = baseOffset + fieldInstance.memoryOffset;
       let typeKind = fieldInstance.type.kind;
@@ -4408,12 +4408,12 @@ export class Class extends TypedElement {
             if (i64_is(value)) {
               writeI64(value, buffer, offset);
             } else {
-              writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.USIZE);
+              writeI32AsI64(i32(value), buffer, offset, typeKind === TypeKind.USIZE);
             }
             return 8;
           } else {
             if (i64_is(value)) {
-              writeI64AsI32(value, buffer, offset, typeKind == TypeKind.USIZE);
+              writeI64AsI32(value, buffer, offset, typeKind === TypeKind.USIZE);
             } else {
               writeI32(i32(value), buffer, offset);
             }
@@ -4425,7 +4425,7 @@ export class Class extends TypedElement {
           if (i64_is(value)) {
             writeI64(value, buffer, offset);
           } else {
-            writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.U64);
+            writeI32AsI64(i32(value), buffer, offset, typeKind === TypeKind.U64);
           }
           return 8;
         }
@@ -4454,7 +4454,7 @@ export class Class extends TypedElement {
   getTypeArgumentsTo(extendedPrototype: ClassPrototype): Type[] | null {
     var current: Class | null = this;
     do {
-      if (current.prototype == extendedPrototype) return current.typeArguments;
+      if (current.prototype === extendedPrototype) return current.typeArguments;
       current = current.base;
     } while (current);
     return null;
@@ -4473,29 +4473,29 @@ export class Class extends TypedElement {
       return this.getTypeArgumentsTo(staticArrayPrototype)![0];
     }
     var abvInstance = program.arrayBufferViewInstance;
-    while (current.base != abvInstance) {
+    while (current.base !== abvInstance) {
       current = assert(current.base);
     }
     var prototype = current.prototype;
     switch (prototype.name.charCodeAt(0)) {
       case CharCode.F: {
-        if (prototype == program.float32ArrayPrototype) return Type.f32;
-        if (prototype == program.float64ArrayPrototype) return Type.f64;
+        if (prototype === program.float32ArrayPrototype) return Type.f32;
+        if (prototype === program.float64ArrayPrototype) return Type.f64;
         break;
       }
       case CharCode.I: {
-        if (prototype == program.int8ArrayPrototype) return Type.i8;
-        if (prototype == program.int16ArrayPrototype) return Type.i16;
-        if (prototype == program.int32ArrayPrototype) return Type.i32;
-        if (prototype == program.int64ArrayPrototype) return Type.i64;
+        if (prototype === program.int8ArrayPrototype) return Type.i8;
+        if (prototype === program.int16ArrayPrototype) return Type.i16;
+        if (prototype === program.int32ArrayPrototype) return Type.i32;
+        if (prototype === program.int64ArrayPrototype) return Type.i64;
         break;
       }
       case CharCode.U: {
-        if (prototype == program.uint8ArrayPrototype) return Type.u8;
-        if (prototype == program.uint8ClampedArrayPrototype) return Type.u8;
-        if (prototype == program.uint16ArrayPrototype) return Type.u16;
-        if (prototype == program.uint32ArrayPrototype) return Type.u32;
-        if (prototype == program.uint64ArrayPrototype) return Type.u64;
+        if (prototype === program.uint8ArrayPrototype) return Type.u8;
+        if (prototype === program.uint8ClampedArrayPrototype) return Type.u8;
+        if (prototype === program.uint16ArrayPrototype) return Type.u16;
+        if (prototype === program.uint32ArrayPrototype) return Type.u32;
+        if (prototype === program.uint64ArrayPrototype) return Type.u64;
         break;
       }
     }
@@ -4513,7 +4513,7 @@ export class Class extends TypedElement {
       // Check that there are no managed instance fields
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
-        if (member.kind == ElementKind.FIELD) {
+        if (member.kind === ElementKind.FIELD) {
           let fieldType = (<Field>member).type;
           if (fieldType.isManaged) return false;
         }
@@ -4523,10 +4523,10 @@ export class Class extends TypedElement {
       if (instanceMembers.has(CommonNames.visit)) {
         let prototype = this.prototype;
         if (
-          prototype == program.arrayPrototype ||
-          prototype == program.staticArrayPrototype ||
-          prototype == program.setPrototype ||
-          prototype == program.mapPrototype
+          prototype === program.arrayPrototype ||
+          prototype === program.staticArrayPrototype ||
+          prototype === program.setPrototype ||
+          prototype === program.mapPrototype
         ) {
           // Note that we cannot know for sure anymore as soon as the collection
           // is extended, because user code may implement a custom visitor.
@@ -4611,7 +4611,7 @@ function registerConcreteElement(program: Program, element: Element): void {
 function tryMerge(older: Element, newer: Element): DeclaredElement | null {
   // NOTE: some of the following cases are not supported by TS, not sure why exactly.
   // suggesting to just merge what seems to be possible for now and revisit later.
-  assert(older.program == newer.program);
+  assert(older.program === newer.program);
   if (newer.members) return null;
   var merged: DeclaredElement | null = null;
   switch (older.kind) {
@@ -4635,7 +4635,7 @@ function tryMerge(older: Element, newer: Element): DeclaredElement | null {
     }
     case ElementKind.CLASS_PROTOTYPE:
     case ElementKind.ENUM: {
-      if (newer.kind == ElementKind.NAMESPACE) {
+      if (newer.kind === ElementKind.NAMESPACE) {
         copyMembers(newer, older);
         merged = <DeclaredElement>older;
         break;
@@ -4668,7 +4668,7 @@ function tryMerge(older: Element, newer: Element): DeclaredElement | null {
       break;
     }
     case ElementKind.GLOBAL: {
-      if (newer.kind == ElementKind.TYPEDEFINITION) {
+      if (newer.kind === ElementKind.TYPEDEFINITION) {
         if (!older.shadowType) {
           older.shadowType = <TypeDefinition>newer;
           copyMembers(newer, older);
@@ -4696,7 +4696,7 @@ function tryMerge(older: Element, newer: Element): DeclaredElement | null {
   if (merged) {
     let olderIsExport = older.is(CommonFlags.EXPORT) || older.hasDecorator(DecoratorFlags.GLOBAL);
     let newerIsExport = newer.is(CommonFlags.EXPORT) || newer.hasDecorator(DecoratorFlags.GLOBAL);
-    if (olderIsExport != newerIsExport) {
+    if (olderIsExport !== newerIsExport) {
       older.program.error(
         DiagnosticCode.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local,
         merged.identifierNode.range, merged.identifierNode.text

@@ -156,10 +156,10 @@ type TempMap = Map<TypeRef, LocalIndex>;
 /** Attempts to match the `__tostack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
 function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
   if (
-    _BinaryenExpressionGetId(expr) == ExpressionId.Call &&
-    module.readStringCached(_BinaryenCallGetTarget(expr)) == BuiltinNames.tostack
+    _BinaryenExpressionGetId(expr) === ExpressionId.Call &&
+    module.readStringCached(_BinaryenCallGetTarget(expr)) === BuiltinNames.tostack
   ) {
-    assert(_BinaryenCallGetNumOperands(expr) == 1);
+    assert(_BinaryenCallGetNumOperands(expr) === 1);
     return _BinaryenCallGetOperandAt(expr, 0);
   }
   return 0;
@@ -198,15 +198,15 @@ export class ShadowStackPass extends Pass {
   /** Target pointer type. */
   get ptrType(): TypeRef { return this.options.sizeTypeRef; }
   /** Target pointer size. */
-  get ptrSize(): i32 { return this.ptrType == TypeRef.I64 ? 8 : 4; }
+  get ptrSize(): i32 { return this.ptrType === TypeRef.I64 ? 8 : 4; }
   /** Target pointer addition operation. */
-  get ptrBinaryAdd(): BinaryOp { return this.ptrType == TypeRef.I64 ? BinaryOp.AddI64 : BinaryOp.AddI32; }
+  get ptrBinaryAdd(): BinaryOp { return this.ptrType === TypeRef.I64 ? BinaryOp.AddI64 : BinaryOp.AddI32; }
   /** Target pointer subtraction operation. */
-  get ptrBinarySub(): BinaryOp { return this.ptrType == TypeRef.I64 ? BinaryOp.SubI64 : BinaryOp.SubI32; }
+  get ptrBinarySub(): BinaryOp { return this.ptrType === TypeRef.I64 ? BinaryOp.SubI64 : BinaryOp.SubI32; }
 
   /** Gets a constant with the specified value of the target pointer type. */
   ptrConst(value: i32): ExpressionRef {
-    return this.ptrType == TypeRef.I64
+    return this.ptrType === TypeRef.I64
       ? this.module.i64(value)
       : this.module.i32(value);
   }
@@ -254,7 +254,7 @@ export class ShadowStackPass extends Pass {
 
   /** Makes an expression modifying the stack pointer by the given offset. */
   makeStackOffset(offset: i32): ExpressionRef {
-    assert(offset != 0);
+    assert(offset !== 0);
     var module = this.module;
     var expr = module.global_set(BuiltinNames.stack_pointer,
       module.binary(offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
@@ -296,7 +296,7 @@ export class ShadowStackPass extends Pass {
         remain -= 8;
       }
       if (remain) {
-        assert(remain == 4);
+        assert(remain === 4);
         // store<i32>(__stack_pointer, 0, frameSize - remain)
         stmts.push(
           module.store(4,
@@ -485,7 +485,7 @@ export class ShadowStackPass extends Pass {
   updateExport(exportRef: ExportRef, managedOperandIndices: i32[]): void {
     var module = this.module;
     var moduleRef = module.ref;
-    assert(_BinaryenExportGetKind(exportRef) == ExternalKind.Function);
+    assert(_BinaryenExportGetKind(exportRef) === ExternalKind.Function);
 
     var internalNameRef = _BinaryenExportGetValue(exportRef);
     var internalName = module.readStringCached(internalNameRef)!;
@@ -502,7 +502,7 @@ export class ShadowStackPass extends Pass {
     var wrapperName = "export:" + internalName;
     var wrapperNameRef = module.allocStringCached(wrapperName);
 
-    if (_BinaryenGetFunction(moduleRef, wrapperNameRef) == 0) {
+    if (_BinaryenGetFunction(moduleRef, wrapperNameRef) === 0) {
       let stmts = new Array<ExpressionRef>();
       // __stack_pointer -= frameSize
       stmts.push(
@@ -522,7 +522,7 @@ export class ShadowStackPass extends Pass {
       for (let i = 0; i < numParams; ++i) {
         forwardedOperands[i] = module.local_get(i, paramTypes[i]);
       }
-      if (results != TypeRef.None) {
+      if (results !== TypeRef.None) {
         let tempIndex = numLocals++;
         vars.push(results);
         // t = original(...)
@@ -589,12 +589,12 @@ export class ShadowStackPass extends Pass {
       // Handle implicit return
       let body = _BinaryenFunctionGetBody(func);
       let bodyType = _BinaryenExpressionGetType(body);
-      if (bodyType == TypeRef.Unreachable) {
+      if (bodyType === TypeRef.Unreachable) {
         // body
         stmts.push(
           body
         );
-      } else if (bodyType == TypeRef.None) {
+      } else if (bodyType === TypeRef.None) {
         // body
         stmts.push(
           body

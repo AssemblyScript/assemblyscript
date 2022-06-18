@@ -1,12 +1,12 @@
 /**
  * @fileoverview A potential minimalistic shadow stack. Currently not used.
- * 
+ *
  * Instruments a module's exports to track when the execution stack is fully
  * unwound, and injects a call to `__autocollect` to be invoked when it is.
  * Accounts for the currently in-flight managed return value from Wasm to the
  * host by pushing it to a mini stack, essentially a stack of only one value,
  * while `__autocollect` is executing.
- * 
+ *
  * @license Apache-2.0
  */
 
@@ -68,7 +68,7 @@ export class MiniStack extends Pass {
 
   /** Instruments a function export to also maintain stack depth. */
   instrumentFunctionExport(ref: ExportRef): void {
-    assert(_BinaryenExportGetKind(ref) == ExternalKind.Function);
+    assert(_BinaryenExportGetKind(ref) === ExternalKind.Function);
     var module = this.module;
     var internalNameRef = _BinaryenExportGetValue(ref);
     var externalNameRef = _BinaryenExportGetName(ref);
@@ -103,7 +103,7 @@ export class MiniStack extends Pass {
           )
         );
       }
-      if (results == TypeRef.None) {
+      if (results === TypeRef.None) {
         stmts.push(
           call
         );
@@ -139,7 +139,7 @@ export class MiniStack extends Pass {
           module.call(AUTOCOLLECT, null, TypeRef.None)
         )
       );
-      if (results != TypeRef.None) {
+      if (results !== TypeRef.None) {
         stmts.push(
           module.local_get(numParams, results)
         );
@@ -164,7 +164,7 @@ export class MiniStack extends Pass {
       // We are going to modify the list of exports, so do this in two steps
       for (let i: Index = 0; i < numExports; ++i) {
         let exportRef = _BinaryenGetExportByIndex(moduleRef, i);
-        if (_BinaryenExportGetKind(exportRef) == ExternalKind.Function) {
+        if (_BinaryenExportGetKind(exportRef) === ExternalKind.Function) {
           functionExportRefs.push(exportRef);
         }
       }
