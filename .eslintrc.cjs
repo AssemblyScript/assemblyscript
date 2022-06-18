@@ -52,6 +52,7 @@ module.exports = {
     "block-spacing": "error",
     "space-before-blocks": "error",
     "no-lonely-if": "error",
+    "no-constant-binary-expression": "error",
 
     // This is mostly visual style, making comments look uniform.
     "spaced-comment": ["error", "always", {
@@ -257,6 +258,7 @@ module.exports = {
         "no-compare-neg-zero": "off",
         "no-inner-declarations": "off",
         "no-constant-condition": "off",
+        "no-constant-binary-expression": "off",
         "use-isnan": "off",
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-unused-vars": "off",
