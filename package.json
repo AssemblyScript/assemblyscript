@@ -20,7 +20,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "108.0.0-nightly.20220528",
+    "binaryen": "109.0.0-nightly.20220618",
     "long": "^5.2.0"
   },
   "devDependencies": {
