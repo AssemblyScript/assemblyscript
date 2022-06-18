@@ -124,7 +124,7 @@ export class JSBuilder extends ExportsWalker {
   private deferredCode: string[] = new Array<string>();
 
   private exports: string[] = new Array();
-  private importMappings: Map<string,i32> = new Map();
+  private importMappings: Map<string, i32> = new Map();
 
   /** Constructs a new JavaScript bindings builder. */
   constructor(program: Program, esm: bool, includePrivate: bool = false) {
@@ -508,7 +508,7 @@ export class JSBuilder extends ExportsWalker {
     for (let _keys = Map_keys(moduleImports), i = 0, k = _keys.length; i < k; ++i) {
       let moduleName = _keys[i];
       let moduleId = this.ensureModuleId(moduleName);
-      let module = <Map<string,Element>>moduleImports.get(moduleName);
+      let module = <Map<string, Element>>moduleImports.get(moduleName);
       indent(sb, this.indentLevel);
       if (isIdentifier(moduleName)) {
         sb.push(moduleName);
@@ -619,20 +619,17 @@ export class JSBuilder extends ExportsWalker {
     if (hasAdaptedExports) {
       indent(sb, this.indentLevel);
       sb.push("}, exports);\n");
+    } else if (
+      this.needsLiftBuffer || this.needsLowerBuffer ||
+      this.needsLiftString || this.needsLowerString ||
+      this.needsLiftArray || this.needsLowerArray ||
+      this.needsLiftTypedArray || this.needsLowerTypedArray ||
+      this.needsLiftStaticArray
+    ) {
+      sb.length = sbLengthBefore - 2; // skip adaptedExports + 1x indent
     } else {
-      if (
-        this.needsLiftBuffer || this.needsLowerBuffer ||
-        this.needsLiftString || this.needsLowerString ||
-        this.needsLiftArray || this.needsLowerArray ||
-        this.needsLiftTypedArray || this.needsLowerTypedArray ||
-        this.needsLiftStaticArray
-      ) {
-        sb.length = sbLengthBefore - 2; // skip adaptedExports + 1x indent
-      } else {
-        sb.length = sbLengthBefore - 4; // skip memory and adaptedExports + 2x indent
-      }
+      sb.length = sbLengthBefore - 4; // skip memory and adaptedExports + 2x indent
     }
-
     // Add external JS code fragments
     var deferredCode = this.deferredCode;
     if (deferredCode.length) {
@@ -871,8 +868,11 @@ export class JSBuilder extends ExportsWalker {
       sb.push(`
 } = await (async url => instantiate(
   await (async () => {
-    try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
-    catch { return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url)); }
+    try {
+      return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url));
+    } catch {
+      return globalThis.WebAssembly.compile(await (await import("node:fs/promises")).readFile(url));
+    }
   })(), {
 `);
       let needsMaybeDefault = false;
@@ -1150,35 +1150,33 @@ export class JSBuilder extends ExportsWalker {
     }
     if (valueType.isInternalReference) {
       sb.push("new Uint32Array(memory.buffer)[");
+    } else if (valueType == Type.i8) {
+      sb.push("new Int8Array(memory.buffer)[");
+    } else if (valueType == Type.u8 || valueType == Type.bool) {
+      sb.push("new Uint8Array(memory.buffer)[");
+    } else if (valueType == Type.i16) {
+      sb.push("new Int16Array(memory.buffer)[");
+    } else if (valueType == Type.u16) {
+      sb.push("new Uint16Array(memory.buffer)[");
+    } else if (valueType == Type.i32 || valueType == Type.isize32) {
+      sb.push("new Int32Array(memory.buffer)[");
+    } else if (valueType == Type.u32 || valueType == Type.usize32) {
+      sb.push("new Uint32Array(memory.buffer)[");
+    } else if (valueType == Type.i64 || valueType == Type.isize64) {
+      sb.push("new BigInt64Array(memory.buffer)[");
+    } else if (valueType == Type.u64 || valueType == Type.usize64) {
+      sb.push("new BigUint64Array(memory.buffer)[");
+    } else if (valueType == Type.f32) {
+      sb.push("new Float32Array(memory.buffer)[");
+    } else if (valueType == Type.f64) {
+      sb.push("new Float64Array(memory.buffer)[");
     } else {
-      if (valueType == Type.i8) {
-        sb.push("new Int8Array(memory.buffer)[");
-      } else if (valueType == Type.u8 || valueType == Type.bool) {
-        sb.push("new Uint8Array(memory.buffer)[");
-      } else if (valueType == Type.i16) {
-        sb.push("new Int16Array(memory.buffer)[");
-      } else if (valueType == Type.u16) {
-        sb.push("new Uint16Array(memory.buffer)[");
-      } else if (valueType == Type.i32 || valueType == Type.isize32) {
-        sb.push("new Int32Array(memory.buffer)[");
-      } else if (valueType == Type.u32 || valueType == Type.usize32) {
-        sb.push("new Uint32Array(memory.buffer)[");
-      } else if (valueType == Type.i64 || valueType == Type.isize64) {
-        sb.push("new BigInt64Array(memory.buffer)[");
-      } else if (valueType == Type.u64 || valueType == Type.usize64) {
-        sb.push("new BigUint64Array(memory.buffer)[");
-      } else if (valueType == Type.f32) {
-        sb.push("new Float32Array(memory.buffer)[");
-      } else if (valueType == Type.f64) {
-        sb.push("new Float64Array(memory.buffer)[");
+      if (skipTail) {
+        sb.push("(() => { throw Error(\"unsupported type\") })()");
       } else {
-        if (skipTail) {
-          sb.push("(() => { throw Error(\"unsupported type\") })()");
-        } else {
-          sb.push("throw Error(\"unsupported type\"); }");
-        }
-        return;
+        sb.push("throw Error(\"unsupported type\"); }");
       }
+      return;
     }
     sb.push(targetName);
     sb.push(" >>> ");

@@ -47,8 +47,8 @@ export async function postInstantiate(instance) {
   assert.strictEqual(exports.stringFunction("a", "b"), "ab");
 
   {
-    let i16 = new Int16Array([1,2,3]);
-    let f32 = new Float32Array([4,5,6]);
+    let i16 = new Int16Array([1, 2, 3]);
+    let f32 = new Float32Array([4, 5, 6]);
     let u64 = exports.typedarrayFunction(i16, f32);
     assert.deepStrictEqual(u64, new BigUint64Array([1n, 2n, 3n, 4n, 5n, 6n]));
   }

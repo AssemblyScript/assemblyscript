@@ -40,7 +40,7 @@ export class TSDBuilder extends ExportsWalker {
   private esm: bool;
   private sb: string[] = [];
   private indentLevel: i32 = 0;
-  private seenObjectTypes: Map<Class,string> = new Map();
+  private seenObjectTypes: Map<Class, string> = new Map();
   private deferredTypings: string[] = new Array();
 
   /** Constructs a new TypeScript definitions builder. */

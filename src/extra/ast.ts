@@ -1169,13 +1169,11 @@ export class ASTBuilder {
       if (body) {
         if (node.arrowKind == ArrowKind.ARROW_SINGLE) {
           assert(isTypeOmitted(returnType));
+        } else if (isTypeOmitted(returnType)) {
+          sb.push(")");
         } else {
-          if (isTypeOmitted(returnType)) {
-            sb.push(")");
-          } else {
-            sb.push("): ");
-            this.visitTypeNode(returnType);
-          }
+          sb.push("): ");
+          this.visitTypeNode(returnType);
         }
         sb.push(" => ");
         this.visitNode(body);

@@ -31,7 +31,7 @@ export abstract class ExportsWalker {
   /** Whether to include private members */
   includePrivate: bool;
   /** Already seen elements. */
-  seen: Map<Element,string> = new Map();
+  seen: Map<Element, string> = new Map();
 
   /** Constructs a new Element walker. */
   constructor(program: Program, includePrivate: bool = false) {
