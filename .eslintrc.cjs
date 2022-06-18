@@ -47,6 +47,12 @@ module.exports = {
       ]
     }],
 
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "block-spacing": "error",
+    "space-before-blocks": "error",
+    "no-lonely-if": "error",
+
     // This is mostly visual style, making comments look uniform.
     "spaced-comment": ["error", "always", {
       "markers": ["/"],   // triple-slash
@@ -102,6 +108,7 @@ module.exports = {
         "bin/*"
       ],
       rules: {
+        "keyword-spacing": ["error", { "before": true, "after": true }],
         // We are testing both ESM and UMD, so don't limit us.
         "@typescript-eslint/no-var-requires": "off",
 

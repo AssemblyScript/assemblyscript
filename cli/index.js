@@ -98,11 +98,10 @@ export function configToArguments(options, argv = []) {
     const opt = generated.options[key];
     if (opt && opt.type === "b") {
       if (val) argv.push(`--${key}`);
+    } else if (Array.isArray(val)) {
+      val.forEach(val => { argv.push(`--${key}`, String(val)); });
     } else {
-      if (Array.isArray(val)) {
-        val.forEach(val => { argv.push(`--${key}`, String(val)); });
-      }
-      else argv.push(`--${key}`, String(val));
+      argv.push(`--${key}`, String(val));
     }
   });
   return argv;
@@ -538,11 +537,9 @@ export async function main(argv, options) {
           if ((sourceText = await readFile(plainName + extension, libDir)) != null) {
             sourcePath = libraryPrefix + plainName + extension;
             break;
-          } else {
-            if ((sourceText = await readFile(indexName + extension, libDir)) != null) {
-              sourcePath = libraryPrefix + indexName + extension;
-              break;
-            }
+          } else if ((sourceText = await readFile(indexName + extension, libDir)) != null) {
+            sourcePath = libraryPrefix + indexName + extension;
+            break;
           }
         }
         if (sourceText == null) { // paths
@@ -1083,7 +1080,7 @@ async function getConfig(file, baseDir, readFile) {
   let config;
   try {
     config = JSON.parse(contents);
-  } catch(ex) {
+  } catch (ex) {
     throw new Error(`Asconfig is not valid json: ${location}`);
   }
 

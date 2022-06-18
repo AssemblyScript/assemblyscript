@@ -37,6 +37,9 @@
     "d3": "^6.3.1",
     "jsdom": "^16.4.0"
   },
+  "devDependencies": {
+    "esm2umd": "^0.1.2"
+  },
   "files": [
     "index.d.ts",
     "index.js",
