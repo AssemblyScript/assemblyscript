@@ -1970,8 +1970,8 @@ export class Program extends DiagnosticEmitter {
     if (isStatic) { // global function
       assert(declaration.name.kind != NodeKind.CONSTRUCTOR);
       if (!parent.add(name, element)) return null;
-    } else { // actual instance method
-      if (!parent.addInstance(name, element)) return null;
+    } else if (!parent.addInstance(name, element)) { // actual instance method
+      return null;
     }
     this.checkOperatorOverloads(declaration.decorators, element, parent);
     return element;

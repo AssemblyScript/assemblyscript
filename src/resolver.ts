@@ -3179,15 +3179,13 @@ export class Resolver extends DiagnosticEmitter {
                     fieldPrototype.name, instance.internalName, baseClass.internalName
                   );
                 }
-              } else {
+              } else if (existingField.is(CommonFlags.PRIVATE)) {
                 // fieldPrototype is public here
-                if (existingField.is(CommonFlags.PRIVATE)) {
-                  this.errorRelated(
-                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, baseClass.internalName, instance.internalName
-                  );
-                }
+                this.errorRelated(
+                  DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
+                  fieldPrototype.name, baseClass.internalName, instance.internalName
+                );
               }
 
               // assignability

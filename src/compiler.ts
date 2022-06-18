@@ -3130,11 +3130,8 @@ export class Compiler extends DiagnosticEmitter {
           initializers.push(
             this.makeLocalAssignment(local, initExpr, type, false)
           );
-        } else {
-          // no need to assign zero
-          if (local.type.isShortIntegerValue) {
-            flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
-          }
+        } else if (local.type.isShortIntegerValue) { // no need to assign zero
+          flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
         }
       }
     }
@@ -3692,40 +3689,33 @@ export class Compiler extends DiagnosticEmitter {
       expr = this.makeIsTrueish(expr, Type.v128, reportNode);
 
     // int to int
-    } else {
-      // i64 to ...
-      if (fromType.isLongIntegerValue) {
-
-        // i64 to i32 or smaller
-        if (toType.isBooleanValue) {
-          expr = module.binary(BinaryOp.NeI64, expr, module.i64(0));
-        } else if (!toType.isLongIntegerValue) {
-          expr = module.unary(UnaryOp.WrapI64ToI32, expr); // discards upper bits
-        }
-
-      // i32 or smaller to i64
-      } else if (toType.isLongIntegerValue) {
-        expr = module.unary(
-          fromType.isSignedIntegerValue ? UnaryOp.ExtendI32ToI64 : UnaryOp.ExtendU32ToU64,
-          this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
-        );
-
-      // i32 to i32
-      } else {
-        // small i32 to ...
-        if (fromType.isShortIntegerValue) {
-          // small i32 to larger i32
-          if (fromType.size < toType.size) {
-            expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
-          }
-        // same size
-        } else if (!explicit && !this.options.isWasm64 && fromType.isVaryingIntegerValue && !toType.isVaryingIntegerValue) {
-          this.warning(
-            DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
-            reportNode.range, fromType.toString(), toType.toString()
-          );
-        }
+    } else if (fromType.isLongIntegerValue) {
+      // i64 to i32 or smaller
+      if (toType.isBooleanValue) {
+        expr = module.binary(BinaryOp.NeI64, expr, module.i64(0));
+      } else if (!toType.isLongIntegerValue) {
+        expr = module.unary(UnaryOp.WrapI64ToI32, expr); // discards upper bits
       }
+
+    // i32 or smaller to i64
+    } else if (toType.isLongIntegerValue) {
+      expr = module.unary(
+        fromType.isSignedIntegerValue ? UnaryOp.ExtendI32ToI64 : UnaryOp.ExtendU32ToU64,
+        this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
+      );
+
+    // i32 to i32
+    } else if (fromType.isShortIntegerValue) {
+      // small i32 to larger i32
+      if (fromType.size < toType.size) {
+        expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
+      }
+    // same size
+    } else if (!explicit && !this.options.isWasm64 && fromType.isVaryingIntegerValue && !toType.isVaryingIntegerValue) {
+      this.warning(
+        DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
     }
 
     this.currentType = toType;
@@ -7884,43 +7874,40 @@ export class Compiler extends DiagnosticEmitter {
       }
 
     // either none or both nullable
-    } else {
-
+    } else if (actualType.isAssignableTo(expectedType)) {
       // downcast - check statically
-      if (actualType.isAssignableTo(expectedType)) {
-        return module.maybeDropCondition(expr, module.i32(1));
+      return module.maybeDropCondition(expr, module.i32(1));
 
-      // upcast - check dynamically
-      } else if (expectedType.isAssignableTo(actualType)) {
-        let program = this.program;
-        if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
-          // FIXME: the temp local and the if can be removed here once flows
-          // perform null checking, which would error earlier when checking
-          // uninitialized (thus zero) `var a: A` to be an instance of something.
-          let temp = flow.getTempLocal(actualType);
-          let instanceofInstance = assert(program.instanceofInstance);
-          this.compileFunction(instanceofInstance);
-          let ret = module.if(
-            module.unary(
-              sizeTypeRef == TypeRef.I64
-                ? UnaryOp.EqzI64
-                : UnaryOp.EqzI32,
-              module.local_tee(temp.index, expr, actualType.isManaged),
-            ),
-            module.i32(0),
-            this.makeCallDirect(instanceofInstance, [
-              module.local_get(temp.index, sizeTypeRef),
-              module.i32(expectedType.classReference!.id)
-            ], expression)
-          );
-          flow.freeTempLocal(temp);
-          return ret;
-        } else {
-          this.error(
-            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-            expression.range, "instanceof", actualType.toString(), expectedType.toString()
-          );
-        }
+    // upcast - check dynamically
+    } else if (expectedType.isAssignableTo(actualType)) {
+      let program = this.program;
+      if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
+        // FIXME: the temp local and the if can be removed here once flows
+        // perform null checking, which would error earlier when checking
+        // uninitialized (thus zero) `var a: A` to be an instance of something.
+        let temp = flow.getTempLocal(actualType);
+        let instanceofInstance = assert(program.instanceofInstance);
+        this.compileFunction(instanceofInstance);
+        let ret = module.if(
+          module.unary(
+            sizeTypeRef == TypeRef.I64
+              ? UnaryOp.EqzI64
+              : UnaryOp.EqzI32,
+            module.local_tee(temp.index, expr, actualType.isManaged),
+          ),
+          module.i32(0),
+          this.makeCallDirect(instanceofInstance, [
+            module.local_get(temp.index, sizeTypeRef),
+            module.i32(expectedType.classReference!.id)
+          ], expression)
+        );
+        flow.freeTempLocal(temp);
+        return ret;
+      } else {
+        this.error(
+          DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+          expression.range, "instanceof", actualType.toString(), expectedType.toString()
+        );
       }
     }
 

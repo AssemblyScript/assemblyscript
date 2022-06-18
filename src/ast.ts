@@ -1929,8 +1929,8 @@ export class ExportStatement extends Statement {
       let normalizedPath = normalizePath(path.value);
       if (path.value.startsWith(".")) { // relative
         normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
-      } else { // absolute
-        if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
+      } else if (!normalizedPath.startsWith(LIBRARY_PREFIX)) { // absolute
+        normalizedPath = LIBRARY_PREFIX + normalizedPath;
       }
       this.internalPath = normalizedPath;
     } else {
@@ -2120,8 +2120,8 @@ export class ImportStatement extends Statement {
     var normalizedPath = normalizePath(path.value);
     if (path.value.startsWith(".")) { // relative in project
       normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
-    } else { // absolute in library
-      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
+    } else if (!normalizedPath.startsWith(LIBRARY_PREFIX)) { // absolute in library
+      normalizedPath = LIBRARY_PREFIX + normalizedPath;
     }
     this.internalPath = mangleInternalPath(normalizedPath);
   }
