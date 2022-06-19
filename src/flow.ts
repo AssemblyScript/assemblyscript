@@ -333,7 +333,6 @@ export class Flow {
       case <u32>TypeRef.F64: { temps = parentFunction.tempF64s; break; }
       case <u32>TypeRef.V128: { temps = parentFunction.tempV128s; break; }
       case <u32>TypeRef.Funcref: { temps = parentFunction.tempFuncrefs; break; }
-      case <u32>TypeRef.Externref: { temps = parentFunction.tempExternrefs; break; }
       case <u32>TypeRef.Anyref: { temps = parentFunction.tempAnyrefs; break; }
       case <u32>TypeRef.Eqref: { temps = parentFunction.tempEqrefs; break; }
       case <u32>TypeRef.I31ref: { temps = parentFunction.tempI31refs; break; }
@@ -413,12 +412,6 @@ export class Flow {
         let tempFuncrefs = parentFunction.tempFuncrefs;
         if (tempFuncrefs) temps = tempFuncrefs;
         else parentFunction.tempFuncrefs = temps = [];
-        break;
-      }
-      case <u32>TypeRef.Externref: {
-        let tempExternrefs = parentFunction.tempExternrefs;
-        if (tempExternrefs) temps = tempExternrefs;
-        else parentFunction.tempExternrefs = temps = [];
         break;
       }
       case <u32>TypeRef.Anyref: {

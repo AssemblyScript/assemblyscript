@@ -59,7 +59,6 @@ export namespace TypeRef {
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
   export const Funcref: TypeRef = 7 /* _BinaryenTypeFuncref */;
-  export const Externref: TypeRef = 8 /* _BinaryenTypeExternref */;
   export const Anyref: TypeRef = 8 /* _BinaryenTypeAnyref */;
   export const Eqref: TypeRef = 9 /* _BinaryenTypeEqref */;
   export const I31ref: TypeRef = 10 /* _BinaryenTypeI31ref */;

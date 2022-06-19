@@ -3334,7 +3334,6 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.F32: return module.if(module.binary(BinaryOp.EqF32, arg0, module.f32(0)), abort);
       case TypeKind.F64: return module.if(module.binary(BinaryOp.EqF64, arg0, module.f64(0)), abort);
       case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
       case TypeKind.DATAREF:
@@ -3418,7 +3417,6 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         return ret;
       }
       case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
       case TypeKind.DATAREF:

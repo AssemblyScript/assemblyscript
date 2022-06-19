@@ -123,11 +123,11 @@ console.log("42 from console.log");
 Math.log(Math.E);
 
 // @ts-ignore
-@external("env", "globalThis") declare const immutableGlobal: externref;
+@external("env", "globalThis") declare const immutableGlobal: anyref;
 immutableGlobal;
 
 // @ts-ignore
-@external("env", "globalThis.globalThis") declare const immutableGlobalNested: externref;
+@external("env", "globalThis.globalThis") declare const immutableGlobalNested: anyref;
 immutableGlobalNested;
 
 // @ts-ignore

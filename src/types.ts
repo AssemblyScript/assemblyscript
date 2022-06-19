@@ -61,8 +61,6 @@ export const enum TypeKind {
 
   /** Function reference. */
   FUNCREF,
-  /** External reference. */
-  EXTERNREF,
   /** Any reference. */
   ANYREF,
   /** Equatable reference. */
@@ -400,7 +398,7 @@ export class Type {
             if (targetFunction = target.getSignature()) {
               return currentFunction.isAssignableTo(targetFunction);
             }
-          } else if (this.isExternalReference && (this.kind == target.kind || (target.kind == TypeKind.ANYREF && this.kind != TypeKind.EXTERNREF))) {
+          } else if (this.isExternalReference && (this.kind == target.kind || target.kind == TypeKind.ANYREF)) {
             return true;
           }
         }
@@ -498,7 +496,6 @@ export class Type {
       case TypeKind.F64: return "f64";
       case TypeKind.V128: return "v128";
       case TypeKind.FUNCREF: return "funcref";
-      case TypeKind.EXTERNREF: return "externref";
       case TypeKind.ANYREF: return "anyref";
       case TypeKind.EQREF: return "eqref";
       case TypeKind.I31REF: return "i31ref";
@@ -530,7 +527,6 @@ export class Type {
       case TypeKind.V128: return TypeRef.V128;
       // TODO: nullable/non-nullable refs have different type refs
       case TypeKind.FUNCREF: return TypeRef.Funcref;
-      case TypeKind.EXTERNREF: return TypeRef.Externref;
       case TypeKind.ANYREF: return TypeRef.Anyref;
       case TypeKind.EQREF: return TypeRef.Eqref;
       case TypeKind.I31REF: return TypeRef.I31ref;
@@ -668,13 +664,6 @@ export class Type {
 
   /** Function reference. */
   static readonly funcref: Type = new Type(TypeKind.FUNCREF,
-    TypeFlags.EXTERNAL   |
-    TypeFlags.NULLABLE   |
-    TypeFlags.REFERENCE, 0
-  );
-
-  /** External reference. */
-  static readonly externref: Type = new Type(TypeKind.EXTERNREF,
     TypeFlags.EXTERNAL   |
     TypeFlags.NULLABLE   |
     TypeFlags.REFERENCE, 0

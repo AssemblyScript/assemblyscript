@@ -1007,7 +1007,6 @@ export class Program extends DiagnosticEmitter {
     // respectively stored or loaded.
     this.registerNativeType(CommonNames.v128, Type.v128);
     this.registerNativeType(CommonNames.funcref, Type.funcref);
-    this.registerNativeType(CommonNames.externref, Type.externref);
     this.registerNativeType(CommonNames.anyref, Type.anyref);
     this.registerNativeType(CommonNames.eqref, Type.eqref);
     this.registerNativeType(CommonNames.i31ref, Type.i31ref);
@@ -1275,9 +1274,8 @@ export class Program extends DiagnosticEmitter {
     if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonNames.V128);
     if (options.hasFeature(Feature.REFERENCE_TYPES)) {
       this.registerWrapperClass(Type.funcref, CommonNames.Funcref);
-      this.registerWrapperClass(Type.externref, CommonNames.Externref);
+      this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
       if (options.hasFeature(Feature.GC)) {
-        this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
         this.registerWrapperClass(Type.eqref, CommonNames.Eqref);
         this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
         this.registerWrapperClass(Type.dataref, CommonNames.Dataref);
@@ -3727,7 +3725,6 @@ export class Function extends TypedElement {
   tempF64s: Local[] | null = null;
   tempV128s: Local[] | null = null;
   tempFuncrefs: Local[] | null = null;
-  tempExternrefs: Local[] | null = null;
   tempAnyrefs: Local[] | null = null;
   tempEqrefs: Local[] | null = null;
   tempI31refs: Local[] | null = null;

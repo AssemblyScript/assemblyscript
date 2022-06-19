@@ -37,8 +37,6 @@ declare type f64 = number;
 declare type v128 = object;
 /** Function reference. */
 declare type funcref = object | null;
-/** External reference. */
-declare type externref = object | null;
 /** Any reference. */
 declare type anyref = object | null;
 /** Equatable reference. */

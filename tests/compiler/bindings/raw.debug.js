@@ -23,7 +23,7 @@ export async function instantiate(module, imports = {}) {
         Math.log
       ),
       "globalThis.globalThis": (
-        // bindings/esm/immutableGlobalNested: externref
+        // bindings/esm/immutableGlobalNested: anyref
         globalThis.globalThis
       ),
       "Date.getTimezoneOffset"() {

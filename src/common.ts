@@ -124,7 +124,6 @@ export namespace CommonNames {
   export const f64 = "f64";
   export const v128 = "v128";
   export const funcref = "funcref";
-  export const externref = "externref";
   export const anyref = "anyref";
   export const eqref = "eqref";
   export const i31ref = "i31ref";
@@ -201,7 +200,6 @@ export namespace CommonNames {
   export const F64 = "F64";
   export const V128 = "V128";
   export const Funcref = "Funcref";
-  export const Externref = "Externref";
   export const Anyref = "Anyref";
   export const Eqref = "Eqref";
   export const I31ref = "I31ref";

@@ -4971,7 +4971,6 @@ export class Compiler extends DiagnosticEmitter {
         return module.ref_eq(leftExpr, rightExpr);
       }
       case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
       case TypeKind.ANYREF: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -5036,7 +5035,6 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
       case TypeKind.ANYREF: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -9911,7 +9909,7 @@ export class Compiler extends DiagnosticEmitter {
                     typeString = "object";
                   }
                 } else {
-                  typeString = "externref"; // TODO?
+                  typeString = "anyref"; // TODO?
                 }
               }
             } else if (type == Type.bool) {
@@ -10021,11 +10019,11 @@ export class Compiler extends DiagnosticEmitter {
   /** Checks whether a particular type is supported. */
   checkTypeSupported(type: Type, reportNode: Node): bool {
     switch (type.kind) {
-      case TypeKind.V128: return this.checkFeatureEnabled(Feature.SIMD, reportNode);
+      case TypeKind.V128:
+        return this.checkFeatureEnabled(Feature.SIMD, reportNode);
       case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
-        return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode);
       case TypeKind.ANYREF:
+        return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode);
       case TypeKind.EQREF:
       case TypeKind.I31REF:
       case TypeKind.DATAREF: {
@@ -10134,7 +10132,6 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
       case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
       case TypeKind.DATAREF: return module.ref_null(type.toRef());
@@ -10248,7 +10245,6 @@ export class Compiler extends DiagnosticEmitter {
         return module.unary(UnaryOp.AnyTrueV128, expr);
       }
       case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
       case TypeKind.DATAREF:

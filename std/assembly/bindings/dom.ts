@@ -1,5 +1,5 @@
 @external("env", "globalThis")
-export declare const globalThis: externref;
+export declare const globalThis: anyref;
 
 export declare namespace Math {
   @external("env", "Math.E")
@@ -92,27 +92,27 @@ export declare namespace Math {
 
 export declare namespace Reflect {
   @external("env", "Reflect.get")
-  export function get(target: externref, propertyKey: string): externref;
+  export function get(target: anyref, propertyKey: string): anyref;
   @external("env", "Reflect.getWithReceiver")
   @external.js("return Reflect.get(target, propertyKey, receiver);")
-  export function getWithReceiver(target: externref, propertyKey: string, receiver: externref): externref;
+  export function getWithReceiver(target: anyref, propertyKey: string, receiver: anyref): anyref;
   @external("env", "Reflect.has")
-  export function has(target: externref, propertyKey: string): bool;
+  export function has(target: anyref, propertyKey: string): bool;
   @external("env", "Reflect.set")
-  export function set(target: externref, propertyKey: string, value: externref): externref;
+  export function set(target: anyref, propertyKey: string, value: anyref): anyref;
   @external("env", "Reflect.setWithReceiver")
   @external.js("return Reflect.set(target, propertyKey, value, receiver);")
-  export function setWithReceiver(target: externref, propertyKey: string, value: externref , receiver: externref): externref;
+  export function setWithReceiver(target: anyref, propertyKey: string, value: anyref , receiver: anyref): anyref;
   @external("env", "Reflect.apply")
-  export function apply(target: externref, thisArgument: externref, argumentsList: externref): externref;
+  export function apply(target: anyref, thisArgument: anyref, argumentsList: anyref): anyref;
 }
 
 export declare namespace String {
   @external("env", "String.fromCodePoint")
-  export function fromCodePoint(codepoint: i32): externref;
+  export function fromCodePoint(codepoint: i32): anyref;
   @external("env", "String.fromCodePoints")
   @external.js("return String.fromCodePoint(...codepoints);")
-  export function fromCodePoints(codepoints: i32[]): externref;
+  export function fromCodePoints(codepoints: i32[]): anyref;
 }
 
 export declare namespace Date {
@@ -143,7 +143,7 @@ export declare namespace console {
 
 export declare namespace document {
   @external("env", "document.getElementById")
-  export function getElementById(id: string): externref;
+  export function getElementById(id: string): anyref;
 }
 
 export declare namespace performance {
