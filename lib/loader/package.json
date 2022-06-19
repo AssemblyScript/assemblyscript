@@ -48,6 +48,6 @@
     "README.md"
   ],
   "devDependencies": {
-    "esm2umd": "^0.1.2"
+    "esm2umd": "^0.2.1"
   }
 }
