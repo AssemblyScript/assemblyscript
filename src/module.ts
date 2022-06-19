@@ -2470,13 +2470,13 @@ export class Module {
         passes.push("vacuum");
 
         passes.push("simplify-globals-optimizing");
+        passes.push("remove-unused-brs");
+        passes.push("optimize-instructions");
       }
       // clean up
       passes.push("duplicate-function-elimination");
       passes.push("memory-packing");
       passes.push("remove-unused-module-elements");
-      passes.push("remove-unused-brs");
-      passes.push("optimize-instructions");
 
       this.runPasses(passes);
     }
