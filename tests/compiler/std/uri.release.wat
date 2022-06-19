@@ -1837,8 +1837,6 @@
         local.tee $5
         i32.const 4
         i32.shr_u
-        i32.const 15
-        i32.and
         i32.const 1676
         i32.add
         i32.load8_u

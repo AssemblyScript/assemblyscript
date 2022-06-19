@@ -2469,7 +2469,6 @@ export class Module {
         passes.push("merge-blocks");
         passes.push("vacuum");
 
-        passes.push("optimize-instructions");
         passes.push("simplify-globals-optimizing");
       }
       // clean up
@@ -2477,6 +2476,7 @@ export class Module {
       passes.push("memory-packing");
       passes.push("remove-unused-module-elements");
       passes.push("remove-unused-brs");
+      passes.push("optimize-instructions");
 
       this.runPasses(passes);
     }

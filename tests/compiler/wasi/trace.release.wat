@@ -231,13 +231,8 @@
   i32.const 12
   i64.const 9071471065260641
   i64.store
-  i32.const 0
-  i32.const 1
   local.get $0
-  select
   if (result i32)
-   i32.const 19
-  else
    local.get $0
    i32.const 20
    i32.sub
@@ -253,6 +248,8 @@
    call $~lib/string/String.UTF8.encodeUnsafe@varargs
    i32.const 19
    i32.add
+  else
+   i32.const 19
   end
   local.tee $0
   i32.const 544106784
@@ -261,11 +258,7 @@
   i32.const 4
   i32.add
   local.set $0
-  i32.const 0
-  i32.const 1
   local.get $1
-  select
-  i32.eqz
   if
    local.get $1
    i32.const 20
