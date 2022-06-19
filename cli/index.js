@@ -797,11 +797,6 @@ export async function main(argv, options) {
     } catch (e) {
       crash("optimize", e);
     }
-    try {
-      binaryenModule.runPasses(runPasses);
-    } catch (e) {
-      crash("runPasses", e);
-    }
     if (converge) {
       let last;
       try {
@@ -818,11 +813,6 @@ export async function main(argv, options) {
           assemblyscript.optimize(module, optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
         } catch (e) {
           crash("optimize (converge)", e);
-        }
-        try {
-          binaryenModule.runPasses(runPasses);
-        } catch (e) {
-          crash("runPasses (converge)", e);
         }
         let next;
         try {
@@ -841,6 +831,13 @@ export async function main(argv, options) {
         }
         last = next;
       } while (true);
+    }
+    if (runPasses.length) {
+      try {
+        binaryenModule.runPasses(runPasses);
+      } catch (e) {
+        crash("runPasses", e);
+      }
     }
     stats.optimizeTime += stats.end(begin);
   }
