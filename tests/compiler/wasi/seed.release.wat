@@ -83,17 +83,17 @@
   global.get $~lib/math/random_state1_64
   local.tee $0
   global.set $~lib/math/random_state0_64
+  local.get $0
+  local.get $1
   local.get $1
   i64.const 23
   i64.shl
-  local.get $1
   i64.xor
   local.tee $1
   i64.const 17
   i64.shr_u
   local.get $1
   i64.xor
-  local.get $0
   i64.xor
   local.get $0
   i64.const 26

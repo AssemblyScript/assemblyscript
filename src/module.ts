@@ -2464,6 +2464,7 @@ export class Module {
           passes.push("simplify-locals");
           passes.push("coalesce-locals");
         }
+        passes.push("optimize-instructions");
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("merge-blocks");
