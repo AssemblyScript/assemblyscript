@@ -1647,7 +1647,7 @@
       local.get $6
       i32.const 56319
       i32.le_u
-      if (result i32)
+      if
        local.get $1
        local.get $4
        i32.le_u
@@ -1694,10 +1694,8 @@
        i32.or
        i32.const 65536
        i32.add
-      else
-       local.get $6
+       local.set $6
       end
-      local.set $6
      end
      local.get $8
      i32.const 6

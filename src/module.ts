@@ -2476,6 +2476,7 @@ export class Module {
       passes.push("duplicate-function-elimination");
       passes.push("memory-packing");
       passes.push("remove-unused-module-elements");
+      passes.push("remove-unused-brs");
 
       this.runPasses(passes);
     }

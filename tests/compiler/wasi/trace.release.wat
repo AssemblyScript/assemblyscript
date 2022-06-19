@@ -231,12 +231,10 @@
   i32.const 12
   i64.const 9071471065260641
   i64.store
+  i32.const 0
+  i32.const 1
   local.get $0
-  if (result i32)
-   i32.const 0
-  else
-   i32.const 1
-  end
+  select
   if (result i32)
    i32.const 19
   else
@@ -263,12 +261,10 @@
   i32.const 4
   i32.add
   local.set $0
+  i32.const 0
+  i32.const 1
   local.get $1
-  if (result i32)
-   i32.const 0
-  else
-   i32.const 1
-  end
+  select
   i32.eqz
   if
    local.get $1

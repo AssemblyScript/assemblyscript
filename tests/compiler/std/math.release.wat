@@ -3968,7 +3968,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $7
       f64.const 8.4784276603689e-32
       f64.mul
@@ -3988,10 +3988,8 @@
       local.get $0
       local.get $2
       f64.sub
-     else
-      local.get $1
+      local.set $1
      end
-     local.set $1
     end
     local.get $1
     global.set $~lib/math/rempio2_y0
@@ -8333,21 +8331,19 @@
      i32.and
      local.set $2
     end
+    local.get $0
+    f32.const 8388608
+    f32.mul
+    i32.reinterpret_f32
+    i32.const 2147483647
+    i32.and
+    i32.const 192937984
+    i32.sub
+    local.get $2
     local.get $2
     i32.const 8388608
     i32.lt_u
-    if (result i32)
-     local.get $0
-     f32.const 8388608
-     f32.mul
-     i32.reinterpret_f32
-     i32.const 2147483647
-     i32.and
-     i32.const 192937984
-     i32.sub
-    else
-     local.get $2
-    end
+    select
     local.set $2
    end
    local.get $2
@@ -9391,7 +9387,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $7
       f64.const 8.4784276603689e-32
       f64.mul
@@ -9411,10 +9407,8 @@
       local.get $0
       local.get $2
       f64.sub
-     else
-      local.get $1
+      local.set $1
      end
-     local.set $1
     end
     local.get $1
     global.set $~lib/math/rempio2_y0
@@ -10556,7 +10550,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $4
       f64.const 8.4784276603689e-32
       f64.mul
@@ -10576,10 +10570,8 @@
       local.get $0
       local.get $5
       f64.sub
-     else
-      local.get $1
+      local.set $1
      end
-     local.set $1
     end
     local.get $1
     global.set $~lib/math/rempio2_y0
@@ -11450,7 +11442,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $7
       f64.const 8.4784276603689e-32
       f64.mul
@@ -11470,10 +11462,8 @@
       local.get $0
       local.get $1
       f64.sub
-     else
-      local.get $2
+      local.set $2
      end
-     local.set $2
     end
     local.get $2
     global.set $~lib/math/rempio2_y0
