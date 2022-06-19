@@ -62,6 +62,10 @@ function toUpperSnakeCase(str) {
   return str.replace(/-/g, "_").toUpperCase();
 }
 
+function unquote(str) {
+  return str.replace(/['"]+/g, "");
+}
+
 /** Ensures that an object is a wrapper class instead of just a pointer. */
 // function __wrap(ptrOrObj, wrapperClass) {
 //   if (typeof ptrOrObj === "number") {
@@ -776,14 +780,19 @@ export async function main(argv, options) {
     : false;
 
   const runPasses = [];
+  let hasAsyncifyPass = false;
   if (opts.runPasses) {
     if (typeof opts.runPasses === "string") {
-      opts.runPasses = opts.runPasses.split(",");
+      opts.runPasses = unquote(opts.runPasses).split(",");
     }
     if (opts.runPasses.length) {
       opts.runPasses.forEach(pass => {
         if (!runPasses.includes(pass = pass.trim())) {
-          runPasses.push(pass);
+          if (pass === "asyncify") {
+            hasAsyncifyPass = true;
+          } else {
+            runPasses.push(pass);
+          }
         }
       });
     }
@@ -796,6 +805,13 @@ export async function main(argv, options) {
       assemblyscript.optimize(module, optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
     } catch (e) {
       crash("optimize", e);
+    }
+    if (runPasses.length) {
+      try {
+        binaryenModule.runPasses(runPasses);
+      } catch (e) {
+        crash("runPasses", e);
+      }
     }
     if (converge) {
       let last;
@@ -813,6 +829,13 @@ export async function main(argv, options) {
           assemblyscript.optimize(module, optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
         } catch (e) {
           crash("optimize (converge)", e);
+        }
+        if (runPasses.length) {
+          try {
+            binaryenModule.runPasses(runPasses);
+          } catch (e) {
+            crash("runPasses (converge)", e);
+          }
         }
         let next;
         try {
@@ -832,12 +855,8 @@ export async function main(argv, options) {
         last = next;
       } while (true);
     }
-    if (runPasses.length) {
-      try {
-        binaryenModule.runPasses(runPasses);
-      } catch (e) {
-        crash("runPasses", e);
-      }
+    if (hasAsyncifyPass) {
+      binaryenModule.runPasses(["asyncify"]);
     }
     stats.optimizeTime += stats.end(begin);
   }
