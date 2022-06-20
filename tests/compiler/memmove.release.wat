@@ -137,11 +137,11 @@
        local.get $5
        return
       end
-      local.get $0
       local.get $2
       i32.const 1
       i32.sub
       local.tee $2
+      local.get $0
       i32.add
       local.get $1
       local.get $2
@@ -156,11 +156,11 @@
      i32.const 8
      i32.ge_u
      if
-      local.get $0
       local.get $2
       i32.const 8
       i32.sub
       local.tee $2
+      local.get $0
       i32.add
       local.get $1
       local.get $2
@@ -174,11 +174,11 @@
    loop $while-continue|5
     local.get $2
     if
-     local.get $0
      local.get $2
      i32.const 1
      i32.sub
      local.tee $2
+     local.get $0
      i32.add
      local.get $1
      local.get $2
