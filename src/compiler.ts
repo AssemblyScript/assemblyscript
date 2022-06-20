@@ -5196,6 +5196,7 @@ export class Compiler extends DiagnosticEmitter {
           ) {
             let leftValue = getConstValueI32(leftExpr);
             let rightValue = getConstValueI32(rightExpr);
+            this.currentType = type;
             return module.i32(i64_low(i64_pow(
               i64_new(leftValue),
               i64_new(rightValue)
@@ -5238,6 +5239,7 @@ export class Compiler extends DiagnosticEmitter {
             let leftValue = i64_new(getConstValueI64Low(leftExpr), getConstValueI64High(leftExpr));
             let rightValue = i64_new(getConstValueI64Low(rightExpr), getConstValueI64High(rightExpr));
             let result = i64_pow(leftValue, rightValue);
+            this.currentType = type;
             return module.i64(i64_low(result), i64_high(result));
           }
         }
@@ -5273,10 +5275,12 @@ export class Compiler extends DiagnosticEmitter {
               let leftValue = i64_new(getConstValueI64Low(leftExpr), getConstValueI64High(leftExpr));
               let rightValue = i64_new(getConstValueI64Low(rightExpr), getConstValueI64High(rightExpr));
               let result = i64_pow(leftValue, rightValue);
+              this.currentType = type;
               return module.i64(i64_low(result), i64_high(result));
             } else {
               let leftValue = getConstValueI32(leftExpr);
               let rightValue = getConstValueI32(rightExpr);
+              this.currentType = type;
               return module.i32(i64_low(i64_pow(
                 i64_new(leftValue),
                 i64_new(rightValue)
@@ -5317,6 +5321,7 @@ export class Compiler extends DiagnosticEmitter {
           ) {
             let leftValue = getConstValueF32(leftExpr);
             let rightValue = getConstValueF32(rightExpr);
+            this.currentType = type;
             return module.f32(f32(Math.pow(leftValue, rightValue)));
           }
         }
@@ -5358,6 +5363,7 @@ export class Compiler extends DiagnosticEmitter {
           ) {
             let leftValue = getConstValueF64(leftExpr);
             let rightValue = getConstValueF64(rightExpr);
+            this.currentType = type;
             return module.f64(Math.pow(leftValue, rightValue));
           }
         }
