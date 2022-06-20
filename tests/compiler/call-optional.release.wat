@@ -31,10 +31,10 @@
    i32.const -2
    local.set $2
   end
-  local.get $2
   local.get $0
   local.get $1
   i32.add
+  local.get $2
   i32.add
  )
  (func $~start
