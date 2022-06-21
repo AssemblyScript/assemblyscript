@@ -3478,19 +3478,19 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  private checkRecurseDefinitionForType(identifierName: string, type: TypeNode): bool {
+  private checkRecursiveTypeDeclaration(identifierName: string, type: TypeNode): bool {
     switch (type.kind) {
       case NodeKind.NAMEDTYPE:
         return (<NamedTypeNode>type).name.identifier.text == identifierName;
 
       case NodeKind.FUNCTIONTYPE: {
         let fnType = <FunctionTypeNode>type;
-        if (this.checkRecurseDefinitionForType(identifierName, fnType.returnType)) {
+        if (this.checkRecursiveTypeDeclaration(identifierName, fnType.returnType)) {
           return true;
         }
         let params = fnType.parameters;
         for (let i = 0, k = params.length; i < k; i++) {
-          if (this.checkRecurseDefinitionForType(identifierName, params[i].type)) {
+          if (this.checkRecursiveTypeDeclaration(identifierName, params[i].type)) {
             return true;
           }
         }
@@ -3521,7 +3521,7 @@ export class Parser extends DiagnosticEmitter {
         tn.skip(Token.BAR);
         let type = this.parseType(tn);
         if (!type) return null;
-        if (this.checkRecurseDefinitionForType(name.text, type)) {
+        if (this.checkRecursiveTypeDeclaration(name.text, type)) {
           this.error(
             DiagnosticCode.Not_implemented_0,
             tn.range(), "recursion in type aliases"
