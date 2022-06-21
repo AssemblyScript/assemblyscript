@@ -5169,8 +5169,8 @@ export class Compiler extends DiagnosticEmitter {
           // Precompute power if LHS and RHS constants
           // TODO: move this optimization to AIR
           if (
-            getExpressionId(leftExpr) == ExpressionId.Const &&
-            getExpressionId(rightExpr) == ExpressionId.Const
+            getExpressionId(leftExpr) === ExpressionId.Const &&
+            getExpressionId(rightExpr) === ExpressionId.Const
           ) {
             let leftValue = getConstValueI32(leftExpr);
             let rightValue = getConstValueI32(rightExpr);
@@ -5211,8 +5211,8 @@ export class Compiler extends DiagnosticEmitter {
           // Precompute power if LHS and RHS constants
           // TODO: move this optimization to AIR
           if (
-            getExpressionId(leftExpr) == ExpressionId.Const &&
-            getExpressionId(rightExpr) == ExpressionId.Const
+            getExpressionId(leftExpr) === ExpressionId.Const &&
+            getExpressionId(rightExpr) === ExpressionId.Const
           ) {
             let leftValue = i64_new(getConstValueI64Low(leftExpr), getConstValueI64High(leftExpr));
             let rightValue = i64_new(getConstValueI64Low(rightExpr), getConstValueI64High(rightExpr));
@@ -5246,8 +5246,8 @@ export class Compiler extends DiagnosticEmitter {
           // Precompute power if LHS and RHS constants
           // TODO: move this optimization to AIR
           if (
-            getExpressionId(leftExpr) == ExpressionId.Const &&
-            getExpressionId(rightExpr) == ExpressionId.Const
+            getExpressionId(leftExpr) === ExpressionId.Const &&
+            getExpressionId(rightExpr) === ExpressionId.Const
           ) {
             if (isWasm64) {
               let leftValue = i64_new(getConstValueI64Low(leftExpr), getConstValueI64High(leftExpr));
@@ -5294,8 +5294,8 @@ export class Compiler extends DiagnosticEmitter {
           // Precompute power if LHS and RHS constants
           // TODO: move this optimization to AIR
           if (
-            getExpressionId(leftExpr) == ExpressionId.Const &&
-            getExpressionId(rightExpr) == ExpressionId.Const
+            getExpressionId(leftExpr) === ExpressionId.Const &&
+            getExpressionId(rightExpr) === ExpressionId.Const
           ) {
             let leftValue = getConstValueF32(leftExpr);
             let rightValue = getConstValueF32(rightExpr);
@@ -5336,8 +5336,8 @@ export class Compiler extends DiagnosticEmitter {
           // Precompute power if LHS and RHS constants
           // TODO: move this optimization to AIR
           if (
-            getExpressionId(leftExpr) == ExpressionId.Const &&
-            getExpressionId(rightExpr) == ExpressionId.Const
+            getExpressionId(leftExpr) === ExpressionId.Const &&
+            getExpressionId(rightExpr) === ExpressionId.Const
           ) {
             let leftValue = getConstValueF64(leftExpr);
             let rightValue = getConstValueF64(rightExpr);
