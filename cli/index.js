@@ -835,7 +835,7 @@ export async function main(argv, options) {
         }
         if (next.length >= last.length) {
           if (next.length > last.length) {
-            stderr.write(`Last converge was suboptimial.${EOL}`);
+            stderr.write(`Last converge was suboptimal.${EOL}`);
           }
           break;
         }
