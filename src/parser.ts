@@ -3478,26 +3478,31 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  private checkRecursiveTypeDeclaration(identifierName: string, type: TypeNode): bool {
+  private getRecursiveDepthForTypeDeclaration(
+    identifierName: string,
+    type: TypeNode,
+    depth: i32 = 0
+  ): i32 {
     switch (type.kind) {
-      case NodeKind.NAMEDTYPE:
-        return (<NamedTypeNode>type).name.identifier.text == identifierName;
-
+      case NodeKind.NAMEDTYPE: {
+        if ((<NamedTypeNode>type).name.identifier.text == identifierName) {
+          return depth;
+        }
+        break;
+      }
       case NodeKind.FUNCTIONTYPE: {
         let fnType = <FunctionTypeNode>type;
-        if (this.checkRecursiveTypeDeclaration(identifierName, fnType.returnType)) {
-          return true;
-        }
+        let res = this.getRecursiveDepthForTypeDeclaration(identifierName, fnType.returnType, depth + 1);
+        if (res != -1) return res;
         let params = fnType.parameters;
         for (let i = 0, k = params.length; i < k; i++) {
-          if (this.checkRecursiveTypeDeclaration(identifierName, params[i].type)) {
-            return true;
-          }
+          res = this.getRecursiveDepthForTypeDeclaration(identifierName, params[i].type, depth + 1);
+          if (res != -1) return res;
         }
         break;
       }
     }
-    return false;
+    return -1;
   }
 
   parseTypeDeclaration(
@@ -3521,11 +3526,19 @@ export class Parser extends DiagnosticEmitter {
         tn.skip(Token.BAR);
         let type = this.parseType(tn);
         if (!type) return null;
-        if (this.checkRecursiveTypeDeclaration(name.text, type)) {
-          this.error(
-            DiagnosticCode.Not_implemented_0,
-            tn.range(), "Recursion in type aliases"
-          );
+        let depth = this.getRecursiveDepthForTypeDeclaration(name.text, type);
+        if (depth >= 0) {
+          if (depth == 0) {
+            this.error(
+              DiagnosticCode.Type_alias_0_circularly_references_itself,
+              tn.range(), name.text
+            );
+          } else {
+            this.error(
+              DiagnosticCode.Not_implemented_0,
+              tn.range(), "Recursion in type aliases"
+            );
+          }
           return null;
         }
         let ret = Node.createTypeDeclaration(
