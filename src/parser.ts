@@ -3524,7 +3524,7 @@ export class Parser extends DiagnosticEmitter {
         if (this.checkRecursiveTypeDeclaration(name.text, type)) {
           this.error(
             DiagnosticCode.Not_implemented_0,
-            tn.range(), "recursion in type aliases"
+            tn.range(), "Recursion in type aliases"
           );
           return null;
         }
