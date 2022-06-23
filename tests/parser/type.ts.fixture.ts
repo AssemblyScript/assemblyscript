@@ -9,3 +9,4 @@ export type T2 = int32_t;
 // ERROR 100: "Not implemented: Recursion in type aliases" in type.ts(14,31+1)
 // ERROR 100: "Not implemented: Recursion in type aliases" in type.ts(15,26+1)
 // ERROR 100: "Not implemented: Recursion in type aliases" in type.ts(16,39+1)
+// ERROR 100: "Not implemented: Recursion in type aliases" in type.ts(17,32+1)

@@ -14,3 +14,4 @@ export type T5 = () => T5;
 export type T6<T> = () => T6<T>;
 export type T7 = Array<T7>;
 export type T8 = Map<string, Array<T8>>;
+export type T9 = Array<() => T9>;
