@@ -658,6 +658,7 @@ class InstrumentReturns extends Pass {
     var stmts = new Array<ExpressionRef>();
     if (value) {
       let returnType = _BinaryenExpressionGetType(value);
+      if (returnType == TypeRef.Unreachable) return;
       let temp = this.parentPass.getSharedTemp(this.currentFunction, returnType);
       // t = value
       stmts.push(
