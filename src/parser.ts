@@ -3483,7 +3483,7 @@ export class Parser extends DiagnosticEmitter {
     type: TypeNode,
     depth: i32 = 0
   ): i32 {
-    let typeArguments = (<NamedTypeNode>type).typeArguments;
+    var typeArguments = (<NamedTypeNode>type).typeArguments;
     if (typeArguments) {
       for (let i = 0, k = typeArguments.length; i < k; i++) {
         let res = this.getRecursiveDepthForTypeDeclaration(identifierName, typeArguments[i], depth + 1);
