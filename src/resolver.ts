@@ -744,7 +744,7 @@ export class Resolver extends DiagnosticEmitter {
         let typeNode = parameterNodes[i].type;
         if (typeNode.hasGenericComponent(typeParameterNodes)) {
           let type = this.resolveExpression(argumentExpression, ctxFlow, Type.auto, ReportMode.SWALLOW);
-          if (type) this.propagateInferredGenericTypes(typeNode, type, ctxFlow, contextualTypeArguments, typeParameterNames);
+          if (type) this.propagateInferredGenericTypes(typeNode, type, prototype, contextualTypeArguments, typeParameterNames);
         }
       }
 
@@ -795,8 +795,8 @@ export class Resolver extends DiagnosticEmitter {
     node: TypeNode,
     /** The inferred type. */
     type: Type,
-    /** Contextual flow. */
-    ctxFlow: Flow,
+    /** Contextual element. */
+    ctxElement: Element,
     /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
     ctxTypes: Map<string,Type>,
     /** The names of the type parameters being inferred. */
@@ -808,13 +808,13 @@ export class Resolver extends DiagnosticEmitter {
       if (typeArgumentNodes && typeArgumentNodes.length > 0) { // foo<T>(bar: Array<T>)
         let classReference = type.classReference;
         if (classReference) {
-          let classPrototype = this.resolveTypeName(namedTypeNode.name, ctxFlow.actualFunction);
+          let classPrototype = this.resolveTypeName(namedTypeNode.name, ctxElement);
           if (!classPrototype || classPrototype.kind != ElementKind.CLASS_PROTOTYPE) return;
           if (classReference.prototype == <ClassPrototype>classPrototype) {
             let typeArguments = classReference.typeArguments;
             if (typeArguments && typeArguments.length == typeArgumentNodes.length) {
               for (let i = 0, k = typeArguments.length; i < k; ++i) {
-                this.propagateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxFlow, ctxTypes, typeParameterNames);
+                this.propagateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxElement, ctxTypes, typeParameterNames);
               }
               return;
             }
@@ -839,10 +839,10 @@ export class Resolver extends DiagnosticEmitter {
           let thisType = signatureReference.thisType;
           if (parameterTypes.length == parameterNodes.length && !thisType == !functionTypeNode.explicitThisType) {
             for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-              this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxFlow, ctxTypes, typeParameterNames);
+              this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxElement, ctxTypes, typeParameterNames);
             }
-            this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxFlow, ctxTypes, typeParameterNames);
-            if (thisType) this.propagateInferredGenericTypes(functionTypeNode.explicitThisType!, thisType, ctxFlow, ctxTypes, typeParameterNames);
+            this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxElement, ctxTypes, typeParameterNames);
+            if (thisType) this.propagateInferredGenericTypes(functionTypeNode.explicitThisType!, thisType, ctxElement, ctxTypes, typeParameterNames);
             return;
           }
         }
