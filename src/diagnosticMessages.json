@@ -158,6 +158,7 @@
   "Variable '{0}' used before its declaration.": 2448,
   "Cannot redeclare block-scoped variable '{0}'" : 2451,
   "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": 2453,
+  "Type alias '{0}' circularly references itself.": 2456,
   "Type '{0}' has no property '{1}'.": 2460,
   "The '{0}' operator cannot be applied to type '{1}'.": 2469,
   "In 'const' enum declarations member initializer must be constant expression.": 2474,
