@@ -1,8 +1,7 @@
 // Lookup data for pio2f_large_quot
 
 // @ts-ignore: decorator
-@lazy @inline
-const PIO2_TABLE32 = memory.data<u64>([
+@lazy @inline const PIO2_TABLE32 = memory.data<u64>([
   0xA2F9836E4E441529,
   0xFC2757D1F534DDC0,
   0xDB6295993C439041,
@@ -13,8 +12,7 @@ const PIO2_TABLE32 = memory.data<u64>([
 
 /** @internal */
 // @ts-ignore: decorator
-@lazy @inline
-const PIO2_TABLE64 = memory.data<u64>([
+@lazy @inline const PIO2_TABLE64 = memory.data<u64>([
   0x00000000A2F9836E, 0x4E441529FC2757D1, 0xF534DDC0DB629599, 0x3C439041FE5163AB,
   0xDEBBC561B7246E3A, 0x424DD2E006492EEA, 0x09D1921CFE1DEB1C, 0xB129A73EE88235F5,
   0x2EBB4484E99C7026, 0xB45F7E413991D639, 0x835339F49C845F8B, 0xBDF9283B1FF897FF,
@@ -26,8 +24,7 @@ const PIO2_TABLE64 = memory.data<u64>([
 // Lookup data for exp2f
 
 // @ts-ignore: decorator
-@lazy @inline
-const EXP2_TABLE32 = memory.data<u64>([
+@lazy @inline const EXP2_TABLE32 = memory.data<u64>([
   // exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
   // used for computing 2^(k/N) for an int |k| < 150 N as
   // double(tab[k%N] + (k << 52-BITS))
@@ -42,14 +39,12 @@ const EXP2_TABLE32 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@inline
-const EXP2_TABLE32_BITS = 5;
+@inline const EXP2_TABLE32_BITS = 5;
 
 // Lookup data for log2f
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG2_TABLE32 = memory.data<u64>([
+@lazy @inline const LOG2_TABLE32 = memory.data<u64>([
   0x3FF661EC79F8F3BE, 0xBFDEFEC65B963019, // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
   0x3FF571ED4AAF883D, 0xBFDB0B6832D4FCA4, // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
   0x3FF49539F0F010B0, 0xBFD7418B0A1FB77B, // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
@@ -69,14 +64,12 @@ const LOG2_TABLE32 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@inline
-const LOG2_TABLE32_BITS = 4;
+@inline const LOG2_TABLE32_BITS = 4;
 
 // Lookup data for logf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/logf.c
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG_TABLE32 = memory.data<u64>([
+@lazy @inline const LOG_TABLE32 = memory.data<u64>([
   0x3FF661EC79F8F3BE, 0xBFD57BF7808CAADE, // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
   0x3FF571ED4AAF883D, 0xBFD2BEF0A7C06DDB, // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
   0x3FF49539F0F010B0, 0xBFD01EAE7F513A67, // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
@@ -96,14 +89,12 @@ const LOG_TABLE32 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@inline
-const LOG_TABLE32_BITS = 4;
+@inline const LOG_TABLE32_BITS = 4;
 
 // Lookup data for exp. See: https://git.musl-libc.org/cgit/musl/tree/src/math/exp.c
 
 // @ts-ignore: decorator
-@lazy @inline
-const EXP_TABLE64 = memory.data<u64>([
+@lazy @inline const EXP_TABLE64 = memory.data<u64>([
   0x0000000000000000, 0x3FF0000000000000,
   0x3C9B3B4F1A88BF6E, 0x3FEFF63DA9FB3335,
   0xBC7160139CD8DC5D, 0x3FEFEC9A3E778061,
@@ -235,8 +226,7 @@ const EXP_TABLE64 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@inline
-const EXP_TABLE64_BITS = 7;
+@inline const EXP_TABLE64_BITS = 7;
 
 // Lookup data for log2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log2.c
 
@@ -268,8 +258,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 |log2(x)| < 0x1p-4, this is not enough so that is special cased. */
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG2_TABLE1_64 = memory.data<u64>([
+@lazy @inline const LOG2_TABLE1_64 = memory.data<u64>([
   //     invc       ,        logc
   0x3FF724286BB1ACF8, 0xBFE1095FEECDB000,
   0x3FF6E1F766D2CCA1, 0xBFE08494BD76D000,
@@ -338,8 +327,7 @@ const LOG2_TABLE1_64 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG2_TABLE2_64 = memory.data<u64>([
+@lazy @inline const LOG2_TABLE2_64 = memory.data<u64>([
   //      chi       ,         clo
   0x3FE6200012B90A8E, 0x3C8904AB0644B605,
   0x3FE66000045734A6, 0x3C61FF9BEA62F7A9,
@@ -408,8 +396,7 @@ const LOG2_TABLE2_64 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@inline
-const LOG2_TABLE64_BITS = 6;
+@inline const LOG2_TABLE64_BITS = 6;
 
 // Lookup data for log. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log.c
 
@@ -441,8 +428,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 |log(x)| < 0x1p-4, this is not enough so that is special cased.*/
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG_TABLE1_64 = memory.data<u64>([
+@lazy @inline const LOG_TABLE1_64 = memory.data<u64>([
   //      invc      ,        logc
   0x3FF734F0C3E0DE9F, 0xBFD7CC7F79E69000,
   0x3FF713786A2CE91F, 0xBFD76FEEC20D0000,
@@ -575,8 +561,7 @@ const LOG_TABLE1_64 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG_TABLE2_64 = memory.data<u64>([
+@lazy @inline const LOG_TABLE2_64 = memory.data<u64>([
   //      chi       ,         clo
   0x3FE61000014FB66B, 0x3C7E026C91425B3C,
   0x3FE63000034DB495, 0x3C8DBFEA48005D41,
@@ -709,8 +694,7 @@ const LOG_TABLE2_64 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@inline
-const LOG_TABLE64_BITS = 7;
+@inline const LOG_TABLE64_BITS = 7;
 
 // Lookup data for pow. See: https://git.musl-libc.org/cgit/musl/tree/src/math/pow.c
 
@@ -738,8 +722,7 @@ error and the interval for z is selected such that near x == 1, where log(x)
 is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 
 // @ts-ignore: decorator
-@lazy @inline
-const POW_LOG_TABLE64 = memory.data<u64>([
+@lazy @inline const POW_LOG_TABLE64 = memory.data<u64>([
   //      invc      ,pad,       logc       ,       logctail
   0x3FF6A00000000000, 0, 0xBFD62C82F2B9C800, 0x3CFAB42428375680,
   0x3FF6800000000000, 0, 0xBFD5D1BDBF580800, 0xBD1CA508D8E0F720,
@@ -872,8 +855,7 @@ const POW_LOG_TABLE64 = memory.data<u64>([
 ]);
 
 // @ts-ignore: decorator
-@inline
-const POW_LOG_TABLE64_BITS = 7;
+@inline const POW_LOG_TABLE64_BITS = 7;
 
 
 /** @internal */
@@ -3778,7 +3760,7 @@ export function sincos32(x: f32): f32 { // see: musl/tree/src/math/sincosf.c
       if (ix <= 0x4016CBE3) { // |x| ~<= 3π/4
         if (sign) {
           sincos_cos32 = sin32_kern(x + s1pio2);
-          return -cos32_kern(x + s1pio2)
+          return -cos32_kern(x + s1pio2);
         } else {
           sincos_cos32 = sin32_kern(s1pio2 - x);
           return cos32_kern(s1pio2 - x);
@@ -3786,7 +3768,7 @@ export function sincos32(x: f32): f32 { // see: musl/tree/src/math/sincosf.c
       }
       // -sin(x + c) is not correct if x+c could be 0: -0 vs +0
       sincos_cos32 = -cos32_kern(sign ? x + s2pio2 : x - s2pio2);
-      return -sin32_kern(sign ? x + s2pio2 : x - s2pio2)
+      return -sin32_kern(sign ? x + s2pio2 : x - s2pio2);
     }
     if (ix <= 0x40E231D5) {   // |x| ~<= 9π/4
       if (ix <= 0x40AFEDDF) { // |x| ~<= 7π/4
