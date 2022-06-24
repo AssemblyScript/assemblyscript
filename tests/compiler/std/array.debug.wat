@@ -56,8 +56,6 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
- (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
- (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $std/array/charset i32 (i32.const 7136))
  (global $std/array/inputStabArr (mut i32) (i32.const 0))
@@ -3181,7 +3179,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 f32)
-  (local $6 f64)
   local.get $2
   i32.eqz
   if
@@ -3235,30 +3232,46 @@
      if
       br $for-continue|0
      end
-     local.get $0
-     local.get $3
-     call $~lib/array/Array<f32>#__get
-     f64.promote_f32
-     local.set $6
-     local.get $6
-     i64.reinterpret_f64
-     i64.const 63
-     i64.shr_u
-     i64.const 0
-     i64.ne
+     block $~lib/math/NativeMath.signbit<f32>|inlined.0 (result i32)
+      local.get $0
+      local.get $3
+      call $~lib/array/Array<f32>#__get
+      local.set $5
+      i32.const 0
+      drop
+      i32.const 1
+      drop
+      i32.const 4
+      i32.const 4
+      i32.eq
+      drop
+      local.get $5
+      i32.reinterpret_f32
+      i32.const 31
+      i32.shr_u
+      br $~lib/math/NativeMath.signbit<f32>|inlined.0
+     end
      i32.const 0
      i32.ne
-     local.get $1
-     local.get $3
-     call $~lib/array/Array<f32>#__get
-     f64.promote_f32
-     local.set $6
-     local.get $6
-     i64.reinterpret_f64
-     i64.const 63
-     i64.shr_u
-     i64.const 0
-     i64.ne
+     block $~lib/math/NativeMath.signbit<f32>|inlined.1 (result i32)
+      local.get $1
+      local.get $3
+      call $~lib/array/Array<f32>#__get
+      local.set $5
+      i32.const 0
+      drop
+      i32.const 1
+      drop
+      i32.const 4
+      i32.const 4
+      i32.eq
+      drop
+      local.get $5
+      i32.reinterpret_f32
+      i32.const 31
+      i32.shr_u
+      br $~lib/math/NativeMath.signbit<f32>|inlined.1
+     end
      i32.const 0
      i32.ne
      i32.ne
@@ -5715,7 +5728,7 @@
   local.get $1
   i32.add
  )
- (func $~lib/math/murmurHash3 (param $0 i64) (result i64)
+ (func $~lib/util/math/murmurHash3 (param $0 i64) (result i64)
   local.get $0
   local.get $0
   i64.const 33
@@ -5744,41 +5757,6 @@
   local.set $0
   local.get $0
  )
- (func $~lib/math/splitMix32 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 1831565813
-  i32.add
-  local.set $0
-  local.get $0
-  local.get $0
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.get $0
-  i32.const 1
-  i32.or
-  i32.mul
-  local.set $0
-  local.get $0
-  local.get $0
-  local.get $0
-  local.get $0
-  i32.const 7
-  i32.shr_u
-  i32.xor
-  local.get $0
-  i32.const 61
-  i32.or
-  i32.mul
-  i32.add
-  i32.xor
-  local.set $0
-  local.get $0
-  local.get $0
-  i32.const 14
-  i32.shr_u
-  i32.xor
- )
  (func $~lib/math/NativeMath.seedRandom (param $0 i64)
   local.get $0
   i64.const 0
@@ -5788,20 +5766,13 @@
    local.set $0
   end
   local.get $0
-  call $~lib/math/murmurHash3
+  call $~lib/util/math/murmurHash3
   global.set $~lib/math/random_state0_64
   global.get $~lib/math/random_state0_64
   i64.const -1
   i64.xor
-  call $~lib/math/murmurHash3
+  call $~lib/util/math/murmurHash3
   global.set $~lib/math/random_state1_64
-  local.get $0
-  i32.wrap_i64
-  call $~lib/math/splitMix32
-  global.set $~lib/math/random_state0_32
-  global.get $~lib/math/random_state0_32
-  call $~lib/math/splitMix32
-  global.set $~lib/math/random_state1_32
   i32.const 1
   global.set $~lib/math/random_seeded
  )
@@ -7858,28 +7829,58 @@
      if
       br $for-continue|0
      end
-     local.get $0
-     local.get $3
-     call $~lib/array/Array<f64>#__get
-     local.set $5
-     local.get $5
-     i64.reinterpret_f64
-     i64.const 63
-     i64.shr_u
-     i64.const 0
-     i64.ne
+     block $~lib/math/NativeMath.signbit<f64>|inlined.0 (result i32)
+      local.get $0
+      local.get $3
+      call $~lib/array/Array<f64>#__get
+      local.set $5
+      i32.const 0
+      drop
+      i32.const 1
+      drop
+      i32.const 8
+      i32.const 4
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 8
+      i32.eq
+      drop
+      local.get $5
+      i64.reinterpret_f64
+      i64.const 63
+      i64.shr_u
+      i64.const 0
+      i64.ne
+      br $~lib/math/NativeMath.signbit<f64>|inlined.0
+     end
      i32.const 0
      i32.ne
-     local.get $1
-     local.get $3
-     call $~lib/array/Array<f64>#__get
-     local.set $5
-     local.get $5
-     i64.reinterpret_f64
-     i64.const 63
-     i64.shr_u
-     i64.const 0
-     i64.ne
+     block $~lib/math/NativeMath.signbit<f64>|inlined.1 (result i32)
+      local.get $1
+      local.get $3
+      call $~lib/array/Array<f64>#__get
+      local.set $5
+      i32.const 0
+      drop
+      i32.const 1
+      drop
+      i32.const 8
+      i32.const 4
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 8
+      i32.eq
+      drop
+      local.get $5
+      i64.reinterpret_f64
+      i64.const 63
+      i64.shr_u
+      i64.const 0
+      i64.ne
+      br $~lib/math/NativeMath.signbit<f64>|inlined.1
+     end
      i32.const 0
      i32.ne
      i32.ne
@@ -20707,19 +20708,26 @@
     local.get $5
     i32.store offset=4
     local.get $5
-    call $~lib/math/NativeMath.random
-    global.get $std/array/charset
-    local.set $5
-    global.get $~lib/memory/__stack_pointer
-    local.get $5
-    i32.store offset=8
-    local.get $5
-    call $~lib/string/String#get:length
-    f64.convert_i32_s
-    f64.mul
-    local.set $4
-    local.get $4
-    f64.floor
+    block $~lib/math/NativeMath.floor<f64>|inlined.0 (result f64)
+     call $~lib/math/NativeMath.random
+     global.get $std/array/charset
+     local.set $5
+     global.get $~lib/memory/__stack_pointer
+     local.get $5
+     i32.store offset=8
+     local.get $5
+     call $~lib/string/String#get:length
+     f64.convert_i32_s
+     f64.mul
+     local.set $4
+     i32.const 0
+     drop
+     i32.const 1
+     drop
+     local.get $4
+     f64.floor
+     br $~lib/math/NativeMath.floor<f64>|inlined.0
+    end
     i32.trunc_sat_f64_s
     call $~lib/string/String#charAt
     local.set $5

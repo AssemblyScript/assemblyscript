@@ -21,7 +21,7 @@
   (local $8 i64)
   (local $9 i64)
   block $__inlined_func$std/mod/check<f64> (result i32)
-   block $__inlined_func$~lib/math/NativeMath.mod (result f64)
+   block $__inlined_func$~lib/util/math/mod64 (result f64)
     local.get $0
     local.get $0
     f64.trunc
@@ -32,7 +32,7 @@
     f64.abs
     f64.const 1
     f64.eq
-    br_if $__inlined_func$~lib/math/NativeMath.mod
+    br_if $__inlined_func$~lib/util/math/mod64
     drop
     local.get $1
     i64.reinterpret_f64
@@ -69,7 +69,7 @@
      local.tee $4
      local.get $4
      f64.div
-     br $__inlined_func$~lib/math/NativeMath.mod
+     br $__inlined_func$~lib/util/math/mod64
     end
     local.get $7
     i64.const 1
@@ -84,7 +84,7 @@
      i64.ne
      f64.convert_i32_u
      f64.mul
-     br $__inlined_func$~lib/math/NativeMath.mod
+     br $__inlined_func$~lib/util/math/mod64
     end
     local.get $9
     i64.eqz
@@ -145,7 +145,7 @@
        local.get $3
        local.get $5
        i64.eq
-       br_if $__inlined_func$~lib/math/NativeMath.mod
+       br_if $__inlined_func$~lib/util/math/mod64
        drop
        local.get $3
        local.get $5
@@ -173,7 +173,7 @@
      local.get $3
      local.get $5
      i64.eq
-     br_if $__inlined_func$~lib/math/NativeMath.mod
+     br_if $__inlined_func$~lib/util/math/mod64
      drop
      local.get $3
      local.get $5
@@ -280,7 +280,7 @@
   (local $7 i32)
   (local $8 i32)
   block $__inlined_func$std/mod/check<f32> (result i32)
-   block $__inlined_func$~lib/math/NativeMathf.mod (result f32)
+   block $__inlined_func$~lib/util/math/mod32 (result f32)
     local.get $0
     local.get $0
     f32.trunc
@@ -291,7 +291,7 @@
     f32.abs
     f32.const 1
     f32.eq
-    br_if $__inlined_func$~lib/math/NativeMathf.mod
+    br_if $__inlined_func$~lib/util/math/mod32
     drop
     local.get $1
     i32.reinterpret_f32
@@ -329,7 +329,7 @@
      local.tee $0
      local.get $0
      f32.div
-     br $__inlined_func$~lib/math/NativeMathf.mod
+     br $__inlined_func$~lib/util/math/mod32
     end
     local.get $6
     i32.const 1
@@ -344,7 +344,7 @@
      i32.ne
      f32.convert_i32_u
      f32.mul
-     br $__inlined_func$~lib/math/NativeMathf.mod
+     br $__inlined_func$~lib/util/math/mod32
     end
     local.get $8
     if (result i32)
@@ -403,7 +403,7 @@
        local.get $3
        local.get $4
        i32.eq
-       br_if $__inlined_func$~lib/math/NativeMathf.mod
+       br_if $__inlined_func$~lib/util/math/mod32
        drop
        local.get $3
        local.get $4
@@ -431,7 +431,7 @@
      local.get $3
      local.get $4
      i32.eq
-     br_if $__inlined_func$~lib/math/NativeMathf.mod
+     br_if $__inlined_func$~lib/util/math/mod32
      drop
      local.get $3
      local.get $4

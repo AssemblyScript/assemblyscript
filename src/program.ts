@@ -1401,9 +1401,6 @@ export class Program extends DiagnosticEmitter {
       if (!globalAliases.has(CommonNames.Math)) {
         globalAliases.set(CommonNames.Math, CommonNames.NativeMath);
       }
-      if (!globalAliases.has(CommonNames.Mathf)) {
-        globalAliases.set(CommonNames.Mathf, CommonNames.NativeMathf);
-      }
       // TODO: for (let [alias, name] of globalAliases) {
       for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
         let alias = unchecked(_keys[i]);

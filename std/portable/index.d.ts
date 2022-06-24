@@ -304,7 +304,6 @@ declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
 
 // Standard library
 
-declare const Mathf: typeof Math;
 declare const JSMath: typeof Math;
 
 declare interface StringConstructor {

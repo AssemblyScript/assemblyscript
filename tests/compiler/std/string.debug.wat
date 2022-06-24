@@ -4368,7 +4368,7 @@
   local.get $1
   call $~lib/util/string/strtol<i64>
  )
- (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4587,7 +4587,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/util/math/scalbn64 (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -5393,7 +5393,7 @@
      i32.const 0
      local.get $12
      i32.sub
-     call $~lib/math/ipow32
+     call $~lib/util/math/ipow32
      i64.extend_i32_s
      local.set $23
      local.get $19
@@ -5432,7 +5432,7 @@
      f64.convert_i64_u
      local.get $20
      i32.wrap_i64
-     call $~lib/math/NativeMath.scalbn
+     call $~lib/util/math/scalbn64
      br $~lib/util/string/scientific|inlined.0
     else
      local.get $17
@@ -5530,7 +5530,7 @@
      local.set $20
      i32.const 5
      local.get $13
-     call $~lib/math/ipow32
+     call $~lib/util/math/ipow32
      local.set $15
      local.get $20
      i64.const 4294967295
@@ -5593,7 +5593,7 @@
      f64.convert_i64_u
      local.get $24
      i32.wrap_i64
-     call $~lib/math/NativeMath.scalbn
+     call $~lib/util/math/scalbn64
      br $~lib/util/string/scientific|inlined.0
     end
     unreachable
@@ -11089,21 +11089,36 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2704
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store
-  local.get $4
-  i32.const 0
-  call $~lib/string/parseInt
-  local.set $2
-  local.get $2
-  i64.reinterpret_f64
-  i64.const 63
-  i64.shr_u
-  i64.const 0
-  i64.ne
+  block $~lib/math/NativeMath.signbit<f64>|inlined.0 (result i32)
+   i32.const 2704
+   local.set $4
+   global.get $~lib/memory/__stack_pointer
+   local.get $4
+   i32.store
+   local.get $4
+   i32.const 0
+   call $~lib/string/parseInt
+   local.set $2
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
+   local.get $2
+   i64.reinterpret_f64
+   i64.const 63
+   i64.shr_u
+   i64.const 0
+   i64.ne
+   br $~lib/math/NativeMath.signbit<f64>|inlined.0
+  end
   i32.const 0
   i32.ne
   i32.eqz

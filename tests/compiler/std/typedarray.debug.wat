@@ -10626,7 +10626,7 @@
   i64.const 2
   i64.eq
  )
- (func $~lib/math/NativeMathf.mod (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/util/math/mod32 (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10880,7 +10880,7 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   f32.const 2
-  call $~lib/math/NativeMathf.mod
+  call $~lib/util/math/mod32
   f32.const 0
   f32.eq
  )
@@ -10946,7 +10946,7 @@
   f32.const 2
   f32.eq
  )
- (func $~lib/math/NativeMath.mod (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/util/math/mod64 (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -11206,7 +11206,7 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   f64.const 2
-  call $~lib/math/NativeMath.mod
+  call $~lib/util/math/mod64
   f64.const 0
   f64.eq
  )
