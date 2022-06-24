@@ -231,7 +231,7 @@ assert(test_abs(Infinity, Infinity, 0.0, 0));
 assert(test_abs(-Infinity, Infinity, 0.0, 0));
 assert(test_abs(NaN, NaN, 0.0, 0));
 
-// Mathf.abs ///////////////////////////////////////////////////////////////////////////////////////
+// Math.abs<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_absf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.abs<f32>(value), expected, error, flags);
@@ -291,7 +291,7 @@ assert(test_acos(NaN, NaN, 0.0, 0));
 assert(test_acos(-0.530922720959298489, 2.13048537997054632, 0.139100849628448486, INEXACT));
 assert(test_acos(0.493955674639974585, 1.05416298758519456, 0.220547676086425781, INEXACT));
 
-// Mathf.acos //////////////////////////////////////////////////////////////////////////////////////
+// Math.acos<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_acosf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.acos<f32>(value), expected, error, flags);
@@ -372,7 +372,7 @@ assert(test_acosh(1.10608311999264286, 0.45663734043848031, -0.29381608963012695
 assert(test_acosh(1.10898095576286582, 0.462724685995942797, -0.399009555578231812, INEXACT));
 assert(test_acosh(1.11694291598755213, 0.47902433134075284, -0.321674108505249023, INEXACT));
 
-// Mathf.acosh /////////////////////////////////////////////////////////////////////////////////////
+// Math.acosh<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_acoshf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.acosh<f32>(value), expected, error, flags);
@@ -433,7 +433,7 @@ assert(test_asin(-Infinity, NaN, 0.0, INVALID));
 assert(test_asin(NaN, NaN, 0.0, 0));
 assert(test_asin(0.507304392911914759, 0.53205389977723494, -0.161573171615600586, INEXACT));
 
-// Mathf.asin //////////////////////////////////////////////////////////////////////////////////////
+// Math.asin<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_asinf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.asin<f32>(value), expected, error, flags);
@@ -511,7 +511,7 @@ assert(test_asinh(-0.0, -0.0, 0.0, 0));
 // assert(test_asinh(0.489993198082535886, 0.472243604962259256, -0.437918633222579956, INEXACT));
 // assert(test_asinh(0.519085143365399015, 0.498216616337933904, -0.420524448156356812, INEXACT));
 
-// Mathf.asinh /////////////////////////////////////////////////////////////////////////////////////
+// Math.asinh<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_asinhf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.asinh<f32>(value), expected, error, flags);
@@ -567,7 +567,7 @@ assert(test_atan(-Infinity, -1.57079632679489656, 0.275765955448150635, INEXACT)
 assert(test_atan(NaN, NaN, 0.0, 0));
 assert(test_atan(0.6929821535674624, 0.606000455515256164, -0.170757904648780823, INEXACT));
 
-// Mathf.atan //////////////////////////////////////////////////////////////////////////////////////
+// Math.atan<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_atanf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.atan<f32>(value), expected, error, flags);
@@ -631,7 +631,7 @@ assert(test_atanh(5.56268464626800346e-309, 5.56268464626800346e-309, 0.0, INEXA
 assert(test_atanh(-5.56268464626800346e-309, -5.56268464626800346e-309, 0.0, INEXACT | UNDERFLOW));
 assert(test_atanh(8.98846567431157954e+307, NaN, 0.0, INVALID));
 
-// Mathf.atanh /////////////////////////////////////////////////////////////////////////////////////
+// Math.atanh<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_atanhf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.atanh<f32>(value), expected, error, flags);
@@ -718,7 +718,7 @@ assert(test_atan2(1.0, 8.98846567431157954e+307, 1.11253692925360069e-308, 0.0, 
 assert(test_atan2(1.5, 8.98846567431157954e+307, 1.66880539388040104e-308, 0.0, INEXACT | UNDERFLOW));
 assert(test_atan2(1.5, -8.98846567431157954e+307, 3.14159265358979312, 0.0, INEXACT));
 
-// Mathf.atan2 /////////////////////////////////////////////////////////////////////////////////////
+// Math.atan2<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_atan2f(value1: f32, value2: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.atan2<f32>(value1, value2), expected, error, flags);
@@ -799,7 +799,7 @@ assert(test_cbrt(1.0, 1.0, 0.0, 0));
 assert(test_cbrt(-1.0, -1.0, 0.0, 0));
 assert(test_cbrt(8.0, 2.0, 0.0, 0));
 
-// Mathf.cbrt //////////////////////////////////////////////////////////////////////////////////////
+// Math.cbrt<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_cbrtf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.cbrt<f32>(value), expected, error, flags);
@@ -897,7 +897,7 @@ assert(test_ceil(-0.99999237060546875, -0.0, 0.0, INEXACT));
 assert(test_ceil(7.88860905221011805e-31, 1.0, 0.0, INEXACT));
 assert(test_ceil(-7.88860905221011805e-31, -0.0, 0.0, INEXACT));
 
-// Mathf.ceil //////////////////////////////////////////////////////////////////////////////////////
+// Math.ceil<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_ceilf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.ceil<f32>(value), expected, error, flags);
@@ -1138,7 +1138,7 @@ assert(NativeMath.cos(13.0 / 4 * kPI) == -0.7071067811865471);
 assert(NativeMath.cos<f64>(1000000.0) == 0.9367521275331447);
 assert(NativeMath.cos(1048575.0 / 2 * kPI) == -3.435757038074824e-12);
 
-// Mathf.cos ///////////////////////////////////////////////////////////////////////////////////////
+// Math.cos<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_cosf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return  check<f32>(NativeMath.cos<f32>(value), expected, error, flags);
@@ -1246,7 +1246,7 @@ assert(test_cosh(Infinity, Infinity, 0.0, 0));
 assert(test_cosh(-Infinity, Infinity, 0.0, 0));
 assert(test_cosh(NaN, NaN, 0.0, 0));
 
-// Mathf.cosh //////////////////////////////////////////////////////////////////////////////////////
+// Math.cosh<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_coshf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.cosh<f32>(value), expected, error, flags);
@@ -1440,7 +1440,7 @@ assert(test_exp(
   INEXACT
 )); // -2.714495295208544660026143771835e-14
 
-// Mathf.exp ///////////////////////////////////////////////////////////////////////////////////////
+// Math.exp<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_expf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.exp<f32>(value), expected, error, flags);
@@ -1506,7 +1506,7 @@ assert(test_expm1(NaN, NaN, 0.0, 0));
 assert(test_expm1(2.22507385850720089e-308, 2.22507385850720089e-308, 0.0, INEXACT | UNDERFLOW));
 assert(test_expm1(-2.22507385850720089e-308,-2.22507385850720089e-308, 0.0, INEXACT | UNDERFLOW));
 
-// Mathf.expm1 /////////////////////////////////////////////////////////////////////////////////////
+// Math.expm1<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_expm1f(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.expm1<f32>(value), expected, error, flags);
@@ -1582,7 +1582,7 @@ assert(test_exp2(reinterpret<f64>(0xC090CC0000000000),                          
 assert(test_exp2(reinterpret<f64>(0xC0A0000000000000),                                   0,                                     0, INEXACT | UNDERFLOW));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Mathf.exp2
+// Math.exp2<f32>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function test_exp2f(value: f32, expected: f32, error: f32, flags: i32): bool {
@@ -1639,7 +1639,7 @@ assert(test_floor(-0.99999237060546875, -1.0, 0.0, INEXACT));
 assert(test_floor(7.88860905221011805e-31, 0.0, 0.0, INEXACT));
 assert(test_floor(-7.88860905221011805e-31, -1.0, 0.0, INEXACT));
 
-// Mathf.floor /////////////////////////////////////////////////////////////////////////////////////
+// Math.floor<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_floorf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.floor<f32>(value), expected, error, flags);
@@ -1720,7 +1720,7 @@ assert(test_hypot(1.0, NaN, NaN, 0.0, 0));
 assert(test_hypot(NaN, 0.0, NaN, 0.0, 0));
 assert(test_hypot(0.0, NaN, NaN, 0.0, 0));
 
-// Mathf.hypot /////////////////////////////////////////////////////////////////////////////////////
+// Math.hypot<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_hypotf(value1: f32, value2: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.hypot<f32>(value1, value2), expected, error, flags);
@@ -1790,7 +1790,7 @@ assert(test_log(Infinity, Infinity, 0.0, 0));
 assert(test_log(-Infinity, NaN, 0.0, INVALID));
 assert(test_log(NaN, NaN, 0.0, 0));
 
-// Mathf.log ///////////////////////////////////////////////////////////////////////////////////////
+// Math.log<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_logf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.log<f32>(value), expected, error, flags);
@@ -1847,7 +1847,7 @@ assert(test_log10(Infinity, Infinity, 0.0, 0));
 assert(test_log10(-Infinity, NaN, 0.0, INVALID));
 assert(test_log10(NaN, NaN, 0.0, 0));
 
-// Mathf.log10 /////////////////////////////////////////////////////////////////////////////////////
+// Math.log10<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_log10f(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.log10<f32>(value), expected, error, flags);
@@ -1906,7 +1906,7 @@ assert(test_log1p(Infinity, Infinity, 0.0, 0));
 assert(test_log1p(-Infinity, NaN, 0.0, INVALID));
 assert(test_log1p(NaN, NaN, 0.0, 0));
 
-// Mathf.log1p /////////////////////////////////////////////////////////////////////////////////////
+// Math.log1p<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_log1pf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.log1p<f32>(value), expected, error, flags);
@@ -1966,7 +1966,7 @@ assert(test_log2(Infinity, Infinity, 0.0, 0));
 assert(test_log2(-Infinity, NaN, 0.0, INVALID));
 assert(test_log2(NaN, NaN, 0.0, 0));
 
-// Mathf.log2 //////////////////////////////////////////////////////////////////////////////////////
+// Math.log2<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_log2f(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.log2<f32>(value), expected, error, flags);
@@ -2075,7 +2075,7 @@ assert(test_max(-1.75, 0.5, 0.5, 0.0, 0));
 assert(test_max(1.75, -0.5, 1.75, 0.0, 0));
 assert(test_max(-1.75, -0.5, -0.5, 0.0, 0));
 
-// Mathf.max ///////////////////////////////////////////////////////////////////////////////////////
+// Math.max<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_maxf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.max<f32>(left, right), expected, error, flags);
@@ -2234,7 +2234,7 @@ assert(test_min(-1.75, 0.5, -1.75, 0.0, 0));
 assert(test_min(1.75, -0.5, -0.5, 0.0, 0));
 assert(test_min(-1.75, -0.5, -1.75, 0.0, 0));
 
-// Mathf.min ///////////////////////////////////////////////////////////////////////////////////////
+// Math.min<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_minf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.min<f32>(left, right), expected, error, flags);
@@ -2481,7 +2481,7 @@ assert(test_mod(reinterpret<f64>(0x0010000000000006), reinterpret<f64>(0x0010000
 assert(test_mod(reinterpret<f64>(0x001FFFFFFFFFFFFF), reinterpret<f64>(0x0020000000000000), reinterpret<f64>(0x001FFFFFFFFFFFFF), 0.0, 0));
 assert(test_mod(reinterpret<f64>(0x009FFFFFFFFFFFFF), reinterpret<f64>(0x0090000000000000), reinterpret<f64>(0x008FFFFFFFFFFFFE), 0.0, 0));
 
-// Mathf.mod ///////////////////////////////////////////////////////////////////////////////////////
+// Math.mod<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_modf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.mod<f32>(left, right), expected, error, flags);
@@ -2726,7 +2726,7 @@ assert(NativeMath.pow<f64>(+Infinity, 0.5) == +Infinity);
 assert(NativeMath.pow<f64>(-Infinity, 0.5) == +Infinity);
 assert(isNaN(NativeMath.pow<f64>(NaN, 0.5)));
 
-// Mathf.pow ///////////////////////////////////////////////////////////////////////////////////////
+// Math.pow<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_powf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.pow<f32>(left, right), expected, error, flags);
@@ -3044,7 +3044,7 @@ assert(NativeMath.round( 9007199254740991.0) ==  9007199254740991.0); // round(+
 assert(NativeMath.round(-9007199254740991.0) == -9007199254740991.0); // round(-(2 ** 53 - 1)) == -(2 ** 53 - 1)
 assert(NativeMath.round(-1.7976931348623157e+308) == -1.7976931348623157e+308);
 
-// Mathf.round /////////////////////////////////////////////////////////////////////////////////////
+// Math.round<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_roundf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return  check<f32>(NativeMath.round<f32>(value), expected, error, flags);
@@ -3100,7 +3100,7 @@ assert(test_sign(Infinity, 1.0, 0.0, 0));
 assert(test_sign(-Infinity, -1.0, 0.0, 0));
 assert(test_sign(NaN, NaN, 0.0, 0));
 
-// Mathf.sign //////////////////////////////////////////////////////////////////////////////////////
+// Math.sign<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_signf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return  check<f32>(NativeMath.sign<f32>(value), expected, error, flags);
@@ -3130,7 +3130,7 @@ assert(NativeMath.signbit(+Infinity) == false);
 assert(NativeMath.signbit(-Infinity) == true);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Mathf.signbit
+// Math.signbit<f32>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 assert(NativeMath.signbit<f32>(0.0)  == false);
@@ -3239,7 +3239,7 @@ assert(NativeMath.sin(1048576.0 / 4 * kPI) == -3.2103381051568376e-11);
 assert(NativeMath.sin(+kTwo120) == +0.377820109360752e0);
 assert(NativeMath.sin(-kTwo120) == -0.377820109360752e0);
 
-// Mathf.sin ///////////////////////////////////////////////////////////////////////////////////////
+// Math.sin<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_sinf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.sin<f32>(value), expected, error, flags);
@@ -3348,7 +3348,7 @@ assert(test_sinh(Infinity, Infinity, 0.0, 0));
 assert(test_sinh(-Infinity, -Infinity, 0.0, 0));
 assert(test_sinh(NaN, NaN, 0.0, 0));
 
-// Mathf.sinh //////////////////////////////////////////////////////////////////////////////////////
+// Math.sinh<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_sinhf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.sinh<f32>(value), expected, error, flags);
@@ -3470,7 +3470,7 @@ assert(test_sqrt(2.64615054688296253e-306, 1.62669927979419815e-153, 0.499867290
 assert(test_sqrt(3.81670763677204135e-306, 1.95363958722483965e-153, 0.499834716320037842, INEXACT));
 assert(test_sqrt(4.57432207785627658e-306, 2.13876648511619359e-153, 0.499859392642974854, INEXACT));
 
-// Mathf.sqrt //////////////////////////////////////////////////////////////////////////////////////
+// Math.sqrt<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_sqrtf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.sqrt<f32>(value), expected, error, flags);
@@ -3599,7 +3599,7 @@ assert(test_tan(Infinity, NaN, 0.0, INVALID));
 assert(test_tan(-Infinity, NaN, 0.0, INVALID));
 assert(test_tan(NaN, NaN, 0.0, 0));
 
-// Mathf.tan ///////////////////////////////////////////////////////////////////////////////////////
+// Math.tan<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_tanf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.tan<f32>(value), expected, error, flags);
@@ -3690,7 +3690,7 @@ assert(test_tanh(Infinity, 1.0, 0.0, 0));
 assert(test_tanh(-Infinity, -1.0, 0.0, 0));
 assert(test_tanh(NaN, NaN, 0.0, 0));
 
-// Mathf.tanh //////////////////////////////////////////////////////////////////////////////////////
+// Math.tanh<f32> //////////////////////////////////////////////////////////////////////////////////////
 
 function test_tanhf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.tanh<f32>(value), expected, error, flags);
@@ -3753,7 +3753,7 @@ assert(test_trunc(-0.99999237060546875, -0.0, 0.0, INEXACT));
 assert(test_trunc(7.88860905221011805e-31, 0.0, 0.0, INEXACT));
 assert(test_trunc(-7.88860905221011805e-31, -0.0, 0.0, INEXACT));
 
-// Mathf.trunc /////////////////////////////////////////////////////////////////////////////////////
+// Math.trunc<f32> /////////////////////////////////////////////////////////////////////////////////////
 
 function test_truncf(value: f32, expected: f32, error: f32, flags: i32): bool {
   return check<f32>(NativeMath.trunc<f32>(value), expected, error, flags);

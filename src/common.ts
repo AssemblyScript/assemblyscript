@@ -216,7 +216,6 @@ export namespace CommonNames {
   export const ArrayBufferView = "ArrayBufferView";
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";
-  export const Mathf = "Mathf";
   export const NativeMath = "NativeMath";
   export const Int8Array = "Int8Array";
   export const Int16Array = "Int16Array";
