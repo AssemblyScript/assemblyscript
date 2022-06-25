@@ -50,59 +50,56 @@ const OVERFLOW  = 1 << 4;
 const kPI     = reinterpret<f64>(0x400921FB54442D18);
 const kTwo120 = 1.329227995784916e+36;
 
-function eulp(x: f64): i32 {
-  var u = reinterpret<u64>(x);
-  var e = <i32>(u >> 52 & 0x7ff);
-  if (!e) e++;
-  return e - 0x3ff - 52;
-}
-
-function ulperr(got: f64, want: f64, dwant: f64): f64 {
-  const Ox1p1023  = reinterpret<f64>(0x7FE0000000000000);
-  if (isNaN(got) && isNaN(want)) return 0;
-  if (got == want) {
-    if (NativeMath.signbit(got) == NativeMath.signbit(want)) return dwant;
-    return Infinity;
-  }
-  if (!isFinite(got)) {
-    got = copysign<f64>(Ox1p1023, got);
-    want *= 0.5;
-  }
-  return scalbn64(got - want, -eulp(want)) + dwant;
-}
-
-function eulpf(x: f32): i32 {
+function eulp32(x: f32): i32 {
   var u = reinterpret<u32>(x);
   var e = <i32>(u >> 23 & 0xff);
   if (!e) e++;
   return e - 0x7f - 23;
 }
 
-function ulperrf(got: f32, want: f32, dwant: f32): f32 {
+function eulp64(x: f64): i32 {
+  var u = reinterpret<u64>(x);
+  var e = <i32>(u >> 52 & 0x7ff);
+  if (!e) e++;
+  return e - 0x3ff - 52;
+}
+
+function ulperr32(got: f32, want: f32, dwant: f32): f32 {
   const Ox1p127f = reinterpret<f32>(0x7F000000);
-  if (isNaN(got) && isNaN(want)) return 0;
+  if (isNaN<f32>(got) && isNaN<f32>(want)) return 0;
   if (got == want) {
-    if (NativeMath.signbit(got) == NativeMath.signbit(want)) return dwant;
+    if (NativeMath.signbit<f32>(got) == NativeMath.signbit<f32>(want)) return dwant;
     return Infinity;
   }
-  if (!isFinite(got)) {
+  if (!isFinite<f32>(got)) {
     got = copysign<f32>(Ox1p127f, got);
     want *= 0.5;
   }
-  return scalbn32(got - want, -eulpf(want)) + dwant;
+  return scalbn32(got - want, -eulp32(want)) + dwant;
+}
+
+function ulperr64(got: f64, want: f64, dwant: f64): f64 {
+  const Ox1p1023 = reinterpret<f64>(0x7FE0000000000000);
+  if (isNaN<f64>(got) && isNaN<f64>(want)) return 0;
+  if (got == want) {
+    if (NativeMath.signbit<f64>(got) == NativeMath.signbit<f64>(want)) return dwant;
+    return Infinity;
+  }
+  if (!isFinite<f64>(got)) {
+    got = copysign<f64>(Ox1p1023, got);
+    want *= 0.5;
+  }
+  return scalbn64(got - want, -eulp64(want)) + dwant;
 }
 
 function check<T extends number>(actual: T, expected: T, dy: T, flags: i32): bool {
   if (actual == expected) return true;
-  if (isNaN(expected)) return isNaN(actual);
+  if (isNaN<T>(expected)) return isNaN<T>(actual);
   var d: T;
-  if (sizeof<T>() == 8) d = <T>ulperr(actual, expected, dy);
-  else if (sizeof<T>() == 4) d = <T>ulperrf(actual, expected, dy);
+  if (sizeof<T>() == 4) d = <T>ulperr32(actual, expected, dy);
+  else if (sizeof<T>() == 8) d = <T>ulperr64(actual, expected, dy);
   else return false;
-  if (abs<T>(d) >= 1.5) {
-    return false;
-  }
-  return true;
+  return abs<T>(d) < 1.5;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
