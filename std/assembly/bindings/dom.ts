@@ -206,6 +206,12 @@ export declare namespace document {
   export let URL: string;
 
   /**
+   * Creates an instance of the element for the specified tag.
+   * @param tagName The name of an element.
+   */
+  @external("env", "document.createElement")
+  export function createElement(tagName: string /* , options?: ElementCreationOptions */): externref;
+  /**
    * Returns a reference to the first HTMLElement object with the specified value of the ID attribute.
    * @param id String that specifies the ID value.
    */
