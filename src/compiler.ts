@@ -10584,6 +10584,12 @@ export class Compiler extends DiagnosticEmitter {
     var temp = flow.getTempLocal(type);
     if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
     flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
+
+    var staticAbortCallExpr = this.makeStaticAbort(
+      this.ensureStaticString("unexpected null"),
+      reportNode
+    ); // TODO: throw
+
     if (type.isExternalReference) {
       let nonNullExpr = module.local_get(temp.index, type.toRef());
       if (this.options.hasFeature(Feature.GC)) {
@@ -10591,14 +10597,14 @@ export class Compiler extends DiagnosticEmitter {
       }
       expr = module.if(
         module.ref_is_null(module.local_tee(temp.index, expr, false)),
-        this.makeStaticAbort(this.ensureStaticString("unexpected null"), reportNode), // TODO: throw
+        staticAbortCallExpr,
         nonNullExpr
       );
     } else {
       expr = module.if(
         module.local_tee(temp.index, expr, type.isManaged),
         module.local_get(temp.index, type.toRef()),
-        this.makeStaticAbort(this.ensureStaticString("unexpected null"), reportNode) // TODO: throw
+        staticAbortCallExpr
       );
     }
     flow.freeTempLocal(temp);
