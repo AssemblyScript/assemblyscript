@@ -422,10 +422,8 @@ export namespace NativeMath {
       if (sizeof<T>() == 8) {
         return <T>log2_64(x);
       }
-    } else if (isInteger<T>()) {
-      return <T>(sizeof<native<T>>() * 8 - 1 - clz<T>(x));
     }
-    return ERROR("Math.log2 accept only numeric types");
+    return ERROR("Math.log2 accept only f32 or f64 types");
   }
 
   // @ts-ignore: decorator

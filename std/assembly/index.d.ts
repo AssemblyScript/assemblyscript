@@ -2091,7 +2091,7 @@ interface IMath {
   /** Returns the natural logarithm (base e) of 1 + `x`. */
   log1p<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the base 2 logarithm of `x`. */
-  log2<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
+  log2<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the largest-valued number of its arguments. */
   max<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
   /** Returns the lowest-valued number of its arguments. */
