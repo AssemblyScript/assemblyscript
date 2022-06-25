@@ -10510,7 +10510,7 @@ export class Compiler extends DiagnosticEmitter {
             module.local_get(thisLocalIndex, sizeTypeRef),
             initializerNode // use initializer if present, otherwise initialize with zero
               ? this.compileExpression(initializerNode, fieldType, Constraints.CONV_IMPLICIT)
-              : this.makeZero(fieldType, fieldPrototype.declaration)
+              : this.makeZero(fieldType)
           ], TypeRef.None)
         );
       }
