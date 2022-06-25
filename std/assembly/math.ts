@@ -222,6 +222,7 @@ export namespace NativeMath {
   @inline
   export function ceil<T extends number = f64>(x: T): T {
     if (isInteger<T>()) {
+      WARNING("Using Math.ceil for integer types is unnecessary");
       return x;
     } else if (isFloat<T>()) {
       return builtin_ceil<T>(x);
@@ -321,6 +322,7 @@ export namespace NativeMath {
   @inline
   export function floor<T extends number = f64>(x: T): T {
     if (isInteger<T>()) {
+      WARNING("Using Math.floor for integer types is unnecessary");
       return x;
     } else if (isFloat<T>()) {
       return builtin_floor<T>(x);
@@ -355,6 +357,7 @@ export namespace NativeMath {
 
   export function imul<T extends number = f64>(x: T, y: T): T {
     if (isInteger<T>()) {
+      WARNING("Using Math.imul for integer types is unnecessary. Just use ordinal multiplication");
       return <T>(<i32>x * <i32>y);
     } else if (isFloat<T>()) {
       /*
@@ -448,15 +451,8 @@ export namespace NativeMath {
       if (sizeof<T>() == 8) {
         return <T>pow64(x, y);
       }
-    } else if (isInteger<T>()) {
-      if (sizeof<T>() <= 4) {
-        return <T>ipow32(x, y);
-      }
-      if (sizeof<T>() == 8) {
-        return <T>ipow64(x, y);
-      }
     }
-    return ERROR("Math.pow accept only numeric types");
+    return ERROR("Math.pow accept only f32 or f64 types");
   }
 
   export function seedRandom(value: i64): void {
@@ -487,6 +483,7 @@ export namespace NativeMath {
   @inline
   export function round<T extends number = f64>(x: T): T {
     if (isInteger<T>()) {
+      WARNING("Using Math.round for integer types is unnecessary");
       return x;
     } else if (isFloat<T>()) {
       let roundUp = builtin_ceil<T>(x);
@@ -606,6 +603,7 @@ export namespace NativeMath {
   @inline
   export function trunc<T extends number = f64>(x: T): T {
     if (isInteger<T>()) {
+      WARNING("Using Math.trunc for integer types is unnecessary");
       return x;
     } else if (isFloat<T>()) {
       return builtin_trunc<T>(x);

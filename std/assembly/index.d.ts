@@ -2097,7 +2097,7 @@ interface IMath {
   /** Returns the lowest-valued number of its arguments. */
   min<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
   /** Returns `base` to the power of `exponent`. */
-  pow<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(base: T, exponent: T): Widen<T>;
+  pow<T extends f32 | f64>(base: T, exponent: T): Widen<T>;
   /** Returns a pseudo-random number in the range from 0.0 inclusive up to but not including 1.0. */
   random(): f64;
   /** Returns the value of `x` rounded to the nearest integer. */
