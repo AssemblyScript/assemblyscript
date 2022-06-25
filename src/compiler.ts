@@ -10631,6 +10631,12 @@ export class Compiler extends DiagnosticEmitter {
     var temp = flow.getTempLocal(type);
     var instanceofInstance = this.program.instanceofInstance;
     assert(this.compileFunction(instanceofInstance));
+
+    var staticAbortCallExpr = this.makeStaticAbort(
+      this.ensureStaticString("unexpected upcast"),
+      reportNode
+    ); // TODO: throw
+
     if (!toType.isNullableReference || flow.isNonnull(expr, type)) {
       // Simplify if the value cannot be `null`. If toType is non-nullable, a
       // null-check would have been emitted separately so is not necessary here.
@@ -10640,7 +10646,7 @@ export class Compiler extends DiagnosticEmitter {
           module.i32(toType.classReference!.id)
         ], TypeRef.I32),
         module.local_get(temp.index, type.toRef()),
-        this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
+        staticAbortCallExpr
       );
     } else {
       expr = module.if(
@@ -10651,7 +10657,7 @@ export class Compiler extends DiagnosticEmitter {
             module.i32(toType.classReference!.id)
           ], TypeRef.I32),
           module.local_get(temp.index, type.toRef()),
-          this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
+          staticAbortCallExpr
         ),
         module.usize(0)
       );
