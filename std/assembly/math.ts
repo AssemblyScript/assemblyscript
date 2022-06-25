@@ -3,8 +3,6 @@ export { JSMath };
 
 import {
   dtoi32, murmurHash3,
-  ipow32, ipow64,
-  mod32, mod64,
   acos32, acos64,
   acosh32, acosh64,
   asin32, asin64,
@@ -22,6 +20,7 @@ import {
   log2_32, log2_64,
   log10_32, log10_64,
   hypot32, hypot64,
+  ipow32, ipow64,
   pow32, pow64,
   sin32, sin64,
   sinh32, sinh64,
@@ -615,22 +614,6 @@ export namespace NativeMath {
     } else {
       return ERROR("Math.trunc accept only numeric types");
     }
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function mod<T extends number = f64>(x: T, y: T): T {
-    if (isInteger<T>()) {
-      return <T>(x % y);
-    } else if (isFloat<T>()) {
-      if (sizeof<T>() == 4) {
-        return <T>mod32(x, y);
-      }
-      if (sizeof<T>() == 8) {
-        return <T>mod64(x, y);
-      }
-    }
-    return ERROR("Math.mod accept only numeric types");
   }
 
   // @ts-ignore: decorator

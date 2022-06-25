@@ -31,6 +31,8 @@
 */
 
 import {
+  mod32,
+  mod64,
   scalbn32,
   scalbn64,
   ipow64
@@ -2319,8 +2321,8 @@ assert(test_minf(-1.75, -0.5, -1.75, 0.0, 0));
 declare function mod(x: f64, y: f64): f64;
 
 function test_mod(left: f64, right: f64, expected: f64, error: f64, flags: i32): bool {
-  return  check<f64>(NativeMath.mod(left, right), expected, error, flags) &&
-  (!js || check<f64>(           mod(left, right), expected, error, flags));
+  return  check<f64>(mod64(left, right), expected, error, flags) &&
+  (!js || check<f64>(  mod(left, right), expected, error, flags));
 }
 
 // sanity
@@ -2484,7 +2486,7 @@ assert(test_mod(reinterpret<f64>(0x009FFFFFFFFFFFFF), reinterpret<f64>(0x0090000
 // Math.mod<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_modf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
-  return check<f32>(NativeMath.mod<f32>(left, right), expected, error, flags);
+  return check<f32>(mod32(left, right), expected, error, flags);
 }
 
 // sanity

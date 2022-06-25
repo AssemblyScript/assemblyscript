@@ -2124,8 +2124,6 @@ interface INativeMath extends IMath {
   sincos_cos: f64;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
-  /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
-  mod<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T, y: T): T;
   /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
   sincos<T extends f32 | f64>(x: T): void;
   /** Returns 2 raised to the given power x. Equivalent to 2 ** x. */
