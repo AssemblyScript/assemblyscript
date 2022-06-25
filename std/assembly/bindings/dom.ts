@@ -175,10 +175,10 @@ export declare namespace document {
   export const children: externref;
   /** Returns the first child that is an element, and null otherwise. */
   @external("env", "document.firstElementChild")
-  export const firstElementChild: externref | null;
+  export const firstElementChild: externref;
   /** Returns the last child that is an element, and null otherwise. */
   @external("env", "document.lastElementChild")
-  export const lastElementChild: externref | null;
+  export const lastElementChild: externref;
 
   /**
    * Returns the HTTP cookies that apply to the Document. If there are no cookies or cookies can't be applied
