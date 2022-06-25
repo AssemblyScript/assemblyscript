@@ -2026,7 +2026,7 @@ declare const Symbol: SymbolConstructor;
 
 // prevent infer T as literal
 /** @internal */
-type Narrow<T> = T extends number ? number : T;
+type Widen<T> = T extends number ? number : T;
 
 /** @internal */
 interface IMath {
@@ -2047,77 +2047,77 @@ interface IMath {
   /** The square root of 2, approximately 1.414. */
   readonly SQRT2: f64;
   /** Returns the absolute value of `x`. */
-  abs<T extends Narrow<u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>>(x: T): Narrow<T>;
+  abs<T extends Widen<u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>>(x: T): Widen<T>;
   /** Returns the arccosine (in radians) of `x`. */
-  acos<T extends f32 | f64>(x: T): Narrow<T>;
+  acos<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic arc-cosine of `x`. */
-  acosh<T extends f32 | f64>(x: T): Narrow<T>;
+  acosh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the arcsine (in radians) of `x`. */
-  asin<T extends f32 | f64>(x: T): Narrow<T>;
+  asin<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic arcsine of `x`. */
-  asinh<T extends f32 | f64>(x: T): Narrow<T>;
+  asinh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the arctangent (in radians) of `x`. */
-  atan<T extends f32 | f64>(x: T): Narrow<T>;
+  atan<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the arctangent of the quotient of its arguments. */
-  atan2<T extends f32 | f64>(y: T, x: T): Narrow<T>;
+  atan2<T extends f32 | f64>(y: T, x: T): Widen<T>;
   /** Returns the hyperbolic arctangent of `x`. */
-  atanh<T extends f32 | f64>(x: T): Narrow<T>;
+  atanh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the cube root of `x`. */
-  cbrt<T extends f32 | f64>(x: T): Narrow<T>;
+  cbrt<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the smallest integer greater than or equal to `x`. */
-  ceil<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Narrow<T>;
+  ceil<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. @deprecate */
-  clz32<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Narrow<T>;
+  clz32<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns the cosine (in radians) of `x`. */
-  cos<T extends f32 | f64>(x: T): Narrow<T>;
+  cos<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic cosine of `x`. */
-  cosh<T extends f32 | f64>(x: T): Narrow<T>;
+  cosh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns e to the power of `x`. */
-  exp<T extends f32 | f64>(x: T): Narrow<T>;
+  exp<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns e to the power of `x`, minus 1. */
-  expm1<T extends f32 | f64>(x: T): Narrow<T>;
+  expm1<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the largest integer less than or equal to `x`. */
-  floor<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Narrow<T>;
+  floor<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns the nearest 32-bit single precision float representation of `x`. */
-  fround<T extends f32 | f64>(x: T): Narrow<T>;
+  fround<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the square root of the sum of squares of its arguments. */
-  hypot<T extends f32 | f64>(a: T, b: T): Narrow<T>; // TODO: rest
+  hypot<T extends f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
   /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. @deprecate */
-  imul<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Narrow<T>;
+  imul<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>;
   /** Returns the natural logarithm (base e) of `x`. */
-  log<T extends f32 | f64>(x: T): Narrow<T>;
+  log<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the base 10 logarithm of `x`. */
-  log10<T extends f32 | f64>(x: T): Narrow<T>;
+  log10<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the natural logarithm (base e) of 1 + `x`. */
-  log1p<T extends f32 | f64>(x: T): Narrow<T>;
+  log1p<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the base 2 logarithm of `x`. */
-  log2<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Narrow<T>;
+  log2<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns the largest-valued number of its arguments. */
-  max<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Narrow<T>; // TODO: rest
+  max<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
   /** Returns the lowest-valued number of its arguments. */
-  min<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Narrow<T>; // TODO: rest
+  min<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
   /** Returns `base` to the power of `exponent`. */
-  pow<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(base: T, exponent: T): Narrow<T>;
+  pow<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(base: T, exponent: T): Widen<T>;
   /** Returns a pseudo-random number in the range from 0.0 inclusive up to but not including 1.0. */
   random(): f64;
   /** Returns the value of `x` rounded to the nearest integer. */
-  round<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Narrow<T>;
+  round<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns the sign of `x`, indicating whether the number is positive, negative or zero. */
-  sign<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Narrow<T>;
+  sign<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns whether the sign bit of `x` is set. */
   signbit<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): bool;
   /** Returns the sine of `x`. */
-  sin<T extends f32 | f64>(x: T): Narrow<T>;
+  sin<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic sine of `x`. */
-  sinh<T extends f32 | f64>(x: T): Narrow<T>;
+  sinh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the square root of `x`. */
-  sqrt<T extends f32 | f64>(x: T): Narrow<T>;
+  sqrt<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the tangent of `x`. */
-  tan<T extends f32 | f64>(x: T): Narrow<T>;
+  tan<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic tangent of `x`. */
-  tanh<T extends f32 | f64>(x: T): Narrow<T>;
+  tanh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the integer part of `x` by removing any fractional digits. */
-  trunc<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Narrow<T>;
+  trunc<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
 }
 
 /** @internal */
@@ -2131,7 +2131,7 @@ interface INativeMath extends IMath {
   /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
   sincos<T extends f32 | f64>(x: T): void;
   /** Returns 2 raised to the given power x. Equivalent to 2 ** x. */
-  exp2<T extends f32 | f64>(x: T): Narrow<T>;
+  exp2<T extends f32 | f64>(x: T): Widen<T>;
 }
 
 /** Double precision math imported from JavaScript. */
