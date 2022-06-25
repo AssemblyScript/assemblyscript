@@ -10260,6 +10260,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: return module.i64(-1, -1);
       case TypeKind.F32: return module.f32(-1);
       case TypeKind.F64: return module.f64(-1);
+      case TypeKind.I31REF: return module.i31_new(module.i32(-1));
     }
   }
 
