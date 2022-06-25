@@ -1242,7 +1242,7 @@ export class Compiler extends DiagnosticEmitter {
       if (global.is(CommonFlags.INLINED)) {
         initExpr = this.compileInlineConstant(global, global.type, Constraints.PREFER_STATIC);
       } else {
-        initExpr = this.makeZero(type, global.declaration);
+        initExpr = this.makeZero(type);
       }
     }
 
@@ -1255,7 +1255,7 @@ export class Compiler extends DiagnosticEmitter {
           findDecorator(DecoratorKind.INLINE, global.decoratorNodes)!.range, "inline"
         );
       }
-      module.addGlobal(internalName, typeRef, true, this.makeZero(type, global.declaration));
+      module.addGlobal(internalName, typeRef, true, this.makeZero(type));
       this.currentBody.push(
         module.global_set(internalName, initExpr)
       );
@@ -7038,7 +7038,7 @@ export class Compiler extends DiagnosticEmitter {
         let needsVarargsStub = false;
         for (let n = numParameters; n < overloadNumParameters; ++n) {
           // TODO: inline constant initializers and skip varargs stub
-          paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n], overloadInstance.declaration);
+          paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n]);
           needsVarargsStub = true;
         }
         let calledName = needsVarargsStub
@@ -7238,7 +7238,7 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
         }
-        operands.push(this.makeZero(parameterTypes[i], instance.declaration));
+        operands.push(this.makeZero(parameterTypes[i]));
         allOptionalsAreConstant = false;
       }
       if (!allOptionalsAreConstant && !instance.is(CommonFlags.MODULE_IMPORT)) {
@@ -7348,7 +7348,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       let parameterTypes = signature.parameterTypes;
       for (let i = numArguments; i < maxArguments; ++i) {
-        operands.push(this.makeZero(parameterTypes[i], reportNode));
+        operands.push(this.makeZero(parameterTypes[i]));
       }
     }
 
@@ -7642,7 +7642,7 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = signatureReference.type.asNullable();
             return options.isWasm64 ? module.i64(0) : module.i32(0);
           }
-          return this.makeZero(contextualType, expression);
+          return this.makeZero(contextualType);
         }
         this.currentType = options.usizeType;
         this.warning(
@@ -7934,7 +7934,7 @@ export class Compiler extends DiagnosticEmitter {
             ? BinaryOp.NeI64
             : BinaryOp.NeI32,
           expr,
-          this.makeZero(actualType, expression.expression)
+          this.makeZero(actualType)
         );
       }
 
@@ -8041,7 +8041,7 @@ export class Compiler extends DiagnosticEmitter {
               ? BinaryOp.NeI64
               : BinaryOp.NeI32,
             expr,
-            this.makeZero(actualType, expression.expression)
+            this.makeZero(actualType)
           );
 
         // <nonNullable> is just `true`
@@ -8392,7 +8392,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         values[i] = expr;
       } else {
-        values[i] = this.makeZero(elementType, elementExpression);
+        values[i] = this.makeZero(elementType);
       }
     }
 
@@ -8544,7 +8544,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         values[i] = expr;
       } else {
-        values[i] = this.makeZero(elementType, elementExpression);
+        values[i] = this.makeZero(elementType);
       }
     }
 
@@ -8781,7 +8781,7 @@ export class Compiler extends DiagnosticEmitter {
           exprs.push(
             module.call(fieldInstance.internalSetterName, [
               module.local_get(tempLocal.index, classTypeRef),
-              this.makeZero(fieldType, expression)
+              this.makeZero(fieldType)
             ], TypeRef.None)
           );
           this.compileFieldSetter(fieldInstance);
@@ -9077,7 +9077,7 @@ export class Compiler extends DiagnosticEmitter {
       ctorInstance,
       argumentExpressions,
       reportNode,
-      this.makeZero(this.options.usizeType, reportNode),
+      this.makeZero(this.options.usizeType),
       constraints
     );
     if (getExpressionType(expr) != TypeRef.None) { // possibly WILL_DROP
@@ -9644,7 +9644,7 @@ export class Compiler extends DiagnosticEmitter {
               this.options.isWasm64
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
-              this.makeZero(this.currentType, expression.operand),
+              this.makeZero(this.currentType),
               expr
             );
             break;
@@ -10194,7 +10194,7 @@ export class Compiler extends DiagnosticEmitter {
   // === Specialized code generation ==============================================================
 
   /** Makes a constant zero of the specified type. */
-  makeZero(type: Type, reportNode: Node): ExpressionRef {
+  makeZero(type: Type): ExpressionRef {
     var module = this.module;
     switch (type.kind) {
       default: assert(false);
@@ -10536,7 +10536,7 @@ export class Compiler extends DiagnosticEmitter {
     if (message) {
       messageArg = this.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT);
     } else {
-      messageArg = this.makeZero(stringInstance.type, codeLocation);
+      messageArg = this.makeZero(stringInstance.type);
     }
 
     return this.makeStaticAbort(messageArg, codeLocation);
