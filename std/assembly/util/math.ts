@@ -3020,7 +3020,7 @@ function oflow64(sign: u32): f64 {
 // Returns 1 if input is the bit representation of 0, infinity or nan.
 // @ts-ignore: decorator
 @inline
-function zeroinfnan(u: u64): bool {
+function zeroinfnan64(u: u64): bool {
   return (u << 1) - 1 >= 0xFFE0000000000000 - 1;
 }
 
@@ -3201,7 +3201,7 @@ function pow64_lut(x: f64, y: f64): f64 {
     // and if |y| < 2^-54 / 1075 ~= 0x1.e7b6p-65 then pow(x,y) = +-1.
     // Special cases: (x < 0x1p-126 or inf or nan) or
     // (|y| < 0x1p-65 or |y| >= 0x1p63 or nan).
-    if (zeroinfnan(iy)) {
+    if (zeroinfnan64(iy)) {
       if ((iy << 1) == 0) return 1.0;
       if (ix == 0x3FF0000000000000) return NaN; // original: 1.0
       if ((ix << 1) > 0xFFE0000000000000 || (iy << 1) > 0xFFE0000000000000) return x + y;
@@ -3209,7 +3209,7 @@ function pow64_lut(x: f64, y: f64): f64 {
       if (((ix << 1) < 0x7FE0000000000000) == !(iy >> 63)) return 0; // |x|<1 && y==inf or |x|>1 && y==-inf.
       return y * y;
     }
-    if (zeroinfnan(ix)) {
+    if (zeroinfnan64(ix)) {
       let x2 = x * x;
       if (i32(ix >> 63) && checkint64(iy) == 1) x2 = -x2;
       return iy >> 63 ? 1 / x2 : x2;
