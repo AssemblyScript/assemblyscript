@@ -20,7 +20,6 @@ import {
   log2_32, log2_64,
   log10_32, log10_64,
   hypot32, hypot64,
-  ipow32, ipow64,
   pow32, pow64,
   sin32, sin64,
   sinh32, sinh64,
