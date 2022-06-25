@@ -1110,34 +1110,34 @@ assert(NativeMath.cos(1e90 * kPI) == JSMath.cos(1e90 * kPI));
 
 // v8 ieee754-unittest.cc
 // cos(x) = 1 for |x| < 2^-27
-assert(NativeMath.cos<f64>(+2.3283064365386963e-10) == 1.0);
-assert(NativeMath.cos<f64>(-2.3283064365386963e-10) == 1.0);
+assert(NativeMath.cos(+2.3283064365386963e-10) == 1.0);
+assert(NativeMath.cos(-2.3283064365386963e-10) == 1.0);
 // Test KERNELCOS for |x| < 0.3.
 // cos(pi/20) = sqrt(sqrt(2)*sqrt(sqrt(5)+5)+4)/2^(3/2)
-assert(NativeMath.cos<f64>(0.15707963267948966) == 0.9876883405951378);
+assert(NativeMath.cos(0.15707963267948966) == 0.9876883405951378);
 // Test KERNELCOS for x ~= 0.78125
-assert(NativeMath.cos<f64>(0.7812504768371582) == 0.7100335477927638);
-assert(NativeMath.cos<f64>(0.78125) == 0.7100338835660797);
+assert(NativeMath.cos(0.7812504768371582) == 0.7100335477927638);
+assert(NativeMath.cos(0.78125) == 0.7100338835660797);
 // Test KERNELCOS for |x| > 0.3.
 // cos(pi/8) = sqrt(sqrt(2)+1)/2^(3/4)
-assert(NativeMath.cos<f64>(0.39269908169872414) == 0.9238795325112867);
+assert(NativeMath.cos(0.39269908169872414) == 0.9238795325112867);
 // Test KERNELTAN for |x| < 0.67434.
-assert(NativeMath.cos<f64>(-0.39269908169872414) == 0.9238795325112867);
+assert(NativeMath.cos(-0.39269908169872414) == 0.9238795325112867);
 
 // Tests for cos.
-assert(NativeMath.cos<f64>(3.725290298461914e-9) == 1.0);
+assert(NativeMath.cos(3.725290298461914e-9) == 1.0);
 // Cover different code paths in KERNELCOS.
-assert(NativeMath.cos<f64>(0.25) == 0.9689124217106447);
-assert(NativeMath.cos<f64>(0.5) == 0.8775825618903728);
-assert(NativeMath.cos<f64>(0.785) == 0.7073882691671998);
+assert(NativeMath.cos(0.25) == 0.9689124217106447);
+assert(NativeMath.cos(0.5) == 0.8775825618903728);
+assert(NativeMath.cos(0.785) == 0.7073882691671998);
 // Test that cos(Math.PI/2) != 0 since Math.PI is not exact.
-assert(NativeMath.cos<f64>(1.5707963267948966) == 6.123233995736766e-17);
+assert(NativeMath.cos(1.5707963267948966) == 6.123233995736766e-17);
 // Test cos for various phases.
 assert(NativeMath.cos(7.0 / 4 * kPI) == 0.7071067811865474);
 assert(NativeMath.cos(9.0 / 4 * kPI) == 0.7071067811865477);
 assert(NativeMath.cos(11.0 / 4 * kPI) == -0.7071067811865467);
 assert(NativeMath.cos(13.0 / 4 * kPI) == -0.7071067811865471);
-assert(NativeMath.cos<f64>(1000000.0) == 0.9367521275331447);
+assert(NativeMath.cos(1000000.0) == 0.9367521275331447);
 assert(NativeMath.cos(1048575.0 / 2 * kPI) == -3.435757038074824e-12);
 
 // Math.cos<f32> ///////////////////////////////////////////////////////////////////////////////////////
@@ -2685,48 +2685,48 @@ assert(test_pow(-2.0, 1.0, -2.0, 0.0, 0));
 assert(test_pow(-2.0, -1.0, -0.5, 0.0, 0));
 
 // Fast paths
-assert(NativeMath.pow<f64>(+0.0,+0.0) == 1.0);
-assert(NativeMath.pow<f64>(-0.0,+0.0) == 1.0);
-assert(NativeMath.pow<f64>(-0.0,-0.0) == 1.0);
-assert(NativeMath.pow<f64>(+0.0,-0.0) == 1.0);
-assert(NativeMath.pow<f64>(-1.0, 0.0) == 1.0);
-assert(NativeMath.pow<f64>(+Infinity, 0.0) == 1.0);
-assert(NativeMath.pow<f64>(-Infinity, 0.0) == 1.0);
-assert(NativeMath.pow<f64>(NaN, 0.0) == 1.0);
+assert(NativeMath.pow(+0.0,+0.0) == 1.0);
+assert(NativeMath.pow(-0.0,+0.0) == 1.0);
+assert(NativeMath.pow(-0.0,-0.0) == 1.0);
+assert(NativeMath.pow(+0.0,-0.0) == 1.0);
+assert(NativeMath.pow(-1.0, 0.0) == 1.0);
+assert(NativeMath.pow(+Infinity, 0.0) == 1.0);
+assert(NativeMath.pow(-Infinity, 0.0) == 1.0);
+assert(NativeMath.pow(NaN, 0.0) == 1.0);
 
-assert(NativeMath.pow<f64>(+0.0,+1.0) == +0.0);
-assert(NativeMath.pow<f64>(-0.0,+1.0) == -0.0);
-assert(NativeMath.pow<f64>(-1.0, 1.0) == -1.0);
-assert(NativeMath.pow<f64>(+Infinity, 1.0) == +Infinity);
-assert(NativeMath.pow<f64>(-Infinity, 1.0) == -Infinity);
-assert(isNaN(NativeMath.pow<f64>(NaN, 1.0)));
+assert(NativeMath.pow(+0.0,+1.0) == +0.0);
+assert(NativeMath.pow(-0.0,+1.0) == -0.0);
+assert(NativeMath.pow(-1.0, 1.0) == -1.0);
+assert(NativeMath.pow(+Infinity, 1.0) == +Infinity);
+assert(NativeMath.pow(-Infinity, 1.0) == -Infinity);
+assert(isNaN(NativeMath.pow(NaN, 1.0)));
 
-assert(NativeMath.pow<f64>(+0.0,-1.0) == +Infinity);
-assert(NativeMath.pow<f64>(-0.0,-1.0) == -Infinity);
-assert(NativeMath.pow<f64>(-1.0,-1.0) == -1.0);
-assert(NativeMath.pow<f64>( 0.5,-1.0) == +2.0);
-assert(NativeMath.pow<f64>( 1.0,-1.0) == +1.0);
-assert(NativeMath.pow<f64>(+Infinity,-1.0) == +0.0);
-assert(NativeMath.pow<f64>(-Infinity,-1.0) == -0.0);
+assert(NativeMath.pow(+0.0,-1.0) == +Infinity);
+assert(NativeMath.pow(-0.0,-1.0) == -Infinity);
+assert(NativeMath.pow(-1.0,-1.0) == -1.0);
+assert(NativeMath.pow( 0.5,-1.0) == +2.0);
+assert(NativeMath.pow( 1.0,-1.0) == +1.0);
+assert(NativeMath.pow(+Infinity,-1.0) == +0.0);
+assert(NativeMath.pow(-Infinity,-1.0) == -0.0);
 assert(isNaN(NativeMath.pow(NaN,-1.0)));
 
-assert(NativeMath.pow<f64>(+0.0, 2.0) == +0.0);
-assert(NativeMath.pow<f64>(-0.0, 2.0) == +0.0);
-assert(NativeMath.pow<f64>(-1.0, 2.0) == +1.0);
-assert(NativeMath.pow<f64>( 0.5, 2.0) == +0.25);
-assert(NativeMath.pow<f64>( 1.0, 2.0) == +1.0);
-assert(NativeMath.pow<f64>(+Infinity, 2.0) == +Infinity);
-assert(NativeMath.pow<f64>(-Infinity, 2.0) == +Infinity);
-assert(isNaN(NativeMath.pow<f64>(NaN, 2.0)));
+assert(NativeMath.pow(+0.0, 2.0) == +0.0);
+assert(NativeMath.pow(-0.0, 2.0) == +0.0);
+assert(NativeMath.pow(-1.0, 2.0) == +1.0);
+assert(NativeMath.pow( 0.5, 2.0) == +0.25);
+assert(NativeMath.pow( 1.0, 2.0) == +1.0);
+assert(NativeMath.pow(+Infinity, 2.0) == +Infinity);
+assert(NativeMath.pow(-Infinity, 2.0) == +Infinity);
+assert(isNaN(NativeMath.pow(NaN, 2.0)));
 
-assert(NativeMath.pow<f64>(+0.0, 0.5) == +0.0);
-assert(NativeMath.pow<f64>(-0.0, 0.5) == +0.0);
-assert(isNaN(NativeMath.pow<f64>(-1.0, 0.5)));
-assert(NativeMath.pow<f64>( 4.0, 0.5) == +2.0);
-assert(NativeMath.pow<f64>( 1.0, 0.5) == +1.0);
-assert(NativeMath.pow<f64>(+Infinity, 0.5) == +Infinity);
-assert(NativeMath.pow<f64>(-Infinity, 0.5) == +Infinity);
-assert(isNaN(NativeMath.pow<f64>(NaN, 0.5)));
+assert(NativeMath.pow(+0.0, 0.5) == +0.0);
+assert(NativeMath.pow(-0.0, 0.5) == +0.0);
+assert(isNaN(NativeMath.pow(-1.0, 0.5)));
+assert(NativeMath.pow( 4.0, 0.5) == +2.0);
+assert(NativeMath.pow( 1.0, 0.5) == +1.0);
+assert(NativeMath.pow(+Infinity, 0.5) == +Infinity);
+assert(NativeMath.pow(-Infinity, 0.5) == +Infinity);
+assert(isNaN(NativeMath.pow(NaN, 0.5)));
 
 // Math.pow<f32> ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -3844,22 +3844,22 @@ assert(NativeMath.imul<f64>(f64.MAX_VALUE, f64.MAX_VALUE) == 0);
 
 // Math.clz32 /////////////////////////////////////////////////////////////////////////////////
 
-assert(NativeMath.clz32<f64>(+0.0) == 32);
-assert(NativeMath.clz32<f64>(+1.0) == 31);
-assert(NativeMath.clz32<f64>(-1.0) == 0);
-assert(NativeMath.clz32<f64>(-128.0) == 0);
-assert(NativeMath.clz32<f64>(4294967295.0) == 0);
-assert(NativeMath.clz32<f64>(4294967295.5) == 0);
-assert(NativeMath.clz32<f64>(4294967296.0) == 32);
-assert(NativeMath.clz32<f64>(4294967297.0) == 31);
-assert(NativeMath.clz32<f64>(NaN) == 32);
-assert(NativeMath.clz32<f64>(Infinity) == 32);
-assert(NativeMath.clz32<f64>(+f64.MAX_SAFE_INTEGER) == 0);
-assert(NativeMath.clz32<f64>(-f64.MAX_SAFE_INTEGER) == 31);
-assert(NativeMath.clz32<f64>(+f64.MAX_VALUE) == 32);
-assert(NativeMath.clz32<f64>(+f64.MIN_VALUE) == 32);
-assert(NativeMath.clz32<f64>(-f64.MAX_VALUE) == 32);
-assert(NativeMath.clz32<f64>(+f64.EPSILON)   == 32);
+assert(NativeMath.clz32(+0.0) == 32);
+assert(NativeMath.clz32(+1.0) == 31);
+assert(NativeMath.clz32(-1.0) == 0);
+assert(NativeMath.clz32(-128.0) == 0);
+assert(NativeMath.clz32(4294967295.0) == 0);
+assert(NativeMath.clz32(4294967295.5) == 0);
+assert(NativeMath.clz32(4294967296.0) == 32);
+assert(NativeMath.clz32(4294967297.0) == 31);
+assert(NativeMath.clz32(NaN) == 32);
+assert(NativeMath.clz32(Infinity) == 32);
+assert(NativeMath.clz32(+f64.MAX_SAFE_INTEGER) == 0);
+assert(NativeMath.clz32(-f64.MAX_SAFE_INTEGER) == 31);
+assert(NativeMath.clz32(+f64.MAX_VALUE) == 32);
+assert(NativeMath.clz32(+f64.MIN_VALUE) == 32);
+assert(NativeMath.clz32(-f64.MAX_VALUE) == 32);
+assert(NativeMath.clz32(+f64.EPSILON)   == 32);
 
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 
