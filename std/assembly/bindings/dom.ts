@@ -181,11 +181,13 @@ export declare namespace document {
   export const lastElementChild: externref | null;
 
   /**
-   * Returns the HTTP cookies that apply to the Document. If there are no cookies or cookies can't be applied to this resource, the empty string will be returned.
+   * Returns the HTTP cookies that apply to the Document. If there are no cookies or cookies can't be applied
+   * to this resource, the empty string will be returned.
    *
    * Can be set, to add a new cookie to the element's set of HTTP cookies.
    *
-   * If the contents are sandboxed into a unique origin (e.g. in an iframe with the sandbox attribute), a "SecurityError" DOMException will be thrown on getting and setting.
+   * If the contents are sandboxed into a unique origin (e.g. in an iframe with the sandbox attribute),
+   * a "SecurityError" DOMException will be thrown on getting and setting.
    */
   @external("env", "document.cookie")
   export let cookie: string;
@@ -233,25 +235,13 @@ export declare namespace document {
   /** Gets a value indicating whether the object currently has focus. */
   @external("env", "document.hasFocus")
   export function hasFocus(): bool;
-  /**
-   * Inserts nodes after the last child of node, while replacing strings in nodes with equivalent Text nodes.
-   *
-   * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
-   */
+  /** Inserts nodes after the last child of node, while replacing strings in nodes with equivalent Text nodes. */
   @external("env", "document.append")
   export function append(node: externref): void;
-  /**
-   * Inserts nodes before the first child of node, while replacing strings in nodes with equivalent Text nodes.
-   *
-   * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
-   */
+  /** Inserts nodes before the first child of node, while replacing strings in nodes with equivalent Text nodes. */
   @external("env", "document.prepend")
   export function prepend(node: externref): void;
-  /**
-   * Replace all children of node with nodes, while replacing strings in nodes with equivalent Text nodes.
-   *
-   * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
-   */
+  /** Replace all children of node with nodes, while replacing strings in nodes with equivalent Text nodes. */
   @external("env", "document.replaceChildren")
   export function replaceChildren(node: externref): void;
   /**
