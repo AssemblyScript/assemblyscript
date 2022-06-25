@@ -2062,7 +2062,7 @@ interface IMath {
   cbrt<T extends f32 | f64>(x: T): T;
   /** Returns the smallest integer greater than or equal to `x`. */
   ceil<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): T;
-  /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. */
+  /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. @deprecate */
   clz32<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): T;
   /** Returns the cosine (in radians) of `x`. */
   cos<T extends f32 | f64>(x: T): T;
@@ -2078,8 +2078,8 @@ interface IMath {
   fround<T extends f32 | f64>(x: T): T;
   /** Returns the square root of the sum of squares of its arguments. */
   hypot<T extends f32 | f64>(a: T, b: T): T; // TODO: rest
-  /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
-  imul<T extends f32 | f64>(a: T, b: T): T;
+  /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. @deprecate */
+  imul<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): T;
   /** Returns the natural logarithm (base e) of `x`. */
   log<T extends f32 | f64>(x: T): T;
   /** Returns the base 10 logarithm of `x`. */
