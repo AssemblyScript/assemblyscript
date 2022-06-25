@@ -2066,7 +2066,7 @@ interface IMath {
   cbrt<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the smallest integer greater than or equal to `x`. */
   ceil<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
-  /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. @deprecate */
+  /** @deprecated Returns the number of leading zero bits in the 32-bit binary representation of `x`. */
   clz32<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns the cosine (in radians) of `x`. */
   cos<T extends f32 | f64>(x: T): Widen<T>;
@@ -2078,11 +2078,11 @@ interface IMath {
   expm1<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the largest integer less than or equal to `x`. */
   floor<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
-  /** Returns the nearest 32-bit single precision float representation of `x`. */
+  /** @deprecated Returns the nearest 32-bit single precision float representation of `x`. */
   fround<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the square root of the sum of squares of its arguments. */
   hypot<T extends f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
-  /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. @deprecate */
+  /** @deprecated Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
   imul<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>;
   /** Returns the natural logarithm (base e) of `x`. */
   log<T extends f32 | f64>(x: T): Widen<T>;
