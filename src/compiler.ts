@@ -10584,7 +10584,7 @@ export class Compiler extends DiagnosticEmitter {
     var temp = flow.getTempLocal(type);
     if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
     flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-    if (type.kind >= TypeKind.FUNCREF && type.kind <= TypeKind.DATAREF) {
+    if (type.isExternalReference) {
       let nonNullExpr = module.local_get(temp.index, type.toRef());
       if (this.options.hasFeature(Feature.GC)) {
         nonNullExpr = module.ref_as_nonnull(nonNullExpr);
