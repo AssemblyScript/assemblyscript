@@ -81,6 +81,7 @@ import {
   _BinaryenMemoryFillGetValue,
   _BinaryenMemoryFillGetSize,
   _BinaryenRefIsGetValue,
+  _BinaryenRefAsGetValue,
   _BinaryenTryGetBody,
   _BinaryenTryGetNumCatchBodies,
   _BinaryenTryGetCatchBodyAt,
@@ -989,7 +990,7 @@ export abstract class Visitor {
       }
       case ExpressionId.RefAs: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenRefAsGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitRefAs(expr);
         break;

@@ -25,7 +25,6 @@ import {
   ExpressionRef,
   UnaryOp,
   BinaryOp,
-  RefIsOp,
   TypeRef,
   FunctionRef,
   ExpressionId,
@@ -10331,11 +10330,11 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
-      case TypeKind.DATAREF:
-      case TypeKind.I31REF: {
+      case TypeKind.I31REF:
+      case TypeKind.DATAREF: {
         // Needs to be true (i.e. not zero) when the ref is _not_ null,
         // which means `ref.is_null` returns false (i.e. zero).
-        return module.unary(UnaryOp.EqzI32, module.ref_is(RefIsOp.RefIsNull, expr));
+        return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
 
       }
       default: {
@@ -10585,11 +10584,23 @@ export class Compiler extends DiagnosticEmitter {
     var temp = flow.getTempLocal(type);
     if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
     flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-    expr = module.if(
-      module.local_tee(temp.index, expr, type.isManaged),
-      module.local_get(temp.index, type.toRef()),
-      this.makeStaticAbort(this.ensureStaticString("unexpected null"), reportNode) // TODO: throw
-    );
+    if (type.kind >= TypeKind.FUNCREF && type.kind <= TypeKind.DATAREF) {
+      let nonNullExpr = module.local_get(temp.index, type.toRef());
+      if (this.options.hasFeature(Feature.GC)) {
+        nonNullExpr = module.ref_as_nonnull(nonNullExpr);
+      }
+      expr = module.if(
+        module.ref_is_null(module.local_tee(temp.index, expr, false)),
+        this.makeStaticAbort(this.ensureStaticString("unexpected null"), reportNode), // TODO: throw
+        nonNullExpr
+      );
+    } else {
+      expr = module.if(
+        module.local_tee(temp.index, expr, type.isManaged),
+        module.local_get(temp.index, type.toRef()),
+        this.makeStaticAbort(this.ensureStaticString("unexpected null"), reportNode) // TODO: throw
+      );
+    }
     flow.freeTempLocal(temp);
     this.currentType = type.nonNullableType;
     return expr;
