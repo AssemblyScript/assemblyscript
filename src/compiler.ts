@@ -10596,7 +10596,9 @@ export class Compiler extends DiagnosticEmitter {
         nonNullExpr = module.ref_as_nonnull(nonNullExpr);
       }
       expr = module.if(
-        module.ref_is_null(module.local_tee(temp.index, expr, false)),
+        module.ref_is_null(
+          module.local_tee(temp.index, expr, false)
+        ),
         staticAbortCallExpr,
         nonNullExpr
       );
