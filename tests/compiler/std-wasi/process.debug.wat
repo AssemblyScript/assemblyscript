@@ -5972,7 +5972,7 @@
      local.get $9
      i32.store offset=4
      local.get $9
-     call $~lib/array/Array<~lib/string/String>#__set
+     call $~lib/array/Array<~lib/string/String>#__uset
     end
     local.get $5
     i32.const 1
