@@ -727,9 +727,10 @@ export class JSBuilder extends ExportsWalker {
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + ${entriesCountOffset} >>> 2],
       entriesPtr = mem32[ptr + ${entriesOffset} >>> 2],
-      tagOffset = 1 << align,
-      entryAlign = Math.max(tagOffset, ${pointerSize}) - 1,
-      entrySize = (tagOffset + ${pointerSize} + entryAlign) & ~entryAlign,
+      typeSize = 1 << align,
+      tagOffset = Math.max(typeSize, ${pointerSize}),
+      entryAlign = tagOffset - 1,
+      entrySize = (typeSize + ${pointerSize} + entryAlign) & ~entryAlign,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const
