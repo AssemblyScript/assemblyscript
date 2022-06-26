@@ -110,24 +110,34 @@ export declare function setI32Function(): __Internref9;
  */
 export declare function setF64Function(): __Internref10;
 /**
+ * bindings/esm/mapStringU8Function
+ * @returns `~lib/map/Map<~lib/string/String,u8>`
+ */
+export declare function mapStringU8Function(): __Internref11;
+/**
+ * bindings/esm/mapI32F64Function
+ * @returns `~lib/map/Map<i32,f64>`
+ */
+export declare function mapI32F64Function(): __Internref12;
+/**
  * bindings/esm/objectFunction
  * @param a `bindings/esm/PlainObject`
  * @param b `bindings/esm/PlainObject`
  * @returns `bindings/esm/PlainObject`
  */
-export declare function objectFunction(a: __Record11<undefined>, b: __Record11<undefined>): __Record11<never>;
+export declare function objectFunction(a: __Record13<undefined>, b: __Record13<undefined>): __Record13<never>;
 /**
  * bindings/esm/newInternref
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function newInternref(): __Internref14;
+export declare function newInternref(): __Internref16;
 /**
  * bindings/esm/internrefFunction
  * @param a `bindings/esm/NonPlainObject`
  * @param b `bindings/esm/NonPlainObject`
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function internrefFunction(a: __Internref14, b: __Internref14): __Internref14;
+export declare function internrefFunction(a: __Internref16, b: __Internref16): __Internref16;
 /** ~lib/set/Set<u8> */
 declare class __Internref8 extends Number {
   private __nominal8: symbol;
@@ -140,8 +150,16 @@ declare class __Internref9 extends Number {
 declare class __Internref10 extends Number {
   private __nominal10: symbol;
 }
+/** ~lib/map/Map<~lib/string/String,u8> */
+declare class __Internref11 extends Number {
+  private __nominal11: symbol;
+}
+/** ~lib/map/Map<i32,f64> */
+declare class __Internref12 extends Number {
+  private __nominal12: symbol;
+}
 /** bindings/esm/PlainObject */
-declare interface __Record11<TOmittable> {
+declare interface __Record13<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */
@@ -176,6 +194,6 @@ declare interface __Record11<TOmittable> {
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
-declare class __Internref14 extends Number {
-  private __nominal14: symbol;
+declare class __Internref16 extends Number {
+  private __nominal16: symbol;
 }

@@ -717,7 +717,7 @@ export class JSBuilder extends ExportsWalker {
     if (this.needsLiftSet) {
       const entriesCountOffset = 16;   // TODO: removes hardcoded consts here
       const entriesOffset = 8;         // ^
-      const emptyMask = 1 << 0;
+      const emptyTagMask = 1 << 0;
       const pointerSize = this.program.options.isWasm64 ? 8 : 4;
 
       sb.push(`  function __liftSet(liftElement, byteSize, ptr) {
@@ -734,8 +734,8 @@ export class JSBuilder extends ExportsWalker {
       const
         buf = entries + i * entrySize,
         tag = mem32[buf + tagOffset >>> 2];
-      if (!(tag & ${emptyMask})) {
-        res.add(liftElement(buf >>> 0));
+      if (!(tag & ${emptyTagMask})) {
+        res.add(liftElement(buf));
       }
     }
     return res;
@@ -745,7 +745,7 @@ export class JSBuilder extends ExportsWalker {
     if (this.needsLiftMap) {
       const entriesCountOffset = 16;   // TODO: removes hardcoded consts here
       const entriesOffset = 8;         // ^
-      const emptyMask = 1 << 0;
+      const emptyTagMask = 1 << 0;
       const pointerSize = this.program.options.isWasm64 ? 8 : 4;
 
       sb.push(`  function __liftMap(liftKeyElement, keySize, liftValueElement, valueSize, ptr) {
@@ -754,16 +754,16 @@ export class JSBuilder extends ExportsWalker {
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + ${entriesCountOffset} >>> 2],
       entries = mem32[ptr + ${entriesOffset} >>> 2],
-      tagOffset = Math.max(keySize, valueSize, ${pointerSize}),
-      entryAlign = tagOffset - 1,
-      entrySize = (keySize + valueSize + ${pointerSize} + entryAlign) & ~entryAlign,
+      tagOffset = keySize + valueSize,
+      entryAlign = Math.max(keySize, valueSize, ${pointerSize}) - 1,
+      entrySize = (tagOffset + ${pointerSize} + entryAlign) & ~entryAlign,
       res = new Map();
     for (let i = 0; i < count; ++i) {
       const
         buf = entries + i * entrySize,
         tag = mem32[buf + tagOffset >>> 2];
-      if (!(tag & ${emptyMask})) {
-        res.set(liftKeyElement(buf >>> 0), liftValueElement(buf + keySize >>> 0));
+      if (!(tag & ${emptyTagMask})) {
+        res.set(liftKeyElement(buf), liftValueElement(buf + keySize));
       }
     }
     return res;

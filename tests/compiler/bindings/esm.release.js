@@ -159,12 +159,20 @@ async function instantiate(module, imports = {}) {
       // bindings/esm/setF64Function() => ~lib/set/Set<f64>
       return __liftSet(ptr => new Float64Array(memory.buffer)[ptr >>> 3], 8, exports.setF64Function() >>> 0);
     },
+    mapStringU8Function() {
+      // bindings/esm/mapStringU8Function() => ~lib/map/Map<~lib/string/String,u8>
+      return __liftMap(ptr => __liftString(new Uint32Array(memory.buffer)[ptr >>> 2]), 4, ptr => new Uint8Array(memory.buffer)[ptr >>> 0], 1, exports.mapStringU8Function() >>> 0);
+    },
+    mapI32F64Function() {
+      // bindings/esm/mapI32F64Function() => ~lib/map/Map<i32,f64>
+      return __liftMap(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 4, ptr => new Float64Array(memory.buffer)[ptr >>> 3], 8, exports.mapI32F64Function() >>> 0);
+    },
     objectFunction(a, b) {
       // bindings/esm/objectFunction(bindings/esm/PlainObject, bindings/esm/PlainObject) => bindings/esm/PlainObject
-      a = __retain(__lowerRecord11(a) || __notnull());
-      b = __lowerRecord11(b) || __notnull();
+      a = __retain(__lowerRecord13(a) || __notnull());
+      b = __lowerRecord13(b) || __notnull();
       try {
-        return __liftRecord11(exports.objectFunction(a, b) >>> 0);
+        return __liftRecord13(exports.objectFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
@@ -184,11 +192,11 @@ async function instantiate(module, imports = {}) {
       }
     },
   }, exports);
-  function __lowerRecord11(value) {
+  function __lowerRecord13(value) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
-    const ptr = exports.__pin(exports.__new(68, 11));
+    const ptr = exports.__pin(exports.__new(68, 13));
     new Int8Array(memory.buffer)[ptr + 0 >>> 0] = value.a;
     new Int16Array(memory.buffer)[ptr + 2 >>> 1] = value.b;
     new Int32Array(memory.buffer)[ptr + 4 >>> 2] = value.c;
@@ -203,12 +211,12 @@ async function instantiate(module, imports = {}) {
     new Float32Array(memory.buffer)[ptr + 44 >>> 2] = value.l;
     new Float64Array(memory.buffer)[ptr + 48 >>> 3] = value.m;
     new Uint32Array(memory.buffer)[ptr + 56 >>> 2] = __lowerString(value.n);
-    new Uint32Array(memory.buffer)[ptr + 60 >>> 2] = __lowerTypedArray(12, Uint8Array, 0, value.o);
-    new Uint32Array(memory.buffer)[ptr + 64 >>> 2] = __lowerArray(13, (ptr, value) => { new Uint32Array(memory.buffer)[ptr >>> 2] = __lowerString(value) || __notnull(); }, 2, value.p);
+    new Uint32Array(memory.buffer)[ptr + 60 >>> 2] = __lowerTypedArray(14, Uint8Array, 0, value.o);
+    new Uint32Array(memory.buffer)[ptr + 64 >>> 2] = __lowerArray(15, (ptr, value) => { new Uint32Array(memory.buffer)[ptr >>> 2] = __lowerString(value) || __notnull(); }, 2, value.p);
     exports.__unpin(ptr);
     return ptr;
   }
-  function __liftRecord11(ptr) {
+  function __liftRecord13(ptr) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!ptr) return null;
@@ -342,7 +350,27 @@ async function instantiate(module, imports = {}) {
         buf = entries + i * entrySize,
         tag = mem32[buf + tagOffset >>> 2];
       if (!(tag & 1)) {
-        res.add(liftElement(buf >>> 0));
+        res.add(liftElement(buf));
+      }
+    }
+    return res;
+  }
+  function __liftMap(liftKeyElement, keySize, liftValueElement, valueSize, ptr) {
+    if (!ptr) return null;
+    const
+      mem32 = new Uint32Array(memory.buffer),
+      count = mem32[ptr + 16 >>> 2],
+      entries = mem32[ptr + 8 >>> 2],
+      tagOffset = keySize + valueSize,
+      entryAlign = Math.max(keySize, valueSize, 4) - 1,
+      entrySize = (tagOffset + 4 + entryAlign) & ~entryAlign,
+      res = new Map();
+    for (let i = 0; i < count; ++i) {
+      const
+        buf = entries + i * entrySize,
+        tag = mem32[buf + tagOffset >>> 2];
+      if (!(tag & 1)) {
+        res.set(liftKeyElement(buf), liftValueElement(buf + keySize));
       }
     }
     return res;
@@ -401,6 +429,8 @@ export const {
   setU8Function,
   setI32Function,
   setF64Function,
+  mapStringU8Function,
+  mapI32F64Function,
   objectFunction,
   newInternref,
   internrefFunction

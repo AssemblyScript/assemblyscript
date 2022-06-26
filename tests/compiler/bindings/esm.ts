@@ -106,6 +106,26 @@ export function setF64Function(): Set<f64> {
   return set;
 }
 
+export function mapStringU8Function(): Map<string,u8> {
+  var map = new Map<string, u8>();
+  map.set('1', 1);
+  map.set('2', 2);
+  map.set('3', 3);
+  map.set('4', 4);
+  map.delete('2');
+  return map;
+}
+
+export function mapI32F64Function(): Map<i32,f64> {
+  var map = new Map<i32,f64>();
+  map.set(1, 1.0);
+  map.set(2, 2.0);
+  map.set(3, 3.0);
+  map.set(4, 4.0);
+  map.delete(2);
+  return map;
+}
+
 class PlainObject {
   a: i8;
   b: i16;
