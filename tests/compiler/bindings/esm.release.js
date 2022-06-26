@@ -149,15 +149,15 @@ async function instantiate(module, imports = {}) {
     },
     setU8Function() {
       // bindings/esm/setU8Function() => ~lib/set/Set<u8>
-      return __liftSet(ptr => new Uint8Array(memory.buffer)[ptr >>> 0], 0, exports.setU8Function() >>> 0);
+      return __liftSet(ptr => new Uint8Array(memory.buffer)[ptr >>> 0], 1, exports.setU8Function() >>> 0);
     },
     setI32Function() {
       // bindings/esm/setI32Function() => ~lib/set/Set<i32>
-      return __liftSet(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 2, exports.setI32Function() >>> 0);
+      return __liftSet(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 4, exports.setI32Function() >>> 0);
     },
     setF64Function() {
       // bindings/esm/setF64Function() => ~lib/set/Set<f64>
-      return __liftSet(ptr => new Float64Array(memory.buffer)[ptr >>> 3], 3, exports.setF64Function() >>> 0);
+      return __liftSet(ptr => new Float64Array(memory.buffer)[ptr >>> 3], 8, exports.setF64Function() >>> 0);
     },
     objectFunction(a, b) {
       // bindings/esm/objectFunction(bindings/esm/PlainObject, bindings/esm/PlainObject) => bindings/esm/PlainObject
@@ -327,16 +327,15 @@ async function instantiate(module, imports = {}) {
     exports.__unpin(buf);
     return buf;
   }
-  function __liftSet(liftElement, align, ptr) {
+  function __liftSet(liftElement, byteSize, ptr) {
     if (!ptr) return null;
     const
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + 16 >>> 2],
       entriesPtr = mem32[ptr + 8 >>> 2],
-      typeSize = 1 << align,
-      tagOffset = Math.max(typeSize, 4),
+      tagOffset = Math.max(byteSize, 4),
       entryAlign = tagOffset - 1,
-      entrySize = (typeSize + 4 + entryAlign) & ~entryAlign,
+      entrySize = (byteSize + 4 + entryAlign) & ~entryAlign,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const

@@ -720,16 +720,15 @@ export class JSBuilder extends ExportsWalker {
       const emptyMask = 1 << 0;
       const pointerSize = this.program.options.isWasm64 ? 8 : 4;
 
-      sb.push(`  function __liftSet(liftElement, align, ptr) {
+      sb.push(`  function __liftSet(liftElement, byteSize, ptr) {
     if (!ptr) return null;
     const
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + ${entriesCountOffset} >>> 2],
       entriesPtr = mem32[ptr + ${entriesOffset} >>> 2],
-      typeSize = 1 << align,
-      tagOffset = Math.max(typeSize, ${pointerSize}),
+      tagOffset = Math.max(byteSize, ${pointerSize}),
       entryAlign = tagOffset - 1,
-      entrySize = (typeSize + ${pointerSize} + entryAlign) & ~entryAlign,
+      entrySize = (byteSize + ${pointerSize} + entryAlign) & ~entryAlign,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const
@@ -737,6 +736,34 @@ export class JSBuilder extends ExportsWalker {
         tag = mem32[entryPtr + tagOffset >>> 2];
       if (!(tag & ${emptyMask})) {
         res.add(liftElement(entryPtr >>> 0));
+      }
+    }
+    return res;
+  }
+`);
+    }
+    if (this.needsLiftMap) {
+      const entriesCountOffset = 16;   // TODO: removes hardcoded consts here
+      const entriesOffset = 8;         // ^
+      const emptyMask = 1 << 0;
+      const pointerSize = this.program.options.isWasm64 ? 8 : 4;
+
+      sb.push(`  function __liftMap(liftKeyElement, keySize, liftValueElement, valueSize, ptr) {
+    if (!ptr) return null;
+    const
+      mem32 = new Uint32Array(memory.buffer),
+      count = mem32[ptr + ${entriesCountOffset} >>> 2],
+      entriesPtr = mem32[ptr + ${entriesOffset} >>> 2],
+      tagOffset = Math.max(keySize, valueSize, ${pointerSize}),
+      entryAlign = tagOffset - 1,
+      entrySize = (keySize + valueSize + ${pointerSize} + entryAlign) & ~entryAlign,
+      res = new Map();
+    for (let i = 0; i < count; ++i) {
+      const
+        entryPtr = entriesPtr + i * entrySize,
+        tag = mem32[entryPtr + tagOffset >>> 2];
+      if (!(tag & ${emptyMask})) {
+        res.set(liftKeyElement(entryPtr >>> 0), liftValueElement(entryPtr + keySize >>> 0));
       }
     }
     return res;
@@ -923,7 +950,7 @@ export class JSBuilder extends ExportsWalker {
         let valueType = clazz.getTypeArgumentsTo(program.setPrototype)![0];
         sb.push("__liftSet(");
         this.makeLiftFromMemory(valueType, sb);
-        sb.push(`, ${valueType.alignLog2}, `);
+        sb.push(`, ${valueType.byteSize}, `);
         this.needsLiftSet = true;
       } else if (clazz.extends(program.mapPrototype)) {
         let typeArgs  = clazz.getTypeArgumentsTo(program.mapPrototype)!;
@@ -931,9 +958,9 @@ export class JSBuilder extends ExportsWalker {
         let valueType = typeArgs[1];
         sb.push("__liftMap(");
         this.makeLiftFromMemory(keyType, sb);
-        sb.push(`, ${keyType.alignLog2}, `);
+        sb.push(`, ${keyType.byteSize}, `);
         this.makeLiftFromMemory(valueType, sb);
-        sb.push(`, ${valueType.alignLog2}, `);
+        sb.push(`, ${valueType.byteSize}, `);
         this.needsLiftMap = true;
       } else if (this.isPlainObject(clazz)) {
         sb.push(`__liftRecord${clazz.id}(`);
