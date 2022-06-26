@@ -453,7 +453,7 @@ export function indent(sb: string[], level: i32): void {
 }
 
 /** Escapes a string using the specified kind of quote. */
-export function escapeString(str: string, quote: CharCode): string {
+export function escapeString(str: string, quote: CharCode = CharCode.DOUBLEQUOTE): string {
   var sb = new Array<string>();
   var off = 0;
   var i = 0;

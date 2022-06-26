@@ -206,7 +206,7 @@ export class TSDBuilder extends ExportsWalker {
           sb.push(moduleName);
         } else {
           sb.push("\"");
-          sb.push(escapeString(moduleName, CharCode.DOUBLEQUOTE));
+          sb.push(escapeString(moduleName));
           sb.push("\"");
         }
         sb.push(": unknown,\n");

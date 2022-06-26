@@ -684,7 +684,7 @@ export class ASTBuilder {
   visitStringLiteral(str: string): void {
     var sb = this.sb;
     sb.push("\"");
-    sb.push(escapeString(str, CharCode.DOUBLEQUOTE));
+    sb.push(escapeString(str));
     sb.push("\"");
   }
 
@@ -1482,7 +1482,7 @@ export class ASTBuilder {
       sb.push("declare ");
     }
     sb.push("module \"");
-    sb.push(escapeString(node.moduleName, CharCode.DOUBLEQUOTE));
+    sb.push(escapeString(node.moduleName));
     sb.push("\"");
   }
 
