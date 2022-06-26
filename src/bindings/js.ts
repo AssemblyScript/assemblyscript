@@ -125,9 +125,9 @@ export class JSBuilder extends ExportsWalker {
 
   private deferredLifts: Set<Element> = new Set();
   private deferredLowers: Set<Element> = new Set();
-  private deferredCode: string[] = new Array<string>();
+  private deferredCode: string[] = [];
 
-  private exports: string[] = new Array();
+  private exports: string[] = [];
   private importMappings: Map<string,i32> = new Map();
 
   /** Constructs a new JavaScript bindings builder. */
@@ -333,10 +333,7 @@ export class JSBuilder extends ExportsWalker {
             releases.push(name);
           }
           this.makeLowerToValue(name, type, sb);
-          if (needsRetainRelease) {
-            sb.push(")");
-          }
-          sb.push(";\n");
+          sb.push(needsRetainRelease ? ");\n" : ";\n");
         }
       }
       if (releases.length) {
