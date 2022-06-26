@@ -144,7 +144,7 @@ export class JSBuilder extends ExportsWalker {
       indent(sb, this.indentLevel);
       sb.push(`${name}: {\n`);
       indent(sb, ++this.indentLevel);
-      sb.push(`// ${element.internalName}: ${type.toString()}\n`);
+      sb.push(`// ${element.internalName}: ${type}\n`);
       indent(sb, this.indentLevel);
       sb.push("valueOf() { return this.value; },\n");
       indent(sb, this.indentLevel);
@@ -211,7 +211,7 @@ export class JSBuilder extends ExportsWalker {
     if (isPlainValue(type, Mode.IMPORT)) {
       sb.push("(\n");
       indent(sb, this.indentLevel + 1);
-      sb.push(`// ${element.internalName}: ${element.type.toString()}\n`);
+      sb.push(`// ${element.internalName}: ${element.type}\n`);
       indent(sb, this.indentLevel + 1);
       if (moduleName != "env") {
         sb.push(`__module${moduleId}.`);
@@ -222,7 +222,7 @@ export class JSBuilder extends ExportsWalker {
     } else {
       sb.push("{\n");
       indent(sb, ++this.indentLevel);
-      sb.push(`// ${element.internalName}: ${element.type.toString()}\n`);
+      sb.push(`// ${element.internalName}: ${element.type}\n`);
       indent(sb, this.indentLevel);
       sb.push("// not supported: cannot lower before instantiate completes\n");
       indent(sb, --this.indentLevel);
@@ -239,7 +239,7 @@ export class JSBuilder extends ExportsWalker {
     if (isPlainFunction(signature, Mode.IMPORT) && !code) {
       sb.push(": (\n");
       indent(sb, this.indentLevel + 1);
-      sb.push(`// ${element.internalName}${element.signature.toString()}\n`);
+      sb.push(`// ${element.internalName}${element.signature}\n`);
       indent(sb, this.indentLevel + 1);
       if (moduleName != "env") {
         sb.push(`${moduleName}.`);
@@ -257,7 +257,7 @@ export class JSBuilder extends ExportsWalker {
       let parameters = parameterNames.join(", ");
       sb.push(`(${parameters}) {\n`);
       indent(sb, ++this.indentLevel);
-      sb.push(`// ${element.internalName}${element.signature.toString()}\n`);
+      sb.push(`// ${element.internalName}${element.signature}\n`);
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         let type = parameterTypes[i];
         if (!isPlainValue(type, Mode.EXPORT)) {
@@ -317,7 +317,7 @@ export class JSBuilder extends ExportsWalker {
       }
       sb.push(") {\n");
       indent(sb, ++this.indentLevel);
-      sb.push(`// ${element.internalName}${signature.toString()}\n`);
+      sb.push(`// ${element.internalName}${signature}\n`);
       let releases = new Array<string>();
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         let type = parameterTypes[i];
@@ -1145,7 +1145,7 @@ export class JSBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push(`function __liftRecord${clazz.id}(${pointerName}) {\n`);
     indent(sb, ++this.indentLevel);
-    sb.push(`// ${clazz.type.toString()}\n`);
+    sb.push(`// ${clazz.type}\n`);
     indent(sb, this.indentLevel);
     sb.push("// Hint: Opt-out from lifting as a record by providing an empty constructor\n");
     indent(sb, this.indentLevel);
@@ -1180,7 +1180,7 @@ export class JSBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push(`function __lowerRecord${clazz.id}(${valueName}) {\n`);
     indent(sb, ++this.indentLevel);
-    sb.push(`// ${clazz.type.toString()}\n`);
+    sb.push(`// ${clazz.type}\n`);
     indent(sb, this.indentLevel);
     sb.push("// Hint: Opt-out from lowering as a record by providing an empty constructor\n");
     indent(sb, this.indentLevel);
