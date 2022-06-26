@@ -7,24 +7,24 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
- (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
+ (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
- (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
- (type $i32_i32_f64_=>_none (func (param i32 i32 f64)))
  (type $none_=>_i32 (func (result i32)))
  (type $f32_=>_i32 (func (param f32) (result i32)))
  (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
  (type $i32_f32_=>_none (func (param i32 f32)))
+ (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
  (type $i32_f64_=>_none (func (param i32 f64)))
+ (type $i32_i32_f64_=>_none (func (param i32 i32 f64)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
@@ -2629,6 +2629,18 @@
   local.get $1
   i32.store offset=12
  )
+ (func $~lib/array/Array<i8>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store8
+  i32.const 0
+  drop
+ )
  (func $~lib/rt/itcms/__renew (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -2764,53 +2776,6 @@
    local.get $6
    i32.store offset=8
   end
- )
- (func $~lib/array/Array<i8>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 0
-  i32.shl
-  i32.add
-  local.get $2
-  i32.store8
-  i32.const 0
-  drop
- )
- (func $~lib/array/Array<i8>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 0
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<i8>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<i8>#__uset
  )
  (func $~lib/array/Array<i8>#set:length (param $0 i32) (param $1 i32)
   local.get $0
@@ -3746,41 +3711,6 @@
   i32.store8
   i32.const 0
   drop
- )
- (func $~lib/array/Array<u8>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 0
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<u8>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u8>#__uset
  )
  (func $~lib/array/Array<u8>#set:length (param $0 i32) (param $1 i32)
   local.get $0
@@ -4719,41 +4649,6 @@
   i32.const 0
   drop
  )
- (func $~lib/array/Array<i16>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 1
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<i16>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<i16>#__uset
- )
  (func $~lib/array/Array<i16>#set:length (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -5688,41 +5583,6 @@
   i32.store16
   i32.const 0
   drop
- )
- (func $~lib/array/Array<u16>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 1
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<u16>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u16>#__uset
  )
  (func $~lib/array/Array<u16>#set:length (param $0 i32) (param $1 i32)
   local.get $0
@@ -6659,41 +6519,6 @@
   i32.const 0
   drop
  )
- (func $~lib/array/Array<i32>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 2
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<i32>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<i32>#__uset
- )
  (func $~lib/array/Array<i32>#set:length (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -7616,41 +7441,6 @@
   i32.store
   i32.const 0
   drop
- )
- (func $~lib/array/Array<u32>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 2
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<u32>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u32>#__uset
  )
  (func $~lib/array/Array<u32>#set:length (param $0 i32) (param $1 i32)
   local.get $0
@@ -8591,41 +8381,6 @@
   i64.store
   i32.const 0
   drop
- )
- (func $~lib/array/Array<i64>#__set (param $0 i32) (param $1 i32) (param $2 i64)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 3
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<i64>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<i64>#__uset
  )
  (func $~lib/array/Array<i64>#set:length (param $0 i32) (param $1 i32)
   local.get $0
@@ -9568,41 +9323,6 @@
   i32.const 0
   drop
  )
- (func $~lib/array/Array<u64>#__set (param $0 i32) (param $1 i32) (param $2 i64)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 3
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<u64>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u64>#__uset
- )
  (func $~lib/array/Array<u64>#set:length (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -10527,41 +10247,6 @@
   f32.store
   i32.const 0
   drop
- )
- (func $~lib/array/Array<f32>#__set (param $0 i32) (param $1 i32) (param $2 f32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 2
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<f32>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<f32>#__uset
  )
  (func $~lib/array/Array<f32>#set:length (param $0 i32) (param $1 i32)
   local.get $0
@@ -11504,41 +11189,6 @@
   f64.store
   i32.const 0
   drop
- )
- (func $~lib/array/Array<f64>#__set (param $0 i32) (param $1 i32) (param $2 f64)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 224
-    i32.const 592
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 3
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<f64>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<f64>#__uset
  )
  (func $~lib/array/Array<f64>#set:length (param $0 i32) (param $1 i32)
   local.get $0
@@ -12869,7 +12519,7 @@
      local.get $8
      local.get $7
      i32.load8_s
-     call $~lib/array/Array<i8>#__set
+     call $~lib/array/Array<i8>#__uset
     end
     local.get $5
     i32.const 1
@@ -13097,7 +12747,7 @@
      local.get $8
      local.get $7
      i32.load8_u
-     call $~lib/array/Array<u8>#__set
+     call $~lib/array/Array<u8>#__uset
     end
     local.get $5
     i32.const 1
@@ -13325,7 +12975,7 @@
      local.get $8
      local.get $7
      i32.load16_s
-     call $~lib/array/Array<i16>#__set
+     call $~lib/array/Array<i16>#__uset
     end
     local.get $5
     i32.const 1
@@ -13553,7 +13203,7 @@
      local.get $8
      local.get $7
      i32.load16_u
-     call $~lib/array/Array<u16>#__set
+     call $~lib/array/Array<u16>#__uset
     end
     local.get $5
     i32.const 1
@@ -13781,7 +13431,7 @@
      local.get $8
      local.get $7
      i32.load
-     call $~lib/array/Array<i32>#__set
+     call $~lib/array/Array<i32>#__uset
     end
     local.get $5
     i32.const 1
@@ -14009,7 +13659,7 @@
      local.get $8
      local.get $7
      i32.load
-     call $~lib/array/Array<u32>#__set
+     call $~lib/array/Array<u32>#__uset
     end
     local.get $5
     i32.const 1
@@ -14237,7 +13887,7 @@
      local.get $8
      local.get $7
      i64.load
-     call $~lib/array/Array<i64>#__set
+     call $~lib/array/Array<i64>#__uset
     end
     local.get $5
     i32.const 1
@@ -14465,7 +14115,7 @@
      local.get $8
      local.get $7
      i64.load
-     call $~lib/array/Array<u64>#__set
+     call $~lib/array/Array<u64>#__uset
     end
     local.get $5
     i32.const 1
@@ -14693,7 +14343,7 @@
      local.get $8
      local.get $7
      f32.load
-     call $~lib/array/Array<f32>#__set
+     call $~lib/array/Array<f32>#__uset
     end
     local.get $5
     i32.const 1
@@ -14921,7 +14571,7 @@
      local.get $8
      local.get $7
      f64.load
-     call $~lib/array/Array<f64>#__set
+     call $~lib/array/Array<f64>#__uset
     end
     local.get $5
     i32.const 1
