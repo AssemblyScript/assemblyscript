@@ -718,9 +718,8 @@ export class JSBuilder extends ExportsWalker {
       const entriesCountOffset = 16;   // TODO: removes hardcoded consts here
       const entriesOffset = 8;         // ^
       const entryKeyOffset = 4;        // ^
-      const entryTaggedNextOffset = 0; // ^
-      const entrySize = 4 + 4;         // ^
       const emptyMask = 1 << 0;
+      const pointerSize = 4;           // TODO: depends of wasm64 or not
 
       sb.push(`  function __liftSet(liftElement, align, ptr) {
     if (!ptr) return null;
@@ -728,13 +727,14 @@ export class JSBuilder extends ExportsWalker {
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + ${entriesCountOffset} >>> 2],
       entriesPtr = mem32[ptr + ${entriesOffset} >>> 2],
-      entryAlign = Math.max(1 << align, 4) - 1,
-      entrySize = (${entrySize} + entryAlign) & ~entryAlign,
+      tagOffset = 1 << align,
+      entryAlign = Math.max(tagOffset, ${pointerSize}) - 1,
+      entrySize = (tagOffset + ${pointerSize} + entryAlign) & ~entryAlign,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const
         entryPtr = entriesPtr + i * entrySize,
-        tag = mem32[entryPtr + ${entryTaggedNextOffset} >>> 2];
+        tag = mem32[entryPtr + tagOffset >>> 2];
       if (!(tag & ${emptyMask})) {
         res.add(liftElement(entryPtr + ${entryKeyOffset} >>> 0));
       }
