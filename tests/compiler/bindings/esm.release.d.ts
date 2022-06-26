@@ -95,26 +95,53 @@ export declare function staticarrayFunction(a: Array<number>, b: Array<number>):
  */
 export declare function arrayFunction(a: Array<number>, b: Array<number>): Array<number>;
 /**
+ * bindings/esm/setU8Function
+ * @returns `~lib/set/Set<u8>`
+ */
+export declare function setU8Function(): __Internref8;
+/**
+ * bindings/esm/setI32Function
+ * @returns `~lib/set/Set<i32>`
+ */
+export declare function setI32Function(): __Internref9;
+/**
+ * bindings/esm/setF64Function
+ * @returns `~lib/set/Set<f64>`
+ */
+export declare function setF64Function(): __Internref10;
+/**
  * bindings/esm/objectFunction
  * @param a `bindings/esm/PlainObject`
  * @param b `bindings/esm/PlainObject`
  * @returns `bindings/esm/PlainObject`
  */
-export declare function objectFunction(a: __Record8<undefined>, b: __Record8<undefined>): __Record8<never>;
+export declare function objectFunction(a: __Record11<undefined>, b: __Record11<undefined>): __Record11<never>;
 /**
  * bindings/esm/newInternref
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function newInternref(): __Internref11;
+export declare function newInternref(): __Internref14;
 /**
  * bindings/esm/internrefFunction
  * @param a `bindings/esm/NonPlainObject`
  * @param b `bindings/esm/NonPlainObject`
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function internrefFunction(a: __Internref11, b: __Internref11): __Internref11;
+export declare function internrefFunction(a: __Internref14, b: __Internref14): __Internref14;
+/** ~lib/set/Set<u8> */
+declare class __Internref8 extends Number {
+  private __nominal8: symbol;
+}
+/** ~lib/set/Set<i32> */
+declare class __Internref9 extends Number {
+  private __nominal9: symbol;
+}
+/** ~lib/set/Set<f64> */
+declare class __Internref10 extends Number {
+  private __nominal10: symbol;
+}
 /** bindings/esm/PlainObject */
-declare interface __Record8<TOmittable> {
+declare interface __Record11<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */
@@ -149,6 +176,6 @@ declare interface __Record8<TOmittable> {
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
-declare class __Internref11 extends Number {
-  private __nominal11: symbol;
+declare class __Internref14 extends Number {
+  private __nominal14: symbol;
 }

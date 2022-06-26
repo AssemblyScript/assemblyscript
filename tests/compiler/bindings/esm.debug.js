@@ -147,12 +147,24 @@ async function instantiate(module, imports = {}) {
         __release(a);
       }
     },
+    setU8Function() {
+      // bindings/esm/setU8Function() => ~lib/set/Set<u8>
+      return __liftSet(ptr => new Uint8Array(memory.buffer)[ptr >>> 0], 0, exports.setU8Function() >>> 0);
+    },
+    setI32Function() {
+      // bindings/esm/setI32Function() => ~lib/set/Set<i32>
+      return __liftSet(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 2, exports.setI32Function() >>> 0);
+    },
+    setF64Function() {
+      // bindings/esm/setF64Function() => ~lib/set/Set<f64>
+      return __liftSet(ptr => new Float64Array(memory.buffer)[ptr >>> 3], 3, exports.setF64Function() >>> 0);
+    },
     objectFunction(a, b) {
       // bindings/esm/objectFunction(bindings/esm/PlainObject, bindings/esm/PlainObject) => bindings/esm/PlainObject
-      a = __retain(__lowerRecord8(a) || __notnull());
-      b = __lowerRecord8(b) || __notnull();
+      a = __retain(__lowerRecord11(a) || __notnull());
+      b = __lowerRecord11(b) || __notnull();
       try {
-        return __liftRecord8(exports.objectFunction(a, b) >>> 0);
+        return __liftRecord11(exports.objectFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
@@ -172,11 +184,11 @@ async function instantiate(module, imports = {}) {
       }
     },
   }, exports);
-  function __lowerRecord8(value) {
+  function __lowerRecord11(value) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
-    const ptr = exports.__pin(exports.__new(68, 8));
+    const ptr = exports.__pin(exports.__new(68, 11));
     new Int8Array(memory.buffer)[ptr + 0 >>> 0] = value.a;
     new Int16Array(memory.buffer)[ptr + 2 >>> 1] = value.b;
     new Int32Array(memory.buffer)[ptr + 4 >>> 2] = value.c;
@@ -191,12 +203,12 @@ async function instantiate(module, imports = {}) {
     new Float32Array(memory.buffer)[ptr + 44 >>> 2] = value.l;
     new Float64Array(memory.buffer)[ptr + 48 >>> 3] = value.m;
     new Uint32Array(memory.buffer)[ptr + 56 >>> 2] = __lowerString(value.n);
-    new Uint32Array(memory.buffer)[ptr + 60 >>> 2] = __lowerTypedArray(9, Uint8Array, 0, value.o);
-    new Uint32Array(memory.buffer)[ptr + 64 >>> 2] = __lowerArray(10, (ptr, value) => { new Uint32Array(memory.buffer)[ptr >>> 2] = __lowerString(value) || __notnull(); }, 2, value.p);
+    new Uint32Array(memory.buffer)[ptr + 60 >>> 2] = __lowerTypedArray(12, Uint8Array, 0, value.o);
+    new Uint32Array(memory.buffer)[ptr + 64 >>> 2] = __lowerArray(13, (ptr, value) => { new Uint32Array(memory.buffer)[ptr >>> 2] = __lowerString(value) || __notnull(); }, 2, value.p);
     exports.__unpin(ptr);
     return ptr;
   }
-  function __liftRecord8(ptr) {
+  function __liftRecord11(ptr) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!ptr) return null;
@@ -315,6 +327,27 @@ async function instantiate(module, imports = {}) {
     exports.__unpin(buf);
     return buf;
   }
+  function __liftSet(liftElement, align, ptr) {
+    if (!ptr) return null;
+    const
+      mem32 = new Uint32Array(memory.buffer),
+      count = mem32[ptr + 16 >>> 2],
+      entriesPtr = mem32[ptr + 8 >>> 2],
+      typeSize = 1 << align,
+      tagOffset = Math.max(typeSize, 4),
+      entryAlign = tagOffset - 1,
+      entrySize = (typeSize + 4 + entryAlign) & ~entryAlign,
+      res = new Set();
+    for (let i = 0; i < count; ++i) {
+      const
+        entryPtr = entriesPtr + i * entrySize,
+        tag = mem32[entryPtr + tagOffset >>> 2];
+      if (!(tag & 1)) {
+        res.add(liftElement(entryPtr >>> 0));
+      }
+    }
+    return res;
+  }
   const registry = new FinalizationRegistry(__release);
   class Internref extends Number {}
   function __liftInternref(ptr) {
@@ -366,6 +399,9 @@ export const {
   typedarrayFunction,
   staticarrayFunction,
   arrayFunction,
+  setU8Function,
+  setI32Function,
+  setF64Function,
   objectFunction,
   newInternref,
   internrefFunction

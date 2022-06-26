@@ -717,9 +717,8 @@ export class JSBuilder extends ExportsWalker {
     if (this.needsLiftSet) {
       const entriesCountOffset = 16;   // TODO: removes hardcoded consts here
       const entriesOffset = 8;         // ^
-      const entryKeyOffset = 4;        // ^
       const emptyMask = 1 << 0;
-      const pointerSize = 4;           // TODO: depends of wasm64 or not
+      const pointerSize = this.program.options.isWasm64 ? 8 : 4;
 
       sb.push(`  function __liftSet(liftElement, align, ptr) {
     if (!ptr) return null;
@@ -737,7 +736,7 @@ export class JSBuilder extends ExportsWalker {
         entryPtr = entriesPtr + i * entrySize,
         tag = mem32[entryPtr + tagOffset >>> 2];
       if (!(tag & ${emptyMask})) {
-        res.add(liftElement(entryPtr + ${entryKeyOffset} >>> 0));
+        res.add(liftElement(entryPtr >>> 0));
       }
     }
     return res;

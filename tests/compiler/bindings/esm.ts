@@ -76,6 +76,36 @@ export function arrayFunction(a: Array<i32>, b: Array<i32>): Array<i32> {
   return c;
 }
 
+export function setU8Function(): Set<u8> {
+  var set = new Set<u8>();
+  set.add(1);
+  set.add(2);
+  set.add(3);
+  set.add(4);
+  set.delete(2);
+  return set;
+}
+
+export function setI32Function(): Set<i32> {
+  var set = new Set<i32>();
+  set.add(-1);
+  set.add(-2);
+  set.add(-3);
+  set.add(-4);
+  set.delete(-2);
+  return set;
+}
+
+export function setF64Function(): Set<f64> {
+  var set = new Set<f64>();
+  set.add(1.0);
+  set.add(2.0);
+  set.add(3.0);
+  set.add(4.0);
+  set.delete(2.0);
+  return set;
+}
+
 class PlainObject {
   a: i8;
   b: i16;
