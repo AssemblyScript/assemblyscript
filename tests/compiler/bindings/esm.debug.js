@@ -332,17 +332,17 @@ async function instantiate(module, imports = {}) {
     const
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + 16 >>> 2],
-      entriesPtr = mem32[ptr + 8 >>> 2],
+      entries = mem32[ptr + 8 >>> 2],
       tagOffset = Math.max(byteSize, 4),
       entryAlign = tagOffset - 1,
       entrySize = (byteSize + 4 + entryAlign) & ~entryAlign,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const
-        entryPtr = entriesPtr + i * entrySize,
-        tag = mem32[entryPtr + tagOffset >>> 2];
+        buf = entries + i * entrySize,
+        tag = mem32[buf + tagOffset >>> 2];
       if (!(tag & 1)) {
-        res.add(liftElement(entryPtr >>> 0));
+        res.add(liftElement(buf >>> 0));
       }
     }
     return res;

@@ -725,17 +725,17 @@ export class JSBuilder extends ExportsWalker {
     const
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + ${entriesCountOffset} >>> 2],
-      entriesPtr = mem32[ptr + ${entriesOffset} >>> 2],
+      entries = mem32[ptr + ${entriesOffset} >>> 2],
       tagOffset = Math.max(byteSize, ${pointerSize}),
       entryAlign = tagOffset - 1,
       entrySize = (byteSize + ${pointerSize} + entryAlign) & ~entryAlign,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const
-        entryPtr = entriesPtr + i * entrySize,
-        tag = mem32[entryPtr + tagOffset >>> 2];
+        buf = entries + i * entrySize,
+        tag = mem32[buf + tagOffset >>> 2];
       if (!(tag & ${emptyMask})) {
-        res.add(liftElement(entryPtr >>> 0));
+        res.add(liftElement(buf >>> 0));
       }
     }
     return res;
@@ -753,17 +753,17 @@ export class JSBuilder extends ExportsWalker {
     const
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + ${entriesCountOffset} >>> 2],
-      entriesPtr = mem32[ptr + ${entriesOffset} >>> 2],
+      entries = mem32[ptr + ${entriesOffset} >>> 2],
       tagOffset = Math.max(keySize, valueSize, ${pointerSize}),
       entryAlign = tagOffset - 1,
       entrySize = (keySize + valueSize + ${pointerSize} + entryAlign) & ~entryAlign,
       res = new Map();
     for (let i = 0; i < count; ++i) {
       const
-        entryPtr = entriesPtr + i * entrySize,
-        tag = mem32[entryPtr + tagOffset >>> 2];
+        buf = entries + i * entrySize,
+        tag = mem32[buf + tagOffset >>> 2];
       if (!(tag & ${emptyMask})) {
-        res.set(liftKeyElement(entryPtr >>> 0), liftValueElement(entryPtr + keySize >>> 0));
+        res.set(liftKeyElement(buf >>> 0), liftValueElement(buf + keySize >>> 0));
       }
     }
     return res;
