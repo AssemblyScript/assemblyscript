@@ -61,7 +61,7 @@ export async function postInstantiate(instance) {
 
   assert.deepStrictEqual(exports.setI32Function(), new Set([-1, -3, -4]));
 
-  assert.deepStrictEqual(exports.setF64Function(), new Set([1, 3, 4]));
+  assert.deepStrictEqual(exports.setF64Function(), new Set([1.5, 3.5, 4.5]));
 
   {
     let obj = exports.objectFunction({ a: 1, b: 2 }, { a: 3, b: 4 });

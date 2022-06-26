@@ -98,11 +98,11 @@ export function setI32Function(): Set<i32> {
 
 export function setF64Function(): Set<f64> {
   var set = new Set<f64>();
-  set.add(1.0);
-  set.add(2.0);
-  set.add(3.0);
-  set.add(4.0);
-  set.delete(2.0);
+  set.add(1.5);
+  set.add(2.5);
+  set.add(3.5);
+  set.add(4.5);
+  set.delete(2.5);
   return set;
 }
 

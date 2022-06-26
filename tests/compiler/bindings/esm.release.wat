@@ -3737,22 +3737,22 @@
    local.get $1
    i32.store
    local.get $1
-   f64.const 1
+   f64.const 1.5
    call $~lib/set/Set<f64>#add
    local.get $1
-   f64.const 2
+   f64.const 2.5
    call $~lib/set/Set<f64>#add
    local.get $1
-   f64.const 3
+   f64.const 3.5
    call $~lib/set/Set<f64>#add
    local.get $1
-   f64.const 4
+   f64.const 4.5
    call $~lib/set/Set<f64>#add
    local.get $1
    i32.load
    local.get $1
    i32.load offset=4
-   i32.const -1388320166
+   i32.const 1781634846
    i32.and
    i32.const 2
    i32.shl
@@ -3773,7 +3773,7 @@
       else
        local.get $0
        f64.load
-       f64.const 2
+       f64.const 2.5
        f64.eq
       end
       br_if $__inlined_func$~lib/set/Set<f64>#find

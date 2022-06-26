@@ -5624,23 +5624,23 @@
   local.tee $0
   i32.store
   local.get $0
-  f64.const 1
+  f64.const 1.5
   call $~lib/set/Set<f64>#add
   drop
   local.get $0
-  f64.const 2
+  f64.const 2.5
   call $~lib/set/Set<f64>#add
   drop
   local.get $0
-  f64.const 3
+  f64.const 3.5
   call $~lib/set/Set<f64>#add
   drop
   local.get $0
-  f64.const 4
+  f64.const 4.5
   call $~lib/set/Set<f64>#add
   drop
   local.get $0
-  f64.const 2
+  f64.const 2.5
   call $~lib/set/Set<f64>#delete
   drop
   local.get $0
