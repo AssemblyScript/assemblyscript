@@ -315,8 +315,8 @@
   },
   "disableWarning": {
     "description": [
-      "Disables specified warning output", 
-      "not define specified warning number will disable all kinds of warning"
+      "Disables warnings matching the given diagnostic code.", 
+      "If no diagnostic code is given, all warnings are disabled."
     ],
     "type": "I"
   },

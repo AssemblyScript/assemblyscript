@@ -1124,13 +1124,13 @@ export function checkDiagnostics(program, stderr, disableWarning, reportDiagnost
     let diagnostic = assemblyscript.nextDiagnostic(program);
     if (!diagnostic) break;
     if (stderr) {
-      const checkWarningPrint = (diagnostic) => {
+      const isDisabledWarning = (diagnostic) => {
         if (disableWarning == null) return true;
         if (!disableWarning.length) return false;
         const code = assemblyscript.getDiagnosticCode(diagnostic);
         return !disableWarning.includes(code);
       };
-      if (assemblyscript.isError(diagnostic) || checkWarningPrint(diagnostic)) {
+      if (assemblyscript.isError(diagnostic) || isDisabledWarning(diagnostic)) {
         stderr.write(assemblyscript.formatDiagnostic(diagnostic, useColors, true) + EOL + EOL);
       }
     }
