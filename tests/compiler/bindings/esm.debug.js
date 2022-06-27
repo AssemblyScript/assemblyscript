@@ -335,20 +335,25 @@ async function instantiate(module, imports = {}) {
     exports.__unpin(buf);
     return buf;
   }
-  function __liftSet(liftElement, byteSize, ptr) {
+  function __liftSet(liftElement, keySize, ptr) {
     if (!ptr) return null;
     const
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + 16 >>> 2],
       entries = mem32[ptr + 8 >>> 2],
-      tagOffset = Math.max(byteSize, 4),
-      entryMask = tagOffset - 1,
-      entrySize = (byteSize + 4 + entryMask) & ~entryMask,
+      // key is known
+      keyMask = keySize - 1,
+      taggedOffset = (keySize + 3) & ~3,
+      // end is all contents combined (here: pointer after value after key, net size unaligned)
+      endOffset = taggedOffset + 4,
+      // entire thing is at least pointer aligned, or more if K or V is larger, i.e. v128
+      entryMask = Math.max(3, keyMask),
+      entrySize = (endOffset + entryMask) & ~entryMask,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const
         buf = entries + i * entrySize,
-        tag = mem32[buf + tagOffset >>> 2];
+        tag = mem32[buf + taggedOffset >>> 2];
       if (!(tag & 1)) {
         res.add(liftElement(buf));
       }
@@ -361,17 +366,25 @@ async function instantiate(module, imports = {}) {
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + 16 >>> 2],
       entries = mem32[ptr + 8 >>> 2],
-      alignedKeySize = (keySize + valueSize - 1) & ~(valueSize - 1),
-      tagOffset = ((alignedKeySize + valueSize) + 3) & ~3,
-      entryMask = Math.max(keySize, valueSize, 4) - 1,
-      entrySize = (tagOffset + 4 + entryMask) & ~entryMask,
+      // key is known
+      keyMask = keySize - 1,
+      keyOffset = 0,
+      // value is aligned after key
+      valueMask = valueSize - 1,
+      valueOffset = (keyOffset + keySize + valueMask) & ~valueMask,
+      taggedOffset = (valueOffset + valueSize + 3) & ~3,
+      // end is all contents combined (here: pointer after value after key, net size unaligned)
+      endOffset = taggedOffset + 4,
+      // entire thing is at least pointer aligned, or more if K or V is larger, i.e. v128
+      entryMask = Math.max(3, keyMask, valueMask),
+      entrySize = (endOffset + entryMask) & ~entryMask,
       res = new Map();
     for (let i = 0; i < count; ++i) {
       const
         buf = entries + i * entrySize,
-        tag = mem32[buf + tagOffset >>> 2];
+        tag = mem32[buf + taggedOffset >>> 2];
       if (!(tag & 1)) {
-        res.set(liftKeyElement(buf), liftValueElement(buf + alignedKeySize));
+        res.set(liftKeyElement(buf + keyOffset), liftValueElement(buf + valueOffset));
       }
     }
     return res;
