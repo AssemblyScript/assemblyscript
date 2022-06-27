@@ -63,6 +63,7 @@ export async function postInstantiate(instance) {
 
   assert.deepStrictEqual(exports.mapStringU8Function(), new Map([['1', 1], ['3', 3], ['4', 4]]));
   assert.deepStrictEqual(exports.mapI32F64Function(),   new Map([[1, 1], [3, 3], [4, 4]]));
+  assert.deepStrictEqual(exports.mapU16I64Function(),   new Map([[1, 1n], [3, 3n], [4, 4n]]));
 
   {
     let obj = exports.objectFunction({ a: 1, b: 2 }, { a: 3, b: 4 });

@@ -120,24 +120,29 @@ export declare function mapStringU8Function(): __Internref11;
  */
 export declare function mapI32F64Function(): __Internref12;
 /**
+ * bindings/esm/mapU16I64Function
+ * @returns `~lib/map/Map<u16,i64>`
+ */
+export declare function mapU16I64Function(): __Internref13;
+/**
  * bindings/esm/objectFunction
  * @param a `bindings/esm/PlainObject`
  * @param b `bindings/esm/PlainObject`
  * @returns `bindings/esm/PlainObject`
  */
-export declare function objectFunction(a: __Record13<undefined>, b: __Record13<undefined>): __Record13<never>;
+export declare function objectFunction(a: __Record14<undefined>, b: __Record14<undefined>): __Record14<never>;
 /**
  * bindings/esm/newInternref
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function newInternref(): __Internref16;
+export declare function newInternref(): __Internref17;
 /**
  * bindings/esm/internrefFunction
  * @param a `bindings/esm/NonPlainObject`
  * @param b `bindings/esm/NonPlainObject`
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function internrefFunction(a: __Internref16, b: __Internref16): __Internref16;
+export declare function internrefFunction(a: __Internref17, b: __Internref17): __Internref17;
 /** ~lib/set/Set<u8> */
 declare class __Internref8 extends Number {
   private __nominal8: symbol;
@@ -158,8 +163,12 @@ declare class __Internref11 extends Number {
 declare class __Internref12 extends Number {
   private __nominal12: symbol;
 }
+/** ~lib/map/Map<u16,i64> */
+declare class __Internref13 extends Number {
+  private __nominal13: symbol;
+}
 /** bindings/esm/PlainObject */
-declare interface __Record13<TOmittable> {
+declare interface __Record14<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */
@@ -194,6 +203,6 @@ declare interface __Record13<TOmittable> {
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
-declare class __Internref16 extends Number {
-  private __nominal16: symbol;
+declare class __Internref17 extends Number {
+  private __nominal17: symbol;
 }

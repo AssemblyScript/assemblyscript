@@ -107,7 +107,7 @@ export function setF64Function(): Set<f64> {
 }
 
 export function mapStringU8Function(): Map<string,u8> {
-  var map = new Map<string, u8>();
+  var map = new Map<string,u8>();
   map.set('1', 1);
   map.set('2', 2);
   map.set('3', 3);
@@ -122,6 +122,16 @@ export function mapI32F64Function(): Map<i32,f64> {
   map.set(2, 2.0);
   map.set(3, 3.0);
   map.set(4, 4.0);
+  map.delete(2);
+  return map;
+}
+
+export function mapU16I64Function(): Map<u16,i64> {
+  var map = new Map<u16,i64>();
+  map.set(1, 1);
+  map.set(2, 2);
+  map.set(3, 3);
+  map.set(4, 4);
   map.delete(2);
   return map;
 }

@@ -4,13 +4,13 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
  (type $i32_f64_=>_none (func (param i32 f64)))
+ (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
- (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
@@ -21,6 +21,7 @@
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_f32_=>_none (func (param i32 f32)))
  (type $i32_i32_f64_=>_i32 (func (param i32 i32 f64) (result i32)))
+ (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
  (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
  (import "env" "globalThis" (global $bindings/esm/immutableGlobal anyref))
  (import "env" "globalThis.globalThis" (global $bindings/esm/immutableGlobalNested anyref))
@@ -57,9 +58,9 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1152))
- (global $~lib/memory/__data_end i32 (i32.const 1292))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17676))
- (global $~lib/memory/__heap_base i32 (i32.const 17676))
+ (global $~lib/memory/__data_end i32 (i32.const 1300))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17684))
+ (global $~lib/memory/__heap_base i32 (i32.const 17684))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00")
@@ -86,7 +87,7 @@
  (data (i32.const 988) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\004\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1020) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
  (data (i32.const 1084) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
- (data (i32.const 1152) "\11\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\81\08\00\00\02\00\00\00\01\19\00\00\02\00\00\00\01\02\00\00\02\00\00\00$\t\00\00\00\00\00\00\02\t\00\00\00\00\00\00H\00\00\00\00\00\00\00\08\t\00\00\00\00\00\00\08\1a\00\00\00\00\00\00P\00\82\00\00\00\00\00\10\1a\12\00\00\00\00\00\00\00\00\00\00\00\00\00A\00\00\00\02\00\00\00\02A\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 1152) "\12\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\81\08\00\00\02\00\00\00\01\19\00\00\02\00\00\00\01\02\00\00\02\00\00\00$\t\00\00\00\00\00\00\02\t\00\00\00\00\00\00H\00\00\00\00\00\00\00\08\t\00\00\00\00\00\00\08\1a\00\00\00\00\00\00P\00\82\00\00\00\00\00\10\1a\12\00\00\00\00\00\10\n\01\00\00\00\00\00\00\00\00\00\00\00\00\00A\00\00\00\02\00\00\00\02A\00\00\00\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "plainGlobal" (global $bindings/esm/plainGlobal))
@@ -106,6 +107,7 @@
  (export "setF64Function" (func $bindings/esm/setF64Function))
  (export "mapStringU8Function" (func $bindings/esm/mapStringU8Function))
  (export "mapI32F64Function" (func $bindings/esm/mapI32F64Function))
+ (export "mapU16I64Function" (func $bindings/esm/mapU16I64Function))
  (export "newInternref" (func $bindings/esm/newInternref))
  (export "__new" (func $~lib/rt/itcms/__new))
  (export "__pin" (func $~lib/rt/itcms/__pin))
@@ -5055,6 +5057,383 @@
   end
   i32.const 1
  )
+ (func $~lib/map/Map<u16,i64>#set:buckets (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/map/Map<u16,i64>#set:bucketsMask (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=4
+ )
+ (func $~lib/map/Map<u16,i64>#set:entries (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=8
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/map/Map<u16,i64>#set:entriesCapacity (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<u16,i64>#set:entriesOffset (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=16
+ )
+ (func $~lib/map/Map<u16,i64>#set:entriesCount (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=20
+ )
+ (func $~lib/util/hash/HASH<u16> (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 2
+  i32.const 4
+  i32.le_u
+  drop
+  local.get $0
+  i32.const 65535
+  i32.and
+  local.set $2
+  i32.const 2
+  local.set $1
+  i32.const 0
+  i32.const 374761393
+  i32.add
+  local.get $1
+  i32.add
+  local.set $3
+  local.get $3
+  local.get $2
+  i32.const -1028477379
+  i32.mul
+  i32.add
+  local.set $3
+  local.get $3
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  local.set $3
+  local.get $3
+  i32.const -2048144777
+  i32.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  local.set $3
+  local.get $3
+  i32.const -1028477379
+  i32.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i32.const 16
+  i32.shr_u
+  i32.xor
+  local.set $3
+  local.get $3
+  return
+ )
+ (func $~lib/map/Map<u16,i64>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  loop $while-continue|0
+   local.get $3
+   local.set $4
+   local.get $4
+   if
+    local.get $3
+    i32.load offset=16
+    local.set $5
+    local.get $5
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i32.load16_u
+     local.get $1
+     i32.const 65535
+     i32.and
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $5
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $while-continue|0
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/map/MapEntry<u16,i64>#set:value (param $0 i32) (param $1 i64)
+  local.get $0
+  local.get $1
+  i64.store offset=8
+ )
+ (func $~lib/map/MapEntry<u16,i64>#set:key (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store16
+ )
+ (func $~lib/map/MapEntry<u16,i64>#set:taggedNext (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=16
+ )
+ (func $~lib/map/Map<u16,i64>#rehash (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $3
+  i32.store
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  local.get $4
+  i32.const 24
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $5
+  i32.store offset=4
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 24
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  loop $while-continue|0
+   local.get $6
+   local.get $7
+   i32.ne
+   local.set $9
+   local.get $9
+   if
+    local.get $6
+    local.set $10
+    local.get $10
+    i32.load offset=16
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $11
+     local.get $10
+     i32.load16_u
+     local.set $12
+     local.get $11
+     local.get $12
+     call $~lib/map/MapEntry<u16,i64>#set:key
+     local.get $11
+     local.get $10
+     i64.load offset=8
+     call $~lib/map/MapEntry<u16,i64>#set:value
+     local.get $12
+     call $~lib/util/hash/HASH<u16>
+     local.get $1
+     i32.and
+     local.set $13
+     local.get $3
+     local.get $13
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $14
+     local.get $11
+     local.get $14
+     i32.load
+     call $~lib/map/MapEntry<u16,i64>#set:taggedNext
+     local.get $14
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 24
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 24
+    i32.add
+    local.set $6
+    br $while-continue|0
+   end
+  end
+  local.get $0
+  local.get $3
+  call $~lib/map/Map<u16,i64>#set:buckets
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u16,i64>#set:bucketsMask
+  local.get $0
+  local.get $5
+  call $~lib/map/Map<u16,i64>#set:entries
+  local.get $0
+  local.get $4
+  call $~lib/map/Map<u16,i64>#set:entriesCapacity
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  call $~lib/map/Map<u16,i64>#set:entriesOffset
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/map/Map<u16,i64>#delete (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  local.get $1
+  local.get $1
+  call $~lib/util/hash/HASH<u16>
+  call $~lib/map/Map<u16,i64>#find
+  local.set $2
+  local.get $2
+  i32.eqz
+  if
+   i32.const 0
+   return
+  end
+  local.get $2
+  local.get $2
+  i32.load offset=16
+  i32.const 1
+  i32.or
+  call $~lib/map/MapEntry<u16,i64>#set:taggedNext
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.const 1
+  i32.sub
+  call $~lib/map/Map<u16,i64>#set:entriesCount
+  local.get $0
+  i32.load offset=4
+  i32.const 1
+  i32.shr_u
+  local.set $3
+  local.get $3
+  i32.const 1
+  i32.add
+  i32.const 4
+  local.tee $4
+  local.get $0
+  i32.load offset=20
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.gt_u
+  select
+  i32.ge_u
+  if (result i32)
+   local.get $0
+   i32.load offset=20
+   local.get $0
+   i32.load offset=12
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
+   i32.lt_s
+  else
+   i32.const 0
+  end
+  if
+   local.get $0
+   local.get $3
+   call $~lib/map/Map<u16,i64>#rehash
+  end
+  i32.const 1
+ )
  (func $bindings/esm/PlainObject#set:a (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -5492,6 +5871,26 @@
   local.get $1
   call $~lib/map/Map<i32,f64>#__visit
  )
+ (func $~lib/map/Map<u16,i64>#__visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/itcms/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  i32.const 0
+  drop
+  local.get $2
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/map/Map<u16,i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u16,i64>#__visit
+ )
  (func $bindings/esm/PlainObject~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -5580,79 +5979,85 @@
     block $~lib/array/Array<~lib/string/String>
      block $~lib/typedarray/Uint8Array
       block $bindings/esm/PlainObject
-       block $~lib/map/Map<i32,f64>
-        block $~lib/map/Map<~lib/string/String,u8>
-         block $~lib/set/Set<f64>
-          block $~lib/set/Set<i32>
-           block $~lib/set/Set<u8>
-            block $~lib/array/Array<i32>
-             block $~lib/staticarray/StaticArray<i32>
-              block $~lib/typedarray/Uint64Array
-               block $~lib/typedarray/Float32Array
-                block $~lib/typedarray/Int16Array
-                 block $~lib/arraybuffer/ArrayBufferView
-                  block $~lib/string/String
-                   block $~lib/arraybuffer/ArrayBuffer
-                    local.get $0
-                    i32.const 8
-                    i32.sub
-                    i32.load
-                    br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int16Array $~lib/typedarray/Float32Array $~lib/typedarray/Uint64Array $~lib/staticarray/StaticArray<i32> $~lib/array/Array<i32> $~lib/set/Set<u8> $~lib/set/Set<i32> $~lib/set/Set<f64> $~lib/map/Map<~lib/string/String,u8> $~lib/map/Map<i32,f64> $bindings/esm/PlainObject $~lib/typedarray/Uint8Array $~lib/array/Array<~lib/string/String> $bindings/esm/NonPlainObject $invalid
+       block $~lib/map/Map<u16,i64>
+        block $~lib/map/Map<i32,f64>
+         block $~lib/map/Map<~lib/string/String,u8>
+          block $~lib/set/Set<f64>
+           block $~lib/set/Set<i32>
+            block $~lib/set/Set<u8>
+             block $~lib/array/Array<i32>
+              block $~lib/staticarray/StaticArray<i32>
+               block $~lib/typedarray/Uint64Array
+                block $~lib/typedarray/Float32Array
+                 block $~lib/typedarray/Int16Array
+                  block $~lib/arraybuffer/ArrayBufferView
+                   block $~lib/string/String
+                    block $~lib/arraybuffer/ArrayBuffer
+                     local.get $0
+                     i32.const 8
+                     i32.sub
+                     i32.load
+                     br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int16Array $~lib/typedarray/Float32Array $~lib/typedarray/Uint64Array $~lib/staticarray/StaticArray<i32> $~lib/array/Array<i32> $~lib/set/Set<u8> $~lib/set/Set<i32> $~lib/set/Set<f64> $~lib/map/Map<~lib/string/String,u8> $~lib/map/Map<i32,f64> $~lib/map/Map<u16,i64> $bindings/esm/PlainObject $~lib/typedarray/Uint8Array $~lib/array/Array<~lib/string/String> $bindings/esm/NonPlainObject $invalid
+                    end
+                    return
                    end
                    return
                   end
+                  local.get $0
+                  local.get $1
+                  call $~lib/arraybuffer/ArrayBufferView~visit
                   return
                  end
                  local.get $0
                  local.get $1
-                 call $~lib/arraybuffer/ArrayBufferView~visit
+                 call $~lib/typedarray/Int16Array~visit
                  return
                 end
                 local.get $0
                 local.get $1
-                call $~lib/typedarray/Int16Array~visit
+                call $~lib/typedarray/Float32Array~visit
                 return
                end
                local.get $0
                local.get $1
-               call $~lib/typedarray/Float32Array~visit
+               call $~lib/typedarray/Uint64Array~visit
                return
               end
-              local.get $0
-              local.get $1
-              call $~lib/typedarray/Uint64Array~visit
               return
              end
+             local.get $0
+             local.get $1
+             call $~lib/array/Array<i32>~visit
              return
             end
             local.get $0
             local.get $1
-            call $~lib/array/Array<i32>~visit
+            call $~lib/set/Set<u8>~visit
             return
            end
            local.get $0
            local.get $1
-           call $~lib/set/Set<u8>~visit
+           call $~lib/set/Set<i32>~visit
            return
           end
           local.get $0
           local.get $1
-          call $~lib/set/Set<i32>~visit
+          call $~lib/set/Set<f64>~visit
           return
          end
          local.get $0
          local.get $1
-         call $~lib/set/Set<f64>~visit
+         call $~lib/map/Map<~lib/string/String,u8>~visit
          return
         end
         local.get $0
         local.get $1
-        call $~lib/map/Map<~lib/string/String,u8>~visit
+        call $~lib/map/Map<i32,f64>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/map/Map<i32,f64>~visit
+       call $~lib/map/Map<u16,i64>~visit
        return
       end
       local.get $0
@@ -5709,8 +6114,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17696
-   i32.const 17744
+   i32.const 17712
+   i32.const 17760
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -7284,6 +7689,229 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
+ (func $~lib/map/Map<u16,i64>#constructor (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 24
+   i32.const 13
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
+  local.get $0
+  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  call $~lib/map/Map<u16,i64>#set:buckets
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  call $~lib/map/Map<u16,i64>#set:bucketsMask
+  local.get $0
+  i32.const 0
+  i32.const 4
+  i32.const 24
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  call $~lib/map/Map<u16,i64>#set:entries
+  local.get $0
+  i32.const 4
+  call $~lib/map/Map<u16,i64>#set:entriesCapacity
+  local.get $0
+  i32.const 0
+  call $~lib/map/Map<u16,i64>#set:entriesOffset
+  local.get $0
+  i32.const 0
+  call $~lib/map/Map<u16,i64>#set:entriesCount
+  local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $~lib/map/Map<u16,i64>#set (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $1
+  call $~lib/util/hash/HASH<u16>
+  local.set $3
+  local.get $0
+  local.get $1
+  local.get $3
+  call $~lib/map/Map<u16,i64>#find
+  local.set $4
+  local.get $4
+  if
+   local.get $4
+   local.get $2
+   call $~lib/map/MapEntry<u16,i64>#set:value
+   i32.const 0
+   drop
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<u16,i64>#rehash
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.load offset=8
+   local.tee $5
+   i32.store
+   local.get $5
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $6
+   i32.const 1
+   i32.add
+   call $~lib/map/Map<u16,i64>#set:entriesOffset
+   local.get $6
+   i32.const 24
+   i32.mul
+   i32.add
+   local.set $4
+   local.get $4
+   local.get $1
+   call $~lib/map/MapEntry<u16,i64>#set:key
+   i32.const 0
+   drop
+   local.get $4
+   local.get $2
+   call $~lib/map/MapEntry<u16,i64>#set:value
+   i32.const 0
+   drop
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   call $~lib/map/Map<u16,i64>#set:entriesCount
+   local.get $0
+   i32.load
+   local.get $3
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $6
+   local.get $4
+   local.get $6
+   i32.load
+   call $~lib/map/MapEntry<u16,i64>#set:taggedNext
+   local.get $6
+   local.get $4
+   i32.store
+  end
+  local.get $0
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $7
+ )
+ (func $bindings/esm/mapU16I64Function (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $~lib/map/Map<u16,i64>#constructor
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.const 1
+  i64.const 1
+  call $~lib/map/Map<u16,i64>#set
+  drop
+  local.get $0
+  i32.const 2
+  i64.const 2
+  call $~lib/map/Map<u16,i64>#set
+  drop
+  local.get $0
+  i32.const 3
+  i64.const 3
+  call $~lib/map/Map<u16,i64>#set
+  drop
+  local.get $0
+  i32.const 4
+  i64.const 4
+  call $~lib/map/Map<u16,i64>#set
+  drop
+  local.get $0
+  i32.const 2
+  call $~lib/map/Map<u16,i64>#delete
+  drop
+  local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
  (func $bindings/esm/PlainObject#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -7299,7 +7927,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 68
-   i32.const 13
+   i32.const 14
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
@@ -7413,7 +8041,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.const 16
+   i32.const 17
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store
