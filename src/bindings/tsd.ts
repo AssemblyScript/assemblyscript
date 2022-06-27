@@ -187,7 +187,7 @@ export class TSDBuilder extends ExportsWalker {
       ++this.indentLevel;
     } else {
       if (this.program.options.exportMemory) {
-        sb.push("/** bindings/esm/memory */\n");
+        sb.push("/** Exported memory */\n");
         sb.push("export declare const memory: WebAssembly.Memory;\n");
       }
     }
