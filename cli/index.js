@@ -62,13 +62,6 @@ function toUpperSnakeCase(str) {
   return str.replace(/-/g, "_").toUpperCase();
 }
 
-function unquote(value) {
-  if (typeof value === "string") {
-    return value.replace(/['"]+/g, "");
-  }
-  return value;
-}
-
 /** Ensures that an object is a wrapper class instead of just a pointer. */
 // function __wrap(ptrOrObj, wrapperClass) {
 //   if (typeof ptrOrObj === "number") {
@@ -245,7 +238,7 @@ export async function main(argv, options) {
   // Load additional options from asconfig.json
   const seenAsconfig = new Set();
   seenAsconfig.add(configPath);
-  const target = unquote(opts.target) || "release";
+  const target = opts.target || "release";
   while (config) {
     // Merge target first
     if (config.targets) {
@@ -300,7 +293,7 @@ export async function main(argv, options) {
   // Set up options
   var program, runtime;
   const compilerOptions = assemblyscript.newOptions();
-  switch (unquote(opts.runtime)) {
+  switch (opts.runtime) {
     case "stub": runtime = 0; break;
     case "minimal": runtime = 1; break;
     /* incremental */
@@ -317,8 +310,8 @@ export async function main(argv, options) {
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
   if (opts.exportStart) {
-    if (typeof opts.exportStart === "string" && unquote(opts.exportStart) !== "") {
-      assemblyscript.setExportStart(compilerOptions, unquote(opts.exportStart));
+    if (typeof opts.exportStart === "string" && opts.exportStart !== "") {
+      assemblyscript.setExportStart(compilerOptions, opts.exportStart);
     } else {
       return prepareResult(Error("exportStart option required string argument"));
     }
@@ -331,7 +324,7 @@ export async function main(argv, options) {
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
   assemblyscript.setBundleVersion(compilerOptions, bundleMajorVersion, bundleMinorVersion, bundlePatchVersion);
-  if (!opts.stackSize && unquote(opts.runtime) === "incremental") {
+  if (!opts.stackSize && runtime === 2 /* incremental */) {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);
