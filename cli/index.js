@@ -62,6 +62,13 @@ function toUpperSnakeCase(str) {
   return str.replace(/-/g, "_").toUpperCase();
 }
 
+function unquote(value) {
+  if (typeof value === "string") {
+    return value.replace(/['"]+/g, "");
+  }
+  return value;
+}
+
 /** Ensures that an object is a wrapper class instead of just a pointer. */
 // function __wrap(ptrOrObj, wrapperClass) {
 //   if (typeof ptrOrObj === "number") {
@@ -238,7 +245,7 @@ export async function main(argv, options) {
   // Load additional options from asconfig.json
   const seenAsconfig = new Set();
   seenAsconfig.add(configPath);
-  const target = opts.target || "release";
+  const target = unquote(opts.target) || "release";
   while (config) {
     // Merge target first
     if (config.targets) {
@@ -293,7 +300,7 @@ export async function main(argv, options) {
   // Set up options
   var program, runtime;
   const compilerOptions = assemblyscript.newOptions();
-  switch (opts.runtime) {
+  switch (unquote(opts.runtime)) {
     case "stub": runtime = 0; break;
     case "minimal": runtime = 1; break;
     /* incremental */
@@ -309,7 +316,11 @@ export async function main(argv, options) {
   assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  assemblyscript.setExportStart(compilerOptions, typeof opts.exportStart === "string" ? opts.exportStart : null);
+  if (typeof opts.exportStart === "string" && unquote(opts.exportStart) !== "") {
+    assemblyscript.setExportStart(compilerOptions, unquote(opts.exportStart));
+  } else {
+    return prepareResult(Error("exportStart option required string argument"));
+  }
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, opts.sourceMap != null);
@@ -318,7 +329,7 @@ export async function main(argv, options) {
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
   assemblyscript.setBundleVersion(compilerOptions, bundleMajorVersion, bundleMinorVersion, bundlePatchVersion);
-  if (!opts.stackSize && opts.runtime == "incremental") {
+  if (!opts.stackSize && unquote(opts.runtime) === "incremental") {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);
