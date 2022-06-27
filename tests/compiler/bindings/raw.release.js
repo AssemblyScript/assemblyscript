@@ -147,12 +147,36 @@ export async function instantiate(module, imports = {}) {
         __release(a);
       }
     },
+    setU8Function() {
+      // bindings/esm/setU8Function() => ~lib/set/Set<u8>
+      return __liftSet(ptr => new Uint8Array(memory.buffer)[ptr >>> 0], 1, exports.setU8Function() >>> 0);
+    },
+    setI32Function() {
+      // bindings/esm/setI32Function() => ~lib/set/Set<i32>
+      return __liftSet(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 4, exports.setI32Function() >>> 0);
+    },
+    setF64Function() {
+      // bindings/esm/setF64Function() => ~lib/set/Set<f64>
+      return __liftSet(ptr => new Float64Array(memory.buffer)[ptr >>> 3], 8, exports.setF64Function() >>> 0);
+    },
+    mapStringU8Function() {
+      // bindings/esm/mapStringU8Function() => ~lib/map/Map<~lib/string/String,u8>
+      return __liftMap(ptr => __liftString(new Uint32Array(memory.buffer)[ptr >>> 2]), 4, ptr => new Uint8Array(memory.buffer)[ptr >>> 0], 1, exports.mapStringU8Function() >>> 0);
+    },
+    mapI32F64Function() {
+      // bindings/esm/mapI32F64Function() => ~lib/map/Map<i32,f64>
+      return __liftMap(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 4, ptr => new Float64Array(memory.buffer)[ptr >>> 3], 8, exports.mapI32F64Function() >>> 0);
+    },
+    mapU16I64Function() {
+      // bindings/esm/mapU16I64Function() => ~lib/map/Map<u16,i64>
+      return __liftMap(ptr => new Uint16Array(memory.buffer)[ptr >>> 1], 2, ptr => new BigInt64Array(memory.buffer)[ptr >>> 3], 8, exports.mapU16I64Function() >>> 0);
+    },
     objectFunction(a, b) {
       // bindings/esm/objectFunction(bindings/esm/PlainObject, bindings/esm/PlainObject) => bindings/esm/PlainObject
-      a = __retain(__lowerRecord8(a) || __notnull());
-      b = __lowerRecord8(b) || __notnull();
+      a = __retain(__lowerRecord14(a) || __notnull());
+      b = __lowerRecord14(b) || __notnull();
       try {
-        return __liftRecord8(exports.objectFunction(a, b) >>> 0);
+        return __liftRecord14(exports.objectFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
@@ -172,11 +196,11 @@ export async function instantiate(module, imports = {}) {
       }
     },
   }, exports);
-  function __lowerRecord8(value) {
+  function __lowerRecord14(value) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
-    const ptr = exports.__pin(exports.__new(68, 8));
+    const ptr = exports.__pin(exports.__new(68, 14));
     new Int8Array(memory.buffer)[ptr + 0 >>> 0] = value.a;
     new Int16Array(memory.buffer)[ptr + 2 >>> 1] = value.b;
     new Int32Array(memory.buffer)[ptr + 4 >>> 2] = value.c;
@@ -191,12 +215,12 @@ export async function instantiate(module, imports = {}) {
     new Float32Array(memory.buffer)[ptr + 44 >>> 2] = value.l;
     new Float64Array(memory.buffer)[ptr + 48 >>> 3] = value.m;
     new Uint32Array(memory.buffer)[ptr + 56 >>> 2] = __lowerString(value.n);
-    new Uint32Array(memory.buffer)[ptr + 60 >>> 2] = __lowerTypedArray(9, Uint8Array, 0, value.o);
-    new Uint32Array(memory.buffer)[ptr + 64 >>> 2] = __lowerArray(10, (ptr, value) => { new Uint32Array(memory.buffer)[ptr >>> 2] = __lowerString(value) || __notnull(); }, 2, value.p);
+    new Uint32Array(memory.buffer)[ptr + 60 >>> 2] = __lowerTypedArray(15, Uint8Array, 0, value.o);
+    new Uint32Array(memory.buffer)[ptr + 64 >>> 2] = __lowerArray(16, (ptr, value) => { new Uint32Array(memory.buffer)[ptr >>> 2] = __lowerString(value) || __notnull(); }, 2, value.p);
     exports.__unpin(ptr);
     return ptr;
   }
-  function __liftRecord8(ptr) {
+  function __liftRecord14(ptr) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!ptr) return null;
@@ -303,7 +327,7 @@ export async function instantiate(module, imports = {}) {
     const
       len = new Uint32Array(memory.buffer)[ptr - 4 >>> 2] >>> align,
       res = new Array(len);
-    for (let i = 0; i < length; ++i) res[i] = liftElement(ptr + (i << align >>> 0));
+    for (let i = 0; i < len; ++i) res[i] = liftElement(ptr + (i << align >>> 0));
     return res;
   }
   function __lowerStaticArray(id, lowerElement, align, values) {
@@ -314,6 +338,60 @@ export async function instantiate(module, imports = {}) {
     for (let i = 0; i < len; i++) lowerElement(buf + (i << align >>> 0), values[i]);
     exports.__unpin(buf);
     return buf;
+  }
+  function __liftSet(liftElement, keySize, ptr) {
+    if (!ptr) return null;
+    const
+      mem32 = new Uint32Array(memory.buffer),
+      count = mem32[ptr + 16 >>> 2],
+      entries = mem32[ptr + 8 >>> 2],
+      // key is known
+      keyMask = keySize - 1,
+      taggedOffset = (keySize + 3) & ~3,
+      // end is all contents combined (here: pointer after value after key, net size unaligned)
+      endOffset = taggedOffset + 4,
+      // entire thing is at least pointer aligned, or more if K or V is larger, i.e. v128
+      entryMask = Math.max(3, keyMask),
+      entrySize = (endOffset + entryMask) & ~entryMask,
+      res = new Set();
+    for (let i = 0; i < count; ++i) {
+      const
+        buf = entries + i * entrySize,
+        tag = mem32[buf + taggedOffset >>> 2];
+      if (!(tag & 1)) {
+        res.add(liftElement(buf));
+      }
+    }
+    return res;
+  }
+  function __liftMap(liftKeyElement, keySize, liftValueElement, valueSize, ptr) {
+    if (!ptr) return null;
+    const
+      mem32 = new Uint32Array(memory.buffer),
+      count = mem32[ptr + 16 >>> 2],
+      entries = mem32[ptr + 8 >>> 2],
+      // key is known
+      keyMask = keySize - 1,
+      keyOffset = 0,
+      // value is aligned after key
+      valueMask = valueSize - 1,
+      valueOffset = (keyOffset + keySize + valueMask) & ~valueMask,
+      taggedOffset = (valueOffset + valueSize + 3) & ~3,
+      // end is all contents combined (here: pointer after value after key, net size unaligned)
+      endOffset = taggedOffset + 4,
+      // entire thing is at least pointer aligned, or more if K or V is larger, i.e. v128
+      entryMask = Math.max(3, keyMask, valueMask),
+      entrySize = (endOffset + entryMask) & ~entryMask,
+      res = new Map();
+    for (let i = 0; i < count; ++i) {
+      const
+        buf = entries + i * entrySize,
+        tag = mem32[buf + taggedOffset >>> 2];
+      if (!(tag & 1)) {
+        res.set(liftKeyElement(buf + keyOffset), liftValueElement(buf + valueOffset));
+      }
+    }
+    return res;
   }
   const registry = new FinalizationRegistry(__release);
   class Internref extends Number {}
@@ -333,7 +411,7 @@ export async function instantiate(module, imports = {}) {
     if (ptr) {
       const refs = refcounts.get(ptr);
       if (refs) refcounts.set(ptr, refs + 1);
-      else refs.set(exports.__pin(ptr), 1);
+      else refcounts.set(exports.__pin(ptr), 1);
     }
     return ptr;
   }

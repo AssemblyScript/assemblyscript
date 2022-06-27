@@ -56,7 +56,7 @@ export class TSDBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push(`/** ${element.internalName} */\n`);
     indent(sb, this.indentLevel);
-    sb.push(`export ${ this.esm ? "declare" : ""} const ${name}: {\n`);
+    sb.push(`export ${ this.esm ? "declare " : ""}const ${name}: {\n`);
     indent(sb, ++this.indentLevel);
     sb.push(`/** @type \`${type}\` */\n`);
     indent(sb, this.indentLevel);
@@ -77,7 +77,7 @@ export class TSDBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push(`/** ${element.internalName} */\n`);
     indent(sb, this.indentLevel++);
-    sb.push(`export ${ this.esm ? "declare" : ""} enum ${name} {\n`);
+    sb.push(`export ${ this.esm ? "declare " : ""}enum ${name} {\n`);
     var members = element.members;
     if (members) {
       // TODO: for (let [memberName, member] of members) {
@@ -116,7 +116,7 @@ export class TSDBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push(" */\n");
     indent(sb, this.indentLevel);
-    sb.push(`export ${this.esm ? "declare" : ""} function ${name}(`);
+    sb.push(`export ${this.esm ? "declare " : ""}function ${name}(`);
     var requiredParameters = signature.requiredParameters;
     for (let i = 0; i < numParameters; ++i) {
       if (i) sb.push(", ");
