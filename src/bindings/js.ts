@@ -867,6 +867,9 @@ export class JSBuilder extends ExportsWalker {
       if (this.program.options.exportMemory) {
         sb.push("memory,\n  ");
       }
+      if (this.program.options.exportTable) {
+        sb.push("table,\n  ");
+      }
       for (let i = 0, k = exports.length; i < k; ++i) {
         if (i > 0) sb.push(",\n  ");
         sb.push(exports[i]);
