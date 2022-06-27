@@ -715,17 +715,20 @@ export class JSBuilder extends ExportsWalker {
 `);
     }
     if (this.needsLiftSet) {
-      const entriesCountOffset = 16;   // TODO: removes hardcoded consts here
-      const entriesOffset = 8;         // ^
+      const setInstance = Map_values(program.setPrototype.instances!)[0];
+      const entriesOffset = setInstance.offsetof("entriesOffset");
+      const entries = setInstance.offsetof("entries");
       const emptyTagMask = 1 << 0;
       const pointerSize = this.program.options.isWasm64 ? 8 : 4;
+
+      console.log('>>> needsLiftSet', { entriesOffset, entries });
 
       sb.push(`  function __liftSet(liftElement, byteSize, ptr) {
     if (!ptr) return null;
     const
       mem32 = new Uint32Array(memory.buffer),
-      count = mem32[ptr + ${entriesCountOffset} >>> 2],
-      entries = mem32[ptr + ${entriesOffset} >>> 2],
+      count = mem32[ptr + ${entriesOffset} >>> 2],
+      entries = mem32[ptr + ${entries} >>> 2],
       tagOffset = Math.max(byteSize, ${pointerSize}),
       entryAlign = tagOffset - 1,
       entrySize = (byteSize + ${pointerSize} + entryAlign) & ~entryAlign,
@@ -743,17 +746,20 @@ export class JSBuilder extends ExportsWalker {
 `);
     }
     if (this.needsLiftMap) {
-      const entriesCountOffset = 16;   // TODO: removes hardcoded consts here
-      const entriesOffset = 8;         // ^
+      const mapInstance = Map_values(program.mapPrototype.instances!)[0];
+      const entriesOffset = mapInstance.offsetof("entriesOffset");
+      const entries = mapInstance.offsetof("entries");
       const emptyTagMask = 1 << 0;
       const pointerSize = this.program.options.isWasm64 ? 8 : 4;
+
+      console.log('>>> needsLiftMap', { entriesOffset, entries });
 
       sb.push(`  function __liftMap(liftKeyElement, keySize, liftValueElement, valueSize, ptr) {
     if (!ptr) return null;
     const
       mem32 = new Uint32Array(memory.buffer),
-      count = mem32[ptr + ${entriesCountOffset} >>> 2],
-      entries = mem32[ptr + ${entriesOffset} >>> 2],
+      count = mem32[ptr + ${entriesOffset} >>> 2],
+      entries = mem32[ptr + ${entries} >>> 2],
       tagOffset = keySize + valueSize,
       entryAlign = Math.max(keySize, valueSize, ${pointerSize}) - 1,
       entrySize = (tagOffset + ${pointerSize} + entryAlign) & ~entryAlign,
