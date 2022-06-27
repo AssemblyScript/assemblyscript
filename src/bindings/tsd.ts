@@ -190,13 +190,13 @@ export class TSDBuilder extends ExportsWalker {
       indent(sb, this.indentLevel);
       sb.push("/** Exported memory */\n");
       indent(sb, this.indentLevel);
-      sb.push(`export ${this.esm ? "declare" : ""} const memory: WebAssembly.Memory;\n`);
+      sb.push(`export ${this.esm ? "declare " : ""}const memory: WebAssembly.Memory;\n`);
     }
     if (this.program.options.exportTable) {
       indent(sb, this.indentLevel);
       sb.push("/** Exported table */\n");
       indent(sb, this.indentLevel);
-      sb.push(`export ${this.esm ? "declare" : ""} const table: WebAssembly.Table;\n`);
+      sb.push(`export ${this.esm ? "declare " : ""}const table: WebAssembly.Table;\n`);
     }
     this.walk();
     if (!this.esm) {

@@ -1,6 +1,6 @@
 declare namespace __AdaptedExports {
   /** Exported memory */
-  export  const memory: WebAssembly.Memory;
+  export const memory: WebAssembly.Memory;
   /** bindings/esm/plainGlobal */
   export const plainGlobal: {
     /** @type `i32` */
