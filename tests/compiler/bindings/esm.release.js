@@ -342,8 +342,8 @@ async function instantiate(module, imports = {}) {
       count = mem32[ptr + 16 >>> 2],
       entries = mem32[ptr + 8 >>> 2],
       tagOffset = Math.max(byteSize, 4),
-      entryAlign = tagOffset - 1,
-      entrySize = (byteSize + 4 + entryAlign) & ~entryAlign,
+      entryMask = tagOffset - 1,
+      entrySize = (byteSize + 4 + entryMask) & ~entryMask,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const
@@ -361,11 +361,10 @@ async function instantiate(module, imports = {}) {
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + 16 >>> 2],
       entries = mem32[ptr + 8 >>> 2],
-      valueMask = valueSize - 1,
-      alignedKeySize = ((keySize + valueMask) & ~valueMask),
+      alignedKeySize = (keySize + valueSize - 1) & ~(valueSize - 1),
       tagOffset = ((alignedKeySize + valueSize) + 3) & ~3,
-      entryAlign = Math.max(keySize, valueSize, 4) - 1,
-      entrySize = (tagOffset + 4 + entryAlign) & ~entryAlign,
+      entryMask = Math.max(keySize, valueSize, 4) - 1,
+      entrySize = (tagOffset + 4 + entryMask) & ~entryMask,
       res = new Map();
     for (let i = 0; i < count; ++i) {
       const

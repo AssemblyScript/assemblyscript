@@ -728,8 +728,8 @@ export class JSBuilder extends ExportsWalker {
       count = mem32[ptr + ${entriesOffset} >>> 2],
       entries = mem32[ptr + ${entries} >>> 2],
       tagOffset = Math.max(byteSize, ${pointerSize}),
-      entryAlign = tagOffset - 1,
-      entrySize = (byteSize + ${pointerSize} + entryAlign) & ~entryAlign,
+      entryMask = tagOffset - 1,
+      entrySize = (byteSize + ${pointerSize} + entryMask) & ~entryMask,
       res = new Set();
     for (let i = 0; i < count; ++i) {
       const
@@ -749,6 +749,7 @@ export class JSBuilder extends ExportsWalker {
       const entries = mapInstance.offsetof("entries");
       const emptyTagMask = 1 << 0;
       const pointerSize = this.program.options.isWasm64 ? 8 : 4;
+      const pointerMask = pointerSize - 1;
 
       sb.push(`  function __liftMap(liftKeyElement, keySize, liftValueElement, valueSize, ptr) {
     if (!ptr) return null;
@@ -756,11 +757,10 @@ export class JSBuilder extends ExportsWalker {
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + ${entriesOffset} >>> 2],
       entries = mem32[ptr + ${entries} >>> 2],
-      valueMask = valueSize - 1,
-      alignedKeySize = ((keySize + valueMask) & ~valueMask),
-      tagOffset = ((alignedKeySize + valueSize) + 3) & ~3,
-      entryAlign = Math.max(keySize, valueSize, ${pointerSize}) - 1,
-      entrySize = (tagOffset + ${pointerSize} + entryAlign) & ~entryAlign,
+      alignedKeySize = (keySize + valueSize - 1) & ~(valueSize - 1),
+      tagOffset = ((alignedKeySize + valueSize) + ${pointerMask}) & ~${pointerMask},
+      entryMask = Math.max(keySize, valueSize, ${pointerSize}) - 1,
+      entrySize = (tagOffset + ${pointerSize} + entryMask) & ~entryMask,
       res = new Map();
     for (let i = 0; i < count; ++i) {
       const
