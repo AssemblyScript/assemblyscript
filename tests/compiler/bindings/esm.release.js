@@ -352,6 +352,7 @@ async function instantiate(module, imports = {}) {
   return adaptedExports;
 }
 export const {
+  memory,
   plainGlobal,
   plainMutableGlobal,
   stringGlobal,
