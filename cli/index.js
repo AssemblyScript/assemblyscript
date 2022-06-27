@@ -316,10 +316,12 @@ export async function main(argv, options) {
   assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  if (typeof opts.exportStart === "string" && unquote(opts.exportStart) !== "") {
-    assemblyscript.setExportStart(compilerOptions, unquote(opts.exportStart));
-  } else {
-    return prepareResult(Error("exportStart option required string argument"));
+  if (opts.exportStart) {
+    if (typeof opts.exportStart === "string" && unquote(opts.exportStart) !== "") {
+      assemblyscript.setExportStart(compilerOptions, unquote(opts.exportStart));
+    } else {
+      return prepareResult(Error("exportStart option required string argument"));
+    }
   }
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
