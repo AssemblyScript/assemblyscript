@@ -186,6 +186,10 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("declare namespace __AdaptedExports {\n");
       ++this.indentLevel;
     }
+    if (this.program.options.exportMemory) {
+      sb.push("/** bindings/esm/memory */\n");
+      sb.push("export declare const memory: WebAssembly.Memory;\n");
+    }
     this.walk();
     if (!this.esm) {
       --this.indentLevel;
@@ -212,9 +216,6 @@ export class TSDBuilder extends ExportsWalker {
         sb.push(": unknown,\n");
       }
       sb.push("}): Promise<typeof __AdaptedExports>;\n");
-    }
-    if (this.program.options.exportMemory) {
-      sb.push("export declare const memory: WebAssembly.Memory;\n");
     }
     return sb.join("");
   }

@@ -1,3 +1,5 @@
+/** bindings/esm/memory */
+export declare const memory: WebAssembly.Memory;
 /** bindings/esm/plainGlobal */
 export declare const plainGlobal: {
   /** @type `i32` */
@@ -152,4 +154,3 @@ declare interface __Record8<TOmittable> {
 declare class __Internref11 extends Number {
   private __nominal11: symbol;
 }
-export declare const memory: WebAssembly.Memory;
