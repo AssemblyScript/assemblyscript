@@ -62,6 +62,10 @@ function toUpperSnakeCase(str) {
   return str.replace(/-/g, "_").toUpperCase();
 }
 
+function isNonEmptyString(value) {
+  return typeof value === "string" && value !== "";
+}
+
 /** Ensures that an object is a wrapper class instead of just a pointer. */
 // function __wrap(ptrOrObj, wrapperClass) {
 //   if (typeof ptrOrObj === "number") {
@@ -309,7 +313,9 @@ export async function main(argv, options) {
   assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  assemblyscript.setExportStart(compilerOptions, typeof opts.exportStart === "string" ? opts.exportStart : null);
+  if (opts.exportStart) {
+    assemblyscript.setExportStart(compilerOptions, isNonEmptyString(opts.exportStart) ? opts.exportStart : "_start");
+  }
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, opts.sourceMap != null);
@@ -318,7 +324,7 @@ export async function main(argv, options) {
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
   assemblyscript.setBundleVersion(compilerOptions, bundleMajorVersion, bundleMinorVersion, bundlePatchVersion);
-  if (!opts.stackSize && opts.runtime == "incremental") {
+  if (!opts.stackSize && runtime === 2 /* incremental */) {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);

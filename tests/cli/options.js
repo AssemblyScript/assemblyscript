@@ -1,5 +1,5 @@
 import assert from "assert";
-import * as optionsUtil from "../../cli/util/options.js";
+import * as optionsUtil from "../../util/options.js";
 
 const config = {
   "enable": {
@@ -40,10 +40,15 @@ optionsUtil.addDefaults(config, merged = { other: ["y"] });
 assert.deepStrictEqual(merged.other, ["y"]);
 
 // Complete usage test
-var result = optionsUtil.parse(["--enable", "a", "--disable", "b"], config, false);
+var result = optionsUtil.parse([
+  "--enable", "a",
+  "--disable", "b",
+], config, false);
+
 merged = optionsUtil.merge(config, result.options, { enable: ["b", "c"] });
 merged = optionsUtil.merge(config, merged, { disable: ["a", "d"] });
 optionsUtil.addDefaults(config, merged);
+
 assert.deepStrictEqual(merged.enable, ["a", "c"]);
 assert.deepStrictEqual(merged.disable, ["b", "d"]);
 assert.deepStrictEqual(merged.other, ["x"]);
