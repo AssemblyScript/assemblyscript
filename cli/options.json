@@ -282,7 +282,7 @@
   },
   "runPasses": {
     "category": "Binaryen",
-    "description":  [
+    "description": [
       "Specifies additional Binaryen passes to run after other",
       "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
     ],
@@ -312,6 +312,13 @@
     ],
     "type": "b",
     "default": false
+  },
+  "disableWarning": {
+    "description": [
+      "Disables specified warning output", 
+      "not define specified warning number will disable all kinds of warning"
+    ],
+    "type": "I"
   },
   "noEmit": {
     "description": "Performs compilation as usual but does not emit code.",
