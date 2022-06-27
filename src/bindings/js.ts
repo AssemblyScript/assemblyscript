@@ -721,8 +721,6 @@ export class JSBuilder extends ExportsWalker {
       const emptyTagMask = 1 << 0;
       const pointerSize = this.program.options.isWasm64 ? 8 : 4;
 
-      console.log('>>> needsLiftSet', { entriesOffset, entries });
-
       sb.push(`  function __liftSet(liftElement, byteSize, ptr) {
     if (!ptr) return null;
     const
@@ -752,15 +750,15 @@ export class JSBuilder extends ExportsWalker {
       const emptyTagMask = 1 << 0;
       const pointerSize = this.program.options.isWasm64 ? 8 : 4;
 
-      console.log('>>> needsLiftMap', { entriesOffset, entries });
-
       sb.push(`  function __liftMap(liftKeyElement, keySize, liftValueElement, valueSize, ptr) {
     if (!ptr) return null;
     const
       mem32 = new Uint32Array(memory.buffer),
       count = mem32[ptr + ${entriesOffset} >>> 2],
       entries = mem32[ptr + ${entries} >>> 2],
-      tagOffset = keySize + valueSize,
+      valueMask = valueSize - 1,
+      alignedKeySize = ((keySize + valueMask) & ~valueMask),
+      tagOffset = ((alignedKeySize + valueSize) + 3) & ~3,
       entryAlign = Math.max(keySize, valueSize, ${pointerSize}) - 1,
       entrySize = (tagOffset + ${pointerSize} + entryAlign) & ~entryAlign,
       res = new Map();
@@ -769,7 +767,7 @@ export class JSBuilder extends ExportsWalker {
         buf = entries + i * entrySize,
         tag = mem32[buf + tagOffset >>> 2];
       if (!(tag & ${emptyTagMask})) {
-        res.set(liftKeyElement(buf), liftValueElement(buf + keySize));
+        res.set(liftKeyElement(buf), liftValueElement(buf + alignedKeySize));
       }
     }
     return res;
