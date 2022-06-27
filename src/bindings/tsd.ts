@@ -213,6 +213,9 @@ export class TSDBuilder extends ExportsWalker {
       }
       sb.push("}): Promise<typeof __AdaptedExports>;\n");
     }
+    if (this.program.options.exportMemory) {
+      sb.push("export declare const memory: WebAssembly.Memory;\n");
+    }
     return sb.join("");
   }
 
