@@ -62,6 +62,10 @@ function toUpperSnakeCase(str) {
   return str.replace(/-/g, "_").toUpperCase();
 }
 
+function isNonEmptyString(value) {
+  return typeof value === "string" && value !== "";
+}
+
 /** Ensures that an object is a wrapper class instead of just a pointer. */
 // function __wrap(ptrOrObj, wrapperClass) {
 //   if (typeof ptrOrObj === "number") {
@@ -310,11 +314,7 @@ export async function main(argv, options) {
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
   if (opts.exportStart) {
-    if (typeof opts.exportStart === "string" && opts.exportStart !== "") {
-      assemblyscript.setExportStart(compilerOptions, opts.exportStart);
-    } else {
-      return prepareResult(Error("exportStart option required string argument"));
-    }
+    assemblyscript.setExportStart(compilerOptions, isNonEmptyString(opts.exportStart) ? opts.exportStart : "_start");
   }
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
