@@ -1,4 +1,4 @@
-/** bindings/esm/memory */
+/** Exported memory */
 export declare const memory: WebAssembly.Memory;
 /** bindings/esm/plainGlobal */
 export declare const plainGlobal: {
