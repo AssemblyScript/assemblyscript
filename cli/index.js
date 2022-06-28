@@ -1125,12 +1125,12 @@ export function checkDiagnostics(program, stderr, disableWarning, reportDiagnost
     if (!diagnostic) break;
     if (stderr) {
       const isDisabledWarning = (diagnostic) => {
-        if (disableWarning == null) return true;
-        if (!disableWarning.length) return false;
+        if (disableWarning == null) return false;
+        if (!disableWarning.length) return true;
         const code = assemblyscript.getDiagnosticCode(diagnostic);
-        return !disableWarning.includes(code);
+        return disableWarning.includes(code);
       };
-      if (assemblyscript.isError(diagnostic) || isDisabledWarning(diagnostic)) {
+      if (assemblyscript.isError(diagnostic) || !isDisabledWarning(diagnostic)) {
         stderr.write(assemblyscript.formatDiagnostic(diagnostic, useColors, true) + EOL + EOL);
       }
     }
