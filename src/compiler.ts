@@ -5364,6 +5364,22 @@ export class Compiler extends DiagnosticEmitter {
             let leftValue = getConstValueF64(leftExpr);
             let rightValue = getConstValueF64(rightExpr);
             this.currentType = type;
+            if (!ASC_TARGET) { // ASC_TARGET == JS
+              // Engines like V8, WebKit and SpiderMonkey uses powi fast path if exponent is integers
+              // This speculative optimization leads to loose precisions like:
+              // 10 ** 208 != 1e208 or 10 ** -5 != 1e-5
+              // to avoid this we forcing exponent to fractional form and compensate
+              // this afterwards.
+              // if (isFinite(rightValue) && Math.trunc(rightValue) == rightValue) {
+              if (
+                isFinite(rightValue) &&
+                Math.abs(rightValue) >= 2 &&
+                Math.trunc(rightValue) == rightValue
+              ) {
+                const res = Math.pow(leftValue, rightValue - 0.5) * Math.pow(leftValue, 0.5);
+                return module.f64(res);
+              }
+            }
             return module.f64(Math.pow(leftValue, rightValue));
           }
         }
