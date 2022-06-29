@@ -5323,7 +5323,7 @@ export class Compiler extends DiagnosticEmitter {
             let leftValue = getConstValueF32(leftExpr);
             let rightValue = getConstValueF32(rightExpr);
             this.currentType = type;
-            return module.f32(f32(Math.pow(leftValue, rightValue)));
+            return module.f32(f32(accuratePow64(leftValue, rightValue)));
           }
         }
         let instance = this.f32PowInstance;
