@@ -1073,6 +1073,10 @@ declare namespace i16x8 {
   export function extmul_high_i8x16_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 8-bit unsigned integer extended multiplication of the eight higher lanes producing twice wider 16-bit integer results. */
   export function extmul_high_i8x16_u(a: v128, b: v128): v128;
+  /** Selects 16-bit lanes from either vector according to the specified [0-7] respectively [8-15] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -1161,6 +1165,10 @@ declare namespace i32x4 {
   export function extmul_high_i16x8_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 16-bit unsigned integer extended multiplication of the four higher lanes producing twice wider 32-bit integer results. */
   export function extmul_high_i16x8_u(a: v128, b: v128): v128;
+  /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -1219,6 +1227,10 @@ declare namespace i64x2 {
   export function extmul_high_i32x4_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 32-bit unsigned integer extended multiplication of the two higher lanes producing twice wider 64-bit integer results. */
   export function extmul_high_i32x4_u(a: v128, b: v128): v128;
+  /** Selects 64-bit lanes from either vector according to the specified [0-1] respectively [2-3] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -1277,6 +1289,10 @@ declare namespace f32x4 {
   export function convert_i32x4_u(a: v128): v128;
   /** Demotes each 64-bit float lane of a vector to single-precision. The higher lanes of the result are initialized to zero. */
   export function demote_f64x2_zero(a: v128): v128;
+  /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -1335,6 +1351,10 @@ declare namespace f64x2 {
   export function convert_low_i32x4_u(a: v128): v128;
   /** Promotes the low 32-bit float lanes of a vector to double-precision. */
   export function promote_low_f32x4(a: v128): v128;
+  /** Selects 64-bit lanes from either vector according to the specified [0-1] respectively [2-3] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 
 declare abstract class i31 {

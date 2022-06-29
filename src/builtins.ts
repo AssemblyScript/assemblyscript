@@ -540,6 +540,8 @@ export namespace BuiltinNames {
   export const i16x8_extmul_low_i8x16_u = "~lib/builtins/i16x8.extmul_low_i8x16_u";
   export const i16x8_extmul_high_i8x16_s = "~lib/builtins/i16x8.extmul_high_i8x16_s";
   export const i16x8_extmul_high_i8x16_u = "~lib/builtins/i16x8.extmul_high_i8x16_u";
+  export const i16x8_shuffle = "~lib/builtins/i16x8.shuffle";
+  export const i16x8_swizzle = "~lib/builtins/i16x8.swizzle";
 
   export const i32x4_splat = "~lib/builtins/i32x4.splat";
   export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
@@ -583,6 +585,8 @@ export namespace BuiltinNames {
   export const i32x4_extmul_low_i16x8_u = "~lib/builtins/i32x4.extmul_low_i16x8_u";
   export const i32x4_extmul_high_i16x8_s = "~lib/builtins/i32x4.extmul_high_i16x8_s";
   export const i32x4_extmul_high_i16x8_u = "~lib/builtins/i32x4.extmul_high_i16x8_u";
+  export const i32x4_shuffle = "~lib/builtins/i32x4.shuffle";
+  export const i32x4_swizzle = "~lib/builtins/i32x4.swizzle";
 
   export const i64x2_splat = "~lib/builtins/i64x2.splat";
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
@@ -615,6 +619,8 @@ export namespace BuiltinNames {
   export const i64x2_extmul_low_i32x4_u = "~lib/builtins/i64x2.extmul_low_i32x4_u";
   export const i64x2_extmul_high_i32x4_s = "~lib/builtins/i64x2.extmul_high_i32x4_s";
   export const i64x2_extmul_high_i32x4_u = "~lib/builtins/i64x2.extmul_high_i32x4_u";
+  export const i64x2_shuffle = "~lib/builtins/i64x2.shuffle";
+  export const i64x2_swizzle = "~lib/builtins/i64x2.swizzle";
 
   export const f32x4_splat = "~lib/builtins/f32x4.splat";
   export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
@@ -643,6 +649,8 @@ export namespace BuiltinNames {
   export const f32x4_convert_i32x4_s = "~lib/builtins/f32x4.convert_i32x4_s";
   export const f32x4_convert_i32x4_u = "~lib/builtins/f32x4.convert_i32x4_u";
   export const f32x4_demote_f64x2_zero = "~lib/builtins/f32x4.demote_f64x2_zero";
+  export const f32x4_shuffle = "~lib/builtins/f32x4.shuffle";
+  export const f32x4_swizzle = "~lib/builtins/f32x4.swizzle";
 
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
@@ -671,6 +679,8 @@ export namespace BuiltinNames {
   export const f64x2_convert_low_i32x4_s = "~lib/builtins/f64x2.convert_low_i32x4_s";
   export const f64x2_convert_low_i32x4_u = "~lib/builtins/f64x2.convert_low_i32x4_u";
   export const f64x2_promote_low_f32x4 = "~lib/builtins/f64x2.promote_low_f32x4";
+  export const f64x2_shuffle = "~lib/builtins/f64x2.shuffle";
+  export const f64x2_swizzle = "~lib/builtins/f64x2.swizzle";
 
   export const i31_new = "~lib/builtins/i31.new";
   export const i31_get = "~lib/builtins/i31.get";
@@ -8770,6 +8780,24 @@ function builtin_i16x8_extmul_high_i8x16_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_extmul_high_i8x16_u, builtin_i16x8_extmul_high_i8x16_u);
 
+// i16x8.shuffle -> v128.shuffle<i16>
+function builtin_i16x8_shuffle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_shuffle(ctx);
+}
+builtins.set(BuiltinNames.i16x8_shuffle, builtin_i16x8_shuffle);
+
+// i16x8.swizzle -> v128.swizzle
+function builtin_i16x8_swizzle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = null;
+  ctx.contextualType = Type.v128;
+  return builtin_v128_swizzle(ctx);
+}
+builtins.set(BuiltinNames.i16x8_swizzle, builtin_i16x8_swizzle);
+
 // i32x4.splat -> v128.splat<i32>
 function builtin_i32x4_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -9148,6 +9176,24 @@ function builtin_i32x4_extmul_high_i16x8_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_extmul_high_i16x8_u, builtin_i32x4_extmul_high_i16x8_u);
 
+// i32x4.shuffle -> v128.shuffle<i32>
+function builtin_i32x4_shuffle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_shuffle(ctx);
+}
+builtins.set(BuiltinNames.i32x4_shuffle, builtin_i32x4_shuffle);
+
+// i32x4.swizzle -> v128.swizzle
+function builtin_i32x4_swizzle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = null;
+  ctx.contextualType = Type.v128;
+  return builtin_v128_swizzle(ctx);
+}
+builtins.set(BuiltinNames.i32x4_swizzle, builtin_i32x4_swizzle);
+
 // i64x2.splat -> v128.splat<i64>
 function builtin_i64x2_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -9390,6 +9436,24 @@ function builtin_i64x2_extmul_high_i32x4_u(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_extmul_high(ctx);
 }
 builtins.set(BuiltinNames.i64x2_extmul_high_i32x4_u, builtin_i64x2_extmul_high_i32x4_u);
+
+// i64x2.shuffle -> v128.shuffle<i64>
+function builtin_i64x2_shuffle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_shuffle(ctx);
+}
+builtins.set(BuiltinNames.i64x2_shuffle, builtin_i64x2_shuffle);
+
+// i64x2.swizzle -> v128.swizzle
+function builtin_i64x2_swizzle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = null;
+  ctx.contextualType = Type.v128;
+  return builtin_v128_swizzle(ctx);
+}
+builtins.set(BuiltinNames.i64x2_swizzle, builtin_i64x2_swizzle);
 
 // f32x4.splat -> v128.splat<f32>
 function builtin_f32x4_splat(ctx: BuiltinContext): ExpressionRef {
@@ -9634,6 +9698,24 @@ function builtin_f32x4_demote_f64x2_zero(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_demote_f64x2_zero, builtin_f32x4_demote_f64x2_zero);
 
+// f32x4.shuffle -> v128.shuffle<f32>
+function builtin_f32x4_shuffle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_shuffle(ctx);
+}
+builtins.set(BuiltinNames.f32x4_shuffle, builtin_f32x4_shuffle);
+
+// f32x4.swizzle -> v128.swizzle
+function builtin_f32x4_swizzle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = null;
+  ctx.contextualType = Type.v128;
+  return builtin_v128_swizzle(ctx);
+}
+builtins.set(BuiltinNames.f32x4_swizzle, builtin_f32x4_swizzle);
+
 // f64x2.splat -> v128.splat<f64>
 function builtin_f64x2_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -9876,6 +9958,24 @@ function builtin_f64x4_promote_low_f32x4(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_promote_low(ctx);
 }
 builtins.set(BuiltinNames.f64x2_promote_low_f32x4, builtin_f64x4_promote_low_f32x4);
+
+// f64x2.shuffle -> v128.shuffle<f32>
+function builtin_f64x2_shuffle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_shuffle(ctx);
+}
+builtins.set(BuiltinNames.f64x2_shuffle, builtin_f64x2_shuffle);
+
+// f64x2.swizzle -> v128.swizzle
+function builtin_f64x2_swizzle(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = null;
+  ctx.contextualType = Type.v128;
+  return builtin_v128_swizzle(ctx);
+}
+builtins.set(BuiltinNames.f64x2_swizzle, builtin_f64x2_swizzle);
 
 // === Internal helpers =======================================================================
 

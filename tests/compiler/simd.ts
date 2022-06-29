@@ -379,6 +379,11 @@ function test_i16x8(): void {
   assert(i16x8.extend_low_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(255));
   assert(i16x8.extend_high_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(-1));
   assert(i16x8.extend_high_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(255));
+  assert(
+    i16x8.shuffle(a, b, 0, 1, 2, 3, 12, 13, 14, 15)
+    ==
+    v128.shuffle<i16>(a, b, 0, 1, 2, 3, 12, 13, 14, 15)
+  );
   {
     let ptr = __alloc(16);
     store<i8>(ptr, 1);
@@ -514,6 +519,11 @@ function test_i32x4(): void {
   assert(i32x4.extend_low_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(65535));
   assert(i32x4.extend_high_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(-1));
   assert(i32x4.extend_high_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(65535));
+  assert(
+    i32x4.shuffle(a, b, 0, 1, 6, 7)
+    ==
+    v128.shuffle<i32>(a, b, 0, 1, 6, 7)
+  );
   {
     let ptr = __alloc(16);
     store<i16>(ptr, 1);
