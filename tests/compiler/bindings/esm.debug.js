@@ -119,8 +119,8 @@ async function instantiate(module, imports = {}) {
     },
     typedarrayFunction(a, b) {
       // bindings/esm/typedarrayFunction(~lib/typedarray/Int16Array, ~lib/typedarray/Float32Array) => ~lib/typedarray/Uint64Array
-      a = __retain(__lowerTypedArray(Int16Array, 3, 1, a) || __notnull());
-      b = __lowerTypedArray(Float32Array, 4, 2, b) || __notnull();
+      a = __retain(__lowerTypedArray(3, Int16Array, 1, a) || __notnull());
+      b = __lowerTypedArray(4, Float32Array, 2, b) || __notnull();
       try {
         return __liftTypedArray(BigUint64Array, exports.typedarrayFunction(a, b) >>> 0);
       } finally {
@@ -129,30 +129,54 @@ async function instantiate(module, imports = {}) {
     },
     staticarrayFunction(a, b) {
       // bindings/esm/staticarrayFunction(~lib/staticarray/StaticArray<i32>, ~lib/staticarray/StaticArray<i32>) => ~lib/staticarray/StaticArray<i32>
-      a = __retain(__lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, a) || __notnull());
-      b = __lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, b) || __notnull();
+      a = __retain(__lowerStaticArray(6, (ptr, value) => { new Int32Array(memory.buffer)[ptr >>> 2] = value; }, 2, a) || __notnull());
+      b = __lowerStaticArray(6, (ptr, value) => { new Int32Array(memory.buffer)[ptr >>> 2] = value; }, 2, b) || __notnull();
       try {
-        return __liftStaticArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, exports.staticarrayFunction(a, b) >>> 0);
+        return __liftStaticArray(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 2, exports.staticarrayFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
     },
     arrayFunction(a, b) {
       // bindings/esm/arrayFunction(~lib/array/Array<i32>, ~lib/array/Array<i32>) => ~lib/array/Array<i32>
-      a = __retain(__lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, a) || __notnull());
-      b = __lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, b) || __notnull();
+      a = __retain(__lowerArray(7, (ptr, value) => { new Int32Array(memory.buffer)[ptr >>> 2] = value; }, 2, a) || __notnull());
+      b = __lowerArray(7, (ptr, value) => { new Int32Array(memory.buffer)[ptr >>> 2] = value; }, 2, b) || __notnull();
       try {
-        return __liftArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, exports.arrayFunction(a, b) >>> 0);
+        return __liftArray(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 2, exports.arrayFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
     },
+    setU8Function() {
+      // bindings/esm/setU8Function() => ~lib/set/Set<u8>
+      return __liftSet(ptr => new Uint8Array(memory.buffer)[ptr >>> 0], 1, exports.setU8Function() >>> 0);
+    },
+    setI32Function() {
+      // bindings/esm/setI32Function() => ~lib/set/Set<i32>
+      return __liftSet(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 4, exports.setI32Function() >>> 0);
+    },
+    setF64Function() {
+      // bindings/esm/setF64Function() => ~lib/set/Set<f64>
+      return __liftSet(ptr => new Float64Array(memory.buffer)[ptr >>> 3], 8, exports.setF64Function() >>> 0);
+    },
+    mapStringU8Function() {
+      // bindings/esm/mapStringU8Function() => ~lib/map/Map<~lib/string/String,u8>
+      return __liftMap(ptr => __liftString(new Uint32Array(memory.buffer)[ptr >>> 2]), 4, ptr => new Uint8Array(memory.buffer)[ptr >>> 0], 1, exports.mapStringU8Function() >>> 0);
+    },
+    mapI32F64Function() {
+      // bindings/esm/mapI32F64Function() => ~lib/map/Map<i32,f64>
+      return __liftMap(ptr => new Int32Array(memory.buffer)[ptr >>> 2], 4, ptr => new Float64Array(memory.buffer)[ptr >>> 3], 8, exports.mapI32F64Function() >>> 0);
+    },
+    mapU16I64Function() {
+      // bindings/esm/mapU16I64Function() => ~lib/map/Map<u16,i64>
+      return __liftMap(ptr => new Uint16Array(memory.buffer)[ptr >>> 1], 2, ptr => new BigInt64Array(memory.buffer)[ptr >>> 3], 8, exports.mapU16I64Function() >>> 0);
+    },
     objectFunction(a, b) {
       // bindings/esm/objectFunction(bindings/esm/PlainObject, bindings/esm/PlainObject) => bindings/esm/PlainObject
-      a = __retain(__lowerRecord8(a) || __notnull());
-      b = __lowerRecord8(b) || __notnull();
+      a = __retain(__lowerRecord14(a) || __notnull());
+      b = __lowerRecord14(b) || __notnull();
       try {
-        return __liftRecord8(exports.objectFunction(a, b) >>> 0);
+        return __liftRecord14(exports.objectFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
@@ -172,155 +196,209 @@ async function instantiate(module, imports = {}) {
       }
     },
   }, exports);
-  function __lowerRecord8(value) {
+  function __lowerRecord14(value) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
-    const pointer = exports.__pin(exports.__new(68, 8));
-    new Int8Array(memory.buffer)[pointer + 0 >>> 0] = value.a;
-    new Int16Array(memory.buffer)[pointer + 2 >>> 1] = value.b;
-    new Int32Array(memory.buffer)[pointer + 4 >>> 2] = value.c;
-    new BigInt64Array(memory.buffer)[pointer + 8 >>> 3] = value.d || 0n;
-    new Uint8Array(memory.buffer)[pointer + 16 >>> 0] = value.e;
-    new Uint16Array(memory.buffer)[pointer + 18 >>> 1] = value.f;
-    new Uint32Array(memory.buffer)[pointer + 20 >>> 2] = value.g;
-    new BigUint64Array(memory.buffer)[pointer + 24 >>> 3] = value.h || 0n;
-    new Int32Array(memory.buffer)[pointer + 32 >>> 2] = value.i;
-    new Uint32Array(memory.buffer)[pointer + 36 >>> 2] = value.j;
-    new Uint8Array(memory.buffer)[pointer + 40 >>> 0] = value.k ? 1 : 0;
-    new Float32Array(memory.buffer)[pointer + 44 >>> 2] = value.l;
-    new Float64Array(memory.buffer)[pointer + 48 >>> 3] = value.m;
-    new Uint32Array(memory.buffer)[pointer + 56 >>> 2] = __lowerString(value.n);
-    new Uint32Array(memory.buffer)[pointer + 60 >>> 2] = __lowerTypedArray(Uint8Array, 9, 0, value.o);
-    new Uint32Array(memory.buffer)[pointer + 64 >>> 2] = __lowerArray((pointer, value) => { new Uint32Array(memory.buffer)[pointer >>> 2] = __lowerString(value) || __notnull(); }, 10, 2, value.p);
-    exports.__unpin(pointer);
-    return pointer;
+    const ptr = exports.__pin(exports.__new(68, 14));
+    new Int8Array(memory.buffer)[ptr + 0 >>> 0] = value.a;
+    new Int16Array(memory.buffer)[ptr + 2 >>> 1] = value.b;
+    new Int32Array(memory.buffer)[ptr + 4 >>> 2] = value.c;
+    new BigInt64Array(memory.buffer)[ptr + 8 >>> 3] = value.d || 0n;
+    new Uint8Array(memory.buffer)[ptr + 16 >>> 0] = value.e;
+    new Uint16Array(memory.buffer)[ptr + 18 >>> 1] = value.f;
+    new Uint32Array(memory.buffer)[ptr + 20 >>> 2] = value.g;
+    new BigUint64Array(memory.buffer)[ptr + 24 >>> 3] = value.h || 0n;
+    new Int32Array(memory.buffer)[ptr + 32 >>> 2] = value.i;
+    new Uint32Array(memory.buffer)[ptr + 36 >>> 2] = value.j;
+    new Uint8Array(memory.buffer)[ptr + 40 >>> 0] = value.k ? 1 : 0;
+    new Float32Array(memory.buffer)[ptr + 44 >>> 2] = value.l;
+    new Float64Array(memory.buffer)[ptr + 48 >>> 3] = value.m;
+    new Uint32Array(memory.buffer)[ptr + 56 >>> 2] = __lowerString(value.n);
+    new Uint32Array(memory.buffer)[ptr + 60 >>> 2] = __lowerTypedArray(15, Uint8Array, 0, value.o);
+    new Uint32Array(memory.buffer)[ptr + 64 >>> 2] = __lowerArray(16, (ptr, value) => { new Uint32Array(memory.buffer)[ptr >>> 2] = __lowerString(value) || __notnull(); }, 2, value.p);
+    exports.__unpin(ptr);
+    return ptr;
   }
-  function __liftRecord8(pointer) {
+  function __liftRecord14(ptr) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lifting as a record by providing an empty constructor
-    if (!pointer) return null;
+    if (!ptr) return null;
     return {
-      a: new Int8Array(memory.buffer)[pointer + 0 >>> 0],
-      b: new Int16Array(memory.buffer)[pointer + 2 >>> 1],
-      c: new Int32Array(memory.buffer)[pointer + 4 >>> 2],
-      d: new BigInt64Array(memory.buffer)[pointer + 8 >>> 3],
-      e: new Uint8Array(memory.buffer)[pointer + 16 >>> 0],
-      f: new Uint16Array(memory.buffer)[pointer + 18 >>> 1],
-      g: new Uint32Array(memory.buffer)[pointer + 20 >>> 2],
-      h: new BigUint64Array(memory.buffer)[pointer + 24 >>> 3],
-      i: new Int32Array(memory.buffer)[pointer + 32 >>> 2],
-      j: new Uint32Array(memory.buffer)[pointer + 36 >>> 2],
-      k: new Uint8Array(memory.buffer)[pointer + 40 >>> 0] != 0,
-      l: new Float32Array(memory.buffer)[pointer + 44 >>> 2],
-      m: new Float64Array(memory.buffer)[pointer + 48 >>> 3],
-      n: __liftString(new Uint32Array(memory.buffer)[pointer + 56 >>> 2]),
-      o: __liftTypedArray(Uint8Array, new Uint32Array(memory.buffer)[pointer + 60 >>> 2]),
-      p: __liftArray(pointer => __liftString(new Uint32Array(memory.buffer)[pointer >>> 2]), 2, new Uint32Array(memory.buffer)[pointer + 64 >>> 2]),
+      a: new Int8Array(memory.buffer)[ptr + 0 >>> 0],
+      b: new Int16Array(memory.buffer)[ptr + 2 >>> 1],
+      c: new Int32Array(memory.buffer)[ptr + 4 >>> 2],
+      d: new BigInt64Array(memory.buffer)[ptr + 8 >>> 3],
+      e: new Uint8Array(memory.buffer)[ptr + 16 >>> 0],
+      f: new Uint16Array(memory.buffer)[ptr + 18 >>> 1],
+      g: new Uint32Array(memory.buffer)[ptr + 20 >>> 2],
+      h: new BigUint64Array(memory.buffer)[ptr + 24 >>> 3],
+      i: new Int32Array(memory.buffer)[ptr + 32 >>> 2],
+      j: new Uint32Array(memory.buffer)[ptr + 36 >>> 2],
+      k: new Uint8Array(memory.buffer)[ptr + 40 >>> 0] != 0,
+      l: new Float32Array(memory.buffer)[ptr + 44 >>> 2],
+      m: new Float64Array(memory.buffer)[ptr + 48 >>> 3],
+      n: __liftString(new Uint32Array(memory.buffer)[ptr + 56 >>> 2]),
+      o: __liftTypedArray(Uint8Array, new Uint32Array(memory.buffer)[ptr + 60 >>> 2]),
+      p: __liftArray(ptr => __liftString(new Uint32Array(memory.buffer)[ptr >>> 2]), 2, new Uint32Array(memory.buffer)[ptr + 64 >>> 2]),
     };
   }
-  function __liftBuffer(pointer) {
-    if (!pointer) return null;
-    return memory.buffer.slice(pointer, pointer + new Uint32Array(memory.buffer)[pointer - 4 >>> 2]);
+  function __liftBuffer(ptr) {
+    if (!ptr) return null;
+    return memory.buffer.slice(ptr, ptr + new Uint32Array(memory.buffer)[ptr - 4 >>> 2]);
   }
   function __lowerBuffer(value) {
     if (value == null) return 0;
-    const pointer = exports.__new(value.byteLength, 0) >>> 0;
-    new Uint8Array(memory.buffer).set(new Uint8Array(value), pointer);
-    return pointer;
+    const ptr = exports.__new(value.byteLength, 0) >>> 0;
+    new Uint8Array(memory.buffer).set(new Uint8Array(value), ptr);
+    return ptr;
   }
-  function __liftString(pointer) {
-    if (!pointer) return null;
+  function __liftString(ptr) {
+    if (!ptr) return null;
     const
-      end = pointer + new Uint32Array(memory.buffer)[pointer - 4 >>> 2] >>> 1,
-      memoryU16 = new Uint16Array(memory.buffer);
+      end = ptr + new Uint32Array(memory.buffer)[ptr - 4 >>> 2] >>> 1,
+      mem16 = new Uint16Array(memory.buffer);
     let
-      start = pointer >>> 1,
-      string = "";
-    while (end - start > 1024) string += String.fromCharCode(...memoryU16.subarray(start, start += 1024));
-    return string + String.fromCharCode(...memoryU16.subarray(start, end));
+      start = ptr >>> 1,
+      res = "";
+    while (end - start > 1024) res += String.fromCharCode(...mem16.subarray(start, start += 1024));
+    return res + String.fromCharCode(...mem16.subarray(start, end));
   }
   function __lowerString(value) {
     if (value == null) return 0;
     const
-      length = value.length,
-      pointer = exports.__new(length << 1, 1) >>> 0,
-      memoryU16 = new Uint16Array(memory.buffer);
-    for (let i = 0; i < length; ++i) memoryU16[(pointer >>> 1) + i] = value.charCodeAt(i);
-    return pointer;
+      len = value.length,
+      ptr = exports.__new(len << 1, 1) >>> 0,
+      mem16 = new Uint16Array(memory.buffer);
+    for (let i = 0; i < len; ++i) mem16[(ptr >>> 1) + i] = value.charCodeAt(i);
+    return ptr;
   }
-  function __liftArray(liftElement, align, pointer) {
-    if (!pointer) return null;
+  function __liftArray(liftElement, align, ptr) {
+    if (!ptr) return null;
     const
-      memoryU32 = new Uint32Array(memory.buffer),
-      dataStart = memoryU32[pointer + 4 >>> 2],
-      length = memoryU32[pointer + 12 >>> 2],
-      values = new Array(length);
-    for (let i = 0; i < length; ++i) values[i] = liftElement(dataStart + (i << align >>> 0));
-    return values;
+      mem32 = new Uint32Array(memory.buffer),
+      buf = mem32[ptr + 4 >>> 2],
+      len = mem32[ptr + 12 >>> 2],
+      res = new Array(len);
+    for (let i = 0; i < len; ++i) res[i] = liftElement(buf + (i << align >>> 0));
+    return res;
   }
-  function __lowerArray(lowerElement, id, align, values) {
+  function __lowerArray(id, lowerElement, align, values) {
     if (values == null) return 0;
     const
-      length = values.length,
-      buffer = exports.__pin(exports.__new(length << align, 0)) >>> 0,
-      header = exports.__pin(exports.__new(16, id)) >>> 0,
-      memoryU32 = new Uint32Array(memory.buffer);
-    memoryU32[header + 0 >>> 2] = buffer;
-    memoryU32[header + 4 >>> 2] = buffer;
-    memoryU32[header + 8 >>> 2] = length << align;
-    memoryU32[header + 12 >>> 2] = length;
-    for (let i = 0; i < length; ++i) lowerElement(buffer + (i << align >>> 0), values[i]);
-    exports.__unpin(buffer);
-    exports.__unpin(header);
-    return header;
+      len = values.length,
+      buf = exports.__pin(exports.__new(len << align, 0)) >>> 0,
+      ptr = exports.__pin(exports.__new(16, id)) >>> 0,
+      mem32 = new Uint32Array(memory.buffer);
+    mem32[ptr + 0 >>> 2] = buf;
+    mem32[ptr + 4 >>> 2] = buf;
+    mem32[ptr + 8 >>> 2] = len << align;
+    mem32[ptr + 12 >>> 2] = len;
+    for (let i = 0; i < len; ++i) lowerElement(buf + (i << align >>> 0), values[i]);
+    exports.__unpin(buf);
+    exports.__unpin(ptr);
+    return ptr;
   }
-  function __liftTypedArray(constructor, pointer) {
-    if (!pointer) return null;
-    const memoryU32 = new Uint32Array(memory.buffer);
-    return new constructor(
+  function __liftTypedArray(Ctr, ptr) {
+    if (!ptr) return null;
+    const mem32 = new Uint32Array(memory.buffer);
+    return new Ctr(
       memory.buffer,
-      memoryU32[pointer + 4 >>> 2],
-      memoryU32[pointer + 8 >>> 2] / constructor.BYTES_PER_ELEMENT
+      mem32[ptr + 4 >>> 2],
+      mem32[ptr + 8 >>> 2] / Ctr.BYTES_PER_ELEMENT
     ).slice();
   }
-  function __lowerTypedArray(constructor, id, align, values) {
+  function __lowerTypedArray(id, Ctr, align, values) {
     if (values == null) return 0;
     const
-      length = values.length,
-      buffer = exports.__pin(exports.__new(length << align, 0)) >>> 0,
-      header = exports.__new(12, id) >>> 0,
-      memoryU32 = new Uint32Array(memory.buffer);
-    memoryU32[header + 0 >>> 2] = buffer;
-    memoryU32[header + 4 >>> 2] = buffer;
-    memoryU32[header + 8 >>> 2] = length << align;
-    new constructor(memory.buffer, buffer, length).set(values);
-    exports.__unpin(buffer);
-    return header;
+      len = values.length,
+      buf = exports.__pin(exports.__new(len << align, 0)) >>> 0,
+      ptr = exports.__new(12, id) >>> 0,
+      mem32 = new Uint32Array(memory.buffer);
+    mem32[ptr + 0 >>> 2] = buf;
+    mem32[ptr + 4 >>> 2] = buf;
+    mem32[ptr + 8 >>> 2] = len << align;
+    new Ctr(memory.buffer, buf, len).set(values);
+    exports.__unpin(buf);
+    return ptr;
   }
-  function __liftStaticArray(liftElement, align, pointer) {
-    if (!pointer) return null;
+  function __liftStaticArray(liftElement, align, ptr) {
+    if (!ptr) return null;
     const
-      length = new Uint32Array(memory.buffer)[pointer - 4 >>> 2] >>> align,
-      values = new Array(length);
-    for (let i = 0; i < length; ++i) values[i] = liftElement(pointer + (i << align >>> 0));
-    return values;
+      len = new Uint32Array(memory.buffer)[ptr - 4 >>> 2] >>> align,
+      res = new Array(len);
+    for (let i = 0; i < len; ++i) res[i] = liftElement(ptr + (i << align >>> 0));
+    return res;
   }
-  function __lowerStaticArray(lowerElement, id, align, values) {
+  function __lowerStaticArray(id, lowerElement, align, values) {
     if (values == null) return 0;
     const
-      length = values.length,
-      buffer = exports.__pin(exports.__new(length << align, id)) >>> 0;
-    for (let i = 0; i < length; i++) lowerElement(buffer + (i << align >>> 0), values[i]);
-    exports.__unpin(buffer);
-    return buffer;
+      len = values.length,
+      buf = exports.__pin(exports.__new(len << align, id)) >>> 0;
+    for (let i = 0; i < len; i++) lowerElement(buf + (i << align >>> 0), values[i]);
+    exports.__unpin(buf);
+    return buf;
+  }
+  function __liftSet(liftElement, keySize, ptr) {
+    if (!ptr) return null;
+    const
+      mem32 = new Uint32Array(memory.buffer),
+      count = mem32[ptr + 16 >>> 2],
+      entries = mem32[ptr + 8 >>> 2],
+      // key is known
+      keyMask = keySize - 1,
+      taggedOffset = (keySize + 3) & ~3,
+      // end is all contents combined (here: pointer after value after key, net size unaligned)
+      endOffset = taggedOffset + 4,
+      // entire thing is at least pointer aligned, or more if K or V is larger, i.e. v128
+      entryMask = Math.max(3, keyMask),
+      entrySize = (endOffset + entryMask) & ~entryMask,
+      res = new Set();
+    for (let i = 0; i < count; ++i) {
+      const
+        buf = entries + i * entrySize,
+        tag = mem32[buf + taggedOffset >>> 2];
+      if (!(tag & 1)) {
+        res.add(liftElement(buf));
+      }
+    }
+    return res;
+  }
+  function __liftMap(liftKeyElement, keySize, liftValueElement, valueSize, ptr) {
+    if (!ptr) return null;
+    const
+      mem32 = new Uint32Array(memory.buffer),
+      count = mem32[ptr + 16 >>> 2],
+      entries = mem32[ptr + 8 >>> 2],
+      // key is known
+      keyMask = keySize - 1,
+      keyOffset = 0,
+      // value is aligned after key
+      valueMask = valueSize - 1,
+      valueOffset = (keyOffset + keySize + valueMask) & ~valueMask,
+      taggedOffset = (valueOffset + valueSize + 3) & ~3,
+      // end is all contents combined (here: pointer after value after key, net size unaligned)
+      endOffset = taggedOffset + 4,
+      // entire thing is at least pointer aligned, or more if K or V is larger, i.e. v128
+      entryMask = Math.max(3, keyMask, valueMask),
+      entrySize = (endOffset + entryMask) & ~entryMask,
+      res = new Map();
+    for (let i = 0; i < count; ++i) {
+      const
+        buf = entries + i * entrySize,
+        tag = mem32[buf + taggedOffset >>> 2];
+      if (!(tag & 1)) {
+        res.set(liftKeyElement(buf + keyOffset), liftValueElement(buf + valueOffset));
+      }
+    }
+    return res;
   }
   const registry = new FinalizationRegistry(__release);
   class Internref extends Number {}
-  function __liftInternref(pointer) {
-    if (!pointer) return null;
-    const sentinel = new Internref(__retain(pointer));
-    registry.register(sentinel, pointer);
+  function __liftInternref(ptr) {
+    if (!ptr) return null;
+    const sentinel = new Internref(__retain(ptr));
+    registry.register(sentinel, ptr);
     return sentinel;
   }
   function __lowerInternref(value) {
@@ -329,20 +407,20 @@ async function instantiate(module, imports = {}) {
     throw TypeError("internref expected");
   }
   const refcounts = new Map();
-  function __retain(pointer) {
-    if (pointer) {
-      const refcount = refcounts.get(pointer);
-      if (refcount) refcounts.set(pointer, refcount + 1);
-      else refcounts.set(exports.__pin(pointer), 1);
+  function __retain(ptr) {
+    if (ptr) {
+      const refs = refcounts.get(ptr);
+      if (refs) refcounts.set(ptr, refs + 1);
+      else refcounts.set(exports.__pin(ptr), 1);
     }
-    return pointer;
+    return ptr;
   }
-  function __release(pointer) {
-    if (pointer) {
-      const refcount = refcounts.get(pointer);
-      if (refcount === 1) exports.__unpin(pointer), refcounts.delete(pointer);
-      else if (refcount) refcounts.set(pointer, refcount - 1);
-      else throw Error(`invalid refcount '${refcount}' for reference '${pointer}'`);
+  function __release(ptr) {
+    if (ptr) {
+      const refs = refcounts.get(ptr);
+      if (refs === 1) exports.__unpin(ptr), refcounts.delete(ptr);
+      else if (refs) refcounts.set(ptr, refs - 1);
+      else throw Error(`invalid refcount '${refs}' for reference '${ptr}'`);
     }
   }
   function __notnull() {
@@ -366,6 +444,12 @@ export const {
   typedarrayFunction,
   staticarrayFunction,
   arrayFunction,
+  setU8Function,
+  setI32Function,
+  setF64Function,
+  mapStringU8Function,
+  mapI32F64Function,
+  mapU16I64Function,
   objectFunction,
   newInternref,
   internrefFunction

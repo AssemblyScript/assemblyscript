@@ -76,6 +76,66 @@ export function arrayFunction(a: Array<i32>, b: Array<i32>): Array<i32> {
   return c;
 }
 
+export function setU8Function(): Set<u8> {
+  var set = new Set<u8>();
+  set.add(1);
+  set.add(2);
+  set.add(3);
+  set.add(4);
+  set.delete(2);
+  return set;
+}
+
+export function setI32Function(): Set<i32> {
+  var set = new Set<i32>();
+  set.add(-1);
+  set.add(-2);
+  set.add(-3);
+  set.add(-4);
+  set.delete(-2);
+  return set;
+}
+
+export function setF64Function(): Set<f64> {
+  var set = new Set<f64>();
+  set.add(1.5);
+  set.add(2.5);
+  set.add(3.5);
+  set.add(4.5);
+  set.delete(2.5);
+  return set;
+}
+
+export function mapStringU8Function(): Map<string,u8> {
+  var map = new Map<string,u8>();
+  map.set('1', 1);
+  map.set('2', 2);
+  map.set('3', 3);
+  map.set('4', 4);
+  map.delete('2');
+  return map;
+}
+
+export function mapI32F64Function(): Map<i32,f64> {
+  var map = new Map<i32,f64>();
+  map.set(1, 1.0);
+  map.set(2, 2.0);
+  map.set(3, 3.0);
+  map.set(4, 4.0);
+  map.delete(2);
+  return map;
+}
+
+export function mapU16I64Function(): Map<u16,i64> {
+  var map = new Map<u16,i64>();
+  map.set(1, 1);
+  map.set(2, 2);
+  map.set(3, 3);
+  map.set(4, 4);
+  map.delete(2);
+  return map;
+}
+
 class PlainObject {
   a: i8;
   b: i16;
