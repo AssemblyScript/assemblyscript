@@ -5366,11 +5366,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = type;
             if (!ASC_TARGET) { // ASC_TARGET == JS
               // Engines like V8, WebKit and SpiderMonkey uses powi fast path if exponent is integer
-              // This speculative optimization leads to loose precisions like:
-              // 10 ** 208 != 1e208 or 10 ** -5 != 1e-5
-              // to avoid this we forcing exponent to fractional form and compensate
-              // this afterwards.
-              // if (isFinite(rightValue) && Math.trunc(rightValue) == rightValue) {
+              // This speculative optimization leads to loose precisions like 10 ** 208 != 1e208
+              // or/and 10 ** -5 != 1e-5 anymore. For avoid this behaviour we are forcing exponent
+              // to fractional form and compensate this afterwards.
               if (
                 isFinite(rightValue) &&
                 Math.abs(rightValue) >= 2 &&
