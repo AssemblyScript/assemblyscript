@@ -5374,8 +5374,7 @@ export class Compiler extends DiagnosticEmitter {
                 Math.abs(rightValue) >= 2 &&
                 Math.trunc(rightValue) == rightValue
               ) {
-                const res = Math.pow(leftValue, rightValue - 0.5) * Math.pow(leftValue, 0.5);
-                return module.f64(res);
+                return module.f64(Math.pow(leftValue, rightValue - 0.5) * Math.pow(leftValue, 0.5));
               }
             }
             return module.f64(Math.pow(leftValue, rightValue));
