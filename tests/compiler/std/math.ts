@@ -4131,3 +4131,10 @@ assert(0 ** 0.5 == 0.0);
 assert(0 ** -1.0 == Infinity);
 assert(0.0 ** 0 == 1.0);
 assert(1.0 ** 1 == 1.0);
+
+// Special cases for test constant fold correctness
+assert(10.0 ** 308 == 1e308);
+assert(10.0 ** 208 == 1e208);
+assert(10.0 ** -5 == 1e-5);
+assert(f32(10) ** 38 == f32(1e38));
+assert(f32(10) ** -5 == f32(1e-5));

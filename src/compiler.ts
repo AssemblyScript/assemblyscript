@@ -199,7 +199,8 @@ import {
   isPowerOf2,
   v128_zero,
   readI32,
-  isIdentifier
+  isIdentifier,
+  accuratePow64
 } from "./util";
 
 import {
@@ -5322,7 +5323,7 @@ export class Compiler extends DiagnosticEmitter {
             let leftValue = getConstValueF32(leftExpr);
             let rightValue = getConstValueF32(rightExpr);
             this.currentType = type;
-            return module.f32(f32(Math.pow(leftValue, rightValue)));
+            return module.f32(f32(accuratePow64(leftValue, rightValue)));
           }
         }
         let instance = this.f32PowInstance;
@@ -5364,7 +5365,7 @@ export class Compiler extends DiagnosticEmitter {
             let leftValue = getConstValueF64(leftExpr);
             let rightValue = getConstValueF64(rightExpr);
             this.currentType = type;
-            return module.f64(Math.pow(leftValue, rightValue));
+            return module.f64(accuratePow64(leftValue, rightValue));
           }
         }
         let instance = this.f64PowInstance;
