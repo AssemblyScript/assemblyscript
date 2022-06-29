@@ -5365,7 +5365,7 @@ export class Compiler extends DiagnosticEmitter {
             let rightValue = getConstValueF64(rightExpr);
             this.currentType = type;
             if (!ASC_TARGET) { // ASC_TARGET == JS
-              // Engines like V8, WebKit and SpiderMonkey uses powi fast path if exponent is integers
+              // Engines like V8, WebKit and SpiderMonkey uses powi fast path if exponent is integer
               // This speculative optimization leads to loose precisions like:
               // 10 ** 208 != 1e208 or 10 ** -5 != 1e-5
               // to avoid this we forcing exponent to fractional form and compensate
