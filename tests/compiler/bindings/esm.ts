@@ -26,6 +26,14 @@ export function plainFunction64(a: i64, b: i64): i64 {
   return a + b;
 }
 
+export function plainFunctionGetUnsigned32(): u32 {
+  return -2; // 4294967294
+}
+
+export function plainFunctionGetUnsigned64(): u64 {
+  return -2; // 18446744073709551614n
+}
+
 export function bufferFunction(a: ArrayBuffer, b: ArrayBuffer): ArrayBuffer {
   var aByteLength = a.byteLength;
   var bByteLength = b.byteLength;

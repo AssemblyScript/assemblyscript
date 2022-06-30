@@ -949,6 +949,7 @@ export class JSBuilder extends ExportsWalker {
   /** Lifts a WebAssembly value to a JavaScript value. */
   makeLiftFromValue(name: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
+      // Lift reference types
       const clazz = assert(type.getClassOrWrapper(this.program));
       if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
         sb.push("__liftBuffer(");
@@ -1005,11 +1006,17 @@ export class JSBuilder extends ExportsWalker {
       }
       sb.push(")");
     } else {
-      sb.push(name);
-      if (type.isUnsignedIntegerValue && type.size == 32) {
-        sb.push(" >>> 0");
-      } else if (type == Type.bool) {
-        sb.push(" != 0");
+      // Lift basic plain types
+      if (type.isUnsignedIntegerValue && type.size == 64) {
+        sb.push(`BigInt.asUintN(64, ${name})`);
+      } else {
+        if (type == Type.bool) {
+          sb.push(`${name} != 0`);
+        } else if (type.isUnsignedIntegerValue) {
+          sb.push(`${name} >>> 0`);
+        } else {
+          sb.push(name);
+        }
       }
     }
   }
@@ -1017,6 +1024,7 @@ export class JSBuilder extends ExportsWalker {
   /** Lowers a JavaScript value to a WebAssembly value. */
   makeLowerToValue(name: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
+      // Lower reference types
       const clazz = assert(type.getClass());
       if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
         sb.push("__lowerBuffer(");
@@ -1082,6 +1090,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push(" || __notnull()");
       }
     } else {
+      // Lower basic types
       sb.push(name); // basic value
       if (type.isIntegerValue && type.size == 64) {
         sb.push(" || 0n");
@@ -1284,7 +1293,7 @@ function isPlainValue(type: Type, kind: Mode): bool {
     if (type == Type.bool) return false;
   } else {
     // requires coercion from signed to unsigned
-    if (type.isUnsignedIntegerValue && type.size == 32) return false;
+    if (type.isUnsignedIntegerValue) return false;
     // requires coercion from 1/0 to true/false
     if (type == Type.bool) return false;
   }
