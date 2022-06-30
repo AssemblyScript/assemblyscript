@@ -54,6 +54,16 @@ declare namespace __AdaptedExports {
    */
   export function plainFunction64(a: bigint, b: bigint): bigint;
   /**
+   * bindings/esm/plainFunctionGetUnsigned32
+   * @returns `u32`
+   */
+  export function plainFunctionGetUnsigned32(): number;
+  /**
+   * bindings/esm/plainFunctionGetUnsigned64
+   * @returns `u64`
+   */
+  export function plainFunctionGetUnsigned64(): bigint;
+  /**
    * bindings/esm/bufferFunction
    * @param a `~lib/arraybuffer/ArrayBuffer`
    * @param b `~lib/arraybuffer/ArrayBuffer`
