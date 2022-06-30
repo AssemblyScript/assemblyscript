@@ -86,13 +86,13 @@ async function instantiate(module, imports = {}) {
       b = b || 0n;
       return exports.plainFunction64(a, b);
     },
-    plainFunctionGetUnsigned32() {
-      // bindings/esm/plainFunctionGetUnsigned32() => u32
-      return exports.plainFunctionGetUnsigned32() >>> 0;
+    getMaxUnsigned32() {
+      // bindings/esm/getMaxUnsigned32() => u32
+      return exports.getMaxUnsigned32() >>> 0;
     },
-    plainFunctionGetUnsigned64() {
-      // bindings/esm/plainFunctionGetUnsigned64() => u64
-      return BigInt.asUintN(64, exports.plainFunctionGetUnsigned64());
+    getMaxUnsigned64() {
+      // bindings/esm/getMaxUnsigned64() => u64
+      return BigInt.asUintN(64, exports.getMaxUnsigned64());
     },
     bufferFunction(a, b) {
       // bindings/esm/bufferFunction(~lib/arraybuffer/ArrayBuffer, ~lib/arraybuffer/ArrayBuffer) => ~lib/arraybuffer/ArrayBuffer
@@ -368,8 +368,8 @@ export const {
   ConstEnum,
   plainFunction,
   plainFunction64,
-  plainFunctionGetUnsigned32,
-  plainFunctionGetUnsigned64,
+  getMaxUnsigned32,
+  getMaxUnsigned64,
   bufferFunction,
   stringFunction,
   stringFunctionOptional,

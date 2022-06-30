@@ -35,8 +35,8 @@ export async function postInstantiate(instance) {
   assert.strictEqual(exports.Enum.TWO, 2);
   assert.strictEqual(exports.Enum[2], "TWO");
 
-  assert.strictEqual(exports.plainFunctionGetUnsigned32(), 4294967294);
-  assert.strictEqual(exports.plainFunctionGetUnsigned64(), 18446744073709551614n);
+  assert.strictEqual(exports.getMaxUnsigned32(), 4294967295);
+  assert.strictEqual(exports.getMaxUnsigned64(), 18446744073709551615n);
 
   assert.strictEqual(exports.plainFunction(1, 2), 3);
 

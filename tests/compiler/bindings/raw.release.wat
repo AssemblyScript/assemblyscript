@@ -92,8 +92,8 @@
  (export "ConstEnum.THREE" (global $bindings/esm/ConstEnum.THREE))
  (export "plainFunction" (func $bindings/esm/plainFunction))
  (export "plainFunction64" (func $bindings/esm/plainFunction64))
- (export "plainFunctionGetUnsigned32" (func $bindings/esm/plainFunctionGetUnsigned32))
- (export "plainFunctionGetUnsigned64" (func $bindings/esm/plainFunctionGetUnsigned64))
+ (export "getMaxUnsigned32" (func $bindings/esm/getMaxUnsigned32))
+ (export "getMaxUnsigned64" (func $bindings/esm/getMaxUnsigned64))
  (export "newInternref" (func $bindings/esm/newInternref))
  (export "__new" (func $~lib/rt/itcms/__new))
  (export "__pin" (func $~lib/rt/itcms/__pin))
@@ -121,11 +121,11 @@
   local.get $1
   i64.add
  )
- (func $bindings/esm/plainFunctionGetUnsigned32 (result i32)
-  i32.const -2
+ (func $bindings/esm/getMaxUnsigned32 (result i32)
+  i32.const -1
  )
- (func $bindings/esm/plainFunctionGetUnsigned64 (result i64)
-  i64.const -2
+ (func $bindings/esm/getMaxUnsigned64 (result i64)
+  i64.const -1
  )
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
