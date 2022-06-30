@@ -1007,16 +1007,12 @@ export class JSBuilder extends ExportsWalker {
       sb.push(")");
     } else {
       // Lift basic plain types
-      if (type.isUnsignedIntegerValue && type.size == 64) {
-        sb.push(`BigInt.asUintN(64, ${name})`);
+      if (type == Type.bool) {
+        sb.push(`${name} != 0`);
+      } else if (type.isUnsignedIntegerValue && type.size >= 32) {
+        sb.push(type.size == 64 ? `BigInt.asUintN(64, ${name})` : `${name} >>> 0`);
       } else {
-        if (type == Type.bool) {
-          sb.push(`${name} != 0`);
-        } else if (type.isUnsignedIntegerValue) {
-          sb.push(`${name} >>> 0`);
-        } else {
-          sb.push(name);
-        }
+        sb.push(name);
       }
     }
   }
