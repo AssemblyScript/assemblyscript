@@ -90,6 +90,7 @@ import {
 import {
   BuiltinNames
 } from "./builtins";
+import { ConditionInfo, ConditionInfoContainer } from "./conditionInfo";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
@@ -1219,6 +1220,25 @@ export class Flow {
         break;
       }
     }
+  }
+
+  conditionInfoStack: ConditionInfoContainer[] = []
+  startCompileCondition(): void {
+    this.conditionInfoStack.push(new ConditionInfoContainer());
+  }
+  stopCompileCondition(): ConditionInfoContainer {
+    return assert(this.conditionInfoStack.pop());
+  }
+  addConditionInfo(conditionInfo: ConditionInfo, branch: bool = true): void {
+    if (this.conditionInfoStack.length > 0) {
+      const infoContainer =
+        this.conditionInfoStack[this.conditionInfoStack.length - 1];
+      if (branch) {
+        infoContainer.trueInfo.push(conditionInfo);
+      } else {
+        infoContainer.falseInfo.push(conditionInfo);
+      }
+    }    
   }
 
   /**

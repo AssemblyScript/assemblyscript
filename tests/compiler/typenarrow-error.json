@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2339: Property 'foo' does not exist on type 'typenarrow-error/A",
+    "EOF"
+  ]
+}
