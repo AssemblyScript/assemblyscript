@@ -2,22 +2,7 @@
 /* eslint-disable no-global-assign */
 
 class Foo {}
-
-Foo++;
-++Foo;
-// Foo += 1;
-
-Foo--;
---Foo;
-// Foo -= 1;
-
-Array++;
-++Array;
-// Array += 1;
-
-Array--;
---Array;
-// Array -= 1;
+namespace Bar {}
 
 const a = (Foo++);
 const b = (++Foo);
@@ -27,12 +12,12 @@ const d = (Foo--);
 const e = (--Foo);
 // const f = (Foo -= 1);
 
-const g = (Array++);
-const h = (++Array);
-// const i = (Array += 1);
+const g = (Bar++);
+const h = (++Bar);
+// const i = (Bar += 1);
 
-const j = (Array--);
-const k = (--Array);
-// const l = (Array -= 1);
+const j = (Bar--);
+const k = (--Bar);
+// const l = (Bar -= 1);
 
 ERROR("EOF");  
