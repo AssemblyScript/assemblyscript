@@ -585,7 +585,9 @@ export async function main(argv, options) {
     }
     // No such file
     if (sourceText == null) return null;
-    return { sourceText, sourcePath };
+    const file = { sourceText, sourcePath };
+    await applyTransform("afterRead", file);
+    return file;
   }
 
   // Gets all pending imported files from the the backlog
