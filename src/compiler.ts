@@ -176,7 +176,8 @@ import {
   NamedTypeNode,
 
   findDecorator,
-  isTypeOmitted
+  isTypeOmitted,
+  VariableDeclaration
 } from "./ast";
 
 import {
@@ -2955,6 +2956,145 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.unreachable();
   }
 
+  /** Tries to inline an expression into a new constant local. */
+  private tryInlineConst(
+    identifierNode: IdentifierExpression,
+    type: Type,
+    initExpr: ExpressionRef
+  ): bool {
+    var flow = this.currentFlow;
+    var name = identifierNode.text;
+    var local: Local | null = null;
+    switch (<u32>getExpressionType(initExpr)) {
+      case <u32>TypeRef.I32: {
+        local = new Local(name, -1, type, flow.parentFunction);
+        local.setConstantIntegerValue(
+          i64_new(
+            getConstValueI32(initExpr),
+            0
+          ),
+          type
+        );
+        break;
+      }
+      case <u32>TypeRef.I64: {
+        local = new Local(name, -1, type, flow.parentFunction);
+        local.setConstantIntegerValue(
+          i64_new(
+            getConstValueI64Low(initExpr),
+            getConstValueI64High(initExpr)
+          ),
+          type
+        );
+        break;
+      }
+      case <u32>TypeRef.F32: {
+        local = new Local(name, -1, type, flow.parentFunction);
+        local.setConstantFloatValue(<f64>getConstValueF32(initExpr), type);
+        break;
+      }
+      case <u32>TypeRef.F64: {
+        local = new Local(name, -1, type, flow.parentFunction);
+        local.setConstantFloatValue(getConstValueF64(initExpr), type);
+        break;
+      }
+    }
+    if (local) {
+      // Add as a virtual local that doesn't actually exist in WebAssembly
+      let scopedLocals = flow.scopedLocals;
+      if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
+      else assert(!scopedLocals.has(name));
+      scopedLocals.set(name, local);
+      return true;
+    }
+    return false;
+  }
+
+  /** Compiles a variable as part of a VariableDeclaration. */
+  private compileVariable(
+    identifierNode: IdentifierExpression,
+    type: Type,
+    initExpr: ExpressionRef,
+    declaration: VariableDeclaration,
+    isConst: bool,
+    isScoped: bool,
+    initializers: Array<ExpressionRef>,
+  ): bool {
+    var flow = this.currentFlow;
+    var name = identifierNode.text;
+    if (isScoped) {
+      let existingLocal = flow.getScopedLocal(name);
+      if (existingLocal) {
+        if (!existingLocal.declaration.range.source.isNative) {
+          this.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            identifierNode.range,
+            existingLocal.declaration.name.range,
+            name
+          );
+        } else { // scoped locals are shared temps that don't track declarations
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            identifierNode.range, name
+          );
+        }
+        return false;
+      }
+    } else {
+      let existing = flow.lookupLocal(name);
+      if (existing) {
+        this.errorRelated(
+          DiagnosticCode.Duplicate_identifier_0,
+          declaration.name.range,
+          existing.declaration.name.range,
+          name
+        );
+        return false;
+      }
+    }
+
+    // Handle constants, and try to inline if value is static
+    if (isConst) {
+      if (initExpr) {
+        let precomp = this.module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+        if (precomp) {
+          initExpr = precomp; // always use precomputed initExpr
+          if (this.tryInlineConst(identifierNode, type, initExpr)) {
+            return true;
+          }
+        }
+      } else {
+        this.error(
+          DiagnosticCode._const_declarations_must_be_initialized,
+          declaration.range
+        );
+      }
+    }
+
+    // Otherwise compile as mutable
+    var local: Local | null;
+    if (isScoped) {
+      local = flow.addScopedLocal(name, type);
+    } else {
+      local = flow.parentFunction.addLocal(type, name, identifierNode, declaration);
+    }
+
+    if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+
+    if (initExpr) {
+      initializers.push(
+        this.makeLocalAssignment(local, initExpr, type, false)
+      );
+    } else {
+      // no need to assign zero
+      if (local.type.isShortIntegerValue) {
+        flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
+      }
+    }
+
+    return true;
+  }
+
   /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
   private compileVariableStatement(
     statement: VariableStatement
@@ -2973,6 +3113,8 @@ export class Compiler extends DiagnosticEmitter {
       let name = identifierNode.text;
       let type: Type | null = null;
       let initExpr: ExpressionRef = 0;
+      let isConst = declaration.is(CommonFlags.CONST);
+      let isScoped = declaration.isAny(CommonFlags.LET | CommonFlags.CONST) || flow.isInline;  
 
       // Resolve type if annotated
       let typeNode = declaration.type;
@@ -3024,126 +3166,8 @@ export class Compiler extends DiagnosticEmitter {
         continue;
       }
 
-      // Handle constants, and try to inline if value is static
-      let isConst = declaration.is(CommonFlags.CONST);
-      let isStatic = false;
-      if (isConst) {
-        if (initExpr) {
-          let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
-          if (precomp) {
-            initExpr = precomp; // always use precomputed initExpr
-            let local: Local | null = null;
-            switch (<u32>getExpressionType(initExpr)) {
-              case <u32>TypeRef.I32: {
-                local = new Local(name, -1, type, flow.parentFunction);
-                local.setConstantIntegerValue(
-                  i64_new(
-                    getConstValueI32(initExpr),
-                    0
-                  ),
-                  type
-                );
-                break;
-              }
-              case <u32>TypeRef.I64: {
-                local = new Local(name, -1, type, flow.parentFunction);
-                local.setConstantIntegerValue(
-                  i64_new(
-                    getConstValueI64Low(initExpr),
-                    getConstValueI64High(initExpr)
-                  ),
-                  type
-                );
-                break;
-              }
-              case <u32>TypeRef.F32: {
-                local = new Local(name, -1, type, flow.parentFunction);
-                local.setConstantFloatValue(<f64>getConstValueF32(initExpr), type);
-                break;
-              }
-              case <u32>TypeRef.F64: {
-                local = new Local(name, -1, type, flow.parentFunction);
-                local.setConstantFloatValue(getConstValueF64(initExpr), type);
-                break;
-              }
-            }
-            if (local) {
-              // Add as a virtual local that doesn't actually exist in WebAssembly
-              let scopedLocals = flow.scopedLocals;
-              if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
-              else if (scopedLocals.has(name)) {
-                let existing = assert(scopedLocals.get(name));
-                this.errorRelated(
-                  DiagnosticCode.Duplicate_identifier_0,
-                  declaration.name.range,
-                  existing.declaration.name.range,
-                  name
-                );
-                return this.module.unreachable();
-              }
-              scopedLocals.set(name, local);
-              isStatic = true;
-            }
-          }
-        } else {
-          this.error(
-            DiagnosticCode._const_declarations_must_be_initialized,
-            declaration.range
-          );
-        }
-      }
-
-      // Otherwise compile as mutable
-      if (!isStatic) {
-        let local: Local;
-        if (
-          declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
-          flow.isInline
-        ) { // here: not top-level
-          let existingLocal = flow.getScopedLocal(name);
-          if (existingLocal) {
-            if (!existingLocal.declaration.range.source.isNative) {
-              this.errorRelated(
-                DiagnosticCode.Duplicate_identifier_0,
-                declaration.name.range,
-                existingLocal.declaration.name.range,
-                name
-              );
-            } else { // scoped locals are shared temps that don't track declarations
-              this.error(
-                DiagnosticCode.Duplicate_identifier_0,
-                declaration.name.range, name
-              );
-            }
-            local = existingLocal;
-          } else {
-            local = flow.addScopedLocal(name, type);
-          }
-          if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
-        } else {
-          let existing = flow.lookupLocal(name);
-          if (existing) {
-            this.errorRelated(
-              DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range,
-              existing.declaration.name.range,
-              name
-            );
-            continue;
-          }
-          local = flow.parentFunction.addLocal(type, name, identifierNode, declaration);
-          if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
-        }
-        if (initExpr) {
-          initializers.push(
-            this.makeLocalAssignment(local, initExpr, type, false)
-          );
-        } else {
-          // no need to assign zero
-          if (local.type.isShortIntegerValue) {
-            flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
-          }
-        }
+      if (!this.compileVariable(identifierNode, type, initExpr, declaration, isConst, isScoped, initializers)) {
+        continue;
       }
     }
     this.currentType = Type.void;
