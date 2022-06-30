@@ -176,8 +176,7 @@ import {
   NamedTypeNode,
 
   findDecorator,
-  isTypeOmitted,
-  VariableDeclaration
+  isTypeOmitted
 } from "./ast";
 
 import {
