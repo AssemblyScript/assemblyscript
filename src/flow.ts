@@ -568,26 +568,26 @@ export class Flow {
     }
   }
 
-    /** check if an expression is a local variant, return -1 means not, otherwise return local index */
-    lookupTypedElementByExpressionRef(expr: ExpressionRef): TypedElement | null {
-      switch (getExpressionId(expr)) {
-        case ExpressionId.LocalSet: {
-          if (!isLocalTee(expr)) break;
-          return this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-        }
-        case ExpressionId.LocalGet: {
-          return this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-        }
-        case ExpressionId.GlobalGet: {
-          let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
-          if (global.kind == ElementKind.GLOBAL) {
-            return <Global>global;
-          }
-          break;
-        }
+  /** check if an expression is a local variant, return -1 means not, otherwise return local index */
+  lookupTypedElementByExpressionRef(expr: ExpressionRef): TypedElement | null {
+    switch (getExpressionId(expr)) {
+      case ExpressionId.LocalSet: {
+        if (!isLocalTee(expr)) break;
+        return this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
       }
-      return null;
+      case ExpressionId.LocalGet: {
+        return this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+      }
+      case ExpressionId.GlobalGet: {
+        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
+        if (global.kind == ElementKind.GLOBAL) {
+          return <Global>global;
+        }
+        break;
+      }
     }
+    return null;
+  }
 
   /** Looks up the local of the specified name in the current scope. */
   lookupLocal(name: string): Local | null {
@@ -647,7 +647,7 @@ export class Flow {
     }
   }
   getNarrowedType(element: TypedElement): Type | null {
-    return this.narrowedTypes.has(element) ? changetype<Type>(this.narrowedTypes.get(element)) : null
+    return this.narrowedTypes.has(element) ? changetype<Type>(this.narrowedTypes.get(element)) : null;
   }
   
   static mergeLocalType(a: Type | null, b: Type | null): Type | null {
@@ -915,7 +915,7 @@ export class Flow {
     }
 
     // local types
-    const narrowedTypes = other.narrowedTypes
+    const narrowedTypes = other.narrowedTypes;
     for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
       let key = _key[i];
       this.setNarrowedType(key, Flow.mergeLocalType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
@@ -1024,7 +1024,7 @@ export class Flow {
         for (let i = 0, k = rightLocalFlags.length; i < k; ++i) {
           thisLocalFlags[i] = rightLocalFlags[i];
         }
-        const narrowedTypes = right.narrowedTypes
+        const narrowedTypes = right.narrowedTypes;
         for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
           let key = _key[i];
           this.setNarrowedType(key, Flow.mergeLocalType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
@@ -1035,7 +1035,7 @@ export class Flow {
       for (let i = 0, k = leftLocalFlags.length; i < k; ++i) {
         thisLocalFlags[i] = leftLocalFlags[i];
       }
-      const narrowedTypes = left.narrowedTypes
+      const narrowedTypes = left.narrowedTypes;
       for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
         let key = _key[i];
         this.setNarrowedType(key, Flow.mergeLocalType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
