@@ -1257,6 +1257,8 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.FIELD: { // someVar.prop
         let variableLikeElement = <VariableLikeElement>target;
         let type = variableLikeElement.type;
+        let narrowedType = ctxFlow.getNarrowedType(variableLikeElement);
+        if (narrowedType) type = narrowedType;
         assert(type != Type.void);
         let classReference = type.getClassOrWrapper(this.program);
         if (!classReference) {

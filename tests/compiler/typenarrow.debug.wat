@@ -40,6 +40,7 @@
  (data (i32.const 416) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
+ (export "test" (func $typenarrow/test))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
@@ -2153,6 +2154,41 @@
  )
  (func $typenarrow/B#foo (param $0 i32)
   nop
+ )
+ (func $typenarrow/test
+  (local $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $typenarrow/A#constructor
+  local.tee $0
+  i32.store
+  local.get $0
+  local.tee $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   i32.const 4
+   call $~lib/rt/__instanceof
+  end
+  if
+   local.get $0
+   call $typenarrow/B#foo
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)

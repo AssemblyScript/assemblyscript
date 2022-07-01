@@ -2666,11 +2666,13 @@ export class Compiler extends DiagnosticEmitter {
     // ...              ┌◄┘
 
     // Precompute the condition (always executes)
+    this.currentFlow.startCondition();
     var condExpr = this.makeIsTrueish(
       this.compileExpression(statement.condition, Type.bool),
       this.currentType,
       statement.condition
     );
+    this.currentFlow.stopCondition();
     var condKind = this.evaluateCondition(condExpr);
 
     // Shortcut if the condition is constant
@@ -2700,6 +2702,7 @@ export class Compiler extends DiagnosticEmitter {
     var thenFlow = flow.fork();
     this.currentFlow = thenFlow;
     thenFlow.inheritNonnullIfTrue(condExpr);
+    thenFlow.inheritLocalTypeIfTrue(flow);
     if (ifTrue.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>ifTrue).statements, false, thenStmts);
     } else {
@@ -7756,7 +7759,8 @@ export class Compiler extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.LOCAL: {
         let local = <Local>target;
-        let localType = local.type;
+        let narrowedType = flow.getNarrowedType(local);
+        let localType = narrowedType ? narrowedType : local.type;
         assert(localType != Type.void);
         if (this.pendingElements.has(local)) {
           this.error(
@@ -7793,7 +7797,8 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(global)) { // reports; not yet compiled if a static field
           return module.unreachable();
         }
-        let globalType = global.type;
+        let narrowedType = flow.getNarrowedType(global);
+        let globalType = narrowedType ? narrowedType : global.type;
         if (this.pendingElements.has(global)) {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
@@ -7912,6 +7917,9 @@ export class Compiler extends DiagnosticEmitter {
     var expr = this.compileExpression(expression.expression, expectedType);
     var actualType = this.currentType;
     this.currentType = Type.bool;
+
+    let element = flow.lookupTypedElementByExpressionRef(expr);
+    if (element) flow.setConditionLocalType(element, expectedType);
 
     // instanceof <value> - must be exact
     if (expectedType.isValue) {
