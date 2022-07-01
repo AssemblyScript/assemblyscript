@@ -1030,7 +1030,14 @@ export class Resolver extends DiagnosticEmitter {
         );
       }
       case NodeKind.CLASS: {
-        return Type.void;
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            node.range,
+            "Block-scoped class declarations or expressions"
+          );
+        }
+        return null;
       }
       case NodeKind.COMMA: {
         return this.resolveCommaExpression(

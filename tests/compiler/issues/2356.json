@@ -2,7 +2,7 @@
   "asc_flags": [
   ],
   "stderr": [
-    "TS2329: Index signature is missing in type 'void'.",
+    "AS100: Not implemented: Block-scoped class declarations or expressions",
     "class Foo {}[0];",
     "EOF"
   ]
