@@ -4,7 +4,7 @@ console.log("Simple CommonJS transform loaded");
 
 exports.afterRead = (file) => {
   assert(typeof file === "object" && file !== null);
-  assert(typeof file.sourceText === "string" && typeof file.sourceContent === "string");
+  assert(typeof file.sourceText === "string" && typeof file.sourcePath === "string");
   console.log("- afterRead");
 };
 
