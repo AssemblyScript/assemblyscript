@@ -5781,9 +5781,11 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
   }
 
-  private compileAssignment(
+  private compilePatternAssignment(
     expression: Expression,
     valueExpression: Expression,
+    valueExpr: ExpressionRef,
+    valueType: Type,
     contextualType: Type
   ): ExpressionRef {
     var program = this.program;
@@ -5879,10 +5881,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // compile the value and do the assignment
-    assert(targetType != Type.void);
-    var valueExpr = this.compileExpression(valueExpression, targetType);
-    var valueType = this.currentType;
     return this.makeAssignment(
       target,
       this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
@@ -5891,6 +5889,85 @@ export class Compiler extends DiagnosticEmitter {
       thisExpression,
       elementExpression,
       contextualType != Type.void
+    );
+  }
+
+  private compileStaticArrayPatternAssignment(
+    expression: ArrayLiteralExpression,
+    valueExpression: ArrayLiteralExpression,
+  ): ExpressionRef {
+    var exprs = expression.elementExpressions;
+    var exprsLength = exprs.length;
+    var valueExprs = valueExpression.elementExpressions;
+    var valueExprsLength = valueExprs.length;
+    if (exprsLength > valueExprsLength) {
+      for (let i = valueExprsLength; i < exprsLength; ++i) {
+        this.error(
+          DiagnosticCode.Array_of_length_0_has_no_element_at_index_1,
+          exprs[i].range, valueExprsLength.toString(), i.toString()
+        );
+      }
+      return this.module.unreachable();
+    }
+    
+    var block = [];
+
+    var module = this.module;
+    var program = this.program;
+    var resolver = program.resolver;
+    var flow = this.currentFlow;
+
+    var valueElement = resolver.lookupExpression(valueExpression, flow); // reports
+    if (!valueElement) return this.module.unreachable();
+    assert(valueElement.kind == ElementKind.CLASS);
+    var valueElementType = (<Class>valueElement).getArrayValueType();
+
+    var locals: Local[] = new Array(valueExprsLength);
+    for (let i = 0; i < valueExprsLength; ++i) {
+      if (exprs[i].kind == NodeKind.OMITTED) continue;
+      const valueExpr = this.compileExpression(valueExprs[i], valueElementType);
+      let local = flow.getTempLocal(Type.auto);
+      flow.setLocalFlag(local.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
+      locals[i] = local;
+      block.push(this.makeLocalAssignment(local, valueExpr, valueElementType, false));
+    }
+
+    for (let i = 0; i < valueExprsLength; ++i) {
+      let expression = exprs[i];
+      if (expression.kind == NodeKind.OMITTED) continue;
+      let local = locals[i];
+      block.push(this.compilePatternAssignment(
+        expression,
+        valueExprs[i],
+        module.local_get(local.index, valueElementType.toRef()),
+        valueElementType,
+        Type.void
+      ));
+      flow.freeTempLocal(local);
+    }
+
+    return this.module.flatten(block);
+  }
+
+  private compileAssignment(
+    expression: Expression,
+    valueExpression: Expression,
+    contextualType: Type
+  ): ExpressionRef {
+    if (expression.isLiteralKind(LiteralKind.ARRAY) && valueExpression.isLiteralKind(LiteralKind.ARRAY) && contextualType == Type.void) {
+      return this.compileStaticArrayPatternAssignment(<ArrayLiteralExpression>expression, <ArrayLiteralExpression>valueExpression);
+    }
+    
+    // compile the value and do the assignment
+    var valueExpr = this.compileExpression(valueExpression, Type.auto);
+    var valueType = this.currentType;
+    
+    return this.compilePatternAssignment(
+      expression, 
+      valueExpression, 
+      valueExpr,
+      valueType,
+      contextualType
     );
   }
 
