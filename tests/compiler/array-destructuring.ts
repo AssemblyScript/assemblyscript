@@ -6,4 +6,16 @@
   assert(b == 2);
   assert(c == 3);
   assert(d == 5);
+
+  let arr = [5, 4, 3, 2, 1];
+  let barr = [a, b, c, , d] = arr;
+  assert(a == 5);
+  assert(b == 4);
+  assert(c == 3);
+  assert(d == 1);
+  assert(arr == barr);
+
+  [a, b] = [b, a];
+  assert(a == 4);
+  assert(b == 5);
 }

@@ -5781,7 +5781,7 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
   }
 
-  private compilePatternAssignment(
+  private compilePrimaryAssignment(
     expression: Expression,
     valueExpression: Expression,
     contextualType: Type,
@@ -5898,6 +5898,83 @@ export class Compiler extends DiagnosticEmitter {
     );
   }
 
+  private compilePatternAssignment(
+    expression: Expression,
+    valueExpression: Expression,
+    contextualType: Type,
+    valueExpr: ExpressionRef = 0,
+    valueType: Type | null = null,
+  ): ExpressionRef {
+    var program = this.program;
+    var module = this.module;
+    var flow = this.currentFlow;
+
+    if (expression.isLiteralKind(LiteralKind.ARRAY)) {
+      const pattern = <ArrayLiteralExpression>expression;
+      const block = [];
+
+      if (valueExpr == 0 || valueType == null) {
+        // compile the value and do the assignment
+        valueExpr = this.compileExpression(valueExpression, Type.auto);
+        valueType = this.currentType;
+      }
+
+      // add initializer as local
+      let initLocal = flow.getTempLocal(Type.auto);
+      flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
+      block.push(this.makeLocalAssignment(initLocal, valueExpr, valueType, false));
+
+      let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
+      let classType = valueType.getClassOrWrapper(program);
+      let indexedGet: Function | null = null;
+      if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
+        this.error(
+          DiagnosticCode.Index_signature_is_missing_in_type_0,
+          valueExpression.range, valueType.toString()
+        );
+        return module.unreachable();
+      }
+
+      if (!isUnchecked && this.options.pedantic) {
+        this.pedantic(
+          DiagnosticCode.Indexed_access_may_involve_bounds_checking,
+          expression.range
+        );
+      }
+
+      const exprs = pattern.elementExpressions;
+      for (let i = 0, l = exprs.length; i < l; ++i) {
+        let expr = exprs[i];
+        if (expr.kind == NodeKind.OMITTED) continue;
+
+        let indexExpr = this.makeCallDirect(indexedGet, [
+          module.local_get(initLocal.index, valueType.toRef()), module.i32(i)
+        ], valueExpression, false);
+
+        block.push(this.compilePatternAssignment(
+          expr,
+          valueExpression,
+          Type.void,
+          indexExpr,
+          indexedGet.signature.returnType
+        ));
+      }
+
+      if (contextualType == Type.void) {
+        flow.freeTempLocal(initLocal);
+        return this.module.flatten(block);
+      } else {
+        const valueTypeRef = valueType.toRef();
+        block.push(module.local_get(initLocal.index, valueTypeRef));
+        flow.freeTempLocal(initLocal);
+        this.currentType = valueType;
+        return this.module.flatten(block, valueTypeRef);
+      }
+    }
+
+    return this.compilePrimaryAssignment(expression, valueExpression, contextualType, valueExpr, valueType);
+  }
+
   private compileStaticArrayPatternAssignment(
     expression: ArrayLiteralExpression,
     valueExpression: ArrayLiteralExpression,
@@ -5963,7 +6040,6 @@ export class Compiler extends DiagnosticEmitter {
     if (expression.isLiteralKind(LiteralKind.ARRAY) && valueExpression.isLiteralKind(LiteralKind.ARRAY) && contextualType == Type.void) {
       return this.compileStaticArrayPatternAssignment(<ArrayLiteralExpression>expression, <ArrayLiteralExpression>valueExpression);
     }
-        
     return this.compilePatternAssignment(
       expression, 
       valueExpression, 
