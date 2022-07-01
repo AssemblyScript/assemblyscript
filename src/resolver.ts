@@ -1029,6 +1029,9 @@ export class Resolver extends DiagnosticEmitter {
           ctxFlow, ctxType, reportMode
         );
       }
+      case NodeKind.CLASS: {
+        return Type.void;
+      }
       case NodeKind.COMMA: {
         return this.resolveCommaExpression(
           <CommaExpression>node,
