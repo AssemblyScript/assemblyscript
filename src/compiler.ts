@@ -5784,9 +5784,9 @@ export class Compiler extends DiagnosticEmitter {
   private compilePatternAssignment(
     expression: Expression,
     valueExpression: Expression,
-    valueExpr: ExpressionRef,
-    valueType: Type,
-    contextualType: Type
+    contextualType: Type,
+    valueExpr: ExpressionRef = 0,
+    valueType: Type | null = null,
   ): ExpressionRef {
     var program = this.program;
     var resolver = program.resolver;
@@ -5881,6 +5881,12 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    if (valueExpr == 0 || valueType == null) {
+      // compile the value and do the assignment
+      valueExpr = this.compileExpression(valueExpression, targetType);
+      valueType = this.currentType;
+    }
+
     return this.makeAssignment(
       target,
       this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
@@ -5939,9 +5945,9 @@ export class Compiler extends DiagnosticEmitter {
       block.push(this.compilePatternAssignment(
         expression,
         valueExprs[i],
+        Type.void,
         module.local_get(local.index, valueElementType.toRef()),
         valueElementType,
-        Type.void
       ));
       flow.freeTempLocal(local);
     }
@@ -5957,16 +5963,10 @@ export class Compiler extends DiagnosticEmitter {
     if (expression.isLiteralKind(LiteralKind.ARRAY) && valueExpression.isLiteralKind(LiteralKind.ARRAY) && contextualType == Type.void) {
       return this.compileStaticArrayPatternAssignment(<ArrayLiteralExpression>expression, <ArrayLiteralExpression>valueExpression);
     }
-    
-    // compile the value and do the assignment
-    var valueExpr = this.compileExpression(valueExpression, Type.auto);
-    var valueType = this.currentType;
-    
+        
     return this.compilePatternAssignment(
       expression, 
       valueExpression, 
-      valueExpr,
-      valueType,
       contextualType
     );
   }
