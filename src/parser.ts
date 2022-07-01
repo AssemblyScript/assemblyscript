@@ -84,7 +84,6 @@ import {
   TypeParameterNode,
   VariableStatement,
   VariableDeclaration,
-  VoidStatement,
   WhileStatement,
   ModuleDeclaration,
 
@@ -2916,10 +2915,6 @@ export class Parser extends DiagnosticEmitter {
         statement = this.parseTryStatement(tn);
         break;
       }
-      case Token.VOID: {
-        statement = this.parseVoidStatement(tn);
-        break;
-      }
       case Token.WHILE: {
         statement = this.parseWhileStatement(tn);
         break;
@@ -3586,20 +3581,6 @@ export class Parser extends DiagnosticEmitter {
     var moduleName = tn.readString();
     var ret = Node.createModuleDeclaration(moduleName, flags, tn.range(startPos, tn.pos));
     this.currentModuleName = moduleName;
-    tn.skip(Token.SEMICOLON);
-    return ret;
-  }
-
-  parseVoidStatement(
-    tn: Tokenizer
-  ): VoidStatement | null {
-
-    // at 'void': Expression ';'?
-
-    var startPos = tn.tokenPos;
-    var expression = this.parseExpression(tn, Precedence.GROUPING);
-    if (!expression) return null;
-    var ret = Node.createVoidStatement(expression, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
     return ret;
   }

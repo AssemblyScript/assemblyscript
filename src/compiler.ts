@@ -145,7 +145,6 @@ import {
   ThrowStatement,
   TryStatement,
   VariableStatement,
-  VoidStatement,
   WhileStatement,
 
   Expression,
@@ -2169,10 +2168,6 @@ export class Compiler extends DiagnosticEmitter {
         if (!stmt) stmt = module.nop();
         break;
       }
-      case NodeKind.VOID: {
-        stmt = this.compileVoidStatement(<VoidStatement>statement);
-        break;
-      }
       case NodeKind.WHILE: {
         stmt = this.compileWhileStatement(<WhileStatement>statement);
         break;
@@ -3149,14 +3144,6 @@ export class Compiler extends DiagnosticEmitter {
     return initializers.length == 0
       ? 0
       : module.flatten(initializers);
-  }
-
-  private compileVoidStatement(
-    statement: VoidStatement
-  ): ExpressionRef {
-    return this.compileExpression(statement.expression, Type.void,
-      Constraints.CONV_EXPLICIT | Constraints.WILL_DROP
-    );
   }
 
   private compileWhileStatement(
@@ -9901,6 +9888,11 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.TYPEOF: {
         return this.compileTypeof(expression, contextualType, constraints);
+      }
+      case Token.VOID: {
+        return this.compileExpression(expression.operand, Type.void,
+          Constraints.CONV_EXPLICIT | Constraints.WILL_DROP
+        );
       }
       case Token.DOT_DOT_DOT: {
         this.error(

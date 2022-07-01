@@ -366,8 +366,7 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.NULL:
     case Token.READONLY:
     case Token.SET:
-    case Token.TYPE:
-    case Token.VOID: return true;
+    case Token.TYPE: return true;
     default: return false;
   }
 }
