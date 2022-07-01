@@ -2992,7 +2992,6 @@ export abstract class TypedElement extends DeclaredElement {
 
   /** Resolved type. Set once `is(RESOLVED)`, otherwise void. */
   type: Type = Type.void;
-  typeStack: Type[] = [];
 
   constructor(
     /** Specific element kind. */
@@ -3017,15 +3016,6 @@ export abstract class TypedElement extends DeclaredElement {
     assert(!this.is(CommonFlags.RESOLVED));
     this.type = type;
     this.set(CommonFlags.RESOLVED);
-  }
-  narrowType(type: Type): void {
-    if (type.isClass) {
-      this.typeStack.push(this.type);
-      this.type = type;
-    }
-  }
-  recoverType(): void {
-    this.type = this.typeStack.length > 0 ? this.typeStack.pop() : this.type;
   }
 }
 

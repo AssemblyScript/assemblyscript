@@ -88,8 +88,7 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName,
-  TypedElement
+  mangleInternalName
 } from "./program";
 
 import {
@@ -211,7 +210,6 @@ import {
 import {
   ShadowStackPass
 } from "./passes/shadowstack";
-import { TypeNarrowInfo } from "./conditionInfo";
 
 /** Compiler options. */
 export class Options {
@@ -2667,17 +2665,12 @@ export class Compiler extends DiagnosticEmitter {
     // )                 └┬─────────┴─┘
     // ...              ┌◄┘
 
-    this.currentFlow.startCompileCondition();
-
     // Precompute the condition (always executes)
     var condExpr = this.makeIsTrueish(
       this.compileExpression(statement.condition, Type.bool),
       this.currentType,
       statement.condition
     );
-
-    const conditionInfoContainer = this.currentFlow.stopCompileCondition();
-
     var condKind = this.evaluateCondition(condExpr);
 
     // Shortcut if the condition is constant
@@ -2707,13 +2700,11 @@ export class Compiler extends DiagnosticEmitter {
     var thenFlow = flow.fork();
     this.currentFlow = thenFlow;
     thenFlow.inheritNonnullIfTrue(condExpr);
-    conditionInfoContainer.trueInfo.forEach((info) => info.apply());
     if (ifTrue.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>ifTrue).statements, false, thenStmts);
     } else {
       thenStmts.push(this.compileStatement(ifTrue));
     }
-    conditionInfoContainer.trueInfo.forEach((info) => info.recover());
     var thenTerminates = thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS);
     if (thenTerminates) {
       thenStmts.push(module.unreachable());
@@ -2727,13 +2718,11 @@ export class Compiler extends DiagnosticEmitter {
       let elseFlow = flow.fork();
       this.currentFlow = elseFlow;
       elseFlow.inheritNonnullIfFalse(condExpr);
-      conditionInfoContainer.falseInfo.forEach((info) => info.apply());
       if (ifFalse.kind == NodeKind.BLOCK) {
         this.compileStatements((<BlockStatement>ifFalse).statements, false, elseStmts);
       } else {
         elseStmts.push(this.compileStatement(ifFalse));
       }
-      conditionInfoContainer.falseInfo.forEach((info) => info.recover());
       let elseTerminates = elseFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS);
       if (elseTerminates) {
         elseStmts.push(module.unreachable());
@@ -5857,7 +5846,6 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var target = resolver.lookupExpression(expression, flow); // reports
     if (!target) return this.module.unreachable();
-    if (target instanceof TypedElement) (<TypedElement>target).recoverType();
     var thisExpression = resolver.currentThisExpression;
     var elementExpression = resolver.currentElementExpression;
 
@@ -7914,14 +7902,6 @@ export class Compiler extends DiagnosticEmitter {
     if (!expectedType) {
       this.currentType = Type.bool;
       return this.module.unreachable();
-    }
-    if (expression.expression.kind == NodeKind.IDENTIFIER) {
-      const identifier = <IdentifierExpression>expression.expression;
-      const element = flow.lookup(identifier.text);
-      if (element && element instanceof TypedElement) {
-        const typedElement = <TypedElement>element;
-        flow.addConditionInfo(new TypeNarrowInfo(typedElement, expectedType));
-      }
     }
     return this.makeInstanceofType(expression, expectedType);
   }
