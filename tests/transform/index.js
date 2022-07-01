@@ -32,7 +32,7 @@ export default class MyTransform extends Transform {
     await defer();
     await defer();
     this.log("  complete");
-    assert(constructorCalled && afterReadCalled && afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterReadCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
   }
   async afterParse() {
     check(this);
