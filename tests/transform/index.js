@@ -2,6 +2,7 @@ import assert from "assert";
 import { Transform } from "../../dist/transform.js";
 
 var constructorCalled = false;
+var afterReadCalled = false;
 var afterParseCalled = false;
 var afterInitializeCalled = false;
 var afterCompileCalled = false;
@@ -10,35 +11,51 @@ console.log("Transform loaded");
 
 export default class MyTransform extends Transform {
   constructor() {
-    assert(!constructorCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(
+      !constructorCalled
+      && !afterReadCalled
+      && !afterParseCalled
+      && !afterInitializeCalled
+      && !afterCompileCalled);
     constructorCalled = true;
     super();
     check(this);
     this.log("- constructor");
-    assert(constructorCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && !afterReadCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+  }
+  async afterRead() {
+    check(this);
+    assert(constructorCalled && !afterReadCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    afterReadCalled = true;
+    this.log("- afterRead");
+    await defer();
+    await defer();
+    await defer();
+    this.log("  complete");
+    assert(constructorCalled && afterReadCalled && afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
   }
   async afterParse() {
     check(this);
-    assert(constructorCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterReadCalled && !afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
     afterParseCalled = true;
     this.log("- afterParse");
     await defer();
     await defer();
     await defer();
     this.log("  complete");
-    assert(constructorCalled && afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterReadCalled && afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
   }
   afterInitialize() {
     check(this);
-    assert(constructorCalled && afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterReadCalled && afterParseCalled && !afterInitializeCalled && !afterCompileCalled);
     afterInitializeCalled = true;
     this.log("- afterInitialize");
-    assert(constructorCalled && afterParseCalled && afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterReadCalled && afterParseCalled && afterInitializeCalled && !afterCompileCalled);
     return defer();
   }
   afterCompile() {
     check(this);
-    assert(constructorCalled && afterParseCalled && afterInitializeCalled && !afterCompileCalled);
+    assert(constructorCalled && afterReadCalled && afterParseCalled && afterInitializeCalled && !afterCompileCalled);
     afterCompileCalled = true;
     this.log("- afterCompile");
   }

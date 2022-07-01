@@ -2,6 +2,12 @@ const assert = require("assert");
 
 console.log("Simple CommonJS transform loaded");
 
+exports.afterRead = (file) => {
+  assert(typeof file === "object" && file !== null);
+  assert(typeof file.sourceText === "string" && typeof file.sourceContent === "string");
+  console.log("- afterRead");
+};
+
 exports.afterParse = (parser) => {
   assert(typeof parser === "object" && parser !== null);
   console.log("- afterParse");

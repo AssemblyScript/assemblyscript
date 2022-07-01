@@ -2,6 +2,12 @@ import assert from "assert";
 
 console.log("Simple transform loaded");
 
+export function afterRead(file) {
+  assert(typeof file === "object" && file !== null);
+  assert(typeof file.sourceText === "string" && typeof file.source === "string");
+  console.log("- afterRead");
+}
+
 export function afterParse(parser) {
   assert(typeof parser === "object" && parser !== null);
   console.log("- afterParse");

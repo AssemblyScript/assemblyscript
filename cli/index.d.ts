@@ -269,6 +269,9 @@ export abstract class Transform {
   /** Lists all files in a directory. */
   listFiles(dirname: string, baseDir: string): (string[] | null) | Promise<string[] | null>;
 
+  /** Called when file was read, before parsing the content. */
+  afterRead?(file: { sourceText: string, sourcePath: string }): Promise<void>;
+
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void | Promise<void>;
 
