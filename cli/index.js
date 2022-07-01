@@ -586,7 +586,8 @@ export async function main(argv, options) {
     // No such file
     if (sourceText == null) return null;
     const file = { sourceText, sourcePath };
-    await applyTransform("afterRead", file);
+    let error = await applyTransform("afterRead", file);
+    if (error) return prepareResult(error);
     return file;
   }
 
