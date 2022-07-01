@@ -4,7 +4,7 @@ console.log("Simple transform loaded");
 
 export function afterRead(file) {
   assert(typeof file === "object" && file !== null);
-  assert(typeof file.sourceText === "string" && typeof file.source === "string");
+  assert(typeof file.sourceText === "string" && typeof file.sourcePath === "string");
   console.log("- afterRead");
 }
 
