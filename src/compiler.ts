@@ -5942,13 +5942,14 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
+      const valueTypeRef = valueType.toRef();
       const exprs = pattern.elementExpressions;
       for (let i = 0, l = exprs.length; i < l; ++i) {
         let expr = exprs[i];
         if (expr.kind == NodeKind.OMITTED) continue;
 
         let indexExpr = this.makeCallDirect(indexedGet, [
-          module.local_get(initLocal.index, valueType.toRef()), module.i32(i)
+          module.local_get(initLocal.index, valueTypeRef), module.i32(i)
         ], valueExpression, false);
 
         block.push(this.compilePatternAssignment(
@@ -5964,7 +5965,6 @@ export class Compiler extends DiagnosticEmitter {
         flow.freeTempLocal(initLocal);
         return this.module.flatten(block);
       } else {
-        const valueTypeRef = valueType.toRef();
         block.push(module.local_get(initLocal.index, valueTypeRef));
         flow.freeTempLocal(initLocal);
         this.currentType = valueType;

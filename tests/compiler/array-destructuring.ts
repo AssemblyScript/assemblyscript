@@ -1,3 +1,9 @@
+class Foo {
+  @operator("[]")
+  __get(index: i32): i32 { 
+    return index + 2;
+  }
+}
 
 {
   let a: i32, b: i32, c: i32, d: i32;
@@ -15,7 +21,15 @@
   assert(d == 1);
   assert(arr == barr);
 
+  [] = arr;
+  [,] = arr;
+
   [a, b] = [b, a];
   assert(a == 4);
   assert(b == 5);
+
+  [a, b] = new Foo();
+  assert(a == 2);
+  assert(b == 3);
 }
+
