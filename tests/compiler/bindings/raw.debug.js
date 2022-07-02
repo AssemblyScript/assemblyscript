@@ -173,7 +173,7 @@ export async function instantiate(module, imports = {}) {
     },
   }, exports);
   function __lowerRecord8(value) {
-    // bindings/esm/PlainObject
+    // PlainObject
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
     const pointer = exports.__pin(exports.__new(68, 8));
@@ -197,7 +197,7 @@ export async function instantiate(module, imports = {}) {
     return pointer;
   }
   function __liftRecord8(pointer) {
-    // bindings/esm/PlainObject
+    // PlainObject
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!pointer) return null;
     return {

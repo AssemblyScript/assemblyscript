@@ -2335,7 +2335,7 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<string>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2383,7 +2383,7 @@
  (func $~lib/array/Array<~lib/string/String>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<~lib/string/String>#__visit
+  call $~lib/array/Array<string>#__visit
  )
  (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0

@@ -10,17 +10,17 @@
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $NonNullable/z (mut i32) (i32.const 224))
- (global $~lib/memory/__data_end i32 (i32.const 300))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16684))
- (global $~lib/memory/__heap_base i32 (i32.const 16684))
+ (global $NonNullable/z (mut i32) (i32.const 192))
+ (global $~lib/memory/__data_end i32 (i32.const 268))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16652))
+ (global $~lib/memory/__heap_base i32 (i32.const 16652))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00u\003\002\00\00\00\00\00\00\00")
  (data (i32.const 44) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00N\00o\00n\00N\00u\00l\00l\00a\00b\00l\00e\00.\00t\00s\00")
  (data (i32.const 92) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00S\00t\00r\00i\00n\00g\00")
- (data (i32.const 124) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\002\00\00\00A\00r\00r\00a\00y\00<\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00/\00S\00t\00r\00i\00n\00g\00>\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 204) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00z\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 236) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 124) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00A\00r\00r\00a\00y\00<\00s\00t\00r\00i\00n\00g\00>\00\00\00")
+ (data (i32.const 172) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00z\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 204) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -220,8 +220,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16704
-   i32.const 16752
+   i32.const 16672
+   i32.const 16720
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -316,7 +316,7 @@
   if (result i32)
    local.get $0
   else
-   i32.const 256
+   i32.const 224
    i32.const 64
    i32.const 20
    i32.const 40

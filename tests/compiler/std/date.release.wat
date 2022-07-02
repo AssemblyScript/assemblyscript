@@ -2796,7 +2796,7 @@
   end
   i32.const -1
  )
- (func $~lib/array/Array<~lib/string/String>#push (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<string>#push (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4575,14 +4575,14 @@
         memory.copy
         local.get $5
         local.get $7
-        call $~lib/array/Array<~lib/string/String>#push
+        call $~lib/array/Array<string>#push
        else
         global.get $~lib/memory/__stack_pointer
         i32.const 3456
         i32.store offset=20
         local.get $5
         i32.const 3456
-        call $~lib/array/Array<~lib/string/String>#push
+        call $~lib/array/Array<string>#push
        end
        local.get $3
        i32.const 1
@@ -4603,7 +4603,7 @@
      if
       local.get $5
       local.get $0
-      call $~lib/array/Array<~lib/string/String>#push
+      call $~lib/array/Array<string>#push
       br $folding-inner2
      end
      local.get $4
@@ -4632,14 +4632,14 @@
       memory.copy
       local.get $5
       local.get $3
-      call $~lib/array/Array<~lib/string/String>#push
+      call $~lib/array/Array<string>#push
      else
       global.get $~lib/memory/__stack_pointer
       i32.const 3456
       i32.store offset=20
       local.get $5
       i32.const 3456
-      call $~lib/array/Array<~lib/string/String>#push
+      call $~lib/array/Array<string>#push
      end
      global.get $~lib/memory/__stack_pointer
      i32.const 24
@@ -4760,7 +4760,7 @@
    end
    local.get $0
    i32.const 0
-   call $~lib/array/Array<~lib/string/String>#__get
+   call $~lib/array/Array<string>#__get
    local.set $3
    global.get $~lib/memory/__stack_pointer
    local.get $3
@@ -4770,7 +4770,7 @@
    local.set $3
    local.get $0
    i32.const 1
-   call $~lib/array/Array<~lib/string/String>#__get
+   call $~lib/array/Array<string>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -4785,7 +4785,7 @@
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.const 2
-    call $~lib/array/Array<~lib/string/String>#__get
+    call $~lib/array/Array<string>#__get
     local.tee $0
     i32.store offset=20
     global.get $~lib/memory/__stack_pointer
@@ -4842,7 +4842,7 @@
   i32.store offset=24
   local.get $0
   i32.const 0
-  call $~lib/array/Array<~lib/string/String>#__get
+  call $~lib/array/Array<string>#__get
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -4859,7 +4859,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<~lib/string/String>#__get
+   call $~lib/array/Array<string>#__get
    local.set $1
    global.get $~lib/memory/__stack_pointer
    local.get $1
@@ -4873,7 +4873,7 @@
    if (result i32)
     local.get $0
     i32.const 2
-    call $~lib/array/Array<~lib/string/String>#__get
+    call $~lib/array/Array<string>#__get
     local.set $0
     global.get $~lib/memory/__stack_pointer
     local.get $0
@@ -8579,7 +8579,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
- (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<string>#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub

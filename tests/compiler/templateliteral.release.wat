@@ -1716,7 +1716,7 @@
   memory.fill
   local.get $1
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<string>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -1732,7 +1732,7 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__link
   end
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#join (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<string>#join (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3392,14 +3392,14 @@
    i32.const 1744
    i32.const 1
    i32.const 1056
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+   call $~lib/staticarray/StaticArray<string>#__uset
    global.get $~lib/memory/__stack_pointer
    i32.const 1744
    i32.store offset=16
    i32.const 1744
    i32.const 3
    i32.const 1088
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+   call $~lib/staticarray/StaticArray<string>#__uset
    global.get $~lib/memory/__stack_pointer
    i32.const 1744
    i32.store offset=16
@@ -3407,7 +3407,7 @@
    i32.const 1184
    i32.store offset=20
    i32.const 1744
-   call $~lib/staticarray/StaticArray<~lib/string/String>#join
+   call $~lib/staticarray/StaticArray<string>#join
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -3514,14 +3514,14 @@
    i32.const 3680
    i32.const 1
    local.get $0
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+   call $~lib/staticarray/StaticArray<string>#__uset
    global.get $~lib/memory/__stack_pointer
    i32.const 3680
    i32.store offset=8
    i32.const 3680
    i32.const 3
    local.get $1
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+   call $~lib/staticarray/StaticArray<string>#__uset
    global.get $~lib/memory/__stack_pointer
    i32.const 3680
    i32.store offset=8
@@ -3529,7 +3529,7 @@
    i32.const 1184
    i32.store offset=12
    i32.const 3680
-   call $~lib/staticarray/StaticArray<~lib/string/String>#join
+   call $~lib/staticarray/StaticArray<string>#join
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -3636,14 +3636,14 @@
    i32.const 4976
    i32.const 1
    local.get $0
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+   call $~lib/staticarray/StaticArray<string>#__uset
    global.get $~lib/memory/__stack_pointer
    i32.const 4976
    i32.store offset=8
    i32.const 4976
    i32.const 3
    local.get $1
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+   call $~lib/staticarray/StaticArray<string>#__uset
    global.get $~lib/memory/__stack_pointer
    i32.const 4976
    i32.store offset=8
@@ -3651,7 +3651,7 @@
    i32.const 1184
    i32.store offset=12
    i32.const 4976
-   call $~lib/staticarray/StaticArray<~lib/string/String>#join
+   call $~lib/staticarray/StaticArray<string>#join
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -3770,14 +3770,14 @@
    i32.const 5440
    i32.const 1
    local.get $1
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+   call $~lib/staticarray/StaticArray<string>#__uset
    global.get $~lib/memory/__stack_pointer
    i32.const 5440
    i32.store offset=16
    i32.const 5440
    i32.const 3
    local.get $0
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+   call $~lib/staticarray/StaticArray<string>#__uset
    global.get $~lib/memory/__stack_pointer
    i32.const 5440
    i32.store offset=16
@@ -3785,7 +3785,7 @@
    i32.const 1184
    i32.store offset=20
    i32.const 5440
-   call $~lib/staticarray/StaticArray<~lib/string/String>#join
+   call $~lib/staticarray/StaticArray<string>#join
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -4272,14 +4272,14 @@
   i32.const 5616
   i32.const 1
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+  call $~lib/staticarray/StaticArray<string>#__uset
   global.get $~lib/memory/__stack_pointer
   i32.const 5616
   i32.store offset=12
   i32.const 5616
   i32.const 3
   local.get $1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#__uset
+  call $~lib/staticarray/StaticArray<string>#__uset
   global.get $~lib/memory/__stack_pointer
   i32.const 5616
   i32.store offset=12
@@ -4287,7 +4287,7 @@
   i32.const 1184
   i32.store offset=16
   i32.const 5616
-  call $~lib/staticarray/StaticArray<~lib/string/String>#join
+  call $~lib/staticarray/StaticArray<string>#join
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.add

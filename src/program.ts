@@ -66,7 +66,8 @@ import {
   Type,
   TypeKind,
   Signature,
-  TypeFlags
+  TypeFlags,
+  typesToString
 } from "./types";
 
 import {
@@ -3610,7 +3611,9 @@ export class Function extends TypedElement {
   ) {
     super(
       ElementKind.FUNCTION,
-      nameInclTypeParameters,
+      typeArguments
+        ? prototype.name + "<" + typesToString(typeArguments, true) + ">"
+        : prototype.name,
       mangleInternalName(nameInclTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
       prototype.program,
       prototype.parent,
@@ -4224,7 +4227,9 @@ export class Class extends TypedElement {
   ) {
     super(
       _isInterface ? ElementKind.INTERFACE : ElementKind.CLASS,
-      nameInclTypeParameters,
+      typeArguments
+        ? prototype.name + "<" + typesToString(typeArguments, true) +  ">"
+        : prototype.name,
       mangleInternalName(nameInclTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
       prototype.program,
       prototype.parent,

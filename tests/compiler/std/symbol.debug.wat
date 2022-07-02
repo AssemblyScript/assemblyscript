@@ -2727,22 +2727,22 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/map/Map<~lib/string/String,usize>#has (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<string,usize>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<~lib/string/String,usize>#find
+  call $~lib/map/Map<string,usize>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<~lib/string/String,usize>#get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<string,usize>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<~lib/string/String,usize>#find
+  call $~lib/map/Map<string,usize>#find
   local.set $2
   local.get $2
   i32.eqz
@@ -2772,7 +2772,7 @@
   local.get $1
   i32.store offset=8
  )
- (func $~lib/map/Map<~lib/string/String,usize>#rehash (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<string,usize>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2980,7 +2980,7 @@
   local.get $3
   return
  )
- (func $~lib/map/Map<usize,~lib/string/String>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<usize,string>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3045,7 +3045,7 @@
   local.get $1
   i32.store offset=8
  )
- (func $~lib/map/Map<usize,~lib/string/String>#rehash (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,string>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3183,22 +3183,22 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/map/Map<usize,~lib/string/String>#has (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,string>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<usize>
-  call $~lib/map/Map<usize,~lib/string/String>#find
+  call $~lib/map/Map<usize,string>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<usize,~lib/string/String>#get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,string>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<usize>
-  call $~lib/map/Map<usize,~lib/string/String>#find
+  call $~lib/map/Map<usize,string>#find
   local.set $2
   local.get $2
   i32.eqz
@@ -3286,7 +3286,7 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/map/Map<~lib/string/String,usize>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<string,usize>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3353,9 +3353,9 @@
  (func $~lib/map/Map<~lib/string/String,usize>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/map/Map<~lib/string/String,usize>#__visit
+  call $~lib/map/Map<string,usize>#__visit
  )
- (func $~lib/map/Map<usize,~lib/string/String>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,string>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3422,7 +3422,7 @@
  (func $~lib/map/Map<usize,~lib/string/String>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/map/Map<usize,~lib/string/String>#__visit
+  call $~lib/map/Map<usize,string>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
@@ -3480,7 +3480,7 @@
    unreachable
   end
  )
- (func $~lib/map/Map<~lib/string/String,usize>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<string,usize>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3572,10 +3572,10 @@
   i32.eqz
   if
    i32.const 0
-   call $~lib/map/Map<~lib/string/String,usize>#constructor
+   call $~lib/map/Map<string,usize>#constructor
    global.set $~lib/symbol/stringToId
    i32.const 0
-   call $~lib/map/Map<usize,~lib/string/String>#constructor
+   call $~lib/map/Map<usize,string>#constructor
    global.set $~lib/symbol/idToString
   else
    global.get $~lib/symbol/stringToId
@@ -3585,7 +3585,7 @@
    i32.store
    local.get $3
    local.get $0
-   call $~lib/map/Map<~lib/string/String,usize>#has
+   call $~lib/map/Map<string,usize>#has
    if
     global.get $~lib/symbol/stringToId
     local.set $3
@@ -3594,7 +3594,7 @@
     i32.store
     local.get $3
     local.get $0
-    call $~lib/map/Map<~lib/string/String,usize>#get
+    call $~lib/map/Map<string,usize>#get
     local.set $3
     global.get $~lib/memory/__stack_pointer
     i32.const 4
@@ -3624,7 +3624,7 @@
   local.get $3
   local.get $0
   local.get $2
-  call $~lib/map/Map<~lib/string/String,usize>#set
+  call $~lib/map/Map<string,usize>#set
   drop
   global.get $~lib/symbol/idToString
   local.set $3
@@ -3634,7 +3634,7 @@
   local.get $3
   local.get $2
   local.get $0
-  call $~lib/map/Map<usize,~lib/string/String>#set
+  call $~lib/map/Map<usize,string>#set
   drop
   local.get $2
   local.set $3
@@ -3665,7 +3665,7 @@
    i32.store
    local.get $1
    local.get $0
-   call $~lib/map/Map<usize,~lib/string/String>#has
+   call $~lib/map/Map<usize,string>#has
   else
    i32.const 0
   end
@@ -3677,7 +3677,7 @@
    i32.store
    local.get $1
    local.get $0
-   call $~lib/map/Map<usize,~lib/string/String>#get
+   call $~lib/map/Map<usize,string>#get
   else
    i32.const 0
   end
@@ -3848,7 +3848,7 @@
     i32.store offset=4
     local.get $4
     local.get $1
-    call $~lib/map/Map<usize,~lib/string/String>#has
+    call $~lib/map/Map<usize,string>#has
    else
     i32.const 0
    end
@@ -3861,7 +3861,7 @@
     i32.store offset=4
     local.get $4
     local.get $1
-    call $~lib/map/Map<usize,~lib/string/String>#get
+    call $~lib/map/Map<usize,string>#get
     local.tee $2
     i32.store
    end
@@ -4245,7 +4245,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
- (func $~lib/map/Map<~lib/string/String,usize>#constructor (param $0 i32) (result i32)
+ (func $~lib/map/Map<string,usize>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4301,7 +4301,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/map/Map<usize,~lib/string/String>#constructor (param $0 i32) (result i32)
+ (func $~lib/map/Map<usize,string>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4357,7 +4357,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/map/Map<~lib/string/String,usize>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<string,usize>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4377,7 +4377,7 @@
   local.get $0
   local.get $1
   local.get $3
-  call $~lib/map/Map<~lib/string/String,usize>#find
+  call $~lib/map/Map<string,usize>#find
   local.set $4
   local.get $4
   if
@@ -4414,7 +4414,7 @@
      i32.const 1
      i32.or
     end
-    call $~lib/map/Map<~lib/string/String,usize>#rehash
+    call $~lib/map/Map<string,usize>#rehash
    end
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -4480,7 +4480,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $7
  )
- (func $~lib/map/Map<usize,~lib/string/String>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<usize,string>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4500,7 +4500,7 @@
   local.get $0
   local.get $1
   local.get $3
-  call $~lib/map/Map<usize,~lib/string/String>#find
+  call $~lib/map/Map<usize,string>#find
   local.set $4
   local.get $4
   if
@@ -4541,7 +4541,7 @@
      i32.const 1
      i32.or
     end
-    call $~lib/map/Map<usize,~lib/string/String>#rehash
+    call $~lib/map/Map<usize,string>#rehash
    end
    global.get $~lib/memory/__stack_pointer
    local.get $0

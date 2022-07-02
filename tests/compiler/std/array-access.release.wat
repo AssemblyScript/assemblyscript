@@ -117,7 +117,7 @@
   local.get $2
   i32.eqz
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Array<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -202,7 +202,7 @@
    i32.store
    local.get $0
    i32.const 0
-   call $~lib/array/Array<~lib/array/Array<i32>>#__get
+   call $~lib/array/Array<Array<i32>>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -267,7 +267,7 @@
    i32.store
    local.get $0
    i32.const 0
-   call $~lib/array/Array<~lib/array/Array<i32>>#__get
+   call $~lib/array/Array<Array<i32>>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -323,7 +323,7 @@
    i64.store
    local.get $0
    i32.const 0
-   call $~lib/array/Array<~lib/array/Array<i32>>#__get
+   call $~lib/array/Array<Array<i32>>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -378,14 +378,14 @@
    i64.store
    local.get $0
    i32.const 0
-   call $~lib/array/Array<~lib/array/Array<i32>>#__get
+   call $~lib/array/Array<Array<i32>>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=4
    local.get $0
    i32.const 1
-   call $~lib/array/Array<~lib/array/Array<i32>>#__get
+   call $~lib/array/Array<Array<i32>>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
@@ -445,14 +445,14 @@
    i32.store offset=8
    local.get $0
    i32.const 0
-   call $~lib/array/Array<~lib/array/Array<i32>>#__get
+   call $~lib/array/Array<Array<i32>>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store offset=8
    local.get $0
    i32.const 1
-   call $~lib/array/Array<~lib/array/Array<i32>>#__get
+   call $~lib/array/Array<Array<i32>>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0

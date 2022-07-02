@@ -2339,7 +2339,7 @@
    unreachable
   end
  )
- (func $issues/2166/Test2166Ref1<~lib/string/String>#fn<i32> (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $issues/2166/Test2166Ref1<string>#fn<i32> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2411,7 +2411,7 @@
   i64.store
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  call $issues/2166/Test2166Ref1<~lib/string/String>#constructor
+  call $issues/2166/Test2166Ref1<string>#constructor
   local.tee $0
   i32.store
   local.get $0
@@ -2422,7 +2422,7 @@
   i32.store offset=4
   local.get $1
   i32.const 1
-  call $issues/2166/Test2166Ref1<~lib/string/String>#fn<i32>
+  call $issues/2166/Test2166Ref1<string>#fn<i32>
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -2565,7 +2565,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $issues/2166/Test2166Ref1<~lib/string/String>#constructor (param $0 i32) (result i32)
+ (func $issues/2166/Test2166Ref1<string>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4

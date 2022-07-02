@@ -475,7 +475,7 @@ export class Type {
       let classReference = this.getClass();
       if (classReference) {
         let internalName = classReference.internalName;
-        if (noInternalStd && internalName.startsWith(LIBRARY_SUBST)) {
+        if (noInternalStd) {
           let name = classReference.name;
           if (name == "String") name = "string";
           if (name == "Symbol") name = "symbol";
@@ -736,11 +736,11 @@ export function typesToRefs(types: Type[]): TypeRef[] {
 }
 
 /** Converts an array of types to its combined string representation. */
-export function typesToString(types: Type[]): string {
+export function typesToString(types: Type[], noInternalStd: bool = false): string {
   var numTypes = types.length;
   if (!numTypes) return "";
   var sb = new Array<string>(numTypes);
-  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true, false);
+  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true, noInternalStd);
   return sb.join(",");
 }
 

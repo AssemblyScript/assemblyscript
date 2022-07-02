@@ -2283,19 +2283,19 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $class-overloading-cast/B<i32,~lib/string/String>#foo (param $0 i32) (param $1 i32) (result i32)
+ (func $class-overloading-cast/B<i32,string>#foo (param $0 i32) (param $1 i32) (result i32)
   i32.const 464
  )
  (func $class-overloading-cast/A<f64>#foo (param $0 i32) (param $1 f64) (result i32)
   i32.const 432
  )
- (func $class-overloading-cast/A<~lib/string/String>#foo (param $0 i32) (param $1 i32) (result i32)
+ (func $class-overloading-cast/A<string>#foo (param $0 i32) (param $1 i32) (result i32)
   i32.const 432
  )
  (func $class-overloading-cast/B<i32,f64>#foo (param $0 i32) (param $1 i32) (result i32)
   i32.const 464
  )
- (func $class-overloading-cast/B<f64,~lib/string/String>#foo (param $0 i32) (param $1 f64) (result i32)
+ (func $class-overloading-cast/B<f64,string>#foo (param $0 i32) (param $1 f64) (result i32)
   i32.const 464
  )
  (func $class-overloading-cast/A<i32>#foo@virtual (param $0 i32) (param $1 i32) (result i32)
@@ -2325,7 +2325,7 @@
    end
    local.get $0
    local.get $1
-   call $class-overloading-cast/B<i32,~lib/string/String>#foo
+   call $class-overloading-cast/B<i32,string>#foo
    return
   end
   local.get $0
@@ -2349,14 +2349,14 @@
    end
    local.get $0
    local.get $1
-   call $class-overloading-cast/B<f64,~lib/string/String>#foo
+   call $class-overloading-cast/B<f64,string>#foo
    return
   end
   local.get $0
   local.get $1
   call $class-overloading-cast/A<f64>#foo
  )
- (func $class-overloading-cast/A<~lib/string/String>#foo@virtual (param $0 i32) (param $1 i32) (result i32)
+ (func $class-overloading-cast/A<string>#foo@virtual (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 8
@@ -2365,7 +2365,7 @@
   drop
   local.get $0
   local.get $1
-  call $class-overloading-cast/A<~lib/string/String>#foo
+  call $class-overloading-cast/A<string>#foo
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
@@ -2514,10 +2514,10 @@
   call $class-overloading-cast/B<i32,f64>#constructor
   global.set $class-overloading-cast/v
   i32.const 0
-  call $class-overloading-cast/B<i32,~lib/string/String>#constructor
+  call $class-overloading-cast/B<i32,string>#constructor
   global.set $class-overloading-cast/v2
   i32.const 0
-  call $class-overloading-cast/B<f64,~lib/string/String>#constructor
+  call $class-overloading-cast/B<f64,string>#constructor
   global.set $class-overloading-cast/v3
   global.get $class-overloading-cast/v
   local.set $0
@@ -2555,7 +2555,7 @@
   i32.store offset=8
   local.get $0
   i32.const 1
-  call $class-overloading-cast/B<i32,~lib/string/String>#foo
+  call $class-overloading-cast/B<i32,string>#foo
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2621,7 +2621,7 @@
   local.get $0
   i32.store offset=12
   local.get $0
-  call $class-overloading-cast/A<~lib/string/String>#foo@virtual
+  call $class-overloading-cast/A<string>#foo@virtual
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2655,7 +2655,7 @@
   local.get $0
   i32.store offset=12
   local.get $0
-  call $class-overloading-cast/A<~lib/string/String>#foo@virtual
+  call $class-overloading-cast/A<string>#foo@virtual
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2743,7 +2743,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading-cast/B<i32,~lib/string/String>#constructor (param $0 i32) (result i32)
+ (func $class-overloading-cast/B<i32,string>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2804,7 +2804,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading-cast/B<f64,~lib/string/String>#constructor (param $0 i32) (result i32)
+ (func $class-overloading-cast/B<f64,string>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2837,7 +2837,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading-cast/A<~lib/string/String>#constructor (param $0 i32) (result i32)
+ (func $class-overloading-cast/A<string>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2887,7 +2887,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  call $class-overloading-cast/A<~lib/string/String>#constructor
+  call $class-overloading-cast/A<string>#constructor
   local.tee $0
   i32.store
   local.get $0

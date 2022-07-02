@@ -1911,7 +1911,7 @@
   local.get $3
   i32.eqz
  )
- (func $~lib/map/Map<usize,~lib/string/String>#get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,string>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1951,7 +1951,7 @@
   i32.add
   i32.load
   local.set $0
-  block $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
+  block $__inlined_func$~lib/map/Map<usize,string>#find
    loop $while-continue|0
     local.get $0
     if
@@ -1968,7 +1968,7 @@
       local.get $1
       i32.eq
      end
-     br_if $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
+     br_if $__inlined_func$~lib/map/Map<usize,string>#find
      local.get $2
      i32.const -2
      i32.and
@@ -2208,7 +2208,7 @@
   global.set $~started
   call $start:std/symbol
  )
- (func $~lib/map/Map<~lib/string/String,usize>#find (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<string,usize>#find (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2313,7 +2313,7 @@
     local.get $0
     i32.const 1056
     call $~lib/util/hash/HASH<~lib/string/String>
-    call $~lib/map/Map<~lib/string/String,usize>#find
+    call $~lib/map/Map<string,usize>#find
     if
      global.get $~lib/memory/__stack_pointer
      global.get $~lib/symbol/stringToId
@@ -2322,7 +2322,7 @@
      local.get $0
      i32.const 1056
      call $~lib/util/hash/HASH<~lib/string/String>
-     call $~lib/map/Map<~lib/string/String,usize>#find
+     call $~lib/map/Map<string,usize>#find
      local.tee $0
      i32.eqz
      if
@@ -2493,7 +2493,7 @@
    i32.const 1056
    call $~lib/util/hash/HASH<~lib/string/String>
    local.tee $5
-   call $~lib/map/Map<~lib/string/String,usize>#find
+   call $~lib/map/Map<string,usize>#find
    local.tee $0
    if
     local.get $0
@@ -2768,7 +2768,7 @@
    i32.add
    i32.load
    local.set $0
-   block $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
+   block $__inlined_func$~lib/map/Map<usize,string>#find
     loop $while-continue|06
      local.get $0
      if
@@ -2785,7 +2785,7 @@
        local.get $2
        i32.eq
       end
-      br_if $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
+      br_if $__inlined_func$~lib/map/Map<usize,string>#find
       local.get $1
       i32.const -2
       i32.and
@@ -3119,7 +3119,7 @@
    i32.add
    i32.load
    local.set $1
-   block $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
+   block $__inlined_func$~lib/map/Map<usize,string>#find
     loop $while-continue|0
      local.get $1
      if
@@ -3136,7 +3136,7 @@
        local.get $0
        i32.eq
       end
-      br_if $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
+      br_if $__inlined_func$~lib/map/Map<usize,string>#find
       local.get $2
       i32.const -2
       i32.and
@@ -3158,7 +3158,7 @@
    i32.store
    local.get $1
    local.get $0
-   call $~lib/map/Map<usize,~lib/string/String>#get
+   call $~lib/map/Map<usize,string>#get
   else
    i32.const 0
   end
@@ -3337,7 +3337,7 @@
     i32.add
     i32.load
     local.set $1
-    block $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
+    block $__inlined_func$~lib/map/Map<usize,string>#find
      loop $while-continue|0
       local.get $1
       if
@@ -3354,7 +3354,7 @@
         local.get $0
         i32.eq
        end
-       br_if $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
+       br_if $__inlined_func$~lib/map/Map<usize,string>#find
        local.get $3
        i32.const -2
        i32.and
@@ -3378,7 +3378,7 @@
     local.get $1
     local.get $2
     local.get $0
-    call $~lib/map/Map<usize,~lib/string/String>#get
+    call $~lib/map/Map<usize,string>#get
     local.tee $2
     i32.store
    end

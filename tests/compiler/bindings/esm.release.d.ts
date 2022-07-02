@@ -96,21 +96,21 @@ export declare function staticarrayFunction(a: Array<number>, b: Array<number>):
 export declare function arrayFunction(a: Array<number>, b: Array<number>): Array<number>;
 /**
  * bindings/esm/objectFunction
- * @param a `bindings/esm/PlainObject`
- * @param b `bindings/esm/PlainObject`
- * @returns `bindings/esm/PlainObject`
+ * @param a `PlainObject`
+ * @param b `PlainObject`
+ * @returns `PlainObject`
  */
 export declare function objectFunction(a: __Record8<undefined>, b: __Record8<undefined>): __Record8<never>;
 /**
  * bindings/esm/newInternref
- * @returns `bindings/esm/NonPlainObject`
+ * @returns `NonPlainObject`
  */
 export declare function newInternref(): __Internref11;
 /**
  * bindings/esm/internrefFunction
- * @param a `bindings/esm/NonPlainObject`
- * @param b `bindings/esm/NonPlainObject`
- * @returns `bindings/esm/NonPlainObject`
+ * @param a `NonPlainObject`
+ * @param b `NonPlainObject`
+ * @returns `NonPlainObject`
  */
 export declare function internrefFunction(a: __Internref11, b: __Internref11): __Internref11;
 /** bindings/esm/PlainObject */
@@ -145,7 +145,7 @@ declare interface __Record8<TOmittable> {
   n: string | null | TOmittable;
   /** @type `Uint8Array | null` */
   o: Uint8Array | null | TOmittable;
-  /** @type `Array<~lib/string/String> | null` */
+  /** @type `Array<string> | null` */
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */

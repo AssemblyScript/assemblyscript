@@ -121,7 +121,7 @@
   i32.store
   local.get $2
   i32.const 0
-  call $~lib/array/Array<assert-nonnull/Foo>#__get
+  call $~lib/array/Array<Foo>#__get
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -160,7 +160,7 @@
   i32.store
   local.get $2
   i32.const 0
-  call $~lib/array/Array<assert-nonnull/Foo|null>#__get
+  call $~lib/array/Array<Foo|null>#__get
   local.tee $1
   i32.store offset=4
   local.get $1
@@ -226,7 +226,7 @@
   i32.store
   local.get $2
   i32.const 0
-  call $~lib/array/Array<assert-nonnull/Foo|null>#__get
+  call $~lib/array/Array<Foo|null>#__get
   local.tee $1
   i32.store offset=4
   local.get $1
@@ -295,7 +295,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Foo>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -351,7 +351,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
- (func $~lib/array/Array<assert-nonnull/Foo|null>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<Foo|null>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -411,7 +411,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.const 0
-  call $~lib/array/Array<assert-nonnull/Foo|null>#__get
+  call $~lib/array/Array<Foo|null>#__get
   local.tee $1
   i32.store
   local.get $1

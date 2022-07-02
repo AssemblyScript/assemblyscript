@@ -2340,7 +2340,7 @@
    end
   end
  )
- (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -2385,7 +2385,7 @@
   drop
   local.get $2
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#get:length (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<string>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 20
   i32.sub
@@ -2548,17 +2548,17 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/array/Array<~lib/string/String>#get:length (param $0 i32) (result i32)
+ (func $~lib/array/Array<string>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#includes (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<string>#includes (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   i32.const 0
   drop
   local.get $0
   local.get $1
   local.get $2
-  call $~lib/staticarray/StaticArray<~lib/string/String>#indexOf
+  call $~lib/staticarray/StaticArray<string>#indexOf
   i32.const 0
   i32.ge_s
   return
@@ -2888,7 +2888,7 @@
   local.get $2
   call $~lib/staticarray/StaticArray<i32>#lastIndexOf
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#join (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<string>#join (param $0 i32) (param $1 i32) (result i32)
   i32.const 0
   drop
   i32.const 0
@@ -2903,7 +2903,7 @@
   drop
   local.get $0
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   local.get $1
   call $~lib/util/string/joinStringArray
   return
@@ -4842,7 +4842,7 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<Ref>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4885,7 +4885,7 @@
  (func $~lib/staticarray/StaticArray<std/staticarray/Ref>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit
+  call $~lib/staticarray/StaticArray<Ref>#__visit
  )
  (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
@@ -4913,7 +4913,7 @@
   local.get $1
   call $~lib/array/Array<usize>#__visit
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<string>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4956,9 +4956,9 @@
  (func $~lib/staticarray/StaticArray<~lib/string/String>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#__visit
+  call $~lib/staticarray/StaticArray<string>#__visit
  )
- (func $~lib/array/Array<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<string>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5006,7 +5006,7 @@
  (func $~lib/array/Array<~lib/string/String>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<~lib/string/String>#__visit
+  call $~lib/array/Array<string>#__visit
  )
  (func $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -5173,7 +5173,7 @@
    unreachable
   end
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<string>#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5187,7 +5187,7 @@
   i32.const 0
   i32.store
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   local.set $3
   local.get $3
   i32.const 0
@@ -5270,7 +5270,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $6
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#toString (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<string>#toString (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -5287,7 +5287,7 @@
   local.get $1
   i32.store
   local.get $1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#join
+  call $~lib/staticarray/StaticArray<string>#join
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -5610,12 +5610,12 @@
   i32.const 0
   i32.const 0
   call $std/staticarray/Ref#constructor
-  call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
+  call $~lib/staticarray/StaticArray<Ref>#__uset
   local.get $0
   i32.const 1
   i32.const 0
   call $std/staticarray/Ref#constructor
-  call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
+  call $~lib/staticarray/StaticArray<Ref>#__uset
   local.get $0
   global.set $std/staticarray/arr4
   i32.const 0
@@ -5836,9 +5836,9 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   local.get $1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.eq
   i32.eqz
   if
@@ -5854,14 +5854,14 @@
   loop $for-loop|2
    local.get $3
    local.get $1
-   call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+   call $~lib/staticarray/StaticArray<string>#get:length
    i32.lt_s
    local.set $2
    local.get $2
    if
     local.get $1
     local.get $3
-    call $~lib/staticarray/StaticArray<~lib/string/String>#__get
+    call $~lib/staticarray/StaticArray<string>#__get
     local.set $5
     global.get $~lib/memory/__stack_pointer
     local.get $5
@@ -5869,7 +5869,7 @@
     local.get $5
     local.get $0
     local.get $3
-    call $~lib/staticarray/StaticArray<~lib/string/String>#__get
+    call $~lib/staticarray/StaticArray<string>#__get
     local.set $5
     global.get $~lib/memory/__stack_pointer
     local.get $5
@@ -5900,7 +5900,7 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.const 2
   i32.eq
   i32.eqz
@@ -5914,7 +5914,7 @@
   end
   local.get $0
   i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#__get
+  call $~lib/staticarray/StaticArray<string>#__get
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -5938,7 +5938,7 @@
   end
   local.get $0
   i32.const 1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#__get
+  call $~lib/staticarray/StaticArray<string>#__get
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -5968,9 +5968,9 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   local.get $1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.const 1
   i32.sub
   i32.eq
@@ -5991,9 +5991,9 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   local.get $1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.eq
   i32.eqz
   if
@@ -6012,7 +6012,7 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.const 0
   i32.eq
   i32.eqz
@@ -6032,7 +6032,7 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.const 1
   i32.eq
   i32.eqz
@@ -6046,7 +6046,7 @@
   end
   local.get $0
   i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#__get
+  call $~lib/staticarray/StaticArray<string>#__get
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -6076,7 +6076,7 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.const 0
   i32.eq
   i32.eqz
@@ -6096,7 +6096,7 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.const 1
   i32.eq
   i32.eqz
@@ -6110,7 +6110,7 @@
   end
   local.get $0
   i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#__get
+  call $~lib/staticarray/StaticArray<string>#__get
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -6151,13 +6151,13 @@
   local.get $5
   i32.store offset=12
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#concat
+  call $~lib/staticarray/StaticArray<string>#concat
   local.tee $3
   i32.store offset=16
   local.get $3
-  call $~lib/array/Array<~lib/string/String>#get:length
+  call $~lib/array/Array<string>#get:length
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.eq
   i32.eqz
   if
@@ -6182,13 +6182,13 @@
   local.get $5
   i32.store offset=12
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#concat
+  call $~lib/staticarray/StaticArray<string>#concat
   local.tee $3
   i32.store offset=16
   local.get $3
-  call $~lib/array/Array<~lib/string/String>#get:length
+  call $~lib/array/Array<string>#get:length
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.const 1
   i32.add
   i32.eq
@@ -6218,7 +6218,7 @@
   i32.store offset=12
   local.get $5
   i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#includes
+  call $~lib/staticarray/StaticArray<string>#includes
   i32.const 1
   i32.eq
   i32.eqz
@@ -6238,7 +6238,7 @@
   i32.store offset=12
   local.get $5
   i32.const 0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#includes
+  call $~lib/staticarray/StaticArray<string>#includes
   i32.const 0
   i32.eq
   i32.eqz
@@ -6258,7 +6258,7 @@
   i32.store offset=12
   local.get $5
   i32.const 5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#includes
+  call $~lib/staticarray/StaticArray<string>#includes
   i32.const 0
   i32.eq
   i32.eqz
@@ -6278,7 +6278,7 @@
   i32.store offset=12
   local.get $5
   i32.const -1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#includes
+  call $~lib/staticarray/StaticArray<string>#includes
   i32.const 1
   i32.eq
   i32.eqz
@@ -6533,7 +6533,7 @@
   local.get $5
   i32.store offset=20
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#join
+  call $~lib/staticarray/StaticArray<string>#join
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -6562,7 +6562,7 @@
   local.get $5
   i32.store offset=20
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#join
+  call $~lib/staticarray/StaticArray<string>#join
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -6591,7 +6591,7 @@
   local.get $5
   i32.store offset=20
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#join
+  call $~lib/staticarray/StaticArray<string>#join
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -6620,7 +6620,7 @@
   local.get $5
   i32.store offset=20
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#join
+  call $~lib/staticarray/StaticArray<string>#join
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -6649,14 +6649,14 @@
   local.get $5
   i32.store offset=20
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#join
+  call $~lib/staticarray/StaticArray<string>#join
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
   i32.store
   local.get $5
   local.get $3
-  call $~lib/staticarray/StaticArray<~lib/string/String>#toString
+  call $~lib/staticarray/StaticArray<string>#toString
   local.set $5
   global.get $~lib/memory/__stack_pointer
   local.get $5
@@ -7508,7 +7508,7 @@
   i32.const 0
   i32.store
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   local.set $3
   local.get $1
   i32.const 0
@@ -7627,7 +7627,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $10
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<string>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
@@ -7640,7 +7640,7 @@
   i32.store
   local.get $1
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   i32.ge_u
   if
    i32.const 64
@@ -7682,7 +7682,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#concat (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<string>#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7705,10 +7705,10 @@
   i32.const 0
   i32.store
   local.get $0
-  call $~lib/staticarray/StaticArray<~lib/string/String>#get:length
+  call $~lib/staticarray/StaticArray<string>#get:length
   local.set $2
   local.get $1
-  call $~lib/array/Array<~lib/string/String>#get:length
+  call $~lib/array/Array<string>#get:length
   local.set $3
   local.get $2
   local.get $3

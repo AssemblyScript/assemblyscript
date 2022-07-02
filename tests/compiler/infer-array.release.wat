@@ -1611,7 +1611,7 @@
   f32.load
   drop
  )
- (func $~lib/array/Array<infer-array/Ref|null>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref|null>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1780,16 +1780,16 @@
    local.get $3
    i32.const 0
    local.get $0
-   call $~lib/array/Array<infer-array/Ref|null>#__uset
+   call $~lib/array/Array<Ref|null>#__uset
    local.get $3
    i32.const 1
    local.get $1
-   call $~lib/array/Array<infer-array/Ref|null>#__uset
+   call $~lib/array/Array<Ref|null>#__uset
    local.get $3
    i32.store offset=12
    local.get $3
    i32.const 0
-   call $~lib/array/Array<infer-array/Ref|null>#__get
+   call $~lib/array/Array<Ref|null>#__get
    global.get $~lib/memory/__stack_pointer
    call $infer-array/Ref#constructor
    local.tee $0
@@ -1814,16 +1814,16 @@
    local.get $3
    i32.const 0
    local.get $0
-   call $~lib/array/Array<infer-array/Ref|null>#__uset
+   call $~lib/array/Array<Ref|null>#__uset
    local.get $3
    i32.const 1
    local.get $1
-   call $~lib/array/Array<infer-array/Ref|null>#__uset
+   call $~lib/array/Array<Ref|null>#__uset
    local.get $3
    i32.store offset=8
    local.get $3
    i32.const 1
-   call $~lib/array/Array<infer-array/Ref|null>#__get
+   call $~lib/array/Array<Ref|null>#__get
    global.get $~lib/memory/__stack_pointer
    call $infer-array/Ref#constructor
    local.tee $0
@@ -1844,16 +1844,16 @@
    local.get $2
    i32.const 0
    local.get $0
-   call $~lib/array/Array<infer-array/Ref|null>#__uset
+   call $~lib/array/Array<Ref|null>#__uset
    local.get $2
    i32.const 1
    i32.const 0
-   call $~lib/array/Array<infer-array/Ref|null>#__uset
+   call $~lib/array/Array<Ref|null>#__uset
    local.get $2
    i32.store offset=12
    local.get $2
    i32.const 0
-   call $~lib/array/Array<infer-array/Ref|null>#__get
+   call $~lib/array/Array<Ref|null>#__get
    global.get $~lib/memory/__stack_pointer
    i32.const 2
    i32.const 2
@@ -1864,7 +1864,7 @@
    i32.store offset=8
    local.get $0
    i32.const 0
-   call $~lib/array/Array<infer-array/Ref|null>#__get
+   call $~lib/array/Array<Ref|null>#__get
    global.get $~lib/memory/__stack_pointer
    i32.const 1
    i32.const 2
@@ -1941,7 +1941,7 @@
    i32.const 3
    i32.const 1936
    call $~lib/rt/__newArray
-   call $~lib/array/Array<infer-array/Ref|null>#__uset
+   call $~lib/array/Array<Ref|null>#__uset
    local.get $1
    i32.const 1
    i32.const 1
@@ -1949,7 +1949,7 @@
    i32.const 3
    i32.const 1968
    call $~lib/rt/__newArray
-   call $~lib/array/Array<infer-array/Ref|null>#__uset
+   call $~lib/array/Array<Ref|null>#__uset
    local.get $1
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
@@ -2179,7 +2179,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
- (func $~lib/array/Array<infer-array/Ref|null>#__get (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<Ref|null>#__get (param $0 i32) (param $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
