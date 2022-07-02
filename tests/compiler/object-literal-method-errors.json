@@ -1,0 +1,9 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS100: Not implemented: Getter/setter in object literal",
+    "AS100: Not implemented: Getter/setter in object literal",
+    "EOF"
+  ]
+}
