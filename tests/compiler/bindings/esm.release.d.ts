@@ -11,12 +11,12 @@ export declare const plainMutableGlobal: {
 };
 /** bindings/esm/stringGlobal */
 export declare const stringGlobal: {
-  /** @type `string` */
+  /** @type `~lib/string/String` */
   get value(): string
 };
 /** bindings/esm/mutableStringGlobal */
 export declare const mutableStringGlobal: {
-  /** @type `string` */
+  /** @type `~lib/string/String` */
   get value(): string;
   set value(value: string);
 };
@@ -54,30 +54,30 @@ export declare function plainFunction(a: number, b: number): number;
 export declare function plainFunction64(a: bigint, b: bigint): bigint;
 /**
  * bindings/esm/bufferFunction
- * @param a `ArrayBuffer`
- * @param b `ArrayBuffer`
- * @returns `ArrayBuffer`
+ * @param a `~lib/arraybuffer/ArrayBuffer`
+ * @param b `~lib/arraybuffer/ArrayBuffer`
+ * @returns `~lib/arraybuffer/ArrayBuffer`
  */
 export declare function bufferFunction(a: ArrayBuffer, b: ArrayBuffer): ArrayBuffer;
 /**
  * bindings/esm/stringFunction
- * @param a `string`
- * @param b `string`
- * @returns `string`
+ * @param a `~lib/string/String`
+ * @param b `~lib/string/String`
+ * @returns `~lib/string/String`
  */
 export declare function stringFunction(a: string, b: string): string;
 /**
  * bindings/esm/stringFunctionOptional
- * @param a `string`
- * @param b `string`
- * @returns `string`
+ * @param a `~lib/string/String`
+ * @param b `~lib/string/String`
+ * @returns `~lib/string/String`
  */
 export declare function stringFunctionOptional(a: string, b?: string): string;
 /**
  * bindings/esm/typedarrayFunction
- * @param a `Int16Array`
- * @param b `Float32Array`
- * @returns `Uint64Array`
+ * @param a `~lib/typedarray/Int16Array`
+ * @param b `~lib/typedarray/Float32Array`
+ * @returns `~lib/typedarray/Uint64Array`
  */
 export declare function typedarrayFunction(a: Int16Array, b: Float32Array): BigUint64Array;
 /**
@@ -141,9 +141,9 @@ declare interface __Record8<TOmittable> {
   l: number | TOmittable;
   /** @type `f64` */
   m: number | TOmittable;
-  /** @type `string | null` */
+  /** @type `~lib/string/String | null` */
   n: string | null | TOmittable;
-  /** @type `Uint8Array | null` */
+  /** @type `~lib/typedarray/Uint8Array | null` */
   o: Uint8Array | null | TOmittable;
   /** @type `Array<string> | null` */
   p: Array<string> | null | TOmittable;

@@ -490,6 +490,10 @@ export class Type {
             name = classReference.name;
             if (name == "String") name = "string";
             if (name == "Symbol") name = "symbol";
+            if (classReference.program.elementsByName.has(name)) {
+              // We already have this global name so use internal name
+              name = classReference.internalName;
+            }
           } // otherwise fallback to internalName
         }
         return this.isNullableReference

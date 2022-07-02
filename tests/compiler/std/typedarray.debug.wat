@@ -39407,489 +39407,489 @@
   local.get $1
   call $~lib/array/Array<i32>#__visit
  )
- (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2CInt8Array%29=>i8>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2CInt8Array%29=>i8>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i8%2Ci8%2Ci32%2CInt8Array%29=>i8>#__visit
+  call $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit
  )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8Array%29=>u8>#__visit (param $0 i32) (param $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8Array%29=>u8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8Array%29=>u8>#__visit
- )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8ClampedArray%29=>u8>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8ClampedArray%29=>u8>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8ClampedArray%29=>u8>#__visit
+  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit
  )
- (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2CInt16Array%29=>i16>#__visit (param $0 i32) (param $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2CInt16Array%29=>i16>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i16%2Ci16%2Ci32%2CInt16Array%29=>i16>#__visit
- )
- (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2CUint16Array%29=>u16>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2CUint16Array%29=>u16>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u16%2Cu16%2Ci32%2CUint16Array%29=>u16>#__visit
+  call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2CInt32Array%29=>i32>#__visit (param $0 i32) (param $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2CInt32Array%29=>i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2CInt32Array%29=>i32>#__visit
- )
- (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2CUint32Array%29=>u32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2CUint32Array%29=>u32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u32%2Cu32%2Ci32%2CUint32Array%29=>u32>#__visit
+  call $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit
  )
- (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2CInt64Array%29=>i64>#__visit (param $0 i32) (param $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2CInt64Array%29=>i64>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i64%2Ci64%2Ci32%2CInt64Array%29=>i64>#__visit
- )
- (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2CUint64Array%29=>u64>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2CUint64Array%29=>u64>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u64%2Cu64%2Ci32%2CUint64Array%29=>u64>#__visit
+  call $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit
  )
- (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2CFloat32Array%29=>f32>#__visit (param $0 i32) (param $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2CFloat32Array%29=>f32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28f32%2Cf32%2Ci32%2CFloat32Array%29=>f32>#__visit
- )
- (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2CFloat64Array%29=>f64>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2CFloat64Array%29=>f64>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28f64%2Cf64%2Ci32%2CFloat64Array%29=>f64>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>i8>#__visit (param $0 i32) (param $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>i8>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>i8>#__visit
- )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>u8>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>u8>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>u8>#__visit
+  call $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>u8>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>u8>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>u8>#__visit
+  call $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit
  )
- (func $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>i16>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>i16>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>i16>#__visit
+  call $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit
  )
- (func $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>u16>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>u16>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>u16>#__visit
+  call $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>i32>#__visit
+  call $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit
  )
- (func $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>u32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>u32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>u32>#__visit
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit
  )
- (func $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>i64>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>i64>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>i64>#__visit
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit
  )
- (func $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>u64>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>u64>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>u64>#__visit
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit
  )
- (func $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>f32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>f32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>f32>#__visit
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit
  )
- (func $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>f64>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>f64>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>f64>#__visit
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit
  )
- (func $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>bool>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>bool>#__visit
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>bool>#__visit
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit
  )
- (func $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>bool>#__visit
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit
  )
- (func $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>bool>#__visit
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>bool>#__visit
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit
  )
- (func $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>bool>#__visit
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>bool>#__visit
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>bool>#__visit
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>bool>#__visit
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>bool>#__visit
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>void>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>void>#__visit
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>void>#__visit
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>void>#__visit
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>void>#__visit
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>void>#__visit
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>void>#__visit
+  call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#__visit
  )
- (func $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>void>#__visit
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#__visit
  )
- (func $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>void>#__visit
+  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#__visit
  )
- (func $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>void>#__visit
+  call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#__visit
  )
- (func $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>void>#__visit
+  call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#__visit
  )
  (func $~lib/array/Array<f32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
@@ -40113,50 +40113,50 @@
                  block $~lib/array/Array<u8>
                   block $~lib/array/Array<f64>
                    block $~lib/array/Array<f32>
-                    block $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>void>
-                     block $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>void>
-                      block $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>void>
-                       block $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>void>
-                        block $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>void>
-                         block $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>void>
-                          block $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>void>
-                           block $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>void>
-                            block $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>void>
-                             block $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>void>
-                              block $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>void>
-                               block $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>bool>
-                                block $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>bool>
-                                 block $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>bool>
-                                  block $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>bool>
-                                   block $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>bool>
-                                    block $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>bool>
-                                     block $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>bool>
-                                      block $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>bool>
-                                       block $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>bool>
-                                        block $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>bool>
-                                         block $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>bool>
-                                          block $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>f64>
-                                           block $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>f32>
-                                            block $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>u64>
-                                             block $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>i64>
-                                              block $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>u32>
-                                               block $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>i32>
-                                                block $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>u16>
-                                                 block $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>i16>
-                                                  block $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>u8>
-                                                   block $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>u8>
-                                                    block $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>i8>
-                                                     block $~lib/function/Function<%28f64%2Cf64%2Ci32%2CFloat64Array%29=>f64>
-                                                      block $~lib/function/Function<%28f32%2Cf32%2Ci32%2CFloat32Array%29=>f32>
-                                                       block $~lib/function/Function<%28u64%2Cu64%2Ci32%2CUint64Array%29=>u64>
-                                                        block $~lib/function/Function<%28i64%2Ci64%2Ci32%2CInt64Array%29=>i64>
-                                                         block $~lib/function/Function<%28u32%2Cu32%2Ci32%2CUint32Array%29=>u32>
-                                                          block $~lib/function/Function<%28i32%2Ci32%2Ci32%2CInt32Array%29=>i32>
-                                                           block $~lib/function/Function<%28u16%2Cu16%2Ci32%2CUint16Array%29=>u16>
-                                                            block $~lib/function/Function<%28i16%2Ci16%2Ci32%2CInt16Array%29=>i16>
-                                                             block $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8ClampedArray%29=>u8>
-                                                              block $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8Array%29=>u8>
-                                                               block $~lib/function/Function<%28i8%2Ci8%2Ci32%2CInt8Array%29=>i8>
+                    block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>
+                     block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>
+                      block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>
+                       block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>
+                        block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>
+                         block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>
+                          block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>
+                           block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>
+                            block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>
+                             block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>
+                              block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>
+                               block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>
+                                block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>
+                                 block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>
+                                  block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>
+                                   block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>
+                                    block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>
+                                     block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>
+                                      block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>
+                                       block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>
+                                        block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>
+                                         block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>
+                                          block $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>
+                                           block $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>
+                                            block $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>
+                                             block $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>
+                                              block $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>
+                                               block $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>
+                                                block $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>
+                                                 block $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>
+                                                  block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>
+                                                   block $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>
+                                                    block $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>
+                                                     block $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>
+                                                      block $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>
+                                                       block $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>
+                                                        block $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>
+                                                         block $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>
+                                                          block $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>
+                                                           block $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>
+                                                            block $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>
+                                                             block $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>
+                                                              block $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>
+                                                               block $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>
                                                                 block $~lib/array/Array<i32>
                                                                  block $~lib/array/Array<i8>
                                                                   block $~lib/function/Function<%28f64%2Cf64%29=>i32>
@@ -40178,7 +40178,7 @@
                                                                                  i32.const 8
                                                                                  i32.sub
                                                                                  i32.load
-                                                                                 br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int8Array $~lib/typedarray/Uint8Array $~lib/typedarray/Uint8ClampedArray $~lib/typedarray/Int16Array $~lib/typedarray/Uint16Array $~lib/typedarray/Int32Array $~lib/typedarray/Uint32Array $~lib/typedarray/Int64Array $~lib/typedarray/Uint64Array $~lib/typedarray/Float32Array $~lib/typedarray/Float64Array $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/array/Array<i8> $~lib/array/Array<i32> $~lib/function/Function<%28i8%2Ci8%2Ci32%2CInt8Array%29=>i8> $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8Array%29=>u8> $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8ClampedArray%29=>u8> $~lib/function/Function<%28i16%2Ci16%2Ci32%2CInt16Array%29=>i16> $~lib/function/Function<%28u16%2Cu16%2Ci32%2CUint16Array%29=>u16> $~lib/function/Function<%28i32%2Ci32%2Ci32%2CInt32Array%29=>i32> $~lib/function/Function<%28u32%2Cu32%2Ci32%2CUint32Array%29=>u32> $~lib/function/Function<%28i64%2Ci64%2Ci32%2CInt64Array%29=>i64> $~lib/function/Function<%28u64%2Cu64%2Ci32%2CUint64Array%29=>u64> $~lib/function/Function<%28f32%2Cf32%2Ci32%2CFloat32Array%29=>f32> $~lib/function/Function<%28f64%2Cf64%2Ci32%2CFloat64Array%29=>f64> $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>i8> $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>u8> $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>u8> $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>i16> $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>u16> $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>i32> $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>u32> $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>i64> $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>u64> $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>f32> $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>f64> $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>bool> $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>bool> $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>bool> $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>bool> $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>bool> $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>bool> $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>bool> $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>bool> $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>bool> $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>bool> $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>bool> $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>void> $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>void> $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>void> $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>void> $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>void> $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>void> $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>void> $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>void> $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>void> $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>void> $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>void> $~lib/array/Array<f32> $~lib/array/Array<f64> $~lib/array/Array<u8> $~lib/array/Array<i16> $~lib/array/Array<u16> $~lib/array/Array<u32> $~lib/array/Array<i64> $~lib/array/Array<u64> $~lib/function/Function<%28i8%2Ci8%29=>i32> $~lib/function/Function<%28u8%2Cu8%29=>i32> $~lib/function/Function<%28i16%2Ci16%29=>i32> $~lib/function/Function<%28u16%2Cu16%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/function/Function<%28i64%2Ci64%29=>i32> $~lib/function/Function<%28u64%2Cu64%29=>i32> $~lib/function/Function<%28f32%2Cf32%29=>i32> $invalid
+                                                                                 br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Int8Array $~lib/typedarray/Uint8Array $~lib/typedarray/Uint8ClampedArray $~lib/typedarray/Int16Array $~lib/typedarray/Uint16Array $~lib/typedarray/Int32Array $~lib/typedarray/Uint32Array $~lib/typedarray/Int64Array $~lib/typedarray/Uint64Array $~lib/typedarray/Float32Array $~lib/typedarray/Float64Array $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/array/Array<i8> $~lib/array/Array<i32> $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8> $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8> $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8> $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16> $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32> $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32> $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64> $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64> $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32> $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool> $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void> $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void> $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void> $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void> $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void> $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void> $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void> $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void> $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void> $~lib/array/Array<f32> $~lib/array/Array<f64> $~lib/array/Array<u8> $~lib/array/Array<i16> $~lib/array/Array<u16> $~lib/array/Array<u32> $~lib/array/Array<i64> $~lib/array/Array<u64> $~lib/function/Function<%28i8%2Ci8%29=>i32> $~lib/function/Function<%28u8%2Cu8%29=>i32> $~lib/function/Function<%28i16%2Ci16%29=>i32> $~lib/function/Function<%28u16%2Cu16%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/function/Function<%28i64%2Ci64%29=>i32> $~lib/function/Function<%28u64%2Cu64%29=>i32> $~lib/function/Function<%28f32%2Cf32%29=>i32> $invalid
                                                                                 end
                                                                                 return
                                                                                end
@@ -40261,222 +40261,222 @@
                                                                end
                                                                local.get $0
                                                                local.get $1
-                                                               call $~lib/function/Function<%28i8%2Ci8%2Ci32%2CInt8Array%29=>i8>~visit
+                                                               call $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit
                                                                return
                                                               end
                                                               local.get $0
                                                               local.get $1
-                                                              call $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8Array%29=>u8>~visit
+                                                              call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit
                                                               return
                                                              end
                                                              local.get $0
                                                              local.get $1
-                                                             call $~lib/function/Function<%28u8%2Cu8%2Ci32%2CUint8ClampedArray%29=>u8>~visit
+                                                             call $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit
                                                              return
                                                             end
                                                             local.get $0
                                                             local.get $1
-                                                            call $~lib/function/Function<%28i16%2Ci16%2Ci32%2CInt16Array%29=>i16>~visit
+                                                            call $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit
                                                             return
                                                            end
                                                            local.get $0
                                                            local.get $1
-                                                           call $~lib/function/Function<%28u16%2Cu16%2Ci32%2CUint16Array%29=>u16>~visit
+                                                           call $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit
                                                            return
                                                           end
                                                           local.get $0
                                                           local.get $1
-                                                          call $~lib/function/Function<%28i32%2Ci32%2Ci32%2CInt32Array%29=>i32>~visit
+                                                          call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit
                                                           return
                                                          end
                                                          local.get $0
                                                          local.get $1
-                                                         call $~lib/function/Function<%28u32%2Cu32%2Ci32%2CUint32Array%29=>u32>~visit
+                                                         call $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit
                                                          return
                                                         end
                                                         local.get $0
                                                         local.get $1
-                                                        call $~lib/function/Function<%28i64%2Ci64%2Ci32%2CInt64Array%29=>i64>~visit
+                                                        call $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit
                                                         return
                                                        end
                                                        local.get $0
                                                        local.get $1
-                                                       call $~lib/function/Function<%28u64%2Cu64%2Ci32%2CUint64Array%29=>u64>~visit
+                                                       call $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit
                                                        return
                                                       end
                                                       local.get $0
                                                       local.get $1
-                                                      call $~lib/function/Function<%28f32%2Cf32%2Ci32%2CFloat32Array%29=>f32>~visit
+                                                      call $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit
                                                       return
                                                      end
                                                      local.get $0
                                                      local.get $1
-                                                     call $~lib/function/Function<%28f64%2Cf64%2Ci32%2CFloat64Array%29=>f64>~visit
+                                                     call $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit
                                                      return
                                                     end
                                                     local.get $0
                                                     local.get $1
-                                                    call $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>i8>~visit
+                                                    call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>~visit
                                                     return
                                                    end
                                                    local.get $0
                                                    local.get $1
-                                                   call $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>u8>~visit
+                                                   call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>~visit
                                                    return
                                                   end
                                                   local.get $0
                                                   local.get $1
-                                                  call $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>u8>~visit
+                                                  call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>~visit
                                                   return
                                                  end
                                                  local.get $0
                                                  local.get $1
-                                                 call $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>i16>~visit
+                                                 call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>~visit
                                                  return
                                                 end
                                                 local.get $0
                                                 local.get $1
-                                                call $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>u16>~visit
+                                                call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>~visit
                                                 return
                                                end
                                                local.get $0
                                                local.get $1
-                                               call $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>i32>~visit
+                                               call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>~visit
                                                return
                                               end
                                               local.get $0
                                               local.get $1
-                                              call $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>u32>~visit
+                                              call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>~visit
                                               return
                                              end
                                              local.get $0
                                              local.get $1
-                                             call $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>i64>~visit
+                                             call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>~visit
                                              return
                                             end
                                             local.get $0
                                             local.get $1
-                                            call $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>u64>~visit
+                                            call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>~visit
                                             return
                                            end
                                            local.get $0
                                            local.get $1
-                                           call $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>f32>~visit
+                                           call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>~visit
                                            return
                                           end
                                           local.get $0
                                           local.get $1
-                                          call $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>f64>~visit
+                                          call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>~visit
                                           return
                                          end
                                          local.get $0
                                          local.get $1
-                                         call $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>bool>~visit
+                                         call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>~visit
                                          return
                                         end
                                         local.get $0
                                         local.get $1
-                                        call $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>bool>~visit
+                                        call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>~visit
                                         return
                                        end
                                        local.get $0
                                        local.get $1
-                                       call $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>bool>~visit
+                                       call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>~visit
                                        return
                                       end
                                       local.get $0
                                       local.get $1
-                                      call $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>bool>~visit
+                                      call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>~visit
                                       return
                                      end
                                      local.get $0
                                      local.get $1
-                                     call $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>bool>~visit
+                                     call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>~visit
                                      return
                                     end
                                     local.get $0
                                     local.get $1
-                                    call $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>bool>~visit
+                                    call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>~visit
                                     return
                                    end
                                    local.get $0
                                    local.get $1
-                                   call $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>bool>~visit
+                                   call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>~visit
                                    return
                                   end
                                   local.get $0
                                   local.get $1
-                                  call $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>bool>~visit
+                                  call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>~visit
                                   return
                                  end
                                  local.get $0
                                  local.get $1
-                                 call $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>bool>~visit
+                                 call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>~visit
                                  return
                                 end
                                 local.get $0
                                 local.get $1
-                                call $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>bool>~visit
+                                call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>~visit
                                 return
                                end
                                local.get $0
                                local.get $1
-                               call $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>bool>~visit
+                               call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>~visit
                                return
                               end
                               local.get $0
                               local.get $1
-                              call $~lib/function/Function<%28i8%2Ci32%2CInt8Array%29=>void>~visit
+                              call $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>~visit
                               return
                              end
                              local.get $0
                              local.get $1
-                             call $~lib/function/Function<%28u8%2Ci32%2CUint8Array%29=>void>~visit
+                             call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>~visit
                              return
                             end
                             local.get $0
                             local.get $1
-                            call $~lib/function/Function<%28u8%2Ci32%2CUint8ClampedArray%29=>void>~visit
+                            call $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>~visit
                             return
                            end
                            local.get $0
                            local.get $1
-                           call $~lib/function/Function<%28i16%2Ci32%2CInt16Array%29=>void>~visit
+                           call $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>~visit
                            return
                           end
                           local.get $0
                           local.get $1
-                          call $~lib/function/Function<%28u16%2Ci32%2CUint16Array%29=>void>~visit
+                          call $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>~visit
                           return
                          end
                          local.get $0
                          local.get $1
-                         call $~lib/function/Function<%28i32%2Ci32%2CInt32Array%29=>void>~visit
+                         call $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>~visit
                          return
                         end
                         local.get $0
                         local.get $1
-                        call $~lib/function/Function<%28u32%2Ci32%2CUint32Array%29=>void>~visit
+                        call $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>~visit
                         return
                        end
                        local.get $0
                        local.get $1
-                       call $~lib/function/Function<%28i64%2Ci32%2CInt64Array%29=>void>~visit
+                       call $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>~visit
                        return
                       end
                       local.get $0
                       local.get $1
-                      call $~lib/function/Function<%28u64%2Ci32%2CUint64Array%29=>void>~visit
+                      call $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>~visit
                       return
                      end
                      local.get $0
                      local.get $1
-                     call $~lib/function/Function<%28f32%2Ci32%2CFloat32Array%29=>void>~visit
+                     call $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>~visit
                      return
                     end
                     local.get $0
                     local.get $1
-                    call $~lib/function/Function<%28f64%2Ci32%2CFloat64Array%29=>void>~visit
+                    call $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>~visit
                     return
                    end
                    local.get $0
