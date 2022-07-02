@@ -50,14 +50,14 @@ export async function instantiate(module, imports = {}) {
   const memory = exports.memory || imports.env.memory;
   const adaptedExports = Object.setPrototypeOf({
     stringGlobal: {
-      // bindings/esm/stringGlobal: ~lib/string/String
+      // bindings/esm/stringGlobal: string
       valueOf() { return this.value; },
       get value() {
         return __liftString(exports.stringGlobal.value >>> 0);
       }
     },
     mutableStringGlobal: {
-      // bindings/esm/mutableStringGlobal: ~lib/string/String
+      // bindings/esm/mutableStringGlobal: string
       valueOf() { return this.value; },
       get value() {
         return __liftString(exports.mutableStringGlobal.value >>> 0);

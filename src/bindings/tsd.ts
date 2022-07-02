@@ -65,7 +65,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push(": {\n");
     indent(sb, ++this.indentLevel);
     sb.push("/** @type `");
-    sb.push(type.toString(false, true));
+    sb.push(type.toString());
     sb.push("` */\n");
     indent(sb, this.indentLevel);
     sb.push("get value(): ");
@@ -129,14 +129,14 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(" * @param ");
       sb.push(element.getParameterName(i));
       sb.push(" `");
-      sb.push(parameterTypes[i].toString(false, true));
+      sb.push(parameterTypes[i].toString());
       sb.push("`\n");
     }
     var returnType = signature.returnType;
     if (returnType != Type.void) {
       indent(sb, this.indentLevel);
       sb.push(" * @returns `");
-      sb.push(returnType.toString(false, true));
+      sb.push(returnType.toString());
       sb.push("`\n");
     }
     indent(sb, this.indentLevel);
@@ -337,7 +337,7 @@ export class TSDBuilder extends ExportsWalker {
         if (member.kind != ElementKind.FIELD) continue;
         let field = <Field>member;
         sb.push("  /** @type `");
-        sb.push(field.type.toString(false, true));
+        sb.push(field.type.toString());
         sb.push("` */\n  ");
         sb.push(field.name);
         sb.push(": ");

@@ -1088,7 +1088,7 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             initializerNode.range,
-            this.currentType.toString(false, true),
+            this.currentType.toString(),
             "<auto>"
           );
           global.set(CommonFlags.ERRORED);
@@ -2772,7 +2772,7 @@ export class Compiler extends DiagnosticEmitter {
     } else if (returnType != Type.void) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        statement.range, "void", returnType.toString(false, true)
+        statement.range, "void", returnType.toString()
       );
       this.currentType = returnType;
       return module.unreachable();
@@ -3010,7 +3010,7 @@ export class Compiler extends DiagnosticEmitter {
         if (this.currentType == Type.void) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            declaration.range, this.currentType.toString(false, true), "<auto>"
+            declaration.range, this.currentType.toString(), "<auto>"
           );
           continue;
         }
@@ -3528,8 +3528,8 @@ export class Compiler extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         reportNode.range,
-        fromType.toString(false, true),
-        toType.toString(false, true)
+        fromType.toString(),
+        toType.toString()
       );
       return module.unreachable();
     }
@@ -3575,8 +3575,8 @@ export class Compiler extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         reportNode.range,
-        fromType.toString(false, true),
-        toType.toString(false, true)
+        fromType.toString(),
+        toType.toString()
       );
       this.currentType = toType;
       return module.unreachable();
@@ -3590,8 +3590,8 @@ export class Compiler extends DiagnosticEmitter {
         this.error(
           DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
           reportNode.range,
-          fromType.toString(false, true),
-          toType.toString(false, true)
+          fromType.toString(),
+          toType.toString()
         ); // recoverable
       }
     }
@@ -3743,8 +3743,8 @@ export class Compiler extends DiagnosticEmitter {
             this.warning(
               DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
               reportNode.range,
-              fromType.toString(false, true),
-              toType.toString(false, true)
+              fromType.toString(),
+              toType.toString()
             );
           }
         }
@@ -3861,8 +3861,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, "<",
-            leftType.toString(false, true),
-            rightType.toString(false, true)
+            leftType.toString(),
+            rightType.toString()
           );
           this.currentType = contextualType;
           return module.unreachable();
@@ -3898,8 +3898,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, ">",
-            leftType.toString(false, true),
-            rightType.toString(false, true)
+            leftType.toString(),
+            rightType.toString()
           );
           this.currentType = contextualType;
           return module.unreachable();
@@ -3935,8 +3935,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, "<=",
-            leftType.toString(false, true),
-            rightType.toString(false, true)
+            leftType.toString(),
+            rightType.toString()
           );
           this.currentType = contextualType;
           return module.unreachable();
@@ -3972,8 +3972,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, ">=",
-            leftType.toString(false, true),
-            rightType.toString(false, true)
+            leftType.toString(),
+            rightType.toString()
           );
           this.currentType = contextualType;
           return module.unreachable();
@@ -4012,8 +4012,8 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range,
             operatorTokenToString(expression.operator),
-            leftType.toString(false, true),
-            rightType.toString(false, true)
+            leftType.toString(),
+            rightType.toString()
           );
           this.currentType = contextualType;
           return module.unreachable();
@@ -4051,8 +4051,8 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range,
             operatorTokenToString(expression.operator),
-            leftType.toString(false, true),
-            rightType.toString(false, true)
+            leftType.toString(),
+            rightType.toString()
           );
           this.currentType = contextualType;
           return module.unreachable();
@@ -4088,7 +4088,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isNumericValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "+", leftType.toString(false, true)
+              expression.range, "+", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4102,8 +4102,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "+",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4135,7 +4135,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isNumericValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "-", leftType.toString(false, true)
+              expression.range, "-", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4149,8 +4149,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "-",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4182,7 +4182,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isNumericValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "*", leftType.toString(false, true)
+              expression.range, "*", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4196,8 +4196,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "*",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4229,7 +4229,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isNumericValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "**", leftType.toString(false, true)
+              expression.range, "**", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4243,8 +4243,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "**",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4276,7 +4276,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isNumericValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "/", leftType.toString(false, true)
+              expression.range, "/", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4290,8 +4290,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "/",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4323,7 +4323,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isNumericValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "%", leftType.toString(false, true)
+              expression.range, "%", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4337,8 +4337,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "%",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4368,7 +4368,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!leftType.isIntegerValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "<<", leftType.toString(false, true)
+            expression.range, "<<", leftType.toString()
           );
           return module.unreachable();
         }
@@ -4395,7 +4395,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!leftType.isIntegerValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, ">>", leftType.toString(false, true)
+            expression.range, ">>", leftType.toString()
           );
           return this.module.unreachable();
         }
@@ -4423,7 +4423,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!leftType.isIntegerValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, ">>>", leftType.toString(false, true)
+            expression.range, ">>>", leftType.toString()
           );
           return module.unreachable();
         }
@@ -4452,7 +4452,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isIntegerValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "&", leftType.toString(false, true)
+              expression.range, "&", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4466,8 +4466,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "&",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4499,7 +4499,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isIntegerValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "|", leftType.toString(false, true)
+              expression.range, "|", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4513,8 +4513,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "|",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4546,7 +4546,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!leftType.isIntegerValue) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "^", leftType.toString(false, true)
+              expression.range, "^", leftType.toString()
             );
             return module.unreachable();
           }
@@ -4560,8 +4560,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "^",
-              leftType.toString(false, true),
-              rightType.toString(false, true)
+              leftType.toString(),
+              rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4720,8 +4720,8 @@ export class Compiler extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         expression.range,
-        this.currentType.toString(false, true),
-        targetType.toString(false, true)
+        this.currentType.toString(),
+        targetType.toString()
       );
       return module.unreachable();
     }
@@ -5022,7 +5022,7 @@ export class Compiler extends DiagnosticEmitter {
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
           reportNode.range,
           "ref.eq",
-          type.toString(false, true)
+          type.toString()
         );
         return module.unreachable();
       }
@@ -5087,7 +5087,7 @@ export class Compiler extends DiagnosticEmitter {
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
           reportNode.range,
           "ref.eq",
-          type.toString(false, true)
+          type.toString()
         );
         return module.unreachable();
       }
@@ -6417,7 +6417,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.error(
           DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-          expression.range, local.type.toString(false, true)
+          expression.range, local.type.toString()
         );
         return module.unreachable();
       }
@@ -6430,7 +6430,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.error(
           DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-          expression.range, global.type.toString(false, true)
+          expression.range, global.type.toString()
         );
         return module.unreachable();
       }
@@ -6455,7 +6455,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.error(
           DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-          expression.range, fieldType.toString(false, true)
+          expression.range, fieldType.toString()
         );
         return module.unreachable();
       }
@@ -6474,7 +6474,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!getterInstance) {
           this.error(
             DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, type.toString(false, true)
+            expression.range, type.toString()
           );
           return module.unreachable();
         }
@@ -6492,7 +6492,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!signature) {
           this.error(
             DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, this.currentType.toString(false, true)
+            expression.range, this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -6516,7 +6516,7 @@ export class Compiler extends DiagnosticEmitter {
         if (type) {
           this.error(
             DiagnosticCode.Type_0_has_no_call_signatures,
-            expression.range, type.toString(false, true)
+            expression.range, type.toString()
           );
         } else {
           this.error(
@@ -7069,8 +7069,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             overloadInstance.identifierNode.range,
-            overloadType.toString(false, true),
-            originalType.toString(false, true)
+            overloadType.toString(),
+            originalType.toString()
           );
           continue;
         }
@@ -7480,7 +7480,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       this.error(
         DiagnosticCode.Index_signature_is_missing_in_type_0,
-        expression.expression.range, targetType.toString(false, true)
+        expression.expression.range, targetType.toString()
       );
     }
     return module.unreachable();
@@ -7523,7 +7523,9 @@ export class Compiler extends DiagnosticEmitter {
       if (numPresentParameters > numParameters) {
         this.error(
           DiagnosticCode.Expected_0_arguments_but_got_1,
-          expression.range, numParameters.toString(), numPresentParameters.toString()
+          expression.range,
+          numParameters.toString(),
+          numPresentParameters.toString()
         );
         return module.unreachable();
       }
@@ -7542,8 +7544,8 @@ export class Compiler extends DiagnosticEmitter {
             this.error(
               DiagnosticCode.Type_0_is_not_assignable_to_type_1,
               parameterNode.range,
-              parameterTypes[i].toString(false, true),
-              resolvedType.toString(false, true)
+              parameterTypes[i].toString(),
+              resolvedType.toString()
             );
             return module.unreachable();
           }
@@ -7568,8 +7570,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             signatureNode.returnType.range,
-            resolvedType.toString(false, true),
-            returnType.toString(false, true)
+            resolvedType.toString(),
+            returnType.toString()
           );
           return module.unreachable();
         }
@@ -7596,8 +7598,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             thisTypeNode.range,
-            thisType.toString(false, true),
-            resolvedType.toString(false, true)
+            thisType.toString(),
+            resolvedType.toString()
           );
           return module.unreachable();
         }
@@ -7701,7 +7703,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = options.usizeType;
         this.warning(
           DiagnosticCode.Expression_resolves_to_unusual_type_0,
-          expression.range, this.currentType.toString(false, true)
+          expression.range, this.currentType.toString()
         );
         return options.isWasm64
           ? module.i64(0)
@@ -8024,8 +8026,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, "instanceof",
-            actualType.toString(false, true),
-            expectedType.toString(false, true)
+            actualType.toString(),
+            expectedType.toString()
           );
         }
       }
@@ -8066,8 +8068,8 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, "instanceof",
-            actualType.toString(false, true),
-            expectedType.toString(false, true)
+            actualType.toString(),
+            expectedType.toString()
           );
         }
       }
@@ -8695,7 +8697,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!classReference) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        expression.range, "<object>", contextualType.toString(false, true)
+        expression.range, "<object>", contextualType.toString()
       );
       return module.unreachable();
     }
@@ -8721,7 +8723,7 @@ export class Compiler extends DiagnosticEmitter {
     if (ctorPrototype) {
       this.errorRelated(
         DiagnosticCode.Class_0_cannot_declare_a_constructor_when_instantiated_from_an_object_literal,
-        expression.range, ctorPrototype.identifierNode.range, classType.toString(false, true)
+        expression.range, ctorPrototype.identifierNode.range, classType.toString()
       );
       return module.unreachable();
     }
@@ -8762,7 +8764,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!member || member.kind != ElementKind.FIELD) {
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
-          names[i].range, memberName, classType.toString(false, true)
+          names[i].range, memberName, classType.toString()
         );
         hasErrors = true;
         continue;
@@ -8770,7 +8772,7 @@ export class Compiler extends DiagnosticEmitter {
       if (member.is(CommonFlags.PRIVATE)) {
         this.error(
           DiagnosticCode.Property_0_is_private_and_only_accessible_within_class_1,
-          names[i].range, memberName, classType.toString(false, true)
+          names[i].range, memberName, classType.toString()
         );
         hasErrors = true;
         continue;
@@ -8778,7 +8780,7 @@ export class Compiler extends DiagnosticEmitter {
       if (member.is(CommonFlags.PROTECTED)) {
         this.error(
           DiagnosticCode.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses,
-          names[i].range, memberName, classType.toString(false, true)
+          names[i].range, memberName, classType.toString()
         );
         hasErrors = true;
         continue;
@@ -8814,7 +8816,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!fieldType.isNullableReference) {
           this.error(
             DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-            expression.range, fieldInstance.name, "<object>", classType.toString(false, true)
+            expression.range, fieldInstance.name, "<object>", classType.toString()
           );
           hasErrors = true;
           continue;
@@ -8850,7 +8852,7 @@ export class Compiler extends DiagnosticEmitter {
       // Otherwise error
       this.error(
         DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-        expression.range, fieldInstance.name, "<object>", classType.toString(false, true)
+        expression.range, fieldInstance.name, "<object>", classType.toString()
       );
       hasErrors = true;
     }
@@ -9343,8 +9345,8 @@ export class Compiler extends DiagnosticEmitter {
         this.error(
           DiagnosticCode.Type_0_is_not_assignable_to_type_1,
           ifElse.range,
-          ifElseType.toString(false, true),
-          ifThenType.toString(false, true)
+          ifElseType.toString(),
+          ifThenType.toString()
         );
         this.currentType = ctxType;
         return module.unreachable();
@@ -9419,7 +9421,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.currentType.isValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "++", this.currentType.toString(false, true)
+            expression.range, "++", this.currentType.toString()
           );
           if (tempLocal) flow.freeTempLocal(tempLocal);
           return module.unreachable();
@@ -9480,7 +9482,7 @@ export class Compiler extends DiagnosticEmitter {
           default: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "++", this.currentType.toString(false, true)
+              expression.range, "++", this.currentType.toString()
             );
             return module.unreachable();
           }
@@ -9508,7 +9510,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.currentType.isValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "--", this.currentType.toString(false, true)
+            expression.range, "--", this.currentType.toString()
           );
           if (tempLocal) flow.freeTempLocal(tempLocal);
           return module.unreachable();
@@ -9569,7 +9571,7 @@ export class Compiler extends DiagnosticEmitter {
           default: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "--", this.currentType.toString(false, true)
+              expression.range, "--", this.currentType.toString()
             );
             return module.unreachable();
           }
@@ -9649,7 +9651,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.currentType.isValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "+", this.currentType.toString(false, true)
+            expression.range, "+", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -9682,7 +9684,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.currentType.isValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "-", this.currentType.toString(false, true)
+            expression.range, "-", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -9725,7 +9727,7 @@ export class Compiler extends DiagnosticEmitter {
           default: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "-", this.currentType.toString(false, true)
+              expression.range, "-", this.currentType.toString()
             );
             expr = module.unreachable();
           }
@@ -9753,7 +9755,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.currentType.isValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "++", this.currentType.toString(false, true)
+            expression.range, "++", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -9796,7 +9798,7 @@ export class Compiler extends DiagnosticEmitter {
           default: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "++", this.currentType.toString(false, true)
+              expression.range, "++", this.currentType.toString()
             );
             expr = module.unreachable();
           }
@@ -9824,7 +9826,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.currentType.isValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "--", this.currentType.toString(false, true)
+            expression.range, "--", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -9867,7 +9869,7 @@ export class Compiler extends DiagnosticEmitter {
           default: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "--", this.currentType.toString(false, true)
+              expression.range, "--", this.currentType.toString()
             );
             expr = module.unreachable();
           }
@@ -9913,7 +9915,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.currentType.isValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "~", this.currentType.toString(false, true)
+            expression.range, "~", this.currentType.toString()
           );
           return module.unreachable();
         }
@@ -9950,7 +9952,7 @@ export class Compiler extends DiagnosticEmitter {
           default: {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "~", this.currentType.toString(false, true)
+              expression.range, "~", this.currentType.toString()
             );
             expr = module.unreachable();
           }
@@ -10438,8 +10440,8 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             reportNode.range,
             toStringInstance.identifierAndSignatureRange,
-            toStringReturnType.toString(false, true),
-            stringType.toString(false, true)
+            toStringReturnType.toString(),
+            stringType.toString()
           );
           this.currentType = stringType;
           return this.module.unreachable();
@@ -10450,8 +10452,8 @@ export class Compiler extends DiagnosticEmitter {
     this.error(
       DiagnosticCode.Type_0_is_not_assignable_to_type_1,
       reportNode.range,
-      type.toString(false, true),
-      stringType.toString(false, true)
+      type.toString(),
+      stringType.toString()
     );
     this.currentType = stringType;
     return this.module.unreachable();

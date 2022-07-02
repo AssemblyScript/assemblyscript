@@ -469,18 +469,19 @@ export class Type {
   }
 
   /** Converts this type to a string. */
-  toString(validWat: bool = false, shortName: bool = false): string {
+  toString(validWat: bool = false, noInternalStd: bool = true): string {
     const nullablePostfix = validWat ? "|null" : " | null";
     if (this.isReference) {
       let classReference = this.getClass();
       if (classReference) {
         let internalName = classReference.internalName;
-        if (shortName && internalName.startsWith(LIBRARY_SUBST)) {
-          let shortName = classReference.name;
-          if (shortName == "String") shortName = "string";
+        if (noInternalStd && internalName.startsWith(LIBRARY_SUBST)) {
+          let name = classReference.name;
+          if (name == "String") name = "string";
+          if (name == "Symbol") name = "symbol";
           return this.isNullableReference
-            ? shortName + nullablePostfix
-            : shortName;
+            ? name + nullablePostfix
+            : name;
         }
         return this.isNullableReference
           ? internalName + nullablePostfix
@@ -735,11 +736,11 @@ export function typesToRefs(types: Type[]): TypeRef[] {
 }
 
 /** Converts an array of types to its combined string representation. */
-export function typesToString(types: Type[], shortName: bool = false): string {
+export function typesToString(types: Type[]): string {
   var numTypes = types.length;
   if (!numTypes) return "";
   var sb = new Array<string>(numTypes);
-  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true, shortName);
+  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true, false);
   return sb.join(",");
 }
 
@@ -915,7 +916,7 @@ export class Signature {
   }
 
   /** Converts this signature to a string. */
-  toString(validWat: bool = false, shortName: bool = false): string {
+  toString(validWat: bool = false, noInternalStd: bool = false): string {
     var sb = new Array<string>();
     sb.push(validWat ? "%28" : "(");
     var index = 0;
@@ -923,7 +924,7 @@ export class Signature {
     if (thisType) {
       sb.push(validWat ? "this:" : "this: ");
       assert(!thisType.signatureReference);
-      sb.push(thisType.toString(validWat, shortName));
+      sb.push(thisType.toString(validWat, noInternalStd));
       index = 1;
     }
     var parameters = this.parameterTypes;
@@ -934,12 +935,12 @@ export class Signature {
       for (let i = 0; i < numParameters; ++i, ++index) {
         if (index) sb.push(validWat ? "%2C" : ", ");
         if (i == restIndex) sb.push("...");
-        sb.push(parameters[i].toString(validWat, shortName));
+        sb.push(parameters[i].toString(validWat, noInternalStd));
         if (i >= optionalStart && i != restIndex) sb.push("?");
       }
     }
     sb.push(validWat ? "%29=>" : ") => ");
-    sb.push(this.returnType.toString(validWat, shortName));
+    sb.push(this.returnType.toString(validWat, noInternalStd));
     return sb.join("");
   }
 
