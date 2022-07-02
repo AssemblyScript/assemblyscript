@@ -2297,7 +2297,7 @@
   i32.const 0
   drop
  )
- (func $~lib/array/Array<std/array-literal/Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2313,11 +2313,11 @@
   i32.const 1
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<std/array-literal/Ref>#get:length (param $0 i32) (result i32)
+ (func $~lib/array/Array<Ref>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<std/array-literal/RefWithCtor>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<RefWithCtor>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2333,7 +2333,7 @@
   i32.const 1
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<std/array-literal/RefWithCtor>#get:length (param $0 i32) (result i32)
+ (func $~lib/array/Array<RefWithCtor>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
@@ -2486,7 +2486,7 @@
   local.get $1
   call $~lib/array/Array<i32>#__visit
  )
- (func $~lib/array/Array<std/array-literal/Ref>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<Ref>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2534,9 +2534,9 @@
  (func $~lib/array/Array<std/array-literal/Ref>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<std/array-literal/Ref>#__visit
+  call $~lib/array/Array<Ref>#__visit
  )
- (func $~lib/array/Array<std/array-literal/RefWithCtor>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<RefWithCtor>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2584,7 +2584,7 @@
  (func $~lib/array/Array<std/array-literal/RefWithCtor>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<std/array-literal/RefWithCtor>#__visit
+  call $~lib/array/Array<RefWithCtor>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
@@ -3093,17 +3093,17 @@
   i32.const 0
   i32.const 0
   call $std/array-literal/Ref#constructor
-  call $~lib/array/Array<std/array-literal/Ref>#__uset
+  call $~lib/array/Array<Ref>#__uset
   local.get $1
   i32.const 1
   i32.const 0
   call $std/array-literal/Ref#constructor
-  call $~lib/array/Array<std/array-literal/Ref>#__uset
+  call $~lib/array/Array<Ref>#__uset
   local.get $1
   i32.const 2
   i32.const 0
   call $std/array-literal/Ref#constructor
-  call $~lib/array/Array<std/array-literal/Ref>#__uset
+  call $~lib/array/Array<Ref>#__uset
   local.get $1
   global.set $std/array-literal/dynamicArrayRef
   global.get $std/array-literal/dynamicArrayRef
@@ -3112,7 +3112,7 @@
   local.get $2
   i32.store
   local.get $2
-  call $~lib/array/Array<std/array-literal/Ref>#get:length
+  call $~lib/array/Array<Ref>#get:length
   i32.const 3
   i32.eq
   i32.eqz
@@ -3141,17 +3141,17 @@
   i32.const 0
   i32.const 0
   call $std/array-literal/RefWithCtor#constructor
-  call $~lib/array/Array<std/array-literal/RefWithCtor>#__uset
+  call $~lib/array/Array<RefWithCtor>#__uset
   local.get $0
   i32.const 1
   i32.const 0
   call $std/array-literal/RefWithCtor#constructor
-  call $~lib/array/Array<std/array-literal/RefWithCtor>#__uset
+  call $~lib/array/Array<RefWithCtor>#__uset
   local.get $0
   i32.const 2
   i32.const 0
   call $std/array-literal/RefWithCtor#constructor
-  call $~lib/array/Array<std/array-literal/RefWithCtor>#__uset
+  call $~lib/array/Array<RefWithCtor>#__uset
   local.get $0
   global.set $std/array-literal/dynamicArrayRefWithCtor
   global.get $std/array-literal/dynamicArrayRefWithCtor
@@ -3160,7 +3160,7 @@
   local.get $2
   i32.store
   local.get $2
-  call $~lib/array/Array<std/array-literal/RefWithCtor>#get:length
+  call $~lib/array/Array<RefWithCtor>#get:length
   i32.const 3
   i32.eq
   i32.eqz
@@ -3199,7 +3199,7 @@
   i32.const 0
   i32.const 0
   call $std/array-literal/Ref#constructor
-  call $~lib/array/Array<std/array-literal/Ref>#__uset
+  call $~lib/array/Array<Ref>#__uset
   local.get $1
   local.set $2
   global.get $~lib/memory/__stack_pointer

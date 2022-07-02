@@ -18,6 +18,12 @@ import {
   createType
 } from "./module";
 
+export const enum TypeNamePolicy {
+  SHORT,
+  NAME_ONLY,
+  INTERNAL_ONLY,
+}
+
 /** Indicates the kind of a type. */
 export const enum TypeKind {
 
@@ -469,23 +475,26 @@ export class Type {
   }
 
   /** Converts this type to a string. */
-  toString(validWat: bool = false, noInternalStd: bool = true): string {
+  toString(validWat: bool = false, namePolicy: TypeNamePolicy = TypeNamePolicy.SHORT): string {
     const nullablePostfix = validWat ? "|null" : " | null";
     if (this.isReference) {
       let classReference = this.getClass();
       if (classReference) {
-        let internalName = classReference.internalName;
-        if (noInternalStd && internalName.startsWith(LIBRARY_SUBST)) {
-          let name = classReference.name;
+        let name = classReference.internalName;
+        if (namePolicy == TypeNamePolicy.NAME_ONLY) {
+          name = classReference.name;
           if (name == "String") name = "string";
           if (name == "Symbol") name = "symbol";
-          return this.isNullableReference
-            ? name + nullablePostfix
-            : name;
+        } else if (namePolicy == TypeNamePolicy.SHORT) {
+          if (classReference.internalName.startsWith(LIBRARY_SUBST)) {
+            name = classReference.name;
+            if (name == "String") name = "string";
+            if (name == "Symbol") name = "symbol";
+          } // otherwise fallback to internalName
         }
         return this.isNullableReference
-          ? internalName + nullablePostfix
-          : internalName;
+          ? name + nullablePostfix
+          : name;
       } else {
         let signatureReference = this.getSignature();
         if (signatureReference) {
@@ -736,11 +745,11 @@ export function typesToRefs(types: Type[]): TypeRef[] {
 }
 
 /** Converts an array of types to its combined string representation. */
-export function typesToString(types: Type[], noInternalStd: bool = false): string {
+export function typesToString(types: Type[], namePolicy: TypeNamePolicy = TypeNamePolicy.INTERNAL_ONLY): string {
   var numTypes = types.length;
   if (!numTypes) return "";
   var sb = new Array<string>(numTypes);
-  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true, noInternalStd);
+  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true, namePolicy);
   return sb.join(",");
 }
 

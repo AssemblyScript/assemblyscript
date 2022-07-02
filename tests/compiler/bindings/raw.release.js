@@ -2,7 +2,7 @@ export async function instantiate(module, imports = {}) {
   const adaptedImports = {
     env: Object.assign(Object.create(globalThis), imports.env || {}, {
       trace(message, n, a0, a1, a2, a3, a4) {
-        // ~lib/builtins/trace(~lib/string/String, i32?, f64?, f64?, f64?, f64?, f64?) => void
+        // ~lib/builtins/trace(string, i32?, f64?, f64?, f64?, f64?, f64?) => void
         message = __liftString(message >>> 0);
         (() => {
           // @external.js
@@ -10,7 +10,7 @@ export async function instantiate(module, imports = {}) {
         })();
       },
       "console.log"(text) {
-        // ~lib/bindings/dom/console.log(~lib/string/String) => void
+        // ~lib/bindings/dom/console.log(string) => void
         text = __liftString(text >>> 0);
         console.log(text);
       },
@@ -34,7 +34,7 @@ export async function instantiate(module, imports = {}) {
         })();
       },
       abort(message, fileName, lineNumber, columnNumber) {
-        // ~lib/builtins/abort(~lib/string/String | null?, ~lib/string/String | null?, u32?, u32?) => void
+        // ~lib/builtins/abort(string | null?, string | null?, u32?, u32?) => void
         message = __liftString(message >>> 0);
         fileName = __liftString(fileName >>> 0);
         lineNumber = lineNumber >>> 0;
@@ -87,7 +87,7 @@ export async function instantiate(module, imports = {}) {
       return exports.plainFunction64(a, b);
     },
     bufferFunction(a, b) {
-      // bindings/esm/bufferFunction(~lib/arraybuffer/ArrayBuffer, ~lib/arraybuffer/ArrayBuffer) => ~lib/arraybuffer/ArrayBuffer
+      // bindings/esm/bufferFunction(ArrayBuffer, ArrayBuffer) => ArrayBuffer
       a = __retain(__lowerBuffer(a) || __notnull());
       b = __lowerBuffer(b) || __notnull();
       try {
@@ -97,7 +97,7 @@ export async function instantiate(module, imports = {}) {
       }
     },
     stringFunction(a, b) {
-      // bindings/esm/stringFunction(~lib/string/String, ~lib/string/String) => ~lib/string/String
+      // bindings/esm/stringFunction(string, string) => string
       a = __retain(__lowerString(a) || __notnull());
       b = __lowerString(b) || __notnull();
       try {
@@ -107,7 +107,7 @@ export async function instantiate(module, imports = {}) {
       }
     },
     stringFunctionOptional(a, b) {
-      // bindings/esm/stringFunctionOptional(~lib/string/String, ~lib/string/String?) => ~lib/string/String
+      // bindings/esm/stringFunctionOptional(string, string?) => string
       a = __retain(__lowerString(a) || __notnull());
       b = __lowerString(b) || __notnull();
       try {
@@ -118,7 +118,7 @@ export async function instantiate(module, imports = {}) {
       }
     },
     typedarrayFunction(a, b) {
-      // bindings/esm/typedarrayFunction(~lib/typedarray/Int16Array, ~lib/typedarray/Float32Array) => ~lib/typedarray/Uint64Array
+      // bindings/esm/typedarrayFunction(Int16Array, Float32Array) => Uint64Array
       a = __retain(__lowerTypedArray(Int16Array, 3, 1, a) || __notnull());
       b = __lowerTypedArray(Float32Array, 4, 2, b) || __notnull();
       try {
@@ -128,7 +128,7 @@ export async function instantiate(module, imports = {}) {
       }
     },
     staticarrayFunction(a, b) {
-      // bindings/esm/staticarrayFunction(~lib/staticarray/StaticArray<i32>, ~lib/staticarray/StaticArray<i32>) => ~lib/staticarray/StaticArray<i32>
+      // bindings/esm/staticarrayFunction(StaticArray<i32>, StaticArray<i32>) => StaticArray<i32>
       a = __retain(__lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, a) || __notnull());
       b = __lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, b) || __notnull();
       try {
@@ -138,7 +138,7 @@ export async function instantiate(module, imports = {}) {
       }
     },
     arrayFunction(a, b) {
-      // bindings/esm/arrayFunction(~lib/array/Array<i32>, ~lib/array/Array<i32>) => ~lib/array/Array<i32>
+      // bindings/esm/arrayFunction(Array<i32>, Array<i32>) => Array<i32>
       a = __retain(__lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, a) || __notnull());
       b = __lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, b) || __notnull();
       try {
