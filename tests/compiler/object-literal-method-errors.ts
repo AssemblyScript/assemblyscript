@@ -1,5 +1,5 @@
 class SomeClass {
-  val: i32
+  val: i32;
 }
 
 const obj = {
