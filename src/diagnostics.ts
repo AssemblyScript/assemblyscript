@@ -158,6 +158,11 @@ export class DiagnosticMessage {
   }
 }
 
+function formatMessage(sb: string[], showContext: bool, range: Range, source: Source): void {
+  if (showContext) sb.push(`\n${formatDiagnosticContext(range)}`);
+  sb.push(`\n in ${source.normalizedPath}(${source.lineAt(range.start)},${source.columnAt()})`);
+}
+
 /** Formats a diagnostic message, optionally with terminal colors and source context. */
 export function formatDiagnosticMessage(
   message: DiagnosticMessage,
@@ -165,52 +170,23 @@ export function formatDiagnosticMessage(
   showContext: bool = false
 ): string {
   var wasColorsEnabled = setColorsEnabled(useColors);
-
   // general information
   var sb: string[] = [];
+
   if (isColorsEnabled()) sb.push(diagnosticCategoryToColor(message.category));
   sb.push(diagnosticCategoryToString(message.category));
+
   if (isColorsEnabled()) sb.push(COLOR_RESET);
-  sb.push(message.code < 1000 ? " AS" : " TS");
-  sb.push(message.code.toString());
-  sb.push(": ");
-  sb.push(message.message);
+  sb.push(`${message.code < 1000 ? " AS" : " TS"}${message.code}: ${message.message}`);
 
   // include range information if available
   var range = message.range;
   if (range) {
-    let source = range.source;
-
     // include context information if requested
-    if (showContext) {
-      sb.push("\n");
-      sb.push(formatDiagnosticContext(range));
-    }
-    sb.push("\n");
-    sb.push(" in ");
-    sb.push(source.normalizedPath);
-    sb.push("(");
-    sb.push(source.lineAt(range.start).toString());
-    sb.push(",");
-    sb.push(source.columnAt().toString());
-    sb.push(")");
+    formatMessage(sb, showContext, range, range.source);
 
     let relatedRange = message.relatedRange;
-    if (relatedRange) {
-      let relatedSource = relatedRange.source;
-      if (showContext) {
-        sb.push("\n");
-        sb.push(formatDiagnosticContext(relatedRange));
-      }
-      sb.push("\n");
-      sb.push(" in ");
-      sb.push(relatedSource.normalizedPath);
-      sb.push("(");
-      sb.push(relatedSource.lineAt(relatedRange.start).toString());
-      sb.push(",");
-      sb.push(relatedSource.columnAt().toString());
-      sb.push(")");
-    }
+    if (relatedRange) formatMessage(sb, showContext, relatedRange, relatedRange.source);
   }
   setColorsEnabled(wasColorsEnabled);
   return sb.join("");
@@ -224,11 +200,7 @@ function formatDiagnosticContext(range: Range): string {
   var end = range.end;
   while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) start--;
   while (end < len && !isLineBreak(text.charCodeAt(end))) end++;
-  var sb: string[] = [
-    "\n ",
-    text.substring(start, end),
-    "\n "
-  ];
+  var sb = [`\n ${text.substring(start, end)}\n `];
   while (start < range.start) {
     sb.push(" ");
     start++;
