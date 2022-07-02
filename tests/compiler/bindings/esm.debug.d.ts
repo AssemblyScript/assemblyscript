@@ -96,21 +96,21 @@ export declare function staticarrayFunction(a: Array<number>, b: Array<number>):
 export declare function arrayFunction(a: Array<number>, b: Array<number>): Array<number>;
 /**
  * bindings/esm/objectFunction
- * @param a `PlainObject`
- * @param b `PlainObject`
- * @returns `PlainObject`
+ * @param a `bindings/esm/PlainObject`
+ * @param b `bindings/esm/PlainObject`
+ * @returns `bindings/esm/PlainObject`
  */
 export declare function objectFunction(a: __Record8<undefined>, b: __Record8<undefined>): __Record8<never>;
 /**
  * bindings/esm/newInternref
- * @returns `NonPlainObject`
+ * @returns `bindings/esm/NonPlainObject`
  */
 export declare function newInternref(): __Internref11;
 /**
  * bindings/esm/internrefFunction
- * @param a `NonPlainObject`
- * @param b `NonPlainObject`
- * @returns `NonPlainObject`
+ * @param a `bindings/esm/NonPlainObject`
+ * @param b `bindings/esm/NonPlainObject`
+ * @returns `bindings/esm/NonPlainObject`
  */
 export declare function internrefFunction(a: __Internref11, b: __Internref11): __Internref11;
 /** bindings/esm/PlainObject */

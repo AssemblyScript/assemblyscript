@@ -2351,7 +2351,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<MultiAssignmentTest>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2367,7 +2367,7 @@
   i32.const 1
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<MultiAssignmentTest>#__set (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -2400,9 +2400,9 @@
   local.get $0
   local.get $1
   local.get $2
-  call $~lib/array/Array<MultiAssignmentTest>#__uset
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__uset
  )
- (func $~lib/array/Array<MultiAssignmentTest>#get:length (param $0 i32) (result i32)
+ (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
@@ -2452,7 +2452,7 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/array/Array<MultiAssignmentTest>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2500,7 +2500,7 @@
  (func $~lib/array/Array<issues/1699/MultiAssignmentTest>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<MultiAssignmentTest>#__visit
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
@@ -2569,7 +2569,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 3
-  call $~lib/array/Array<MultiAssignmentTest>#constructor
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#constructor
   local.tee $0
   i32.store
   local.get $0
@@ -2585,22 +2585,22 @@
   local.get $4
   i32.store offset=8
   local.get $4
-  call $~lib/array/Array<MultiAssignmentTest>#__set
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set
   local.get $1
   local.get $2
-  call $~lib/array/Array<MultiAssignmentTest>#__get
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
   i32.store offset=4
   local.get $4
-  call $~lib/array/Array<MultiAssignmentTest>#__set
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set
   i32.const 0
   local.set $1
   loop $for-loop|0
    local.get $1
    local.get $0
-   call $~lib/array/Array<MultiAssignmentTest>#get:length
+   call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length
    i32.lt_s
    local.set $2
    local.get $2
@@ -2617,7 +2617,7 @@
      local.get $0
      local.get $1
      local.get $3
-     call $~lib/array/Array<MultiAssignmentTest>#__set
+     call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set
     end
     local.get $1
     i32.const 1
@@ -2628,10 +2628,10 @@
   end
   local.get $0
   i32.const 0
-  call $~lib/array/Array<MultiAssignmentTest>#__get
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
   local.get $0
   i32.const 1
-  call $~lib/array/Array<MultiAssignmentTest>#__get
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
   i32.eq
   i32.eqz
   if
@@ -2644,10 +2644,10 @@
   end
   local.get $0
   i32.const 2
-  call $~lib/array/Array<MultiAssignmentTest>#__get
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
   local.get $0
   i32.const 1
-  call $~lib/array/Array<MultiAssignmentTest>#__get
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get
   i32.ne
   i32.eqz
   if
@@ -2663,7 +2663,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<MultiAssignmentTest>#constructor (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2784,7 +2784,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/array/Array<MultiAssignmentTest>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer

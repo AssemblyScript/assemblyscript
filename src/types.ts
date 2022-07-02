@@ -475,7 +475,7 @@ export class Type {
       let classReference = this.getClass();
       if (classReference) {
         let internalName = classReference.internalName;
-        if (noInternalStd) {
+        if (noInternalStd && internalName.startsWith(LIBRARY_SUBST)) {
           let name = classReference.name;
           if (name == "String") name = "string";
           if (name == "Symbol") name = "symbol";

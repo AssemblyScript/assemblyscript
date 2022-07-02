@@ -1593,7 +1593,7 @@
   memory.fill
   local.get $1
  )
- (func $~lib/array/Array<Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<std/array-literal/Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2101,15 +2101,15 @@
   local.get $0
   i32.const 0
   call $std/array-literal/Ref#constructor
-  call $~lib/array/Array<Ref>#__uset
+  call $~lib/array/Array<std/array-literal/Ref>#__uset
   local.get $0
   i32.const 1
   call $std/array-literal/Ref#constructor
-  call $~lib/array/Array<Ref>#__uset
+  call $~lib/array/Array<std/array-literal/Ref>#__uset
   local.get $0
   i32.const 2
   call $std/array-literal/Ref#constructor
-  call $~lib/array/Array<Ref>#__uset
+  call $~lib/array/Array<std/array-literal/Ref>#__uset
   local.get $0
   global.set $std/array-literal/dynamicArrayRef
   global.get $~lib/memory/__stack_pointer
@@ -2142,15 +2142,15 @@
   local.get $0
   i32.const 0
   call $std/array-literal/RefWithCtor#constructor
-  call $~lib/array/Array<Ref>#__uset
+  call $~lib/array/Array<std/array-literal/Ref>#__uset
   local.get $0
   i32.const 1
   call $std/array-literal/RefWithCtor#constructor
-  call $~lib/array/Array<Ref>#__uset
+  call $~lib/array/Array<std/array-literal/Ref>#__uset
   local.get $0
   i32.const 2
   call $std/array-literal/RefWithCtor#constructor
-  call $~lib/array/Array<Ref>#__uset
+  call $~lib/array/Array<std/array-literal/Ref>#__uset
   local.get $0
   global.set $std/array-literal/dynamicArrayRefWithCtor
   global.get $~lib/memory/__stack_pointer
@@ -2193,7 +2193,7 @@
   local.get $0
   i32.const 0
   call $std/array-literal/Ref#constructor
-  call $~lib/array/Array<Ref>#__uset
+  call $~lib/array/Array<std/array-literal/Ref>#__uset
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store

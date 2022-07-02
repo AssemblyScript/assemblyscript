@@ -2340,7 +2340,7 @@
    end
   end
  )
- (func $~lib/staticarray/StaticArray<Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -4842,7 +4842,7 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/staticarray/StaticArray<Ref>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4885,7 +4885,7 @@
  (func $~lib/staticarray/StaticArray<std/staticarray/Ref>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/staticarray/StaticArray<Ref>#__visit
+  call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit
  )
  (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
@@ -5610,12 +5610,12 @@
   i32.const 0
   i32.const 0
   call $std/staticarray/Ref#constructor
-  call $~lib/staticarray/StaticArray<Ref>#__uset
+  call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
   local.get $0
   i32.const 1
   i32.const 0
   call $std/staticarray/Ref#constructor
-  call $~lib/staticarray/StaticArray<Ref>#__uset
+  call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
   local.get $0
   global.set $std/staticarray/arr4
   i32.const 0

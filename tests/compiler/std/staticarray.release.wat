@@ -1699,7 +1699,7 @@
   memory.fill
   local.get $1
  )
- (func $~lib/staticarray/StaticArray<Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -3252,11 +3252,11 @@
    local.get $6
    i32.const 0
    call $std/staticarray/Ref#constructor
-   call $~lib/staticarray/StaticArray<Ref>#__uset
+   call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
    local.get $6
    i32.const 1
    call $std/staticarray/Ref#constructor
-   call $~lib/staticarray/StaticArray<Ref>#__uset
+   call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
    local.get $6
    global.set $std/staticarray/arr4
    i32.const 0
