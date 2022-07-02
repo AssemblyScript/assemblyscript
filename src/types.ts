@@ -925,7 +925,7 @@ export class Signature {
   }
 
   /** Converts this signature to a string. */
-  toString(validWat: bool = false, noInternalStd: bool = false): string {
+  toString(validWat: bool = false, namePolicy: TypeNamePolicy = TypeNamePolicy.SHORT): string {
     var sb = new Array<string>();
     sb.push(validWat ? "%28" : "(");
     var index = 0;
@@ -933,7 +933,7 @@ export class Signature {
     if (thisType) {
       sb.push(validWat ? "this:" : "this: ");
       assert(!thisType.signatureReference);
-      sb.push(thisType.toString(validWat, noInternalStd));
+      sb.push(thisType.toString(validWat, namePolicy));
       index = 1;
     }
     var parameters = this.parameterTypes;
@@ -944,12 +944,12 @@ export class Signature {
       for (let i = 0; i < numParameters; ++i, ++index) {
         if (index) sb.push(validWat ? "%2C" : ", ");
         if (i == restIndex) sb.push("...");
-        sb.push(parameters[i].toString(validWat, noInternalStd));
+        sb.push(parameters[i].toString(validWat, namePolicy));
         if (i >= optionalStart && i != restIndex) sb.push("?");
       }
     }
     sb.push(validWat ? "%29=>" : ") => ");
-    sb.push(this.returnType.toString(validWat, noInternalStd));
+    sb.push(this.returnType.toString(validWat, namePolicy));
     return sb.join("");
   }
 
