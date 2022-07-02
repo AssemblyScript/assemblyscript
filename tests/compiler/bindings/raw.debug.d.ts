@@ -12,12 +12,12 @@ declare namespace __AdaptedExports {
   };
   /** bindings/esm/stringGlobal */
   export const stringGlobal: {
-    /** @type `~lib/string/String` */
+    /** @type `string` */
     get value(): string
   };
   /** bindings/esm/mutableStringGlobal */
   export const mutableStringGlobal: {
-    /** @type `~lib/string/String` */
+    /** @type `string` */
     get value(): string;
     set value(value: string);
   };
@@ -55,44 +55,44 @@ declare namespace __AdaptedExports {
   export function plainFunction64(a: bigint, b: bigint): bigint;
   /**
    * bindings/esm/bufferFunction
-   * @param a `~lib/arraybuffer/ArrayBuffer`
-   * @param b `~lib/arraybuffer/ArrayBuffer`
-   * @returns `~lib/arraybuffer/ArrayBuffer`
+   * @param a `ArrayBuffer`
+   * @param b `ArrayBuffer`
+   * @returns `ArrayBuffer`
    */
   export function bufferFunction(a: ArrayBuffer, b: ArrayBuffer): ArrayBuffer;
   /**
    * bindings/esm/stringFunction
-   * @param a `~lib/string/String`
-   * @param b `~lib/string/String`
-   * @returns `~lib/string/String`
+   * @param a `string`
+   * @param b `string`
+   * @returns `string`
    */
   export function stringFunction(a: string, b: string): string;
   /**
    * bindings/esm/stringFunctionOptional
-   * @param a `~lib/string/String`
-   * @param b `~lib/string/String`
-   * @returns `~lib/string/String`
+   * @param a `string`
+   * @param b `string`
+   * @returns `string`
    */
   export function stringFunctionOptional(a: string, b?: string): string;
   /**
    * bindings/esm/typedarrayFunction
-   * @param a `~lib/typedarray/Int16Array`
-   * @param b `~lib/typedarray/Float32Array`
-   * @returns `~lib/typedarray/Uint64Array`
+   * @param a `Int16Array`
+   * @param b `Float32Array`
+   * @returns `Uint64Array`
    */
   export function typedarrayFunction(a: Int16Array, b: Float32Array): BigUint64Array;
   /**
    * bindings/esm/staticarrayFunction
-   * @param a `~lib/staticarray/StaticArray<i32>`
-   * @param b `~lib/staticarray/StaticArray<i32>`
-   * @returns `~lib/staticarray/StaticArray<i32>`
+   * @param a `StaticArray<i32>`
+   * @param b `StaticArray<i32>`
+   * @returns `StaticArray<i32>`
    */
   export function staticarrayFunction(a: Array<number>, b: Array<number>): Array<number>;
   /**
    * bindings/esm/arrayFunction
-   * @param a `~lib/array/Array<i32>`
-   * @param b `~lib/array/Array<i32>`
-   * @returns `~lib/array/Array<i32>`
+   * @param a `Array<i32>`
+   * @param b `Array<i32>`
+   * @returns `Array<i32>`
    */
   export function arrayFunction(a: Array<number>, b: Array<number>): Array<number>;
   /**
@@ -143,11 +143,11 @@ declare interface __Record8<TOmittable> {
   l: number | TOmittable;
   /** @type `f64` */
   m: number | TOmittable;
-  /** @type `~lib/string/String | null` */
+  /** @type `string | null` */
   n: string | null | TOmittable;
-  /** @type `~lib/typedarray/Uint8Array | null` */
+  /** @type `Uint8Array | null` */
   o: Uint8Array | null | TOmittable;
-  /** @type `~lib/array/Array<~lib/string/String> | null` */
+  /** @type `Array<~lib/string/String> | null` */
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */

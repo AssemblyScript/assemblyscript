@@ -3331,7 +3331,9 @@ export class Resolver extends DiagnosticEmitter {
               if (reportMode == ReportMode.REPORT) {
                 this.error(
                   DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                  overloadPrototype.functionTypeNode.returnType.range, returnType.toString(), instance.type.toString()
+                  overloadPrototype.functionTypeNode.returnType.range,
+                  returnType.toString(false, true),
+                  instance.type.toString(false, true)
                 );
               }
             }

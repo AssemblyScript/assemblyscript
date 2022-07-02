@@ -2,9 +2,9 @@
   "asc_flags": [
   ],
   "stderr": [
-    "TS2322: Type '~lib/string/String | null' is not assignable to type '~lib/string/String'",
+    "TS2322: Type 'string | null' is not assignable to type 'string'",
     "a.b + a.c",
-    "TS2322: Type '~lib/string/String | null' is not assignable to type '~lib/string/String'",
+    "TS2322: Type 'string | null' is not assignable to type 'string'",
     "a.c + a.b",
     "EOF"
   ]

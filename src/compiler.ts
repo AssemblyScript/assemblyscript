@@ -1087,7 +1087,9 @@ export class Compiler extends DiagnosticEmitter {
         if (this.currentType == Type.void) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            initializerNode.range, this.currentType.toString(), "<auto>"
+            initializerNode.range,
+            this.currentType.toString(false, true),
+            "<auto>"
           );
           global.set(CommonFlags.ERRORED);
           pendingElements.delete(global);
@@ -2770,7 +2772,7 @@ export class Compiler extends DiagnosticEmitter {
     } else if (returnType != Type.void) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        statement.range, "void", returnType.toString()
+        statement.range, "void", returnType.toString(false, true)
       );
       this.currentType = returnType;
       return module.unreachable();
@@ -3008,7 +3010,7 @@ export class Compiler extends DiagnosticEmitter {
         if (this.currentType == Type.void) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            declaration.range, this.currentType.toString(), "<auto>"
+            declaration.range, this.currentType.toString(false, true), "<auto>"
           );
           continue;
         }
@@ -3525,7 +3527,9 @@ export class Compiler extends DiagnosticEmitter {
       assert(toType.kind != TypeKind.VOID); // convertExpression should not be called with void -> void
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        reportNode.range, fromType.toString(), toType.toString()
+        reportNode.range,
+        fromType.toString(false, true),
+        toType.toString(false, true)
       );
       return module.unreachable();
     }
@@ -3570,7 +3574,9 @@ export class Compiler extends DiagnosticEmitter {
       }
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        reportNode.range, fromType.toString(), toType.toString()
+        reportNode.range,
+        fromType.toString(false, true),
+        toType.toString(false, true)
       );
       this.currentType = toType;
       return module.unreachable();
@@ -4677,7 +4683,9 @@ export class Compiler extends DiagnosticEmitter {
     if (!this.currentType.isStrictlyAssignableTo(targetType)) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        expression.range, this.currentType.toString(), targetType.toString()
+        expression.range,
+        this.currentType.toString(false, true),
+        targetType.toString(false, true)
       );
       return module.unreachable();
     }
@@ -7024,7 +7032,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!overloadType.isAssignableTo(originalType)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
+            overloadInstance.identifierNode.range,
+            overloadType.toString(false, true),
+            originalType.toString(false, true)
           );
           continue;
         }
@@ -7495,7 +7505,9 @@ export class Compiler extends DiagnosticEmitter {
           if (!parameterTypes[i].isStrictlyAssignableTo(resolvedType)) {
             this.error(
               DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-              parameterNode.range, parameterTypes[i].toString(), resolvedType.toString()
+              parameterNode.range,
+              parameterTypes[i].toString(false, true),
+              resolvedType.toString(false, true)
             );
             return module.unreachable();
           }
@@ -7519,7 +7531,9 @@ export class Compiler extends DiagnosticEmitter {
         ) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            signatureNode.returnType.range, resolvedType.toString(), returnType.toString()
+            signatureNode.returnType.range,
+            resolvedType.toString(false, true),
+            returnType.toString(false, true)
           );
           return module.unreachable();
         }
@@ -7545,7 +7559,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!thisType.isStrictlyAssignableTo(resolvedType)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            thisTypeNode.range, thisType.toString(), resolvedType.toString()
+            thisTypeNode.range,
+            thisType.toString(false, true),
+            resolvedType.toString(false, true)
           );
           return module.unreachable();
         }
@@ -8639,7 +8655,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!classReference) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        expression.range, "<object>", contextualType.toString()
+        expression.range, "<object>", contextualType.toString(false, true)
       );
       return module.unreachable();
     }
@@ -9286,7 +9302,9 @@ export class Compiler extends DiagnosticEmitter {
       if (!commonType) {
         this.error(
           DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-          ifElse.range, ifElseType.toString(), ifThenType.toString()
+          ifElse.range,
+          ifElseType.toString(false, true),
+          ifThenType.toString(false, true)
         );
         this.currentType = ctxType;
         return module.unreachable();
@@ -10378,7 +10396,10 @@ export class Compiler extends DiagnosticEmitter {
         if (!toStringReturnType.isStrictlyAssignableTo(stringType)) {
           this.errorRelated(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            reportNode.range, toStringInstance.identifierAndSignatureRange, toStringReturnType.toString(), stringType.toString()
+            reportNode.range,
+            toStringInstance.identifierAndSignatureRange,
+            toStringReturnType.toString(false, true),
+            stringType.toString(false, true)
           );
           this.currentType = stringType;
           return this.module.unreachable();
@@ -10388,7 +10409,9 @@ export class Compiler extends DiagnosticEmitter {
     }
     this.error(
       DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-      reportNode.range, type.toString(), stringType.toString()
+      reportNode.range,
+      type.toString(false, true),
+      stringType.toString(false, true)
     );
     this.currentType = stringType;
     return this.module.unreachable();
