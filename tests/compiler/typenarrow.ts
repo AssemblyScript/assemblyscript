@@ -1,27 +1,101 @@
 class A {}
+
 class B extends A {
-  foo(): void {}
+  b1(): void {}
+  check(): bool {
+    return true;
+  }
+}
+class C extends B {
+  c1: i32;
 }
 
-let t = new A();
-if (t instanceof B) {
-  t.foo();
+let value = new A();
+let condi = true;
+
+// noraml
+if (value instanceof B) {
+  value.b1();
 }
 
-if (t instanceof B && true) {
-  t.foo;
-}
-if (true && t instanceof B) {
-  t.foo;
-}
-if (!(t instanceof B)) {
+// not
+if (!(value instanceof B)) {
 } else {
-  t.foo;
+  value.b1();
 }
 
-export function test(): void {
-  let t = new A();
-  if (t instanceof B) {
-    t.foo();
+// and
+if (value instanceof B && condi) {
+  value.b1();
+}
+if (condi && value instanceof B) {
+  value.b1();
+}
+
+// or
+if (condi || !(value instanceof B)) {
+} else {
+  value.b1;
+}
+
+if (!(value instanceof B) || condi) {
+} else {
+  value.b1;
+}
+
+// in condition check for logic operator
+if (value instanceof B && value.check()) {
+}
+if (!(value instanceof B) || value.check()) {
+}
+
+// compatibiltiy
+if (value instanceof B && value instanceof C) {
+  value.c1;
+  value.b1();
+}
+// TODO
+// if (value instanceof B || value instanceof C) {
+//   value.b1();
+// }
+
+export function testlocal(): void {
+  let value = new A();
+  let condi = true;
+
+  // noraml
+  if (value instanceof B) {
+    value.b1();
+  }
+
+  // not
+  if (!(value instanceof B)) {
+  } else {
+    value.b1();
+  }
+
+  // and
+  if (value instanceof B && condi) {
+    value.b1();
+  }
+  if (condi && value instanceof B) {
+    value.b1();
+  }
+
+  // or
+  if (condi || !(value instanceof B)) {
+  } else {
+    value.b1;
+  }
+
+  if (!(value instanceof B) || condi) {
+  } else {
+    value.b1;
+  }
+
+  // in condition check for logic operator
+  if (value instanceof B && value.check()) {
+  }
+  if (!(value instanceof B) || value.check()) {
   }
 }
