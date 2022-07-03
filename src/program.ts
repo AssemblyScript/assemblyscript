@@ -3450,6 +3450,7 @@ export class Local extends VariableLikeElement {
   /** Sets the temporary name of this local. */
   setTemporaryName(name: string): void {
     this.name = name;
+    this.scopedName = name;
     this.globalName = mangleGlobalName(name, this.parent, false);
   }
 
@@ -3457,6 +3458,7 @@ export class Local extends VariableLikeElement {
   resetTemporaryName(): void {
     var name = this.originalName;
     this.name = name;
+    this.scopedName = name;
     this.globalName = mangleGlobalName(name, this.parent, false);
   }
 }
@@ -3534,7 +3536,7 @@ export class FunctionPrototype extends DeclaredElement {
     var declaration = this.declaration;
     assert(declaration.kind == NodeKind.METHODDECLARATION);
     var bound = new FunctionPrototype(
-      this.name,
+      this.scopedName,
       classInstance, // !
       <MethodDeclaration>declaration,
       this.decoratorFlags
@@ -3838,7 +3840,7 @@ export class Field extends VariableLikeElement {
   ) {
     super(
       ElementKind.FIELD,
-      prototype.name,
+      prototype.scopedName,
       parent,
       <VariableLikeDeclarationStatement>prototype.declaration
     );

@@ -2895,9 +2895,9 @@ export class Resolver extends DiagnosticEmitter {
 
     // Otherwise create
     if (prototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
-      instance = new Interface(prototype.name, <InterfacePrototype>prototype, typeArguments);
+      instance = new Interface(prototype.scopedName, <InterfacePrototype>prototype, typeArguments);
     } else {
-      instance = new Class(prototype.name, prototype, typeArguments);
+      instance = new Class(prototype.scopedName, prototype, typeArguments);
     }
     prototype.setResolvedInstance(instanceKey, instance);
     var pendingClasses = this.resolveClassPending;
@@ -3077,7 +3077,7 @@ export class Resolver extends DiagnosticEmitter {
       // TODO: for (let member of instanceMemberPrototypes.values()) {
       for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
-        let memberName = member.name;
+        let memberName = member.scopedName;
         switch (member.kind) {
 
           case ElementKind.FIELD_PROTOTYPE: {
@@ -3087,8 +3087,8 @@ export class Resolver extends DiagnosticEmitter {
             let existingField: Field | null = null;
             if (base) {
               let baseMembers = base.members;
-              if (baseMembers && baseMembers.has(fieldPrototype.name)) {
-                let baseField = assert(baseMembers.get(fieldPrototype.name));
+              if (baseMembers && baseMembers.has(fieldPrototype.scopedName)) {
+                let baseField = assert(baseMembers.get(fieldPrototype.scopedName));
                 if (baseField.kind == ElementKind.FIELD) {
                   existingField = <Field>baseField;
                 } else {
@@ -3212,12 +3212,12 @@ export class Resolver extends DiagnosticEmitter {
           }
           case ElementKind.FUNCTION_PROTOTYPE: {
             let boundPrototype = (<FunctionPrototype>member).toBound(instance);
-            instance.add(boundPrototype.name, boundPrototype); // reports
+            instance.add(boundPrototype.scopedName, boundPrototype); // reports
             break;
           }
           case ElementKind.PROPERTY_PROTOTYPE: {
             let boundPrototype = (<PropertyPrototype>member).toBound(instance);
-            instance.add(boundPrototype.name, boundPrototype); // reports
+            instance.add(boundPrototype.scopedName, boundPrototype); // reports
             break;
           }
           default: assert(false);
