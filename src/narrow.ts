@@ -90,7 +90,7 @@ class TypeNarrowChecker {
         potential.set(element, [new ConditionalNarrowedType(expr, type)]);
       }
     }
-    // case 2: remove condition type, eg t = new A()
+    // case 2: remove condition type, eg t = new A() in some condition
     // TODO
   }
 
@@ -172,11 +172,6 @@ class TypeNarrowChecker {
   collectNarrowedTypeIfFalse(expr: ExpressionRef): Map<TypedElement, Type> {
     let result = new Map<TypedElement, Type>();
     if (this.expressionMap == null) this.updateMap();
-    let expressionMap = assert(this.expressionMap);
-    if (expressionMap.has(expr)) {
-      let typeMap = assert(expressionMap.get(expr));
-      mergeTypeMap(result, typeMap);
-    }
     switch (getExpressionId(expr)) {
       case ExpressionId.Unary: {
         switch (getUnaryOp(expr)) {

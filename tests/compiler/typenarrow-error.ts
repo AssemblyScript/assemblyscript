@@ -3,6 +3,7 @@ class B extends A {
   b1: i32;
   b2: i32;
   b3: i32;
+  b4: i32;
 }
 class C extends A {
   c1: i32;
@@ -23,7 +24,7 @@ if (value instanceof B) {
   value.b2;
 }
 
-if (value instanceof B || true) {
+if (value instanceof B || condi) {
   // TS2339: Property 'b3' does not exist on type 'typenarrow-error/A
   value.b3;
 }
@@ -32,6 +33,10 @@ if (value instanceof B || true) {
 if (value instanceof B && value instanceof C) {
   // TS2339: Property 'c1' does not exist on type 'typenarrow-error/A
   value.c1;
+}
+
+// TS2339: Property 'b4' does not exist on type 'typenarrow-error/A
+if (value instanceof B || value.b4) {
 }
 
 ERROR("EOF");
