@@ -24,10 +24,10 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $typenarrow/t (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 416))
- (global $~lib/memory/__data_end i32 (i32.const 460))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16844))
- (global $~lib/memory/__heap_base i32 (i32.const 16844))
+ (global $~lib/rt/__rtti_base i32 (i32.const 448))
+ (global $~lib/memory/__data_end i32 (i32.const 500))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16884))
+ (global $~lib/memory/__heap_base i32 (i32.const 16884))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -37,9 +37,10 @@
  (data (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 416) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00")
- (table $0 1 1 funcref)
- (elem $0 (i32.const 1))
+ (data (i32.const 412) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 448) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 2 2 funcref)
+ (elem $0 (i32.const 1) $typenarrow/B#foo)
  (export "test" (func $typenarrow/test))
  (export "memory" (memory $0))
  (start $~start)
@@ -2217,30 +2218,47 @@
    call $~lib/rt/itcms/__visit
   end
  )
+ (func $~lib/function/Function<%28this:typenarrow/B%29=>void>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28this:typenarrow/B%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28this:typenarrow/B%29=>void>#__visit
+ )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $typenarrow/B
-    block $typenarrow/A
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $typenarrow/A $typenarrow/B $invalid
+   block $~lib/function/Function<%28this:typenarrow/B%29=>void>
+    block $typenarrow/B
+     block $typenarrow/A
+      block $~lib/arraybuffer/ArrayBufferView
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $typenarrow/A $typenarrow/B $~lib/function/Function<%28this:typenarrow/B%29=>void> $invalid
+        end
+        return
        end
        return
       end
+      local.get $0
+      local.get $1
+      call $~lib/arraybuffer/ArrayBufferView~visit
       return
      end
-     local.get $0
-     local.get $1
-     call $~lib/arraybuffer/ArrayBufferView~visit
      return
     end
     return
    end
+   local.get $0
+   local.get $1
+   call $~lib/function/Function<%28this:typenarrow/B%29=>void>~visit
    return
   end
   unreachable
@@ -2253,8 +2271,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16864
    i32.const 16912
+   i32.const 16960
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2313,6 +2331,65 @@
    i32.store offset=4
    local.get $1
    call $typenarrow/B#foo
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $typenarrow/t
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $0
+   i32.const 4
+   call $~lib/rt/__instanceof
+  end
+  if (result i32)
+   i32.const 1
+  else
+   i32.const 0
+  end
+  if
+   i32.const 432
+   drop
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $typenarrow/t
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $0
+   i32.const 4
+   call $~lib/rt/__instanceof
+  end
+  if
+   i32.const 432
+   drop
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $typenarrow/t
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $0
+   i32.const 4
+   call $~lib/rt/__instanceof
+  end
+  i32.eqz
+  if
+   nop
+  else
+   i32.const 432
+   drop
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 8

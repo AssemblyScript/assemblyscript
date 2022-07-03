@@ -28,7 +28,6 @@ import {
   ElementKind,
   Field,
   Class,
-  Global,
   TypedElement
 } from "./program";
 
@@ -91,6 +90,7 @@ import {
 import {
   BuiltinNames
 } from "./builtins";
+import { conditionalNarrowedTypeChecker } from "./narrow";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
@@ -240,10 +240,6 @@ export class Flow {
   thisFieldFlags: Map<Field,FieldFlags> | null = null;
   /** type narrow */
   narrowedTypes: Map<TypedElement, Type> = new Map<TypedElement, Type>();
-  /** */
-  inCondition: bool = false;
-  narrowedTypesIfTrue: Map<TypedElement, Type> = new Map<TypedElement, Type>();
-  narrowedTypesIfFalse: Map<TypedElement, Type> = new Map<TypedElement, Type>();
   
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null = null;
@@ -568,27 +564,6 @@ export class Flow {
     }
   }
 
-  /** check if an expression is a local variant, return -1 means not, otherwise return local index */
-  lookupTypedElementByExpressionRef(expr: ExpressionRef): TypedElement | null {
-    switch (getExpressionId(expr)) {
-      case ExpressionId.LocalSet: {
-        if (!isLocalTee(expr)) break;
-        return this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-      }
-      case ExpressionId.LocalGet: {
-        return this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-      }
-      case ExpressionId.GlobalGet: {
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
-        if (global.kind == ElementKind.GLOBAL) {
-          return <Global>global;
-        }
-        break;
-      }
-    }
-    return null;
-  }
-
   /** Looks up the local of the specified name in the current scope. */
   lookupLocal(name: string): Local | null {
     var current: Flow | null = this;
@@ -649,8 +624,18 @@ export class Flow {
   getNarrowedType(element: TypedElement): Type | null {
     return this.narrowedTypes.has(element) ? changetype<Type>(this.narrowedTypes.get(element)) : null;
   }
+  private updateNarrowedType(narrowedType: Map<TypedElement, Type>): void {
+    let _key = Map_keys(narrowedType);
+    for (let i = 0, k = _key.length; i < k; i++) {
+      let element = _key[i];
+      let updatedType = assert(narrowedType.get(element));
+      let originType = this.narrowedTypes.has(element) ? assert(this.narrowedTypes.get(element)) : null;
+      let type = Flow.updateType(originType, updatedType);
+      this.setNarrowedType(element, type);
+    }
+  }
   
-  static mergeLocalType(a: Type | null, b: Type | null): Type | null {
+  static mergeType(a: Type | null, b: Type | null): Type | null {
     if (a == null || b == null) {
       return null;
     } else if (a.isAssignableTo(b)) {
@@ -661,7 +646,7 @@ export class Flow {
       return null;
     }
   }
-  static updateLocalType(origin: Type | null, update: Type | null): Type | null{
+  static updateType(origin: Type | null, update: Type | null): Type | null{
     if (origin == null) {
       return update;
     } else if (update == null) {
@@ -675,38 +660,16 @@ export class Flow {
     return origin;
   }
 
-  startCondition(): void {
-    this.inCondition = true;
+  setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {
+    conditionalNarrowedTypeChecker.setConditionNarrowedType(expr, element, type);
   }
-  stopCondition(): void {
-    this.inCondition = false;
+  inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
+    let condiNarrow = conditionalNarrowedTypeChecker.collectNarrowedTypeIfTrue(condi);
+    this.updateNarrowedType(condiNarrow);
   }
-  switchTrueFalse(): void {
-    let tmp = this.narrowedTypesIfTrue;
-    this.narrowedTypesIfTrue = this.narrowedTypesIfFalse;
-    this.narrowedTypesIfFalse = tmp;
-  }
-  setConditionLocalType(element: TypedElement, type: Type | null, condi:bool = true): void {
-    let potentialLocalTypes = condi ? this.narrowedTypesIfTrue : this.narrowedTypesIfFalse;
-    if (type == null && potentialLocalTypes.has(element)) {
-      potentialLocalTypes.delete(element);
-    } else if (type) {
-      potentialLocalTypes.set(element, type);
-    }
-  }
-  inheritLocalTypeIfTrue(flow: Flow): void {
-    let narrowedTypesConditional = flow.narrowedTypesIfTrue;
-    for (let _key = Map_keys(narrowedTypesConditional), i = 0, k = _key.length; i < k; i++) {
-      let key = _key[i];
-      this.setNarrowedType(key, Flow.updateLocalType(this.getNarrowedType(key), assert(narrowedTypesConditional.get(key))));
-    }
-  }
-  inheritLocalTypeIfFalse(flow: Flow): void {
-    let narrowedTypesConditional = flow.narrowedTypesIfFalse;
-    for (let _key = Map_keys(narrowedTypesConditional), i = 0, k = _key.length; i < k; i++) {
-      let key = _key[i];
-      this.setNarrowedType(key, Flow.updateLocalType(this.getNarrowedType(key), assert(narrowedTypesConditional.get(key))));
-    }
+  inheritNarrowedTypeIfFalse(condi:ExpressionRef): void {
+    let condiNarrow = conditionalNarrowedTypeChecker.collectNarrowedTypeIfFalse(condi);
+    this.updateNarrowedType(condiNarrow);
   }
 
   /** Initializes `this` field flags. */
@@ -918,7 +881,7 @@ export class Flow {
     const narrowedTypes = other.narrowedTypes;
     for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
       let key = _key[i];
-      this.setNarrowedType(key, Flow.mergeLocalType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
+      this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
     }
 
     // field flags do not matter here since there's only INITIALIZED, which can
@@ -1027,7 +990,7 @@ export class Flow {
         const narrowedTypes = right.narrowedTypes;
         for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
           let key = _key[i];
-          this.setNarrowedType(key, Flow.mergeLocalType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
+          this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
         }
       }
     } else if (rightFlags & FlowFlags.TERMINATES) {
@@ -1038,7 +1001,7 @@ export class Flow {
       const narrowedTypes = left.narrowedTypes;
       for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
         let key = _key[i];
-        this.setNarrowedType(key, Flow.mergeLocalType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
+        this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
       }
     } else {
       let leftLocalFlags = left.localFlags;
@@ -1061,12 +1024,12 @@ export class Flow {
       const leftNarrowedTypes = left.narrowedTypes;
       for (let _key = Map_keys(leftNarrowedTypes), i = 0, k = _key.length; i < k; i++) {
         let key = _key[i];
-        this.setNarrowedType(key, Flow.mergeLocalType(this.getNarrowedType(key), assert(leftNarrowedTypes.get(key))));
+        this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(leftNarrowedTypes.get(key))));
       }
       const rightNarrowedTypes = right.narrowedTypes;
       for (let _key = Map_keys(rightNarrowedTypes), i = 0, k = _key.length; i < k; i++) {
         let key = _key[i];
-        this.setNarrowedType(key, Flow.mergeLocalType(this.getNarrowedType(key), assert(rightNarrowedTypes.get(key))));
+        this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(rightNarrowedTypes.get(key))));
       }
     }
 

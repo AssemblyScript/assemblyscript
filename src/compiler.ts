@@ -88,7 +88,8 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName
+  mangleInternalName,
+  TypedElement
 } from "./program";
 
 import {
@@ -2555,6 +2556,7 @@ export class Compiler extends DiagnosticEmitter {
     // Compile the body assuming the condition turned out true
     var bodyFlow = flow.fork();
     bodyFlow.inheritNonnullIfTrue(condExpr);
+    bodyFlow.inheritNarrowedTypeIfTrue(condExpr);
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
     var body = statement.statement;
@@ -2666,13 +2668,11 @@ export class Compiler extends DiagnosticEmitter {
     // ...              ┌◄┘
 
     // Precompute the condition (always executes)
-    this.currentFlow.startCondition();
     var condExpr = this.makeIsTrueish(
       this.compileExpression(statement.condition, Type.bool),
       this.currentType,
       statement.condition
     );
-    this.currentFlow.stopCondition();
     var condKind = this.evaluateCondition(condExpr);
 
     // Shortcut if the condition is constant
@@ -2702,7 +2702,7 @@ export class Compiler extends DiagnosticEmitter {
     var thenFlow = flow.fork();
     this.currentFlow = thenFlow;
     thenFlow.inheritNonnullIfTrue(condExpr);
-    thenFlow.inheritLocalTypeIfTrue(flow);
+    thenFlow.inheritNarrowedTypeIfTrue(condExpr);
     if (ifTrue.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>ifTrue).statements, false, thenStmts);
     } else {
@@ -2721,6 +2721,7 @@ export class Compiler extends DiagnosticEmitter {
       let elseFlow = flow.fork();
       this.currentFlow = elseFlow;
       elseFlow.inheritNonnullIfFalse(condExpr);
+      elseFlow.inheritNarrowedTypeIfFalse(condExpr);
       if (ifFalse.kind == NodeKind.BLOCK) {
         this.compileStatements((<BlockStatement>ifFalse).statements, false, elseStmts);
       } else {
@@ -2744,6 +2745,9 @@ export class Compiler extends DiagnosticEmitter {
           ? null     // thenFlow terminates: just inherit
           : thenFlow // must become nonnull in thenFlow otherwise
       );
+      if (thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
+        flow.inheritNarrowedTypeIfFalse(condExpr);
+      }
       return module.if(condExpr,
         module.flatten(thenStmts)
       );
@@ -3239,6 +3243,7 @@ export class Compiler extends DiagnosticEmitter {
     // Compile the body assuming the condition turned out true
     var bodyFlow = flow.fork();
     bodyFlow.inheritNonnullIfTrue(condExpr);
+    bodyFlow.inheritNarrowedTypeIfTrue(condExpr);
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
     var body = statement.statement;
@@ -4547,6 +4552,7 @@ export class Compiler extends DiagnosticEmitter {
         let rightFlow = flow.fork();
         this.currentFlow = rightFlow;
         rightFlow.inheritNonnullIfTrue(leftExpr);
+        rightFlow.inheritNarrowedTypeIfTrue(leftExpr);
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
@@ -4611,6 +4617,7 @@ export class Compiler extends DiagnosticEmitter {
         let rightFlow = flow.fork();
         this.currentFlow = rightFlow;
         rightFlow.inheritNonnullIfFalse(leftExpr);
+        rightFlow.inheritNarrowedTypeIfFalse(leftExpr);
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
@@ -5941,6 +5948,9 @@ export class Compiler extends DiagnosticEmitter {
     assert(targetType != Type.void);
     var valueExpr = this.compileExpression(valueExpression, targetType);
     var valueType = this.currentType;
+    if (target instanceof TypedElement) {
+      flow.setNarrowedType(<TypedElement>target, null);
+    }
     return this.makeAssignment(
       target,
       this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
@@ -7908,7 +7918,14 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = Type.bool;
       return this.module.unreachable();
     }
-    return this.makeInstanceofType(expression, expectedType);
+    let instanceExpression = this.makeInstanceofType(expression, expectedType);
+    if (expression.expression.kind == NodeKind.IDENTIFIER) {
+      let element = flow.lookup((<IdentifierExpression>expression.expression).text);
+      if (element instanceof TypedElement) {
+        flow.setConditionNarrowedType(instanceExpression, <TypedElement>element, expectedType);
+      }
+    }
+    return instanceExpression;
   }
 
   private makeInstanceofType(expression: InstanceOfExpression, expectedType: Type): ExpressionRef {
@@ -7917,9 +7934,6 @@ export class Compiler extends DiagnosticEmitter {
     var expr = this.compileExpression(expression.expression, expectedType);
     var actualType = this.currentType;
     this.currentType = Type.bool;
-
-    let element = flow.lookupTypedElementByExpressionRef(expr);
-    if (element) flow.setConditionLocalType(element, expectedType);
 
     // instanceof <value> - must be exact
     if (expectedType.isValue) {
@@ -9269,12 +9283,14 @@ export class Compiler extends DiagnosticEmitter {
     var outerFlow = this.currentFlow;
     var ifThenFlow = outerFlow.fork();
     ifThenFlow.inheritNonnullIfTrue(condExpr);
+    ifThenFlow.inheritNarrowedTypeIfTrue(condExpr);
     this.currentFlow = ifThenFlow;
     var ifThenExpr = this.compileExpression(ifThen, ctxType);
     var ifThenType = this.currentType;
 
     var ifElseFlow = outerFlow.fork();
     ifElseFlow.inheritNonnullIfFalse(condExpr);
+    ifElseFlow.inheritNarrowedTypeIfFalse(condExpr);
     this.currentFlow = ifElseFlow;
     var ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType);
     var ifElseType = this.currentType;
