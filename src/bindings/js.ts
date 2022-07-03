@@ -143,9 +143,9 @@ export class JSBuilder extends ExportsWalker {
       sb.push(": {\n");
       indent(sb, ++this.indentLevel);
       sb.push("// ");
-      sb.push(element.name);
+      sb.push(element.scopedName);
       sb.push(": ");
-      sb.push(type.toString());
+      sb.push(type.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       indent(sb, this.indentLevel);
       sb.push("valueOf() { return this.value; },\n");
@@ -185,7 +185,7 @@ export class JSBuilder extends ExportsWalker {
     sb.push(": (values => (\n");
     indent(sb, ++this.indentLevel);
     sb.push("// ");
-    sb.push(element.name);
+    sb.push(element.scopedName);
     sb.push("\n");
     var members = element.members;
     if (members) {
@@ -194,17 +194,17 @@ export class JSBuilder extends ExportsWalker {
         if (value.kind != ElementKind.ENUMVALUE) continue;
         indent(sb, this.indentLevel);
         sb.push("values[values.");
-        sb.push(value.name);
+        sb.push(value.scopedName);
         if (value.is(CommonFlags.INLINED)) {
           sb.push(" = ");
           sb.push(i64_low((<EnumValue>value).constantIntegerValue).toString());
         } else {
           sb.push(" = exports[\"");
-          sb.push(escapeString(name + "." + value.name, CharCode.DOUBLEQUOTE));
+          sb.push(escapeString(name + "." + value.scopedName, CharCode.DOUBLEQUOTE));
           sb.push("\"].valueOf()");
         }
         sb.push("] = \"");
-        sb.push(escapeString(value.name, CharCode.DOUBLEQUOTE));
+        sb.push(escapeString(value.scopedName, CharCode.DOUBLEQUOTE));
         sb.push("\",\n");
       }
     }
@@ -231,9 +231,9 @@ export class JSBuilder extends ExportsWalker {
       sb.push("(\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
-      sb.push(element.name);
+      sb.push(element.scopedName);
       sb.push(": ");
-      sb.push(element.type.toString());
+      sb.push(element.type.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       indent(sb, this.indentLevel + 1);
       if (moduleName != "env") {
@@ -249,9 +249,9 @@ export class JSBuilder extends ExportsWalker {
       sb.push("{\n");
       indent(sb, ++this.indentLevel);
       sb.push("// ");
-      sb.push(element.name);
+      sb.push(element.scopedName);
       sb.push(": ");
-      sb.push(element.type.toString());
+      sb.push(element.type.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       indent(sb, this.indentLevel);
       sb.push("// not supported: cannot lower before instantiate completes\n");
@@ -276,7 +276,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(": (\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
-      sb.push(element.name);
+      sb.push(element.scopedName);
       sb.push(element.signature.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       indent(sb, this.indentLevel + 1);
@@ -299,7 +299,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(") {\n");
       indent(sb, ++this.indentLevel);
       sb.push("// ");
-      sb.push(element.name);
+      sb.push(element.scopedName);
       sb.push(element.signature.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
@@ -370,7 +370,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(") {\n");
       indent(sb, ++this.indentLevel);
       sb.push("// ");
-      sb.push(element.name);
+      sb.push(element.scopedName);
       sb.push(signature.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       let releases = new Array<string>();
@@ -1198,7 +1198,7 @@ export class JSBuilder extends ExportsWalker {
     sb.push("(pointer) {\n");
     indent(sb, ++this.indentLevel);
     sb.push("// ");
-    sb.push(clazz.type.toString());
+    sb.push(clazz.type.toString(false, TypeNamePolicy.SHORT));
     sb.push("\n");
     indent(sb, this.indentLevel);
     sb.push("// Hint: Opt-out from lifting as a record by providing an empty constructor\n");
@@ -1214,7 +1214,7 @@ export class JSBuilder extends ExportsWalker {
         if (member.kind != ElementKind.FIELD) continue;
         let field = <Field>member;
         indent(sb, this.indentLevel);
-        sb.push(field.name);
+        sb.push(field.scopedName);
         sb.push(": ");
         this.makeLiftFromMemory(field.type, sb, "pointer + " + field.memoryOffset.toString());
         sb.push(",\n");
@@ -1236,7 +1236,7 @@ export class JSBuilder extends ExportsWalker {
     sb.push("(value) {\n");
     indent(sb, ++this.indentLevel);
     sb.push("// ");
-    sb.push(clazz.type.toString());
+    sb.push(clazz.type.toString(false, TypeNamePolicy.SHORT));
     sb.push("\n");
     indent(sb, this.indentLevel);
     sb.push("// Hint: Opt-out from lowering as a record by providing an empty constructor\n");
