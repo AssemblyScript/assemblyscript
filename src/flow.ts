@@ -90,7 +90,7 @@ import {
 import {
   BuiltinNames
 } from "./builtins";
-import { conditionalNarrowedTypeChecker } from "./narrow";
+import { conditionalNarrowedTypeChecker, typeAnd, typeOr } from "./narrow";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
@@ -630,34 +630,9 @@ export class Flow {
       let element = _key[i];
       let updatedType = assert(narrowedType.get(element));
       let originType = this.narrowedTypes.has(element) ? assert(this.narrowedTypes.get(element)) : null;
-      let type = Flow.updateType(originType, updatedType);
+      let type = typeOr(originType, updatedType);
       this.setNarrowedType(element, type);
     }
-  }
-  
-  static mergeType(a: Type | null, b: Type | null): Type | null {
-    if (a == null || b == null) {
-      return null;
-    } else if (a.isAssignableTo(b)) {
-      return a;
-    } else if (b.isAssignableTo(a)) {
-      return b;
-    } else {
-      return null;
-    }
-  }
-  static updateType(origin: Type | null, update: Type | null): Type | null{
-    if (origin == null) {
-      return update;
-    } else if (update == null) {
-      return origin;
-    } else if (update.isAssignableTo(origin)) {
-      return update;
-    } else if (origin.isAssignableTo(update)) {
-      return origin;
-    }
-    assert(false, "cannot update type");
-    return origin;
   }
 
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {
@@ -881,7 +856,7 @@ export class Flow {
     const narrowedTypes = other.narrowedTypes;
     for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
       let key = _key[i];
-      this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
+      this.setNarrowedType(key, typeAnd(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
     }
 
     // field flags do not matter here since there's only INITIALIZED, which can
@@ -990,7 +965,7 @@ export class Flow {
         const narrowedTypes = right.narrowedTypes;
         for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
           let key = _key[i];
-          this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
+          this.setNarrowedType(key, typeAnd(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
         }
       }
     } else if (rightFlags & FlowFlags.TERMINATES) {
@@ -1001,7 +976,7 @@ export class Flow {
       const narrowedTypes = left.narrowedTypes;
       for (let _key = Map_keys(narrowedTypes), i = 0, k = _key.length; i < k; i++) {
         let key = _key[i];
-        this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
+        this.setNarrowedType(key, typeAnd(this.getNarrowedType(key), assert(narrowedTypes.get(key))));
       }
     } else {
       let leftLocalFlags = left.localFlags;
@@ -1024,12 +999,12 @@ export class Flow {
       const leftNarrowedTypes = left.narrowedTypes;
       for (let _key = Map_keys(leftNarrowedTypes), i = 0, k = _key.length; i < k; i++) {
         let key = _key[i];
-        this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(leftNarrowedTypes.get(key))));
+        this.setNarrowedType(key, typeAnd(this.getNarrowedType(key), assert(leftNarrowedTypes.get(key))));
       }
       const rightNarrowedTypes = right.narrowedTypes;
       for (let _key = Map_keys(rightNarrowedTypes), i = 0, k = _key.length; i < k; i++) {
         let key = _key[i];
-        this.setNarrowedType(key, Flow.mergeType(this.getNarrowedType(key), assert(rightNarrowedTypes.get(key))));
+        this.setNarrowedType(key, typeAnd(this.getNarrowedType(key), assert(rightNarrowedTypes.get(key))));
       }
     }
 

@@ -50,11 +50,11 @@ if (!(value instanceof B) || value.check()) {
 }
 
 // compatibiltiy
-if (value instanceof B && value instanceof C) {
+if (value instanceof C && value instanceof B) {
   value.c1;
   value.b1();
 }
-// TODO
+
 // if (value instanceof B || value instanceof C) {
 //   value.b1();
 // }

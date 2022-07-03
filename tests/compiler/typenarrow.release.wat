@@ -1639,7 +1639,7 @@
      loop $do-loop|027
       i32.const 1
       local.get $0
-      i32.const 4
+      i32.const 6
       i32.eq
       br_if $__inlined_func$~lib/rt/__instanceof25
       drop
@@ -1653,48 +1653,6 @@
       br_if $do-loop|027
      end
     end
-    i32.const 0
-   end
-  else
-   i32.const 0
-  end
-  if (result i32)
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-   local.get $0
-   if (result i32)
-    block $__inlined_func$~lib/rt/__instanceof28 (result i32)
-     local.get $0
-     i32.const 20
-     i32.sub
-     i32.load offset=12
-     local.tee $0
-     i32.const 1472
-     i32.load
-     i32.le_u
-     if
-      loop $do-loop|030
-       i32.const 1
-       local.get $0
-       i32.const 6
-       i32.eq
-       br_if $__inlined_func$~lib/rt/__instanceof28
-       drop
-       local.get $0
-       i32.const 3
-       i32.shl
-       i32.const 1476
-       i32.add
-       i32.load offset=4
-       local.tee $0
-       br_if $do-loop|030
-      end
-     end
-     i32.const 0
-    end
-   else
     i32.const 0
    end
   else

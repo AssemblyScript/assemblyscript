@@ -1,4 +1,3 @@
-import { Flow } from "./flow";
 import {
   BinaryOp,
   ExpressionId,
@@ -21,24 +20,47 @@ import {
 import { TypedElement } from "./program";
 import { Type } from "./types";
 
+export function typeAnd(a: Type | null, b: Type | null): Type | null {
+  if (a == null || b == null) {
+    return null;
+  } else if (a.isAssignableTo(b)) {
+    return b;
+  } else if (b.isAssignableTo(a)) {
+    return a;
+  } else {
+    return null;
+  }
+}
+export function typeOr(a: Type | null, b: Type | null): Type | null {
+  if (a == null) {
+    return b;
+  } else if (b == null) {
+    return a;
+  } else if (a.isAssignableTo(b)) {
+    // a extends b
+    return a;
+  } else if (b.isAssignableTo(a)) {
+    // b extends a
+    return b;
+  } else {
+    return null;
+  }
+}
+
 function mergeTypeMap(
-  main: Map<TypedElement, Type>,
-  other: Map<TypedElement, Type>
+  mainMap: Map<TypedElement, Type>,
+  otherMap: Map<TypedElement, Type>
 ): void {
-  let _key = Map_keys(other);
+  let _key = Map_keys(otherMap);
   for (let i = 0, k = _key.length; i < k; i++) {
     let key = _key[i];
-    let otherType = assert(other.get(key));
-    if (main.has(key)) {
-      let mainType = assert(main.get(key));
-      let mergeType = Flow.mergeType(mainType, otherType);
-      if (mergeType) {
-        main.set(key, mergeType);
-      } else {
-        main.delete(key);
-      }
+    let main = mainMap.has(key) ? assert(mainMap.get(key)) : null;
+    let other = assert(otherMap.get(key));
+    let merged = typeOr(main, other);
+    if (merged) {
+      mainMap.set(key, merged);
     } else {
-      main.set(key, otherType);
+      mainMap.delete(key);
     }
   }
 }
@@ -53,6 +75,7 @@ class TypeNarrowChecker {
   expressionMap: Map<ExpressionRef, Map<TypedElement, Type>> | null = null;
 
   private updateMap(): void {
+    // TODO could update when change, maintain 2 map both
     let expressionMap = new Map<ExpressionRef, Map<TypedElement, Type>>();
     let narrowedTypesConditional = this.elementMap;
     let _key = Map_keys(narrowedTypesConditional);
@@ -83,9 +106,7 @@ class TypeNarrowChecker {
     if (expr > 0 && type) {
       if (potential.has(element)) {
         let conditionTypes = assert(potential.get(element));
-        conditionTypes.push(
-          new ConditionalNarrowedType(expr, type)
-        );
+        conditionTypes.push(new ConditionalNarrowedType(expr, type));
       } else {
         potential.set(element, [new ConditionalNarrowedType(expr, type)]);
       }
@@ -114,12 +135,10 @@ class TypeNarrowChecker {
         if (ifFalse && isConstZero(ifFalse)) {
           // Logical AND: (if (condition ifTrue 0))
           // the only way this had become true is if condition and ifTrue are true
-          let subMapCondi = this.collectNarrowedTypeIfTrue(
-            getIfCondition(expr)
-          );
-          mergeTypeMap(result, subMapCondi);
+          let subMap = this.collectNarrowedTypeIfTrue(getIfCondition(expr));
           let subMapTrue = this.collectNarrowedTypeIfTrue(getIfTrue(expr));
-          mergeTypeMap(result, subMapTrue);
+          mergeTypeMap(subMap, subMapTrue);
+          mergeTypeMap(result, subMap);
         }
         break;
       }
@@ -190,12 +209,10 @@ class TypeNarrowChecker {
         if (ifFalse && isConstNonZero(ifTrue)) {
           // Logical OR: (if (condition 1 ifFalse))
           // the only way this had become false is if condition and ifFalse are false
-          let subMapCondi = this.collectNarrowedTypeIfFalse(
-            getIfCondition(expr)
-          );
+          let subMap = this.collectNarrowedTypeIfFalse(getIfCondition(expr));
           let subMapFalse = this.collectNarrowedTypeIfFalse(getIfFalse(expr));
-          mergeTypeMap(result, subMapCondi);
-          mergeTypeMap(result, subMapFalse);
+          mergeTypeMap(subMap, subMapFalse);
+          mergeTypeMap(result, subMap);
         }
         break;
       }
