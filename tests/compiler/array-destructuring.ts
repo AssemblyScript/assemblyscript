@@ -49,10 +49,10 @@ class Bar {
   assert(bar.bar == 4);
 
   [a, b, c] = [1, 2, 3];
-  [[a, b], [c]] = [[c, b], [a, d]];
+  [[a, b], [c]] = [[c, a], [b, d]];
 
   assert(a == 3);
-  assert(b == 2);
-  assert(c == 1);
+  assert(b == 1);
+  assert(c == 2);
 }
 

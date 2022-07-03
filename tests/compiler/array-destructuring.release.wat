@@ -1953,7 +1953,7 @@
    i32.store
    local.get $0
    i32.load offset=4
-   i32.const 2
+   i32.const 1
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 2
@@ -1967,7 +1967,7 @@
    i32.store offset=20
    local.get $1
    i32.load offset=4
-   i32.const 1
+   i32.const 2
    i32.store
    local.get $1
    i32.load offset=4
@@ -1995,7 +1995,7 @@
     unreachable
    end
    local.get $0
-   i32.const 2
+   i32.const 1
    i32.ne
    if
     i32.const 0
@@ -2006,7 +2006,7 @@
     unreachable
    end
    local.get $1
-   i32.const 1
+   i32.const 2
    i32.ne
    if
     i32.const 0

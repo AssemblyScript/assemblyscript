@@ -2809,7 +2809,7 @@
   call $~lib/array/Array<i32>#__uset
   local.get $9
   i32.const 1
-  local.get $1
+  local.get $0
   call $~lib/array/Array<i32>#__uset
   local.get $9
   local.set $8
@@ -2828,7 +2828,7 @@
   i32.store offset=20
   local.get $9
   i32.const 0
-  local.get $0
+  local.get $1
   call $~lib/array/Array<i32>#__uset
   local.get $9
   i32.const 1
@@ -2865,7 +2865,7 @@
    unreachable
   end
   local.get $1
-  i32.const 2
+  i32.const 1
   i32.eq
   i32.eqz
   if
@@ -2877,7 +2877,7 @@
    unreachable
   end
   local.get $2
-  i32.const 1
+  i32.const 2
   i32.eq
   i32.eqz
   if
