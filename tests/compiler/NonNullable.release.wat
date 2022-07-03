@@ -3,7 +3,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17676))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17660))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\06\00\00\00u\003\002")
@@ -11,12 +11,12 @@
  (data (i32.const 1080) "\01\00\00\00\1c\00\00\00N\00o\00n\00N\00u\00l\00l\00a\00b\00l\00e\00.\00t\00s")
  (data (i32.const 1116) "\1c")
  (data (i32.const 1128) "\01\00\00\00\0c\00\00\00S\00t\00r\00i\00n\00g")
- (data (i32.const 1148) ",")
- (data (i32.const 1160) "\01\00\00\00\1a\00\00\00A\00r\00r\00a\00y\00<\00s\00t\00r\00i\00n\00g\00>")
- (data (i32.const 1196) "\1c")
- (data (i32.const 1208) "\01\00\00\00\02\00\00\00z")
- (data (i32.const 1228) "<")
- (data (i32.const 1240) "\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
+ (data (i32.const 1148) "\1c")
+ (data (i32.const 1160) "\01\00\00\00\n\00\00\00A\00r\00r\00a\00y")
+ (data (i32.const 1180) "\1c")
+ (data (i32.const 1192) "\01\00\00\00\02\00\00\00z")
+ (data (i32.const 1212) "<")
+ (data (i32.const 1224) "\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
@@ -143,11 +143,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 1292
+  i32.const 1276
   i32.lt_s
   if
-   i32.const 17696
-   i32.const 17744
+   i32.const 17680
+   i32.const 17728
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -218,25 +218,25 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $0
-  i32.const 1216
+  i32.const 1200
   i32.store offset=8
   local.get $0
-  i32.const 1216
+  i32.const 1200
   i32.store
   block $folding-inner0
-   i32.const 1216
+   i32.const 1200
    i32.const 0
    call $~lib/string/String.__eq
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1216
+   i32.const 1200
    i32.store
-   i32.const 1216
+   i32.const 1200
    i32.const 0
    call $~lib/string/String.__eq
    i32.eqz
    if
-    i32.const 1216
+    i32.const 1200
     i32.const 0
     call $~lib/string/String.__eq
     br_if $folding-inner0

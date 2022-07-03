@@ -55,7 +55,7 @@ export class TSDBuilder extends ExportsWalker {
     var tsType = this.toTypeScriptType(type, Mode.EXPORT);
     indent(sb, this.indentLevel);
     sb.push("/** ");
-    sb.push(element.internalName);
+    sb.push(element.name);
     sb.push(" */\n");
     indent(sb, this.indentLevel);
     sb.push("export ");
@@ -87,7 +87,7 @@ export class TSDBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel);
     sb.push("/** ");
-    sb.push(element.internalName);
+    sb.push(element.name);
     sb.push(" */\n");
     indent(sb, this.indentLevel++);
     sb.push("export ");
@@ -120,7 +120,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("/**\n");
     indent(sb, this.indentLevel);
     sb.push(" * ");
-    sb.push(element.internalName);
+    sb.push(element.name);
     sb.push("\n");
     var parameterTypes = signature.parameterTypes;
     var numParameters = parameterTypes.length;
@@ -326,7 +326,7 @@ export class TSDBuilder extends ExportsWalker {
     var sb = new Array<string>();
     var members = clazz.members;
     sb.push("/** ");
-    sb.push(clazz.internalName);
+    sb.push(clazz.name);
     sb.push(" */\ndeclare interface __Record");
     sb.push(clazz.id.toString());
     sb.push("<TOmittable> {\n");
@@ -362,7 +362,7 @@ export class TSDBuilder extends ExportsWalker {
   makeInternrefType(clazz: Class): string {
     var sb = new Array<string>();
     sb.push("/** ");
-    sb.push(clazz.internalName);
+    sb.push(clazz.name);
     sb.push(" */\n");
     sb.push("declare class __Internref");
     sb.push(clazz.id.toString());

@@ -142,7 +142,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(": {\n");
       indent(sb, ++this.indentLevel);
       sb.push("// ");
-      sb.push(element.internalName);
+      sb.push(element.name);
       sb.push(": ");
       sb.push(type.toString());
       sb.push("\n");
@@ -184,7 +184,7 @@ export class JSBuilder extends ExportsWalker {
     sb.push(": (values => (\n");
     indent(sb, ++this.indentLevel);
     sb.push("// ");
-    sb.push(element.internalName);
+    sb.push(element.name);
     sb.push("\n");
     var members = element.members;
     if (members) {
@@ -230,7 +230,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push("(\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
-      sb.push(element.internalName);
+      sb.push(element.name);
       sb.push(": ");
       sb.push(element.type.toString());
       sb.push("\n");
@@ -248,7 +248,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push("{\n");
       indent(sb, ++this.indentLevel);
       sb.push("// ");
-      sb.push(element.internalName);
+      sb.push(element.name);
       sb.push(": ");
       sb.push(element.type.toString());
       sb.push("\n");
@@ -275,7 +275,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(": (\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
-      sb.push(element.internalName);
+      sb.push(element.name);
       sb.push(element.signature.toString());
       sb.push("\n");
       indent(sb, this.indentLevel + 1);
@@ -298,7 +298,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(") {\n");
       indent(sb, ++this.indentLevel);
       sb.push("// ");
-      sb.push(element.internalName);
+      sb.push(element.name);
       sb.push(element.signature.toString());
       sb.push("\n");
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
@@ -369,7 +369,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(") {\n");
       indent(sb, ++this.indentLevel);
       sb.push("// ");
-      sb.push(element.internalName);
+      sb.push(element.name);
       sb.push(signature.toString());
       sb.push("\n");
       let releases = new Array<string>();

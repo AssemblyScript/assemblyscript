@@ -437,7 +437,7 @@ export class Program extends DiagnosticEmitter {
     this.resolver = new Resolver(this);
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
-    this.filesByName.set(nativeFile.internalName, nativeFile);
+    this.filesByName.set(nativeFile.globalName, nativeFile);
   }
 
   /** Parser instance. */
@@ -1084,7 +1084,7 @@ export class Program extends DiagnosticEmitter {
     for (let i = 0, k = this.sources.length; i < k; ++i) {
       let source = this.sources[i];
       let file = new File(this, source);
-      this.filesByName.set(file.internalName, file);
+      this.filesByName.set(file.globalName, file);
       let statements = source.statements;
       for (let j = 0, l = statements.length; j < l; ++j) {
         let statement = statements[j];
@@ -1247,7 +1247,7 @@ export class Program extends DiagnosticEmitter {
               this.error(
                 DiagnosticCode.Module_0_has_no_exported_member_1,
                 queuedExport.foreignIdentifier.range,
-                file.internalName, queuedExport.foreignIdentifier.text
+                file.globalName, queuedExport.foreignIdentifier.text
               );
             }
           }
@@ -1451,9 +1451,9 @@ export class Program extends DiagnosticEmitter {
             let thisMember = _values[j];
             if (
               !thisMember.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.PRIVATE) &&
-              baseInstanceMembers.has(thisMember.name)
+              baseInstanceMembers.has(thisMember.scopedName)
             ) {
-              let baseMember = assert(baseInstanceMembers.get(thisMember.name));
+              let baseMember = assert(baseInstanceMembers.get(thisMember.scopedName));
               if (
                 thisMember.kind == ElementKind.FUNCTION_PROTOTYPE &&
                 baseMember.kind == ElementKind.FUNCTION_PROTOTYPE
@@ -2621,7 +2621,7 @@ export class Program extends DiagnosticEmitter {
 
   /** Determines the element type of a built-in array. */
   // determineBuiltinArrayType(target: Class): Type | null {
-  //   switch (target.internalName) {
+  //   switch (target.globalName) {
   //     case BuiltinSymbols.Int8Array: return Type.i8;
   //     case BuiltinSymbols.Uint8ClampedArray:
   //     case BuiltinSymbols.Uint8Array: return Type.u8;
@@ -2753,15 +2753,17 @@ export abstract class Element {
   members: Map<string,DeclaredElement> | null = null;
   /** Shadowing type in type space, if any. */
   shadowType: TypeDefinition | null = null;
+  /** Unique name referring to this element in namespace */
+  scopedName!: string;
 
   /** Constructs a new program element. */
   protected constructor(
     /** Specific element kind. */
     public kind: ElementKind,
-    /** Simple name. */
+    /** Simple human readable name. */
     public name: string,
-    /** Internal name referring to this element. */
-    public internalName: string,
+    /** Unique global name referring to this element. */
+    public globalName: string,
     /** Containing {@link Program}. */
     public program: Program,
     /** Parent element. */
@@ -2769,7 +2771,8 @@ export abstract class Element {
   ) {
     this.program = program;
     this.name = name;
-    this.internalName = internalName;
+    this.globalName = globalName;
+    this.scopedName = name;
     if (parent) {
       this.parent = parent;
     } else {
@@ -2850,7 +2853,7 @@ export abstract class Element {
     var program = this.program;
     if (element.kind != ElementKind.FUNCTION_PROTOTYPE || !(<FunctionPrototype>element).isBound) {
       // prefer unbound prototypes in global lookup maps
-      program.elementsByName.set(element.internalName, element);
+      program.elementsByName.set(element.globalName, element);
       program.elementsByDeclaration.set(originalDeclaration, element);
     }
     return true;
@@ -2875,7 +2878,7 @@ export abstract class Element {
 
   /** Returns a string representation of this element. */
   toString(): string {
-    return `${this.internalName}, kind=${this.kind}`;
+    return `${this.globalName}, kind=${this.kind}`;
   }
 }
 
@@ -2894,10 +2897,10 @@ export abstract class DeclaredElement extends Element {
   protected constructor(
     /** Specific element kind. */
     kind: ElementKind,
-    /** Simple name. */
+    /** Simple human readable name. */
     name: string,
-    /** Internal name referring to this element. */
-    internalName: string,
+    /** Unique global name referring to this element. */
+    globalName: string,
     /** Containing {@link Program}. */
     program: Program,
     /** Parent element. */
@@ -2905,7 +2908,7 @@ export abstract class DeclaredElement extends Element {
     /** Declaration reference. */
     public declaration: DeclarationStatement
   ) {
-    super(kind, name, internalName, program, parent);
+    super(kind, name, globalName, program, parent);
     declaredElements.add(kind);
     // It is necessary to have access to identifiers of all members and exports
     // for reporting purposes and this is the lowest common denominator. Comes
@@ -2998,10 +3001,10 @@ export abstract class TypedElement extends DeclaredElement {
   constructor(
     /** Specific element kind. */
     kind: ElementKind,
-    /** Simple name. */
+    /** Simple human readable name. */
     name: string,
-    /** Internal name referring to this element. */
-    internalName: string,
+    /** Ynique global name referring to this element. */
+    globalName: string,
     /** Containing {@link Program}. */
     program: Program,
     /** Parent element. */
@@ -3009,7 +3012,7 @@ export abstract class TypedElement extends DeclaredElement {
     /** Declaration reference. */
     declaration: DeclarationStatement
   ) {
-    super(kind, name, internalName, program, parent, declaration);
+    super(kind, name, globalName, program, parent, declaration);
     typedElements.add(kind);
   }
 
@@ -3048,14 +3051,15 @@ export class File extends Element {
       null // special case for files
     );
     this.source = source;
-    assert(!program.filesByName.has(this.internalName));
-    program.filesByName.set(this.internalName, this);
+    assert(!program.filesByName.has(this.globalName));
+    program.filesByName.set(this.globalName, this);
     var startFunction = this.program.makeNativeFunction(
-      `start:${this.internalName}`,
+      `start:${this.globalName}`,
       new Signature(program, null, Type.void),
       this
     );
-    startFunction.internalName = startFunction.name;
+    startFunction.globalName = startFunction.name;
+    startFunction.scopedName = startFunction.name;
     this.startFunction = startFunction;
   }
 
@@ -3186,7 +3190,7 @@ export class TypeDefinition extends TypedElement {
     super(
       ElementKind.TYPEDEFINITION,
       name,
-      mangleInternalName(name, parent, false),
+      mangleGlobalName(name, parent, false),
       parent.program,
       parent,
       declaration
@@ -3222,7 +3226,7 @@ export class Namespace extends DeclaredElement {
     super(
       ElementKind.NAMESPACE,
       name,
-      mangleInternalName(name, parent, false),
+      mangleGlobalName(name, parent, false),
       parent.program,
       parent,
       declaration
@@ -3255,7 +3259,7 @@ export class Enum extends TypedElement {
     super(
       ElementKind.ENUM,
       name,
-      mangleInternalName(name, parent, false),
+      mangleGlobalName(name, parent, false),
       parent.program,
       parent,
       declaration
@@ -3306,7 +3310,7 @@ export abstract class VariableLikeElement extends TypedElement {
     super(
       kind,
       name,
-      mangleInternalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
+      mangleGlobalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
       declaration
@@ -3447,14 +3451,14 @@ export class Local extends VariableLikeElement {
   /** Sets the temporary name of this local. */
   setTemporaryName(name: string): void {
     this.name = name;
-    this.internalName = mangleInternalName(name, this.parent, false);
+    this.globalName = mangleGlobalName(name, this.parent, false);
   }
 
   /** Resets the temporary name of this local. */
   resetTemporaryName(): void {
     var name = this.originalName;
     this.name = name;
-    this.internalName = mangleInternalName(name, this.parent, false);
+    this.globalName = mangleGlobalName(name, this.parent, false);
   }
 }
 
@@ -3485,7 +3489,7 @@ export class FunctionPrototype extends DeclaredElement {
     super(
       ElementKind.FUNCTION_PROTOTYPE,
       name,
-      mangleInternalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
+      mangleGlobalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
       declaration
@@ -3599,8 +3603,8 @@ export class Function extends TypedElement {
 
   /** Constructs a new concrete function. */
   constructor(
-    /** Name incl. type parameters, i.e. `foo<i32>`. */
-    nameInclTypeParameters: string,
+    /** Simple human readable name */
+    name: string,
     /** Respective function prototype. */
     prototype: FunctionPrototype,
     /** Concrete type arguments. */
@@ -3610,16 +3614,19 @@ export class Function extends TypedElement {
     /** Contextual type arguments inherited from its parent class, if any. */
     contextualTypeArguments: Map<string,Type> | null = null
   ) {
+    let nameWithTypeParameters = name;
+    if (typeArguments) {
+      nameWithTypeParameters += `<${typesToString(typeArguments, TypeNamePolicy.NAME_ONLY)}>`;
+    }
     super(
       ElementKind.FUNCTION,
-      typeArguments
-        ? prototype.name + "<" + typesToString(typeArguments, TypeNamePolicy.NAME_ONLY) + ">"
-        : prototype.name,
-      mangleInternalName(nameInclTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
+      name,
+      mangleGlobalName(nameWithTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
       prototype.program,
       prototype.parent,
       prototype.declaration
     );
+    this.scopedName = nameWithTypeParameters;
     this.prototype = prototype;
     this.typeArguments = typeArguments;
     this.signature = signature;
@@ -3784,7 +3791,7 @@ export class FieldPrototype extends DeclaredElement {
     super(
       ElementKind.FIELD_PROTOTYPE,
       name,
-      mangleInternalName(name, parent, assert(declaration.is(CommonFlags.INSTANCE))),
+      mangleGlobalName(name, parent, assert(declaration.is(CommonFlags.INSTANCE))),
       parent.program,
       parent,
       declaration
@@ -3854,7 +3861,7 @@ export class Field extends VariableLikeElement {
   get internalGetterName(): string {
     var cached = this._internalGetterName;
     if (cached == null) {
-      this._internalGetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${GETTER_PREFIX}${this.name}`;
+      this._internalGetterName = cached = `${this.parent.globalName}${INSTANCE_DELIMITER}${GETTER_PREFIX}${this.scopedName}`;
     }
     return cached;
   }
@@ -3864,7 +3871,7 @@ export class Field extends VariableLikeElement {
   get internalSetterName(): string {
     var cached = this._internalSetterName;
     if (cached == null) {
-      this._internalSetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${SETTER_PREFIX}${this.name}`;
+      this._internalSetterName = cached = `${this.parent.globalName}${INSTANCE_DELIMITER}${SETTER_PREFIX}${this.scopedName}`;
     }
     return cached;
   }
@@ -3916,7 +3923,7 @@ export class PropertyPrototype extends DeclaredElement {
     super(
       ElementKind.PROPERTY_PROTOTYPE,
       name,
-      mangleInternalName(name, parent, firstDeclaration.is(CommonFlags.INSTANCE)),
+      mangleGlobalName(name, parent, firstDeclaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
       firstDeclaration
@@ -3943,7 +3950,7 @@ export class PropertyPrototype extends DeclaredElement {
     var firstDeclaration = this.declaration;
     assert(firstDeclaration.kind == NodeKind.METHODDECLARATION);
     var bound = new PropertyPrototype(
-      this.name,
+      this.scopedName,
       classInstance, // !
       <MethodDeclaration>firstDeclaration
     );
@@ -3980,7 +3987,7 @@ export class Property extends VariableLikeElement {
   ) {
     super(
       ElementKind.PROPERTY,
-      prototype.name,
+      prototype.scopedName,
       parent,
       Node.createVariableDeclaration(
         prototype.identifierNode,
@@ -4012,7 +4019,7 @@ export class IndexSignature extends TypedElement {
     super(
       ElementKind.INDEXSIGNATURE,
       "[]",
-      parent.internalName + "[]",
+      parent.globalName + "[]",
       parent.program,
       parent,
       parent.program.makeNativeVariableDeclaration("[]") // is fine
@@ -4062,7 +4069,7 @@ export class ClassPrototype extends DeclaredElement {
     super(
       _isInterface ? ElementKind.INTERFACE_PROTOTYPE : ElementKind.CLASS_PROTOTYPE,
       name,
-      mangleInternalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
+      mangleGlobalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
       declaration
@@ -4219,24 +4226,27 @@ export class Class extends TypedElement {
   /** Constructs a new class. */
   constructor(
     /** Name incl. type parameters, i.e. `Foo<i32>`. */
-    nameInclTypeParameters: string,
+    name: string,
     /** The respective class prototype. */
     prototype: ClassPrototype,
     /** Concrete type arguments, if any. */
     typeArguments: Type[] | null = null,
     _isInterface: bool = false // FIXME
   ) {
+    let nameWithTypeParameters = name;
+    if (typeArguments) {
+      nameWithTypeParameters += `<${typesToString(typeArguments, TypeNamePolicy.NAME_ONLY)}>`;
+    }
     super(
       _isInterface ? ElementKind.INTERFACE : ElementKind.CLASS,
-      typeArguments
-        ? prototype.name + "<" + typesToString(typeArguments, TypeNamePolicy.NAME_ONLY) +  ">"
-        : prototype.name,
-      mangleInternalName(nameInclTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
+      name,
+      mangleGlobalName(nameWithTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
       prototype.program,
       prototype.parent,
       prototype.declaration
     );
     var program = this.program;
+    this.scopedName = nameWithTypeParameters;
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
@@ -4487,7 +4497,7 @@ export class Class extends TypedElement {
       current = assert(current.base);
     }
     var prototype = current.prototype;
-    switch (prototype.name.charCodeAt(0)) {
+    switch (prototype.scopedName.charCodeAt(0)) {
       case CharCode.F: {
         if (prototype == program.float32ArrayPrototype) return Type.f32;
         if (prototype == program.float64ArrayPrototype) return Type.f64;
@@ -4613,8 +4623,8 @@ export class Interface extends Class { // FIXME
 
 /** Registers a concrete element with a program. */
 function registerConcreteElement(program: Program, element: Element): void {
-  assert(!program.instancesByName.has(element.internalName));
-  program.instancesByName.set(element.internalName, element);
+  assert(!program.instancesByName.has(element.globalName));
+  program.instancesByName.set(element.globalName, element);
 }
 
 /** Attempts to merge two elements. Returns the merged element on success. */
@@ -4732,7 +4742,7 @@ function copyMembers(src: Element, dest: Element): void {
 }
 
 /** Mangles the internal name of an element with the specified name that is a child of the given parent. */
-export function mangleInternalName(
+export function mangleGlobalName(
   name: string,
   parent: Element,
   isInstance: bool,
@@ -4741,12 +4751,12 @@ export function mangleInternalName(
   switch (parent.kind) {
     case ElementKind.FILE: {
       if (asGlobal) return name;
-      return parent.internalName + PATH_DELIMITER + name;
+      return parent.globalName + PATH_DELIMITER + name;
     }
     case ElementKind.FUNCTION: {
       if (asGlobal) return name;
       assert(!isInstance);
-      return parent.internalName + INNER_DELIMITER + name;
+      return parent.globalName + INNER_DELIMITER + name;
     }
     case ElementKind.PROPERTY_PROTOTYPE: // properties are just containers
     case ElementKind.PROPERTY: {         //
@@ -4755,7 +4765,7 @@ export function mangleInternalName(
     }
     default: {
       return (
-        mangleInternalName(parent.name, parent.parent, parent.is(CommonFlags.INSTANCE), asGlobal) +
+        mangleGlobalName(parent.scopedName, parent.parent, parent.is(CommonFlags.INSTANCE), asGlobal) +
         (isInstance ? INSTANCE_DELIMITER : STATIC_DELIMITER) + name
       );
     }

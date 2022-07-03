@@ -231,7 +231,7 @@ export class Resolver extends DiagnosticEmitter {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_is_not_generic,
-              node.range, element.internalName
+              node.range, element.globalName
             );
           }
         }
@@ -274,7 +274,7 @@ export class Resolver extends DiagnosticEmitter {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_is_not_generic,
-              node.range, element.internalName
+              node.range, element.globalName
             );
           }
         }
@@ -695,7 +695,7 @@ export class Resolver extends DiagnosticEmitter {
         if (reportMode == ReportMode.REPORT) {
           this.error(
             DiagnosticCode.Type_0_is_not_generic,
-            node.expression.range, prototype.internalName
+            node.expression.range, prototype.globalName
           );
         }
         return null;
@@ -1305,7 +1305,7 @@ export class Resolver extends DiagnosticEmitter {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
-              elementExpression.range, parent.internalName
+              elementExpression.range, parent.globalName
             );
           }
           return null;
@@ -1418,7 +1418,7 @@ export class Resolver extends DiagnosticEmitter {
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Property_0_does_not_exist_on_type_1,
-        node.property.range, propertyName, target.internalName
+        node.property.range, propertyName, target.globalName
       );
     }
     return null;
@@ -2328,7 +2328,7 @@ export class Resolver extends DiagnosticEmitter {
         let functionPrototype = <FunctionPrototype>target;
         // `unchecked` behaves like parenthesized
         if (
-          functionPrototype.internalName == BuiltinNames.unchecked &&
+          functionPrototype.globalName == BuiltinNames.unchecked &&
           node.args.length > 0
         ) {
           return this.resolveExpression(node.args[0], ctxFlow, ctxType, reportMode);
@@ -2361,7 +2361,7 @@ export class Resolver extends DiagnosticEmitter {
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-        targetExpression.range, target.internalName
+        targetExpression.range, target.globalName
       );
     }
     return null;
@@ -2721,10 +2721,8 @@ export class Resolver extends DiagnosticEmitter {
     var signature = new Signature(this.program, parameterTypes, returnType, thisType);
     signature.requiredParameters = requiredParameters;
 
-    var nameInclTypeParameters = prototype.name;
-    if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;
     var instance = new Function(
-      nameInclTypeParameters,
+      prototype.scopedName,
       prototype,
       typeArguments,
       signature,
@@ -2805,7 +2803,7 @@ export class Resolver extends DiagnosticEmitter {
         if (reportMode == ReportMode.REPORT) {
           this.error(
             DiagnosticCode.Type_0_is_not_generic,
-            reportNode.range, prototype.internalName
+            reportNode.range, prototype.globalName
           );
         }
         return null;
@@ -2896,12 +2894,10 @@ export class Resolver extends DiagnosticEmitter {
     if (instance) return instance;
 
     // Otherwise create
-    var nameInclTypeParameters = prototype.name;
-    if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;
     if (prototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
-      instance = new Interface(nameInclTypeParameters, <InterfacePrototype>prototype, typeArguments);
+      instance = new Interface(prototype.name, <InterfacePrototype>prototype, typeArguments);
     } else {
-      instance = new Class(nameInclTypeParameters, prototype, typeArguments);
+      instance = new Class(prototype.name, prototype, typeArguments);
     }
     prototype.setResolvedInstance(instanceKey, instance);
     var pendingClasses = this.resolveClassPending;
@@ -2934,7 +2930,7 @@ export class Resolver extends DiagnosticEmitter {
           this.error(
             DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
             prototype.identifierNode.range,
-            prototype.internalName
+            prototype.globalName
           );
           return null;
         }
@@ -2970,7 +2966,7 @@ export class Resolver extends DiagnosticEmitter {
             this.error(
               DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
               prototype.identifierNode.range,
-              prototype.internalName
+              prototype.globalName
             );
             return null;
           }
@@ -3163,7 +3159,7 @@ export class Resolver extends DiagnosticEmitter {
                   this.errorRelated(
                     DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
                     fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, instance.internalName, baseClass.internalName
+                    fieldPrototype.name, instance.globalName, baseClass.globalName
                   );
                 }
               } else if (fieldPrototype.is(CommonFlags.PROTECTED)) {
@@ -3171,14 +3167,14 @@ export class Resolver extends DiagnosticEmitter {
                   this.errorRelated(
                     DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
                     fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, baseClass.internalName, instance.internalName
+                    fieldPrototype.name, baseClass.globalName, instance.globalName
                   );
                 } else if (!existingField.is(CommonFlags.PROTECTED)) {
                   // may be implicitly public
                   this.errorRelated(
                     DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
                     fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, instance.internalName, baseClass.internalName
+                    fieldPrototype.name, instance.globalName, baseClass.globalName
                   );
                 }
               } else {
@@ -3187,7 +3183,7 @@ export class Resolver extends DiagnosticEmitter {
                   this.errorRelated(
                     DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
                     fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, baseClass.internalName, instance.internalName
+                    fieldPrototype.name, baseClass.globalName, instance.globalName
                   );
                 }
               }
@@ -3197,7 +3193,7 @@ export class Resolver extends DiagnosticEmitter {
                 this.errorRelated(
                   DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name, instance.internalName, baseClass.internalName
+                  fieldPrototype.name, instance.globalName, baseClass.globalName
                 );
               }
             }
@@ -3262,7 +3258,7 @@ export class Resolver extends DiagnosticEmitter {
           this.errorRelated(
             DiagnosticCode.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_2,
             instance.identifierNode.range, member.identifierNode.range,
-            instance.internalName, memberName, member.parent.internalName
+            instance.globalName, memberName, member.parent.globalName
           );
         }
       }
@@ -3419,7 +3415,7 @@ export class Resolver extends DiagnosticEmitter {
         if (reportMode == ReportMode.REPORT) {
           this.error(
             DiagnosticCode.Type_0_is_not_generic,
-            reportNode.range, prototype.internalName
+            reportNode.range, prototype.globalName
           );
         }
         return null;

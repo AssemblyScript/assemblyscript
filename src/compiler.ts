@@ -88,7 +88,7 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName
+  mangleGlobalName
 } from "./program";
 
 import {
@@ -455,7 +455,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up the main start function
     var startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, new Signature(program, [], Type.void));
-    startFunctionInstance.internalName = BuiltinNames.start;
+    startFunctionInstance.globalName = BuiltinNames.start;
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = new Array<ExpressionRef>();
     this.shadowStack = new ShadowStackPass(this);
@@ -474,7 +474,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // obtain the main start function
     var startFunctionInstance = this.currentFlow.actualFunction;
-    assert(startFunctionInstance.internalName == BuiltinNames.start);
+    assert(startFunctionInstance.globalName == BuiltinNames.start);
     var startFunctionBody = this.currentBody;
     assert(startFunctionBody.length == 0);
 
@@ -506,14 +506,14 @@ export class Compiler extends DiagnosticEmitter {
         let name = runtimeFunctions[i];
         let instance = program.requireFunction(name);
         if (this.compileFunction(instance) && !module.hasExport(name)) {
-          module.addFunctionExport(instance.internalName, name);
+          module.addFunctionExport(instance.globalName, name);
         }
       }
       for (let i = 0, k = runtimeGlobals.length; i < k; ++i) {
         let name = runtimeGlobals[i];
         let instance = program.requireGlobal(name);
         if (this.compileGlobal(instance) && !module.hasExport(name)) {
-          module.addGlobalExport(instance.internalName, name);
+          module.addGlobalExport(instance.globalName, name);
         }
       }
     }
@@ -724,7 +724,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!tableBase) tableBase = 1; // leave first elem blank
     var functionTableNames = new Array<string>(functionTable.length);
     for (let i = 0, k = functionTable.length; i < k; ++i) {
-      functionTableNames[i] = functionTable[i].internalName;
+      functionTableNames[i] = functionTable[i].globalName;
     }
 
     var tableSize = tableBase + functionTable.length;
@@ -770,7 +770,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       let funcRef = module.addFunction(
-        startFunctionInstance.internalName,
+        startFunctionInstance.globalName,
         signature.paramRefs,
         signature.resultRefs,
         typesToRefs(startFunctionInstance.additionalLocals),
@@ -785,7 +785,7 @@ export class Compiler extends DiagnosticEmitter {
             this.program.nativeRange, exportStart
           );
         } else {
-          module.addFunctionExport(startFunctionInstance.internalName, exportStart);
+          module.addFunctionExport(startFunctionInstance.globalName, exportStart);
         }
       }
     }
@@ -851,7 +851,7 @@ export class Compiler extends DiagnosticEmitter {
           if (functionInstance.is(CommonFlags.COMPILED)) {
             let exportName = prefix + name;
             if (!module.hasExport(exportName)) {
-              module.addFunctionExport(functionInstance.internalName, exportName);
+              module.addFunctionExport(functionInstance.globalName, exportName);
               this.hasCustomFunctionExports = true;
               if (signature.hasManagedOperands) {
                 this.shadowStack.noteExport(exportName, signature.getManagedOperandIndices());
@@ -876,7 +876,7 @@ export class Compiler extends DiagnosticEmitter {
         if (global.is(CommonFlags.COMPILED)) {
           let exportName = prefix + name;
           if (!module.hasExport(exportName)) {
-            module.addGlobalExport(element.internalName, exportName);
+            module.addGlobalExport(element.globalName, exportName);
           }
           return;
         }
@@ -909,7 +909,7 @@ export class Compiler extends DiagnosticEmitter {
         if (enumValue.is(CommonFlags.COMPILED)) {
           let exportName = prefix + name;
           if (!module.hasExport(exportName)) {
-            module.addGlobalExport(element.internalName, exportName);
+            module.addGlobalExport(element.globalName, exportName);
           }
           return;
         }
@@ -1025,14 +1025,14 @@ export class Compiler extends DiagnosticEmitter {
       let varTypes = new Array<TypeRef>(numLocals);
       for (let i = 0; i < numLocals; ++i) varTypes[i] = locals[i].type.toRef();
       module.addFunction(
-        startFunction.internalName,
+        startFunction.globalName,
         startSignature.paramRefs,
         startSignature.resultRefs,
         varTypes,
         module.flatten(startFunctionBody)
       );
       previousBody.push(
-        module.call(startFunction.internalName, null, TypeRef.None)
+        module.call(startFunction.globalName, null, TypeRef.None)
       );
     }
   }
@@ -1109,11 +1109,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle ambient builtins like '__heap_base' that need to be resolved but are added explicitly
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
-      let internalName = global.internalName;
-      if (internalName == BuiltinNames.data_end) this.runtimeFeatures |= RuntimeFeatures.DATA;
-      else if (internalName == BuiltinNames.stack_pointer) this.runtimeFeatures |= RuntimeFeatures.STACK;
-      else if (internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
-      else if (internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
+      let globalName = global.globalName;
+      if (globalName == BuiltinNames.data_end) this.runtimeFeatures |= RuntimeFeatures.DATA;
+      else if (globalName == BuiltinNames.stack_pointer) this.runtimeFeatures |= RuntimeFeatures.STACK;
+      else if (globalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
+      else if (globalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
       pendingElements.delete(global);
       return true;
     }
@@ -1131,7 +1131,7 @@ export class Compiler extends DiagnosticEmitter {
         mangleImportName(global, global.declaration);
         this.program.markModuleImport(mangleImportName_moduleName, mangleImportName_elementName, global);
         module.addGlobalImport(
-          global.internalName,
+          global.globalName,
           mangleImportName_moduleName,
           mangleImportName_elementName,
           typeRef,
@@ -1248,7 +1248,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    var internalName = global.internalName;
+    var globalName = global.globalName;
 
     if (initializeInStart) { // initialize to mutable zero and set the actual value in start
       if (isDeclaredInline) {
@@ -1257,12 +1257,12 @@ export class Compiler extends DiagnosticEmitter {
           findDecorator(DecoratorKind.INLINE, global.decoratorNodes)!.range, "inline"
         );
       }
-      module.addGlobal(internalName, typeRef, true, this.makeZero(type, global.declaration));
+      module.addGlobal(globalName, typeRef, true, this.makeZero(type, global.declaration));
       this.currentBody.push(
-        module.global_set(internalName, initExpr)
+        module.global_set(globalName, initExpr)
       );
     } else if (!isDeclaredInline) { // compile normally
-      module.addGlobal(internalName, typeRef, !isDeclaredConstant, initExpr);
+      module.addGlobal(globalName, typeRef, !isDeclaredConstant, initExpr);
     }
     pendingElements.delete(global);
     return true;
@@ -1333,7 +1333,7 @@ export class Compiler extends DiagnosticEmitter {
             initExpr = module.i32(i64_low(value));
           } else {
             initExpr = module.binary(BinaryOp.AddI32,
-              module.global_get(previousValue.internalName, TypeRef.I32),
+              module.global_get(previousValue.globalName, TypeRef.I32),
               module.i32(1)
             );
             let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
@@ -1352,7 +1352,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.currentFlow = previousFlow;
         if (initInStart) {
-          module.addGlobal(enumValue.internalName, TypeRef.I32, true, module.i32(0));
+          module.addGlobal(enumValue.globalName, TypeRef.I32, true, module.i32(0));
           this.currentBody.push(
             this.makeGlobalAssignment(enumValue, initExpr, Type.i32, false)
           );
@@ -1361,10 +1361,10 @@ export class Compiler extends DiagnosticEmitter {
           if (isInline) {
             enumValue.setConstantIntegerValue(i64_new(getConstValueI32(initExpr)), Type.i32);
             if (enumValue.is(CommonFlags.MODULE_EXPORT)) {
-              module.addGlobal(enumValue.internalName, TypeRef.I32, false, initExpr);
+              module.addGlobal(enumValue.globalName, TypeRef.I32, false, initExpr);
             }
           } else {
-            module.addGlobal(enumValue.internalName, TypeRef.I32, false, initExpr);
+            module.addGlobal(enumValue.globalName, TypeRef.I32, false, initExpr);
           }
           enumValue.isImmutable = true;
           previousValueIsMut = false;
@@ -1473,7 +1473,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // create the function
       funcRef = module.addFunction(
-        instance.internalName,
+        instance.globalName,
         signature.paramRefs,
         signature.resultRefs,
         typesToRefs(instance.additionalLocals),
@@ -1485,18 +1485,18 @@ export class Compiler extends DiagnosticEmitter {
       mangleImportName(instance, declarationNode); // TODO: check for duplicates
       this.program.markModuleImport(mangleImportName_moduleName, mangleImportName_elementName, instance);
       module.addFunctionImport(
-        instance.internalName,
+        instance.globalName,
         mangleImportName_moduleName,
         mangleImportName_elementName,
         signature.paramRefs,
         signature.resultRefs
       );
-      funcRef = module.getFunction(instance.internalName);
+      funcRef = module.getFunction(instance.globalName);
 
     // abstract or interface function
     } else if (instance.is(CommonFlags.ABSTRACT) || instance.parent.kind == ElementKind.INTERFACE) {
       funcRef = module.addFunction(
-        instance.internalName,
+        instance.globalName,
         signature.paramRefs,
         signature.resultRefs,
         null,
@@ -1763,7 +1763,7 @@ export class Compiler extends DiagnosticEmitter {
         this.compileFunction(linkInstance);
         bodyExpr = module.block(null, [
           bodyExpr,
-          module.call(linkInstance.internalName, [
+          module.call(linkInstance.globalName, [
             module.local_get(0, thisTypeRef),
             module.local_get(1, valueTypeRef),
             module.i32(0)
@@ -5863,7 +5863,7 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
             expression.range,
-            target.internalName
+            target.globalName
           );
           return this.module.unreachable();
         }
@@ -5884,7 +5884,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!setterInstance) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-            expression.range, propertyInstance.internalName
+            expression.range, propertyInstance.globalName
           );
           return this.module.unreachable();
         }
@@ -5904,12 +5904,12 @@ export class Compiler extends DiagnosticEmitter {
           if (!indexedGet) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
-              expression.range, classInstance.internalName
+              expression.range, classInstance.globalName
             );
           } else {
             this.error(
               DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-              expression.range, classInstance.internalName
+              expression.range, classInstance.globalName
             );
           }
           return this.module.unreachable();
@@ -5928,7 +5928,7 @@ export class Compiler extends DiagnosticEmitter {
       default: {
         this.error(
           DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-          expression.range, target.internalName
+          expression.range, target.globalName
         );
         return this.module.unreachable();
       }
@@ -5975,7 +5975,7 @@ export class Compiler extends DiagnosticEmitter {
         if (flow.isLocalFlag(local.index, LocalFlags.CONSTANT, true)) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-            valueExpression.range, target.internalName
+            valueExpression.range, target.globalName
           );
           this.currentType = tee ? local.type : Type.void;
           return module.unreachable();
@@ -5989,7 +5989,7 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
             valueExpression.range,
-            target.internalName
+            target.globalName
           );
           this.currentType = tee ? global.type : Type.void;
           return module.unreachable();
@@ -6006,7 +6006,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!isConstructor || initializerNode) {
             this.error(
               DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-              valueExpression.range, fieldInstance.internalName
+              valueExpression.range, fieldInstance.globalName
             );
             return module.unreachable();
           }
@@ -6037,7 +6037,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!setterInstance) {
           this.error(
             DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-            valueExpression.range, target.internalName
+            valueExpression.range, target.globalName
           );
           return module.unreachable();
         }
@@ -6086,7 +6086,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!getterInstance) {
           this.error(
             DiagnosticCode.Index_signature_is_missing_in_type_0,
-            valueExpression.range, classInstance.internalName
+            valueExpression.range, classInstance.globalName
           );
           return module.unreachable();
         }
@@ -6094,7 +6094,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!setterInstance) {
           this.error(
             DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-            valueExpression.range, classInstance.internalName
+            valueExpression.range, classInstance.globalName
           );
           this.currentType = tee ? getterInstance.signature.returnType : Type.void;
           return module.unreachable();
@@ -6194,12 +6194,12 @@ export class Compiler extends DiagnosticEmitter {
     if (tee) { // (global = value), global
       this.currentType = type;
       return module.block(null, [
-        module.global_set(global.internalName, valueExpr),
-        module.global_get(global.internalName, typeRef)
+        module.global_set(global.globalName, valueExpr),
+        module.global_get(global.globalName, typeRef)
       ], typeRef);
     } else { // global = value
       this.currentType = Type.void;
-      return module.global_set(global.internalName,
+      return module.global_set(global.globalName,
         valueExpr
       );
     }
@@ -6381,7 +6381,7 @@ export class Compiler extends DiagnosticEmitter {
         let global = <Global>target;
         signature = global.type.signatureReference;
         if (signature) {
-          functionArg = module.global_get(global.internalName, global.type.toRef());
+          functionArg = module.global_get(global.globalName, global.type.toRef());
           break;
         }
         this.error(
@@ -6539,7 +6539,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!prototype.is(CommonFlags.GENERIC)) {
         this.error(
           DiagnosticCode.Type_0_is_not_generic,
-          expression.range, prototype.internalName
+          expression.range, prototype.globalName
         );
       }
       typeArguments = this.resolver.resolveTypeArguments(
@@ -6564,9 +6564,9 @@ export class Compiler extends DiagnosticEmitter {
       false
     );
     // global builtins
-    var internalName = prototype.internalName;
-    if (builtins.has(internalName)) {
-      let fn = assert(builtins.get(internalName));
+    var globalName = prototype.globalName;
+    if (builtins.has(globalName)) {
+      let fn = assert(builtins.get(globalName));
       return fn(ctx);
     }
     // class builtins
@@ -6574,7 +6574,7 @@ export class Compiler extends DiagnosticEmitter {
     if (parent.kind == ElementKind.CLASS) {
       let classPrototype = (<Class>parent).prototype;
       if (classPrototype == this.program.functionPrototype) {
-        let methodName = prototype.name;
+        let methodName = prototype.scopedName;
         if (function_builtins.has(methodName)) {
           let fn = assert(function_builtins.get(methodName));
           return fn(ctx);
@@ -6696,7 +6696,7 @@ export class Compiler extends DiagnosticEmitter {
       if (inlineStack.includes(instance)) {
         this.warning(
           DiagnosticCode.Function_0_cannot_be_inlined_into_itself,
-          reportNode.range, instance.internalName
+          reportNode.range, instance.globalName
         );
       } else {
         inlineStack.push(instance);
@@ -6951,7 +6951,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = previousFlow;
 
     var funcRef = module.addFunction(
-      stub.internalName,
+      stub.globalName,
       stub.signature.paramRefs,
       stub.signature.resultRefs,
       typesToRefs(stub.additionalLocals),
@@ -6975,7 +6975,7 @@ export class Compiler extends DiagnosticEmitter {
     original.virtualStub = stub;
     var module = this.module;
     stub.ref = module.addFunction(
-      stub.internalName,
+      stub.globalName,
       stub.signature.paramRefs,
       stub.signature.resultRefs,
       null,
@@ -7044,8 +7044,8 @@ export class Compiler extends DiagnosticEmitter {
           needsVarargsStub = true;
         }
         let calledName = needsVarargsStub
-          ? this.ensureVarargsStub(overloadInstance).internalName
-          : overloadInstance.internalName;
+          ? this.ensureVarargsStub(overloadInstance).globalName
+          : overloadInstance.globalName;
         let returnTypeRef = overloadSignature.returnType.toRef();
         let stmts = new Array<ExpressionRef>();
         if (needsVarargsStub) {
@@ -7088,7 +7088,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         paramExprs[1 + i] = module.local_get(1 + i, parameterTypes[i].toRef());
       }
-      body = module.call(instance.internalName, paramExprs, returnType.toRef());
+      body = module.call(instance.globalName, paramExprs, returnType.toRef());
 
     // Otherwise trap
     } else {
@@ -7097,9 +7097,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // Create the virtual stub function
     var ref = stub.ref;
-    if (ref) module.removeFunction(stub.internalName);
+    if (ref) module.removeFunction(stub.globalName);
     stub.ref = module.addFunction(
-      stub.internalName,
+      stub.globalName,
       stub.signature.paramRefs,
       stub.signature.resultRefs,
       [ TypeRef.I32 ],
@@ -7158,7 +7158,7 @@ export class Compiler extends DiagnosticEmitter {
         if (inlineStack.includes(instance)) {
           this.warning(
             DiagnosticCode.Function_0_cannot_be_inlined_into_itself,
-            reportNode.range, instance.internalName
+            reportNode.range, instance.globalName
           );
         } else {
           inlineStack.push(instance);
@@ -7176,7 +7176,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         this.warning(
           DiagnosticCode.Function_0_is_virtual_and_will_not_be_inlined,
-          reportNode.range, instance.internalName
+          reportNode.range, instance.globalName
         );
       }
     }
@@ -7230,7 +7230,7 @@ export class Compiler extends DiagnosticEmitter {
                 } else {
                   operands.push(
                     this.convertExpression(
-                      module.global_get(global.internalName, global.type.toRef()),
+                      module.global_get(global.globalName, global.type.toRef()),
                       global.type, parameterTypes[i], false, initializer
                     )
                   );
@@ -7259,7 +7259,7 @@ export class Compiler extends DiagnosticEmitter {
           lastOperand
         ], lastOperandType.toRef());
         this.operandsTostack(instance.signature, operands);
-        let expr = module.call(instance.internalName, operands, returnTypeRef);
+        let expr = module.call(instance.globalName, operands, returnTypeRef);
         if (returnType != Type.void && immediatelyDropped) {
           expr = module.drop(expr);
           this.currentType = Type.void;
@@ -7276,7 +7276,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (operands) this.operandsTostack(instance.signature, operands);
-    var expr = module.call(instance.internalName, operands, returnType.toRef());
+    var expr = module.call(instance.globalName, operands, returnType.toRef());
     this.currentType = returnType;
     return expr;
   }
@@ -7582,7 +7582,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // add a constant local referring to the function if applicable
     if (!isSemanticallyAnonymous) {
-      let fname = instance.name;
+      let fname = instance.scopedName;
       let existingLocal = flow.getScopedLocal(fname);
       if (existingLocal) {
         if (!existingLocal.declaration.range.source.isNative) {
@@ -7600,7 +7600,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       } else {
         let ftype = instance.type;
-        let local = flow.addScopedLocal(instance.name, ftype);
+        let local = flow.addScopedLocal(instance.scopedName, ftype);
         flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         expr = module.local_tee(local.index, expr, ftype.isManaged);
       }
@@ -7762,7 +7762,7 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
             expression.range,
-            local.internalName
+            local.globalName
           );
           this.currentType = localType;
           return module.unreachable();
@@ -7798,7 +7798,7 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
             expression.range,
-            global.internalName
+            global.globalName
           );
           this.currentType = globalType;
           return module.unreachable();
@@ -7808,7 +7808,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(global, contextualType, constraints);
         }
         this.currentType = globalType;
-        return module.global_get(global.internalName, globalType.toRef());
+        return module.global_get(global.globalName, globalType.toRef());
       }
       case ElementKind.ENUMVALUE: { // here: if referenced from within the same enum
         let enumValue = <EnumValue>target;
@@ -7825,7 +7825,7 @@ export class Compiler extends DiagnosticEmitter {
           assert(enumValue.constantValueKind == ConstantValueKind.INTEGER);
           return module.i32(i64_low(enumValue.constantIntegerValue));
         }
-        return module.global_get(enumValue.internalName, TypeRef.I32);
+        return module.global_get(enumValue.globalName, TypeRef.I32);
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
         let functionPrototype = <FunctionPrototype>target;
@@ -7855,7 +7855,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (contextualType.isExternalReference) {
           this.currentType = Type.funcref;
-          return module.ref_func(functionInstance.internalName, TypeRef.Funcref); // TODO
+          return module.ref_func(functionInstance.globalName, TypeRef.Funcref); // TODO
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
         this.currentType = functionInstance.signature.type;
@@ -8054,7 +8054,7 @@ export class Compiler extends DiagnosticEmitter {
       // dynamic check against all possible concrete ids
       } else if (prototype.extends(classReference.prototype)) {
         this.pendingClassInstanceOf.add(prototype);
-        return module.call(`${prototype.internalName}~instanceof`, [ expr ], TypeRef.I32);
+        return module.call(`${prototype.globalName}~instanceof`, [ expr ], TypeRef.I32);
       }
     }
 
@@ -8430,7 +8430,7 @@ export class Compiler extends DiagnosticEmitter {
       flow.freeTempLocal(tempDataStart);
       this.error(
         DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-        expression.range, arrayInstance.internalName
+        expression.range, arrayInstance.globalName
       );
       this.currentType = arrayType;
       return module.unreachable();
@@ -8461,7 +8461,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0; i < length; ++i) {
       // this[i] = value
       stmts.push(
-        module.call(indexedSet.internalName, [
+        module.call(indexedSet.globalName, [
           module.local_get(tempThis.index, arrayTypeRef),
           module.i32(i),
           values[i]
@@ -8591,7 +8591,7 @@ export class Compiler extends DiagnosticEmitter {
       flow.freeTempLocal(tempThis);
       this.error(
         DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-        expression.range, arrayInstance.internalName
+        expression.range, arrayInstance.globalName
       );
       this.currentType = arrayType;
       return module.unreachable();
@@ -8614,7 +8614,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0; i < length; ++i) {
       // array[i] = value
       stmts.push(
-        module.call(indexedSet.internalName, [
+        module.call(indexedSet.globalName, [
           module.local_get(tempThis.index, arrayTypeRef),
           module.i32(i),
           values[i]
@@ -8996,7 +8996,7 @@ export class Compiler extends DiagnosticEmitter {
         for (let i = numOperands; i < numLocals; ++i) varTypes.push(locals[i].type.toRef());
       }
       let funcRef = module.addFunction(
-        instance.internalName,
+        instance.globalName,
         signature.paramRefs,
         signature.resultRefs,
         varTypes,
@@ -9031,13 +9031,13 @@ export class Compiler extends DiagnosticEmitter {
                   DiagnosticCode.Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned,
                   field.declaration.name.range,
                   relatedNode.range,
-                  field.internalName
+                  field.globalName
                 );
               } else {
                 this.error(
                   DiagnosticCode.Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned,
                   field.declaration.name.range,
-                  field.internalName
+                  field.globalName
                 );
               }
             }
@@ -9046,7 +9046,7 @@ export class Compiler extends DiagnosticEmitter {
               this.warning( // involves a runtime check
                 DiagnosticCode.Property_0_is_always_assigned_before_being_used,
                 field.identifierNode.range,
-                field.internalName
+                field.globalName
               );
             } else {
               this.pedantic( // is a nop anyway
@@ -9114,7 +9114,7 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
             expression.range,
-            global.internalName
+            global.globalName
           );
           this.currentType = globalType;
           return module.unreachable();
@@ -9123,7 +9123,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(global, ctxType, constraints);
         }
         this.currentType = globalType;
-        return module.global_get(global.internalName, globalType.toRef());
+        return module.global_get(global.globalName, globalType.toRef());
       }
       case ElementKind.ENUMVALUE: { // enum value
         let enumValue = <EnumValue>target;
@@ -9140,7 +9140,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(enumValue, ctxType, constraints);
         }
         assert(enumValue.type == Type.i32);
-        return module.global_get(enumValue.internalName, TypeRef.I32);
+        return module.global_get(enumValue.globalName, TypeRef.I32);
       }
       case ElementKind.FIELD: {
         let fieldInstance = <Field>target;
@@ -9165,7 +9165,7 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Property_0_is_used_before_being_assigned,
             expression.range,
             fieldInstance.identifierNode.range,
-            fieldInstance.internalName
+            fieldInstance.globalName
           );
         }
         if (thisType.isNullableReference) {
@@ -10406,7 +10406,7 @@ export class Compiler extends DiagnosticEmitter {
     if (classInstance.hasDecorator(DecoratorFlags.UNMANAGED)) {
       let allocInstance = program.allocInstance;
       this.compileFunction(allocInstance);
-      return module.call(allocInstance.internalName, [
+      return module.call(allocInstance.globalName, [
         options.isWasm64
           ? module.i64(classInstance.nextMemoryOffset)
           : module.i32(classInstance.nextMemoryOffset)
@@ -10414,7 +10414,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       let newInstance = program.newInstance;
       this.compileFunction(newInstance);
-      return module.call(newInstance.internalName, [
+      return module.call(newInstance.globalName, [
         options.isWasm64
           ? module.i64(classInstance.nextMemoryOffset)
           : module.i32(classInstance.nextMemoryOffset),
@@ -10489,7 +10489,7 @@ export class Compiler extends DiagnosticEmitter {
           module.local_get(thisLocalIndex, sizeTypeRef),
           module.local_get(
             isInline
-              ? flow.lookupLocal(field.name)!.index
+              ? flow.lookupLocal(field.scopedName)!.index
               : 1 + parameterIndex, // `this` is local 0
             fieldTypeRef
           )
@@ -10560,7 +10560,7 @@ export class Compiler extends DiagnosticEmitter {
     var source = range.source;
     return module.block(null, [
       module.call(
-        abortInstance.internalName, [
+        abortInstance.globalName, [
           messageExpr,
           filenameExpr,
           module.i32(source.lineAt(range.start)),
@@ -10617,7 +10617,7 @@ export class Compiler extends DiagnosticEmitter {
       // Simplify if the value cannot be `null`. If toType is non-nullable, a
       // null-check would have been emitted separately so is not necessary here.
       expr = module.if(
-        module.call(instanceofInstance.internalName, [
+        module.call(instanceofInstance.globalName, [
           module.local_tee(temp.index, expr, type.isManaged),
           module.i32(toType.classReference!.id)
         ], TypeRef.I32),
@@ -10628,7 +10628,7 @@ export class Compiler extends DiagnosticEmitter {
       expr = module.if(
         module.local_tee(temp.index, expr, type.isManaged),
         module.if(
-          module.call(instanceofInstance.internalName, [
+          module.call(instanceofInstance.globalName, [
             module.local_get(temp.index, type.toRef()),
             module.i32(toType.classReference!.id)
           ], TypeRef.I32),
@@ -10653,8 +10653,8 @@ function mangleImportName(
   // by default, use the file name as the module name
   mangleImportName_moduleName = declaration.range.source.simplePath;
   // and the internal name of the element within that file as the element name
-  mangleImportName_elementName = mangleInternalName(
-    element.name, element.parent, element.is(CommonFlags.INSTANCE), true
+  mangleImportName_elementName = mangleGlobalName(
+    element.scopedName, element.parent, element.is(CommonFlags.INSTANCE), true
   );
   // override module name if a `module` statement is present
   let overriddenModuleName = declaration.overriddenModuleName;

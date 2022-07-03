@@ -222,7 +222,7 @@
   i32.const 2
   global.set $~argumentsLength
   i32.const 0
-  call $function-types/makeAndAdd<i32>@varargs
+  call $function-types/makeAndAdd@varargs<i32>
   i32.const 3
   i32.eq
   i32.eqz
@@ -259,7 +259,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $function-types/makeAndAdd<i32>@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd@varargs<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4

@@ -2,7 +2,7 @@
   "asc_flags": [
   ],
   "stderr": [
-    "TS2322: Type 'nullable/Example | null' is not assignable to type 'nullable/Example'.",
+    "TS2322: Type 'Example | null' is not assignable to type 'Example'.",
     "EOF"
   ]
 }

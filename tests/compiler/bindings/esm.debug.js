@@ -2,7 +2,7 @@ async function instantiate(module, imports = {}) {
   const adaptedImports = {
     env: Object.assign(Object.create(globalThis), imports.env || {}, {
       trace(message, n, a0, a1, a2, a3, a4) {
-        // ~lib/builtins/trace(~lib/string/String, i32?, f64?, f64?, f64?, f64?, f64?) => void
+        // trace(string, i32?, f64?, f64?, f64?, f64?, f64?) => void
         message = __liftString(message >>> 0);
         (() => {
           // @external.js
@@ -10,31 +10,31 @@ async function instantiate(module, imports = {}) {
         })();
       },
       "console.log"(text) {
-        // ~lib/bindings/dom/console.log(~lib/string/String) => void
+        // log(string) => void
         text = __liftString(text >>> 0);
         console.log(text);
       },
       "Math.E": (
-        // ~lib/bindings/dom/Math.E: f64
+        // E: f64
         Math.E
       ),
       "Math.log": (
-        // ~lib/bindings/dom/Math.log(f64) => f64
+        // log(f64) => f64
         Math.log
       ),
       "globalThis.globalThis": (
-        // bindings/esm/immutableGlobalNested: externref
+        // immutableGlobalNested: externref
         globalThis.globalThis
       ),
       "Date.getTimezoneOffset"() {
-        // bindings/esm/Date_getTimezoneOffset() => i32
+        // Date_getTimezoneOffset() => i32
         return (() => {
           // @external.js
           return new Date().getTimezoneOffset();
         })();
       },
       abort(message, fileName, lineNumber, columnNumber) {
-        // ~lib/builtins/abort(~lib/string/String | null?, ~lib/string/String | null?, u32?, u32?) => void
+        // abort(string | null?, string | null?, u32?, u32?) => void
         message = __liftString(message >>> 0);
         fileName = __liftString(fileName >>> 0);
         lineNumber = lineNumber >>> 0;
@@ -50,14 +50,14 @@ async function instantiate(module, imports = {}) {
   const memory = exports.memory || imports.env.memory;
   const adaptedExports = Object.setPrototypeOf({
     stringGlobal: {
-      // bindings/esm/stringGlobal: ~lib/string/String
+      // stringGlobal: string
       valueOf() { return this.value; },
       get value() {
         return __liftString(exports.stringGlobal.value >>> 0);
       }
     },
     mutableStringGlobal: {
-      // bindings/esm/mutableStringGlobal: ~lib/string/String
+      // mutableStringGlobal: string
       valueOf() { return this.value; },
       get value() {
         return __liftString(exports.mutableStringGlobal.value >>> 0);
@@ -67,27 +67,27 @@ async function instantiate(module, imports = {}) {
       }
     },
     Enum: (values => (
-      // bindings/esm/Enum
+      // Enum
       values[values.ONE = exports["Enum.ONE"].valueOf()] = "ONE",
       values[values.TWO = exports["Enum.TWO"].valueOf()] = "TWO",
       values[values.THREE = exports["Enum.THREE"].valueOf()] = "THREE",
       values
     ))({}),
     ConstEnum: (values => (
-      // bindings/esm/ConstEnum
+      // ConstEnum
       values[values.ONE = 1] = "ONE",
       values[values.TWO = 2] = "TWO",
       values[values.THREE = 3] = "THREE",
       values
     ))({}),
     plainFunction64(a, b) {
-      // bindings/esm/plainFunction64(i64, i64) => i64
+      // plainFunction64(i64, i64) => i64
       a = a || 0n;
       b = b || 0n;
       return exports.plainFunction64(a, b);
     },
     bufferFunction(a, b) {
-      // bindings/esm/bufferFunction(~lib/arraybuffer/ArrayBuffer, ~lib/arraybuffer/ArrayBuffer) => ~lib/arraybuffer/ArrayBuffer
+      // bufferFunction(ArrayBuffer, ArrayBuffer) => ArrayBuffer
       a = __retain(__lowerBuffer(a) || __notnull());
       b = __lowerBuffer(b) || __notnull();
       try {
@@ -97,7 +97,7 @@ async function instantiate(module, imports = {}) {
       }
     },
     stringFunction(a, b) {
-      // bindings/esm/stringFunction(~lib/string/String, ~lib/string/String) => ~lib/string/String
+      // stringFunction(string, string) => string
       a = __retain(__lowerString(a) || __notnull());
       b = __lowerString(b) || __notnull();
       try {
@@ -107,7 +107,7 @@ async function instantiate(module, imports = {}) {
       }
     },
     stringFunctionOptional(a, b) {
-      // bindings/esm/stringFunctionOptional(~lib/string/String, ~lib/string/String?) => ~lib/string/String
+      // stringFunctionOptional(string, string?) => string
       a = __retain(__lowerString(a) || __notnull());
       b = __lowerString(b) || __notnull();
       try {
@@ -118,7 +118,7 @@ async function instantiate(module, imports = {}) {
       }
     },
     typedarrayFunction(a, b) {
-      // bindings/esm/typedarrayFunction(~lib/typedarray/Int16Array, ~lib/typedarray/Float32Array) => ~lib/typedarray/Uint64Array
+      // typedarrayFunction(Int16Array, Float32Array) => Uint64Array
       a = __retain(__lowerTypedArray(Int16Array, 3, 1, a) || __notnull());
       b = __lowerTypedArray(Float32Array, 4, 2, b) || __notnull();
       try {
@@ -128,7 +128,7 @@ async function instantiate(module, imports = {}) {
       }
     },
     staticarrayFunction(a, b) {
-      // bindings/esm/staticarrayFunction(StaticArray<i32>, StaticArray<i32>) => StaticArray<i32>
+      // staticarrayFunction(StaticArray, StaticArray) => StaticArray
       a = __retain(__lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, a) || __notnull());
       b = __lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, b) || __notnull();
       try {
@@ -138,7 +138,7 @@ async function instantiate(module, imports = {}) {
       }
     },
     arrayFunction(a, b) {
-      // bindings/esm/arrayFunction(Array<i32>, Array<i32>) => Array<i32>
+      // arrayFunction(Array, Array) => Array
       a = __retain(__lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, a) || __notnull());
       b = __lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, b) || __notnull();
       try {
@@ -148,7 +148,7 @@ async function instantiate(module, imports = {}) {
       }
     },
     objectFunction(a, b) {
-      // bindings/esm/objectFunction(bindings/esm/PlainObject, bindings/esm/PlainObject) => bindings/esm/PlainObject
+      // objectFunction(PlainObject, PlainObject) => PlainObject
       a = __retain(__lowerRecord8(a) || __notnull());
       b = __lowerRecord8(b) || __notnull();
       try {
@@ -158,11 +158,11 @@ async function instantiate(module, imports = {}) {
       }
     },
     newInternref() {
-      // bindings/esm/newInternref() => bindings/esm/NonPlainObject
+      // newInternref() => NonPlainObject
       return __liftInternref(exports.newInternref() >>> 0);
     },
     internrefFunction(a, b) {
-      // bindings/esm/internrefFunction(bindings/esm/NonPlainObject, bindings/esm/NonPlainObject) => bindings/esm/NonPlainObject
+      // internrefFunction(NonPlainObject, NonPlainObject) => NonPlainObject
       a = __retain(__lowerInternref(a) || __notnull());
       b = __lowerInternref(b) || __notnull();
       try {
@@ -173,7 +173,7 @@ async function instantiate(module, imports = {}) {
     },
   }, exports);
   function __lowerRecord8(value) {
-    // bindings/esm/PlainObject
+    // PlainObject
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
     const pointer = exports.__pin(exports.__new(68, 8));
@@ -197,7 +197,7 @@ async function instantiate(module, imports = {}) {
     return pointer;
   }
   function __liftRecord8(pointer) {
-    // bindings/esm/PlainObject
+    // PlainObject
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!pointer) return null;
     return {

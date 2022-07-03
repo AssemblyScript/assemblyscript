@@ -2384,7 +2384,7 @@
  (func $class-overloading/B1#baz (param $0 i32) (result i32)
   i32.const 3
  )
- (func $class-overloading/A#a<i32>@virtual (param $0 i32) (param $1 i32)
+ (func $class-overloading/A#a@virtual<i32> (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
    block $case2
@@ -2889,7 +2889,7 @@
   i32.store
   local.get $0
   i32.const 1
-  call $class-overloading/A#a<i32>@virtual
+  call $class-overloading/A#a@virtual<i32>
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3149,7 +3149,7 @@
   i32.store
   local.get $0
   i32.const 1
-  call $class-overloading/A#a<i32>@virtual
+  call $class-overloading/A#a@virtual<i32>
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3278,7 +3278,7 @@
   i32.store
   local.get $0
   i32.const 1
-  call $class-overloading/A#a<i32>@virtual
+  call $class-overloading/A#a@virtual<i32>
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3407,7 +3407,7 @@
   i32.store
   local.get $0
   i32.const 1
-  call $class-overloading/A#a<i32>@virtual
+  call $class-overloading/A#a@virtual<i32>
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer

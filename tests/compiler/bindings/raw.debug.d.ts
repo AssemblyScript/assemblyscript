@@ -1,27 +1,27 @@
 declare namespace __AdaptedExports {
-  /** bindings/esm/plainGlobal */
+  /** plainGlobal */
   export const plainGlobal: {
     /** @type `i32` */
     get value(): number
   };
-  /** bindings/esm/plainMutableGlobal */
+  /** plainMutableGlobal */
   export const plainMutableGlobal: {
     /** @type `i32` */
     get value(): number;
     set value(value: number);
   };
-  /** bindings/esm/stringGlobal */
+  /** stringGlobal */
   export const stringGlobal: {
-    /** @type `~lib/string/String` */
+    /** @type `string` */
     get value(): string
   };
-  /** bindings/esm/mutableStringGlobal */
+  /** mutableStringGlobal */
   export const mutableStringGlobal: {
-    /** @type `~lib/string/String` */
+    /** @type `string` */
     get value(): string;
     set value(value: string);
   };
-  /** bindings/esm/Enum */
+  /** Enum */
   export enum Enum {
     /** @type `i32` */
     ONE,
@@ -30,7 +30,7 @@ declare namespace __AdaptedExports {
     /** @type `i32` */
     THREE,
   }
-  /** bindings/esm/ConstEnum */
+  /** ConstEnum */
   export enum ConstEnum {
     /** @type `i32` */
     ONE,
@@ -40,82 +40,82 @@ declare namespace __AdaptedExports {
     THREE,
   }
   /**
-   * bindings/esm/plainFunction
+   * plainFunction
    * @param a `i32`
    * @param b `i32`
    * @returns `i32`
    */
   export function plainFunction(a: number, b: number): number;
   /**
-   * bindings/esm/plainFunction64
+   * plainFunction64
    * @param a `i64`
    * @param b `i64`
    * @returns `i64`
    */
   export function plainFunction64(a: bigint, b: bigint): bigint;
   /**
-   * bindings/esm/bufferFunction
-   * @param a `~lib/arraybuffer/ArrayBuffer`
-   * @param b `~lib/arraybuffer/ArrayBuffer`
-   * @returns `~lib/arraybuffer/ArrayBuffer`
+   * bufferFunction
+   * @param a `ArrayBuffer`
+   * @param b `ArrayBuffer`
+   * @returns `ArrayBuffer`
    */
   export function bufferFunction(a: ArrayBuffer, b: ArrayBuffer): ArrayBuffer;
   /**
-   * bindings/esm/stringFunction
-   * @param a `~lib/string/String`
-   * @param b `~lib/string/String`
-   * @returns `~lib/string/String`
+   * stringFunction
+   * @param a `string`
+   * @param b `string`
+   * @returns `string`
    */
   export function stringFunction(a: string, b: string): string;
   /**
-   * bindings/esm/stringFunctionOptional
-   * @param a `~lib/string/String`
-   * @param b `~lib/string/String`
-   * @returns `~lib/string/String`
+   * stringFunctionOptional
+   * @param a `string`
+   * @param b `string`
+   * @returns `string`
    */
   export function stringFunctionOptional(a: string, b?: string): string;
   /**
-   * bindings/esm/typedarrayFunction
-   * @param a `~lib/typedarray/Int16Array`
-   * @param b `~lib/typedarray/Float32Array`
-   * @returns `~lib/typedarray/Uint64Array`
+   * typedarrayFunction
+   * @param a `Int16Array`
+   * @param b `Float32Array`
+   * @returns `Uint64Array`
    */
   export function typedarrayFunction(a: Int16Array, b: Float32Array): BigUint64Array;
   /**
-   * bindings/esm/staticarrayFunction
-   * @param a `StaticArray<i32>`
-   * @param b `StaticArray<i32>`
-   * @returns `StaticArray<i32>`
+   * staticarrayFunction
+   * @param a `StaticArray`
+   * @param b `StaticArray`
+   * @returns `StaticArray`
    */
   export function staticarrayFunction(a: Array<number>, b: Array<number>): Array<number>;
   /**
-   * bindings/esm/arrayFunction
-   * @param a `Array<i32>`
-   * @param b `Array<i32>`
-   * @returns `Array<i32>`
+   * arrayFunction
+   * @param a `Array`
+   * @param b `Array`
+   * @returns `Array`
    */
   export function arrayFunction(a: Array<number>, b: Array<number>): Array<number>;
   /**
-   * bindings/esm/objectFunction
-   * @param a `bindings/esm/PlainObject`
-   * @param b `bindings/esm/PlainObject`
-   * @returns `bindings/esm/PlainObject`
+   * objectFunction
+   * @param a `PlainObject`
+   * @param b `PlainObject`
+   * @returns `PlainObject`
    */
   export function objectFunction(a: __Record8<undefined>, b: __Record8<undefined>): __Record8<never>;
   /**
-   * bindings/esm/newInternref
-   * @returns `bindings/esm/NonPlainObject`
+   * newInternref
+   * @returns `NonPlainObject`
    */
   export function newInternref(): __Internref11;
   /**
-   * bindings/esm/internrefFunction
-   * @param a `bindings/esm/NonPlainObject`
-   * @param b `bindings/esm/NonPlainObject`
-   * @returns `bindings/esm/NonPlainObject`
+   * internrefFunction
+   * @param a `NonPlainObject`
+   * @param b `NonPlainObject`
+   * @returns `NonPlainObject`
    */
   export function internrefFunction(a: __Internref11, b: __Internref11): __Internref11;
 }
-/** bindings/esm/PlainObject */
+/** PlainObject */
 declare interface __Record8<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
@@ -143,14 +143,14 @@ declare interface __Record8<TOmittable> {
   l: number | TOmittable;
   /** @type `f64` */
   m: number | TOmittable;
-  /** @type `~lib/string/String | null` */
+  /** @type `string | null` */
   n: string | null | TOmittable;
-  /** @type `~lib/typedarray/Uint8Array | null` */
+  /** @type `Uint8Array | null` */
   o: Uint8Array | null | TOmittable;
-  /** @type `Array<string> | null` */
+  /** @type `Array | null` */
   p: Array<string> | null | TOmittable;
 }
-/** bindings/esm/NonPlainObject */
+/** NonPlainObject */
 declare class __Internref11 extends Number {
   private __nominal11: symbol;
 }

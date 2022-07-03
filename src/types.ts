@@ -20,8 +20,7 @@ import {
 
 export const enum TypeNamePolicy {
   SHORT,
-  NAME_ONLY,
-  INTERNAL_ONLY,
+  GLOBAL
 }
 
 /** Indicates the kind of a type. */
@@ -480,21 +479,11 @@ export class Type {
     if (this.isReference) {
       let classReference = this.getClass();
       if (classReference) {
-        let name = classReference.internalName;
-        if (namePolicy == TypeNamePolicy.NAME_ONLY) {
+        let name = classReference.globalName;
+        if (namePolicy == TypeNamePolicy.SHORT) {
           name = classReference.name;
           if (name == "String") name = "string";
           if (name == "Symbol") name = "symbol";
-        } else if (namePolicy == TypeNamePolicy.SHORT) {
-          if (classReference.internalName.startsWith(LIBRARY_SUBST)) {
-            name = classReference.name;
-            if (name == "String") name = "string";
-            if (name == "Symbol") name = "symbol";
-            if (classReference.program.elementsByName.has(name)) {
-              // We already have this global name so use internal name
-              name = classReference.internalName;
-            }
-          } // otherwise fallback to internalName
         }
         return this.isNullableReference
           ? name + nullablePostfix
@@ -749,7 +738,7 @@ export function typesToRefs(types: Type[]): TypeRef[] {
 }
 
 /** Converts an array of types to its combined string representation. */
-export function typesToString(types: Type[], namePolicy: TypeNamePolicy = TypeNamePolicy.INTERNAL_ONLY): string {
+export function typesToString(types: Type[], namePolicy: TypeNamePolicy = TypeNamePolicy.GLOBAL): string {
   var numTypes = types.length;
   if (!numTypes) return "";
   var sb = new Array<string>(numTypes);

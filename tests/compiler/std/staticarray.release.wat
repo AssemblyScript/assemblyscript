@@ -1699,7 +1699,7 @@
   memory.fill
   local.get $1
  )
- (func $~lib/staticarray/StaticArray<Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -1853,7 +1853,7 @@
   local.get $3
   i32.eqz
  )
- (func $~lib/staticarray/StaticArray<string>#includes (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<~lib/string/String>#includes (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/memory/__stack_pointer
@@ -1874,7 +1874,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  block $__inlined_func$~lib/staticarray/StaticArray<string>#indexOf
+  block $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf
    local.get $0
    i32.const 20
    i32.sub
@@ -1894,7 +1894,7 @@
     global.set $~lib/memory/__stack_pointer
     i32.const -1
     local.set $2
-    br $__inlined_func$~lib/staticarray/StaticArray<string>#indexOf
+    br $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf
    end
    local.get $2
    i32.const 0
@@ -1933,7 +1933,7 @@
       i32.const 4
       i32.add
       global.set $~lib/memory/__stack_pointer
-      br $__inlined_func$~lib/staticarray/StaticArray<string>#indexOf
+      br $__inlined_func$~lib/staticarray/StaticArray<~lib/string/String>#indexOf
      end
      local.get $2
      i32.const 1
@@ -3252,11 +3252,11 @@
    local.get $6
    i32.const 0
    call $std/staticarray/Ref#constructor
-   call $~lib/staticarray/StaticArray<Ref>#__uset
+   call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
    local.get $6
    i32.const 1
    call $std/staticarray/Ref#constructor
-   call $~lib/staticarray/StaticArray<Ref>#__uset
+   call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__uset
    local.get $6
    global.set $std/staticarray/arr4
    i32.const 0
@@ -3546,14 +3546,14 @@
     if
      local.get $2
      local.get $1
-     call $~lib/staticarray/StaticArray<string>#__get
+     call $~lib/staticarray/StaticArray<~lib/string/String>#__get
      local.set $6
      global.get $~lib/memory/__stack_pointer
      local.get $6
      i32.store
      local.get $0
      local.get $1
-     call $~lib/staticarray/StaticArray<string>#__get
+     call $~lib/staticarray/StaticArray<~lib/string/String>#__get
      local.set $7
      global.get $~lib/memory/__stack_pointer
      local.get $7
@@ -3602,7 +3602,7 @@
    end
    local.get $0
    i32.const 0
-   call $~lib/staticarray/StaticArray<string>#__get
+   call $~lib/staticarray/StaticArray<~lib/string/String>#__get
    local.set $1
    global.get $~lib/memory/__stack_pointer
    local.tee $6
@@ -3625,7 +3625,7 @@
    end
    local.get $0
    i32.const 1
-   call $~lib/staticarray/StaticArray<string>#__get
+   call $~lib/staticarray/StaticArray<~lib/string/String>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
@@ -3750,7 +3750,7 @@
    end
    local.get $0
    i32.const 0
-   call $~lib/staticarray/StaticArray<string>#__get
+   call $~lib/staticarray/StaticArray<~lib/string/String>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
@@ -3817,7 +3817,7 @@
    end
    local.get $0
    i32.const 0
-   call $~lib/staticarray/StaticArray<string>#__get
+   call $~lib/staticarray/StaticArray<~lib/string/String>#__get
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
@@ -3859,7 +3859,7 @@
    i32.store offset=12
    local.get $1
    local.get $2
-   call $~lib/staticarray/StaticArray<string>#concat
+   call $~lib/staticarray/StaticArray<~lib/string/String>#concat
    local.tee $0
    i32.store offset=16
    local.get $0
@@ -3890,7 +3890,7 @@
    i32.store offset=12
    local.get $1
    local.get $2
-   call $~lib/staticarray/StaticArray<string>#concat
+   call $~lib/staticarray/StaticArray<~lib/string/String>#concat
    local.tee $0
    i32.store offset=16
    local.get $0
@@ -3928,7 +3928,7 @@
    local.get $1
    i32.const 1984
    i32.const 0
-   call $~lib/staticarray/StaticArray<string>#includes
+   call $~lib/staticarray/StaticArray<~lib/string/String>#includes
    i32.const 1
    i32.ne
    if
@@ -3945,7 +3945,7 @@
    local.get $1
    i32.const 2384
    i32.const 0
-   call $~lib/staticarray/StaticArray<string>#includes
+   call $~lib/staticarray/StaticArray<~lib/string/String>#includes
    if
     i32.const 0
     i32.const 1216
@@ -3960,7 +3960,7 @@
    local.get $1
    i32.const 2080
    i32.const 5
-   call $~lib/staticarray/StaticArray<string>#includes
+   call $~lib/staticarray/StaticArray<~lib/string/String>#includes
    if
     i32.const 0
     i32.const 1216
@@ -3975,7 +3975,7 @@
    local.get $1
    i32.const 2080
    i32.const -1
-   call $~lib/staticarray/StaticArray<string>#includes
+   call $~lib/staticarray/StaticArray<~lib/string/String>#includes
    i32.const 1
    i32.ne
    if
@@ -6647,7 +6647,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/staticarray/StaticArray<string>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -6707,7 +6707,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
- (func $~lib/staticarray/StaticArray<string>#concat (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<~lib/string/String>#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)

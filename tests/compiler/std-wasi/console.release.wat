@@ -3044,7 +3044,7 @@
   i32.const 1136
   i64.load
  )
- (func $~lib/map/Map<string,u64>#rehash (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4037,7 +4037,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/map/Map<string,u64>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4136,7 +4136,7 @@
    local.get $0
    local.get $0
    call $~lib/util/hash/HASH<~lib/string/String>
-   call $~lib/map/Map<string,u64>#find
+   call $~lib/map/Map<~lib/string/String,u64>#find
    if
     global.get $~lib/memory/__stack_pointer
     i32.const 5376
@@ -4181,7 +4181,7 @@
    local.get $0
    call $~lib/util/hash/HASH<~lib/string/String>
    local.tee $4
-   call $~lib/map/Map<string,u64>#find
+   call $~lib/map/Map<~lib/string/String,u64>#find
    local.tee $3
    if
     local.get $3
@@ -4215,7 +4215,7 @@
       i32.const 1
       i32.or
      end
-     call $~lib/map/Map<string,u64>#rehash
+     call $~lib/map/Map<~lib/string/String,u64>#rehash
     end
     global.get $~lib/memory/__stack_pointer
     local.get $2
@@ -4320,7 +4320,7 @@
   local.get $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<string,u64>#find
+  call $~lib/map/Map<~lib/string/String,u64>#find
   local.tee $2
   i32.eqz
   if
@@ -4397,7 +4397,7 @@
   local.get $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<string,u64>#find
+  call $~lib/map/Map<~lib/string/String,u64>#find
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
@@ -4458,7 +4458,7 @@
   local.get $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<string,u64>#find
+  call $~lib/map/Map<~lib/string/String,u64>#find
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
@@ -4492,7 +4492,7 @@
   local.get $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<string,u64>#find
+  call $~lib/map/Map<~lib/string/String,u64>#find
   local.tee $0
   if
    local.get $0
@@ -4539,7 +4539,7 @@
    if
     local.get $1
     local.get $2
-    call $~lib/map/Map<string,u64>#rehash
+    call $~lib/map/Map<~lib/string/String,u64>#rehash
    end
   end
   global.get $~lib/memory/__stack_pointer

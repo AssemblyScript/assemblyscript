@@ -5787,7 +5787,7 @@
   memory.copy
   local.get $3
  )
- (func $~lib/array/Array<string>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<~lib/string/String>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -5899,7 +5899,7 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/array/Array<string>#push (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#push (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -5933,7 +5933,7 @@
   call $~lib/array/Array<~lib/string/String>#set:length_
   local.get $3
  )
- (func $~lib/array/Array<string>#get:length (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
@@ -7895,7 +7895,7 @@
   local.get $1
   call $~lib/array/Array<i32>#__visit
  )
- (func $~lib/array/Array<string>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7943,7 +7943,7 @@
  (func $~lib/array/Array<~lib/string/String>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/array/Array<string>#__visit
+  call $~lib/array/Array<~lib/string/String>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
@@ -8054,7 +8054,7 @@
    local.get $3
    i32.const 0
    local.get $0
-   call $~lib/array/Array<string>#__uset
+   call $~lib/array/Array<~lib/string/String>#__uset
    local.get $3
    local.set $15
    global.get $~lib/memory/__stack_pointer
@@ -8244,7 +8244,7 @@
      memory.copy
      local.get $10
      local.get $7
-     call $~lib/array/Array<string>#push
+     call $~lib/array/Array<~lib/string/String>#push
      drop
     else
      local.get $10
@@ -8254,7 +8254,7 @@
      local.get $15
      i32.store offset=20
      local.get $15
-     call $~lib/array/Array<string>#push
+     call $~lib/array/Array<~lib/string/String>#push
      drop
     end
     local.get $13
@@ -8285,7 +8285,7 @@
   if
    local.get $10
    local.get $0
-   call $~lib/array/Array<string>#push
+   call $~lib/array/Array<~lib/string/String>#push
    drop
    local.get $10
    local.set $15
@@ -8324,7 +8324,7 @@
    memory.copy
    local.get $10
    local.get $4
-   call $~lib/array/Array<string>#push
+   call $~lib/array/Array<~lib/string/String>#push
    drop
   else
    local.get $10
@@ -8334,7 +8334,7 @@
    local.get $15
    i32.store offset=20
    local.get $15
-   call $~lib/array/Array<string>#push
+   call $~lib/array/Array<~lib/string/String>#push
    drop
   end
   local.get $10
@@ -18031,13 +18031,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18080,7 +18080,7 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 0
   i32.eq
   i32.eqz
@@ -18110,13 +18110,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18159,13 +18159,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18208,13 +18208,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18233,7 +18233,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18252,7 +18252,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18295,13 +18295,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18320,7 +18320,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18339,7 +18339,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18382,13 +18382,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18407,7 +18407,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18426,7 +18426,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18445,7 +18445,7 @@
   if (result i32)
    local.get $0
    i32.const 3
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18488,13 +18488,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18513,7 +18513,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18532,7 +18532,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18551,7 +18551,7 @@
   if (result i32)
    local.get $0
    i32.const 3
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18594,13 +18594,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 4
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18619,7 +18619,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18638,7 +18638,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18657,7 +18657,7 @@
   if (result i32)
    local.get $0
    i32.const 3
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18700,13 +18700,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18725,7 +18725,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18744,7 +18744,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18787,7 +18787,7 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 0
   i32.eq
   i32.eqz
@@ -18817,13 +18817,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18866,13 +18866,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 1
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18915,13 +18915,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18940,7 +18940,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -18959,7 +18959,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -19002,13 +19002,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -19027,7 +19027,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -19046,7 +19046,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -19089,13 +19089,13 @@
   local.tee $0
   i32.store offset=40
   local.get $0
-  call $~lib/array/Array<string>#get:length
+  call $~lib/array/Array<~lib/string/String>#get:length
   i32.const 3
   i32.eq
   if (result i32)
    local.get $0
    i32.const 0
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -19114,7 +19114,7 @@
   if (result i32)
    local.get $0
    i32.const 1
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -19133,7 +19133,7 @@
   if (result i32)
    local.get $0
    i32.const 2
-   call $~lib/array/Array<string>#__get
+   call $~lib/array/Array<~lib/string/String>#__get
    local.set $4
    global.get $~lib/memory/__stack_pointer
    local.get $4
@@ -25735,7 +25735,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $12
  )
- (func $~lib/array/Array<string>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer

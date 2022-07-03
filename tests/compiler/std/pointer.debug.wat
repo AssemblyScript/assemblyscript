@@ -73,33 +73,33 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<Entry>#get:value|inlined.0 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0 (result i32)
    global.get $std/pointer/one
    local.set $0
    i32.const 1
    drop
    local.get $0
-   br $std/pointer/Pointer<Entry>#get:value|inlined.0
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0
   end
   i32.const 1
   call $std/pointer/Entry#set:key
-  block $std/pointer/Pointer<Entry>#get:value|inlined.1 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1 (result i32)
    global.get $std/pointer/one
    local.set $1
    i32.const 1
    drop
    local.get $1
-   br $std/pointer/Pointer<Entry>#get:value|inlined.1
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1
   end
   i32.const 2
   call $std/pointer/Entry#set:val
-  block $std/pointer/Pointer<Entry>#get:value|inlined.2 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.2 (result i32)
    global.get $std/pointer/one
    local.set $0
    i32.const 1
    drop
    local.get $0
-   br $std/pointer/Pointer<Entry>#get:value|inlined.2
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.2
   end
   i32.load
   i32.const 1
@@ -113,13 +113,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<Entry>#get:value|inlined.3 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3 (result i32)
    global.get $std/pointer/one
    local.set $1
    i32.const 1
    drop
    local.get $1
-   br $std/pointer/Pointer<Entry>#get:value|inlined.3
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3
   end
   i32.load offset=4
   i32.const 2
@@ -265,13 +265,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<Entry>#get:value|inlined.4 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4 (result i32)
    global.get $std/pointer/two
    local.set $1
    i32.const 1
    drop
    local.get $1
-   br $std/pointer/Pointer<Entry>#get:value|inlined.4
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4
   end
   i32.load
   i32.const 1
@@ -285,13 +285,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<Entry>#get:value|inlined.5 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5 (result i32)
    global.get $std/pointer/two
    local.set $0
    i32.const 1
    drop
    local.get $0
-   br $std/pointer/Pointer<Entry>#get:value|inlined.5
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5
   end
   i32.load offset=4
   i32.const 2
@@ -307,13 +307,13 @@
   end
   global.get $std/pointer/one
   local.set $2
-  block $std/pointer/Pointer<Entry>#get:value|inlined.6 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6 (result i32)
    global.get $std/pointer/two
    local.set $1
    i32.const 1
    drop
    local.get $1
-   br $std/pointer/Pointer<Entry>#get:value|inlined.6
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6
   end
   local.set $0
   i32.const 1
@@ -350,13 +350,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<Entry>#get:value|inlined.7 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7 (result i32)
    global.get $std/pointer/one
    local.set $2
    i32.const 1
    drop
    local.get $2
-   br $std/pointer/Pointer<Entry>#get:value|inlined.7
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7
   end
   i32.load
   i32.const 1
@@ -370,13 +370,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $std/pointer/Pointer<Entry>#get:value|inlined.8 (result i32)
+  block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8 (result i32)
    global.get $std/pointer/one
    local.set $1
    i32.const 1
    drop
    local.get $1
-   br $std/pointer/Pointer<Entry>#get:value|inlined.8
+   br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8
   end
   i32.load offset=4
   i32.const 2

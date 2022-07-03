@@ -4204,12 +4204,12 @@
   end
   return
  )
- (func $~lib/map/Map<string,u64>#has (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<string,u64>#find
+  call $~lib/map/Map<~lib/string/String,u64>#find
   i32.const 0
   i32.ne
  )
@@ -4253,7 +4253,7 @@
   local.get $1
   i32.store offset=16
  )
- (func $~lib/map/Map<string,u64>#rehash (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4396,13 +4396,13 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/map/Map<string,u64>#get (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/map/Map<~lib/string/String,u64>#get (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<string,u64>#find
+  call $~lib/map/Map<~lib/string/String,u64>#find
   local.set $2
   local.get $2
   i32.eqz
@@ -4961,7 +4961,7 @@
   local.get $1
   call $~lib/util/number/utoa64
  )
- (func $~lib/map/Map<string,u64>#delete (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#delete (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4970,7 +4970,7 @@
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<~lib/string/String>
-  call $~lib/map/Map<string,u64>#find
+  call $~lib/map/Map<~lib/string/String,u64>#find
   local.set $2
   local.get $2
   i32.eqz
@@ -5024,7 +5024,7 @@
   if
    local.get $0
    local.get $3
-   call $~lib/map/Map<string,u64>#rehash
+   call $~lib/map/Map<~lib/string/String,u64>#rehash
   end
   i32.const 1
  )
@@ -5070,7 +5070,7 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/map/Map<string,u64>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5137,7 +5137,7 @@
  (func $~lib/map/Map<~lib/string/String,u64>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/map/Map<string,u64>#__visit
+  call $~lib/map/Map<~lib/string/String,u64>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
@@ -5419,7 +5419,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/map/Map<string,u64>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5517,7 +5517,7 @@
   i32.store
   local.get $2
   local.get $0
-  call $~lib/map/Map<string,u64>#has
+  call $~lib/map/Map<~lib/string/String,u64>#has
   if
    local.get $1
    i32.const 4352
@@ -5552,7 +5552,7 @@
   local.get $2
   local.get $0
   call $~lib/process/process.hrtime
-  call $~lib/map/Map<string,u64>#set
+  call $~lib/map/Map<~lib/string/String,u64>#set
   drop
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -5585,7 +5585,7 @@
   i32.store
   local.get $7
   local.get $0
-  call $~lib/map/Map<string,u64>#get
+  call $~lib/map/Map<~lib/string/String,u64>#get
   local.set $1
   call $~lib/process/process.hrtime
   local.set $2
@@ -5654,7 +5654,7 @@
   i32.store
   local.get $2
   local.get $0
-  call $~lib/map/Map<string,u64>#has
+  call $~lib/map/Map<~lib/string/String,u64>#has
   i32.eqz
   if
    local.get $1
@@ -5711,7 +5711,7 @@
   i32.store
   local.get $2
   local.get $0
-  call $~lib/map/Map<string,u64>#has
+  call $~lib/map/Map<~lib/string/String,u64>#has
   i32.eqz
   if
    local.get $1
@@ -5748,7 +5748,7 @@
   i32.store
   local.get $2
   local.get $0
-  call $~lib/map/Map<string,u64>#delete
+  call $~lib/map/Map<~lib/string/String,u64>#delete
   drop
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -5834,7 +5834,7 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   i32.const 0
-  call $~lib/map/Map<string,u64>#constructor
+  call $~lib/map/Map<~lib/string/String,u64>#constructor
   global.set $~lib/console/timers
   i32.const 3920
   local.set $0
@@ -5958,7 +5958,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
- (func $~lib/map/Map<string,u64>#constructor (param $0 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -6014,7 +6014,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/map/Map<string,u64>#set (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/map/Map<~lib/string/String,u64>#set (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6034,7 +6034,7 @@
   local.get $0
   local.get $1
   local.get $3
-  call $~lib/map/Map<string,u64>#find
+  call $~lib/map/Map<~lib/string/String,u64>#find
   local.set $4
   local.get $4
   if
@@ -6071,7 +6071,7 @@
      i32.const 1
      i32.or
     end
-    call $~lib/map/Map<string,u64>#rehash
+    call $~lib/map/Map<~lib/string/String,u64>#rehash
    end
    global.get $~lib/memory/__stack_pointer
    local.get $0

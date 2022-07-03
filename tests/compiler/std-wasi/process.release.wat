@@ -2967,7 +2967,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<string>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<~lib/string/String>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3526,7 +3526,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/map/Map<string,string>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,~lib/string/String>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3836,7 +3836,7 @@
       local.get $5
       local.get $7
       local.get $0
-      call $~lib/map/Map<string,string>#set
+      call $~lib/map/Map<~lib/string/String,~lib/string/String>#set
      else
       global.get $~lib/memory/__stack_pointer
       i32.const 5200
@@ -3844,7 +3844,7 @@
       local.get $5
       local.get $6
       i32.const 5200
-      call $~lib/map/Map<string,string>#set
+      call $~lib/map/Map<~lib/string/String,~lib/string/String>#set
      end
      local.get $2
      i32.const 1
@@ -4012,7 +4012,7 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.get $4
-   call $~lib/array/Array<string>#constructor
+   call $~lib/array/Array<~lib/string/String>#constructor
    local.tee $7
    i32.store
    loop $for-loop|0
@@ -4066,7 +4066,7 @@
      local.get $7
      local.get $0
      local.get $8
-     call $~lib/array/Array<string>#__uset
+     call $~lib/array/Array<~lib/string/String>#__uset
      local.get $0
      i32.const 1
      i32.add
@@ -4109,7 +4109,7 @@
      i32.store offset=4
      local.get $4
      local.get $0
-     call $~lib/array/Array<string>#__get
+     call $~lib/array/Array<~lib/string/String>#__get
      local.set $4
      global.get $~lib/memory/__stack_pointer
      local.get $4
@@ -4151,7 +4151,7 @@
    local.get $3
    i32.load offset=16
    local.tee $3
-   call $~lib/array/Array<string>#constructor
+   call $~lib/array/Array<~lib/string/String>#constructor
    local.tee $5
    i32.store
    i32.const 0
@@ -4180,7 +4180,7 @@
       local.get $5
       local.get $0
       local.get $6
-      call $~lib/array/Array<string>#__uset
+      call $~lib/array/Array<~lib/string/String>#__uset
       local.get $0
       i32.const 1
       i32.add
@@ -4233,7 +4233,7 @@
      local.get $3
      local.get $4
      local.get $0
-     call $~lib/array/Array<string>#__get
+     call $~lib/array/Array<~lib/string/String>#__get
      local.tee $3
      i32.store offset=8
      global.get $~lib/memory/__stack_pointer
@@ -4256,7 +4256,7 @@
      local.get $3
      local.get $3
      call $~lib/util/hash/HASH<~lib/string/String>
-     call $~lib/map/Map<string,string>#find
+     call $~lib/map/Map<~lib/string/String,~lib/string/String>#find
      local.tee $3
      i32.eqz
      if
@@ -4737,7 +4737,7 @@
   call $~lib/wasi/index/abort
   unreachable
  )
- (func $~lib/array/Array<string>#constructor (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5040,7 +5040,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/array/Array<string>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -5254,7 +5254,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/map/Map<string,string>#set (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<~lib/string/String,~lib/string/String>#set (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5281,7 +5281,7 @@
    local.get $1
    call $~lib/util/hash/HASH<~lib/string/String>
    local.tee $7
-   call $~lib/map/Map<string,string>#find
+   call $~lib/map/Map<~lib/string/String,~lib/string/String>#find
    local.tee $3
    if
     local.get $3

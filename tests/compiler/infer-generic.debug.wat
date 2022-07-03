@@ -2273,16 +2273,16 @@
   local.get $1
   call $~lib/array/Array<f32>#__visit
  )
- (func $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray<f32>%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray<f32>%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray<f32>%29=>bool>#__visit
+  call $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray%29=>bool>#__visit
  )
  (func $~lib/function/Function<%28f32%29=>f64>#__visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -2311,7 +2311,7 @@
    block $~lib/function/Function<%28f32%2Ci32%29=>f64>
     block $~lib/function/Function<%28f32%29=>f64>
      block $infer-generic/Ref
-      block $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray<f32>%29=>bool>
+      block $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray%29=>bool>
        block $~lib/array/Array<f32>
         block $~lib/arraybuffer/ArrayBufferView
          block $~lib/string/String
@@ -2320,7 +2320,7 @@
            i32.const 8
            i32.sub
            i32.load
-           br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<f32> $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray<f32>%29=>bool> $infer-generic/Ref $~lib/function/Function<%28f32%29=>f64> $~lib/function/Function<%28f32%2Ci32%29=>f64> $invalid
+           br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<f32> $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray%29=>bool> $infer-generic/Ref $~lib/function/Function<%28f32%29=>f64> $~lib/function/Function<%28f32%2Ci32%29=>f64> $invalid
           end
           return
          end
@@ -2338,7 +2338,7 @@
       end
       local.get $0
       local.get $1
-      call $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray<f32>%29=>bool>~visit
+      call $~lib/function/Function<%28bool%2Cf32%2Ci32%2CArray%29=>bool>~visit
       return
      end
      return

@@ -207,7 +207,7 @@ export class Flow {
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
     var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
-    flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
+    flow.inlineReturnLabel = `${inlineFunction.globalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }

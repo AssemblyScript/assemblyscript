@@ -1066,7 +1066,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     }
     compiler.error(
       DiagnosticCode.Type_0_has_no_property_1,
-      firstOperand.range, classReference.internalName, fieldName
+      firstOperand.range, classReference.globalName, fieldName
     );
     return module.unreachable();
   }
@@ -9905,7 +9905,7 @@ export function compileVisitGlobals(compiler: Compiler): void {
         let value = global.constantIntegerValue;
         if (i64_low(value) || i64_high(value)) {
           exprs.push(
-            module.call(visitInstance.internalName, [
+            module.call(visitInstance.globalName, [
               compiler.options.isWasm64
                 ? module.i64(i64_low(value), i64_high(value))
                 : module.i32(i64_low(value)),
@@ -9917,10 +9917,10 @@ export function compileVisitGlobals(compiler: Compiler): void {
         exprs.push(
           module.if(
             module.local_tee(1,
-              module.global_get(global.internalName, sizeTypeRef),
+              module.global_get(global.globalName, sizeTypeRef),
               false // internal
             ),
-            module.call(visitInstance.internalName, [
+            module.call(visitInstance.globalName, [
               module.local_get(1, sizeTypeRef), // tempRef != null
               module.local_get(0, TypeRef.I32) // cookie
             ], TypeRef.None)
@@ -9956,7 +9956,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   var base = instance.base;
   if (base) {
     body.push(
-      module.call(`${base.internalName}~visit`, [
+      module.call(`${base.globalName}~visit`, [
         module.local_get(0, sizeTypeRef), // this
         module.local_get(1, TypeRef.I32)  // cookie
       ], TypeRef.None)
@@ -9985,7 +9985,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
           instance.type.isStrictlyAssignableTo(visitThisType) // incl. implemented on super
         );
         body.push(
-          module.call(visitInstance.internalName, [
+          module.call(visitInstance.globalName, [
             module.local_get(0, sizeTypeRef), // this
             module.local_get(1, TypeRef.I32)  // cookie
           ], TypeRef.None)
@@ -10021,7 +10021,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
                     ),
                     false // internal
                   ),
-                  module.call(visitInstance.internalName, [
+                  module.call(visitInstance.globalName, [
                     module.local_get(2, sizeTypeRef), // value
                     module.local_get(1, TypeRef.I32)  // cookie
                   ], TypeRef.None)
@@ -10035,7 +10035,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   }
 
   // Create the visitor function
-  instance.visitRef = module.addFunction(`${instance.internalName}~visit`,
+  instance.visitRef = module.addFunction(`${instance.globalName}~visit`,
     createType([sizeTypeRef, TypeRef.I32]),
     TypeRef.None,
     needsTempValue ? [ sizeTypeRef ] : null,
@@ -10068,12 +10068,12 @@ export function compileVisitMembers(compiler: Compiler): void {
     let instanceId = _keys[i];
     assert(instanceId == nextId++);
     let instance = assert(managedClasses.get(instanceId));
-    names[i] = instance.internalName;
+    names[i] = instance.globalName;
     if (instance.isPointerfree) {
       cases[i] = module.return();
     } else {
       cases[i] = module.block(null, [
-        module.call(`${instance.internalName}~visit`, [
+        module.call(`${instance.globalName}~visit`, [
           module.local_get(0, sizeTypeRef), // this
           module.local_get(1, TypeRef.I32)  // cookie
         ], TypeRef.None),
@@ -10233,7 +10233,7 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
       let instance = unchecked(_values[i]);
       stmts.push(
         module.if(
-          module.call(instanceofInstance.internalName, [
+          module.call(instanceofInstance.globalName, [
             module.local_get(0, sizeTypeRef),
             module.i32(instance.id)
           ], TypeRef.I32),
@@ -10253,7 +10253,7 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
   );
 
   module.addFunction(
-    `${prototype.internalName}~instanceof`,
+    `${prototype.globalName}~instanceof`,
     sizeTypeRef,
     TypeRef.I32,
     null,
@@ -10435,7 +10435,7 @@ function checkTypeAbsent(ctx: BuiltinContext): i32 {
     let prototype = ctx.prototype;
     prototype.program.error(
       DiagnosticCode.Type_0_is_not_generic,
-      ctx.reportNode.typeArgumentsRange, prototype.internalName
+      ctx.reportNode.typeArgumentsRange, prototype.globalName
     );
     return 1;
   }
