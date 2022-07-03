@@ -24,14 +24,14 @@
     "long": "^5.2.0"
   },
   "devDependencies": {
-    "@types/node": "^16.11.6",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.3",
+    "@typescript-eslint/parser": "^5.30.3",
     "diff": "^5.0.0",
-    "esbuild": "^0.14.1",
-    "eslint": "^8.2.0",
+    "esbuild": "^0.14.48",
+    "eslint": "^8.19.0",
     "glob": "^7.2.0",
-    "typescript": "~4.5.2"
+    "typescript": "^4.7.4"
   },
   "type": "module",
   "exports": {
