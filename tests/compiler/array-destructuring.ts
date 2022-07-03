@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 class Foo {
   @operator("[]")
   __get(index: i32): i32 { 
