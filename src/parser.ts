@@ -958,7 +958,7 @@ export class Parser extends DiagnosticEmitter {
 
     var name = this.parseBindingPattern(tn);
     if (!name) return null;
-    if (!this.checkBindingPattern(name)) {
+    if (!checkBindingPattern(name, false)) {
       this.error(
         DiagnosticCode.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
         name.range
@@ -3982,57 +3982,6 @@ export class Parser extends DiagnosticEmitter {
     }
   }
 
-  checkBindingPattern(expr: Expression): bool {
-    function checkElement(elem: Expression): bool {
-      var elemKind = elem.kind;
-      if (elemKind == NodeKind.IDENTIFIER) {
-        return true;
-      } else if (elemKind == NodeKind.BINARY) {
-        let binaryElem = <BinaryExpression>elem;
-        if (binaryElem.operator != Token.EQUALS) {
-          return false;
-        }
-        if (binaryElem.left.kind != NodeKind.IDENTIFIER) {
-          return false;
-        }
-      }
-      return false;
-    }
-
-    switch (expr.kind) {
-      case NodeKind.IDENTIFIER:
-      case NodeKind.PROPERTYACCESS:
-      case NodeKind.ELEMENTACCESS:
-        return true;
-      case NodeKind.LITERAL: {
-        let literalKind = (<LiteralExpression>expr).literalKind;
-        if (literalKind == LiteralKind.ARRAY) {
-          let arr = <ArrayLiteralExpression>expr;
-          let elementExpressions = arr.elementExpressions;
-          for (let i = 0, l = elementExpressions.length; i < l; ++i) {
-            let elem: Expression = elementExpressions[i];
-            if (elem.kind == NodeKind.OMITTED) {
-              continue;
-            } else if (!checkElement(elem)) {
-              return false;
-            }
-          }
-          return true;
-        } else if (literalKind == LiteralKind.OBJECT) {
-          let obj = <ObjectLiteralExpression>expr;
-          let values = obj.values;
-          for (let i = 0, l = values.length; i < l; ++i) {
-            if (!checkElement(values[i])) {
-              return false;
-            }
-          }
-          return true;
-        } 
-      }
-    }
-    return false;
-  }
-
   tryParseTypeArgumentsBeforeArguments(
     tn: Tokenizer
   ): TypeNode[] | null {
@@ -4264,7 +4213,7 @@ export class Parser extends DiagnosticEmitter {
         }
         // BinaryExpression (right associative)
         case Token.EQUALS:
-          if (!this.checkBindingPattern(expr)) {
+          if (!checkBindingPattern(expr, true)) {
             this.error(
               DiagnosticCode.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
               expr.range
@@ -4579,4 +4528,52 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
   }
   return Precedence.NONE;
+}
+
+function checkBindingPattern(expr: Expression, isAssignment: bool): bool {
+  function checkElement(elem: Expression, isAssignment: bool): bool {
+    // var elemKind = elem.kind;
+    // if (elemKind == NodeKind.BINARY) {
+    //   let binaryElem = <BinaryExpression>elem;
+    //   if (binaryElem.operator != Token.EQUALS) {
+    //     return false;
+    //   }
+    //   return checkBindingPattern(binaryElem.left, isAssignment);
+    // }
+    return checkBindingPattern(elem, isAssignment);
+  }
+
+  switch (expr.kind) {
+    case NodeKind.IDENTIFIER:
+      return true;
+    case NodeKind.PROPERTYACCESS:
+    case NodeKind.ELEMENTACCESS:
+      return isAssignment;
+    case NodeKind.LITERAL: {
+      let literalKind = (<LiteralExpression>expr).literalKind;
+      if (literalKind == LiteralKind.ARRAY) {
+        let arr = <ArrayLiteralExpression>expr;
+        let elementExpressions = arr.elementExpressions;
+        for (let i = 0, l = elementExpressions.length; i < l; ++i) {
+          let elem: Expression = elementExpressions[i];
+          if (elem.kind == NodeKind.OMITTED) {
+            continue;
+          } else if (!checkElement(elem, isAssignment)) {
+            return false;
+          }
+        }
+        return true;
+      } else if (literalKind == LiteralKind.OBJECT) {
+        let obj = <ObjectLiteralExpression>expr;
+        let values = obj.values;
+        for (let i = 0, l = values.length; i < l; ++i) {
+          if (!checkElement(values[i], isAssignment)) {
+            return false;
+          }
+        }
+        return true;
+      } 
+    }
+  }
+  return false;
 }
