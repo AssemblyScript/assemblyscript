@@ -2723,6 +2723,7 @@ export class Resolver extends DiagnosticEmitter {
 
     var instance = new Function(
       prototype.scopedName,
+      null,
       prototype,
       typeArguments,
       signature,

@@ -7555,6 +7555,7 @@ export class Compiler extends DiagnosticEmitter {
       signature.requiredParameters = numParameters; // !
       instance = new Function(
         prototype.name,
+        null,
         prototype,
         null,
         signature,
@@ -8907,6 +8908,7 @@ export class Compiler extends DiagnosticEmitter {
         this.checkFieldInitialization(baseClass, reportNode);
         instance = new Function(
           CommonNames.constructor,
+          null,
           new FunctionPrototype(
             CommonNames.constructor,
             classInstance,
@@ -8922,6 +8924,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         instance = new Function(
           CommonNames.constructor,
+          null,
           new FunctionPrototype(
             CommonNames.constructor,
             classInstance, // bound

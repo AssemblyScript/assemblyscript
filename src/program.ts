@@ -929,6 +929,7 @@ export class Program extends DiagnosticEmitter {
   ): Function {
     return new Function(
       name,
+      null,
       new FunctionPrototype(
         name,
         parent,
@@ -3606,6 +3607,8 @@ export class Function extends TypedElement {
   constructor(
     /** Simple human readable name */
     name: string,
+    /** Postfix for global name */
+    postfix: string | null,
     /** Respective function prototype. */
     prototype: FunctionPrototype,
     /** Concrete type arguments. */
@@ -3615,15 +3618,14 @@ export class Function extends TypedElement {
     /** Contextual type arguments inherited from its parent class, if any. */
     contextualTypeArguments: Map<string,Type> | null = null
   ) {
-    let scopedName: string;
+    let tail = postfix ? STUB_DELIMITER + postfix : "";
+    let scopedName = typeArguments
+      ? `${name}<${typesToString(typeArguments)}>${tail}`
+      : name + tail;
     super(
       ElementKind.FUNCTION,
-      name,
-      mangleGlobalName(
-        (scopedName = typeArguments ? `${name}<${typesToString(typeArguments)}>` : name),
-        prototype.parent,
-        prototype.is(CommonFlags.INSTANCE)
-      ),
+      name + tail,
+      mangleGlobalName(scopedName, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
       prototype.program,
       prototype.parent,
       prototype.declaration
@@ -3690,7 +3692,8 @@ export class Function extends TypedElement {
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
   newStub(postfix: string): Function {
     var stub = new Function(
-      this.original.name + STUB_DELIMITER + postfix,
+      this.original.name,
+      postfix,
       this.prototype,
       this.typeArguments,
       this.signature.clone(),

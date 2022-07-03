@@ -1402,7 +1402,7 @@
   local.get $3
   i32.eqz
  )
- (func $class-overloading/A#a@virtual<i32> (param $0 i32)
+ (func $class-overloading/A#a<i32>@virtual (param $0 i32)
   block $default
    block $case2
     block $case1
@@ -1609,7 +1609,7 @@
    local.tee $0
    i32.store
    local.get $0
-   call $class-overloading/A#a@virtual<i32>
+   call $class-overloading/A#a<i32>@virtual
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/which
    local.tee $0
@@ -1930,7 +1930,7 @@
    local.tee $0
    i32.store
    local.get $0
-   call $class-overloading/A#a@virtual<i32>
+   call $class-overloading/A#a<i32>@virtual
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/which
    local.tee $0
@@ -2120,7 +2120,7 @@
    local.tee $0
    i32.store
    local.get $0
-   call $class-overloading/A#a@virtual<i32>
+   call $class-overloading/A#a<i32>@virtual
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/which
    local.tee $0
@@ -2335,7 +2335,7 @@
    local.tee $0
    i32.store
    local.get $0
-   call $class-overloading/A#a@virtual<i32>
+   call $class-overloading/A#a<i32>@virtual
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/which
    local.tee $0

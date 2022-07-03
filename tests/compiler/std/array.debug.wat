@@ -13541,7 +13541,7 @@
    i32.sub
   end
  )
- (func $std/array/assertSorted@varargs<~lib/string/String|null> (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<~lib/string/String|null>@varargs (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -14613,7 +14613,7 @@
    i32.sub
   end
  )
- (func $std/array/assertSorted@varargs<~lib/string/String> (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<~lib/string/String>@varargs (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -30544,7 +30544,7 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 0
-  call $std/array/assertSorted@varargs<~lib/string/String|null>
+  call $std/array/assertSorted<~lib/string/String|null>@varargs
   local.get $38
   local.get $36
   i32.const 0
@@ -30567,7 +30567,7 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 0
-  call $std/array/assertSorted@varargs<~lib/string/String>
+  call $std/array/assertSorted<~lib/string/String>@varargs
   i32.const 2
   i32.const 0
   i32.const 35
