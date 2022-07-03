@@ -16,7 +16,8 @@ import {
 
 import {
   Type,
-  TypeFlags
+  TypeFlags,
+  TypeNamePolicy
 } from "../types";
 
 import {
@@ -55,7 +56,7 @@ export class TSDBuilder extends ExportsWalker {
     var tsType = this.toTypeScriptType(type, Mode.EXPORT);
     indent(sb, this.indentLevel);
     sb.push("/** ");
-    sb.push(element.name);
+    sb.push(element.scopedName);
     sb.push(" */\n");
     indent(sb, this.indentLevel);
     sb.push("export ");
@@ -65,7 +66,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push(": {\n");
     indent(sb, ++this.indentLevel);
     sb.push("/** @type `");
-    sb.push(type.toString());
+    sb.push(type.toString(false, TypeNamePolicy.SHORT));
     sb.push("` */\n");
     indent(sb, this.indentLevel);
     sb.push("get value(): ");
@@ -87,7 +88,7 @@ export class TSDBuilder extends ExportsWalker {
     var sb = this.sb;
     indent(sb, this.indentLevel);
     sb.push("/** ");
-    sb.push(element.name);
+    sb.push(element.scopedName);
     sb.push(" */\n");
     indent(sb, this.indentLevel++);
     sb.push("export ");
@@ -120,7 +121,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("/**\n");
     indent(sb, this.indentLevel);
     sb.push(" * ");
-    sb.push(element.name);
+    sb.push(element.scopedName);
     sb.push("\n");
     var parameterTypes = signature.parameterTypes;
     var numParameters = parameterTypes.length;
@@ -129,14 +130,14 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(" * @param ");
       sb.push(element.getParameterName(i));
       sb.push(" `");
-      sb.push(parameterTypes[i].toString());
+      sb.push(parameterTypes[i].toString(false, TypeNamePolicy.SHORT));
       sb.push("`\n");
     }
     var returnType = signature.returnType;
     if (returnType != Type.void) {
       indent(sb, this.indentLevel);
       sb.push(" * @returns `");
-      sb.push(returnType.toString());
+      sb.push(returnType.toString(false, TypeNamePolicy.SHORT));
       sb.push("`\n");
     }
     indent(sb, this.indentLevel);
@@ -326,7 +327,7 @@ export class TSDBuilder extends ExportsWalker {
     var sb = new Array<string>();
     var members = clazz.members;
     sb.push("/** ");
-    sb.push(clazz.name);
+    sb.push(clazz.scopedName);
     sb.push(" */\ndeclare interface __Record");
     sb.push(clazz.id.toString());
     sb.push("<TOmittable> {\n");
@@ -337,9 +338,9 @@ export class TSDBuilder extends ExportsWalker {
         if (member.kind != ElementKind.FIELD) continue;
         let field = <Field>member;
         sb.push("  /** @type `");
-        sb.push(field.type.toString());
+        sb.push(field.type.toString(false, TypeNamePolicy.SHORT));
         sb.push("` */\n  ");
-        sb.push(field.name);
+        sb.push(field.scopedName);
         sb.push(": ");
         sb.push(this.toTypeScriptType(field.type, mode));
         if (this.fieldAcceptsUndefined(field.type)) {
