@@ -4,10 +4,6 @@
  */
 
 import {
-  LIBRARY_SUBST
-} from "./common";
-
-import {
   Class,
   Program,
   DecoratorFlags

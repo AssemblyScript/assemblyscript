@@ -67,7 +67,6 @@ import {
   TypeKind,
   Signature,
   TypeFlags,
-  TypeNamePolicy,
   typesToString
 } from "./types";
 
@@ -3614,19 +3613,20 @@ export class Function extends TypedElement {
     /** Contextual type arguments inherited from its parent class, if any. */
     contextualTypeArguments: Map<string,Type> | null = null
   ) {
-    let nameWithTypeParameters = name;
-    if (typeArguments) {
-      nameWithTypeParameters += `<${typesToString(typeArguments, TypeNamePolicy.NAME_ONLY)}>`;
-    }
+    let scopedName: string;
     super(
       ElementKind.FUNCTION,
       name,
-      mangleGlobalName(nameWithTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
+      mangleGlobalName(
+        (scopedName = typeArguments ? `${name}<${typesToString(typeArguments)}>` : name),
+        prototype.parent,
+        prototype.is(CommonFlags.INSTANCE)
+      ),
       prototype.program,
       prototype.parent,
       prototype.declaration
     );
-    this.scopedName = nameWithTypeParameters;
+    this.scopedName = scopedName;
     this.prototype = prototype;
     this.typeArguments = typeArguments;
     this.signature = signature;
@@ -4233,20 +4233,21 @@ export class Class extends TypedElement {
     typeArguments: Type[] | null = null,
     _isInterface: bool = false // FIXME
   ) {
-    let nameWithTypeParameters = name;
-    if (typeArguments) {
-      nameWithTypeParameters += `<${typesToString(typeArguments, TypeNamePolicy.NAME_ONLY)}>`;
-    }
+    let scopedName: string;
     super(
       _isInterface ? ElementKind.INTERFACE : ElementKind.CLASS,
       name,
-      mangleGlobalName(nameWithTypeParameters, prototype.parent, prototype.is(CommonFlags.INSTANCE)),
+      mangleGlobalName(
+        (scopedName = typeArguments ? `${name}<${typesToString(typeArguments)}>` : name),
+        prototype.parent,
+        prototype.is(CommonFlags.INSTANCE)
+      ),
       prototype.program,
       prototype.parent,
       prototype.declaration
     );
     var program = this.program;
-    this.scopedName = nameWithTypeParameters;
+    this.scopedName = scopedName;
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
