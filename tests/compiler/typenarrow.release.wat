@@ -1668,6 +1668,176 @@
    i32.store offset=4
   end
   global.get $~lib/memory/__stack_pointer
+  global.get $typenarrow/value
+  local.tee $0
+  i32.store
+  local.get $0
+  if (result i32)
+   block $__inlined_func$~lib/rt/__instanceof29 (result i32)
+    local.get $0
+    i32.const 20
+    i32.sub
+    i32.load offset=12
+    local.tee $0
+    i32.const 1472
+    i32.load
+    i32.le_u
+    if
+     loop $do-loop|031
+      i32.const 1
+      local.get $0
+      i32.const 4
+      i32.eq
+      br_if $__inlined_func$~lib/rt/__instanceof29
+      drop
+      local.get $0
+      i32.const 3
+      i32.shl
+      i32.const 1476
+      i32.add
+      i32.load offset=4
+      local.tee $0
+      br_if $do-loop|031
+     end
+    end
+    i32.const 0
+   end
+  else
+   i32.const 0
+  end
+  if (result i32)
+   i32.const 1
+  else
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
+   local.get $0
+   if (result i32)
+    block $__inlined_func$~lib/rt/__instanceof32 (result i32)
+     local.get $0
+     i32.const 20
+     i32.sub
+     i32.load offset=12
+     local.tee $0
+     i32.const 1472
+     i32.load
+     i32.le_u
+     if
+      loop $do-loop|034
+       i32.const 1
+       local.get $0
+       i32.const 6
+       i32.eq
+       br_if $__inlined_func$~lib/rt/__instanceof32
+       drop
+       local.get $0
+       i32.const 3
+       i32.shl
+       i32.const 1476
+       i32.add
+       i32.load offset=4
+       local.tee $0
+       br_if $do-loop|034
+      end
+     end
+     i32.const 0
+    end
+   else
+    i32.const 0
+   end
+  end
+  if
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   i32.store offset=4
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $typenarrow/value
+  local.tee $0
+  i32.store
+  local.get $0
+  if (result i32)
+   block $__inlined_func$~lib/rt/__instanceof36 (result i32)
+    local.get $0
+    i32.const 20
+    i32.sub
+    i32.load offset=12
+    local.tee $0
+    i32.const 1472
+    i32.load
+    i32.le_u
+    if
+     loop $do-loop|038
+      i32.const 1
+      local.get $0
+      i32.const 4
+      i32.eq
+      br_if $__inlined_func$~lib/rt/__instanceof36
+      drop
+      local.get $0
+      i32.const 3
+      i32.shl
+      i32.const 1476
+      i32.add
+      i32.load offset=4
+      local.tee $0
+      br_if $do-loop|038
+     end
+    end
+    i32.const 0
+   end
+  else
+   i32.const 0
+  end
+  if (result i32)
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
+   local.get $0
+   if (result i32)
+    block $__inlined_func$~lib/rt/__instanceof39 (result i32)
+     local.get $0
+     i32.const 20
+     i32.sub
+     i32.load offset=12
+     local.tee $0
+     i32.const 1472
+     i32.load
+     i32.le_u
+     if
+      loop $do-loop|041
+       i32.const 1
+       local.get $0
+       i32.const 6
+       i32.eq
+       br_if $__inlined_func$~lib/rt/__instanceof39
+       drop
+       local.get $0
+       i32.const 3
+       i32.shl
+       i32.const 1476
+       i32.add
+       i32.load offset=4
+       local.tee $0
+       br_if $do-loop|041
+      end
+     end
+     i32.const 0
+    end
+   else
+    i32.const 0
+   end
+  else
+   i32.const 0
+  end
+  if
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   i32.store offset=4
+  end
+  global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer

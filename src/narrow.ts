@@ -47,20 +47,35 @@ export function typeOr(a: Type | null, b: Type | null): Type | null {
   }
 }
 
+enum Mode {
+  AND,
+  OR,
+}
+
 function mergeTypeMap(
-  mainMap: Map<TypedElement, Type>,
-  otherMap: Map<TypedElement, Type>
+  aMap: Map<TypedElement, Type>,
+  bMap: Map<TypedElement, Type>,
+  mode: Mode = Mode.OR
 ): void {
-  let _key = Map_keys(otherMap);
-  for (let i = 0, k = _key.length; i < k; i++) {
-    let key = _key[i];
-    let main = mainMap.has(key) ? assert(mainMap.get(key)) : null;
-    let other = assert(otherMap.get(key));
-    let merged = typeOr(main, other);
-    if (merged) {
-      mainMap.set(key, merged);
+  let bKeys = Map_keys(bMap);
+  if (mode == Mode.AND) {
+    let aKeys = Map_keys(aMap);
+    for(let i = 0, k = aKeys.length; i < k; i++) {
+      let akey = aKeys[i];
+      if (!bKeys.includes(akey)) {
+        aMap.delete(akey);
+      }
+    }
+  }
+  for (let i = 0, k = bKeys.length; i < k; i++) {
+    let key = bKeys[i];
+    let aType = aMap.has(key) ? assert(aMap.get(key)) : null;
+    let bType = assert(bMap.get(key));
+    let mergedType = mode == Mode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
+    if (mergedType) {
+      aMap.set(key, mergedType);
     } else {
-      mainMap.delete(key);
+      aMap.delete(key);
     }
   }
 }
@@ -131,13 +146,23 @@ class TypeNarrowChecker {
         break;
       }
       case ExpressionId.If: {
+        let condition = getIfCondition(expr);
+        let ifTrue = getIfTrue(expr);
         let ifFalse = getIfFalse(expr);
         if (ifFalse && isConstZero(ifFalse)) {
           // Logical AND: (if (condition ifTrue 0))
           // the only way this had become true is if condition and ifTrue are true
-          let subMap = this.collectNarrowedTypeIfTrue(getIfCondition(expr));
-          let subMapTrue = this.collectNarrowedTypeIfTrue(getIfTrue(expr));
+          let subMap = this.collectNarrowedTypeIfTrue(condition);
+          let subMapTrue = this.collectNarrowedTypeIfTrue(ifTrue);
           mergeTypeMap(subMap, subMapTrue);
+          mergeTypeMap(result, subMap);
+        }
+        if (ifFalse && isConstNonZero(ifTrue)) {
+          // Logical OR: (if (condition 1 ifFalse))
+          // the only way this had become false is if condition and ifFalse are false
+          let subMap = this.collectNarrowedTypeIfTrue(condition);
+          let subMapFalse = this.collectNarrowedTypeIfTrue(ifFalse);
+          mergeTypeMap(subMap, subMapFalse, Mode.AND);
           mergeTypeMap(result, subMap);
         }
         break;

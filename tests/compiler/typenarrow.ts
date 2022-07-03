@@ -55,9 +55,14 @@ if (value instanceof C && value instanceof B) {
   value.b1();
 }
 
-// if (value instanceof B || value instanceof C) {
-//   value.b1();
-// }
+if (value instanceof B || value instanceof C) {
+  value.b1();
+}
+
+if (!(value instanceof B && value instanceof C)) {
+} else {
+  value.b1();
+}
 
 export function testlocal(): void {
   let value = new A();

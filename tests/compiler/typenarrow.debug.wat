@@ -2695,6 +2695,87 @@
    call $typenarrow/B#b1
   end
   global.get $~lib/memory/__stack_pointer
+  global.get $typenarrow/value
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $0
+   i32.const 4
+   call $~lib/rt/__instanceof
+  end
+  if (result i32)
+   i32.const 1
+  else
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
+   local.get $0
+   i32.eqz
+   if (result i32)
+    i32.const 0
+   else
+    local.get $0
+    i32.const 6
+    call $~lib/rt/__instanceof
+   end
+  end
+  if
+   global.get $typenarrow/value
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
+   local.get $1
+   i32.store offset=4
+   local.get $1
+   call $typenarrow/B#b1
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $typenarrow/value
+  local.tee $0
+  i32.store
+  local.get $0
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $0
+   i32.const 4
+   call $~lib/rt/__instanceof
+  end
+  if (result i32)
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
+   local.get $0
+   i32.eqz
+   if (result i32)
+    i32.const 0
+   else
+    local.get $0
+    i32.const 6
+    call $~lib/rt/__instanceof
+   end
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   nop
+  else
+   global.get $typenarrow/value
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
+   local.get $1
+   i32.store offset=4
+   local.get $1
+   call $typenarrow/B#b1
+  end
+  global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
