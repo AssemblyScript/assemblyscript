@@ -5008,49 +5008,49 @@
   local.get $1
   call $~lib/array/Array<~lib/string/String>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>i32>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>void>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>void>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>void>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>void>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>bool>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2CStaticArray%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2CStaticArray%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2CStaticArray%29=>i32>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>#__visit
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -5066,10 +5066,10 @@
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
    block $~lib/function/Function<%28i32%2Ci32%29=>i32>
-    block $~lib/function/Function<%28i32%2Ci32%2Ci32%2CStaticArray%29=>i32>
-     block $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>bool>
-      block $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>void>
-       block $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>i32>
+    block $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>
+     block $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>bool>
+      block $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>void>
+       block $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>
         block $~lib/staticarray/StaticArray<f32>
          block $~lib/staticarray/StaticArray<f64>
           block $~lib/array/Array<~lib/string/String>
@@ -5086,7 +5086,7 @@
                     i32.const 8
                     i32.sub
                     i32.load
-                    br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/staticarray/StaticArray<i32> $std/staticarray/Ref $~lib/staticarray/StaticArray<std/staticarray/Ref> $~lib/array/Array<i32> $~lib/array/Array<usize> $~lib/staticarray/StaticArray<~lib/string/String> $~lib/array/Array<~lib/string/String> $~lib/staticarray/StaticArray<f64> $~lib/staticarray/StaticArray<f32> $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>i32> $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>void> $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>bool> $~lib/function/Function<%28i32%2Ci32%2Ci32%2CStaticArray%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $invalid
+                    br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/staticarray/StaticArray<i32> $std/staticarray/Ref $~lib/staticarray/StaticArray<std/staticarray/Ref> $~lib/array/Array<i32> $~lib/array/Array<usize> $~lib/staticarray/StaticArray<~lib/string/String> $~lib/array/Array<~lib/string/String> $~lib/staticarray/StaticArray<f64> $~lib/staticarray/StaticArray<f32> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>bool> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $invalid
                    end
                    return
                   end
@@ -5132,22 +5132,22 @@
        end
        local.get $0
        local.get $1
-       call $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>i32>~visit
+       call $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>~visit
        return
       end
       local.get $0
       local.get $1
-      call $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>void>~visit
+      call $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>void>~visit
       return
      end
      local.get $0
      local.get $1
-     call $~lib/function/Function<%28i32%2Ci32%2CStaticArray%29=>bool>~visit
+     call $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>bool>~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/function/Function<%28i32%2Ci32%2Ci32%2CStaticArray%29=>i32>~visit
+    call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32>~visit
     return
    end
    local.get $0

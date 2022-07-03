@@ -18152,71 +18152,71 @@
   local.get $1
   call $~lib/array/Array<std/array/Ref|null>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CArray%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CArray%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CArray%29=>bool>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CArray%29=>void>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CArray%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CArray%29=>void>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CArray%29=>f32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CArray%29=>f32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CArray%29=>f32>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CArray%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2CArray%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2CArray%29=>i32>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2CArray%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2CArray%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2CArray%29=>i32>#__visit
+  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28bool%2Ci32%2Ci32%2CArray%29=>bool>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28bool%2Ci32%2Ci32%2CArray%29=>bool>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28bool%2Ci32%2Ci32%2CArray%29=>bool>#__visit
+  call $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit
  )
  (func $~lib/array/Array<std/array/Dim>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18312,16 +18312,16 @@
   local.get $1
   call $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28Dim%2CDim%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28std/array/Dim%2Cstd/array/Dim%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28Dim%2CDim%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28std/array/Dim%2Cstd/array/Dim%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28Dim%2CDim%29=>i32>#__visit
+  call $~lib/function/Function<%28std/array/Dim%2Cstd/array/Dim%29=>i32>#__visit
  )
  (func $~lib/array/Array<~lib/array/Array<i32>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18373,16 +18373,16 @@
   local.get $1
   call $~lib/array/Array<~lib/array/Array<i32>>#__visit
  )
- (func $~lib/function/Function<%28Array%2CArray%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28Array%2CArray%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28Array%2CArray%29=>i32>#__visit
+  call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>#__visit
  )
  (func $~lib/array/Array<std/array/Proxy<i32>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18434,16 +18434,16 @@
   local.get $1
   call $~lib/array/Array<std/array/Proxy<i32>>#__visit
  )
- (func $~lib/function/Function<%28Proxy%2CProxy%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28Proxy%2CProxy%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28Proxy%2CProxy%29=>i32>#__visit
+  call $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>#__visit
  )
  (func $~lib/array/Array<~lib/string/String|null>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18495,16 +18495,16 @@
   local.get $1
   call $~lib/array/Array<~lib/string/String|null>#__visit
  )
- (func $~lib/function/Function<%28string|null%2Cstring|null%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28string|null%2Cstring|null%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28string|null%2Cstring|null%29=>i32>#__visit
+  call $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>#__visit
  )
  (func $~lib/array/Array<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18556,16 +18556,16 @@
   local.get $1
   call $~lib/array/Array<~lib/string/String>#__visit
  )
- (func $~lib/function/Function<%28string%2Cstring%29=>i32>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28string%2Cstring%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28string%2Cstring%29=>i32>#__visit
+  call $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>#__visit
  )
  (func $~lib/array/Array<bool>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
@@ -18832,20 +18832,20 @@
   local.get $1
   call $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>#__visit
  )
- (func $~lib/function/Function<%28Array%2Ci32%2CArray%29=>Array>#__visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/array/Array<i32>%2Ci32%2C~lib/array/Array<~lib/array/Array<i32>>%29=>~lib/array/Array<i32>>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28Array%2Ci32%2CArray%29=>Array>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/array/Array<i32>%2Ci32%2C~lib/array/Array<~lib/array/Array<i32>>%29=>~lib/array/Array<i32>>~visit (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  call $~lib/function/Function<%28Array%2Ci32%2CArray%29=>Array>#__visit
+  call $~lib/function/Function<%28~lib/array/Array<i32>%2Ci32%2C~lib/array/Array<~lib/array/Array<i32>>%29=>~lib/array/Array<i32>>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $~lib/function/Function<%28Array%2Ci32%2CArray%29=>Array>
+   block $~lib/function/Function<%28~lib/array/Array<i32>%2Ci32%2C~lib/array/Array<~lib/array/Array<i32>>%29=>~lib/array/Array<i32>>
     block $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>
      block $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>
       block $~lib/array/Array<~lib/array/Array<u32>>
@@ -18855,28 +18855,28 @@
           block $~lib/array/Array<i16>
            block $~lib/array/Array<i8>
             block $~lib/array/Array<bool>
-             block $~lib/function/Function<%28string%2Cstring%29=>i32>
+             block $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>
               block $~lib/array/Array<~lib/string/String>
-               block $~lib/function/Function<%28string|null%2Cstring|null%29=>i32>
+               block $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>
                 block $~lib/array/Array<~lib/string/String|null>
-                 block $~lib/function/Function<%28Proxy%2CProxy%29=>i32>
+                 block $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>
                   block $~lib/array/Array<std/array/Proxy<i32>>
                    block $std/array/Proxy<i32>
-                    block $~lib/function/Function<%28Array%2CArray%29=>i32>
+                    block $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>
                      block $~lib/array/Array<~lib/array/Array<i32>>
-                      block $~lib/function/Function<%28Dim%2CDim%29=>i32>
+                      block $~lib/function/Function<%28std/array/Dim%2Cstd/array/Dim%29=>i32>
                        block $~lib/function/Function<%28u32%2Cu32%29=>i32>
                         block $~lib/function/Function<%28i32%2Ci32%29=>i32>
                          block $~lib/function/Function<%28f64%2Cf64%29=>i32>
                           block $~lib/function/Function<%28f32%2Cf32%29=>i32>
                            block $~lib/array/Array<std/array/Dim>
                             block $std/array/Dim
-                             block $~lib/function/Function<%28bool%2Ci32%2Ci32%2CArray%29=>bool>
-                              block $~lib/function/Function<%28i32%2Ci32%2Ci32%2CArray%29=>i32>
-                               block $~lib/function/Function<%28i32%2Ci32%2CArray%29=>i32>
-                                block $~lib/function/Function<%28i32%2Ci32%2CArray%29=>f32>
-                                 block $~lib/function/Function<%28i32%2Ci32%2CArray%29=>void>
-                                  block $~lib/function/Function<%28i32%2Ci32%2CArray%29=>bool>
+                             block $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>
+                              block $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>
+                               block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>
+                                block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>
+                                 block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>
+                                  block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>
                                    block $~lib/array/Array<std/array/Ref|null>
                                     block $~lib/array/Array<f64>
                                      block $~lib/array/Array<u16>
@@ -18894,7 +18894,7 @@
                                                 i32.const 8
                                                 i32.sub
                                                 i32.load
-                                                br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $std/array/Ref $~lib/typedarray/Uint8Array $~lib/array/Array<u8> $~lib/array/Array<u32> $~lib/array/Array<f32> $~lib/array/Array<std/array/Ref> $~lib/array/Array<u16> $~lib/array/Array<f64> $~lib/array/Array<std/array/Ref|null> $~lib/function/Function<%28i32%2Ci32%2CArray%29=>bool> $~lib/function/Function<%28i32%2Ci32%2CArray%29=>void> $~lib/function/Function<%28i32%2Ci32%2CArray%29=>f32> $~lib/function/Function<%28i32%2Ci32%2CArray%29=>i32> $~lib/function/Function<%28i32%2Ci32%2Ci32%2CArray%29=>i32> $~lib/function/Function<%28bool%2Ci32%2Ci32%2CArray%29=>bool> $std/array/Dim $~lib/array/Array<std/array/Dim> $~lib/function/Function<%28f32%2Cf32%29=>i32> $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/function/Function<%28Dim%2CDim%29=>i32> $~lib/array/Array<~lib/array/Array<i32>> $~lib/function/Function<%28Array%2CArray%29=>i32> $std/array/Proxy<i32> $~lib/array/Array<std/array/Proxy<i32>> $~lib/function/Function<%28Proxy%2CProxy%29=>i32> $~lib/array/Array<~lib/string/String|null> $~lib/function/Function<%28string|null%2Cstring|null%29=>i32> $~lib/array/Array<~lib/string/String> $~lib/function/Function<%28string%2Cstring%29=>i32> $~lib/array/Array<bool> $~lib/array/Array<i8> $~lib/array/Array<i16> $~lib/array/Array<u64> $~lib/array/Array<i64> $~lib/array/Array<~lib/array/Array<u8>> $~lib/array/Array<~lib/array/Array<u32>> $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>> $~lib/array/Array<~lib/array/Array<~lib/string/String|null>> $~lib/function/Function<%28Array%2Ci32%2CArray%29=>Array> $invalid
+                                                br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $std/array/Ref $~lib/typedarray/Uint8Array $~lib/array/Array<u8> $~lib/array/Array<u32> $~lib/array/Array<f32> $~lib/array/Array<std/array/Ref> $~lib/array/Array<u16> $~lib/array/Array<f64> $~lib/array/Array<std/array/Ref|null> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $std/array/Dim $~lib/array/Array<std/array/Dim> $~lib/function/Function<%28f32%2Cf32%29=>i32> $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/function/Function<%28std/array/Dim%2Cstd/array/Dim%29=>i32> $~lib/array/Array<~lib/array/Array<i32>> $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32> $std/array/Proxy<i32> $~lib/array/Array<std/array/Proxy<i32>> $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32> $~lib/array/Array<~lib/string/String|null> $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32> $~lib/array/Array<~lib/string/String> $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32> $~lib/array/Array<bool> $~lib/array/Array<i8> $~lib/array/Array<i16> $~lib/array/Array<u64> $~lib/array/Array<i64> $~lib/array/Array<~lib/array/Array<u8>> $~lib/array/Array<~lib/array/Array<u32>> $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>> $~lib/array/Array<~lib/array/Array<~lib/string/String|null>> $~lib/function/Function<%28~lib/array/Array<i32>%2Ci32%2C~lib/array/Array<~lib/array/Array<i32>>%29=>~lib/array/Array<i32>> $invalid
                                                end
                                                return
                                               end
@@ -18954,32 +18954,32 @@
                                   end
                                   local.get $0
                                   local.get $1
-                                  call $~lib/function/Function<%28i32%2Ci32%2CArray%29=>bool>~visit
+                                  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit
                                   return
                                  end
                                  local.get $0
                                  local.get $1
-                                 call $~lib/function/Function<%28i32%2Ci32%2CArray%29=>void>~visit
+                                 call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>~visit
                                  return
                                 end
                                 local.get $0
                                 local.get $1
-                                call $~lib/function/Function<%28i32%2Ci32%2CArray%29=>f32>~visit
+                                call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>~visit
                                 return
                                end
                                local.get $0
                                local.get $1
-                               call $~lib/function/Function<%28i32%2Ci32%2CArray%29=>i32>~visit
+                               call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit
                                return
                               end
                               local.get $0
                               local.get $1
-                              call $~lib/function/Function<%28i32%2Ci32%2Ci32%2CArray%29=>i32>~visit
+                              call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit
                               return
                              end
                              local.get $0
                              local.get $1
-                             call $~lib/function/Function<%28bool%2Ci32%2Ci32%2CArray%29=>bool>~visit
+                             call $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit
                              return
                             end
                             return
@@ -19011,7 +19011,7 @@
                       end
                       local.get $0
                       local.get $1
-                      call $~lib/function/Function<%28Dim%2CDim%29=>i32>~visit
+                      call $~lib/function/Function<%28std/array/Dim%2Cstd/array/Dim%29=>i32>~visit
                       return
                      end
                      local.get $0
@@ -19021,7 +19021,7 @@
                     end
                     local.get $0
                     local.get $1
-                    call $~lib/function/Function<%28Array%2CArray%29=>i32>~visit
+                    call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>~visit
                     return
                    end
                    return
@@ -19033,7 +19033,7 @@
                  end
                  local.get $0
                  local.get $1
-                 call $~lib/function/Function<%28Proxy%2CProxy%29=>i32>~visit
+                 call $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>~visit
                  return
                 end
                 local.get $0
@@ -19043,7 +19043,7 @@
                end
                local.get $0
                local.get $1
-               call $~lib/function/Function<%28string|null%2Cstring|null%29=>i32>~visit
+               call $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>~visit
                return
               end
               local.get $0
@@ -19053,7 +19053,7 @@
              end
              local.get $0
              local.get $1
-             call $~lib/function/Function<%28string%2Cstring%29=>i32>~visit
+             call $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>~visit
              return
             end
             local.get $0
@@ -19103,7 +19103,7 @@
    end
    local.get $0
    local.get $1
-   call $~lib/function/Function<%28Array%2Ci32%2CArray%29=>Array>~visit
+   call $~lib/function/Function<%28~lib/array/Array<i32>%2Ci32%2C~lib/array/Array<~lib/array/Array<i32>>%29=>~lib/array/Array<i32>>~visit
    return
   end
   unreachable

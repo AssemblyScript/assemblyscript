@@ -914,7 +914,7 @@ export class Signature {
   }
 
   /** Converts this signature to a string. */
-  toString(validWat: bool = false, namePolicy: TypeNamePolicy = TypeNamePolicy.SHORT): string {
+  toString(validWat: bool = false, namePolicy: TypeNamePolicy = TypeNamePolicy.GLOBAL): string {
     var sb = new Array<string>();
     sb.push(validWat ? "%28" : "(");
     var index = 0;

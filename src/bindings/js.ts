@@ -28,7 +28,8 @@ import {
 import {
   Type,
   TypeFlags,
-  Signature
+  Signature,
+  TypeNamePolicy
 } from "../types";
 
 import {
@@ -276,7 +277,7 @@ export class JSBuilder extends ExportsWalker {
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
       sb.push(element.name);
-      sb.push(element.signature.toString());
+      sb.push(element.signature.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       indent(sb, this.indentLevel + 1);
       if (moduleName != "env") {
@@ -299,7 +300,7 @@ export class JSBuilder extends ExportsWalker {
       indent(sb, ++this.indentLevel);
       sb.push("// ");
       sb.push(element.name);
-      sb.push(element.signature.toString());
+      sb.push(element.signature.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         let type = parameterTypes[i];
@@ -370,7 +371,7 @@ export class JSBuilder extends ExportsWalker {
       indent(sb, ++this.indentLevel);
       sb.push("// ");
       sb.push(element.name);
-      sb.push(signature.toString());
+      sb.push(signature.toString(false, TypeNamePolicy.SHORT));
       sb.push("\n");
       let releases = new Array<string>();
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
