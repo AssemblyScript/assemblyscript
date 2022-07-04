@@ -188,6 +188,7 @@ import {
 } from "./types";
 
 import {
+  BitSet,
   writeI8,
   writeI16,
   writeI32,
@@ -6748,7 +6749,7 @@ export class Compiler extends DiagnosticEmitter {
     var previousFlow = this.currentFlow;
     var flow = Flow.createInline(previousFlow.parentFunction, instance);
     var body = [];
-    var usedLocals = new Set<i32>();
+    var usedLocals = new BitSet();
 
     // Prepare compiled arguments right to left, keeping track of used locals.
     for (let i = numArguments - 1; i >= 0; --i) {
