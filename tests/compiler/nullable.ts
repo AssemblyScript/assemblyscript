@@ -4,7 +4,7 @@ function notNullable(a: Example): void {}
 
 notNullable(null);
 
-export function test(): void {
+function test(): void {
   let value: Example | null = new Example();
   if (value != null) {
     // value = null;
@@ -13,5 +13,7 @@ export function test(): void {
     notNullable(value);
   }
 }
+
+test();
 
 ERROR("EOF");
