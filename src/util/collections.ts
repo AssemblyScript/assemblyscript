@@ -58,7 +58,10 @@ export class BitSet {
   }
 
   has(index: i32): bool {
-    return (this.words[index >>> 5] & (1 << index)) !== 0;
+    var idx = index >>> 5;
+    var words = this.words;
+    if (idx >= words.length) return false;
+    return (unchecked(words[index >>> 5]) & (1 << index)) !== 0;
   }
 
   clear(): void {
