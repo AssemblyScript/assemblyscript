@@ -4567,6 +4567,7 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.currentFlow = flow;
+          this.currentFlow.inheritBranch(rightFlow, condKind);
           this.currentType = Type.bool;
 
         } else {
@@ -4596,8 +4597,8 @@ export class Compiler extends DiagnosticEmitter {
             flow.freeTempLocal(tempLocal);
           }
           this.currentType = leftType;
+          this.currentFlow.inheritBranch(rightFlow);
         }
-        this.currentFlow.inheritBranch(rightFlow);
         break;
       }
       case Token.BAR_BAR: { // left || right -> ((t = left) ? t : right)
@@ -4631,6 +4632,13 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.if(leftExpr, module.i32(1), rightExpr);
             }
           }
+          let inheritCondi =
+            condKind == ConditionKind.TRUE
+              ? ConditionKind.FALSE
+              : condKind == ConditionKind.FALSE
+              ? ConditionKind.TRUE
+              : ConditionKind.UNKNOWN;
+          flow.inheritBranch(rightFlow, inheritCondi);
           this.currentFlow = flow;
           this.currentType = Type.bool;
 
@@ -4638,6 +4646,7 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
           rightFlow.freeScopedLocals();
+          flow.inheritBranch(rightFlow);
           this.currentFlow = flow;
 
           // simplify if copying left is trivial
@@ -4662,7 +4671,6 @@ export class Compiler extends DiagnosticEmitter {
           }
           this.currentType = leftType;
         }
-        this.currentFlow.inheritBranch(rightFlow);
         break;
       }
       default: {
