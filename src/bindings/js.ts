@@ -1283,15 +1283,16 @@ enum Mode {
 
 function isPlainValue(type: Type, kind: Mode): bool {
   if (kind == Mode.IMPORT) {
-    // requires coercion of undefined to 0n
-    if (type.isIntegerValue && type.size == 64) return false;
     // may be stored to an Uint8Array, make sure to store 1/0
     if (type == Type.bool) return false;
+    // requires coercion of undefined to 0n
+    if (type.isIntegerValue && type.size == 64) return false;
   } else {
-    // requires coercion from signed to unsigned
-    if (type.isUnsignedIntegerValue) return false;
     // requires coercion from 1/0 to true/false
     if (type == Type.bool) return false;
+    // requires coercion from signed to unsigned for u32 and u64.
+    // Note, u8 and u16 doesn't overflow in native type so mark as plain
+    if (type.isUnsignedIntegerValue && type.size >= 32) return false;
   }
   return !type.isInternalReference;
 }
@@ -1299,10 +1300,10 @@ function isPlainValue(type: Type, kind: Mode): bool {
 function isPlainFunction(signature: Signature, mode: Mode): bool {
   var parameterTypes = signature.parameterTypes;
   var inverseMode = mode == Mode.IMPORT ? Mode.EXPORT : Mode.IMPORT;
+  if (!isPlainValue(signature.returnType, mode)) return false;
   for (let i = 0, k = parameterTypes.length; i < k; ++i) {
     if (!isPlainValue(parameterTypes[i], inverseMode)) return false;
   }
-  if (!isPlainValue(signature.returnType, mode)) return false;
   return true;
 }
 
