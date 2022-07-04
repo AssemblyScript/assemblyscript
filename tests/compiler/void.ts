@@ -11,8 +11,14 @@ var u8Val2: u8 = 255;
 
 void (u8Val1 + u8Val2); // can remain unwrapped
 
+function oneToEight(callback: (n: i32) => void): void {
+  for (let i = 1; i <= 8; ++i) {
+    callback(i);
+  }
+}
+
 var foo = -1;
-[1, 2, 3, 4, 5, 6, 7, 8].forEach(v => void (foo = v));
+oneToEight(v => void (foo = v));
 assert(foo == 8);
 
 function aVoid(): void {
