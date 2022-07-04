@@ -4566,14 +4566,15 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.if(leftExpr, rightExpr, module.i32(0));
             }
           }
+          flow.inheritBranch(rightFlow, condKind);
           this.currentFlow = flow;
-          this.currentFlow.inheritBranch(rightFlow, condKind);
           this.currentType = Type.bool;
 
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
           rightFlow.freeScopedLocals();
+          flow.inheritBranch(rightFlow);
           this.currentFlow = flow;
 
           // simplify if copying left is trivial
@@ -4597,7 +4598,6 @@ export class Compiler extends DiagnosticEmitter {
             flow.freeTempLocal(tempLocal);
           }
           this.currentType = leftType;
-          this.currentFlow.inheritBranch(rightFlow);
         }
         break;
       }
