@@ -45,7 +45,7 @@ export class BitSet {
     var idx = index >>> 5;
     var words = this.words;
     if (idx > words.length) { // resize
-      this.words = new Uint32Array(idx + 8);
+      this.words = new Uint32Array(idx + 16);
       this.words.set(words);
       words = this.words;
     }
@@ -68,7 +68,7 @@ export class BitSet {
   }
 
   clear(): void {
-    this.words = new Uint32Array(8);
+    this.words = new Uint32Array(16);
   }
 
   toArray(): i32[] {
@@ -77,7 +77,7 @@ export class BitSet {
       let word = unchecked(this.words[i]);
       while (word) {
         let mask = word & -word;
-        res[p++] = (i << 5) + popcnt(mask - 1);
+        unchecked(res[p++] = (i << 5) + popcnt(mask - 1));
         word ^= mask;
       }
     }
