@@ -4597,6 +4597,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           this.currentType = leftType;
         }
+        this.currentFlow.inheritBranch(rightFlow);
         break;
       }
       case Token.BAR_BAR: { // left || right -> ((t = left) ? t : right)
@@ -4661,6 +4662,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           this.currentType = leftType;
         }
+        this.currentFlow.inheritBranch(rightFlow);
         break;
       }
       default: {
