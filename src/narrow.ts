@@ -47,35 +47,51 @@ export function typeOr(a: Type | null, b: Type | null): Type | null {
   }
 }
 
-enum Mode {
+export enum TypeMergeMode {
   AND,
   OR,
 }
 
-function mergeTypeMap(
-  aMap: Map<TypedElement, Type>,
-  bMap: Map<TypedElement, Type>,
-  mode: Mode = Mode.OR
-): void {
-  let bKeys = Map_keys(bMap);
-  if (mode == Mode.AND) {
-    let aKeys = Map_keys(aMap);
-    for(let i = 0, k = aKeys.length; i < k; i++) {
-      let akey = aKeys[i];
-      if (!bKeys.includes(akey)) {
-        aMap.delete(akey);
+export class NarrowedTypeMap {
+  typeMap: Map<TypedElement, Type>;
+  constructor() {
+    this.typeMap = new Map<TypedElement, Type>();
+  }
+  clone(): NarrowedTypeMap {
+    let map = this.typeMap;
+    let other = new NarrowedTypeMap();
+    let _key = Map_keys(map);
+    for (let i = 0, k = _key.length; i < k; i++) {
+      let key = _key[i];
+      let value = assert(map.get(key));
+      other.typeMap.set(key, value);
+    }
+    return other;
+  }
+  merge(other: NarrowedTypeMap, mode: TypeMergeMode = TypeMergeMode.OR): void {
+    let aMap = this.typeMap;
+    let bMap = other.typeMap;
+    let bKeys = Map_keys(bMap);
+    if (mode == TypeMergeMode.AND) {
+      let aKeys = Map_keys(aMap);
+      for (let i = 0, k = aKeys.length; i < k; i++) {
+        let akey = aKeys[i];
+        if (!bKeys.includes(akey)) {
+          aMap.delete(akey);
+        }
       }
     }
-  }
-  for (let i = 0, k = bKeys.length; i < k; i++) {
-    let key = bKeys[i];
-    let aType = aMap.has(key) ? assert(aMap.get(key)) : null;
-    let bType = assert(bMap.get(key));
-    let mergedType = mode == Mode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
-    if (mergedType) {
-      aMap.set(key, mergedType);
-    } else {
-      aMap.delete(key);
+    for (let i = 0, k = bKeys.length; i < k; i++) {
+      let key = bKeys[i];
+      let aType = aMap.has(key) ? assert(aMap.get(key)) : null;
+      let bType = assert(bMap.get(key));
+      let mergedType =
+        mode == TypeMergeMode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
+      if (mergedType) {
+        aMap.set(key, mergedType);
+      } else {
+        aMap.delete(key);
+      }
     }
   }
 }
@@ -87,11 +103,11 @@ class ConditionalNarrowedType {
 type ElementType = Map<TypedElement, ConditionalNarrowedType[]>;
 class TypeNarrowChecker {
   elementMap: ElementType = new Map<TypedElement, ConditionalNarrowedType[]>();
-  expressionMap: Map<ExpressionRef, Map<TypedElement, Type>> | null = null;
+  expressionMap: Map<ExpressionRef, NarrowedTypeMap> | null = null;
 
   private updateMap(): void {
     // TODO could update when change, maintain 2 map both
-    let expressionMap = new Map<ExpressionRef, Map<TypedElement, Type>>();
+    let expressionMap = new Map<ExpressionRef, NarrowedTypeMap>();
     let narrowedTypesConditional = this.elementMap;
     let _key = Map_keys(narrowedTypesConditional);
     for (let i = 0, k = _key.length; i < k; i++) {
@@ -101,10 +117,10 @@ class TypeNarrowChecker {
         let expr = narrowedTypes[i].expr;
         let type = narrowedTypes[i].type;
         if (!expressionMap.has(expr)) {
-          expressionMap.set(expr, new Map());
+          expressionMap.set(expr, new NarrowedTypeMap());
         }
         let typedMap = assert(expressionMap.get(expr));
-        typedMap.set(element, type);
+        typedMap.typeMap.set(element, type);
       }
     }
     this.expressionMap = expressionMap;
@@ -130,19 +146,19 @@ class TypeNarrowChecker {
     // TODO
   }
 
-  collectNarrowedTypeIfTrue(expr: ExpressionRef): Map<TypedElement, Type> {
-    let result = new Map<TypedElement, Type>();
+  collectNarrowedTypeIfTrue(expr: ExpressionRef): NarrowedTypeMap {
+    let result = new NarrowedTypeMap();
     if (this.expressionMap == null) this.updateMap();
     let expressionMap = assert(this.expressionMap);
     if (expressionMap.has(expr)) {
       let typeMap = assert(expressionMap.get(expr));
-      mergeTypeMap(result, typeMap);
+      result.merge(typeMap);
     }
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
         let subMap = this.collectNarrowedTypeIfTrue(getLocalSetValue(expr));
-        mergeTypeMap(result, subMap);
+        result.merge(subMap);
         break;
       }
       case ExpressionId.If: {
@@ -154,16 +170,16 @@ class TypeNarrowChecker {
           // the only way this had become true is if condition and ifTrue are true
           let subMap = this.collectNarrowedTypeIfTrue(condition);
           let subMapTrue = this.collectNarrowedTypeIfTrue(ifTrue);
-          mergeTypeMap(subMap, subMapTrue);
-          mergeTypeMap(result, subMap);
+          subMap.merge(subMapTrue);
+          result.merge(subMap);
         }
         if (ifFalse && isConstNonZero(ifTrue)) {
           // Logical OR: (if (condition 1 ifFalse))
           // the only way this had become false is if condition and ifFalse are false
           let subMap = this.collectNarrowedTypeIfTrue(condition);
           let subMapFalse = this.collectNarrowedTypeIfTrue(ifFalse);
-          mergeTypeMap(subMap, subMapFalse, Mode.AND);
-          mergeTypeMap(result, subMap);
+          subMap.merge(subMapFalse, TypeMergeMode.AND);
+          result.merge(subMap);
         }
         break;
       }
@@ -172,7 +188,7 @@ class TypeNarrowChecker {
           case UnaryOp.EqzI32:
           case UnaryOp.EqzI64: {
             let subMap = this.collectNarrowedTypeIfFalse(getUnaryValue(expr)); // !value -> value must have been false
-            mergeTypeMap(result, subMap);
+            result.merge(subMap);
             break;
           }
         }
@@ -186,10 +202,10 @@ class TypeNarrowChecker {
             let right = getBinaryRight(expr);
             if (isConstNonZero(left)) {
               let subMap = this.collectNarrowedTypeIfTrue(right); // TRUE == right -> right must have been true
-              mergeTypeMap(result, subMap);
+              result.merge(subMap);
             } else if (isConstNonZero(right)) {
               let subMap = this.collectNarrowedTypeIfTrue(left); // left == TRUE -> left must have been true
-              mergeTypeMap(result, subMap);
+              result.merge(subMap);
             }
             break;
           }
@@ -199,10 +215,10 @@ class TypeNarrowChecker {
             let right = getBinaryRight(expr);
             if (isConstZero(left)) {
               let subMap = this.collectNarrowedTypeIfTrue(right); // TRUE == right -> right must have been true
-              mergeTypeMap(result, subMap);
+              result.merge(subMap);
             } else if (isConstZero(right)) {
               let subMap = this.collectNarrowedTypeIfTrue(left); // TRUE == right -> right must have been true
-              mergeTypeMap(result, subMap);
+              result.merge(subMap);
             }
             break;
           }
@@ -213,8 +229,8 @@ class TypeNarrowChecker {
     return result;
   }
 
-  collectNarrowedTypeIfFalse(expr: ExpressionRef): Map<TypedElement, Type> {
-    let result = new Map<TypedElement, Type>();
+  collectNarrowedTypeIfFalse(expr: ExpressionRef): NarrowedTypeMap {
+    let result = new NarrowedTypeMap();
     if (this.expressionMap == null) this.updateMap();
     switch (getExpressionId(expr)) {
       case ExpressionId.Unary: {
@@ -222,7 +238,7 @@ class TypeNarrowChecker {
           case UnaryOp.EqzI32:
           case UnaryOp.EqzI64: {
             let subMap = this.collectNarrowedTypeIfTrue(getUnaryValue(expr)); // !value -> value must have been true
-            mergeTypeMap(result, subMap);
+            result.merge(subMap);
             break;
           }
         }
@@ -236,8 +252,8 @@ class TypeNarrowChecker {
           // the only way this had become false is if condition and ifFalse are false
           let subMap = this.collectNarrowedTypeIfFalse(getIfCondition(expr));
           let subMapFalse = this.collectNarrowedTypeIfFalse(getIfFalse(expr));
-          mergeTypeMap(subMap, subMapFalse);
-          mergeTypeMap(result, subMap);
+          subMap.merge(subMapFalse);
+          result.merge(subMap);
         }
         break;
       }
@@ -250,10 +266,10 @@ class TypeNarrowChecker {
             let right = getBinaryRight(expr);
             if (isConstZero(left)) {
               let subMap = this.collectNarrowedTypeIfTrue(right); // !(FALSE == right) -> right must have been true
-              mergeTypeMap(result, subMap);
+              result.merge(subMap);
             } else if (isConstZero(right)) {
               let subMap = this.collectNarrowedTypeIfTrue(left); // !(left == FALSE) -> left must have been true
-              mergeTypeMap(result, subMap);
+              result.merge(subMap);
             }
             break;
           }
@@ -263,10 +279,10 @@ class TypeNarrowChecker {
             let right = getBinaryRight(expr);
             if (isConstNonZero(left)) {
               let subMap = this.collectNarrowedTypeIfTrue(right); // !(TRUE != right) -> right must have been true
-              mergeTypeMap(result, subMap);
+              result.merge(subMap);
             } else if (isConstNonZero(right)) {
               let subMap = this.collectNarrowedTypeIfTrue(left); // !(left != TRUE) -> left must have been true
-              mergeTypeMap(result, subMap);
+              result.merge(subMap);
             }
             break;
           }
