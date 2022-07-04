@@ -43,10 +43,13 @@ export class BitSet {
 
   add(index: i32): this {
     var idx = index >>> 5;
-    if (idx > this.words.length) {
-      this.resize(index);
+    var words = this.words;
+    if (idx > words.length) { // resize
+      this.words = new Uint32Array(idx + 8);
+      this.words.set(words);
+      words = this.words;
     }
-    unchecked(this.words[idx] |= 1 << index);
+    unchecked(words[idx] |= 1 << index);
     return this;
   }
 
@@ -66,12 +69,6 @@ export class BitSet {
 
   clear(): void {
     this.words = new Uint32Array(8);
-  }
-
-  private resize(index: i32): void {
-    var newWords = new Uint32Array((index + 64) >>> 5);
-    newWords.set(this.words);
-    this.words = newWords;
   }
 
   toArray(): i32[] {
