@@ -36,7 +36,8 @@ export class BitSet {
     var count = 0;
     var words = this.words;
     for (let i = 0, len = words.length; i < len; i++) {
-      count += popcnt(unchecked(words[i]));
+      let word = unchecked(words[i]);
+      if (word) count += popcnt(word);
     }
     return count;
   }
