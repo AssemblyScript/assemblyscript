@@ -50,7 +50,7 @@ declare function externalBool(): bool;
 
 // externalBool may return `true` while `value` isn't instanceof C
 if (externalBool() || value instanceof B) {
-  // TS2339: Property 'b1' does not exist on type 'typenarrow-error/A'.
+  // TS2339: Property 'b6' does not exist on type 'typenarrow-error/A'
   value.b6;
 }
 
