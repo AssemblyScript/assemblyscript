@@ -1278,6 +1278,7 @@
  )
  (func $start:typenarrow
   (local $0 i32)
+  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -1370,8 +1371,13 @@
   end
   if
    global.get $~lib/memory/__stack_pointer
+   local.tee $0
    global.get $typenarrow/value
+   local.tee $1
    i32.store offset=4
+   local.get $0
+   local.get $1
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   global.get $typenarrow/value
@@ -1413,8 +1419,13 @@
   end
   if
    global.get $~lib/memory/__stack_pointer
+   local.tee $0
    global.get $typenarrow/value
+   local.tee $1
    i32.store offset=4
+   local.get $0
+   local.get $1
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   global.get $typenarrow/value
@@ -1456,8 +1467,13 @@
   end
   if
    global.get $~lib/memory/__stack_pointer
+   local.tee $0
    global.get $typenarrow/value
+   local.tee $1
    i32.store offset=4
+   local.get $0
+   local.get $1
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   global.get $typenarrow/value
@@ -1499,8 +1515,13 @@
   end
   if
    global.get $~lib/memory/__stack_pointer
+   local.tee $0
    global.get $typenarrow/value
+   local.tee $1
    i32.store offset=4
+   local.get $0
+   local.get $1
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   global.get $typenarrow/value

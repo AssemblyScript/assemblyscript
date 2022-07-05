@@ -2479,6 +2479,10 @@
    i32.store offset=4
    local.get $1
    call $typenarrow/B#b1
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   global.get $typenarrow/value
@@ -2504,6 +2508,10 @@
    i32.store offset=4
    local.get $1
    call $typenarrow/B#b1
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   global.get $typenarrow/value
@@ -2531,6 +2539,10 @@
    i32.store offset=4
    local.get $1
    call $typenarrow/B#b1
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
   end
   global.get $typenarrow/condi
   if (result i32)
@@ -2558,6 +2570,10 @@
    i32.store offset=4
    local.get $1
    call $typenarrow/B#b1
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
   end
   global.get $typenarrow/condi
   if (result i32)
@@ -2583,6 +2599,10 @@
   else
    i32.const 432
    drop
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   global.get $typenarrow/value
@@ -2608,6 +2628,10 @@
   else
    i32.const 432
    drop
+   global.get $~lib/memory/__stack_pointer
+   global.get $typenarrow/value
+   local.tee $0
+   i32.store
   end
   global.get $~lib/memory/__stack_pointer
   global.get $typenarrow/value
