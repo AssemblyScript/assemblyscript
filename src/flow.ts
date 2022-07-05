@@ -612,7 +612,7 @@ export class Flow {
 
   setNarrowedType(element: TypedElement, type: Type | null): void {
     const typeMap = this.narrowedTypes;
-    if (type == null && typeMap.get(element) == null) {
+    if (type == null && typeMap.get(element) != null) {
       typeMap.delete(element);
     } else if (type) {
       typeMap.set(element, type);
