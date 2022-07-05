@@ -2967,35 +2967,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 4784
-    i32.const 4608
-    i32.const 130
-    i32.const 22
-    call $~lib/wasi/index/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $3
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $3
-   i32.store offset=12
-  end
+ (func $~lib/array/Array<~lib/string/String>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3906,6 +3878,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -4002,10 +3975,10 @@
    end
    i32.const 1088
    i32.load
-   local.tee $3
+   local.tee $4
    i32.const 2
    i32.shl
-   local.tee $4
+   local.tee $3
    i32.const 1092
    i32.load
    i32.add
@@ -4021,15 +3994,15 @@
    i32.const 4
    i32.add
    local.tee $6
-   local.get $4
+   local.get $3
    local.get $6
    i32.add
    call $~lib/bindings/wasi_snapshot_preview1/args_get
-   local.tee $4
+   local.tee $3
    i32.const 65535
    i32.and
    if
-    local.get $4
+    local.get $3
     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
     i32.const 4224
     i32.const 96
@@ -4038,13 +4011,13 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $3
+   local.get $4
    call $~lib/array/Array<~lib/string/String>#constructor
-   local.tee $4
+   local.tee $7
    i32.store
    loop $for-loop|0
     local.get $0
-    local.get $3
+    local.get $4
     i32.lt_s
     if
      global.get $~lib/memory/__stack_pointer
@@ -4054,19 +4027,46 @@
      i32.shl
      i32.add
      i32.load
-     local.tee $7
+     local.tee $3
+     local.get $3
      local.get $5
-     local.get $7
      i32.add
      local.get $6
      i32.sub
      call $~lib/string/String.UTF8.decodeUnsafe
-     local.tee $7
+     local.tee $8
      i32.store offset=4
-     local.get $4
      local.get $0
      local.get $7
-     call $~lib/array/Array<~lib/string/String>#__set
+     i32.load offset=12
+     i32.ge_u
+     if
+      local.get $0
+      i32.const 0
+      i32.lt_s
+      if
+       i32.const 4784
+       i32.const 4608
+       i32.const 130
+       i32.const 22
+       call $~lib/wasi/index/abort
+       unreachable
+      end
+      local.get $7
+      local.get $0
+      i32.const 1
+      i32.add
+      local.tee $3
+      i32.const 1
+      call $~lib/array/ensureCapacity
+      local.get $7
+      local.get $3
+      i32.store offset=12
+     end
+     local.get $7
+     local.get $0
+     local.get $8
+     call $~lib/array/Array<~lib/string/String>#__uset
      local.get $0
      i32.const 1
      i32.add
@@ -4080,7 +4080,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $4
+   local.get $7
    global.set $~lib/process/process.argv
    global.get $~lib/process/process.argv
    global.set $std-wasi/process/argv
@@ -4180,7 +4180,7 @@
       local.get $5
       local.get $0
       local.get $6
-      call $~lib/array/Array<~lib/string/String>#__set
+      call $~lib/array/Array<~lib/string/String>#__uset
       local.get $0
       i32.const 1
       i32.add

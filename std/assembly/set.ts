@@ -185,7 +185,7 @@ export class Set<T> {
     for (let i = 0; i < size; ++i) {
       let entry = changetype<SetEntry<T>>(start + <usize>i * ENTRY_SIZE<T>());
       if (!(entry.taggedNext & EMPTY)) {
-        values[length++] = entry.key;
+        unchecked(values[length++] = entry.key);
       }
     }
     values.length = length;
