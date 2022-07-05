@@ -39,4 +39,9 @@ if (value instanceof B && value instanceof C) {
 if (value instanceof B || value.b4) {
 }
 
+if (value instanceof B && (value = new A())) {
+  // TS2339: Property 'b5' does not exist on type 'typenarrow-error/A
+  value.b5;
+}
+
 ERROR("EOF");

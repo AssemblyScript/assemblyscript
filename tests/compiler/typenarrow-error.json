@@ -7,6 +7,7 @@
     "TS2339: Property 'b3' does not exist on type 'typenarrow-error/A",
     "TS2339: Property 'c1' does not exist on type 'typenarrow-error/A",
     "TS2339: Property 'b4' does not exist on type 'typenarrow-error/A",
+    "TS2339: Property 'b5' does not exist on type 'typenarrow-error/A",
     "EOF"
   ]
 }
