@@ -611,15 +611,15 @@ export class Flow {
   }
 
   setNarrowedType(element: TypedElement, type: Type | null): void {
-    const typeMap = this.narrowedTypes.typeMap;
-    if (type == null && typeMap.has(element)) {
+    const typeMap = this.narrowedTypes;
+    if (type == null && typeMap.get(element) == null) {
       typeMap.delete(element);
     } else if (type) {
       typeMap.set(element, type);
     }
   }
   getNarrowedType(element: TypedElement): Type | null {
-    return this.narrowedTypes.typeMap.has(element) ? changetype<Type>(this.narrowedTypes.typeMap.get(element)) : null;
+    return this.narrowedTypes.get(element);
   }
 
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {

@@ -5958,10 +5958,8 @@ export class Compiler extends DiagnosticEmitter {
     assert(targetType != Type.void);
     var valueExpr = this.compileExpression(valueExpression, targetType);
     var valueType = this.currentType;
-    if (target instanceof TypedElement) {
-      flow.setNarrowedType(<TypedElement>target, null);
-    }
-    return this.makeAssignment(
+
+    let assignmentExpression = this.makeAssignment(
       target,
       this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
       valueType,
@@ -5970,6 +5968,13 @@ export class Compiler extends DiagnosticEmitter {
       elementExpression,
       contextualType != Type.void
     );
+
+    if (target instanceof TypedElement) {
+      let typedTarget = <TypedElement>target;
+      flow.setNarrowedType(typedTarget, null);
+      flow.setConditionNarrowedType(assignmentExpression, typedTarget, null);
+    }
+    return assignmentExpression;
   }
 
   /** Makes an assignment expression or block, assigning a value to a target. */

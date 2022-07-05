@@ -53,9 +53,20 @@ export enum TypeMergeMode {
 }
 
 export class NarrowedTypeMap {
-  typeMap: Map<TypedElement, Type>;
-  constructor() {
-    this.typeMap = new Map<TypedElement, Type>();
+  private typeMap: Map<TypedElement, Type> = new Map();
+  static readonly INVAILD_TYPE: Type = Type.void;
+  get(key: TypedElement): Type | null {
+    if (this.typeMap.has(key)) {
+      return assert(this.typeMap.get(key));
+    } else {
+      return null;
+    }
+  }
+  set(key: TypedElement, value: Type): void {
+    this.typeMap.set(key, value);
+  }
+  delete(key: TypedElement): bool {
+    return this.typeMap.delete(key);
   }
   clone(): NarrowedTypeMap {
     let map = this.typeMap;
@@ -100,9 +111,8 @@ class ConditionalNarrowedType {
   constructor(public expr: ExpressionRef, public type: Type) {}
 }
 
-type ElementType = Map<TypedElement, ConditionalNarrowedType[]>;
 class TypeNarrowChecker {
-  elementMap: ElementType = new Map<TypedElement, ConditionalNarrowedType[]>();
+  elementMap: Map<TypedElement, ConditionalNarrowedType[]> = new Map();
   expressionMap: Map<ExpressionRef, NarrowedTypeMap> | null = null;
 
   private updateMap(): void {
@@ -120,7 +130,7 @@ class TypeNarrowChecker {
           expressionMap.set(expr, new NarrowedTypeMap());
         }
         let typedMap = assert(expressionMap.get(expr));
-        typedMap.typeMap.set(element, type);
+        typedMap.set(element, type);
       }
     }
     this.expressionMap = expressionMap;
@@ -132,18 +142,25 @@ class TypeNarrowChecker {
     type: Type | null
   ): void {
     this.expressionMap = null; // reset map
-    let potential = this.elementMap;
+    let elementMap = this.elementMap;
     // case1: add condition type, eg t instanceof B
     if (expr > 0 && type) {
-      if (potential.has(element)) {
-        let conditionTypes = assert(potential.get(element));
-        conditionTypes.push(new ConditionalNarrowedType(expr, type));
-      } else {
-        potential.set(element, [new ConditionalNarrowedType(expr, type)]);
+      if (!elementMap.has(element)) {
+        elementMap.set(element, new Array<ConditionalNarrowedType>());
       }
+      let conditionTypes = assert(elementMap.get(element));
+      conditionTypes.push(new ConditionalNarrowedType(expr, type));
     }
     // case 2: remove condition type, eg t = new A() in some condition
-    // TODO
+    if (expr > 0 && type == null) {
+      if (!elementMap.has(element)) {
+        elementMap.set(element, new Array<ConditionalNarrowedType>());
+      }
+      let conditionTypes = assert(elementMap.get(element));
+      conditionTypes.push(
+        new ConditionalNarrowedType(expr, NarrowedTypeMap.INVAILD_TYPE)
+      );
+    }
   }
 
   collectNarrowedTypeIfTrue(expr: ExpressionRef): NarrowedTypeMap {
