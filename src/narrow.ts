@@ -90,7 +90,7 @@ export class NarrowedTypeMap {
       let aKeys = Map_keys(aMap);
       for (let i = 0, k = aKeys.length; i < k; i++) {
         let akey = aKeys[i];
-        if (!bKeys.includes(akey)) {
+        if (!bMap.has(akey)) {
           aMap.delete(akey);
         }
       }
