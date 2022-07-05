@@ -99,8 +99,9 @@ export class NarrowedTypeMap {
       let key = bKeys[i];
       let aType = aMap.has(key) ? assert(aMap.get(key)) : null;
       let bType = assert(bMap.get(key));
-      let mergedType =
-        mode == TypeMergeMode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
+      let mergedType = mode == TypeMergeMode.OR 
+        ? typeOr(aType, bType) 
+        : typeAnd(aType, bType);
       if (mergedType) {
         aMap.set(key, mergedType);
       } else {
