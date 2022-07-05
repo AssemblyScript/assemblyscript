@@ -98,7 +98,8 @@ import {
   LocalFlags,
   FieldFlags,
   ConditionKind,
-  findUsedLocals
+  findUsedLocals,
+  invertedCondition
 } from "./flow";
 
 import {
@@ -4642,13 +4643,7 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.if(leftExpr, module.i32(1), rightExpr);
             }
           }
-          let inheritCondi =
-            condKind == ConditionKind.TRUE
-              ? ConditionKind.FALSE
-              : condKind == ConditionKind.FALSE
-              ? ConditionKind.TRUE
-              : ConditionKind.UNKNOWN;
-          flow.inheritBranch(rightFlow, inheritCondi);
+          flow.inheritBranch(rightFlow, invertedCondition(condKind));
           this.currentFlow = flow;
           this.currentType = Type.bool;
 

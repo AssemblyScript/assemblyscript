@@ -192,6 +192,12 @@ export const enum ConditionKind {
   FALSE
 }
 
+export function invertedCondition(kind: ConditionKind): ConditionKind {
+  if (kind == ConditionKind.TRUE) return ConditionKind.FALSE;
+  if (kind == ConditionKind.FALSE) return ConditionKind.TRUE;
+  return kind;
+}
+
 /** A control flow evaluator. */
 export class Flow {
 
