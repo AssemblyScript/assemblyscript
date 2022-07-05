@@ -115,6 +115,11 @@ export declare namespace String {
   export function fromCodePoints(codepoints: i32[]): externref;
 }
 
+export declare namespace Object {
+  @external("env", "Object.is")
+  export function is(a: externref, b: externref): bool;
+}
+
 export declare namespace Date {
   @external("env", "Date.now")
   export function now(): f64;
