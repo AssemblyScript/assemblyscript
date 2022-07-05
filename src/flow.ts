@@ -90,7 +90,7 @@ import {
 import {
   BuiltinNames
 } from "./builtins";
-import { conditionalNarrowedTypeChecker, NarrowedTypeMap, TypeMergeMode } from "./narrow";
+import { NarrowedTypeMap, TypeMergeMode, TypeNarrowChecker } from "./narrow";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
@@ -240,6 +240,8 @@ export class Flow {
   thisFieldFlags: Map<Field,FieldFlags> | null = null;
   /** type narrow */
   narrowedTypes: NarrowedTypeMap = new NarrowedTypeMap();
+  /** conditional type narrow, eg if (condi) */
+  conditionalNarrowedType: TypeNarrowChecker = new TypeNarrowChecker();
   
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null = null;
@@ -316,6 +318,7 @@ export class Flow {
     }
     branch.localFlags = this.localFlags.slice();
     branch.narrowedTypes = this.narrowedTypes.clone();
+    branch.conditionalNarrowedType = this.conditionalNarrowedType;
     if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
       branch.thisFieldFlags = uniqueMap<Field,FieldFlags>(thisFieldFlags);
@@ -623,14 +626,14 @@ export class Flow {
   }
 
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {
-    conditionalNarrowedTypeChecker.setConditionNarrowedType(expr, element, type);
+    this.conditionalNarrowedType.setConditionNarrowedType(expr, element, type);
   }
   inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
-    let condiNarrow = conditionalNarrowedTypeChecker.collectNarrowedTypeIfTrue(condi);
+    let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfTrue(condi);
     this.narrowedTypes.merge(condiNarrow);
   }
   inheritNarrowedTypeIfFalse(condi:ExpressionRef): void {
-    let condiNarrow = conditionalNarrowedTypeChecker.collectNarrowedTypeIfFalse(condi);
+    let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfFalse(condi);
     this.narrowedTypes.merge(condiNarrow);
   }
 

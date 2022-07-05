@@ -110,7 +110,7 @@ export class NarrowedTypeMap {
   }
 }
 
-class TypeNarrowChecker {
+export class TypeNarrowChecker {
   expressionMap: Map<ExpressionRef, NarrowedTypeMap> = new Map();
 
   setConditionNarrowedType(
@@ -280,4 +280,3 @@ class TypeNarrowChecker {
   }
 }
 
-export let conditionalNarrowedTypeChecker = new TypeNarrowChecker();
