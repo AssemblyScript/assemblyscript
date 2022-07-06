@@ -493,7 +493,8 @@ export class Parser extends DiagnosticEmitter {
   parseType(
     tn: Tokenizer,
     acceptParenthesized: bool = true,
-    suppressErrors: bool = false
+    suppressErrors: bool = false,
+    constraint: bool = false // TODO: remove this when we have proper unions
   ): TypeNode | null {
 
     // before: Type
@@ -641,6 +642,7 @@ export class Parser extends DiagnosticEmitter {
       } else {
         let notNullStart = tn.pos;
         let notNull = this.parseType(tn, false, true);
+        if (constraint) continue;
         if (!suppressErrors) {
           this.error(
             DiagnosticCode._0_expected,
@@ -666,14 +668,17 @@ export class Parser extends DiagnosticEmitter {
 
       // ...[] | null
       let nullable = false;
-      if (tn.skip(Token.BAR)) {
+      while (tn.skip(Token.BAR)) {
         if (tn.skip(Token.NULL)) {
           nullable = true;
         } else {
+          let notNullStart = tn.pos;
+          let notNull = this.parseType(tn, false, true);
+          if (constraint) continue;
           if (!suppressErrors) {
             this.error(
               DiagnosticCode._0_expected,
-              tn.range(), "null"
+              notNull ? notNull.range : tn.range(notNullStart), "null"
             );
           }
           return null;
@@ -1175,7 +1180,7 @@ export class Parser extends DiagnosticEmitter {
       );
       let extendsType: NamedTypeNode | null = null;
       if (tn.skip(Token.EXTENDS)) {
-        let type = this.parseType(tn);
+        let type = this.parseType(tn, true, false, true);
         if (!type) return null;
         if (type.kind != NodeKind.NAMEDTYPE) {
           this.error(
