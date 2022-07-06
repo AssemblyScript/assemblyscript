@@ -118,6 +118,18 @@ export declare namespace String {
 export declare namespace Object {
   @external("env", "Object.is")
   export function is(a: externref, b: externref): bool;
+  @external("env", "Object.hasOwn")
+  export function hasOwn(target: externref, propertyKey: string): bool;
+  @external("env", "Object.assign")
+  export function assign(target: externref, source: externref): externref;
+  @external("env", "Object.keys")
+  export function keys(target: externref): externref;
+  @external("env", "Object.values")
+  export function values(target: externref): externref;
+  @external("env", "Object.entries")
+  export function entries(target: externref): externref;
+  @external("env", "Object.getOwnPropertyNames")
+  export function getOwnPropertyNames(target: externref): externref;
 }
 
 export declare namespace Date {
