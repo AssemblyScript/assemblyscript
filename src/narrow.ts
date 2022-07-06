@@ -54,6 +54,9 @@ export enum TypeMergeMode {
 
 export class NarrowedTypeMap {
   private typeMap: Map<TypedElement, Type> = new Map();
+  get size(): i32 {
+    return this.typeMap.size;
+  }
   get(key: TypedElement): Type | null {
     if (this.typeMap.has(key)) {
       let type = assert(this.typeMap.get(key));
@@ -99,9 +102,7 @@ export class NarrowedTypeMap {
       let key = bKeys[i];
       let aType = aMap.has(key) ? assert(aMap.get(key)) : null;
       let bType = assert(bMap.get(key));
-      let mergedType = mode == TypeMergeMode.OR 
-        ? typeOr(aType, bType) 
-        : typeAnd(aType, bType);
+      let mergedType = mode == TypeMergeMode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
       if (mergedType) {
         aMap.set(key, mergedType);
       } else {
@@ -114,11 +115,7 @@ export class NarrowedTypeMap {
 export class TypeNarrowChecker {
   expressionMap: Map<ExpressionRef, NarrowedTypeMap> = new Map();
 
-  setConditionNarrowedType(
-    expr: ExpressionRef,
-    element: TypedElement,
-    type: Type | null
-  ): void {
+  setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {
     let expressionMap = this.expressionMap;
     if (expr > 0) {
       if (!expressionMap.has(expr)) {
@@ -280,4 +277,3 @@ export class TypeNarrowChecker {
     return result;
   }
 }
-

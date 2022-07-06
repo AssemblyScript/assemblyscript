@@ -245,7 +245,7 @@ export class Flow {
   /** Field flags on `this`. Constructors only. */
   thisFieldFlags: Map<Field,FieldFlags> | null = null;
   /** type narrow */
-  narrowedTypes: NarrowedTypeMap = new NarrowedTypeMap();
+  narrowedTypes: NarrowedTypeMap | null = null;
   /** conditional type narrow, eg if (condi) */
   conditionalNarrowedType: TypeNarrowChecker = new TypeNarrowChecker();
   
@@ -323,7 +323,8 @@ export class Flow {
       branch.breakLabel = this.breakLabel;
     }
     branch.localFlags = this.localFlags.slice();
-    branch.narrowedTypes = this.narrowedTypes.clone();
+    let narrowedTypes = this.narrowedTypes;
+    branch.narrowedTypes = narrowedTypes ? narrowedTypes.clone(): null;
     branch.conditionalNarrowedType = this.conditionalNarrowedType;
     if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
@@ -620,15 +621,22 @@ export class Flow {
   }
 
   setNarrowedType(element: TypedElement, type: Type | null): void {
-    const typeMap = this.narrowedTypes;
-    if (type == null && typeMap.get(element) != null) {
-      typeMap.delete(element);
+    if (this.narrowedTypes == null) {
+      this.narrowedTypes = new NarrowedTypeMap();
+    }
+    let narrowedTypes = assert(this.narrowedTypes);
+    if (type == null && narrowedTypes.get(element) != null) {
+      narrowedTypes.delete(element);
     } else if (type) {
-      typeMap.set(element, type);
+      narrowedTypes.set(element, type);
     }
   }
   getNarrowedType(element: TypedElement): Type | null {
-    return this.narrowedTypes.get(element);
+    if (this.narrowedTypes == null) {
+      this.narrowedTypes = new NarrowedTypeMap();
+    }
+    let narrowedTypes = assert(this.narrowedTypes);
+    return narrowedTypes.get(element);
   }
 
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {
@@ -636,11 +644,23 @@ export class Flow {
   }
   inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
     let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfTrue(condi);
-    this.narrowedTypes.merge(condiNarrow);
+    if (condiNarrow.size != 0) {
+      if (this.narrowedTypes == null) {
+        this.narrowedTypes = new NarrowedTypeMap();
+      }
+      let narrowedTypes = assert(this.narrowedTypes);
+      narrowedTypes.merge(condiNarrow);
+    }
   }
   inheritNarrowedTypeIfFalse(condi:ExpressionRef): void {
     let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfFalse(condi);
-    this.narrowedTypes.merge(condiNarrow);
+    if (condiNarrow.size != 0) {
+      if (this.narrowedTypes == null) {
+        this.narrowedTypes = new NarrowedTypeMap();
+      }
+      let narrowedTypes = assert(this.narrowedTypes);
+      narrowedTypes.merge(condiNarrow);
+    }
   }
 
   /** Initializes `this` field flags. */
@@ -849,8 +869,11 @@ export class Flow {
     }
 
     // narrowed types
-
-    this.narrowedTypes.merge(other.narrowedTypes, TypeMergeMode.AND);
+    let thisNarrowedTypes = this.narrowedTypes;
+    let otherNarrowedTypes = other.narrowedTypes;
+    if (thisNarrowedTypes && otherNarrowedTypes) {
+      thisNarrowedTypes.merge(otherNarrowedTypes, TypeMergeMode.AND);
+    }
 
     // field flags do not matter here since there's only INITIALIZED, which can
     // only be set if it has been observed prior to entering the branch.
@@ -955,14 +978,22 @@ export class Flow {
         for (let i = 0, k = rightLocalFlags.length; i < k; ++i) {
           thisLocalFlags[i] = rightLocalFlags[i];
         }
-        this.narrowedTypes.merge(right.narrowedTypes, TypeMergeMode.AND);
+        let thisNarrowedTypes = this.narrowedTypes;
+        let rightNarrowedTypes = right.narrowedTypes;
+        if (thisNarrowedTypes && rightNarrowedTypes) {
+          thisNarrowedTypes.merge(rightNarrowedTypes, TypeMergeMode.AND);
+        }
       }
     } else if (rightFlags & FlowFlags.TERMINATES) {
       let leftLocalFlags = left.localFlags;
       for (let i = 0, k = leftLocalFlags.length; i < k; ++i) {
         thisLocalFlags[i] = leftLocalFlags[i];
       }
-      this.narrowedTypes.merge(left.narrowedTypes, TypeMergeMode.AND);
+      let thisNarrowedTypes = this.narrowedTypes;
+      let leftNarrowedTypes = left.narrowedTypes;
+      if (thisNarrowedTypes && leftNarrowedTypes) {
+        thisNarrowedTypes.merge(leftNarrowedTypes, TypeMergeMode.AND);
+      }
     } else {
       let leftLocalFlags = left.localFlags;
       let numLeftLocalFlags = leftLocalFlags.length;
@@ -981,8 +1012,13 @@ export class Flow {
       }
 
       // narrow type
-      this.narrowedTypes = right.narrowedTypes.clone();
-      this.narrowedTypes.merge(left.narrowedTypes, TypeMergeMode.AND);
+      let leftNarrowedTypes = left.narrowedTypes;
+      let rightNarrowedTypes = right.narrowedTypes;
+      if (leftNarrowedTypes && rightNarrowedTypes) {
+        let narrowedTypes = rightNarrowedTypes.clone();
+        narrowedTypes.merge(leftNarrowedTypes, TypeMergeMode.AND);
+        this.narrowedTypes = narrowedTypes;
+      }
     }
 
     // field flags (currently only INITIALIZED, so can simplify)
