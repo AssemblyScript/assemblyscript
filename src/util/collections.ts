@@ -45,7 +45,7 @@ export class BitSet {
   add(index: i32): this {
     var idx = index >>> 5;
     var words = this.words;
-    if (idx > words.length) { // resize
+    if (idx >= words.length) { // resize
       this.words = new Uint32Array(idx + 16);
       this.words.set(words);
       words = this.words;
