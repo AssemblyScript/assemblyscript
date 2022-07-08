@@ -45,6 +45,7 @@
 0b0;
 0b1;
 0b1111111111111111111111111111111;
+18446744073709551615;
 0xFFFFFFFFFFFFFFFF;
 -123;
 0.0;
@@ -96,6 +97,7 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 `\unicode\xGG\u\x`;
 
 // doesn't fit into i64 / u64
+18446744073709551616;
 0x10000000000000000;
 0xFFF000000000000FFF;
 0o2000000000000000000000;
