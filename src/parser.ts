@@ -92,8 +92,7 @@ import {
   ArrayLiteralExpression,
   ObjectLiteralExpression,
   LiteralKind,
-  LiteralExpression,
-  BinaryExpression
+  LiteralExpression
 } from "./ast";
 
 /** Represents a dependee. */
