@@ -4,6 +4,7 @@
  */
 
 declare type i64 = { __Long__: true }; // opaque
+declare type u64 = { __Long__: true, unsigned: true }; // opaque
 
 declare const i64_zero: i64;
 declare const i64_one: i64;
