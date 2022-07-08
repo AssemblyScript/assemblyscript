@@ -1404,7 +1404,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     if (overflowUnsigned) {
       this.error(
-        DiagnosticCode.Literal_0_does_not_fit_into_the_type_i64,
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
         this.range(start, pos), "0x" + this.source.text.substring(start, pos)
       );
     } else if (pos == start) {
@@ -1473,7 +1473,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     if (overflowUnsigned) {
       this.error(
-        DiagnosticCode.Literal_0_does_not_fit_into_the_type_i64,
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
         this.range(start, pos), this.source.text.substring(start, pos)
       );
     } else if (pos == start) {
@@ -1537,7 +1537,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     if (overflowUnsigned) {
       this.error(
-        DiagnosticCode.Literal_0_does_not_fit_into_the_type_i64,
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
         this.range(start, pos), "0o" + this.source.text.substring(start, pos)
       );
     } else if (pos == start) {
@@ -1599,7 +1599,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     if (overflow) {
       this.error(
-        DiagnosticCode.Literal_0_does_not_fit_into_the_type_i64,
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
         this.range(start, pos), "0b" + this.source.text.substring(start, pos)
       );
     } else if (pos == start) {
