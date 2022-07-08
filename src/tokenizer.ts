@@ -1398,12 +1398,7 @@ export class Tokenizer extends DiagnosticEmitter {
       value = nextValue;
       ++pos;
     }
-    if (overflowUnsigned) {
-      this.error(
-        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
-        this.range(start, pos), "0x" + this.source.text.substring(start, pos)
-      );
-    } else if (pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Hexadecimal_digit_expected,
         this.range(start)
@@ -1412,6 +1407,12 @@ export class Tokenizer extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
+      );
+    } else if (overflowUnsigned) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+        this.range(start - 2, pos),
+        this.source.text.substring(start - 2, pos)
       );
     }
     this.pos = pos;
@@ -1462,12 +1463,7 @@ export class Tokenizer extends DiagnosticEmitter {
       value = nextValue;
       ++pos;
     }
-    if (overflowUnsigned) {
-      this.error(
-        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
-        this.range(start, pos), this.source.text.substring(start, pos)
-      );
-    } else if (pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Digit_expected,
         this.range(start)
@@ -1476,6 +1472,12 @@ export class Tokenizer extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
+      );
+    } else if (overflowUnsigned) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+        this.range(start, pos),
+        this.source.text.substring(start, pos)
       );
     }
     this.pos = pos;
@@ -1521,12 +1523,7 @@ export class Tokenizer extends DiagnosticEmitter {
       value = nextValue;
       ++pos;
     }
-    if (overflowUnsigned) {
-      this.error(
-        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
-        this.range(start, pos), "0o" + this.source.text.substring(start, pos)
-      );
-    } else if (pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Octal_digit_expected,
         this.range(start)
@@ -1535,6 +1532,12 @@ export class Tokenizer extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
+      );
+    } else if (overflowUnsigned) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+        this.range(start - 2, pos),
+        this.source.text.substring(start - 2, pos)
       );
     }
     this.pos = pos;
@@ -1583,12 +1586,7 @@ export class Tokenizer extends DiagnosticEmitter {
       value = nextValue;
       ++pos;
     }
-    if (overflow) {
-      this.error(
-        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
-        this.range(start, pos), "0b" + this.source.text.substring(start, pos)
-      );
-    } else if (pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Binary_digit_expected,
         this.range(start)
@@ -1597,6 +1595,12 @@ export class Tokenizer extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
+      );
+    } else if (overflow) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+        this.range(start - 2, pos),
+        this.source.text.substring(start - 2, pos)
       );
     }
     this.pos = pos;
