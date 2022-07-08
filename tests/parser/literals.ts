@@ -94,7 +94,7 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 2.0b;
 `\unicode\xGG\u\x`;
 
-// doesn't fit into i64
+// doesn't fit into i64 / u64
 0x10000000000000000;
 0xFFF000000000000FFF;
 0o2000000000000000000000;
