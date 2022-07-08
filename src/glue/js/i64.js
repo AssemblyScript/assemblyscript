@@ -128,6 +128,10 @@ globalThis.i64_gt = function i64_gt(left, right) {
   return left.gt(right);
 };
 
+globalThis.i64_gt_u = function i64_gt_u(left, right) {
+  return left.toUnsigned().gt(right.toUnsigned());
+};
+
 globalThis.i64_align = function i64_align(value, alignment) {
   assert(alignment && (alignment & (alignment - 1)) == 0);
   var mask = Long.fromInt(alignment - 1);
@@ -185,10 +189,6 @@ globalThis.i64_to_f32 = function i64_to_f32(value) {
 
 globalThis.i64_to_f64 = function i64_to_f64(value) {
   return value.toNumber();
-};
-
-globalThis.i64_to_u64 = function i64_to_u64(value) {
-  return value.toUnsigned();
 };
 
 globalThis.i64_to_string = function i64_to_string(value, unsigned) {

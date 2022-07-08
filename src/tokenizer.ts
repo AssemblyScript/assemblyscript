@@ -1356,8 +1356,8 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0);
     var i64_4 = i64_new(4);
     var prevValue: i64;
-    // var overflowSigned = false;
     var overflowUnsigned = false;
+
     while (pos < end) {
       let c = text.charCodeAt(pos);
       prevValue = i64_clone(value);
@@ -1392,13 +1392,9 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt(prevValue, value)) {
-        // Signed overflow occurred
-        // overflowSigned = true;
-        if (i64_gt(i64_to_u64(prevValue), i64_to_u64(value))) {
-          // Unsigned overflow occurred
-          overflowUnsigned = true;
-        }
+      if (i64_gt_u(prevValue, value)) {
+        // Unsigned overflow occurred
+        overflowUnsigned = true;
       }
       ++pos;
     }
@@ -1432,7 +1428,6 @@ export class Tokenizer extends DiagnosticEmitter {
     var i64_10 = i64_new(10);
     var prevValue: i64;
     var overflowUnsigned = false;
-    // var overflowSigned = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1461,13 +1456,9 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt(prevValue, value)) {
-        // Signed overflow occurred
-        // overflowSigned = true;
-        if (i64_gt(i64_to_u64(prevValue), i64_to_u64(value))) {
-          // Unsigned overflow occurred
-          overflowUnsigned = true;
-        }
+      if (i64_gt_u(prevValue, value)) {
+        // Unsigned overflow occurred
+        overflowUnsigned = true;
       }
       ++pos;
     }
@@ -1501,7 +1492,6 @@ export class Tokenizer extends DiagnosticEmitter {
     var i64_3 = i64_new(3);
     var prevValue: i64;
     var overflowUnsigned = false;
-    // var overflowSigned = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1525,13 +1515,9 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt(prevValue, value)) {
-        // Signed overflow occurred
-        // overflowSigned = true;
-        if (i64_gt(i64_to_u64(prevValue), i64_to_u64(value))) {
-          // Unsigned overflow occurred
-          overflowUnsigned = true;
-        }
+      if (i64_gt_u(prevValue, value)) {
+        // Unsigned overflow occurred
+        overflowUnsigned = true;
       }
       ++pos;
     }

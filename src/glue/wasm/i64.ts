@@ -172,6 +172,12 @@ function i64_gt(left: i64, right: i64): bool {
 
 // @ts-ignore: decorator
 @global @inline
+function i64_gt_u(left: i64, right: i64): bool {
+  return <u64>left > <u64>right;
+}
+
+// @ts-ignore: decorator
+@global @inline
 function i64_align(value: i64, alignment: i64): i64 {
   var mask: i64 = alignment - 1;
   assert(alignment && (alignment & mask) == 0);
@@ -242,12 +248,6 @@ function i64_to_f32(value: i64): f32 {
 @global @inline
 function i64_to_f64(value: i64): f64 {
   return <f64>value;
-}
-
-// @ts-ignore: decorator
-@global @inline
-function i64_to_u64(value: i64): u64 {
-  return <u64>value;
 }
 
 // @ts-ignore: decorator
