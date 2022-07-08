@@ -187,6 +187,14 @@ globalThis.i64_to_f64 = function i64_to_f64(value) {
   return value.toNumber();
 };
 
+globalThis.i64_to_u64 = function i64_to_u64(value) {
+  return value.toUnsigned();
+};
+
 globalThis.i64_to_string = function i64_to_string(value, unsigned) {
   return unsigned ? value.toUnsigned().toString() : value.toString();
+};
+
+globalThis.i64_clone = function i64_clone(value) {
+  return Long.fromBits(value.low, value.high, value.unsigned);
 };

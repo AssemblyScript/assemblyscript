@@ -49,4 +49,6 @@ declare function i64_is_f64(value: i64): boolean;
 
 declare function i64_to_f32(value: i64): f64;
 declare function i64_to_f64(value: i64): f64;
+declare function i64_to_u64(value: i64): u64;
 declare function i64_to_string(value: i64, unsigned?: boolean): string;
+declare function i64_clone(value: i64): i64;

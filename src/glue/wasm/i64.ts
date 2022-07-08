@@ -246,6 +246,18 @@ function i64_to_f64(value: i64): f64 {
 
 // @ts-ignore: decorator
 @global @inline
+function i64_to_u64(value: i64): u64 {
+  return <u64>value;
+}
+
+// @ts-ignore: decorator
+@global @inline
 function i64_to_string(value: i64, unsigned: bool = false): string {
   return unsigned ? u64(value).toString() : value.toString();
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_clone(value: i64): i64 {
+  return value;
 }

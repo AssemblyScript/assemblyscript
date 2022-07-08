@@ -45,6 +45,7 @@
 0b0;
 0b1;
 0b1111111111111111111111111111111;
+0xFFFFFFFFFFFFFFFF
 0.0;
 0.123;
 .0;
@@ -92,6 +93,12 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 1.a;
 2.0b;
 `\unicode\xGG\u\x`;
+
+// doesn't fit into i64
+0x10000000000000000;
+0xFFF000000000000FFF;
+0o2000000000000000000000;
+0b10000000000000000000000000000000000000000000000000000000000000000;
 
 // technically invalid, but not handled by AS yet, TS1005: ';' expected
 3 4;

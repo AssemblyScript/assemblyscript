@@ -1355,8 +1355,12 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_4 = i64_new(4);
+    var prevValue: i64;
+    // var overflowSigned = false;
+    var overflowUnsigned = false;
     while (pos < end) {
       let c = text.charCodeAt(pos);
+      prevValue = i64_clone(value);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = (value << 4) + c - CharCode._0;
         value = i64_add(
@@ -1388,9 +1392,22 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
+      if (i64_gt(prevValue, value)) {
+        // Signed overflow occurred
+        // overflowSigned = true;
+        if (i64_gt(i64_to_u64(prevValue), i64_to_u64(value))) {
+          // Unsigned overflow occurred
+          overflowUnsigned = true;
+        }
+      }
       ++pos;
     }
-    if (pos == start) {
+    if (overflowUnsigned) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_the_type_i64,
+        this.range(start, pos), "0x" + this.source.text.substring(start, pos)
+      );
+    } else if (pos == start) {
       this.error(
         DiagnosticCode.Hexadecimal_digit_expected,
         this.range(start)
@@ -1413,8 +1430,13 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_10 = i64_new(10);
+    var prevValue: i64;
+    var overflowUnsigned = false;
+    // var overflowSigned = false;
+
     while (pos < end) {
       let c = text.charCodeAt(pos);
+      prevValue = i64_clone(value);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 10 + c - CharCode._0;
         value = i64_add(
@@ -1439,9 +1461,22 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
+      if (i64_gt(prevValue, value)) {
+        // Signed overflow occurred
+        // overflowSigned = true;
+        if (i64_gt(i64_to_u64(prevValue), i64_to_u64(value))) {
+          // Unsigned overflow occurred
+          overflowUnsigned = true;
+        }
+      }
       ++pos;
     }
-    if (pos == start) {
+    if (overflowUnsigned) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_the_type_i64,
+        this.range(start, pos), this.source.text.substring(start, pos)
+      );
+    } else if (pos == start) {
       this.error(
         DiagnosticCode.Digit_expected,
         this.range(start)
@@ -1464,8 +1499,13 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_3 = i64_new(3);
+    var prevValue: i64;
+    var overflowUnsigned = false;
+    // var overflowSigned = false;
+
     while (pos < end) {
       let c = text.charCodeAt(pos);
+      prevValue = i64_clone(value);
       if (c >= CharCode._0 && c <= CharCode._7) {
         // value = (value << 3) + c - CharCode._0;
         value = i64_add(
@@ -1485,9 +1525,22 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
+      if (i64_gt(prevValue, value)) {
+        // Signed overflow occurred
+        // overflowSigned = true;
+        if (i64_gt(i64_to_u64(prevValue), i64_to_u64(value))) {
+          // Unsigned overflow occurred
+          overflowUnsigned = true;
+        }
+      }
       ++pos;
     }
-    if (pos == start) {
+    if (overflowUnsigned) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_the_type_i64,
+        this.range(start, pos), "0o" + this.source.text.substring(start, pos)
+      );
+    } else if (pos == start) {
       this.error(
         DiagnosticCode.Octal_digit_expected,
         this.range(start)
@@ -1510,8 +1563,12 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_1 = i64_new(1);
+    var prevValue: i64;
+    var overflow = false;
+
     while (pos < end) {
       let c = text.charCodeAt(pos);
+      prevValue = i64_clone(value);
       if (c == CharCode._0) {
         // value = (value << 1);
         value = i64_shl(value, i64_1);
@@ -1534,9 +1591,18 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
+      if (i64_gt(prevValue, value)) {
+        // Overflow occurred
+        overflow = true;
+      }
       ++pos;
     }
-    if (pos == start) {
+    if (overflow) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_the_type_i64,
+        this.range(start, pos), "0b" + this.source.text.substring(start, pos)
+      );
+    } else if (pos == start) {
       this.error(
         DiagnosticCode.Binary_digit_expected,
         this.range(start)
