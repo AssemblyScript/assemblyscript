@@ -1355,27 +1355,26 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_4 = i64_new(4);
-    var prevValue: i64;
+    var nextValue = value;
     var overflowUnsigned = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      prevValue = i64_clone(value);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = (value << 4) + c - CharCode._0;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
       } else if (c >= CharCode.A && c <= CharCode.F) {
         // value = (value << 4) + 10 + c - CharCode.A;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_4),
           i64_new(10 + c - CharCode.A)
         );
       } else if (c >= CharCode.a && c <= CharCode.f) {
         // value = (value << 4) + 10 + c - CharCode.a;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_4),
           i64_new(10 + c - CharCode.a)
         );
@@ -1392,10 +1391,11 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(prevValue, value)) {
+      if (i64_gt_u(value, nextValue)) {
         // Unsigned overflow occurred
         overflowUnsigned = true;
       }
+      value = nextValue;
       ++pos;
     }
     if (overflowUnsigned) {
@@ -1426,15 +1426,14 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_10 = i64_new(10);
-    var prevValue: i64;
+    var nextValue = value;
     var overflowUnsigned = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      prevValue = i64_clone(value);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 10 + c - CharCode._0;
-        value = i64_add(
+        nextValue = i64_add(
           i64_mul(value, i64_10),
           i64_new(c - CharCode._0)
         );
@@ -1456,10 +1455,11 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(prevValue, value)) {
+      if (i64_gt_u(value, nextValue)) {
         // Unsigned overflow occurred
         overflowUnsigned = true;
       }
+      value = nextValue;
       ++pos;
     }
     if (overflowUnsigned) {
@@ -1490,15 +1490,14 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_3 = i64_new(3);
-    var prevValue: i64;
+    var nextValue = value;
     var overflowUnsigned = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      prevValue = i64_clone(value);
       if (c >= CharCode._0 && c <= CharCode._7) {
         // value = (value << 3) + c - CharCode._0;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_3),
           i64_new(c - CharCode._0)
         );
@@ -1515,10 +1514,11 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(prevValue, value)) {
+      if (i64_gt_u(value, nextValue)) {
         // Unsigned overflow occurred
         overflowUnsigned = true;
       }
+      value = nextValue;
       ++pos;
     }
     if (overflowUnsigned) {
@@ -1549,18 +1549,17 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_1 = i64_new(1);
-    var prevValue: i64;
+    var nextValue = value;
     var overflow = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      prevValue = i64_clone(value);
       if (c == CharCode._0) {
         // value = (value << 1);
-        value = i64_shl(value, i64_1);
+        nextValue = i64_shl(value, i64_1);
       } else if (c == CharCode._1) {
         // value = (value << 1) + 1;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_1),
           i64_1
         );
@@ -1577,10 +1576,11 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt(prevValue, value)) {
+      if (i64_gt(value, nextValue)) {
         // Overflow occurred
         overflow = true;
       }
+      value = nextValue;
       ++pos;
     }
     if (overflow) {
