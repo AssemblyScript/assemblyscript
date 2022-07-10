@@ -80,6 +80,7 @@ export enum Token {
   NEW,          // ES2017
   NULL,         // ES
   OF,
+  OVERRIDE,
   PACKAGE,      // ES2017 non-lexical
   PRIVATE,      // ES2017 non-lexical
   PROTECTED,    // ES2017 non-lexical
@@ -291,6 +292,7 @@ export function tokenFromKeyword(text: string): Token {
     }
     case CharCode.o: {
       if (text == "of") return Token.OF;
+      if (text == "override") return Token.OVERRIDE;
       break;
     }
     case CharCode.p: {
