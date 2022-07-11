@@ -107,12 +107,14 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 
 // doesn't fit into i64 / u64
 18446744073709551616;
-// -9223372036854775809; TODO
 0x10000000000000000;
-// -0x8000000000000001; TODO
 0xFFF000000000000FFF;
 0o2000000000000000000000;
 0b10000000000000000000000000000000000000000000000000000000000000000;
+
+// TODO: signed underflow
+// -9223372036854775809;
+// -0x8000000000000001;
 
 // technically invalid, but not handled by AS yet, TS1005: ';' expected
 3 4;
