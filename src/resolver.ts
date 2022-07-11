@@ -1519,7 +1519,7 @@ export class Resolver extends DiagnosticEmitter {
     ctxType: Type
   ): Type {
     if (negate) {
-      intValue = i64_sub(i64_new(0), intValue);
+      intValue = i64_neg(intValue);
       // TODO: check overflow
     }
     if (ctxType.isValue) {
