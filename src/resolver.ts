@@ -1520,20 +1520,8 @@ export class Resolver extends DiagnosticEmitter {
   ): Type {
     let intValue = expr.value;
     if (negate) {
-      console.log("+intValue: ", i64_to_string(intValue),
-        expr.range.source.text.substring(expr.range.start - 1, expr.range.end)
-      );
-      console.log("-intValue: ", i64_to_string(i64_neg(intValue)));
-      // Check signed overflow
-      if (
-        // x > 0 && x + i64.min > 0   ->   underflow
-        (i64_gt(intValue, i64_zero) &&
-        i64_gt(i64_add(intValue, i64_minimum), i64_zero)) ||
-        // x < 0 && x + i64.max < 0   ->   overflow
-        (i64_lt(intValue, i64_zero) &&
-        i64_lt(i64_add(intValue, i64_maximum), i64_zero))
-      ) {
-        // console.log(">>> overflow!", expr.range.source.text.substring(expr.range.start - 1));
+      // x + i64.min > 0   ->   underflow
+      if (i64_gt(i64_add(intValue, i64_minimum), i64_zero)) {
         this.error(
           DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
           expr.range,

@@ -2,7 +2,8 @@
   "asc_flags": [
   ],
   "stderr": [
-    "ERROR 236: \"Literal '-9223372036854775809' does not fit into 'i64' or 'u64' types.\" in literals.ts(47,1+21)",
+    "AS236: Literal '-9223372036854775809' does not fit into 'i64' or 'u64' types.",
+    "AS236: Literal '-0x8000000000000001' does not fit into 'i64' or 'u64' types.",
     "EOF"
   ]
 }
