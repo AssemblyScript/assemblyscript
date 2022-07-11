@@ -47,8 +47,12 @@
 2147483647;
 18446744073709551615;
 18446744073709551615;
+-9223372036854775807;
 -9223372036854775808;
+-9223372036854775807;
 -9223372036854775808;
+-1;
+-1;
 -123;
 0;
 0.123;
@@ -109,20 +113,20 @@ c;
 d;
 a;
 b;
-// ERROR 1109: "Expression expected." in literals.ts(91,4+1)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(92,2+0)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(93,2+0)
-// ERROR 1109: "Expression expected." in literals.ts(94,3+1)
-// ERROR 6188: "Numeric separators are not allowed here." in literals.ts(96,2+0)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(97,3+0)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(98,4+0)
-// ERROR 1125: "Hexadecimal digit expected." in literals.ts(99,4+1)
-// ERROR 1125: "Hexadecimal digit expected." in literals.ts(99,12+1)
-// ERROR 1125: "Hexadecimal digit expected." in literals.ts(99,16+1)
-// ERROR 236: "Literal '18446744073709551616' does not fit into 'i64' or 'u64' types." in literals.ts(102,1+20)
-// ERROR 236: "Literal '9223372036854775809' does not fit into 'i64' or 'u64' types." in literals.ts(103,2+19)
-// ERROR 236: "Literal '0x10000000000000000' does not fit into 'i64' or 'u64' types." in literals.ts(104,1+19)
-// ERROR 236: "Literal '0x8000000000000001' does not fit into 'i64' or 'u64' types." in literals.ts(105,2+18)
-// ERROR 236: "Literal '0xFFF000000000000FFF' does not fit into 'i64' or 'u64' types." in literals.ts(106,1+20)
-// ERROR 236: "Literal '0o2000000000000000000000' does not fit into 'i64' or 'u64' types." in literals.ts(107,1+24)
-// ERROR 236: "Literal '0b10000000000000000000000000000000000000000000000000000000000000000' does not fit into 'i64' or 'u64' types." in literals.ts(108,1+67)
+// ERROR 1109: "Expression expected." in literals.ts(95,4+1)
+// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(96,2+0)
+// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(97,2+0)
+// ERROR 1109: "Expression expected." in literals.ts(98,3+1)
+// ERROR 6188: "Numeric separators are not allowed here." in literals.ts(100,2+0)
+// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(101,3+0)
+// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(102,4+0)
+// ERROR 1125: "Hexadecimal digit expected." in literals.ts(103,4+1)
+// ERROR 1125: "Hexadecimal digit expected." in literals.ts(103,12+1)
+// ERROR 1125: "Hexadecimal digit expected." in literals.ts(103,16+1)
+// ERROR 236: "Literal '18446744073709551616' does not fit into 'i64' or 'u64' types." in literals.ts(106,1+20)
+// ERROR 236: "Literal '9223372036854775809' does not fit into 'i64' or 'u64' types." in literals.ts(107,2+19)
+// ERROR 236: "Literal '0x10000000000000000' does not fit into 'i64' or 'u64' types." in literals.ts(108,1+19)
+// ERROR 236: "Literal '0x8000000000000001' does not fit into 'i64' or 'u64' types." in literals.ts(109,2+18)
+// ERROR 236: "Literal '0xFFF000000000000FFF' does not fit into 'i64' or 'u64' types." in literals.ts(110,1+20)
+// ERROR 236: "Literal '0o2000000000000000000000' does not fit into 'i64' or 'u64' types." in literals.ts(111,1+24)
+// ERROR 236: "Literal '0b10000000000000000000000000000000000000000000000000000000000000000' does not fit into 'i64' or 'u64' types." in literals.ts(112,1+67)
