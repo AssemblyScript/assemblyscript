@@ -15,6 +15,12 @@
 @global const i64_neg_one: i64 = -1;
 
 // @ts-ignore: decorator
+@global const i64_minimum: i64 = i64.MIN_VALUE;
+
+// @ts-ignore: decorator
+@global const i64_maximum: i64 = i64.MAX_VALUE;
+
+// @ts-ignore: decorator
 @global @inline
 function i64_is<T>(value: T): bool {
   return isInteger<T>() && sizeof<T>() == 8;
@@ -36,6 +42,12 @@ function i64_low(value: i64): i32 {
 @global @inline
 function i64_not(value: i64): i64 {
   return ~value;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_neg(value: i64): i64 {
+  return -value;
 }
 
 // @ts-ignore: decorator
@@ -166,6 +178,12 @@ function i64_ne(left: i64, right: i64): bool {
 
 // @ts-ignore: decorator
 @global @inline
+function i64_ge(left: i64, right: i64): bool {
+  return left >= right;
+}
+
+// @ts-ignore: decorator
+@global @inline
 function i64_gt(left: i64, right: i64): bool {
   return left > right;
 }
@@ -182,6 +200,12 @@ function i64_align(value: i64, alignment: i64): i64 {
   var mask: i64 = alignment - 1;
   assert(alignment && (alignment & mask) == 0);
   return (value + mask) & ~mask;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_signbit(value: i64): bool {
+  return <bool>(value >>> 63);
 }
 
 // @ts-ignore: decorator

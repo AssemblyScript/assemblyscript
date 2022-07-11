@@ -1356,7 +1356,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0);
     var i64_4 = i64_new(4);
     var nextValue = value;
-    var overflowUnsigned = false;
+    var overflowOccurred = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1391,9 +1391,13 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(value, nextValue)) {
-        // Unsigned overflow occurred
-        overflowUnsigned = true;
+      if (i64_gt_u(value, nextValue) || (
+        i64_ne(value, i64_neg_one) && i64_ne(nextValue, i64_neg_one) &&
+        i64_ne(value, i64_minimum) && i64_ne(nextValue, i64_minimum) &&
+        i64_signbit(nextValue) && !i64_signbit(value)
+      )) {
+        // Signed or unsigned overflow occurred
+        overflowOccurred = true;
       }
       value = nextValue;
       ++pos;
@@ -1408,7 +1412,8 @@ export class Tokenizer extends DiagnosticEmitter {
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
-    } else if (overflowUnsigned) {
+    }
+    if (overflowOccurred) {
       this.error(
         DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
         this.range(start - 2, pos),
@@ -1428,7 +1433,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0);
     var i64_10 = i64_new(10);
     var nextValue = value;
-    var overflowUnsigned = false;
+    var overflowOccurred = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1456,9 +1461,13 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(value, nextValue)) {
-        // Unsigned overflow occurred
-        overflowUnsigned = true;
+      if (i64_gt_u(value, nextValue) || (
+        i64_ne(value, i64_neg_one) && i64_ne(nextValue, i64_neg_one) &&
+        i64_ne(value, i64_minimum) && i64_ne(nextValue, i64_minimum) &&
+        i64_signbit(nextValue) && !i64_signbit(value)
+      )) {
+        // Signed or unsigned overflow occurred
+        overflowOccurred = true;
       }
       value = nextValue;
       ++pos;
@@ -1473,7 +1482,7 @@ export class Tokenizer extends DiagnosticEmitter {
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
-    } else if (overflowUnsigned) {
+    } else if (overflowOccurred) {
       this.error(
         DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
         this.range(start, pos),
@@ -1493,7 +1502,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0);
     var i64_3 = i64_new(3);
     var nextValue = value;
-    var overflowUnsigned = false;
+    var overflowOccurred = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1516,9 +1525,13 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(value, nextValue)) {
-        // Unsigned overflow occurred
-        overflowUnsigned = true;
+      if (i64_gt_u(value, nextValue) || (
+        i64_ne(value, i64_neg_one) && i64_ne(nextValue, i64_neg_one) &&
+        i64_ne(value, i64_minimum) && i64_ne(nextValue, i64_minimum) &&
+        i64_signbit(nextValue) && !i64_signbit(value)
+      )) {
+        // Signed or unsigned overflow occurred
+        overflowOccurred = true;
       }
       value = nextValue;
       ++pos;
@@ -1533,7 +1546,7 @@ export class Tokenizer extends DiagnosticEmitter {
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
-    } else if (overflowUnsigned) {
+    } else if (overflowOccurred) {
       this.error(
         DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
         this.range(start - 2, pos),
@@ -1553,7 +1566,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var value = i64_new(0);
     var i64_1 = i64_new(1);
     var nextValue = value;
-    var overflow = false;
+    var overflowOccurred = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1581,7 +1594,7 @@ export class Tokenizer extends DiagnosticEmitter {
       }
       if (i64_gt(value, nextValue)) {
         // Overflow occurred
-        overflow = true;
+        overflowOccurred = true;
       }
       value = nextValue;
       ++pos;
@@ -1596,7 +1609,7 @@ export class Tokenizer extends DiagnosticEmitter {
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
-    } else if (overflow) {
+    } else if (overflowOccurred) {
       this.error(
         DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
         this.range(start - 2, pos),
