@@ -134,12 +134,32 @@ globalThis.i64_ge = function i64_ge(left, right) {
   return left.ge(right);
 };
 
+globalThis.i64_ge_u = function i64_ge_u(left, right) {
+  return left.toUnsigned().ge(right.toUnsigned());
+};
+
 globalThis.i64_gt = function i64_gt(left, right) {
   return left.gt(right);
 };
 
 globalThis.i64_gt_u = function i64_gt_u(left, right) {
   return left.toUnsigned().gt(right.toUnsigned());
+};
+
+globalThis.i64_le = function i64_le(left, right) {
+  return left.le(right);
+};
+
+globalThis.i64_le_u = function i64_le_u(left, right) {
+  return left.toUnsigned().le(right.toUnsigned());
+};
+
+globalThis.i64_lt = function i64_lt(left, right) {
+  return left.lt(right);
+};
+
+globalThis.i64_lt_u = function i64_lt_u(left, right) {
+  return left.toUnsigned().lt(right.toUnsigned());
 };
 
 globalThis.i64_align = function i64_align(value, alignment) {

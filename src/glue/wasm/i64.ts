@@ -184,6 +184,12 @@ function i64_ge(left: i64, right: i64): bool {
 
 // @ts-ignore: decorator
 @global @inline
+function i64_ge_u(left: i64, right: i64): bool {
+  return <u64>left >= <u64>right;
+}
+
+// @ts-ignore: decorator
+@global @inline
 function i64_gt(left: i64, right: i64): bool {
   return left > right;
 }
@@ -192,6 +198,30 @@ function i64_gt(left: i64, right: i64): bool {
 @global @inline
 function i64_gt_u(left: i64, right: i64): bool {
   return <u64>left > <u64>right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_le(left: i64, right: i64): bool {
+  return left <= right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_le_u(left: i64, right: i64): bool {
+  return <u64>left <= <u64>right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_lt(left: i64, right: i64): bool {
+  return left < right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_lt_u(left: i64, right: i64): bool {
+  return <u64>left < <u64>right;
 }
 
 // @ts-ignore: decorator

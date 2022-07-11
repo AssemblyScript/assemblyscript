@@ -35,11 +35,17 @@ declare function i64_xor(left: i64, right: i64): i64;
 declare function i64_shl(left: i64, right: i64): i64;
 declare function i64_shr(left: i64, right: i64): i64;
 declare function i64_shr_u(left: i64, right: i64): i64;
+
 declare function i64_eq(left: i64, right: i64): boolean;
 declare function i64_ne(left: i64, right: i64): boolean;
 declare function i64_ge(left: i64, right: i64): boolean;
+declare function i64_ge_u(left: i64, right: i64): boolean;
 declare function i64_gt(left: i64, right: i64): boolean;
 declare function i64_gt_u(left: i64, right: i64): boolean;
+declare function i64_le(left: i64, right: i64): boolean;
+declare function i64_le_u(left: i64, right: i64): boolean;
+declare function i64_lt(left: i64, right: i64): boolean;
+declare function i64_lt_u(left: i64, right: i64): boolean;
 
 declare function i64_align(value: i64, alignment: i32): i64;
 declare function i64_signbit(value): boolean;
