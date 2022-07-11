@@ -8090,9 +8090,13 @@ export class Compiler extends DiagnosticEmitter {
         return module.f64(floatValue);
       }
       case LiteralKind.INTEGER: {
-        let intValue = (<IntegerLiteralExpression>expression).value;
-        let type = this.resolver.determineIntegerLiteralType(intValue, implicitlyNegate, contextualType);
-        if (implicitlyNegate) intValue = i64_neg(intValue);
+        let expr = <IntegerLiteralExpression>expression;
+        let type = this.resolver.determineIntegerLiteralType(expr, implicitlyNegate, contextualType);
+
+        let intValue = implicitlyNegate
+          ? i64_neg(expr.value)
+          : expr.value;
+
         this.currentType = type;
         switch (type.kind) {
           case TypeKind.ISIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));

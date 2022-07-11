@@ -1,4 +1,8 @@
 {
   "asc_flags": [
+  ],
+  "stderr": [
+    "ERROR 236: \"Literal '-9223372036854775809' does not fit into 'i64' or 'u64' types.\" in literals.ts(47,1+21)",
+    "EOF"
   ]
 }

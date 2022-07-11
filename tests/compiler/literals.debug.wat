@@ -97,6 +97,10 @@
   drop
   i32.const 0
   drop
+  i64.const 9223372036854775807
+  drop
+  i64.const 9223372036854775807
+  drop
  )
  (func $~start
   call $start:literals

@@ -1512,15 +1512,38 @@ export class Resolver extends DiagnosticEmitter {
   /** Determines the final type of an integer literal given the specified contextual type. */
   determineIntegerLiteralType(
     /** Integer literal value. */
-    intValue: i64,
+    expr: IntegerLiteralExpression,
     /** Has unary minus before literal. */
     negate: bool,
     /** Contextual type. */
     ctxType: Type
   ): Type {
+    let intValue = expr.value;
     if (negate) {
+      console.log("+intValue: ", i64_to_string(intValue),
+        expr.range.source.text.substring(expr.range.start - 1, expr.range.end)
+      );
+      console.log("-intValue: ", i64_to_string(i64_neg(intValue)));
+      // Check signed overflow
+      if (
+        // x > 0 && x + i64.min > 0   ->   underflow
+        (i64_gt(intValue, i64_zero) &&
+        i64_gt(i64_add(intValue, i64_minimum), i64_zero)) ||
+        // x < 0 && x + i64.max < 0   ->   overflow
+        (i64_lt(intValue, i64_zero) &&
+        i64_lt(i64_add(intValue, i64_maximum), i64_zero))
+      ) {
+        // console.log(">>> overflow!", expr.range.source.text.substring(expr.range.start - 1));
+        this.error(
+          DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+          expr.range,
+          expr.range.source.text.substring(
+            expr.range.start - 1,
+            expr.range.end
+          )
+        );
+      }
       intValue = i64_neg(intValue);
-      // TODO: check overflow
     }
     if (ctxType.isValue) {
       // compile to contextual type if matching
@@ -1722,7 +1745,7 @@ export class Resolver extends DiagnosticEmitter {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
         if (operand.isLiteralKind(LiteralKind.INTEGER)) {
           return this.determineIntegerLiteralType(
-            (<IntegerLiteralExpression>operand).value,
+            <IntegerLiteralExpression>operand,
             true,
             ctxType
           );
@@ -2188,7 +2211,7 @@ export class Resolver extends DiagnosticEmitter {
     switch (node.literalKind) {
       case LiteralKind.INTEGER: {
         let intType = this.determineIntegerLiteralType(
-          (<IntegerLiteralExpression>node).value,
+          <IntegerLiteralExpression>node,
           false,
           ctxType
         );

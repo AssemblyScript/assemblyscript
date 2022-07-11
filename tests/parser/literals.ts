@@ -112,10 +112,6 @@ tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision
 0o2000000000000000000000;
 0b10000000000000000000000000000000000000000000000000000000000000000;
 
-// TODO: signed underflow
-// -9223372036854775809;
-// -0x8000000000000001;
-
 // technically invalid, but not handled by AS yet, TS1005: ';' expected
 3 4;
 5 c;

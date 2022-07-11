@@ -42,3 +42,9 @@
 0b1;
 true;
 false;
+
+// Signed underflow
+-9223372036854775809;
+// -0x8000000000000001;
+
+ERROR("EOF");
