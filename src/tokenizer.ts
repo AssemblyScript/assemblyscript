@@ -1391,12 +1391,8 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(value, nextValue) || (
-        i64_ne(value, i64_neg_one) && i64_ne(nextValue, i64_neg_one) &&
-        i64_ne(value, i64_minimum) && i64_ne(nextValue, i64_minimum) &&
-        i64_signbit(nextValue) && !i64_signbit(value)
-      )) {
-        // Signed or unsigned overflow occurred
+      if (i64_gt_u(value, nextValue)) {
+        // Unsigned overflow occurred
         overflowOccurred = true;
       }
       value = nextValue;
@@ -1461,12 +1457,8 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(value, nextValue) || (
-        i64_ne(value, i64_neg_one) && i64_ne(nextValue, i64_neg_one) &&
-        i64_ne(value, i64_minimum) && i64_ne(nextValue, i64_minimum) &&
-        i64_signbit(nextValue) && !i64_signbit(value)
-      )) {
-        // Signed or unsigned overflow occurred
+      if (i64_gt_u(value, nextValue)) {
+        // Unsigned overflow occurred
         overflowOccurred = true;
       }
       value = nextValue;
@@ -1525,12 +1517,8 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      if (i64_gt_u(value, nextValue) || (
-        i64_ne(value, i64_neg_one) && i64_ne(nextValue, i64_neg_one) &&
-        i64_ne(value, i64_minimum) && i64_ne(nextValue, i64_minimum) &&
-        i64_signbit(nextValue) && !i64_signbit(value)
-      )) {
-        // Signed or unsigned overflow occurred
+      if (i64_gt_u(value, nextValue)) {
+        // Unsigned overflow occurred
         overflowOccurred = true;
       }
       value = nextValue;
