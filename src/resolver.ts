@@ -1513,9 +1513,15 @@ export class Resolver extends DiagnosticEmitter {
   determineIntegerLiteralType(
     /** Integer literal value. */
     intValue: i64,
+    /** Has unary minus before literal. */
+    negate: bool,
     /** Contextual type. */
     ctxType: Type
   ): Type {
+    if (negate) {
+      intValue = i64_sub(i64_new(0), intValue);
+      // TODO: check overflow
+    }
     if (ctxType.isValue) {
       // compile to contextual type if matching
       switch (ctxType.kind) {
@@ -1715,7 +1721,11 @@ export class Resolver extends DiagnosticEmitter {
       case Token.MINUS: {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
         if (operand.isLiteralKind(LiteralKind.INTEGER)) {
-          return this.determineIntegerLiteralType(i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value), ctxType);
+          return this.determineIntegerLiteralType(
+            (<IntegerLiteralExpression>operand).value,
+            true,
+            ctxType
+          );
         }
         // fall-through
       }
@@ -2179,6 +2189,7 @@ export class Resolver extends DiagnosticEmitter {
       case LiteralKind.INTEGER: {
         let intType = this.determineIntegerLiteralType(
           (<IntegerLiteralExpression>node).value,
+          false,
           ctxType
         );
         return assert(intType.getClassOrWrapper(this.program));
