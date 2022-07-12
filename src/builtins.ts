@@ -8359,7 +8359,6 @@ builtins.set(BuiltinNames.i8x16_shuffle, builtin_i8x16_shuffle);
 
 // i8x16.swizzle -> v128.swizzle
 function builtin_i8x16_swizzle(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
   ctx.typeArguments = null;
   ctx.contextualType = Type.v128;
   return builtin_v128_swizzle(ctx);
@@ -8791,7 +8790,6 @@ builtins.set(BuiltinNames.i16x8_shuffle, builtin_i16x8_shuffle);
 
 // i16x8.swizzle -> v128.swizzle
 function builtin_i16x8_swizzle(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
   ctx.typeArguments = null;
   ctx.contextualType = Type.v128;
   return builtin_v128_swizzle(ctx);
@@ -9187,7 +9185,6 @@ builtins.set(BuiltinNames.i32x4_shuffle, builtin_i32x4_shuffle);
 
 // i32x4.swizzle -> v128.swizzle
 function builtin_i32x4_swizzle(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
   ctx.typeArguments = null;
   ctx.contextualType = Type.v128;
   return builtin_v128_swizzle(ctx);
@@ -9448,7 +9445,6 @@ builtins.set(BuiltinNames.i64x2_shuffle, builtin_i64x2_shuffle);
 
 // i64x2.swizzle -> v128.swizzle
 function builtin_i64x2_swizzle(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
   ctx.typeArguments = null;
   ctx.contextualType = Type.v128;
   return builtin_v128_swizzle(ctx);
@@ -9709,7 +9705,6 @@ builtins.set(BuiltinNames.f32x4_shuffle, builtin_f32x4_shuffle);
 
 // f32x4.swizzle -> v128.swizzle
 function builtin_f32x4_swizzle(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
   ctx.typeArguments = null;
   ctx.contextualType = Type.v128;
   return builtin_v128_swizzle(ctx);
@@ -9970,7 +9965,6 @@ builtins.set(BuiltinNames.f64x2_shuffle, builtin_f64x2_shuffle);
 
 // f64x2.swizzle -> v128.swizzle
 function builtin_f64x2_swizzle(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
   ctx.typeArguments = null;
   ctx.contextualType = Type.v128;
   return builtin_v128_swizzle(ctx);
