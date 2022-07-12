@@ -384,6 +384,11 @@ function test_i16x8(): void {
     ==
     v128.shuffle<i16>(a, b, 0, 1, 2, 3, 12, 13, 14, 15)
   );
+  assert(
+    i16x8.swizzle(a, b)
+    ==
+    v128.swizzle(a, b)
+  );
   {
     let ptr = __alloc(16);
     store<i8>(ptr, 1);
