@@ -241,19 +241,19 @@ function i64_signbit(value: i64): bool {
 // @ts-ignore: decorator
 @global @inline
 function i64_is_i8(value: i64): bool {
-  return value >= i8.MIN_VALUE && value <= <i64>i8.MAX_VALUE;
+  return value >= i8.MIN_VALUE && value <= i8.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_is_i16(value: i64): bool {
-  return value >= i16.MIN_VALUE && value <= <i64>i16.MAX_VALUE;
+  return value >= i16.MIN_VALUE && value <= i16.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_is_i32(value: i64): bool {
-  return value >= i32.MIN_VALUE && value <= <i64>i32.MAX_VALUE;
+  return value >= i32.MIN_VALUE && value <= i32.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
