@@ -1522,13 +1522,10 @@ export class Resolver extends DiagnosticEmitter {
     if (negate) {
       // x + i64.min > 0   ->   underflow
       if (i64_gt(i64_add(intValue, i64_minimum), i64_zero)) {
+        let range = expr.range;
         this.error(
           DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
-          expr.range,
-          expr.range.source.text.substring(
-            expr.range.start - 1,
-            expr.range.end
-          )
+          range, range.source.text.substring(range.start - 1, range.end)
         );
       }
       intValue = i64_neg(intValue);
