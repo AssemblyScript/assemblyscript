@@ -1173,7 +1173,7 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, s: v128): v128;
+  export declare function swizzle(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @unsafe @builtin
