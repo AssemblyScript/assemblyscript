@@ -137,10 +137,20 @@ export async function instantiate(module, imports = {}) {
         __release(a);
       }
     },
+    staticarrayU16(a) {
+      // bindings/esm/staticarrayU16(~lib/staticarray/StaticArray<u16>) => ~lib/staticarray/StaticArray<u16>
+      a = __lowerStaticArray((pointer, value) => { new Uint16Array(memory.buffer)[pointer >>> 1] = value; }, 7, 1, a) || __notnull();
+      return __liftStaticArray(pointer => new Uint16Array(memory.buffer)[pointer >>> 1], 1, exports.staticarrayU16(a) >>> 0);
+    },
+    staticarrayI64(a) {
+      // bindings/esm/staticarrayI64(~lib/staticarray/StaticArray<i64>) => ~lib/staticarray/StaticArray<i64>
+      a = __lowerStaticArray((pointer, value) => { new BigInt64Array(memory.buffer)[pointer >>> 3] = value || 0n; }, 8, 3, a) || __notnull();
+      return __liftStaticArray(pointer => new BigInt64Array(memory.buffer)[pointer >>> 3], 3, exports.staticarrayI64(a) >>> 0);
+    },
     arrayFunction(a, b) {
       // bindings/esm/arrayFunction(~lib/array/Array<i32>, ~lib/array/Array<i32>) => ~lib/array/Array<i32>
-      a = __retain(__lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, a) || __notnull());
-      b = __lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, b) || __notnull();
+      a = __retain(__lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 9, 2, a) || __notnull());
+      b = __lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 9, 2, b) || __notnull();
       try {
         return __liftArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, exports.arrayFunction(a, b) >>> 0);
       } finally {
@@ -149,10 +159,10 @@ export async function instantiate(module, imports = {}) {
     },
     objectFunction(a, b) {
       // bindings/esm/objectFunction(bindings/esm/PlainObject, bindings/esm/PlainObject) => bindings/esm/PlainObject
-      a = __retain(__lowerRecord8(a) || __notnull());
-      b = __lowerRecord8(b) || __notnull();
+      a = __retain(__lowerRecord10(a) || __notnull());
+      b = __lowerRecord10(b) || __notnull();
       try {
-        return __liftRecord8(exports.objectFunction(a, b) >>> 0);
+        return __liftRecord10(exports.objectFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
@@ -172,11 +182,11 @@ export async function instantiate(module, imports = {}) {
       }
     },
   }, exports);
-  function __lowerRecord8(value) {
+  function __lowerRecord10(value) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
-    const pointer = exports.__pin(exports.__new(68, 8));
+    const pointer = exports.__pin(exports.__new(68, 10));
     new Int8Array(memory.buffer)[pointer + 0 >>> 0] = value.a;
     new Int16Array(memory.buffer)[pointer + 2 >>> 1] = value.b;
     new Int32Array(memory.buffer)[pointer + 4 >>> 2] = value.c;
@@ -191,12 +201,12 @@ export async function instantiate(module, imports = {}) {
     new Float32Array(memory.buffer)[pointer + 44 >>> 2] = value.l;
     new Float64Array(memory.buffer)[pointer + 48 >>> 3] = value.m;
     new Uint32Array(memory.buffer)[pointer + 56 >>> 2] = __lowerString(value.n);
-    new Uint32Array(memory.buffer)[pointer + 60 >>> 2] = __lowerTypedArray(Uint8Array, 9, 0, value.o);
-    new Uint32Array(memory.buffer)[pointer + 64 >>> 2] = __lowerArray((pointer, value) => { new Uint32Array(memory.buffer)[pointer >>> 2] = __lowerString(value) || __notnull(); }, 10, 2, value.p);
+    new Uint32Array(memory.buffer)[pointer + 60 >>> 2] = __lowerTypedArray(Uint8Array, 11, 0, value.o);
+    new Uint32Array(memory.buffer)[pointer + 64 >>> 2] = __lowerArray((pointer, value) => { new Uint32Array(memory.buffer)[pointer >>> 2] = __lowerString(value) || __notnull(); }, 12, 2, value.p);
     exports.__unpin(pointer);
     return pointer;
   }
-  function __liftRecord8(pointer) {
+  function __liftRecord10(pointer) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!pointer) return null;
@@ -311,7 +321,11 @@ export async function instantiate(module, imports = {}) {
     const
       length = values.length,
       buffer = exports.__pin(exports.__new(length << align, id)) >>> 0;
-    for (let i = 0; i < length; i++) lowerElement(buffer + (i << align >>> 0), values[i]);
+    if (ArrayBuffer.isView(values)) {
+      new (values.constructor)(memory.buffer, buffer, length).set(values);
+    } else {
+      for (let i = 0; i < length; i++) lowerElement(buffer + (i << align >>> 0), values[i]);
+    }
     exports.__unpin(buffer);
     return buffer;
   }

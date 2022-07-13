@@ -789,7 +789,11 @@ export class JSBuilder extends ExportsWalker {
     const
       length = values.length,
       buffer = exports.__pin(exports.__new(length << align, id)) >>> 0;
-    for (let i = 0; i < length; i++) lowerElement(buffer + (i << align >>> 0), values[i]);
+    if (ArrayBuffer.isView(values)) {
+      new (values.constructor)(memory.buffer, buffer, length).set(values);
+    } else {
+      for (let i = 0; i < length; i++) lowerElement(buffer + (i << align >>> 0), values[i]);
+    }
     exports.__unpin(buffer);
     return buffer;
   }
