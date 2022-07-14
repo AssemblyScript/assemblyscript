@@ -86,19 +86,19 @@ export declare function typedarrayFunction(a: Int16Array, b: Float32Array): BigU
  * @param b `~lib/staticarray/StaticArray<i32>`
  * @returns `~lib/staticarray/StaticArray<i32>`
  */
-export declare function staticarrayFunction(a: Array<number>, b: Array<number>): Array<number>;
+export declare function staticarrayFunction(a: ArrayLike<number>, b: ArrayLike<number>): ArrayLike<number>;
 /**
  * bindings/esm/staticarrayU16
  * @param a `~lib/staticarray/StaticArray<u16>`
  * @returns `~lib/staticarray/StaticArray<u16>`
  */
-export declare function staticarrayU16(a: Array<number>): Array<number>;
+export declare function staticarrayU16(a: ArrayLike<number>): ArrayLike<number>;
 /**
  * bindings/esm/staticarrayI64
  * @param a `~lib/staticarray/StaticArray<i64>`
  * @returns `~lib/staticarray/StaticArray<i64>`
  */
-export declare function staticarrayI64(a: Array<bigint>): Array<bigint>;
+export declare function staticarrayI64(a: ArrayLike<bigint>): ArrayLike<bigint>;
 /**
  * bindings/esm/arrayFunction
  * @param a `~lib/array/Array<i32>`
