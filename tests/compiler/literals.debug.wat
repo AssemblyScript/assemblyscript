@@ -97,9 +97,13 @@
   drop
   i32.const 0
   drop
-  i64.const 9223372036854775807
+  i64.const -9223372036854775808
   drop
-  i64.const 9223372036854775807
+  i64.const -9223372036854775808
+  drop
+  i64.const -9223372036854775808
+  drop
+  i64.const -9223372036854775808
   drop
  )
  (func $~start
