@@ -25,6 +25,10 @@ export function uniqueMap<K,V>(original: Map<K,V> | null = null, overrides: Map<
   return cloned;
 }
 
+/** BitSet represent growable sequence of N bits. It's faster alternative of Set<i32> when elements
+ * are not too much sparsed. Also it's more memory and cache efficient than Array<bool>.
+ * The best way to use it for short bit sequences (less than 32*(2**16)).
+ */
 export class BitSet {
   words!: Uint32Array;
 
