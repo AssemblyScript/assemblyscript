@@ -31,7 +31,8 @@
     "esbuild": "^0.14.1",
     "eslint": "^8.2.0",
     "glob": "^7.2.0",
-    "typescript": "~4.5.2"
+    "typescript": "~4.5.2",
+    "c8": "^7.11.2"
   },
   "type": "module",
   "exports": {
@@ -65,7 +66,8 @@
     "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "build": "node scripts/build",
     "watch": "node scripts/build --watch",
-    "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:asconfig && npm run test:transform",
+    "coverage":"ASC_FEATURES=\"*\" c8 npm run test",
+    "test": "npm run test:parser && npm run test:compiler && npm run test:browser && npm run test:asconfig && npm run test:transform",
     "test:parser": "node --enable-source-maps tests/parser",
     "test:compiler": "node --enable-source-maps --experimental-wasi-unstable-preview1 --no-warnings tests/compiler",
     "test:browser": "node --enable-source-maps tests/browser",

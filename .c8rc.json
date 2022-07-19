@@ -1,0 +1,22 @@
+{
+    "reporter": [
+        "html",
+        "text"
+    ],
+    "reportsDirectory": "./coverage",
+    "src": [
+        "src"
+    ],
+    "exclude": [
+        "std/**/*",
+        "tests/**/*",
+        "dist/**/*",
+        "bin/asinit.js",
+        "lib/**/*",
+        "scripts/**/*",
+        "src/glue/wasm/**/*",
+        "util/browser/**/*"
+    ],
+    "clean": true,
+    "exclude-after-remap": true
+}
