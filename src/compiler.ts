@@ -6134,8 +6134,13 @@ export class Compiler extends DiagnosticEmitter {
           ], valueExpression);
         }
       }
+      default: {
+        this.error(
+          DiagnosticCode.The_target_of_an_assignment_must_be_a_variable_or_a_property_access,
+          valueExpression.range
+        );
+      }
     }
-    assert(false);
     return module.unreachable();
   }
 
@@ -9321,9 +9326,6 @@ export class Compiler extends DiagnosticEmitter {
       contextualType.exceptVoid,
       Constraints.NONE
     );
-
-    // shortcut if compiling the getter already failed
-    if (getExpressionId(getValue) == ExpressionId.Unreachable) return getValue;
 
     // if the value isn't dropped, a temp. local is required to remember the original value,
     // except if a static overload is found, which reverses the use of a temp. (see below)
