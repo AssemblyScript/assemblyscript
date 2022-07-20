@@ -73,6 +73,14 @@ export function staticarrayFunction(a: StaticArray<i32>, b: StaticArray<i32>): S
   return c;
 }
 
+export function staticarrayU16(a: StaticArray<u16>): StaticArray<u16> {
+  return a;
+}
+
+export function staticarrayI64(a: StaticArray<i64>): StaticArray<i64> {
+  return a;
+}
+
 export function arrayFunction(a: Array<i32>, b: Array<i32>): Array<i32> {
   var c = new Array<i32>(a.length + b.length);
   for (let i = 0; i < a.length; ++i) {

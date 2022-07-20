@@ -99,7 +99,19 @@ declare namespace __AdaptedExports {
    * @param b `~lib/staticarray/StaticArray<i32>`
    * @returns `~lib/staticarray/StaticArray<i32>`
    */
-  export function staticarrayFunction(a: Array<number>, b: Array<number>): Array<number>;
+  export function staticarrayFunction(a: ArrayLike<number>, b: ArrayLike<number>): ArrayLike<number>;
+  /**
+   * bindings/esm/staticarrayU16
+   * @param a `~lib/staticarray/StaticArray<u16>`
+   * @returns `~lib/staticarray/StaticArray<u16>`
+   */
+  export function staticarrayU16(a: ArrayLike<number>): ArrayLike<number>;
+  /**
+   * bindings/esm/staticarrayI64
+   * @param a `~lib/staticarray/StaticArray<i64>`
+   * @returns `~lib/staticarray/StaticArray<i64>`
+   */
+  export function staticarrayI64(a: ArrayLike<bigint>): ArrayLike<bigint>;
   /**
    * bindings/esm/arrayFunction
    * @param a `~lib/array/Array<i32>`
@@ -113,22 +125,22 @@ declare namespace __AdaptedExports {
    * @param b `bindings/esm/PlainObject`
    * @returns `bindings/esm/PlainObject`
    */
-  export function objectFunction(a: __Record8<undefined>, b: __Record8<undefined>): __Record8<never>;
+  export function objectFunction(a: __Record10<undefined>, b: __Record10<undefined>): __Record10<never>;
   /**
    * bindings/esm/newInternref
    * @returns `bindings/esm/NonPlainObject`
    */
-  export function newInternref(): __Internref11;
+  export function newInternref(): __Internref13;
   /**
    * bindings/esm/internrefFunction
    * @param a `bindings/esm/NonPlainObject`
    * @param b `bindings/esm/NonPlainObject`
    * @returns `bindings/esm/NonPlainObject`
    */
-  export function internrefFunction(a: __Internref11, b: __Internref11): __Internref11;
+  export function internrefFunction(a: __Internref13, b: __Internref13): __Internref13;
 }
 /** bindings/esm/PlainObject */
-declare interface __Record8<TOmittable> {
+declare interface __Record10<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */
@@ -163,8 +175,8 @@ declare interface __Record8<TOmittable> {
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
-declare class __Internref11 extends Number {
-  private __nominal11: symbol;
+declare class __Internref13 extends Number {
+  private __nominal13: symbol;
 }
 /** Instantiates the compiled WebAssembly module with the given imports. */
 export declare function instantiate(module: WebAssembly.Module, imports: {
