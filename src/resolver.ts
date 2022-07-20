@@ -1778,6 +1778,9 @@ export class Resolver extends DiagnosticEmitter {
         }
         return null;
       }
+      case Token.TYPEOF: {
+        return this.program.stringInstance.type;
+      }
       default: assert(false);
     }
     return null;
