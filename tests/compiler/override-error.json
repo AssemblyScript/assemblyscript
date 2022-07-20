@@ -1,0 +1,6 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "TS4117: This member cannot have an 'override' modifier because it is not declared in the base class 'A'."
+  ]
+}

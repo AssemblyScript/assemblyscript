@@ -185,6 +185,7 @@
   "Duplicate property '{0}'.": 2718,
   "Property '{0}' is missing in type '{1}' but required in type '{2}'.": 2741,
   "Type '{0}' has no call signatures.": 2757,
+  "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": 4117,
 
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,

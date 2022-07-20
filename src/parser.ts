@@ -1862,6 +1862,7 @@ export class Parser extends DiagnosticEmitter {
     //   'declare'?
     //   ('public' | 'private' | 'protected')?
     //   ('static' | 'abstract')?
+    //   'override'?
     //   'readonly'?
     //   ('get' | 'set')?
     //   Identifier ...
@@ -1991,6 +1992,22 @@ export class Parser extends DiagnosticEmitter {
       if (parent.flags & CommonFlags.GENERIC) flags |= CommonFlags.GENERIC_CONTEXT;
     }
 
+    var overrideStart = 0;
+    var overrideEnd = 0;
+    if (tn.skip(Token.OVERRIDE)) {
+      if (isInterface || parent.extendsType == null) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "override"
+        );
+      } else {
+        flags |= CommonFlags.OVERRIDE;
+        overrideStart = tn.tokenPos;
+        overrideEnd = tn.pos;
+      }
+      if (!startPos) startPos = tn.tokenPos;
+    }
+
     var readonlyStart = 0;
     var readonlyEnd = 0;
     if (tn.peek() == Token.READONLY) {
@@ -2103,6 +2120,12 @@ export class Parser extends DiagnosticEmitter {
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(staticStart, staticEnd), "static"
           ); // recoverable
+        }
+        if (flags & CommonFlags.OVERRIDE) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(overrideStart, overrideEnd), "override"
+          );
         }
         if (flags & CommonFlags.ABSTRACT) {
           this.error(
