@@ -1758,7 +1758,7 @@ declare class Array<T> {
   some(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
   shift(): T;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
@@ -1792,7 +1792,7 @@ declare class StaticArray<T> {
   every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): this;
