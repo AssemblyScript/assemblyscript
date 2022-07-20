@@ -784,14 +784,13 @@ export class JSBuilder extends ExportsWalker {
 `);
     }
     if (this.needsLowerStaticArray) {
-      sb.push(`  function __lowerStaticArray(lowerElement, id, align, values) {
+      sb.push(`  function __lowerStaticArray(lowerElement, typedConstructor, id, align, values) {
     if (values == null) return 0;
     const
       length = values.length,
       buffer = exports.__pin(exports.__new(length << align, id)) >>> 0;
     if (ArrayBuffer.isView(values)) {
-      if (values.constructor.BYTES_PER_ELEMENT !== (1 << align)) throw new Error("Mismatch element type");
-      new values.constructor(memory.buffer, buffer, length).set(values);
+      new typedConstructor(memory.buffer, buffer, length).set(values);
     } else {
       for (let i = 0; i < length; i++) lowerElement(buffer + (i << align >>> 0), values[i]);
     }
@@ -1054,9 +1053,38 @@ export class JSBuilder extends ExportsWalker {
         sb.push("__lowerStaticArray(");
         this.makeLowerToMemory(valueType, sb);
         sb.push(", ");
+        if (valueType.isNumericValue) {
+          if (valueType == Type.u8) {
+            sb.push("Uint8Array");
+          } else if (valueType == Type.i8) {
+            sb.push("Int8Array");
+          } else if (valueType == Type.u16) {
+            sb.push("Uint16Array");
+          } else if (valueType == Type.i16) {
+            sb.push("Int16Array");
+          } else if (valueType == Type.u32) {
+            sb.push("Uint32Array");
+          } else if (valueType == Type.i32) {
+            sb.push("Int32Array");
+          } else if (valueType == Type.u64) {
+            sb.push("BigUint64Array");
+          } else if (valueType == Type.i64) {
+            sb.push("BigInt64Array");
+          } else if (valueType == Type.f32) {
+            sb.push("Float32Array");
+          } else if (valueType == Type.f64) {
+            sb.push("Float64Array");
+          } else {
+            // unreachable
+            assert(false);
+          }
+        } else {
+          sb.push("undefined");
+        }
+        sb.push(", ");
         sb.push(clazz.id.toString());
         sb.push(", ");
-        sb.push(clazz.getArrayValueType().alignLog2.toString());
+        sb.push(valueType.alignLog2.toString());
         sb.push(", ");
         this.needsLowerStaticArray = true;
       } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {

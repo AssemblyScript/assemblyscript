@@ -137,8 +137,8 @@ async function instantiate(module, imports = {}) {
     },
     staticarrayFunction(a, b) {
       // bindings/esm/staticarrayFunction(~lib/staticarray/StaticArray<i32>, ~lib/staticarray/StaticArray<i32>) => ~lib/staticarray/StaticArray<i32>
-      a = __retain(__lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, a) || __notnull());
-      b = __lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, b) || __notnull();
+      a = __retain(__lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, Int32Array, 6, 2, a) || __notnull());
+      b = __lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, Int32Array, 6, 2, b) || __notnull();
       try {
         return __liftStaticArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, exports.staticarrayFunction(a, b) >>> 0);
       } finally {
@@ -147,12 +147,12 @@ async function instantiate(module, imports = {}) {
     },
     staticarrayU16(a) {
       // bindings/esm/staticarrayU16(~lib/staticarray/StaticArray<u16>) => ~lib/staticarray/StaticArray<u16>
-      a = __lowerStaticArray((pointer, value) => { new Uint16Array(memory.buffer)[pointer >>> 1] = value; }, 7, 1, a) || __notnull();
+      a = __lowerStaticArray((pointer, value) => { new Uint16Array(memory.buffer)[pointer >>> 1] = value; }, Uint16Array, 7, 1, a) || __notnull();
       return __liftStaticArray(pointer => new Uint16Array(memory.buffer)[pointer >>> 1], 1, exports.staticarrayU16(a) >>> 0);
     },
     staticarrayI64(a) {
       // bindings/esm/staticarrayI64(~lib/staticarray/StaticArray<i64>) => ~lib/staticarray/StaticArray<i64>
-      a = __lowerStaticArray((pointer, value) => { new BigInt64Array(memory.buffer)[pointer >>> 3] = value || 0n; }, 8, 3, a) || __notnull();
+      a = __lowerStaticArray((pointer, value) => { new BigInt64Array(memory.buffer)[pointer >>> 3] = value || 0n; }, BigInt64Array, 8, 3, a) || __notnull();
       return __liftStaticArray(pointer => new BigInt64Array(memory.buffer)[pointer >>> 3], 3, exports.staticarrayI64(a) >>> 0);
     },
     arrayFunction(a, b) {
@@ -324,14 +324,13 @@ async function instantiate(module, imports = {}) {
     for (let i = 0; i < length; ++i) values[i] = liftElement(pointer + (i << align >>> 0));
     return values;
   }
-  function __lowerStaticArray(lowerElement, id, align, values) {
+  function __lowerStaticArray(lowerElement, typedConstructor, id, align, values) {
     if (values == null) return 0;
     const
       length = values.length,
       buffer = exports.__pin(exports.__new(length << align, id)) >>> 0;
     if (ArrayBuffer.isView(values)) {
-      if (values.constructor.BYTES_PER_ELEMENT !== (1 << align)) throw new Error("Mismatch element type");
-      new values.constructor(memory.buffer, buffer, length).set(values);
+      new typedConstructor(memory.buffer, buffer, length).set(values);
     } else {
       for (let i = 0; i < length; i++) lowerElement(buffer + (i << align >>> 0), values[i]);
     }
