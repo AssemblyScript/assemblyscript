@@ -784,7 +784,7 @@ export class JSBuilder extends ExportsWalker {
 `);
     }
     if (this.needsLowerStaticArray) {
-      sb.push(`  function __lowerStaticArray(lowerElement, typedConstructor, id, align, values) {
+      sb.push(`  function __lowerStaticArray(lowerElement, id, align, values, typedConstructor) {
     if (values == null) return 0;
     const
       length = values.length,
@@ -1053,35 +1053,6 @@ export class JSBuilder extends ExportsWalker {
         sb.push("__lowerStaticArray(");
         this.makeLowerToMemory(valueType, sb);
         sb.push(", ");
-        if (valueType.isNumericValue) {
-          if (valueType == Type.u8 || valueType == Type.bool) {
-            sb.push("Uint8Array");
-          } else if (valueType == Type.i8) {
-            sb.push("Int8Array");
-          } else if (valueType == Type.u16) {
-            sb.push("Uint16Array");
-          } else if (valueType == Type.i16) {
-            sb.push("Int16Array");
-          } else if (valueType == Type.u32) {
-            sb.push("Uint32Array");
-          } else if (valueType == Type.i32) {
-            sb.push("Int32Array");
-          } else if (valueType == Type.u64) {
-            sb.push("BigUint64Array");
-          } else if (valueType == Type.i64) {
-            sb.push("BigInt64Array");
-          } else if (valueType == Type.f32) {
-            sb.push("Float32Array");
-          } else if (valueType == Type.f64) {
-            sb.push("Float64Array");
-          } else {
-            // unreachable
-            assert(false);
-          }
-        } else {
-          sb.push("undefined");
-        }
-        sb.push(", ");
         sb.push(clazz.id.toString());
         sb.push(", ");
         sb.push(valueType.alignLog2.toString());
@@ -1119,6 +1090,37 @@ export class JSBuilder extends ExportsWalker {
         this.needsLowerInternref = true;
       }
       sb.push(name);
+      if (clazz.extends(this.program.staticArrayPrototype)) {
+        // optional last argument for __lowerStaticArray
+        let valueType = clazz.getArrayValueType();
+        if (valueType.isNumericValue) {
+          sb.push(", ");
+          if (valueType == Type.u8 || valueType == Type.bool) {
+            sb.push("Uint8Array");
+          } else if (valueType == Type.i8) {
+            sb.push("Int8Array");
+          } else if (valueType == Type.u16) {
+            sb.push("Uint16Array");
+          } else if (valueType == Type.i16) {
+            sb.push("Int16Array");
+          } else if (valueType == Type.u32) {
+            sb.push("Uint32Array");
+          } else if (valueType == Type.i32) {
+            sb.push("Int32Array");
+          } else if (valueType == Type.u64) {
+            sb.push("BigUint64Array");
+          } else if (valueType == Type.i64) {
+            sb.push("BigInt64Array");
+          } else if (valueType == Type.f32) {
+            sb.push("Float32Array");
+          } else if (valueType == Type.f64) {
+            sb.push("Float64Array");
+          } else {
+            // unreachable
+            assert(false);
+          }
+        }
+      }
       sb.push(")");
       if (!type.is(TypeFlags.NULLABLE)) {
         this.needsNotNull = true;
