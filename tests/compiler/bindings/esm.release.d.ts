@@ -1,3 +1,5 @@
+/** Exported memory */
+export declare const memory: WebAssembly.Memory;
 /** bindings/esm/plainGlobal */
 export declare const plainGlobal: {
   /** @type `i32` */
@@ -52,6 +54,16 @@ export declare function plainFunction(a: number, b: number): number;
  * @returns `i64`
  */
 export declare function plainFunction64(a: bigint, b: bigint): bigint;
+/**
+ * bindings/esm/getMaxUnsigned32
+ * @returns `u32`
+ */
+export declare function getMaxUnsigned32(): number;
+/**
+ * bindings/esm/getMaxUnsigned64
+ * @returns `u64`
+ */
+export declare function getMaxUnsigned64(): bigint;
 /**
  * bindings/esm/bufferFunction
  * @param a `~lib/arraybuffer/ArrayBuffer`

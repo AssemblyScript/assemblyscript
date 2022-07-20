@@ -868,6 +868,12 @@ export class JSBuilder extends ExportsWalker {
 
     if (this.esm) {
       sb.push("export const {\n  ");
+      if (this.program.options.exportMemory) {
+        sb.push("memory,\n  ");
+      }
+      if (this.program.options.exportTable) {
+        sb.push("table,\n  ");
+      }
       for (let i = 0, k = exports.length; i < k; ++i) {
         if (i > 0) sb.push(",\n  ");
         sb.push(exports[i]);
@@ -953,6 +959,7 @@ export class JSBuilder extends ExportsWalker {
   /** Lifts a WebAssembly value to a JavaScript value. */
   makeLiftFromValue(name: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
+      // Lift reference types
       const clazz = assert(type.getClassOrWrapper(this.program));
       if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
         sb.push("__liftBuffer(");
@@ -1009,11 +1016,13 @@ export class JSBuilder extends ExportsWalker {
       }
       sb.push(")");
     } else {
-      sb.push(name);
-      if (type.isUnsignedIntegerValue && type.size == 32) {
-        sb.push(" >>> 0");
-      } else if (type == Type.bool) {
-        sb.push(" != 0");
+      // Lift basic plain types
+      if (type == Type.bool) {
+        sb.push(`${name} != 0`);
+      } else if (type.isUnsignedIntegerValue && type.size >= 32) {
+        sb.push(type.size == 64 ? `BigInt.asUintN(64, ${name})` : `${name} >>> 0`);
+      } else {
+        sb.push(name);
       }
     }
   }
@@ -1021,6 +1030,7 @@ export class JSBuilder extends ExportsWalker {
   /** Lowers a JavaScript value to a WebAssembly value. */
   makeLowerToValue(name: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
+      // Lower reference types
       const clazz = assert(type.getClass());
       if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
         sb.push("__lowerBuffer(");
@@ -1086,6 +1096,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push(" || __notnull()");
       }
     } else {
+      // Lower basic types
       sb.push(name); // basic value
       if (type.isIntegerValue && type.size == 64) {
         sb.push(" || 0n");
@@ -1282,15 +1293,16 @@ enum Mode {
 
 function isPlainValue(type: Type, kind: Mode): bool {
   if (kind == Mode.IMPORT) {
-    // requires coercion of undefined to 0n
-    if (type.isIntegerValue && type.size == 64) return false;
     // may be stored to an Uint8Array, make sure to store 1/0
     if (type == Type.bool) return false;
+    // requires coercion of undefined to 0n
+    if (type.isIntegerValue && type.size == 64) return false;
   } else {
-    // requires coercion from signed to unsigned
-    if (type.isUnsignedIntegerValue && type.size == 32) return false;
     // requires coercion from 1/0 to true/false
     if (type == Type.bool) return false;
+    // requires coercion from signed to unsigned for u32 and u64.
+    // Note, u8 and u16 doesn't overflow in native type so mark as plain
+    if (type.isUnsignedIntegerValue && type.size >= 32) return false;
   }
   return !type.isInternalReference;
 }
@@ -1298,10 +1310,10 @@ function isPlainValue(type: Type, kind: Mode): bool {
 function isPlainFunction(signature: Signature, mode: Mode): bool {
   var parameterTypes = signature.parameterTypes;
   var inverseMode = mode == Mode.IMPORT ? Mode.EXPORT : Mode.IMPORT;
+  if (!isPlainValue(signature.returnType, mode)) return false;
   for (let i = 0, k = parameterTypes.length; i < k; ++i) {
     if (!isPlainValue(parameterTypes[i], inverseMode)) return false;
   }
-  if (!isPlainValue(signature.returnType, mode)) return false;
   return true;
 }
 

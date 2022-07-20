@@ -115,6 +115,23 @@ export declare namespace String {
   export function fromCodePoints(codepoints: i32[]): externref;
 }
 
+export declare namespace Object {
+  @external("env", "Object.is")
+  export function is(a: externref, b: externref): bool;
+  @external("env", "Object.hasOwn")
+  export function hasOwn(target: externref, propertyKey: string): bool;
+  @external("env", "Object.assign")
+  export function assign(target: externref, source: externref): externref;
+  @external("env", "Object.keys")
+  export function keys(target: externref): externref;
+  @external("env", "Object.values")
+  export function values(target: externref): externref;
+  @external("env", "Object.entries")
+  export function entries(target: externref): externref;
+  @external("env", "Object.getOwnPropertyNames")
+  export function getOwnPropertyNames(target: externref): externref;
+}
+
 export declare namespace Date {
   @external("env", "Date.now")
   export function now(): f64;
@@ -142,8 +159,120 @@ export declare namespace console {
 }
 
 export declare namespace document {
+  /** Returns document's encoding. */
+  @external("env", "document.characterSet")
+  export const characterSet: string;
+  /** Returns a value that indicates whether standards-compliant mode is switched on for the object. */
+  @external("env", "document.compatMode")
+  export const compatMode: string;
+  /** Returns document's content type. */
+  @external("env", "document.contentType")
+  export const contentType: string;
+  /** Returns a reference to the root node of the document. */
+  @external("env", "document.documentElement")
+  export const documentElement: externref;
+  /** Returns document's URL. */
+  @external("env", "document.documentURI")
+  export const documentURI: string;
+  /** Returns the URL of the location that referred the user to the current page. */
+  @external("env", "document.referrer")
+  export const referrer: string;
+  /** Returns true if document has the ability of fullscreen mode, or false otherwise. */
+  @external("env", "document.pictureInPictureEnabled")
+  export const fullscreenEnabled: bool;
+  /** Returns true if document has the ability of picture-in-picture mode, or false otherwise. */
+  @external("env", "document.pictureInPictureEnabled")
+  export const pictureInPictureEnabled: bool;
+
+  /** Returns the number of child elements. */
+  @external("env", "document.childElementCount")
+  export const childElementCount: i32;
+  /** Returns the child elements. */
+  @external("env", "document.children")
+  export const children: externref;
+  /** Returns the first child that is an element, and null otherwise. */
+  @external("env", "document.firstElementChild")
+  export const firstElementChild: externref;
+  /** Returns the last child that is an element, and null otherwise. */
+  @external("env", "document.lastElementChild")
+  export const lastElementChild: externref;
+
+  /**
+   * Returns the HTTP cookies that apply to the Document. If there are no cookies or cookies can't be applied
+   * to this resource, the empty string will be returned.
+   *
+   * Can be set, to add a new cookie to the element's set of HTTP cookies.
+   *
+   * If the contents are sandboxed into a unique origin (e.g. in an iframe with the sandbox attribute),
+   * a "SecurityError" DOMException will be thrown on getting and setting.
+   */
+  @external("env", "document.cookie")
+  export let cookie: string;
+  /** Represents the <body> or <frameset> node of the current document, or null if no such element exists. */
+  @external("env", "document.body")
+  export let body: externref;
+  /** Sets or gets the security domain of the document. */
+  @external("env", "document.domain")
+  export let domain: string;
+  /** Sets or gets the title of the document. */
+  @external("env", "document.title")
+  export let title: string;
+  /** Sets or gets information about the current Location. */
+  @external("env", "document.location")
+  export let location: externref;
+  /** Sets or gets the URL for the current document. */
+  @external("env", "document.URL")
+  export let URL: string;
+
+  /**
+   * Creates an instance of the element for the specified tag.
+   * @param tagName The name of an element.
+   */
+  @external("env", "document.createElement")
+  export function createElement(tagName: string /* , options?: ElementCreationOptions */): externref;
+  /**
+   * Returns a reference to the first HTMLElement object with the specified value of the ID attribute.
+   * @param id String that specifies the ID value.
+   */
   @external("env", "document.getElementById")
   export function getElementById(id: string): externref;
+  /**
+   * Returns a HTMLCollection of the elements in the object on which the method was invoked that have all the classes
+   * given by classNames. The classNames argument is interpreted as a space-separated list of classes.
+   * @param classNames Gets a collection of objects based on the value of the CLASS attribute.
+   */
+  @external("env", "document.getElementsByClassName")
+  export function getElementsByClassName(classNames: string): externref;
+  /**
+   * Gets a collection of HTMLElement objects based on the value of the NAME or ID attribute.
+   * @param elementName Gets a collection of objects based on the value of the NAME or ID attribute.
+   */
+  @external("env", "document.getElementsByName")
+  export function getElementsByName(elementName: string): externref;
+  /** Gets a value indicating whether the object currently has focus. */
+  @external("env", "document.hasFocus")
+  export function hasFocus(): bool;
+  /** Inserts nodes after the last child of node, while replacing strings in nodes with equivalent Text nodes. */
+  @external("env", "document.append")
+  export function append(node: externref): void;
+  /** Inserts nodes before the first child of node, while replacing strings in nodes with equivalent Text nodes. */
+  @external("env", "document.prepend")
+  export function prepend(node: externref): void;
+  /** Replace all children of node with nodes, while replacing strings in nodes with equivalent Text nodes. */
+  @external("env", "document.replaceChildren")
+  export function replaceChildren(node: externref): void;
+  /**
+   * Writes one or more HTML expressions to a document in the specified window.
+   * @param content Specifies the text and HTML tags to write.
+   */
+  @external("env", "document.write")
+  export function write(content: string): void;
+  /**
+   * Writes one or more HTML expressions, followed by a carriage return, to a document in the specified window.
+   * @param content Specifies the text and HTML tags to write.
+   */
+  @external("env", "document.writeln")
+  export function writeln(content: string): void;
 }
 
 export declare namespace performance {

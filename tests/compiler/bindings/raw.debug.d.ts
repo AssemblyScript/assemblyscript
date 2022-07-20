@@ -1,4 +1,6 @@
 declare namespace __AdaptedExports {
+  /** Exported memory */
+  export const memory: WebAssembly.Memory;
   /** bindings/esm/plainGlobal */
   export const plainGlobal: {
     /** @type `i32` */
@@ -53,6 +55,16 @@ declare namespace __AdaptedExports {
    * @returns `i64`
    */
   export function plainFunction64(a: bigint, b: bigint): bigint;
+  /**
+   * bindings/esm/getMaxUnsigned32
+   * @returns `u32`
+   */
+  export function getMaxUnsigned32(): number;
+  /**
+   * bindings/esm/getMaxUnsigned64
+   * @returns `u64`
+   */
+  export function getMaxUnsigned64(): bigint;
   /**
    * bindings/esm/bufferFunction
    * @param a `~lib/arraybuffer/ArrayBuffer`

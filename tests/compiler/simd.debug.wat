@@ -4657,6 +4657,16 @@
  (func $start:simd
   i32.const 1
   drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   call $simd/test_v128
   call $simd/test_i8x16
   call $simd/test_i16x8

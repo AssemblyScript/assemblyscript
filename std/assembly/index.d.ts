@@ -196,14 +196,16 @@ declare function instantiate<T>(...args: any[]): T;
 declare function isNaN<T extends f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T extends f32 | f64>(value: T): bool;
-/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
-declare function isInteger<T>(value?: any): value is number;
-/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
-declare function isFloat<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression is of a boolean type. */
 declare function isBoolean<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
+declare function isInteger<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression can represent negative numbers. Compiles to a constant. */
 declare function isSigned<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
+declare function isFloat<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a v128 type. Compiles to a constant. */
+declare function isVector<T>(value?: any): value is v128;
 /** Tests if the specified type *or* expression is of a reference type. Compiles to a constant. */
 declare function isReference<T>(value?: any): value is object | string;
 /** Tests if the specified type *or* expression can be used as a string. Compiles to a constant. */
@@ -1758,7 +1760,7 @@ declare class Array<T> {
   some(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
   shift(): T;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
@@ -1792,7 +1794,7 @@ declare class StaticArray<T> {
   every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): this;

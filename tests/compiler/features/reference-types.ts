@@ -1,10 +1,10 @@
 // can use anyref as a parameter or return type
 
-export declare function external(a: anyref): anyref;
-export declare function somethingReal(): anyref;
-export declare function somethingNull(): anyref;
+export declare function external(a: externref): externref;
+export declare function somethingReal(): externref;
+export declare function somethingNull(): externref;
 
-export function internal(a: anyref): anyref {
+export function internal(a: externref): externref {
   const b = external(a);
   let c = external(b);
   var d = external(c);
@@ -12,20 +12,20 @@ export function internal(a: anyref): anyref {
 }
 
 // Truthiness conversion
-if(!somethingReal()) {
+if (!somethingReal()) {
   assert(false);
 }
-if(!somethingNull()) {
+if (!somethingNull()) {
   // nop
 } else {
   assert(false);
 }
-if(somethingReal()) {
+if (somethingReal()) {
   // nop
 } else {
   assert(false);
 }
-if(somethingNull()) {
+if (somethingNull()) {
   assert(false);
 }
 
@@ -58,11 +58,11 @@ assert(!funcGlobal);
 var funcGlobalInit: funcref = null;
 assert(!funcGlobalInit);
 
-var anyGlobal: anyref;
+var anyGlobal: externref;
 assert(!anyGlobal);
 anyGlobal = null;
 assert(!anyGlobal);
-var anyGlobalInit: anyref = null;
+var anyGlobalInit: externref = null;
 assert(!anyGlobalInit);
 
 function testLocal<T>(): void {
@@ -74,7 +74,7 @@ function testLocal<T>(): void {
   assert(!localInit);
 }
 testLocal<funcref>();
-testLocal<anyref>();
+testLocal<externref>();
 
 // funcref can represent function references
 
@@ -90,5 +90,9 @@ assert(otherFuncGlobal);
 
 // constant globals
 
-export const a: anyref = null;
+export const a: externref = null;
 export const b: funcref = null;
+
+// non-null assertions
+export const nonNullFunc = otherFuncGlobal!;
+export const nonNullReal = somethingReal()!;

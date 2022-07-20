@@ -86,6 +86,14 @@ export async function instantiate(module, imports = {}) {
       b = b || 0n;
       return exports.plainFunction64(a, b);
     },
+    getMaxUnsigned32() {
+      // bindings/esm/getMaxUnsigned32() => u32
+      return exports.getMaxUnsigned32() >>> 0;
+    },
+    getMaxUnsigned64() {
+      // bindings/esm/getMaxUnsigned64() => u64
+      return BigInt.asUintN(64, exports.getMaxUnsigned64());
+    },
     bufferFunction(a, b) {
       // bindings/esm/bufferFunction(~lib/arraybuffer/ArrayBuffer, ~lib/arraybuffer/ArrayBuffer) => ~lib/arraybuffer/ArrayBuffer
       a = __retain(__lowerBuffer(a) || __notnull());

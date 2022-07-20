@@ -621,7 +621,7 @@ export async function main(argv, options) {
         stats.parseTime += stats.end(begin);
       }
     }
-    const numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+    const numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
     if (numErrors) {
       const err = Error(`${numErrors} parse error(s)`);
       err.stack = err.message; // omit stack
@@ -730,7 +730,7 @@ export async function main(argv, options) {
       ? assemblyscript.getBinaryenModuleRef(module)
       : module.ref
   );
-  var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+  var numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
   if (numErrors) {
     const err = Error(`${numErrors} compile error(s)`);
     err.stack = err.message; // omit stack
@@ -743,7 +743,7 @@ export async function main(argv, options) {
     if (error) return prepareResult(error);
   }
 
-  numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+  numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
   if (numErrors) {
     const err = Error(`${numErrors} afterCompile error(s)`);
     err.stack = err.message; // omit stack
@@ -1123,17 +1123,22 @@ async function getConfig(file, baseDir, readFile) {
 }
 
 /** Checks diagnostics emitted so far for errors. */
-export function checkDiagnostics(program, stderr, reportDiagnostic, useColors) {
+export function checkDiagnostics(program, stderr, disableWarning, reportDiagnostic, useColors) {
   if (typeof useColors === "undefined" && stderr) useColors = stderr.isTTY;
   var numErrors = 0;
   do {
     let diagnostic = assemblyscript.nextDiagnostic(program);
     if (!diagnostic) break;
     if (stderr) {
-      stderr.write(
-        assemblyscript.formatDiagnostic(diagnostic, useColors, true) +
-        EOL + EOL
-      );
+      const isDisabledWarning = (diagnostic) => {
+        if (disableWarning == null) return false;
+        if (!disableWarning.length) return true;
+        const code = assemblyscript.getDiagnosticCode(diagnostic);
+        return disableWarning.includes(code);
+      };
+      if (assemblyscript.isError(diagnostic) || !isDisabledWarning(diagnostic)) {
+        stderr.write(assemblyscript.formatDiagnostic(diagnostic, useColors, true) + EOL + EOL);
+      }
     }
     if (reportDiagnostic) {
       function wrapRange(range) {

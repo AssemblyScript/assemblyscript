@@ -1524,6 +1524,12 @@ export class Program extends DiagnosticEmitter {
                 }
               }
             }
+            if (thisMember.is(CommonFlags.OVERRIDE) && !baseInstanceMembers.has(thisMember.name)) {
+              this.error(
+                DiagnosticCode.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0,
+                thisMember.identifierNode.range, basePrototype.name
+              );
+            }
           }
         }
         let nextPrototype = basePrototype.basePrototype;

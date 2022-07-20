@@ -4,7 +4,7 @@ class A<T> {
   }
 }
 class B<T, V> extends A<T> {
-  foo(a: T): string {
+  override foo(a: T): string {
     return "B";
   }
 }
