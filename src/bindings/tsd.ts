@@ -186,6 +186,18 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("declare namespace __AdaptedExports {\n");
       ++this.indentLevel;
     }
+    if (this.program.options.exportMemory) {
+      indent(sb, this.indentLevel);
+      sb.push("/** Exported memory */\n");
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}const memory: WebAssembly.Memory;\n`);
+    }
+    if (this.program.options.exportTable) {
+      indent(sb, this.indentLevel);
+      sb.push("/** Exported table */\n");
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}const table: WebAssembly.Table;\n`);
+    }
     this.walk();
     if (!this.esm) {
       --this.indentLevel;
