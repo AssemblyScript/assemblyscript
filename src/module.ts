@@ -1774,11 +1774,23 @@ export class Module {
     return binaryen._BinaryenRefIs(this.ref, op, expr);
   }
 
+  ref_is_null(
+    expr: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenRefIs(this.ref, RefIsOp.RefIsNull, expr);
+  }
+
   ref_as(
     op: RefAsOp,
     expr: ExpressionRef
   ): ExpressionRef {
     return binaryen._BinaryenRefAs(this.ref, op, expr);
+  }
+
+  ref_as_nonnull(
+    expr: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenRefAs(this.ref, RefAsOp.RefAsNonNull, expr);
   }
 
   ref_func(

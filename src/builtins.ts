@@ -3119,7 +3119,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
         }
         exprs[i] = expr;
       } else {
-        exprs[i] = compiler.makeZero(elementType, elementExpression);
+        exprs[i] = compiler.makeZero(elementType);
       }
     }
     if (!isStatic) {

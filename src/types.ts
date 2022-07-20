@@ -697,6 +697,7 @@ export class Type {
   /** 31-bit integer reference. */
   static readonly i31ref: Type = new Type(TypeKind.I31REF,
     TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
     TypeFlags.REFERENCE, 0
   );
 
