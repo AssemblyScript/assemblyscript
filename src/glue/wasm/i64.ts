@@ -15,6 +15,12 @@
 @global const i64_neg_one: i64 = -1;
 
 // @ts-ignore: decorator
+@global const i64_minimum: i64 = i64.MIN_VALUE;
+
+// @ts-ignore: decorator
+@global const i64_maximum: i64 = i64.MAX_VALUE;
+
+// @ts-ignore: decorator
 @global @inline
 function i64_is<T>(value: T): bool {
   return isInteger<T>() && sizeof<T>() == 8;
@@ -36,6 +42,12 @@ function i64_low(value: i64): i32 {
 @global @inline
 function i64_not(value: i64): i64 {
   return ~value;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_neg(value: i64): i64 {
+  return -value;
 }
 
 // @ts-ignore: decorator
@@ -166,8 +178,50 @@ function i64_ne(left: i64, right: i64): bool {
 
 // @ts-ignore: decorator
 @global @inline
+function i64_ge(left: i64, right: i64): bool {
+  return left >= right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_ge_u(left: i64, right: i64): bool {
+  return <u64>left >= <u64>right;
+}
+
+// @ts-ignore: decorator
+@global @inline
 function i64_gt(left: i64, right: i64): bool {
   return left > right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_gt_u(left: i64, right: i64): bool {
+  return <u64>left > <u64>right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_le(left: i64, right: i64): bool {
+  return left <= right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_le_u(left: i64, right: i64): bool {
+  return <u64>left <= <u64>right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_lt(left: i64, right: i64): bool {
+  return left < right;
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_lt_u(left: i64, right: i64): bool {
+  return <u64>left < <u64>right;
 }
 
 // @ts-ignore: decorator
@@ -180,20 +234,26 @@ function i64_align(value: i64, alignment: i64): i64 {
 
 // @ts-ignore: decorator
 @global @inline
+function i64_signbit(value: i64): bool {
+  return <bool>(value >>> 63);
+}
+
+// @ts-ignore: decorator
+@global @inline
 function i64_is_i8(value: i64): bool {
-  return value >= i8.MIN_VALUE && value <= <i64>i8.MAX_VALUE;
+  return value >= i8.MIN_VALUE && value <= i8.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_is_i16(value: i64): bool {
-  return value >= i16.MIN_VALUE && value <= <i64>i16.MAX_VALUE;
+  return value >= i16.MIN_VALUE && value <= i16.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_is_i32(value: i64): bool {
-  return value >= i32.MIN_VALUE && value <= <i64>i32.MAX_VALUE;
+  return value >= i32.MIN_VALUE && value <= i32.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
@@ -248,4 +308,10 @@ function i64_to_f64(value: i64): f64 {
 @global @inline
 function i64_to_string(value: i64, unsigned: bool = false): string {
   return unsigned ? u64(value).toString() : value.toString();
+}
+
+// @ts-ignore: decorator
+@global @inline
+function i64_clone(value: i64): i64 {
+  return value;
 }
