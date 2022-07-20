@@ -12,6 +12,7 @@
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
+ (type $none_=>_i64 (func (result i64)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_f32_=>_none (func (param i32 f32)))
@@ -34,6 +35,8 @@
  (global $bindings/esm/ConstEnum.ONE i32 (i32.const 1))
  (global $bindings/esm/ConstEnum.TWO i32 (i32.const 2))
  (global $bindings/esm/ConstEnum.THREE i32 (i32.const 3))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
+ (global $~lib/builtins/u64.MAX_VALUE i64 (i64.const -1))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
@@ -91,6 +94,8 @@
  (export "ConstEnum.THREE" (global $bindings/esm/ConstEnum.THREE))
  (export "plainFunction" (func $bindings/esm/plainFunction))
  (export "plainFunction64" (func $bindings/esm/plainFunction64))
+ (export "getMaxUnsigned32" (func $bindings/esm/getMaxUnsigned32))
+ (export "getMaxUnsigned64" (func $bindings/esm/getMaxUnsigned64))
  (export "newInternref" (func $bindings/esm/newInternref))
  (export "__new" (func $~lib/rt/itcms/__new))
  (export "__pin" (func $~lib/rt/itcms/__pin))
@@ -117,6 +122,12 @@
   local.get $0
   local.get $1
   i64.add
+ )
+ (func $bindings/esm/getMaxUnsigned32 (result i32)
+  global.get $~lib/builtins/u32.MAX_VALUE
+ )
+ (func $bindings/esm/getMaxUnsigned64 (result i64)
+  global.get $~lib/builtins/u64.MAX_VALUE
  )
  (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (param $0 i32) (result i32)
   local.get $0

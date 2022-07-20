@@ -26,6 +26,14 @@ export function plainFunction64(a: i64, b: i64): i64 {
   return a + b;
 }
 
+export function getMaxUnsigned32(): u32 {
+  return u32.MAX_VALUE; // 4294967295
+}
+
+export function getMaxUnsigned64(): u64 {
+  return u64.MAX_VALUE; // 18446744073709551615
+}
+
 export function bufferFunction(a: ArrayBuffer, b: ArrayBuffer): ArrayBuffer {
   var aByteLength = a.byteLength;
   var bByteLength = b.byteLength;
