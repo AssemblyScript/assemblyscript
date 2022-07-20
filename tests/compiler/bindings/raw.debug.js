@@ -329,7 +329,7 @@ export async function instantiate(module, imports = {}) {
     const
       length = values.length,
       buffer = exports.__pin(exports.__new(length << align, id)) >>> 0;
-    if (values instanceof typedConstructor) {
+    if (typedConstructor && values instanceof typedConstructor) {
       new typedConstructor(memory.buffer, buffer, length).set(values);
     } else {
       for (let i = 0; i < length; i++) lowerElement(buffer + (i << align >>> 0), values[i]);
