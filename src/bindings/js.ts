@@ -1054,7 +1054,7 @@ export class JSBuilder extends ExportsWalker {
         this.makeLowerToMemory(valueType, sb);
         sb.push(", ");
         if (valueType.isNumericValue) {
-          if (valueType == Type.u8) {
+          if (valueType == Type.u8 || valueType == Type.bool) {
             sb.push("Uint8Array");
           } else if (valueType == Type.i8) {
             sb.push("Int8Array");
