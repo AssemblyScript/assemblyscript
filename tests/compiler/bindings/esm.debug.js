@@ -189,6 +189,11 @@ async function instantiate(module, imports = {}) {
         __release(a);
       }
     },
+    functionFunction(fn) {
+      // bindings/esm/functionFunction(() => void) => () => void
+      fn = __lowerInternref(fn) || __notnull();
+      return __liftInternref(exports.functionFunction(fn) >>> 0);
+    },
   }, exports);
   function __lowerRecord10(value) {
     // bindings/esm/PlainObject
@@ -337,8 +342,8 @@ async function instantiate(module, imports = {}) {
     exports.__unpin(buffer);
     return buffer;
   }
-  const registry = new FinalizationRegistry(__release);
   class Internref extends Number {}
+  const registry = new FinalizationRegistry(__release);
   function __liftInternref(pointer) {
     if (!pointer) return null;
     const sentinel = new Internref(__retain(pointer));
@@ -395,7 +400,8 @@ export const {
   arrayFunction,
   objectFunction,
   newInternref,
-  internrefFunction
+  internrefFunction,
+  functionFunction
 } = await (async url => instantiate(
   await (async () => {
     try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }

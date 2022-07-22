@@ -115,6 +115,7 @@
  (export "arrayFunction" (func $export:bindings/esm/arrayFunction))
  (export "objectFunction" (func $export:bindings/esm/objectFunction))
  (export "internrefFunction" (func $export:bindings/esm/internrefFunction))
+ (export "functionFunction" (func $export:bindings/esm/functionFunction))
  (func $bindings/esm/plainFunction (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -2805,6 +2806,9 @@
  (func $bindings/esm/internrefFunction (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
+ (func $bindings/esm/functionFunction (param $0 i32) (result i32)
+  local.get $0
+ )
  (func $~lib/rt/itcms/__pin (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
@@ -4274,5 +4278,24 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+ )
+ (func $export:bindings/esm/functionFunction (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $bindings/esm/functionFunction
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
  )
 )

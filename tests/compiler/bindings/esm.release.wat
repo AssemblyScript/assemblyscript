@@ -113,6 +113,7 @@
  (export "arrayFunction" (func $export:bindings/esm/arrayFunction))
  (export "objectFunction" (func $export:bindings/esm/objectFunction))
  (export "internrefFunction" (func $export:bindings/esm/internrefFunction))
+ (export "functionFunction" (func $export:bindings/esm/staticarrayU16))
  (func $bindings/esm/plainFunction (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1

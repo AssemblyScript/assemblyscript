@@ -137,6 +137,12 @@ export declare function newInternref(): __Internref13;
  * @returns `bindings/esm/NonPlainObject`
  */
 export declare function internrefFunction(a: __Internref13, b: __Internref13): __Internref13;
+/**
+ * bindings/esm/functionFunction
+ * @param fn `() => void`
+ * @returns `() => void`
+ */
+export declare function functionFunction(fn: __Internref14): __Internref14;
 /** bindings/esm/PlainObject */
 declare interface __Record10<TOmittable> {
   /** @type `i8` */
@@ -175,4 +181,8 @@ declare interface __Record10<TOmittable> {
 /** bindings/esm/NonPlainObject */
 declare class __Internref13 extends Number {
   private __nominal13: symbol;
+}
+/** ~lib/function/Function<%28%29=>void> */
+declare class __Internref14 extends Number {
+  private __nominal14: symbol;
 }

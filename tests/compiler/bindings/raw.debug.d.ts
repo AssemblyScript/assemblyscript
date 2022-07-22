@@ -138,6 +138,12 @@ declare namespace __AdaptedExports {
    * @returns `bindings/esm/NonPlainObject`
    */
   export function internrefFunction(a: __Internref13, b: __Internref13): __Internref13;
+  /**
+   * bindings/esm/functionFunction
+   * @param fn `() => void`
+   * @returns `() => void`
+   */
+  export function functionFunction(fn: __Internref14): __Internref14;
 }
 /** bindings/esm/PlainObject */
 declare interface __Record10<TOmittable> {
@@ -177,6 +183,10 @@ declare interface __Record10<TOmittable> {
 /** bindings/esm/NonPlainObject */
 declare class __Internref13 extends Number {
   private __nominal13: symbol;
+}
+/** ~lib/function/Function<%28%29=>void> */
+declare class __Internref14 extends Number {
+  private __nominal14: symbol;
 }
 /** Instantiates the compiled WebAssembly module with the given imports. */
 export declare function instantiate(module: WebAssembly.Module, imports: {
