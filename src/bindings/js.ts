@@ -799,11 +799,13 @@ export class JSBuilder extends ExportsWalker {
   }
 `);
     }
+    if (this.needsLiftInternref || this.needsLowerInternref) {
+      sb.push("  class Internref extends Number {}\n");
+    }
     if (this.needsLiftInternref) {
       this.needsRetain = true;
       this.needsRelease = true;
       sb.push(`  const registry = new FinalizationRegistry(__release);
-  class Internref extends Number {}
   function __liftInternref(pointer) {
     if (!pointer) return null;
     const sentinel = new Internref(__retain(pointer));
@@ -1031,7 +1033,7 @@ export class JSBuilder extends ExportsWalker {
   makeLowerToValue(name: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
       // Lower reference types
-      const clazz = assert(type.getClass());
+      const clazz = assert(type.getClassOrWrapper(this.program));
       if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
         sb.push("__lowerBuffer(");
         this.needsLowerBuffer = true;
