@@ -37,4 +37,7 @@ export class Invalid<T> {
   // 1031: 'declare' modifier cannot appear on class elements of this kind.
   // 1183: An implementation cannot be declared in ambient contexts.
   declare declareMethod(): i32 {}
+
+  // ERROR 1042: "'override' modifier cannot be used here."
+  override overrideMethod(): void {}
 }

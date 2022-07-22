@@ -4,6 +4,10 @@
  */
 
 import {
+  BitSet
+} from "../util";
+
+import {
   Visitor
 } from "./pass";
 
@@ -17,13 +21,13 @@ import {
 } from "../glue/binaryen";
 
 class FindUsedLocalsVisitor extends Visitor {
-  used: Set<i32>;
+  used: BitSet;
 
-  constructor(used: Set<i32> = new Set()) {
+  constructor(used: BitSet = new BitSet()) {
     super();
     this.used = used;
   }
-  
+
   /** @override */
   visitLocalGet(localGet: ExpressionRef): void {
     this.used.add(<i32>_BinaryenLocalGetGetIndex(localGet));
@@ -40,8 +44,8 @@ var singleton: FindUsedLocalsVisitor | null = null;
 /** Finds the indexes of all locals used in the specified expression. */
 export function findUsedLocals(
   expr: ExpressionRef,
-  used: Set<i32> = new Set()
-): Set<i32> {
+  used: BitSet = new BitSet()
+): BitSet {
   var visitor = singleton;
   if (!visitor) singleton = visitor = new FindUsedLocalsVisitor(used);
   else visitor.used = used;

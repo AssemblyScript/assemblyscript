@@ -35,6 +35,9 @@ export async function postInstantiate(instance) {
   assert.strictEqual(exports.Enum.TWO, 2);
   assert.strictEqual(exports.Enum[2], "TWO");
 
+  assert.strictEqual(exports.getMaxUnsigned32(), 4294967295);
+  assert.strictEqual(exports.getMaxUnsigned64(), 18446744073709551615n);
+
   assert.strictEqual(exports.plainFunction(1, 2), 3);
 
   {
@@ -54,6 +57,10 @@ export async function postInstantiate(instance) {
   }
 
   assert.deepStrictEqual(exports.staticarrayFunction([1, 2, 3], [4, 5, 6]), [1, 2, 3, 4, 5, 6]);
+
+  assert.deepStrictEqual(exports.staticarrayU16(Uint16Array.of(1, 2, 3)), [1, 2, 3]);
+
+  assert.deepStrictEqual(exports.staticarrayI64(BigInt64Array.of(1n, 2n, 3n)), [1n, 2n, 3n]);
 
   assert.deepStrictEqual(exports.arrayFunction([1, 2, 3], [4, 5, 6]), [1, 2, 3, 4, 5, 6]);
 

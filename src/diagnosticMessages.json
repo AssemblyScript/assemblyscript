@@ -46,6 +46,7 @@
   "Property '{0}' is always assigned before being used.": 233,
   "Expression does not compile to a value at runtime.": 234,
   "Only variables, functions and enums become WebAssembly module exports.": 235,
+  "Literal '{0}' does not fit into 'i64' or 'u64' types.": 236,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,
@@ -184,6 +185,7 @@
   "Duplicate property '{0}'.": 2718,
   "Property '{0}' is missing in type '{1}' but required in type '{2}'.": 2741,
   "Type '{0}' has no call signatures.": 2757,
+  "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": 4117,
 
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,

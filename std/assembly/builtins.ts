@@ -2,7 +2,15 @@ type auto = i32;
 
 // @ts-ignore: decorator
 @builtin
+export declare function isBoolean<T>(value?: T): bool;
+
+// @ts-ignore: decorator
+@builtin
 export declare function isInteger<T>(value?: T): bool;
+
+// @ts-ignore: decorator
+@builtin
+export declare function isSigned<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
@@ -10,11 +18,7 @@ export declare function isFloat<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
-export declare function isBoolean<T>(value?: T): bool;
-
-// @ts-ignore: decorator
-@builtin
-export declare function isSigned<T>(value?: T): bool;
+export declare function isVector<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin

@@ -186,6 +186,18 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("declare namespace __AdaptedExports {\n");
       ++this.indentLevel;
     }
+    if (this.program.options.exportMemory) {
+      indent(sb, this.indentLevel);
+      sb.push("/** Exported memory */\n");
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}const memory: WebAssembly.Memory;\n`);
+    }
+    if (this.program.options.exportTable) {
+      indent(sb, this.indentLevel);
+      sb.push("/** Exported table */\n");
+      indent(sb, this.indentLevel);
+      sb.push(`export ${this.esm ? "declare " : ""}const table: WebAssembly.Table;\n`);
+    }
     this.walk();
     if (!this.esm) {
       --this.indentLevel;
@@ -241,12 +253,14 @@ export class TSDBuilder extends ExportsWalker {
         sb.push("ArrayBuffer");
       } else if (clazz.extends(this.program.stringInstance.prototype)) {
         sb.push("string");
-      } else if (
-        clazz.extends(this.program.arrayPrototype) ||
-        clazz.extends(this.program.staticArrayPrototype)
-      ) {
+      } else if (clazz.extends(this.program.arrayPrototype)) {
         const valueType = clazz.getArrayValueType();
         sb.push("Array<");
+        sb.push(this.toTypeScriptType(valueType, mode));
+        sb.push(">");
+      } else if (clazz.extends(this.program.staticArrayPrototype)) {
+        const valueType = clazz.getArrayValueType();
+        sb.push("ArrayLike<");
         sb.push(this.toTypeScriptType(valueType, mode));
         sb.push(">");
       } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {

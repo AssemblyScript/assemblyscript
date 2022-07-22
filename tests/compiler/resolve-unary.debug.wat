@@ -32,10 +32,10 @@
  (global $resolve-unary/b (mut i32) (i32.const 1))
  (global $resolve-unary/foo (mut i32) (i32.const 0))
  (global $resolve-unary/bar (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 2704))
- (global $~lib/memory/__data_end i32 (i32.const 2748))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19132))
- (global $~lib/memory/__heap_base i32 (i32.const 19132))
+ (global $~lib/rt/__rtti_base i32 (i32.const 2816))
+ (global $~lib/memory/__data_end i32 (i32.const 2868))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19252))
+ (global $~lib/memory/__heap_base i32 (i32.const 19252))
  (memory $0 1)
  (data (i32.const 12) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
  (data (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
@@ -66,9 +66,12 @@
  (data (i32.const 2604) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00-\00-\00i\00\00\00\00\00\00\00")
  (data (i32.const 2636) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\00+\00+\00\00\00\00\00\00\00")
  (data (i32.const 2668) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\00-\00-\00\00\00\00\00\00\00")
- (data (i32.const 2704) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
- (table $0 1 1 funcref)
- (elem $0 (i32.const 1))
+ (data (i32.const 2700) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00n\00u\00m\00b\00e\00r\00")
+ (data (i32.const 2732) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2764) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2816) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 2 2 funcref)
+ (elem $0 (i32.const 1) $start:resolve-unary~anonymous|0)
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
@@ -2765,6 +2768,12 @@
  (func $resolve-unary/Bar.postfix_dec (param $0 i32) (result i32)
   i32.const 2688
  )
+ (func $start:resolve-unary~anonymous|0
+  nop
+ )
+ (func $resolve-unary/generic<~lib/string/String> (param $0 i32)
+  nop
+ )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   global.get $resolve-unary/foo
@@ -2805,30 +2814,47 @@
    call $~lib/rt/itcms/__visit
   end
  )
+ (func $~lib/function/Function<%28%29=>void>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28%29=>void>#__visit
+ )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $resolve-unary/Bar
-    block $resolve-unary/Foo
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $resolve-unary/Foo $resolve-unary/Bar $invalid
+   block $~lib/function/Function<%28%29=>void>
+    block $resolve-unary/Bar
+     block $resolve-unary/Foo
+      block $~lib/arraybuffer/ArrayBufferView
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $resolve-unary/Foo $resolve-unary/Bar $~lib/function/Function<%28%29=>void> $invalid
+        end
+        return
        end
        return
       end
+      local.get $0
+      local.get $1
+      call $~lib/arraybuffer/ArrayBufferView~visit
       return
      end
-     local.get $0
-     local.get $1
-     call $~lib/arraybuffer/ArrayBufferView~visit
      return
     end
     return
    end
+   local.get $0
+   local.get $1
+   call $~lib/function/Function<%28%29=>void>~visit
    return
   end
   unreachable
@@ -2841,8 +2867,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 19152
-   i32.const 19200
+   i32.const 19280
+   i32.const 19328
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3501,6 +3527,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
+  i32.const 2720
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $~lib/string/String#get:length
+  drop
+  i32.const 2752
+  drop
+  i32.const 2784
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $resolve-unary/generic<~lib/string/String>
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.add

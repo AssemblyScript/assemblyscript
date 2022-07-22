@@ -19,6 +19,11 @@
   "bugs": {
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "engineStrict": true,
   "dependencies": {
     "binaryen": "108.0.0-nightly.20220528",
     "long": "^5.2.0"
