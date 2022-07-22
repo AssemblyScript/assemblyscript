@@ -18,13 +18,15 @@ import {
 
 import {
   isLineBreak,
+  isWhiteSpace,
   COLOR_CYAN,
   COLOR_YELLOW,
   COLOR_RED,
   COLOR_MAGENTA,
   COLOR_RESET,
   isColorsEnabled,
-  setColorsEnabled
+  setColorsEnabled,
+  CharCode
 } from "./util";
 
 export {
@@ -185,10 +187,10 @@ export function formatDiagnosticMessage(
     if (showContext) {
       sb.push("\n");
       sb.push(formatDiagnosticContext(range));
+    } else {
+      sb.push("\n in ");
+      sb.push(source.normalizedPath);
     }
-    sb.push("\n");
-    sb.push(" in ");
-    sb.push(source.normalizedPath);
     sb.push("(");
     sb.push(source.lineAt(range.start).toString());
     sb.push(",");
@@ -201,10 +203,10 @@ export function formatDiagnosticMessage(
       if (showContext) {
         sb.push("\n");
         sb.push(formatDiagnosticContext(relatedRange));
+      } else {
+        sb.push("\n in ");
+        sb.push(relatedSource.normalizedPath);
       }
-      sb.push("\n");
-      sb.push(" in ");
-      sb.push(relatedSource.normalizedPath);
       sb.push("(");
       sb.push(relatedSource.lineAt(relatedRange.start).toString());
       sb.push(",");
@@ -218,34 +220,59 @@ export function formatDiagnosticMessage(
 
 /** Formats the diagnostic context for the specified range, optionally with terminal colors. */
 function formatDiagnosticContext(range: Range): string {
-  var text = range.source.text;
+  var source = range.source;
+  var text = source.text;
   var len = text.length;
   var start = range.start;
-  var end = range.end;
+  var end = start;
+  var lineNumber = source.lineAt(start).toString();
+  var lineSpace = " ".repeat(lineNumber.length);
+  // Find preceeding line break
   while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) start--;
+  // Skip leading whitespace
+  while (start < len && isWhiteSpace(text.charCodeAt(start))) start++;
+  // Find next line break
   while (end < len && !isLineBreak(text.charCodeAt(end))) end++;
   var sb: string[] = [
-    "\n ",
-    text.substring(start, end),
-    "\n "
+    lineSpace,
+    "  :\n ",
+    lineNumber,
+    " │ ",
+    text.substring(start, end).replaceAll("\t", "  "),
+    "\n ", 
+    lineSpace,
+    " │ "
   ];
   while (start < range.start) {
-    sb.push(" ");
-    start++;
+    if (text.charCodeAt(start) == CharCode.TAB) {
+      sb.push("  ");
+      start += 2;
+    } else {
+      sb.push(" ");
+      start++;
+    }
   }
   if (isColorsEnabled()) sb.push(COLOR_RED);
   if (range.start == range.end) {
     sb.push("^");
   } else {
     while (start++ < range.end) {
-      if (isLineBreak(text.charCodeAt(start))) {
+      let cc = text.charCodeAt(start);
+      if (cc == CharCode.TAB) {
+        sb.push("~~");
+      } else if (isLineBreak(cc)) {
         sb.push(start == range.start + 1 ? "^" : "~");
         break;
+      } else {
+        sb.push("~");
       }
-      sb.push("~");
     }
   }
   if (isColorsEnabled()) sb.push(COLOR_RESET);
+  sb.push("\n ");
+  sb.push(lineSpace);
+  sb.push(" └─ in ");
+  sb.push(source.normalizedPath);
   return sb.join("");
 }
 
