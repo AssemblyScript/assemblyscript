@@ -855,6 +855,10 @@ export async function main(argv, options) {
 
   // Prepare output
   if (!opts.noEmit) {
+    if (opts.binaryFile) {
+      // We catched lagacy field for binary output (before 0.20)
+      return prepareResult(Error("`binaryFile` doesn't support. Please use `outFile` instead."));
+    }
     let bindings = opts.bindings || [];
     let hasStdout = false;
     let hasOutFile = opts.outFile != null;
