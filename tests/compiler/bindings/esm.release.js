@@ -127,8 +127,8 @@ async function instantiate(module, imports = {}) {
     },
     typedarrayFunction(a, b) {
       // bindings/esm/typedarrayFunction(~lib/typedarray/Int16Array, ~lib/typedarray/Float32Array) => ~lib/typedarray/Uint64Array
-      a = __retain(__lowerTypedArray(Int16Array, 3, 1, a) || __notnull());
-      b = __lowerTypedArray(Float32Array, 4, 2, b) || __notnull();
+      a = __retain(__lowerTypedArray(Int16Array, 4, 1, a) || __notnull());
+      b = __lowerTypedArray(Float32Array, 5, 2, b) || __notnull();
       try {
         return __liftTypedArray(BigUint64Array, exports.typedarrayFunction(a, b) >>> 0);
       } finally {
@@ -137,8 +137,8 @@ async function instantiate(module, imports = {}) {
     },
     staticarrayFunction(a, b) {
       // bindings/esm/staticarrayFunction(~lib/staticarray/StaticArray<i32>, ~lib/staticarray/StaticArray<i32>) => ~lib/staticarray/StaticArray<i32>
-      a = __retain(__lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, a, Int32Array) || __notnull());
-      b = __lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 6, 2, b, Int32Array) || __notnull();
+      a = __retain(__lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, a, Int32Array) || __notnull());
+      b = __lowerStaticArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 7, 2, b, Int32Array) || __notnull();
       try {
         return __liftStaticArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, exports.staticarrayFunction(a, b) >>> 0);
       } finally {
@@ -147,18 +147,18 @@ async function instantiate(module, imports = {}) {
     },
     staticarrayU16(a) {
       // bindings/esm/staticarrayU16(~lib/staticarray/StaticArray<u16>) => ~lib/staticarray/StaticArray<u16>
-      a = __lowerStaticArray((pointer, value) => { new Uint16Array(memory.buffer)[pointer >>> 1] = value; }, 7, 1, a, Uint16Array) || __notnull();
+      a = __lowerStaticArray((pointer, value) => { new Uint16Array(memory.buffer)[pointer >>> 1] = value; }, 8, 1, a, Uint16Array) || __notnull();
       return __liftStaticArray(pointer => new Uint16Array(memory.buffer)[pointer >>> 1], 1, exports.staticarrayU16(a) >>> 0);
     },
     staticarrayI64(a) {
       // bindings/esm/staticarrayI64(~lib/staticarray/StaticArray<i64>) => ~lib/staticarray/StaticArray<i64>
-      a = __lowerStaticArray((pointer, value) => { new BigInt64Array(memory.buffer)[pointer >>> 3] = value || 0n; }, 8, 3, a, BigInt64Array) || __notnull();
+      a = __lowerStaticArray((pointer, value) => { new BigInt64Array(memory.buffer)[pointer >>> 3] = value || 0n; }, 9, 3, a, BigInt64Array) || __notnull();
       return __liftStaticArray(pointer => new BigInt64Array(memory.buffer)[pointer >>> 3], 3, exports.staticarrayI64(a) >>> 0);
     },
     arrayFunction(a, b) {
       // bindings/esm/arrayFunction(~lib/array/Array<i32>, ~lib/array/Array<i32>) => ~lib/array/Array<i32>
-      a = __retain(__lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 9, 2, a) || __notnull());
-      b = __lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 9, 2, b) || __notnull();
+      a = __retain(__lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 10, 2, a) || __notnull());
+      b = __lowerArray((pointer, value) => { new Int32Array(memory.buffer)[pointer >>> 2] = value; }, 10, 2, b) || __notnull();
       try {
         return __liftArray(pointer => new Int32Array(memory.buffer)[pointer >>> 2], 2, exports.arrayFunction(a, b) >>> 0);
       } finally {
@@ -167,10 +167,10 @@ async function instantiate(module, imports = {}) {
     },
     objectFunction(a, b) {
       // bindings/esm/objectFunction(bindings/esm/PlainObject, bindings/esm/PlainObject) => bindings/esm/PlainObject
-      a = __retain(__lowerRecord10(a) || __notnull());
-      b = __lowerRecord10(b) || __notnull();
+      a = __retain(__lowerRecord11(a) || __notnull());
+      b = __lowerRecord11(b) || __notnull();
       try {
-        return __liftRecord10(exports.objectFunction(a, b) >>> 0);
+        return __liftRecord11(exports.objectFunction(a, b) >>> 0);
       } finally {
         __release(a);
       }
@@ -194,12 +194,19 @@ async function instantiate(module, imports = {}) {
       fn = __lowerInternref(fn) || __notnull();
       return __liftInternref(exports.functionFunction(fn) >>> 0);
     },
+    fn: {
+      // bindings/esm/fn: () => void
+      valueOf() { return this.value; },
+      get value() {
+        return __liftInternref(exports.fn.value >>> 0);
+      }
+    },
   }, exports);
-  function __lowerRecord10(value) {
+  function __lowerRecord11(value) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lowering as a record by providing an empty constructor
     if (value == null) return 0;
-    const pointer = exports.__pin(exports.__new(68, 10));
+    const pointer = exports.__pin(exports.__new(68, 11));
     new Int8Array(memory.buffer)[pointer + 0 >>> 0] = value.a;
     new Int16Array(memory.buffer)[pointer + 2 >>> 1] = value.b;
     new Int32Array(memory.buffer)[pointer + 4 >>> 2] = value.c;
@@ -214,12 +221,12 @@ async function instantiate(module, imports = {}) {
     new Float32Array(memory.buffer)[pointer + 44 >>> 2] = value.l;
     new Float64Array(memory.buffer)[pointer + 48 >>> 3] = value.m;
     new Uint32Array(memory.buffer)[pointer + 56 >>> 2] = __lowerString(value.n);
-    new Uint32Array(memory.buffer)[pointer + 60 >>> 2] = __lowerTypedArray(Uint8Array, 11, 0, value.o);
-    new Uint32Array(memory.buffer)[pointer + 64 >>> 2] = __lowerArray((pointer, value) => { new Uint32Array(memory.buffer)[pointer >>> 2] = __lowerString(value) || __notnull(); }, 12, 2, value.p);
+    new Uint32Array(memory.buffer)[pointer + 60 >>> 2] = __lowerTypedArray(Uint8Array, 12, 0, value.o);
+    new Uint32Array(memory.buffer)[pointer + 64 >>> 2] = __lowerArray((pointer, value) => { new Uint32Array(memory.buffer)[pointer >>> 2] = __lowerString(value) || __notnull(); }, 13, 2, value.p);
     exports.__unpin(pointer);
     return pointer;
   }
-  function __liftRecord10(pointer) {
+  function __liftRecord11(pointer) {
     // bindings/esm/PlainObject
     // Hint: Opt-out from lifting as a record by providing an empty constructor
     if (!pointer) return null;
@@ -401,7 +408,8 @@ export const {
   objectFunction,
   newInternref,
   internrefFunction,
-  functionFunction
+  functionFunction,
+  fn
 } = await (async url => instantiate(
   await (async () => {
     try { return await globalThis.WebAssembly.compileStreaming(globalThis.fetch(url)); }
