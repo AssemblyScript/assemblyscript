@@ -275,6 +275,8 @@ export class Options {
   shrinkLevelHint: i32 = 0;
   /** Hinted basename. */
   basenameHint: string = "output";
+  /** Hinted bindings generation. */
+  bindingsHint: bool = false;
 
   /** Tests if the target is WASM64 or, otherwise, WASM32. */
   get isWasm64(): bool {
@@ -410,6 +412,8 @@ export class Compiler extends DiagnosticEmitter {
   shadowStack!: ShadowStackPass;
   /** Whether the module has custom function exports. */
   hasCustomFunctionExports: bool = false;
+  /** Whether the module has externals involving managed types. */
+  hasManagedExternals: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -500,8 +504,8 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // compile and export runtime if requested
-    if (this.options.exportRuntime) {
+    // compile and export runtime if requested or necessary
+    if (this.options.exportRuntime || (this.options.bindingsHint && this.hasManagedExternals)) {
       for (let i = 0, k = runtimeFunctions.length; i < k; ++i) {
         let name = runtimeFunctions[i];
         let instance = program.requireFunction(name);
@@ -853,8 +857,12 @@ export class Compiler extends DiagnosticEmitter {
             if (!module.hasExport(exportName)) {
               module.addFunctionExport(functionInstance.internalName, exportName);
               this.hasCustomFunctionExports = true;
-              if (signature.hasManagedOperands) {
+              let hasManagedOperands = signature.hasManagedOperands;
+              if (hasManagedOperands) {
                 this.shadowStack.noteExport(exportName, signature.getManagedOperandIndices());
+              }
+              if (hasManagedOperands || signature.returnType.isManaged) {
+                this.hasManagedExternals = true;
               }
             }
             return;
@@ -877,6 +885,9 @@ export class Compiler extends DiagnosticEmitter {
           let exportName = prefix + name;
           if (!module.hasExport(exportName)) {
             module.addGlobalExport(element.internalName, exportName);
+            if (global.type.isManaged) {
+              this.hasManagedExternals = true;
+            }
           }
           return;
         }
@@ -1138,6 +1149,9 @@ export class Compiler extends DiagnosticEmitter {
           !isDeclaredConstant
         );
         pendingElements.delete(global);
+        if (type.isManaged) {
+          this.hasManagedExternals = true;
+        }
         return true;
       }
 
@@ -1492,6 +1506,9 @@ export class Compiler extends DiagnosticEmitter {
         signature.resultRefs
       );
       funcRef = module.getFunction(instance.internalName);
+      if (signature.hasManagedOperands || signature.returnType.isManaged) {
+        this.hasManagedExternals = true;
+      }
 
     // abstract or interface function
     } else if (instance.is(CommonFlags.ABSTRACT) || instance.parent.kind == ElementKind.INTERFACE) {
