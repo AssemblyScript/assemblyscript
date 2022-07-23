@@ -1392,9 +1392,9 @@ export function liftRequiresExportRuntime(type: Type): bool {
   ) {
     return liftRequiresExportRuntime(clazz.getArrayValueType());
   }
-  // assume that plain objects require runtime lifting
-  // and avoid potentially costly recursive checks
-  return isPlainObject(clazz);
+  // complex objects lift as internref using __pin. plain objects may or may not
+  // involve the runtime: assume that they do to avoid potentially costly checks
+  return true;
 }
 
 export function lowerRequiresExportRuntime(type: Type): bool {
