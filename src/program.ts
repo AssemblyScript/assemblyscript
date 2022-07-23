@@ -1309,7 +1309,15 @@ export class Program extends DiagnosticEmitter {
               Range.join(thisPrototype.identifierNode.range, extendsNode.range)
             );
           }
-          thisPrototype.basePrototype = basePrototype;
+          if (!thisPrototype.extends(basePrototype)) {
+            thisPrototype.basePrototype = basePrototype;
+          } else {
+            this.error(
+              DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+              basePrototype.identifierNode.range,
+              basePrototype.identifierNode.text,
+            );
+          }
         } else {
           this.error(
             DiagnosticCode.A_class_may_only_extend_another_class,
@@ -1318,7 +1326,16 @@ export class Program extends DiagnosticEmitter {
         }
       } else if (thisPrototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
         if (baseElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
-          thisPrototype.basePrototype = <InterfacePrototype>baseElement;
+          const basePrototype = <InterfacePrototype>baseElement;
+          if (!thisPrototype.extends(basePrototype)) {
+            thisPrototype.basePrototype = basePrototype;
+          } else {
+            this.error(
+              DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+              basePrototype.identifierNode.range,
+              basePrototype.identifierNode.text,
+            );
+          }
         } else {
           this.error(
             DiagnosticCode.An_interface_can_only_extend_an_interface,
