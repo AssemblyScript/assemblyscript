@@ -2231,6 +2231,9 @@ export class Resolver extends DiagnosticEmitter {
       case LiteralKind.TEMPLATE: {
         return this.program.stringInstance;
       }
+      case LiteralKind.REGEXP: {
+        return this.program.regexpInstance;
+      }
       case LiteralKind.ARRAY: {
         let classReference = ctxType.getClass();
         if (classReference && classReference.prototype == this.program.arrayPrototype) {

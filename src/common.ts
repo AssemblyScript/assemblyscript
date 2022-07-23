@@ -210,6 +210,7 @@ export namespace CommonNames {
   export const I31ref = "I31ref";
   export const Dataref = "Dataref";
   export const String = "String";
+  export const RegExp = "RegExp";
   export const Object = "Object";
   export const Array = "Array";
   export const StaticArray = "StaticArray";
