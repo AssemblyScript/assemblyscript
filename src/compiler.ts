@@ -5328,23 +5328,14 @@ export class Compiler extends DiagnosticEmitter {
         }
         let instance = this.f32PowInstance;
         if (!instance) {
-          let namespace = this.program.lookup(CommonNames.Mathf);
-          if (!namespace) {
+          let prototype = this.program.lookup(CommonNames.fpow32);
+          if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
-              reportNode.range, "Mathf"
+              reportNode.range, "pow32"
             );
             return module.unreachable();
           }
-          let namespaceMembers = namespace.members;
-          if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
-            this.error(
-              DiagnosticCode.Cannot_find_name_0,
-              reportNode.range, "Mathf.pow"
-            );
-            return module.unreachable();
-          }
-          let prototype = assert(namespaceMembers.get(CommonNames.pow));
           assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
           this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
         }
@@ -5370,23 +5361,14 @@ export class Compiler extends DiagnosticEmitter {
         }
         let instance = this.f64PowInstance;
         if (!instance) {
-          let namespace = this.program.lookup(CommonNames.Math);
-          if (!namespace) {
+          let prototype = this.program.lookup(CommonNames.fpow64);
+          if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
-              reportNode.range, "Math"
+              reportNode.range, "pow64"
             );
             return module.unreachable();
           }
-          let namespaceMembers = namespace.members;
-          if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
-            this.error(
-              DiagnosticCode.Cannot_find_name_0,
-              reportNode.range, "Math.pow"
-            );
-            return module.unreachable();
-          }
-          let prototype = assert(namespaceMembers.get(CommonNames.pow));
           assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
           this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
         }
@@ -5508,23 +5490,14 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: {
         let instance = this.f32ModInstance;
         if (!instance) {
-          let namespace = this.program.lookup(CommonNames.Mathf);
-          if (!namespace) {
+          let prototype = this.program.lookup(CommonNames.fmod32);
+          if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
-              reportNode.range, "Mathf"
+              reportNode.range, "mod32"
             );
             return module.unreachable();
           }
-          let namespaceMembers = namespace.members;
-          if (!namespaceMembers || !namespaceMembers.has(CommonNames.mod)) {
-            this.error(
-              DiagnosticCode.Cannot_find_name_0,
-              reportNode.range, "Mathf.mod"
-            );
-            return module.unreachable();
-          }
-          let prototype = assert(namespaceMembers.get(CommonNames.mod));
           assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
           this.f32ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
         }
@@ -5536,23 +5509,14 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         let instance = this.f64ModInstance;
         if (!instance) {
-          let namespace = this.program.lookup(CommonNames.Math);
-          if (!namespace) {
+          let prototype = this.program.lookup(CommonNames.fmod64);
+          if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
-              reportNode.range, "Math"
+              reportNode.range, "mod64"
             );
             return module.unreachable();
           }
-          let namespaceMembers = namespace.members;
-          if (!namespaceMembers || !namespaceMembers.has(CommonNames.mod)) {
-            this.error(
-              DiagnosticCode.Cannot_find_name_0,
-              reportNode.range, "Math.mod"
-            );
-            return module.unreachable();
-          }
-          let prototype = assert(namespaceMembers.get(CommonNames.mod));
           assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
           this.f64ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
         }

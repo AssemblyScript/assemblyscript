@@ -3695,7 +3695,7 @@
   local.get $5
   i64.mul
  )
- (func $~lib/math/ipow32 (param $0 i32) (result i32)
+ (func $~lib/util/math/ipow32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 5
@@ -3849,7 +3849,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/util/math/scalbn64 (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -4566,7 +4566,7 @@
       i32.const 0
       local.get $1
       i32.sub
-      call $~lib/math/ipow32
+      call $~lib/util/math/ipow32
       i64.extend_i32_s
       local.tee $13
       i64.div_u
@@ -4596,7 +4596,7 @@
       local.get $12
       i64.sub
       i32.wrap_i64
-      call $~lib/math/NativeMath.scalbn
+      call $~lib/util/math/scalbn64
      else
       local.get $6
       local.get $6
@@ -4668,7 +4668,7 @@
        end
       end
       local.get $3
-      call $~lib/math/ipow32
+      call $~lib/util/math/ipow32
       i64.extend_i32_u
       local.tee $8
       local.get $6
@@ -4718,7 +4718,7 @@
       f64.convert_i64_u
       global.get $~lib/util/string/__fixmulShift
       i32.wrap_i64
-      call $~lib/math/NativeMath.scalbn
+      call $~lib/util/math/scalbn64
      end
     end
     local.set $9

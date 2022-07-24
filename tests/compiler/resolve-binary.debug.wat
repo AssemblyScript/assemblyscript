@@ -2753,7 +2753,7 @@
   local.get $1
   call $~lib/util/number/itoa32
  )
- (func $~lib/math/NativeMath.pow (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/util/math/pow64 (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -2854,7 +2854,7 @@
   i32.const 1
   i32.lt_s
   drop
-  block $~lib/util/math/pow_lut|inlined.0 (result f64)
+  block $~lib/util/math/pow64_lut|inlined.0 (result f64)
    local.get $0
    local.set $3
    local.get $1
@@ -2915,14 +2915,14 @@
      i64.eq
      if
       f64.const 1
-      br $~lib/util/math/pow_lut|inlined.0
+      br $~lib/util/math/pow64_lut|inlined.0
      end
      local.get $5
      i64.const 4607182418800017408
      i64.eq
      if
       f64.const nan:0x8000000000000
-      br $~lib/util/math/pow_lut|inlined.0
+      br $~lib/util/math/pow64_lut|inlined.0
      end
      local.get $5
      i64.const 1
@@ -2942,7 +2942,7 @@
       local.get $3
       local.get $2
       f64.add
-      br $~lib/util/math/pow_lut|inlined.0
+      br $~lib/util/math/pow64_lut|inlined.0
      end
      local.get $5
      i64.const 1
@@ -2951,7 +2951,7 @@
      i64.eq
      if
       f64.const nan:0x8000000000000
-      br $~lib/util/math/pow_lut|inlined.0
+      br $~lib/util/math/pow64_lut|inlined.0
      end
      local.get $5
      i64.const 1
@@ -2967,12 +2967,12 @@
      i32.eq
      if
       f64.const 0
-      br $~lib/util/math/pow_lut|inlined.0
+      br $~lib/util/math/pow64_lut|inlined.0
      end
      local.get $2
      local.get $2
      f64.mul
-     br $~lib/util/math/pow_lut|inlined.0
+     br $~lib/util/math/pow64_lut|inlined.0
     end
     local.get $5
     local.set $9
@@ -2995,7 +2995,7 @@
      i64.shr_u
      i32.wrap_i64
      if (result i32)
-      block $~lib/util/math/checkint|inlined.0 (result i32)
+      block $~lib/util/math/checkint64|inlined.0 (result i32)
        local.get $6
        local.set $9
        local.get $9
@@ -3009,7 +3009,7 @@
        i64.lt_u
        if
         i32.const 0
-        br $~lib/util/math/checkint|inlined.0
+        br $~lib/util/math/checkint64|inlined.0
        end
        local.get $11
        i64.const 1023
@@ -3018,7 +3018,7 @@
        i64.gt_u
        if
         i32.const 2
-        br $~lib/util/math/checkint|inlined.0
+        br $~lib/util/math/checkint64|inlined.0
        end
        i64.const 1
        i64.const 1023
@@ -3037,7 +3037,7 @@
        i64.ne
        if
         i32.const 0
-        br $~lib/util/math/checkint|inlined.0
+        br $~lib/util/math/checkint64|inlined.0
        end
        local.get $9
        local.get $11
@@ -3046,7 +3046,7 @@
        i64.ne
        if
         i32.const 1
-        br $~lib/util/math/checkint|inlined.0
+        br $~lib/util/math/checkint64|inlined.0
        end
        i32.const 2
       end
@@ -3072,7 +3072,7 @@
      else
       local.get $10
      end
-     br $~lib/util/math/pow_lut|inlined.0
+     br $~lib/util/math/pow64_lut|inlined.0
     end
     local.get $5
     i64.const 63
@@ -3080,7 +3080,7 @@
     i64.const 0
     i64.ne
     if
-     block $~lib/util/math/checkint|inlined.1 (result i32)
+     block $~lib/util/math/checkint64|inlined.1 (result i32)
       local.get $6
       local.set $9
       local.get $9
@@ -3094,7 +3094,7 @@
       i64.lt_u
       if
        i32.const 0
-       br $~lib/util/math/checkint|inlined.1
+       br $~lib/util/math/checkint64|inlined.1
       end
       local.get $11
       i64.const 1023
@@ -3103,7 +3103,7 @@
       i64.gt_u
       if
        i32.const 2
-       br $~lib/util/math/checkint|inlined.1
+       br $~lib/util/math/checkint64|inlined.1
       end
       i64.const 1
       i64.const 1023
@@ -3122,7 +3122,7 @@
       i64.ne
       if
        i32.const 0
-       br $~lib/util/math/checkint|inlined.1
+       br $~lib/util/math/checkint64|inlined.1
       end
       local.get $9
       local.get $11
@@ -3131,7 +3131,7 @@
       i64.ne
       if
        i32.const 1
-       br $~lib/util/math/checkint|inlined.1
+       br $~lib/util/math/checkint64|inlined.1
       end
       i32.const 2
      end
@@ -3147,7 +3147,7 @@
       local.get $3
       f64.sub
       f64.div
-      br $~lib/util/math/pow_lut|inlined.0
+      br $~lib/util/math/pow64_lut|inlined.0
      end
      local.get $12
      i32.const 1
@@ -3180,7 +3180,7 @@
      i64.eq
      if
       f64.const 1
-      br $~lib/util/math/pow_lut|inlined.0
+      br $~lib/util/math/pow64_lut|inlined.0
      end
      local.get $8
      i64.const 2047
@@ -3189,7 +3189,7 @@
      i64.lt_u
      if
       f64.const 1
-      br $~lib/util/math/pow_lut|inlined.0
+      br $~lib/util/math/pow64_lut|inlined.0
      end
      local.get $5
      i64.const 4607182418800017408
@@ -3203,7 +3203,7 @@
      else
       f64.const 0
      end
-     br $~lib/util/math/pow_lut|inlined.0
+     br $~lib/util/math/pow64_lut|inlined.0
     end
     local.get $7
     i64.const 0
@@ -3452,7 +3452,7 @@
    f64.mul
    f64.add
    local.set $35
-   block $~lib/util/math/exp_inline|inlined.0 (result f64)
+   block $~lib/util/math/exp64_inline|inlined.0 (result f64)
     local.get $36
     local.set $15
     local.get $35
@@ -3485,7 +3485,7 @@
       f64.const 1
       local.get $12
       select
-      br $~lib/util/math/exp_inline|inlined.0
+      br $~lib/util/math/exp64_inline|inlined.0
      end
      local.get $39
      i32.const 1033
@@ -3527,7 +3527,7 @@
        local.get $17
        f64.mul
       end
-      br $~lib/util/math/exp_inline|inlined.0
+      br $~lib/util/math/exp64_inline|inlined.0
      end
      i32.const 0
      local.set $39
@@ -3723,7 +3723,7 @@
       f64.const 2.2250738585072014e-308
       f64.mul
      end
-     br $~lib/util/math/exp_inline|inlined.0
+     br $~lib/util/math/exp64_inline|inlined.0
     end
     local.get $11
     f64.reinterpret_i64
@@ -4992,7 +4992,7 @@
   local.get $0
   call $~lib/util/number/dtoa
  )
- (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5667,7 +5667,7 @@
   global.set $resolve-binary/f
   global.get $resolve-binary/f
   f64.const 2
-  call $~lib/math/NativeMath.pow
+  call $~lib/util/math/pow64
   global.set $resolve-binary/f
   global.get $resolve-binary/f
   i32.const 0
@@ -6051,7 +6051,7 @@
   end
   i32.const 2
   i32.const 2
-  call $~lib/math/ipow32
+  call $~lib/util/math/ipow32
   i32.const 10
   call $~lib/number/I32#toString
   local.set $0
@@ -6077,7 +6077,7 @@
   end
   f64.const 2
   f64.const 2
-  call $~lib/math/NativeMath.pow
+  call $~lib/util/math/pow64
   i32.const 0
   call $~lib/number/F64#toString
   local.set $0
@@ -6103,7 +6103,7 @@
   end
   f64.const 2
   f64.const 2
-  call $~lib/math/NativeMath.pow
+  call $~lib/util/math/pow64
   i32.const 0
   call $~lib/number/F64#toString
   local.set $0

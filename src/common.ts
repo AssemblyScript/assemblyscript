@@ -220,9 +220,7 @@ export namespace CommonNames {
   export const ArrayBufferView = "ArrayBufferView";
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";
-  export const Mathf = "Mathf";
   export const NativeMath = "NativeMath";
-  export const NativeMathf = "NativeMathf";
   export const Int8Array = "Int8Array";
   export const Int16Array = "Int16Array";
   export const Int32Array = "Int32Array";
@@ -240,10 +238,12 @@ export namespace CommonNames {
   export const abort = "abort";
   export const trace = "trace";
   export const seed = "seed";
-  export const pow = "pow";
-  export const ipow32 = "ipow32";
-  export const ipow64 = "ipow64";
-  export const mod = "mod";
+  export const fpow32 = "~lib/util/math/pow32";
+  export const fpow64 = "~lib/util/math/pow64";
+  export const ipow32 = "~lib/util/math/ipow32";
+  export const ipow64 = "~lib/util/math/ipow64";
+  export const fmod32 = "~lib/util/math/mod32";
+  export const fmod64 = "~lib/util/math/mod64";
   export const alloc = "__alloc";
   export const realloc = "__realloc";
   export const free = "__free";

@@ -2262,7 +2262,7 @@
   i32.rem_s
   call $std/operator-overloading/Tester#constructor
  )
- (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2487,12 +2487,12 @@
   i32.load
   local.get $1
   i32.load
-  call $~lib/math/ipow32
+  call $~lib/util/math/ipow32
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
-  call $~lib/math/ipow32
+  call $~lib/util/math/ipow32
   call $std/operator-overloading/Tester#constructor
  )
  (func $std/operator-overloading/Tester.and (param $0 i32) (param $1 i32) (result i32)

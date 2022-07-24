@@ -2026,128 +2026,122 @@ interface SymbolConstructor {
 
 declare const Symbol: SymbolConstructor;
 
+// prevent infer T as literal
 /** @internal */
-interface IMath<T> {
+type Widen<T> = T extends number ? number : T;
+
+/** @internal */
+interface IMath {
   /** The base of natural logarithms, e, approximately 2.718. */
-  readonly E: T;
+  readonly E: f64;
   /** The natural logarithm of 2, approximately 0.693. */
-  readonly LN2: T;
+  readonly LN2: f64;
   /** The natural logarithm of 10, approximately 2.302. */
-  readonly LN10: T;
+  readonly LN10: f64;
   /** The base 2 logarithm of e, approximately 1.442. */
-  readonly LOG2E: T;
+  readonly LOG2E: f64;
   /** The base 10 logarithm of e, approximately 0.434. */
-  readonly LOG10E: T;
+  readonly LOG10E: f64;
   /** The ratio of the circumference of a circle to its diameter, approximately 3.14159. */
-  readonly PI: T;
+  readonly PI: f64;
   /** The square root of 1/2, approximately 0.707. */
-  readonly SQRT1_2: T;
+  readonly SQRT1_2: f64;
   /** The square root of 2, approximately 1.414. */
-  readonly SQRT2: T;
+  readonly SQRT2: f64;
   /** Returns the absolute value of `x`. */
-  abs(x: T): T;
+  abs<T extends Widen<u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>>(x: T): Widen<T>;
   /** Returns the arccosine (in radians) of `x`. */
-  acos(x: T): T;
+  acos<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic arc-cosine of `x`. */
-  acosh(x: T): T;
+  acosh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the arcsine (in radians) of `x`. */
-  asin(x: T): T;
+  asin<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic arcsine of `x`. */
-  asinh(x: T): T;
+  asinh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the arctangent (in radians) of `x`. */
-  atan(x: T): T;
+  atan<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the arctangent of the quotient of its arguments. */
-  atan2(y: T, x: T): T;
+  atan2<T extends f32 | f64>(y: T, x: T): Widen<T>;
   /** Returns the hyperbolic arctangent of `x`. */
-  atanh(x: T): T;
+  atanh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the cube root of `x`. */
-  cbrt(x: T): T;
+  cbrt<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the smallest integer greater than or equal to `x`. */
-  ceil(x: T): T;
-  /** Returns the number of leading zero bits in the 32-bit binary representation of `x`. */
-  clz32(x: T): T;
+  ceil<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
+  /** @deprecated Returns the number of leading zero bits in the 32-bit binary representation of `x`. */
+  clz32<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns the cosine (in radians) of `x`. */
-  cos(x: T): T;
+  cos<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic cosine of `x`. */
-  cosh(x: T): T;
+  cosh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns e to the power of `x`. */
-  exp(x: T): T;
+  exp<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns e to the power of `x`, minus 1. */
-  expm1(x: T): T;
+  expm1<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the largest integer less than or equal to `x`. */
-  floor(x: T): T;
-  /** Returns the nearest 32-bit single precision float representation of `x`. */
-  fround(x: T): T;
+  floor<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
+  /** @deprecated Returns the nearest 32-bit single precision float representation of `x`. */
+  fround<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the square root of the sum of squares of its arguments. */
-  hypot(value1: T, value2: T): T; // TODO: rest
-  /** Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
-  imul(a: T, b: T): T;
+  hypot<T extends f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
+  /** @deprecated Returns the result of the C-like 32-bit multiplication of `a` and `b`. */
+  imul<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>;
   /** Returns the natural logarithm (base e) of `x`. */
-  log(x: T): T;
+  log<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the base 10 logarithm of `x`. */
-  log10(x: T): T;
+  log10<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the natural logarithm (base e) of 1 + `x`. */
-  log1p(x: T): T;
+  log1p<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the base 2 logarithm of `x`. */
-  log2(x: T): T;
+  log2<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the largest-valued number of its arguments. */
-  max(value1: T, value2: T): T; // TODO: rest
+  max<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
   /** Returns the lowest-valued number of its arguments. */
-  min(value1: T, value2: T): T; // TODO: rest
+  min<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(a: T, b: T): Widen<T>; // TODO: rest
   /** Returns `base` to the power of `exponent`. */
-  pow(base: T, exponent: T): T;
+  pow<T extends f32 | f64>(base: T, exponent: T): Widen<T>;
   /** Returns a pseudo-random number in the range from 0.0 inclusive up to but not including 1.0. */
-  random(): T;
+  random(): f64;
   /** Returns the value of `x` rounded to the nearest integer. */
-  round(x: T): T;
+  round<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns the sign of `x`, indicating whether the number is positive, negative or zero. */
-  sign(x: T): T;
+  sign<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
   /** Returns whether the sign bit of `x` is set. */
-  signbit(x: T): bool;
+  signbit<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): bool;
   /** Returns the sine of `x`. */
-  sin(x: T): T;
+  sin<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic sine of `x`. */
-  sinh(x: T): T;
+  sinh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the square root of `x`. */
-  sqrt(x: T): T;
+  sqrt<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the tangent of `x`. */
-  tan(x: T): T;
+  tan<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the hyperbolic tangent of `x`. */
-  tanh(x: T): T;
+  tanh<T extends f32 | f64>(x: T): Widen<T>;
   /** Returns the integer part of `x` by removing any fractional digits. */
-  trunc(x: T): T;
+  trunc<T extends u8 | u16 | u32 | u64 | i8 | i16 | i32 | i64 | f32 | f64>(x: T): Widen<T>;
 }
 
 /** @internal */
-interface INativeMath<T> extends IMath<T> {
-  /** Contains sin value produced after Math/Mathf.sincos */
-  sincos_sin: T;
-  /** Contains cos value produced after Math/Mathf.sincos */
-  sincos_cos: T;
+interface INativeMath extends IMath {
+  /** Contains sin value produced after Math.sincos */
+  sincos_sin: f64;
+  /** Contains cos value produced after Math.sincos */
+  sincos_cos: f64;
   /** Seeds the random number generator. */
   seedRandom(value: i64): void;
-  /** Multiplies a floating point `x` by 2 raised to power exp `n`. */
-  scalbn(x: T, n: i32): T;
-  /** Returns the floating-point remainder of `x / y` (rounded towards zero). */
-  mod(x: T, y: T): T;
-  /** Returns the floating-point remainder of `x / y` (rounded to nearest). */
-  rem(x: T, y: T): T;
   /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
-  sincos(x: T): void;
+  sincos<T extends f32 | f64>(x: T): void;
   /** Returns 2 raised to the given power x. Equivalent to 2 ** x. */
-  exp2(x: T): T;
+  exp2<T extends f32 | f64>(x: T): Widen<T>;
 }
 
 /** Double precision math imported from JavaScript. */
-declare const JSMath: IMath<f64>;
+declare const JSMath: IMath;
 /** Double precision math implemented natively. */
-declare const NativeMath: INativeMath<f64>;
-/** Single precision math implemented natively. */
-declare const NativeMathf: INativeMath<f32>;
+declare const NativeMath: INativeMath;
 /** Alias of {@link NativeMath} or {@link JSMath} respectively. Defaults to `NativeMath`. */
-declare const Math: IMath<f64>;
-/** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
-declare const Mathf: IMath<f32>;
+declare const Math: IMath;
 
 /** Environmental abort function. */
 declare function abort(msg?: string | null, fileName?: string | null, lineNumber?: i32, columnNumber?: i32): never;
@@ -2236,8 +2230,10 @@ interface TypedPropertyDescriptor<T> {
 
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token:
-  "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
-  ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+  | "[]" | "[]=" | "{}" | "{}="
+  | "==" |  "!=" |  ">" | "<"  | "<=" | ">="
+  | ">>" | ">>>" | "<<" | "&"  | "|"  | "^"
+  |  "+" |   "-" |  "*" | "**" | "/"  | "%"
 ): (
   target: any,
   propertyKey: string,
@@ -2247,8 +2243,10 @@ declare function operator(token:
 declare namespace operator {
   /** Annotates a method as a binary operator overload for the specified `token`. */
   export function binary(token:
-    "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
-    ">>" | ">>>" | "<<" |  "&"  | "|"  | "^"  | "+" | "-" | "*"  | "**" | "/"  | "%"
+    | "[]" | "[]=" | "{}" | "{}="
+    | "==" |  "!=" |  ">" | "<"  | "<=" | ">="
+    | ">>" | ">>>" | "<<" | "&"  | "|"  | "^"
+    |  "+" |   "-" |  "*" | "**" | "/"  | "%"
   ): (
     target: any,
     propertyKey: string,

@@ -1,5 +1,5 @@
 import { itoa32, utoa32, itoa64, utoa64, dtoa, itoa_buffered, dtoa_buffered, MAX_DOUBLE_LENGTH } from "./number";
-import { ipow32 } from "../math";
+import { scalbn64, ipow32 } from "../util/math";
 
 // All tables are stored as two staged lookup tables (static tries)
 // because the full range of Unicode symbols can't be efficiently
@@ -1092,7 +1092,7 @@ function scaledown(significand: u64, exp: i32): f64 {
   significand = (q << s) + <u64>(reinterpret<f64>(reinterpret<u64>(<f64>r) + (s << 52)) / <f64>b);
   shift -= s;
 
-  return NativeMath.scalbn(<f64>significand, <i32>shift);
+  return scalbn64(<f64>significand, <i32>shift);
 }
 
 // Adopted from metallic lib:
@@ -1111,7 +1111,7 @@ function scaleup(significand: u64, exp: i32): f64 {
   }
   significand = fixmul(significand, <u32>ipow32(5, exp));
   shift = __fixmulShift;
-  return NativeMath.scalbn(<f64>significand, <i32>shift);
+  return scalbn64(<f64>significand, <i32>shift);
 }
 
 // Adopted from metallic lib:

@@ -1,12 +1,30 @@
-//
+// Lookup data for pio2f_large_quot
+
+// @ts-ignore: decorator
+@lazy @inline const PIO2_TABLE32 = memory.data<u64>([
+  0xA2F9836E4E441529,
+  0xFC2757D1F534DDC0,
+  0xDB6295993C439041,
+  0xFE5163ABDEBBC561
+]);
+
+// Lookup data for pio2_large_quot
+
+/** @internal */
+// @ts-ignore: decorator
+@lazy @inline const PIO2_TABLE64 = memory.data<u64>([
+  0x00000000A2F9836E, 0x4E441529FC2757D1, 0xF534DDC0DB629599, 0x3C439041FE5163AB,
+  0xDEBBC561B7246E3A, 0x424DD2E006492EEA, 0x09D1921CFE1DEB1C, 0xB129A73EE88235F5,
+  0x2EBB4484E99C7026, 0xB45F7E413991D639, 0x835339F49C845F8B, 0xBDF9283B1FF897FF,
+  0xDE05980FEF2F118B, 0x5A0A6D1F6D367ECF, 0x27CB09B74F463F66, 0x9E5FEA2D7527BAC7,
+  0xEBE5F17B3D0739F7, 0x8A5292EA6BFB5FB1, 0x1F8D5D0856033046, 0xFC7B6BABF0CFBC20,
+  0x9AF4361DA9E39161, 0x5EE61B086599855F, 0x14A068408DFFD880, 0x4D73273106061557
+]);
+
 // Lookup data for exp2f
-//
 
 // @ts-ignore: decorator
-@inline const EXP2F_TABLE_BITS = 5;
-
-// @ts-ignore: decorator
-@lazy @inline const EXP2F_DATA_TAB = memory.data<u64>([
+@lazy @inline const EXP2_TABLE32 = memory.data<u64>([
   // exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
   // used for computing 2^(k/N) for an int |k| < 150 N as
   // double(tab[k%N] + (k << 52-BITS))
@@ -20,445 +38,63 @@
   0x3FEF5818DCFBA487, 0x3FEF7C97337B9B5F, 0x3FEFA4AFA2A490DA, 0x3FEFD0765B6E4540
 ]);
 
-// ULP error: 0.502 (nearest rounding.)
-// Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
-// Wrong count: 168353 (all nearest rounding wrong results with fma.)
 // @ts-ignore: decorator
-@inline
-export function exp2f_lut(x: f32): f32 {
-  const
-    N      = 1 << EXP2F_TABLE_BITS,
-    N_MASK = N - 1,
-    shift  = reinterpret<f64>(0x4338000000000000) / N, // 0x1.8p+52
-    Ox127f = reinterpret<f32>(0x7F000000);
+@inline const EXP2_TABLE32_BITS = 5;
 
-  const
-    C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
-    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
-    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
-
-  var xd = <f64>x;
-  var ix = reinterpret<u32>(x);
-  var ux = ix >> 20 & 0x7FF;
-  if (ux >= 0x430) {
-    // |x| >= 128 or x is nan.
-    if (ix == 0xFF800000) return 0; // x == -Inf    -> 0
-    if (ux >= 0x7F8) return x + x;  // x == Inf/NaN -> Inf/NaN
-    if (x > 0) return x * Ox127f;   // x >     0    -> HugeVal (Owerflow)
-    if (x <= -150) return 0;        // x <= -150    -> 0 (Underflow)
-  }
-
-  // x = k/N + r with r in [-1/(2N), 1/(2N)] and int k.
-  var kd = xd + shift;
-  var ki = reinterpret<u64>(kd);
-  var r  = xd - (kd - shift);
-  var t: u64, y: f64, s: f64;
-
-  // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
-  t += ki << (52 - EXP2F_TABLE_BITS);
-  s  = reinterpret<f64>(t);
-  y  = C2 * r + 1;
-  y += (C0 * r + C1) * (r  * r);
-  y *= s;
-
-  return <f32>y;
-}
-
-// ULP error: 0.502 (nearest rounding.)
-// Relative error: 1.69 * 2^-34 in [-ln2/64, ln2/64] (before rounding.)
-// Wrong count: 170635 (all nearest rounding wrong results with fma.)
-// @ts-ignore: decorator
-@inline
-export function expf_lut(x: f32): f32 {
-  const
-    N        = 1 << EXP2F_TABLE_BITS,
-    N_MASK   = N - 1,
-    shift    = reinterpret<f64>(0x4338000000000000),        // 0x1.8p+52
-    InvLn2N  = reinterpret<f64>(0x3FF71547652B82FE) * N,    // 0x1.71547652b82fep+0
-    Ox1p127f = reinterpret<f32>(0x7F000000);
-
-  const
-    C0 = reinterpret<f64>(0x3FAC6AF84B912394) / N / N / N, // 0x1.c6af84b912394p-5
-    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3) / N / N,     // 0x1.ebfce50fac4f3p-3
-    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6) / N;         // 0x1.62e42ff0c52d6p-1
-
-  var xd = <f64>x;
-  var ix = reinterpret<u32>(x);
-  var ux = ix >> 20 & 0x7FF;
-  if (ux >= 0x42B) {
-    // |x| >= 88 or x is nan.
-    if (ix == 0xFF800000) return 0;                            // x == -Inf    -> 0
-    if (ux >= 0x7F8) return x + x;                             // x == Inf/NaN -> Inf/NaN
-    if (x > reinterpret<f32>(0x42B17217)) return x * Ox1p127f; // x > log(0x1p128)  ~=  88.72 -> HugeVal (Owerflow)
-    if (x < reinterpret<f32>(0xC2CFF1B4)) return 0;            // x < log(0x1p-150) ~= -103.97 -> 0 (Underflow)
-  }
-
-  // x*N/Ln2 = k + r with r in [-1/2, 1/2] and int k.
-  var z = InvLn2N * xd;
-
-  // Round and convert z to int, the result is in [-150*N, 128*N] and
-  // ideally ties-to-even rule is used, otherwise the magnitude of r
-  // can be bigger which gives larger approximation error.
-  var kd = <f64>(z + shift);
-  var ki = reinterpret<u64>(kd);
-  var r  = z - (kd - shift);
-  var s: f64, y: f64, t: u64;
-
-  // exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
-  t += ki << (52 - EXP2F_TABLE_BITS);
-  s  = reinterpret<f64>(t);
-  z  = C0 * r + C1;
-  y  = C2 * r + 1;
-  y += z * (r * r);
-  y *= s;
-
-  return <f32>y;
-}
-
-//
 // Lookup data for log2f
-//
 
 // @ts-ignore: decorator
-@inline const LOG2F_TABLE_BITS = 4;
-
-// @ts-ignore: decorator
-@lazy @inline const LOG2F_DATA_TAB = memory.data<f64>([
-  reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019), // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
-  reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4), // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
-  reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD7418B0A1FB77B), // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
-  reinterpret<f64>(0x3FF3C995B0B80385), reinterpret<f64>(0xBFD39DE91A6DCF7B), // 0x1.3c995b0b80385p+0, -0x1.39de91a6dcf7bp-2,
-  reinterpret<f64>(0x3FF30D190C8864A5), reinterpret<f64>(0xBFD01D9BF3F2B631), // 0x1.30d190c8864a5p+0, -0x1.01d9bf3f2b631p-2,
-  reinterpret<f64>(0x3FF25E227B0B8EA0), reinterpret<f64>(0xBFC97C1D1B3B7AF0), // 0x1.25e227b0b8eap+0 , -0x1.97c1d1b3b7afp-3 ,
-  reinterpret<f64>(0x3FF1BB4A4A1A343F), reinterpret<f64>(0xBFC2F9E393AF3C9F), // 0x1.1bb4a4a1a343fp+0, -0x1.2f9e393af3c9fp-3,
-  reinterpret<f64>(0x3FF12358F08AE5BA), reinterpret<f64>(0xBFB960CBBF788D5C), // 0x1.12358f08ae5bap+0, -0x1.960cbbf788d5cp-4,
-  reinterpret<f64>(0x3FF0953F419900A7), reinterpret<f64>(0xBFAA6F9DB6475FCE), // 0x1.0953f419900a7p+0, -0x1.a6f9db6475fcep-5,
-  reinterpret<f64>(0x3FF0000000000000), 0,                                    // 0x1p+0,                0x0,
-  reinterpret<f64>(0x3FEE608CFD9A47AC), reinterpret<f64>(0x3FB338CA9F24F53D), // 0x1.e608cfd9a47acp-1,  0x1.338ca9f24f53dp-4,
-  reinterpret<f64>(0x3FECA4B31F026AA0), reinterpret<f64>(0x3FC476A9543891BA), // 0x1.ca4b31f026aap-1 ,  0x1.476a9543891bap-3,
-  reinterpret<f64>(0x3FEB2036576AFCE6), reinterpret<f64>(0x3FCE840B4AC4E4D2), // 0x1.b2036576afce6p-1,  0x1.e840b4ac4e4d2p-3,
-  reinterpret<f64>(0x3FE9C2D163A1AA2D), reinterpret<f64>(0x3FD40645F0C6651C), // 0x1.9c2d163a1aa2dp-1,  0x1.40645f0c6651cp-2,
-  reinterpret<f64>(0x3FE886E6037841ED), reinterpret<f64>(0x3FD88E9C2C1B9FF8), // 0x1.886e6037841edp-1,  0x1.88e9c2c1b9ff8p-2,
-  reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FDCE0A44EB17BCC)  // 0x1.767dcf5534862p-1,  0x1.ce0a44eb17bccp-2
+@lazy @inline const LOG2_TABLE32 = memory.data<u64>([
+  0x3FF661EC79F8F3BE, 0xBFDEFEC65B963019, // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
+  0x3FF571ED4AAF883D, 0xBFDB0B6832D4FCA4, // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
+  0x3FF49539F0F010B0, 0xBFD7418B0A1FB77B, // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
+  0x3FF3C995B0B80385, 0xBFD39DE91A6DCF7B, // 0x1.3c995b0b80385p+0, -0x1.39de91a6dcf7bp-2,
+  0x3FF30D190C8864A5, 0xBFD01D9BF3F2B631, // 0x1.30d190c8864a5p+0, -0x1.01d9bf3f2b631p-2,
+  0x3FF25E227B0B8EA0, 0xBFC97C1D1B3B7AF0, // 0x1.25e227b0b8eap+0 , -0x1.97c1d1b3b7afp-3 ,
+  0x3FF1BB4A4A1A343F, 0xBFC2F9E393AF3C9F, // 0x1.1bb4a4a1a343fp+0, -0x1.2f9e393af3c9fp-3,
+  0x3FF12358F08AE5BA, 0xBFB960CBBF788D5C, // 0x1.12358f08ae5bap+0, -0x1.960cbbf788d5cp-4,
+  0x3FF0953F419900A7, 0xBFAA6F9DB6475FCE, // 0x1.0953f419900a7p+0, -0x1.a6f9db6475fcep-5,
+  0x3FF0000000000000, 0,                  // 0x1p+0,                0x0,
+  0x3FEE608CFD9A47AC, 0x3FB338CA9F24F53D, // 0x1.e608cfd9a47acp-1,  0x1.338ca9f24f53dp-4,
+  0x3FECA4B31F026AA0, 0x3FC476A9543891BA, // 0x1.ca4b31f026aap-1 ,  0x1.476a9543891bap-3,
+  0x3FEB2036576AFCE6, 0x3FCE840B4AC4E4D2, // 0x1.b2036576afce6p-1,  0x1.e840b4ac4e4d2p-3,
+  0x3FE9C2D163A1AA2D, 0x3FD40645F0C6651C, // 0x1.9c2d163a1aa2dp-1,  0x1.40645f0c6651cp-2,
+  0x3FE886E6037841ED, 0x3FD88E9C2C1B9FF8, // 0x1.886e6037841edp-1,  0x1.88e9c2c1b9ff8p-2,
+  0x3FE767DCF5534862, 0x3FDCE0A44EB17BCC  // 0x1.767dcf5534862p-1,  0x1.ce0a44eb17bccp-2
 ]);
 
-// ULP error: 0.752 (nearest rounding.)
-// Relative error: 1.9 * 2^-26 (before rounding.)
 // @ts-ignore: decorator
-@inline
-export function log2f_lut(x: f32): f32 {
-  const
-    N_MASK  = (1 << LOG2F_TABLE_BITS) - 1,
-    Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
+@inline const LOG2_TABLE32_BITS = 4;
 
-  const
-    A0 = reinterpret<f64>(0xBFD712B6F70A7E4D), // -0x1.712b6f70a7e4dp-2
-    A1 = reinterpret<f64>(0x3FDECABF496832E0), //  0x1.ecabf496832ep-2
-    A2 = reinterpret<f64>(0xBFE715479FFAE3DE), // -0x1.715479ffae3dep-1
-    A3 = reinterpret<f64>(0x3FF715475F35C8B8); //  0x1.715475f35c8b8p0
-
-  var ux = reinterpret<u32>(x);
-  // Fix sign of zero with downward rounding when x==1.
-  // if (WANT_ROUNDING && predict_false(ix == 0x3f800000)) return 0;
-  if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
-    // x < 0x1p-126 or inf or nan.
-    if (ux * 2 == 0) return -Infinity;
-    if (ux == 0x7F800000) return x; // log2(inf) == inf.
-    if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
-    // x is subnormal, normalize it.
-    ux = reinterpret<u32>(x * Ox1p23f);
-    ux -= 23 << 23;
-  }
-  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
-  // The range is split into N subintervals.
-  // The ith subinterval contains z and c is near its center.
-  var tmp  = ux - 0x3F330000;
-  var i    = (tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK;
-  var top  = tmp & 0xFF800000;
-  var iz   = ux - top;
-  var k    = <i32>tmp >> 23;
-
-  var invc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
-  var z    = <f64>reinterpret<f32>(iz);
-
-  // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
-  var r  = z * invc - 1;
-  var y0 = logc + <f64>k;
-
-  // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
-  var y  = A1 * r + A2;
-  var p  = A3 * r + y0;
-  var r2 = r * r;
-  y += A0 * r2;
-  y  = y * r2 + p;
-
-  return <f32>y;
-}
-
-//
 // Lookup data for logf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/logf.c
-//
 
 // @ts-ignore: decorator
-@inline const LOGF_TABLE_BITS = 4;
-
-// @ts-ignore: decorator
-@lazy @inline const LOGF_DATA_TAB = memory.data<f64>([
-  reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFD57BF7808CAADE), // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
-  reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFD2BEF0A7C06DDB), // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
-  reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD01EAE7F513A67), // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
-  reinterpret<f64>(0x3FF3C995B0B80385), reinterpret<f64>(0xBFCB31D8A68224E9), // 0x1.3c995b0b80385p+0, -0x1.b31d8a68224e9p-3,
-  reinterpret<f64>(0x3FF30D190C8864A5), reinterpret<f64>(0xBFC6574F0AC07758), // 0x1.30d190c8864a5p+0, -0x1.6574f0ac07758p-3,
-  reinterpret<f64>(0x3FF25E227B0B8EA0), reinterpret<f64>(0xBFC1AA2BC79C8100), // 0x1.25e227b0b8eap+0 , -0x1.1aa2bc79c81p-3  ,
-  reinterpret<f64>(0x3FF1BB4A4A1A343F), reinterpret<f64>(0xBFBA4E76CE8C0E5E), // 0x1.1bb4a4a1a343fp+0, -0x1.a4e76ce8c0e5ep-4,
-  reinterpret<f64>(0x3FF12358F08AE5BA), reinterpret<f64>(0xBFB1973C5A611CCC), // 0x1.12358f08ae5bap+0, -0x1.1973c5a611cccp-4,
-  reinterpret<f64>(0x3FF0953F419900A7), reinterpret<f64>(0xBFA252F438E10C1E), // 0x1.0953f419900a7p+0, -0x1.252f438e10c1ep-5,
-  reinterpret<f64>(0x3FF0000000000000), 0,                                    // 0x1p+0,                0,
-  reinterpret<f64>(0x3FEE608CFD9A47AC), reinterpret<f64>(0x3FAAA5AA5DF25984), // 0x1.e608cfd9a47acp-1,  0x1.aa5aa5df25984p-5,
-  reinterpret<f64>(0x3FECA4B31F026AA0), reinterpret<f64>(0x3FBC5E53AA362EB4), // 0x1.ca4b31f026aap-1 ,  0x1.c5e53aa362eb4p-4,
-  reinterpret<f64>(0x3FEB2036576AFCE6), reinterpret<f64>(0x3FC526E57720DB08), // 0x1.b2036576afce6p-1,  0x1.526e57720db08p-3,
-  reinterpret<f64>(0x3FE9C2D163A1AA2D), reinterpret<f64>(0x3FCBC2860D224770), // 0x1.9c2d163a1aa2dp-1,  0x1.bc2860d22477p-3 ,
-  reinterpret<f64>(0x3FE886E6037841ED), reinterpret<f64>(0x3FD1058BC8A07EE1), // 0x1.886e6037841edp-1,  0x1.1058bc8a07ee1p-2,
-  reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FD4043057B6EE09)  // 0x1.767dcf5534862p-1,  0x1.4043057b6ee09p-2
+@lazy @inline const LOG_TABLE32 = memory.data<u64>([
+  0x3FF661EC79F8F3BE, 0xBFD57BF7808CAADE, // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
+  0x3FF571ED4AAF883D, 0xBFD2BEF0A7C06DDB, // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
+  0x3FF49539F0F010B0, 0xBFD01EAE7F513A67, // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
+  0x3FF3C995B0B80385, 0xBFCB31D8A68224E9, // 0x1.3c995b0b80385p+0, -0x1.b31d8a68224e9p-3,
+  0x3FF30D190C8864A5, 0xBFC6574F0AC07758, // 0x1.30d190c8864a5p+0, -0x1.6574f0ac07758p-3,
+  0x3FF25E227B0B8EA0, 0xBFC1AA2BC79C8100, // 0x1.25e227b0b8eap+0 , -0x1.1aa2bc79c81p-3  ,
+  0x3FF1BB4A4A1A343F, 0xBFBA4E76CE8C0E5E, // 0x1.1bb4a4a1a343fp+0, -0x1.a4e76ce8c0e5ep-4,
+  0x3FF12358F08AE5BA, 0xBFB1973C5A611CCC, // 0x1.12358f08ae5bap+0, -0x1.1973c5a611cccp-4,
+  0x3FF0953F419900A7, 0xBFA252F438E10C1E, // 0x1.0953f419900a7p+0, -0x1.252f438e10c1ep-5,
+  0x3FF0000000000000, 0,                  // 0x1p+0,                0,
+  0x3FEE608CFD9A47AC, 0x3FAAA5AA5DF25984, // 0x1.e608cfd9a47acp-1,  0x1.aa5aa5df25984p-5,
+  0x3FECA4B31F026AA0, 0x3FBC5E53AA362EB4, // 0x1.ca4b31f026aap-1 ,  0x1.c5e53aa362eb4p-4,
+  0x3FEB2036576AFCE6, 0x3FC526E57720DB08, // 0x1.b2036576afce6p-1,  0x1.526e57720db08p-3,
+  0x3FE9C2D163A1AA2D, 0x3FCBC2860D224770, // 0x1.9c2d163a1aa2dp-1,  0x1.bc2860d22477p-3 ,
+  0x3FE886E6037841ED, 0x3FD1058BC8A07EE1, // 0x1.886e6037841edp-1,  0x1.1058bc8a07ee1p-2,
+  0x3FE767DCF5534862, 0x3FD4043057B6EE09  // 0x1.767dcf5534862p-1,  0x1.4043057b6ee09p-2
 ]);
 
-// ULP error: 0.818 (nearest rounding.)
-// Relative error: 1.957 * 2^-26 (before rounding.)
 // @ts-ignore: decorator
-@inline
-export function logf_lut(x: f32): f32 {
-  const
-    N_MASK  = (1 << LOGF_TABLE_BITS) - 1,
-    Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
+@inline const LOG_TABLE32_BITS = 4;
 
-  const
-    Ln2 = reinterpret<f64>(0x3FE62E42FEFA39EF), // 0x1.62e42fefa39efp-1;
-    A0  = reinterpret<f64>(0xBFD00EA348B88334), // -0x1.00ea348b88334p-2
-    A1  = reinterpret<f64>(0x3FD5575B0BE00B6A), //  0x1.5575b0be00b6ap-2
-    A2  = reinterpret<f64>(0xBFDFFFFEF20A4123); // -0x1.ffffef20a4123p-2
-
-  var ux = reinterpret<u32>(x);
-  // Fix sign of zero with downward rounding when x==1.
-  // if (WANT_ROUNDING && ux == 0x3f800000) return 0;
-  if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
-    // x < 0x1p-126 or inf or nan.
-    if ((ux << 1) == 0) return -Infinity;
-    if (ux == 0x7F800000) return x; // log(inf) == inf.
-    if ((ux >> 31) || (ux << 1) >= 0xFF000000) return (x - x) / (x - x);
-    // x is subnormal, normalize it.
-    ux = reinterpret<u32>(x * Ox1p23f);
-    ux -= 23 << 23;
-  }
-  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
-  // The range is split into N subintervals.
-  // The ith subinterval contains z and c is near its center.
-  var tmp = ux - 0x3F330000;
-  var i   = (tmp >> (23 - LOGF_TABLE_BITS)) & N_MASK;
-  var k   = <i32>tmp >> 23;
-  var iz  = ux - (tmp & 0x1FF << 23);
-
-  var invc = load<f64>(LOGF_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(LOGF_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
-
-  var z = <f64>reinterpret<f32>(iz);
-
-  // log(x) = log1p(z/c-1) + log(c) + k*Ln2
-  var r = z * invc - 1;
-  var y0 = logc + <f64>k * Ln2;
-
-  // Pipelined polynomial evaluation to approximate log1p(r).
-  var r2 = r * r;
-  var y  = A1 * r + A2;
-  y += A0 * r2;
-  y = y * r2 + (y0 + r);
-
-  return <f32>y;
-}
-
-//
-// Lookup data for powf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/powf.c
-//
-
-// @ts-ignore: decorator
-@inline
-function zeroinfnanf(ux: u32): bool {
-  return (ux << 1) - 1 >= (<u32>0x7f800000 << 1) - 1;
-}
-
-// Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
-// the bit representation of a non-zero finite floating-point value.
-// @ts-ignore: decorator
-@inline
-function checkintf(iy: u32): i32 {
-  var e = iy >> 23 & 0xFF;
-  if (e < 0x7F     ) return 0;
-  if (e > 0x7F + 23) return 2;
-  e = 1 << (0x7F + 23 - e);
-  if (iy & (e - 1)) return 0;
-  if (iy &  e     ) return 1;
-  return 2;
-}
-
-// Subnormal input is normalized so ix has negative biased exponent.
-// Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set.
-// @ts-ignore: decorator
-@inline
-function log2f_inline(ux: u32): f64 {
-  const N_MASK = (1 << LOG2F_TABLE_BITS) - 1;
-
-  const
-    A0 = reinterpret<f64>(0x3FD27616C9496E0B), //  0x1.27616c9496e0bp-2
-    A1 = reinterpret<f64>(0xBFD71969A075C67A), // -0x1.71969a075c67ap-2
-    A2 = reinterpret<f64>(0x3FDEC70A6CA7BADD), //  0x1.ec70a6ca7baddp-2
-    A3 = reinterpret<f64>(0xBFE7154748BEF6C8), // -0x1.7154748bef6c8p-1
-    A4 = reinterpret<f64>(0x3FF71547652AB82B); //  0x1.71547652ab82bp+0
-
-  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
-  // The range is split into N subintervals.
-  // The ith subinterval contains z and c is near its center.
-  var tmp  = ux - 0x3F330000;
-  var i    = <usize>((tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK);
-  var top  = tmp & 0xFF800000;
-  var uz   = ux - top;
-  var k    = <i32>(<i32>top >> 23);
-
-  var invc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
-  var z    = <f64>reinterpret<f32>(uz);
-
-  // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
-  var r  = z * invc - 1;
-  var y0 = logc + <f64>k;
-
-  // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
-  var y = A0 * r + A1;
-  var p = A2 * r + A3;
-  var q = A4 * r + y0;
-
-  r *= r;
-  q += p * r;
-  y  = y * (r * r) + q;
-
-  return y;
-}
-
-// The output of log2 and thus the input of exp2 is either scaled by N
-// (in case of fast toint intrinsics) or not.  The unscaled xd must be
-// in [-1021,1023], sign_bias sets the sign of the result.
-// @ts-ignore: decorator
-@inline
-function exp2f_inline(xd: f64, signBias: u32): f32 {
-  const
-    N      = 1 << EXP2F_TABLE_BITS,
-    N_MASK = N - 1,
-    shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
-
-  const
-    C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
-    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
-    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
-
-  // x = k/N + r with r in [-1/(2N), 1/(2N)]
-  var kd = <f64>(xd + shift);
-  var ki = reinterpret<u64>(kd);
-  var r  = xd - (kd - shift);
-  var t: u64, z: f64, y: f64, s: f64;
-
-  // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
-  t += (ki + signBias) << (52 - EXP2F_TABLE_BITS);
-  s  = reinterpret<f64>(t);
-  z  = C0 * r + C1;
-  y  = C2 * r + 1;
-  y += z * (r * r);
-  y *= s;
-  return <f32>y;
-}
-
-// @ts-ignore: decorator
-@inline
-function xflowf(sign: u32, y: f32): f32 {
-  return select<f32>(-y, y, sign) * y;
-}
-
-// @ts-ignore: decorator
-@inline
-function oflowf(sign: u32): f32 {
-  return xflowf(sign, reinterpret<f32>(0x70000000)); // 0x1p97f
-}
-
-// @ts-ignore: decorator
-@inline
-function uflowf(sign: u32): f32 {
-  return xflowf(sign, reinterpret<f32>(0x10000000)); // 0x1p-95f
-}
-
-// @ts-ignore: decorator
-@inline
-export function powf_lut(x: f32, y: f32): f32 {
-  const
-    Ox1p23f     = reinterpret<f32>(0x4B000000), // 0x1p23f
-    UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571), // 0x1.fffffffd1d571p+6
-    LOWER_LIMIT = -150.0,
-    SIGN_BIAS   = 1 << (EXP2F_TABLE_BITS + 11);
-
-  var signBias: u32 = 0;
-  var ix = reinterpret<u32>(x);
-  var iy = reinterpret<u32>(y);
-  var ny = 0;
-
-  if (i32(ix - 0x00800000 >= 0x7f800000 - 0x00800000) | (ny = i32(zeroinfnanf(iy)))) {
-    // Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).
-    if (ny) {
-      if ((iy << 1) == 0) return 1.0;
-      if (ix == 0x3F800000) return NaN; // original: 1.0
-      if ((ix << 1) > (<u32>0x7F800000 << 1) || (iy << 1) > (<u32>0x7F800000 << 1)) return x + y;
-      if ((ix << 1) == (0x3F800000 << 1)) return NaN; // original: 1.0
-      if (((ix << 1) < (0x3F800000 << 1)) == !(iy >> 31)) return 0; // |x| < 1 && y==inf or |x| > 1 && y==-inf.
-      return y * y;
-    }
-    if (zeroinfnanf(ix)) {
-      let x2 = x * x;
-      if ((ix >> 31) && checkintf(iy) == 1) x2 = -x2;
-      return iy >> 31 ? 1 / x2 : x2;
-    }
-    // x and y are non-zero finite.
-    if (ix >> 31) {
-      // Finite x < 0.
-      let yint = checkintf(iy);
-      if (yint == 0) return (x - x) / (x - x);
-      if (yint == 1) signBias = SIGN_BIAS;
-      ix &= 0x7FFFFFFF;
-    }
-    if (ix < 0x00800000) {
-      // Normalize subnormal x so exponent becomes negative.
-      ix = reinterpret<u32>(x * Ox1p23f);
-      ix &= 0x7FFFFFFF;
-      ix -= 23 << 23;
-    }
-  }
-  var logx = log2f_inline(ix);
-  var ylogx = y * logx; // cannot overflow, y is single prec.
-  if ((reinterpret<u64>(ylogx) >> 47 & 0xFFFF) >= 0x80BF) { // reinterpret<u64>(126.0) >> 47
-    // |y * log(x)| >= 126
-    if (ylogx  > UPPER_LIMIT) return oflowf(signBias); // overflow
-    if (ylogx <= LOWER_LIMIT) return uflowf(signBias); // underflow
-  }
-  return exp2f_inline(ylogx, signBias);
-}
-
-//
 // Lookup data for exp. See: https://git.musl-libc.org/cgit/musl/tree/src/math/exp.c
-//
 
 // @ts-ignore: decorator
-@inline const EXP_TABLE_BITS = 7;
-
-// @ts-ignore: decorator
-@lazy @inline const EXP_DATA_TAB = memory.data<u64>([
+@lazy @inline const EXP_TABLE64 = memory.data<u64>([
   0x0000000000000000, 0x3FF0000000000000,
   0x3C9B3B4F1A88BF6E, 0x3FEFF63DA9FB3335,
   0xBC7160139CD8DC5D, 0x3FEFEC9A3E778061,
@@ -589,6 +225,2345 @@ export function powf_lut(x: f32, y: f32): f32 {
   0x3C5305C14160CC89, 0x3FEFF3C22B8F71F1
 ]);
 
+// @ts-ignore: decorator
+@inline const EXP_TABLE64_BITS = 7;
+
+// Lookup data for log2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log2.c
+
+/* Algorithm:
+
+  x = 2^k z
+  log2(x) = k + log2(c) + log2(z/c)
+  log2(z/c) = poly(z/c - 1)
+
+where z is in [1.6p-1; 1.6p0] which is split into N subintervals and z falls
+into the ith one, then table entries are computed as
+
+  tab[i].invc = 1/c
+  tab[i].logc = (double)log2(c)
+  tab2[i].chi = (double)c
+  tab2[i].clo = (double)(c - (double)c)
+
+where c is near the center of the subinterval and is chosen by trying +-2^29
+floating point invc candidates around 1/center and selecting one for which
+
+  1) the rounding error in 0x1.8p10 + logc is 0,
+  2) the rounding error in z - chi - clo is < 0x1p-64 and
+  3) the rounding error in (double)log2(c) is minimized (< 0x1p-68).
+
+Note: 1) ensures that k + logc can be computed without rounding error, 2)
+ensures that z/c - 1 can be computed as (z - chi - clo)*invc with close to a
+single rounding error when there is no fast fma for z*invc - 1, 3) ensures
+that logc + poly(z/c - 1) has small error, however near x == 1 when
+|log2(x)| < 0x1p-4, this is not enough so that is special cased. */
+
+// @ts-ignore: decorator
+@lazy @inline const LOG2_TABLE1_64 = memory.data<u64>([
+  //     invc       ,        logc
+  0x3FF724286BB1ACF8, 0xBFE1095FEECDB000,
+  0x3FF6E1F766D2CCA1, 0xBFE08494BD76D000,
+  0x3FF6A13D0E30D48A, 0xBFE00143AEE8F800,
+  0x3FF661EC32D06C85, 0xBFDEFEC5360B4000,
+  0x3FF623FA951198F8, 0xBFDDFDD91AB7E000,
+  0x3FF5E75BA4CF026C, 0xBFDCFFAE0CC79000,
+  0x3FF5AC055A214FB8, 0xBFDC043811FDA000,
+  0x3FF571ED0F166E1E, 0xBFDB0B67323AE000,
+  0x3FF53909590BF835, 0xBFDA152F5A2DB000,
+  0x3FF5014FED61ADDD, 0xBFD9217F5AF86000,
+  0x3FF4CAB88E487BD0, 0xBFD8304DB0719000,
+  0x3FF49539B4334FEE, 0xBFD74189F9A9E000,
+  0x3FF460CBDFAFD569, 0xBFD6552BB5199000,
+  0x3FF42D664EE4B953, 0xBFD56B23A29B1000,
+  0x3FF3FB01111DD8A6, 0xBFD483650F5FA000,
+  0x3FF3C995B70C5836, 0xBFD39DE937F6A000,
+  0x3FF3991C4AB6FD4A, 0xBFD2BAA1538D6000,
+  0x3FF3698E0CE099B5, 0xBFD1D98340CA4000,
+  0x3FF33AE48213E7B2, 0xBFD0FA853A40E000,
+  0x3FF30D191985BDB1, 0xBFD01D9C32E73000,
+  0x3FF2E025CAB271D7, 0xBFCE857DA2FA6000,
+  0x3FF2B404CF13CD82, 0xBFCCD3C8633D8000,
+  0x3FF288B02C7CCB50, 0xBFCB26034C14A000,
+  0x3FF25E2263944DE5, 0xBFC97C1C2F4FE000,
+  0x3FF234563D8615B1, 0xBFC7D6023F800000,
+  0x3FF20B46E33EAF38, 0xBFC633A71A05E000,
+  0x3FF1E2EEFDCDA3DD, 0xBFC494F5E9570000,
+  0x3FF1BB4A580B3930, 0xBFC2F9E424E0A000,
+  0x3FF19453847F2200, 0xBFC162595AFDC000,
+  0x3FF16E06C0D5D73C, 0xBFBF9C9A75BD8000,
+  0x3FF1485F47B7E4C2, 0xBFBC7B575BF9C000,
+  0x3FF12358AD0085D1, 0xBFB960C60FF48000,
+  0x3FF0FEF00F532227, 0xBFB64CE247B60000,
+  0x3FF0DB2077D03A8F, 0xBFB33F78B2014000,
+  0x3FF0B7E6D65980D9, 0xBFB0387D1A42C000,
+  0x3FF0953EFE7B408D, 0xBFAA6F9208B50000,
+  0x3FF07325CAC53B83, 0xBFA47A954F770000,
+  0x3FF05197E40D1B5C, 0xBF9D23A8C50C0000,
+  0x3FF03091C1208EA2, 0xBF916A2629780000,
+  0x3FF0101025B37E21, 0xBF7720F8D8E80000,
+  0x3FEFC07EF9CAA76B, 0x3F86FE53B1500000,
+  0x3FEF4465D3F6F184, 0x3FA11CCCE10F8000,
+  0x3FEECC079F84107F, 0x3FAC4DFC8C8B8000,
+  0x3FEE573A99975AE8, 0x3FB3AA321E574000,
+  0x3FEDE5D6F0BD3DE6, 0x3FB918A0D08B8000,
+  0x3FED77B681FF38B3, 0x3FBE72E9DA044000,
+  0x3FED0CB5724DE943, 0x3FC1DCD2507F6000,
+  0x3FECA4B2DC0E7563, 0x3FC476AB03DEA000,
+  0x3FEC3F8EE8D6CB51, 0x3FC7074377E22000,
+  0x3FEBDD2B4F020C4C, 0x3FC98EDE8BA94000,
+  0x3FEB7D6C006015CA, 0x3FCC0DB86AD2E000,
+  0x3FEB20366E2E338F, 0x3FCE840AAFCEE000,
+  0x3FEAC57026295039, 0x3FD0790AB4678000,
+  0x3FEA6D01BC2731DD, 0x3FD1AC056801C000,
+  0x3FEA16D3BC3FF18B, 0x3FD2DB11D4FEE000,
+  0x3FE9C2D14967FEAD, 0x3FD406464EC58000,
+  0x3FE970E4F47C9902, 0x3FD52DBE093AF000,
+  0x3FE920FB3982BCF2, 0x3FD651902050D000,
+  0x3FE8D30187F759F1, 0x3FD771D2CDEAF000,
+  0x3FE886E5EBB9F66D, 0x3FD88E9C857D9000,
+  0x3FE83C97B658B994, 0x3FD9A80155E16000,
+  0x3FE7F405FFC61022, 0x3FDABE186ED3D000,
+  0x3FE7AD22181415CA, 0x3FDBD0F2AEA0E000,
+  0x3FE767DCF99EFF8C, 0x3FDCE0A43DBF4000
+]);
+
+// @ts-ignore: decorator
+@lazy @inline const LOG2_TABLE2_64 = memory.data<u64>([
+  //      chi       ,         clo
+  0x3FE6200012B90A8E, 0x3C8904AB0644B605,
+  0x3FE66000045734A6, 0x3C61FF9BEA62F7A9,
+  0x3FE69FFFC325F2C5, 0x3C827ECFCB3C90BA,
+  0x3FE6E00038B95A04, 0x3C88FF8856739326,
+  0x3FE71FFFE09994E3, 0x3C8AFD40275F82B1,
+  0x3FE7600015590E10, 0xBC72FD75B4238341,
+  0x3FE7A00012655BD5, 0x3C7808E67C242B76,
+  0x3FE7E0003259E9A6, 0xBC6208E426F622B7,
+  0x3FE81FFFEDB4B2D2, 0xBC8402461EA5C92F,
+  0x3FE860002DFAFCC3, 0x3C6DF7F4A2F29A1F,
+  0x3FE89FFFF78C6B50, 0xBC8E0453094995FD,
+  0x3FE8E00039671566, 0xBC8A04F3BEC77B45,
+  0x3FE91FFFE2BF1745, 0xBC77FA34400E203C,
+  0x3FE95FFFCC5C9FD1, 0xBC76FF8005A0695D,
+  0x3FE9A0003BBA4767, 0x3C70F8C4C4EC7E03,
+  0x3FE9DFFFE7B92DA5, 0x3C8E7FD9478C4602,
+  0x3FEA1FFFD72EFDAF, 0xBC6A0C554DCDAE7E,
+  0x3FEA5FFFDE04FF95, 0x3C867DA98CE9B26B,
+  0x3FEA9FFFCA5E8D2B, 0xBC8284C9B54C13DE,
+  0x3FEADFFFDDAD03EA, 0x3C5812C8EA602E3C,
+  0x3FEB1FFFF10D3D4D, 0xBC8EFADDAD27789C,
+  0x3FEB5FFFCE21165A, 0x3C53CB1719C61237,
+  0x3FEB9FFFD950E674, 0x3C73F7D94194CE00,
+  0x3FEBE000139CA8AF, 0x3C750AC4215D9BC0,
+  0x3FEC20005B46DF99, 0x3C6BEEA653E9C1C9,
+  0x3FEC600040B9F7AE, 0xBC7C079F274A70D6,
+  0x3FECA0006255FD8A, 0xBC7A0B4076E84C1F,
+  0x3FECDFFFD94C095D, 0x3C88F933F99AB5D7,
+  0x3FED1FFFF975D6CF, 0xBC582C08665FE1BE,
+  0x3FED5FFFA2561C93, 0xBC7B04289BD295F3,
+  0x3FED9FFF9D228B0C, 0x3C870251340FA236,
+  0x3FEDE00065BC7E16, 0xBC75011E16A4D80C,
+  0x3FEE200002F64791, 0x3C89802F09EF62E0,
+  0x3FEE600057D7A6D8, 0xBC7E0B75580CF7FA,
+  0x3FEEA00027EDC00C, 0xBC8C848309459811,
+  0x3FEEE0006CF5CB7C, 0xBC8F8027951576F4,
+  0x3FEF2000782B7DCC, 0xBC8F81D97274538F,
+  0x3FEF6000260C450A, 0xBC4071002727FFDC,
+  0x3FEF9FFFE88CD533, 0xBC581BDCE1FDA8B0,
+  0x3FEFDFFFD50F8689, 0x3C87F91ACB918E6E,
+  0x3FF0200004292367, 0x3C9B7FF365324681,
+  0x3FF05FFFE3E3D668, 0x3C86FA08DDAE957B,
+  0x3FF0A0000A85A757, 0xBC57E2DE80D3FB91,
+  0x3FF0E0001A5F3FCC, 0xBC91823305C5F014,
+  0x3FF11FFFF8AFBAF5, 0xBC8BFABB6680BAC2,
+  0x3FF15FFFE54D91AD, 0xBC9D7F121737E7EF,
+  0x3FF1A00011AC36E1, 0x3C9C000A0516F5FF,
+  0x3FF1E00019C84248, 0xBC9082FBE4DA5DA0,
+  0x3FF220000FFE5E6E, 0xBC88FDD04C9CFB43,
+  0x3FF26000269FD891, 0x3C8CFE2A7994D182,
+  0x3FF2A00029A6E6DA, 0xBC700273715E8BC5,
+  0x3FF2DFFFE0293E39, 0x3C9B7C39DAB2A6F9,
+  0x3FF31FFFF7DCF082, 0x3C7DF1336EDC5254,
+  0x3FF35FFFF05A8B60, 0xBC9E03564CCD31EB,
+  0x3FF3A0002E0EAECC, 0x3C75F0E74BD3A477,
+  0x3FF3E000043BB236, 0x3C9C7DCB149D8833,
+  0x3FF4200002D187FF, 0x3C7E08AFCF2D3D28,
+  0x3FF460000D387CB1, 0x3C820837856599A6,
+  0x3FF4A00004569F89, 0xBC89FA5C904FBCD2,
+  0x3FF4E000043543F3, 0xBC781125ED175329,
+  0x3FF51FFFCC027F0F, 0x3C9883D8847754DC,
+  0x3FF55FFFFD87B36F, 0xBC8709E731D02807,
+  0x3FF59FFFF21DF7BA, 0x3C87F79F68727B02,
+  0x3FF5DFFFEBFC3481, 0xBC9180902E30E93E
+]);
+
+// @ts-ignore: decorator
+@inline const LOG2_TABLE64_BITS = 6;
+
+// Lookup data for log. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log.c
+
+/* Algorithm:
+
+  x = 2^k z
+  log(x) = k ln2 + log(c) + log(z/c)
+  log(z/c) = poly(z/c - 1)
+
+where z is in [1.6p-1; 1.6p0] which is split into N subintervals and z falls
+into the ith one, then table entries are computed as
+
+  tab[i].invc = 1/c
+  tab[i].logc = (double)log(c)
+  tab2[i].chi = (double)c
+  tab2[i].clo = (double)(c - (double)c)
+
+where c is near the center of the subinterval and is chosen by trying +-2^29
+floating point invc candidates around 1/center and selecting one for which
+
+  1) the rounding error in 0x1.8p9 + logc is 0,
+  2) the rounding error in z - chi - clo is < 0x1p-66 and
+  3) the rounding error in (double)log(c) is minimized (< 0x1p-66).
+
+Note: 1) ensures that k*ln2hi + logc can be computed without rounding error,
+2) ensures that z/c - 1 can be computed as (z - chi - clo)*invc with close to
+a single rounding error when there is no fast fma for z*invc - 1, 3) ensures
+that logc + poly(z/c - 1) has small error, however near x == 1 when
+|log(x)| < 0x1p-4, this is not enough so that is special cased.*/
+
+// @ts-ignore: decorator
+@lazy @inline const LOG_TABLE1_64 = memory.data<u64>([
+  //      invc      ,        logc
+  0x3FF734F0C3E0DE9F, 0xBFD7CC7F79E69000,
+  0x3FF713786A2CE91F, 0xBFD76FEEC20D0000,
+  0x3FF6F26008FAB5A0, 0xBFD713E31351E000,
+  0x3FF6D1A61F138C7D, 0xBFD6B85B38287800,
+  0x3FF6B1490BC5B4D1, 0xBFD65D5590807800,
+  0x3FF69147332F0CBA, 0xBFD602D076180000,
+  0x3FF6719F18224223, 0xBFD5A8CA86909000,
+  0x3FF6524F99A51ED9, 0xBFD54F4356035000,
+  0x3FF63356AA8F24C4, 0xBFD4F637C36B4000,
+  0x3FF614B36B9DDC14, 0xBFD49DA7FDA85000,
+  0x3FF5F66452C65C4C, 0xBFD445923989A800,
+  0x3FF5D867B5912C4F, 0xBFD3EDF439B0B800,
+  0x3FF5BABCCB5B90DE, 0xBFD396CE448F7000,
+  0x3FF59D61F2D91A78, 0xBFD3401E17BDA000,
+  0x3FF5805612465687, 0xBFD2E9E2EF468000,
+  0x3FF56397CEE76BD3, 0xBFD2941B3830E000,
+  0x3FF54725E2A77F93, 0xBFD23EC58CDA8800,
+  0x3FF52AFF42064583, 0xBFD1E9E129279000,
+  0x3FF50F22DBB2BDDF, 0xBFD1956D2B48F800,
+  0x3FF4F38F4734DED7, 0xBFD141679AB9F800,
+  0x3FF4D843CFDE2840, 0xBFD0EDD094EF9800,
+  0x3FF4BD3EC078A3C8, 0xBFD09AA518DB1000,
+  0x3FF4A27FC3E0258A, 0xBFD047E65263B800,
+  0x3FF4880524D48434, 0xBFCFEB224586F000,
+  0x3FF46DCE1B192D0B, 0xBFCF474A7517B000,
+  0x3FF453D9D3391854, 0xBFCEA4443D103000,
+  0x3FF43A2744B4845A, 0xBFCE020D44E9B000,
+  0x3FF420B54115F8FB, 0xBFCD60A22977F000,
+  0x3FF40782DA3EF4B1, 0xBFCCC00104959000,
+  0x3FF3EE8F5D57FE8F, 0xBFCC202956891000,
+  0x3FF3D5D9A00B4CE9, 0xBFCB81178D811000,
+  0x3FF3BD60C010C12B, 0xBFCAE2C9CCD3D000,
+  0x3FF3A5242B75DAB8, 0xBFCA45402E129000,
+  0x3FF38D22CD9FD002, 0xBFC9A877681DF000,
+  0x3FF3755BC5847A1C, 0xBFC90C6D69483000,
+  0x3FF35DCE49AD36E2, 0xBFC87120A645C000,
+  0x3FF34679984DD440, 0xBFC7D68FB4143000,
+  0x3FF32F5CCEFFCB24, 0xBFC73CB83C627000,
+  0x3FF3187775A10D49, 0xBFC6A39A9B376000,
+  0x3FF301C8373E3990, 0xBFC60B3154B7A000,
+  0x3FF2EB4EBB95F841, 0xBFC5737D76243000,
+  0x3FF2D50A0219A9D1, 0xBFC4DC7B8FC23000,
+  0x3FF2BEF9A8B7FD2A, 0xBFC4462C51D20000,
+  0x3FF2A91C7A0C1BAB, 0xBFC3B08ABC830000,
+  0x3FF293726014B530, 0xBFC31B996B490000,
+  0x3FF27DFA5757A1F5, 0xBFC2875490A44000,
+  0x3FF268B39B1D3BBF, 0xBFC1F3B9F879A000,
+  0x3FF2539D838FF5BD, 0xBFC160C8252CA000,
+  0x3FF23EB7AAC9083B, 0xBFC0CE7F57F72000,
+  0x3FF22A012BA940B6, 0xBFC03CDC49FEA000,
+  0x3FF2157996CC4132, 0xBFBF57BDBC4B8000,
+  0x3FF201201DD2FC9B, 0xBFBE370896404000,
+  0x3FF1ECF4494D480B, 0xBFBD17983EF94000,
+  0x3FF1D8F5528F6569, 0xBFBBF9674ED8A000,
+  0x3FF1C52311577E7C, 0xBFBADC79202F6000,
+  0x3FF1B17C74CB26E9, 0xBFB9C0C3E7288000,
+  0x3FF19E010C2C1AB6, 0xBFB8A646B372C000,
+  0x3FF18AB07BB670BD, 0xBFB78D01B3AC0000,
+  0x3FF1778A25EFBCB6, 0xBFB674F145380000,
+  0x3FF1648D354C31DA, 0xBFB55E0E6D878000,
+  0x3FF151B990275FDD, 0xBFB4485CDEA1E000,
+  0x3FF13F0EA432D24C, 0xBFB333D94D6AA000,
+  0x3FF12C8B7210F9DA, 0xBFB22079F8C56000,
+  0x3FF11A3028ECB531, 0xBFB10E4698622000,
+  0x3FF107FBDA8434AF, 0xBFAFFA6C6AD20000,
+  0x3FF0F5EE0F4E6BB3, 0xBFADDA8D4A774000,
+  0x3FF0E4065D2A9FCE, 0xBFABBCECE4850000,
+  0x3FF0D244632CA521, 0xBFA9A1894012C000,
+  0x3FF0C0A77CE2981A, 0xBFA788583302C000,
+  0x3FF0AF2F83C636D1, 0xBFA5715E67D68000,
+  0x3FF09DDB98A01339, 0xBFA35C8A49658000,
+  0x3FF08CABAF52E7DF, 0xBFA149E364154000,
+  0x3FF07B9F2F4E28FB, 0xBF9E72C082EB8000,
+  0x3FF06AB58C358F19, 0xBF9A55F152528000,
+  0x3FF059EEA5ECF92C, 0xBF963D62CF818000,
+  0x3FF04949CDD12C90, 0xBF9228FB8CAA0000,
+  0x3FF038C6C6F0ADA9, 0xBF8C317B20F90000,
+  0x3FF02865137932A9, 0xBF8419355DAA0000,
+  0x3FF0182427EA7348, 0xBF781203C2EC0000,
+  0x3FF008040614B195, 0xBF60040979240000,
+  0x3FEFE01FF726FA1A, 0x3F6FEFF384900000,
+  0x3FEFA11CC261EA74, 0x3F87DC41353D0000,
+  0x3FEF6310B081992E, 0x3F93CEA3C4C28000,
+  0x3FEF25F63CEEADCD, 0x3F9B9FC114890000,
+  0x3FEEE9C8039113E7, 0x3FA1B0D8CE110000,
+  0x3FEEAE8078CBB1AB, 0x3FA58A5BD001C000,
+  0x3FEE741AA29D0C9B, 0x3FA95C8340D88000,
+  0x3FEE3A91830A99B5, 0x3FAD276AEF578000,
+  0x3FEE01E009609A56, 0x3FB07598E598C000,
+  0x3FEDCA01E577BB98, 0x3FB253F5E30D2000,
+  0x3FED92F20B7C9103, 0x3FB42EDD8B380000,
+  0x3FED5CAC66FB5CCE, 0x3FB606598757C000,
+  0x3FED272CAA5EDE9D, 0x3FB7DA76356A0000,
+  0x3FECF26E3E6B2CCD, 0x3FB9AB434E1C6000,
+  0x3FECBE6DA2A77902, 0x3FBB78C7BB0D6000,
+  0x3FEC8B266D37086D, 0x3FBD431332E72000,
+  0x3FEC5894BD5D5804, 0x3FBF0A3171DE6000,
+  0x3FEC26B533BB9F8C, 0x3FC067152B914000,
+  0x3FEBF583EEECE73F, 0x3FC147858292B000,
+  0x3FEBC4FD75DB96C1, 0x3FC2266ECDCA3000,
+  0x3FEB951E0C864A28, 0x3FC303D7A6C55000,
+  0x3FEB65E2C5EF3E2C, 0x3FC3DFC33C331000,
+  0x3FEB374867C9888B, 0x3FC4BA366B7A8000,
+  0x3FEB094B211D304A, 0x3FC5933928D1F000,
+  0x3FEADBE885F2EF7E, 0x3FC66ACD2418F000,
+  0x3FEAAF1D31603DA2, 0x3FC740F8EC669000,
+  0x3FEA82E63FD358A7, 0x3FC815C0F51AF000,
+  0x3FEA5740EF09738B, 0x3FC8E92954F68000,
+  0x3FEA2C2A90AB4B27, 0x3FC9BB3602F84000,
+  0x3FEA01A01393F2D1, 0x3FCA8BED1C2C0000,
+  0x3FE9D79F24DB3C1B, 0x3FCB5B515C01D000,
+  0x3FE9AE2505C7B190, 0x3FCC2967CCBCC000,
+  0x3FE9852EF297CE2F, 0x3FCCF635D5486000,
+  0x3FE95CBAEEA44B75, 0x3FCDC1BD3446C000,
+  0x3FE934C69DE74838, 0x3FCE8C01B8CFE000,
+  0x3FE90D4F2F6752E6, 0x3FCF5509C0179000,
+  0x3FE8E6528EFFD79D, 0x3FD00E6C121FB800,
+  0x3FE8BFCE9FCC007C, 0x3FD071B80E93D000,
+  0x3FE899C0DABEC30E, 0x3FD0D46B9E867000,
+  0x3FE87427AA2317FB, 0x3FD13687334BD000,
+  0x3FE84F00ACB39A08, 0x3FD1980D67234800,
+  0x3FE82A49E8653E55, 0x3FD1F8FFE0CC8000,
+  0x3FE8060195F40260, 0x3FD2595FD7636800,
+  0x3FE7E22563E0A329, 0x3FD2B9300914A800,
+  0x3FE7BEB377DCB5AD, 0x3FD3187210436000,
+  0x3FE79BAA679725C2, 0x3FD377266DEC1800,
+  0x3FE77907F2170657, 0x3FD3D54FFBAF3000,
+  0x3FE756CADBD6130C, 0x3FD432EEE32FE000
+]);
+
+// @ts-ignore: decorator
+@lazy @inline const LOG_TABLE2_64 = memory.data<u64>([
+  //      chi       ,         clo
+  0x3FE61000014FB66B, 0x3C7E026C91425B3C,
+  0x3FE63000034DB495, 0x3C8DBFEA48005D41,
+  0x3FE650000D94D478, 0x3C8E7FA786D6A5B7,
+  0x3FE67000074E6FAD, 0x3C61FCEA6B54254C,
+  0x3FE68FFFFEDF0FAE, 0xBC7C7E274C590EFD,
+  0x3FE6B0000763C5BC, 0xBC8AC16848DCDA01,
+  0x3FE6D0001E5CC1F6, 0x3C833F1C9D499311,
+  0x3FE6EFFFEB05F63E, 0xBC7E80041AE22D53,
+  0x3FE710000E869780, 0x3C7BFF6671097952,
+  0x3FE72FFFFC67E912, 0x3C8C00E226BD8724,
+  0x3FE74FFFDF81116A, 0xBC6E02916EF101D2,
+  0x3FE770000F679C90, 0xBC67FC71CD549C74,
+  0x3FE78FFFFA7EC835, 0x3C81BEC19EF50483,
+  0x3FE7AFFFFE20C2E6, 0xBC707E1729CC6465,
+  0x3FE7CFFFED3FC900, 0xBC808072087B8B1C,
+  0x3FE7EFFFE9261A76, 0x3C8DC0286D9DF9AE,
+  0x3FE81000049CA3E8, 0x3C897FD251E54C33,
+  0x3FE8300017932C8F, 0xBC8AFEE9B630F381,
+  0x3FE850000633739C, 0x3C89BFBF6B6535BC,
+  0x3FE87000204289C6, 0xBC8BBF65F3117B75,
+  0x3FE88FFFEBF57904, 0xBC89006EA23DCB57,
+  0x3FE8B00022BC04DF, 0xBC7D00DF38E04B0A,
+  0x3FE8CFFFE50C1B8A, 0xBC88007146FF9F05,
+  0x3FE8EFFFFC918E43, 0x3C83817BD07A7038,
+  0x3FE910001EFA5FC7, 0x3C893E9176DFB403,
+  0x3FE9300013467BB9, 0x3C7F804E4B980276,
+  0x3FE94FFFE6EE076F, 0xBC8F7EF0D9FF622E,
+  0x3FE96FFFDE3C12D1, 0xBC7082AA962638BA,
+  0x3FE98FFFF4458A0D, 0xBC87801B9164A8EF,
+  0x3FE9AFFFDD982E3E, 0xBC8740E08A5A9337,
+  0x3FE9CFFFED49FB66, 0x3C3FCE08C19BE000,
+  0x3FE9F00020F19C51, 0xBC8A3FAA27885B0A,
+  0x3FEA10001145B006, 0x3C74FF489958DA56,
+  0x3FEA300007BBF6FA, 0x3C8CBEAB8A2B6D18,
+  0x3FEA500010971D79, 0x3C88FECADD787930,
+  0x3FEA70001DF52E48, 0xBC8F41763DD8ABDB,
+  0x3FEA90001C593352, 0xBC8EBF0284C27612,
+  0x3FEAB0002A4F3E4B, 0xBC69FD043CFF3F5F,
+  0x3FEACFFFD7AE1ED1, 0xBC823EE7129070B4,
+  0x3FEAEFFFEE510478, 0x3C6A063EE00EDEA3,
+  0x3FEB0FFFDB650D5B, 0x3C5A06C8381F0AB9,
+  0x3FEB2FFFFEAACA57, 0xBC79011E74233C1D,
+  0x3FEB4FFFD995BADC, 0xBC79FF1068862A9F,
+  0x3FEB7000249E659C, 0x3C8AFF45D0864F3E,
+  0x3FEB8FFFF9871640, 0x3C7CFE7796C2C3F9,
+  0x3FEBAFFFD204CB4F, 0xBC63FF27EEF22BC4,
+  0x3FEBCFFFD2415C45, 0xBC6CFFB7EE3BEA21,
+  0x3FEBEFFFF86309DF, 0xBC814103972E0B5C,
+  0x3FEC0FFFE1B57653, 0x3C8BC16494B76A19,
+  0x3FEC2FFFF1FA57E3, 0xBC64FEEF8D30C6ED,
+  0x3FEC4FFFDCBFE424, 0xBC843F68BCEC4775,
+  0x3FEC6FFFED54B9F7, 0x3C847EA3F053E0EC,
+  0x3FEC8FFFEB998FD5, 0x3C7383068DF992F1,
+  0x3FECB0002125219A, 0xBC68FD8E64180E04,
+  0x3FECCFFFDD94469C, 0x3C8E7EBE1CC7EA72,
+  0x3FECEFFFEAFDC476, 0x3C8EBE39AD9F88FE,
+  0x3FED1000169AF82B, 0x3C757D91A8B95A71,
+  0x3FED30000D0FF71D, 0x3C89C1906970C7DA,
+  0x3FED4FFFEA790FC4, 0xBC580E37C558FE0C,
+  0x3FED70002EDC87E5, 0xBC7F80D64DC10F44,
+  0x3FED900021DC82AA, 0xBC747C8F94FD5C5C,
+  0x3FEDAFFFD86B0283, 0x3C8C7F1DC521617E,
+  0x3FEDD000296C4739, 0x3C88019EB2FFB153,
+  0x3FEDEFFFE54490F5, 0x3C6E00D2C652CC89,
+  0x3FEE0FFFCDABF694, 0xBC7F8340202D69D2,
+  0x3FEE2FFFDB52C8DD, 0x3C7B00C1CA1B0864,
+  0x3FEE4FFFF24216EF, 0x3C72FFA8B094AB51,
+  0x3FEE6FFFE88A5E11, 0xBC57F673B1EFBE59,
+  0x3FEE9000119EFF0D, 0xBC84808D5E0BC801,
+  0x3FEEAFFFDFA51744, 0x3C780006D54320B5,
+  0x3FEED0001A127FA1, 0xBC5002F860565C92,
+  0x3FEEF00007BABCC4, 0xBC8540445D35E611,
+  0x3FEF0FFFF57A8D02, 0xBC4FFB3139EF9105,
+  0x3FEF30001EE58AC7, 0x3C8A81ACF2731155,
+  0x3FEF4FFFF5823494, 0x3C8A3F41D4D7C743,
+  0x3FEF6FFFFCA94C6B, 0xBC6202F41C987875,
+  0x3FEF8FFFE1F9C441, 0x3C777DD1F477E74B,
+  0x3FEFAFFFD2E0E37E, 0xBC6F01199A7CA331,
+  0x3FEFD0001C77E49E, 0x3C7181EE4BCEACB1,
+  0x3FEFEFFFF7E0C331, 0xBC6E05370170875A,
+  0x3FF00FFFF465606E, 0xBC8A7EAD491C0ADA,
+  0x3FF02FFFF3867A58, 0xBC977F69C3FCB2E0,
+  0x3FF04FFFFDFC0D17, 0x3C97BFFE34CB945B,
+  0x3FF0700003CD4D82, 0x3C820083C0E456CB,
+  0x3FF08FFFF9F2CBE8, 0xBC6DFFDFBE37751A,
+  0x3FF0B000010CDA65, 0xBC913F7FAEE626EB,
+  0x3FF0D00001A4D338, 0x3C807DFA79489FF7,
+  0x3FF0EFFFFADAFDFD, 0xBC77040570D66BC0,
+  0x3FF110000BBAFD96, 0x3C8E80D4846D0B62,
+  0x3FF12FFFFAE5F45D, 0x3C9DBFFA64FD36EF,
+  0x3FF150000DD59AD9, 0x3C9A0077701250AE,
+  0x3FF170000F21559A, 0x3C8DFDF9E2E3DEEE,
+  0x3FF18FFFFC275426, 0x3C910030DC3B7273,
+  0x3FF1B000123D3C59, 0x3C997F7980030188,
+  0x3FF1CFFFF8299EB7, 0xBC65F932AB9F8C67,
+  0x3FF1EFFFF48AD400, 0x3C937FBF9DA75BEB,
+  0x3FF210000C8B86A4, 0x3C9F806B91FD5B22,
+  0x3FF2300003854303, 0x3C93FFC2EB9FBF33,
+  0x3FF24FFFFFBCF684, 0x3C7601E77E2E2E72,
+  0x3FF26FFFF52921D9, 0x3C7FFCBB767F0C61,
+  0x3FF2900014933A3C, 0xBC7202CA3C02412B,
+  0x3FF2B00014556313, 0xBC92808233F21F02,
+  0x3FF2CFFFEBFE523B, 0xBC88FF7E384FDCF2,
+  0x3FF2F0000BB8AD96, 0xBC85FF51503041C5,
+  0x3FF30FFFFB7AE2AF, 0xBC810071885E289D,
+  0x3FF32FFFFEAC5F7F, 0xBC91FF5D3FB7B715,
+  0x3FF350000CA66756, 0x3C957F82228B82BD,
+  0x3FF3700011FBF721, 0x3C8000BAC40DD5CC,
+  0x3FF38FFFF9592FB9, 0xBC943F9D2DB2A751,
+  0x3FF3B00004DDD242, 0x3C857F6B707638E1,
+  0x3FF3CFFFF5B2C957, 0x3C7A023A10BF1231,
+  0x3FF3EFFFEAB0B418, 0x3C987F6D66B152B0,
+  0x3FF410001532AFF4, 0x3C67F8375F198524,
+  0x3FF4300017478B29, 0x3C8301E672DC5143,
+  0x3FF44FFFE795B463, 0x3C89FF69B8B2895A,
+  0x3FF46FFFE80475E0, 0xBC95C0B19BC2F254,
+  0x3FF48FFFEF6FC1E7, 0x3C9B4009F23A2A72,
+  0x3FF4AFFFE5BEA704, 0xBC94FFB7BF0D7D45,
+  0x3FF4D000171027DE, 0xBC99C06471DC6A3D,
+  0x3FF4F0000FF03EE2, 0x3C977F890B85531C,
+  0x3FF5100012DC4BD1, 0x3C6004657166A436,
+  0x3FF530001605277A, 0xBC96BFCECE233209,
+  0x3FF54FFFECDB704C, 0xBC8902720505A1D7,
+  0x3FF56FFFEF5F54A9, 0x3C9BBFE60EC96412,
+  0x3FF5900017E61012, 0x3C887EC581AFEF90,
+  0x3FF5B00003C93E92, 0xBC9F41080ABF0CC0,
+  0x3FF5D0001D4919BC, 0xBC98812AFB254729,
+  0x3FF5EFFFE7B87A89, 0xBC947EB780ED6904
+]);
+
+// @ts-ignore: decorator
+@inline const LOG_TABLE64_BITS = 7;
+
+// Lookup data for pow. See: https://git.musl-libc.org/cgit/musl/tree/src/math/pow.c
+
+/* Algorithm:
+
+  x = 2^k z
+  log(x) = k ln2 + log(c) + log(z/c)
+  log(z/c) = poly(z/c - 1)
+
+where z is in [0x1.69555p-1; 0x1.69555p0] which is split into N subintervals
+and z falls into the ith one, then table entries are computed as
+
+  tab[i].invc = 1/c
+  tab[i].logc = round(0x1p43*log(c))/0x1p43
+  tab[i].logctail = (double)(log(c) - logc)
+
+where c is chosen near the center of the subinterval such that 1/c has only a
+few precision bits so z/c - 1 is exactly representible as double:
+
+  1/c = center < 1 ? round(N/center)/N : round(2*N/center)/N/2
+
+Note: |z/c - 1| < 1/N for the chosen c, |log(c) - logc - logctail| < 0x1p-97,
+the last few bits of logc are rounded away so k*ln2hi + logc has no rounding
+error and the interval for z is selected such that near x == 1, where log(x)
+is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
+
+// @ts-ignore: decorator
+@lazy @inline const POW_LOG_TABLE64 = memory.data<u64>([
+  //      invc      ,pad,       logc       ,       logctail
+  0x3FF6A00000000000, 0, 0xBFD62C82F2B9C800, 0x3CFAB42428375680,
+  0x3FF6800000000000, 0, 0xBFD5D1BDBF580800, 0xBD1CA508D8E0F720,
+  0x3FF6600000000000, 0, 0xBFD5767717455800, 0xBD2362A4D5B6506D,
+  0x3FF6400000000000, 0, 0xBFD51AAD872DF800, 0xBCE684E49EB067D5,
+  0x3FF6200000000000, 0, 0xBFD4BE5F95777800, 0xBD041B6993293EE0,
+  0x3FF6000000000000, 0, 0xBFD4618BC21C6000, 0x3D13D82F484C84CC,
+  0x3FF5E00000000000, 0, 0xBFD404308686A800, 0x3CDC42F3ED820B3A,
+  0x3FF5C00000000000, 0, 0xBFD3A64C55694800, 0x3D20B1C686519460,
+  0x3FF5A00000000000, 0, 0xBFD347DD9A988000, 0x3D25594DD4C58092,
+  0x3FF5800000000000, 0, 0xBFD2E8E2BAE12000, 0x3D267B1E99B72BD8,
+  0x3FF5600000000000, 0, 0xBFD2895A13DE8800, 0x3D15CA14B6CFB03F,
+  0x3FF5600000000000, 0, 0xBFD2895A13DE8800, 0x3D15CA14B6CFB03F,
+  0x3FF5400000000000, 0, 0xBFD22941FBCF7800, 0xBD165A242853DA76,
+  0x3FF5200000000000, 0, 0xBFD1C898C1699800, 0xBD1FAFBC68E75404,
+  0x3FF5000000000000, 0, 0xBFD1675CABABA800, 0x3D1F1FC63382A8F0,
+  0x3FF4E00000000000, 0, 0xBFD1058BF9AE4800, 0xBD26A8C4FD055A66,
+  0x3FF4C00000000000, 0, 0xBFD0A324E2739000, 0xBD0C6BEE7EF4030E,
+  0x3FF4A00000000000, 0, 0xBFD0402594B4D000, 0xBCF036B89EF42D7F,
+  0x3FF4A00000000000, 0, 0xBFD0402594B4D000, 0xBCF036B89EF42D7F,
+  0x3FF4800000000000, 0, 0xBFCFB9186D5E4000, 0x3D0D572AAB993C87,
+  0x3FF4600000000000, 0, 0xBFCEF0ADCBDC6000, 0x3D2B26B79C86AF24,
+  0x3FF4400000000000, 0, 0xBFCE27076E2AF000, 0xBD172F4F543FFF10,
+  0x3FF4200000000000, 0, 0xBFCD5C216B4FC000, 0x3D21BA91BBCA681B,
+  0x3FF4000000000000, 0, 0xBFCC8FF7C79AA000, 0x3D27794F689F8434,
+  0x3FF4000000000000, 0, 0xBFCC8FF7C79AA000, 0x3D27794F689F8434,
+  0x3FF3E00000000000, 0, 0xBFCBC286742D9000, 0x3D194EB0318BB78F,
+  0x3FF3C00000000000, 0, 0xBFCAF3C94E80C000, 0x3CBA4E633FCD9066,
+  0x3FF3A00000000000, 0, 0xBFCA23BC1FE2B000, 0xBD258C64DC46C1EA,
+  0x3FF3A00000000000, 0, 0xBFCA23BC1FE2B000, 0xBD258C64DC46C1EA,
+  0x3FF3800000000000, 0, 0xBFC9525A9CF45000, 0xBD2AD1D904C1D4E3,
+  0x3FF3600000000000, 0, 0xBFC87FA06520D000, 0x3D2BBDBF7FDBFA09,
+  0x3FF3400000000000, 0, 0xBFC7AB890210E000, 0x3D2BDB9072534A58,
+  0x3FF3400000000000, 0, 0xBFC7AB890210E000, 0x3D2BDB9072534A58,
+  0x3FF3200000000000, 0, 0xBFC6D60FE719D000, 0xBD10E46AA3B2E266,
+  0x3FF3000000000000, 0, 0xBFC5FF3070A79000, 0xBD1E9E439F105039,
+  0x3FF3000000000000, 0, 0xBFC5FF3070A79000, 0xBD1E9E439F105039,
+  0x3FF2E00000000000, 0, 0xBFC526E5E3A1B000, 0xBD20DE8B90075B8F,
+  0x3FF2C00000000000, 0, 0xBFC44D2B6CCB8000, 0x3D170CC16135783C,
+  0x3FF2C00000000000, 0, 0xBFC44D2B6CCB8000, 0x3D170CC16135783C,
+  0x3FF2A00000000000, 0, 0xBFC371FC201E9000, 0x3CF178864D27543A,
+  0x3FF2800000000000, 0, 0xBFC29552F81FF000, 0xBD248D301771C408,
+  0x3FF2600000000000, 0, 0xBFC1B72AD52F6000, 0xBD2E80A41811A396,
+  0x3FF2600000000000, 0, 0xBFC1B72AD52F6000, 0xBD2E80A41811A396,
+  0x3FF2400000000000, 0, 0xBFC0D77E7CD09000, 0x3D0A699688E85BF4,
+  0x3FF2400000000000, 0, 0xBFC0D77E7CD09000, 0x3D0A699688E85BF4,
+  0x3FF2200000000000, 0, 0xBFBFEC9131DBE000, 0xBD2575545CA333F2,
+  0x3FF2000000000000, 0, 0xBFBE27076E2B0000, 0x3D2A342C2AF0003C,
+  0x3FF2000000000000, 0, 0xBFBE27076E2B0000, 0x3D2A342C2AF0003C,
+  0x3FF1E00000000000, 0, 0xBFBC5E548F5BC000, 0xBD1D0C57585FBE06,
+  0x3FF1C00000000000, 0, 0xBFBA926D3A4AE000, 0x3D253935E85BAAC8,
+  0x3FF1C00000000000, 0, 0xBFBA926D3A4AE000, 0x3D253935E85BAAC8,
+  0x3FF1A00000000000, 0, 0xBFB8C345D631A000, 0x3D137C294D2F5668,
+  0x3FF1A00000000000, 0, 0xBFB8C345D631A000, 0x3D137C294D2F5668,
+  0x3FF1800000000000, 0, 0xBFB6F0D28AE56000, 0xBD269737C93373DA,
+  0x3FF1600000000000, 0, 0xBFB51B073F062000, 0x3D1F025B61C65E57,
+  0x3FF1600000000000, 0, 0xBFB51B073F062000, 0x3D1F025B61C65E57,
+  0x3FF1400000000000, 0, 0xBFB341D7961BE000, 0x3D2C5EDACCF913DF,
+  0x3FF1400000000000, 0, 0xBFB341D7961BE000, 0x3D2C5EDACCF913DF,
+  0x3FF1200000000000, 0, 0xBFB16536EEA38000, 0x3D147C5E768FA309,
+  0x3FF1000000000000, 0, 0xBFAF0A30C0118000, 0x3D2D599E83368E91,
+  0x3FF1000000000000, 0, 0xBFAF0A30C0118000, 0x3D2D599E83368E91,
+  0x3FF0E00000000000, 0, 0xBFAB42DD71198000, 0x3D1C827AE5D6704C,
+  0x3FF0E00000000000, 0, 0xBFAB42DD71198000, 0x3D1C827AE5D6704C,
+  0x3FF0C00000000000, 0, 0xBFA77458F632C000, 0xBD2CFC4634F2A1EE,
+  0x3FF0C00000000000, 0, 0xBFA77458F632C000, 0xBD2CFC4634F2A1EE,
+  0x3FF0A00000000000, 0, 0xBFA39E87B9FEC000, 0x3CF502B7F526FEAA,
+  0x3FF0A00000000000, 0, 0xBFA39E87B9FEC000, 0x3CF502B7F526FEAA,
+  0x3FF0800000000000, 0, 0xBF9F829B0E780000, 0xBD2980267C7E09E4,
+  0x3FF0800000000000, 0, 0xBF9F829B0E780000, 0xBD2980267C7E09E4,
+  0x3FF0600000000000, 0, 0xBF97B91B07D58000, 0xBD288D5493FAA639,
+  0x3FF0400000000000, 0, 0xBF8FC0A8B0FC0000, 0xBCDF1E7CF6D3A69C,
+  0x3FF0400000000000, 0, 0xBF8FC0A8B0FC0000, 0xBCDF1E7CF6D3A69C,
+  0x3FF0200000000000, 0, 0xBF7FE02A6B100000, 0xBD19E23F0DDA40E4,
+  0x3FF0200000000000, 0, 0xBF7FE02A6B100000, 0xBD19E23F0DDA40E4,
+  0x3FF0000000000000, 0, 0,                  0,
+  0x3FF0000000000000, 0, 0,                  0,
+  0x3FEFC00000000000, 0, 0x3F80101575890000, 0xBD10C76B999D2BE8,
+  0x3FEF800000000000, 0, 0x3F90205658938000, 0xBD23DC5B06E2F7D2,
+  0x3FEF400000000000, 0, 0x3F98492528C90000, 0xBD2AA0BA325A0C34,
+  0x3FEF000000000000, 0, 0x3FA0415D89E74000, 0x3D0111C05CF1D753,
+  0x3FEEC00000000000, 0, 0x3FA466AED42E0000, 0xBD2C167375BDFD28,
+  0x3FEE800000000000, 0, 0x3FA894AA149FC000, 0xBD197995D05A267D,
+  0x3FEE400000000000, 0, 0x3FACCB73CDDDC000, 0xBD1A68F247D82807,
+  0x3FEE200000000000, 0, 0x3FAEEA31C006C000, 0xBD0E113E4FC93B7B,
+  0x3FEDE00000000000, 0, 0x3FB1973BD1466000, 0xBD25325D560D9E9B,
+  0x3FEDA00000000000, 0, 0x3FB3BDF5A7D1E000, 0x3D2CC85EA5DB4ED7,
+  0x3FED600000000000, 0, 0x3FB5E95A4D97A000, 0xBD2C69063C5D1D1E,
+  0x3FED400000000000, 0, 0x3FB700D30AEAC000, 0x3CEC1E8DA99DED32,
+  0x3FED000000000000, 0, 0x3FB9335E5D594000, 0x3D23115C3ABD47DA,
+  0x3FECC00000000000, 0, 0x3FBB6AC88DAD6000, 0xBD1390802BF768E5,
+  0x3FECA00000000000, 0, 0x3FBC885801BC4000, 0x3D2646D1C65AACD3,
+  0x3FEC600000000000, 0, 0x3FBEC739830A2000, 0xBD2DC068AFE645E0,
+  0x3FEC400000000000, 0, 0x3FBFE89139DBE000, 0xBD2534D64FA10AFD,
+  0x3FEC000000000000, 0, 0x3FC1178E8227E000, 0x3D21EF78CE2D07F2,
+  0x3FEBE00000000000, 0, 0x3FC1AA2B7E23F000, 0x3D2CA78E44389934,
+  0x3FEBA00000000000, 0, 0x3FC2D1610C868000, 0x3D039D6CCB81B4A1,
+  0x3FEB800000000000, 0, 0x3FC365FCB0159000, 0x3CC62FA8234B7289,
+  0x3FEB400000000000, 0, 0x3FC4913D8333B000, 0x3D25837954FDB678,
+  0x3FEB200000000000, 0, 0x3FC527E5E4A1B000, 0x3D2633E8E5697DC7,
+  0x3FEAE00000000000, 0, 0x3FC6574EBE8C1000, 0x3D19CF8B2C3C2E78,
+  0x3FEAC00000000000, 0, 0x3FC6F0128B757000, 0xBD25118DE59C21E1,
+  0x3FEAA00000000000, 0, 0x3FC7898D85445000, 0xBD1C661070914305,
+  0x3FEA600000000000, 0, 0x3FC8BEAFEB390000, 0xBD073D54AAE92CD1,
+  0x3FEA400000000000, 0, 0x3FC95A5ADCF70000, 0x3D07F22858A0FF6F,
+  0x3FEA000000000000, 0, 0x3FCA93ED3C8AE000, 0xBD28724350562169,
+  0x3FE9E00000000000, 0, 0x3FCB31D8575BD000, 0xBD0C358D4EACE1AA,
+  0x3FE9C00000000000, 0, 0x3FCBD087383BE000, 0xBD2D4BC4595412B6,
+  0x3FE9A00000000000, 0, 0x3FCC6FFBC6F01000, 0xBCF1EC72C5962BD2,
+  0x3FE9600000000000, 0, 0x3FCDB13DB0D49000, 0xBD2AFF2AF715B035,
+  0x3FE9400000000000, 0, 0x3FCE530EFFE71000, 0x3CC212276041F430,
+  0x3FE9200000000000, 0, 0x3FCEF5ADE4DD0000, 0xBCCA211565BB8E11,
+  0x3FE9000000000000, 0, 0x3FCF991C6CB3B000, 0x3D1BCBECCA0CDF30,
+  0x3FE8C00000000000, 0, 0x3FD07138604D5800, 0x3CF89CDB16ED4E91,
+  0x3FE8A00000000000, 0, 0x3FD0C42D67616000, 0x3D27188B163CEAE9,
+  0x3FE8800000000000, 0, 0x3FD1178E8227E800, 0xBD2C210E63A5F01C,
+  0x3FE8600000000000, 0, 0x3FD16B5CCBACF800, 0x3D2B9ACDF7A51681,
+  0x3FE8400000000000, 0, 0x3FD1BF99635A6800, 0x3D2CA6ED5147BDB7,
+  0x3FE8200000000000, 0, 0x3FD214456D0EB800, 0x3D0A87DEBA46BAEA,
+  0x3FE7E00000000000, 0, 0x3FD2BEF07CDC9000, 0x3D2A9CFA4A5004F4,
+  0x3FE7C00000000000, 0, 0x3FD314F1E1D36000, 0xBD28E27AD3213CB8,
+  0x3FE7A00000000000, 0, 0x3FD36B6776BE1000, 0x3D116ECDB0F177C8,
+  0x3FE7800000000000, 0, 0x3FD3C25277333000, 0x3D183B54B606BD5C,
+  0x3FE7600000000000, 0, 0x3FD419B423D5E800, 0x3D08E436EC90E09D,
+  0x3FE7400000000000, 0, 0x3FD4718DC271C800, 0xBD2F27CE0967D675,
+  0x3FE7200000000000, 0, 0x3FD4C9E09E173000, 0xBD2E20891B0AD8A4,
+  0x3FE7000000000000, 0, 0x3FD522AE0738A000, 0x3D2EBE708164C759,
+  0x3FE6E00000000000, 0, 0x3FD57BF753C8D000, 0x3D1FADEDEE5D40EF,
+  0x3FE6C00000000000, 0, 0x3FD5D5BDDF596000, 0xBD0A0B2A08A465DC
+]);
+
+// @ts-ignore: decorator
+@inline const POW_LOG_TABLE64_BITS = 7;
+
+
+/** @internal */
+// @ts-ignore: decorator
+@lazy var
+  rempio2_32_y: f64,
+  rempio2_y0: f64,
+  rempio2_y1: f64,
+  res128_hi:  u64;
+
+/** @internal */
+// @ts-ignore: decorator
+@lazy export var
+  sincos_cos32: f32,
+  sincos_cos64: f64;
+
+
+/** @internal */
+export function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
+  h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
+  h *= 0xFF51AFD7ED558CCD;
+  h ^= h >> 33;
+  h *= 0xC4CEB9FE1A85EC53;
+  h ^= h >> 33;
+  return h;
+}
+
+/** @internal */
+function R32(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
+  const                    // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
+    pS0 = reinterpret<f32>(0x3E2AAA75), //  1.6666586697e-01f
+    pS1 = reinterpret<f32>(0xBD2F13BA), // -4.2743422091e-02f
+    pS2 = reinterpret<f32>(0xBC0DD36B), // -8.6563630030e-03f
+    qS1 = reinterpret<f32>(0xBF34E5AE); // -7.0662963390e-01f
+
+  var p = z * (pS0 + z * (pS1 + z * pS2));
+  var q: f32 = 1 + z * qS1;
+  return p / q;
+}
+
+/** @internal */
+function R64(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
+  const                   // see: musl/src/math/asin.c and SUN COPYRIGHT NOTICE above
+    pS0 = reinterpret<f64>(0x3FC5555555555555), //  1.66666666666666657415e-01
+    pS1 = reinterpret<f64>(0xBFD4D61203EB6F7D), // -3.25565818622400915405e-01
+    pS2 = reinterpret<f64>(0x3FC9C1550E884455), //  2.01212532134862925881e-01
+    pS3 = reinterpret<f64>(0xBFA48228B5688F3B), // -4.00555345006794114027e-02
+    pS4 = reinterpret<f64>(0x3F49EFE07501B288), //  7.91534994289814532176e-04
+    pS5 = reinterpret<f64>(0x3F023DE10DFDF709), //  3.47933107596021167570e-05
+    qS1 = reinterpret<f64>(0xC0033A271C8A2D4B), // -2.40339491173441421878e+00
+    qS2 = reinterpret<f64>(0x40002AE59C598AC8), //  2.02094576023350569471e+00
+    qS3 = reinterpret<f64>(0xBFE6066C1B8D0159), // -6.88283971605453293030e-01
+    qS4 = reinterpret<f64>(0x3FB3B8C5B12E9282); //  7.70381505559019352791e-02
+
+  var p = z * (pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5)))));
+  var q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)));
+  return p / q;
+}
+
+// @ts-ignore: decorator
+@inline
+function expo2_32(x: f32, sign: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
+  const                                // see: musl/src/math/__expo2f.c
+    k    = <u32>235,
+    kln2 = reinterpret<f32>(0x4322E3BC); // 0x1.45c778p+7f
+  var scale = reinterpret<f32>(<u32>(0x7F + (k >> 1)) << 23);
+  // in directed rounding correct sign before rounding or overflow is important
+  return exp32(x - kln2) * (sign * scale) * scale;
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function expo2_64(x: f64, sign: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
+  const                       // see: musl/src/math/__expo2.c
+    k    = <u32>2043,
+    kln2 = reinterpret<f64>(0x40962066151ADD8B); // 0x1.62066151add8bp+10
+  var scale = reinterpret<f64>(<u64>((<u32>0x3FF + k / 2) << 20) << 32);
+  // in directed rounding correct sign before rounding or overflow is important
+  return exp64(x - kln2) * (sign * scale) * scale;
+}
+
+/** @internal */
+// helper for pow32
+// See: jdh8/metallic/src/math/float/log2f.c and jdh8/metallic/src/math/float/kernel/atanh.h
+// @ts-ignore: decorator
+@inline
+function log2up32(x: f64): f64 {
+  const
+    log2e = reinterpret<f64>(0x3FF71547652B82FE), // 1.44269504088896340736
+    c0 = reinterpret<f64>(0x3FD555554FD9CAEF),    // 0.33333332822728226129
+    c1 = reinterpret<f64>(0x3FC999A7A8AF4132),    // 0.20000167595436263505
+    c2 = reinterpret<f64>(0x3FC2438D79437030),    // 0.14268654271188685375
+    c3 = reinterpret<f64>(0x3FBE2F663B001C97);    // 0.11791075649681414150
+
+  var i = reinterpret<i64>(x);
+  var exponent = (i - 0x3FE6A09E667F3BCD) >> 52;
+  x = reinterpret<f64>(i - (exponent << 52));
+  x = (x - 1) / (x + 1);
+  var xx = x * x;
+  var y = x + x * xx * (c0 + c1 * xx + (c2 + c3 * xx) * (xx * xx));
+  return (2 * log2e) * y + <f64>exponent;
+}
+
+/** @internal */
+// helper for pow32
+// See: jdh8/metallic/src/math/float/exp2f.h and jdh8/metallic/blob/master/src/math/float/kernel/exp2f.h
+// @ts-ignore: decorator
+@inline
+function exp2up32(x: f64): f64 {
+  const
+    c0 = reinterpret<f64>(0x3FE62E4302FCC24A), // 6.931471880289532425e-1
+    c1 = reinterpret<f64>(0x3FCEBFBE07D97B91), // 2.402265108421173406e-1
+    c2 = reinterpret<f64>(0x3FAC6AF6CCFC1A65), // 5.550357105498874537e-2
+    c3 = reinterpret<f64>(0x3F83B29E3CE9AEF6), // 9.618030771171497658e-3
+    c4 = reinterpret<f64>(0x3F55F0896145A89F), // 1.339086685300950937e-3
+    c5 = reinterpret<f64>(0x3F2446C81E384864); // 1.546973499989028719e-4
+
+  if (x < -1022) return 0;
+  if (x >= 1024) return Infinity;
+
+  var n = nearest(x);
+  x -= n;
+  var xx = x * x;
+  var y = 1 + x * (c0 + c1 * x + (c2 + c3 * x) * xx + (c4 + c5 * x) * (xx * xx));
+  return reinterpret<f64>(reinterpret<i64>(y) + (<i64>n << 52));
+}
+
+/** @internal */
+/* Helper function to eventually get bits of π/2 * |x|
+ *
+ * y = π/4 * (frac << clz(frac) >> 11)
+ * return clz(frac)
+ *
+ * Right shift 11 bits to make upper half fit in `double`
+ */
+// @ts-ignore: decorator
+@inline
+function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
+  // Bits of π/4
+  const p0: u64 = 0xC4C6628B80DC1CD1;
+  const p1: u64 = 0xC90FDAA22168C234;
+
+  const Ox1p_64 = reinterpret<f64>(0x3BF0000000000000); // 0x1p-64
+  const Ox1p_75 = reinterpret<f64>(0x3B40000000000000); // 0x1p-75
+
+  var shift = clz(q1);
+
+  q1 = q1 << shift | q0 >> (64 - shift);
+  q0 <<= shift;
+
+  var lo = umuldi(p1, q1);
+  var hi = res128_hi;
+
+  var ahi = hi >> 11;
+  var alo = lo >> 11 | hi << 53;
+  var blo = <u64>(Ox1p_75 * <f64>p0 * <f64>q1 + Ox1p_75 * <f64>p1 * <f64>q0);
+
+  rempio2_y0 = <f64>(ahi + u64(lo < blo));
+  rempio2_y1 = Ox1p_64 * <f64>(alo + blo);
+
+  return shift;
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function umuldi(u: u64, v: u64): u64 {
+  var u1: u64 , v1: u64, w0: u64, w1: u64, t: u64;
+
+  u1 = u & 0xFFFFFFFF;
+  v1 = v & 0xFFFFFFFF;
+
+  u >>= 32;
+  v >>= 32;
+
+  t  = u1 * v1;
+  w0 = t & 0xFFFFFFFF;
+  t  = u * v1 + (t >> 32);
+  w1 = t >> 32;
+  t  = u1 * v + (t & 0xFFFFFFFF);
+
+  res128_hi = u * v + w1 + (t >> 32);
+  return (t << 32) + w0;
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function pio2_32_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+  const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
+
+  var offset = (u >> 23) - 152;
+  var shift  = <u64>(offset & 63);
+  var tblPtr = PIO2_TABLE32 + (offset >> 6 << 3);
+
+  var b0 = load<u64>(tblPtr, 0 << 3);
+  var b1 = load<u64>(tblPtr, 1 << 3);
+  var lo: u64;
+
+  if (shift > 32) {
+    let b2 = load<u64>(tblPtr, 2 << 3);
+    lo  = b2 >> (96 - shift);
+    lo |= b1 << (shift - 32);
+  } else {
+    lo = b1 >> (32 - shift);
+  }
+
+  var hi = (b1 >> (64 - shift)) | (b0 << shift);
+  var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
+  var product = mantissa * hi + (mantissa * lo >> 32);
+  var r: i64 = product << 2;
+  var q = <i32>((product >> 62) + (r >>> 63));
+  rempio2_32_y = copysign<f64>(coeff, x) * <f64>r;
+  return q;
+}
+
+/** @internal */
+function pio2_64_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
+  var magnitude = u & 0x7FFFFFFFFFFFFFFF;
+  var offset = (magnitude >> 52) - 1045;
+  var shift  = offset & 63;
+  var tblPtr = PIO2_TABLE64 + (<i32>(offset >> 6) << 3);
+  var s0: u64, s1: u64, s2: u64;
+
+  var b0 = load<u64>(tblPtr, 0 << 3);
+  var b1 = load<u64>(tblPtr, 1 << 3);
+  var b2 = load<u64>(tblPtr, 2 << 3);
+
+  // Get 192 bits of 0x1p-31 / π with `offset` bits skipped
+  if (shift) {
+    let rshift = 64 - shift;
+    let b3 = load<u64>(tblPtr, 3 << 3);
+    s0 = b1 >> rshift | b0 << shift;
+    s1 = b2 >> rshift | b1 << shift;
+    s2 = b3 >> rshift | b2 << shift;
+  } else {
+    s0 = b0;
+    s1 = b1;
+    s2 = b2;
+  }
+
+  var significand = (u & 0x000FFFFFFFFFFFFF) | 0x0010000000000000;
+
+  // First 128 bits of fractional part of x/(2π)
+  var blo = umuldi(s1, significand);
+  var bhi = res128_hi;
+
+  var ahi = s0 * significand;
+  var clo = (s2 >> 32) * (significand >> 32);
+  var plo = blo + clo;
+  var phi = ahi + bhi + u64(plo < clo);
+
+  // r: u128 = p << 2
+  var rlo = plo << 2;
+  var rhi = phi << 2 | plo >> 62;
+
+  // s: i128 = r >> 127
+  var slo = <i64>rhi >> 63;
+  var shi = slo >> 1;
+  var q   = (<i64>phi >> 62) - slo;
+
+  var shifter = 0x3CB0000000000000 - (pio2_right(rlo ^ slo, rhi ^ shi) << 52);
+  var signbit = (u ^ rhi) & 0x8000000000000000;
+  var coeff   = reinterpret<f64>(shifter | signbit);
+
+  rempio2_y0 *= coeff;
+  rempio2_y1 *= coeff;
+
+  return <i32>q;
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function rempio2_32(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
+  const
+    pi2hi = reinterpret<f64>(0x3FF921FB50000000), // 1.57079631090164184570
+    pi2lo = reinterpret<f64>(0x3E5110B4611A6263), // 1.58932547735281966916e-8
+    _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
+
+  if (u < 0x4DC90FDB) { // π * 0x1p28
+    let q = nearest<f64>(x * _2_pi);
+    rempio2_32_y = x - q * pi2hi - q * pi2lo;
+    return <i32>q;
+  }
+
+  var q = pio2_32_large_quot(x, u);
+  return select<i32>(-q, q, sign);
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function rempio2_64(x: f64, u: u64, sign: i32): i32 {
+  const
+    pio2_1  = reinterpret<f64>(0x3FF921FB54400000), // 1.57079632673412561417e+00
+    pio2_1t = reinterpret<f64>(0x3DD0B4611A626331), // 6.07710050650619224932e-11
+    pio2_2  = reinterpret<f64>(0x3DD0B4611A600000), // 6.07710050630396597660e-11
+    pio2_2t = reinterpret<f64>(0x3BA3198A2E037073), // 2.02226624879595063154e-21
+    pio2_3  = reinterpret<f64>(0x3BA3198A2E000000), // 2.02226624871116645580e-21
+    pio2_3t = reinterpret<f64>(0x397B839A252049C1), // 8.47842766036889956997e-32
+    invpio2 = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
+
+  var ix = <u32>(u >> 32) & 0x7FFFFFFF;
+
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (ix < 0x4002D97C) { // |x| < 3pi/4, special case with n=+-1
+      let q = 1, z: f64, y0: f64, y1: f64;
+      if (!sign) {
+        z = x - pio2_1;
+        if (ix != 0x3FF921FB) { // 33+53 bit pi is good enough
+          y0 = z - pio2_1t;
+          y1 = (z - y0) - pio2_1t;
+        } else { // near pi/2, use 33+33+53 bit pi
+          z -= pio2_2;
+          y0 = z - pio2_2t;
+          y1 = (z - y0) - pio2_2t;
+        }
+      } else { // negative x
+        z = x + pio2_1;
+        if (ix != 0x3FF921FB) { // 33+53 bit pi is good enough
+          y0 = z + pio2_1t;
+          y1 = (z - y0) + pio2_1t;
+        } else { // near pi/2, use 33+33+53 bit pi
+          z += pio2_2;
+          y0 = z + pio2_2t;
+          y1 = (z - y0) + pio2_2t;
+        }
+        q = -1;
+      }
+      rempio2_y0 = y0;
+      rempio2_y1 = y1;
+      return q;
+    }
+  }
+
+  if (ix < 0x413921FB) { // |x| ~< 2^20*pi/2 (1647099)
+    // Use precise Cody Waite scheme
+    let q  = nearest<f64>(x * invpio2);
+    let r  = x - q * pio2_1;
+    let w  = q * pio2_1t; // 1st round good to 85 bit
+    let j  = ix >> 20;
+    let y0 = r - w;
+    let hi = <u32>(reinterpret<u64>(y0) >> 32);
+    let i  = j - ((hi >> 20) & 0x7FF);
+
+    if (i > 16) { // 2nd iteration needed, good to 118
+      let t = r;
+      w  = q * pio2_2;
+      r  = t - w;
+      w  = q * pio2_2t - ((t - r) - w);
+      y0 = r - w;
+      hi = <u32>(reinterpret<u64>(y0) >> 32);
+      i = j - ((hi >> 20) & 0x7FF);
+      if (i > 49) { // 3rd iteration need, 151 bits acc
+        let t = r;
+        w  = q * pio2_3;
+        r  = t - w;
+        w  = q * pio2_3t - ((t - r) - w);
+        y0 = r - w;
+      }
+    }
+    let y1 = (r - y0) - w;
+    rempio2_y0 = y0;
+    rempio2_y1 = y1;
+    return <i32>q;
+  }
+  var q = pio2_64_large_quot(x, u);
+  return select<i32>(-q, q, sign);
+}
+
+/** @internal */
+// |sin(x)/x - s(x)| < 2**-37.5 (~[-4.89e-12, 4.824e-12]).
+// @ts-ignore: decorator
+@inline
+function sin32_kern(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
+  const
+    S1 = reinterpret<f64>(0xBFC5555554CBAC77), // -0x15555554cbac77.0p-55
+    S2 = reinterpret<f64>(0x3F811110896EFBB2), //  0x111110896efbb2.0p-59
+    S3 = reinterpret<f64>(0xBF2A00F9E2CAE774), // -0x1a00f9e2cae774.0p-65
+    S4 = reinterpret<f64>(0x3EC6CD878C3B46A7); //  0x16cd878c3b46a7.0p-71
+
+  var z = x * x;
+  var w = z * z;
+  var r = S3 + z * S4;
+  var s = z * x;
+  return <f32>((x + s * (S1 + z * S2)) + s * w * r);
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function sin64_kern(x: f64, y: f64, iy: i32): f64 { // see: musl/tree/src/math/__sin.c
+  const
+    S1 = reinterpret<f64>(0xBFC5555555555549), // -1.66666666666666324348e-01
+    S2 = reinterpret<f64>(0x3F8111111110F8A6), //  8.33333333332248946124e-03
+    S3 = reinterpret<f64>(0xBF2A01A019C161D5), // -1.98412698298579493134e-04
+    S4 = reinterpret<f64>(0x3EC71DE357B1FE7D), //  2.75573137070700676789e-06
+    S5 = reinterpret<f64>(0xBE5AE5E68A2B9CEB), // -2.50507602534068634195e-08
+    S6 = reinterpret<f64>(0x3DE5D93A5ACFD57C); //  1.58969099521155010221e-10
+
+  var z = x * x;
+  var w = z * z;
+  var r = S2 + z * (S3 + z * S4) + z * w * (S5 + z * S6);
+  var v = z * x;
+  if (!iy) {
+    return x + v * (S1 + z * r);
+  } else {
+    return x - ((z * (0.5 * y - v * r) - y) - v * S1);
+  }
+}
+
+/** @internal */
+// |cos(x) - c(x)| < 2**-34.1 (~[-5.37e-11, 5.295e-11]).
+// @ts-ignore: decorator
+@inline
+function cos32_kern(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
+  const
+    C0 = reinterpret<f64>(0xBFDFFFFFFD0C5E81), // -0x1ffffffd0c5e81.0p-54
+    C1 = reinterpret<f64>(0x3FA55553E1053A42), //  0x155553e1053a42.0p-57
+    C2 = reinterpret<f64>(0xBF56C087E80F1E27), // -0x16c087e80f1e27.0p-62
+    C3 = reinterpret<f64>(0x3EF99342E0EE5069); //  0x199342e0ee5069.0p-68
+
+  var z = x * x;
+  var w = z * z;
+  var r = C2 + z * C3;
+  return <f32>(((1 + z * C0) + w * C1) + (w * z) * r);
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function cos64_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
+  const
+    C1 = reinterpret<f64>(0x3FA555555555554C), //  4.16666666666666019037e-02
+    C2 = reinterpret<f64>(0xBF56C16C16C15177), // -1.38888888888741095749e-03
+    C3 = reinterpret<f64>(0x3EFA01A019CB1590), //  2.48015872894767294178e-05
+    C4 = reinterpret<f64>(0xBE927E4F809C52AD), // -2.75573143513906633035e-07
+    C5 = reinterpret<f64>(0x3E21EE9EBDB4B1C4), //  2.08757232129817482790e-09
+    C6 = reinterpret<f64>(0xBDA8FAE9BE8838D4); // -1.13596475577881948265e-11
+
+  var z = x * x;
+  var w = z * z;
+  var r = z * (C1 + z * (C2 + z * C3)) + w * w * (C4 + z * (C5 + z * C6));
+  var hz = 0.5 * z;
+  w = 1.0 - hz;
+  return w + (((1.0 - w) - hz) + (z * r - x * y));
+}
+
+/** @internal */
+// |tan(x)/x - t(x)| < 2**-25.5 (~[-2e-08, 2e-08]).
+// @ts-ignore: decorator
+@inline
+function tan32_kern(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
+  const
+    T0 = reinterpret<f64>(0x3FD5554D3418C99F), // 0x15554d3418c99f.0p-54
+    T1 = reinterpret<f64>(0x3FC112FD38999F72), // 0x1112fd38999f72.0p-55
+    T2 = reinterpret<f64>(0x3FAB54C91D865AFE), // 0x1b54c91d865afe.0p-57
+    T3 = reinterpret<f64>(0x3F991DF3908C33CE), // 0x191df3908c33ce.0p-58
+    T4 = reinterpret<f64>(0x3F685DADFCECF44E), // 0x185dadfcecf44e.0p-61
+    T5 = reinterpret<f64>(0x3F8362B9BF971BCD); // 0x1362b9bf971bcd.0p-59
+
+  var z = x * x;
+  var r = T4 + z * T5;
+  var t = T2 + z * T3;
+  var w = z * z;
+  var s = z * x;
+  var u = T0 + z * T1;
+
+  r = (x + s * u) + (s * w) * (t + w * r);
+  return <f32>(odd ? -1 / r : r);
+}
+
+/** @internal */
+function tan64_kern(x: f64, y: f64, iy: i32): f64 { // see: src/lib/msun/src/k_tan.c
+  const
+    T0  = reinterpret<f64>(0x3FD5555555555563), //  3.33333333333334091986e-01
+    T1  = reinterpret<f64>(0x3FC111111110FE7A), //  1.33333333333201242699e-01
+    T2  = reinterpret<f64>(0x3FABA1BA1BB341FE), //  5.39682539762260521377e-02
+    T3  = reinterpret<f64>(0x3F9664F48406D637), //  2.18694882948595424599e-02
+    T4  = reinterpret<f64>(0x3F8226E3E96E8493), //  8.86323982359930005737e-03
+    T5  = reinterpret<f64>(0x3F6D6D22C9560328), //  3.59207910759131235356e-03
+    T6  = reinterpret<f64>(0x3F57DBC8FEE08315), //  1.45620945432529025516e-03
+    T7  = reinterpret<f64>(0x3F4344D8F2F26501), //  5.88041240820264096874e-04
+    T8  = reinterpret<f64>(0x3F3026F71A8D1068), //  2.46463134818469906812e-04
+    T9  = reinterpret<f64>(0x3F147E88A03792A6), //  7.81794442939557092300e-05
+    T10 = reinterpret<f64>(0x3F12B80F32F0A7E9), //  7.14072491382608190305e-05
+    T11 = reinterpret<f64>(0xBEF375CBDB605373), // -1.85586374855275456654e-05
+    T12 = reinterpret<f64>(0x3EFB2A7074BF7AD4); //  2.59073051863633712884e-05
+
+  const
+    one    = reinterpret<f64>(0x3FF0000000000000), // 1.00000000000000000000e+00
+    pio4   = reinterpret<f64>(0x3FE921FB54442D18), // 7.85398163397448278999e-01
+    pio4lo = reinterpret<f64>(0x3C81A62633145C07); // 3.06161699786838301793e-17
+
+  var z: f64, r: f64, v: f64, w: f64, s: f64;
+  var hx = <i32>(reinterpret<u64>(x) >> 32); // high word of x
+  var ix = hx & 0x7FFFFFFF; // high word of |x|
+  var big = ix >= 0x3FE59428;
+  if (big) { // |x| >= 0.6744
+    if (hx < 0) { x = -x, y = -y; }
+    z = pio4 - x;
+    w = pio4lo - y;
+    x = z + w;
+    y = 0.0;
+  }
+  z = x * x;
+  w = z * z;
+  r = T1 + w * (T3 + w * (T5 + w * (T7 + w * (T9 + w * T11))));
+  v = z * (T2 + w * (T4 + w * (T6 + w * (T8 + w * (T10 + w * T12)))));
+  s = z * x;
+  r = y + z * (s * (r + v) + y);
+  r += T0 * s;
+  w = x + r;
+  if (big) {
+    v = iy;
+    return (1 - ((hx >> 30) & 2)) * (v - 2.0 * (x - (w * w / (w + v) - r)));
+  }
+  if (iy == 1) return w;
+  var a: f64, t: f64;
+  z = w;
+  z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF00000000);
+  v = r - (z - x);  // z + v = r + x
+  t = a = -one / w; // a = -1.0 / w
+  t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
+  s = one + t * z;
+  return t + a * (s + t * v);
+}
+
+/** @internal */
+export function dtoi32(x: f64): i32 {
+  if (ASC_SHRINK_LEVEL > 0) {
+    const inv32 = 1.0 / 4294967296;
+    return <i32><i64>(x - 4294967296 * floor(x * inv32));
+  } else {
+    let result = 0;
+    let u = reinterpret<u64>(x);
+    let e = (u >> 52) & 0x7FF;
+    if (e <= 1023 + 30) {
+      result = <i32>x;
+    } else if (e <= 1023 + 30 + 53) {
+      let v = (u & ((<u64>1 << 52) - 1)) | (<u64>1 << 52);
+      v = v << e - 1023 - 52 + 32;
+      result = <i32>(v >> 32);
+      result = select<i32>(-result, result, u >> 63);
+    }
+    return result;
+  }
+}
+
+export function ipow32(x: i32, e: i32): i32 {
+  var out = 1;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (x == 2) {
+      return select<i32>(1 << e, 0, <u32>e < 32);
+    }
+    if (e <= 0) {
+      if (x == -1) return select<i32>(-1, 1, e & 1);
+      return i32(e == 0) | i32(x == 1);
+    }
+    else if (e == 1) return x;
+    else if (e == 2) return x * x;
+    else if (e < 32) {
+      let log = 32 - clz<i32>(e);
+      // 32 = 2 ^ 5, so need only five cases.
+      // But some extra cases needs for properly overflowing
+      switch (log) {
+        case 5: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 4: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 3: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 2: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 1: {
+          if (e & 1) out *= x;
+        }
+      }
+      return out;
+    }
+  }
+  while (e) {
+    if (e & 1) out *= x;
+    e >>>= 1;
+    x *= x;
+  }
+  return out;
+}
+
+export function ipow64(x: i64, e: i64): i64 {
+  var out: i64 = 1;
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (x == 2) {
+      return select<i64>(1 << e, 0, <u64>e < 64);
+    }
+    if (e <= 0) {
+      if (x == -1) return select<i64>(-1, 1, e & 1);
+      return i64(e == 0) | i64(x == 1);
+    }
+    else if (e == 1) return x;
+    else if (e == 2) return x * x;
+    else if (e < 64) {
+      let log = 64 - <i32>clz<i64>(e);
+      // 64 = 2 ^ 6, so need only six cases.
+      // But some extra cases needs for properly overflowing
+      switch (log) {
+        case 6: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 5: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 4: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 3: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 2: {
+          if (e & 1) out *= x;
+          e >>>= 1;
+          x *= x;
+        }
+        case 1: {
+          if (e & 1) out *= x;
+        }
+      }
+      return out;
+    }
+  }
+  while (e) {
+    if (e & 1) out *= x;
+    e >>>= 1;
+    x *= x;
+  }
+  return out;
+}
+
+export function acos32(x: f32): f32 { // see: musl/src/math/acosf.c and SUN COPYRIGHT NOTICE above
+  const
+    pio2_hi   = reinterpret<f32>(0x3FC90FDA), // 1.5707962513e+00f
+    pio2_lo   = reinterpret<f32>(0x33A22168), // 7.5497894159e-08f
+    Ox1p_120f = reinterpret<f32>(0x03800000); // 0x1p-120f
+
+  var hx = reinterpret<u32>(x);
+  var ix = hx & 0x7FFFFFFF;
+  if (ix >= 0x3F800000) {
+    if (ix == 0x3F800000) {
+      if (hx >> 31) return 2 * pio2_hi + Ox1p_120f;
+      return 0;
+    }
+    return 0 / (x - x);
+  }
+  if (ix < 0x3F000000) {
+    if (ix <= 0x32800000) return pio2_hi + Ox1p_120f;
+    return pio2_hi - (x - (pio2_lo - x * R32(x * x)));
+  }
+  var z: f32, w: f32, s: f32;
+  if (hx >> 31) {
+    // z = (1 + x) * 0.5;
+    z = 0.5 + x * 0.5;
+    s = sqrt<f32>(z);
+    w = R32(z) * s - pio2_lo;
+    return 2 * (pio2_hi - (s + w));
+  }
+  // z = (1 - x) * 0.5;
+  z = 0.5 - x * 0.5;
+  s = sqrt<f32>(z);
+  hx = reinterpret<u32>(s);
+  var df = reinterpret<f32>(hx & 0xFFFFF000);
+  var c = (z - df * df) / (s + df);
+  w = R32(z) * s + c;
+  return 2 * (df + w);
+}
+
+export function acos64(x: f64): f64 { // see: musl/src/math/acos.c and SUN COPYRIGHT NOTICE above
+  const
+    pio2_hi   = reinterpret<f64>(0x3FF921FB54442D18), // 1.57079632679489655800e+00
+    pio2_lo   = reinterpret<f64>(0x3C91A62633145C07), // 6.12323399573676603587e-17
+    Ox1p_120f = reinterpret<f32>(0x03800000);
+
+  var hx = <u32>(reinterpret<u64>(x) >> 32);
+  var ix = hx & 0x7FFFFFFF;
+  if (ix >= 0x3FF00000) {
+    let lx = <u32>reinterpret<u64>(x);
+    if ((ix - 0x3FF00000 | lx) == 0) {
+      if (hx >> 31) return 2 * pio2_hi + Ox1p_120f;
+      return 0;
+    }
+    return 0 / (x - x);
+  }
+  if (ix < 0x3FE00000) {
+    if (ix <= 0x3C600000) return pio2_hi + Ox1p_120f;
+    return pio2_hi - (x - (pio2_lo - x * R64(x * x)));
+  }
+  var s: f64, w: f64, z: f64;
+  if (hx >> 31) {
+    // z = (1.0 + x) * 0.5;
+    z = 0.5 + x * 0.5;
+    s = sqrt<f64>(z);
+    w = R64(z) * s - pio2_lo;
+    return 2 * (pio2_hi - (s + w));
+  }
+  // z = (1.0 - x) * 0.5;
+  z = 0.5 - x * 0.5;
+  s = sqrt<f64>(z);
+  var df = reinterpret<f64>(reinterpret<u64>(s) & 0xFFFFFFFF00000000);
+  var c = (z - df * df) / (s + df);
+  w = R64(z) * s + c;
+  return 2 * (df + w);
+}
+
+export function acosh32(x: f32): f32 { // see: musl/src/math/acoshf.c
+  const s = reinterpret<f32>(0x3F317218); // 0.693147180559945309417232121458176568f
+  var u = reinterpret<u32>(x);
+  var a = u & 0x7FFFFFFF;
+  if (a < 0x3F800000 + (1 << 23)) { // |x| < 2, invalid if x < 1
+    let xm1 = x - 1;
+    return log1p32(xm1 + sqrt<f32>(xm1 * (xm1 + 2)));
+  }
+  if (u < 0x3F800000 + (12 << 23)) { // 2 <= x < 0x1p12
+    return log32(2 * x - 1 / (x + sqrt<f32>(x * x - 1)));
+  }
+  // x >= 0x1p12 or x <= -2 or NaN
+  return log32(x) + s;
+}
+
+export function acosh64(x: f64): f64 { // see: musl/src/math/acosh.c
+  const s = reinterpret<f64>(0x3FE62E42FEFA39EF);
+  var u = reinterpret<u64>(x);
+  // Prevent propagation for all input values less than 1.0.
+  // Note musl lib didn't fix this yet.
+  if (<i64>u < 0x3FF0000000000000) return (x - x) / 0.0;
+  var e = u >> 52 & 0x7FF;
+  if (e < 0x3FF + 1) return log1p64(x - 1 + sqrt<f64>((x - 1) * (x - 1) + 2 * (x - 1)));
+  if (e < 0x3FF + 26) return log64(2 * x - 1 / (x + sqrt<f64>(x * x - 1)));
+  return log64(x) + s;
+}
+
+export function asin32(x: f32): f32 { // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
+  const
+    pio2      = reinterpret<f32>(0x3FC90FDB), // 1.570796326794896558e+00f
+    Ox1p_120f = reinterpret<f32>(0x03800000); // 0x1p-120f
+
+  var sx = x;
+  var hx = reinterpret<u32>(x) & 0x7FFFFFFF;
+  if (hx >= 0x3F800000) {
+    if (hx == 0x3F800000) return x * pio2 + Ox1p_120f;
+    return 0 / (x - x);
+  }
+  if (hx < 0x3F000000) {
+    if (hx < 0x39800000 && hx >= 0x00800000) return x;
+    return x + x * R32(x * x);
+  }
+  // var z: f32 = (1 - builtin_abs<f32>(x)) * 0.5;
+  var z: f32 = 0.5 - abs<f32>(x) * 0.5;
+  var s = sqrt<f64>(z); // sic
+  x = <f32>(pio2 - 2 * (s + s * R32(z)));
+  return copysign<f32>(x, sx);
+}
+
+export function asin64(x: f64): f64 { // see: musl/src/math/asin.c and SUN COPYRIGHT NOTICE above
+  const
+    pio2_hi   = reinterpret<f64>(0x3FF921FB54442D18), // 1.57079632679489655800e+00
+    pio2_lo   = reinterpret<f64>(0x3C91A62633145C07), // 6.12323399573676603587e-17
+    Ox1p_120f = reinterpret<f32>(0x03800000);
+
+  var hx = <u32>(reinterpret<u64>(x) >> 32);
+  var ix = hx & 0x7FFFFFFF;
+  if (ix >= 0x3FF00000) {
+    let lx = <u32>reinterpret<u64>(x);
+    if ((ix - 0x3FF00000 | lx) == 0) return x * pio2_hi + Ox1p_120f;
+    return 0 / (x - x);
+  }
+  if (ix < 0x3FE00000) {
+    if (ix < 0x3E500000 && ix >= 0x00100000) return x;
+    return x + x * R64(x * x);
+  }
+  // var z = (1.0 - builtin_abs<f64>(x)) * 0.5;
+  var z = 0.5 - abs<f64>(x) * 0.5;
+  var s = sqrt<f64>(z);
+  var r = R64(z);
+  if (ix >= 0x3FEF3333) x = pio2_hi - (2 * (s + s * r) - pio2_lo);
+  else {
+    let f = reinterpret<f64>(reinterpret<u64>(s) & 0xFFFFFFFF00000000);
+    let c = (z - f * f) / (s + f);
+    x = 0.5 * pio2_hi - (2 * s * r - (pio2_lo - 2 * c) - (0.5 * pio2_hi - 2 * f));
+  }
+  if (hx >> 31) return -x;
+  return x;
+}
+
+export function asinh32(x: f32): f32 { // see: musl/src/math/asinhf.c
+  const c = reinterpret<f32>(0x3F317218); // 0.693147180559945309417232121458176568f
+  var u = reinterpret<u32>(x) & 0x7FFFFFFF;
+  var y = reinterpret<f32>(u);
+  if (u >= 0x3F800000 + (12 << 23)) y = log32(y) + c;
+  else if (u >= 0x3F800000 + (1 << 23))  y =   log32(2 * y + 1 / (sqrt<f32>(y * y + 1) + y));
+  else if (u >= 0x3F800000 - (12 << 23)) y = log1p32(y + y * y / (sqrt<f32>(y * y + 1) + 1));
+  return copysign<f32>(y, x);
+}
+
+export function asinh64(x: f64): f64 { // see: musl/src/math/asinh.c
+  const c = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0.693147180559945309417232121458176568
+  var u = reinterpret<u64>(x);
+  var e = u >> 52 & 0x7FF;
+  var y = reinterpret<f64>(u & 0x7FFFFFFFFFFFFFFF);
+  if (e >= 0x3FF + 26) y = log64(y) + c;
+  else if (e >= 0x3FF + 1)  y =   log64(2 * y + 1 / (sqrt<f64>(y * y + 1) + y));
+  else if (e >= 0x3FF - 26) y = log1p64(y + y * y / (sqrt<f64>(y * y + 1) + 1));
+  return copysign<f64>(y, x);
+}
+
+export function atan32(x: f32): f32 { // see: musl/src/math/atanf.c and SUN COPYRIGHT NOTICE above
+  const
+    atanhi0   = reinterpret<f32>(0x3EED6338), //  4.6364760399e-01f
+    atanhi1   = reinterpret<f32>(0x3F490FDA), //  7.8539812565e-01f
+    atanhi2   = reinterpret<f32>(0x3F7B985E), //  9.8279368877e-01f
+    atanhi3   = reinterpret<f32>(0x3FC90FDA), //  1.5707962513e+00f
+    atanlo0   = reinterpret<f32>(0x31AC3769), //  5.0121582440e-09f
+    atanlo1   = reinterpret<f32>(0x33222168), //  3.7748947079e-08f
+    atanlo2   = reinterpret<f32>(0x33140FB4), //  3.4473217170e-08f
+    atanlo3   = reinterpret<f32>(0x33A22168), //  7.5497894159e-08f
+    aT0       = reinterpret<f32>(0x3EAAAAA9), //  3.3333328366e-01f
+    aT1       = reinterpret<f32>(0xBE4CCA98), // -1.9999158382e-01f
+    aT2       = reinterpret<f32>(0x3E11F50D), //  1.4253635705e-01f
+    aT3       = reinterpret<f32>(0xBDDA1247), // -1.0648017377e-01f
+    aT4       = reinterpret<f32>(0x3D7CAC25), //  6.1687607318e-02f
+    Ox1p_120f = reinterpret<f32>(0x03800000); //  0x1p-120f
+
+  var ix = reinterpret<u32>(x);
+  var sx = x;
+  ix &= 0x7FFFFFFF;
+  var z: f32;
+  if (ix >= 0x4C800000) {
+    if (isNaN(x)) return x;
+    z = atanhi3 + Ox1p_120f;
+    return copysign<f32>(z, sx);
+  }
+  var id: i32;
+  if (ix < 0x3EE00000) {
+    if (ix < 0x39800000) return x;
+    id = -1;
+  } else {
+    x = abs<f32>(x);
+    if (ix < 0x3F980000) {
+      if (ix < 0x3F300000) {
+        id = 0;
+        x = (2.0 * x - 1.0) / (2.0 + x);
+      } else {
+        id = 1;
+        x = (x - 1.0) / (x + 1.0);
+      }
+    } else {
+      if (ix < 0x401C0000) {
+        id = 2;
+        x = (x - 1.5) / (1.0 + 1.5 * x);
+      } else {
+        id = 3;
+        x = -1.0 / x;
+      }
+    }
+  }
+  z = x * x;
+  var w = z * z;
+  var s1 = z * (aT0 + w * (aT2 + w * aT4));
+  var s2 = w * (aT1 + w * aT3);
+  var s3 = x * (s1 + s2);
+  if (id < 0) return x - s3;
+  switch (id) {
+    case 0: { z = atanhi0 - ((s3 - atanlo0) - x); break; }
+    case 1: { z = atanhi1 - ((s3 - atanlo1) - x); break; }
+    case 2: { z = atanhi2 - ((s3 - atanlo2) - x); break; }
+    case 3: { z = atanhi3 - ((s3 - atanlo3) - x); break; }
+    default: unreachable();
+  }
+  return copysign<f32>(z, sx);
+}
+
+export function atan64(x: f64): f64 { // see musl/src/math/atan.c and SUN COPYRIGHT NOTICE above
+  const
+    atanhi0   = reinterpret<f64>(0x3FDDAC670561BB4F), //  4.63647609000806093515e-01
+    atanhi1   = reinterpret<f64>(0x3FE921FB54442D18), //  7.85398163397448278999e-01
+    atanhi2   = reinterpret<f64>(0x3FEF730BD281F69B), //  9.82793723247329054082e-01
+    atanhi3   = reinterpret<f64>(0x3FF921FB54442D18), //  1.57079632679489655800e+00
+    atanlo0   = reinterpret<f64>(0x3C7A2B7F222F65E2), //  2.26987774529616870924e-17
+    atanlo1   = reinterpret<f64>(0x3C81A62633145C07), //  3.06161699786838301793e-17
+    atanlo2   = reinterpret<f64>(0x3C7007887AF0CBBD), //  1.39033110312309984516e-17
+    atanlo3   = reinterpret<f64>(0x3C91A62633145C07), //  6.12323399573676603587e-17
+    aT0       = reinterpret<f64>(0x3FD555555555550D), //  3.33333333333329318027e-01
+    aT1       = reinterpret<f64>(0xBFC999999998EBC4), // -1.99999999998764832476e-01
+    aT2       = reinterpret<f64>(0x3FC24924920083FF), //  1.42857142725034663711e-01
+    aT3       = reinterpret<f64>(0xBFBC71C6FE231671), // -1.11111104054623557880e-01,
+    aT4       = reinterpret<f64>(0x3FB745CDC54C206E), //  9.09088713343650656196e-02
+    aT5       = reinterpret<f64>(0xBFB3B0F2AF749A6D), // -7.69187620504482999495e-02
+    aT6       = reinterpret<f64>(0x3FB10D66A0D03D51), //  6.66107313738753120669e-02
+    aT7       = reinterpret<f64>(0xBFADDE2D52DEFD9A), // -5.83357013379057348645e-02
+    aT8       = reinterpret<f64>(0x3FA97B4B24760DEB), //  4.97687799461593236017e-02
+    aT9       = reinterpret<f64>(0xBFA2B4442C6A6C2F), // -3.65315727442169155270e-02
+    aT10      = reinterpret<f64>(0x3F90AD3AE322DA11), //  1.62858201153657823623e-02
+    Ox1p_120f = reinterpret<f32>(0x03800000);
+
+  var ix = <u32>(reinterpret<u64>(x) >> 32);
+  var sx = x;
+  ix &= 0x7FFFFFFF;
+  var z: f64;
+  if (ix >= 0x44100000) {
+    if (isNaN(x)) return x;
+    z = atanhi3 + Ox1p_120f;
+    return copysign<f64>(z, sx);
+  }
+  var id: i32;
+  if (ix < 0x3FDC0000) {
+    if (ix < 0x3E400000) return x;
+    id = -1;
+  } else {
+    x = abs<f64>(x);
+    if (ix < 0x3FF30000) {
+      if (ix < 0x3FE60000) {
+        id = 0;
+        x = (2.0 * x - 1.0) / (2.0 + x);
+      } else {
+        id = 1;
+        x = (x - 1.0) / (x + 1.0);
+      }
+    } else {
+      if (ix < 0x40038000) {
+        id = 2;
+        x = (x - 1.5) / (1.0 + 1.5 * x);
+      } else {
+        id = 3;
+        x = -1.0 / x;
+      }
+    }
+  }
+  z = x * x;
+  var w = z * z;
+  var s1 = z * (aT0 + w * (aT2 + w * (aT4 + w * (aT6 + w * (aT8 + w * aT10)))));
+  var s2 = w * (aT1 + w * (aT3 + w * (aT5 + w * (aT7 + w * aT9))));
+  var s3 = x * (s1 + s2);
+  if (id < 0) return x - s3;
+  switch (id) {
+    case 0: { z = atanhi0 - ((s3 - atanlo0) - x); break; }
+    case 1: { z = atanhi1 - ((s3 - atanlo1) - x); break; }
+    case 2: { z = atanhi2 - ((s3 - atanlo2) - x); break; }
+    case 3: { z = atanhi3 - ((s3 - atanlo3) - x); break; }
+    default: unreachable();
+  }
+  return copysign<f64>(z, sx);
+}
+
+export function atanh32(x: f32): f32 { // see: musl/src/math/atanhf.c
+  var u = reinterpret<u32>(x);
+  var y = abs<f32>(x);
+  if (u < 0x3F800000 - (1 << 23)) {
+    if (u >= 0x3F800000 - (32 << 23)) y = 0.5 * log1p32(2 * y * (1.0 + y / (1 - y)));
+  } else y = 0.5 * log1p32(2 * (y / (1 - y)));
+  return copysign<f32>(y, x);
+}
+
+export function atanh64(x: f64): f64 { // see: musl/src/math/atanh.c
+  var u = reinterpret<u64>(x);
+  var e = u >> 52 & 0x7FF;
+  var y = abs<f64>(x);
+  if (e < 0x3FF - 1) {
+    if (e >= 0x3FF - 32) y = 0.5 * log1p64(2 * y + 2 * y * y / (1 - y));
+  } else {
+    y = 0.5 * log1p64(2 * (y / (1 - y)));
+  }
+  return copysign<f64>(y, x);
+}
+
+export function atan2_32(y: f32, x: f32): f32 { // see: musl/src/math/atan2f.c and SUN COPYRIGHT NOTICE above
+  const
+    pi    = reinterpret<f32>(0x40490FDB), //  3.1415927410e+00f
+    pi_lo = reinterpret<f32>(0xB3BBBD2E); // -8.7422776573e-08f
+
+  if (isNaN(x) || isNaN(y)) return x + y;
+  var ix = reinterpret<u32>(x);
+  var iy = reinterpret<u32>(y);
+  if (ix == 0x3F800000) return atan32(y);
+  var m = <u32>(((iy >> 31) & 1) | ((ix >> 30) & 2));
+  ix &= 0x7FFFFFFF;
+  iy &= 0x7FFFFFFF;
+  if (iy == 0) {
+    switch (m) {
+      case 0:
+      case 1: return  y;
+      case 2: return  pi;
+      case 3: return -pi;
+    }
+  }
+  if (ix == 0) return m & 1 ? -pi / 2 : pi / 2;
+  if (ix == 0x7F800000) {
+    if (iy == 0x7F800000) {
+      let t: f32 = m & 2 ? 3 * pi / 4 : pi / 4;
+      return m & 1 ? -t : t;
+    } else {
+      let t: f32 = m & 2 ? pi : 0.0;
+      return m & 1 ? -t : t;
+    }
+  }
+  if (ix + (26 << 23) < iy || iy == 0x7F800000) return m & 1 ? -pi / 2 : pi / 2;
+  var z: f32;
+  if ((m & 2) && iy + (26 << 23) < ix) z = 0.0;
+  else z = atan32(abs<f32>(y / x));
+  switch (m) {
+    case 0: return  z;
+    case 1: return -z;
+    case 2: return pi - (z - pi_lo);
+    case 3: return (z - pi_lo) - pi;
+  }
+  return unreachable();
+}
+
+export function atan2_64(y: f64, x: f64): f64 { // see: musl/src/math/atan2.c and SUN COPYRIGHT NOTICE above
+  const
+    pi    = reinterpret<f64>(0x400921FB54442D18), // 3.14159265358979323846
+    pi_lo = reinterpret<f64>(0x3CA1A62633145C07); // 1.2246467991473531772E-16
+
+  if (isNaN(x) || isNaN(y)) return x + y;
+  var u = reinterpret<u64>(x);
+  var ix = <u32>(u >> 32);
+  var lx = <u32>u;
+  u = reinterpret<u64>(y);
+  var iy = <u32>(u >> 32);
+  var ly = <u32>u;
+  if ((ix - 0x3FF00000 | lx) == 0) return atan64(y);
+  var m = ((iy >> 31) & 1) | ((ix >> 30) & 2);
+  ix = ix & 0x7FFFFFFF;
+  iy = iy & 0x7FFFFFFF;
+  if ((iy | ly) == 0) {
+    switch (m) {
+      case 0:
+      case 1: return  y;
+      case 2: return  pi;
+      case 3: return -pi;
+    }
+  }
+  if ((ix | lx) == 0) return m & 1 ? -pi / 2 : pi / 2;
+  if (ix == 0x7FF00000) {
+    if (iy == 0x7FF00000) {
+      let t = m & 2 ? 3 * pi / 4 : pi / 4;
+      return m & 1 ? -t : t;
+    } else {
+      let t = m & 2 ? pi : 0;
+      return m & 1 ? -t : t;
+    }
+  }
+  var z: f64;
+  if (ix + (64 << 20) < iy || iy == 0x7FF00000) return m & 1 ? -pi / 2 : pi / 2;
+  if ((m & 2) && iy + (64 << 20) < ix) z = 0;
+  else z = atan64(abs<f64>(y / x));
+  switch (m) {
+    case 0: return  z;
+    case 1: return -z;
+    case 2: return pi - (z - pi_lo);
+    case 3: return (z - pi_lo) - pi;
+  }
+  return unreachable();
+}
+
+export function cbrt32(x: f32): f32 { // see: musl/src/math/cbrtf.c and SUN COPYRIGHT NOTICE above
+  const
+    B1      = <u32>709958130,
+    B2      = <u32>642849266,
+    Ox1p24f = reinterpret<f32>(0x4B800000);
+
+  var u = reinterpret<u32>(x);
+  var hx = u & 0x7FFFFFFF;
+  if (hx >= 0x7F800000) return x + x;
+  if (hx < 0x00800000) {
+    if (hx == 0) return x;
+    u = reinterpret<u32>(x * Ox1p24f);
+    hx = u & 0x7FFFFFFF;
+    hx = hx / 3 + B2;
+  } else {
+    hx = hx / 3 + B1;
+  }
+  u &= 0x80000000;
+  u |= hx;
+  var t = <f64>reinterpret<f32>(u);
+  var r = t * t * t;
+  t = t * (<f64>x + x + r) / (x + r + r);
+  r = t * t * t;
+  t = t * (<f64>x + x + r) / (x + r + r);
+  return <f32>t;
+}
+
+export function cbrt64(x: f64): f64 { // see: musl/src/math/cbrt.c and SUN COPYRIGHT NOTICE above
+  const
+    B1     = <u32>715094163,
+    B2     = <u32>696219795,
+    P0     = reinterpret<f64>(0x3FFE03E60F61E692), //  1.87595182427177009643
+    P1     = reinterpret<f64>(0xBFFE28E092F02420), // -1.88497979543377169875
+    P2     = reinterpret<f64>(0x3FF9F1604A49D6C2), //  1.621429720105354466140
+    P3     = reinterpret<f64>(0xBFE844CBBEE751D9), // -0.758397934778766047437
+    P4     = reinterpret<f64>(0x3FC2B000D4E4EDD7), //  0.145996192886612446982
+    Ox1p54 = reinterpret<f64>(0x4350000000000000); //  0x1p54
+
+  var u = reinterpret<u64>(x);
+  var hx = <u32>(u >> 32) & 0x7FFFFFFF;
+  if (hx >= 0x7FF00000) return x + x;
+  if (hx < 0x00100000) {
+    u = reinterpret<u64>(x * Ox1p54);
+    hx = <u32>(u >> 32) & 0x7FFFFFFF;
+    if (hx == 0) return x;
+    hx = hx / 3 + B2;
+  } else {
+    hx = hx / 3 + B1;
+  }
+  u &= 1 << 63;
+  u |= <u64>hx << 32;
+  var t = reinterpret<f64>(u);
+  var r = (t * t) * (t / x);
+  t = t * ((P0 + r * (P1 + r * P2)) + ((r * r) * r) * (P3 + r * P4));
+  t = reinterpret<f64>((reinterpret<u64>(t) + 0x80000000) & 0xFFFFFFFFC0000000);
+  var s = t * t;
+  r = x / s;
+  r = (r - t) / (2 * t + r);
+  t = t + t * r;
+  return t;
+}
+
+export function cos32(x: f32): f32 { // see: musl/src/math/cosf.c
+  const
+    c1pio2 = reinterpret<f64>(0x3FF921FB54442D18), // M_PI_2 * 1
+    c2pio2 = reinterpret<f64>(0x400921FB54442D18), // M_PI_2 * 2
+    c3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // M_PI_2 * 3
+    c4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
+
+  var ix = reinterpret<u32>(x);
+  var sign = ix >> 31;
+  ix &= 0x7FFFFFFF;
+
+  if (ix <= 0x3F490FDA) {  // |x| ~<= π/4
+    if (ix < 0x39800000) { // |x| < 2**-12
+      // raise inexact if x != 0
+      return 1;
+    }
+    return cos32_kern(x);
+  }
+
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (ix <= 0x407B53D1) {  // |x| ~<= 5π/4
+      if (ix > 0x4016CBE3) { // |x|  ~> 3π/4
+        return -cos32_kern(sign ? x + c2pio2 : x - c2pio2);
+      } else {
+        return sign ? sin32_kern(x + c1pio2) : sin32_kern(c1pio2 - x);
+      }
+    }
+    if (ix <= 0x40E231D5) {  // |x| ~<= 9π/4
+      if (ix > 0x40AFEDDF) { // |x|  ~> 7π/4
+        return cos32_kern(sign ? x + c4pio2 : x - c4pio2);
+      } else {
+        return sign ? sin32_kern(-x - c3pio2) : sin32_kern(x - c3pio2);
+      }
+    }
+  }
+
+  // cos(Inf or NaN) is NaN
+  if (ix >= 0x7F800000) return x - x;
+
+  // general argument reduction needed
+  var n = rempio2_32(x, ix, sign);
+  var y = rempio2_32_y;
+
+  var t = n & 1 ? sin32_kern(y) : cos32_kern(y);
+  return (n + 1) & 2 ? -t : t;
+}
+
+export function cos64(x: f64): f64 { // see: musl/src/math/cos.c
+  var u  = reinterpret<u64>(x);
+  var ix = <u32>(u >> 32);
+  var sign = ix >> 31;
+
+  ix &= 0x7FFFFFFF;
+
+  // |x| ~< pi/4
+  if (ix <= 0x3FE921FB) {
+    if (ix < 0x3E46A09E) {  // |x| < 2**-27 * sqrt(2)
+      return 1.0;
+    }
+    return cos64_kern(x, 0);
+  }
+
+  // sin(Inf or NaN) is NaN
+  if (ix >= 0x7FF00000) return x - x;
+
+  // argument reduction needed
+  var n  = rempio2_64(x, u, sign);
+  var y0 = rempio2_y0;
+  var y1 = rempio2_y1;
+
+  x = n & 1 ? sin64_kern(y0, y1, 1) : cos64_kern(y0, y1);
+  return (n + 1) & 2 ? -x : x;
+}
+
+export function cosh32(x: f32): f32 { // see: musl/src/math/coshf.c
+  var u = reinterpret<u32>(x);
+  u &= 0x7FFFFFFF;
+  x = reinterpret<f32>(u);
+  if (u < 0x3F317217) {
+    if (u < 0x3F800000 - (12 << 23)) return 1;
+    let t = expm1_32(x);
+    // return 1 + t * t / (2 * (1 + t));
+    return 1 + t * t / (2 + 2 * t);
+  }
+  if (u < 0x42B17217) {
+    let t = exp32(x);
+    // return 0.5 * (t + 1 / t);
+    return 0.5 * t + 0.5 / t;
+  }
+  return expo2_32(x, 1);
+}
+
+export function cosh64(x: f64): f64 { // see: musl/src/math/cosh.c
+  var u = reinterpret<u64>(x);
+  u &= 0x7FFFFFFFFFFFFFFF;
+  x = reinterpret<f64>(u);
+  var w = <u32>(u >> 32);
+  var t: f64;
+  if (w < 0x3FE62E42) {
+    if (w < 0x3FF00000 - (26 << 20)) return 1;
+    t = expm1_64(x);
+    // return 1 + t * t / (2 * (1 + t));
+    return 1 + t * t / (2 + 2 * t);
+  }
+  if (w < 0x40862E42) {
+    t = exp64(x);
+    return 0.5 * (t + 1 / t);
+  }
+  t = expo2_64(x, 1);
+  return t;
+}
+
+export function hypot32(x: f32, y: f32): f32 { // see: musl/src/math/hypotf.c
+  const
+    Ox1p90f  = reinterpret<f32>(0x6C800000),
+    Ox1p_90f = reinterpret<f32>(0x12800000);
+
+  var ux = reinterpret<u32>(x);
+  var uy = reinterpret<u32>(y);
+  ux &= 0x7FFFFFFF;
+  uy &= 0x7FFFFFFF;
+  if (ux < uy) {
+    let ut = ux;
+    ux = uy;
+    uy = ut;
+  }
+  x = reinterpret<f32>(ux);
+  y = reinterpret<f32>(uy);
+  if (uy == 0xFF << 23) return y;
+  if (ux >= 0xFF << 23 || uy == 0 || ux - uy >= 25 << 23) return x + y;
+  var z: f32 = 1;
+  if (ux >= (0x7F + 60) << 23) {
+    z  = Ox1p90f;
+    x *= Ox1p_90f;
+    y *= Ox1p_90f;
+  } else if (uy < (0x7F - 60) << 23) {
+    z  = Ox1p_90f;
+    x *= Ox1p90f;
+    y *= Ox1p90f;
+  }
+  return z * sqrt<f32>(<f32>(<f64>x * x + <f64>y * y));
+}
+
+export function hypot64(x: f64, y: f64): f64 { // see: musl/src/math/hypot.c
+  const
+    SPLIT    = reinterpret<f64>(0x41A0000000000000) + 1, // 0x1p27 + 1
+    Ox1p700  = reinterpret<f64>(0x6BB0000000000000),
+    Ox1p_700 = reinterpret<f64>(0x1430000000000000);
+
+  var ux = reinterpret<u64>(x);
+  var uy = reinterpret<u64>(y);
+  ux &= 0x7FFFFFFFFFFFFFFF;
+  uy &= 0x7FFFFFFFFFFFFFFF;
+  if (ux < uy) {
+    let ut = ux;
+    ux = uy;
+    uy = ut;
+  }
+  var ex = <i32>(ux >> 52);
+  var ey = <i32>(uy >> 52);
+  y = reinterpret<f64>(uy);
+  if (ey == 0x7FF) return y;
+  x = reinterpret<f64>(ux);
+  if (ex == 0x7FF || uy == 0) return x;
+  if (ex - ey > 64) return x + y;
+  var z = 1.0;
+  if (ex > 0x3FF + 510) {
+    z  = Ox1p700;
+    x *= Ox1p_700;
+    y *= Ox1p_700;
+  } else if (ey < 0x3FF - 450) {
+    z  = Ox1p_700;
+    x *= Ox1p700;
+    y *= Ox1p700;
+  }
+  var c = x * SPLIT;
+  var h = x - c + c;
+  var l = x - h;
+  var hx = x * x;
+  var lx = h * h - hx + (2 * h + l) * l;
+  c = y * SPLIT;
+  h = y - c + c;
+  l = y - h;
+  var hy = y * y;
+  var ly = h * h - hy + (2 * h + l) * l;
+  return z * sqrt<f64>(ly + lx + hy + hx);
+}
+
+// ULP error: 0.502 (nearest rounding.)
+// Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
+// Wrong count: 168353 (all nearest rounding wrong results with fma.)
+export function exp2_32_lut(x: f32): f32 {
+  const
+    N      = 1 << EXP2_TABLE32_BITS,
+    N_MASK = N - 1,
+    shift  = reinterpret<f64>(0x4338000000000000) / N, // 0x1.8p+52
+    Ox127f = reinterpret<f32>(0x7F000000);
+
+  const
+    C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
+
+  var xd = <f64>x;
+  var ix = reinterpret<u32>(x);
+  var ux = ix >> 20 & 0x7FF;
+  if (ux >= 0x430) {
+    // |x| >= 128 or x is nan.
+    if (ix == 0xFF800000) return 0; // x == -Inf    -> 0
+    if (ux >= 0x7F8) return x + x;  // x == Inf/NaN -> Inf/NaN
+    if (x > 0) return x * Ox127f;   // x >     0    -> HugeVal (Owerflow)
+    if (x <= -150) return 0;        // x <= -150    -> 0 (Underflow)
+  }
+
+  // x = k/N + r with r in [-1/(2N), 1/(2N)] and int k.
+  var kd = xd + shift;
+  var ki = reinterpret<u64>(kd);
+  var r  = xd - (kd - shift);
+  var t: u64, y: f64, s: f64;
+
+  // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
+  t  = load<u64>(EXP2_TABLE32 + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t += ki << (52 - EXP2_TABLE32_BITS);
+  s  = reinterpret<f64>(t);
+  y  = C2 * r + 1;
+  y += (C0 * r + C1) * (r  * r);
+  y *= s;
+
+  return <f32>y;
+}
+
+// ULP error: 0.502 (nearest rounding.)
+// Relative error: 1.69 * 2^-34 in [-ln2/64, ln2/64] (before rounding.)
+// Wrong count: 170635 (all nearest rounding wrong results with fma.)
+// @ts-ignore: decorator
+@inline
+export function exp32_lut(x: f32): f32 {
+  const
+    N        = 1 << EXP2_TABLE32_BITS,
+    N_MASK   = N - 1,
+    shift    = reinterpret<f64>(0x4338000000000000),        // 0x1.8p+52
+    InvLn2N  = reinterpret<f64>(0x3FF71547652B82FE) * N,    // 0x1.71547652b82fep+0
+    Ox1p127f = reinterpret<f32>(0x7F000000);
+
+  const
+    C0 = reinterpret<f64>(0x3FAC6AF84B912394) / N / N / N, // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3) / N / N,     // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6) / N;         // 0x1.62e42ff0c52d6p-1
+
+  var xd = <f64>x;
+  var ix = reinterpret<u32>(x);
+  var ux = ix >> 20 & 0x7FF;
+  if (ux >= 0x42B) {
+    // |x| >= 88 or x is nan.
+    if (ix == 0xFF800000) return 0;                            // x == -Inf    -> 0
+    if (ux >= 0x7F8) return x + x;                             // x == Inf/NaN -> Inf/NaN
+    if (x > reinterpret<f32>(0x42B17217)) return x * Ox1p127f; // x > log(0x1p128)  ~=  88.72 -> HugeVal (Owerflow)
+    if (x < reinterpret<f32>(0xC2CFF1B4)) return 0;            // x < log(0x1p-150) ~= -103.97 -> 0 (Underflow)
+  }
+
+  // x*N/Ln2 = k + r with r in [-1/2, 1/2] and int k.
+  var z = InvLn2N * xd;
+
+  // Round and convert z to int, the result is in [-150*N, 128*N] and
+  // ideally ties-to-even rule is used, otherwise the magnitude of r
+  // can be bigger which gives larger approximation error.
+  var kd = <f64>(z + shift);
+  var ki = reinterpret<u64>(kd);
+  var r  = z - (kd - shift);
+  var s: f64, y: f64, t: u64;
+
+  // exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
+  t  = load<u64>(EXP2_TABLE32 + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t += ki << (52 - EXP2_TABLE32_BITS);
+  s  = reinterpret<f64>(t);
+  z  = C0 * r + C1;
+  y  = C2 * r + 1;
+  y += z * (r * r);
+  y *= s;
+
+  return <f32>y;
+}
+
+// ULP error: 0.752 (nearest rounding.)
+// Relative error: 1.9 * 2^-26 (before rounding.)
+// @ts-ignore: decorator
+@inline
+export function log2_32_lut(x: f32): f32 {
+  const
+    N_MASK  = (1 << LOG2_TABLE32_BITS) - 1,
+    Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
+
+  const
+    A0 = reinterpret<f64>(0xBFD712B6F70A7E4D), // -0x1.712b6f70a7e4dp-2
+    A1 = reinterpret<f64>(0x3FDECABF496832E0), //  0x1.ecabf496832ep-2
+    A2 = reinterpret<f64>(0xBFE715479FFAE3DE), // -0x1.715479ffae3dep-1
+    A3 = reinterpret<f64>(0x3FF715475F35C8B8); //  0x1.715475f35c8b8p0
+
+  var ux = reinterpret<u32>(x);
+  // Fix sign of zero with downward rounding when x==1.
+  // if (WANT_ROUNDING && predict_false(ix == 0x3f800000)) return 0;
+  if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
+    // x < 0x1p-126 or inf or nan.
+    if (ux * 2 == 0) return -Infinity;
+    if (ux == 0x7F800000) return x; // log2(inf) == inf.
+    if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
+    // x is subnormal, normalize it.
+    ux = reinterpret<u32>(x * Ox1p23f);
+    ux -= 23 << 23;
+  }
+  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
+  var tmp  = ux - 0x3F330000;
+  var i    = (tmp >> (23 - LOG2_TABLE32_BITS)) & N_MASK;
+  var top  = tmp & 0xFF800000;
+  var iz   = ux - top;
+  var k    = <i32>tmp >> 23;
+
+  var invc = load<f64>(LOG2_TABLE32 + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(LOG2_TABLE32 + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var z    = <f64>reinterpret<f32>(iz);
+
+  // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
+  var r  = z * invc - 1;
+  var y0 = logc + <f64>k;
+
+  // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
+  var y  = A1 * r + A2;
+  var p  = A3 * r + y0;
+  var r2 = r * r;
+  y += A0 * r2;
+  y  = y * r2 + p;
+
+  return <f32>y;
+}
+
+// ULP error: 0.818 (nearest rounding.)
+// Relative error: 1.957 * 2^-26 (before rounding.)
+// @ts-ignore: decorator
+@inline
+export function logf_lut(x: f32): f32 {
+  const
+    N_MASK  = (1 << LOG_TABLE32_BITS) - 1,
+    Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
+
+  const
+    Ln2 = reinterpret<f64>(0x3FE62E42FEFA39EF), // 0x1.62e42fefa39efp-1;
+    A0  = reinterpret<f64>(0xBFD00EA348B88334), // -0x1.00ea348b88334p-2
+    A1  = reinterpret<f64>(0x3FD5575B0BE00B6A), //  0x1.5575b0be00b6ap-2
+    A2  = reinterpret<f64>(0xBFDFFFFEF20A4123); // -0x1.ffffef20a4123p-2
+
+  var ux = reinterpret<u32>(x);
+  // Fix sign of zero with downward rounding when x==1.
+  // if (WANT_ROUNDING && ux == 0x3f800000) return 0;
+  if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
+    // x < 0x1p-126 or inf or nan.
+    if ((ux << 1) == 0) return -Infinity;
+    if (ux == 0x7F800000) return x; // log(inf) == inf.
+    if ((ux >> 31) || (ux << 1) >= 0xFF000000) return (x - x) / (x - x);
+    // x is subnormal, normalize it.
+    ux = reinterpret<u32>(x * Ox1p23f);
+    ux -= 23 << 23;
+  }
+  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
+  var tmp = ux - 0x3F330000;
+  var i   = (tmp >> (23 - LOG_TABLE32_BITS)) & N_MASK;
+  var k   = <i32>tmp >> 23;
+  var iz  = ux - (tmp & 0x1FF << 23);
+
+  var invc = load<f64>(LOG_TABLE32 + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(LOG_TABLE32 + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+
+  var z = <f64>reinterpret<f32>(iz);
+
+  // log(x) = log1p(z/c-1) + log(c) + k*Ln2
+  var r = z * invc - 1;
+  var y0 = logc + <f64>k * Ln2;
+
+  // Pipelined polynomial evaluation to approximate log1p(r).
+  var r2 = r * r;
+  var y  = A1 * r + A2;
+  y += A0 * r2;
+  y = y * r2 + (y0 + r);
+
+  return <f32>y;
+}
+
+//
+// Lookup data for powf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/powf.c
+//
+
+// @ts-ignore: decorator
+@inline
+function zeroinfnan32(ux: u32): bool {
+  return (ux << 1) - 1 >= (<u32>0x7f800000 << 1) - 1;
+}
+
+// Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
+// the bit representation of a non-zero finite floating-point value.
+// @ts-ignore: decorator
+@inline
+function checkint32(iy: u32): i32 {
+  var e = iy >> 23 & 0xFF;
+  if (e < 0x7F     ) return 0;
+  if (e > 0x7F + 23) return 2;
+  e = 1 << (0x7F + 23 - e);
+  if (iy & (e - 1)) return 0;
+  if (iy &  e     ) return 1;
+  return 2;
+}
+
+// Subnormal input is normalized so ix has negative biased exponent.
+// Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set.
+// @ts-ignore: decorator
+@inline
+function log2_32_inline(ux: u32): f64 {
+  const N_MASK = (1 << LOG2_TABLE32_BITS) - 1;
+
+  const
+    A0 = reinterpret<f64>(0x3FD27616C9496E0B), //  0x1.27616c9496e0bp-2
+    A1 = reinterpret<f64>(0xBFD71969A075C67A), // -0x1.71969a075c67ap-2
+    A2 = reinterpret<f64>(0x3FDEC70A6CA7BADD), //  0x1.ec70a6ca7baddp-2
+    A3 = reinterpret<f64>(0xBFE7154748BEF6C8), // -0x1.7154748bef6c8p-1
+    A4 = reinterpret<f64>(0x3FF71547652AB82B); //  0x1.71547652ab82bp+0
+
+  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
+  var tmp  = ux - 0x3F330000;
+  var i    = <usize>((tmp >> (23 - LOG2_TABLE32_BITS)) & N_MASK);
+  var top  = tmp & 0xFF800000;
+  var uz   = ux - top;
+  var k    = <i32>(<i32>top >> 23);
+
+  var invc = load<f64>(LOG2_TABLE32 + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(LOG2_TABLE32 + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var z    = <f64>reinterpret<f32>(uz);
+
+  // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
+  var r  = z * invc - 1;
+  var y0 = logc + <f64>k;
+
+  // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
+  var y = A0 * r + A1;
+  var p = A2 * r + A3;
+  var q = A4 * r + y0;
+
+  r *= r;
+  q += p * r;
+  y  = y * (r * r) + q;
+
+  return y;
+}
+
+// The output of log2 and thus the input of exp2 is either scaled by N
+// (in case of fast toint intrinsics) or not.  The unscaled xd must be
+// in [-1021,1023], sign_bias sets the sign of the result.
+// @ts-ignore: decorator
+@inline
+function exp2_32_inline(xd: f64, signBias: u32): f32 {
+  const
+    N      = 1 << EXP2_TABLE32_BITS,
+    N_MASK = N - 1,
+    shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
+
+  const
+    C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
+
+  // x = k/N + r with r in [-1/(2N), 1/(2N)]
+  var kd = <f64>(xd + shift);
+  var ki = reinterpret<u64>(kd);
+  var r  = xd - (kd - shift);
+  var t: u64, z: f64, y: f64, s: f64;
+
+  // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
+  t  = load<u64>(EXP2_TABLE32 + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t += (ki + signBias) << (52 - EXP2_TABLE32_BITS);
+  s  = reinterpret<f64>(t);
+  z  = C0 * r + C1;
+  y  = C2 * r + 1;
+  y += z * (r * r);
+  y *= s;
+  return <f32>y;
+}
+
+// @ts-ignore: decorator
+@inline
+function xflow32(sign: u32, y: f32): f32 {
+  return select<f32>(-y, y, sign) * y;
+}
+
+// @ts-ignore: decorator
+@inline
+function oflow32(sign: u32): f32 {
+  return xflow32(sign, reinterpret<f32>(0x70000000)); // 0x1p97f
+}
+
+// @ts-ignore: decorator
+@inline
+function uflow32(sign: u32): f32 {
+  return xflow32(sign, reinterpret<f32>(0x10000000)); // 0x1p-95f
+}
+
+// @ts-ignore: decorator
+@inline
+function pow32_lut(x: f32, y: f32): f32 {
+  const
+    Ox1p23f     = reinterpret<f32>(0x4B000000), // 0x1p23f
+    UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571), // 0x1.fffffffd1d571p+6
+    LOWER_LIMIT = -150.0,
+    SIGN_BIAS   = 1 << (EXP2_TABLE32_BITS + 11);
+
+  var signBias: u32 = 0;
+  var ix = reinterpret<u32>(x);
+  var iy = reinterpret<u32>(y);
+  var ny = 0;
+
+  if (i32(ix - 0x00800000 >= 0x7f800000 - 0x00800000) | (ny = i32(zeroinfnan32(iy)))) {
+    // Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).
+    if (ny) {
+      if ((iy << 1) == 0) return 1.0;
+      if (ix == 0x3F800000) return NaN; // original: 1.0
+      if ((ix << 1) > (<u32>0x7F800000 << 1) || (iy << 1) > (<u32>0x7F800000 << 1)) return x + y;
+      if ((ix << 1) == (0x3F800000 << 1)) return NaN; // original: 1.0
+      if (((ix << 1) < (0x3F800000 << 1)) == !(iy >> 31)) return 0; // |x| < 1 && y==inf or |x| > 1 && y==-inf.
+      return y * y;
+    }
+    if (zeroinfnan32(ix)) {
+      let x2 = x * x;
+      if ((ix >> 31) && checkint32(iy) == 1) x2 = -x2;
+      return iy >> 31 ? 1 / x2 : x2;
+    }
+    // x and y are non-zero finite.
+    if (ix >> 31) {
+      // Finite x < 0.
+      let yint = checkint32(iy);
+      if (yint == 0) return (x - x) / (x - x);
+      if (yint == 1) signBias = SIGN_BIAS;
+      ix &= 0x7FFFFFFF;
+    }
+    if (ix < 0x00800000) {
+      // Normalize subnormal x so exponent becomes negative.
+      ix = reinterpret<u32>(x * Ox1p23f);
+      ix &= 0x7FFFFFFF;
+      ix -= 23 << 23;
+    }
+  }
+  var logx = log2_32_inline(ix);
+  var ylogx = y * logx; // cannot overflow, y is single prec.
+  if ((reinterpret<u64>(ylogx) >> 47 & 0xFFFF) >= 0x80BF) { // reinterpret<u64>(126.0) >> 47
+    // |y * log(x)| >= 126
+    if (ylogx  > UPPER_LIMIT) return oflow32(signBias); // overflow
+    if (ylogx <= LOWER_LIMIT) return uflow32(signBias); // underflow
+  }
+  return exp2_32_inline(ylogx, signBias);
+}
+
 // Handle cases that may overflow or underflow when computing the result that
 // is scale*(1+TMP) without intermediate rounding. The bit representation of
 // scale is in SBITS, however it has a computed exponent that may have
@@ -615,12 +2590,12 @@ function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
   // Note: sbits is signed scale.
   scale = reinterpret<f64>(sbits);
   var y = scale + scale * tmp;
-  if (abs(y) < 1.0) {
+  if (abs<f64>(y) < 1.0) {
     // Round y to the right precision before scaling it into the subnormal
     // range to avoid double rounding that can cause 0.5+E/2 ulp error where
     // E is the worst-case ulp error outside the subnormal range.  So this
     // is only useful if the goal is better than 1 ulp worst-case error.
-    let one = copysign(1.0, y);
+    let one = copysign<f64>(1.0, y);
     let lo = scale - y + scale * tmp;
     let hi = one + y;
     lo = one - hi + y + lo;
@@ -635,7 +2610,7 @@ function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
 @inline
 export function exp_lut(x: f64): f64 {
   const
-    N      = 1 << EXP_TABLE_BITS,
+    N      = 1 << EXP_TABLE64_BITS,
     N_MASK = N - 1;
 
   const
@@ -683,11 +2658,11 @@ export function exp_lut(x: f64): f64 {
   var r = x + kd * NegLn2hiN + kd * NegLn2loN;
   // 2^(k/N) ~= scale * (1 + tail).
   var idx = <usize>((ki & N_MASK) << 1);
-  var top = ki << (52 - EXP_TABLE_BITS);
+  var top = ki << (52 - EXP_TABLE64_BITS);
 
-  var tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()))); // T[idx]
+  var tail = reinterpret<f64>(load<u64>(EXP_TABLE64 + (idx << alignof<u64>()))); // T[idx]
   // This is only a valid scale when -1023*N < k < 1024*N
-  var sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  var sbits = load<u64>(EXP_TABLE64 + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
   // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
   // Evaluation is optimized assuming superscalar pipelined execution.
   var r2 = r * r;
@@ -741,11 +2716,9 @@ function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
   return y * Ox1p_1022;
 }
 
-// @ts-ignore: decorator
-@inline
-export function exp2_lut(x: f64): f64 {
+export function exp2_64_lut(x: f64): f64 {
   const
-    N      = 1 << EXP_TABLE_BITS,
+    N      = 1 << EXP_TABLE64_BITS,
     N_MASK = N - 1,
     shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p52
 
@@ -777,11 +2750,11 @@ export function exp2_lut(x: f64): f64 {
   var r = x - kd;
   // 2^(k/N) ~= scale * (1 + tail)
   var idx = <usize>((ki & N_MASK) << 1);
-  var top = ki << (52 - EXP_TABLE_BITS);
+  var top = ki << (52 - EXP_TABLE64_BITS);
 
-  var tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
+  var tail = reinterpret<f64>(load<u64>(EXP_TABLE64 + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
   // This is only a valid scale when -1023*N < k < 1024*N
-  var sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  var sbits = load<u64>(EXP_TABLE64 + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
   // exp2(x) = 2^(k/N) * 2^r ~= scale + scale * (tail + 2^r - 1).
   // Evaluation is optimized assuming superscalar pipelined execution
   var r2 = r * r;
@@ -795,182 +2768,10 @@ export function exp2_lut(x: f64): f64 {
   return scale * tmp + scale;
 }
 
-//
-// Lookup data for log2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log2.c
-//
-
-// @ts-ignore: decorator
-@inline const LOG2_TABLE_BITS = 6;
-
-/* Algorithm:
-
-  x = 2^k z
-  log2(x) = k + log2(c) + log2(z/c)
-  log2(z/c) = poly(z/c - 1)
-
-where z is in [1.6p-1; 1.6p0] which is split into N subintervals and z falls
-into the ith one, then table entries are computed as
-
-  tab[i].invc = 1/c
-  tab[i].logc = (double)log2(c)
-  tab2[i].chi = (double)c
-  tab2[i].clo = (double)(c - (double)c)
-
-where c is near the center of the subinterval and is chosen by trying +-2^29
-floating point invc candidates around 1/center and selecting one for which
-
-  1) the rounding error in 0x1.8p10 + logc is 0,
-  2) the rounding error in z - chi - clo is < 0x1p-64 and
-  3) the rounding error in (double)log2(c) is minimized (< 0x1p-68).
-
-Note: 1) ensures that k + logc can be computed without rounding error, 2)
-ensures that z/c - 1 can be computed as (z - chi - clo)*invc with close to a
-single rounding error when there is no fast fma for z*invc - 1, 3) ensures
-that logc + poly(z/c - 1) has small error, however near x == 1 when
-|log2(x)| < 0x1p-4, this is not enough so that is special cased. */
-
-// @ts-ignore: decorator
-@lazy @inline const LOG2_DATA_TAB1 = memory.data<f64>([
-  //            invc                  ,                logc
-  reinterpret<f64>(0x3FF724286BB1ACF8), reinterpret<f64>(0xBFE1095FEECDB000),
-  reinterpret<f64>(0x3FF6E1F766D2CCA1), reinterpret<f64>(0xBFE08494BD76D000),
-  reinterpret<f64>(0x3FF6A13D0E30D48A), reinterpret<f64>(0xBFE00143AEE8F800),
-  reinterpret<f64>(0x3FF661EC32D06C85), reinterpret<f64>(0xBFDEFEC5360B4000),
-  reinterpret<f64>(0x3FF623FA951198F8), reinterpret<f64>(0xBFDDFDD91AB7E000),
-  reinterpret<f64>(0x3FF5E75BA4CF026C), reinterpret<f64>(0xBFDCFFAE0CC79000),
-  reinterpret<f64>(0x3FF5AC055A214FB8), reinterpret<f64>(0xBFDC043811FDA000),
-  reinterpret<f64>(0x3FF571ED0F166E1E), reinterpret<f64>(0xBFDB0B67323AE000),
-  reinterpret<f64>(0x3FF53909590BF835), reinterpret<f64>(0xBFDA152F5A2DB000),
-  reinterpret<f64>(0x3FF5014FED61ADDD), reinterpret<f64>(0xBFD9217F5AF86000),
-  reinterpret<f64>(0x3FF4CAB88E487BD0), reinterpret<f64>(0xBFD8304DB0719000),
-  reinterpret<f64>(0x3FF49539B4334FEE), reinterpret<f64>(0xBFD74189F9A9E000),
-  reinterpret<f64>(0x3FF460CBDFAFD569), reinterpret<f64>(0xBFD6552BB5199000),
-  reinterpret<f64>(0x3FF42D664EE4B953), reinterpret<f64>(0xBFD56B23A29B1000),
-  reinterpret<f64>(0x3FF3FB01111DD8A6), reinterpret<f64>(0xBFD483650F5FA000),
-  reinterpret<f64>(0x3FF3C995B70C5836), reinterpret<f64>(0xBFD39DE937F6A000),
-  reinterpret<f64>(0x3FF3991C4AB6FD4A), reinterpret<f64>(0xBFD2BAA1538D6000),
-  reinterpret<f64>(0x3FF3698E0CE099B5), reinterpret<f64>(0xBFD1D98340CA4000),
-  reinterpret<f64>(0x3FF33AE48213E7B2), reinterpret<f64>(0xBFD0FA853A40E000),
-  reinterpret<f64>(0x3FF30D191985BDB1), reinterpret<f64>(0xBFD01D9C32E73000),
-  reinterpret<f64>(0x3FF2E025CAB271D7), reinterpret<f64>(0xBFCE857DA2FA6000),
-  reinterpret<f64>(0x3FF2B404CF13CD82), reinterpret<f64>(0xBFCCD3C8633D8000),
-  reinterpret<f64>(0x3FF288B02C7CCB50), reinterpret<f64>(0xBFCB26034C14A000),
-  reinterpret<f64>(0x3FF25E2263944DE5), reinterpret<f64>(0xBFC97C1C2F4FE000),
-  reinterpret<f64>(0x3FF234563D8615B1), reinterpret<f64>(0xBFC7D6023F800000),
-  reinterpret<f64>(0x3FF20B46E33EAF38), reinterpret<f64>(0xBFC633A71A05E000),
-  reinterpret<f64>(0x3FF1E2EEFDCDA3DD), reinterpret<f64>(0xBFC494F5E9570000),
-  reinterpret<f64>(0x3FF1BB4A580B3930), reinterpret<f64>(0xBFC2F9E424E0A000),
-  reinterpret<f64>(0x3FF19453847F2200), reinterpret<f64>(0xBFC162595AFDC000),
-  reinterpret<f64>(0x3FF16E06C0D5D73C), reinterpret<f64>(0xBFBF9C9A75BD8000),
-  reinterpret<f64>(0x3FF1485F47B7E4C2), reinterpret<f64>(0xBFBC7B575BF9C000),
-  reinterpret<f64>(0x3FF12358AD0085D1), reinterpret<f64>(0xBFB960C60FF48000),
-  reinterpret<f64>(0x3FF0FEF00F532227), reinterpret<f64>(0xBFB64CE247B60000),
-  reinterpret<f64>(0x3FF0DB2077D03A8F), reinterpret<f64>(0xBFB33F78B2014000),
-  reinterpret<f64>(0x3FF0B7E6D65980D9), reinterpret<f64>(0xBFB0387D1A42C000),
-  reinterpret<f64>(0x3FF0953EFE7B408D), reinterpret<f64>(0xBFAA6F9208B50000),
-  reinterpret<f64>(0x3FF07325CAC53B83), reinterpret<f64>(0xBFA47A954F770000),
-  reinterpret<f64>(0x3FF05197E40D1B5C), reinterpret<f64>(0xBF9D23A8C50C0000),
-  reinterpret<f64>(0x3FF03091C1208EA2), reinterpret<f64>(0xBF916A2629780000),
-  reinterpret<f64>(0x3FF0101025B37E21), reinterpret<f64>(0xBF7720F8D8E80000),
-  reinterpret<f64>(0x3FEFC07EF9CAA76B), reinterpret<f64>(0x3F86FE53B1500000),
-  reinterpret<f64>(0x3FEF4465D3F6F184), reinterpret<f64>(0x3FA11CCCE10F8000),
-  reinterpret<f64>(0x3FEECC079F84107F), reinterpret<f64>(0x3FAC4DFC8C8B8000),
-  reinterpret<f64>(0x3FEE573A99975AE8), reinterpret<f64>(0x3FB3AA321E574000),
-  reinterpret<f64>(0x3FEDE5D6F0BD3DE6), reinterpret<f64>(0x3FB918A0D08B8000),
-  reinterpret<f64>(0x3FED77B681FF38B3), reinterpret<f64>(0x3FBE72E9DA044000),
-  reinterpret<f64>(0x3FED0CB5724DE943), reinterpret<f64>(0x3FC1DCD2507F6000),
-  reinterpret<f64>(0x3FECA4B2DC0E7563), reinterpret<f64>(0x3FC476AB03DEA000),
-  reinterpret<f64>(0x3FEC3F8EE8D6CB51), reinterpret<f64>(0x3FC7074377E22000),
-  reinterpret<f64>(0x3FEBDD2B4F020C4C), reinterpret<f64>(0x3FC98EDE8BA94000),
-  reinterpret<f64>(0x3FEB7D6C006015CA), reinterpret<f64>(0x3FCC0DB86AD2E000),
-  reinterpret<f64>(0x3FEB20366E2E338F), reinterpret<f64>(0x3FCE840AAFCEE000),
-  reinterpret<f64>(0x3FEAC57026295039), reinterpret<f64>(0x3FD0790AB4678000),
-  reinterpret<f64>(0x3FEA6D01BC2731DD), reinterpret<f64>(0x3FD1AC056801C000),
-  reinterpret<f64>(0x3FEA16D3BC3FF18B), reinterpret<f64>(0x3FD2DB11D4FEE000),
-  reinterpret<f64>(0x3FE9C2D14967FEAD), reinterpret<f64>(0x3FD406464EC58000),
-  reinterpret<f64>(0x3FE970E4F47C9902), reinterpret<f64>(0x3FD52DBE093AF000),
-  reinterpret<f64>(0x3FE920FB3982BCF2), reinterpret<f64>(0x3FD651902050D000),
-  reinterpret<f64>(0x3FE8D30187F759F1), reinterpret<f64>(0x3FD771D2CDEAF000),
-  reinterpret<f64>(0x3FE886E5EBB9F66D), reinterpret<f64>(0x3FD88E9C857D9000),
-  reinterpret<f64>(0x3FE83C97B658B994), reinterpret<f64>(0x3FD9A80155E16000),
-  reinterpret<f64>(0x3FE7F405FFC61022), reinterpret<f64>(0x3FDABE186ED3D000),
-  reinterpret<f64>(0x3FE7AD22181415CA), reinterpret<f64>(0x3FDBD0F2AEA0E000),
-  reinterpret<f64>(0x3FE767DCF99EFF8C), reinterpret<f64>(0x3FDCE0A43DBF4000)
-]);
-
-// @ts-ignore: decorator
-@lazy @inline const LOG2_DATA_TAB2 = memory.data<f64>([
-  //              chi                 ,                 clo
-  reinterpret<f64>(0x3FE6200012B90A8E), reinterpret<f64>(0x3C8904AB0644B605),
-  reinterpret<f64>(0x3FE66000045734A6), reinterpret<f64>(0x3C61FF9BEA62F7A9),
-  reinterpret<f64>(0x3FE69FFFC325F2C5), reinterpret<f64>(0x3C827ECFCB3C90BA),
-  reinterpret<f64>(0x3FE6E00038B95A04), reinterpret<f64>(0x3C88FF8856739326),
-  reinterpret<f64>(0x3FE71FFFE09994E3), reinterpret<f64>(0x3C8AFD40275F82B1),
-  reinterpret<f64>(0x3FE7600015590E10), reinterpret<f64>(0xBC72FD75B4238341),
-  reinterpret<f64>(0x3FE7A00012655BD5), reinterpret<f64>(0x3C7808E67C242B76),
-  reinterpret<f64>(0x3FE7E0003259E9A6), reinterpret<f64>(0xBC6208E426F622B7),
-  reinterpret<f64>(0x3FE81FFFEDB4B2D2), reinterpret<f64>(0xBC8402461EA5C92F),
-  reinterpret<f64>(0x3FE860002DFAFCC3), reinterpret<f64>(0x3C6DF7F4A2F29A1F),
-  reinterpret<f64>(0x3FE89FFFF78C6B50), reinterpret<f64>(0xBC8E0453094995FD),
-  reinterpret<f64>(0x3FE8E00039671566), reinterpret<f64>(0xBC8A04F3BEC77B45),
-  reinterpret<f64>(0x3FE91FFFE2BF1745), reinterpret<f64>(0xBC77FA34400E203C),
-  reinterpret<f64>(0x3FE95FFFCC5C9FD1), reinterpret<f64>(0xBC76FF8005A0695D),
-  reinterpret<f64>(0x3FE9A0003BBA4767), reinterpret<f64>(0x3C70F8C4C4EC7E03),
-  reinterpret<f64>(0x3FE9DFFFE7B92DA5), reinterpret<f64>(0x3C8E7FD9478C4602),
-  reinterpret<f64>(0x3FEA1FFFD72EFDAF), reinterpret<f64>(0xBC6A0C554DCDAE7E),
-  reinterpret<f64>(0x3FEA5FFFDE04FF95), reinterpret<f64>(0x3C867DA98CE9B26B),
-  reinterpret<f64>(0x3FEA9FFFCA5E8D2B), reinterpret<f64>(0xBC8284C9B54C13DE),
-  reinterpret<f64>(0x3FEADFFFDDAD03EA), reinterpret<f64>(0x3C5812C8EA602E3C),
-  reinterpret<f64>(0x3FEB1FFFF10D3D4D), reinterpret<f64>(0xBC8EFADDAD27789C),
-  reinterpret<f64>(0x3FEB5FFFCE21165A), reinterpret<f64>(0x3C53CB1719C61237),
-  reinterpret<f64>(0x3FEB9FFFD950E674), reinterpret<f64>(0x3C73F7D94194CE00),
-  reinterpret<f64>(0x3FEBE000139CA8AF), reinterpret<f64>(0x3C750AC4215D9BC0),
-  reinterpret<f64>(0x3FEC20005B46DF99), reinterpret<f64>(0x3C6BEEA653E9C1C9),
-  reinterpret<f64>(0x3FEC600040B9F7AE), reinterpret<f64>(0xBC7C079F274A70D6),
-  reinterpret<f64>(0x3FECA0006255FD8A), reinterpret<f64>(0xBC7A0B4076E84C1F),
-  reinterpret<f64>(0x3FECDFFFD94C095D), reinterpret<f64>(0x3C88F933F99AB5D7),
-  reinterpret<f64>(0x3FED1FFFF975D6CF), reinterpret<f64>(0xBC582C08665FE1BE),
-  reinterpret<f64>(0x3FED5FFFA2561C93), reinterpret<f64>(0xBC7B04289BD295F3),
-  reinterpret<f64>(0x3FED9FFF9D228B0C), reinterpret<f64>(0x3C870251340FA236),
-  reinterpret<f64>(0x3FEDE00065BC7E16), reinterpret<f64>(0xBC75011E16A4D80C),
-  reinterpret<f64>(0x3FEE200002F64791), reinterpret<f64>(0x3C89802F09EF62E0),
-  reinterpret<f64>(0x3FEE600057D7A6D8), reinterpret<f64>(0xBC7E0B75580CF7FA),
-  reinterpret<f64>(0x3FEEA00027EDC00C), reinterpret<f64>(0xBC8C848309459811),
-  reinterpret<f64>(0x3FEEE0006CF5CB7C), reinterpret<f64>(0xBC8F8027951576F4),
-  reinterpret<f64>(0x3FEF2000782B7DCC), reinterpret<f64>(0xBC8F81D97274538F),
-  reinterpret<f64>(0x3FEF6000260C450A), reinterpret<f64>(0xBC4071002727FFDC),
-  reinterpret<f64>(0x3FEF9FFFE88CD533), reinterpret<f64>(0xBC581BDCE1FDA8B0),
-  reinterpret<f64>(0x3FEFDFFFD50F8689), reinterpret<f64>(0x3C87F91ACB918E6E),
-  reinterpret<f64>(0x3FF0200004292367), reinterpret<f64>(0x3C9B7FF365324681),
-  reinterpret<f64>(0x3FF05FFFE3E3D668), reinterpret<f64>(0x3C86FA08DDAE957B),
-  reinterpret<f64>(0x3FF0A0000A85A757), reinterpret<f64>(0xBC57E2DE80D3FB91),
-  reinterpret<f64>(0x3FF0E0001A5F3FCC), reinterpret<f64>(0xBC91823305C5F014),
-  reinterpret<f64>(0x3FF11FFFF8AFBAF5), reinterpret<f64>(0xBC8BFABB6680BAC2),
-  reinterpret<f64>(0x3FF15FFFE54D91AD), reinterpret<f64>(0xBC9D7F121737E7EF),
-  reinterpret<f64>(0x3FF1A00011AC36E1), reinterpret<f64>(0x3C9C000A0516F5FF),
-  reinterpret<f64>(0x3FF1E00019C84248), reinterpret<f64>(0xBC9082FBE4DA5DA0),
-  reinterpret<f64>(0x3FF220000FFE5E6E), reinterpret<f64>(0xBC88FDD04C9CFB43),
-  reinterpret<f64>(0x3FF26000269FD891), reinterpret<f64>(0x3C8CFE2A7994D182),
-  reinterpret<f64>(0x3FF2A00029A6E6DA), reinterpret<f64>(0xBC700273715E8BC5),
-  reinterpret<f64>(0x3FF2DFFFE0293E39), reinterpret<f64>(0x3C9B7C39DAB2A6F9),
-  reinterpret<f64>(0x3FF31FFFF7DCF082), reinterpret<f64>(0x3C7DF1336EDC5254),
-  reinterpret<f64>(0x3FF35FFFF05A8B60), reinterpret<f64>(0xBC9E03564CCD31EB),
-  reinterpret<f64>(0x3FF3A0002E0EAECC), reinterpret<f64>(0x3C75F0E74BD3A477),
-  reinterpret<f64>(0x3FF3E000043BB236), reinterpret<f64>(0x3C9C7DCB149D8833),
-  reinterpret<f64>(0x3FF4200002D187FF), reinterpret<f64>(0x3C7E08AFCF2D3D28),
-  reinterpret<f64>(0x3FF460000D387CB1), reinterpret<f64>(0x3C820837856599A6),
-  reinterpret<f64>(0x3FF4A00004569F89), reinterpret<f64>(0xBC89FA5C904FBCD2),
-  reinterpret<f64>(0x3FF4E000043543F3), reinterpret<f64>(0xBC781125ED175329),
-  reinterpret<f64>(0x3FF51FFFCC027F0F), reinterpret<f64>(0x3C9883D8847754DC),
-  reinterpret<f64>(0x3FF55FFFFD87B36F), reinterpret<f64>(0xBC8709E731D02807),
-  reinterpret<f64>(0x3FF59FFFF21DF7BA), reinterpret<f64>(0x3C87F79F68727B02),
-  reinterpret<f64>(0x3FF5DFFFEBFC3481), reinterpret<f64>(0xBC9180902E30E93E)
-]);
-
 // @ts-ignore: decorator
 @inline
-export function log2_lut(x: f64): f64 {
-  const N_MASK = (1 << LOG2_TABLE_BITS) - 1;
+export function log2_64_lut(x: f64): f64 {
+  const N_MASK = (1 << LOG2_TABLE64_BITS) - 1;
 
   const
     LO: u64 = 0x3FEEA4AF00000000, // reinterpret<u64>(1.0 - 0x1.5b51p-5)
@@ -1038,12 +2839,12 @@ export function log2_lut(x: f64): f64 {
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
   var tmp  = ix - 0x3FE6000000000000;
-  var i    = <usize>((tmp >> (52 - LOG2_TABLE_BITS)) & N_MASK);
+  var i    = <usize>((tmp >> (52 - LOG2_TABLE64_BITS)) & N_MASK);
   var k    = <i64>tmp >> 52;
   var iz   = ix - (tmp & 0xFFF0000000000000);
 
-  var invc = load<f64>(LOG2_DATA_TAB1  + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
-  var logc = load<f64>(LOG2_DATA_TAB1  + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
+  var invc = load<f64>(LOG2_TABLE1_64  + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
+  var logc = load<f64>(LOG2_TABLE1_64  + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
   var z    = reinterpret<f64>(iz);
   var kd   = <f64>k;
 
@@ -1056,8 +2857,8 @@ export function log2_lut(x: f64): f64 {
   // 	t2 = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -t1);
   // #else
   // rounding error: 0x1p-55/N + 0x1p-65.
-  var chi = load<f64>(LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
-  var clo = load<f64>(LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
+  var chi = load<f64>(LOG2_TABLE2_64 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
+  var clo = load<f64>(LOG2_TABLE2_64 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
 
   var r   = (z - chi - clo) * invc;
   var rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xFFFFFFFF00000000);
@@ -1080,310 +2881,10 @@ export function log2_lut(x: f64): f64 {
   return lo + r2 * p + hi;
 }
 
-//
-// Lookup data for log. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log.c
-//
-
-// @ts-ignore: decorator
-@inline const LOG_TABLE_BITS = 7;
-
-/* Algorithm:
-
-  x = 2^k z
-  log(x) = k ln2 + log(c) + log(z/c)
-  log(z/c) = poly(z/c - 1)
-
-where z is in [1.6p-1; 1.6p0] which is split into N subintervals and z falls
-into the ith one, then table entries are computed as
-
-  tab[i].invc = 1/c
-  tab[i].logc = (double)log(c)
-  tab2[i].chi = (double)c
-  tab2[i].clo = (double)(c - (double)c)
-
-where c is near the center of the subinterval and is chosen by trying +-2^29
-floating point invc candidates around 1/center and selecting one for which
-
-  1) the rounding error in 0x1.8p9 + logc is 0,
-  2) the rounding error in z - chi - clo is < 0x1p-66 and
-  3) the rounding error in (double)log(c) is minimized (< 0x1p-66).
-
-Note: 1) ensures that k*ln2hi + logc can be computed without rounding error,
-2) ensures that z/c - 1 can be computed as (z - chi - clo)*invc with close to
-a single rounding error when there is no fast fma for z*invc - 1, 3) ensures
-that logc + poly(z/c - 1) has small error, however near x == 1 when
-|log(x)| < 0x1p-4, this is not enough so that is special cased.*/
-
-// @ts-ignore: decorator
-@lazy @inline const LOG_DATA_TAB1 = memory.data<f64>([
-  //              invc                ,                 logc
-  reinterpret<f64>(0x3FF734F0C3E0DE9F), reinterpret<f64>(0xBFD7CC7F79E69000),
-  reinterpret<f64>(0x3FF713786A2CE91F), reinterpret<f64>(0xBFD76FEEC20D0000),
-  reinterpret<f64>(0x3FF6F26008FAB5A0), reinterpret<f64>(0xBFD713E31351E000),
-  reinterpret<f64>(0x3FF6D1A61F138C7D), reinterpret<f64>(0xBFD6B85B38287800),
-  reinterpret<f64>(0x3FF6B1490BC5B4D1), reinterpret<f64>(0xBFD65D5590807800),
-  reinterpret<f64>(0x3FF69147332F0CBA), reinterpret<f64>(0xBFD602D076180000),
-  reinterpret<f64>(0x3FF6719F18224223), reinterpret<f64>(0xBFD5A8CA86909000),
-  reinterpret<f64>(0x3FF6524F99A51ED9), reinterpret<f64>(0xBFD54F4356035000),
-  reinterpret<f64>(0x3FF63356AA8F24C4), reinterpret<f64>(0xBFD4F637C36B4000),
-  reinterpret<f64>(0x3FF614B36B9DDC14), reinterpret<f64>(0xBFD49DA7FDA85000),
-  reinterpret<f64>(0x3FF5F66452C65C4C), reinterpret<f64>(0xBFD445923989A800),
-  reinterpret<f64>(0x3FF5D867B5912C4F), reinterpret<f64>(0xBFD3EDF439B0B800),
-  reinterpret<f64>(0x3FF5BABCCB5B90DE), reinterpret<f64>(0xBFD396CE448F7000),
-  reinterpret<f64>(0x3FF59D61F2D91A78), reinterpret<f64>(0xBFD3401E17BDA000),
-  reinterpret<f64>(0x3FF5805612465687), reinterpret<f64>(0xBFD2E9E2EF468000),
-  reinterpret<f64>(0x3FF56397CEE76BD3), reinterpret<f64>(0xBFD2941B3830E000),
-  reinterpret<f64>(0x3FF54725E2A77F93), reinterpret<f64>(0xBFD23EC58CDA8800),
-  reinterpret<f64>(0x3FF52AFF42064583), reinterpret<f64>(0xBFD1E9E129279000),
-  reinterpret<f64>(0x3FF50F22DBB2BDDF), reinterpret<f64>(0xBFD1956D2B48F800),
-  reinterpret<f64>(0x3FF4F38F4734DED7), reinterpret<f64>(0xBFD141679AB9F800),
-  reinterpret<f64>(0x3FF4D843CFDE2840), reinterpret<f64>(0xBFD0EDD094EF9800),
-  reinterpret<f64>(0x3FF4BD3EC078A3C8), reinterpret<f64>(0xBFD09AA518DB1000),
-  reinterpret<f64>(0x3FF4A27FC3E0258A), reinterpret<f64>(0xBFD047E65263B800),
-  reinterpret<f64>(0x3FF4880524D48434), reinterpret<f64>(0xBFCFEB224586F000),
-  reinterpret<f64>(0x3FF46DCE1B192D0B), reinterpret<f64>(0xBFCF474A7517B000),
-  reinterpret<f64>(0x3FF453D9D3391854), reinterpret<f64>(0xBFCEA4443D103000),
-  reinterpret<f64>(0x3FF43A2744B4845A), reinterpret<f64>(0xBFCE020D44E9B000),
-  reinterpret<f64>(0x3FF420B54115F8FB), reinterpret<f64>(0xBFCD60A22977F000),
-  reinterpret<f64>(0x3FF40782DA3EF4B1), reinterpret<f64>(0xBFCCC00104959000),
-  reinterpret<f64>(0x3FF3EE8F5D57FE8F), reinterpret<f64>(0xBFCC202956891000),
-  reinterpret<f64>(0x3FF3D5D9A00B4CE9), reinterpret<f64>(0xBFCB81178D811000),
-  reinterpret<f64>(0x3FF3BD60C010C12B), reinterpret<f64>(0xBFCAE2C9CCD3D000),
-  reinterpret<f64>(0x3FF3A5242B75DAB8), reinterpret<f64>(0xBFCA45402E129000),
-  reinterpret<f64>(0x3FF38D22CD9FD002), reinterpret<f64>(0xBFC9A877681DF000),
-  reinterpret<f64>(0x3FF3755BC5847A1C), reinterpret<f64>(0xBFC90C6D69483000),
-  reinterpret<f64>(0x3FF35DCE49AD36E2), reinterpret<f64>(0xBFC87120A645C000),
-  reinterpret<f64>(0x3FF34679984DD440), reinterpret<f64>(0xBFC7D68FB4143000),
-  reinterpret<f64>(0x3FF32F5CCEFFCB24), reinterpret<f64>(0xBFC73CB83C627000),
-  reinterpret<f64>(0x3FF3187775A10D49), reinterpret<f64>(0xBFC6A39A9B376000),
-  reinterpret<f64>(0x3FF301C8373E3990), reinterpret<f64>(0xBFC60B3154B7A000),
-  reinterpret<f64>(0x3FF2EB4EBB95F841), reinterpret<f64>(0xBFC5737D76243000),
-  reinterpret<f64>(0x3FF2D50A0219A9D1), reinterpret<f64>(0xBFC4DC7B8FC23000),
-  reinterpret<f64>(0x3FF2BEF9A8B7FD2A), reinterpret<f64>(0xBFC4462C51D20000),
-  reinterpret<f64>(0x3FF2A91C7A0C1BAB), reinterpret<f64>(0xBFC3B08ABC830000),
-  reinterpret<f64>(0x3FF293726014B530), reinterpret<f64>(0xBFC31B996B490000),
-  reinterpret<f64>(0x3FF27DFA5757A1F5), reinterpret<f64>(0xBFC2875490A44000),
-  reinterpret<f64>(0x3FF268B39B1D3BBF), reinterpret<f64>(0xBFC1F3B9F879A000),
-  reinterpret<f64>(0x3FF2539D838FF5BD), reinterpret<f64>(0xBFC160C8252CA000),
-  reinterpret<f64>(0x3FF23EB7AAC9083B), reinterpret<f64>(0xBFC0CE7F57F72000),
-  reinterpret<f64>(0x3FF22A012BA940B6), reinterpret<f64>(0xBFC03CDC49FEA000),
-  reinterpret<f64>(0x3FF2157996CC4132), reinterpret<f64>(0xBFBF57BDBC4B8000),
-  reinterpret<f64>(0x3FF201201DD2FC9B), reinterpret<f64>(0xBFBE370896404000),
-  reinterpret<f64>(0x3FF1ECF4494D480B), reinterpret<f64>(0xBFBD17983EF94000),
-  reinterpret<f64>(0x3FF1D8F5528F6569), reinterpret<f64>(0xBFBBF9674ED8A000),
-  reinterpret<f64>(0x3FF1C52311577E7C), reinterpret<f64>(0xBFBADC79202F6000),
-  reinterpret<f64>(0x3FF1B17C74CB26E9), reinterpret<f64>(0xBFB9C0C3E7288000),
-  reinterpret<f64>(0x3FF19E010C2C1AB6), reinterpret<f64>(0xBFB8A646B372C000),
-  reinterpret<f64>(0x3FF18AB07BB670BD), reinterpret<f64>(0xBFB78D01B3AC0000),
-  reinterpret<f64>(0x3FF1778A25EFBCB6), reinterpret<f64>(0xBFB674F145380000),
-  reinterpret<f64>(0x3FF1648D354C31DA), reinterpret<f64>(0xBFB55E0E6D878000),
-  reinterpret<f64>(0x3FF151B990275FDD), reinterpret<f64>(0xBFB4485CDEA1E000),
-  reinterpret<f64>(0x3FF13F0EA432D24C), reinterpret<f64>(0xBFB333D94D6AA000),
-  reinterpret<f64>(0x3FF12C8B7210F9DA), reinterpret<f64>(0xBFB22079F8C56000),
-  reinterpret<f64>(0x3FF11A3028ECB531), reinterpret<f64>(0xBFB10E4698622000),
-  reinterpret<f64>(0x3FF107FBDA8434AF), reinterpret<f64>(0xBFAFFA6C6AD20000),
-  reinterpret<f64>(0x3FF0F5EE0F4E6BB3), reinterpret<f64>(0xBFADDA8D4A774000),
-  reinterpret<f64>(0x3FF0E4065D2A9FCE), reinterpret<f64>(0xBFABBCECE4850000),
-  reinterpret<f64>(0x3FF0D244632CA521), reinterpret<f64>(0xBFA9A1894012C000),
-  reinterpret<f64>(0x3FF0C0A77CE2981A), reinterpret<f64>(0xBFA788583302C000),
-  reinterpret<f64>(0x3FF0AF2F83C636D1), reinterpret<f64>(0xBFA5715E67D68000),
-  reinterpret<f64>(0x3FF09DDB98A01339), reinterpret<f64>(0xBFA35C8A49658000),
-  reinterpret<f64>(0x3FF08CABAF52E7DF), reinterpret<f64>(0xBFA149E364154000),
-  reinterpret<f64>(0x3FF07B9F2F4E28FB), reinterpret<f64>(0xBF9E72C082EB8000),
-  reinterpret<f64>(0x3FF06AB58C358F19), reinterpret<f64>(0xBF9A55F152528000),
-  reinterpret<f64>(0x3FF059EEA5ECF92C), reinterpret<f64>(0xBF963D62CF818000),
-  reinterpret<f64>(0x3FF04949CDD12C90), reinterpret<f64>(0xBF9228FB8CAA0000),
-  reinterpret<f64>(0x3FF038C6C6F0ADA9), reinterpret<f64>(0xBF8C317B20F90000),
-  reinterpret<f64>(0x3FF02865137932A9), reinterpret<f64>(0xBF8419355DAA0000),
-  reinterpret<f64>(0x3FF0182427EA7348), reinterpret<f64>(0xBF781203C2EC0000),
-  reinterpret<f64>(0x3FF008040614B195), reinterpret<f64>(0xBF60040979240000),
-  reinterpret<f64>(0x3FEFE01FF726FA1A), reinterpret<f64>(0x3F6FEFF384900000),
-  reinterpret<f64>(0x3FEFA11CC261EA74), reinterpret<f64>(0x3F87DC41353D0000),
-  reinterpret<f64>(0x3FEF6310B081992E), reinterpret<f64>(0x3F93CEA3C4C28000),
-  reinterpret<f64>(0x3FEF25F63CEEADCD), reinterpret<f64>(0x3F9B9FC114890000),
-  reinterpret<f64>(0x3FEEE9C8039113E7), reinterpret<f64>(0x3FA1B0D8CE110000),
-  reinterpret<f64>(0x3FEEAE8078CBB1AB), reinterpret<f64>(0x3FA58A5BD001C000),
-  reinterpret<f64>(0x3FEE741AA29D0C9B), reinterpret<f64>(0x3FA95C8340D88000),
-  reinterpret<f64>(0x3FEE3A91830A99B5), reinterpret<f64>(0x3FAD276AEF578000),
-  reinterpret<f64>(0x3FEE01E009609A56), reinterpret<f64>(0x3FB07598E598C000),
-  reinterpret<f64>(0x3FEDCA01E577BB98), reinterpret<f64>(0x3FB253F5E30D2000),
-  reinterpret<f64>(0x3FED92F20B7C9103), reinterpret<f64>(0x3FB42EDD8B380000),
-  reinterpret<f64>(0x3FED5CAC66FB5CCE), reinterpret<f64>(0x3FB606598757C000),
-  reinterpret<f64>(0x3FED272CAA5EDE9D), reinterpret<f64>(0x3FB7DA76356A0000),
-  reinterpret<f64>(0x3FECF26E3E6B2CCD), reinterpret<f64>(0x3FB9AB434E1C6000),
-  reinterpret<f64>(0x3FECBE6DA2A77902), reinterpret<f64>(0x3FBB78C7BB0D6000),
-  reinterpret<f64>(0x3FEC8B266D37086D), reinterpret<f64>(0x3FBD431332E72000),
-  reinterpret<f64>(0x3FEC5894BD5D5804), reinterpret<f64>(0x3FBF0A3171DE6000),
-  reinterpret<f64>(0x3FEC26B533BB9F8C), reinterpret<f64>(0x3FC067152B914000),
-  reinterpret<f64>(0x3FEBF583EEECE73F), reinterpret<f64>(0x3FC147858292B000),
-  reinterpret<f64>(0x3FEBC4FD75DB96C1), reinterpret<f64>(0x3FC2266ECDCA3000),
-  reinterpret<f64>(0x3FEB951E0C864A28), reinterpret<f64>(0x3FC303D7A6C55000),
-  reinterpret<f64>(0x3FEB65E2C5EF3E2C), reinterpret<f64>(0x3FC3DFC33C331000),
-  reinterpret<f64>(0x3FEB374867C9888B), reinterpret<f64>(0x3FC4BA366B7A8000),
-  reinterpret<f64>(0x3FEB094B211D304A), reinterpret<f64>(0x3FC5933928D1F000),
-  reinterpret<f64>(0x3FEADBE885F2EF7E), reinterpret<f64>(0x3FC66ACD2418F000),
-  reinterpret<f64>(0x3FEAAF1D31603DA2), reinterpret<f64>(0x3FC740F8EC669000),
-  reinterpret<f64>(0x3FEA82E63FD358A7), reinterpret<f64>(0x3FC815C0F51AF000),
-  reinterpret<f64>(0x3FEA5740EF09738B), reinterpret<f64>(0x3FC8E92954F68000),
-  reinterpret<f64>(0x3FEA2C2A90AB4B27), reinterpret<f64>(0x3FC9BB3602F84000),
-  reinterpret<f64>(0x3FEA01A01393F2D1), reinterpret<f64>(0x3FCA8BED1C2C0000),
-  reinterpret<f64>(0x3FE9D79F24DB3C1B), reinterpret<f64>(0x3FCB5B515C01D000),
-  reinterpret<f64>(0x3FE9AE2505C7B190), reinterpret<f64>(0x3FCC2967CCBCC000),
-  reinterpret<f64>(0x3FE9852EF297CE2F), reinterpret<f64>(0x3FCCF635D5486000),
-  reinterpret<f64>(0x3FE95CBAEEA44B75), reinterpret<f64>(0x3FCDC1BD3446C000),
-  reinterpret<f64>(0x3FE934C69DE74838), reinterpret<f64>(0x3FCE8C01B8CFE000),
-  reinterpret<f64>(0x3FE90D4F2F6752E6), reinterpret<f64>(0x3FCF5509C0179000),
-  reinterpret<f64>(0x3FE8E6528EFFD79D), reinterpret<f64>(0x3FD00E6C121FB800),
-  reinterpret<f64>(0x3FE8BFCE9FCC007C), reinterpret<f64>(0x3FD071B80E93D000),
-  reinterpret<f64>(0x3FE899C0DABEC30E), reinterpret<f64>(0x3FD0D46B9E867000),
-  reinterpret<f64>(0x3FE87427AA2317FB), reinterpret<f64>(0x3FD13687334BD000),
-  reinterpret<f64>(0x3FE84F00ACB39A08), reinterpret<f64>(0x3FD1980D67234800),
-  reinterpret<f64>(0x3FE82A49E8653E55), reinterpret<f64>(0x3FD1F8FFE0CC8000),
-  reinterpret<f64>(0x3FE8060195F40260), reinterpret<f64>(0x3FD2595FD7636800),
-  reinterpret<f64>(0x3FE7E22563E0A329), reinterpret<f64>(0x3FD2B9300914A800),
-  reinterpret<f64>(0x3FE7BEB377DCB5AD), reinterpret<f64>(0x3FD3187210436000),
-  reinterpret<f64>(0x3FE79BAA679725C2), reinterpret<f64>(0x3FD377266DEC1800),
-  reinterpret<f64>(0x3FE77907F2170657), reinterpret<f64>(0x3FD3D54FFBAF3000),
-  reinterpret<f64>(0x3FE756CADBD6130C), reinterpret<f64>(0x3FD432EEE32FE000)
-]);
-
-// @ts-ignore: decorator
-@lazy @inline const LOG_DATA_TAB2 = memory.data<f64>([
-  //               chi                ,                  clo
-  reinterpret<f64>(0x3FE61000014FB66B), reinterpret<f64>(0x3C7E026C91425B3C),
-  reinterpret<f64>(0x3FE63000034DB495), reinterpret<f64>(0x3C8DBFEA48005D41),
-  reinterpret<f64>(0x3FE650000D94D478), reinterpret<f64>(0x3C8E7FA786D6A5B7),
-  reinterpret<f64>(0x3FE67000074E6FAD), reinterpret<f64>(0x3C61FCEA6B54254C),
-  reinterpret<f64>(0x3FE68FFFFEDF0FAE), reinterpret<f64>(0xBC7C7E274C590EFD),
-  reinterpret<f64>(0x3FE6B0000763C5BC), reinterpret<f64>(0xBC8AC16848DCDA01),
-  reinterpret<f64>(0x3FE6D0001E5CC1F6), reinterpret<f64>(0x3C833F1C9D499311),
-  reinterpret<f64>(0x3FE6EFFFEB05F63E), reinterpret<f64>(0xBC7E80041AE22D53),
-  reinterpret<f64>(0x3FE710000E869780), reinterpret<f64>(0x3C7BFF6671097952),
-  reinterpret<f64>(0x3FE72FFFFC67E912), reinterpret<f64>(0x3C8C00E226BD8724),
-  reinterpret<f64>(0x3FE74FFFDF81116A), reinterpret<f64>(0xBC6E02916EF101D2),
-  reinterpret<f64>(0x3FE770000F679C90), reinterpret<f64>(0xBC67FC71CD549C74),
-  reinterpret<f64>(0x3FE78FFFFA7EC835), reinterpret<f64>(0x3C81BEC19EF50483),
-  reinterpret<f64>(0x3FE7AFFFFE20C2E6), reinterpret<f64>(0xBC707E1729CC6465),
-  reinterpret<f64>(0x3FE7CFFFED3FC900), reinterpret<f64>(0xBC808072087B8B1C),
-  reinterpret<f64>(0x3FE7EFFFE9261A76), reinterpret<f64>(0x3C8DC0286D9DF9AE),
-  reinterpret<f64>(0x3FE81000049CA3E8), reinterpret<f64>(0x3C897FD251E54C33),
-  reinterpret<f64>(0x3FE8300017932C8F), reinterpret<f64>(0xBC8AFEE9B630F381),
-  reinterpret<f64>(0x3FE850000633739C), reinterpret<f64>(0x3C89BFBF6B6535BC),
-  reinterpret<f64>(0x3FE87000204289C6), reinterpret<f64>(0xBC8BBF65F3117B75),
-  reinterpret<f64>(0x3FE88FFFEBF57904), reinterpret<f64>(0xBC89006EA23DCB57),
-  reinterpret<f64>(0x3FE8B00022BC04DF), reinterpret<f64>(0xBC7D00DF38E04B0A),
-  reinterpret<f64>(0x3FE8CFFFE50C1B8A), reinterpret<f64>(0xBC88007146FF9F05),
-  reinterpret<f64>(0x3FE8EFFFFC918E43), reinterpret<f64>(0x3C83817BD07A7038),
-  reinterpret<f64>(0x3FE910001EFA5FC7), reinterpret<f64>(0x3C893E9176DFB403),
-  reinterpret<f64>(0x3FE9300013467BB9), reinterpret<f64>(0x3C7F804E4B980276),
-  reinterpret<f64>(0x3FE94FFFE6EE076F), reinterpret<f64>(0xBC8F7EF0D9FF622E),
-  reinterpret<f64>(0x3FE96FFFDE3C12D1), reinterpret<f64>(0xBC7082AA962638BA),
-  reinterpret<f64>(0x3FE98FFFF4458A0D), reinterpret<f64>(0xBC87801B9164A8EF),
-  reinterpret<f64>(0x3FE9AFFFDD982E3E), reinterpret<f64>(0xBC8740E08A5A9337),
-  reinterpret<f64>(0x3FE9CFFFED49FB66), reinterpret<f64>(0x3C3FCE08C19BE000),
-  reinterpret<f64>(0x3FE9F00020F19C51), reinterpret<f64>(0xBC8A3FAA27885B0A),
-  reinterpret<f64>(0x3FEA10001145B006), reinterpret<f64>(0x3C74FF489958DA56),
-  reinterpret<f64>(0x3FEA300007BBF6FA), reinterpret<f64>(0x3C8CBEAB8A2B6D18),
-  reinterpret<f64>(0x3FEA500010971D79), reinterpret<f64>(0x3C88FECADD787930),
-  reinterpret<f64>(0x3FEA70001DF52E48), reinterpret<f64>(0xBC8F41763DD8ABDB),
-  reinterpret<f64>(0x3FEA90001C593352), reinterpret<f64>(0xBC8EBF0284C27612),
-  reinterpret<f64>(0x3FEAB0002A4F3E4B), reinterpret<f64>(0xBC69FD043CFF3F5F),
-  reinterpret<f64>(0x3FEACFFFD7AE1ED1), reinterpret<f64>(0xBC823EE7129070B4),
-  reinterpret<f64>(0x3FEAEFFFEE510478), reinterpret<f64>(0x3C6A063EE00EDEA3),
-  reinterpret<f64>(0x3FEB0FFFDB650D5B), reinterpret<f64>(0x3C5A06C8381F0AB9),
-  reinterpret<f64>(0x3FEB2FFFFEAACA57), reinterpret<f64>(0xBC79011E74233C1D),
-  reinterpret<f64>(0x3FEB4FFFD995BADC), reinterpret<f64>(0xBC79FF1068862A9F),
-  reinterpret<f64>(0x3FEB7000249E659C), reinterpret<f64>(0x3C8AFF45D0864F3E),
-  reinterpret<f64>(0x3FEB8FFFF9871640), reinterpret<f64>(0x3C7CFE7796C2C3F9),
-  reinterpret<f64>(0x3FEBAFFFD204CB4F), reinterpret<f64>(0xBC63FF27EEF22BC4),
-  reinterpret<f64>(0x3FEBCFFFD2415C45), reinterpret<f64>(0xBC6CFFB7EE3BEA21),
-  reinterpret<f64>(0x3FEBEFFFF86309DF), reinterpret<f64>(0xBC814103972E0B5C),
-  reinterpret<f64>(0x3FEC0FFFE1B57653), reinterpret<f64>(0x3C8BC16494B76A19),
-  reinterpret<f64>(0x3FEC2FFFF1FA57E3), reinterpret<f64>(0xBC64FEEF8D30C6ED),
-  reinterpret<f64>(0x3FEC4FFFDCBFE424), reinterpret<f64>(0xBC843F68BCEC4775),
-  reinterpret<f64>(0x3FEC6FFFED54B9F7), reinterpret<f64>(0x3C847EA3F053E0EC),
-  reinterpret<f64>(0x3FEC8FFFEB998FD5), reinterpret<f64>(0x3C7383068DF992F1),
-  reinterpret<f64>(0x3FECB0002125219A), reinterpret<f64>(0xBC68FD8E64180E04),
-  reinterpret<f64>(0x3FECCFFFDD94469C), reinterpret<f64>(0x3C8E7EBE1CC7EA72),
-  reinterpret<f64>(0x3FECEFFFEAFDC476), reinterpret<f64>(0x3C8EBE39AD9F88FE),
-  reinterpret<f64>(0x3FED1000169AF82B), reinterpret<f64>(0x3C757D91A8B95A71),
-  reinterpret<f64>(0x3FED30000D0FF71D), reinterpret<f64>(0x3C89C1906970C7DA),
-  reinterpret<f64>(0x3FED4FFFEA790FC4), reinterpret<f64>(0xBC580E37C558FE0C),
-  reinterpret<f64>(0x3FED70002EDC87E5), reinterpret<f64>(0xBC7F80D64DC10F44),
-  reinterpret<f64>(0x3FED900021DC82AA), reinterpret<f64>(0xBC747C8F94FD5C5C),
-  reinterpret<f64>(0x3FEDAFFFD86B0283), reinterpret<f64>(0x3C8C7F1DC521617E),
-  reinterpret<f64>(0x3FEDD000296C4739), reinterpret<f64>(0x3C88019EB2FFB153),
-  reinterpret<f64>(0x3FEDEFFFE54490F5), reinterpret<f64>(0x3C6E00D2C652CC89),
-  reinterpret<f64>(0x3FEE0FFFCDABF694), reinterpret<f64>(0xBC7F8340202D69D2),
-  reinterpret<f64>(0x3FEE2FFFDB52C8DD), reinterpret<f64>(0x3C7B00C1CA1B0864),
-  reinterpret<f64>(0x3FEE4FFFF24216EF), reinterpret<f64>(0x3C72FFA8B094AB51),
-  reinterpret<f64>(0x3FEE6FFFE88A5E11), reinterpret<f64>(0xBC57F673B1EFBE59),
-  reinterpret<f64>(0x3FEE9000119EFF0D), reinterpret<f64>(0xBC84808D5E0BC801),
-  reinterpret<f64>(0x3FEEAFFFDFA51744), reinterpret<f64>(0x3C780006D54320B5),
-  reinterpret<f64>(0x3FEED0001A127FA1), reinterpret<f64>(0xBC5002F860565C92),
-  reinterpret<f64>(0x3FEEF00007BABCC4), reinterpret<f64>(0xBC8540445D35E611),
-  reinterpret<f64>(0x3FEF0FFFF57A8D02), reinterpret<f64>(0xBC4FFB3139EF9105),
-  reinterpret<f64>(0x3FEF30001EE58AC7), reinterpret<f64>(0x3C8A81ACF2731155),
-  reinterpret<f64>(0x3FEF4FFFF5823494), reinterpret<f64>(0x3C8A3F41D4D7C743),
-  reinterpret<f64>(0x3FEF6FFFFCA94C6B), reinterpret<f64>(0xBC6202F41C987875),
-  reinterpret<f64>(0x3FEF8FFFE1F9C441), reinterpret<f64>(0x3C777DD1F477E74B),
-  reinterpret<f64>(0x3FEFAFFFD2E0E37E), reinterpret<f64>(0xBC6F01199A7CA331),
-  reinterpret<f64>(0x3FEFD0001C77E49E), reinterpret<f64>(0x3C7181EE4BCEACB1),
-  reinterpret<f64>(0x3FEFEFFFF7E0C331), reinterpret<f64>(0xBC6E05370170875A),
-  reinterpret<f64>(0x3FF00FFFF465606E), reinterpret<f64>(0xBC8A7EAD491C0ADA),
-  reinterpret<f64>(0x3FF02FFFF3867A58), reinterpret<f64>(0xBC977F69C3FCB2E0),
-  reinterpret<f64>(0x3FF04FFFFDFC0D17), reinterpret<f64>(0x3C97BFFE34CB945B),
-  reinterpret<f64>(0x3FF0700003CD4D82), reinterpret<f64>(0x3C820083C0E456CB),
-  reinterpret<f64>(0x3FF08FFFF9F2CBE8), reinterpret<f64>(0xBC6DFFDFBE37751A),
-  reinterpret<f64>(0x3FF0B000010CDA65), reinterpret<f64>(0xBC913F7FAEE626EB),
-  reinterpret<f64>(0x3FF0D00001A4D338), reinterpret<f64>(0x3C807DFA79489FF7),
-  reinterpret<f64>(0x3FF0EFFFFADAFDFD), reinterpret<f64>(0xBC77040570D66BC0),
-  reinterpret<f64>(0x3FF110000BBAFD96), reinterpret<f64>(0x3C8E80D4846D0B62),
-  reinterpret<f64>(0x3FF12FFFFAE5F45D), reinterpret<f64>(0x3C9DBFFA64FD36EF),
-  reinterpret<f64>(0x3FF150000DD59AD9), reinterpret<f64>(0x3C9A0077701250AE),
-  reinterpret<f64>(0x3FF170000F21559A), reinterpret<f64>(0x3C8DFDF9E2E3DEEE),
-  reinterpret<f64>(0x3FF18FFFFC275426), reinterpret<f64>(0x3C910030DC3B7273),
-  reinterpret<f64>(0x3FF1B000123D3C59), reinterpret<f64>(0x3C997F7980030188),
-  reinterpret<f64>(0x3FF1CFFFF8299EB7), reinterpret<f64>(0xBC65F932AB9F8C67),
-  reinterpret<f64>(0x3FF1EFFFF48AD400), reinterpret<f64>(0x3C937FBF9DA75BEB),
-  reinterpret<f64>(0x3FF210000C8B86A4), reinterpret<f64>(0x3C9F806B91FD5B22),
-  reinterpret<f64>(0x3FF2300003854303), reinterpret<f64>(0x3C93FFC2EB9FBF33),
-  reinterpret<f64>(0x3FF24FFFFFBCF684), reinterpret<f64>(0x3C7601E77E2E2E72),
-  reinterpret<f64>(0x3FF26FFFF52921D9), reinterpret<f64>(0x3C7FFCBB767F0C61),
-  reinterpret<f64>(0x3FF2900014933A3C), reinterpret<f64>(0xBC7202CA3C02412B),
-  reinterpret<f64>(0x3FF2B00014556313), reinterpret<f64>(0xBC92808233F21F02),
-  reinterpret<f64>(0x3FF2CFFFEBFE523B), reinterpret<f64>(0xBC88FF7E384FDCF2),
-  reinterpret<f64>(0x3FF2F0000BB8AD96), reinterpret<f64>(0xBC85FF51503041C5),
-  reinterpret<f64>(0x3FF30FFFFB7AE2AF), reinterpret<f64>(0xBC810071885E289D),
-  reinterpret<f64>(0x3FF32FFFFEAC5F7F), reinterpret<f64>(0xBC91FF5D3FB7B715),
-  reinterpret<f64>(0x3FF350000CA66756), reinterpret<f64>(0x3C957F82228B82BD),
-  reinterpret<f64>(0x3FF3700011FBF721), reinterpret<f64>(0x3C8000BAC40DD5CC),
-  reinterpret<f64>(0x3FF38FFFF9592FB9), reinterpret<f64>(0xBC943F9D2DB2A751),
-  reinterpret<f64>(0x3FF3B00004DDD242), reinterpret<f64>(0x3C857F6B707638E1),
-  reinterpret<f64>(0x3FF3CFFFF5B2C957), reinterpret<f64>(0x3C7A023A10BF1231),
-  reinterpret<f64>(0x3FF3EFFFEAB0B418), reinterpret<f64>(0x3C987F6D66B152B0),
-  reinterpret<f64>(0x3FF410001532AFF4), reinterpret<f64>(0x3C67F8375F198524),
-  reinterpret<f64>(0x3FF4300017478B29), reinterpret<f64>(0x3C8301E672DC5143),
-  reinterpret<f64>(0x3FF44FFFE795B463), reinterpret<f64>(0x3C89FF69B8B2895A),
-  reinterpret<f64>(0x3FF46FFFE80475E0), reinterpret<f64>(0xBC95C0B19BC2F254),
-  reinterpret<f64>(0x3FF48FFFEF6FC1E7), reinterpret<f64>(0x3C9B4009F23A2A72),
-  reinterpret<f64>(0x3FF4AFFFE5BEA704), reinterpret<f64>(0xBC94FFB7BF0D7D45),
-  reinterpret<f64>(0x3FF4D000171027DE), reinterpret<f64>(0xBC99C06471DC6A3D),
-  reinterpret<f64>(0x3FF4F0000FF03EE2), reinterpret<f64>(0x3C977F890B85531C),
-  reinterpret<f64>(0x3FF5100012DC4BD1), reinterpret<f64>(0x3C6004657166A436),
-  reinterpret<f64>(0x3FF530001605277A), reinterpret<f64>(0xBC96BFCECE233209),
-  reinterpret<f64>(0x3FF54FFFECDB704C), reinterpret<f64>(0xBC8902720505A1D7),
-  reinterpret<f64>(0x3FF56FFFEF5F54A9), reinterpret<f64>(0x3C9BBFE60EC96412),
-  reinterpret<f64>(0x3FF5900017E61012), reinterpret<f64>(0x3C887EC581AFEF90),
-  reinterpret<f64>(0x3FF5B00003C93E92), reinterpret<f64>(0xBC9F41080ABF0CC0),
-  reinterpret<f64>(0x3FF5D0001D4919BC), reinterpret<f64>(0xBC98812AFB254729),
-  reinterpret<f64>(0x3FF5EFFFE7B87A89), reinterpret<f64>(0xBC947EB780ED6904)
-]);
-
 // @ts-ignore: decorator
 @inline
-export function log_lut(x: f64): f64 {
-  const N_MASK = (1 << LOG_TABLE_BITS) - 1;
+export function log64_lut(x: f64): f64 {
+  const N_MASK = (1 << LOG_TABLE64_BITS) - 1;
 
   const
     B0  = reinterpret<f64>(0xBFE0000000000000), // -0x1p-1
@@ -1449,12 +2950,12 @@ export function log_lut(x: f64): f64 {
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
   var tmp  = ix - 0x3FE6000000000000;
-  var i    = <usize>((tmp >> (52 - LOG_TABLE_BITS)) & N_MASK);
+  var i    = <usize>((tmp >> (52 - LOG_TABLE64_BITS)) & N_MASK);
   var k    = <i64>tmp >> 52;
   var iz   = ix - (tmp & (u64(0xFFF) << 52));
 
-  var invc = load<f64>(LOG_DATA_TAB1 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
-  var logc = load<f64>(LOG_DATA_TAB1 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
+  var invc = load<f64>(LOG_TABLE1_64 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
+  var logc = load<f64>(LOG_TABLE1_64 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
   var z    = reinterpret<f64>(iz);
 
   // log(x) = log1p(z/c-1) + log(c) + k*Ln2.
@@ -1464,8 +2965,8 @@ export function log_lut(x: f64): f64 {
   // 	r = __builtin_fma(z, invc, -1.0);
   // #else
   // rounding error: 0x1p-55/N + 0x1p-66
-  const chi = load<f64>(LOG_DATA_TAB2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
-  const clo = load<f64>(LOG_DATA_TAB2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
+  const chi = load<f64>(LOG_TABLE2_64 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
+  const clo = load<f64>(LOG_TABLE2_64 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
   var r = (z - chi - clo) * invc;
   // #endif
   var kd = <f64>k;
@@ -1484,174 +2985,11 @@ export function log_lut(x: f64): f64 {
   return lo + r2 * A0 + r * r2 * (A1 + r * A2 + r2 * (A3 + r * A4)) + hi;
 }
 
-//
-// Lookup data for pow. See: https://git.musl-libc.org/cgit/musl/tree/src/math/pow.c
-//
-
-// @ts-ignore: decorator
-@inline const POW_LOG_TABLE_BITS = 7;
-
-/* Algorithm:
-
-  x = 2^k z
-  log(x) = k ln2 + log(c) + log(z/c)
-  log(z/c) = poly(z/c - 1)
-
-where z is in [0x1.69555p-1; 0x1.69555p0] which is split into N subintervals
-and z falls into the ith one, then table entries are computed as
-
-  tab[i].invc = 1/c
-  tab[i].logc = round(0x1p43*log(c))/0x1p43
-  tab[i].logctail = (double)(log(c) - logc)
-
-where c is chosen near the center of the subinterval such that 1/c has only a
-few precision bits so z/c - 1 is exactly representible as double:
-
-  1/c = center < 1 ? round(N/center)/N : round(2*N/center)/N/2
-
-Note: |z/c - 1| < 1/N for the chosen c, |log(c) - logc - logctail| < 0x1p-97,
-the last few bits of logc are rounded away so k*ln2hi + logc has no rounding
-error and the interval for z is selected such that near x == 1, where log(x)
-is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
-
-// @ts-ignore: decorator
-@lazy @inline const POW_LOG_DATA_TAB = memory.data<f64>([
-  //             invc                 ,pad,               logc                 ,               logctail
-  reinterpret<f64>(0x3FF6A00000000000), 0, reinterpret<f64>(0xBFD62C82F2B9C800), reinterpret<f64>(0x3CFAB42428375680),
-  reinterpret<f64>(0x3FF6800000000000), 0, reinterpret<f64>(0xBFD5D1BDBF580800), reinterpret<f64>(0xBD1CA508D8E0F720),
-  reinterpret<f64>(0x3FF6600000000000), 0, reinterpret<f64>(0xBFD5767717455800), reinterpret<f64>(0xBD2362A4D5B6506D),
-  reinterpret<f64>(0x3FF6400000000000), 0, reinterpret<f64>(0xBFD51AAD872DF800), reinterpret<f64>(0xBCE684E49EB067D5),
-  reinterpret<f64>(0x3FF6200000000000), 0, reinterpret<f64>(0xBFD4BE5F95777800), reinterpret<f64>(0xBD041B6993293EE0),
-  reinterpret<f64>(0x3FF6000000000000), 0, reinterpret<f64>(0xBFD4618BC21C6000), reinterpret<f64>(0x3D13D82F484C84CC),
-  reinterpret<f64>(0x3FF5E00000000000), 0, reinterpret<f64>(0xBFD404308686A800), reinterpret<f64>(0x3CDC42F3ED820B3A),
-  reinterpret<f64>(0x3FF5C00000000000), 0, reinterpret<f64>(0xBFD3A64C55694800), reinterpret<f64>(0x3D20B1C686519460),
-  reinterpret<f64>(0x3FF5A00000000000), 0, reinterpret<f64>(0xBFD347DD9A988000), reinterpret<f64>(0x3D25594DD4C58092),
-  reinterpret<f64>(0x3FF5800000000000), 0, reinterpret<f64>(0xBFD2E8E2BAE12000), reinterpret<f64>(0x3D267B1E99B72BD8),
-  reinterpret<f64>(0x3FF5600000000000), 0, reinterpret<f64>(0xBFD2895A13DE8800), reinterpret<f64>(0x3D15CA14B6CFB03F),
-  reinterpret<f64>(0x3FF5600000000000), 0, reinterpret<f64>(0xBFD2895A13DE8800), reinterpret<f64>(0x3D15CA14B6CFB03F),
-  reinterpret<f64>(0x3FF5400000000000), 0, reinterpret<f64>(0xBFD22941FBCF7800), reinterpret<f64>(0xBD165A242853DA76),
-  reinterpret<f64>(0x3FF5200000000000), 0, reinterpret<f64>(0xBFD1C898C1699800), reinterpret<f64>(0xBD1FAFBC68E75404),
-  reinterpret<f64>(0x3FF5000000000000), 0, reinterpret<f64>(0xBFD1675CABABA800), reinterpret<f64>(0x3D1F1FC63382A8F0),
-  reinterpret<f64>(0x3FF4E00000000000), 0, reinterpret<f64>(0xBFD1058BF9AE4800), reinterpret<f64>(0xBD26A8C4FD055A66),
-  reinterpret<f64>(0x3FF4C00000000000), 0, reinterpret<f64>(0xBFD0A324E2739000), reinterpret<f64>(0xBD0C6BEE7EF4030E),
-  reinterpret<f64>(0x3FF4A00000000000), 0, reinterpret<f64>(0xBFD0402594B4D000), reinterpret<f64>(0xBCF036B89EF42D7F),
-  reinterpret<f64>(0x3FF4A00000000000), 0, reinterpret<f64>(0xBFD0402594B4D000), reinterpret<f64>(0xBCF036B89EF42D7F),
-  reinterpret<f64>(0x3FF4800000000000), 0, reinterpret<f64>(0xBFCFB9186D5E4000), reinterpret<f64>(0x3D0D572AAB993C87),
-  reinterpret<f64>(0x3FF4600000000000), 0, reinterpret<f64>(0xBFCEF0ADCBDC6000), reinterpret<f64>(0x3D2B26B79C86AF24),
-  reinterpret<f64>(0x3FF4400000000000), 0, reinterpret<f64>(0xBFCE27076E2AF000), reinterpret<f64>(0xBD172F4F543FFF10),
-  reinterpret<f64>(0x3FF4200000000000), 0, reinterpret<f64>(0xBFCD5C216B4FC000), reinterpret<f64>(0x3D21BA91BBCA681B),
-  reinterpret<f64>(0x3FF4000000000000), 0, reinterpret<f64>(0xBFCC8FF7C79AA000), reinterpret<f64>(0x3D27794F689F8434),
-  reinterpret<f64>(0x3FF4000000000000), 0, reinterpret<f64>(0xBFCC8FF7C79AA000), reinterpret<f64>(0x3D27794F689F8434),
-  reinterpret<f64>(0x3FF3E00000000000), 0, reinterpret<f64>(0xBFCBC286742D9000), reinterpret<f64>(0x3D194EB0318BB78F),
-  reinterpret<f64>(0x3FF3C00000000000), 0, reinterpret<f64>(0xBFCAF3C94E80C000), reinterpret<f64>(0x3CBA4E633FCD9066),
-  reinterpret<f64>(0x3FF3A00000000000), 0, reinterpret<f64>(0xBFCA23BC1FE2B000), reinterpret<f64>(0xBD258C64DC46C1EA),
-  reinterpret<f64>(0x3FF3A00000000000), 0, reinterpret<f64>(0xBFCA23BC1FE2B000), reinterpret<f64>(0xBD258C64DC46C1EA),
-  reinterpret<f64>(0x3FF3800000000000), 0, reinterpret<f64>(0xBFC9525A9CF45000), reinterpret<f64>(0xBD2AD1D904C1D4E3),
-  reinterpret<f64>(0x3FF3600000000000), 0, reinterpret<f64>(0xBFC87FA06520D000), reinterpret<f64>(0x3D2BBDBF7FDBFA09),
-  reinterpret<f64>(0x3FF3400000000000), 0, reinterpret<f64>(0xBFC7AB890210E000), reinterpret<f64>(0x3D2BDB9072534A58),
-  reinterpret<f64>(0x3FF3400000000000), 0, reinterpret<f64>(0xBFC7AB890210E000), reinterpret<f64>(0x3D2BDB9072534A58),
-  reinterpret<f64>(0x3FF3200000000000), 0, reinterpret<f64>(0xBFC6D60FE719D000), reinterpret<f64>(0xBD10E46AA3B2E266),
-  reinterpret<f64>(0x3FF3000000000000), 0, reinterpret<f64>(0xBFC5FF3070A79000), reinterpret<f64>(0xBD1E9E439F105039),
-  reinterpret<f64>(0x3FF3000000000000), 0, reinterpret<f64>(0xBFC5FF3070A79000), reinterpret<f64>(0xBD1E9E439F105039),
-  reinterpret<f64>(0x3FF2E00000000000), 0, reinterpret<f64>(0xBFC526E5E3A1B000), reinterpret<f64>(0xBD20DE8B90075B8F),
-  reinterpret<f64>(0x3FF2C00000000000), 0, reinterpret<f64>(0xBFC44D2B6CCB8000), reinterpret<f64>(0x3D170CC16135783C),
-  reinterpret<f64>(0x3FF2C00000000000), 0, reinterpret<f64>(0xBFC44D2B6CCB8000), reinterpret<f64>(0x3D170CC16135783C),
-  reinterpret<f64>(0x3FF2A00000000000), 0, reinterpret<f64>(0xBFC371FC201E9000), reinterpret<f64>(0x3CF178864D27543A),
-  reinterpret<f64>(0x3FF2800000000000), 0, reinterpret<f64>(0xBFC29552F81FF000), reinterpret<f64>(0xBD248D301771C408),
-  reinterpret<f64>(0x3FF2600000000000), 0, reinterpret<f64>(0xBFC1B72AD52F6000), reinterpret<f64>(0xBD2E80A41811A396),
-  reinterpret<f64>(0x3FF2600000000000), 0, reinterpret<f64>(0xBFC1B72AD52F6000), reinterpret<f64>(0xBD2E80A41811A396),
-  reinterpret<f64>(0x3FF2400000000000), 0, reinterpret<f64>(0xBFC0D77E7CD09000), reinterpret<f64>(0x3D0A699688E85BF4),
-  reinterpret<f64>(0x3FF2400000000000), 0, reinterpret<f64>(0xBFC0D77E7CD09000), reinterpret<f64>(0x3D0A699688E85BF4),
-  reinterpret<f64>(0x3FF2200000000000), 0, reinterpret<f64>(0xBFBFEC9131DBE000), reinterpret<f64>(0xBD2575545CA333F2),
-  reinterpret<f64>(0x3FF2000000000000), 0, reinterpret<f64>(0xBFBE27076E2B0000), reinterpret<f64>(0x3D2A342C2AF0003C),
-  reinterpret<f64>(0x3FF2000000000000), 0, reinterpret<f64>(0xBFBE27076E2B0000), reinterpret<f64>(0x3D2A342C2AF0003C),
-  reinterpret<f64>(0x3FF1E00000000000), 0, reinterpret<f64>(0xBFBC5E548F5BC000), reinterpret<f64>(0xBD1D0C57585FBE06),
-  reinterpret<f64>(0x3FF1C00000000000), 0, reinterpret<f64>(0xBFBA926D3A4AE000), reinterpret<f64>(0x3D253935E85BAAC8),
-  reinterpret<f64>(0x3FF1C00000000000), 0, reinterpret<f64>(0xBFBA926D3A4AE000), reinterpret<f64>(0x3D253935E85BAAC8),
-  reinterpret<f64>(0x3FF1A00000000000), 0, reinterpret<f64>(0xBFB8C345D631A000), reinterpret<f64>(0x3D137C294D2F5668),
-  reinterpret<f64>(0x3FF1A00000000000), 0, reinterpret<f64>(0xBFB8C345D631A000), reinterpret<f64>(0x3D137C294D2F5668),
-  reinterpret<f64>(0x3FF1800000000000), 0, reinterpret<f64>(0xBFB6F0D28AE56000), reinterpret<f64>(0xBD269737C93373DA),
-  reinterpret<f64>(0x3FF1600000000000), 0, reinterpret<f64>(0xBFB51B073F062000), reinterpret<f64>(0x3D1F025B61C65E57),
-  reinterpret<f64>(0x3FF1600000000000), 0, reinterpret<f64>(0xBFB51B073F062000), reinterpret<f64>(0x3D1F025B61C65E57),
-  reinterpret<f64>(0x3FF1400000000000), 0, reinterpret<f64>(0xBFB341D7961BE000), reinterpret<f64>(0x3D2C5EDACCF913DF),
-  reinterpret<f64>(0x3FF1400000000000), 0, reinterpret<f64>(0xBFB341D7961BE000), reinterpret<f64>(0x3D2C5EDACCF913DF),
-  reinterpret<f64>(0x3FF1200000000000), 0, reinterpret<f64>(0xBFB16536EEA38000), reinterpret<f64>(0x3D147C5E768FA309),
-  reinterpret<f64>(0x3FF1000000000000), 0, reinterpret<f64>(0xBFAF0A30C0118000), reinterpret<f64>(0x3D2D599E83368E91),
-  reinterpret<f64>(0x3FF1000000000000), 0, reinterpret<f64>(0xBFAF0A30C0118000), reinterpret<f64>(0x3D2D599E83368E91),
-  reinterpret<f64>(0x3FF0E00000000000), 0, reinterpret<f64>(0xBFAB42DD71198000), reinterpret<f64>(0x3D1C827AE5D6704C),
-  reinterpret<f64>(0x3FF0E00000000000), 0, reinterpret<f64>(0xBFAB42DD71198000), reinterpret<f64>(0x3D1C827AE5D6704C),
-  reinterpret<f64>(0x3FF0C00000000000), 0, reinterpret<f64>(0xBFA77458F632C000), reinterpret<f64>(0xBD2CFC4634F2A1EE),
-  reinterpret<f64>(0x3FF0C00000000000), 0, reinterpret<f64>(0xBFA77458F632C000), reinterpret<f64>(0xBD2CFC4634F2A1EE),
-  reinterpret<f64>(0x3FF0A00000000000), 0, reinterpret<f64>(0xBFA39E87B9FEC000), reinterpret<f64>(0x3CF502B7F526FEAA),
-  reinterpret<f64>(0x3FF0A00000000000), 0, reinterpret<f64>(0xBFA39E87B9FEC000), reinterpret<f64>(0x3CF502B7F526FEAA),
-  reinterpret<f64>(0x3FF0800000000000), 0, reinterpret<f64>(0xBF9F829B0E780000), reinterpret<f64>(0xBD2980267C7E09E4),
-  reinterpret<f64>(0x3FF0800000000000), 0, reinterpret<f64>(0xBF9F829B0E780000), reinterpret<f64>(0xBD2980267C7E09E4),
-  reinterpret<f64>(0x3FF0600000000000), 0, reinterpret<f64>(0xBF97B91B07D58000), reinterpret<f64>(0xBD288D5493FAA639),
-  reinterpret<f64>(0x3FF0400000000000), 0, reinterpret<f64>(0xBF8FC0A8B0FC0000), reinterpret<f64>(0xBCDF1E7CF6D3A69C),
-  reinterpret<f64>(0x3FF0400000000000), 0, reinterpret<f64>(0xBF8FC0A8B0FC0000), reinterpret<f64>(0xBCDF1E7CF6D3A69C),
-  reinterpret<f64>(0x3FF0200000000000), 0, reinterpret<f64>(0xBF7FE02A6B100000), reinterpret<f64>(0xBD19E23F0DDA40E4),
-  reinterpret<f64>(0x3FF0200000000000), 0, reinterpret<f64>(0xBF7FE02A6B100000), reinterpret<f64>(0xBD19E23F0DDA40E4),
-  reinterpret<f64>(0x3FF0000000000000), 0, 0, 0,
-  reinterpret<f64>(0x3FF0000000000000), 0, 0, 0,
-  reinterpret<f64>(0x3FEFC00000000000), 0, reinterpret<f64>(0x3F80101575890000), reinterpret<f64>(0xBD10C76B999D2BE8),
-  reinterpret<f64>(0x3FEF800000000000), 0, reinterpret<f64>(0x3F90205658938000), reinterpret<f64>(0xBD23DC5B06E2F7D2),
-  reinterpret<f64>(0x3FEF400000000000), 0, reinterpret<f64>(0x3F98492528C90000), reinterpret<f64>(0xBD2AA0BA325A0C34),
-  reinterpret<f64>(0x3FEF000000000000), 0, reinterpret<f64>(0x3FA0415D89E74000), reinterpret<f64>(0x3D0111C05CF1D753),
-  reinterpret<f64>(0x3FEEC00000000000), 0, reinterpret<f64>(0x3FA466AED42E0000), reinterpret<f64>(0xBD2C167375BDFD28),
-  reinterpret<f64>(0x3FEE800000000000), 0, reinterpret<f64>(0x3FA894AA149FC000), reinterpret<f64>(0xBD197995D05A267D),
-  reinterpret<f64>(0x3FEE400000000000), 0, reinterpret<f64>(0x3FACCB73CDDDC000), reinterpret<f64>(0xBD1A68F247D82807),
-  reinterpret<f64>(0x3FEE200000000000), 0, reinterpret<f64>(0x3FAEEA31C006C000), reinterpret<f64>(0xBD0E113E4FC93B7B),
-  reinterpret<f64>(0x3FEDE00000000000), 0, reinterpret<f64>(0x3FB1973BD1466000), reinterpret<f64>(0xBD25325D560D9E9B),
-  reinterpret<f64>(0x3FEDA00000000000), 0, reinterpret<f64>(0x3FB3BDF5A7D1E000), reinterpret<f64>(0x3D2CC85EA5DB4ED7),
-  reinterpret<f64>(0x3FED600000000000), 0, reinterpret<f64>(0x3FB5E95A4D97A000), reinterpret<f64>(0xBD2C69063C5D1D1E),
-  reinterpret<f64>(0x3FED400000000000), 0, reinterpret<f64>(0x3FB700D30AEAC000), reinterpret<f64>(0x3CEC1E8DA99DED32),
-  reinterpret<f64>(0x3FED000000000000), 0, reinterpret<f64>(0x3FB9335E5D594000), reinterpret<f64>(0x3D23115C3ABD47DA),
-  reinterpret<f64>(0x3FECC00000000000), 0, reinterpret<f64>(0x3FBB6AC88DAD6000), reinterpret<f64>(0xBD1390802BF768E5),
-  reinterpret<f64>(0x3FECA00000000000), 0, reinterpret<f64>(0x3FBC885801BC4000), reinterpret<f64>(0x3D2646D1C65AACD3),
-  reinterpret<f64>(0x3FEC600000000000), 0, reinterpret<f64>(0x3FBEC739830A2000), reinterpret<f64>(0xBD2DC068AFE645E0),
-  reinterpret<f64>(0x3FEC400000000000), 0, reinterpret<f64>(0x3FBFE89139DBE000), reinterpret<f64>(0xBD2534D64FA10AFD),
-  reinterpret<f64>(0x3FEC000000000000), 0, reinterpret<f64>(0x3FC1178E8227E000), reinterpret<f64>(0x3D21EF78CE2D07F2),
-  reinterpret<f64>(0x3FEBE00000000000), 0, reinterpret<f64>(0x3FC1AA2B7E23F000), reinterpret<f64>(0x3D2CA78E44389934),
-  reinterpret<f64>(0x3FEBA00000000000), 0, reinterpret<f64>(0x3FC2D1610C868000), reinterpret<f64>(0x3D039D6CCB81B4A1),
-  reinterpret<f64>(0x3FEB800000000000), 0, reinterpret<f64>(0x3FC365FCB0159000), reinterpret<f64>(0x3CC62FA8234B7289),
-  reinterpret<f64>(0x3FEB400000000000), 0, reinterpret<f64>(0x3FC4913D8333B000), reinterpret<f64>(0x3D25837954FDB678),
-  reinterpret<f64>(0x3FEB200000000000), 0, reinterpret<f64>(0x3FC527E5E4A1B000), reinterpret<f64>(0x3D2633E8E5697DC7),
-  reinterpret<f64>(0x3FEAE00000000000), 0, reinterpret<f64>(0x3FC6574EBE8C1000), reinterpret<f64>(0x3D19CF8B2C3C2E78),
-  reinterpret<f64>(0x3FEAC00000000000), 0, reinterpret<f64>(0x3FC6F0128B757000), reinterpret<f64>(0xBD25118DE59C21E1),
-  reinterpret<f64>(0x3FEAA00000000000), 0, reinterpret<f64>(0x3FC7898D85445000), reinterpret<f64>(0xBD1C661070914305),
-  reinterpret<f64>(0x3FEA600000000000), 0, reinterpret<f64>(0x3FC8BEAFEB390000), reinterpret<f64>(0xBD073D54AAE92CD1),
-  reinterpret<f64>(0x3FEA400000000000), 0, reinterpret<f64>(0x3FC95A5ADCF70000), reinterpret<f64>(0x3D07F22858A0FF6F),
-  reinterpret<f64>(0x3FEA000000000000), 0, reinterpret<f64>(0x3FCA93ED3C8AE000), reinterpret<f64>(0xBD28724350562169),
-  reinterpret<f64>(0x3FE9E00000000000), 0, reinterpret<f64>(0x3FCB31D8575BD000), reinterpret<f64>(0xBD0C358D4EACE1AA),
-  reinterpret<f64>(0x3FE9C00000000000), 0, reinterpret<f64>(0x3FCBD087383BE000), reinterpret<f64>(0xBD2D4BC4595412B6),
-  reinterpret<f64>(0x3FE9A00000000000), 0, reinterpret<f64>(0x3FCC6FFBC6F01000), reinterpret<f64>(0xBCF1EC72C5962BD2),
-  reinterpret<f64>(0x3FE9600000000000), 0, reinterpret<f64>(0x3FCDB13DB0D49000), reinterpret<f64>(0xBD2AFF2AF715B035),
-  reinterpret<f64>(0x3FE9400000000000), 0, reinterpret<f64>(0x3FCE530EFFE71000), reinterpret<f64>(0x3CC212276041F430),
-  reinterpret<f64>(0x3FE9200000000000), 0, reinterpret<f64>(0x3FCEF5ADE4DD0000), reinterpret<f64>(0xBCCA211565BB8E11),
-  reinterpret<f64>(0x3FE9000000000000), 0, reinterpret<f64>(0x3FCF991C6CB3B000), reinterpret<f64>(0x3D1BCBECCA0CDF30),
-  reinterpret<f64>(0x3FE8C00000000000), 0, reinterpret<f64>(0x3FD07138604D5800), reinterpret<f64>(0x3CF89CDB16ED4E91),
-  reinterpret<f64>(0x3FE8A00000000000), 0, reinterpret<f64>(0x3FD0C42D67616000), reinterpret<f64>(0x3D27188B163CEAE9),
-  reinterpret<f64>(0x3FE8800000000000), 0, reinterpret<f64>(0x3FD1178E8227E800), reinterpret<f64>(0xBD2C210E63A5F01C),
-  reinterpret<f64>(0x3FE8600000000000), 0, reinterpret<f64>(0x3FD16B5CCBACF800), reinterpret<f64>(0x3D2B9ACDF7A51681),
-  reinterpret<f64>(0x3FE8400000000000), 0, reinterpret<f64>(0x3FD1BF99635A6800), reinterpret<f64>(0x3D2CA6ED5147BDB7),
-  reinterpret<f64>(0x3FE8200000000000), 0, reinterpret<f64>(0x3FD214456D0EB800), reinterpret<f64>(0x3D0A87DEBA46BAEA),
-  reinterpret<f64>(0x3FE7E00000000000), 0, reinterpret<f64>(0x3FD2BEF07CDC9000), reinterpret<f64>(0x3D2A9CFA4A5004F4),
-  reinterpret<f64>(0x3FE7C00000000000), 0, reinterpret<f64>(0x3FD314F1E1D36000), reinterpret<f64>(0xBD28E27AD3213CB8),
-  reinterpret<f64>(0x3FE7A00000000000), 0, reinterpret<f64>(0x3FD36B6776BE1000), reinterpret<f64>(0x3D116ECDB0F177C8),
-  reinterpret<f64>(0x3FE7800000000000), 0, reinterpret<f64>(0x3FD3C25277333000), reinterpret<f64>(0x3D183B54B606BD5C),
-  reinterpret<f64>(0x3FE7600000000000), 0, reinterpret<f64>(0x3FD419B423D5E800), reinterpret<f64>(0x3D08E436EC90E09D),
-  reinterpret<f64>(0x3FE7400000000000), 0, reinterpret<f64>(0x3FD4718DC271C800), reinterpret<f64>(0xBD2F27CE0967D675),
-  reinterpret<f64>(0x3FE7200000000000), 0, reinterpret<f64>(0x3FD4C9E09E173000), reinterpret<f64>(0xBD2E20891B0AD8A4),
-  reinterpret<f64>(0x3FE7000000000000), 0, reinterpret<f64>(0x3FD522AE0738A000), reinterpret<f64>(0x3D2EBE708164C759),
-  reinterpret<f64>(0x3FE6E00000000000), 0, reinterpret<f64>(0x3FD57BF753C8D000), reinterpret<f64>(0x3D1FADEDEE5D40EF),
-  reinterpret<f64>(0x3FE6C00000000000), 0, reinterpret<f64>(0x3FD5D5BDDF596000), reinterpret<f64>(0xBD0A0B2A08A465DC)
-]);
-
 // Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
 // the bit representation of a non-zero finite floating-point value.
 // @ts-ignore: decorator
 @inline
-function checkint(iy: u64): i32 {
+function checkint64(iy: u64): i32 {
   var e = iy >> 52 & 0x7FF;
   if (e < 0x3FF     ) return 0;
   if (e > 0x3FF + 52) return 2;
@@ -1663,26 +3001,26 @@ function checkint(iy: u64): i32 {
 
 // @ts-ignore: decorator
 @inline
-function xflow(sign: u32, y: f64): f64 {
+function xflow64(sign: u32, y: f64): f64 {
   return select(-y, y, sign) * y;
 }
 
 // @ts-ignore: decorator
 @inline
-function uflow(sign: u32): f64 {
-  return xflow(sign, reinterpret<f64>(0x1000000000000000)); // 0x1p-767
+function uflow64(sign: u32): f64 {
+  return xflow64(sign, reinterpret<f64>(0x1000000000000000)); // 0x1p-767
 }
 
 // @ts-ignore: decorator
 @inline
-function oflow(sign: u32): f64 {
-  return xflow(sign, reinterpret<f64>(0x7000000000000000)); // 0x1p769
+function oflow64(sign: u32): f64 {
+  return xflow64(sign, reinterpret<f64>(0x7000000000000000)); // 0x1p769
 }
 
 // Returns 1 if input is the bit representation of 0, infinity or nan.
 // @ts-ignore: decorator
 @inline
-function zeroinfnan(u: u64): bool {
+function zeroinfnan64(u: u64): bool {
   return (u << 1) - 1 >= 0xFFE0000000000000 - 1;
 }
 
@@ -1694,8 +3032,8 @@ function zeroinfnan(u: u64): bool {
 // normalized in the subnormal range using the sign bit for the exponent.
 // @ts-ignore: decorator
 @inline
-function log_inline(ix: u64): f64 {
-  const N = 1 << POW_LOG_TABLE_BITS;
+function log64_inline(ix: u64): f64 {
+  const N = 1 << POW_LOG_TABLE64_BITS;
   const N_MASK = N - 1;
 
   const
@@ -1715,16 +3053,16 @@ function log_inline(ix: u64): f64 {
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
   var tmp = ix - 0x3fE6955500000000;
-  var i   = <usize>((tmp >> (52 - POW_LOG_TABLE_BITS)) & N_MASK);
+  var i   = <usize>((tmp >> (52 - POW_LOG_TABLE64_BITS)) & N_MASK);
   var k   = <i64>tmp >> 52;
   var iz  = ix - (tmp & u64(0xFFF) << 52);
   var z   = reinterpret<f64>(iz);
   var kd  = <f64>k;
 
   // log(x) = k*Ln2 + log(c) + log1p(z/c-1).
-  var invc     = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 0 << alignof<f64>()); // tab[i].invc
-  var logc     = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 2 << alignof<f64>()); // tab[i].logc
-  var logctail = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 3 << alignof<f64>()); // tab[i].logctail
+  var invc     = load<f64>(POW_LOG_TABLE64 + (i << (2 + alignof<f64>())), 0 << alignof<f64>()); // tab[i].invc
+  var logc     = load<f64>(POW_LOG_TABLE64 + (i << (2 + alignof<f64>())), 2 << alignof<f64>()); // tab[i].logc
+  var logctail = load<f64>(POW_LOG_TABLE64 + (i << (2 + alignof<f64>())), 3 << alignof<f64>()); // tab[i].logctail
 
   // Note: 1/c is j/N or j/N/2 where j is an integer in [N,2N) and
   // |z/c - 1| < 1/N, so r = z/c - 1 is exactly representible.
@@ -1762,14 +3100,14 @@ function log_inline(ix: u64): f64 {
 }
 
 // @ts-ignore: decorator
-@inline const SIGN_BIAS = 0x800 << EXP_TABLE_BITS;
+@inline const SIGN_BIAS = 0x800 << EXP_TABLE64_BITS;
 
 // Computes sign*exp(x+xtail) where |xtail| < 2^-8/N and |xtail| <= |x|.
 // The sign_bias argument is SIGN_BIAS or 0 and sets the sign to -1 or 1.
 // @ts-ignore: decorator
 @inline
-function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
-  const N      = 1 << EXP_TABLE_BITS;
+function exp64_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
+  const N      = 1 << EXP_TABLE64_BITS;
   const N_MASK = N - 1;
 
   const
@@ -1796,11 +3134,11 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
     if (abstop - 0x3C9 >= 0x80000000) {
       // Avoid spurious underflow for tiny x.
       // Note: 0 is common input.
-      return select(-1.0, 1.0, sign_bias);
+      return select<f64>(-1.0, 1.0, sign_bias);
     }
     if (abstop >= 0x409) { // top12(1024.0)
       // Note: inf and nan are already handled.
-      return ux >> 63 ? uflow(sign_bias) : oflow(sign_bias);
+      return ux >> 63 ? uflow64(sign_bias) : oflow64(sign_bias);
     }
     // Large x is special cased below.
     abstop = 0;
@@ -1829,11 +3167,11 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   r += xtail;
   // 2^(k/N) ~= scale * (1 + tail)
   idx = <usize>((ki & N_MASK) << 1);
-  top = (ki + sign_bias) << (52 - EXP_TABLE_BITS);
+  top = (ki + sign_bias) << (52 - EXP_TABLE64_BITS);
 
-  tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>())));
+  tail = reinterpret<f64>(load<u64>(EXP_TABLE64 + (idx << alignof<u64>())));
   // This is only a valid scale when -1023*N < k < 1024*N
-  sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top;
+  sbits = load<u64>(EXP_TABLE64 + (idx << alignof<u64>()), 1 << alignof<u64>()) + top;
   // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
   // Evaluation is optimized assuming superscalar pipelined execution.
   r2 = r * r;
@@ -1849,7 +3187,7 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
 
 // @ts-ignore: decorator
 @inline
-export function pow_lut(x: f64, y: f64): f64 {
+function pow64_lut(x: f64, y: f64): f64 {
   const Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
 
   var sign_bias: u32 = 0;
@@ -1863,7 +3201,7 @@ export function pow_lut(x: f64, y: f64): f64 {
     // and if |y| < 2^-54 / 1075 ~= 0x1.e7b6p-65 then pow(x,y) = +-1.
     // Special cases: (x < 0x1p-126 or inf or nan) or
     // (|y| < 0x1p-65 or |y| >= 0x1p63 or nan).
-    if (zeroinfnan(iy)) {
+    if (zeroinfnan64(iy)) {
       if ((iy << 1) == 0) return 1.0;
       if (ix == 0x3FF0000000000000) return NaN; // original: 1.0
       if ((ix << 1) > 0xFFE0000000000000 || (iy << 1) > 0xFFE0000000000000) return x + y;
@@ -1871,15 +3209,15 @@ export function pow_lut(x: f64, y: f64): f64 {
       if (((ix << 1) < 0x7FE0000000000000) == !(iy >> 63)) return 0; // |x|<1 && y==inf or |x|>1 && y==-inf.
       return y * y;
     }
-    if (zeroinfnan(ix)) {
+    if (zeroinfnan64(ix)) {
       let x2 = x * x;
-      if (i32(ix >> 63) && checkint(iy) == 1) x2 = -x2;
+      if (i32(ix >> 63) && checkint64(iy) == 1) x2 = -x2;
       return iy >> 63 ? 1 / x2 : x2;
     }
     // Here x and y are non-zero finite
     if (ix >> 63) {
       // Finite x < 0
-      let yint = checkint(iy);
+      let yint = checkint64(iy);
       if (yint == 0) return (x - x) / (x - x);
       if (yint == 1) sign_bias = SIGN_BIAS;
       ix   &= 0x7FFFFFFFFFFFFFFF;
@@ -1899,7 +3237,7 @@ export function pow_lut(x: f64, y: f64): f64 {
     }
   }
 
-  var hi = log_inline(ix);
+  var hi = log64_inline(ix);
   var lo = log_tail;
   var ehi: f64, elo: f64;
   // #if __FP_FAST_FMA
@@ -1913,5 +3251,1396 @@ export function pow_lut(x: f64, y: f64): f64 {
   ehi = yhi * lhi;
   elo = ylo * lhi + y * llo; // |elo| < |ehi| * 2^-25.
   // #endif
-  return exp_inline(ehi, elo, sign_bias);
+  return exp64_inline(ehi, elo, sign_bias);
+}
+
+export function pow32(x: f32, y: f32): f32 {
+  // TODO: remove this fast pathes after introduced own mid-end IR with "stdlib call simplify" transforms
+  if (abs<f32>(y) <= 2) {
+    if (y == 2.0) return x * x;
+    if (y == 0.5) {
+      return select<f32>(
+        abs<f32>(sqrt<f32>(x)),
+        Infinity,
+        x != -Infinity
+      );
+    }
+    if (y == -1.0) return 1 / x;
+    if (y == 1.0) return x;
+    if (y == 0.0) return 1.0;
+  }
+  if (ASC_SHRINK_LEVEL < 1) {
+    // see: musl/src/math/powf.c
+    return pow32_lut(x, y);
+  } else {
+    // based on:  jdh8/metallic/src/math/float/powf.c
+    if (y == 0) return 1;
+    // @ts-ignore: cast
+    if (isNaN(x) | isNaN(y)) {
+      return NaN;
+    }
+    let sign: u32 = 0;
+    let uy = reinterpret<u32>(y);
+    let ux = reinterpret<u32>(x);
+    let sx = ux >> 31;
+    ux &= 0x7FFFFFFF;
+    if (sx && nearest<f32>(y) == y) {
+      x = -x;
+      sx = 0;
+      sign = u32(nearest<f32>(y * 0.5) != y * 0.5) << 31;
+    }
+    let m: u32;
+    if (ux == 0x3F800000) { // x == 1
+      m = sx | u32((uy & 0x7FFFFFFF) == 0x7F800000) ? 0x7FC00000 : 0x3F800000;
+    } else if (ux == 0) {
+      m = uy >> 31 ? 0x7F800000 : 0;
+    } else if (ux == 0x7F800000) {
+      m = uy >> 31 ? 0 : 0x7F800000;
+    } else if (sx) {
+      m = 0x7FC00000;
+    } else {
+      m = reinterpret<u32>(<f32>exp2up32(<f64>y * log2up32(x)));
+    }
+    return reinterpret<f32>(m | sign);
+  }
+}
+
+export function pow64(x: f64, y: f64): f64 { // see: musl/src/math/pow.c and SUN COPYRIGHT NOTICE above
+  // TODO: remove this fast pathes after introduced own mid-end IR with "stdlib call simplify" transforms
+  if (abs<f64>(y) <= 2) {
+    if (y == 2.0) return x * x;
+    if (y == 0.5) {
+      return select<f64>(
+        abs<f64>(sqrt<f64>(x)),
+        Infinity,
+        x != -Infinity
+      );
+    }
+    if (y == -1.0) return 1 / x;
+    if (y == 1.0) return x;
+    if (y == 0.0) return 1.0;
+  }
+  if (ASC_SHRINK_LEVEL < 1) {
+    return pow64_lut(x, y);
+  } else {
+    const
+      dp_h1   = reinterpret<f64>(0x3FE2B80340000000), //  5.84962487220764160156e-01
+      dp_l1   = reinterpret<f64>(0x3E4CFDEB43CFD006), //  1.35003920212974897128e-08
+      two53   = reinterpret<f64>(0x4340000000000000), //  9007199254740992.0
+      huge    = reinterpret<f64>(0x7E37E43C8800759C), //  1e+300
+      tiny    = reinterpret<f64>(0x01A56E1FC2F8F359), //  1e-300
+      L1      = reinterpret<f64>(0x3FE3333333333303), //  5.99999999999994648725e-01
+      L2      = reinterpret<f64>(0x3FDB6DB6DB6FABFF), //  4.28571428578550184252e-01
+      L3      = reinterpret<f64>(0x3FD55555518F264D), //  3.33333329818377432918e-01
+      L4      = reinterpret<f64>(0x3FD17460A91D4101), //  2.72728123808534006489e-01
+      L5      = reinterpret<f64>(0x3FCD864A93C9DB65), //  2.30660745775561754067e-01
+      L6      = reinterpret<f64>(0x3FCA7E284A454EEF), //  2.06975017800338417784e-01
+      P1      = reinterpret<f64>(0x3FC555555555553E), //  1.66666666666666019037e-01
+      P2      = reinterpret<f64>(0xBF66C16C16BEBD93), // -2.77777777770155933842e-03
+      P3      = reinterpret<f64>(0x3F11566AAF25DE2C), //  6.61375632143793436117e-05
+      P4      = reinterpret<f64>(0xBEBBBD41C5D26BF1), // -1.65339022054652515390e-06
+      P5      = reinterpret<f64>(0x3E66376972BEA4D0), //  4.13813679705723846039e-08
+      lg2     = reinterpret<f64>(0x3FE62E42FEFA39EF), //  6.93147180559945286227e-01
+      lg2_h   = reinterpret<f64>(0x3FE62E4300000000), //  6.93147182464599609375e-01
+      lg2_l   = reinterpret<f64>(0xBE205C610CA86C39), // -1.90465429995776804525e-09
+      ovt     = reinterpret<f64>(0x3C971547652B82FE), //  8.0085662595372944372e-017
+      cp      = reinterpret<f64>(0x3FEEC709DC3A03FD), //  9.61796693925975554329e-01
+      cp_h    = reinterpret<f64>(0x3FEEC709E0000000), //  9.61796700954437255859e-01
+      cp_l    = reinterpret<f64>(0xBE3E2FE0145B01F5), // -7.02846165095275826516e-09
+      ivln2   = reinterpret<f64>(0x3FF71547652B82FE), //  1.44269504088896338700e+00
+      ivln2_h = reinterpret<f64>(0x3FF7154760000000), //  1.44269502162933349609e+00
+      ivln2_l = reinterpret<f64>(0x3E54AE0BF85DDF44), //  1.92596299112661746887e-08
+      inv3    = reinterpret<f64>(0x3FD5555555555555); //  0.3333333333333333333333
+
+    let u_ = reinterpret<u64>(x);
+    let hx = <i32>(u_ >> 32);
+    let lx = <u32>u_;
+    u_ = reinterpret<u64>(y);
+    let hy = <i32>(u_ >> 32);
+    let ly = <u32>u_;
+    let ix = hx & 0x7FFFFFFF;
+    let iy = hy & 0x7FFFFFFF;
+    if ((iy | ly) == 0) return 1.0; // x**0 = 1, even if x is NaN
+    // if (hx == 0x3FF00000 && lx == 0) return 1.0; // C: 1**y = 1, even if y is NaN, JS: NaN
+    if ( // NaN if either arg is NaN
+      ix > 0x7FF00000 || (ix == 0x7FF00000 && lx != 0) ||
+      iy > 0x7FF00000 || (iy == 0x7FF00000 && ly != 0)
+    ) return x + y;
+    let yisint = 0, k: i32;
+    if (hx < 0) {
+      if (iy >= 0x43400000) yisint = 2;
+      else if (iy >= 0x3FF00000) {
+        k = (iy >> 20) - 0x3FF;
+        let offset = select<u32>(52, 20, k > 20) - k;
+        let Ly = select<u32>(ly, iy, k > 20);
+        let jj = Ly >> offset;
+        if ((jj << offset) == Ly) yisint = 2 - (jj & 1);
+      }
+    }
+    if (ly == 0) {
+      if (iy == 0x7FF00000) { // y is +-inf
+        if (((ix - 0x3FF00000) | lx) == 0) return NaN; // C: (-1)**+-inf is 1, JS: NaN
+        else if (ix >= 0x3FF00000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
+        else return hy >= 0 ? 0.0 : -y; // (|x|<1)**+-inf = 0,inf
+      }
+      if (iy == 0x3FF00000) {
+        if (hy >= 0) return x;
+        return 1 / x;
+      }
+      if (hy == 0x40000000) return x * x;
+      if (hy == 0x3FE00000) {
+        if (hx >= 0) return sqrt<f64>(x);
+      }
+    }
+    let ax = abs<f64>(x), z: f64;
+    if (lx == 0) {
+      if (ix == 0 || ix == 0x7FF00000 || ix == 0x3FF00000) {
+        z = ax;
+        if (hy < 0) z = 1.0 / z;
+        if (hx < 0) {
+          if (((ix - 0x3FF00000) | yisint) == 0) {
+            let d = z - z;
+            z = d / d;
+          } else if (yisint == 1) z = -z;
+        }
+        return z;
+      }
+    }
+    let s = 1.0;
+    if (hx < 0) {
+      if (yisint == 0) {
+        let d = x - x;
+        return d / d;
+      }
+      if (yisint == 1) s = -1.0;
+    }
+    let t1: f64, t2: f64, p_h: f64, p_l: f64, r: f64, t: f64, u: f64, v: f64, w: f64;
+    let j: i32, n: i32;
+    if (iy > 0x41E00000) {
+      if (iy > 0x43F00000) {
+        if (ix <= 0x3FEFFFFF) return hy < 0 ? huge * huge : tiny * tiny;
+        if (ix >= 0x3FF00000) return hy > 0 ? huge * huge : tiny * tiny;
+      }
+      if (ix < 0x3FEFFFFF) return hy < 0 ? s * huge * huge : s * tiny * tiny;
+      if (ix > 0x3FF00000) return hy > 0 ? s * huge * huge : s * tiny * tiny;
+      t = ax - 1.0;
+      w = (t * t) * (0.5 - t * (inv3 - t * 0.25));
+      u = ivln2_h * t;
+      v = t * ivln2_l - w * ivln2;
+      t1 = u + v;
+      t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
+      t2 = v - (t1 - u);
+    } else {
+      let ss: f64, s2: f64, s_h: f64, s_l: f64, t_h: f64, t_l: f64;
+      n = 0;
+      if (ix < 0x00100000) {
+        ax *= two53;
+        n -= 53;
+        ix = <u32>(reinterpret<u64>(ax) >> 32);
+      }
+      n += (ix >> 20) - 0x3FF;
+      j = ix & 0x000FFFFF;
+      ix = j | 0x3FF00000;
+      if (j <= 0x3988E) k = 0;
+      else if (j < 0xBB67A) k = 1;
+      else {
+        k = 0;
+        n += 1;
+        ix -= 0x00100000;
+      }
+      ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
+      let bp = select<f64>(1.5, 1.0, k); // k ? 1.5 : 1.0
+      u = ax - bp;
+      v = 1.0 / (ax + bp);
+      ss = u * v;
+      s_h = ss;
+      s_h = reinterpret<f64>(reinterpret<u64>(s_h) & 0xFFFFFFFF00000000);
+      t_h = reinterpret<f64>(<u64>(((ix >> 1) | 0x20000000) + 0x00080000 + (k << 18)) << 32);
+      t_l = ax - (t_h - bp);
+      s_l = v * ((u - s_h * t_h) - s_h * t_l);
+      s2 = ss * ss;
+      r = s2 * s2 * (L1 + s2 * (L2 + s2 * (L3 + s2 * (L4 + s2 * (L5 + s2 * L6)))));
+      r += s_l * (s_h + ss);
+      s2 = s_h * s_h;
+      t_h = 3.0 + s2 + r;
+      t_h = reinterpret<f64>(reinterpret<u64>(t_h) & 0xFFFFFFFF00000000);
+      t_l = r - ((t_h - 3.0) - s2);
+      u = s_h * t_h;
+      v = s_l * t_h + t_l * ss;
+      p_h = u + v;
+      p_h = reinterpret<f64>(reinterpret<u64>(p_h) & 0xFFFFFFFF00000000);
+      p_l = v - (p_h - u);
+      let z_h = cp_h * p_h;
+      let dp_l = select<f64>(dp_l1, 0.0, k);
+      let z_l = cp_l * p_h + p_l * cp + dp_l;
+      t = <f64>n;
+      let dp_h = select<f64>(dp_h1, 0.0, k);
+      t1 = ((z_h + z_l) + dp_h) + t;
+      t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
+      t2 = z_l - (((t1 - t) - dp_h) - z_h);
+    }
+    let y1 = y;
+    y1 = reinterpret<f64>(reinterpret<u64>(y1) & 0xFFFFFFFF00000000);
+    p_l = (y - y1) * t1 + y * t2;
+    p_h = y1 * t1;
+    z = p_l + p_h;
+    u_ = reinterpret<u64>(z);
+    j = <u32>(u_ >> 32);
+    let i = <i32>u_;
+    if (j >= 0x40900000) {
+      if (((j - 0x40900000) | i) != 0) return s * huge * huge;
+      if (p_l + ovt > z - p_h) return s * huge * huge;
+    } else if ((j & 0x7FFFFFFF) >= 0x4090CC00) {
+      if (((j - 0xC090CC00) | i) != 0) return s * tiny * tiny;
+      if (p_l <= z - p_h) return s * tiny * tiny;
+    }
+    i = j & 0x7FFFFFFF;
+    k = (i >> 20) - 0x3FF;
+    n = 0;
+    if (i > 0x3FE00000) {
+      n = j + (0x00100000 >> (k + 1));
+      k = ((n & 0x7FFFFFFF) >> 20) - 0x3FF;
+      t = 0.0;
+      t = reinterpret<f64>(<u64>(n & ~(0x000FFFFF >> k)) << 32);
+      n = ((n & 0x000FFFFF) | 0x00100000) >> (20 - k);
+      if (j < 0) n = -n;
+      p_h -= t;
+    }
+    t = p_l + p_h;
+    t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
+    u = t * lg2_h;
+    v = (p_l - (t - p_h)) * lg2 + t * lg2_l;
+    z = u + v;
+    w = v - (z - u);
+    t = z * z;
+    t1 = z - t * (P1 + t * (P2 + t * (P3 + t * (P4 + t * P5))));
+    r = (z * t1) / (t1 - 2.0) - (w + z * w);
+    z = 1.0 - (r - z);
+    j = <u32>(reinterpret<u64>(z) >> 32);
+    j += n << 20;
+    if ((j >> 20) <= 0) z = scalbn64(z, n);
+    else z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF | (<u64>j << 32));
+    return s * z;
+  }
+}
+
+export function sin32(x: f32): f32 { // see: musl/src/math/sinf.c
+  const
+    s1pio2 = reinterpret<f64>(0x3FF921FB54442D18), // M_PI_2 * 1
+    s2pio2 = reinterpret<f64>(0x400921FB54442D18), // M_PI_2 * 2
+    s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // M_PI_2 * 3
+    s4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
+
+  var ix = reinterpret<u32>(x);
+  var sign = ix >> 31;
+  ix &= 0x7FFFFFFF;
+
+  if (ix <= 0x3F490FDA) {  // |x| ~<= π/4
+    if (ix < 0x39800000) { // |x| < 2**-12
+      return x;
+    }
+    return sin32_kern(x);
+  }
+
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (ix <= 0x407B53D1) {   // |x| ~<= 5π/4
+      if (ix <= 0x4016CBE3) { // |x| ~<= 3π/4
+        return sign ? -cos32_kern(x + s1pio2) : cos32_kern(x - s1pio2);
+      }
+      return sin32_kern(-(sign ? x + s2pio2 : x - s2pio2));
+    }
+
+    if (ix <= 0x40E231D5) {   // |x| ~<= 9π/4
+      if (ix <= 0x40AFEDDF) { // |x| ~<= 7π/4
+        return sign ? cos32_kern(x + s3pio2) : -cos32_kern(x - s3pio2);
+      }
+      return sin32_kern(sign ? x + s4pio2 : x - s4pio2);
+    }
+  }
+
+  // sin(Inf or NaN) is NaN
+  if (ix >= 0x7F800000) return x - x;
+
+  var n = rempio2_32(x, ix, sign);
+  var y = rempio2_32_y;
+
+  var t = n & 1 ? cos32_kern(y) : sin32_kern(y);
+  return n & 2 ? -t : t;
+}
+
+export function sin64(x: f64): f64 { // see: musl/src/math/sin.c
+  var u  = reinterpret<u64>(x);
+  var ix = <u32>(u >> 32);
+  var sign = ix >> 31;
+
+  ix &= 0x7FFFFFFF;
+
+  // |x| ~< pi/4
+  if (ix <= 0x3FE921FB) {
+    if (ix < 0x3E500000) { // |x| < 2**-26
+      return x;
+    }
+    return sin64_kern(x, 0.0, 0);
+  }
+
+  // sin(Inf or NaN) is NaN
+  if (ix >= 0x7FF00000) return x - x;
+
+  // argument reduction needed
+  var n  = rempio2_64(x, u, sign);
+  var y0 = rempio2_y0;
+  var y1 = rempio2_y1;
+
+  x = n & 1 ? cos64_kern(y0, y1) : sin64_kern(y0, y1, 1);
+  return n & 2 ? -x : x;
+}
+
+export function sinh32(x: f32): f32 { // see: musl/src/math/sinhf.c
+  var u = reinterpret<u32>(x) & 0x7FFFFFFF;
+  var a = reinterpret<f32>(u);
+  var h = copysign<f32>(0.5, x);
+  if (u < 0x42B17217) {
+    let t = expm1_32(a);
+    if (u < 0x3F800000) {
+      if (u < 0x3F800000 - (12 << 23)) return x;
+      return h * (2 * t - t * t / (t + 1));
+    }
+    return h * (t + t / (t + 1));
+  }
+  return expo2_32(a, 2 * h);
+}
+
+export function sinh64(x: f64): f64 { // see: musl/src/math/sinh.c
+  var u = reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF;
+  var a = reinterpret<f64>(u);
+  var w = <u32>(u >> 32);
+  var h = copysign<f64>(0.5, x);
+  if (w < 0x40862E42) {
+    let t = expm1_64(a);
+    if (w < 0x3FF00000) {
+      if (w < 0x3FF00000 - (26 << 20)) return x;
+      return h * (2 * t - t * t / (t + 1));
+    }
+    return h * (t + t / (t + 1));
+  }
+  return expo2_64(a, 2 * h);
+}
+
+export function tan32(x: f32): f32 { // see: musl/src/math/tanf.c
+  const
+    t1pio2 = reinterpret<f64>(0x3FF921FB54442D18), // 1 * M_PI_2
+    t2pio2 = reinterpret<f64>(0x400921FB54442D18), // 2 * M_PI_2
+    t3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // 3 * M_PI_2
+    t4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
+
+  var ix = reinterpret<u32>(x);
+  var sign = ix >> 31;
+  ix &= 0x7FFFFFFF;
+
+  if (ix <= 0x3F490FDA) {  // |x| ~<= π/4
+    if (ix < 0x39800000) { // |x| < 2**-12
+      return x;
+    }
+    return tan32_kern(x, 0);
+  }
+
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (ix <= 0x407B53D1) {   // |x| ~<= 5π/4
+      if (ix <= 0x4016CBE3) { // |x| ~<= 3π/4
+        return tan32_kern((sign ? x + t1pio2 : x - t1pio2), 1);
+      } else {
+        return tan32_kern((sign ? x + t2pio2 : x - t2pio2), 0);
+      }
+    }
+    if (ix <= 0x40E231D5) {   // |x| ~<= 9π/4
+      if (ix <= 0x40AFEDDF) { // |x| ~<= 7π/4
+        return tan32_kern((sign ? x + t3pio2 : x - t3pio2), 1);
+      } else {
+        return tan32_kern((sign ? x + t4pio2 : x - t4pio2), 0);
+      }
+    }
+  }
+
+  // tan(Inf or NaN) is NaN
+  if (ix >= 0x7F800000) return x - x;
+
+  // argument reduction
+  var n = rempio2_32(x, ix, sign);
+  var y = rempio2_32_y;
+  return tan32_kern(y, n & 1);
+}
+
+export function tan64(x: f64): f64 { // see: musl/src/math/tan.c
+  var u = reinterpret<u64>(x);
+  var ix = <i32>(u >> 32);
+  var sign = ix >>> 31;
+
+  ix &= 0x7FFFFFFF;
+
+  // |x| ~< pi/4
+  if (ix <= 0x3FE921FB) {
+    if (ix < 0x3E400000) { // |x| < 2**-27
+      return x;
+    }
+    return tan64_kern(x, 0.0, 1);
+  }
+
+  // tan(Inf or NaN) is NaN
+  if (ix >= 0x7FF00000) return x - x;
+
+  var n = rempio2_64(x, u, sign);
+  return tan64_kern(rempio2_y0, rempio2_y1, 1 - ((n & 1) << 1));
+}
+
+export function tanh32(x: f32): f32 { // see: musl/src/math/tanhf.c
+  var u = reinterpret<u32>(x);
+  u &= 0x7FFFFFFF;
+  var y = reinterpret<f32>(u);
+  var t: f32;
+  if (u > 0x3F0C9F54) {
+    if (u > 0x41200000) t = 1 + 0 / y;
+    else {
+      t = expm1_32(2 * y);
+      t = 1 - 2 / (t + 2);
+    }
+  } else if (u > 0x3E82C578) {
+    t = expm1_32(2 * y);
+    t = t / (t + 2);
+  } else if (u >= 0x00800000) {
+    t = expm1_32(-2 * y);
+    t = -t / (t + 2);
+  } else t = y;
+  return copysign<f32>(t, x);
+}
+
+export function tanh64(x: f64): f64 { // see: musl/src/math/tanh.c
+  var u = reinterpret<u64>(x);
+  u &= 0x7FFFFFFFFFFFFFFF;
+  var y = reinterpret<f64>(u);
+  var w = <u32>(u >> 32);
+  var t: f64;
+  if (w > 0x3FE193EA) {
+    if (w > 0x40340000) {
+      t = 1 - 0 / y;
+    } else {
+      t = expm1_64(2 * y);
+      t = 1 - 2 / (t + 2);
+    }
+  } else if (w > 0x3FD058AE) {
+    t = expm1_64(2 * y);
+    t = t / (t + 2);
+  } else if (w >= 0x00100000) {
+    t = expm1_64(-2 * y);
+    t = -t / (t + 2);
+  } else t = y;
+  return copysign<f64>(t, x);
+}
+
+export function sincos32(x: f32): f32 { // see: musl/tree/src/math/sincosf.c
+  const
+    s1pio2 = reinterpret<f64>(0x3FF921FB54442D18), // 1 * M_PI_2
+    s2pio2 = reinterpret<f64>(0x400921FB54442D18), // 2 * M_PI_2
+    s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // 3 * M_PI_2
+    s4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
+
+  var ix = reinterpret<u32>(x);
+  var sign = ix >> 31;
+  ix &= 0x7FFFFFFF;
+
+  if (ix <= 0x3F490FDA) {  // |x| ~<= π/4
+    if (ix < 0x39800000) { // |x| < 2**-12
+      sincos_cos32 = 1;
+      return x;
+    }
+    sincos_cos32 = cos32_kern(x);
+    return sin32_kern(x);
+  }
+  if (ASC_SHRINK_LEVEL < 1) {
+    if (ix <= 0x407B53D1) {   // |x| ~<= 5π/4
+      if (ix <= 0x4016CBE3) { // |x| ~<= 3π/4
+        if (sign) {
+          sincos_cos32 = sin32_kern(x + s1pio2);
+          return -cos32_kern(x + s1pio2);
+        } else {
+          sincos_cos32 = sin32_kern(s1pio2 - x);
+          return cos32_kern(s1pio2 - x);
+        }
+      }
+      // -sin(x + c) is not correct if x+c could be 0: -0 vs +0
+      sincos_cos32 = -cos32_kern(sign ? x + s2pio2 : x - s2pio2);
+      return -sin32_kern(sign ? x + s2pio2 : x - s2pio2);
+    }
+    if (ix <= 0x40E231D5) {   // |x| ~<= 9π/4
+      if (ix <= 0x40AFEDDF) { // |x| ~<= 7π/4
+        if (sign) {
+          sincos_cos32 = -sin32_kern(x + s3pio2);
+          return cos32_kern(x + s3pio2);
+        } else {
+          sincos_cos32 = sin32_kern(x - s3pio2);
+          return -cos32_kern(x - s3pio2);
+        }
+      }
+      sincos_cos32 = cos32_kern(sign ? x + s4pio2 : x - s4pio2);
+      return sin32_kern(sign ? x + s4pio2 : x - s4pio2);
+    }
+  }
+  // sin(Inf or NaN) is NaN
+  if (ix >= 0x7F800000) {
+    let xx = x - x;
+    sincos_cos32 = xx;
+    return xx;
+  }
+  // general argument reduction needed
+  var n = rempio2_32(x, ix, sign);
+  var y = rempio2_32_y;
+  var s = sin32_kern(y);
+  var c = cos32_kern(y);
+  var sin = s, cos = c;
+  if (n & 1) {
+    sin =  c;
+    cos = -s;
+  }
+  if (n & 2) {
+    sin = -sin;
+    cos = -cos;
+  }
+  sincos_cos32 = cos;
+  return sin;
+}
+
+export function sincos64(x: f64): f64 { // see: musl/tree/src/math/sincos.c
+  var u = reinterpret<u64>(x);
+  var ix = <u32>(u >> 32);
+  var sign = ix >> 31;
+  ix &= 0x7FFFFFFF;
+
+  if (ix <= 0x3FE921FB) {  // |x| ~<= π/4
+    if (ix < 0x3E46A09E) { // if |x| < 2**-27 * sqrt(2)
+      sincos_cos64 = 1;
+      return x; // sin
+    }
+    sincos_cos64 = cos64_kern(x, 0);
+    return sin64_kern(x, 0, 0);
+  }
+  // sin(Inf or NaN) is NaN
+  if (ix >= 0x7F800000) {
+    let xx = x - x;
+    sincos_cos64 = xx;
+    return xx;
+  }
+  // general argument reduction needed
+  var n = rempio2_64(x, u, sign);
+  var y0 = rempio2_y0;
+  var y1 = rempio2_y1;
+  var s = sin64_kern(y0, y1, 1);
+  var c = cos64_kern(y0, y1);
+  var sin = s, cos = c;
+  if (n & 1) {
+    sin =  c;
+    cos = -s;
+  }
+  if (n & 2) {
+    sin = -sin;
+    cos = -cos;
+  }
+  sincos_cos64 = cos;
+  return sin;
+}
+
+export function scalbn32(x: f32, n: i32): f32 { // see: https://git.musl-libc.org/cgit/musl/tree/src/math/scalbnf.c
+  const
+    Ox1p24f   = reinterpret<f32>(0x4B800000),
+    Ox1p127f  = reinterpret<f32>(0x7F000000),
+    Ox1p_126f = reinterpret<f32>(0x00800000);
+
+  var y = x;
+  if (n > 127) {
+    y *= Ox1p127f;
+    n -= 127;
+    if (n > 127) {
+      y *= Ox1p127f;
+      n = min<i32>(n - 127, 127);
+    }
+  } else if (n < -126) {
+    y *= Ox1p_126f * Ox1p24f;
+    n += 126 - 24;
+    if (n < -126) {
+      y *= Ox1p_126f * Ox1p24f;
+      n = max<i32>(n + 126 - 24, -126);
+    }
+  }
+  return y * reinterpret<f32>(<u32>(0x7F + n) << 23);
+}
+
+export function scalbn64(x: f64, n: i32): f64 { // see: https://git.musl-libc.org/cgit/musl/tree/src/math/scalbn.c
+  const
+    Ox1p53    = reinterpret<f64>(0x4340000000000000),
+    Ox1p1023  = reinterpret<f64>(0x7FE0000000000000),
+    Ox1p_1022 = reinterpret<f64>(0x0010000000000000);
+
+  var y = x;
+  if (n > 1023) {
+    y *= Ox1p1023;
+    n -= 1023;
+    if (n > 1023) {
+      y *= Ox1p1023;
+      n = min<i32>(n - 1023, 1023);
+    }
+  } else if (n < -1022) {
+    // make sure final n < -53 to avoid double
+    // rounding in the subnormal range
+    y *= Ox1p_1022 * Ox1p53;
+    n += 1022 - 53;
+    if (n < -1022) {
+      y *= Ox1p_1022 * Ox1p53;
+      n = max<i32>(n + 1022 - 53, -1022);
+    }
+  }
+  return y * reinterpret<f64>(<u64>(0x3FF + n) << 52);
+}
+
+export function exp32(x: f32): f32 { // see: musl/src/math/expf.c and SUN COPYRIGHT NOTICE above
+  if (ASC_SHRINK_LEVEL < 1) {
+    return exp32_lut(x);
+  } else {
+    const
+      ln2hi    = reinterpret<f32>(0x3F317200), //  6.9314575195e-1f
+      ln2lo    = reinterpret<f32>(0x35BFBE8E), //  1.4286067653e-6f
+      invln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+0f
+      P1       = reinterpret<f32>(0x3E2AAA8F), //  1.6666625440e-1f
+      P2       = reinterpret<f32>(0xBB355215), // -2.7667332906e-3f
+      Ox1p127f = reinterpret<f32>(0x7F000000); //  0x1p+127f
+
+    let hx = reinterpret<u32>(x);
+    let sign_ = <i32>(hx >> 31);
+    hx &= 0x7FFFFFFF;
+    if (hx >= 0x42AEAC50) {
+      if (hx > 0x7F800000) return x; // NaN
+      if (hx >= 0x42B17218) {
+        if (!sign_) return x * Ox1p127f;
+        else if (hx >= 0x42CFF1B5) return 0;
+      }
+    }
+    let hi: f32, lo: f32;
+    let k: i32;
+    if (hx > 0x3EB17218) {
+      if (hx > 0x3F851592) {
+        k = <i32>(invln2 * x + copysign<f32>(0.5, x));
+      } else {
+        k = 1 - (sign_ << 1);
+      }
+      hi = x - <f32>k * ln2hi;
+      lo = <f32>k * ln2lo;
+      x = hi - lo;
+    } else if (hx > 0x39000000) {
+      k = 0;
+      hi = x;
+      lo = 0;
+    } else {
+      return 1 + x;
+    }
+    let xx = x * x;
+    let c = x - xx * (P1 + xx * P2);
+    let y: f32 = 1 + (x * c / (2 - c) - lo + hi);
+    return k == 0 ? y : scalbn32(y, k);
+  }
+}
+
+export function exp64(x: f64): f64 { // see: musl/src/math/exp.c and SUN COPYRIGHT NOTICE above
+  if (ASC_SHRINK_LEVEL < 1) {
+    return exp_lut(x);
+  } else {
+    const
+      ln2hi     = reinterpret<f64>(0x3FE62E42FEE00000), //  6.93147180369123816490e-01
+      ln2lo     = reinterpret<f64>(0x3DEA39EF35793C76), //  1.90821492927058770002e-10
+      invln2    = reinterpret<f64>(0x3FF71547652B82FE), //  1.44269504088896338700e+00
+      P1        = reinterpret<f64>(0x3FC555555555553E), //  1.66666666666666019037e-01
+      P2        = reinterpret<f64>(0xBF66C16C16BEBD93), // -2.77777777770155933842e-03
+      P3        = reinterpret<f64>(0x3F11566AAF25DE2C), //  6.61375632143793436117e-05
+      P4        = reinterpret<f64>(0xBEBBBD41C5D26BF1), // -1.65339022054652515390e-06
+      P5        = reinterpret<f64>(0x3E66376972BEA4D0), //  4.13813679705723846039e-08
+      overflow  = reinterpret<f64>(0x40862E42FEFA39EF), //  709.782712893383973096
+      underflow = reinterpret<f64>(0xC0874910D52D3051), // -745.13321910194110842
+      Ox1p1023  = reinterpret<f64>(0x7FE0000000000000); //  0x1p1023
+
+    let hx = <u32>(reinterpret<u64>(x) >> 32);
+    let sign_ = <i32>(hx >> 31);
+    hx &= 0x7FFFFFFF;
+    if (hx >= 0x4086232B) {
+      if (isNaN(x)) return x;
+      if (x > overflow)  return x * Ox1p1023;
+      if (x < underflow) return 0;
+    }
+    let hi: f64, lo: f64 = 0;
+    let k = 0;
+    if (hx > 0x3FD62E42) {
+      if (hx >= 0x3FF0A2B2) {
+        k = <i32>(invln2 * x + copysign<f64>(0.5, x));
+      } else {
+        k = 1 - (sign_ << 1);
+      }
+      hi = x - k * ln2hi;
+      lo = k * ln2lo;
+      x = hi - lo;
+    } else if (hx > 0x3E300000) {
+      hi = x;
+    } else return 1.0 + x;
+    let xs = x * x;
+    // var c = x - xp2 * (P1 + xp2 * (P2 + xp2 * (P3 + xp2 * (P4 + xp2 * P5))));
+    let xq = xs * xs;
+    let c = x - (xs * P1 + xq * ((P2 + xs * P3) + xq * (P4 + xs * P5)));
+    let y = 1.0 + (x * c / (2 - c) - lo + hi);
+    return k == 0 ? y : scalbn64(y, k);
+  }
+}
+
+export function expm1_32(x: f32): f32 { // see: musl/src/math/expm1f.c and SUN COPYRIGHT NOTICE above
+  const
+    ln2_hi   = reinterpret<f32>(0x3F317180), //  6.9313812256e-01f
+    ln2_lo   = reinterpret<f32>(0x3717F7D1), //  9.0580006145e-06f
+    invln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+00f
+    Q1       = reinterpret<f32>(0xBD088868), // -3.3333212137e-02f
+    Q2       = reinterpret<f32>(0x3ACF3010), //  1.5807170421e-03f
+    Ox1p127f = reinterpret<f32>(0x7F000000); //  0x1p+127f
+
+  var u = reinterpret<u32>(x);
+  var hx = u & 0x7FFFFFFF;
+  var sign_ = <i32>(u >> 31);
+  if (hx >= 0x4195B844) {
+    if (hx > 0x7F800000) return x;
+    if (sign_) return -1;
+    if (hx > 0x42B17217) { // x > log(FLT_MAX)
+      x *= Ox1p127f;
+      return x;
+    }
+  }
+  var c: f32 = 0.0, t: f32, k: i32;
+  if (hx > 0x3EB17218) {
+    k = select<i32>(
+      1 - (sign_ << 1),
+      <i32>(invln2 * x + copysign<f32>(0.5, x)),
+      hx < 0x3F851592
+    );
+    t = <f32>k;
+    let hi = x - t * ln2_hi;
+    let lo = t * ln2_lo;
+    x = hi - lo;
+    c = (hi - x) - lo;
+  } else if (hx < 0x33000000) {
+    return x;
+  } else k = 0;
+  var hfx: f32 = 0.5 * x;
+  var hxs: f32 = x * hfx;
+  var r1: f32 = 1.0 + hxs * (Q1 + hxs * Q2);
+  t  = 3.0 - r1 * hfx;
+  var e = hxs * ((r1 - t) / (6.0 - x * t));
+  if (k == 0) return x - (x * e - hxs);
+  e  = x * (e - c) - c;
+  e -= hxs;
+  if (k == -1) return 0.5 * (x - e) - 0.5;
+  if (k == 1) {
+    if (x < -0.25) return -2.0 * (e - (x + 0.5));
+    return 1.0 + 2.0 * (x - e);
+  }
+  u = (0x7F + k) << 23;
+  var twopk = reinterpret<f32>(u);
+  var y: f32;
+  if (k < 0 || k > 56) {
+    y = x - e + 1.0;
+    if (k == 128) y = y * 2.0 * Ox1p127f;
+    else y = y * twopk;
+    return y - 1.0;
+  }
+  u = (0x7F - k) << 23;
+  y = reinterpret<f32>(u);
+  if (k < 20) y = (1 - y) - e;
+  else y = 1 - (e + y);
+  return (x + y) * twopk;
+}
+
+export function expm1_64(x: f64): f64 { // see: musl/src/math/expm1.c and SUN COPYRIGHT NOTICE above
+  const
+    o_threshold = reinterpret<f64>(0x40862E42FEFA39EF), //  7.09782712893383973096e+02
+    ln2_hi      = reinterpret<f64>(0x3FE62E42FEE00000), //  6.93147180369123816490e-01
+    ln2_lo      = reinterpret<f64>(0x3DEA39EF35793C76), //  1.90821492927058770002e-10
+    invln2      = reinterpret<f64>(0x3FF71547652B82FE), //  1.44269504088896338700e+00
+    Q1          = reinterpret<f64>(0xBFA11111111110F4), // -3.33333333333331316428e-02
+    Q2          = reinterpret<f64>(0x3F5A01A019FE5585), //  1.58730158725481460165e-03
+    Q3          = reinterpret<f64>(0xBF14CE199EAADBB7), // -7.93650757867487942473e-05
+    Q4          = reinterpret<f64>(0x3ED0CFCA86E65239), //  4.00821782732936239552e-06
+    Q5          = reinterpret<f64>(0xBE8AFDB76E09C32D), // -2.01099218183624371326e-07
+    Ox1p1023    = reinterpret<f64>(0x7FE0000000000000); //  0x1p1023
+
+  var u = reinterpret<u64>(x);
+  var hx = <u32>(u >> 32 & 0x7FFFFFFF);
+  var k = 0, sign_ = <i32>(u >> 63);
+  if (hx >= 0x4043687A) {
+    if (isNaN(x)) return x;
+    if (sign_) return -1;
+    if (x > o_threshold) return x * Ox1p1023;
+  }
+  var c = 0.0, t: f64;
+  if (hx > 0x3FD62E42) {
+    k = select<i32>(
+      1 - (sign_ << 1),
+      <i32>(invln2 * x + copysign<f64>(0.5, x)),
+      hx < 0x3FF0A2B2
+    );
+    t = <f64>k;
+    let hi = x - t * ln2_hi;
+    let lo = t * ln2_lo;
+    x = hi - lo;
+    c = (hi - x) - lo;
+  } else if (hx < 0x3C900000) return x;
+  var hfx = 0.5 * x;
+  var hxs = x * hfx;
+  // var r1 = 1.0 + hxs * (Q1 + hxs * (Q2 + hxs * (Q3 + hxs * (Q4 + hxs * Q5))));
+  var hxq = hxs * hxs;
+  var r1 = (1.0 + hxs * Q1) + hxq * ((Q2 + hxs * Q3) + hxq * (Q4 + hxs * Q5));
+  t = 3.0 - r1 * hfx;
+  var e = hxs * ((r1 - t) / (6.0 - x * t));
+  if (k == 0) return x - (x * e - hxs);
+  e = x * (e - c) - c;
+  e -= hxs;
+  if (k == -1) return 0.5 * (x - e) - 0.5;
+  if (k == 1) {
+    if (x < -0.25) return -2.0 * (e - (x + 0.5));
+    return 1.0 + 2.0 * (x - e);
+  }
+  u = (0x3FF + k) << 52;
+  var twopk = reinterpret<f64>(u);
+  var y: f64;
+  if (k < 0 || k > 56) {
+    y = x - e + 1.0;
+    if (k == 1024) y = y * 2.0 * Ox1p1023;
+    else y = y * twopk;
+    return y - 1.0;
+  }
+  u = (0x3FF - k) << 52;
+  y = reinterpret<f64>(u);
+  if (k < 20) y = (1 - y) - e;
+  else y = 1 - (e + y);
+  return (x + y) * twopk;
+}
+
+export function log32(x: f32): f32 { // see: musl/src/math/logf.c and SUN COPYRIGHT NOTICE above
+  if (ASC_SHRINK_LEVEL < 1) {
+    return logf_lut(x);
+  } else {
+    const
+      ln2_hi  = reinterpret<f32>(0x3F317180), // 6.9313812256e-01f
+      ln2_lo  = reinterpret<f32>(0x3717F7D1), // 9.0580006145e-06f
+      Lg1     = reinterpret<f32>(0x3F2AAAAA), // 0xaaaaaa.0p-24f
+      Lg2     = reinterpret<f32>(0x3ECCCE13), // 0xccce13.0p-25f
+      Lg3     = reinterpret<f32>(0x3E91E9EE), // 0x91e9ee.0p-25f
+      Lg4     = reinterpret<f32>(0x3E789E26), // 0xf89e26.0p-26f
+      Ox1p25f = reinterpret<f32>(0x4C000000);
+
+    let u = reinterpret<u32>(x);
+    let k = 0;
+    if (u < 0x00800000 || <bool>(u >> 31)) {
+      if (u << 1 == 0) return -1 / (x * x);
+      if (u >> 31) return (x - x) / 0;
+      k -= 25;
+      x *= Ox1p25f;
+      u = reinterpret<u32>(x);
+    } else if (u >= 0x7F800000) {
+      return x;
+    } else if (u == 0x3F800000) {
+      return 0;
+    }
+    u += 0x3F800000 - 0x3F3504F3;
+    k += <u32>(<i32>u >> 23) - 0x7F;
+    u = (u & 0x007FFFFF) + 0x3F3504F3;
+    x = reinterpret<f32>(u);
+    let f = x - 1.0;
+    let s = f / (2.0 + f);
+    let z = s * s;
+    let w = z * z;
+    let t1 = w * (Lg2 + w * Lg4);
+    let t2 = z * (Lg1 + w * Lg3);
+    let r = t2 + t1;
+    let hfsq = <f32>0.5 * f * f;
+    let dk = <f32>k;
+    return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
+  }
+}
+
+export function log64(x: f64): f64 { // see: musl/src/math/log.c and SUN COPYRIGHT NOTICE above
+  if (ASC_SHRINK_LEVEL < 1) {
+    return log64_lut(x);
+  } else {
+    const
+      ln2_hi = reinterpret<f64>(0x3FE62E42FEE00000), // 6.93147180369123816490e-01
+      ln2_lo = reinterpret<f64>(0x3DEA39EF35793C76), // 1.90821492927058770002e-10
+      Lg1    = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
+      Lg2    = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
+      Lg3    = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
+      Lg4    = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
+      Lg5    = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
+      Lg6    = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
+      Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
+      Ox1p54 = reinterpret<f64>(0x4350000000000000); // 0x1p54
+
+    let u = reinterpret<u64>(x);
+    let hx = <u32>(u >> 32);
+    let k = 0;
+    if (hx < 0x00100000 || <bool>(hx >> 31)) {
+      if (u << 1 == 0) return -1 / (x * x);
+      if (hx >> 31)    return (x - x) / 0.0;
+      k -= 54;
+      x *= Ox1p54;
+      u = reinterpret<u64>(x);
+      hx = <u32>(u >> 32);
+    } else if (hx >= 0x7FF00000) {
+      return x;
+    } else if (hx == 0x3FF00000 && u << 32 == 0) {
+      return 0;
+    }
+    hx += 0x3FF00000 - 0x3FE6A09E;
+    k += (<i32>hx >> 20) - 0x3FF;
+    hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
+    u = <u64>hx << 32 | (u & 0xFFFFFFFF);
+    x = reinterpret<f64>(u);
+    let f = x - 1.0;
+    let hfsq = 0.5 * f * f;
+    let s = f / (2.0 + f);
+    let z = s * s;
+    let w = z * z;
+    let t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+    let t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+    let r = t2 + t1;
+    let dk = <f64>k;
+    return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
+  }
+}
+
+export function log10_32(x: f32): f32 { // see: musl/src/math/log10f.c and SUN COPYRIGHT NOTICE above
+  const
+    ivln10hi  = reinterpret<f32>(0x3EDE6000), //  4.3432617188e-01f
+    ivln10lo  = reinterpret<f32>(0xB804EAD9), // -3.1689971365e-05f
+    log10_2hi = reinterpret<f32>(0x3E9A2080), //  3.0102920532e-01f
+    log10_2lo = reinterpret<f32>(0x355427DB), //  7.9034151668e-07f
+    Lg1       = reinterpret<f32>(0x3F2AAAAA), //  0xaaaaaa.0p-24f, 0.66666662693f
+    Lg2       = reinterpret<f32>(0x3ECCCE13), //  0xccce13.0p-25f, 0.40000972152f
+    Lg3       = reinterpret<f32>(0x3E91E9EE), //  0x91e9ee.0p-25f, 0.28498786688f
+    Lg4       = reinterpret<f32>(0x3E789E26), //  0xf89e26.0p-26f, 0.24279078841f
+    Ox1p25f   = reinterpret<f32>(0x4C000000); //  0x1p25f
+
+  var ix = reinterpret<u32>(x);
+  var k = 0;
+  if (ix < 0x00800000 || <bool>(ix >> 31)) {
+    if (ix << 1 == 0) return -1 / (x * x);
+    if (ix >> 31) return (x - x) / 0.0;
+    k -= 25;
+    x *= Ox1p25f;
+    ix = reinterpret<u32>(x);
+  } else if (ix >= 0x7F800000) {
+    return x;
+  } else if (ix == 0x3F800000) {
+    return 0;
+  }
+  ix += 0x3F800000 - 0x3F3504F3;
+  k += <i32>(ix >> 23) - 0x7F;
+  ix = (ix & 0x007FFFFF) + 0x3F3504F3;
+  x = reinterpret<f32>(ix);
+  var f = x - 1.0;
+  var s = f / (2.0 + f);
+  var z = s * s;
+  var w = z * z;
+  var t1 = w * (Lg2 + w * Lg4);
+  var t2 = z * (Lg1 + w * Lg3);
+  var r = t2 + t1;
+  var hfsq: f32 = 0.5 * f * f;
+  var hi = f - hfsq;
+  ix = reinterpret<u32>(hi);
+  ix &= 0xFFFFF000;
+  hi = reinterpret<f32>(ix);
+  var lo = f - hi - hfsq + s * (hfsq + r);
+  var dk = <f32>k;
+  return dk * log10_2lo + (lo + hi) * ivln10lo + lo * ivln10hi + hi * ivln10hi + dk * log10_2hi;
+}
+
+export function log10_64(x: f64): f64 { // see: musl/src/math/log10.c and SUN COPYRIGHT NOTICE above
+  const
+    ivln10hi  = reinterpret<f64>(0x3FDBCB7B15200000), // 4.34294481878168880939e-01
+    ivln10lo  = reinterpret<f64>(0x3DBB9438CA9AADD5), // 2.50829467116452752298e-11
+    log10_2hi = reinterpret<f64>(0x3FD34413509F6000), // 3.01029995663611771306e-01
+    log10_2lo = reinterpret<f64>(0x3D59FEF311F12B36), // 3.69423907715893078616e-13
+    Lg1       = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
+    Lg2       = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
+    Lg3       = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
+    Lg4       = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
+    Lg5       = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
+    Lg6       = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
+    Lg7       = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
+    Ox1p54    = reinterpret<f64>(0x4350000000000000); // 0x1p54
+
+  var u = reinterpret<u64>(x);
+  var hx = <u32>(u >> 32);
+  var k = 0;
+  if (hx < 0x00100000 || <bool>(hx >> 31)) {
+    if (u << 1 == 0) return -1 / (x * x);
+    if (hx >> 31) return (x - x) / 0.0;
+    k -= 54;
+    x *= Ox1p54;
+    u = reinterpret<u64>(x);
+    hx = <u32>(u >> 32);
+  } else if (hx >= 0x7FF00000) {
+    return x;
+  } else if (hx == 0x3FF00000 && u << 32 == 0) {
+    return 0;
+  }
+  hx += 0x3FF00000 - 0x3FE6A09E;
+  k += <i32>(hx >> 20) - 0x3FF;
+  hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
+  u = <u64>hx << 32 | (u & 0xFFFFFFFF);
+  x = reinterpret<f64>(u);
+  var f = x - 1.0;
+  var hfsq = 0.5 * f * f;
+  var s = f / (2.0 + f);
+  var z = s * s;
+  var w = z * z;
+  var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+  var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+  var r = t2 + t1;
+  var hi = f - hfsq;
+  u = reinterpret<u64>(hi);
+  u &= 0xFFFFFFFF00000000;
+  hi = reinterpret<f64>(u);
+  var lo = f - hi - hfsq + s * (hfsq + r);
+  var val_hi = hi * ivln10hi;
+  var dk = <f64>k;
+  var y = dk * log10_2hi;
+  var val_lo = dk * log10_2lo + (lo + hi) * ivln10lo + lo * ivln10hi;
+  w = y + val_hi;
+  val_lo += (y - w) + val_hi;
+  return val_lo + w;
+}
+
+export function log1p32(x: f32): f32 { // see: musl/src/math/log1pf.c and SUN COPYRIGHT NOTICE above
+  const
+    ln2_hi = reinterpret<f32>(0x3F317180), // 6.9313812256e-01
+    ln2_lo = reinterpret<f32>(0x3717F7D1), // 9.0580006145e-06
+    Lg1    = reinterpret<f32>(0x3F2AAAAA), // 0xaaaaaa.0p-24f, 0.66666662693f
+    Lg2    = reinterpret<f32>(0x3ECCCE13), // 0xccce13.0p-25f, 0.40000972152f
+    Lg3    = reinterpret<f32>(0x3E91E9EE), // 0x91e9ee.0p-25f, 0.28498786688f
+    Lg4    = reinterpret<f32>(0x3E789E26); // 0xf89e26.0p-26f, 0.24279078841f
+
+  var ix = reinterpret<u32>(x);
+  var c: f32 = 0, f: f32 = 0;
+  var k: i32 = 1;
+  if (ix < 0x3ED413D0 || <bool>(ix >> 31)) {
+    if (ix >= 0xBF800000) {
+      if (x == -1) return x / 0.0;
+      return (x - x) / 0.0;
+    }
+    if (ix << 1 < 0x33800000 << 1) return x;
+    if (ix <= 0xBE95F619) {
+      k = 0;
+      c = 0;
+      f = x;
+    }
+  } else if (ix >= 0x7F800000) return x;
+  if (k) {
+    let uf: f32 = 1 + x;
+    let iu = reinterpret<u32>(uf);
+    iu += 0x3F800000 - 0x3F3504F3;
+    k = <i32>(iu >> 23) - 0x7F;
+    if (k < 25) {
+      c = k >= 2 ? 1 - (uf - x) : x - (uf - 1);
+      c /= uf;
+    } else c = 0;
+    iu = (iu & 0x007FFFFF) + 0x3F3504F3;
+    f = reinterpret<f32>(iu) - 1;
+  }
+  var s = f / (2.0 + f);
+  var z = s * s;
+  var w = z * z;
+  var t1 = w * (Lg2 + w * Lg4);
+  var t2 = z * (Lg1 + w * Lg3);
+  var r = t2 + t1;
+  var hfsq: f32 = 0.5 * f * f;
+  var dk = <f32>k;
+  return s * (hfsq + r) + (dk * ln2_lo + c) - hfsq + f + dk * ln2_hi;
+}
+
+export function log1p64(x: f64): f64 { // see: musl/src/math/log1p.c and SUN COPYRIGHT NOTICE above
+  const
+    ln2_hi = reinterpret<f64>(0x3FE62E42FEE00000), // 6.93147180369123816490e-01
+    ln2_lo = reinterpret<f64>(0x3DEA39EF35793C76), // 1.90821492927058770002e-10
+    Lg1    = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
+    Lg2    = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
+    Lg3    = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
+    Lg4    = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
+    Lg5    = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
+    Lg6    = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
+    Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244); // 1.479819860511658591e-01
+
+  var u = reinterpret<u64>(x);
+  var hx = <u32>(u >> 32);
+  var k = 1;
+  var c = 0.0, f = 0.0;
+  if (hx < 0x3FDA827A || <bool>(hx >> 31)) {
+    if (hx >= 0xBFF00000) {
+      if (x == -1) return x / 0.0;
+      return (x - x) / 0.0;
+    }
+    if (hx << 1 < 0x3CA00000 << 1) return x;
+    if (hx <= 0xBFD2BEC4) {
+      k = 0;
+      c = 0;
+      f = x;
+    }
+  } else if (hx >= 0x7FF00000) return x;
+  if (k) {
+    u = reinterpret<u64>(1 + x);
+    let hu = <u32>(u >> 32);
+    hu += 0x3FF00000 - 0x3FE6A09E;
+    k = <i32>(hu >> 20) - 0x3FF;
+    if (k < 54) {
+      let uf = reinterpret<f64>(u);
+      c = k >= 2 ? 1 - (uf - x) : x - (uf - 1);
+      c /= uf;
+    } else c = 0;
+    hu = (hu & 0x000FFFFF) + 0x3FE6A09E;
+    u = <u64>hu << 32 | (u & 0xFFFFFFFF);
+    f = reinterpret<f64>(u) - 1;
+  }
+  var hfsq = 0.5 * f * f;
+  var s = f / (2.0 + f);
+  var z = s * s;
+  var w = z * z;
+  var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+  var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+  var r = t2 + t1;
+  var dk = <f64>k;
+  return s * (hfsq + r) + (dk * ln2_lo + c) - hfsq + f + dk * ln2_hi;
+}
+
+export function log2_32(x: f32): f32 { // see: musl/src/math/log2f.c and SUN COPYRIGHT NOTICE above
+  if (ASC_SHRINK_LEVEL < 1) {
+    return log2_32_lut(x);
+  } else {
+    const
+      ivln2hi = reinterpret<f32>(0x3FB8B000), //  1.4428710938e+00f
+      ivln2lo = reinterpret<f32>(0xB9389AD4), // -1.7605285393e-04
+      Lg1     = reinterpret<f32>(0x3F2AAAAA), //  0xaaaaaa.0p-24f, 0.66666662693f
+      Lg2     = reinterpret<f32>(0x3ECCCE13), //  0xccce13.0p-25f, 0.40000972152f
+      Lg3     = reinterpret<f32>(0x3E91E9EE), //  0x91e9ee.0p-25f, 0.28498786688f
+      Lg4     = reinterpret<f32>(0x3E789E26), //  0xf89e26.0p-26f, 0.24279078841f
+      Ox1p25f = reinterpret<f32>(0x4C000000); //  0x1p25f
+
+    let ix = reinterpret<u32>(x);
+    let k: i32 = 0;
+    if (ix < 0x00800000 || <bool>(ix >> 31)) {
+      if (ix << 1 == 0) return -1 / (x * x);
+      if (ix >> 31) return (x - x) / 0.0;
+      k -= 25;
+      x *= Ox1p25f;
+      ix = reinterpret<u32>(x);
+    } else if (ix >= 0x7F800000) {
+      return x;
+    } else if (ix == 0x3F800000) {
+      return 0;
+    }
+    ix += 0x3F800000 - 0x3F3504F3;
+    k += <i32>(ix >> 23) - 0x7F;
+    ix = (ix & 0x007FFFFF) + 0x3F3504F3;
+    x = reinterpret<f32>(ix);
+    let f = x - 1.0;
+    let s = f / (2.0 + f);
+    let z = s * s;
+    let w = z * z;
+    let t1 = w * (Lg2 + w * Lg4);
+    let t2 = z * (Lg1 + w * Lg3);
+    let r = t2 + t1;
+    let hfsq: f32 = 0.5 * f * f;
+    let hi = f - hfsq;
+    let u = reinterpret<u32>(hi);
+    u &= 0xFFFFF000;
+    hi = reinterpret<f32>(u);
+    let lo: f32 = f - hi - hfsq + s * (hfsq + r);
+    let dk = <f32>k;
+    return (lo + hi) * ivln2lo + lo * ivln2hi + hi * ivln2hi + dk;
+  }
+}
+
+export function log2_64(x: f64): f64 { // see: musl/src/math/log2.c and SUN COPYRIGHT NOTICE above
+  if (ASC_SHRINK_LEVEL < 1) {
+    return log2_64_lut(x);
+  } else {
+    const
+      ivln2hi = reinterpret<f64>(0x3FF7154765200000), // 1.44269504072144627571e+00
+      ivln2lo = reinterpret<f64>(0x3DE705FC2EEFA200), // 1.67517131648865118353e-10
+      Lg1     = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
+      Lg2     = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
+      Lg3     = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
+      Lg4     = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
+      Lg5     = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
+      Lg6     = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
+      Lg7     = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
+      Ox1p54  = reinterpret<f64>(0x4350000000000000); // 1p54
+
+    let u = reinterpret<u64>(x);
+    let hx = <u32>(u >> 32);
+    let k = 0;
+    if (hx < 0x00100000 || <bool>(hx >> 31)) {
+      if (u << 1 == 0) return -1 / (x * x);
+      if (hx >> 31) return (x - x) / 0.0;
+      k -= 54;
+      x *= Ox1p54;
+      u = reinterpret<u64>(x);
+      hx = <u32>(u >> 32);
+    } else if (hx >= 0x7FF00000) {
+      return x;
+    } else if (hx == 0x3FF00000 && u << 32 == 0) {
+      return 0;
+    }
+    hx += 0x3FF00000 - 0x3FE6A09E;
+    k += <i32>(hx >> 20) - 0x3FF;
+    hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
+    u = <u64>hx << 32 | (u & 0xFFFFFFFF);
+    x = reinterpret<f64>(u);
+    let f = x - 1.0;
+    let hfsq = 0.5 * f * f;
+    let s = f / (2.0 + f);
+    let z = s * s;
+    let w = z * z;
+    let t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+    let t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+    let r = t2 + t1;
+    let hi = f - hfsq;
+    u = reinterpret<u64>(hi);
+    u &= 0xFFFFFFFF00000000;
+    hi = reinterpret<f64>(u);
+    let lo = f - hi - hfsq + s * (hfsq + r);
+    let val_hi = hi * ivln2hi;
+    let val_lo = (lo + hi) * ivln2lo + lo * ivln2hi;
+    let y = <f64>k;
+    w = y + val_hi;
+    val_lo += (y - w) + val_hi;
+    val_hi = w;
+    return val_lo + val_hi;
+  }
+}
+
+export function mod32(x: f32, y: f32): f32 { // see: musl/src/math/fmodf.c
+  if (abs<f32>(y) == 1.0) {
+    // x % 1, x % -1  ==>  sign(x) * abs(x - 1.0 * trunc(x / 1.0))
+    // TODO: move this rule to compiler's optimization pass.
+    // It could be apply for any x % C_pot, where "C_pot" is pow of two const.
+    return copysign<f32>(x - trunc<f32>(x), x);
+  }
+  var ux = reinterpret<u32>(x);
+  var uy = reinterpret<u32>(y);
+  var ex = <i32>(ux >> 23 & 0xFF);
+  var ey = <i32>(uy >> 23 & 0xFF);
+  var sm = ux & 0x80000000;
+  var uy1 = uy << 1;
+  if (uy1 == 0 || ex == 0xFF || isNaN<f32>(y)) {
+    let m = x * y;
+    return m / m;
+  }
+  var ux1 = ux << 1;
+  if (ux1 <= uy1) {
+    return x * f32(ux1 != uy1);
+  }
+  if (!ex) {
+    ex -= clz<u32>(ux << 9);
+    ux <<= 1 - ex;
+  } else {
+    ux &= <u32>-1 >> 9;
+    ux |= 1 << 23;
+  }
+  if (!ey) {
+    ey -= clz<u32>(uy << 9);
+    uy <<= 1 - ey;
+  } else {
+    uy &= <u32>-1 >> 9;
+    uy |= 1 << 23;
+  }
+  while (ex > ey) {
+    if (ux >= uy) {
+      if (ux == uy) return 0 * x;
+      ux -= uy;
+    }
+    ux <<= 1;
+    --ex;
+  }
+  if (ux >= uy) {
+    if (ux == uy) return 0 * x;
+    ux -= uy;
+  }
+  // for (; !(ux >> 23); ux <<= 1) --ex;
+  var shift = <i32>clz<u32>(ux << 8);
+  ex -= shift;
+  ux <<= shift;
+  if (ex > 0) {
+    ux -= 1 << 23;
+    ux |= <u32>ex << 23;
+  } else {
+    ux >>= -ex + 1;
+  }
+  return reinterpret<f32>(ux | sm);
+}
+
+export function mod64(x: f64, y: f64): f64 { // see: musl/src/math/fmod.c
+  if (abs<f64>(y) == 1.0) {
+    // x % 1, x % -1  ==>  sign(x) * abs(x - 1.0 * trunc(x / 1.0))
+    // TODO: move this rule to compiler's optimization pass.
+    // It could be apply for any x % C_pot, where "C_pot" is pow of two const.
+    return copysign<f64>(x - trunc<f64>(x), x);
+  }
+  var ux = reinterpret<u64>(x);
+  var uy = reinterpret<u64>(y);
+  var ex = <i64>(ux >> 52 & 0x7FF);
+  var ey = <i64>(uy >> 52 & 0x7FF);
+  var sx = ux >> 63;
+  var uy1 = uy << 1;
+  if (uy1 == 0 || ex == 0x7FF || isNaN<f64>(y)) {
+    let m = x * y;
+    return m / m;
+  }
+  var ux1 = ux << 1;
+  if (ux1 <= uy1) {
+    return x * f64(ux1 != uy1);
+  }
+  if (!ex) {
+    ex -= clz<i64>(ux << 12);
+    ux <<= 1 - ex;
+  } else {
+    ux &= <u64>-1 >> 12;
+    ux |= 1 << 52;
+  }
+  if (!ey) {
+    ey -= clz<i64>(uy << 12);
+    uy <<= 1 - ey;
+  } else {
+    uy &= <u64>-1 >> 12;
+    uy |= 1 << 52;
+  }
+  while (ex > ey) {
+    if (ux >= uy) {
+      if (ux == uy) return 0 * x;
+      ux -= uy;
+    }
+    ux <<= 1;
+    --ex;
+  }
+  if (ux >= uy) {
+    if (ux == uy) return 0 * x;
+    ux -= uy;
+  }
+  // for (; !(ux >> 52); ux <<= 1) --ex;
+  var shift = clz<i64>(ux << 11);
+  ex -= shift;
+  ux <<= shift;
+  if (ex > 0) {
+    ux -= 1 << 52;
+    ux |= ex << 52;
+  } else {
+    ux >>= -ex + 1;
+  }
+  return reinterpret<f64>(ux | (sx << 63));
 }
