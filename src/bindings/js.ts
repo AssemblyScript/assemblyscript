@@ -1418,5 +1418,5 @@ export function lowerRequiresExportRuntime(type: Type): bool {
   }
   // complex objects lower via internref by reference,
   // while plain objects lower using __new
-  return !isPlainObject(clazz);
+  return isPlainObject(clazz);
 }
