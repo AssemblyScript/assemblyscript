@@ -2522,9 +2522,16 @@ export class Module {
   }
 
   toText(watFormat: bool = true): string {
-    var textPtr = watFormat
-      ? binaryen._BinaryenModuleAllocateAndWriteStackIR(this.ref)
-      : binaryen._BinaryenModuleAllocateAndWriteText(this.ref);
+    var textPtr: usize = 0;
+    if (watFormat) {
+      this.runPasses([
+        'generate-stack-ir',
+        'optimize-stack-ir'
+      ]);
+      textPtr = binaryen._BinaryenModuleAllocateAndWriteStackIR(this.ref);
+    } else {
+      textPtr = binaryen._BinaryenModuleAllocateAndWriteText(this.ref);
+    }
     var text = readString(textPtr);
     if (textPtr) binaryen._free(textPtr);
     return text || "";
