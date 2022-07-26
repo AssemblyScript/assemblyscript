@@ -602,6 +602,8 @@ export declare function _BinaryenModuleOptimize(module: ModuleRef): void;
 export declare function _BinaryenModuleRunPasses(module: ModuleRef, passes: ArrayRef<StringRef>, numPasses: Index): void;
 export declare function _BinaryenModuleAutoDrop(module: ModuleRef): void;
 export declare function _BinaryenModuleAllocateAndWrite(out: ArrayRef<u8>, module: ModuleRef, sourceMapUrl: StringRef): void;
+export declare function _BinaryenModuleAllocateAndWriteText(module: ModuleRef): StringRef;
+export declare function _BinaryenModuleAllocateAndWriteStackIR(module: ModuleRef): StringRef;
 export declare function _BinaryenModuleRead(input: ArrayRef<u8>, inputSize: usize): ModuleRef;
 export declare function _BinaryenModuleInterpret(module: ModuleRef): void;
 export declare function _BinaryenModuleAddDebugInfoFileName(module: ModuleRef, filename: StringRef): Index;

@@ -58,15 +58,13 @@ export namespace TypeRef {
   export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
+  export const Funcref = binaryen._BinaryenTypeFuncref();
+  export const Externref = binaryen._BinaryenTypeExternref();
+  export const Anyref = binaryen._BinaryenTypeAnyref();
+  export const Eqref = binaryen._BinaryenTypeEqref();
+  export const I31ref = binaryen._BinaryenTypeI31ref();
+  export const Dataref = binaryen._BinaryenTypeDataref();
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
-
-  // Will define in Module's constructor
-  export let Funcref: TypeRef = -1;
-  export let Externref: TypeRef = -1;
-  export let Anyref: TypeRef = -1;
-  export let Eqref: TypeRef = -1;
-  export let I31ref: TypeRef = -1;
-  export let Dataref: TypeRef = -1;
 }
 
 /** Binaryen feature constants. */
@@ -1104,14 +1102,6 @@ export class Module {
   ) {
     assert(sizeType == TypeRef.I32 || sizeType == TypeRef.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
-
-    // cache heap types
-    TypeRef.Funcref = binaryen._BinaryenTypeFuncref();
-    TypeRef.Externref = binaryen._BinaryenTypeExternref();
-    TypeRef.Anyref = binaryen._BinaryenTypeAnyref();
-    TypeRef.Eqref = binaryen._BinaryenTypeEqref();
-    TypeRef.I31ref = binaryen._BinaryenTypeI31ref();
-    TypeRef.Dataref = binaryen._BinaryenTypeDataref();
   }
 
   private lit: usize;
@@ -2532,7 +2522,12 @@ export class Module {
   }
 
   toText(watFormat: bool = true): string {
-    throw new Error("not implemented"); // JS glue overrides this
+    var textPtr = watFormat
+      ? binaryen._BinaryenModuleAllocateAndWriteStackIR(this.ref)
+      : binaryen._BinaryenModuleAllocateAndWriteText(this.ref);
+    var text = readString(textPtr);
+    if (textPtr) binaryen._free(textPtr);
+    return text || "";
   }
 
   private cachedStringsToPointers: Map<string,usize> = new Map();

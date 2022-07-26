@@ -4,19 +4,6 @@
  */
 
 import binaryen from "../../lib/binaryen.js";
-import { Module } from "../module.ts";
-
-Module.prototype.toText = function toText(watFormat = true) {
-  if (watFormat) {
-    // NOTE: Conversion to StackIR can yield conversion artifacts like sequences
-    // of unreachable statements not actually emitted by the compiler. Optimizing
-    // StackIR removes these again, but may also suppress useless code emitted by
-    // the compiler that's then no longer visible in tests. Both not ideal.
-    return binaryen.wrapModule(this.ref).emitStackIR(/* optimize-stack-ir */ true);
-  } else {
-    return binaryen.wrapModule(this.ref).emitText();
-  }
-};
 
 export const {
   _BinaryenTypeCreate,
@@ -582,6 +569,8 @@ export const {
   _BinaryenModuleRunPasses,
   _BinaryenModuleAutoDrop,
   _BinaryenModuleAllocateAndWrite,
+  _BinaryenModuleAllocateAndWriteText,
+  _BinaryenModuleAllocateAndWriteStackIR,
   _BinaryenModuleRead,
   _BinaryenModuleInterpret,
   _BinaryenModuleAddDebugInfoFileName,
