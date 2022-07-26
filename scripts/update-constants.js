@@ -11,10 +11,6 @@ const srcfile = path.join(__dirname, "..", "src", "module.ts");
 var src = fs.readFileSync(srcfile, "utf8")
   .replace(/(?:enum|namespace) (\w+) \{([^}]*)\}/g, function($0) {
     return $0.replace(/(\w+)[ ]+=[ ]+([^,;\n]+)/g, function($0, key, val) {
-      // ignore binaryen types which should cached in runtime
-      if (/\bignore\b/.test(val)) {
-        return $0;
-      }
       var match = val.match(/\b(_(?:Binaryen|Relooper|ExpressionRunner)\w+)\b/);
       if (match) {
         let fn = match[1];
