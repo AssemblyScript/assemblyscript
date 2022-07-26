@@ -58,13 +58,15 @@ export namespace TypeRef {
   export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
-  export let Funcref: TypeRef = -1 /* ignore */;
-  export let Externref: TypeRef = -1 /* ignore */;
-  export let Anyref: TypeRef = -1 /* ignore */;
-  export let Eqref: TypeRef = -1 /* ignore */;
-  export let I31ref: TypeRef = -1 /* ignore */;
-  export let Dataref: TypeRef = -1 /* ignore */;
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
+
+  // Will define in Module's constructor
+  export let Funcref: TypeRef = -1;
+  export let Externref: TypeRef = -1;
+  export let Anyref: TypeRef = -1;
+  export let Eqref: TypeRef = -1;
+  export let I31ref: TypeRef = -1;
+  export let Dataref: TypeRef = -1;
 }
 
 /** Binaryen feature constants. */
