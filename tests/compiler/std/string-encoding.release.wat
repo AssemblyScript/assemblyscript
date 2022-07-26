@@ -1615,13 +1615,13 @@
   local.get $2
  )
  (func $~lib/string/String.UTF8.encode@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $2of2
+  block $1of2
    block $0of2
     block $outOfRange
      global.get $~argumentsLength
      i32.const 1
      i32.sub
-     br_table $0of2 $2of2 $2of2 $outOfRange
+     br_table $0of2 $1of2 $1of2 $outOfRange
     end
     unreachable
    end

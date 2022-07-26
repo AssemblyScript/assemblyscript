@@ -1446,10 +1446,9 @@
    call_indirect $0 (type $i32_=>_i32)
    drop
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
    i32.const 123
    i32.store
-   local.get $0
+   global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer

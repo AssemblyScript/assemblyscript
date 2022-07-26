@@ -2355,6 +2355,7 @@ export class Module {
         passes.push("merge-blocks");
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
+        passes.push("gufa-optimizing");
       }
       if (optimizeLevel >= 3) {
         passes.push("simplify-locals-nostructure");
@@ -2365,7 +2366,6 @@ export class Module {
         passes.push("licm");
         passes.push("merge-locals");
         passes.push("reorder-locals");
-        passes.push("gufa-optimizing");
         passes.push("dae-optimizing");
       }
       passes.push("optimize-instructions");

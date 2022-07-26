@@ -43,12 +43,12 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  block $2of2
+  block $0of2
    block $outOfRange
     global.get $~argumentsLength
     i32.const 3
     i32.sub
-    br_table $2of2 $2of2 $2of2 $outOfRange
+    br_table $0of2 $0of2 $0of2 $outOfRange
    end
    unreachable
   end
