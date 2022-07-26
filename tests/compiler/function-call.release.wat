@@ -65,7 +65,7 @@
   i32.add
  )
  (func $start:function-call~fn2|4 (param $0 i32) (result i32)
-  local.get $0
+  i32.const 1
  )
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
@@ -1267,9 +1267,7 @@
   nop
  )
  (func $function-call/Foo#fnRet (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $1
-  local.get $2
-  i32.add
+  i32.const 3
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $folding-inner0
@@ -1363,16 +1361,7 @@
    i32.const 1248
    i32.load
    call_indirect $0 (type $i32_=>_i32)
-   i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1152
-    i32.const 20
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
+   drop
    memory.size
    i32.const 16
    i32.shl
@@ -1439,16 +1428,7 @@
    i32.const 1712
    i32.load
    call_indirect $0 (type $i32_=>_i32)
-   i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1152
-    i32.const 33
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
+   drop
    global.get $~lib/memory/__stack_pointer
    global.get $function-call/foo
    local.tee $0

@@ -87,12 +87,10 @@
   i32.const 1
  )
  (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.add
+  i32.const 3
  )
  (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
+  i32.const 1
  )
  (func $start:function-expression~anonymous|6 (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
@@ -1192,7 +1190,7 @@
   end
  )
  (func $function-expression/semanticallyAnonymous~fnDecl|0 (param $0 i64) (result i64)
-  local.get $0
+  unreachable
  )
  (func $function-expression/semanticallyAnonymous
   (local $0 i32)

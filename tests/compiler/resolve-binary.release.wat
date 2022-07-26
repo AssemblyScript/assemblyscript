@@ -2017,9 +2017,9 @@
     i32.add
    end
   end
-  local.set $2
+  local.set $8
   loop $while-continue|0
-   local.get $2
+   local.get $8
    i32.const 0
    i32.gt_s
    if
@@ -2035,7 +2035,7 @@
              block $case2|1
               block $case1|1
                block $case0|1
-                local.get $2
+                local.get $8
                 i32.const 1
                 i32.sub
                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case0|1 $case10|1
@@ -2043,7 +2043,7 @@
                local.get $5
                i32.const 1000000000
                i32.div_u
-               local.set $7
+               local.set $2
                local.get $5
                i32.const 1000000000
                i32.rem_u
@@ -2053,7 +2053,7 @@
               local.get $5
               i32.const 100000000
               i32.div_u
-              local.set $7
+              local.set $2
               local.get $5
               i32.const 100000000
               i32.rem_u
@@ -2063,7 +2063,7 @@
              local.get $5
              i32.const 10000000
              i32.div_u
-             local.set $7
+             local.set $2
              local.get $5
              i32.const 10000000
              i32.rem_u
@@ -2073,7 +2073,7 @@
             local.get $5
             i32.const 1000000
             i32.div_u
-            local.set $7
+            local.set $2
             local.get $5
             i32.const 1000000
             i32.rem_u
@@ -2083,7 +2083,7 @@
            local.get $5
            i32.const 100000
            i32.div_u
-           local.set $7
+           local.set $2
            local.get $5
            i32.const 100000
            i32.rem_u
@@ -2093,7 +2093,7 @@
           local.get $5
           i32.const 10000
           i32.div_u
-          local.set $7
+          local.set $2
           local.get $5
           i32.const 10000
           i32.rem_u
@@ -2103,7 +2103,7 @@
          local.get $5
          i32.const 1000
          i32.div_u
-         local.set $7
+         local.set $2
          local.get $5
          i32.const 1000
          i32.rem_u
@@ -2113,7 +2113,7 @@
         local.get $5
         i32.const 100
         i32.div_u
-        local.set $7
+        local.set $2
         local.get $5
         i32.const 100
         i32.rem_u
@@ -2123,7 +2123,7 @@
        local.get $5
        i32.const 10
        i32.div_u
-       local.set $7
+       local.set $2
        local.get $5
        i32.const 10
        i32.rem_u
@@ -2131,39 +2131,39 @@
        br $break|1
       end
       local.get $5
-      local.set $7
+      local.set $2
       i32.const 0
       local.set $5
       br $break|1
      end
      i32.const 0
-     local.set $7
+     local.set $2
     end
+    local.get $2
     local.get $4
-    local.get $7
     i32.or
     if
      local.get $4
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
-     local.get $8
+     local.get $7
      i32.const 1
      i32.shl
      i32.const 9728
      i32.add
-     local.get $7
+     local.get $2
      i32.const 65535
      i32.and
      i32.const 48
      i32.add
      i32.store16
     end
-    local.get $2
+    local.get $8
     i32.const 1
     i32.sub
-    local.set $2
+    local.set $8
     local.get $3
     local.get $5
     i64.extend_i32_u
@@ -2176,10 +2176,10 @@
     i64.ge_u
     if
      global.get $~lib/util/number/_K
-     local.get $2
+     local.get $8
      i32.add
      global.set $~lib/util/number/_K
-     local.get $2
+     local.get $8
      i32.const 2
      i32.shl
      i32.const 10656
@@ -2266,11 +2266,11 @@
    i64.ne
    if
     local.get $4
-    local.tee $5
+    local.tee $2
     i32.const 1
     i32.add
     local.set $4
-    local.get $5
+    local.get $2
     i32.const 1
     i32.shl
     i32.const 9728
@@ -2283,10 +2283,10 @@
     i32.add
     i32.store16
    end
-   local.get $2
+   local.get $8
    i32.const 1
    i32.sub
-   local.set $2
+   local.set $8
    local.get $0
    local.get $12
    i64.and
@@ -2296,14 +2296,14 @@
    br_if $while-continue|4
   end
   global.get $~lib/util/number/_K
-  local.get $2
+  local.get $8
   i32.add
   global.set $~lib/util/number/_K
   local.get $6
   local.set $0
   local.get $9
   i32.const 0
-  local.get $2
+  local.get $8
   i32.sub
   i32.const 2
   i32.shl
