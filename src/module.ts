@@ -58,12 +58,12 @@ export namespace TypeRef {
   export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
-  export const Funcref: TypeRef = binaryen._BinaryenTypeFuncref();
-  export const Externref: TypeRef = binaryen._BinaryenTypeExternref();
-  export const Anyref: TypeRef = binaryen._BinaryenTypeAnyref();
-  export const Eqref: TypeRef = binaryen._BinaryenTypeEqref();
-  export const I31ref: TypeRef = binaryen._BinaryenTypeI31ref();
-  export const Dataref: TypeRef = binaryen._BinaryenTypeDataref();
+  export let Funcref: TypeRef = -1 /* ignore */;
+  export let Externref: TypeRef = -1 /* ignore */;
+  export let Anyref: TypeRef = -1 /* ignore */;
+  export let Eqref: TypeRef = -1 /* ignore */;
+  export let I31ref: TypeRef = -1 /* ignore */;
+  export let Dataref: TypeRef = -1 /* ignore */;
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
@@ -1102,6 +1102,14 @@ export class Module {
   ) {
     assert(sizeType == TypeRef.I32 || sizeType == TypeRef.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
+
+    // cache heap types
+    TypeRef.Funcref = binaryen._BinaryenTypeFuncref();
+    TypeRef.Externref = binaryen._BinaryenTypeExternref();
+    TypeRef.Anyref = binaryen._BinaryenTypeAnyref();
+    TypeRef.Eqref = binaryen._BinaryenTypeEqref();
+    TypeRef.I31ref = binaryen._BinaryenTypeI31ref();
+    TypeRef.Dataref = binaryen._BinaryenTypeDataref();
   }
 
   private lit: usize;
