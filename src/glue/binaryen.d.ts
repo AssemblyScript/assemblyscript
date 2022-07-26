@@ -38,6 +38,13 @@ export declare function _BinaryenTypeCreate(types: ArrayRef<TypeRef>, numTypes: 
 export declare function _BinaryenTypeArity(type: TypeRef): u32;
 export declare function _BinaryenTypeExpand(type: TypeRef, typesOut: ArrayRef<TypeRef>): void;
 
+export declare function _BinaryenTypeFuncref(): TypeRef;
+export declare function _BinaryenTypeExternref(): TypeRef;
+export declare function _BinaryenTypeAnyref(): TypeRef;
+export declare function _BinaryenTypeEqref(): TypeRef;
+export declare function _BinaryenTypeI31ref(): TypeRef;
+export declare function _BinaryenTypeDataref(): TypeRef;
+
 export declare function _BinaryenModuleCreate(): ModuleRef;
 export declare function _BinaryenModuleDispose(module: ModuleRef): void;
 

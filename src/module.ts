@@ -58,12 +58,12 @@ export namespace TypeRef {
   export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
-  export const Funcref: TypeRef = 7 /* _BinaryenTypeFuncref */;
-  export const Externref: TypeRef = 8 /* _BinaryenTypeExternref */;
-  export const Anyref: TypeRef = 8 /* _BinaryenTypeAnyref */;
-  export const Eqref: TypeRef = 9 /* _BinaryenTypeEqref */;
-  export const I31ref: TypeRef = 10 /* _BinaryenTypeI31ref */;
-  export const Dataref: TypeRef = 11 /* _BinaryenTypeDataref */;
+  export const Funcref: TypeRef = binaryen._BinaryenTypeFuncref();
+  export const Externref: TypeRef = binaryen._BinaryenTypeExternref();
+  export const Anyref: TypeRef = binaryen._BinaryenTypeAnyref();
+  export const Eqref: TypeRef = binaryen._BinaryenTypeEqref();
+  export const I31ref: TypeRef = binaryen._BinaryenTypeI31ref();
+  export const Dataref: TypeRef = binaryen._BinaryenTypeDataref();
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
@@ -85,7 +85,7 @@ export enum FeatureFlags {
   FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
-  All = 57343 /* _BinaryenFeatureAll */
+  All = 122879 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
