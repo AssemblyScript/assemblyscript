@@ -11,7 +11,7 @@ const srcfile = path.join(__dirname, "..", "src", "module.ts");
 var src = fs.readFileSync(srcfile, "utf8")
   .replace(/(?:enum|namespace) (\w+) \{([^}]*)\}/g, function($0) {
     return $0.replace(/(\w+)[ ]+=[ ]+([^,;\n]+)/g, function($0, key, val) {
-      // ignore binaryen types which should cacheed in runtime
+      // ignore values which has runtime assignments
       if (val.startsWith("binaryen.")) {
         return $0;
       }
