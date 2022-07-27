@@ -3114,7 +3114,7 @@ function allocU8Array(u8s: Uint8Array | null): usize {
   var len = u8s.length;
   var ptr = binaryen._malloc(len);
   for (let i = 0; i < len; ++i) {
-    binaryen.__i32_store8(ptr + i, u8s[i]);
+    binaryen.__i32_store8(ptr + i, unchecked(u8s[i]));
   }
   return ptr;
 }
@@ -3125,7 +3125,7 @@ function allocI32Array(i32s: i32[] | null): usize {
   var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
   for (let i = 0; i < len; ++i) {
-    let val = i32s[i];
+    let val = unchecked(i32s[i]);
     binaryen.__i32_store(idx, val);
     idx += 4;
   }
@@ -3138,7 +3138,7 @@ function allocU32Array(u32s: u32[] | null): usize {
   var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
   for (let i = 0; i < len; ++i) {
-    let val = u32s[i];
+    let val = unchecked(u32s[i]);
     binaryen.__i32_store(idx, val);
     idx += 4;
   }
@@ -3153,7 +3153,7 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
   var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
   for (let i = 0, k = len; i < k; ++i) {
-    let val = ptrs[i];
+    let val = unchecked(ptrs[i]);
     binaryen.__i32_store(idx, <i32>val);
     idx += 4;
   }
@@ -3224,25 +3224,41 @@ function allocString(str: string | null): usize {
 function readBuffer(ptr: usize, len: i32): Uint8Array {
   var ret = new Uint8Array(len);
   for (let i = 0; i < len; ++i) {
-    ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
+    unchecked(ret[i] = binaryen.__i32_load8_u(ptr + <usize>i));
   }
   return ret;
 }
 
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
-  var arr = new Array<i32>();
   // the following is based on Emscripten's UTF8ArrayToString
   var cp: u32;
   var u1: u32, u2: u32, u3: u32;
-  while (cp = binaryen.__i32_load8_u(ptr++)) {
+  var len: u32 = 0, mask: u32 = 0;
+  var end = ptr;
+
+  while (cp = binaryen.__i32_load8_u(end++)) mask |= cp;
+
+  var len = end - ptr - 1;
+  var arr = new Array<i32>(len);
+
+  if (mask <= 0x7F) {
+    // fast ASCII path
+    for (let i = 0; i < len; i++) {
+      let cp = binaryen.__i32_load8_u(ptr++);
+      unchecked(arr[i] = cp);
+    }
+    return String.fromCharCodes(arr);
+  }
+  for (let i = 0; i < len; i++) {
+    let cp = binaryen.__i32_load8_u(ptr++);
     if (!(cp & 0x80)) {
-      arr.push(cp);
+      unchecked(arr[i] = cp);
       continue;
     }
     u1 = binaryen.__i32_load8_u(ptr++) & 63;
     if ((cp & 0xE0) == 0xC0) {
-      arr.push(((cp & 31) << 6) | u1);
+      unchecked(arr[i] = ((cp & 31) << 6) | u1);
       continue;
     }
     u2 = binaryen.__i32_load8_u(ptr++) & 63;
@@ -3257,11 +3273,11 @@ export function readString(ptr: usize): string | null {
       }
     }
     if (cp < 0x10000) {
-      arr.push(cp);
+      unchecked(arr[i] = cp);
     } else {
       let ch = cp - 0x10000;
-      arr.push(SURROGATE_HIGH | (ch >>> 10));
-      arr.push(SURROGATE_LOW | (ch & 0x3FF));
+      unchecked(arr[i  ] = SURROGATE_HIGH | (ch >>> 10));
+      unchecked(arr[i++] = SURROGATE_LOW | (ch & 0x3FF));
     }
   }
   // TODO: implement and use String.fromCodePoints
