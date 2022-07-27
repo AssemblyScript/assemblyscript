@@ -3231,12 +3231,8 @@ function readBuffer(ptr: usize, len: i32): Uint8Array {
 
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
-  // the following is based on Emscripten's UTF8ArrayToString
-  var cp: u32;
-  var u1: u32, u2: u32, u3: u32;
-  var len: u32 = 0, mask: u32 = 0;
-  var end = ptr;
 
+  var cp: u32, mask: u32 = 0, end = ptr;
   while (cp = binaryen.__i32_load8_u(end++)) mask |= cp;
 
   var len = end - ptr - 1;
@@ -3250,6 +3246,8 @@ export function readString(ptr: usize): string | null {
     }
     return String.fromCharCodes(arr);
   }
+
+  var u1: u32, u2: u32, u3: u32;
   for (let i = 0; i < len; i++) {
     cp = binaryen.__i32_load8_u(ptr++);
     if (!(cp & 0x80)) {
