@@ -3239,7 +3239,7 @@ export function readString(ptr: usize): string | null {
   var arr = new Array<i32>(len);
 
   if (mask <= 0x7F) {
-    // fast ASCII path
+    // fast ascii-only path
     for (let i: u32 = 0; i < len; ++i) {
       cp = binaryen.__i32_load8_u(ptr++);
       unchecked(arr[i] = cp);
