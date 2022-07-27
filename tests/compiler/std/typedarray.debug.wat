@@ -23239,25 +23239,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -23354,25 +23350,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -23459,25 +23451,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -23558,25 +23546,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -23661,25 +23645,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -23726,25 +23706,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -23818,25 +23794,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -23883,25 +23855,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -23998,25 +23966,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24103,25 +24067,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24198,25 +24158,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24301,25 +24257,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24366,25 +24318,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24458,25 +24406,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24524,25 +24468,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24645,25 +24585,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24754,25 +24690,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24872,25 +24804,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -24978,25 +24906,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25044,25 +24968,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25158,25 +25078,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25270,25 +25186,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25387,25 +25299,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25492,25 +25400,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25587,25 +25491,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25692,25 +25592,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25784,25 +25680,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25849,25 +25741,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -25943,25 +25831,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26060,25 +25944,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26165,25 +26045,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26260,25 +26136,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26365,25 +26237,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26457,25 +26325,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26522,25 +26386,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint16Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint16Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26614,25 +26474,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26698,25 +26554,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26803,25 +26655,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -26898,25 +26746,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27003,25 +26847,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27097,25 +26937,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27191,25 +27027,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27283,25 +27115,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27371,25 +27199,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27476,25 +27300,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27571,25 +27391,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27676,25 +27492,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27770,25 +27582,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27864,25 +27672,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -27958,25 +27762,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28075,25 +27875,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28178,25 +27974,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28244,25 +28036,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28349,25 +28137,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28443,25 +28227,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28537,25 +28317,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Int64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Int64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28631,25 +28407,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28748,25 +28520,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28851,25 +28619,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -28917,25 +28681,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29022,25 +28782,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29116,25 +28872,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29210,25 +28962,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29304,25 +29052,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29416,25 +29160,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29481,25 +29221,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29577,25 +29313,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29673,25 +29405,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29769,25 +29497,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float32Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float32Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29865,25 +29589,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -29979,25 +29699,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -30076,25 +29792,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -30172,25 +29884,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -30268,25 +29976,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -30364,25 +30068,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Float64Array#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Float64Array#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -30461,25 +30161,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -30570,25 +30266,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -30686,25 +30378,21 @@
   local.get $3
   i32.const 0
   i32.lt_s
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1943
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
+  if (result i32)
+   i32.const 1
+  else
+   local.get $6
+   local.get $3
+   i32.add
+   local.get $5
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.gt_s
   end
-  local.get $6
-  local.get $3
-  i32.add
-  local.get $5
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.gt_s
   if
    i32.const 336
    i32.const 608
-   i32.const 1944
-   i32.const 43
+   i32.const 1942
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end

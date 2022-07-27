@@ -1936,18 +1936,15 @@ function SET<
   if (isReference<U>()) {
     ERROR(E_NOTIMPLEMENTED);
   }
-
   let sourceLen = source.length;
-
   // Uncaught RangeError: offset is out of bounds
-  if (offset < 0) throw new RangeError(E_INDEXOUTOFRANGE);
-  if (sourceLen + offset > target.length) throw new RangeError(E_INDEXOUTOFRANGE);
-
+  if (offset < 0 || sourceLen + offset > target.length) {
+    throw new RangeError(E_INDEXOUTOFRANGE);
+  }
   // @ts-ignore: dataStart
   var targetStart = target.dataStart + (<usize>offset << alignof<T>());
   // @ts-ignore: dataStart
   var sourceStart = source.dataStart;
-
   // if the types align and match, use memory.copy() instead of manual loop
   if (
     isInteger<T>() == isInteger<U>() &&
