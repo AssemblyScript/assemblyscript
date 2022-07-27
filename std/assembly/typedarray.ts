@@ -1949,36 +1949,37 @@ function SET<
   if (
     isInteger<T>() == isInteger<U>() &&
     alignof<T>() == alignof<U>() &&
-    !(target instanceof Uint8ClampedArray && isSigned<U>())
+    !(isSigned<U>() && target instanceof Uint8ClampedArray)
   ) {
     memory.copy(targetStart, sourceStart, <usize>sourceLen << alignof<U>());
   } else {
     for (let i = 0; i < sourceLen; i++) {
+      let ptr = targetStart + (<usize>i << alignof<T>());
+      let value = load<U>(sourceStart + (<usize>i << alignof<U>()));
       // if TArray is Uint8ClampedArray, then values must be clamped
       if (target instanceof Uint8ClampedArray) {
         if (isFloat<U>()) {
-          let value = load<U>(sourceStart + (<usize>i << alignof<U>()));
           store<T>(
-            targetStart + (<usize>i << alignof<T>()),
+            ptr,
+            // @ts-ignore: cast to T is valid for numeric types here
             isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : <T>0
           );
         } else {
-          let value = load<U>(sourceStart + (<usize>i << alignof<U>()));
           if (!isSigned<U>()) {
             store<T>(
-              targetStart + (<usize>i << alignof<T>()),
+              ptr,
               // @ts-ignore: cast to T is valid for numeric types here
               min<U>(255, value)
             );
           } else if (sizeof<T>() <= 4) {
             store<T>(
-              targetStart + (<usize>i << alignof<T>()),
+              ptr,
               // @ts-ignore: cast to T is valid for numeric types here
               ~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value)
             );
           } else {
             store<T>(
-              targetStart + (<usize>i << alignof<T>()),
+              ptr,
               // @ts-ignore: cast to T is valid for numeric types here
               ~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value)
             );
@@ -1986,14 +1987,13 @@ function SET<
         }
         // if U is a float, then casting float to int must include a finite check
       } else if (isFloat<U>() && !isFloat<T>()) {
-        let value = load<U>(sourceStart + (<usize>i << alignof<U>()));
         // @ts-ignore: cast to T is valid for numeric types here
-        store<T>(targetStart + (<usize>i << alignof<T>()), isFinite<U>(value) ? <T>value : 0);
+        store<T>(ptr, isFinite<U>(value) ? <T>value : 0);
       } else if (isFloat<T>() && !isFloat<U>()) {
         // @ts-ignore: In this case the <T> conversion is required
-        store<T>(targetStart + (<usize>i << alignof<T>()), <T>load<U>(sourceStart + (<usize>i << alignof<U>())));
+        store<T>(ptr, <T>value);
       } else {
-        store<T>(targetStart + (<usize>i << alignof<T>()), load<U>(sourceStart + (<usize>i << alignof<U>())));
+        store<T>(ptr, value);
       }
     }
   }

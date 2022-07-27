@@ -23225,6 +23225,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -23280,23 +23282,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 0
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     i32.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store8
     local.get $9
     i32.const 1
@@ -23335,7 +23341,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -23391,30 +23398,32 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
+    local.set $12
     i32.const 0
-    i32.shl
-    i32.add
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f32_s
     else
      i32.const 0
@@ -23437,6 +23446,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -23492,23 +23503,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 0
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     i64.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i64.store8
     local.get $9
     i32.const 1
@@ -23531,7 +23546,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -23587,30 +23603,32 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
+    local.set $12
     i32.const 0
-    i32.shl
-    i32.add
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f64_s
     else
      i32.const 0
@@ -23692,6 +23710,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -23747,23 +23767,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 0
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 1
     i32.shl
     i32.add
     i32.load16_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store8
     local.get $9
     i32.const 1
@@ -23841,6 +23865,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -23896,23 +23922,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 0
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     i32.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store8
     local.get $9
     i32.const 1
@@ -23951,7 +23981,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -24007,30 +24038,32 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
+    local.set $12
     i32.const 0
-    i32.shl
-    i32.add
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f32_u
     else
      i32.const 0
@@ -24053,6 +24086,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -24108,23 +24143,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 0
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     i64.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i64.store8
     local.get $9
     i32.const 1
@@ -24143,7 +24182,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -24199,30 +24239,32 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
+    local.set $12
     i32.const 0
-    i32.shl
-    i32.add
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f64_u
     else
      i32.const 0
@@ -24304,6 +24346,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -24359,23 +24403,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 0
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 1
     i32.shl
     i32.add
     i32.load16_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store8
     local.get $9
     i32.const 1
@@ -24454,6 +24502,7 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -24509,17 +24558,23 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     i32.load
-    local.set $11
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 0
+    drop
     i32.const 1
     i32.eqz
     drop
@@ -24527,22 +24582,18 @@
     i32.const 4
     i32.le_u
     drop
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
     local.get $11
+    local.get $12
     i32.const 31
     i32.shr_s
     i32.const -1
     i32.xor
     i32.const 255
-    local.get $11
+    local.get $12
     i32.sub
     i32.const 31
     i32.shr_s
-    local.get $11
+    local.get $12
     i32.or
     i32.and
     i32.store8
@@ -24570,7 +24621,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -24626,31 +24678,33 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
+    i32.const 0
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 1
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i32)
      f32.const 0
      f32.const 255
-     local.get $11
+     local.get $12
      f32.min
      f32.max
      i32.trunc_sat_f32_u
@@ -24675,7 +24729,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i64)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -24731,17 +24786,23 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     i64.load
-    local.set $11
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 0
+    drop
     i32.const 1
     i32.eqz
     drop
@@ -24749,12 +24810,8 @@
     i32.const 4
     i32.le_u
     drop
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
     local.get $11
+    local.get $12
     i32.wrap_i64
     i32.const 31
     i32.shr_s
@@ -24762,13 +24819,13 @@
     i32.xor
     i64.extend_i32_s
     i32.const 255
-    local.get $11
+    local.get $12
     i32.wrap_i64
     i32.sub
     i32.const 31
     i32.shr_s
     i64.extend_i32_s
-    local.get $11
+    local.get $12
     i64.or
     i64.and
     i64.store8
@@ -24789,7 +24846,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -24845,31 +24903,33 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
+    i32.const 0
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 1
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i32)
      f64.const 0
      f64.const 255
-     local.get $11
+     local.get $12
      f64.min
      f64.max
      i32.trunc_sat_f64_u
@@ -24954,6 +25014,7 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -25009,17 +25070,23 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 1
     i32.shl
     i32.add
     i32.load16_s
-    local.set $11
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 0
+    drop
     i32.const 1
     i32.eqz
     drop
@@ -25027,22 +25094,18 @@
     i32.const 4
     i32.le_u
     drop
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
     local.get $11
+    local.get $12
     i32.const 31
     i32.shr_s
     i32.const -1
     i32.xor
     i32.const 255
-    local.get $11
+    local.get $12
     i32.sub
     i32.const 31
     i32.shr_s
-    local.get $11
+    local.get $12
     i32.or
     i32.and
     i32.store8
@@ -25064,6 +25127,7 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -25118,17 +25182,23 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_s
-    local.set $11
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 0
+    drop
     i32.const 1
     i32.eqz
     drop
@@ -25136,22 +25206,18 @@
     i32.const 4
     i32.le_u
     drop
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
     local.get $11
+    local.get $12
     i32.const 31
     i32.shr_s
     i32.const -1
     i32.xor
     i32.const 255
-    local.get $11
+    local.get $12
     i32.sub
     i32.const 31
     i32.shr_s
-    local.get $11
+    local.get $12
     i32.or
     i32.and
     i32.store8
@@ -25172,6 +25238,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -25227,23 +25295,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 1
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     i32.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store16
     local.get $9
     i32.const 1
@@ -25284,7 +25356,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -25340,30 +25413,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 1
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 1
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f32_s
     else
      i32.const 0
@@ -25386,6 +25461,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -25441,23 +25518,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 1
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     i64.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i64.store16
     local.get $9
     i32.const 1
@@ -25476,7 +25557,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -25532,30 +25614,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 1
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 1
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f64_s
     else
      i32.const 0
@@ -25578,6 +25662,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -25633,23 +25719,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 1
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_u
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store16
     local.get $9
     i32.const 1
@@ -25727,6 +25817,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -25782,23 +25874,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 1
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store16
     local.get $9
     i32.const 1
@@ -25817,6 +25913,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -25872,23 +25970,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 1
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     i32.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store16
     local.get $9
     i32.const 1
@@ -25929,7 +26031,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -25985,30 +26088,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 1
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 1
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f32_u
     else
      i32.const 0
@@ -26031,6 +26136,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -26086,23 +26193,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 1
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     i64.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i64.store16
     local.get $9
     i32.const 1
@@ -26121,7 +26232,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -26177,30 +26289,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 1
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 1
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f64_u
     else
      i32.const 0
@@ -26223,6 +26337,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -26278,23 +26394,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 1
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_u
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store16
     local.get $9
     i32.const 1
@@ -26372,6 +26492,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -26427,23 +26549,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 1
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store16
     local.get $9
     i32.const 1
@@ -26539,7 +26665,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -26595,30 +26722,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f32_s
     else
      i32.const 0
@@ -26641,6 +26770,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -26696,23 +26827,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 2
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     i64.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i64.store32
     local.get $9
     i32.const 1
@@ -26731,7 +26866,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -26787,30 +26923,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f64_s
     else
      i32.const 0
@@ -26833,6 +26971,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -26888,23 +27028,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 2
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_u
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store
     local.get $9
     i32.const 1
@@ -26923,6 +27067,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -26978,23 +27124,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 2
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 1
     i32.shl
     i32.add
     i32.load16_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store
     local.get $9
     i32.const 1
@@ -27013,6 +27163,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -27068,23 +27220,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 2
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store
     local.get $9
     i32.const 1
@@ -27184,7 +27340,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -27240,30 +27397,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f32_u
     else
      i32.const 0
@@ -27286,6 +27445,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -27341,23 +27502,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 2
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     i64.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i64.store32
     local.get $9
     i32.const 1
@@ -27376,7 +27541,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -27432,30 +27598,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i32)
-     local.get $11
+     local.get $12
      i32.trunc_sat_f64_u
     else
      i32.const 0
@@ -27478,6 +27646,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -27533,23 +27703,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 2
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_u
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store
     local.get $9
     i32.const 1
@@ -27568,6 +27742,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -27623,23 +27799,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 2
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 1
     i32.shl
     i32.add
     i32.load16_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store
     local.get $9
     i32.const 1
@@ -27658,6 +27838,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -27713,23 +27895,27 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 2
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
     i32.load8_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
     i32.store
     local.get $9
     i32.const 1
@@ -27748,6 +27934,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -27803,23 +27991,28 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 3
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
-    i64.load32_s
+    i32.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
+    i64.extend_i32_s
     i64.store
     local.get $9
     i32.const 1
@@ -27860,7 +28053,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -27916,30 +28110,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i64)
-     local.get $11
+     local.get $12
      i64.trunc_sat_f32_s
     else
      i64.const 0
@@ -28021,7 +28217,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -28077,30 +28274,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i64)
-     local.get $11
+     local.get $12
      i64.trunc_sat_f64_s
     else
      i64.const 0
@@ -28123,6 +28322,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -28178,23 +28379,28 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 3
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
-    i64.load8_u
+    i32.load8_u
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
+    i64.extend_i32_u
     i64.store
     local.get $9
     i32.const 1
@@ -28213,6 +28419,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -28268,23 +28476,28 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 3
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 1
     i32.shl
     i32.add
-    i64.load16_s
+    i32.load16_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
+    i64.extend_i32_s
     i64.store
     local.get $9
     i32.const 1
@@ -28303,6 +28516,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -28358,23 +28573,28 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 3
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
-    i64.load8_s
+    i32.load8_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
+    i64.extend_i32_s
     i64.store
     local.get $9
     i32.const 1
@@ -28393,6 +28613,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -28448,23 +28670,28 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 3
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
-    i64.load32_s
+    i32.load
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
+    i64.extend_i32_s
     i64.store
     local.get $9
     i32.const 1
@@ -28505,7 +28732,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -28561,30 +28789,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i64)
-     local.get $11
+     local.get $12
      i64.trunc_sat_f32_u
     else
      i64.const 0
@@ -28666,7 +28896,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f64)
+  (local $11 i32)
+  (local $12 f64)
   local.get $0
   local.set $5
   local.get $1
@@ -28722,30 +28953,32 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    i32.eqz
-    drop
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    i32.eqz
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f64.sub
     f64.const 0
     f64.eq
     if (result i64)
-     local.get $11
+     local.get $12
      i64.trunc_sat_f64_u
     else
      i64.const 0
@@ -28768,6 +29001,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -28823,23 +29058,28 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 3
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
-    i64.load8_u
+    i32.load8_u
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
+    i64.extend_i32_u
     i64.store
     local.get $9
     i32.const 1
@@ -28858,6 +29098,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -28913,23 +29155,28 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 3
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 1
     i32.shl
     i32.add
-    i64.load16_s
+    i32.load16_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
+    i64.extend_i32_s
     i64.store
     local.get $9
     i32.const 1
@@ -28948,6 +29195,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -29003,23 +29252,28 @@
    local.set $10
    local.get $10
    if
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 0
-    drop
     local.get $7
     local.get $9
     i32.const 3
     i32.shl
     i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 0
     i32.shl
     i32.add
-    i64.load8_s
+    i32.load8_s
+    local.set $12
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    local.get $11
+    local.get $12
+    i64.extend_i32_s
     i64.store
     local.get $9
     i32.const 1
@@ -29038,6 +29292,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -29093,6 +29349,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -29100,17 +29369,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load
+    local.get $11
+    local.get $12
     f32.convert_i32_s
     f32.store
     local.get $9
@@ -29207,6 +29467,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -29262,6 +29524,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -29269,17 +29544,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load
+    local.get $11
+    local.get $12
     f32.convert_i64_s
     f32.store
     local.get $9
@@ -29299,6 +29565,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -29354,6 +29622,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 0
+    i32.shl
+    i32.add
+    i32.load8_u
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -29361,17 +29642,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u
+    local.get $11
+    local.get $12
     f32.convert_i32_u
     f32.store
     local.get $9
@@ -29391,6 +29663,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -29446,6 +29720,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 1
+    i32.shl
+    i32.add
+    i32.load16_s
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -29453,17 +29740,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_s
+    local.get $11
+    local.get $12
     f32.convert_i32_s
     f32.store
     local.get $9
@@ -29483,6 +29761,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -29538,6 +29818,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 0
+    i32.shl
+    i32.add
+    i32.load8_s
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -29545,17 +29838,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_s
+    local.get $11
+    local.get $12
     f32.convert_i32_s
     f32.store
     local.get $9
@@ -29575,6 +29859,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -29630,6 +29916,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -29637,17 +29936,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load
+    local.get $11
+    local.get $12
     f64.convert_i32_s
     f64.store
     local.get $9
@@ -29685,6 +29975,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -29740,6 +30032,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 2
+    i32.shl
+    i32.add
+    f32.load
+    local.set $12
     i32.const 0
     drop
     i32.const 1
@@ -29748,17 +30053,8 @@
     i32.const 1
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    f32.load
+    local.get $11
+    local.get $12
     f64.promote_f32
     f64.store
     local.get $9
@@ -29778,6 +30074,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
   local.get $0
   local.set $5
   local.get $1
@@ -29833,6 +30131,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -29840,17 +30151,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load
+    local.get $11
+    local.get $12
     f64.convert_i64_s
     f64.store
     local.get $9
@@ -29870,6 +30172,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -29925,6 +30229,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 0
+    i32.shl
+    i32.add
+    i32.load8_u
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -29932,17 +30249,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u
+    local.get $11
+    local.get $12
     f64.convert_i32_u
     f64.store
     local.get $9
@@ -29962,6 +30270,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -30017,6 +30327,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 1
+    i32.shl
+    i32.add
+    i32.load16_s
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -30024,17 +30347,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_s
+    local.get $11
+    local.get $12
     f64.convert_i32_s
     f64.store
     local.get $9
@@ -30054,6 +30368,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -30109,6 +30425,19 @@
    local.set $10
    local.get $10
    if
+    local.get $7
+    local.get $9
+    i32.const 3
+    i32.shl
+    i32.add
+    local.set $11
+    local.get $8
+    local.get $9
+    i32.const 0
+    i32.shl
+    i32.add
+    i32.load8_s
+    local.set $12
     i32.const 0
     drop
     i32.const 0
@@ -30116,17 +30445,8 @@
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $8
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_s
+    local.get $11
+    local.get $12
     f64.convert_i32_s
     f64.store
     local.get $9
@@ -30146,7 +30466,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 f32)
+  (local $11 i32)
+  (local $12 f32)
   local.get $0
   local.set $5
   local.get $1
@@ -30202,31 +30523,33 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
+    i32.const 0
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $11
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 1
+    drop
     local.get $11
-    local.get $11
+    local.get $12
+    local.get $12
     f32.sub
     f32.const 0
     f32.eq
     if (result i32)
      f32.const 0
      f32.const 255
-     local.get $11
+     local.get $12
      f32.min
      f32.max
      i32.trunc_sat_f32_u
@@ -30252,6 +30575,7 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -30307,17 +30631,23 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     i32.load
-    local.set $11
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 0
+    drop
     i32.const 1
     i32.eqz
     drop
@@ -30325,22 +30655,18 @@
     i32.const 4
     i32.le_u
     drop
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
     local.get $11
+    local.get $12
     i32.const 31
     i32.shr_s
     i32.const -1
     i32.xor
     i32.const 255
-    local.get $11
+    local.get $12
     i32.sub
     i32.const 31
     i32.shr_s
-    local.get $11
+    local.get $12
     i32.or
     i32.and
     i32.store8
@@ -30364,6 +30690,7 @@
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
+  (local $14 i32)
   local.get $0
   local.set $5
   local.get $1
@@ -30419,31 +30746,33 @@
    local.set $10
    local.get $10
    if
-    i32.const 1
-    drop
+    local.get $7
+    local.get $9
     i32.const 0
-    drop
+    i32.shl
+    i32.add
+    local.set $11
     local.get $8
     local.get $9
     i32.const 2
     i32.shl
     i32.add
     i32.load
-    local.set $11
+    local.set $12
+    i32.const 1
+    drop
+    i32.const 0
+    drop
     i32.const 0
     i32.eqz
     drop
-    local.get $7
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.const 255
-    local.tee $12
     local.get $11
+    i32.const 255
     local.tee $13
     local.get $12
+    local.tee $14
     local.get $13
+    local.get $14
     i32.lt_u
     select
     i32.store8
