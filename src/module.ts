@@ -3232,12 +3232,12 @@ function readBuffer(ptr: usize, len: i32): Uint8Array {
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
 
-  var cp: u32, mask: u32 = 0, end = ptr;
-  while (cp = binaryen.__i32_load8_u(end++)) mask |= cp;
-
-  var len = <u32>(end - ptr - 1);
+  var cp: u32, mask: u32 = 0, end = ptr, len: u32 = 0;
+  while (cp = binaryen.__i32_load8_u(end++)) {
+    mask |= cp;
+    len += 1 + u32((cp & 0xF8) == 0xF0);
+  }
   var arr = new Array<i32>(len);
-
   if (mask <= 0x7F) {
     // fast ascii-only path
     for (let i: u32 = 0; i < len; ++i) {
