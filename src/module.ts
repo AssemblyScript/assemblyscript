@@ -3235,7 +3235,7 @@ export function readString(ptr: usize): string | null {
   var cp: u32, mask: u32 = 0, end = ptr;
   while (cp = binaryen.__i32_load8_u(end++)) mask |= cp;
 
-  var len = end - ptr - 1;
+  var len = <u32>(end - ptr - 1);
   var arr = new Array<i32>(len);
 
   if (mask <= 0x7F) {
