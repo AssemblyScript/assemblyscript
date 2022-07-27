@@ -85,6 +85,7 @@ export enum FeatureFlags {
   FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
+  Strings = 65536 /* _BinaryenFeatureStringss */,
   All = 122879 /* _BinaryenFeatureAll */
 }
 
@@ -1173,7 +1174,7 @@ export class Module {
     assert(bytes.length == 16);
     var out = this.lit;
     for (let i = 0; i < 16; ++i) {
-      binaryen.__i32_store8(out + i, bytes[i]);
+      binaryen.__i32_store8(out + i, unchecked(bytes[i]));
     }
     binaryen._BinaryenLiteralVec128(out, out);
     return binaryen._BinaryenConst(this.ref, out);
@@ -1545,7 +1546,7 @@ export class Module {
     var numNames = names.length;
     var strs = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
-      strs[i] = this.allocStringCached(names[i]);
+      unchecked(strs[i] = this.allocStringCached(names[i]));
     }
     var cArr = allocPtrArray(strs);
     var cStr = this.allocStringCached(defaultName);
@@ -2080,15 +2081,16 @@ export class Module {
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
-      let segment = segments[i];
+      let segment = unchecked(segments[i]);
       let buffer = segment.buffer;
       let offset = segment.offset;
-      segs[i] = allocU8Array(buffer);
-      psvs[i] = 0; // no passive segments currently
-      offs[i] = target == Target.WASM64
+      unchecked(segs[i] = allocU8Array(buffer));
+      unchecked(psvs[i] = 0); // no passive segments currently
+      unchecked(offs[i] = target == Target.WASM64
         ? this.i64(i64_low(offset), i64_high(offset))
-        : this.i32(i64_low(offset));
-      sizs[i] = buffer.length;
+        : this.i32(i64_low(offset))
+      );
+      unchecked(sizs[i] = buffer.length);
     }
     var cArr1 = allocPtrArray(segs);
     var cArr2 = allocU8Array(psvs);
@@ -2102,7 +2104,7 @@ export class Module {
     binaryen._free(cArr2);
     binaryen._free(cArr1);
     for (let i = k - 1; i >= 0; --i) {
-      binaryen._free(segs[i]);
+      binaryen._free(unchecked(segs[i]));
     }
   }
 
@@ -2122,7 +2124,7 @@ export class Module {
     var numNames = funcs.length;
     var names = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
-      names[i] = this.allocStringCached(funcs[i]);
+      unchecked(names[i] = this.allocStringCached(funcs[i]));
     }
     var cArr = allocPtrArray(names);
     var tableRef = binaryen._BinaryenGetTable(this.ref, cStr);
@@ -2675,7 +2677,7 @@ export function expandType(type: TypeRef): TypeRef[] {
   binaryen._BinaryenTypeExpand(type, cArr);
   var types = new Array<TypeRef>(arity);
   for (let i: u32 = 0; i < arity; ++i) {
-    types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+    unchecked(types[i] = binaryen.__i32_load(cArr + (<usize>i << 2)));
   }
   binaryen._free(cArr);
   return types;
@@ -2912,7 +2914,7 @@ export function getFunctionVars(func: FunctionRef): TypeRef[] {
   var count = binaryen._BinaryenFunctionGetNumVars(func);
   var types = new Array<TypeRef>(count);
   for (let i: Index = 0; i < count; ++i) {
-    types[i] = binaryen._BinaryenFunctionGetVar(func, i);
+    unchecked(types[i] = binaryen._BinaryenFunctionGetVar(func, i));
   }
   return types;
 }
@@ -3048,17 +3050,17 @@ export class SwitchBuilder {
     var entry = new Array<ExpressionRef>(1 + numValues + 1);
     var labels = new Array<string>(numCases);
     for (let i = 0; i < numCases; ++i) {
-      labels[i] = `case${i}${labelPostfix}`;
+      unchecked(labels[i] = `case${i}${labelPostfix}`);
     }
     entry[0] = module.local_set(localIndex, this.condition, false); // u32
     for (let i = 0; i < numValues; ++i) {
-      let index = indexes[i];
-      entry[1 + i] = module.br(labels[index],
+      let index = unchecked(indexes[i]);
+      unchecked(entry[1 + i] = module.br(labels[index],
         module.binary(BinaryOp.EqI32,
           module.local_get(localIndex, TypeRef.I32),
           module.i32(values[i])
         )
-      );
+      ));
     }
     var defaultIndex = this.defaultIndex;
     var defaultLabel = `default${labelPostfix}`;
@@ -3071,7 +3073,7 @@ export class SwitchBuilder {
     for (let i = 1; i < numCases; ++i) {
       let block = cases[i - 1];
       block.unshift(current);
-      current = module.block(labels[i], block);
+      current = module.block(unchecked(labels[i]), block);
     }
     var lastCase = cases[numCases - 1];
     lastCase.unshift(current);
