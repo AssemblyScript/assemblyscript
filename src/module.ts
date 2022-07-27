@@ -3244,38 +3244,37 @@ export function readString(ptr: usize): string | null {
       cp = binaryen.__i32_load8_u(ptr++);
       unchecked(arr[i] = cp);
     }
-    return String.fromCharCodes(arr);
-  }
-
-  var u1: u32, u2: u32, u3: u32;
-  for (let i: u32 = 0; i < len; ++i) {
-    cp = binaryen.__i32_load8_u(ptr++);
-    if (!(cp & 0x80)) {
-      unchecked(arr[i] = cp);
-      continue;
-    }
-    u1 = binaryen.__i32_load8_u(ptr++) & 63;
-    if ((cp & 0xE0) == 0xC0) {
-      unchecked(arr[i] = ((cp & 31) << 6) | u1);
-      continue;
-    }
-    u2 = binaryen.__i32_load8_u(ptr++) & 63;
-    if ((cp & 0xF0) == 0xE0) {
-      cp = ((cp & 15) << 12) | (u1 << 6) | u2;
-    } else {
-      u3 = binaryen.__i32_load8_u(ptr++) & 63;
-      if ((cp & 0xF8) == 0xF0) {
-        cp = ((cp & 7) << 18) | (u1 << 12) | (u2 << 6) | u3;
-      } else {
-        assert(false, "Invalid UTF8 sequence during readString");
+  } else {
+    let u1: u32, u2: u32, u3: u32;
+    for (let i: u32 = 0; i < len; ++i) {
+      cp = binaryen.__i32_load8_u(ptr++);
+      if (!(cp & 0x80)) {
+        unchecked(arr[i] = cp);
+        continue;
       }
-    }
-    if (cp < 0x10000) {
-      unchecked(arr[i] = cp);
-    } else {
-      let ch = cp - 0x10000;
-      unchecked(arr[  i] = SURROGATE_HIGH | (ch >>> 10));
-      unchecked(arr[++i] = SURROGATE_LOW | (ch & 0x3FF));
+      u1 = binaryen.__i32_load8_u(ptr++) & 63;
+      if ((cp & 0xE0) == 0xC0) {
+        unchecked(arr[i] = ((cp & 31) << 6) | u1);
+        continue;
+      }
+      u2 = binaryen.__i32_load8_u(ptr++) & 63;
+      if ((cp & 0xF0) == 0xE0) {
+        cp = ((cp & 15) << 12) | (u1 << 6) | u2;
+      } else {
+        u3 = binaryen.__i32_load8_u(ptr++) & 63;
+        if ((cp & 0xF8) == 0xF0) {
+          cp = ((cp & 7) << 18) | (u1 << 12) | (u2 << 6) | u3;
+        } else {
+          assert(false, "Invalid UTF8 sequence during readString");
+        }
+      }
+      if (cp < 0x10000) {
+        unchecked(arr[i] = cp);
+      } else {
+        let ch = cp - 0x10000;
+        unchecked(arr[  i] = SURROGATE_HIGH | (ch >>> 10));
+        unchecked(arr[++i] = SURROGATE_LOW | (ch & 0x3FF));
+      }
     }
   }
   // TODO: implement and use String.fromCodePoints
