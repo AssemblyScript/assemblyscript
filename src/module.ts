@@ -3240,7 +3240,7 @@ export function readString(ptr: usize): string | null {
 
   if (mask <= 0x7F) {
     // fast ASCII path
-    for (let i = 0; i < len; i++) {
+    for (let i: u32 = 0; i < len; i++) {
       cp = binaryen.__i32_load8_u(ptr++);
       unchecked(arr[i] = cp);
     }
@@ -3248,7 +3248,7 @@ export function readString(ptr: usize): string | null {
   }
 
   var u1: u32, u2: u32, u3: u32;
-  for (let i = 0; i < len; i++) {
+  for (let i: u32 = 0; i < len; i++) {
     cp = binaryen.__i32_load8_u(ptr++);
     if (!(cp & 0x80)) {
       unchecked(arr[i] = cp);
