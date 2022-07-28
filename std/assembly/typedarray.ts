@@ -138,7 +138,7 @@ export class Int8Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Int8Array, i8, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int8Array {
@@ -275,7 +275,7 @@ export class Uint8Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Uint8Array, u8, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -416,7 +416,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Uint8ClampedArray, u8, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -557,7 +557,7 @@ export class Int16Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Int16Array, i16, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -698,7 +698,7 @@ export class Uint16Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Uint16Array, u16, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -839,7 +839,7 @@ export class Int32Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Int32Array, i32, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -980,7 +980,7 @@ export class Uint32Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Uint32Array, u32, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1121,7 +1121,7 @@ export class Int64Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Int64Array, i64, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1262,7 +1262,7 @@ export class Uint64Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Uint64Array, u64, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1403,7 +1403,7 @@ export class Float32Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Float32Array, f32, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1544,7 +1544,7 @@ export class Float64Array extends ArrayBufferView {
   }
 
   set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
-    SET<Float64Array, f64, U, valueof<U>>(this, source, offset);
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1923,75 +1923,59 @@ function WRAP<TArray extends ArrayBufferView, T>(
 // @ts-ignore: decorator
 @inline
 function SET<
-  TArray extends ArrayLike<T>,
-  T extends number,
-  UArray extends ArrayLike<U>,
-  U extends number
+  TArray extends ArrayLike<number>,
+  UArray extends ArrayLike<number>
 >(
   target: TArray,
   source: UArray,
   offset: i32 = 0
 ): void {
   // need to assert at compile time that U is not a reference or a function
-  if (isReference<U>()) {
+  if (isReference<valueof<UArray>>()) {
     ERROR(E_NOTIMPLEMENTED);
   }
   let sourceLen = source.length;
-  // Uncaught RangeError: offset is out of bounds
   if (offset < 0 || sourceLen + offset > target.length) {
+    // offset is out of bounds
     throw new RangeError(E_INDEXOUTOFRANGE);
   }
   // @ts-ignore: dataStart
-  var targetStart = target.dataStart + (<usize>offset << alignof<T>());
+  var targetStart = target.dataStart + (<usize>offset << (alignof<valueof<TArray>>()));
   // @ts-ignore: dataStart
   var sourceStart = source.dataStart;
   // if the types align and match, use memory.copy() instead of manual loop
   if (
-    isInteger<T>() == isInteger<U>() &&
-    alignof<T>() == alignof<U>() &&
-    !(isSigned<U>() && target instanceof Uint8ClampedArray)
+    isInteger<valueof<TArray>>() == isInteger<valueof<UArray>>() &&
+    alignof<valueof<TArray>>() == alignof<valueof<UArray>>() &&
+    !(isSigned<valueof<UArray>>() && target instanceof Uint8ClampedArray)
   ) {
-    memory.copy(targetStart, sourceStart, <usize>sourceLen << alignof<U>());
+    memory.copy(targetStart, sourceStart, <usize>sourceLen << (alignof<valueof<UArray>>()));
   } else {
     for (let i = 0; i < sourceLen; i++) {
-      let ptr = targetStart + (<usize>i << alignof<T>());
-      let value = load<U>(sourceStart + (<usize>i << alignof<U>()));
+      let ptr = targetStart + (<usize>i << (alignof<valueof<TArray>>()));
+      let value = load<valueof<UArray>>(sourceStart + (<usize>i << (alignof<valueof<UArray>>())));
       // if TArray is Uint8ClampedArray, then values must be clamped
       if (target instanceof Uint8ClampedArray) {
-        if (isFloat<U>()) {
-          store<T>(
-            ptr,
-            // @ts-ignore: cast to T is valid for numeric types here
-            isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : <T>0
+        if (isFloat<valueof<UArray>>()) {
+          store<valueof<TArray>>(ptr,
+            isFinite<valueof<UArray>>(value)
+              ? <valueof<TArray>>max<valueof<UArray>>(0, min<valueof<UArray>>(255, value))
+              : 0
           );
         } else {
-          if (!isSigned<U>()) {
-            store<T>(
-              ptr,
-              // @ts-ignore: cast to T is valid for numeric types here
-              min<U>(255, value)
-            );
-          } else if (sizeof<T>() <= 4) {
-            store<T>(
-              ptr,
-              // @ts-ignore: cast to T is valid for numeric types here
-              ~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value)
-            );
+          if (!isSigned<valueof<UArray>>()) {
+            store<valueof<TArray>>(ptr, min<valueof<UArray>>(255, value));
+          } else if (sizeof<valueof<TArray>>() <= 4) {
+            store<valueof<TArray>>(ptr, ~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value));
           } else {
-            store<T>(
-              ptr,
-              // @ts-ignore: cast to T is valid for numeric types here
-              ~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value)
-            );
+            store<valueof<TArray>>(ptr, ~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value));
           }
         }
       } else {
-        if (isFloat<U>() && !isFloat<T>()) {
-          // @ts-ignore: cast to T is valid for numeric types here
-          store<T>(ptr, isFinite<U>(value) ? <T>value : 0);
+        if (isFloat<valueof<UArray>>() && !isFloat<valueof<TArray>>()) {
+          store<valueof<TArray>>(ptr, isFinite<valueof<UArray>>(value) ? <valueof<TArray>>value : 0);
         } else {
-          // @ts-ignore: cast
-          store<T>(ptr, <T>value);
+          store<valueof<TArray>>(ptr, <valueof<TArray>>value);
         }
       }
     }
