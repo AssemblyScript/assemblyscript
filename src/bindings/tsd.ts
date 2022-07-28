@@ -302,17 +302,12 @@ export class TSDBuilder extends ExportsWalker {
             sb.push(mode == Mode.EXPORT ? "<never>" : "<undefined>");
           }
         } else {
-          let isPlainObject = this.isPlainObject(clazz);
-          if (isPlainObject) {
-            typeName = "__Record" + clazz.id.toString();
-            sb.push(typeName);
-            sb.push(mode == Mode.EXPORT ? "<never>" : "<undefined>");
-          } else {
-            typeName = "__Internref" + clazz.id.toString();
-            sb.push(typeName);
-          }
+          let isPlain = this.isPlainObject(clazz);
+          typeName = `${isPlain ? "__Record" : "__Internref"}${clazz.id}`;
+          sb.push(typeName);
           seenObjectTypes.set(clazz, typeName);
-          if (isPlainObject) {
+          if (isPlain) {
+            sb.push(mode == Mode.EXPORT ? "<never>" : "<undefined>");
             this.deferredTypings.push(this.makeRecordType(clazz, mode));
           } else {
             this.deferredTypings.push(this.makeInternrefType(clazz));
