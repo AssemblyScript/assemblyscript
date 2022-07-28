@@ -130,6 +130,12 @@ export function internrefFunction(a: NonPlainObject, b: NonPlainObject): NonPlai
   return a;
 }
 
+export function functionFunction(fn: () => void): () => void {
+  return fn;
+}
+
+export const fn = function(): void {};
+
 trace("trace", 1, 42);
 
 import { console, Math } from "bindings/dom";

@@ -124,21 +124,32 @@ export declare function arrayFunction(a: Array<number>, b: Array<number>): Array
  * @param b `bindings/esm/PlainObject`
  * @returns `bindings/esm/PlainObject`
  */
-export declare function objectFunction(a: __Record10<undefined>, b: __Record10<undefined>): __Record10<never>;
+export declare function objectFunction(a: __Record11<undefined>, b: __Record11<undefined>): __Record11<never>;
 /**
  * bindings/esm/newInternref
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function newInternref(): __Internref13;
+export declare function newInternref(): __Internref14;
 /**
  * bindings/esm/internrefFunction
  * @param a `bindings/esm/NonPlainObject`
  * @param b `bindings/esm/NonPlainObject`
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function internrefFunction(a: __Internref13, b: __Internref13): __Internref13;
+export declare function internrefFunction(a: __Internref14, b: __Internref14): __Internref14;
+/**
+ * bindings/esm/functionFunction
+ * @param fn `() => void`
+ * @returns `() => void`
+ */
+export declare function functionFunction(fn: __Internref3): __Internref3;
+/** bindings/esm/fn */
+export declare const fn: {
+  /** @type `() => void` */
+  get value(): __Internref3
+};
 /** bindings/esm/PlainObject */
-declare interface __Record10<TOmittable> {
+declare interface __Record11<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */
@@ -173,6 +184,10 @@ declare interface __Record10<TOmittable> {
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
-declare class __Internref13 extends Number {
-  private __nominal13: symbol;
+declare class __Internref14 extends Number {
+  private __nominal14: symbol;
+}
+/** ~lib/function/Function<%28%29=>void> */
+declare class __Internref3 extends Number {
+  private __nominal3: symbol;
 }

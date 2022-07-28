@@ -996,6 +996,9 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
+  /** resolving expressions */
+  private resolvingExpressions: Set<Expression> = new Set();
+
   /** Resolves an expression to its static type. */
   resolveExpression(
     /** The expression to resolve. */
@@ -1005,6 +1008,21 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual type. */
     ctxType: Type = Type.auto,
     /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    const resolvingExpressions = this.resolvingExpressions;
+    if (resolvingExpressions.has(node)) return null;
+    resolvingExpressions.add(node);
+    const resolved = this.doResolveExpression(node, ctxFlow, ctxType, reportMode);
+    resolvingExpressions.delete(node);
+    return resolved;
+  }
+
+  /** Resolves an expression to its static type. (may cause stack overflow) */
+  private doResolveExpression(
+    node: Expression,
+    ctxFlow: Flow,
+    ctxType: Type = Type.auto,
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
     while (node.kind == NodeKind.PARENTHESIZED) { // skip
@@ -2214,6 +2232,9 @@ export class Resolver extends DiagnosticEmitter {
       case LiteralKind.STRING:
       case LiteralKind.TEMPLATE: {
         return this.program.stringInstance;
+      }
+      case LiteralKind.REGEXP: {
+        return this.program.regexpInstance;
       }
       case LiteralKind.ARRAY: {
         let classReference = ctxType.getClass();

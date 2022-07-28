@@ -1,0 +1,7 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2506: 'Foo' is referenced directly or indirectly in its own base expression."
+  ]
+}

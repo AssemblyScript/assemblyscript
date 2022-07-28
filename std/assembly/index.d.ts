@@ -844,9 +844,9 @@ declare namespace v128 {
   /** Computes the maximum of each lane. */
   export function max<T>(a: v128, b: v128): v128;
   /** Computes the pseudo-minimum of each lane. */
-  export function pmin<T>(a: v128, b: v128): v128;
+  export function pmin<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the pseudo-maximum of each lane. */
-  export function pmax<T>(a: v128, b: v128): v128;
+  export function pmax<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T extends i16>(a: v128, b: v128): v128;
   /** Computes the average of each lane. */

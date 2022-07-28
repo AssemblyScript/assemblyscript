@@ -121,6 +121,20 @@ function test_v128(): void {
     );
     __free(ptr);
   }
+  {
+    assert(
+      v128.pmin<f32>(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+      ==
+      f32x4(-1, -1, -1, -1)
+    );
+  }
+  {
+    assert(
+      v128.pmax<f32>(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+      ==
+      f32x4(1, 1, 1, 1)
+    );
+  }
   // TODO: missing C-API in Binaryen (see also passes/pass.ts)
   // v128.load8_lane
   // v128.load16_lane

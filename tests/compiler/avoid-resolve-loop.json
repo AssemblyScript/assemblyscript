@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS225: Expression cannot be represented by a type.",
+    "TS2448: Variable 'avoid-resolve-loop/e' used before its declaration.",
+    "TS2322: Type 'void' is not assignable to type '<auto>'.",
+    "AS225: Expression cannot be represented by a type."
+  ]
+}
