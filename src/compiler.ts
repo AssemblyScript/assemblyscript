@@ -9296,7 +9296,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var outerFlow = this.currentFlow;
     var ifThenFlow = outerFlow.fork();
-    ifThenFlow.inheritNarrowedTypeIfTrue(condExpr);    
+    ifThenFlow.inheritNarrowedTypeIfTrue(condExpr);
     this.currentFlow = ifThenFlow;
     var ifThenExpr = this.compileExpression(ifThen, ctxType);
     var ifThenType = this.currentType;
