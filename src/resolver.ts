@@ -530,10 +530,10 @@ export class Resolver extends DiagnosticEmitter {
         // Fast path for typed arrays
         let name = classReference.name;
         let headChar = name.charCodeAt(0);
-        if (headChar == CharCode.F) { // float points
+        if (headChar == CharCode.F) {
           if (name == CommonNames.Float32Array) return Type.f32;
           if (name == CommonNames.Float64Array) return Type.f64;
-        } else if (headChar == CharCode.U) { // unsigned
+        } else if (headChar == CharCode.U) {
           if (name == CommonNames.Uint8Array || name == CommonNames.Uint8ClampedArray) return Type.u8;
           if (name == CommonNames.Uint16Array) return Type.u16;
           if (name == CommonNames.Uint32Array) return Type.u32;
