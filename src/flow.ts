@@ -63,12 +63,6 @@ import {
   getSelectElse,
   getCallTarget,
   getLocalSetIndex,
-  getIfCondition,
-  getUnaryValue,
-  getCallOperandAt,
-  getCallOperandCount,
-  isConstZero,
-  isConstNonZero
 } from "./module";
 
 import {
@@ -88,11 +82,7 @@ import {
   uniqueMap
 } from "./util";
 
-import {
-  BuiltinNames
-} from "./builtins";
 import { NarrowedTypeMap, TypeMergeMode, TypeNarrowChecker } from "./narrow";
-import { _BinaryenExpressionPrint } from "./glue/binaryen";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
