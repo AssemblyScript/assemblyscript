@@ -96,7 +96,8 @@ import {
 
 import {
   uniqueMap,
-  isPowerOf2
+  isPowerOf2,
+  CharCode
 } from "./util";
 
 import {
@@ -525,8 +526,28 @@ export class Resolver extends DiagnosticEmitter {
     if (!typeArgument) return null;
     var classReference = typeArgument.getClassOrWrapper(this.program);
     if (classReference) {
-      let overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
-      if (overload) return overload.signature.returnType;
+      if (classReference.extends(this.program.arrayBufferViewInstance.prototype)) {
+        // Fast path for typed arrays
+        let name = classReference.name;
+        let headChar = name.charCodeAt(0);
+        if (headChar == CharCode.F) { // float points
+          if (name == CommonNames.Float32Array) return Type.f32;
+          if (name == CommonNames.Float64Array) return Type.f64;
+        } else if (headChar == CharCode.U) { // unsigned
+          if (name == CommonNames.Uint8Array || name == CommonNames.Uint8ClampedArray) return Type.u8;
+          if (name == CommonNames.Uint16Array) return Type.u16;
+          if (name == CommonNames.Uint32Array) return Type.u32;
+          if (name == CommonNames.Uint64Array) return Type.u64;
+        } else {
+          if (name == CommonNames.Int8Array)  return Type.i8;
+          if (name == CommonNames.Int16Array) return Type.i16;
+          if (name == CommonNames.Int32Array) return Type.i32;
+          if (name == CommonNames.Int64Array) return Type.i64;
+        }
+      } else {
+        let overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
+        if (overload) return overload.signature.returnType;
+      }
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
