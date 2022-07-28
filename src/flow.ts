@@ -635,10 +635,13 @@ export class Flow {
     return narrowedTypes.get(element);
   }
 
-  /** type == null means this expr is a assign expression and will insert a toxic and disable the other check */
-  setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {
+  setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type): void {
     if (type && !type.isReference) return;
     this.conditionalNarrowedType.setConditionNarrowedType(expr, element, type);
+  }
+  setAssignType(expr: ExpressionRef, element: TypedElement, type: Type): void {
+    if (type && !type.isReference) return;
+    this.conditionalNarrowedType.setAssignType(expr, element, type);
   }
   inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
     let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfTrue(condi, this);
