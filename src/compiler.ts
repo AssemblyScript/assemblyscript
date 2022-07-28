@@ -2556,7 +2556,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile the body assuming the condition turned out true
     var bodyFlow = flow.fork();
-    bodyFlow.inheritNonnullIfTrue(condExpr);
     bodyFlow.inheritNarrowedTypeIfTrue(condExpr);
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
@@ -2702,8 +2701,8 @@ export class Compiler extends DiagnosticEmitter {
     var thenStmts = new Array<ExpressionRef>();
     var thenFlow = flow.fork();
     this.currentFlow = thenFlow;
-    thenFlow.inheritNonnullIfTrue(condExpr);
     thenFlow.inheritNarrowedTypeIfTrue(condExpr);
+    
     if (ifTrue.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>ifTrue).statements, false, thenStmts);
     } else {
@@ -2721,7 +2720,6 @@ export class Compiler extends DiagnosticEmitter {
       let elseStmts = new Array<ExpressionRef>();
       let elseFlow = flow.fork();
       this.currentFlow = elseFlow;
-      elseFlow.inheritNonnullIfFalse(condExpr);
       elseFlow.inheritNarrowedTypeIfFalse(condExpr);
       if (ifFalse.kind == NodeKind.BLOCK) {
         this.compileStatements((<BlockStatement>ifFalse).statements, false, elseStmts);
@@ -2740,12 +2738,8 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(elseStmts)
       );
     } else {
+      flow.inheritNarrowedTypeIfFalse(condExpr);
       flow.inheritBranch(thenFlow);
-      flow.inheritNonnullIfFalse(condExpr,
-        thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)
-          ? null     // thenFlow terminates: just inherit
-          : thenFlow // must become nonnull in thenFlow otherwise
-      );
       if (thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
         flow.inheritNarrowedTypeIfFalse(condExpr);
       }
@@ -2980,6 +2974,7 @@ export class Compiler extends DiagnosticEmitter {
       let name = declaration.name.text;
       let type: Type | null = null;
       let initExpr: ExpressionRef = 0;
+      let initType: Type | null = null;
 
       // Resolve type if annotated
       let typeNode = declaration.type;
@@ -3002,6 +2997,8 @@ export class Compiler extends DiagnosticEmitter {
           );
           pendingElements.delete(dummy);
           flow.freeScopedDummyLocal(name);
+
+          initType = this.currentType;
         }
 
       // Otherwise infer type from initializer
@@ -3021,6 +3018,7 @@ export class Compiler extends DiagnosticEmitter {
           continue;
         }
         type = this.currentType;
+        initType = this.currentType;
 
       // Error if there's neither a type nor an initializer
       } else {
@@ -3143,7 +3141,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (initExpr) {
           initializers.push(
-            this.makeLocalAssignment(local, initExpr, type, false)
+            this.makeLocalAssignment(local, initExpr, initType ? initType : type, false)
           );
         } else {
           // no need to assign zero
@@ -3243,7 +3241,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile the body assuming the condition turned out true
     var bodyFlow = flow.fork();
-    bodyFlow.inheritNonnullIfTrue(condExpr);
     bodyFlow.inheritNarrowedTypeIfTrue(condExpr);
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
@@ -4552,7 +4549,6 @@ export class Compiler extends DiagnosticEmitter {
 
         let rightFlow = flow.fork();
         this.currentFlow = rightFlow;
-        rightFlow.inheritNonnullIfTrue(leftExpr);
         rightFlow.inheritNarrowedTypeIfTrue(leftExpr);
 
         // simplify if only interested in true or false
@@ -4599,7 +4595,7 @@ export class Compiler extends DiagnosticEmitter {
           } else {
             let tempLocal = flow.getTempLocal(leftType);
             if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED);
-            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.NONNULL);
+            if (flow.isNonnull(leftExpr, leftType)) flow.setNarrowedType(tempLocal, leftType.nonNullableType);
             expr = module.if(
               this.makeIsTrueish(module.local_tee(tempLocal.index, leftExpr, leftType.isManaged), leftType, left),
               rightExpr,
@@ -4619,7 +4615,6 @@ export class Compiler extends DiagnosticEmitter {
 
         let rightFlow = flow.fork();
         this.currentFlow = rightFlow;
-        rightFlow.inheritNonnullIfFalse(leftExpr);
         rightFlow.inheritNarrowedTypeIfFalse(leftExpr);
 
         // simplify if only interested in true or false
@@ -4666,7 +4661,7 @@ export class Compiler extends DiagnosticEmitter {
           } else {
             let temp = flow.getTempLocal(leftType);
             if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
+            if (flow.isNonnull(leftExpr, leftType)) flow.setNarrowedType(temp, leftType.nonNullableType);
             expr = module.if(
               this.makeIsTrueish(module.local_tee(temp.index, leftExpr, leftType.isManaged), leftType, left),
               module.local_get(temp.index, leftType.toRef()),
@@ -5963,12 +5958,6 @@ export class Compiler extends DiagnosticEmitter {
       elementExpression,
       contextualType != Type.void
     );
-
-    if (target instanceof TypedElement) {
-      let typedTarget = <TypedElement>target;
-      flow.setNarrowedType(typedTarget, null);
-      flow.setConditionNarrowedType(assignmentExpression, typedTarget, null);
-    }
     return assignmentExpression;
   }
 
@@ -6178,16 +6167,13 @@ export class Compiler extends DiagnosticEmitter {
     /** Whether to tee the value. */
     tee: bool
   ): ExpressionRef {
+    let expressionRef: ExpressionRef;
     var module = this.module;
     var flow = this.currentFlow;
     var type = local.type;
     assert(type != Type.void);
     var localIndex = local.index;
 
-    if (type.isNullableReference) {
-      if (!valueType.isNullableReference || flow.isNonnull(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.NONNULL);
-      else flow.unsetLocalFlag(localIndex, LocalFlags.NONNULL);
-    }
     flow.setLocalFlag(localIndex, LocalFlags.INITIALIZED);
     if (type.isShortIntegerValue) {
       if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
@@ -6195,11 +6181,20 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (tee) { // local = value
       this.currentType = type;
-      return module.local_tee(localIndex, valueExpr, type.isManaged);
+      expressionRef = module.local_tee(localIndex, valueExpr, type.isManaged);
     } else { // void(local = value)
       this.currentType = Type.void;
-      return module.local_set(localIndex, valueExpr, type.isManaged);
+      expressionRef = module.local_set(localIndex, valueExpr, type.isManaged);
     }
+    if (type.isReference) {
+      let narrowedType = valueType;
+      if (!valueType.isNullableReference || flow.isNonnull(valueExpr, type)) {
+        narrowedType = valueType.nonNullableType;
+      }
+      flow.setNarrowedType(local, narrowedType);
+      flow.setConditionNarrowedType(expressionRef, local, null);
+    }
+    return expressionRef;
   }
 
   /** Makes an assignment to a global. */
@@ -6213,24 +6208,28 @@ export class Compiler extends DiagnosticEmitter {
     /** Whether to tee the value. */
     tee: bool
   ): ExpressionRef {
+    let expressionRef: ExpressionRef;
     var module = this.module;
     var type = global.type;
+    var flow = this.currentFlow;
     assert(type != Type.void);
     var typeRef = type.toRef();
-
     valueExpr = this.ensureSmallIntegerWrap(valueExpr, type); // globals must be wrapped
     if (tee) { // (global = value), global
       this.currentType = type;
-      return module.block(null, [
+      expressionRef = module.block(null, [
         module.global_set(global.internalName, valueExpr),
         module.global_get(global.internalName, typeRef)
       ], typeRef);
     } else { // global = value
       this.currentType = Type.void;
-      return module.global_set(global.internalName,
+      expressionRef = module.global_set(global.internalName,
         valueExpr
       );
     }
+    flow.setNarrowedType(global, valueType);
+    flow.setConditionNarrowedType(expressionRef, global, null);
+    return expressionRef;
   }
 
   /** Makes an assignment to a field. */
@@ -6791,7 +6790,7 @@ export class Compiler extends DiagnosticEmitter {
       findUsedLocals(paramExpr, usedLocals);
       // inlining is aware of wrap/nonnull states:
       if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
-      if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
+      if (flow.isNonnull(paramExpr, paramType) && paramType.isNullableReference) flow.setNarrowedType(argumentLocal, paramType.nonNullableType);
       body.unshift(
         module.local_set(argumentLocal.index, paramExpr, paramType.isManaged)
       );
@@ -7801,9 +7800,6 @@ export class Compiler extends DiagnosticEmitter {
         }
         let localIndex = local.index;
         assert(localIndex >= 0);
-        if (localType.isNullableReference && flow.isLocalFlag(localIndex, LocalFlags.NONNULL, false)) {
-          localType = localType.nonNullableType;
-        }
         this.currentType = localType;
 
         if (target.parent != flow.parentFunction) {
@@ -9296,14 +9292,12 @@ export class Compiler extends DiagnosticEmitter {
 
     var outerFlow = this.currentFlow;
     var ifThenFlow = outerFlow.fork();
-    ifThenFlow.inheritNonnullIfTrue(condExpr);
-    ifThenFlow.inheritNarrowedTypeIfTrue(condExpr);
+    ifThenFlow.inheritNarrowedTypeIfTrue(condExpr);    
     this.currentFlow = ifThenFlow;
     var ifThenExpr = this.compileExpression(ifThen, ctxType);
     var ifThenType = this.currentType;
 
     var ifElseFlow = outerFlow.fork();
-    ifElseFlow.inheritNonnullIfFalse(condExpr);
     ifElseFlow.inheritNarrowedTypeIfFalse(condExpr);
     this.currentFlow = ifElseFlow;
     var ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType);
@@ -10621,7 +10615,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var temp = flow.getTempLocal(type);
     if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-    flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
+    flow.setNarrowedType(temp, type);
 
     var staticAbortCallExpr = this.makeStaticAbort(
       this.ensureStaticString("unexpected null"),

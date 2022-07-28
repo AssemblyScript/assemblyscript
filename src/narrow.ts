@@ -1,3 +1,5 @@
+import { BuiltinNames } from "./builtins";
+import { Flow } from "./flow";
 import {
   BinaryOp,
   ExpressionId,
@@ -5,10 +7,15 @@ import {
   getBinaryLeft,
   getBinaryOp,
   getBinaryRight,
+  getCallOperandAt,
+  getCallOperandCount,
+  getCallTarget,
   getExpressionId,
   getIfCondition,
   getIfFalse,
   getIfTrue,
+  getLocalGetIndex,
+  getLocalSetIndex,
   getLocalSetValue,
   getUnaryOp,
   getUnaryValue,
@@ -57,9 +64,9 @@ export class NarrowedTypeMap {
   get size(): i32 {
     return this.typeMap.size;
   }
-  get(key: TypedElement): Type | null {
-    if (this.typeMap.has(key)) {
-      let type = assert(this.typeMap.get(key));
+  get(element: TypedElement): Type | null {
+    if (this.typeMap.has(element)) {
+      let type = assert(this.typeMap.get(element));
       if (type == Type.void) {
         return null;
       }
@@ -68,8 +75,17 @@ export class NarrowedTypeMap {
       return null;
     }
   }
-  set(key: TypedElement, value: Type): void {
-    this.typeMap.set(key, value);
+  set(element: TypedElement, type: Type): void {
+    this.typeMap.set(element, type);
+  }
+  setNonnull(typedElement: TypedElement): void {
+    let typeMap = this.typeMap;
+    if (typeMap.has(typedElement)) {
+      let type = assert(typeMap.get(typedElement));
+      typeMap.set(typedElement, type.nonNullableType);
+    } else {
+      typeMap.set(typedElement, typedElement.type.nonNullableType);
+    }
   }
   delete(key: TypedElement): bool {
     return this.typeMap.delete(key);
@@ -102,7 +118,8 @@ export class NarrowedTypeMap {
       let key = bKeys[i];
       let aType = aMap.has(key) ? assert(aMap.get(key)) : null;
       let bType = assert(bMap.get(key));
-      let mergedType = mode == TypeMergeMode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
+      let mergedType =
+        mode == TypeMergeMode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
       if (mergedType) {
         aMap.set(key, mergedType);
       } else {
@@ -110,12 +127,37 @@ export class NarrowedTypeMap {
       }
     }
   }
+
+  toString(): string {
+    let key = Map_keys(this.typeMap);
+    let value = Map_values(this.typeMap);
+    let str = new Array<string>();
+    for (let i = 0, k = key.length; i < k; i++) {
+      str.push(`${key[i].internalName}: ${value[i]}`);
+    }
+    return "narrowedTypes: " + str.join("; ");
+  }
 }
 
 export class TypeNarrowChecker {
   expressionMap: Map<ExpressionRef, NarrowedTypeMap> = new Map();
 
-  setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {
+  removeConditionNarrowedType(element: TypedElement): void {
+    let maps = Map_values(this.expressionMap);
+    for (let i = 0, k = maps.length; i < k; i++) {
+      maps[i].delete(element);
+    }
+  }
+
+  /**
+   * case 1: type is nonnull, add condition type, eg t instanceof B
+   * case 2: type is null, remove condition type, eg t = new A() in some condition
+   */
+  setConditionNarrowedType(
+    expr: ExpressionRef,
+    element: TypedElement,
+    type: Type | null
+  ): void {
     let expressionMap = this.expressionMap;
     if (expr > 0) {
       if (!expressionMap.has(expr)) {
@@ -123,16 +165,14 @@ export class TypeNarrowChecker {
       }
       let narrowMap = assert(expressionMap.get(expr));
       if (type) {
-        // case 1: add condition type, eg t instanceof B
         narrowMap.set(element, type);
       } else {
-        // case 2: remove condition type, eg t = new A() in some condition
         narrowMap.set(element, Type.void);
       }
     }
   }
 
-  collectNarrowedTypeIfTrue(expr: ExpressionRef): NarrowedTypeMap {
+  collectNarrowedTypeIfTrue(expr: ExpressionRef, flow: Flow): NarrowedTypeMap {  
     let result = new NarrowedTypeMap();
     let expressionMap = assert(this.expressionMap);
     if (expressionMap.has(expr)) {
@@ -142,8 +182,18 @@ export class TypeNarrowChecker {
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
-        let subMap = this.collectNarrowedTypeIfTrue(getLocalSetValue(expr));
+        let subMap = this.collectNarrowedTypeIfTrue(
+          getLocalSetValue(expr),
+          flow
+        );
         result.merge(subMap);
+        let local = flow.parentFunction.localsByIndex[getLocalSetIndex(expr)];
+        result.setNonnull(local);
+        break;
+      }
+      case ExpressionId.LocalGet: {
+        let local = flow.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+        result.setNonnull(local);
         break;
       }
       case ExpressionId.If: {
@@ -153,16 +203,16 @@ export class TypeNarrowChecker {
         if (ifFalse && isConstZero(ifFalse)) {
           // Logical AND: (if (condition ifTrue 0))
           // the only way this had become true is if condition and ifTrue are true
-          let subMap = this.collectNarrowedTypeIfTrue(condition);
-          let subMapTrue = this.collectNarrowedTypeIfTrue(ifTrue);
+          let subMap = this.collectNarrowedTypeIfTrue(condition, flow);
+          let subMapTrue = this.collectNarrowedTypeIfTrue(ifTrue, flow);
           subMap.merge(subMapTrue);
           result.merge(subMap);
         }
         if (ifFalse && isConstNonZero(ifTrue)) {
           // Logical OR: (if (condition 1 ifFalse))
           // the only way this had become false is if condition and ifFalse are false
-          let subMap = this.collectNarrowedTypeIfTrue(condition);
-          let subMapFalse = this.collectNarrowedTypeIfTrue(ifFalse);
+          let subMap = this.collectNarrowedTypeIfTrue(condition, flow);
+          let subMapFalse = this.collectNarrowedTypeIfTrue(ifFalse, flow);
           subMap.merge(subMapFalse, TypeMergeMode.AND);
           result.merge(subMap);
         }
@@ -172,7 +222,10 @@ export class TypeNarrowChecker {
         switch (getUnaryOp(expr)) {
           case UnaryOp.EqzI32:
           case UnaryOp.EqzI64: {
-            let subMap = this.collectNarrowedTypeIfFalse(getUnaryValue(expr)); // !value -> value must have been false
+            let subMap = this.collectNarrowedTypeIfFalse(
+              getUnaryValue(expr),
+              flow
+            ); // !value -> value must have been false
             result.merge(subMap);
             break;
           }
@@ -186,10 +239,10 @@ export class TypeNarrowChecker {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (isConstNonZero(left)) {
-              let subMap = this.collectNarrowedTypeIfTrue(right); // TRUE == right -> right must have been true
+              let subMap = this.collectNarrowedTypeIfTrue(right, flow); // TRUE == right -> right must have been true
               result.merge(subMap);
             } else if (isConstNonZero(right)) {
-              let subMap = this.collectNarrowedTypeIfTrue(left); // left == TRUE -> left must have been true
+              let subMap = this.collectNarrowedTypeIfTrue(left, flow); // left == TRUE -> left must have been true
               result.merge(subMap);
             }
             break;
@@ -199,10 +252,10 @@ export class TypeNarrowChecker {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (isConstZero(left)) {
-              let subMap = this.collectNarrowedTypeIfTrue(right); // TRUE == right -> right must have been true
+              let subMap = this.collectNarrowedTypeIfTrue(right, flow); // TRUE == right -> right must have been true
               result.merge(subMap);
             } else if (isConstZero(right)) {
-              let subMap = this.collectNarrowedTypeIfTrue(left); // TRUE == right -> right must have been true
+              let subMap = this.collectNarrowedTypeIfTrue(left, flow); // TRUE == right -> right must have been true
               result.merge(subMap);
             }
             break;
@@ -210,18 +263,63 @@ export class TypeNarrowChecker {
         }
         break;
       }
+      case ExpressionId.Call: {
+        // handle string eq/ne/not overloads
+        let name = getCallTarget(expr);
+        if (name == BuiltinNames.String_eq) {
+          assert(getCallOperandCount(expr) == 2);
+          let left = getCallOperandAt(expr, 0);
+          let right = getCallOperandAt(expr, 1);
+          if (isConstNonZero(left)) {
+            let subMap = this.collectNarrowedTypeIfTrue(right, flow); // TRUE == right -> right must have been true
+            result.merge(subMap);
+          } else if (isConstNonZero(right)) {
+            let subMap = this.collectNarrowedTypeIfTrue(left, flow); // left == TRUE -> left must have been true
+            result.merge(subMap);
+          }
+        } else if (name == BuiltinNames.String_ne) {
+          assert(getCallOperandCount(expr) == 2);
+          let left = getCallOperandAt(expr, 0);
+          let right = getCallOperandAt(expr, 1);
+          if (isConstZero(left)) {
+            let subMap = this.collectNarrowedTypeIfTrue(right, flow); // FALSE != right -> right must have been true
+            result.merge(subMap);
+          } else if (isConstZero(right)) {
+            let subMap = this.collectNarrowedTypeIfTrue(left, flow); // left != FALSE -> left must have been true
+            result.merge(subMap);
+          }
+        } else if (name == BuiltinNames.String_not) {
+          assert(getCallOperandCount(expr) == 1);
+          let subMap = this.collectNarrowedTypeIfFalse(
+            getCallOperandAt(expr, 0),
+            flow
+          ); // !value -> value must have been false
+          result.merge(subMap);
+        } else if (name == BuiltinNames.tostack) {
+          assert(getCallOperandCount(expr) == 1);
+          let subMap = this.collectNarrowedTypeIfTrue(
+            getCallOperandAt(expr, 0),
+            flow
+          );
+          result.merge(subMap);
+        }
+        break;
+      }
     }
     return result;
   }
 
-  collectNarrowedTypeIfFalse(expr: ExpressionRef): NarrowedTypeMap {
+  collectNarrowedTypeIfFalse(expr: ExpressionRef, flow: Flow): NarrowedTypeMap {
     let result = new NarrowedTypeMap();
     switch (getExpressionId(expr)) {
       case ExpressionId.Unary: {
         switch (getUnaryOp(expr)) {
           case UnaryOp.EqzI32:
           case UnaryOp.EqzI64: {
-            let subMap = this.collectNarrowedTypeIfTrue(getUnaryValue(expr)); // !value -> value must have been true
+            let subMap = this.collectNarrowedTypeIfTrue(
+              getUnaryValue(expr),
+              flow
+            ); // !value -> value must have been true
             result.merge(subMap);
             break;
           }
@@ -234,8 +332,14 @@ export class TypeNarrowChecker {
         if (ifFalse && isConstNonZero(ifTrue)) {
           // Logical OR: (if (condition 1 ifFalse))
           // the only way this had become false is if condition and ifFalse are false
-          let subMap = this.collectNarrowedTypeIfFalse(getIfCondition(expr));
-          let subMapFalse = this.collectNarrowedTypeIfFalse(getIfFalse(expr));
+          let subMap = this.collectNarrowedTypeIfFalse(
+            getIfCondition(expr),
+            flow
+          );
+          let subMapFalse = this.collectNarrowedTypeIfFalse(
+            getIfFalse(expr),
+            flow
+          );
           subMap.merge(subMapFalse);
           result.merge(subMap);
         }
@@ -249,10 +353,10 @@ export class TypeNarrowChecker {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (isConstZero(left)) {
-              let subMap = this.collectNarrowedTypeIfTrue(right); // !(FALSE == right) -> right must have been true
+              let subMap = this.collectNarrowedTypeIfTrue(right, flow); // !(FALSE == right) -> right must have been true
               result.merge(subMap);
             } else if (isConstZero(right)) {
-              let subMap = this.collectNarrowedTypeIfTrue(left); // !(left == FALSE) -> left must have been true
+              let subMap = this.collectNarrowedTypeIfTrue(left, flow); // !(left == FALSE) -> left must have been true
               result.merge(subMap);
             }
             break;
@@ -262,14 +366,55 @@ export class TypeNarrowChecker {
             let left = getBinaryLeft(expr);
             let right = getBinaryRight(expr);
             if (isConstNonZero(left)) {
-              let subMap = this.collectNarrowedTypeIfTrue(right); // !(TRUE != right) -> right must have been true
+              let subMap = this.collectNarrowedTypeIfTrue(right, flow); // !(TRUE != right) -> right must have been true
               result.merge(subMap);
             } else if (isConstNonZero(right)) {
-              let subMap = this.collectNarrowedTypeIfTrue(left); // !(left != TRUE) -> left must have been true
+              let subMap = this.collectNarrowedTypeIfTrue(left, flow); // !(left != TRUE) -> left must have been true
               result.merge(subMap);
             }
             break;
           }
+        }
+        break;
+      }
+      case ExpressionId.Call: {
+        // handle string eq/ne/not overloads
+        let name = getCallTarget(expr);
+        if (name == BuiltinNames.String_eq) {
+          assert(getCallOperandCount(expr) == 2);
+          let left = getCallOperandAt(expr, 0);
+          let right = getCallOperandAt(expr, 1);
+          if (isConstZero(left)) {
+            this.collectNarrowedTypeIfTrue(right, flow); // !(FALSE == right) -> right must have been true
+          } else if (isConstZero(right)) {
+            let subMap = this.collectNarrowedTypeIfTrue(left, flow); // !(left == FALSE) -> left must have been true
+            result.merge(subMap);
+          }
+        } else if (name == BuiltinNames.String_ne) {
+          assert(getCallOperandCount(expr) == 2);
+          let left = getCallOperandAt(expr, 0);
+          let right = getCallOperandAt(expr, 1);
+          if (isConstNonZero(left)) {
+            let subMap = this.collectNarrowedTypeIfTrue(right, flow); // !(TRUE != right) -> right must have been true
+            result.merge(subMap);
+          } else if (isConstNonZero(right)) {
+            let subMap = this.collectNarrowedTypeIfTrue(left, flow); // !(left != TRUE) -> left must have been true
+            result.merge(subMap);
+          }
+        } else if (name == BuiltinNames.String_not) {
+          assert(getCallOperandCount(expr) == 1);
+          let subMap = this.collectNarrowedTypeIfTrue(
+            getCallOperandAt(expr, 0),
+            flow
+          ); // !(!value) -> value must have been true
+          result.merge(subMap);
+        } else if (name == BuiltinNames.tostack) {
+          assert(getCallOperandCount(expr) == 1);
+          let subMap = this.collectNarrowedTypeIfFalse(
+            getCallOperandAt(expr, 0),
+            flow
+          );
+          result.merge(subMap);
         }
         break;
       }

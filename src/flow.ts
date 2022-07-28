@@ -92,6 +92,7 @@ import {
   BuiltinNames
 } from "./builtins";
 import { NarrowedTypeMap, TypeMergeMode, TypeNarrowChecker } from "./narrow";
+import { _BinaryenExpressionPrint } from "./glue/binaryen";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
@@ -172,7 +173,7 @@ export enum LocalFlags {
   /** Local is properly wrapped. Relevant for small integers. */
   WRAPPED = 1 << 1,
   /** Local is non-null. */
-  NONNULL = 1 << 2,
+  // NONNULL = 1 << 2,
   /** Local is initialized. */
   INITIALIZED = 1 << 3
 }
@@ -325,7 +326,7 @@ export class Flow {
     }
     branch.localFlags = this.localFlags.slice();
     let narrowedTypes = this.narrowedTypes;
-    branch.narrowedTypes = narrowedTypes ? narrowedTypes.clone(): null;
+    branch.narrowedTypes = narrowedTypes ? narrowedTypes.clone() : null;
     branch.conditionalNarrowedType = this.conditionalNarrowedType;
     if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
@@ -367,6 +368,7 @@ export class Flow {
             temps.length = k;
             local.type = type;
             local.flags = CommonFlags.NONE;
+            this.removeNarrowedType(local);
             this.unsetLocalFlag(local.index, ~0);
             return local;
           }
@@ -382,6 +384,7 @@ export class Flow {
         local = parentFunction.addLocal(type);
       }
     }
+    this.removeNarrowedType(local);
     this.unsetLocalFlag(local.index, ~0);
     return local;
   }
@@ -621,16 +624,18 @@ export class Flow {
     localFlags[index] = flags & ~flag;
   }
 
-  setNarrowedType(element: TypedElement, type: Type | null): void {
+  removeNarrowedType(element: TypedElement): void {
+    let thisNarrowedTypes = this.narrowedTypes;
+    if (thisNarrowedTypes) thisNarrowedTypes.delete(element);
+    this.conditionalNarrowedType.removeConditionNarrowedType(element);
+  }
+  setNarrowedType(element: TypedElement, type: Type): void {
+    if (!type.isReference) return;
     if (this.narrowedTypes == null) {
       this.narrowedTypes = new NarrowedTypeMap();
     }
     let narrowedTypes = assert(this.narrowedTypes);
-    if (type == null && narrowedTypes.get(element) != null) {
-      narrowedTypes.delete(element);
-    } else if (type) {
-      narrowedTypes.set(element, type);
-    }
+    narrowedTypes.set(element, type);
   }
   getNarrowedType(element: TypedElement): Type | null {
     if (this.narrowedTypes == null) {
@@ -640,11 +645,13 @@ export class Flow {
     return narrowedTypes.get(element);
   }
 
+  /** type == null means this expr is a assign expression and will insert a toxic and disable the other check */
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type | null): void {
+    if (type && !type.isReference) return;
     this.conditionalNarrowedType.setConditionNarrowedType(expr, element, type);
   }
   inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
-    let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfTrue(condi);
+    let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfTrue(condi, this);
     if (condiNarrow.size != 0) {
       if (this.narrowedTypes == null) {
         this.narrowedTypes = new NarrowedTypeMap();
@@ -654,7 +661,7 @@ export class Flow {
     }
   }
   inheritNarrowedTypeIfFalse(condi:ExpressionRef): void {
-    let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfFalse(condi);
+    let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfFalse(condi, this);
     if (condiNarrow.size != 0) {
       if (this.narrowedTypes == null) {
         this.narrowedTypes = new NarrowedTypeMap();
@@ -864,7 +871,6 @@ export class Flow {
       thisLocalFlags[i] = thisFlags & otherFlags & (
         LocalFlags.CONSTANT  |
         LocalFlags.WRAPPED   |
-        LocalFlags.NONNULL   |
         LocalFlags.INITIALIZED
       );
     }
@@ -979,22 +985,14 @@ export class Flow {
         for (let i = 0, k = rightLocalFlags.length; i < k; ++i) {
           thisLocalFlags[i] = rightLocalFlags[i];
         }
-        let thisNarrowedTypes = this.narrowedTypes;
-        let rightNarrowedTypes = right.narrowedTypes;
-        if (thisNarrowedTypes && rightNarrowedTypes) {
-          thisNarrowedTypes.merge(rightNarrowedTypes, TypeMergeMode.AND);
-        }
+        this.narrowedTypes = right.narrowedTypes;
       }
     } else if (rightFlags & FlowFlags.TERMINATES) {
       let leftLocalFlags = left.localFlags;
       for (let i = 0, k = leftLocalFlags.length; i < k; ++i) {
         thisLocalFlags[i] = leftLocalFlags[i];
       }
-      let thisNarrowedTypes = this.narrowedTypes;
-      let leftNarrowedTypes = left.narrowedTypes;
-      if (thisNarrowedTypes && leftNarrowedTypes) {
-        thisNarrowedTypes.merge(leftNarrowedTypes, TypeMergeMode.AND);
-      }
+      this.narrowedTypes = left.narrowedTypes;
     } else {
       let leftLocalFlags = left.localFlags;
       let numLeftLocalFlags = leftLocalFlags.length;
@@ -1007,7 +1005,6 @@ export class Flow {
         thisLocalFlags[i] = leftFlags & rightFlags & (
           LocalFlags.CONSTANT  |
           LocalFlags.WRAPPED   |
-          LocalFlags.NONNULL   |
           LocalFlags.INITIALIZED
         );
       }
@@ -1059,8 +1056,14 @@ export class Flow {
           return true;
         }
       }
+      let beforeNarrowedTypes = before.narrowedTypes;
+      let afterNarrowedTypes = after.narrowedTypes;
+      let beforeType = beforeNarrowedTypes ? beforeNarrowedTypes.get(local) : null;
+      beforeType = beforeType ? beforeType : local.type;
+      let afterType = afterNarrowedTypes ? afterNarrowedTypes.get(local) : null;
+      afterType = afterType ? afterType : local.type;
       if (type.isNullableReference) {
-        if (before.isLocalFlag(i, LocalFlags.NONNULL) && !after.isLocalFlag(i, LocalFlags.NONNULL)) {
+        if (beforeType != afterType) {
           return true;
         }
       }
@@ -1076,15 +1079,18 @@ export class Flow {
       if (this.isLocalFlag(i, LocalFlags.WRAPPED) != other.isLocalFlag(i, LocalFlags.WRAPPED)) {
         this.unsetLocalFlag(i, LocalFlags.WRAPPED); // assume not wrapped
       }
-      if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
-        this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
-      }
+    }
+    let thisNarrowedTypes = this.narrowedTypes;
+    let otherNarrowedTypes = other.narrowedTypes;
+    if (thisNarrowedTypes && otherNarrowedTypes) {
+      thisNarrowedTypes.merge(otherNarrowedTypes, TypeMergeMode.AND);
     }
   }
 
   /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
   isNonnull(expr: ExpressionRef, type: Type): bool {
     if (!type.isNullableReference) return true;
+    let thisNarrowedTypes = this.narrowedTypes;
     // below, only teeLocal/getLocal are relevant because these are the only expressions that
     // depend on a dynamic nullable state (flag = LocalFlags.NONNULL), while everything else
     // has already been handled by the nullable type check above.
@@ -1092,219 +1098,18 @@ export class Flow {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
         let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-        return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+        let localType = thisNarrowedTypes ? thisNarrowedTypes.get(local) : null;
+        localType = localType ? localType : local.type;
+        return !localType.isNullableReference;
       }
       case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-        return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+        let localType = thisNarrowedTypes ? thisNarrowedTypes.get(local) : null;
+        localType = localType ? localType : local.type;
+        return !localType.isNullableReference;
       }
     }
     return false;
-  }
-
-  /** Updates local states to reflect that this branch is only taken when `expr` is true-ish. */
-  inheritNonnullIfTrue(
-    /** Expression being true. */
-    expr: ExpressionRef,
-    /** If specified, only set the flag if also nonnull in this flow. */
-    iff: Flow | null = null
-  ): void {
-    // A: `expr` is true-ish -> Q: how did that happen?
-
-    // The iff argument is useful in situations like
-    //
-    //  if (!ref) {
-    //    ref = new Ref();
-    //  }
-    //  // inheritNonnullIfFalse(`!ref`, thenFlow) -> ref != null
-    //
-
-    switch (getExpressionId(expr)) {
-      case ExpressionId.LocalSet: {
-        if (!isLocalTee(expr)) break;
-        let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-        if (!iff || iff.isLocalFlag(local.index, LocalFlags.NONNULL)) {
-          this.setLocalFlag(local.index, LocalFlags.NONNULL);
-        }
-        this.inheritNonnullIfTrue(getLocalSetValue(expr), iff); // must have been true-ish as well
-        break;
-      }
-      case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-        if (!iff || iff.isLocalFlag(local.index, LocalFlags.NONNULL)) {
-          this.setLocalFlag(local.index, LocalFlags.NONNULL);
-        }
-        break;
-      }
-      case ExpressionId.If: {
-        let ifFalse = getIfFalse(expr);
-        if (ifFalse && isConstZero(ifFalse)) {
-          // Logical AND: (if (condition ifTrue 0))
-          // the only way this had become true is if condition and ifTrue are true
-          this.inheritNonnullIfTrue(getIfCondition(expr), iff);
-          this.inheritNonnullIfTrue(getIfTrue(expr), iff);
-        }
-        break;
-      }
-      case ExpressionId.Unary: {
-        switch (getUnaryOp(expr)) {
-          case UnaryOp.EqzI32:
-          case UnaryOp.EqzI64: {
-            this.inheritNonnullIfFalse(getUnaryValue(expr), iff); // !value -> value must have been false
-            break;
-          }
-        }
-        break;
-      }
-      case ExpressionId.Binary: {
-        switch (getBinaryOp(expr)) {
-          case BinaryOp.EqI32:
-          case BinaryOp.EqI64: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (isConstNonZero(left)) {
-              this.inheritNonnullIfTrue(right, iff); // TRUE == right -> right must have been true
-            } else if (isConstNonZero(right)) {
-              this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
-            }
-            break;
-          }
-          case BinaryOp.NeI32:
-          case BinaryOp.NeI64: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (isConstZero(left)) {
-              this.inheritNonnullIfTrue(right, iff); // FALSE != right -> right must have been true
-            } else if (isConstZero(right)) {
-              this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
-            }
-            break;
-          }
-        }
-        break;
-      }
-      case ExpressionId.Call: {
-        // handle string eq/ne/not overloads
-        let name = getCallTarget(expr);
-        if (name == BuiltinNames.String_eq) {
-          assert(getCallOperandCount(expr) == 2);
-          let left = getCallOperandAt(expr, 0);
-          let right = getCallOperandAt(expr, 1);
-          if (isConstNonZero(left)) {
-            this.inheritNonnullIfTrue(right, iff); // TRUE == right -> right must have been true
-          } else if (isConstNonZero(right)) {
-            this.inheritNonnullIfTrue(left, iff); // left == TRUE -> left must have been true
-          }
-        } else if (name == BuiltinNames.String_ne) {
-          assert(getCallOperandCount(expr) == 2);
-          let left = getCallOperandAt(expr, 0);
-          let right = getCallOperandAt(expr, 1);
-          if (isConstZero(left)) {
-            this.inheritNonnullIfTrue(right, iff); // FALSE != right -> right must have been true
-          } else if (isConstZero(right)) {
-            this.inheritNonnullIfTrue(left, iff); // left != FALSE -> left must have been true
-          }
-        } else if (name == BuiltinNames.String_not) {
-          assert(getCallOperandCount(expr) == 1);
-          this.inheritNonnullIfFalse(getCallOperandAt(expr, 0), iff); // !value -> value must have been false
-        } else if (name == BuiltinNames.tostack) {
-          assert(getCallOperandCount(expr) == 1);
-          this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff);
-        }
-        break;
-      }
-    }
-  }
-
-  /** Updates local states to reflect that this branch is only taken when `expr` is false-ish. */
-  inheritNonnullIfFalse(
-    /** Expression being false. */
-    expr: ExpressionRef,
-    /** If specified, only set the flag if also nonnull in this flow. */
-    iff: Flow | null = null
-  ): void {
-    // A: `expr` is false-ish -> Q: how did that happen?
-    switch (getExpressionId(expr)) {
-      case ExpressionId.Unary: {
-        switch (getUnaryOp(expr)) {
-          case UnaryOp.EqzI32:
-          case UnaryOp.EqzI64: {
-            this.inheritNonnullIfTrue(getUnaryValue(expr), iff); // !value -> value must have been true
-            break;
-          }
-        }
-        break;
-      }
-      case ExpressionId.If: {
-        let ifTrue = getIfTrue(expr);
-        let ifFalse = getIfFalse(expr);
-        if (ifFalse && isConstNonZero(ifTrue)) {
-          // Logical OR: (if (condition 1 ifFalse))
-          // the only way this had become false is if condition and ifFalse are false
-          this.inheritNonnullIfFalse(getIfCondition(expr), iff);
-          this.inheritNonnullIfFalse(getIfFalse(expr), iff);
-        }
-        break;
-      }
-      case ExpressionId.Binary: {
-        switch (getBinaryOp(expr)) {
-          // remember: we want to know how the _entire_ expression became FALSE (!)
-          case BinaryOp.EqI32:
-          case BinaryOp.EqI64: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (isConstZero(left)) {
-              this.inheritNonnullIfTrue(right, iff); // !(FALSE == right) -> right must have been true
-            } else if (isConstZero(right)) {
-              this.inheritNonnullIfTrue(left, iff); // !(left == FALSE) -> left must have been true
-            }
-            break;
-          }
-          case BinaryOp.NeI32:
-          case BinaryOp.NeI64: {
-            let left = getBinaryLeft(expr);
-            let right = getBinaryRight(expr);
-            if (isConstNonZero(left)) {
-              this.inheritNonnullIfTrue(right, iff); // !(TRUE != right) -> right must have been true
-            } else if (isConstNonZero(right)) {
-              this.inheritNonnullIfTrue(left, iff); // !(left != TRUE) -> left must have been true
-            }
-            break;
-          }
-        }
-        break;
-      }
-      case ExpressionId.Call: {
-        // handle string eq/ne/not overloads
-        let name = getCallTarget(expr);
-        if (name == BuiltinNames.String_eq) {
-          assert(getCallOperandCount(expr) == 2);
-          let left = getCallOperandAt(expr, 0);
-          let right = getCallOperandAt(expr, 1);
-          if (isConstZero(left)) {
-            this.inheritNonnullIfTrue(right, iff); // !(FALSE == right) -> right must have been true
-          } else if (isConstZero(right)) {
-            this.inheritNonnullIfTrue(left, iff); // !(left == FALSE) -> left must have been true
-          }
-        } else if (name == BuiltinNames.String_ne) {
-          assert(getCallOperandCount(expr) == 2);
-          let left = getCallOperandAt(expr, 0);
-          let right = getCallOperandAt(expr, 1);
-          if (isConstNonZero(left)) {
-            this.inheritNonnullIfTrue(right, iff); // !(TRUE != right) -> right must have been true
-          } else if (isConstNonZero(right)) {
-            this.inheritNonnullIfTrue(left, iff); // !(left != TRUE) -> left must have been true
-          }
-        } else if (name == BuiltinNames.String_not) {
-          assert(getCallOperandCount(expr) == 1);
-          this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff); // !(!value) -> value must have been true
-        } else if (name == BuiltinNames.tostack) {
-          assert(getCallOperandCount(expr) == 1);
-          this.inheritNonnullIfFalse(getCallOperandAt(expr, 0), iff);
-        }
-        break;
-      }
-    }
   }
 
   /**
