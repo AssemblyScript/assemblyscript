@@ -1349,9 +1349,9 @@ declare abstract class i31 {
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */
-declare type indexof<T extends unknown[]> = keyof T;
+declare type indexof<T extends ArrayLike<unknown>> = keyof T;
 /** Special type evaluating the indexed access value type. */
-declare type valueof<T extends unknown[]> = T[0];
+declare type valueof<T extends ArrayLike<unknown>> = T[0];
 /** A special type evaluated to the return type of T if T is a callable function. */
 declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 /** A special type evaluated to the return type of T if T is a callable function. */
