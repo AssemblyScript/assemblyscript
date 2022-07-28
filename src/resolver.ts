@@ -96,8 +96,7 @@ import {
 
 import {
   uniqueMap,
-  isPowerOf2,
-  CharCode
+  isPowerOf2
 } from "./util";
 
 import {
