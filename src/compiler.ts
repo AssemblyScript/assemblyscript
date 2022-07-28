@@ -6191,7 +6191,6 @@ export class Compiler extends DiagnosticEmitter {
       if (!valueType.isNullableReference || flow.isNonnull(valueExpr, type)) {
         narrowedType = valueType.nonNullableType;
       }
-      flow.setNarrowedType(local, narrowedType);
       flow.setAssignType(expressionRef, local, narrowedType);
     }
     return expressionRef;
@@ -6232,7 +6231,6 @@ export class Compiler extends DiagnosticEmitter {
       if (!valueType.isNullableReference || flow.isNonnull(valueExpr, type)) {
         narrowedType = valueType.nonNullableType;
       }
-      flow.setNarrowedType(global, narrowedType);
       flow.setAssignType(expressionRef, global, narrowedType);
     }
     return expressionRef;

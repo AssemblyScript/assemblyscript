@@ -82,7 +82,7 @@ import {
   uniqueMap
 } from "./util";
 
-import { NarrowedTypeMap, TypeMergeMode, TypeNarrowChecker } from "./narrow";
+import { NarrowedTypeMap, TypeNarrowChecker } from "./narrow";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
@@ -614,11 +614,13 @@ export class Flow {
     localFlags[index] = flags & ~flag;
   }
 
-  removeNarrowedType(element: TypedElement): void {
-    let thisNarrowedTypes = this.narrowedTypes;
-    if (thisNarrowedTypes) thisNarrowedTypes.delete(element);
-    this.conditionalNarrowedType.removeConditionNarrowedType(element);
+  /** set type assign */
+  setAssignType(expr: ExpressionRef, element: TypedElement, type: Type): void {
+    if (type && !type.isReference) return;
+    this.setNarrowedType(element, type);
+    this.conditionalNarrowedType.setAssignType(expr, element, type);
   }
+  /** set type narrow */
   setNarrowedType(element: TypedElement, type: Type): void {
     if (!type.isReference) return;
     if (this.narrowedTypes == null) {
@@ -627,6 +629,7 @@ export class Flow {
     let narrowedTypes = assert(this.narrowedTypes);
     narrowedTypes.set(element, type);
   }
+  /** get type narrow, return null if not exist */
   getNarrowedType(element: TypedElement): Type | null {
     if (this.narrowedTypes == null) {
       this.narrowedTypes = new NarrowedTypeMap();
@@ -634,15 +637,20 @@ export class Flow {
     let narrowedTypes = assert(this.narrowedTypes);
     return narrowedTypes.get(element);
   }
+  /** do not trace `element` type narrow */
+  removeNarrowedType(element: TypedElement): void {
+    let thisNarrowedTypes = this.narrowedTypes;
+    if (thisNarrowedTypes) thisNarrowedTypes.delete(element);
+    this.conditionalNarrowedType.removeElement(element);
+  }
 
+  /** set conditional type narrow */
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type): void {
     if (type && !type.isReference) return;
     this.conditionalNarrowedType.setConditionNarrowedType(expr, element, type);
   }
-  setAssignType(expr: ExpressionRef, element: TypedElement, type: Type): void {
-    if (type && !type.isReference) return;
-    this.conditionalNarrowedType.setAssignType(expr, element, type);
-  }
+
+  /** take effect conditional type narrow if condition is true */
   inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
     let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfTrue(condi, this);
     if (condiNarrow.size != 0) {
@@ -650,17 +658,18 @@ export class Flow {
         this.narrowedTypes = new NarrowedTypeMap();
       }
       let narrowedTypes = assert(this.narrowedTypes);
-      narrowedTypes.merge(condiNarrow);
+      narrowedTypes.mergeOr(condiNarrow);
     }
   }
-  inheritNarrowedTypeIfFalse(condi:ExpressionRef): void {
+  /** take effect conditional type narrow if condition is false */
+  inheritNarrowedTypeIfFalse(condi: ExpressionRef): void {
     let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfFalse(condi, this);
     if (condiNarrow.size != 0) {
       if (this.narrowedTypes == null) {
         this.narrowedTypes = new NarrowedTypeMap();
       }
       let narrowedTypes = assert(this.narrowedTypes);
-      narrowedTypes.merge(condiNarrow);
+      narrowedTypes.mergeOr(condiNarrow);
     }
   }
 
@@ -872,7 +881,7 @@ export class Flow {
     let thisNarrowedTypes = this.narrowedTypes;
     let otherNarrowedTypes = other.narrowedTypes;
     if (thisNarrowedTypes && otherNarrowedTypes) {
-      thisNarrowedTypes.merge(otherNarrowedTypes, TypeMergeMode.AND);
+      thisNarrowedTypes.mergeAnd(otherNarrowedTypes);
     }
 
     // field flags do not matter here since there's only INITIALIZED, which can
@@ -1007,7 +1016,7 @@ export class Flow {
       let rightNarrowedTypes = right.narrowedTypes;
       if (leftNarrowedTypes && rightNarrowedTypes) {
         let narrowedTypes = rightNarrowedTypes.clone();
-        narrowedTypes.merge(leftNarrowedTypes, TypeMergeMode.AND);
+        narrowedTypes.mergeAnd(leftNarrowedTypes);
         this.narrowedTypes = narrowedTypes;
       }
     }
@@ -1076,7 +1085,7 @@ export class Flow {
     let thisNarrowedTypes = this.narrowedTypes;
     let otherNarrowedTypes = other.narrowedTypes;
     if (thisNarrowedTypes && otherNarrowedTypes) {
-      thisNarrowedTypes.merge(otherNarrowedTypes, TypeMergeMode.AND);
+      thisNarrowedTypes.mergeAnd(otherNarrowedTypes);
     }
   }
 

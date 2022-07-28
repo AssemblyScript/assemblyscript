@@ -27,6 +27,7 @@ import {
 import { TypedElement } from "./program";
 import { Type, TypeFlags } from "./types";
 
+/** both a and b can assign to return type */
 export function typeAnd(a: Type | null, b: Type | null): Type | null {
   if (a == null || b == null) {
     return null;
@@ -44,6 +45,7 @@ export function typeAnd(a: Type | null, b: Type | null): Type | null {
   }
 }
 
+/** return type can assign a and b, aggressive type narrow */
 export function typeOr(a: Type | null, b: Type | null): Type | null {
   if (a == null) {
     return b;
@@ -65,11 +67,6 @@ export function typeOr(a: Type | null, b: Type | null): Type | null {
   }
 }
 
-export enum TypeMergeMode {
-  AND,
-  OR,
-}
-
 export class NarrowedTypeMap {
   private typeMap: Map<TypedElement, Type> = new Map();
   get size(): i32 {
@@ -89,6 +86,7 @@ export class NarrowedTypeMap {
   set(element: TypedElement, type: Type): void {
     this.typeMap.set(element, type);
   }
+  /** set TypedElement as non-nullable */
   setNonnull(typedElement: TypedElement): void {
     let typeMap = this.typeMap;
     if (typeMap.has(typedElement)) {
@@ -112,24 +110,15 @@ export class NarrowedTypeMap {
     }
     return other;
   }
-  merge(other: NarrowedTypeMap, mode: TypeMergeMode = TypeMergeMode.OR): void {
+  mergeOr(other: NarrowedTypeMap): void {
     let aMap = this.typeMap;
     let bMap = other.typeMap;
     let bKeys = Map_keys(bMap);
-    if (mode == TypeMergeMode.AND) {
-      let aKeys = Map_keys(aMap);
-      for (let i = 0, k = aKeys.length; i < k; i++) {
-        let akey = aKeys[i];
-        if (!bMap.has(akey)) {
-          aMap.delete(akey);
-        }
-      }
-    }
     for (let i = 0, k = bKeys.length; i < k; i++) {
       let key = bKeys[i];
       let aType = aMap.has(key) ? assert(aMap.get(key)) : null;
       let bType = assert(bMap.get(key));
-      let mergedType = mode == TypeMergeMode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
+      let mergedType = typeOr(aType, bType);
       if (mergedType) {
         aMap.set(key, mergedType);
       } else {
@@ -137,12 +126,36 @@ export class NarrowedTypeMap {
       }
     }
   }
-  mergeElement(narrowedElement: NarrowedTypeElement, mode: TypeMergeMode = TypeMergeMode.OR): void {
+  mergeAnd(other: NarrowedTypeMap): void {
+    let aMap = this.typeMap;
+    let bMap = other.typeMap;
+    let bKeys = Map_keys(bMap);
+    let aKeys = Map_keys(aMap);
+    for (let i = 0, k = aKeys.length; i < k; i++) {
+      let akey = aKeys[i];
+      if (!bMap.has(akey)) {
+        aMap.delete(akey);
+      }
+    }
+    for (let i = 0, k = bKeys.length; i < k; i++) {
+      let key = bKeys[i];
+      let aType = aMap.has(key) ? assert(aMap.get(key)) : null;
+      let bType = assert(bMap.get(key));
+      let mergedType = typeAnd(aType, bType);
+      if (mergedType) {
+        aMap.set(key, mergedType);
+      } else {
+        aMap.delete(key);
+      }
+    }
+  }
+
+  mergeElementOr(narrowedElement: NarrowedTypeElement): void {
     let thisTypeMap = this.typeMap;
     let element = narrowedElement.element;
     let aType = thisTypeMap.has(element) ? assert(this.typeMap.get(element)) : null;
     let bType = narrowedElement.type;
-    let mergedType = mode == TypeMergeMode.OR ? typeOr(aType, bType) : typeAnd(aType, bType);
+    let mergedType = typeOr(aType, bType);
     if (mergedType) {
       thisTypeMap.set(element, mergedType);
     } else {
@@ -166,40 +179,40 @@ class NarrowedTypeElement {
 }
 
 export class TypeNarrowChecker {
-  expressionMap: Map<ExpressionRef, NarrowedTypeElement> = new Map();
+  /** expression in condition, meeting this expr means type can be narrowed */
+  condiMap: Map<ExpressionRef, NarrowedTypeElement> = new Map();
+  /** expression in condition, meeting this expr means element assigned as a type */
   assignMap: Map<ExpressionRef, NarrowedTypeElement> = new Map();
 
+  /** set conditional narrowed type */
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type): void {
-    let expressionMap = this.expressionMap;
+    let condiMap = this.condiMap;
     if (expr <= 0) return;
-    assert(!expressionMap.has(expr));
-    expressionMap.set(expr, new NarrowedTypeElement(element, type));
+    assert(!condiMap.has(expr));
+    condiMap.set(expr, new NarrowedTypeElement(element, type));
   }
+  /** set type of assigned element */
   setAssignType(expr: ExpressionRef, element: TypedElement, type: Type): void {
     let assignMap = this.assignMap;
     if (expr <= 0) return;
     assert(!assignMap.has(expr));
     assignMap.set(expr, new NarrowedTypeElement(element, type));
   }
-  removeConditionNarrowedType(element: TypedElement): void {
-    let condiKeys = Map_keys(this.expressionMap);
-    let condiValues = Map_values(this.expressionMap);
+  /** remove TypedElement from mapping, called when element is no longer used or re-used */
+  removeElement(element: TypedElement): void {
+    let condiKeys = Map_keys(this.condiMap);
+    let condiValues = Map_values(this.condiMap);
     for (let i = 0, k = condiValues.length; i < k; i++) {
-      if (condiValues[i].element == element) this.expressionMap.delete(condiKeys[i]);
+      if (condiValues[i].element == element) this.condiMap.delete(condiKeys[i]);
     }
     let assignKeys = Map_keys(this.assignMap);
     let assignValues = Map_values(this.assignMap);
     for (let i = 0, k = assignValues.length; i < k; i++) {
-      if (assignValues[i].element == element) this.expressionMap.delete(assignKeys[i]);
+      if (assignValues[i].element == element) this.condiMap.delete(assignKeys[i]);
     }
   }
 
-  collectNarrowedTypeIfTrue(
-    expr: ExpressionRef,
-    flow: Flow,
-    typeMap: NarrowedTypeMap | null = null,
-    nonnullCheck: bool = true
-  ): NarrowedTypeMap {
+  collectNarrowedTypeIfTrue(expr: ExpressionRef, flow: Flow, typeMap: NarrowedTypeMap | null = null): NarrowedTypeMap {
     if (typeMap == null) typeMap = new NarrowedTypeMap();
     // visit children
     switch (getExpressionId(expr)) {
@@ -223,8 +236,8 @@ export class TypeNarrowChecker {
           // the only way this had become false is if condition and ifFalse are false
           let subMapTrue = this.collectNarrowedTypeIfTrue(condition, flow, typeMap.clone());
           let subMapFalse = this.collectNarrowedTypeIfTrue(ifFalse, flow, typeMap.clone());
-          subMapTrue.merge(subMapFalse, TypeMergeMode.AND);
-          typeMap.merge(subMapTrue);
+          subMapTrue.mergeAnd(subMapFalse);
+          typeMap.mergeOr(subMapTrue);
         }
         break;
       }
@@ -299,10 +312,10 @@ export class TypeNarrowChecker {
     }
 
     // update expr
-    const expressionMap = this.expressionMap;
+    const expressionMap = this.condiMap;
     if (expressionMap.has(expr)) {
       const narrowedTypeElement = assert(expressionMap.get(expr));
-      typeMap.mergeElement(narrowedTypeElement);
+      typeMap.mergeElementOr(narrowedTypeElement);
     }
     const assignMap = this.assignMap;
     if (assignMap.has(expr)) {
@@ -311,19 +324,18 @@ export class TypeNarrowChecker {
     }
 
     // nullable check
-    if (nonnullCheck) {
-      switch (getExpressionId(expr)) {
-        case ExpressionId.LocalSet: {
-          const local = flow.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-          typeMap.setNonnull(local);
-          break;
-        }
-        case ExpressionId.LocalGet: {
-          const local = flow.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-          typeMap.setNonnull(local);
-        }
+    switch (getExpressionId(expr)) {
+      case ExpressionId.LocalSet: {
+        const local = flow.parentFunction.localsByIndex[getLocalSetIndex(expr)];
+        typeMap.setNonnull(local);
+        break;
+      }
+      case ExpressionId.LocalGet: {
+        const local = flow.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+        typeMap.setNonnull(local);
       }
     }
+    
     return typeMap;
   }
 
