@@ -44,6 +44,10 @@ export declare function _BinaryenTypeAnyref(): TypeRef;
 export declare function _BinaryenTypeEqref(): TypeRef;
 export declare function _BinaryenTypeI31ref(): TypeRef;
 export declare function _BinaryenTypeDataref(): TypeRef;
+export declare function _BinaryenTypeStringref(): TypeRef;
+export declare function _BinaryenTypeStringviewWTF8(): TypeRef;
+export declare function _BinaryenTypeStringviewWTF16(): TypeRef;
+export declare function _BinaryenTypeStringviewIter(): TypeRef;
 
 export declare function _BinaryenModuleCreate(): ModuleRef;
 export declare function _BinaryenModuleDispose(module: ModuleRef): void;

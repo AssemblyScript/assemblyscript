@@ -16,6 +16,10 @@ export const {
   _BinaryenTypeEqref,
   _BinaryenTypeI31ref,
   _BinaryenTypeDataref,
+  _BinaryenTypeStringref,
+  _BinaryenTypeStringviewWTF8,
+  _BinaryenTypeStringviewWTF16,
+  _BinaryenTypeStringviewIter,
 
   _BinaryenModuleCreate,
   _BinaryenModuleDispose,

@@ -64,6 +64,10 @@ export namespace TypeRef {
   export const Eqref = binaryen._BinaryenTypeEqref();
   export const I31ref = binaryen._BinaryenTypeI31ref();
   export const Dataref = binaryen._BinaryenTypeDataref();
+  export const Stringref = binaryen._BinaryenTypeStringref();
+  export const StringviewWTF8 = binaryen._BinaryenTypeStringviewWTF8();
+  export const StringviewWTF16 = binaryen._BinaryenTypeStringviewWTF16();
+  export const StringviewIter = binaryen._BinaryenTypeStringviewIter();
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
@@ -85,7 +89,7 @@ export enum FeatureFlags {
   FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
-  Strings = 65536 /* _BinaryenFeatureStringss */,
+  Strings = 65536 /* _BinaryenFeatureStrings */,
   All = 122879 /* _BinaryenFeatureAll */
 }
 
