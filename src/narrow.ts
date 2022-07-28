@@ -25,32 +25,43 @@ import {
   UnaryOp,
 } from "./module";
 import { TypedElement } from "./program";
-import { Type } from "./types";
+import { Type, TypeFlags } from "./types";
 
 export function typeAnd(a: Type | null, b: Type | null): Type | null {
   if (a == null || b == null) {
     return null;
-  } else if (a.isAssignableTo(b)) {
-    return b;
-  } else if (b.isAssignableTo(a)) {
-    return a;
   } else {
-    return null;
+    const nonnulla = a.nonNullableType;
+    const nonnullb = b.nonNullableType;
+    const nullable = a.is(TypeFlags.NULLABLE) || b.is(TypeFlags.NULLABLE);
+    if (nonnulla.isAssignableTo(nonnullb)) {
+      return nullable ? b.nullableType : nonnullb;
+    } else if (nonnullb.isAssignableTo(nonnulla)) {
+      return nullable ? a.nullableType : nonnulla;
+    } else {
+      return null;
+    }
   }
 }
+
 export function typeOr(a: Type | null, b: Type | null): Type | null {
   if (a == null) {
     return b;
   } else if (b == null) {
     return a;
-  } else if (a.isAssignableTo(b)) {
-    // a extends b
-    return a;
-  } else if (b.isAssignableTo(a)) {
-    // b extends a
-    return b;
   } else {
-    return null;
+    const nonnulla = a.nonNullableType;
+    const nonnullb = b.nonNullableType;
+    const nullable = a.is(TypeFlags.NULLABLE) && b.is(TypeFlags.NULLABLE);
+    if (nonnulla.isAssignableTo(nonnullb)) {
+      // a extends b
+      return nullable ? a.nullableType : nonnulla;
+    } else if (nonnullb.isAssignableTo(nonnulla)) {
+      // b extends a
+      return nullable ? b.nullableType : nonnullb;
+    } else {
+      return null;
+    }
   }
 }
 
