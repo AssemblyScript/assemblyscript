@@ -1985,15 +1985,14 @@ function SET<
             );
           }
         }
-        // if U is a float, then casting float to int must include a finite check
-      } else if (isFloat<U>() && !isFloat<T>()) {
-        // @ts-ignore: cast to T is valid for numeric types here
-        store<T>(ptr, isFinite<U>(value) ? <T>value : 0);
-      } else if (isFloat<T>() && !isFloat<U>()) {
-        // @ts-ignore: In this case the <T> conversion is required
-        store<T>(ptr, <T>value);
       } else {
-        store<T>(ptr, value);
+        if (isFloat<U>() && !isFloat<T>()) {
+          // @ts-ignore: cast to T is valid for numeric types here
+          store<T>(ptr, isFinite<U>(value) ? <T>value : 0);
+        } else {
+          // @ts-ignore: cast
+          store<T>(ptr, <T>value);
+        }
       }
     }
   }

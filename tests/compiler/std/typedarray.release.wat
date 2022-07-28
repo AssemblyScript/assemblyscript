@@ -61854,42 +61854,42 @@
        end
        i32.const 0
        i32.const 1568
-       i32.const 878
+       i32.const 885
        i32.const 3
        call $~lib/builtins/abort
        unreachable
       end
       i32.const 0
       i32.const 1568
-      i32.const 879
+      i32.const 886
       i32.const 3
       call $~lib/builtins/abort
       unreachable
      end
      i32.const 0
      i32.const 1568
-     i32.const 880
+     i32.const 887
      i32.const 3
      call $~lib/builtins/abort
      unreachable
     end
     i32.const 0
     i32.const 1568
-    i32.const 882
+    i32.const 889
     i32.const 3
     call $~lib/builtins/abort
     unreachable
    end
    i32.const 0
    i32.const 1568
-   i32.const 883
+   i32.const 890
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
   i32.const 1568
-  i32.const 884
+  i32.const 891
   i32.const 3
   call $~lib/builtins/abort
   unreachable
