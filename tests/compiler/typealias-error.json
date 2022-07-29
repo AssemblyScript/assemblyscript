@@ -1,0 +1,9 @@
+{
+  "asc_flags": [],
+  "stderr": [
+    "TS2304: Cannot find name 'T'.",
+    "let element: T = arr[0];",
+    "TS2304: Cannot find name 'element'.",
+    "return element;"
+  ]
+}
