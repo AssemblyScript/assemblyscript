@@ -209,6 +209,7 @@ export class Flow {
     var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
+    flow.contextualTypeArguments = cloneMap(inlineFunction.contextualTypeArguments);
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }
@@ -219,7 +220,7 @@ export class Flow {
     /** Function this flow belongs to. */
     public parentFunction: Function
   ) {
-    /* nop */
+    this.contextualTypeArguments = cloneMap(this.parentFunction.contextualTypeArguments);
   }
 
   /** Parent flow. */
@@ -242,6 +243,8 @@ export class Flow {
   inlineFunction: Function | null = null;
   /** The label we break to when encountering a return statement, when inlining. */
   inlineReturnLabel: string | null = null;
+  /** The current contextual type arguments */
+  contextualTypeArguments: Map<string,Type> | null = null;
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
@@ -258,11 +261,6 @@ export class Flow {
   /** Gets the current return type. */
   get returnType(): Type {
     return this.actualFunction.signature.returnType;
-  }
-
-  /** Gets the current contextual type arguments. */
-  get contextualTypeArguments(): Map<string,Type> | null {
-    return this.actualFunction.contextualTypeArguments;
   }
 
   /** Tests if this flow has the specified flag or flags. */
@@ -299,6 +297,7 @@ export class Flow {
     var branch = new Flow(this.parentFunction);
     branch.parent = this;
     branch.outer = this.outer;
+    branch.contextualTypeArguments = cloneMap(this.contextualTypeArguments);
     if (resetBreakContext) {
       branch.flags = this.flags & ~(
         FlowFlags.BREAKS |
