@@ -145,6 +145,7 @@ import {
   SwitchStatement,
   ThrowStatement,
   TryStatement,
+  TypeDeclaration,
   VariableStatement,
   VoidStatement,
   WhileStatement,
@@ -2149,13 +2150,15 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.TYPEDECLARATION: {
-        // TODO: integrate inner type declaration into flow
-        this.error(
-          DiagnosticCode.Not_implemented_0,
-          statement.range,
-          "Inner type alias"
+        const declaration = <TypeDeclaration>statement;
+        const contextualTypeArguments = this.currentFlow.contextualTypeArguments!;
+        const type = this.resolver.resolveType(
+          declaration.type,
+          this.currentFlow.actualFunction,
+          cloneMap(contextualTypeArguments)
         );
-        stmt = module.unreachable();
+        contextualTypeArguments.set(declaration.name.text, type!);
+        stmt = module.nop();
         break;
       }
       case NodeKind.MODULE: {
