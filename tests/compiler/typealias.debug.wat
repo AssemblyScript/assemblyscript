@@ -8,8 +8,8 @@
  (elem $0 (i32.const 1))
  (export "alias" (func $typealias/alias))
  (export "memory" (memory $0))
- (func $typealias/alias (param $a f32) (result f64)
-  local.get $a
+ (func $typealias/alias (param $alias f32) (result f64)
+  local.get $alias
   f64.promote_f32
  )
 )
