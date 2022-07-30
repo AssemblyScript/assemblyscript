@@ -1394,6 +1394,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1426,6 +1427,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -3385,6 +3387,7 @@
    i32.store offset=16
   else
    global.get $~lib/memory/__stack_pointer
+   local.set $3
    local.get $1
    call $~lib/number/I32#toString
    local.set $1
@@ -3394,6 +3397,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1872
    i32.store offset=8
+   local.get $3
    local.get $1
    i32.const 4
    call $~lib/string/String#padStart
@@ -3660,10 +3664,12 @@
   local.get $0
   i32.const 3584
   call $~lib/string/String.__concat
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 112
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/date/Date#toDateString (param $0 i32) (result i32)
   (local $1 i32)
@@ -3704,6 +3710,7 @@
   local.get $3
   i32.store
   global.get $~lib/memory/__stack_pointer
+  local.set $1
   i32.const 48
   i32.const 4
   call $~lib/rt/itcms/__new
@@ -3711,6 +3718,7 @@
   i32.const 4992
   i32.const 48
   memory.copy
+  local.get $1
   local.get $2
   i32.store offset=4
   local.get $0
@@ -3775,6 +3783,7 @@
   i32.add
   local.set $6
   global.get $~lib/memory/__stack_pointer
+  local.set $0
   local.get $4
   i32.const 31
   i32.shr_s
@@ -3791,6 +3800,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1872
   i32.store offset=12
+  local.get $0
   local.get $7
   i32.const 4
   call $~lib/string/String#padStart
@@ -3875,10 +3885,12 @@
   local.get $1
   local.get $0
   call $~lib/string/String.__concat
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 44
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/date/Date#toTimeString (param $0 i32) (result i32)
   (local $1 i64)
@@ -4023,10 +4035,12 @@
   local.get $2
   local.get $0
   call $~lib/string/String.__concat
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 40
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/date/Date#toUTCString (param $0 i32) (result i32)
   (local $1 i32)
@@ -4069,6 +4083,7 @@
   local.get $3
   i32.store
   global.get $~lib/memory/__stack_pointer
+  local.set $1
   i32.const 48
   i32.const 4
   call $~lib/rt/itcms/__new
@@ -4076,6 +4091,7 @@
   i32.const 6048
   i32.const 48
   memory.copy
+  local.get $1
   local.get $4
   i32.store offset=4
   local.get $0
@@ -4140,6 +4156,7 @@
   i32.add
   local.set $8
   global.get $~lib/memory/__stack_pointer
+  local.set $1
   local.get $5
   i32.const 31
   i32.shr_s
@@ -4156,6 +4173,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1872
   i32.store offset=12
+  local.get $1
   local.get $9
   i32.const 4
   call $~lib/string/String#padStart
@@ -4380,10 +4398,12 @@
   local.get $0
   i32.const 6128
   call $~lib/string/String.__concat
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 96
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/string/String#split (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -4849,6 +4869,7 @@
   i32.store offset=16
   local.get $1
   call $~lib/util/string/strtol<i32>
+  local.set $7
   i32.const 1
   local.set $1
   local.get $0
@@ -4887,6 +4908,7 @@
    i32.const 1
   end
   local.set $0
+  local.get $7
   local.get $1
   local.get $0
   local.get $3
@@ -4895,10 +4917,12 @@
   local.get $5
   call $~lib/date/epochMillis
   call $~lib/date/Date#constructor
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 28
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $start:std/date
   (local $0 i32)

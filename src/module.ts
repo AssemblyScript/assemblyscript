@@ -2529,7 +2529,7 @@ export class Module {
 
   toText(watFormat: bool = true): string {
     var textPtr = watFormat
-      ? binaryen._BinaryenModuleAllocateAndWriteStackIR(this.ref) // TODO: add optimize arg
+      ? binaryen._BinaryenModuleAllocateAndWriteStackIR(this.ref, true)
       : binaryen._BinaryenModuleAllocateAndWriteText(this.ref);
     var text = readString(textPtr);
     if (textPtr) binaryen._free(textPtr);

@@ -1037,6 +1037,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1069,6 +1070,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -2064,10 +2066,12 @@
    i32.load offset=4
    i64.load
    call $~lib/number/U64#toString
+   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $0
    return
   end
   i32.const 19760
@@ -2144,10 +2148,12 @@
   local.get $0
   i64.load
   call $~lib/number/U64#toString
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $resolve-access/propertyAccess (result i32)
   (local $0 i32)

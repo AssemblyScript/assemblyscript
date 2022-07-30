@@ -1479,6 +1479,7 @@
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
+  local.set $2
   local.get $0
   i32.const 4
   i32.sub
@@ -1511,6 +1512,7 @@
   i32.const 1
   i32.or
   i32.store
+  local.get $2
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
@@ -2939,6 +2941,7 @@
   i32.shl
   i32.add
   f64.load
+  local.set $5
   local.get $0
   local.get $1
   i32.const 1
@@ -2948,8 +2951,11 @@
   i32.shl
   i32.add
   f64.load
+  local.set $7
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $7
   local.get $3
   i32.load
   call_indirect $0 (type $f64_f64_=>_i32)
@@ -2968,10 +2974,14 @@
      i32.add
      local.tee $6
      f64.load offset=8
+     local.set $5
      local.get $6
      f64.load
+     local.set $7
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $7
      local.get $3
      i32.load
      call_indirect $0 (type $f64_f64_=>_i32)
@@ -3039,10 +3049,14 @@
      i32.add
      local.tee $1
      f64.load offset=8
+     local.set $5
      local.get $1
      f64.load
+     local.set $7
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $7
      local.get $3
      i32.load
      call_indirect $0 (type $f64_f64_=>_i32)
@@ -3737,6 +3751,7 @@
     local.get $0
     local.get $2
     call $~lib/typedarray/Int8Array#__get
+    local.set $4
     local.get $2
     local.get $1
     i32.load offset=12
@@ -3749,6 +3764,7 @@
      call $~lib/builtins/abort
      unreachable
     end
+    local.get $4
     local.get $1
     i32.load offset=4
     local.get $2
@@ -27754,6 +27770,7 @@
   local.get $1
   i32.add
   i32.load8_s
+  local.set $5
   local.get $1
   i32.const 1
   i32.add
@@ -27761,8 +27778,11 @@
   local.get $0
   i32.add
   i32.load8_s
+  local.set $6
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $6
   local.get $3
   i32.load
   call_indirect $0 (type $i32_i32_=>_i32)
@@ -27779,10 +27799,14 @@
      i32.add
      local.tee $5
      i32.load8_s offset=1
+     local.set $6
      local.get $5
      i32.load8_s
+     local.set $5
      i32.const 2
      global.set $~argumentsLength
+     local.get $6
+     local.get $5
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -27844,10 +27868,14 @@
      i32.add
      local.tee $1
      i32.load8_s offset=1
+     local.set $5
      local.get $1
      i32.load8_s
+     local.set $1
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $1
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -28534,6 +28562,7 @@
   local.get $1
   i32.add
   i32.load8_u
+  local.set $5
   local.get $1
   i32.const 1
   i32.add
@@ -28541,8 +28570,11 @@
   local.get $0
   i32.add
   i32.load8_u
+  local.set $6
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $6
   local.get $3
   i32.load
   call_indirect $0 (type $i32_i32_=>_i32)
@@ -28559,10 +28591,14 @@
      i32.add
      local.tee $5
      i32.load8_u offset=1
+     local.set $6
      local.get $5
      i32.load8_u
+     local.set $5
      i32.const 2
      global.set $~argumentsLength
+     local.get $6
+     local.get $5
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -28624,10 +28660,14 @@
      i32.add
      local.tee $1
      i32.load8_u offset=1
+     local.set $5
      local.get $1
      i32.load8_u
+     local.set $1
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $1
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -29340,6 +29380,7 @@
   i32.shl
   i32.add
   i32.load16_s
+  local.set $5
   local.get $0
   local.get $1
   i32.const 1
@@ -29349,8 +29390,11 @@
   i32.shl
   i32.add
   i32.load16_s
+  local.set $6
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $6
   local.get $3
   i32.load
   call_indirect $0 (type $i32_i32_=>_i32)
@@ -29369,10 +29413,14 @@
      i32.add
      local.tee $5
      i32.load16_s offset=2
+     local.set $6
      local.get $5
      i32.load16_s
+     local.set $5
      i32.const 2
      global.set $~argumentsLength
+     local.get $6
+     local.get $5
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -29440,10 +29488,14 @@
      i32.add
      local.tee $1
      i32.load16_s offset=2
+     local.set $5
      local.get $1
      i32.load16_s
+     local.set $1
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $1
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -30163,6 +30215,7 @@
   i32.shl
   i32.add
   i32.load16_u
+  local.set $5
   local.get $0
   local.get $1
   i32.const 1
@@ -30172,8 +30225,11 @@
   i32.shl
   i32.add
   i32.load16_u
+  local.set $6
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $6
   local.get $3
   i32.load
   call_indirect $0 (type $i32_i32_=>_i32)
@@ -30192,10 +30248,14 @@
      i32.add
      local.tee $5
      i32.load16_u offset=2
+     local.set $6
      local.get $5
      i32.load16_u
+     local.set $5
      i32.const 2
      global.set $~argumentsLength
+     local.get $6
+     local.get $5
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -30263,10 +30323,14 @@
      i32.add
      local.tee $1
      i32.load16_u offset=2
+     local.set $5
      local.get $1
      i32.load16_u
+     local.set $1
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $1
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -30996,6 +31060,7 @@
   i32.shl
   i32.add
   i32.load
+  local.set $5
   local.get $0
   local.get $1
   i32.const 1
@@ -31005,8 +31070,11 @@
   i32.shl
   i32.add
   i32.load
+  local.set $6
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $6
   local.get $3
   i32.load
   call_indirect $0 (type $i32_i32_=>_i32)
@@ -31025,10 +31093,14 @@
      i32.add
      local.tee $5
      i32.load offset=4
+     local.set $6
      local.get $5
      i32.load
+     local.set $5
      i32.const 2
      global.set $~argumentsLength
+     local.get $6
+     local.get $5
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -31096,10 +31168,14 @@
      i32.add
      local.tee $1
      i32.load offset=4
+     local.set $5
      local.get $1
      i32.load
+     local.set $1
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $1
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -31813,6 +31889,7 @@
   i32.shl
   i32.add
   i32.load
+  local.set $5
   local.get $0
   local.get $1
   i32.const 1
@@ -31822,8 +31899,11 @@
   i32.shl
   i32.add
   i32.load
+  local.set $6
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $6
   local.get $3
   i32.load
   call_indirect $0 (type $i32_i32_=>_i32)
@@ -31842,10 +31922,14 @@
      i32.add
      local.tee $5
      i32.load offset=4
+     local.set $6
      local.get $5
      i32.load
+     local.set $5
      i32.const 2
      global.set $~argumentsLength
+     local.get $6
+     local.get $5
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -31913,10 +31997,14 @@
      i32.add
      local.tee $1
      i32.load offset=4
+     local.set $5
      local.get $1
      i32.load
+     local.set $1
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $1
      local.get $3
      i32.load
      call_indirect $0 (type $i32_i32_=>_i32)
@@ -32635,6 +32723,7 @@
   i32.shl
   i32.add
   i64.load
+  local.set $5
   local.get $0
   local.get $1
   i32.const 1
@@ -32644,8 +32733,11 @@
   i32.shl
   i32.add
   i64.load
+  local.set $7
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $7
   local.get $3
   i32.load
   call_indirect $0 (type $i64_i64_=>_i32)
@@ -32664,10 +32756,14 @@
      i32.add
      local.tee $6
      i64.load offset=8
+     local.set $5
      local.get $6
      i64.load
+     local.set $7
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $7
      local.get $3
      i32.load
      call_indirect $0 (type $i64_i64_=>_i32)
@@ -32735,10 +32831,14 @@
      i32.add
      local.tee $1
      i64.load offset=8
+     local.set $5
      local.get $1
      i64.load
+     local.set $7
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $7
      local.get $3
      i32.load
      call_indirect $0 (type $i64_i64_=>_i32)
@@ -33461,6 +33561,7 @@
   i32.shl
   i32.add
   i64.load
+  local.set $5
   local.get $0
   local.get $1
   i32.const 1
@@ -33470,8 +33571,11 @@
   i32.shl
   i32.add
   i64.load
+  local.set $7
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $7
   local.get $3
   i32.load
   call_indirect $0 (type $i64_i64_=>_i32)
@@ -33490,10 +33594,14 @@
      i32.add
      local.tee $6
      i64.load offset=8
+     local.set $5
      local.get $6
      i64.load
+     local.set $7
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $7
      local.get $3
      i32.load
      call_indirect $0 (type $i64_i64_=>_i32)
@@ -33561,10 +33669,14 @@
      i32.add
      local.tee $1
      i64.load offset=8
+     local.set $5
      local.get $1
      i64.load
+     local.set $7
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $7
      local.get $3
      i32.load
      call_indirect $0 (type $i64_i64_=>_i32)
@@ -34287,6 +34399,7 @@
   i32.shl
   i32.add
   f32.load
+  local.set $5
   local.get $0
   local.get $1
   i32.const 1
@@ -34296,8 +34409,11 @@
   i32.shl
   i32.add
   f32.load
+  local.set $7
   i32.const 2
   global.set $~argumentsLength
+  local.get $5
+  local.get $7
   local.get $3
   i32.load
   call_indirect $0 (type $f32_f32_=>_i32)
@@ -34316,10 +34432,14 @@
      i32.add
      local.tee $6
      f32.load offset=4
+     local.set $5
      local.get $6
      f32.load
+     local.set $7
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $7
      local.get $3
      i32.load
      call_indirect $0 (type $f32_f32_=>_i32)
@@ -34387,10 +34507,14 @@
      i32.add
      local.tee $1
      f32.load offset=4
+     local.set $5
      local.get $1
      f32.load
+     local.set $7
      i32.const 2
      global.set $~argumentsLength
+     local.get $5
+     local.get $7
      local.get $3
      i32.load
      call_indirect $0 (type $f32_f32_=>_i32)
@@ -35056,6 +35180,7 @@
    i32.const 5
    call $~lib/typedarray/Int8Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 3952
    i32.store offset=4
@@ -35147,6 +35272,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -35278,6 +35404,7 @@
    i32.const 5
    call $~lib/typedarray/Uint8Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 3984
    i32.store offset=4
@@ -35369,6 +35496,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -35500,6 +35628,7 @@
    i32.const 5
    call $~lib/typedarray/Uint8ClampedArray#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4016
    i32.store offset=4
@@ -35591,6 +35720,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -35722,6 +35852,7 @@
    i32.const 5
    call $~lib/typedarray/Int16Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4048
    i32.store offset=4
@@ -35824,6 +35955,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -35957,6 +36089,7 @@
    i32.const 5
    call $~lib/typedarray/Uint16Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4080
    i32.store offset=4
@@ -36059,6 +36192,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -36192,6 +36326,7 @@
    i32.const 5
    call $~lib/typedarray/Int32Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4112
    i32.store offset=4
@@ -36294,6 +36429,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -36427,6 +36563,7 @@
    i32.const 5
    call $~lib/typedarray/Uint32Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4144
    i32.store offset=4
@@ -36529,6 +36666,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -36662,6 +36800,7 @@
    i64.const 5
    call $~lib/typedarray/Int64Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4176
    i32.store offset=4
@@ -36764,6 +36903,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -36897,6 +37037,7 @@
    i64.const 5
    call $~lib/typedarray/Uint64Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4208
    i32.store offset=4
@@ -36999,6 +37140,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -37132,6 +37274,7 @@
    f32.const 5
    call $~lib/typedarray/Float32Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4240
    i32.store offset=4
@@ -37234,6 +37377,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -37367,6 +37511,7 @@
    f64.const 5
    call $~lib/typedarray/Float64Array#__set
    global.get $~lib/memory/__stack_pointer
+   local.set $4
    global.get $~lib/memory/__stack_pointer
    i32.const 4272
    i32.store offset=4
@@ -37469,6 +37614,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $4
    local.get $6
    i32.store offset=8
    local.get $6
@@ -37995,10 +38141,12 @@
   i32.store
   local.get $0
   call $~lib/typedarray/Uint8Array#join
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int8Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -47040,6 +47188,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Int8Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3600
                                       i32.store offset=4
@@ -47121,6 +47270,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -47180,6 +47330,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Uint8Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3632
                                       i32.store offset=4
@@ -47261,6 +47412,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -47320,6 +47472,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Uint8ClampedArray#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3664
                                       i32.store offset=4
@@ -47401,6 +47554,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -47460,6 +47614,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Int16Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3696
                                       i32.store offset=4
@@ -47549,6 +47704,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -47608,6 +47764,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Uint16Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3728
                                       i32.store offset=4
@@ -47697,6 +47854,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -47756,6 +47914,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Int32Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3760
                                       i32.store offset=4
@@ -47845,6 +48004,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -47904,6 +48064,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Uint32Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3792
                                       i32.store offset=4
@@ -47993,6 +48154,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -48052,6 +48214,7 @@
                                       i64.const 3
                                       call $~lib/typedarray/Int64Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3824
                                       i32.store offset=4
@@ -48141,6 +48304,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -48200,6 +48364,7 @@
                                       i64.const 3
                                       call $~lib/typedarray/Uint64Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3856
                                       i32.store offset=4
@@ -48289,6 +48454,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -48348,6 +48514,7 @@
                                       f32.const 3
                                       call $~lib/typedarray/Float32Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3888
                                       i32.store offset=4
@@ -48437,6 +48604,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -48496,6 +48664,7 @@
                                       f64.const 3
                                       call $~lib/typedarray/Float64Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       global.get $~lib/memory/__stack_pointer
                                       i32.const 3920
                                       i32.store offset=4
@@ -48585,6 +48754,7 @@
                                       i32.const 8
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $7
                                       i32.store offset=8
                                       local.get $7
@@ -50054,8 +50224,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_s
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5008
@@ -50097,8 +50269,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_s
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5040
@@ -50173,8 +50347,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_u
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5072
@@ -50216,8 +50392,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_u
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5104
@@ -50292,8 +50470,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_u
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5136
@@ -50335,8 +50515,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_u
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5168
@@ -50415,8 +50597,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load16_s
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5200
@@ -50462,8 +50646,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load16_s
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5232
@@ -50542,8 +50728,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load16_u
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5264
@@ -50589,8 +50777,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load16_u
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5296
@@ -50669,8 +50859,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5328
@@ -50716,8 +50908,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5360
@@ -50796,8 +50990,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5392
@@ -50843,8 +51039,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load
+                                         local.set $8
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $8
                                          local.get $1
                                          local.get $2
                                          i32.const 5424
@@ -50923,8 +51121,10 @@
                                          i32.shl
                                          i32.add
                                          i64.load
+                                         local.set $4
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $4
                                          local.get $1
                                          local.get $2
                                          i32.const 5456
@@ -50970,8 +51170,10 @@
                                          i32.shl
                                          i32.add
                                          i64.load
+                                         local.set $4
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $4
                                          local.get $1
                                          local.get $2
                                          i32.const 5488
@@ -51050,8 +51252,10 @@
                                          i32.shl
                                          i32.add
                                          i64.load
+                                         local.set $4
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $4
                                          local.get $1
                                          local.get $2
                                          i32.const 5520
@@ -51097,8 +51301,10 @@
                                          i32.shl
                                          i32.add
                                          i64.load
+                                         local.set $4
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $4
                                          local.get $1
                                          local.get $2
                                          i32.const 5552
@@ -51177,8 +51383,10 @@
                                          i32.shl
                                          i32.add
                                          f32.load
+                                         local.set $5
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $5
                                          local.get $1
                                          local.get $2
                                          i32.const 5584
@@ -51224,8 +51432,10 @@
                                          i32.shl
                                          i32.add
                                          f32.load
+                                         local.set $5
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $5
                                          local.get $1
                                          local.get $2
                                          i32.const 5616
@@ -51304,8 +51514,10 @@
                                          i32.shl
                                          i32.add
                                          f64.load
+                                         local.set $6
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $6
                                          local.get $1
                                          local.get $2
                                          i32.const 5648
@@ -51351,8 +51563,10 @@
                                          i32.shl
                                          i32.add
                                          f64.load
+                                         local.set $6
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $6
                                          local.get $1
                                          local.get $2
                                          i32.const 5680
@@ -51427,8 +51641,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_s
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5712
@@ -51470,8 +51686,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_s
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5744
@@ -51546,8 +51764,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_u
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5776
@@ -51589,8 +51809,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_u
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5808
@@ -51665,8 +51887,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_u
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5840
@@ -51708,8 +51932,10 @@
                                          local.get $3
                                          i32.add
                                          i32.load8_u
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5872
@@ -51788,8 +52014,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load16_s
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5904
@@ -51835,8 +52063,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load16_s
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5936
@@ -51915,8 +52145,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load16_u
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 5968
@@ -51962,8 +52194,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load16_u
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 6000
@@ -52042,8 +52276,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 6032
@@ -52089,8 +52325,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 6064
@@ -52169,8 +52407,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 6096
@@ -52216,8 +52456,10 @@
                                          i32.shl
                                          i32.add
                                          i32.load
+                                         local.set $7
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $7
                                          local.get $1
                                          local.get $2
                                          i32.const 6128
@@ -52296,8 +52538,10 @@
                                          i32.shl
                                          i32.add
                                          i64.load
+                                         local.set $4
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $4
                                          local.get $1
                                          local.get $2
                                          i32.const 6160
@@ -52343,8 +52587,10 @@
                                          i32.shl
                                          i32.add
                                          i64.load
+                                         local.set $4
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $4
                                          local.get $1
                                          local.get $2
                                          i32.const 6192
@@ -52423,8 +52669,10 @@
                                          i32.shl
                                          i32.add
                                          i64.load
+                                         local.set $4
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $4
                                          local.get $1
                                          local.get $2
                                          i32.const 6224
@@ -52470,8 +52718,10 @@
                                          i32.shl
                                          i32.add
                                          i64.load
+                                         local.set $4
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $4
                                          local.get $1
                                          local.get $2
                                          i32.const 6256
@@ -52550,8 +52800,10 @@
                                          i32.shl
                                          i32.add
                                          f32.load
+                                         local.set $5
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $5
                                          local.get $1
                                          local.get $2
                                          i32.const 6288
@@ -52597,8 +52849,10 @@
                                          i32.shl
                                          i32.add
                                          f32.load
+                                         local.set $5
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $5
                                          local.get $1
                                          local.get $2
                                          i32.const 6320
@@ -52677,8 +52931,10 @@
                                          i32.shl
                                          i32.add
                                          f64.load
+                                         local.set $6
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $6
                                          local.get $1
                                          local.get $2
                                          i32.const 6352
@@ -52724,8 +52980,10 @@
                                          i32.shl
                                          i32.add
                                          f64.load
+                                         local.set $6
                                          i32.const 3
                                          global.set $~argumentsLength
+                                         local.get $6
                                          local.get $1
                                          local.get $2
                                          i32.const 6384
@@ -54230,8 +54488,10 @@
                                         local.get $3
                                         i32.add
                                         i32.load8_s
+                                        local.set $8
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $8
                                         local.get $2
                                         local.get $1
                                         i32.const 7200
@@ -54329,8 +54589,10 @@
                                         local.get $3
                                         i32.add
                                         i32.load8_u
+                                        local.set $8
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $8
                                         local.get $2
                                         local.get $1
                                         i32.const 7232
@@ -54428,8 +54690,10 @@
                                         local.get $3
                                         i32.add
                                         i32.load8_u
+                                        local.set $8
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $8
                                         local.get $2
                                         local.get $1
                                         i32.const 7264
@@ -54528,8 +54792,10 @@
                                         i32.shl
                                         i32.add
                                         i32.load16_s
+                                        local.set $8
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $8
                                         local.get $2
                                         local.get $1
                                         i32.const 7296
@@ -54631,8 +54897,10 @@
                                         i32.shl
                                         i32.add
                                         i32.load16_u
+                                        local.set $8
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $8
                                         local.get $2
                                         local.get $1
                                         i32.const 7328
@@ -54728,8 +54996,10 @@
                                         i32.shl
                                         i32.add
                                         i32.load
+                                        local.set $8
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $8
                                         local.get $2
                                         local.get $1
                                         i32.const 7360
@@ -54825,8 +55095,10 @@
                                         i32.shl
                                         i32.add
                                         i32.load
+                                        local.set $8
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $8
                                         local.get $2
                                         local.get $1
                                         i32.const 7392
@@ -54925,8 +55197,10 @@
                                         i32.shl
                                         i32.add
                                         i64.load
+                                        local.set $4
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $4
                                         local.get $2
                                         local.get $1
                                         i32.const 7424
@@ -55025,8 +55299,10 @@
                                         i32.shl
                                         i32.add
                                         i64.load
+                                        local.set $4
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $4
                                         local.get $2
                                         local.get $1
                                         i32.const 7456
@@ -55125,8 +55401,10 @@
                                         i32.shl
                                         i32.add
                                         f32.load
+                                        local.set $5
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $5
                                         local.get $2
                                         local.get $1
                                         i32.const 7488
@@ -55225,8 +55503,10 @@
                                         i32.shl
                                         i32.add
                                         f64.load
+                                        local.set $6
                                         i32.const 3
                                         global.set $~argumentsLength
+                                        local.get $6
                                         local.get $2
                                         local.get $1
                                         i32.const 7520
@@ -55336,6 +55616,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 4
                                       i32.const 8
@@ -55349,6 +55630,7 @@
                                       local.get $2
                                       i32.load offset=8
                                       call $~lib/util/bytes/REVERSE<u8>
+                                      local.get $1
                                       local.get $2
                                       i32.store offset=16
                                       local.get $2
@@ -55471,6 +55753,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 8
                                       call $~lib/typedarray/Uint8Array#subarray
@@ -55483,6 +55766,7 @@
                                       local.get $2
                                       i32.load offset=8
                                       call $~lib/util/bytes/REVERSE<u8>
+                                      local.get $1
                                       local.get $2
                                       i32.store offset=16
                                       local.get $2
@@ -55605,6 +55889,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 8
                                       call $~lib/typedarray/Uint8ClampedArray#subarray
@@ -55617,6 +55902,7 @@
                                       local.get $2
                                       i32.load offset=8
                                       call $~lib/util/bytes/REVERSE<u8>
+                                      local.get $1
                                       local.get $2
                                       i32.store offset=16
                                       local.get $2
@@ -55734,6 +56020,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 8
                                       call $~lib/typedarray/Int16Array#subarray
@@ -55741,6 +56028,7 @@
                                       global.get $~lib/memory/__stack_pointer
                                       local.get $2
                                       i32.store offset=12
+                                      local.get $1
                                       local.get $2
                                       call $~lib/typedarray/Int16Array#reverse
                                       local.tee $1
@@ -55863,6 +56151,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 8
                                       call $~lib/typedarray/Uint16Array#subarray
@@ -55870,6 +56159,7 @@
                                       global.get $~lib/memory/__stack_pointer
                                       local.get $2
                                       i32.store offset=12
+                                      local.get $1
                                       local.get $2
                                       call $~lib/typedarray/Int16Array#reverse
                                       local.tee $1
@@ -56039,6 +56329,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 4
                                       i32.const 8
@@ -56103,6 +56394,7 @@
                                         end
                                        end
                                       end
+                                      local.get $1
                                       local.get $3
                                       i32.store offset=16
                                       local.get $3
@@ -56270,6 +56562,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 8
                                       call $~lib/typedarray/Uint32Array#subarray
@@ -56333,6 +56626,7 @@
                                         end
                                        end
                                       end
+                                      local.get $1
                                       local.get $3
                                       i32.store offset=16
                                       local.get $3
@@ -56503,6 +56797,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 8
                                       call $~lib/typedarray/Int64Array#subarray
@@ -56566,6 +56861,7 @@
                                         end
                                        end
                                       end
+                                      local.get $1
                                       local.get $3
                                       i32.store offset=16
                                       local.get $3
@@ -56736,6 +57032,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 8
                                       call $~lib/typedarray/Uint64Array#subarray
@@ -56799,6 +57096,7 @@
                                         end
                                        end
                                       end
+                                      local.get $1
                                       local.get $3
                                       i32.store offset=16
                                       local.get $3
@@ -56969,6 +57267,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 8
                                       call $~lib/typedarray/Float32Array#subarray
@@ -57032,6 +57331,7 @@
                                         end
                                        end
                                       end
+                                      local.get $1
                                       local.get $3
                                       i32.store offset=16
                                       local.get $3
@@ -57202,6 +57502,7 @@
                                        end
                                       end
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $1
                                       local.get $7
                                       i32.const 4
                                       i32.const 8
@@ -57266,6 +57567,7 @@
                                         end
                                        end
                                       end
+                                      local.get $1
                                       local.get $3
                                       i32.store offset=16
                                       local.get $3
@@ -58643,6 +58945,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -58687,6 +58990,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $7
                                       i32.store offset=16
                                       i32.const 0
@@ -58882,6 +59186,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -58926,6 +59231,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $7
                                       i32.store offset=16
                                       i32.const 0
@@ -59020,6 +59326,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -59066,6 +59373,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $8
                                       i32.store offset=16
                                       i32.const 0
@@ -59161,6 +59469,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -59207,6 +59516,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $8
                                       i32.store offset=16
                                       i32.const 0
@@ -59300,6 +59610,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -59346,6 +59657,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $8
                                       i32.store offset=16
                                       i32.const 0
@@ -59439,6 +59751,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -59485,6 +59798,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $8
                                       i32.store offset=16
                                       i32.const 0
@@ -59579,6 +59893,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -59625,6 +59940,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $8
                                       i32.store offset=16
                                       i32.const 0
@@ -59719,6 +60035,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -59765,6 +60082,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $8
                                       i32.store offset=16
                                       i32.const 0
@@ -59859,6 +60177,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -59905,6 +60224,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $8
                                       i32.store offset=16
                                       i32.const 0
@@ -59999,6 +60319,7 @@
                                       local.tee $1
                                       i32.store offset=12
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $3
                                       i32.const 1
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -60045,6 +60366,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $3
                                       local.get $8
                                       i32.store offset=16
                                       i32.const 0
@@ -60418,6 +60740,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Int8Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -60455,6 +60778,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -60541,6 +60865,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Uint8Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -60578,6 +60903,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -60664,6 +60990,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Uint8ClampedArray#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -60701,6 +61028,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -60787,6 +61115,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Int16Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -60826,6 +61155,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -60914,6 +61244,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Uint16Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -60953,6 +61284,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -61041,6 +61373,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Int32Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -61080,6 +61413,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -61168,6 +61502,7 @@
                                       i32.const 3
                                       call $~lib/typedarray/Uint32Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -61207,6 +61542,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -61295,6 +61631,7 @@
                                       i64.const 3
                                       call $~lib/typedarray/Int64Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -61334,6 +61671,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -61422,6 +61760,7 @@
                                       i64.const 3
                                       call $~lib/typedarray/Uint64Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -61461,6 +61800,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1
@@ -61549,6 +61889,7 @@
                                       f32.const 3
                                       call $~lib/typedarray/Float32Array#__set
                                       global.get $~lib/memory/__stack_pointer
+                                      local.set $2
                                       i32.const 0
                                       global.set $~argumentsLength
                                       global.get $~lib/memory/__stack_pointer
@@ -61588,6 +61929,7 @@
                                       i32.const 4
                                       i32.add
                                       global.set $~lib/memory/__stack_pointer
+                                      local.get $2
                                       local.get $1
                                       i32.store offset=4
                                       local.get $1

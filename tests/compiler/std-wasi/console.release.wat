@@ -2047,6 +2047,7 @@
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
+  local.set $2
   local.get $0
   i32.const 4
   i32.sub
@@ -2079,6 +2080,7 @@
   i32.const 1
   i32.or
   i32.store
+  local.get $2
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
@@ -2172,6 +2174,7 @@
    return
   end
   local.get $1
+  local.set $2
   local.get $1
   local.get $1
   i32.const 20
@@ -2260,6 +2263,7 @@
   local.set $1
   i32.const 3
   global.set $~argumentsLength
+  local.get $2
   local.get $5
   local.get $1
   call $~lib/string/String.UTF8.encodeUnsafe@varargs

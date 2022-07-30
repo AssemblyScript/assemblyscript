@@ -1118,6 +1118,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1150,6 +1151,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -2335,10 +2337,12 @@
      end
      local.get $0
      i32.load offset=4
+     local.set $0
      global.get $~lib/memory/__stack_pointer
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
+     local.get $0
      return
     end
    else
@@ -3162,10 +3166,12 @@
   else
    i32.const 0
   end
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/symbol/_Symbol#toString (param $0 i32) (result i32)
   (local $1 i32)
@@ -3399,10 +3405,12 @@
   local.get $0
   i32.const 2400
   call $~lib/string/String.__concat
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $start:std/symbol
   (local $0 i32)

@@ -73,8 +73,10 @@
   global.get $memory/ptr
   i32.const 16
   i32.add
+  local.set $0
   i32.const 1104
   global.set $memory/ptr
+  local.get $0
   i32.const 1104
   i32.ne
   if
@@ -88,8 +90,10 @@
   global.get $memory/ptr
   i32.const 8
   i32.add
+  local.set $0
   i32.const 1112
   global.set $memory/ptr
+  local.get $0
   i32.const 1112
   i32.ne
   if
@@ -103,8 +107,10 @@
   global.get $memory/ptr
   i32.const 4
   i32.add
+  local.set $0
   i32.const 1116
   global.set $memory/ptr
+  local.get $0
   i32.const 1116
   i32.ne
   if
@@ -118,8 +124,10 @@
   global.get $memory/ptr
   i32.const 2
   i32.add
+  local.set $0
   i32.const 1118
   global.set $memory/ptr
+  local.get $0
   i32.const 1118
   i32.ne
   if
@@ -133,8 +141,10 @@
   global.get $memory/ptr
   i32.const 1
   i32.add
+  local.set $0
   i32.const 1119
   global.set $memory/ptr
+  local.get $0
   i32.const 1119
   i32.ne
   if

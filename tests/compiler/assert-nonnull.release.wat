@@ -139,10 +139,12 @@
   end
   local.get $0
   i32.load
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $export:assert-nonnull/testProp (param $0 i32) (result i32)
   (local $1 i32)

@@ -222,6 +222,7 @@
    local.get $0
    i32.load offset=4
    i32.load offset=4
+   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
@@ -230,6 +231,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $0
    return
   end
   i32.const 17712
@@ -278,6 +280,7 @@
    i32.load offset=16
    i32.const 1
    i32.shr_u
+   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
@@ -286,6 +289,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $0
    return
   end
   i32.const 17712
@@ -333,6 +337,7 @@
    i32.store offset=4
    local.get $0
    call $~lib/string/String#startsWith
+   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -341,6 +346,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $0
    return
   end
   i32.const 17712
@@ -396,6 +402,7 @@
    i32.load offset=16
    i32.const 1
    i32.shr_u
+   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
@@ -404,6 +411,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $0
    return
   end
   i32.const 17712
@@ -462,6 +470,7 @@
    i32.store offset=4
    local.get $0
    call $~lib/string/String#startsWith
+   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 12
    i32.add
@@ -470,6 +479,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $0
    return
   end
   i32.const 17712

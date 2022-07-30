@@ -2075,6 +2075,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -2107,6 +2108,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -8168,10 +8170,12 @@
   i32.const 1712
   i32.const 2147483647
   call $~lib/string/String#lastIndexOf
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   global.get $std/string/str
   local.tee $3
   i32.store
+  local.get $0
   local.get $3
   i32.const 20
   i32.sub
@@ -12730,6 +12734,7 @@
   local.tee $3
   i32.store offset=36
   global.get $~lib/memory/__stack_pointer
+  local.set $4
   i32.const 55296
   call $~lib/string/String.fromCodePoint
   local.set $5
@@ -12742,6 +12747,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store offset=4
+  local.get $4
   local.get $5
   local.get $0
   call $~lib/string/String#concat

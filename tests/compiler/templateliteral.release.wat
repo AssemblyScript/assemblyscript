@@ -1233,6 +1233,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1265,6 +1266,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -4211,10 +4213,12 @@
   i32.const 5328
   local.get $0
   call $~lib/string/String#concat
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $templateliteral/RecursiveObject#toString (param $0 i32) (result i32)
   (local $1 i32)
@@ -4249,10 +4253,12 @@
   if
    local.get $0
    i32.load
+   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 20
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $0
    return
   end
   global.get $~lib/memory/__stack_pointer
@@ -4288,10 +4294,12 @@
   i32.store offset=16
   i32.const 5616
   call $~lib/staticarray/StaticArray<~lib/string/String>#join
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/string/String#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

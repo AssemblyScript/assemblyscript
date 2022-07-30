@@ -3893,8 +3893,10 @@
       f64.sub
      end
     end
+    local.set $1
     local.get $0
     global.set $~lib/math/rempio2_y0
+    local.get $1
     global.set $~lib/math/rempio2_y1
     local.get $3
     br $~lib/math/rempio2|inlined.0
@@ -5874,8 +5876,10 @@
   i64.gt_u
   if
    local.get $4
+   local.set $6
    local.get $5
    local.set $4
+   local.get $6
    local.set $5
   end
   local.get $5
@@ -6040,8 +6044,10 @@
    i32.gt_u
    if
     local.get $4
+    local.set $6
     local.get $5
     local.set $4
+    local.get $6
     local.set $5
    end
    local.get $4
@@ -7186,6 +7192,7 @@
   local.get $4
   i32.const -2147483648
   i32.and
+  local.set $5
   local.get $8
   if (result i32)
    local.get $4
@@ -7288,6 +7295,7 @@
   local.tee $4
   i32.sub
   local.set $3
+  local.get $5
   local.get $2
   local.get $4
   i32.shl
@@ -9310,8 +9318,10 @@
       f64.sub
      end
     end
+    local.set $1
     local.get $0
     global.set $~lib/math/rempio2_y0
+    local.get $1
     global.set $~lib/math/rempio2_y1
     local.get $3
     br $~lib/math/rempio2|inlined.1
@@ -10474,8 +10484,10 @@
       f64.sub
      end
     end
+    local.set $1
     local.get $0
     global.set $~lib/math/rempio2_y0
+    local.get $1
     global.set $~lib/math/rempio2_y1
     br $~lib/math/rempio2|inlined.2
    end
@@ -11365,8 +11377,10 @@
       f64.sub
      end
     end
+    local.set $1
     local.get $0
     global.set $~lib/math/rempio2_y0
+    local.get $1
     global.set $~lib/math/rempio2_y1
     local.get $3
     br $~lib/math/rempio2|inlined.3
