@@ -120,8 +120,6 @@ export class Type {
   flags: TypeFlags;
   /** Size in bits. */
   size: i32;
-  /** Size in bytes. */
-  byteSize: i32;
   /** Underlying class reference, if a class type. */
   classReference: Class | null;
   /** Underlying signature reference, if a function type. */
@@ -136,7 +134,6 @@ export class Type {
     this.kind = kind;
     this.flags = flags;
     this.size = size;
-    this.byteSize = <i32>ceil<f64>(<f64>size / 8);
     this.classReference = null;
     this.signatureReference = null;
     if (!(flags & TypeFlags.NULLABLE)) {
@@ -169,8 +166,13 @@ export class Type {
 
   /** Substitutes this type with the auto type if this type is void. */
   get exceptVoid(): Type {
-    if (this.kind == TypeKind.VOID) return Type.auto;
-    return this;
+    return this.kind == TypeKind.VOID ? Type.auto : this;
+  }
+
+  /** Size in bytes. */
+  get byteSize(): i32 {
+    // ceiled div by 8
+    return this.size + 7 >>> 3;
   }
 
   /** Gets this type's logarithmic alignment in memory. */
@@ -258,18 +260,16 @@ export class Type {
     return this.is(TypeFlags.EXTERNAL | TypeFlags.REFERENCE);
   }
 
-  /** Tests if this type represents a class. */
-  get isClass(): bool {
-    return this.isInternalReference
-      ? this.classReference != null
-      : false;
-  }
-
   /** Gets the underlying class of this type, if any. */
   getClass(): Class | null {
     return this.isInternalReference
       ? this.classReference
       : null;
+  }
+
+  /** Tests if this type represents a class. */
+  get isClass(): bool {
+    return this.getClass() != null;
   }
 
   /** Gets the underlying class or wrapper class of this type, if any. */
@@ -297,18 +297,16 @@ export class Type {
     return null;
   }
 
-  /** Tests if this type represents a function. */
-  get isFunction(): bool {
-    return this.isInternalReference
-      ? this.signatureReference != null
-      : false;
-  }
-
   /** Gets the underlying function signature of this type, if any. */
   getSignature(): Signature | null {
     return this.isInternalReference
       ? this.signatureReference
       : null;
+  }
+
+  /** Tests if this type represents a function. */
+  get isFunction(): bool {
+    return this.getSignature() != null;
   }
 
   /** Tests if this is a managed type that needs GC hooks. */
@@ -347,7 +345,8 @@ export class Type {
 
   /** Computes the truncating mask in the target type. */
   computeSmallIntegerMask(targetType: Type): i32 {
-    var size = this.is(TypeFlags.UNSIGNED) ? this.size : this.size - 1;
+    var size = this.size;
+    size = this.is(TypeFlags.UNSIGNED) ? size : size - 1;
     return ~0 >>> (targetType.size - size);
   }
 
@@ -400,8 +399,13 @@ export class Type {
             if (targetFunction = target.getSignature()) {
               return currentFunction.isAssignableTo(targetFunction);
             }
-          } else if (this.isExternalReference && (this.kind == target.kind || (target.kind == TypeKind.ANYREF && this.kind != TypeKind.EXTERNREF))) {
-            return true;
+          } else if (this.isExternalReference) {
+            if (
+              this.kind == target.kind ||
+              (target.kind == TypeKind.ANYREF && this.kind != TypeKind.EXTERNREF)
+            ) {
+              return true;
+            }
           }
         }
       }
@@ -452,7 +456,10 @@ export class Type {
     // special in that it allows integer references as well
     if (this.is(TypeFlags.INTEGER) && target.is(TypeFlags.INTEGER)) {
       let size = this.size;
-      return size == target.size && (size >= 32 || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED));
+      return size == target.size && (
+        size >= 32 ||
+        this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)
+      );
     }
     return this.kind == target.kind;
   }
@@ -719,7 +726,9 @@ export class Type {
 export function typesToRefs(types: Type[]): TypeRef[] {
   var numTypes = types.length;
   var ret = new Array<TypeRef>(numTypes);
-  for (let i = 0; i < numTypes; ++i) ret[i] = types[i].toRef();
+  for (let i = 0; i < numTypes; ++i) {
+    unchecked(ret[i] = types[i].toRef());
+  }
   return ret;
 }
 
@@ -728,7 +737,9 @@ export function typesToString(types: Type[]): string {
   var numTypes = types.length;
   if (!numTypes) return "";
   var sb = new Array<string>(numTypes);
-  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true);
+  for (let i = 0; i < numTypes; ++i) {
+    unchecked(sb[i] = types[i].toString(true));
+  }
   return sb.join(",");
 }
 
@@ -794,7 +805,7 @@ export class Signature {
       let typeRefs = new Array<TypeRef>(1 + numParameterTypes);
       typeRefs[0] = thisType.toRef();
       for (let i = 0; i < numParameterTypes; ++i) {
-        typeRefs[i + 1] = parameterTypes[i].toRef();
+        unchecked(typeRefs[i + 1] = parameterTypes[i].toRef());
       }
       return createType(typeRefs);
     }
@@ -820,17 +831,21 @@ export class Signature {
     // check rest parameter
     if (this.hasRest != other.hasRest) return false;
 
+    // check return type
+    if (!this.returnType.equals(other.returnType)) return false;
+
     // check parameter types
     var thisParameterTypes = this.parameterTypes;
     var otherParameterTypes = other.parameterTypes;
     var numParameters = thisParameterTypes.length;
     if (numParameters != otherParameterTypes.length) return false;
-    for (let i = 0; i < numParameters; ++i) {
-      if (!thisParameterTypes[i].equals(otherParameterTypes[i])) return false;
-    }
 
-    // check return type
-    return this.returnType.equals(other.returnType);
+    for (let i = 0; i < numParameters; ++i) {
+      let thisParameterType = unchecked(thisParameterTypes[i]);
+      let otherParameterType = unchecked(otherParameterTypes[i]);
+      if (!thisParameterType.equals(otherParameterType)) return false;
+    }
+    return true;
   }
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
@@ -840,7 +855,9 @@ export class Signature {
     var thisThisType = this.thisType;
     var targetThisType = target.thisType;
     if (thisThisType) {
-      if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) return false;
+      if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) {
+        return false;
+      }
     } else if (targetThisType) {
       return false;
     }
@@ -848,32 +865,35 @@ export class Signature {
     // check rest parameter
     if (this.hasRest != target.hasRest) return false; // TODO
 
+    // check return type
+    var thisReturnType = this.returnType;
+    var targetReturnType = target.returnType;
+    if (!(thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType))) {
+      return false;
+    }
     // check parameter types
     var thisParameterTypes = this.parameterTypes;
     var targetParameterTypes = target.parameterTypes;
     var numParameters = thisParameterTypes.length;
     if (numParameters != targetParameterTypes.length) return false; // TODO
+
     for (let i = 0; i < numParameters; ++i) {
-      let thisParameterType = thisParameterTypes[i];
-      let targetParameterType = targetParameterTypes[i];
+      let thisParameterType = unchecked(thisParameterTypes[i]);
+      let targetParameterType = unchecked(targetParameterTypes[i]);
       if (!thisParameterType.isAssignableTo(targetParameterType)) return false;
     }
-
-    // check return type
-    var thisReturnType = this.returnType;
-    var targetReturnType = target.returnType;
-    return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
+    return true;
   }
 
   /** Tests if this signature has at least one managed operand. */
   get hasManagedOperands(): bool {
     var thisType = this.thisType;
-    if (thisType) {
-      if (thisType.isManaged) return true;
+    if (thisType && thisType.isManaged) {
+      return true;
     }
     var parameterTypes = this.parameterTypes;
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-      if (parameterTypes[i].isManaged) return true;
+      if (unchecked(parameterTypes[i]).isManaged) return true;
     }
     return false;
   }
@@ -884,14 +904,12 @@ export class Signature {
     var index = 0;
     var thisType = this.thisType;
     if (thisType) {
-      if (thisType.isManaged) {
-        indices.push(index);
-      }
+      if (thisType.isManaged) indices.push(index);
       ++index;
     }
     var parameterTypes = this.parameterTypes;
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-      if (parameterTypes[i].isManaged) {
+      if (unchecked(parameterTypes[i]).isManaged) {
         indices.push(index);
       }
       ++index;
@@ -934,8 +952,13 @@ export class Signature {
     var numParameterTypes = parameterTypes.length;
     var cloneParameterTypes = new Array<Type>(numParameterTypes);
     for (let i = 0; i < numParameterTypes; ++i) {
-      cloneParameterTypes[i] = parameterTypes[i];
+      unchecked(cloneParameterTypes[i] = parameterTypes[i]);
     }
-    return new Signature(this.program, cloneParameterTypes, this.returnType, this.thisType);
+    return new Signature(
+      this.program,
+      cloneParameterTypes,
+      this.returnType,
+      this.thisType
+    );
   }
 }
