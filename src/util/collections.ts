@@ -4,7 +4,7 @@
  */
 
 /** Clone map. Typically used to track contextual type arguments. */
-export function cloneMap<K,V>(map: Map<K,V> | null = null): Map<K,V> {
+export function cloneMap<K,V>(map: Map<K,V> | null): Map<K,V> {
   var out = new Map<K,V>();
   if (map) {
     // TODO: for (let [k, v] of map) {

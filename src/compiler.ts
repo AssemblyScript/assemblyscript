@@ -8280,7 +8280,7 @@ export class Compiler extends DiagnosticEmitter {
           let instance = this.resolver.resolveFunction(
             <FunctionPrototype>target,
             null,
-            cloneMap<string,Type>(),
+            new Map<string,Type>(),
             ReportMode.SWALLOW
           );
           if (!instance) break;
