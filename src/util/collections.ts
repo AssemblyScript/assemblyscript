@@ -5,34 +5,45 @@
 
 /** Clone map. Typically used to track contextual type arguments. */
 export function cloneMap<K,V>(map: Map<K,V> | null): Map<K,V> {
-  var out = new Map<K,V>();
-  if (map) {
-    // TODO: for (let [k, v] of map) {
-    for (let _keys = Map_keys(map), i = 0, k = _keys.length; i < k; ++i) {
-      let k = unchecked(_keys[i]);
-      let v = assert(map.get(k));
-      out.set(k, v);
+  if (!ASC_TARGET) { // JS
+    // fast path for js target
+    return new Map<K, V>(map);
+  } else {
+    let out = new Map<K,V>();
+    if (map) {
+      // TODO: for (let [k, v] of map) {
+      for (let _keys = Map_keys(map), i = 0, k = _keys.length; i < k; ++i) {
+        let k = unchecked(_keys[i]);
+        let v = assert(map.get(k));
+        out.set(k, v);
+      }
     }
+    return out;
   }
-  return out;
 }
 
 /** Merge two maps in into new one. */
 export function mergeMaps<K,V>(map1: Map<K,V>, map2: Map<K,V>): Map<K,V> {
-  var out = new Map<K,V>();
-  // TODO: for (let [k, v] of map1) {
-  for (let _keys = Map_keys(map1), i = 0, k = _keys.length; i < k; ++i) {
-    let k = unchecked(_keys[i]);
-    let v = assert(map1.get(k));
-    out.set(k, v);
+  if (!ASC_TARGET) { // JS
+    let out = new Map<K,V>(map1);
+    map2.forEach((v, k) => out.set(k, v));
+    return out;
+  } else {
+    let out = new Map<K,V>();
+    // TODO: for (let [k, v] of map1) {
+    for (let _keys = Map_keys(map1), i = 0, k = _keys.length; i < k; ++i) {
+      let k = unchecked(_keys[i]);
+      let v = assert(map1.get(k));
+      out.set(k, v);
+    }
+    // TODO: for (let [k, v] of map2) {
+    for (let _keys = Map_keys(map2), i = 0, k = _keys.length; i < k; ++i) {
+      let k = unchecked(_keys[i]);
+      let v = assert(map2.get(k));
+      out.set(k, v);
+    }
+    return out;
   }
-  // TODO: for (let [k, v] of map2) {
-  for (let _keys = Map_keys(map2), i = 0, k = _keys.length; i < k; ++i) {
-    let k = unchecked(_keys[i]);
-    let v = assert(map2.get(k));
-    out.set(k, v);
-  }
-  return out;
 }
 
 /** BitSet represent growable sequence of N bits. It's faster alternative of Set<i32> when elements
