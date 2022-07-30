@@ -435,7 +435,7 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
 
 /** Creates an indentation matching the number of specified levels. */
 export function indent(sb: string[], level: i32): void {
-  sb.push("  ".repeat(level));
+  if (level) sb.push("  ".repeat(level));
 }
 
 /** Escapes a string using the specified kind of quote. */
