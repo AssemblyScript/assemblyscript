@@ -607,7 +607,7 @@ export declare function _BinaryenModuleOptimize(module: ModuleRef): void;
 export declare function _BinaryenModuleRunPasses(module: ModuleRef, passes: ArrayRef<StringRef>, numPasses: Index): void;
 export declare function _BinaryenModuleAutoDrop(module: ModuleRef): void;
 export declare function _BinaryenSizeofAllocateAndWriteResult(): i32;
-export declare function _BinaryenModuleAllocateAndWrite(resultOut: BinaryenModuleAllocateAndWriteResultRef, module: ModuleRef, sourceMapUrl: StringRef);
+export declare function _BinaryenModuleAllocateAndWrite(resultOut: BinaryenModuleAllocateAndWriteResultRef, module: ModuleRef, sourceMapUrl: StringRef): void;
 export declare function _BinaryenModuleAllocateAndWriteText(module: ModuleRef): StringRef;
 export declare function _BinaryenModuleAllocateAndWriteStackIR(module: ModuleRef, optimize: bool): StringRef;
 export declare function _BinaryenModuleRead(input: ArrayRef<u8>, inputSize: usize): ModuleRef;
