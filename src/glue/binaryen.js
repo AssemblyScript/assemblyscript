@@ -572,6 +572,7 @@ export const {
   _BinaryenModuleOptimize,
   _BinaryenModuleRunPasses,
   _BinaryenModuleAutoDrop,
+  _BinaryenSizeofAllocateAndWriteResult,
   _BinaryenModuleAllocateAndWrite,
   _BinaryenModuleAllocateAndWriteText,
   _BinaryenModuleAllocateAndWriteStackIR,

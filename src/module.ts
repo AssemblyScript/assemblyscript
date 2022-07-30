@@ -2511,19 +2511,31 @@ export class Module {
   }
 
   toBinary(sourceMapUrl: string | null = null): BinaryModule {
-    var out = this.lit; // safe to reuse as long as..
-    assert(binaryen._BinaryenSizeofLiteral() >= 12);
-    var cStr = allocString(sourceMapUrl);
-    var binaryPtr: usize = 0;
-    var sourceMapPtr: usize = 0;
-    binaryen._BinaryenModuleAllocateAndWrite(out, this.ref, cStr);
-    binaryPtr = assert(binaryen.__i32_load(out));
+    assert(
+      binaryen._BinaryenSizeofLiteral() >=
+      binaryen._BinaryenSizeofAllocateAndWriteResult()
+    );
+
+    // now safely reuse lit buffer for BinaryenModuleAllocateAndWriteResult
+    var out = this.lit;
+    var str = allocString(sourceMapUrl);
+
+    binaryen._BinaryenModuleAllocateAndWrite(out, this.ref, str);
+
+    // read BinaryenModuleAllocateAndWriteResult struct
+    var binaryPtr = binaryen.__i32_load(out + 0) as usize; // non-nullabe
     var binaryLen = binaryen.__i32_load(out + 4);
-    sourceMapPtr = binaryen.__i32_load(out + 8); // may be NULL
-    var binary = new BinaryModule(readBuffer(binaryPtr, binaryLen), readString(sourceMapPtr));
-    if (cStr) binaryen._free(cStr);
+    var srcMapPtr = binaryen.__i32_load(out + 8) as usize; // nullable
+
+    var binary = new BinaryModule(
+      readBuffer(assert(binaryPtr), binaryLen),
+      readString(srcMapPtr)
+    );
+
+    if (str) binaryen._free(str);
+    if (srcMapPtr) binaryen._free(srcMapPtr);
     binaryen._free(binaryPtr);
-    if (sourceMapPtr) binaryen._free(sourceMapPtr);
+
     return binary;
   }
 

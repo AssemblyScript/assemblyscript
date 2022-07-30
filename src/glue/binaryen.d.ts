@@ -33,6 +33,7 @@ export type ElementSegmentRef = Ref;
 export type RelooperRef = Ref;
 export type RelooperBlockRef = Ref;
 export type ExpressionRunnerRef = Ref;
+export type BinaryenModuleAllocateAndWriteResultRef = Ref;
 
 export declare function _BinaryenTypeCreate(types: ArrayRef<TypeRef>, numTypes: u32): TypeRef;
 export declare function _BinaryenTypeArity(type: TypeRef): u32;
@@ -605,7 +606,8 @@ export declare function _BinaryenModuleValidate(module: ModuleRef): i32;
 export declare function _BinaryenModuleOptimize(module: ModuleRef): void;
 export declare function _BinaryenModuleRunPasses(module: ModuleRef, passes: ArrayRef<StringRef>, numPasses: Index): void;
 export declare function _BinaryenModuleAutoDrop(module: ModuleRef): void;
-export declare function _BinaryenModuleAllocateAndWrite(out: ArrayRef<u8>, module: ModuleRef, sourceMapUrl: StringRef): void;
+export declare function _BinaryenSizeofAllocateAndWriteResult(): i32;
+export declare function _BinaryenModuleAllocateAndWrite(resultOut: BinaryenModuleAllocateAndWriteResultRef, module: ModuleRef, sourceMapUrl: StringRef);
 export declare function _BinaryenModuleAllocateAndWriteText(module: ModuleRef): StringRef;
 export declare function _BinaryenModuleAllocateAndWriteStackIR(module: ModuleRef, optimize: bool): StringRef;
 export declare function _BinaryenModuleRead(input: ArrayRef<u8>, inputSize: usize): ModuleRef;
