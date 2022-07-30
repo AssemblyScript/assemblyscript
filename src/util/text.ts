@@ -454,7 +454,7 @@ export function indent(sb: string[], level: i32): void {
       sb.push(spaces);
       indentCache.set(level, spaces);
     } else {
-      sb.push(indentCache.get(level)!);
+      sb.push(assert(indentCache.get(level)));
     }
   }
 }
