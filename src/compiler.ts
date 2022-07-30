@@ -90,7 +90,8 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName
+  mangleInternalName,
+  TypeDefinition
 } from "./program";
 
 import {
@@ -2151,13 +2152,29 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.TYPEDECLARATION: {
         const declaration = <TypeDeclaration>statement;
-        const contextualTypeArguments = this.currentFlow.contextualTypeArguments!;
-        const type = this.resolver.resolveType(
-          declaration.type,
-          this.currentFlow.actualFunction,
-          cloneMap(contextualTypeArguments)
-        );
-        contextualTypeArguments.set(declaration.name.text, type!);
+        const flow = this.currentFlow;
+        const actualFunction = flow.actualFunction;
+        const name = declaration.name.text;
+        if (declaration.typeParameters) {
+          const typeParameters = assert(declaration.typeParameters);
+          if (typeParameters.length) {
+            const definition = new TypeDefinition(name, actualFunction, declaration);
+            if (!flow.contextualTypeDefinitions) {
+              flow.contextualTypeDefinitions = new Map();
+            }
+            const contextualTypeDefinitions = assert(flow.contextualTypeDefinitions);
+            contextualTypeDefinitions.set(name, definition);
+          }
+        } else {
+          const contextualTypeArguments = flow.contextualTypeArguments;
+          const type = this.resolver.resolveType(
+            declaration.type,
+            actualFunction,
+            cloneMap(contextualTypeArguments),
+            flow.contextualTypeDefinitions
+          );
+          contextualTypeArguments.set(name, assert(type));
+        }
         stmt = module.nop();
         break;
       }
@@ -2954,7 +2971,8 @@ export class Compiler extends DiagnosticEmitter {
         type = resolver.resolveType( // reports
           typeNode,
           flow.actualFunction,
-          cloneMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments),
+          flow.contextualTypeDefinitions
         );
         if (!type) continue;
         this.checkTypeSupported(type, typeNode);
@@ -3758,7 +3776,8 @@ export class Compiler extends DiagnosticEmitter {
         let toType = this.resolver.resolveType( // reports
           assert(expression.toType),
           flow.actualFunction,
-          cloneMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments),
+          flow.contextualTypeDefinitions
         );
         if (!toType) return this.module.unreachable();
         return this.compileExpression(expression.expression, toType, inheritedConstraints | Constraints.CONV_EXPLICIT);
@@ -6286,6 +6305,7 @@ export class Compiler extends DiagnosticEmitter {
         typeArgumentNodes,
         this.currentFlow.actualFunction.parent,
         cloneMap(this.currentFlow.contextualTypeArguments), // don't update
+        this.currentFlow.contextualTypeDefinitions,
         expression
       );
     }
@@ -7200,6 +7220,7 @@ export class Compiler extends DiagnosticEmitter {
     );
     var instance: Function | null;
     var contextualTypeArguments = cloneMap(flow.contextualTypeArguments);
+    const contextualTypeDefinitions = flow.contextualTypeDefinitions;
     var module = this.module;
 
     // compile according to context. this differs from a normal function in that omitted parameter
@@ -7228,7 +7249,8 @@ export class Compiler extends DiagnosticEmitter {
           let resolvedType = this.resolver.resolveType(
             parameterNode.type,
             actualFunction.parent,
-            contextualTypeArguments
+            contextualTypeArguments,
+            contextualTypeDefinitions
           );
           if (!resolvedType) return module.unreachable();
           if (!parameterTypes[i].isStrictlyAssignableTo(resolvedType)) {
@@ -7248,7 +7270,8 @@ export class Compiler extends DiagnosticEmitter {
         let resolvedType = this.resolver.resolveType(
           signatureNode.returnType,
           actualFunction.parent,
-          contextualTypeArguments
+          contextualTypeArguments,
+          contextualTypeDefinitions
         );
         if (!resolvedType) return module.unreachable();
         if (
@@ -7278,7 +7301,8 @@ export class Compiler extends DiagnosticEmitter {
         let resolvedType = this.resolver.resolveType(
           thisTypeNode,
           actualFunction.parent,
-          contextualTypeArguments
+          contextualTypeArguments,
+          contextualTypeDefinitions
         );
         if (!resolvedType) return module.unreachable();
         if (!thisType.isStrictlyAssignableTo(resolvedType)) {
@@ -7306,7 +7330,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise compile like a normal function
     } else {
-      instance = this.resolver.resolveFunction(prototype, null, contextualTypeArguments);
+      instance = this.resolver.resolveFunction(prototype, null, contextualTypeArguments, contextualTypeDefinitions);
       if (!instance) return this.module.unreachable();
       instance.flow.outer = flow;
       let worked = this.compileFunction(instance);
@@ -7581,7 +7605,8 @@ export class Compiler extends DiagnosticEmitter {
         let functionInstance = this.resolver.resolveFunction(
           functionPrototype,
           null,
-          cloneMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments),
+          flow.contextualTypeDefinitions
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
@@ -7636,7 +7661,8 @@ export class Compiler extends DiagnosticEmitter {
     var expectedType = this.resolver.resolveType(
       expression.isType,
       flow.actualFunction,
-      cloneMap(flow.contextualTypeArguments)
+      cloneMap(flow.contextualTypeArguments),
+      flow.contextualTypeDefinitions
     );
     if (!expectedType) {
       this.currentType = Type.bool;
@@ -8020,6 +8046,7 @@ export class Compiler extends DiagnosticEmitter {
             <FunctionPrototype>target,
             null,
             new Map(),
+            this.currentFlow.contextualTypeDefinitions,
             ReportMode.SWALLOW
           );
           if (!instance) break;
@@ -8605,7 +8632,8 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,
-        cloneMap(flow.contextualTypeArguments)
+        cloneMap(flow.contextualTypeArguments),
+        flow.contextualTypeDefinitions
       );
     } else {
       classInstance = this.resolver.resolveClassInclTypeArguments(
@@ -8613,6 +8641,7 @@ export class Compiler extends DiagnosticEmitter {
         typeArguments,
         flow.actualFunction.parent, // relative to caller
         cloneMap(flow.contextualTypeArguments),
+        flow.contextualTypeDefinitions,
         expression
       );
     }

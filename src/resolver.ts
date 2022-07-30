@@ -147,6 +147,8 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
@@ -156,6 +158,7 @@ export class Resolver extends DiagnosticEmitter {
           <NamedTypeNode>node,
           ctxElement,
           ctxTypes,
+          ctxTypeDefinitions,
           reportMode
         );
       }
@@ -164,6 +167,7 @@ export class Resolver extends DiagnosticEmitter {
           <FunctionTypeNode>node,
           ctxElement,
           ctxTypes,
+          ctxTypeDefinitions,
           reportMode
         );
       }
@@ -180,6 +184,8 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
@@ -187,9 +193,19 @@ export class Resolver extends DiagnosticEmitter {
     var typeArgumentNodes = node.typeArguments;
     var isSimpleType = !nameNode.next;
 
-    // Look up in contextual types if a simple type
+    // Look up in contextual types if a simple type, unless in contextual type definitions
     if (isSimpleType) {
       let simpleName = nameNode.identifier.text;
+      if (ctxTypeDefinitions && ctxTypeDefinitions.has(simpleName)) {
+        return this.resolveTypeDefinition(
+          assert(ctxTypeDefinitions.get(simpleName)),
+          node,
+          ctxElement,
+          ctxTypes,
+          ctxTypeDefinitions,
+          reportMode
+        );
+      }
       if (ctxTypes && ctxTypes.has(simpleName)) {
         let type = assert(ctxTypes.get(simpleName));
         if (typeArgumentNodes && typeArgumentNodes.length > 0) {
@@ -255,6 +271,7 @@ export class Resolver extends DiagnosticEmitter {
           typeArgumentNodes,
           ctxElement,
           cloneMap(ctxTypes), // don't inherit
+          ctxTypeDefinitions,
           node,
           reportMode
         );
@@ -265,67 +282,53 @@ export class Resolver extends DiagnosticEmitter {
 
     // Handle type definitions
     if (element.kind == ElementKind.TYPEDEFINITION) {
-      let typeDefinition = <TypeDefinition>element;
-
-      // Shortcut already resolved (mostly builtins)
-      if (element.is(CommonFlags.RESOLVED)) {
-        if (typeArgumentNodes && typeArgumentNodes.length > 0) {
-          if (reportMode == ReportMode.REPORT) {
-            this.error(
-              DiagnosticCode.Type_0_is_not_generic,
-              node.range, element.internalName
-            );
-          }
-        }
-        let type = typeDefinition.type;
-        if (node.isNullable) {
-          if (type.isInternalReference) return type.asNullable();
-          if (reportMode == ReportMode.REPORT) {
-            this.error(
-              DiagnosticCode.Type_0_cannot_be_nullable,
-              nameNode.range, nameNode.identifier.text
-            );
-          }
-        }
-        return type;
-      }
-
-      // Handle special built-in types
-      if (isSimpleType) {
-        let text = nameNode.identifier.text;
-        if (text == CommonNames.native)   return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.indexof)  return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.valueof)  return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.returnof) return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.nonnull)  return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, reportMode);
-      }
-
-      // Resolve normally
-      let typeParameterNodes = typeDefinition.typeParameterNodes;
-      let typeArguments: Type[] | null = null;
-      if (typeParameterNodes) {
-        typeArguments = this.resolveTypeArguments(
-          typeParameterNodes,
-          typeArgumentNodes,
-          ctxElement,
-          ctxTypes = cloneMap(ctxTypes), // update
-          node,
-          reportMode
-        );
-        if (!typeArguments) return null;
-      } else if (typeArgumentNodes && typeArgumentNodes.length > 0) {
-        this.error(
-          DiagnosticCode.Type_0_is_not_generic,
-          node.range, nameNode.identifier.text
-        );
-      }
-      let type = this.resolveType(
-        typeDefinition.typeNode,
-        element,
+      return this.resolveTypeDefinition(
+        <TypeDefinition>element,
+        node,
+        ctxElement,
         ctxTypes,
+        ctxTypeDefinitions,
         reportMode
       );
-      if (!type) return null;
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Cannot_find_name_0,
+        nameNode.range, nameNode.identifier.text
+      );
+    }
+    return null;
+  }
+
+  /** Resolves a {@link TypeDefinition} to a concrete {@link Type}. */
+  private resolveTypeDefinition(
+    /** The type to resolve. */
+    definition: TypeDefinition,
+    /** The type to resolve. */
+    node: NamedTypeNode,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    var nameNode = node.name;
+    var typeArgumentNodes = node.typeArguments;
+
+    // Shortcut already resolved (mostly builtins)
+    if (definition.is(CommonFlags.RESOLVED)) {
+      if (typeArgumentNodes && typeArgumentNodes.length > 0) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_generic,
+            node.range, definition.internalName
+          );
+        }
+      }
+      let type = definition.type;
       if (node.isNullable) {
         if (type.isInternalReference) return type.asNullable();
         if (reportMode == ReportMode.REPORT) {
@@ -337,13 +340,55 @@ export class Resolver extends DiagnosticEmitter {
       }
       return type;
     }
-    if (reportMode == ReportMode.REPORT) {
+
+    // Handle special built-in types
+    if (!nameNode.next) {
+      let text = nameNode.identifier.text;
+      if (text == CommonNames.native)   return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
+      if (text == CommonNames.indexof)  return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
+      if (text == CommonNames.valueof)  return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
+      if (text == CommonNames.returnof) return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
+      if (text == CommonNames.nonnull)  return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
+    }
+
+    // Resolve normally
+    let typeParameterNodes = definition.typeParameterNodes;
+    let typeArguments: Type[] | null = null;
+    if (typeParameterNodes) {
+      typeArguments = this.resolveTypeArguments(
+        typeParameterNodes,
+        typeArgumentNodes,
+        ctxElement,
+        ctxTypes = cloneMap(ctxTypes), // update
+        ctxTypeDefinitions,
+        node,
+        reportMode
+      );
+      if (!typeArguments) return null;
+    } else if (typeArgumentNodes && typeArgumentNodes.length > 0) {
       this.error(
-        DiagnosticCode.Cannot_find_name_0,
-        nameNode.range, nameNode.identifier.text
+        DiagnosticCode.Type_0_is_not_generic,
+        node.range, nameNode.identifier.text
       );
     }
-    return null;
+    let type = this.resolveType(
+      definition.typeNode,
+      definition,
+      ctxTypes,
+      ctxTypeDefinitions,
+      reportMode
+    );
+    if (!type) return null;
+    if (node.isNullable) {
+      if (type.isInternalReference) return type.asNullable();
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Type_0_cannot_be_nullable,
+          nameNode.range, nameNode.identifier.text
+        );
+      }
+    }
+    return type;
   }
 
   /** Resolves a {@link FunctionTypeNode} to a concrete {@link Type}. */
@@ -354,6 +399,8 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
@@ -364,6 +411,7 @@ export class Resolver extends DiagnosticEmitter {
         explicitThisType,
         ctxElement,
         ctxTypes,
+        ctxTypeDefinitions,
         reportMode
       );
       if (!thisType) return null;
@@ -400,6 +448,7 @@ export class Resolver extends DiagnosticEmitter {
         parameterTypeNode,
         ctxElement,
         ctxTypes,
+        ctxTypeDefinitions,
         reportMode
       );
       if (!parameterType) return null;
@@ -420,6 +469,7 @@ export class Resolver extends DiagnosticEmitter {
         returnTypeNode,
         ctxElement,
         ctxTypes,
+        ctxTypeDefinitions,
         reportMode
       );
       if (!returnType) return null;
@@ -437,12 +487,14 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
     if (!typeArgument) return null;
     switch (typeArgument.kind) {
       case TypeKind.I8:
@@ -472,12 +524,14 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
     if (!typeArgument) return null;
     var classReference = typeArgument.classReference;
     if (!classReference) {
@@ -516,12 +570,14 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
     if (!typeArgument) return null;
     var classReference = typeArgument.getClassOrWrapper(this.program);
     if (classReference) {
@@ -544,12 +600,14 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
     if (!typeArgument) return null;
     var signatureReference = typeArgument.getSignature();
     if (signatureReference) return signatureReference.returnType;
@@ -569,12 +627,14 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> | null = null,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, ctxTypeDefinitions, reportMode);
     if (!typeArgument) return null;
     if (!typeArgument.isNullableReference) return typeArgument;
     return typeArgument.nonNullableType;
@@ -627,6 +687,8 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. Updated in place with the new set of contextual types. */
     ctxTypes: Map<string,Type> = new Map(),
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** Alternative report node in case of empty type arguments. */
     alternativeReportNode: Node | null = null,
     /** How to proceed with eventual diagnostics. */
@@ -665,12 +727,14 @@ export class Resolver extends DiagnosticEmitter {
             typeArgumentNodes![i],
             ctxElement,
             oldCtxTypes, // update
+            ctxTypeDefinitions,
             reportMode
           )
         : this.resolveType( // reports
             assert(typeParameters[i].defaultType),
             ctxElement,
             cloneMap(ctxTypes), // don't update
+            ctxTypeDefinitions,
             reportMode
           );
       if (!type) return null;
@@ -706,6 +770,7 @@ export class Resolver extends DiagnosticEmitter {
         typeArguments,
         ctxFlow.actualFunction,
         cloneMap(ctxFlow.contextualTypeArguments), // don't inherit
+        ctxFlow.contextualTypeDefinitions,
         node,
         reportMode
       );
@@ -780,15 +845,19 @@ export class Resolver extends DiagnosticEmitter {
             // Default parameters are resolved in context of the called function, not the calling function
             let parent = prototype.parent;
             let defaultTypeContextualTypeArguments: Map<string, Type> | null = null;
+            let defaultTypeContextualTypeDefinitions: Map<string, TypeDefinition> | null = null;
             if (parent.kind == ElementKind.CLASS) {
               defaultTypeContextualTypeArguments = (<Class>parent).contextualTypeArguments;
             } else if (parent.kind == ElementKind.FUNCTION) {
-              defaultTypeContextualTypeArguments = (<Function>parent).contextualTypeArguments;
+              let func = <Function>parent;
+              defaultTypeContextualTypeArguments = func.contextualTypeArguments;
+              defaultTypeContextualTypeDefinitions = func.flow.contextualTypeDefinitions;
             }
             let resolvedDefaultType = this.resolveType(
               defaultType,
               prototype,
               defaultTypeContextualTypeArguments,
+              defaultTypeContextualTypeDefinitions,
               reportMode
             );
             if (!resolvedDefaultType) return null;
@@ -810,12 +879,13 @@ export class Resolver extends DiagnosticEmitter {
         prototype,
         resolvedTypeArguments,
         cloneMap(ctxFlow.contextualTypeArguments),
+        ctxFlow.contextualTypeDefinitions,
         reportMode
       );
     }
 
     // otherwise resolve the non-generic call as usual
-    return this.resolveFunction(prototype, null, new Map(), reportMode);
+    return this.resolveFunction(prototype, null, new Map(), ctxFlow.contextualTypeDefinitions, reportMode);
   }
 
   /** Updates contextual types with a possibly encapsulated inferred type. */
@@ -1276,7 +1346,7 @@ export class Resolver extends DiagnosticEmitter {
     var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
     if (!element) return null;
     if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
-      let instance = this.resolveFunction(<FunctionPrototype>element, null, new Map(), reportMode);
+      let instance = this.resolveFunction(<FunctionPrototype>element, null, new Map(), ctxFlow.contextualTypeDefinitions, reportMode);
       if (!instance) return null;
       element = instance;
     }
@@ -1297,7 +1367,7 @@ export class Resolver extends DiagnosticEmitter {
     if (global.is(CommonFlags.RESOLVED)) return true;
     var typeNode = global.typeNode;
     var type = typeNode
-      ? this.resolveType(typeNode, global.parent, null, reportMode)
+      ? this.resolveType(typeNode, global.parent, null, null, reportMode)
       : this.resolveExpression(
           assert(global.initializerNode),
           global.file.startFunction.flow,
@@ -1405,7 +1475,7 @@ export class Resolver extends DiagnosticEmitter {
         let shadowType = target.shadowType;
         if (shadowType) {
           if (!shadowType.is(CommonFlags.RESOLVED)) {
-            let resolvedType = this.resolveType(shadowType.typeNode, shadowType.parent, null, reportMode);
+            let resolvedType = this.resolveType(shadowType.typeNode, shadowType.parent, null, null, reportMode);
             if (resolvedType) shadowType.setType(resolvedType);
           }
           let classReference = shadowType.type.classReference;
@@ -1415,7 +1485,7 @@ export class Resolver extends DiagnosticEmitter {
           // Inherit from 'Function' if not overridden, i.e. fn.call
           let ownMember = target.getMember(propertyName);
           if (!ownMember) {
-            let functionInstance = this.resolveFunction(<FunctionPrototype>target, null, new Map(), ReportMode.SWALLOW);
+            let functionInstance = this.resolveFunction(<FunctionPrototype>target, null, new Map(), ctxFlow.contextualTypeDefinitions, ReportMode.SWALLOW);
             if (functionInstance) {
               let wrapper = functionInstance.type.getClassOrWrapper(this.program);
               if (wrapper) target = wrapper;
@@ -1691,6 +1761,7 @@ export class Resolver extends DiagnosticEmitter {
           assert(node.toType), // must be set if not NONNULL
           ctxFlow.actualFunction,
           ctxFlow.contextualTypeArguments,
+          ctxFlow.contextualTypeDefinitions,
           reportMode
         );
         if (!type) return null;
@@ -1747,6 +1818,7 @@ export class Resolver extends DiagnosticEmitter {
           assert(node.toType),
           ctxFlow.actualFunction,
           ctxFlow.contextualTypeArguments,
+          ctxFlow.contextualTypeDefinitions,
           reportMode
         );
       }
@@ -2607,6 +2679,7 @@ export class Resolver extends DiagnosticEmitter {
         node.typeArguments,
         ctxFlow.actualFunction,
         cloneMap(ctxFlow.contextualTypeArguments),
+        ctxFlow.contextualTypeDefinitions,
         node,
         reportMode
       );
@@ -2684,7 +2757,7 @@ export class Resolver extends DiagnosticEmitter {
     const declaration = node.declaration;
     const signature = declaration.signature;
     const body = declaration.body;
-    let functionType = this.resolveFunctionType(signature, ctxFlow.actualFunction, ctxFlow.contextualTypeArguments, reportMode);
+    let functionType = this.resolveFunctionType(signature, ctxFlow.actualFunction, ctxFlow.contextualTypeArguments, ctxFlow.contextualTypeDefinitions, reportMode);
     if (
       functionType &&
       declaration.arrowKind != ArrowKind.NONE &&
@@ -2722,6 +2795,8 @@ export class Resolver extends DiagnosticEmitter {
     typeArguments: Type[] | null,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> = new Map(),
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
@@ -2782,6 +2857,7 @@ export class Resolver extends DiagnosticEmitter {
         explicitThisType,
         prototype.parent, // relative to function
         ctxTypes,
+        ctxTypeDefinitions,
         reportMode
       );
       if (!thisType) return null;
@@ -2815,6 +2891,7 @@ export class Resolver extends DiagnosticEmitter {
         typeNode,
         prototype.parent, // relative to function
         ctxTypes,
+        ctxTypeDefinitions,
         reportMode
       );
       if (!parameterType) return null;
@@ -2851,6 +2928,7 @@ export class Resolver extends DiagnosticEmitter {
         typeNode,
         prototype.parent, // relative to function
         ctxTypes,
+        ctxTypeDefinitions,
         reportMode
       );
       if (!type) return null;
@@ -2897,6 +2975,8 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type>,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null,
     /** The node to use when reporting intermediate errors. */
     reportNode: Node,
     /** How to proceed with eventual diagnostics. */
@@ -2933,6 +3013,7 @@ export class Resolver extends DiagnosticEmitter {
         typeArgumentNodes,
         ctxElement,
         ctxTypes, // update
+        ctxTypeDefinitions,
         reportNode,
         reportMode
       );
@@ -2956,6 +3037,7 @@ export class Resolver extends DiagnosticEmitter {
       prototype,
       resolvedTypeArguments,
       ctxTypes,
+      ctxTypeDefinitions,
       reportMode
     );
   }
@@ -3024,6 +3106,8 @@ export class Resolver extends DiagnosticEmitter {
     typeArguments: Type[] | null,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type> = new Map(),
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null = null,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Class | null {
@@ -3085,6 +3169,7 @@ export class Resolver extends DiagnosticEmitter {
         extendsNode.typeArguments,
         prototype.parent, // relative to derived class
         cloneMap(ctxTypes), // don't inherit
+        ctxTypeDefinitions,
         extendsNode,
         reportMode
       );
@@ -3121,6 +3206,7 @@ export class Resolver extends DiagnosticEmitter {
           implementsNode.typeArguments,
           prototype.parent,
           cloneMap(ctxTypes),
+          ctxTypeDefinitions,
           implementsNode,
           reportMode
         );
@@ -3260,6 +3346,7 @@ export class Resolver extends DiagnosticEmitter {
                 fieldTypeNode,
                 prototype.parent, // relative to class
                 instance.contextualTypeArguments,
+                null,
                 reportMode
               );
               if (fieldType == Type.void) {
@@ -3418,6 +3505,7 @@ export class Resolver extends DiagnosticEmitter {
             <FunctionPrototype>ctorPrototype,
             null,
             assert(instance.contextualTypeArguments),
+            null,
             reportMode
           );
           if (ctorInstance) instance.constructorInstance = <Function>ctorInstance;
@@ -3443,6 +3531,7 @@ export class Resolver extends DiagnosticEmitter {
           boundPrototype,
           null,
           new Map(),
+          null,
           reportMode
         );
       } else {
@@ -3450,6 +3539,7 @@ export class Resolver extends DiagnosticEmitter {
           overloadPrototype,
           null,
           new Map(),
+          null,
           reportMode
         );
       }
@@ -3531,6 +3621,8 @@ export class Resolver extends DiagnosticEmitter {
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
     ctxTypes: Map<string,Type>,
+    /** Contextual type definitions */
+    ctxTypeDefinitions: Map<string,TypeDefinition> | null,
     /** The node to use when reporting intermediate errors. */
     reportNode: Node,
     /** How to proceed with eventual diagnostics. */
@@ -3545,6 +3637,7 @@ export class Resolver extends DiagnosticEmitter {
         typeArgumentNodes,
         ctxElement,
         ctxTypes, // update
+        ctxTypeDefinitions,
         reportNode,
         reportMode
       );
@@ -3568,6 +3661,7 @@ export class Resolver extends DiagnosticEmitter {
       prototype,
       resolvedTypeArguments,
       ctxTypes,
+      ctxTypeDefinitions,
       reportMode
     );
   }
@@ -3588,6 +3682,7 @@ export class Resolver extends DiagnosticEmitter {
         getterPrototype,
         null,
         new Map(),
+        null,
         reportMode
       );
       if (getterInstance) {
@@ -3601,6 +3696,7 @@ export class Resolver extends DiagnosticEmitter {
         setterPrototype,
         null,
         new Map(),
+        null,
         reportMode
       );
       if (setterInstance) {

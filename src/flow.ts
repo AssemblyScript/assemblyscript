@@ -28,7 +28,8 @@ import {
   ElementKind,
   Field,
   Class,
-  TypedElement
+  TypedElement,
+  TypeDefinition
 } from "./program";
 
 import {
@@ -244,7 +245,9 @@ export class Flow {
   /** The label we break to when encountering a return statement, when inlining. */
   inlineReturnLabel: string | null = null;
   /** The current contextual type arguments */
-  contextualTypeArguments: Map<string,Type> | null = null;
+  contextualTypeArguments: Map<string,Type>;
+  /** The current contextual type definitions */
+  contextualTypeDefinitions: Map<string,TypeDefinition> | null = null;
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
@@ -298,6 +301,7 @@ export class Flow {
     branch.parent = this;
     branch.outer = this.outer;
     branch.contextualTypeArguments = cloneMap(this.contextualTypeArguments);
+    branch.contextualTypeDefinitions = cloneMap(this.contextualTypeDefinitions);
     if (resetBreakContext) {
       branch.flags = this.flags & ~(
         FlowFlags.BREAKS |
