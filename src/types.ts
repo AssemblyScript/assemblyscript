@@ -779,8 +779,8 @@ export class Signature {
       usizeType.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE,
       usizeType.size
     );
-    type.signatureReference = this;
     this.type = type;
+    type.signatureReference = this;
 
     var signatureTypes = program.uniqueSignatures;
     var length = signatureTypes.length;
