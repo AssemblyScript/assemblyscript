@@ -7,7 +7,7 @@
 export function cloneMap<K,V>(map: Map<K,V> | null): Map<K,V> {
   if (!ASC_TARGET) { // JS
     // fast path for js target
-    return new Map<K, V>(map);
+    return new Map<K,V>(map);
   } else {
     let out = new Map<K,V>();
     if (map) {
