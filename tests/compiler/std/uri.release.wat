@@ -4246,19 +4246,17 @@
     i32.const 32
     i32.and
    end
-   if (result i32)
-    global.get $~lib/rt/itcms/white
-    i32.eqz
-   else
-    i32.const 2
-   end
    local.set $3
    local.get $2
    i32.load offset=8
    local.set $0
    local.get $1
-   local.get $2
+   global.get $~lib/rt/itcms/white
+   i32.eqz
+   i32.const 2
    local.get $3
+   select
+   local.get $2
    i32.or
    i32.store offset=4
    local.get $1

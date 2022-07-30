@@ -1721,18 +1721,19 @@
    i32.store offset=4
    i32.const 1180
    i32.load
-   local.tee $3
+   local.tee $4
    i32.const 1
    i32.add
-   local.tee $4
+   local.tee $3
+   local.tee $0
    i32.const 1176
    i32.load
-   local.tee $0
+   local.tee $1
    i32.const 2
    i32.shr_u
    i32.gt_u
    if
-    local.get $4
+    local.get $0
     i32.const 268435455
     i32.gt_u
     if
@@ -1744,28 +1745,28 @@
      unreachable
     end
     block $__inlined_func$~lib/rt/itcms/__renew
-     local.get $0
+     local.get $1
      i32.const 1
      i32.shl
-     local.tee $0
+     local.tee $1
      i32.const 1073741820
-     local.get $0
+     local.get $1
      i32.const 1073741820
      i32.lt_u
      select
-     local.tee $0
-     local.get $4
+     local.tee $1
+     local.get $0
      i32.const 8
-     local.get $4
+     local.get $0
      i32.const 8
      i32.gt_u
      select
      i32.const 2
      i32.shl
-     local.tee $1
+     local.tee $0
      local.get $0
      local.get $1
-     i32.gt_u
+     i32.lt_u
      select
      local.tee $2
      i32.const 1168
@@ -1827,7 +1828,7 @@
    end
    i32.const 1172
    i32.load
-   local.get $3
+   local.get $4
    i32.const 2
    i32.shl
    i32.add
@@ -1840,7 +1841,7 @@
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
    i32.const 1180
-   local.get $4
+   local.get $3
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8

@@ -1699,23 +1699,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   local.tee $3
   local.get $0
@@ -1959,23 +1959,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   i32.and
   i32.const 2
@@ -3434,23 +3434,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   local.tee $3
   local.get $0
@@ -3604,23 +3604,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   i32.and
   i32.const 2
@@ -5056,23 +5056,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   local.tee $3
   local.get $0
@@ -5227,23 +5227,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   i32.and
   i32.const 2
@@ -6669,23 +6669,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   local.tee $3
   local.get $0
@@ -6841,23 +6841,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   i32.and
   i32.const 2
@@ -8295,23 +8295,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   local.tee $3
   local.get $0
@@ -8463,23 +8463,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   i32.and
   i32.const 2
@@ -9867,23 +9867,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   local.tee $3
   local.get $0
@@ -10035,23 +10035,23 @@
   i32.const 668265263
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
-  local.get $1
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
-  local.get $1
   i32.xor
   i32.and
   i32.const 2
@@ -13576,23 +13576,23 @@
   i32.const 668265263
   i32.mul
   local.tee $2
+  local.get $2
   i32.const 15
   i32.shr_u
-  local.get $2
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $2
+  local.get $2
   i32.const 13
   i32.shr_u
-  local.get $2
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $2
+  local.get $2
   i32.const 16
   i32.shr_u
-  local.get $2
   i32.xor
   local.tee $3
   local.get $0
@@ -13744,23 +13744,23 @@
   i32.const 668265263
   i32.mul
   local.tee $2
+  local.get $2
   i32.const 15
   i32.shr_u
-  local.get $2
   i32.xor
   i32.const -2048144777
   i32.mul
   local.tee $2
+  local.get $2
   i32.const 13
   i32.shr_u
-  local.get $2
   i32.xor
   i32.const -1028477379
   i32.mul
   local.tee $2
+  local.get $2
   i32.const 16
   i32.shr_u
-  local.get $2
   i32.xor
   i32.and
   i32.const 2

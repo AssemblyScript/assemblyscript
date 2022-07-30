@@ -2559,7 +2559,7 @@
     i32.const 2
     i32.shr_u
     i32.add
-    local.set $4
+    local.set $5
     local.get $2
     i32.const 4
     i32.sub
@@ -2580,7 +2580,7 @@
      local.tee $2
      i32.store
      global.get $~lib/memory/__stack_pointer
-     local.tee $5
+     local.tee $4
      i32.const 8
      i32.sub
      global.set $~lib/memory/__stack_pointer
@@ -2610,7 +2610,7 @@
      local.get $2
      i32.const 0
      i32.store offset=8
-     local.get $4
+     local.get $5
      i32.const 134217727
      i32.gt_u
      if
@@ -2622,25 +2622,25 @@
       unreachable
      end
      global.get $~lib/memory/__stack_pointer
-     local.get $4
+     local.get $5
      i32.const 3
      i32.shl
      local.tee $6
      i32.const 0
      call $~lib/rt/itcms/__new
-     local.tee $4
+     local.tee $5
      i32.store offset=4
      local.get $2
-     local.get $4
+     local.get $5
      i32.store
-     local.get $4
+     local.get $5
      if
       local.get $2
-      local.get $4
+      local.get $5
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
      local.get $2
-     local.get $4
+     local.get $5
      i32.store offset=4
      local.get $2
      local.get $6
@@ -2649,7 +2649,7 @@
      i32.const 8
      i32.add
      global.set $~lib/memory/__stack_pointer
-     local.get $5
+     local.get $4
      local.get $2
      i32.store
      global.get $~lib/memory/__stack_pointer

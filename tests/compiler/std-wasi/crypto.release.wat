@@ -239,12 +239,12 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  block $0of2
+  block $2of2
    block $outOfRange
     global.get $~argumentsLength
     i32.const 3
     i32.sub
-    br_table $0of2 $0of2 $0of2 $outOfRange
+    br_table $2of2 $2of2 $2of2 $outOfRange
    end
    unreachable
   end
@@ -3795,32 +3795,31 @@
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
-   local.tee $4
+   local.tee $1
    i32.const 0
    i32.store
    i32.const 0
    local.get $0
-   local.tee $1
    i32.load offset=8
-   local.tee $0
-   local.get $0
+   local.tee $3
+   local.get $3
    i32.const 0
    i32.gt_s
    select
    local.set $2
-   local.get $4
+   local.get $3
+   local.get $2
+   i32.sub
+   local.tee $3
+   i32.const 0
+   local.get $3
+   i32.const 0
+   i32.gt_s
+   select
+   local.set $3
+   local.get $1
    block $__inlined_func$~lib/typedarray/Uint8Array#constructor (result i32)
-    local.get $0
-    local.get $2
-    i32.sub
-    local.tee $0
-    i32.const 0
-    local.get $0
-    i32.const 0
-    i32.gt_s
-    select
-    local.set $3
-    local.get $4
+    local.get $1
     i32.const 4
     i32.sub
     global.set $~lib/memory/__stack_pointer
@@ -3830,14 +3829,14 @@
      i32.lt_s
      br_if $folding-inner0
      global.get $~lib/memory/__stack_pointer
-     local.tee $0
+     local.tee $1
      i32.const 0
      i32.store
-     local.get $0
+     local.get $1
      i32.const 12
      i32.const 3
      call $~lib/rt/itcms/__new
-     local.tee $0
+     local.tee $1
      i32.store
      global.get $~lib/memory/__stack_pointer
      local.tee $5
@@ -3851,23 +3850,23 @@
      global.get $~lib/memory/__stack_pointer
      i64.const 0
      i64.store
-     local.get $0
+     local.get $1
      i32.eqz
      if
       global.get $~lib/memory/__stack_pointer
       i32.const 12
       i32.const 2
       call $~lib/rt/itcms/__new
-      local.tee $0
+      local.tee $1
       i32.store
      end
-     local.get $0
+     local.get $1
      i32.const 0
      i32.store
-     local.get $0
+     local.get $1
      i32.const 0
      i32.store offset=4
-     local.get $0
+     local.get $1
      i32.const 0
      i32.store offset=8
      local.get $3
@@ -3887,19 +3886,19 @@
      call $~lib/rt/itcms/__new
      local.tee $4
      i32.store offset=4
-     local.get $0
+     local.get $1
      local.get $4
      i32.store
      local.get $4
      if
-      local.get $0
+      local.get $1
       local.get $4
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
-     local.get $0
+     local.get $1
      local.get $4
      i32.store offset=4
-     local.get $0
+     local.get $1
      local.get $3
      i32.store offset=8
      global.get $~lib/memory/__stack_pointer
@@ -3907,22 +3906,22 @@
      i32.add
      global.set $~lib/memory/__stack_pointer
      local.get $5
-     local.get $0
+     local.get $1
      i32.store
      global.get $~lib/memory/__stack_pointer
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
-     local.get $0
+     local.get $1
      br $__inlined_func$~lib/typedarray/Uint8Array#constructor
     end
     br $folding-inner1
    end
-   local.tee $0
+   local.tee $1
    i32.store
-   local.get $0
-   i32.load offset=4
    local.get $1
+   i32.load offset=4
+   local.get $0
    i32.load offset=4
    local.get $2
    i32.add
@@ -3932,7 +3931,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
+   local.get $1
    return
   end
   i32.const 23312

@@ -2354,6 +2354,7 @@ export class Module {
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
         passes.push("gufa-optimizing");
+        passes.push("dae-optimizing");
       }
       if (optimizeLevel >= 3) {
         passes.push("simplify-locals-nostructure");
