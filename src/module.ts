@@ -2517,22 +2517,22 @@ export class Module {
     );
 
     // now safely reuse lit buffer for BinaryenModuleAllocateAndWriteResult
-    var out = this.lit;
-    var str = allocString(sourceMapUrl);
+    var resPtr = this.lit;
+    var urlPtr = allocString(sourceMapUrl);
 
-    binaryen._BinaryenModuleAllocateAndWrite(out, this.ref, str);
+    binaryen._BinaryenModuleAllocateAndWrite(resPtr, this.ref, urlPtr);
 
     // read BinaryenModuleAllocateAndWriteResult struct
-    var binaryPtr = binaryen.__i32_load(out + 0) as usize; // non-nullabe
-    var binaryLen = binaryen.__i32_load(out + 4);
-    var srcMapPtr = binaryen.__i32_load(out + 8) as usize; // nullable
+    var binaryPtr = binaryen.__i32_load(resPtr + 0) as usize; // non-nullabe
+    var binaryLen = binaryen.__i32_load(resPtr + 4);
+    var srcMapPtr = binaryen.__i32_load(resPtr + 8) as usize; // nullable
 
     var binary = new BinaryModule(
       readBuffer(assert(binaryPtr), binaryLen),
       readString(srcMapPtr)
     );
 
-    if (str) binaryen._free(str);
+    if (urlPtr) binaryen._free(urlPtr);
     if (srcMapPtr) binaryen._free(srcMapPtr);
     binaryen._free(binaryPtr);
 
