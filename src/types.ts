@@ -121,9 +121,9 @@ export class Type {
   /** Size in bits. */
   size: i32;
   /** Underlying class reference, if a class type. */
-  classReference: Class | null;
+  classReference: Class | null = null;
   /** Underlying signature reference, if a function type. */
-  signatureReference: Signature | null;
+  signatureReference: Signature | null = null;
   /** Respective non-nullable type, if nullable. */
   private _nonNullableType: Type | null = null;
   /** Respective nullable type, if non-nullable. */
@@ -134,8 +134,6 @@ export class Type {
     this.kind = kind;
     this.flags = flags;
     this.size = size;
-    this.classReference = null;
-    this.signatureReference = null;
     if (!(flags & TypeFlags.NULLABLE)) {
       this._nonNullableType = this;
     } else {
@@ -776,9 +774,13 @@ export class Signature {
     this.program = program;
     this.hasRest = false;
     var usizeType = program.options.usizeType;
-    var type = new Type(usizeType.kind, usizeType.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, usizeType.size);
-    this.type = type;
+    var type = new Type(
+      usizeType.kind,
+      usizeType.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE,
+      usizeType.size
+    );
     type.signatureReference = this;
+    this.type = type;
 
     var signatureTypes = program.uniqueSignatures;
     var length = signatureTypes.length;
@@ -798,12 +800,11 @@ export class Signature {
     var parameterTypes = this.parameterTypes;
     var numParameterTypes = parameterTypes.length;
     if (!numParameterTypes) {
-      if (!thisType) return TypeRef.None;
-      return thisType.toRef();
+      return thisType ? thisType.toRef() : TypeRef.None;
     }
     if (thisType) {
       let typeRefs = new Array<TypeRef>(1 + numParameterTypes);
-      typeRefs[0] = thisType.toRef();
+      unchecked(typeRefs[0] = thisType.toRef());
       for (let i = 0; i < numParameterTypes; ++i) {
         unchecked(typeRefs[i + 1] = parameterTypes[i].toRef());
       }
@@ -849,7 +850,7 @@ export class Signature {
   }
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
-  isAssignableTo(target: Signature, requireSameSize: bool = false): bool {
+  isAssignableTo(target: Signature): bool {
 
     // check `this` type
     var thisThisType = this.thisType;
