@@ -420,8 +420,8 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
   while (lo + 1 < hi) {
     mid = lo + ((hi - lo) >>> 1);
     mid -= (mid & 1);
-    midVal = map[mid];
-    if (midVal <= code && code <= map[mid + 1]) {
+    midVal = unchecked(map[mid]);
+    if (midVal <= code && code <= unchecked(map[mid + 1])) {
       return true;
     }
     if (code < midVal) {
