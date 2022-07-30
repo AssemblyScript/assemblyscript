@@ -433,23 +433,9 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
   return false;
 }
 
-const indentX1 = "  ";
-const indentX2 = "    ";
-const indentX4 = "        ";
-
 /** Creates an indentation matching the number of specified levels. */
 export function indent(sb: string[], level: i32): void {
-  while (level >= 4) {
-    sb.push(indentX4);
-    level -= 4;
-  }
-  if (level >= 2) {
-    sb.push(indentX2);
-    level -= 2;
-  }
-  if (level) {
-    sb.push(indentX1);
-  }
+  sb.push("  ".repeat(level));
 }
 
 /** Escapes a string using the specified kind of quote. */
