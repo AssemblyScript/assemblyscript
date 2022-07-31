@@ -2495,6 +2495,9 @@ export class Module {
       }
       // clean up
       passes.push("duplicate-function-elimination");
+      if (shrinkLevel >= 2) {
+        passes.push("merge-similar-functions");
+      }
       passes.push("memory-packing");
       passes.push("remove-unused-module-elements");
 
