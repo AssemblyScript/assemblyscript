@@ -785,14 +785,14 @@ export class Signature {
     var signatureTypes = program.uniqueSignatures;
     var length = signatureTypes.length;
     for (let i = 0; i < length; i++) {
-      let compare = signatureTypes[i];
+      let compare = unchecked(signatureTypes[i]);
       if (this.equals(compare)) {
         this.id = compare.id;
         return this;
       }
     }
     this.id = program.nextSignatureId++;
-    program.uniqueSignatures.push(this);
+    signatureTypes.push(this);
   }
 
   get paramRefs(): TypeRef {
