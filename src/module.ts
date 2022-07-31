@@ -2629,7 +2629,7 @@ export class Module {
     return precomp;
   }
 
-  isConstExpression(expr: ExpressionRef, features: FeatureFlags = 0): bool {
+  isConstExpression(expr: ExpressionRef): bool {
     switch (getExpressionId(expr)) {
       case ExpressionId.Const:
       case ExpressionId.RefNull:
