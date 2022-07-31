@@ -196,14 +196,16 @@ declare function instantiate<T>(...args: any[]): T;
 declare function isNaN<T extends f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T extends f32 | f64>(value: T): bool;
-/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
-declare function isInteger<T>(value?: any): value is number;
-/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
-declare function isFloat<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression is of a boolean type. */
 declare function isBoolean<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
+declare function isInteger<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression can represent negative numbers. Compiles to a constant. */
 declare function isSigned<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
+declare function isFloat<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a v128 type. Compiles to a constant. */
+declare function isVector<T>(value?: any): value is v128;
 /** Tests if the specified type *or* expression is of a reference type. Compiles to a constant. */
 declare function isReference<T>(value?: any): value is object | string;
 /** Tests if the specified type *or* expression can be used as a string. Compiles to a constant. */
@@ -842,9 +844,9 @@ declare namespace v128 {
   /** Computes the maximum of each lane. */
   export function max<T>(a: v128, b: v128): v128;
   /** Computes the pseudo-minimum of each lane. */
-  export function pmin<T>(a: v128, b: v128): v128;
+  export function pmin<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the pseudo-maximum of each lane. */
-  export function pmax<T>(a: v128, b: v128): v128;
+  export function pmax<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T extends i16>(a: v128, b: v128): v128;
   /** Computes the average of each lane. */
@@ -1367,9 +1369,9 @@ declare abstract class i31 {
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */
-declare type indexof<T extends unknown[]> = keyof T;
+declare type indexof<T extends ArrayLike<unknown>> = keyof T;
 /** Special type evaluating the indexed access value type. */
-declare type valueof<T extends unknown[]> = T[0];
+declare type valueof<T extends ArrayLike<unknown>> = T[0];
 /** A special type evaluated to the return type of T if T is a callable function. */
 declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 /** A special type evaluated to the return type of T if T is a callable function. */
@@ -1778,7 +1780,7 @@ declare class Array<T> {
   some(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
   shift(): T;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
@@ -1812,7 +1814,7 @@ declare class StaticArray<T> {
   every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): this;

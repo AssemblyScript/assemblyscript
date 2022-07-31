@@ -121,6 +121,20 @@ function test_v128(): void {
     );
     __free(ptr);
   }
+  {
+    assert(
+      v128.pmin<f32>(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+      ==
+      f32x4(-1, -1, -1, -1)
+    );
+  }
+  {
+    assert(
+      v128.pmax<f32>(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+      ==
+      f32x4(1, 1, 1, 1)
+    );
+  }
   // TODO: missing C-API in Binaryen (see also passes/pass.ts)
   // v128.load8_lane
   // v128.load16_lane
@@ -775,6 +789,13 @@ export function test_vars_f64x2_full(a: f64, b: f64): v128 {
 }
 
 if (ASC_FEATURE_SIMD) {
+  // test builtins
+  assert(isVector<v128>());
+  assert(!isVector<i32>());
+
+  assert(isVector(i32x4.splat(0)));
+  assert(!isVector(0));
+
   test_v128();
   test_i8x16();
   test_i16x8();

@@ -127,10 +127,11 @@ export namespace BuiltinNames {
   export const trace = "~lib/builtins/trace";
   export const seed = "~lib/builtins/seed";
 
-  export const isInteger = "~lib/builtins/isInteger";
-  export const isFloat = "~lib/builtins/isFloat";
   export const isBoolean = "~lib/builtins/isBoolean";
+  export const isInteger = "~lib/builtins/isInteger";
   export const isSigned = "~lib/builtins/isSigned";
+  export const isFloat = "~lib/builtins/isFloat";
+  export const isVector = "~lib/builtins/isVector";
   export const isReference = "~lib/builtins/isReference";
   export const isString = "~lib/builtins/isString";
   export const isArray = "~lib/builtins/isArray";
@@ -768,6 +769,17 @@ export const function_builtins = new Map<string,(ctx: BuiltinContext) => Express
 
 // === Static type evaluation =================================================================
 
+// isBoolean<T!>() / isBoolean<T?>(value: T) -> bool
+function builtin_isBoolean(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  var type = checkConstantType(ctx);
+  compiler.currentType = Type.bool;
+  if (!type) return module.unreachable();
+  return reifyConstantType(ctx, module.i32(type.isBooleanValue ? 1 : 0));
+}
+builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
+
 // isInteger<T!>() / isInteger<T?>(value: T) -> bool
 function builtin_isInteger(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
@@ -778,6 +790,17 @@ function builtin_isInteger(ctx: BuiltinContext): ExpressionRef {
   return reifyConstantType(ctx, module.i32(type.isIntegerValue ? 1 : 0));
 }
 builtins.set(BuiltinNames.isInteger, builtin_isInteger);
+
+// isSigned<T!>() / isSigned<T?>(value: T) -> bool
+function builtin_isSigned(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  var type = checkConstantType(ctx);
+  compiler.currentType = Type.bool;
+  if (!type) return module.unreachable();
+  return reifyConstantType(ctx, module.i32(type.isSignedIntegerValue ? 1 : 0));
+}
+builtins.set(BuiltinNames.isSigned, builtin_isSigned);
 
 // isFloat<T!>() / isFloat<T?>(value: T) -> bool
 function builtin_isFloat(ctx: BuiltinContext): ExpressionRef {
@@ -790,27 +813,16 @@ function builtin_isFloat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.isFloat, builtin_isFloat);
 
-// isBoolean<T!>() / isBoolean<T?>(value: T) -> bool
-function builtin_isBoolean(ctx: BuiltinContext): ExpressionRef {
+// isVector<T!>() / isVector<T?>(value: T) -> bool
+function builtin_isVector(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isBooleanValue ? 1 : 0));
+  return reifyConstantType(ctx, module.i32(type.isVectorValue ? 1 : 0));
 }
-builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
-
-// isSigned<T!>() / isSigned<T?>(value: T) -> bool
-function builtin_isSigned(ctx: BuiltinContext): ExpressionRef {
-  var compiler = ctx.compiler;
-  var module = compiler.module;
-  var type = checkConstantType(ctx);
-  compiler.currentType = Type.bool;
-  if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isSignedIntegerValue ? 1 : 0));
-}
-builtins.set(BuiltinNames.isSigned, builtin_isSigned);
+builtins.set(BuiltinNames.isVector, builtin_isVector);
 
 // isReference<T!>() / isReference<T?>(value: T) -> bool
 function builtin_isReference(ctx: BuiltinContext): ExpressionRef {
@@ -3129,7 +3141,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
         }
         exprs[i] = expr;
       } else {
-        exprs[i] = compiler.makeZero(elementType, elementExpression);
+        exprs[i] = compiler.makeZero(elementType);
       }
     }
     if (!isStatic) {

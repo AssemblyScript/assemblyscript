@@ -46,6 +46,7 @@
   "Property '{0}' is always assigned before being used.": 233,
   "Expression does not compile to a value at runtime.": 234,
   "Only variables, functions and enums become WebAssembly module exports.": 235,
+  "Literal '{0}' does not fit into 'i64' or 'u64' types.": 236,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,
@@ -114,6 +115,7 @@
   "A definite assignment assertion '!' is not permitted in this context.": 1255,
   "A class may only extend another class.": 1311,
   "A parameter property cannot be declared using a rest parameter.": 1317,
+  "A default export can only be used in a module.": 1319,
   "An identifier or keyword cannot immediately follow a numeric literal.": 1351,
 
   "Duplicate identifier '{0}'.": 2300,
@@ -184,6 +186,7 @@
   "Duplicate property '{0}'.": 2718,
   "Property '{0}' is missing in type '{1}' but required in type '{2}'.": 2741,
   "Type '{0}' has no call signatures.": 2757,
+  "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": 4117,
 
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,

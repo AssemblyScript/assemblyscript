@@ -14,11 +14,14 @@
  (global $features/reference-types/otherFuncGlobal (mut funcref) (ref.func $features/reference-types/someFunc))
  (global $features/reference-types/a anyref (ref.null any))
  (global $features/reference-types/b funcref (ref.null func))
- (global $~lib/memory/__data_end i32 (i32.const 92))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
- (global $~lib/memory/__heap_base i32 (i32.const 16476))
+ (global $features/reference-types/nonNullFunc (mut funcref) (ref.null func))
+ (global $features/reference-types/nonNullReal (mut anyref) (ref.null any))
+ (global $~lib/memory/__data_end i32 (i32.const 156))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16540))
+ (global $~lib/memory/__heap_base i32 (i32.const 16540))
  (memory $0 1)
  (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 92) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (elem declare func $features/reference-types/someFunc)
@@ -28,6 +31,8 @@
  (export "internal" (func $features/reference-types/internal))
  (export "a" (global $features/reference-types/a))
  (export "b" (global $features/reference-types/b))
+ (export "nonNullFunc" (global $features/reference-types/nonNullFunc))
+ (export "nonNullReal" (global $features/reference-types/nonNullReal))
  (export "memory" (memory $0))
  (start $~start)
  (func $features/reference-types/testLocal<funcref>
@@ -77,7 +82,7 @@
    unreachable
   end
  )
- (func $features/reference-types/testLocal<anyref>
+ (func $features/reference-types/testLocal<externref>
   (local $0 anyref)
   (local $1 anyref)
   local.get $0
@@ -129,6 +134,7 @@
  )
  (func $start:features/reference-types
   (local $0 funcref)
+  (local $1 anyref)
   call $features/reference-types/somethingReal
   ref.is_null
   i32.eqz
@@ -278,7 +284,7 @@
    unreachable
   end
   call $features/reference-types/testLocal<funcref>
-  call $features/reference-types/testLocal<anyref>
+  call $features/reference-types/testLocal<externref>
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
   global.get $features/reference-types/funcGlobal
@@ -301,20 +307,46 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block
-   ref.func $features/reference-types/someFunc
-   local.set $0
-   local.get $0
-   ref.is_null
-   if
-    i32.const 0
-    i32.const 32
-    i32.const 88
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
+  ref.func $features/reference-types/someFunc
+  local.set $0
+  local.get $0
+  ref.is_null
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 88
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
   end
+  global.get $features/reference-types/otherFuncGlobal
+  local.tee $0
+  ref.is_null
+  if (result funcref)
+   i32.const 112
+   i32.const 32
+   i32.const 97
+   i32.const 28
+   call $~lib/builtins/abort
+   unreachable
+  else
+   local.get $0
+  end
+  global.set $features/reference-types/nonNullFunc
+  call $features/reference-types/somethingReal
+  local.tee $1
+  ref.is_null
+  if (result anyref)
+   i32.const 112
+   i32.const 32
+   i32.const 98
+   i32.const 28
+   call $~lib/builtins/abort
+   unreachable
+  else
+   local.get $1
+  end
+  global.set $features/reference-types/nonNullReal
  )
  (func $features/reference-types/internal (param $0 anyref) (result anyref)
   (local $1 anyref)

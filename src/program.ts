@@ -634,6 +634,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _stringInstance: Class | null = null;
 
+  /** Gets the standard `RegExp` instance. */
+  get regexpInstance(): Class {
+    var cached = this._regexpInstance;
+    if (!cached) this._regexpInstance = cached = this.requireClass(CommonNames.RegExp);
+    return cached;
+  }
+  private _regexpInstance: Class | null = null;
+
   /** Gets the standard `Object` instance. */
   get objectInstance(): Class {
     var cached = this._objectInstance;
@@ -1309,7 +1317,15 @@ export class Program extends DiagnosticEmitter {
               Range.join(thisPrototype.identifierNode.range, extendsNode.range)
             );
           }
-          thisPrototype.basePrototype = basePrototype;
+          if (!thisPrototype.extends(basePrototype)) {
+            thisPrototype.basePrototype = basePrototype;
+          } else {
+            this.error(
+              DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+              basePrototype.identifierNode.range,
+              basePrototype.identifierNode.text,
+            );
+          }
         } else {
           this.error(
             DiagnosticCode.A_class_may_only_extend_another_class,
@@ -1318,7 +1334,16 @@ export class Program extends DiagnosticEmitter {
         }
       } else if (thisPrototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
         if (baseElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
-          thisPrototype.basePrototype = <InterfacePrototype>baseElement;
+          const basePrototype = <InterfacePrototype>baseElement;
+          if (!thisPrototype.extends(basePrototype)) {
+            thisPrototype.basePrototype = basePrototype;
+          } else {
+            this.error(
+              DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+              basePrototype.identifierNode.range,
+              basePrototype.identifierNode.text,
+            );
+          }
         } else {
           this.error(
             DiagnosticCode.An_interface_can_only_extend_an_interface,
@@ -1523,6 +1548,12 @@ export class Program extends DiagnosticEmitter {
                   }
                 }
               }
+            }
+            if (thisMember.is(CommonFlags.OVERRIDE) && !baseInstanceMembers.has(thisMember.name)) {
+              this.error(
+                DiagnosticCode.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0,
+                thisMember.identifierNode.range, basePrototype.name
+              );
             }
           }
         }

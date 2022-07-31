@@ -678,7 +678,9 @@ export class ASTBuilder {
   }
 
   visitIntegerLiteralExpression(node: IntegerLiteralExpression): void {
-    this.sb.push(i64_to_string(node.value));
+    var range = node.range;
+    var hasExplicitSign = range.source.text.startsWith("-", range.start);
+    this.sb.push(i64_to_string(node.value, !hasExplicitSign));
   }
 
   visitStringLiteral(str: string): void {

@@ -26,6 +26,14 @@ export function plainFunction64(a: i64, b: i64): i64 {
   return a + b;
 }
 
+export function getMaxUnsigned32(): u32 {
+  return u32.MAX_VALUE; // 4294967295
+}
+
+export function getMaxUnsigned64(): u64 {
+  return u64.MAX_VALUE; // 18446744073709551615
+}
+
 export function bufferFunction(a: ArrayBuffer, b: ArrayBuffer): ArrayBuffer {
   var aByteLength = a.byteLength;
   var bByteLength = b.byteLength;
@@ -63,6 +71,14 @@ export function staticarrayFunction(a: StaticArray<i32>, b: StaticArray<i32>): S
     c[a.length + i] = b[i];
   }
   return c;
+}
+
+export function staticarrayU16(a: StaticArray<u16>): StaticArray<u16> {
+  return a;
+}
+
+export function staticarrayI64(a: StaticArray<i64>): StaticArray<i64> {
+  return a;
 }
 
 export function arrayFunction(a: Array<i32>, b: Array<i32>): Array<i32> {
@@ -113,6 +129,12 @@ export function newInternref(): NonPlainObject {
 export function internrefFunction(a: NonPlainObject, b: NonPlainObject): NonPlainObject {
   return a;
 }
+
+export function functionFunction(fn: () => void): () => void {
+  return fn;
+}
+
+export const fn = function(): void {};
 
 trace("trace", 1, 42);
 

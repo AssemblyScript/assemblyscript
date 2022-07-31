@@ -1,6 +1,12 @@
 {
   "extends": "../../std/portable.json",
   "include": [
-    "./**/*.ts"
+    "../**/*.ts"
+  ],
+  "exclude": [
+    "../**/node_modules/",
+    "../tests/**",
+    "../lib/**",
+    "./glue/wasm/**"
   ]
 }

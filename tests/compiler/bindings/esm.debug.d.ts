@@ -1,3 +1,5 @@
+/** Exported memory */
+export declare const memory: WebAssembly.Memory;
 /** bindings/esm/plainGlobal */
 export declare const plainGlobal: {
   /** @type `i32` */
@@ -53,6 +55,16 @@ export declare function plainFunction(a: number, b: number): number;
  */
 export declare function plainFunction64(a: bigint, b: bigint): bigint;
 /**
+ * bindings/esm/getMaxUnsigned32
+ * @returns `u32`
+ */
+export declare function getMaxUnsigned32(): number;
+/**
+ * bindings/esm/getMaxUnsigned64
+ * @returns `u64`
+ */
+export declare function getMaxUnsigned64(): bigint;
+/**
  * bindings/esm/bufferFunction
  * @param a `~lib/arraybuffer/ArrayBuffer`
  * @param b `~lib/arraybuffer/ArrayBuffer`
@@ -86,7 +98,19 @@ export declare function typedarrayFunction(a: Int16Array, b: Float32Array): BigU
  * @param b `~lib/staticarray/StaticArray<i32>`
  * @returns `~lib/staticarray/StaticArray<i32>`
  */
-export declare function staticarrayFunction(a: Array<number>, b: Array<number>): Array<number>;
+export declare function staticarrayFunction(a: ArrayLike<number>, b: ArrayLike<number>): ArrayLike<number>;
+/**
+ * bindings/esm/staticarrayU16
+ * @param a `~lib/staticarray/StaticArray<u16>`
+ * @returns `~lib/staticarray/StaticArray<u16>`
+ */
+export declare function staticarrayU16(a: ArrayLike<number>): ArrayLike<number>;
+/**
+ * bindings/esm/staticarrayI64
+ * @param a `~lib/staticarray/StaticArray<i64>`
+ * @returns `~lib/staticarray/StaticArray<i64>`
+ */
+export declare function staticarrayI64(a: ArrayLike<bigint>): ArrayLike<bigint>;
 /**
  * bindings/esm/arrayFunction
  * @param a `~lib/array/Array<i32>`
@@ -100,21 +124,32 @@ export declare function arrayFunction(a: Array<number>, b: Array<number>): Array
  * @param b `bindings/esm/PlainObject`
  * @returns `bindings/esm/PlainObject`
  */
-export declare function objectFunction(a: __Record8<undefined>, b: __Record8<undefined>): __Record8<never>;
+export declare function objectFunction(a: __Record11<undefined>, b: __Record11<undefined>): __Record11<never>;
 /**
  * bindings/esm/newInternref
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function newInternref(): __Internref11;
+export declare function newInternref(): __Internref14;
 /**
  * bindings/esm/internrefFunction
  * @param a `bindings/esm/NonPlainObject`
  * @param b `bindings/esm/NonPlainObject`
  * @returns `bindings/esm/NonPlainObject`
  */
-export declare function internrefFunction(a: __Internref11, b: __Internref11): __Internref11;
+export declare function internrefFunction(a: __Internref14, b: __Internref14): __Internref14;
+/**
+ * bindings/esm/functionFunction
+ * @param fn `() => void`
+ * @returns `() => void`
+ */
+export declare function functionFunction(fn: __Internref3): __Internref3;
+/** bindings/esm/fn */
+export declare const fn: {
+  /** @type `() => void` */
+  get value(): __Internref3
+};
 /** bindings/esm/PlainObject */
-declare interface __Record8<TOmittable> {
+declare interface __Record11<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */
@@ -149,6 +184,10 @@ declare interface __Record8<TOmittable> {
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
-declare class __Internref11 extends Number {
-  private __nominal11: symbol;
+declare class __Internref14 extends Number {
+  private __nominal14: symbol;
+}
+/** ~lib/function/Function<%28%29=>void> */
+declare class __Internref3 extends Number {
+  private __nominal3: symbol;
 }

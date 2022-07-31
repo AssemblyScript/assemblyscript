@@ -84,6 +84,7 @@ import {
 } from "./ast";
 
 import {
+  BitSet,
   uniqueMap
 } from "./util";
 
@@ -323,7 +324,7 @@ export class Flow {
   }
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, except: Set<i32> | null = null): Local {
+  getTempLocal(type: Type, except: BitSet | null = null): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
     switch (<u32>type.toRef()) {
@@ -458,7 +459,7 @@ export class Flow {
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(name: string, type: Type, except: Set<i32> | null = null): Local {
+  addScopedLocal(name: string, type: Type, except: BitSet | null = null): Local {
     var scopedLocal = this.getTempLocal(type, except);
     scopedLocal.setTemporaryName(name);
     var scopedLocals = this.scopedLocals;
