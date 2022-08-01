@@ -183,14 +183,14 @@ export class Date {
     var yr = this.year;
     var isNeg = yr < 0;
     var year = (isNeg || yr >= 10000)
-      ? (isNeg ? "-" : "+") + abs(yr).toString().padStart(6, "0")
-      : yr.toString().padStart(4, "0");
-    var month = this.month.toString().padStart(2, "0");
-    var day = this.day.toString().padStart(2, "0");
-    var hours = this.getUTCHours().toString().padStart(2, "0");
-    var mins = this.getUTCMinutes().toString().padStart(2, "0");
-    var secs = this.getUTCSeconds().toString().padStart(2, "0");
-    var ms = this.getUTCMilliseconds().toString().padStart(3, "0");
+      ? (isNeg ? "-" : "+") + stringify(abs(yr), 6)
+      : stringify(yr, 4);
+    var month = stringify(this.month, 2);
+    var day = stringify(this.day);
+    var hours = stringify(this.getUTCHours());
+    var mins = stringify(this.getUTCMinutes());
+    var secs = stringify(this.getUTCSeconds());
+    var ms = stringify(this.getUTCMilliseconds(), 3);
 
     return `${year}-${month}-${day}T${hours}:${mins}:${secs}.${ms}Z`;
   }
@@ -209,13 +209,13 @@ export class Date {
     var da = this.day;
     var yr = this.year;
     var wd = dayOfWeek(yr, mo, da);
-    var year = abs(yr).toString().padStart(4, "0");
+    var year = stringify(abs(yr), 4);
     var month = unchecked(months[mo - 1]);
     var week = unchecked(weeks[wd]);
-    var day = da.toString().padStart(2, "0");
-    var hours = this.getUTCHours().toString().padStart(2, "0");
-    var mins = this.getUTCMinutes().toString().padStart(2, "0");
-    var secs = this.getUTCSeconds().toString().padStart(2, "0");
+    var day = stringify(da);
+    var hours = stringify(this.getUTCHours());
+    var mins = stringify(this.getUTCMinutes());
+    var secs = stringify(this.getUTCSeconds());
 
     return `${week}${day}${month}${yr < 0 ? "-" : ""}${year} ${hours}:${mins}:${secs} GMT`;
   }
@@ -236,21 +236,21 @@ export class Date {
     var da = this.day;
     var yr = this.year;
     var wd = dayOfWeek(yr, mo, da);
-    var year = abs(yr).toString().padStart(4, "0");
+    var year = stringify(abs(yr), 4);
     var month = unchecked(months[mo - 1]);
     var week = unchecked(weeks[wd]);
-    var day = da.toString().padStart(2, "0");
+    var day = stringify(da);
 
     return `${week}${month}${day}${yr < 0 ? " -" : " "}${year}`;
   }
 
   // Note: it uses UTC time instead local time (without timezone offset)
   toTimeString(): string {
-    var hour = this.getUTCHours().toString().padStart(2, "0");
-    var min = this.getUTCMinutes().toString().padStart(2, "0");
-    var sec = this.getUTCSeconds().toString().padStart(2, "0");
+    var hours = stringify(this.getUTCHours());
+    var mins = stringify(this.getUTCMinutes());
+    var secs = stringify(this.getUTCSeconds());
     // TODO: add timezone
-    return `${hour}:${min}:${sec}`;
+    return `${hours}:${mins}:${secs}`;
   }
 
   // Note: it uses UTC datetime instead local datetime (without timezone offset)
@@ -327,6 +327,10 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   year += floorDiv(year, 4) - floorDiv(year, 100) + floorDiv(year, 400);
   month = <i32>load<u8>(tab + month - 1);
   return euclidRem(year + month + day, 7);
+}
+
+function stringify<T extends number>(value: T, padding: i32 = 2): string {
+  return value.toString().padStart(padding, "0");
 }
 
 function join(year: i32, month: i32, day: i32, ms: i64): i64 {
