@@ -324,19 +324,20 @@ function invalidDate(millis: i64): bool {
 // Paper: https://arxiv.org/pdf/2102.06959.pdf
 function ymdFromEpochDays(z: i32): i32 {
   z = (z * 4 + 719468 * 4) | 3;
-  var q0 = <u32>floorDiv(z, 146097);
+  var q0 = <u32>floorDiv(z, 146097); // [0, 146096]
   var r1 = <u32>z - q0 * 146097;
   var u1 = <u64>(r1 | 3) * 2939745;
   var dm1 = <u32>u1 / 11758980;
   var n1 = 2141 * dm1 + 197913;
   var year = 100 * q0 + <u32>(u1 >>> 32);
   var mo = n1 >>> 16;
+  // check with range between Mar 1 and Jan 1
   if (dm1 >= 306) {
     mo -= 12;
     ++year;
   }
-  _day = (n1 & 0xFFFF) / 2141 + 1;
-  _month = mo;
+  _day = (n1 & 0xFFFF) / 2141 + 1; // [1, 31]
+  _month = mo; // [1, 12]
   return year;
 }
 
