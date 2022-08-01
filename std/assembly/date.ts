@@ -331,7 +331,6 @@ function ymdFromEpochDays(z: i32): i32 {
   var n1 = 2141 * dm1 + 197913;
   var year = 100 * q0 + <u32>(u1 >>> 32);
   var mo = n1 >>> 16;
-  // check with range between Mar 1 and Jan 1
   if (dm1 >= 306) {
     mo -= 12;
     ++year;
