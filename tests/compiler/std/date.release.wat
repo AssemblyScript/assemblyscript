@@ -10,6 +10,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
+ (type $i32_i32_i32_i64_=>_i64 (func (param i32 i32 i32 i64) (result i64)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -2035,53 +2036,39 @@
   i64.add
   call $~lib/date/Date#setTime
  )
- (func $~lib/date/Date#setUTCDate (param $0 i32) (param $1 i32)
-  (local $2 i64)
-  (local $3 i32)
+ (func $~lib/date/join (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i64) (result i64)
   (local $4 i32)
   local.get $0
-  i32.load offset=8
   local.get $1
-  i32.eq
-  if
-   return
-  end
-  local.get $0
-  i64.const 86400000
-  i64.const 0
-  local.get $0
-  i64.load offset=16
-  i64.const 86400000
-  i64.rem_s
-  local.tee $2
-  i64.const 0
-  i64.lt_s
-  select
-  local.get $2
-  i64.add
-  local.get $0
-  i32.load
-  local.get $0
-  i32.load offset=4
-  local.tee $4
   i32.const 2
   i32.le_s
   i32.sub
-  local.tee $3
-  local.get $3
+  local.tee $0
+  local.get $0
   i32.const 399
   i32.sub
-  local.get $3
+  local.get $0
   i32.const 0
   i32.ge_s
   select
   i32.const 400
   i32.div_s
-  local.set $0
-  local.get $4
+  local.set $4
+  i64.const 86400000
+  i64.const 0
+  local.get $3
+  i64.const 86400000
+  i64.rem_s
+  local.tee $3
+  i64.const 0
+  i64.lt_s
+  select
+  local.get $3
+  i64.add
+  local.get $1
   i32.const -3
   i32.const 9
-  local.get $4
+  local.get $1
   i32.const 2
   i32.gt_s
   select
@@ -2092,26 +2079,26 @@
   i32.add
   i32.const 5
   i32.div_u
-  local.get $1
+  local.get $2
   i32.add
-  local.get $3
   local.get $0
+  local.get $4
   i32.const 400
   i32.mul
   i32.sub
-  local.tee $1
+  local.tee $0
   i32.const 365
   i32.mul
-  local.get $1
+  local.get $0
   i32.const 2
   i32.shr_u
   i32.add
-  local.get $1
+  local.get $0
   i32.const 100
   i32.div_u
   i32.sub
   i32.add
-  local.get $0
+  local.get $4
   i32.const 146097
   i32.mul
   i32.add
@@ -2121,12 +2108,28 @@
   i64.const 86400000
   i64.mul
   i64.add
+ )
+ (func $~lib/date/Date#setUTCDate (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=8
+  local.get $1
+  i32.eq
+  if
+   return
+  end
+  local.get $0
+  local.get $0
+  i32.load
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  local.get $0
+  i64.load offset=16
+  call $~lib/date/join
   call $~lib/date/Date#setTime
  )
  (func $~lib/date/Date#setUTCMonth@varargs (param $0 i32) (param $1 i32)
   (local $2 i32)
-  (local $3 i64)
-  (local $4 i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -2149,88 +2152,19 @@
   i32.ne
   if
    local.get $0
-   i64.const 86400000
-   i64.const 0
-   local.get $0
-   i64.load offset=16
-   i64.const 86400000
-   i64.rem_s
-   local.tee $3
-   i64.const 0
-   i64.lt_s
-   select
-   local.get $3
-   i64.add
    local.get $0
    i32.load
    local.get $1
    i32.const 1
    i32.add
-   local.tee $1
-   i32.const 2
-   i32.le_s
-   i32.sub
-   local.tee $0
-   local.get $0
-   i32.const 399
-   i32.sub
-   local.get $0
-   i32.const 0
-   i32.ge_s
-   select
-   i32.const 400
-   i32.div_s
-   local.set $4
-   local.get $1
-   i32.const -3
-   i32.const 9
-   local.get $1
-   i32.const 2
-   i32.gt_s
-   select
-   i32.add
-   i32.const 153
-   i32.mul
-   i32.const 2
-   i32.add
-   i32.const 5
-   i32.div_u
    local.get $2
-   i32.add
    local.get $0
-   local.get $4
-   i32.const 400
-   i32.mul
-   i32.sub
-   local.tee $0
-   i32.const 365
-   i32.mul
-   local.get $0
-   i32.const 2
-   i32.shr_u
-   i32.add
-   local.get $0
-   i32.const 100
-   i32.div_u
-   i32.sub
-   i32.add
-   local.get $4
-   i32.const 146097
-   i32.mul
-   i32.add
-   i32.const 719469
-   i32.sub
-   i64.extend_i32_s
-   i64.const 86400000
-   i64.mul
-   i64.add
+   i64.load offset=16
+   call $~lib/date/join
    call $~lib/date/Date#setTime
   end
  )
  (func $~lib/date/Date#setUTCFullYear (param $0 i32) (param $1 i32)
-  (local $2 i64)
-  (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.load
   local.get $1
@@ -2238,81 +2172,15 @@
   if
    return
   end
+  local.get $0
   local.get $1
   local.get $0
   i32.load offset=4
-  local.tee $4
-  i32.const 2
-  i32.le_s
-  i32.sub
-  local.tee $3
-  local.get $3
-  i32.const 399
-  i32.sub
-  local.get $3
-  i32.const 0
-  i32.ge_s
-  select
-  i32.const 400
-  i32.div_s
-  local.set $1
-  local.get $0
-  i64.const 86400000
-  i64.const 0
-  local.get $0
-  i64.load offset=16
-  i64.const 86400000
-  i64.rem_s
-  local.tee $2
-  i64.const 0
-  i64.lt_s
-  select
-  local.get $2
-  i64.add
   local.get $0
   i32.load offset=8
-  local.get $4
-  i32.const -3
-  i32.const 9
-  local.get $4
-  i32.const 2
-  i32.gt_s
-  select
-  i32.add
-  i32.const 153
-  i32.mul
-  i32.const 2
-  i32.add
-  i32.const 5
-  i32.div_u
-  i32.add
-  local.get $3
-  local.get $1
-  i32.const 400
-  i32.mul
-  i32.sub
-  local.tee $0
-  i32.const 365
-  i32.mul
   local.get $0
-  i32.const 2
-  i32.shr_u
-  i32.add
-  local.get $0
-  i32.const 100
-  i32.div_u
-  i32.sub
-  i32.add
-  local.get $1
-  i32.const 146097
-  i32.mul
-  i32.add
-  i32.const 719469
-  i32.sub
-  i64.extend_i32_s
-  i64.const 86400000
-  i64.mul
-  i64.add
+  i64.load offset=16
+  call $~lib/date/join
   call $~lib/date/Date#setTime
  )
  (func $~lib/number/I32#toString (param $0 i32) (result i32)

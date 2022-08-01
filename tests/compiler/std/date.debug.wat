@@ -12,6 +12,7 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_i64_=>_i64 (func (param i32 i64) (result i64)))
+ (type $i32_i32_i32_i64_=>_i64 (func (param i32 i32 i32 i64) (result i64)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
@@ -2699,11 +2700,40 @@
   call $~lib/date/Date#setTime
   drop
  )
- (func $~lib/date/Date#setUTCDate (param $0 i32) (param $1 i32)
-  (local $2 i64)
-  (local $3 i64)
+ (func $~lib/date/join (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i64) (result i64)
   (local $4 i64)
   (local $5 i64)
+  (local $6 i64)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/date/daysSinceEpoch
+  i64.extend_i32_s
+  i32.const 86400000
+  i64.extend_i32_s
+  i64.mul
+  local.get $3
+  local.set $5
+  i32.const 86400000
+  i64.extend_i32_s
+  local.set $4
+  local.get $5
+  local.get $4
+  i64.rem_s
+  local.set $6
+  local.get $6
+  local.get $6
+  i64.const 0
+  i64.lt_s
+  if (result i64)
+   local.get $4
+  else
+   i64.const 0
+  end
+  i64.add
+  i64.add
+ )
+ (func $~lib/date/Date#setUTCDate (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=8
   local.get $1
@@ -2712,47 +2742,18 @@
    return
   end
   local.get $0
-  i64.load offset=16
-  local.set $3
-  i32.const 86400000
-  i64.extend_i32_s
-  local.set $2
-  local.get $3
-  local.get $2
-  i64.rem_s
-  local.set $4
-  local.get $4
-  local.get $4
-  i64.const 0
-  i64.lt_s
-  if (result i64)
-   local.get $2
-  else
-   i64.const 0
-  end
-  i64.add
-  local.set $5
-  local.get $0
   local.get $0
   i32.load
   local.get $0
   i32.load offset=4
   local.get $1
-  call $~lib/date/daysSinceEpoch
-  i64.extend_i32_s
-  i32.const 86400000
-  i64.extend_i32_s
-  i64.mul
-  local.get $5
-  i64.add
+  local.get $0
+  i64.load offset=16
+  call $~lib/date/join
   call $~lib/date/Date#setTime
   drop
  )
  (func $~lib/date/Date#setUTCMonth (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i64)
-  (local $4 i64)
-  (local $5 i64)
-  (local $6 i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2763,40 +2764,15 @@
    return
   end
   local.get $0
-  i64.load offset=16
-  local.set $4
-  i32.const 86400000
-  i64.extend_i32_s
-  local.set $3
-  local.get $4
-  local.get $3
-  i64.rem_s
-  local.set $5
-  local.get $5
-  local.get $5
-  i64.const 0
-  i64.lt_s
-  if (result i64)
-   local.get $3
-  else
-   i64.const 0
-  end
-  i64.add
-  local.set $6
-  local.get $0
   local.get $0
   i32.load
   local.get $1
   i32.const 1
   i32.add
   local.get $2
-  call $~lib/date/daysSinceEpoch
-  i64.extend_i32_s
-  i32.const 86400000
-  i64.extend_i32_s
-  i64.mul
-  local.get $6
-  i64.add
+  local.get $0
+  i64.load offset=16
+  call $~lib/date/join
   call $~lib/date/Date#setTime
   drop
  )
@@ -2821,10 +2797,6 @@
   call $~lib/date/Date#setUTCMonth
  )
  (func $~lib/date/Date#setUTCFullYear (param $0 i32) (param $1 i32)
-  (local $2 i64)
-  (local $3 i64)
-  (local $4 i64)
-  (local $5 i64)
   local.get $0
   i32.load
   local.get $1
@@ -2833,39 +2805,14 @@
    return
   end
   local.get $0
-  i64.load offset=16
-  local.set $3
-  i32.const 86400000
-  i64.extend_i32_s
-  local.set $2
-  local.get $3
-  local.get $2
-  i64.rem_s
-  local.set $4
-  local.get $4
-  local.get $4
-  i64.const 0
-  i64.lt_s
-  if (result i64)
-   local.get $2
-  else
-   i64.const 0
-  end
-  i64.add
-  local.set $5
-  local.get $0
   local.get $1
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load offset=8
-  call $~lib/date/daysSinceEpoch
-  i64.extend_i32_s
-  i32.const 86400000
-  i64.extend_i32_s
-  i64.mul
-  local.get $5
-  i64.add
+  local.get $0
+  i64.load offset=16
+  call $~lib/date/join
   call $~lib/date/Date#setTime
   drop
  )
