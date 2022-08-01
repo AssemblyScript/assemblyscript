@@ -11,10 +11,10 @@ import {
 export namespace performance {
   export function now(): f64 {
     if (isDefined(ASC_WASI)) {
-      let err = clock_time_get(clockid.MONOTONIC, 1000000, tempbuf);
+      let err = clock_time_get(clockid.MONOTONIC, 1000, tempbuf);
       if (err) {
         // try with less precission
-        err = clock_time_get(clockid.MONOTONIC, 1000, tempbuf);
+        err = clock_time_get(clockid.MONOTONIC, 1000000, tempbuf);
         if (err) throw new Error("Can't retrive time from clock_time_get");
       }
       return <f64>load<u64>(tempbuf) / 1e6;
