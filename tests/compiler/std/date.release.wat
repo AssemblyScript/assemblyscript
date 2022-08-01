@@ -311,7 +311,7 @@
   i64.add
   i64.add
  )
- (func $~lib/date/ymdFromEpochDays (param $0 i32) (result i32)
+ (func $~lib/date/dateFromEpochDays (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i64)
@@ -1897,7 +1897,7 @@
   i64.const 86400000
   i64.div_s
   i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/dateFromEpochDays
   i32.store
   local.get $0
   global.get $~lib/date/_month
@@ -8251,7 +8251,7 @@
   i64.const 86400000
   i64.div_s
   i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/dateFromEpochDays
   i32.store
   local.get $1
   global.get $~lib/date/_month

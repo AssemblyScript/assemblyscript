@@ -94,7 +94,7 @@ export class Date {
     // instead throwing exception.
     if (invalidDate(epochMillis)) throw new RangeError(E_INVALIDDATE);
 
-    this.year = ymdFromEpochDays(i32(floorDiv(epochMillis, MILLIS_PER_DAY)));
+    this.year = dateFromEpochDays(i32(floorDiv(epochMillis, MILLIS_PER_DAY)));
     this.month = _month;
     this.day = _day;
   }
@@ -107,7 +107,7 @@ export class Date {
     if (invalidDate(time)) throw new RangeError(E_INVALIDDATE);
 
     this.epochMillis = time;
-    this.year = ymdFromEpochDays(i32(floorDiv(time, MILLIS_PER_DAY)));
+    this.year = dateFromEpochDays(i32(floorDiv(time, MILLIS_PER_DAY)));
     this.month = _month;
     this.day = _day;
 
@@ -322,7 +322,7 @@ function invalidDate(millis: i64): bool {
 
 // Based on "Euclidean Affine Functions and Applications to Calendar Algorithms"
 // Paper: https://arxiv.org/pdf/2102.06959.pdf
-function ymdFromEpochDays(z: i32): i32 {
+function dateFromEpochDays(z: i32): i32 {
   z = (z * 4 + 719468 * 4) | 3;
   var q0 = <u32>floorDiv(z, 146097); // [0, 146096]
   var r1 = <u32>z - q0 * 146097;
