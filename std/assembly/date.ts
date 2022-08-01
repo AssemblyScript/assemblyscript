@@ -182,107 +182,83 @@ export class Date {
 
   toISOString(): string {
     // TODO: add more low-level helper which combine toString and padStart without extra allocation
-    var yearStr: string;
-    var year = this.year;
-    var isNeg = year < 0;
-    if (isNeg || year >= 10000) {
-      yearStr = (isNeg ? "-" : "+") + abs(year).toString().padStart(6, "0");
-    } else {
-      yearStr = year.toString().padStart(4, "0");
-    }
 
-    return (
-      yearStr +
-      "-" +
-      this.month.toString().padStart(2, "0") +
-      "-" +
-      this.day.toString().padStart(2, "0") +
-      "T" +
-      this.getUTCHours().toString().padStart(2, "0") +
-      ":" +
-      this.getUTCMinutes().toString().padStart(2, "0") +
-      ":" +
-      this.getUTCSeconds().toString().padStart(2, "0") +
-      "." +
-      this.getUTCMilliseconds().toString().padStart(3, "0") +
-      "Z"
-    );
+    var yr = this.year;
+    var isNeg = yr < 0;
+    var year = (isNeg || yr >= 10000)
+      ? (isNeg ? "-" : "+") + abs(yr).toString().padStart(6, "0")
+      : yr.toString().padStart(4, "0");
+    var month = this.month.toString().padStart(2, "0");
+    var day = this.day.toString().padStart(2, "0");
+    var hour = this.getUTCHours().toString().padStart(2, "0");
+    var min = this.getUTCMinutes().toString().padStart(2, "0");
+    var sec = this.getUTCSeconds().toString().padStart(2, "0");
+    var ms = this.getUTCMilliseconds().toString().padStart(3, "0");
+
+    return `${year}-${month}-${day}T${hour}:${min}:${sec}.${ms}Z`;
   }
 
   toUTCString(): string {
-    const weeks: StaticArray<string> = [
-      "Sun, ", "Mon, ", "Tue, ", "Wed, ", "Thu, ", "Fri, ", "Sat, "
-    ];
-
-    const months: StaticArray<string> = [
-      " Jan ", " Feb ", " Mar ", " Apr ", " May ", " Jun ",
-      " Jul ", " Aug ", " Sep ", " Oct ", " Nov ", " Dec "
-    ];
+    const
+      weeks: StaticArray<string> = [
+        "Sun, ", "Mon, ", "Tue, ", "Wed, ", "Thu, ", "Fri, ", "Sat, "
+      ],
+      months: StaticArray<string> = [
+        " Jan ", " Feb ", " Mar ", " Apr ", " May ", " Jun ",
+        " Jul ", " Aug ", " Sep ", " Oct ", " Nov ", " Dec "
+      ];
 
     var mo = this.month;
     var da = this.day;
     var yr = this.year;
     var wd = dayOfWeek(yr, mo, da);
     var year = abs(yr).toString().padStart(4, "0");
-    if (yr < 0) year = "-" + year;
+    var month = unchecked(months[mo - 1]);
+    var week = unchecked(weeks[wd]);
+    var day = da.toString().padStart(2, "0");
+    var hour = this.getUTCHours().toString().padStart(2, "0");
+    var min = this.getUTCMinutes().toString().padStart(2, "0");
+    var sec = this.getUTCSeconds().toString().padStart(2, "0");
 
-    return (
-      unchecked(weeks[wd]) +
-      da.toString().padStart(2, "0") +
-      unchecked(months[mo - 1]) +
-      year +
-      " " +
-      this.getUTCHours().toString().padStart(2, "0") +
-      ":" +
-      this.getUTCMinutes().toString().padStart(2, "0") +
-      ":" +
-      this.getUTCSeconds().toString().padStart(2, "0") +
-      " GMT"
-    );
+    return `${week}${day}${month}${yr < 0 ? "-" : ""}${year} ${hour}:${min}:${sec} GMT`;
   }
 
   toDateString(): string {
     // TODO: use u64 static data instead 4 chars
     // also use stream itoa variants.
-    const weeks: StaticArray<string> = [
-      "Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat "
-    ];
-
-    const months: StaticArray<string> = [
-      "Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ",
-      "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "
-    ];
+    const
+      weeks: StaticArray<string> = [
+        "Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat "
+      ],
+      months: StaticArray<string> = [
+        "Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ",
+        "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "
+      ];
 
     var mo = this.month;
     var da = this.day;
     var yr = this.year;
     var wd = dayOfWeek(yr, mo, da);
     var year = abs(yr).toString().padStart(4, "0");
-    if (yr < 0) year = "-" + year;
+    var month = unchecked(months[mo - 1]);
+    var week = unchecked(weeks[wd]);
+    var day = da.toString().padStart(2, "0");
 
-    return (
-      unchecked(weeks[wd]) +
-      unchecked(months[mo - 1]) +
-      da.toString().padStart(2, "0") +
-      " " + year
-    );
+    return `${week}${month}${day}${yr < 0 ? " -" : " "}${year}`;
   }
 
   // Note: it uses UTC time instead local time (without timezone offset)
   toTimeString(): string {
+    var hour = this.getUTCHours().toString().padStart(2, "0");
+    var min = this.getUTCMinutes().toString().padStart(2, "0");
+    var sec = this.getUTCSeconds().toString().padStart(2, "0");
     // TODO: add timezone
-    return (
-      this.getUTCHours().toString().padStart(2, "0") +
-      ":" +
-      this.getUTCMinutes().toString().padStart(2, "0") +
-      ":" +
-      this.getUTCSeconds().toString().padStart(2, "0")
-    );
+    return `${hour}:${min}:${sec}`;
   }
 
   // Note: it uses UTC datetime instead local datetime (without timezone offset)
   toString(): string {
-    return this.toDateString() + " " + this.toTimeString();
+    return `${this.toDateString()} ${this.toTimeString()}`;
   }
 }
 
