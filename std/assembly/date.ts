@@ -320,19 +320,23 @@ function invalidDate(millis: i64): bool {
   return (millis < -8640000000000000) | (millis > 8640000000000000);
 }
 
-// see: http://howardhinnant.github.io/date_algorithms.html#civil_from_days
+// Based on "Euclidean Affine Functions and Applications to Calendar Algorithms"
+// Paper: https://arxiv.org/pdf/2102.06959.pdf
 function ymdFromEpochDays(z: i32): i32 {
-  z += 719468;
-  var era = <u32>floorDiv(z, 146097);
-  var doe = <u32>z - era * 146097; // [0, 146096]
-  var yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365; // [0, 399]
-  var year = yoe + era * 400;
-  var doy = doe - (365 * yoe + yoe / 4 - yoe / 100); // [0, 365]
-  var mo = (5 * doy + 2) / 153; // [0, 11]
-  _day = doy - (153 * mo + 2) / 5 + 1; // [1, 31]
-  mo += mo < 10 ? 3 : -9; // [1, 12]
+  z = (z * 4 + 719468 * 4) | 3;
+  var q0 = <u32>floorDiv(z, 146097);
+  var r1 = <u32>z - q0 * 146097;
+  var u1 = <u64>(r1 | 3) * 2939745;
+  var dm1 = <u32>u1 / 11758980;
+  var n1 = 2141 * dm1 + 197913;
+  var year = 100 * q0 + <u32>(u1 >>> 32);
+  var mo = n1 >>> 16;
+  if (dm1 >= 306) {
+    ++year;
+    mo -= 12;
+  }
+  _day = (n1 & 0xFFFF) / 2141 + 1;
   _month = mo;
-  year += u32(mo <= 2);
   return year;
 }
 
