@@ -720,7 +720,6 @@ export class Resolver extends DiagnosticEmitter {
     }
     var typeArguments = new Array<Type>(maxParameterCount);
     var oldCtxTypes = cloneMap(ctxTypes);
-    ctxTypes.clear();
     for (let i = 0; i < maxParameterCount; ++i) {
       let type = i < argumentCount
         ? this.resolveType( // reports
