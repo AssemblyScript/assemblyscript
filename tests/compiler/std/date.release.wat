@@ -3340,7 +3340,7 @@
   global.set $~started
   call $start:std/date
  )
- (func $~lib/date/stringify<i32> (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/date/stringify (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3542,7 +3542,7 @@
      i32.add
      i32.xor
      i32.const 6
-     call $~lib/date/stringify<i32>
+     call $~lib/date/stringify
      local.set $2
      global.get $~lib/memory/__stack_pointer
      local.get $2
@@ -3612,7 +3612,7 @@
    else
     local.get $2
     i32.const 4
-    call $~lib/date/stringify<i32>
+    call $~lib/date/stringify
    end
    local.tee $3
    i32.store offset=8
@@ -3620,14 +3620,14 @@
    local.get $0
    i32.load offset=4
    i32.const 2
-   call $~lib/date/stringify<i32>
+   call $~lib/date/stringify
    local.tee $4
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.load offset=8
    i32.const 2
-   call $~lib/date/stringify<i32>
+   call $~lib/date/stringify
    local.tee $5
    i32.store offset=16
    global.get $~lib/memory/__stack_pointer
@@ -3647,7 +3647,7 @@
    i32.const 3600000
    i32.div_s
    i32.const 2
-   call $~lib/date/stringify<i32>
+   call $~lib/date/stringify
    local.tee $6
    i32.store offset=20
    global.get $~lib/memory/__stack_pointer
@@ -3667,7 +3667,7 @@
    i32.const 60000
    i32.div_s
    i32.const 2
-   call $~lib/date/stringify<i32>
+   call $~lib/date/stringify
    local.tee $7
    i32.store offset=24
    global.get $~lib/memory/__stack_pointer
@@ -3687,7 +3687,7 @@
    i32.const 1000
    i32.div_s
    i32.const 2
-   call $~lib/date/stringify<i32>
+   call $~lib/date/stringify
    local.tee $2
    i32.store offset=28
    global.get $~lib/memory/__stack_pointer
@@ -3705,7 +3705,7 @@
    i64.add
    i32.wrap_i64
    i32.const 3
-   call $~lib/date/stringify<i32>
+   call $~lib/date/stringify
    local.tee $0
    i32.store offset=32
    global.get $~lib/memory/__stack_pointer
@@ -3896,7 +3896,7 @@
   i32.add
   i32.xor
   i32.const 4
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $6
   i32.store offset=8
   global.get $~lib/memory/__stack_pointer
@@ -3922,7 +3922,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $0
   i32.store offset=20
   global.get $~lib/memory/__stack_pointer
@@ -4023,7 +4023,7 @@
   i32.const 3600000
   i32.div_s
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $3
   i32.store
   global.get $~lib/memory/__stack_pointer
@@ -4043,7 +4043,7 @@
   i32.const 60000
   i32.div_s
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $2
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
@@ -4063,7 +4063,7 @@
   i32.const 1000
   i32.div_s
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $0
   i32.store offset=8
   global.get $~lib/memory/__stack_pointer
@@ -4220,7 +4220,7 @@
   i32.add
   i32.xor
   i32.const 4
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $8
   i32.store offset=8
   global.get $~lib/memory/__stack_pointer
@@ -4246,7 +4246,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $7
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $5
   i32.store offset=20
   global.get $~lib/memory/__stack_pointer
@@ -4266,7 +4266,7 @@
   i32.const 3600000
   i32.div_s
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $6
   i32.store offset=24
   global.get $~lib/memory/__stack_pointer
@@ -4286,7 +4286,7 @@
   i32.const 60000
   i32.div_s
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $7
   i32.store offset=28
   global.get $~lib/memory/__stack_pointer
@@ -4306,7 +4306,7 @@
   i32.const 1000
   i32.div_s
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $0
   i32.store offset=32
   global.get $~lib/memory/__stack_pointer

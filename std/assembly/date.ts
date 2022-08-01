@@ -329,7 +329,7 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   return euclidRem(year + month + day, 7);
 }
 
-function stringify<T extends number>(value: T, padding: i32 = 2): string {
+function stringify(value: i32, padding: i32 = 2): string {
   return value.toString().padStart(padding, "0");
 }
 

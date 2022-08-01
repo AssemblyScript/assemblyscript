@@ -4531,7 +4531,7 @@
    unreachable
   end
  )
- (func $~lib/date/stringify<i32> (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/date/stringify (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -4629,7 +4629,7 @@
    local.get $4
    i32.xor
    i32.const 6
-   call $~lib/date/stringify<i32>
+   call $~lib/date/stringify
    local.set $17
    global.get $~lib/memory/__stack_pointer
    local.get $17
@@ -4639,7 +4639,7 @@
   else
    local.get $1
    i32.const 4
-   call $~lib/date/stringify<i32>
+   call $~lib/date/stringify
   end
   local.tee $5
   i32.store offset=8
@@ -4647,42 +4647,42 @@
   local.get $0
   i32.load offset=4
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $6
   i32.store offset=12
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.load offset=8
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $7
   i32.store offset=16
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCHours
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $8
   i32.store offset=20
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCMinutes
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $9
   i32.store offset=24
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCSeconds
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $10
   i32.store offset=28
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCMilliseconds
   i32.const 3
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $11
   i32.store offset=32
   local.get $5
@@ -4847,7 +4847,7 @@
   local.get $8
   i32.xor
   i32.const 4
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $9
   i32.store offset=8
   global.get $~lib/memory/__stack_pointer
@@ -4867,7 +4867,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $4
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $12
   i32.store offset=20
   local.get $11
@@ -4975,21 +4975,21 @@
   local.get $0
   call $~lib/date/Date#getUTCHours
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $1
   i32.store
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCMinutes
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $2
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCSeconds
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $3
   i32.store offset=8
   local.get $1
@@ -5116,7 +5116,7 @@
   local.get $8
   i32.xor
   i32.const 4
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $9
   i32.store offset=8
   global.get $~lib/memory/__stack_pointer
@@ -5136,28 +5136,28 @@
   global.get $~lib/memory/__stack_pointer
   local.get $4
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $12
   i32.store offset=20
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCHours
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $13
   i32.store offset=24
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCMinutes
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $14
   i32.store offset=28
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $~lib/date/Date#getUTCSeconds
   i32.const 2
-  call $~lib/date/stringify<i32>
+  call $~lib/date/stringify
   local.tee $15
   i32.store offset=32
   local.get $11
