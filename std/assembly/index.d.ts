@@ -104,6 +104,8 @@ declare const ASC_VERSION_MAJOR: i32;
 declare const ASC_VERSION_MINOR: i32;
 /** Patch version of the compiler. */
 declare const ASC_VERSION_PATCH: i32;
+/** Defined if WASI imported */
+declare const ASC_WASI: bool;
 
 // Builtins
 
