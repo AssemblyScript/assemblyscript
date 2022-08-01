@@ -6,7 +6,11 @@ import { Date as Date_binding } from "./bindings/dom";
   MILLIS_PER_DAY    = 1000 * 60 * 60 * 24,
   MILLIS_PER_HOUR   = 1000 * 60 * 60,
   MILLIS_PER_MINUTE = 1000 * 60,
-  MILLIS_PER_SECOND = 1000;
+  MILLIS_PER_SECOND = 1000,
+
+  YEARS_PER_ERA = 400,
+  DAYS_PER_ERA  = 146097,
+  UNIX_EPOCH_OFFSET = 719468; // Jan 1, 1970
 
 // ymdFromEpochDays returns values via globals to avoid allocations
 // @ts-ignore: decorator
@@ -323,9 +327,9 @@ function invalidDate(millis: i64): bool {
 // Based on "Euclidean Affine Functions and Applications to Calendar Algorithms"
 // Paper: https://arxiv.org/pdf/2102.06959.pdf
 function dateFromEpoch(ms: i64): i32 {
-  var da = (<i32>floorDiv(ms, MILLIS_PER_DAY) * 4 + 719468 * 4) | 3;
-  var q0 = <u32>floorDiv(da, 146097); // [0, 146096]
-  var r1 = <u32>da - q0 * 146097;
+  var da = (<i32>floorDiv(ms, MILLIS_PER_DAY) * 4 + UNIX_EPOCH_OFFSET * 4) | 3;
+  var q0 = <u32>floorDiv(da, DAYS_PER_ERA); // [0, 146096]
+  var r1 = <u32>da - q0 * DAYS_PER_ERA;
   var u1 = <u64>(r1 | 3) * 2939745;
   var dm1 = <u32>u1 / 11758980;
   var n1 = 2141 * dm1 + 197913;
@@ -343,11 +347,11 @@ function dateFromEpoch(ms: i64): i32 {
 // http://howardhinnant.github.io/date_algorithms.html#days_from_civil
 function daysSinceEpoch(y: i32, m: i32, d: i32): i32 {
   y -= i32(m <= 2);
-  var era = <u32>floorDiv(y, 400);
-  var yoe = <u32>y - era * 400; // [0, 399]
+  var era = <u32>floorDiv(y, YEARS_PER_ERA);
+  var yoe = <u32>y - era * YEARS_PER_ERA; // [0, 399]
   var doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
   var doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
-  return era * 146097 + doe - 719468;
+  return era * 146097 + doe - UNIX_EPOCH_OFFSET;
 }
 
 // TomohikoSakamoto algorithm from https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
@@ -355,7 +359,7 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   const tab = memory.data<u8>([0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4]);
 
   year -= i32(month < 3);
-  year += floorDiv(year, 4) - floorDiv(year, 100) + floorDiv(year, 400);
+  year += floorDiv(year, 4) - floorDiv(year, 100) + floorDiv(year, YEARS_PER_ERA);
   month = <i32>load<u8>(tab + month - 1);
   return euclidRem(year + month + day, 7);
 }
