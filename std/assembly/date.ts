@@ -269,7 +269,7 @@ function epochMillis(
   milliseconds: i32
 ): i64 {
   return (
-    i64(daysSinceEpoch(year, month, day)) * MILLIS_PER_DAY +
+    daysSinceEpoch(year, month, day) * MILLIS_PER_DAY +
     hour * MILLIS_PER_HOUR +
     minute * MILLIS_PER_MINUTE +
     second * MILLIS_PER_SECOND +
@@ -310,13 +310,13 @@ function ymdFromEpochDays(z: i32): i32 {
 }
 
 // http://howardhinnant.github.io/date_algorithms.html#days_from_civil
-function daysSinceEpoch(y: i32, m: i32, d: i32): i32 {
+function daysSinceEpoch(y: i32, m: i32, d: i32): i64 {
   y -= i32(m <= 2);
   var era = <u32>floorDiv(y, 400);
   var yoe = <u32>y - era * 400; // [0, 399]
   var doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
   var doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
-  return era * 146097 + doe - 719468;
+  return <i64><i32>(era * 146097 + doe - 719468);
 }
 
 // TomohikoSakamoto algorithm from https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
@@ -330,5 +330,5 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
 }
 
 function join(year: i32, month: i32, day: i32, ms: i64): i64 {
-  return <i64>daysSinceEpoch(year, month, day) * MILLIS_PER_DAY + euclidRem(ms, MILLIS_PER_DAY);
+  return daysSinceEpoch(year, month, day) * MILLIS_PER_DAY + euclidRem(ms, MILLIS_PER_DAY);
 }

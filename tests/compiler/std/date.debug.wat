@@ -2,11 +2,12 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_i64 (func (param i32 i32 i32) (result i64)))
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $none_=>_i32 (func (result i32)))
@@ -160,7 +161,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $~lib/date/daysSinceEpoch (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/date/daysSinceEpoch (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -240,13 +241,13 @@
   i32.add
   i32.const 719468
   i32.sub
+  i64.extend_i32_s
  )
  (func $~lib/date/epochMillis (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (result i64)
   local.get $0
   local.get $1
   local.get $2
   call $~lib/date/daysSinceEpoch
-  i64.extend_i32_s
   i32.const 86400000
   i64.extend_i32_s
   i64.mul
@@ -2708,7 +2709,6 @@
   local.get $1
   local.get $2
   call $~lib/date/daysSinceEpoch
-  i64.extend_i32_s
   i32.const 86400000
   i64.extend_i32_s
   i64.mul
