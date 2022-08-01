@@ -306,7 +306,7 @@ function epochMillis(
 
 // @ts-ignore: decorator
 @inline function floorDiv<T extends number>(a: T, b: T): T {
-  return (a >= 0 ? a : a - b + 1) / b as T;
+  return (a - (a < 0 ? b - 1 : 0)) / b as T;
 }
 
 // @ts-ignore: decorator

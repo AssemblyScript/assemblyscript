@@ -254,13 +254,13 @@
   i32.le_s
   i32.sub
   local.tee $0
-  local.get $0
   i32.const 399
-  i32.sub
+  i32.const 0
   local.get $0
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
+  i32.sub
   i32.const 400
   i32.div_s
   local.set $3
@@ -324,13 +324,13 @@
   i32.const 3
   i32.or
   local.tee $0
-  local.get $0
   i32.const 146096
-  i32.sub
+  i32.const 0
   local.get $0
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
+  i32.sub
   i32.const 146097
   i32.div_s
   local.set $1
@@ -1887,13 +1887,13 @@
   i64.store offset=16
   local.get $0
   local.get $1
-  local.get $1
   i64.const 86399999
-  i64.sub
+  i64.const 0
   local.get $1
   i64.const 0
-  i64.ge_s
+  i64.lt_s
   select
+  i64.sub
   i64.const 86400000
   i64.div_s
   i32.wrap_i64
@@ -2051,13 +2051,13 @@
   i32.le_s
   i32.sub
   local.tee $3
-  local.get $3
   i32.const 399
-  i32.sub
+  i32.const 0
   local.get $3
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
+  i32.sub
   i32.const 400
   i32.div_s
   local.set $0
@@ -2154,13 +2154,13 @@
    i32.le_s
    i32.sub
    local.tee $0
-   local.get $0
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    select
+   i32.sub
    i32.const 400
    i32.div_s
    local.set $4
@@ -2229,13 +2229,13 @@
   i32.le_s
   i32.sub
   local.tee $3
-  local.get $3
   i32.const 399
-  i32.sub
+  i32.const 0
   local.get $3
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
+  i32.sub
   i32.const 400
   i32.div_s
   local.set $1
@@ -3723,31 +3723,31 @@
   i32.load8_u
   local.get $6
   local.get $6
-  local.get $6
   i32.const 3
-  i32.sub
+  i32.const 0
   local.get $6
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   local.tee $0
   select
+  i32.sub
   i32.const 4
   i32.div_s
   local.get $6
-  local.get $6
   i32.const 99
-  i32.sub
+  i32.const 0
   local.get $0
   select
+  i32.sub
   i32.const 100
   i32.div_s
   i32.sub
   local.get $6
-  local.get $6
   i32.const 399
-  i32.sub
+  i32.const 0
   local.get $0
   select
+  i32.sub
   i32.const 400
   i32.div_s
   i32.add
@@ -4088,31 +4088,31 @@
   i32.load8_u
   local.get $1
   local.get $1
-  local.get $1
   i32.const 3
-  i32.sub
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   local.tee $8
   select
+  i32.sub
   i32.const 4
   i32.div_s
   local.get $1
-  local.get $1
   i32.const 99
-  i32.sub
+  i32.const 0
   local.get $8
   select
+  i32.sub
   i32.const 100
   i32.div_s
   i32.sub
   local.get $1
-  local.get $1
   i32.const 399
-  i32.sub
+  i32.const 0
   local.get $8
   select
+  i32.sub
   i32.const 400
   i32.div_s
   i32.add
@@ -6350,31 +6350,31 @@
    i32.load8_u
    local.get $3
    local.get $3
-   local.get $3
    i32.const 3
-   i32.sub
+   i32.const 0
    local.get $3
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    local.tee $0
    select
+   i32.sub
    i32.const 4
    i32.div_s
    local.get $3
-   local.get $3
    i32.const 99
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 100
    i32.div_s
    i32.sub
    local.get $3
-   local.get $3
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 400
    i32.div_s
    i32.add
@@ -6423,31 +6423,31 @@
    i32.load8_u
    local.get $3
    local.get $3
-   local.get $3
    i32.const 3
-   i32.sub
+   i32.const 0
    local.get $3
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    local.tee $0
    select
+   i32.sub
    i32.const 4
    i32.div_s
    local.get $3
-   local.get $3
    i32.const 99
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 100
    i32.div_s
    i32.sub
    local.get $3
-   local.get $3
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 400
    i32.div_s
    i32.add
@@ -6496,31 +6496,31 @@
    i32.load8_u
    local.get $3
    local.get $3
-   local.get $3
    i32.const 3
-   i32.sub
+   i32.const 0
    local.get $3
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    local.tee $0
    select
+   i32.sub
    i32.const 4
    i32.div_s
    local.get $3
-   local.get $3
    i32.const 99
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 100
    i32.div_s
    i32.sub
    local.get $3
-   local.get $3
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 400
    i32.div_s
    i32.add
@@ -6569,31 +6569,31 @@
    i32.load8_u
    local.get $3
    local.get $3
-   local.get $3
    i32.const 3
-   i32.sub
+   i32.const 0
    local.get $3
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    local.tee $0
    select
+   i32.sub
    i32.const 4
    i32.div_s
    local.get $3
-   local.get $3
    i32.const 99
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 100
    i32.div_s
    i32.sub
    local.get $3
-   local.get $3
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 400
    i32.div_s
    i32.add
@@ -6642,31 +6642,31 @@
    i32.load8_u
    local.get $3
    local.get $3
-   local.get $3
    i32.const 3
-   i32.sub
+   i32.const 0
    local.get $3
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    local.tee $0
    select
+   i32.sub
    i32.const 4
    i32.div_s
    local.get $3
-   local.get $3
    i32.const 99
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 100
    i32.div_s
    i32.sub
    local.get $3
-   local.get $3
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 400
    i32.div_s
    i32.add
@@ -6715,31 +6715,31 @@
    i32.load8_u
    local.get $3
    local.get $3
-   local.get $3
    i32.const 3
-   i32.sub
+   i32.const 0
    local.get $3
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    local.tee $0
    select
+   i32.sub
    i32.const 4
    i32.div_s
    local.get $3
-   local.get $3
    i32.const 99
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 100
    i32.div_s
    i32.sub
    local.get $3
-   local.get $3
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 400
    i32.div_s
    i32.add
@@ -6788,31 +6788,31 @@
    i32.load8_u
    local.get $3
    local.get $3
-   local.get $3
    i32.const 3
-   i32.sub
+   i32.const 0
    local.get $3
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    local.tee $0
    select
+   i32.sub
    i32.const 4
    i32.div_s
    local.get $3
-   local.get $3
    i32.const 99
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 100
    i32.div_s
    i32.sub
    local.get $3
-   local.get $3
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 400
    i32.div_s
    i32.add
@@ -6861,31 +6861,31 @@
    i32.load8_u
    local.get $3
    local.get $3
-   local.get $3
    i32.const 3
-   i32.sub
+   i32.const 0
    local.get $3
    i32.const 0
-   i32.ge_s
+   i32.lt_s
    local.tee $0
    select
+   i32.sub
    i32.const 4
    i32.div_s
    local.get $3
-   local.get $3
    i32.const 99
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 100
    i32.div_s
    i32.sub
    local.get $3
-   local.get $3
    i32.const 399
-   i32.sub
+   i32.const 0
    local.get $0
    select
+   i32.sub
    i32.const 400
    i32.div_s
    i32.add
@@ -8241,13 +8241,13 @@
   end
   local.get $1
   local.get $0
-  local.get $0
   i64.const 86399999
-  i64.sub
+  i64.const 0
   local.get $0
   i64.const 0
-  i64.ge_s
+  i64.lt_s
   select
+  i64.sub
   i64.const 86400000
   i64.div_s
   i32.wrap_i64

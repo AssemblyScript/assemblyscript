@@ -172,17 +172,17 @@
   i32.const 400
   local.set $3
   local.get $4
+  local.get $4
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $4
-  else
-   local.get $4
    local.get $3
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $3
   i32.div_s
   local.set $5
@@ -297,17 +297,17 @@
   i32.const 146097
   local.set $1
   local.get $2
+  local.get $2
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $2
-  else
-   local.get $2
    local.get $1
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $1
   i32.div_s
   local.set $3
@@ -2488,17 +2488,17 @@
   i64.extend_i32_s
   local.set $2
   local.get $3
+  local.get $3
   i64.const 0
-  i64.ge_s
+  i64.lt_s
   if (result i64)
-   local.get $3
-  else
-   local.get $3
    local.get $2
-   i64.sub
    i64.const 1
-   i64.add
+   i64.sub
+  else
+   i64.const 0
   end
+  i64.sub
   local.get $2
   i64.div_s
   i32.wrap_i64
@@ -2866,17 +2866,17 @@
   i32.const 4
   local.set $3
   local.get $4
+  local.get $4
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $4
-  else
-   local.get $4
    local.get $3
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $3
   i32.div_s
   local.get $0
@@ -2884,17 +2884,17 @@
   i32.const 100
   local.set $3
   local.get $4
+  local.get $4
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $4
-  else
-   local.get $4
    local.get $3
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $3
   i32.div_s
   i32.sub
@@ -2903,17 +2903,17 @@
   i32.const 400
   local.set $3
   local.get $4
+  local.get $4
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $4
-  else
-   local.get $4
    local.get $3
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $3
   i32.div_s
   i32.add
@@ -9289,17 +9289,17 @@
   i64.extend_i32_s
   local.set $2
   local.get $3
+  local.get $3
   i64.const 0
-  i64.ge_s
+  i64.lt_s
   if (result i64)
-   local.get $3
-  else
-   local.get $3
    local.get $2
-   i64.sub
    i64.const 1
-   i64.add
+   i64.sub
+  else
+   i64.const 0
   end
+  i64.sub
   local.get $2
   i64.div_s
   i32.wrap_i64
