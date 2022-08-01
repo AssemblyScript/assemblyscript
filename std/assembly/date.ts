@@ -1,5 +1,6 @@
 import { E_INVALIDDATE } from "util/error";
 import { Date as Date_binding } from "./bindings/dom";
+import { clock_time_get, clockid, tempbuf } from "./bindings/wasi";
 
 // @ts-ignore: decorator
 @inline const
@@ -33,7 +34,12 @@ export class Date {
   }
 
   @inline static now(): i64 {
-    return <i64>Date_binding.now();
+    if (isDefined(ASC_WASI)) {
+      clock_time_get(clockid.REALTIME, 1000000, tempbuf);
+      return load<u64>(tempbuf) / 1000000;
+    } else {
+      return <i64>Date_binding.now();
+    }
   }
 
   // It can parse only ISO 8601 inputs like YYYY-MM-DDTHH:MM:SS.000Z
