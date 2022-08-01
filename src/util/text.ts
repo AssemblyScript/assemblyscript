@@ -449,13 +449,13 @@ export function indent(sb: string[], level: i32): void {
       case 4: sb.push(indentX4); break;
     }
   } else {
-    if (!indentCache.has(level)) {
-      let spaces = indentX1.repeat(level);
-      sb.push(spaces);
-      indentCache.set(level, spaces);
+    let indents: string;
+    if (indentCache.has(level)) {
+      indents = assert(indentCache.get(level));
     } else {
-      sb.push(assert(indentCache.get(level)));
+      indentCache.set(level, (indents = indentX1.repeat(level)));
     }
+    sb.push(indents);
   }
 }
 
