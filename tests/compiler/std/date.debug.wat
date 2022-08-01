@@ -265,7 +265,9 @@
  )
  (func $~lib/date/invalidDate (param $0 i64) (result i32)
   local.get $0
-  i64.const -8640000000000000
+  i64.const 0
+  i64.const 8640000000000000
+  i64.sub
   i64.lt_s
   local.get $0
   i64.const 8640000000000000
@@ -2493,7 +2495,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 111
+   i32.const 112
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -5819,7 +5821,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 49
+   i32.const 50
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5885,7 +5887,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 66
+    i32.const 67
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -6114,7 +6116,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 35
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6177,7 +6179,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 35
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6240,7 +6242,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 35
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6303,7 +6305,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 35
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6366,7 +6368,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 35
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6429,7 +6431,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 35
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6492,7 +6494,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 35
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -9276,7 +9278,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 99
+   i32.const 100
    i32.const 35
    call $~lib/builtins/abort
    unreachable

@@ -9,8 +9,9 @@ import { Date as Date_binding } from "./bindings/dom";
   MILLIS_PER_SECOND = 1000,
 
   YEARS_PER_ERA = 400,
-  DAYS_PER_ERA  = 146097,
-  UNIX_EPOCH_OFFSET = 719468; // Jan 1, 1970
+  DAYS_PER_ERA = 146097,
+  UNIX_EPOCH_OFFSET = 719468, // Jan 1, 1970
+  MILLIS_LIMIT = 8640000000000000;
 
 // ymdFromEpochDays returns values via globals to avoid allocations
 // @ts-ignore: decorator
@@ -321,7 +322,7 @@ function epochMillis(
 
 function invalidDate(millis: i64): bool {
   // @ts-ignore
-  return (millis < -8640000000000000) | (millis > 8640000000000000);
+  return (millis < -MILLIS_LIMIT) | (millis > MILLIS_LIMIT);
 }
 
 // Based on "Euclidean Affine Functions and Applications to Calendar Algorithms"
