@@ -15,7 +15,7 @@ export namespace performance {
       if (err) {
         // try with less precission
         err = clock_time_get(clockid.MONOTONIC, 1000000, tempbuf);
-        if (err) throw new Error("Can't retrive time from clock_time_get");
+        if (err) unreachable();
       }
       return <f64>load<u64>(tempbuf) / 1e6;
     } else {

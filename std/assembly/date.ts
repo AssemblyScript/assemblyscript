@@ -35,7 +35,8 @@ export class Date {
 
   @inline static now(): i64 {
     if (isDefined(ASC_WASI)) {
-      clock_time_get(clockid.REALTIME, 1000000, tempbuf);
+      let err = clock_time_get(clockid.REALTIME, 1000000, tempbuf);
+      if (err) unreachable();
       return load<u64>(tempbuf) / 1000000;
     } else {
       return <i64>Date_binding.now();
