@@ -450,7 +450,7 @@ export function indent(sb: string[], level: i32): void {
     }
   } else {
     if (!indentCache.has(level)) {
-      let spaces = "  ".repeat(level);
+      let spaces = indentX1.repeat(level);
       sb.push(spaces);
       indentCache.set(level, spaces);
     } else {
