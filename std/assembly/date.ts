@@ -332,8 +332,8 @@ function ymdFromEpochDays(z: i32): i32 {
   var year = 100 * q0 + <u32>(u1 >>> 32);
   var mo = n1 >>> 16;
   if (dm1 >= 306) {
-    ++year;
     mo -= 12;
+    ++year;
   }
   _day = (n1 & 0xFFFF) / 2141 + 1;
   _month = mo;
