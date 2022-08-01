@@ -4,6 +4,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
@@ -11,7 +12,6 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/date/_day (mut i32) (i32.const 0))
  (global $~lib/date/_month (mut i32) (i32.const 0))
@@ -311,31 +311,41 @@
   i64.add
   i64.add
  )
- (func $~lib/date/dateFromEpochDays (param $0 i32) (result i32)
+ (func $~lib/date/dateFromEpoch (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i64)
+  (local $3 i32)
   (local $4 i32)
   local.get $0
+  i64.const 86399999
+  i64.const 0
+  local.get $0
+  i64.const 0
+  i64.lt_s
+  select
+  i64.sub
+  i64.const 86400000
+  i64.div_s
+  i32.wrap_i64
   i32.const 2
   i32.shl
   i32.const 2877872
   i32.add
   i32.const 3
   i32.or
-  local.tee $0
+  local.tee $1
   i32.const 146096
   i32.const 0
-  local.get $0
+  local.get $1
   i32.const 0
   i32.lt_s
   select
   i32.sub
   i32.const 146097
   i32.div_s
-  local.set $1
-  local.get $0
+  local.set $2
   local.get $1
+  local.get $2
   i32.const 146097
   i32.mul
   i32.sub
@@ -344,7 +354,7 @@
   i64.extend_i32_u
   i64.const 2939745
   i64.mul
-  local.tee $3
+  local.tee $0
   i32.wrap_i64
   i32.const 11758980
   i32.div_u
@@ -353,34 +363,34 @@
   i32.mul
   i32.const 197913
   i32.add
-  local.set $2
-  local.get $3
+  local.set $3
+  local.get $0
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.get $1
+  local.get $2
   i32.const 100
   i32.mul
   i32.add
-  local.set $0
-  local.get $2
+  local.set $1
+  local.get $3
   i32.const 16
   i32.shr_u
-  local.set $1
+  local.set $2
   local.get $4
   i32.const 306
   i32.ge_u
   if
-   local.get $1
+   local.get $2
    i32.const 12
    i32.sub
-   local.set $1
-   local.get $0
+   local.set $2
+   local.get $1
    i32.const 1
    i32.add
-   local.set $0
+   local.set $1
   end
-  local.get $2
+  local.get $3
   i32.const 65535
   i32.and
   i32.const 2141
@@ -388,9 +398,9 @@
   i32.const 1
   i32.add
   global.set $~lib/date/_day
-  local.get $1
+  local.get $2
   global.set $~lib/date/_month
-  local.get $0
+  local.get $1
  )
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
@@ -1887,17 +1897,7 @@
   i64.store offset=16
   local.get $0
   local.get $1
-  i64.const 86399999
-  i64.const 0
-  local.get $1
-  i64.const 0
-  i64.lt_s
-  select
-  i64.sub
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/dateFromEpochDays
+  call $~lib/date/dateFromEpoch
   i32.store
   local.get $0
   global.get $~lib/date/_month
@@ -8241,17 +8241,7 @@
   end
   local.get $1
   local.get $0
-  i64.const 86399999
-  i64.const 0
-  local.get $0
-  i64.const 0
-  i64.lt_s
-  select
-  i64.sub
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/dateFromEpochDays
+  call $~lib/date/dateFromEpoch
   i32.store
   local.get $1
   global.get $~lib/date/_month
