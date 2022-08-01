@@ -127,10 +127,11 @@ export namespace BuiltinNames {
   export const trace = "~lib/builtins/trace";
   export const seed = "~lib/builtins/seed";
 
-  export const isInteger = "~lib/builtins/isInteger";
-  export const isFloat = "~lib/builtins/isFloat";
   export const isBoolean = "~lib/builtins/isBoolean";
+  export const isInteger = "~lib/builtins/isInteger";
   export const isSigned = "~lib/builtins/isSigned";
+  export const isFloat = "~lib/builtins/isFloat";
+  export const isVector = "~lib/builtins/isVector";
   export const isReference = "~lib/builtins/isReference";
   export const isString = "~lib/builtins/isString";
   export const isArray = "~lib/builtins/isArray";
@@ -163,6 +164,7 @@ export namespace BuiltinNames {
   export const trunc = "~lib/builtins/trunc";
   export const eq = "~lib/builtins/eq";
   export const ne = "~lib/builtins/ne";
+  export const rem = "~lib/builtins/rem";
   export const load = "~lib/builtins/load";
   export const store = "~lib/builtins/store";
   export const atomic_load = "~lib/builtins/atomic.load";
@@ -268,6 +270,11 @@ export namespace BuiltinNames {
   export const i64_ne = "~lib/builtins/i64.ne";
   export const f32_ne = "~lib/builtins/f32.ne";
   export const f64_ne = "~lib/builtins/f64.ne";
+
+  export const i32_rem_s = "~lib/builtins/i32.rem_s";
+  export const i32_rem_u = "~lib/builtins/i32.rem_u";
+  export const i64_rem_s = "~lib/builtins/i64.rem_s";
+  export const i64_rem_u = "~lib/builtins/i64.rem_u";
 
   export const i32_load8_s = "~lib/builtins/i32.load8_s";
   export const i32_load8_u = "~lib/builtins/i32.load8_u";
@@ -752,6 +759,17 @@ export const function_builtins = new Map<string,(ctx: BuiltinContext) => Express
 
 // === Static type evaluation =================================================================
 
+// isBoolean<T!>() / isBoolean<T?>(value: T) -> bool
+function builtin_isBoolean(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  var type = checkConstantType(ctx);
+  compiler.currentType = Type.bool;
+  if (!type) return module.unreachable();
+  return reifyConstantType(ctx, module.i32(type.isBooleanValue ? 1 : 0));
+}
+builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
+
 // isInteger<T!>() / isInteger<T?>(value: T) -> bool
 function builtin_isInteger(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
@@ -762,6 +780,17 @@ function builtin_isInteger(ctx: BuiltinContext): ExpressionRef {
   return reifyConstantType(ctx, module.i32(type.isIntegerValue ? 1 : 0));
 }
 builtins.set(BuiltinNames.isInteger, builtin_isInteger);
+
+// isSigned<T!>() / isSigned<T?>(value: T) -> bool
+function builtin_isSigned(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  var type = checkConstantType(ctx);
+  compiler.currentType = Type.bool;
+  if (!type) return module.unreachable();
+  return reifyConstantType(ctx, module.i32(type.isSignedIntegerValue ? 1 : 0));
+}
+builtins.set(BuiltinNames.isSigned, builtin_isSigned);
 
 // isFloat<T!>() / isFloat<T?>(value: T) -> bool
 function builtin_isFloat(ctx: BuiltinContext): ExpressionRef {
@@ -774,27 +803,16 @@ function builtin_isFloat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.isFloat, builtin_isFloat);
 
-// isBoolean<T!>() / isBoolean<T?>(value: T) -> bool
-function builtin_isBoolean(ctx: BuiltinContext): ExpressionRef {
+// isVector<T!>() / isVector<T?>(value: T) -> bool
+function builtin_isVector(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isBooleanValue ? 1 : 0));
+  return reifyConstantType(ctx, module.i32(type.isVectorValue ? 1 : 0));
 }
-builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
-
-// isSigned<T!>() / isSigned<T?>(value: T) -> bool
-function builtin_isSigned(ctx: BuiltinContext): ExpressionRef {
-  var compiler = ctx.compiler;
-  var module = compiler.module;
-  var type = checkConstantType(ctx);
-  compiler.currentType = Type.bool;
-  if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isSignedIntegerValue ? 1 : 0));
-}
-builtins.set(BuiltinNames.isSigned, builtin_isSigned);
+builtins.set(BuiltinNames.isVector, builtin_isVector);
 
 // isReference<T!>() / isReference<T?>(value: T) -> bool
 function builtin_isReference(ctx: BuiltinContext): ExpressionRef {
@@ -815,7 +833,7 @@ function builtin_isString(ctx: BuiltinContext): ExpressionRef {
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
   var classReference = type.getClass();
-  return reifyConstantType(ctx, 
+  return reifyConstantType(ctx,
     module.i32(
       classReference && classReference.isAssignableTo(compiler.program.stringInstance)
         ? 1
@@ -2231,6 +2249,60 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.store, builtin_store);
 
+// rem<T?>(left: T, right: T) -> T
+function builtin_rem(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2)) {
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var left = operands[0];
+  var arg0 = typeArguments
+    ? compiler.compileExpression(
+        left,
+        typeArguments[0],
+        Constraints.CONV_IMPLICIT
+      )
+    : compiler.compileExpression(operands[0], Type.auto);
+  var type = compiler.currentType;
+  if (type.isIntegerValue) {
+    let arg1: ExpressionRef;
+    if (!typeArguments && left.isNumericLiteral) {
+      // prefer right type
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type
+      );
+      if (compiler.currentType != type) {
+        arg0 = compiler.compileExpression(
+          left,
+          (type = compiler.currentType),
+          Constraints.CONV_IMPLICIT
+        );
+      }
+    } else {
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.CONV_IMPLICIT
+      );
+    }
+    if (type.isIntegerValue) {
+      return compiler.makeRem(arg0, arg1, type, ctx.reportNode);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "rem",
+    type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.rem, builtin_rem);
+
 // add<T?>(left: T, right: T) -> T
 function builtin_add(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
@@ -3059,7 +3131,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
         }
         exprs[i] = expr;
       } else {
-        exprs[i] = compiler.makeZero(elementType, elementExpression);
+        exprs[i] = compiler.makeZero(elementType);
       }
     }
     if (!isStatic) {
@@ -6638,6 +6710,42 @@ function builtin_f64_trunc(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64_trunc, builtin_f64_trunc);
 
+// i32.rem_s -> rem<i32>
+function builtin_i32_rem_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_rem(ctx);
+}
+builtins.set(BuiltinNames.i32_rem_s, builtin_i32_rem_s);
+
+// i32.rem_u -> rem<u32>
+function builtin_i32_rem_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.u32;
+  return builtin_rem(ctx);
+}
+builtins.set(BuiltinNames.i32_rem_u, builtin_i32_rem_u);
+
+// i64.rem_s -> rem<i64>
+function builtin_i64_rem_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.i64;
+  return builtin_rem(ctx);
+}
+builtins.set(BuiltinNames.i64_rem_s, builtin_i64_rem_s);
+
+// i64.rem_u -> rem<u64>
+function builtin_i64_rem_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u64 ];
+  ctx.contextualType = Type.u64;
+  return builtin_rem(ctx);
+}
+builtins.set(BuiltinNames.i64_rem_u, builtin_i64_rem_u);
+
 // i32.add -> add<i32>
 function builtin_i32_add(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -9860,7 +9968,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   var base = instance.base;
   if (base) {
     body.push(
-      module.call(base.internalName + "~visit", [
+      module.call(`${base.internalName}~visit`, [
         module.local_get(0, sizeTypeRef), // this
         module.local_get(1, TypeRef.I32)  // cookie
       ], TypeRef.None)
@@ -9939,7 +10047,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   }
 
   // Create the visitor function
-  instance.visitRef = module.addFunction(instance.internalName + "~visit",
+  instance.visitRef = module.addFunction(`${instance.internalName}~visit`,
     createType([sizeTypeRef, TypeRef.I32]),
     TypeRef.None,
     needsTempValue ? [ sizeTypeRef ] : null,
@@ -9977,7 +10085,7 @@ export function compileVisitMembers(compiler: Compiler): void {
       cases[i] = module.return();
     } else {
       cases[i] = module.block(null, [
-        module.call(instance.internalName + "~visit", [
+        module.call(`${instance.internalName}~visit`, [
           module.local_get(0, sizeTypeRef), // this
           module.local_get(1, TypeRef.I32)  // cookie
         ], TypeRef.None),
@@ -10156,7 +10264,13 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
     )
   );
 
-  module.addFunction(prototype.internalName + "~instanceof", sizeTypeRef, TypeRef.I32, null, module.flatten(stmts));
+  module.addFunction(
+    `${prototype.internalName}~instanceof`,
+    sizeTypeRef,
+    TypeRef.I32,
+    null,
+    module.flatten(stmts)
+  );
 }
 
 // Helpers

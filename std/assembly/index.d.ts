@@ -151,6 +151,8 @@ declare function div<T extends i32 | i64 | f32 | f64>(left: T, right: T): T;
 declare function eq<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
 /** Return 0 if two numbers are equal to each other, 1 otherwise. */
 declare function ne<T extends i32 | i64 | f32 | f64>(left: T, right: T): i32;
+/** Computes the remainder of two integers. */
+declare function rem<T extends i32 | i64>(left: T, right: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
@@ -194,14 +196,16 @@ declare function instantiate<T>(...args: any[]): T;
 declare function isNaN<T extends f32 | f64>(value: T): bool;
 /** Tests if a 32-bit or 64-bit float is finite, that is not `NaN` or +/-`Infinity`. */
 declare function isFinite<T extends f32 | f64>(value: T): bool;
-/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
-declare function isInteger<T>(value?: any): value is number;
-/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
-declare function isFloat<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression is of a boolean type. */
 declare function isBoolean<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of an integer type and not a reference. Compiles to a constant. */
+declare function isInteger<T>(value?: any): value is number;
 /** Tests if the specified type *or* expression can represent negative numbers. Compiles to a constant. */
 declare function isSigned<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a float type. Compiles to a constant. */
+declare function isFloat<T>(value?: any): value is number;
+/** Tests if the specified type *or* expression is of a v128 type. Compiles to a constant. */
+declare function isVector<T>(value?: any): value is v128;
 /** Tests if the specified type *or* expression is of a reference type. Compiles to a constant. */
 declare function isReference<T>(value?: any): value is object | string;
 /** Tests if the specified type *or* expression can be used as a string. Compiles to a constant. */
@@ -342,10 +346,15 @@ declare namespace i32 {
   export function div_s(left: i32, right: i32): i32;
   /** Computes the unsigned quotient of two 32-bit integers. */
   export function div_u(left: i32, right: i32): i32;
-  /** Return 1 two 32-bit inegers are equal to each other, 0 otherwise. */
+  /** Return 1 if two 32-bit integers are equal to each other, 0 otherwise. */
   export function eq(left: i32, right: i32): i32;
-  /** Return 0 two 32-bit inegers are equal to each other, 1 otherwise. */
+  /** Return 0 if two 32-bit integers are equal to each other, 1 otherwise. */
   export function ne(left: i32, right: i32): i32;
+  /** Computes the signed remainder of two 32-bit integers. */
+  export function rem_s(left: i32, right: i32): i32;
+  /** Computes the unsigned remainder of two 32-bit integers. */
+  export function rem_u(left: u32, right: u32): u32;
+
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -466,10 +475,15 @@ declare namespace i64 {
   export function div_s(left: i64, right: i64): i64;
   /** Computes the unsigned quotient of two 64-bit integers. */
   export function div_u(left: i64, right: i64): i64;
-  /** Return 1 two 64-bit inegers are equal to each other, 0 otherwise. */
+  /** Return 1 if two 64-bit integers are equal to each other, 0 otherwise. */
   export function eq(left: i64, right: i64): i32;
-  /** Return 0 two 64-bit inegers are equal to each other, 1 otherwise. */
+  /** Return 0 if two 64-bit integers are equal to each other, 1 otherwise. */
   export function ne(left: i64, right: i64): i32;
+  /** Computes the signed remainder of two 64-bit integers. */
+  export function rem_s(left: i64, right: i64): i64;
+  /** Computes the unsigned remainder of two 64-bit integers. */
+  export function rem_u(left: u64, right: u64): u64;
+
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -830,9 +844,9 @@ declare namespace v128 {
   /** Computes the maximum of each lane. */
   export function max<T>(a: v128, b: v128): v128;
   /** Computes the pseudo-minimum of each lane. */
-  export function pmin<T>(a: v128, b: v128): v128;
+  export function pmin<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the pseudo-maximum of each lane. */
-  export function pmax<T>(a: v128, b: v128): v128;
+  export function pmax<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T extends i16>(a: v128, b: v128): v128;
   /** Computes the average of each lane. */
@@ -1335,9 +1349,9 @@ declare abstract class i31 {
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */
-declare type indexof<T extends unknown[]> = keyof T;
+declare type indexof<T extends ArrayLike<unknown>> = keyof T;
 /** Special type evaluating the indexed access value type. */
-declare type valueof<T extends unknown[]> = T[0];
+declare type valueof<T extends ArrayLike<unknown>> = T[0];
 /** A special type evaluated to the return type of T if T is a callable function. */
 declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 /** A special type evaluated to the return type of T if T is a callable function. */
@@ -1746,7 +1760,7 @@ declare class Array<T> {
   some(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
   shift(): T;
   unshift(element: T): i32;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
@@ -1780,7 +1794,7 @@ declare class StaticArray<T> {
   every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
-  slice(from: i32, to?: i32): Array<T>;
+  slice(from?: i32, to?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): this;
@@ -1790,7 +1804,7 @@ declare class StaticArray<T> {
 /** Class representing a sequence of characters. */
 declare class String {
   static fromCharCode(ls: i32, hs?: i32): string;
-  static fromCharCodes(arr: u16[]): string;
+  static fromCharCodes(arr: i32[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
   static raw(parts: TemplateStringsArray, ...args: any[]): string;

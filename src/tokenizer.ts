@@ -80,6 +80,7 @@ export enum Token {
   NEW,          // ES2017
   NULL,         // ES
   OF,
+  OVERRIDE,
   PACKAGE,      // ES2017 non-lexical
   PRIVATE,      // ES2017 non-lexical
   PROTECTED,    // ES2017 non-lexical
@@ -291,6 +292,7 @@ export function tokenFromKeyword(text: string): Token {
     }
     case CharCode.o: {
       if (text == "of") return Token.OF;
+      if (text == "override") return Token.OVERRIDE;
       break;
     }
     case CharCode.p: {
@@ -1355,23 +1357,26 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_4 = i64_new(4);
+    var nextValue = value;
+    var overflowOccurred = false;
+
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = (value << 4) + c - CharCode._0;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
       } else if (c >= CharCode.A && c <= CharCode.F) {
         // value = (value << 4) + 10 + c - CharCode.A;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_4),
           i64_new(10 + c - CharCode.A)
         );
       } else if (c >= CharCode.a && c <= CharCode.f) {
         // value = (value << 4) + 10 + c - CharCode.a;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_4),
           i64_new(10 + c - CharCode.a)
         );
@@ -1388,6 +1393,11 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
+      if (i64_gt_u(value, nextValue)) {
+        // Unsigned overflow occurred
+        overflowOccurred = true;
+      }
+      value = nextValue;
       ++pos;
     }
     if (pos == start) {
@@ -1399,6 +1409,13 @@ export class Tokenizer extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
+      );
+    }
+    if (overflowOccurred) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+        this.range(start - 2, pos),
+        this.source.text.substring(start - 2, pos)
       );
     }
     this.pos = pos;
@@ -1413,11 +1430,14 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_10 = i64_new(10);
+    var nextValue = value;
+    var overflowOccurred = false;
+
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 10 + c - CharCode._0;
-        value = i64_add(
+        nextValue = i64_add(
           i64_mul(value, i64_10),
           i64_new(c - CharCode._0)
         );
@@ -1439,6 +1459,11 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
+      if (i64_gt_u(value, nextValue)) {
+        // Unsigned overflow occurred
+        overflowOccurred = true;
+      }
+      value = nextValue;
       ++pos;
     }
     if (pos == start) {
@@ -1450,6 +1475,12 @@ export class Tokenizer extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
+      );
+    } else if (overflowOccurred) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+        this.range(start, pos),
+        this.source.text.substring(start, pos)
       );
     }
     this.pos = pos;
@@ -1464,11 +1495,14 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_3 = i64_new(3);
+    var nextValue = value;
+    var overflowOccurred = false;
+
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._7) {
         // value = (value << 3) + c - CharCode._0;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_3),
           i64_new(c - CharCode._0)
         );
@@ -1485,6 +1519,11 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
+      if (i64_gt_u(value, nextValue)) {
+        // Unsigned overflow occurred
+        overflowOccurred = true;
+      }
+      value = nextValue;
       ++pos;
     }
     if (pos == start) {
@@ -1496,6 +1535,12 @@ export class Tokenizer extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
+      );
+    } else if (overflowOccurred) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+        this.range(start - 2, pos),
+        this.source.text.substring(start - 2, pos)
       );
     }
     this.pos = pos;
@@ -1510,14 +1555,17 @@ export class Tokenizer extends DiagnosticEmitter {
     var sepEnd = start;
     var value = i64_new(0);
     var i64_1 = i64_new(1);
+    var nextValue = value;
+    var overflowOccurred = false;
+
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c == CharCode._0) {
         // value = (value << 1);
-        value = i64_shl(value, i64_1);
+        nextValue = i64_shl(value, i64_1);
       } else if (c == CharCode._1) {
         // value = (value << 1) + 1;
-        value = i64_add(
+        nextValue = i64_add(
           i64_shl(value, i64_1),
           i64_1
         );
@@ -1534,6 +1582,11 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
+      if (i64_gt(value, nextValue)) {
+        // Overflow occurred
+        overflowOccurred = true;
+      }
+      value = nextValue;
       ++pos;
     }
     if (pos == start) {
@@ -1545,6 +1598,12 @@ export class Tokenizer extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
+      );
+    } else if (overflowOccurred) {
+      this.error(
+        DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+        this.range(start - 2, pos),
+        this.source.text.substring(start - 2, pos)
       );
     }
     this.pos = pos;

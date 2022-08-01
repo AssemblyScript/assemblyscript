@@ -60,10 +60,10 @@ export namespace TypeRef {
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
   export const Funcref: TypeRef = 7 /* _BinaryenTypeFuncref */;
   export const Externref: TypeRef = 8 /* _BinaryenTypeExternref */;
-  export const Anyref: TypeRef = 9 /* _BinaryenTypeAnyref */;
-  export const Eqref: TypeRef = 10 /* _BinaryenTypeEqref */;
-  export const I31ref: TypeRef = 11 /* _BinaryenTypeI31ref */;
-  export const Dataref: TypeRef = 12 /* _BinaryenTypeDataref */;
+  export const Anyref: TypeRef = 8 /* _BinaryenTypeAnyref */;
+  export const Eqref: TypeRef = 9 /* _BinaryenTypeEqref */;
+  export const I31ref: TypeRef = 10 /* _BinaryenTypeI31ref */;
+  export const Dataref: TypeRef = 11 /* _BinaryenTypeDataref */;
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
@@ -85,7 +85,7 @@ export enum FeatureFlags {
   FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
-  All = 65535 /* _BinaryenFeatureAll */
+  All = 57343 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
@@ -845,7 +845,7 @@ export enum BinaryOp {
   /** i16x8.narrow_i32x4_u */
   NarrowU32x4ToU16x8 = 194 /* _BinaryenNarrowUVecI32x4ToVecI16x8 */,
   /** i8x16.swizzle */
-  SwizzleI8x16 = 195 /* _BinaryenSwizzleVec8x16 */,
+  SwizzleI8x16 = 195 /* _BinaryenSwizzleVecI8x16 */,
 
   _last = SwizzleI8x16,
 
@@ -1774,11 +1774,23 @@ export class Module {
     return binaryen._BinaryenRefIs(this.ref, op, expr);
   }
 
+  ref_is_null(
+    expr: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenRefIs(this.ref, RefIsOp.RefIsNull, expr);
+  }
+
   ref_as(
     op: RefAsOp,
     expr: ExpressionRef
   ): ExpressionRef {
     return binaryen._BinaryenRefAs(this.ref, op, expr);
+  }
+
+  ref_as_nonnull(
+    expr: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenRefAs(this.ref, RefAsOp.RefAsNonNull, expr);
   }
 
   ref_func(
@@ -2464,13 +2476,15 @@ export class Module {
           passes.push("simplify-locals");
           passes.push("coalesce-locals");
         }
+        passes.push("optimize-instructions");
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("merge-blocks");
         passes.push("vacuum");
 
-        passes.push("optimize-instructions");
         passes.push("simplify-globals-optimizing");
+        passes.push("remove-unused-brs");
+        passes.push("optimize-instructions");
       }
       // clean up
       passes.push("duplicate-function-elimination");
@@ -3028,7 +3042,7 @@ export class SwitchBuilder {
     var entry = new Array<ExpressionRef>(1 + numValues + 1);
     var labels = new Array<string>(numCases);
     for (let i = 0; i < numCases; ++i) {
-      labels[i] = "case" + i.toString() + labelPostfix;
+      labels[i] = `case${i}${labelPostfix}`;
     }
     entry[0] = module.local_set(localIndex, this.condition, false); // u32
     for (let i = 0; i < numValues; ++i) {
@@ -3041,7 +3055,7 @@ export class SwitchBuilder {
       );
     }
     var defaultIndex = this.defaultIndex;
-    var defaultLabel = "default" + labelPostfix;
+    var defaultLabel = `default${labelPostfix}`;
     entry[1 + numValues] = module.br(
       ~defaultIndex
         ? labels[defaultIndex]

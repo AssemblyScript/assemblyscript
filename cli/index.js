@@ -62,6 +62,10 @@ function toUpperSnakeCase(str) {
   return str.replace(/-/g, "_").toUpperCase();
 }
 
+function isNonEmptyString(value) {
+  return typeof value === "string" && value !== "";
+}
+
 /** Ensures that an object is a wrapper class instead of just a pointer. */
 // function __wrap(ptrOrObj, wrapperClass) {
 //   if (typeof ptrOrObj === "number") {
@@ -309,7 +313,9 @@ export async function main(argv, options) {
   assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  assemblyscript.setExportStart(compilerOptions, typeof opts.exportStart === "string" ? opts.exportStart : null);
+  if (opts.exportStart) {
+    assemblyscript.setExportStart(compilerOptions, isNonEmptyString(opts.exportStart) ? opts.exportStart : "_start");
+  }
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, opts.sourceMap != null);
@@ -318,7 +324,7 @@ export async function main(argv, options) {
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
   assemblyscript.setBundleVersion(compilerOptions, bundleMajorVersion, bundleMinorVersion, bundlePatchVersion);
-  if (!opts.stackSize && opts.runtime == "incremental") {
+  if (!opts.stackSize && runtime === 2 /* incremental */) {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);
@@ -615,7 +621,7 @@ export async function main(argv, options) {
         stats.parseTime += stats.end(begin);
       }
     }
-    const numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+    const numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
     if (numErrors) {
       const err = Error(`${numErrors} parse error(s)`);
       err.stack = err.message; // omit stack
@@ -724,7 +730,7 @@ export async function main(argv, options) {
       ? assemblyscript.getBinaryenModuleRef(module)
       : module.ref
   );
-  var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+  var numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
   if (numErrors) {
     const err = Error(`${numErrors} compile error(s)`);
     err.stack = err.message; // omit stack
@@ -737,7 +743,7 @@ export async function main(argv, options) {
     if (error) return prepareResult(error);
   }
 
-  numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, stderrColors.enabled);
+  numErrors = checkDiagnostics(program, stderr, opts.disableWarning, options.reportDiagnostic, stderrColors.enabled);
   if (numErrors) {
     const err = Error(`${numErrors} afterCompile error(s)`);
     err.stack = err.message; // omit stack
@@ -835,7 +841,7 @@ export async function main(argv, options) {
         }
         if (next.length >= last.length) {
           if (next.length > last.length) {
-            stderr.write(`Last converge was suboptimial.${EOL}`);
+            stderr.write(`Last converge was suboptimal.${EOL}`);
           }
           break;
         }
@@ -1117,17 +1123,22 @@ async function getConfig(file, baseDir, readFile) {
 }
 
 /** Checks diagnostics emitted so far for errors. */
-export function checkDiagnostics(program, stderr, reportDiagnostic, useColors) {
+export function checkDiagnostics(program, stderr, disableWarning, reportDiagnostic, useColors) {
   if (typeof useColors === "undefined" && stderr) useColors = stderr.isTTY;
   var numErrors = 0;
   do {
     let diagnostic = assemblyscript.nextDiagnostic(program);
     if (!diagnostic) break;
     if (stderr) {
-      stderr.write(
-        assemblyscript.formatDiagnostic(diagnostic, useColors, true) +
-        EOL + EOL
-      );
+      const isDisabledWarning = (diagnostic) => {
+        if (disableWarning == null) return false;
+        if (!disableWarning.length) return true;
+        const code = assemblyscript.getDiagnosticCode(diagnostic);
+        return disableWarning.includes(code);
+      };
+      if (assemblyscript.isError(diagnostic) || !isDisabledWarning(diagnostic)) {
+        stderr.write(assemblyscript.formatDiagnostic(diagnostic, useColors, true) + EOL + EOL);
+      }
     }
     if (reportDiagnostic) {
       function wrapRange(range) {

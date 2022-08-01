@@ -84,6 +84,7 @@ import {
 } from "./ast";
 
 import {
+  BitSet,
   uniqueMap
 } from "./util";
 
@@ -207,7 +208,7 @@ export class Flow {
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
     var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
-    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
+    flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }
@@ -323,7 +324,7 @@ export class Flow {
   }
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, except: Set<i32> | null = null): Local {
+  getTempLocal(type: Type, except: BitSet | null = null): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
     switch (<u32>type.toRef()) {
@@ -447,7 +448,6 @@ export class Flow {
       }
       default: throw new Error("concrete type expected");
     }
-    assert(local.index >= 0);
     temps.push(local);
   }
 
@@ -459,7 +459,7 @@ export class Flow {
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(name: string, type: Type, except: Set<i32> | null = null): Local {
+  addScopedLocal(name: string, type: Type, except: BitSet | null = null): Local {
     var scopedLocal = this.getTempLocal(type, except);
     scopedLocal.setTemporaryName(name);
     var scopedLocals = this.scopedLocals;
@@ -1507,7 +1507,7 @@ export class Flow {
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESSES_THIS");
     if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
-    return "Flow(" + this.actualFunction.toString() + ")[" + levels.toString() + "] " + sb.join(" ");
+    return `Flow(${this.actualFunction})[${levels}] ${sb.join(" ")}`;
   }
 }
 

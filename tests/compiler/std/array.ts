@@ -25,6 +25,7 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
   for (let i = 0; i < len; i++) {
     if (isFloat<T>()) {
       if (isNaN(a[i]) && isNaN(b[i])) continue;
+      if (Math.signbit(a[i]) != Math.signbit(b[i])) return false;
     }
     if (a[i] != b[i]) return false;
   }
@@ -70,6 +71,9 @@ class Ref {
 
   arr8.fill(0, 1, 0);
   assert(isArraysEqual<u8>(arr8, [1, 1, 0, 2, 2]));
+
+  arr8.fill(<u8>-1);
+  assert(isArraysEqual<u8>(arr8, [<u8>-1, <u8>-1, <u8>-1, <u8>-1, <u8>-1]));
 }
 
 {
@@ -89,6 +93,34 @@ class Ref {
 
   arr32.fill(0, 1, 0);
   assert(isArraysEqual<u32>(arr32, [1, 1, 0, 2, 2]));
+
+  arr32.fill(-1);
+  assert(isArraysEqual<u32>(arr32, [-1, -1, -1, -1, -1]));
+}
+
+{
+  let arrf32: f32[] = [0.5, 1.0, 1.5, 2.5, 3.0];
+
+  arrf32.fill(1.0, 1, 3);
+  assert(isArraysEqual<f32>(arrf32, [0.5, 1., 1., 2.5, 3.]));
+
+  arrf32.fill(0.0);
+  assert(isArraysEqual<f32>(arrf32, [0., 0., 0., 0., 0.]));
+
+  arrf32.fill(1.0, 0, -3);
+  assert(isArraysEqual<f32>(arrf32, [1., 1., 0., 0., 0.]));
+
+  arrf32.fill(2.0, -2);
+  assert(isArraysEqual<f32>(arrf32, [1., 1., 0., 2., 2.]));
+
+  arrf32.fill(0.0, 1, 0);
+  assert(isArraysEqual<f32>(arrf32, [1., 1., 0., 2., 2.]));
+
+  arrf32.fill(-1.0);
+  assert(isArraysEqual<f32>(arrf32, [-1., -1., -1., -1., -1.]));
+
+  arrf32.fill(-0.0);
+  assert(isArraysEqual<f32>(arrf32, [-0., -0., -0., -0., -0.]));
 }
 
 // Array#push/pop //////////////////////////////////////////////////////////////////////////////////
@@ -1182,9 +1214,15 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(arr3.toString() == "0,1,2,3");
 
   assert((<i8[]>[1, -1, 0]).toString() == "1,-1,0");
+  assert((<i8[]>[-128, -127, -128]).toString() == "-128,-127,-128");
   assert((<u16[]>[1, 0xFFFF, 0]).toString() == "1,65535,0");
+  assert((<i16[]>[-0x8000, -0xFF]).toString() == "-32768,-255");
+  assert((<i32[]>[-0x80000000, -0x80]).toString() == "-2147483648,-128");
   assert((<u64[]>[1, 0xFFFFFFFFFFFFFFFF, 0]).toString() == "1,18446744073709551615,0");
-  assert((<i64[]>[-1, -1234567890123456, 0, i64.MAX_VALUE]).toString() == "-1,-1234567890123456,0,9223372036854775807");
+  assert(
+    (<i64[]>[-1, -1234567890123456, i64.MIN_VALUE, 0, i64.MAX_VALUE]).toString() ==
+    "-1,-1234567890123456,-9223372036854775808,0,9223372036854775807"
+  );
 
   let arrStr: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null];
 

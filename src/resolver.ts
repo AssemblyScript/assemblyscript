@@ -239,7 +239,7 @@ export class Resolver extends DiagnosticEmitter {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_cannot_be_nullable,
-              node.range, element.name + "/i32"
+              node.range, `${element.name}/i32`
             );
           }
         }
@@ -744,7 +744,7 @@ export class Resolver extends DiagnosticEmitter {
         let typeNode = parameterNodes[i].type;
         if (typeNode.hasGenericComponent(typeParameterNodes)) {
           let type = this.resolveExpression(argumentExpression, ctxFlow, Type.auto, ReportMode.SWALLOW);
-          if (type) this.propagateInferredGenericTypes(typeNode, type, ctxFlow, contextualTypeArguments, typeParameterNames);
+          if (type) this.propagateInferredGenericTypes(typeNode, type, prototype, contextualTypeArguments, typeParameterNames);
         }
       }
 
@@ -795,8 +795,8 @@ export class Resolver extends DiagnosticEmitter {
     node: TypeNode,
     /** The inferred type. */
     type: Type,
-    /** Contextual flow. */
-    ctxFlow: Flow,
+    /** Contextual element. */
+    ctxElement: Element,
     /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
     ctxTypes: Map<string,Type>,
     /** The names of the type parameters being inferred. */
@@ -808,13 +808,13 @@ export class Resolver extends DiagnosticEmitter {
       if (typeArgumentNodes && typeArgumentNodes.length > 0) { // foo<T>(bar: Array<T>)
         let classReference = type.classReference;
         if (classReference) {
-          let classPrototype = this.resolveTypeName(namedTypeNode.name, ctxFlow.actualFunction);
+          let classPrototype = this.resolveTypeName(namedTypeNode.name, ctxElement);
           if (!classPrototype || classPrototype.kind != ElementKind.CLASS_PROTOTYPE) return;
           if (classReference.prototype == <ClassPrototype>classPrototype) {
             let typeArguments = classReference.typeArguments;
             if (typeArguments && typeArguments.length == typeArgumentNodes.length) {
               for (let i = 0, k = typeArguments.length; i < k; ++i) {
-                this.propagateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxFlow, ctxTypes, typeParameterNames);
+                this.propagateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxElement, ctxTypes, typeParameterNames);
               }
               return;
             }
@@ -839,10 +839,10 @@ export class Resolver extends DiagnosticEmitter {
           let thisType = signatureReference.thisType;
           if (parameterTypes.length == parameterNodes.length && !thisType == !functionTypeNode.explicitThisType) {
             for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-              this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxFlow, ctxTypes, typeParameterNames);
+              this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxElement, ctxTypes, typeParameterNames);
             }
-            this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxFlow, ctxTypes, typeParameterNames);
-            if (thisType) this.propagateInferredGenericTypes(functionTypeNode.explicitThisType!, thisType, ctxFlow, ctxTypes, typeParameterNames);
+            this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxElement, ctxTypes, typeParameterNames);
+            if (thisType) this.propagateInferredGenericTypes(functionTypeNode.explicitThisType!, thisType, ctxElement, ctxTypes, typeParameterNames);
             return;
           }
         }
@@ -996,6 +996,9 @@ export class Resolver extends DiagnosticEmitter {
     return null;
   }
 
+  /** resolving expressions */
+  private resolvingExpressions: Set<Expression> = new Set();
+
   /** Resolves an expression to its static type. */
   resolveExpression(
     /** The expression to resolve. */
@@ -1005,6 +1008,21 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual type. */
     ctxType: Type = Type.auto,
     /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    const resolvingExpressions = this.resolvingExpressions;
+    if (resolvingExpressions.has(node)) return null;
+    resolvingExpressions.add(node);
+    const resolved = this.doResolveExpression(node, ctxFlow, ctxType, reportMode);
+    resolvingExpressions.delete(node);
+    return resolved;
+  }
+
+  /** Resolves an expression to its static type. (may cause stack overflow) */
+  private doResolveExpression(
+    node: Expression,
+    ctxFlow: Flow,
+    ctxType: Type = Type.auto,
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
     while (node.kind == NodeKind.PARENTHESIZED) { // skip
@@ -1512,10 +1530,24 @@ export class Resolver extends DiagnosticEmitter {
   /** Determines the final type of an integer literal given the specified contextual type. */
   determineIntegerLiteralType(
     /** Integer literal value. */
-    intValue: i64,
+    expr: IntegerLiteralExpression,
+    /** Has unary minus before literal. */
+    negate: bool,
     /** Contextual type. */
     ctxType: Type
   ): Type {
+    let intValue = expr.value;
+    if (negate) {
+      // x + i64.min > 0   ->   underflow
+      if (i64_gt(i64_add(intValue, i64_minimum), i64_zero)) {
+        let range = expr.range;
+        this.error(
+          DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
+          range, range.source.text.substring(range.start - 1, range.end)
+        );
+      }
+      intValue = i64_neg(intValue);
+    }
     if (ctxType.isValue) {
       // compile to contextual type if matching
       switch (ctxType.kind) {
@@ -1715,7 +1747,11 @@ export class Resolver extends DiagnosticEmitter {
       case Token.MINUS: {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
         if (operand.isLiteralKind(LiteralKind.INTEGER)) {
-          return this.determineIntegerLiteralType(i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value), ctxType);
+          return this.determineIntegerLiteralType(
+            <IntegerLiteralExpression>operand,
+            true,
+            ctxType
+          );
         }
         // fall-through
       }
@@ -1777,6 +1813,9 @@ export class Resolver extends DiagnosticEmitter {
           );
         }
         return null;
+      }
+      case Token.TYPEOF: {
+        return this.program.stringInstance.type;
       }
       default: assert(false);
     }
@@ -2178,7 +2217,8 @@ export class Resolver extends DiagnosticEmitter {
     switch (node.literalKind) {
       case LiteralKind.INTEGER: {
         let intType = this.determineIntegerLiteralType(
-          (<IntegerLiteralExpression>node).value,
+          <IntegerLiteralExpression>node,
+          false,
           ctxType
         );
         return assert(intType.getClassOrWrapper(this.program));
@@ -2190,6 +2230,9 @@ export class Resolver extends DiagnosticEmitter {
       case LiteralKind.STRING:
       case LiteralKind.TEMPLATE: {
         return this.program.stringInstance;
+      }
+      case LiteralKind.REGEXP: {
+        return this.program.regexpInstance;
       }
       case LiteralKind.ARRAY: {
         let classReference = ctxType.getClass();
@@ -2722,7 +2765,7 @@ export class Resolver extends DiagnosticEmitter {
     signature.requiredParameters = requiredParameters;
 
     var nameInclTypeParameters = prototype.name;
-    if (instanceKey.length) nameInclTypeParameters += "<" + instanceKey + ">";
+    if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;
     var instance = new Function(
       nameInclTypeParameters,
       prototype,
@@ -2896,12 +2939,12 @@ export class Resolver extends DiagnosticEmitter {
     if (instance) return instance;
 
     // Otherwise create
-    var nameInclTypeParamters = prototype.name;
-    if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
+    var nameInclTypeParameters = prototype.name;
+    if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;
     if (prototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
-      instance = new Interface(nameInclTypeParamters, <InterfacePrototype>prototype, typeArguments);
+      instance = new Interface(nameInclTypeParameters, <InterfacePrototype>prototype, typeArguments);
     } else {
-      instance = new Class(nameInclTypeParamters, prototype, typeArguments);
+      instance = new Class(nameInclTypeParameters, prototype, typeArguments);
     }
     prototype.setResolvedInstance(instanceKey, instance);
     var pendingClasses = this.resolveClassPending;

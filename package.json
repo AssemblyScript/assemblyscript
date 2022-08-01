@@ -19,8 +19,13 @@
   "bugs": {
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "engineStrict": true,
   "dependencies": {
-    "binaryen": "106.0.0-nightly.20220320",
+    "binaryen": "108.0.0-nightly.20220528",
     "long": "^5.2.0"
   },
   "devDependencies": {
@@ -28,11 +33,11 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "diff": "^5.0.0",
-    "esbuild": "^0.14.1",
+    "esbuild": "^0.14.50",
     "eslint": "^8.2.0",
     "glob": "^7.2.0",
-    "typescript": "~4.5.2",
     "c8": "^7.11.2"
+    "typescript": "~4.7.4"
   },
   "type": "module",
   "exports": {

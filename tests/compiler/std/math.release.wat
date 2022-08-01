@@ -19,7 +19,6 @@
  (type $f64_=>_none (func (param f64)))
  (type $i64_i64_i64_i64_i64_=>_none (func (param i64 i64 i64 i64 i64)))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "Math.E" (global $~lib/bindings/dom/Math.E f64))
  (import "env" "Math.LN2" (global $~lib/bindings/dom/Math.LN2 f64))
  (import "env" "Math.LN10" (global $~lib/bindings/dom/Math.LN10 f64))
@@ -135,7 +134,85 @@
  (data (i32.const 11762) "+n\07\'\be\bf<\00\f0*,4*=\00\00\00\00\00\00\f2?")
  (data (i32.const 11794) "+n\07\'\be\bf<\00\f0*,4*=\00\00\00\00\00\e0\f1?")
  (data (i32.const 11825) "\c0[\8fT^\bc\bf\06\be_XW\0c\1d\bd\00\00\00\00\00\c0\f1?")
- (data (i32.const 11857) "\e0J:m\92\ba\bf\c8\aa[\e859%=\00\00\00\00\00\c0\f1?\00\00\00\00\00\00\00\00\00\e0J:m\92\ba\bf\c8\aa[\e859%=\00\00\00\00\00\a0\f1?\00\00\00\00\00\00\00\00\00\a01\d6E\c3\b8\bfhV/M)|\13=\00\00\00\00\00\a0\f1?\00\00\00\00\00\00\00\00\00\a01\d6E\c3\b8\bfhV/M)|\13=\00\00\00\00\00\80\f1?\00\00\00\00\00\00\00\00\00`\e5\8a\d2\f0\b6\bf\das3\c97\97&\bd\00\00\00\00\00`\f1?\00\00\00\00\00\00\00\00\00 \06?\07\1b\b5\bfW^\c6a[\02\1f=\00\00\00\00\00`\f1?\00\00\00\00\00\00\00\00\00 \06?\07\1b\b5\bfW^\c6a[\02\1f=\00\00\00\00\00@\f1?\00\00\00\00\00\00\00\00\00\e0\1b\96\d7A\b3\bf\df\13\f9\cc\da^,=\00\00\00\00\00@\f1?\00\00\00\00\00\00\00\00\00\e0\1b\96\d7A\b3\bf\df\13\f9\cc\da^,=\00\00\00\00\00 \f1?\00\00\00\00\00\00\00\00\00\80\a3\ee6e\b1\bf\t\a3\8fv^|\14=\00\00\00\00\00\00\f1?\00\00\00\00\00\00\00\00\00\80\11\c00\n\af\bf\91\8e6\83\9eY-=\00\00\00\00\00\00\f1?\00\00\00\00\00\00\00\00\00\80\11\c00\n\af\bf\91\8e6\83\9eY-=\00\00\00\00\00\e0\f0?\00\00\00\00\00\00\00\00\00\80\19q\ddB\ab\bfLp\d6\e5z\82\1c=\00\00\00\00\00\e0\f0?\00\00\00\00\00\00\00\00\00\80\19q\ddB\ab\bfLp\d6\e5z\82\1c=\00\00\00\00\00\c0\f0?\00\00\00\00\00\00\00\00\00\c02\f6Xt\a7\bf\ee\a1\f24F\fc,\bd\00\00\00\00\00\c0\f0?\00\00\00\00\00\00\00\00\00\c02\f6Xt\a7\bf\ee\a1\f24F\fc,\bd\00\00\00\00\00\a0\f0?\00\00\00\00\00\00\00\00\00\c0\fe\b9\87\9e\a3\bf\aa\fe&\f5\b7\02\f5<\00\00\00\00\00\a0\f0?\00\00\00\00\00\00\00\00\00\c0\fe\b9\87\9e\a3\bf\aa\fe&\f5\b7\02\f5<\00\00\00\00\00\80\f0?\00\00\00\00\00\00\00\00\00\00x\0e\9b\82\9f\bf\e4\t~|&\80)\bd\00\00\00\00\00\80\f0?\00\00\00\00\00\00\00\00\00\00x\0e\9b\82\9f\bf\e4\t~|&\80)\bd\00\00\00\00\00`\f0?\00\00\00\00\00\00\00\00\00\80\d5\07\1b\b9\97\bf9\a6\fa\93T\8d(\bd\00\00\00\00\00@\f0?\00\00\00\00\00\00\00\00\00\00\fc\b0\a8\c0\8f\bf\9c\a6\d3\f6|\1e\df\bc\00\00\00\00\00@\f0?\00\00\00\00\00\00\00\00\00\00\fc\b0\a8\c0\8f\bf\9c\a6\d3\f6|\1e\df\bc\00\00\00\00\00 \f0?\00\00\00\00\00\00\00\00\00\00\10k*\e0\7f\bf\e4@\da\0d?\e2\19\bd\00\00\00\00\00 \f0?\00\00\00\00\00\00\00\00\00\00\10k*\e0\7f\bf\e4@\da\0d?\e2\19\bd\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\c0\ef?\00\00\00\00\00\00\00\00\00\00\89u\15\10\80?\e8+\9d\99k\c7\10\bd\00\00\00\00\00\80\ef?\00\00\00\00\00\00\00\00\00\80\93XV \90?\d2\f7\e2\06[\dc#\bd\00\00\00\00\00@\ef?\00\00\00\00\00\00\00\00\00\00\c9(%I\98?4\0cZ2\ba\a0*\bd\00\00\00\00\00\00\ef?\00\00\00\00\00\00\00\00\00@\e7\89]A\a0?S\d7\f1\\\c0\11\01=\00\00\00\00\00\c0\ee?\00\00\00\00\00\00\00\00\00\00.\d4\aef\a4?(\fd\bdus\16,\bd\00\00\00\00\00\80\ee?\00\00\00\00\00\00\00\00\00\c0\9f\14\aa\94\a8?}&Z\d0\95y\19\bd\00\00\00\00\00@\ee?\00\00\00\00\00\00\00\00\00\c0\dd\cds\cb\ac?\07(\d8G\f2h\1a\bd\00\00\00\00\00 \ee?\00\00\00\00\00\00\00\00\00\c0\06\c01\ea\ae?{;\c9O>\11\0e\bd\00\00\00\00\00\e0\ed?\00\00\00\00\00\00\00\00\00`F\d1;\97\b1?\9b\9e\0dV]2%\bd\00\00\00\00\00\a0\ed?\00\00\00\00\00\00\00\00\00\e0\d1\a7\f5\bd\b3?\d7N\db\a5^\c8,=\00\00\00\00\00`\ed?\00\00\00\00\00\00\00\00\00\a0\97MZ\e9\b5?\1e\1d]<\06i,\bd\00\00\00\00\00@\ed?\00\00\00\00\00\00\00\00\00\c0\ea\n\d3\00\b7?2\ed\9d\a9\8d\1e\ec<\00\00\00\00\00\00\ed?\00\00\00\00\00\00\00\00\00@Y]^3\b9?\daG\bd:\\\11#=\00\00\00\00\00\c0\ec?\00\00\00\00\00\00\00\00\00`\ad\8d\c8j\bb?\e5h\f7+\80\90\13\bd\00\00\00\00\00\a0\ec?\00\00\00\00\00\00\00\00\00@\bc\01X\88\bc?\d3\acZ\c6\d1F&=\00\00\00\00\00`\ec?\00\00\00\00\00\00\00\00\00 \n\839\c7\be?\e0E\e6\afh\c0-\bd\00\00\00\00\00@\ec?\00\00\00\00\00\00\00\00\00\e0\db9\91\e8\bf?\fd\n\a1O\d64%\bd\00\00\00\00\00\00\ec?\00\00\00\00\00\00\00\00\00\e0\'\82\8e\17\c1?\f2\07-\cex\ef!=\00\00\00\00\00\e0\eb?\00\00\00\00\00\00\00\00\00\f0#~+\aa\c1?4\998D\8e\a7,=\00\00\00\00\00\a0\eb?\00\00\00\00\00\00\00\00\00\80\86\0ca\d1\c2?\a1\b4\81\cbl\9d\03=\00\00\00\00\00\80\eb?\00\00\00\00\00\00\00\00\00\90\15\b0\fce\c3?\89rK#\a8/\c6<\00\00\00\00\00@\eb?\00\00\00\00\00\00\00\00\00\b03\83=\91\c4?x\b6\fdTy\83%=\00\00\00\00\00 \eb?\00\00\00\00\00\00\00\00\00\b0\a1\e4\e5\'\c5?\c7}i\e5\e83&=\00\00\00\00\00\e0\ea?\00\00\00\00\00\00\00\00\00\10\8c\beNW\c6?x.<,\8b\cf\19=\00\00\00\00\00\c0\ea?\00\00\00\00\00\00\00\00\00pu\8b\12\f0\c6?\e1!\9c\e5\8d\11%\bd\00\00\00\00\00\a0\ea?\00\00\00\00\00\00\00\00\00PD\85\8d\89\c7?\05C\91p\10f\1c\bd\00\00\00\00\00`\ea?\00\00\00\00\00\00\00\00\00\009\eb\af\be\c8?\d1,\e9\aaT=\07\bd\00\00\00\00\00@\ea?\00\00\00\00\00\00\00\00\00\00\f7\dcZZ\c9?o\ff\a0X(\f2\07=\00\00\00\00\00\00\ea?\00\00\00\00\00\00\00\00\00\e0\8a<\ed\93\ca?i!VPCr(\bd\00\00\00\00\00\e0\e9?\00\00\00\00\00\00\00\00\00\d0[W\d81\cb?\aa\e1\acN\8d5\0c\bd\00\00\00\00\00\c0\e9?\00\00\00\00\00\00\00\00\00\e0;8\87\d0\cb?\b6\12TY\c4K-\bd\00\00\00\00\00\a0\e9?\00\00\00\00\00\00\00\00\00\10\f0\c6\fbo\cc?\d2+\96\c5r\ec\f1\bc\00\00\00\00\00`\e9?\00\00\00\00\00\00\00\00\00\90\d4\b0=\b1\cd?5\b0\15\f7*\ff*\bd\00\00\00\00\00@\e9?\00\00\00\00\00\00\00\00\00\10\e7\ff\0eS\ce?0\f4A`\'\12\c2<\00\00\00\00\00 \e9?\00\00\00\00\00\00\00\00\00\00\dd\e4\ad\f5\ce?\11\8e\bbe\15!\ca\bc\00\00\00\00\00\00\e9?\00\00\00\00\00\00\00\00\00\b0\b3l\1c\99\cf?0\df\0c\ca\ec\cb\1b=\00\00\00\00\00\c0\e8?\00\00\00\00\00\00\00\00\00XM`8q\d0?\91N\ed\16\db\9c\f8<\00\00\00\00\00\a0\e8?\00\00\00\00\00\00\00\00\00`ag-\c4\d0?\e9\ea<\16\8b\18\'=\00\00\00\00\00\80\e8?\00\00\00\00\00\00\00\00\00\e8\'\82\8e\17\d1?\1c\f0\a5c\0e!,\bd\00\00\00\00\00`\e8?\00\00\00\00\00\00\00\00\00\f8\ac\cb\\k\d1?\81\16\a5\f7\cd\9a+=\00\00\00\00\00@\e8?\00\00\00\00\00\00\00\00\00hZc\99\bf\d1?\b7\bdGQ\ed\a6,=\00\00\00\00\00 \e8?\00\00\00\00\00\00\00\00\00\b8\0emE\14\d2?\ea\baF\ba\de\87\n=\00\00\00\00\00\e0\e7?\00\00\00\00\00\00\00\00\00\90\dc|\f0\be\d2?\f4\04PJ\fa\9c*=\00\00\00\00\00\c0\e7?\00\00\00\00\00\00\00\00\00`\d3\e1\f1\14\d3?\b8<!\d3z\e2(\bd\00\00\00\00\00\a0\e7?\00\00\00\00\00\00\00\00\00\10\bevgk\d3?\c8w\f1\b0\cdn\11=\00\00\00\00\00\80\e7?\00\00\00\00\00\00\00\00\0003wR\c2\d3?\\\bd\06\b6T;\18=\00\00\00\00\00`\e7?\00\00\00\00\00\00\00\00\00\e8\d5#\b4\19\d4?\9d\e0\90\ec6\e4\08=\00\00\00\00\00@\e7?\00\00\00\00\00\00\00\00\00\c8q\c2\8dq\d4?u\d6g\t\ce\'/\bd\00\00\00\00\00 \e7?\00\00\00\00\00\00\00\00\000\17\9e\e0\c9\d4?\a4\d8\n\1b\89 .\bd\00\00\00\00\00\00\e7?\00\00\00\00\00\00\00\00\00\a08\07\ae\"\d5?Y\c7d\81p\be.=\00\00\00\00\00\e0\e6?\00\00\00\00\00\00\00\00\00\d0\c8S\f7{\d5?\ef@]\ee\ed\ad\1f=\00\00\00\00\00\c0\e6?\00\00\00\00\00\00\00\00\00`Y\df\bd\d5\d5?\dce\a4\08*\0b\n\bd")
+ (data (i32.const 11857) "\e0J:m\92\ba\bf\c8\aa[\e859%=\00\00\00\00\00\c0\f1?")
+ (data (i32.const 11889) "\e0J:m\92\ba\bf\c8\aa[\e859%=\00\00\00\00\00\a0\f1?")
+ (data (i32.const 11921) "\a01\d6E\c3\b8\bfhV/M)|\13=\00\00\00\00\00\a0\f1?")
+ (data (i32.const 11953) "\a01\d6E\c3\b8\bfhV/M)|\13=\00\00\00\00\00\80\f1?")
+ (data (i32.const 11985) "`\e5\8a\d2\f0\b6\bf\das3\c97\97&\bd\00\00\00\00\00`\f1?")
+ (data (i32.const 12017) " \06?\07\1b\b5\bfW^\c6a[\02\1f=\00\00\00\00\00`\f1?")
+ (data (i32.const 12049) " \06?\07\1b\b5\bfW^\c6a[\02\1f=\00\00\00\00\00@\f1?")
+ (data (i32.const 12081) "\e0\1b\96\d7A\b3\bf\df\13\f9\cc\da^,=\00\00\00\00\00@\f1?")
+ (data (i32.const 12113) "\e0\1b\96\d7A\b3\bf\df\13\f9\cc\da^,=\00\00\00\00\00 \f1?")
+ (data (i32.const 12145) "\80\a3\ee6e\b1\bf\t\a3\8fv^|\14=\00\00\00\00\00\00\f1?")
+ (data (i32.const 12177) "\80\11\c00\n\af\bf\91\8e6\83\9eY-=\00\00\00\00\00\00\f1?")
+ (data (i32.const 12209) "\80\11\c00\n\af\bf\91\8e6\83\9eY-=\00\00\00\00\00\e0\f0?")
+ (data (i32.const 12241) "\80\19q\ddB\ab\bfLp\d6\e5z\82\1c=\00\00\00\00\00\e0\f0?")
+ (data (i32.const 12273) "\80\19q\ddB\ab\bfLp\d6\e5z\82\1c=\00\00\00\00\00\c0\f0?")
+ (data (i32.const 12305) "\c02\f6Xt\a7\bf\ee\a1\f24F\fc,\bd\00\00\00\00\00\c0\f0?")
+ (data (i32.const 12337) "\c02\f6Xt\a7\bf\ee\a1\f24F\fc,\bd\00\00\00\00\00\a0\f0?")
+ (data (i32.const 12369) "\c0\fe\b9\87\9e\a3\bf\aa\fe&\f5\b7\02\f5<\00\00\00\00\00\a0\f0?")
+ (data (i32.const 12401) "\c0\fe\b9\87\9e\a3\bf\aa\fe&\f5\b7\02\f5<\00\00\00\00\00\80\f0?")
+ (data (i32.const 12434) "x\0e\9b\82\9f\bf\e4\t~|&\80)\bd\00\00\00\00\00\80\f0?")
+ (data (i32.const 12466) "x\0e\9b\82\9f\bf\e4\t~|&\80)\bd\00\00\00\00\00`\f0?")
+ (data (i32.const 12497) "\80\d5\07\1b\b9\97\bf9\a6\fa\93T\8d(\bd\00\00\00\00\00@\f0?")
+ (data (i32.const 12530) "\fc\b0\a8\c0\8f\bf\9c\a6\d3\f6|\1e\df\bc\00\00\00\00\00@\f0?")
+ (data (i32.const 12562) "\fc\b0\a8\c0\8f\bf\9c\a6\d3\f6|\1e\df\bc\00\00\00\00\00 \f0?")
+ (data (i32.const 12594) "\10k*\e0\7f\bf\e4@\da\0d?\e2\19\bd\00\00\00\00\00 \f0?")
+ (data (i32.const 12626) "\10k*\e0\7f\bf\e4@\da\0d?\e2\19\bd\00\00\00\00\00\00\f0?")
+ (data (i32.const 12678) "\f0?")
+ (data (i32.const 12709) "\c0\ef?")
+ (data (i32.const 12722) "\89u\15\10\80?\e8+\9d\99k\c7\10\bd\00\00\00\00\00\80\ef?")
+ (data (i32.const 12753) "\80\93XV \90?\d2\f7\e2\06[\dc#\bd\00\00\00\00\00@\ef?")
+ (data (i32.const 12786) "\c9(%I\98?4\0cZ2\ba\a0*\bd\00\00\00\00\00\00\ef?")
+ (data (i32.const 12817) "@\e7\89]A\a0?S\d7\f1\\\c0\11\01=\00\00\00\00\00\c0\ee?")
+ (data (i32.const 12850) ".\d4\aef\a4?(\fd\bdus\16,\bd\00\00\00\00\00\80\ee?")
+ (data (i32.const 12881) "\c0\9f\14\aa\94\a8?}&Z\d0\95y\19\bd\00\00\00\00\00@\ee?")
+ (data (i32.const 12913) "\c0\dd\cds\cb\ac?\07(\d8G\f2h\1a\bd\00\00\00\00\00 \ee?")
+ (data (i32.const 12945) "\c0\06\c01\ea\ae?{;\c9O>\11\0e\bd\00\00\00\00\00\e0\ed?")
+ (data (i32.const 12977) "`F\d1;\97\b1?\9b\9e\0dV]2%\bd\00\00\00\00\00\a0\ed?")
+ (data (i32.const 13009) "\e0\d1\a7\f5\bd\b3?\d7N\db\a5^\c8,=\00\00\00\00\00`\ed?")
+ (data (i32.const 13041) "\a0\97MZ\e9\b5?\1e\1d]<\06i,\bd\00\00\00\00\00@\ed?")
+ (data (i32.const 13073) "\c0\ea\n\d3\00\b7?2\ed\9d\a9\8d\1e\ec<\00\00\00\00\00\00\ed?")
+ (data (i32.const 13105) "@Y]^3\b9?\daG\bd:\\\11#=\00\00\00\00\00\c0\ec?")
+ (data (i32.const 13137) "`\ad\8d\c8j\bb?\e5h\f7+\80\90\13\bd\00\00\00\00\00\a0\ec?")
+ (data (i32.const 13169) "@\bc\01X\88\bc?\d3\acZ\c6\d1F&=\00\00\00\00\00`\ec?")
+ (data (i32.const 13201) " \n\839\c7\be?\e0E\e6\afh\c0-\bd\00\00\00\00\00@\ec?")
+ (data (i32.const 13233) "\e0\db9\91\e8\bf?\fd\n\a1O\d64%\bd\00\00\00\00\00\00\ec?")
+ (data (i32.const 13265) "\e0\'\82\8e\17\c1?\f2\07-\cex\ef!=\00\00\00\00\00\e0\eb?")
+ (data (i32.const 13297) "\f0#~+\aa\c1?4\998D\8e\a7,=\00\00\00\00\00\a0\eb?")
+ (data (i32.const 13329) "\80\86\0ca\d1\c2?\a1\b4\81\cbl\9d\03=\00\00\00\00\00\80\eb?")
+ (data (i32.const 13361) "\90\15\b0\fce\c3?\89rK#\a8/\c6<\00\00\00\00\00@\eb?")
+ (data (i32.const 13393) "\b03\83=\91\c4?x\b6\fdTy\83%=\00\00\00\00\00 \eb?")
+ (data (i32.const 13425) "\b0\a1\e4\e5\'\c5?\c7}i\e5\e83&=\00\00\00\00\00\e0\ea?")
+ (data (i32.const 13457) "\10\8c\beNW\c6?x.<,\8b\cf\19=\00\00\00\00\00\c0\ea?")
+ (data (i32.const 13489) "pu\8b\12\f0\c6?\e1!\9c\e5\8d\11%\bd\00\00\00\00\00\a0\ea?")
+ (data (i32.const 13521) "PD\85\8d\89\c7?\05C\91p\10f\1c\bd\00\00\00\00\00`\ea?")
+ (data (i32.const 13554) "9\eb\af\be\c8?\d1,\e9\aaT=\07\bd\00\00\00\00\00@\ea?")
+ (data (i32.const 13586) "\f7\dcZZ\c9?o\ff\a0X(\f2\07=\00\00\00\00\00\00\ea?")
+ (data (i32.const 13617) "\e0\8a<\ed\93\ca?i!VPCr(\bd\00\00\00\00\00\e0\e9?")
+ (data (i32.const 13649) "\d0[W\d81\cb?\aa\e1\acN\8d5\0c\bd\00\00\00\00\00\c0\e9?")
+ (data (i32.const 13681) "\e0;8\87\d0\cb?\b6\12TY\c4K-\bd\00\00\00\00\00\a0\e9?")
+ (data (i32.const 13713) "\10\f0\c6\fbo\cc?\d2+\96\c5r\ec\f1\bc\00\00\00\00\00`\e9?")
+ (data (i32.const 13745) "\90\d4\b0=\b1\cd?5\b0\15\f7*\ff*\bd\00\00\00\00\00@\e9?")
+ (data (i32.const 13777) "\10\e7\ff\0eS\ce?0\f4A`\'\12\c2<\00\00\00\00\00 \e9?")
+ (data (i32.const 13810) "\dd\e4\ad\f5\ce?\11\8e\bbe\15!\ca\bc\00\00\00\00\00\00\e9?")
+ (data (i32.const 13841) "\b0\b3l\1c\99\cf?0\df\0c\ca\ec\cb\1b=\00\00\00\00\00\c0\e8?")
+ (data (i32.const 13873) "XM`8q\d0?\91N\ed\16\db\9c\f8<\00\00\00\00\00\a0\e8?")
+ (data (i32.const 13905) "`ag-\c4\d0?\e9\ea<\16\8b\18\'=\00\00\00\00\00\80\e8?")
+ (data (i32.const 13937) "\e8\'\82\8e\17\d1?\1c\f0\a5c\0e!,\bd\00\00\00\00\00`\e8?")
+ (data (i32.const 13969) "\f8\ac\cb\\k\d1?\81\16\a5\f7\cd\9a+=\00\00\00\00\00@\e8?")
+ (data (i32.const 14001) "hZc\99\bf\d1?\b7\bdGQ\ed\a6,=\00\00\00\00\00 \e8?")
+ (data (i32.const 14033) "\b8\0emE\14\d2?\ea\baF\ba\de\87\n=\00\00\00\00\00\e0\e7?")
+ (data (i32.const 14065) "\90\dc|\f0\be\d2?\f4\04PJ\fa\9c*=\00\00\00\00\00\c0\e7?")
+ (data (i32.const 14097) "`\d3\e1\f1\14\d3?\b8<!\d3z\e2(\bd\00\00\00\00\00\a0\e7?")
+ (data (i32.const 14129) "\10\bevgk\d3?\c8w\f1\b0\cdn\11=\00\00\00\00\00\80\e7?")
+ (data (i32.const 14161) "03wR\c2\d3?\\\bd\06\b6T;\18=\00\00\00\00\00`\e7?")
+ (data (i32.const 14193) "\e8\d5#\b4\19\d4?\9d\e0\90\ec6\e4\08=\00\00\00\00\00@\e7?")
+ (data (i32.const 14225) "\c8q\c2\8dq\d4?u\d6g\t\ce\'/\bd\00\00\00\00\00 \e7?")
+ (data (i32.const 14257) "0\17\9e\e0\c9\d4?\a4\d8\n\1b\89 .\bd\00\00\00\00\00\00\e7?")
+ (data (i32.const 14289) "\a08\07\ae\"\d5?Y\c7d\81p\be.=\00\00\00\00\00\e0\e6?")
+ (data (i32.const 14321) "\d0\c8S\f7{\d5?\ef@]\ee\ed\ad\1f=\00\00\00\00\00\c0\e6?")
+ (data (i32.const 14353) "`Y\df\bd\d5\d5?\dce\a4\08*\0b\n\bd")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/math/NativeMath.scalbn (param $0 f64) (param $1 i32) (result f64)
@@ -2827,11 +2904,11 @@
     end
    end
    block $folding-inner0
-    local.get $6
     local.get $8
     i32.const 2147483647
     i32.and
     local.tee $8
+    local.get $6
     i32.or
     i32.eqz
     br_if $folding-inner0
@@ -2876,18 +2953,18 @@
     local.get $9
     i32.const 2146435072
     i32.eq
-    local.get $9
     local.get $8
     i32.const 67108864
     i32.add
-    i32.gt_u
+    local.get $9
+    i32.lt_u
     i32.or
     br_if $folding-inner0
-    local.get $8
     local.get $9
     i32.const 67108864
     i32.add
-    i32.gt_u
+    local.get $8
+    i32.lt_u
     i32.const 0
     local.get $4
     i32.const 2
@@ -3058,18 +3135,18 @@
    local.get $4
    i32.const 2139095040
    i32.eq
-   local.get $4
    local.get $3
    i32.const 218103808
    i32.add
-   i32.gt_u
+   local.get $4
+   i32.lt_u
    i32.or
    br_if $folding-inner0
-   local.get $3
    local.get $4
    i32.const 218103808
    i32.add
-   i32.gt_u
+   local.get $3
+   i32.lt_u
    i32.const 0
    local.get $2
    i32.const 2
@@ -3443,22 +3520,22 @@
   i64.shr_u
   local.tee $8
   i64.mul
+  local.get $7
   local.get $2
   i64.const 4294967295
   i64.and
   local.tee $2
-  local.get $7
   i64.mul
   local.tee $7
   i64.const 32
   i64.shr_u
   i64.add
   local.set $9
-  local.get $2
   local.get $6
   i64.const 32
   i64.shr_u
   local.tee $10
+  local.get $2
   i64.mul
   local.get $9
   i64.const 4294967295
@@ -3477,10 +3554,10 @@
   i64.shr_u
   i64.add
   global.set $~lib/math/res128_hi
+  local.get $10
   local.get $1
   i64.const 32
   i64.shr_u
-  local.get $10
   i64.mul
   local.tee $1
   local.get $7
@@ -3522,10 +3599,10 @@
   local.get $1
   local.get $8
   i64.shl
-  local.get $7
   local.get $2
   i64.const 2
   i64.shl
+  local.get $7
   i64.xor
   local.tee $9
   i64.const 64
@@ -3600,7 +3677,6 @@
   i64.add
   f64.convert_i64_u
   global.set $~lib/math/rempio2_y0
-  local.get $2
   local.get $9
   i64.const 53
   i64.shl
@@ -3608,6 +3684,7 @@
   i64.const 11
   i64.shr_u
   i64.or
+  local.get $2
   i64.add
   f64.convert_i64_u
   f64.const 5.421010862427522e-20
@@ -3890,7 +3967,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $7
       f64.const 8.4784276603689e-32
       f64.mul
@@ -3910,10 +3987,8 @@
       local.get $0
       local.get $2
       f64.sub
-     else
-      local.get $1
+      local.set $1
      end
-     local.set $1
     end
     local.get $1
     global.set $~lib/math/rempio2_y0
@@ -6206,12 +6281,12 @@
    f64.mul
    f64.add
    local.set $7
+   local.get $5
    local.get $3
    i32.const 20
    i32.shr_u
    i32.const 1023
    i32.sub
-   local.get $5
    i32.add
    f64.convert_i32_s
    local.tee $8
@@ -6345,12 +6420,12 @@
    local.get $4
    f32.mul
    local.set $8
+   local.get $5
    local.get $3
    i32.const 23
    i32.shr_u
    i32.const 127
    i32.sub
-   local.get $5
    i32.add
    f32.convert_i32_s
    local.tee $6
@@ -6876,12 +6951,12 @@
     f64.div
     br $__inlined_func$~lib/math/NativeMath.mod
    end
-   local.get $4
    local.get $6
    i64.const 1
    i64.shl
    local.tee $3
-   i64.ge_u
+   local.get $4
+   i64.le_u
    if
     local.get $0
     local.get $3
@@ -7093,12 +7168,12 @@
    f32.div
    return
   end
-  local.get $3
   local.get $4
   i32.const 1
   i32.shl
   local.tee $2
-  i32.ge_u
+  local.get $3
+  i32.le_u
   if
    local.get $0
    local.get $2
@@ -7111,7 +7186,6 @@
   local.get $4
   i32.const -2147483648
   i32.and
-  local.set $5
   local.get $8
   if (result i32)
    local.get $4
@@ -7233,7 +7307,6 @@
   i32.const 0
   i32.gt_s
   select
-  local.get $5
   i32.or
   f32.reinterpret_i32
  )
@@ -7434,6 +7507,7 @@
        br_if $~lib/util/math/checkint|inlined.0
        drop
        i32.const 0
+       local.get $12
        i64.const 1
        i64.const 1075
        local.get $2
@@ -7442,7 +7516,6 @@
        local.tee $2
        i64.const 1
        i64.sub
-       local.get $12
        i64.and
        i64.const 0
        i64.ne
@@ -7498,6 +7571,7 @@
       br_if $~lib/util/math/checkint|inlined.1
       drop
       i32.const 0
+      local.get $12
       i64.const 1
       i64.const 1075
       local.get $13
@@ -7506,7 +7580,6 @@
       local.tee $13
       i64.const 1
       i64.sub
-      local.get $12
       i64.and
       i64.const 0
       i64.ne
@@ -7811,9 +7884,9 @@
     i32.add
     local.tee $11
     i64.load offset=8
+    local.get $2
     local.get $5
     i64.extend_i32_u
-    local.get $2
     i64.add
     i64.const 45
     i64.shl
@@ -8154,6 +8227,7 @@
        br_if $~lib/util/math/checkintf|inlined.0
        drop
        i32.const 0
+       local.get $7
        i32.const 1
        i32.const 150
        local.get $2
@@ -8162,7 +8236,6 @@
        local.tee $2
        i32.const 1
        i32.sub
-       local.get $7
        i32.and
        br_if $~lib/util/math/checkintf|inlined.0
        drop
@@ -8212,6 +8285,7 @@
       br_if $~lib/util/math/checkintf|inlined.1
       drop
       i32.const 0
+      local.get $7
       i32.const 1
       i32.const 150
       local.get $4
@@ -8220,7 +8294,6 @@
       local.tee $4
       i32.const 1
       i32.sub
-      local.get $7
       i32.and
       br_if $~lib/util/math/checkintf|inlined.1
       drop
@@ -8255,21 +8328,19 @@
      i32.and
      local.set $2
     end
+    local.get $0
+    f32.const 8388608
+    f32.mul
+    i32.reinterpret_f32
+    i32.const 2147483647
+    i32.and
+    i32.const 192937984
+    i32.sub
+    local.get $2
     local.get $2
     i32.const 8388608
     i32.lt_u
-    if (result i32)
-     local.get $0
-     f32.const 8388608
-     f32.mul
-     i32.reinterpret_f32
-     i32.const 2147483647
-     i32.and
-     i32.const 192937984
-     i32.sub
-    else
-     local.get $2
-    end
+    select
     local.set $2
    end
    local.get $2
@@ -8400,9 +8471,9 @@
    i32.const 7712
    i32.add
    i64.load
+   local.get $5
    local.get $4
    i64.extend_i32_u
-   local.get $5
    i64.add
    i64.const 47
    i64.shl
@@ -8471,18 +8542,18 @@
   i32.const 1
   i32.or
   local.get $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.mul
   local.tee $1
   i32.const 61
   i32.or
   local.get $1
+  local.get $1
   i32.const 7
   i32.shr_u
-  local.get $1
   i32.xor
   i32.mul
   local.get $1
@@ -8502,18 +8573,18 @@
   i32.const 1
   i32.or
   local.get $1
+  local.get $1
   i32.const 15
   i32.shr_u
-  local.get $1
   i32.xor
   i32.mul
   local.tee $1
   i32.const 61
   i32.or
   local.get $1
+  local.get $1
   i32.const 7
   i32.shr_u
-  local.get $1
   i32.xor
   i32.mul
   local.get $1
@@ -8537,11 +8608,11 @@
   local.get $2
   f64.const 1
   f64.sub
-  local.get $0
   local.get $2
   f64.const 0.5
   f64.sub
-  f64.ge
+  local.get $0
+  f64.le
   select
   local.get $1
   f64.const 0
@@ -8555,11 +8626,11 @@
   local.get $2
   f32.const 1
   f32.sub
-  local.get $0
   local.get $2
   f32.const 0.5
   f32.sub
-  f32.ge
+  local.get $0
+  f32.le
   select
   local.get $1
   f32.const 0
@@ -8712,10 +8783,10 @@
    local.get $4
    i64.lt_s
    if
-    local.get $4
     local.get $3
     i64.const 1
     i64.add
+    local.get $4
     i64.eq
     br_if $do-break|0
     local.get $0
@@ -8831,10 +8902,10 @@
    local.get $8
    f64.lt
    i32.or
-   local.get $4
    local.get $3
    i64.const 1
    i64.add
+   local.get $4
    i64.eq
    i32.and
   end
@@ -8949,10 +9020,10 @@
    local.get $4
    i32.lt_s
    if
-    local.get $4
     local.get $3
     i32.const 1
     i32.add
+    local.get $4
     i32.eq
     br_if $do-break|0
     local.get $0
@@ -9067,10 +9138,10 @@
    local.get $8
    f32.lt
    i32.or
-   local.get $4
    local.get $3
    i32.const 1
    i32.add
+   local.get $4
    i32.eq
    i32.and
   end
@@ -9313,7 +9384,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $7
       f64.const 8.4784276603689e-32
       f64.mul
@@ -9333,10 +9404,8 @@
       local.get $0
       local.get $2
       f64.sub
-     else
-      local.get $1
+      local.set $1
      end
-     local.set $1
     end
     local.get $1
     global.set $~lib/math/rempio2_y0
@@ -10478,7 +10547,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $4
       f64.const 8.4784276603689e-32
       f64.mul
@@ -10498,10 +10567,8 @@
       local.get $0
       local.get $5
       f64.sub
-     else
-      local.get $1
+      local.set $1
      end
-     local.set $1
     end
     local.get $1
     global.set $~lib/math/rempio2_y0
@@ -11372,7 +11439,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $7
       f64.const 8.4784276603689e-32
       f64.mul
@@ -11392,10 +11459,8 @@
       local.get $0
       local.get $1
       f64.sub
-     else
-      local.get $2
+      local.set $2
      end
-     local.set $2
     end
     local.get $2
     global.set $~lib/math/rempio2_y0
@@ -11886,191 +11951,6 @@
     local.get $0
     local.get $0
     i64.mul
-    local.set $0
-    br $while-continue|1
-   end
-  end
-  local.get $2
- )
- (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  i32.const 1
-  local.set $2
-  local.get $0
-  i32.const 2
-  i32.eq
-  if
-   i32.const 1
-   local.get $1
-   i32.shl
-   i32.const 0
-   local.get $1
-   i32.const 32
-   i32.lt_u
-   select
-   return
-  end
-  local.get $1
-  i32.const 0
-  i32.le_s
-  if
-   local.get $0
-   i32.const -1
-   i32.eq
-   if
-    i32.const -1
-    i32.const 1
-    local.get $1
-    i32.const 1
-    i32.and
-    select
-    return
-   end
-   local.get $1
-   i32.eqz
-   local.get $0
-   i32.const 1
-   i32.eq
-   i32.or
-   return
-  else
-   local.get $1
-   i32.const 1
-   i32.eq
-   if
-    local.get $0
-    return
-   else
-    local.get $1
-    i32.const 2
-    i32.eq
-    if
-     local.get $0
-     local.get $0
-     i32.mul
-     return
-    else
-     local.get $1
-     i32.const 32
-     i32.lt_s
-     if
-      block $break|0
-       block $case4|0
-        block $case3|0
-         block $case2|0
-          block $case1|0
-           block $case0|0
-            i32.const 31
-            local.get $1
-            i32.clz
-            i32.sub
-            br_table $case4|0 $case3|0 $case2|0 $case1|0 $case0|0 $break|0
-           end
-           local.get $0
-           i32.const 1
-           local.get $1
-           i32.const 1
-           i32.and
-           select
-           local.set $2
-           local.get $1
-           i32.const 1
-           i32.shr_u
-           local.set $1
-           local.get $0
-           local.get $0
-           i32.mul
-           local.set $0
-          end
-          local.get $0
-          local.get $2
-          i32.mul
-          local.get $2
-          local.get $1
-          i32.const 1
-          i32.and
-          select
-          local.set $2
-          local.get $1
-          i32.const 1
-          i32.shr_u
-          local.set $1
-          local.get $0
-          local.get $0
-          i32.mul
-          local.set $0
-         end
-         local.get $0
-         local.get $2
-         i32.mul
-         local.get $2
-         local.get $1
-         i32.const 1
-         i32.and
-         select
-         local.set $2
-         local.get $1
-         i32.const 1
-         i32.shr_u
-         local.set $1
-         local.get $0
-         local.get $0
-         i32.mul
-         local.set $0
-        end
-        local.get $0
-        local.get $2
-        i32.mul
-        local.get $2
-        local.get $1
-        i32.const 1
-        i32.and
-        select
-        local.set $2
-        local.get $1
-        i32.const 1
-        i32.shr_u
-        local.set $1
-        local.get $0
-        local.get $0
-        i32.mul
-        local.set $0
-       end
-       local.get $0
-       local.get $2
-       i32.mul
-       local.get $2
-       local.get $1
-       i32.const 1
-       i32.and
-       select
-       local.set $2
-      end
-      local.get $2
-      return
-     end
-    end
-   end
-  end
-  loop $while-continue|1
-   local.get $1
-   if
-    local.get $0
-    local.get $2
-    i32.mul
-    local.get $2
-    local.get $1
-    i32.const 1
-    i32.and
-    select
-    local.set $2
-    local.get $1
-    i32.const 1
-    i32.shr_u
-    local.set $1
-    local.get $0
-    local.get $0
-    i32.mul
     local.set $0
     br $while-continue|1
    end
@@ -43976,17 +43856,17 @@
     global.get $~lib/math/random_state1_64
     local.tee $2
     global.set $~lib/math/random_state0_64
+    local.get $2
+    local.get $6
     local.get $6
     i64.const 23
     i64.shl
-    local.get $6
     i64.xor
     local.tee $6
     i64.const 17
     i64.shr_u
     local.get $6
     i64.xor
-    local.get $2
     i64.xor
     local.get $2
     i64.const 26
@@ -56288,382 +56168,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 3
-  call $~lib/math/ipow32
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4091
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const -2
-  i32.const 3
-  call $~lib/math/ipow32
-  i32.const -8
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4092
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const -1
-  i32.const 0
-  call $~lib/math/ipow32
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4093
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const -1
-  i32.const -1
-  call $~lib/math/ipow32
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4094
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const -1
-  i32.const -2
-  call $~lib/math/ipow32
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4095
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const -1
-  i32.const -3
-  call $~lib/math/ipow32
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4096
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  i32.const -2
-  call $~lib/math/ipow32
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4098
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  i32.const -1
-  call $~lib/math/ipow32
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4099
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  i32.const 2
-  call $~lib/math/ipow32
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4102
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const -2
-  call $~lib/math/ipow32
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4104
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const -1
-  call $~lib/math/ipow32
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4105
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 2
-  call $~lib/math/ipow32
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4108
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 3
-  call $~lib/math/ipow32
-  i32.const 255
-  i32.and
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4110
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const -2
-  i32.const 3
-  call $~lib/math/ipow32
-  i32.const 255
-  i32.and
-  i32.const 248
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4111
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 4
-  i32.const 7
-  call $~lib/math/ipow32
-  i32.const 65535
-  i32.and
-  i32.const 16384
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4112
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 4
-  i32.const 8
-  call $~lib/math/ipow32
-  i32.const 65535
-  i32.and
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4113
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 5
-  i32.const 10
-  call $~lib/math/ipow32
-  i32.const 65535
-  i32.and
-  i32.const 761
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4114
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 0
-  i64.const 0
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4116
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 0
-  i64.const 1
-  call $~lib/math/ipow64
-  i64.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4117
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 1
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.const 1
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4118
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 2
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.const 8
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4119
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 4294967295
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.const 12884901887
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4120
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 65535
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.const 281462092005375
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4121
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 65535
-  i64.const 8
-  call $~lib/math/ipow64
-  i64.const -15762478437236735
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4122
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 61731
-  i64.const 4
-  call $~lib/math/ipow64
-  i64.const -3925184889716469295
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4123
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 61731
-  i64.const 4
-  call $~lib/math/ipow64
-  i64.const -3925184889716469295
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4124
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 57055
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.const 339590
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.add
-  i64.const 340126
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.eq
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4126
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 57055
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.const 339590
-  i64.const 3
-  call $~lib/math/ipow64
-  i64.add
-  i64.const 39347712995520375
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4127
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   f64.const 1
   f64.const 0.5
   call $~lib/math/NativeMath.pow
@@ -56699,32 +56203,6 @@
    i32.const 0
    i32.const 1056
    i32.const 4131
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  call $~lib/math/NativeMath.pow
-  f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4132
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  f64.const 1
-  call $~lib/math/NativeMath.pow
-  f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4133
    i32.const 1
    call $~lib/builtins/abort
    unreachable

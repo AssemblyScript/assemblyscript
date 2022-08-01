@@ -4,14 +4,13 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i32_f32_=>_none (func (param i32 f32)))
  (type $i32_f64_=>_none (func (param i32 f64)))
- (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
@@ -102,8 +101,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  global.get $~lib/rt/itcms/iter
   local.get $0
+  global.get $~lib/rt/itcms/iter
   i32.eq
   if
    local.get $0
@@ -163,11 +162,11 @@
    local.get $2
    i32.store offset=8
    local.get $2
+   local.get $1
    local.get $2
    i32.load offset=4
    i32.const 3
    i32.and
-   local.get $1
    i32.or
    i32.store offset=4
   end
@@ -181,10 +180,10 @@
   if (result i32)
    i32.const 1
   else
+   local.get $1
    i32.const 1648
    i32.load
-   local.get $1
-   i32.lt_u
+   i32.gt_u
    if
     i32.const 1248
     i32.const 1312
@@ -207,23 +206,23 @@
   i32.load offset=8
   local.set $1
   local.get $0
-  local.get $2
   global.get $~lib/rt/itcms/white
   i32.eqz
   i32.const 2
   local.get $3
   select
+  local.get $2
   i32.or
   i32.store offset=4
   local.get $0
   local.get $1
   i32.store offset=8
   local.get $1
+  local.get $0
   local.get $1
   i32.load offset=4
   i32.const 3
   i32.and
-  local.get $0
   i32.or
   i32.store offset=4
   local.get $2
@@ -326,37 +325,37 @@
    local.get $4
    i32.store offset=4
   end
-  local.get $2
+  local.get $1
+  local.get $0
   local.get $3
   i32.const 4
   i32.shl
+  local.get $2
   i32.add
   i32.const 2
   i32.shl
-  local.get $0
   i32.add
   i32.load offset=96
-  local.get $1
   i32.eq
   if
-   local.get $2
+   local.get $0
    local.get $3
    i32.const 4
    i32.shl
+   local.get $2
    i32.add
    i32.const 2
    i32.shl
-   local.get $0
    i32.add
    local.get $5
    i32.store offset=96
    local.get $5
    i32.eqz
    if
+    local.get $0
     local.get $3
     i32.const 2
     i32.shl
-    local.get $0
     i32.add
     local.tee $1
     i32.load offset=4
@@ -507,12 +506,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $4
   local.get $1
   i32.const 4
   i32.add
+  local.get $2
   i32.add
-  local.get $4
   i32.ne
   if
    i32.const 0
@@ -573,14 +572,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $0
   local.get $5
   i32.const 4
   i32.shl
+  local.get $2
   i32.add
   i32.const 2
   i32.shl
-  local.get $0
   i32.add
   i32.load offset=96
   local.set $3
@@ -596,14 +595,14 @@
    local.get $1
    i32.store offset=4
   end
-  local.get $2
+  local.get $0
   local.get $5
   i32.const 4
   i32.shl
+  local.get $2
   i32.add
   i32.const 2
   i32.shl
-  local.get $0
   i32.add
   local.get $1
   i32.store offset=96
@@ -615,10 +614,10 @@
   i32.shl
   i32.or
   i32.store
+  local.get $0
   local.get $5
   i32.const 2
   i32.shl
-  local.get $0
   i32.add
   local.tee $0
   local.get $0
@@ -655,11 +654,11 @@
   i32.load offset=1568
   local.tee $4
   if
-   local.get $1
    local.get $4
    i32.const 4
    i32.add
-   i32.lt_u
+   local.get $1
+   i32.gt_u
    if
     i32.const 0
     i32.const 1392
@@ -668,10 +667,10 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $4
    local.get $1
    i32.const 16
    i32.sub
+   local.get $4
    i32.eq
    if
     local.get $4
@@ -683,11 +682,11 @@
     local.set $1
    end
   else
-   local.get $1
    local.get $0
    i32.const 1572
    i32.add
-   i32.lt_u
+   local.get $1
+   i32.gt_u
    if
     i32.const 0
     i32.const 1392
@@ -726,10 +725,10 @@
   local.get $1
   i32.const 0
   i32.store offset=8
-  local.get $2
   local.get $1
   i32.const 4
   i32.add
+  local.get $2
   i32.add
   local.tee $2
   i32.const 2
@@ -786,10 +785,10 @@
      i32.const 16
      i32.lt_u
      if
-      local.get $1
       local.get $0
       i32.const 4
       i32.shl
+      local.get $1
       i32.add
       i32.const 2
       i32.shl
@@ -850,25 +849,25 @@
     i32.and
     local.set $0
     loop $while-continue|1
-     global.get $~lib/rt/itcms/toSpace
      local.get $0
+     global.get $~lib/rt/itcms/toSpace
      i32.ne
      if
       local.get $0
       global.set $~lib/rt/itcms/iter
+      local.get $1
       local.get $0
       i32.load offset=4
       i32.const 3
       i32.and
-      local.get $1
       i32.ne
       if
        local.get $0
-       local.get $1
        local.get $0
        i32.load offset=4
        i32.const -4
        i32.and
+       local.get $1
        i32.or
        i32.store offset=4
        i32.const 0
@@ -925,23 +924,23 @@
      i32.and
      local.set $0
      loop $while-continue|2
-      global.get $~lib/rt/itcms/toSpace
       local.get $0
+      global.get $~lib/rt/itcms/toSpace
       i32.ne
       if
+       local.get $1
        local.get $0
        i32.load offset=4
        i32.const 3
        i32.and
-       local.get $1
        i32.ne
        if
         local.get $0
-        local.get $1
         local.get $0
         i32.load offset=4
         i32.const -4
         i32.and
+        local.get $1
         i32.or
         i32.store offset=4
         local.get $0
@@ -1097,13 +1096,13 @@
    i32.shr_u
   else
    i32.const 31
+   local.get $1
    i32.const 1
    i32.const 27
    local.get $1
    i32.clz
    i32.sub
    i32.shl
-   local.get $1
    i32.add
    i32.const 1
    i32.sub
@@ -1143,10 +1142,10 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
   local.get $2
   i32.const 2
   i32.shl
-  local.get $0
   i32.add
   i32.load offset=4
   i32.const -1
@@ -1155,6 +1154,7 @@
   i32.and
   local.tee $1
   if (result i32)
+   local.get $0
    local.get $1
    i32.ctz
    local.get $2
@@ -1163,7 +1163,6 @@
    i32.add
    i32.const 2
    i32.shl
-   local.get $0
    i32.add
    i32.load offset=96
   else
@@ -1177,12 +1176,12 @@
    i32.and
    local.tee $1
    if (result i32)
+    local.get $0
     local.get $1
     i32.ctz
     local.tee $1
     i32.const 2
     i32.shl
-    local.get $0
     i32.add
     i32.load offset=4
     local.tee $2
@@ -1195,6 +1194,7 @@
      call $~lib/builtins/abort
      unreachable
     end
+    local.get $0
     local.get $2
     i32.ctz
     local.get $1
@@ -1203,7 +1203,6 @@
     i32.add
     i32.const 2
     i32.shl
-    local.get $0
     i32.add
     i32.load offset=96
    else
@@ -1324,6 +1323,7 @@
    i32.sub
    i32.ne
    i32.shl
+   local.get $5
    i32.const 1
    i32.const 27
    local.get $5
@@ -1332,7 +1332,6 @@
    i32.shl
    i32.const 1
    i32.sub
-   local.get $5
    i32.add
    local.get $5
    local.get $5
@@ -1385,12 +1384,12 @@
     unreachable
    end
   end
+  local.get $5
   local.get $2
   i32.load
   i32.const -4
   i32.and
-  local.get $5
-  i32.lt_u
+  i32.gt_u
   if
    i32.const 0
    i32.const 1392
@@ -1428,16 +1427,16 @@
   i32.ge_u
   if
    local.get $2
+   local.get $5
    local.get $3
    i32.const 2
    i32.and
-   local.get $5
    i32.or
    i32.store
-   local.get $5
    local.get $2
    i32.const 4
    i32.add
+   local.get $5
    i32.add
    local.tee $3
    local.get $6
@@ -1481,19 +1480,19 @@
   i32.load offset=8
   local.set $3
   local.get $2
-  global.get $~lib/rt/itcms/white
   local.get $1
+  global.get $~lib/rt/itcms/white
   i32.or
   i32.store offset=4
   local.get $2
   local.get $3
   i32.store offset=8
   local.get $3
+  local.get $2
   local.get $3
   i32.load offset=4
   i32.const 3
   i32.and
-  local.get $2
   i32.or
   i32.store offset=4
   local.get $1
@@ -1594,6 +1593,8 @@
      local.tee $8
      i32.store8
      local.get $2
+     local.get $5
+     local.get $1
      local.get $8
      i32.extend8_s
      i32.const -1028477379
@@ -1623,11 +1624,9 @@
      i32.const 16
      i32.shr_u
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $5
      i32.add
      local.tee $8
      i32.load
@@ -1789,7 +1788,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $1
    local.get $0
    local.get $0
    i32.load offset=16
@@ -1800,7 +1798,6 @@
    local.get $4
    i32.const 3
    i32.shl
-   local.get $1
    i32.add
    local.tee $1
    local.get $2
@@ -1814,9 +1811,9 @@
    local.get $1
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -1829,22 +1826,21 @@
    i32.store
   end
  )
- (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
+  local.get $1
   local.get $0
   i32.load offset=8
-  local.tee $5
   local.get $2
   i32.shr_u
-  local.get $1
-  i32.lt_u
+  i32.gt_u
   if
+   local.get $1
    i32.const 1073741820
    local.get $2
    i32.shr_u
-   local.get $1
-   i32.lt_u
+   i32.gt_u
    if
     i32.const 1456
     i32.const 1616
@@ -1853,137 +1849,79 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $0
-   i32.load
-   local.set $4
-   local.get $1
-   i32.const 8
-   local.get $1
-   i32.const 8
-   i32.gt_u
-   select
-   local.get $2
-   i32.shl
-   local.set $1
-   local.get $3
-   if
-    local.get $5
-    i32.const 1
-    i32.shl
-    local.tee $2
-    i32.const 1073741820
-    local.get $2
-    i32.const 1073741820
-    i32.lt_u
-    select
-    local.tee $2
-    local.get $1
-    local.get $1
-    local.get $2
-    i32.lt_u
-    select
-    local.set $1
-   end
    block $__inlined_func$~lib/rt/itcms/__renew
-    local.get $4
+    local.get $1
+    i32.const 8
+    local.get $1
+    i32.const 8
+    i32.gt_u
+    select
+    local.get $2
+    i32.shl
+    local.tee $3
+    local.get $0
+    i32.load
+    local.tee $2
     i32.const 20
     i32.sub
-    local.tee $3
+    local.tee $4
     i32.load
     i32.const -4
     i32.and
     i32.const 16
     i32.sub
-    local.get $1
-    i32.ge_u
+    i32.le_u
     if
-     local.get $3
-     local.get $1
-     i32.store offset=16
      local.get $4
-     local.set $2
+     local.get $3
+     i32.store offset=16
+     local.get $2
+     local.set $1
      br $__inlined_func$~lib/rt/itcms/__renew
     end
-    local.get $1
     local.get $3
+    local.get $4
     i32.load offset=12
     call $~lib/rt/itcms/__new
-    local.tee $2
+    local.tee $1
+    local.get $2
+    local.get $3
     local.get $4
-    local.get $1
-    local.get $3
     i32.load offset=16
-    local.tee $3
-    local.get $1
+    local.tee $4
     local.get $3
+    local.get $4
     i32.lt_u
     select
     memory.copy
    end
+   local.get $1
    local.get $2
-   local.get $4
    i32.ne
    if
     local.get $0
-    local.get $2
+    local.get $1
     i32.store
     local.get $0
-    local.get $2
+    local.get $1
     i32.store offset=4
-    local.get $2
+    local.get $1
     if
      local.get $0
-     local.get $2
+     local.get $1
      call $byn-split-outlined-A$~lib/rt/itcms/__link
     end
    end
    local.get $0
-   local.get $1
+   local.get $3
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i8>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  local.get $0
-  i32.load offset=12
-  local.get $1
-  i32.le_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 1248
-    i32.const 1616
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $3
-   i32.const 0
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $3
-   i32.store offset=12
-  end
-  local.get $1
-  local.get $0
-  i32.load offset=4
-  i32.add
-  local.get $2
-  i32.store8
- )
  (func $~lib/array/Array<i8>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -1992,9 +1930,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_s
  )
@@ -2667,10 +2605,10 @@
     local.get $6
     i32.lt_s
     if
+     local.get $5
      local.get $3
      i32.const 3
      i32.shl
-     local.get $5
      i32.add
      local.tee $4
      i32.load offset=4
@@ -2679,10 +2617,12 @@
      i32.eqz
      if
       local.get $7
+      i32.load offset=4
       local.get $0
+      i32.add
       local.get $4
       i32.load8_s
-      call $~lib/array/Array<i8>#__set
+      i32.store8
       local.get $0
       i32.const 1
       i32.add
@@ -2697,7 +2637,6 @@
    end
    local.get $7
    local.get $0
-   i32.const 0
    i32.const 0
    call $~lib/array/ensureCapacity
    local.get $7
@@ -2717,10 +2656,10 @@
    i32.const 0
    local.set $0
    loop $for-loop|4
+    local.get $0
     local.get $7
     i32.load offset=12
-    local.get $0
-    i32.gt_s
+    i32.lt_s
     if
      local.get $7
      local.get $0
@@ -2755,9 +2694,9 @@
      local.get $2
      i32.load offset=4
      local.get $1
-     local.get $1
      i32.const 16
      i32.shr_u
+     local.get $1
      i32.xor
      i32.and
      i32.const 2
@@ -3387,6 +3326,8 @@
      local.tee $8
      i32.store8
      local.get $2
+     local.get $5
+     local.get $1
      local.get $8
      i32.const -1028477379
      i32.mul
@@ -3415,11 +3356,9 @@
      i32.const 16
      i32.shr_u
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $5
      i32.add
      local.tee $8
      i32.load
@@ -3582,7 +3521,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $1
    local.get $0
    local.get $0
    i32.load offset=16
@@ -3593,7 +3531,6 @@
    local.get $4
    i32.const 3
    i32.shl
-   local.get $1
    i32.add
    local.tee $1
    local.get $2
@@ -3607,9 +3544,9 @@
    local.get $1
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -3623,10 +3560,10 @@
   end
  )
  (func $~lib/array/Array<u8>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -3635,9 +3572,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_u
  )
@@ -4280,10 +4217,10 @@
     local.get $6
     i32.lt_s
     if
+     local.get $5
      local.get $3
      i32.const 3
      i32.shl
-     local.get $5
      i32.add
      local.tee $4
      i32.load offset=4
@@ -4292,10 +4229,12 @@
      i32.eqz
      if
       local.get $7
+      i32.load offset=4
       local.get $0
+      i32.add
       local.get $4
       i32.load8_u
-      call $~lib/array/Array<i8>#__set
+      i32.store8
       local.get $0
       i32.const 1
       i32.add
@@ -4310,7 +4249,6 @@
    end
    local.get $7
    local.get $0
-   i32.const 0
    i32.const 0
    call $~lib/array/ensureCapacity
    local.get $7
@@ -4330,10 +4268,10 @@
    i32.const 0
    local.set $0
    loop $for-loop|4
+    local.get $0
     local.get $7
     i32.load offset=12
-    local.get $0
-    i32.gt_s
+    i32.lt_s
     if
      local.get $7
      local.get $0
@@ -4369,9 +4307,9 @@
      local.get $2
      i32.load offset=4
      local.get $1
-     local.get $1
      i32.const 16
      i32.shr_u
+     local.get $1
      i32.xor
      i32.and
      i32.const 2
@@ -5008,6 +4946,8 @@
      local.tee $8
      i32.store16
      local.get $2
+     local.get $5
+     local.get $1
      local.get $8
      i32.extend16_s
      i32.const -1028477379
@@ -5037,11 +4977,9 @@
      i32.const 16
      i32.shr_u
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $5
      i32.add
      local.tee $8
      i32.load
@@ -5203,7 +5141,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $1
    local.get $0
    local.get $0
    i32.load offset=16
@@ -5214,7 +5151,6 @@
    local.get $4
    i32.const 3
    i32.shl
-   local.get $1
    i32.add
    local.tee $1
    local.get $2
@@ -5228,9 +5164,9 @@
    local.get $1
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -5243,50 +5179,11 @@
    i32.store
   end
  )
- (func $~lib/array/Array<i16>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  local.get $0
-  i32.load offset=12
-  local.get $1
-  i32.le_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 1248
-    i32.const 1616
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $3
-   i32.const 1
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $3
-   i32.store offset=12
-  end
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.get $2
-  i32.store16
- )
  (func $~lib/array/Array<i16>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -5937,10 +5834,10 @@
     local.get $6
     i32.lt_s
     if
+     local.get $5
      local.get $3
      i32.const 3
      i32.shl
-     local.get $5
      i32.add
      local.tee $4
      i32.load offset=4
@@ -5949,10 +5846,14 @@
      i32.eqz
      if
       local.get $7
+      i32.load offset=4
       local.get $0
+      i32.const 1
+      i32.shl
+      i32.add
       local.get $4
       i32.load16_s
-      call $~lib/array/Array<i16>#__set
+      i32.store16
       local.get $0
       i32.const 1
       i32.add
@@ -5968,7 +5869,6 @@
    local.get $7
    local.get $0
    i32.const 1
-   i32.const 0
    call $~lib/array/ensureCapacity
    local.get $7
    local.get $0
@@ -5987,10 +5887,10 @@
    i32.const 0
    local.set $0
    loop $for-loop|4
+    local.get $0
     local.get $7
     i32.load offset=12
-    local.get $0
-    i32.gt_s
+    i32.lt_s
     if
      local.get $7
      local.get $0
@@ -6025,9 +5925,9 @@
      local.get $2
      i32.load offset=4
      local.get $1
-     local.get $1
      i32.const 16
      i32.shr_u
+     local.get $1
      i32.xor
      i32.and
      i32.const 2
@@ -6657,6 +6557,8 @@
      local.tee $8
      i32.store16
      local.get $2
+     local.get $5
+     local.get $1
      local.get $8
      i32.const -1028477379
      i32.mul
@@ -6685,11 +6587,9 @@
      i32.const 16
      i32.shr_u
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $5
      i32.add
      local.tee $8
      i32.load
@@ -6852,7 +6752,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $1
    local.get $0
    local.get $0
    i32.load offset=16
@@ -6863,7 +6762,6 @@
    local.get $4
    i32.const 3
    i32.shl
-   local.get $1
    i32.add
    local.tee $1
    local.get $2
@@ -6877,9 +6775,9 @@
    local.get $1
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -6893,10 +6791,10 @@
   end
  )
  (func $~lib/array/Array<u16>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -7554,10 +7452,10 @@
     local.get $6
     i32.lt_s
     if
+     local.get $5
      local.get $3
      i32.const 3
      i32.shl
-     local.get $5
      i32.add
      local.tee $4
      i32.load offset=4
@@ -7566,10 +7464,14 @@
      i32.eqz
      if
       local.get $7
+      i32.load offset=4
       local.get $0
+      i32.const 1
+      i32.shl
+      i32.add
       local.get $4
       i32.load16_u
-      call $~lib/array/Array<i16>#__set
+      i32.store16
       local.get $0
       i32.const 1
       i32.add
@@ -7585,7 +7487,6 @@
    local.get $7
    local.get $0
    i32.const 1
-   i32.const 0
    call $~lib/array/ensureCapacity
    local.get $7
    local.get $0
@@ -7604,10 +7505,10 @@
    i32.const 0
    local.set $0
    loop $for-loop|4
+    local.get $0
     local.get $7
     i32.load offset=12
-    local.get $0
-    i32.gt_s
+    i32.lt_s
     if
      local.get $7
      local.get $0
@@ -7643,9 +7544,9 @@
      local.get $2
      i32.load offset=4
      local.get $1
-     local.get $1
      i32.const 16
      i32.shr_u
+     local.get $1
      i32.xor
      i32.and
      i32.const 2
@@ -8282,6 +8183,8 @@
      local.tee $8
      i32.store
      local.get $2
+     local.get $5
+     local.get $1
      local.get $8
      i32.const -1028477379
      i32.mul
@@ -8310,11 +8213,9 @@
      i32.const 16
      i32.shr_u
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $5
      i32.add
      local.tee $8
      i32.load
@@ -8423,9 +8324,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $2
       local.get $1
       i32.load
+      local.get $2
       i32.eq
      end
      br_if $__inlined_func$~lib/set/Set<i32>#find
@@ -8473,7 +8374,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $1
    local.get $0
    local.get $0
    i32.load offset=16
@@ -8484,7 +8384,6 @@
    local.get $4
    i32.const 3
    i32.shl
-   local.get $1
    i32.add
    local.tee $1
    local.get $2
@@ -8498,9 +8397,9 @@
    local.get $1
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -8513,50 +8412,11 @@
    i32.store
   end
  )
- (func $~lib/array/Array<i32>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  local.get $0
-  i32.load offset=12
-  local.get $1
-  i32.le_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 1248
-    i32.const 1616
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $3
-   i32.const 2
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $3
-   i32.store offset=12
-  end
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $2
-  i32.store
- )
  (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -8627,9 +8487,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $2
       local.get $1
       i32.load
+      local.get $2
       i32.eq
      end
      br_if $__inlined_func$~lib/set/Set<i32>#find
@@ -8780,9 +8640,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find
@@ -8858,9 +8718,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find1
@@ -8960,9 +8820,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find4
@@ -9039,9 +8899,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find7
@@ -9190,10 +9050,10 @@
     local.get $6
     i32.lt_s
     if
+     local.get $5
      local.get $3
      i32.const 3
      i32.shl
-     local.get $5
      i32.add
      local.tee $4
      i32.load offset=4
@@ -9202,10 +9062,14 @@
      i32.eqz
      if
       local.get $7
+      i32.load offset=4
       local.get $0
+      i32.const 2
+      i32.shl
+      i32.add
       local.get $4
       i32.load
-      call $~lib/array/Array<i32>#__set
+      i32.store
       local.get $0
       i32.const 1
       i32.add
@@ -9221,7 +9085,6 @@
    local.get $7
    local.get $0
    i32.const 2
-   i32.const 0
    call $~lib/array/ensureCapacity
    local.get $7
    local.get $0
@@ -9240,10 +9103,10 @@
    i32.const 0
    local.set $0
    loop $for-loop|2
+    local.get $0
     local.get $7
     i32.load offset=12
-    local.get $0
-    i32.gt_s
+    i32.lt_s
     if
      local.get $7
      local.get $0
@@ -9277,9 +9140,9 @@
      local.get $2
      i32.load offset=4
      local.get $1
-     local.get $1
      i32.const 16
      i32.shr_u
+     local.get $1
      i32.xor
      i32.and
      i32.const 2
@@ -9299,9 +9162,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $4
          local.get $1
          i32.load
+         local.get $4
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find10
@@ -9407,9 +9270,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find13
@@ -9486,9 +9349,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find16
@@ -9587,9 +9450,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find19
@@ -9665,9 +9528,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find22
@@ -9744,9 +9607,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i32>#find25
@@ -9890,6 +9753,8 @@
      local.tee $8
      i32.store
      local.get $2
+     local.get $5
+     local.get $1
      local.get $8
      i32.const -1028477379
      i32.mul
@@ -9918,11 +9783,9 @@
      i32.const 16
      i32.shr_u
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $5
      i32.add
      local.tee $8
      i32.load
@@ -10031,9 +9894,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $2
       local.get $1
       i32.load
+      local.get $2
       i32.eq
      end
      br_if $__inlined_func$~lib/set/Set<u32>#find
@@ -10081,7 +9944,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $1
    local.get $0
    local.get $0
    i32.load offset=16
@@ -10092,7 +9954,6 @@
    local.get $4
    i32.const 3
    i32.shl
-   local.get $1
    i32.add
    local.tee $1
    local.get $2
@@ -10106,9 +9967,9 @@
    local.get $1
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -10122,10 +9983,10 @@
   end
  )
  (func $~lib/array/Array<u32>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -10196,9 +10057,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $2
       local.get $1
       i32.load
+      local.get $2
       i32.eq
      end
      br_if $__inlined_func$~lib/set/Set<u32>#find
@@ -10349,9 +10210,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find
@@ -10427,9 +10288,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find1
@@ -10529,9 +10390,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find4
@@ -10608,9 +10469,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find7
@@ -10759,10 +10620,10 @@
     local.get $6
     i32.lt_s
     if
+     local.get $5
      local.get $3
      i32.const 3
      i32.shl
-     local.get $5
      i32.add
      local.tee $4
      i32.load offset=4
@@ -10771,10 +10632,14 @@
      i32.eqz
      if
       local.get $7
+      i32.load offset=4
       local.get $0
+      i32.const 2
+      i32.shl
+      i32.add
       local.get $4
       i32.load
-      call $~lib/array/Array<i32>#__set
+      i32.store
       local.get $0
       i32.const 1
       i32.add
@@ -10790,7 +10655,6 @@
    local.get $7
    local.get $0
    i32.const 2
-   i32.const 0
    call $~lib/array/ensureCapacity
    local.get $7
    local.get $0
@@ -10809,10 +10673,10 @@
    i32.const 0
    local.set $0
    loop $for-loop|2
+    local.get $0
     local.get $7
     i32.load offset=12
-    local.get $0
-    i32.gt_s
+    i32.lt_s
     if
      local.get $7
      local.get $0
@@ -10846,9 +10710,9 @@
      local.get $2
      i32.load offset=4
      local.get $1
-     local.get $1
      i32.const 16
      i32.shr_u
+     local.get $1
      i32.xor
      i32.and
      i32.const 2
@@ -10868,9 +10732,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $4
          local.get $1
          i32.load
+         local.get $4
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find10
@@ -10976,9 +10840,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find13
@@ -11055,9 +10919,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find16
@@ -11156,9 +11020,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find19
@@ -11234,9 +11098,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find22
@@ -11313,9 +11177,9 @@
         if (result i32)
          i32.const 0
         else
-         local.get $0
          local.get $1
          i32.load
+         local.get $0
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<u32>#find25
@@ -11446,9 +11310,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $0
       i64.load
+      local.get $1
       i64.eq
      end
      br_if $__inlined_func$~lib/set/Set<i64>#find
@@ -11544,6 +11408,8 @@
      local.tee $6
      i64.store
      local.get $2
+     local.get $7
+     local.get $1
      local.get $6
      i32.wrap_i64
      i32.const -1028477379
@@ -11584,11 +11450,9 @@
      i32.shr_u
      local.get $9
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $7
      i32.add
      local.tee $9
      i32.load
@@ -11708,9 +11572,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $2
       i64.load
+      local.get $1
       i64.eq
      end
      br_if $__inlined_func$~lib/set/Set<i64>#find
@@ -11758,7 +11622,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $2
    local.get $0
    local.get $0
    i32.load offset=16
@@ -11769,7 +11632,6 @@
    local.get $4
    i32.const 4
    i32.shl
-   local.get $2
    i32.add
    local.tee $2
    local.get $1
@@ -11783,9 +11645,9 @@
    local.get $2
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -11798,50 +11660,11 @@
    i32.store
   end
  )
- (func $~lib/array/Array<i64>#__set (param $0 i32) (param $1 i32) (param $2 i64)
-  (local $3 i32)
-  local.get $0
-  i32.load offset=12
-  local.get $1
-  i32.le_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 1248
-    i32.const 1616
-    i32.const 130
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   local.tee $3
-   i32.const 3
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $3
-   i32.store offset=12
-  end
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 3
-  i32.shl
-  i32.add
-  local.get $2
-  i64.store
- )
  (func $~lib/array/Array<i64>#__get (param $0 i32) (param $1 i32) (result i64)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -11923,9 +11746,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $2
       i64.load
+      local.get $1
       i64.eq
      end
      br_if $__inlined_func$~lib/set/Set<i64>#find
@@ -12267,10 +12090,10 @@
     local.get $4
     i32.lt_s
     if
+     local.get $6
      local.get $3
      i32.const 4
      i32.shl
-     local.get $6
      i32.add
      local.tee $7
      i32.load offset=8
@@ -12279,10 +12102,14 @@
      i32.eqz
      if
       local.get $10
+      i32.load offset=4
       local.get $0
+      i32.const 3
+      i32.shl
+      i32.add
       local.get $7
       i64.load
-      call $~lib/array/Array<i64>#__set
+      i64.store
       local.get $0
       i32.const 1
       i32.add
@@ -12298,7 +12125,6 @@
    local.get $10
    local.get $0
    i32.const 3
-   i32.const 0
    call $~lib/array/ensureCapacity
    local.get $10
    local.get $0
@@ -12317,10 +12143,10 @@
    i32.const 0
    local.set $0
    loop $for-loop|2
+    local.get $0
     local.get $10
     i32.load offset=12
-    local.get $0
-    i32.gt_s
+    i32.lt_s
     if
      local.get $2
      local.get $10
@@ -12568,9 +12394,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $0
       i64.load
+      local.get $1
       i64.eq
      end
      br_if $__inlined_func$~lib/set/Set<u64>#find
@@ -12666,6 +12492,8 @@
      local.tee $6
      i64.store
      local.get $2
+     local.get $7
+     local.get $1
      local.get $6
      i32.wrap_i64
      i32.const -1028477379
@@ -12706,11 +12534,9 @@
      i32.shr_u
      local.get $9
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $7
      i32.add
      local.tee $9
      i32.load
@@ -12830,9 +12656,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $2
       i64.load
+      local.get $1
       i64.eq
      end
      br_if $__inlined_func$~lib/set/Set<u64>#find
@@ -12880,7 +12706,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $2
    local.get $0
    local.get $0
    i32.load offset=16
@@ -12891,7 +12716,6 @@
    local.get $4
    i32.const 4
    i32.shl
-   local.get $2
    i32.add
    local.tee $2
    local.get $1
@@ -12905,9 +12729,9 @@
    local.get $2
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -12921,10 +12745,10 @@
   end
  )
  (func $~lib/array/Array<u64>#__get (param $0 i32) (param $1 i32) (result i64)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -13006,9 +12830,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $2
       i64.load
+      local.get $1
       i64.eq
      end
      br_if $__inlined_func$~lib/set/Set<u64>#find
@@ -13313,10 +13137,10 @@
     local.get $4
     i32.lt_s
     if
+     local.get $6
      local.get $3
      i32.const 4
      i32.shl
-     local.get $6
      i32.add
      local.tee $7
      i32.load offset=8
@@ -13325,10 +13149,14 @@
      i32.eqz
      if
       local.get $10
+      i32.load offset=4
       local.get $0
+      i32.const 3
+      i32.shl
+      i32.add
       local.get $7
       i64.load
-      call $~lib/array/Array<i64>#__set
+      i64.store
       local.get $0
       i32.const 1
       i32.add
@@ -13344,7 +13172,6 @@
    local.get $10
    local.get $0
    i32.const 3
-   i32.const 0
    call $~lib/array/ensureCapacity
    local.get $10
    local.get $0
@@ -13363,10 +13190,10 @@
    i32.const 0
    local.set $0
    loop $for-loop|2
+    local.get $0
     local.get $10
     i32.load offset=12
-    local.get $0
-    i32.gt_s
+    i32.lt_s
     if
      local.get $2
      local.get $10
@@ -13628,6 +13455,8 @@
      local.tee $4
      f32.store
      local.get $2
+     local.get $7
+     local.get $1
      local.get $4
      i32.reinterpret_f32
      i32.const -1028477379
@@ -13657,11 +13486,9 @@
      i32.const 16
      i32.shr_u
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $7
      i32.add
      local.tee $9
      i32.load
@@ -13770,9 +13597,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $2
       f32.load
+      local.get $1
       f32.eq
      end
      br_if $__inlined_func$~lib/set/Set<f32>#find
@@ -13820,7 +13647,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $2
    local.get $0
    local.get $0
    i32.load offset=16
@@ -13831,7 +13657,6 @@
    local.get $4
    i32.const 3
    i32.shl
-   local.get $2
    i32.add
    local.tee $2
    local.get $1
@@ -13845,9 +13670,9 @@
    local.get $2
    local.get $0
    i32.load
+   local.get $3
    local.get $0
    i32.load offset=4
-   local.get $3
    i32.and
    i32.const 2
    i32.shl
@@ -13861,10 +13686,10 @@
   end
  )
  (func $~lib/array/Array<f32>#__get (param $0 i32) (param $1 i32) (result f32)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -13935,9 +13760,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $2
       f32.load
+      local.get $1
       f32.eq
      end
      br_if $__inlined_func$~lib/set/Set<f32>#find
@@ -14015,7 +13840,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -14026,24 +13850,24 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $1
    i64.const 0
    i64.store
-   local.get $0
+   local.get $1
    i32.const 0
    i32.store offset=8
-   local.get $0
+   local.get $1
    call $~lib/set/Set<f32>#constructor
-   local.tee $11
+   local.tee $3
    i32.store
    loop $for-loop|0
     local.get $2
     f32.const 100
     f32.lt
     if
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -14055,22 +13879,22 @@
      i32.rotl
      i32.const 668265263
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 15
      i32.shr_u
      i32.xor
      i32.const -2048144777
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 13
      i32.shr_u
      i32.xor
      i32.const -1028477379
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 16
      i32.shr_u
      i32.xor
@@ -14079,36 +13903,36 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find
       loop $while-continue|0
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
-        local.tee $0
+        local.tee $5
         i32.const 1
         i32.and
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find
-        local.get $0
+        local.get $5
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|0
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      if
       i32.const 0
       i32.const 1568
@@ -14117,12 +13941,12 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $11
+     local.get $3
      local.get $2
      call $~lib/set/Set<f32>#add
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -14134,22 +13958,22 @@
      i32.rotl
      i32.const 668265263
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 15
      i32.shr_u
      i32.xor
      i32.const -2048144777
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 13
      i32.shr_u
      i32.xor
      i32.const -1028477379
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 16
      i32.shr_u
      i32.xor
@@ -14158,36 +13982,36 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find1
       loop $while-continue|02
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
-        local.tee $0
+        local.tee $5
         i32.const 1
         i32.and
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find1
-        local.get $0
+        local.get $5
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|02
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      i32.eqz
      if
       i32.const 0
@@ -14204,7 +14028,7 @@
      br $for-loop|0
     end
    end
-   local.get $11
+   local.get $3
    i32.load offset=20
    i32.const 100
    i32.ne
@@ -14223,9 +14047,9 @@
     f32.const 100
     f32.lt
     if
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -14237,22 +14061,22 @@
      i32.rotl
      i32.const 668265263
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 15
      i32.shr_u
      i32.xor
      i32.const -2048144777
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 13
      i32.shr_u
      i32.xor
      i32.const -1028477379
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 16
      i32.shr_u
      i32.xor
@@ -14261,36 +14085,36 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find4
       loop $while-continue|05
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
-        local.tee $0
+        local.tee $5
         i32.const 1
         i32.and
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find4
-        local.get $0
+        local.get $5
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|05
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      i32.eqz
      if
       i32.const 0
@@ -14300,12 +14124,12 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $11
+     local.get $3
      local.get $2
      call $~lib/set/Set<f32>#add
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -14317,22 +14141,22 @@
      i32.rotl
      i32.const 668265263
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 15
      i32.shr_u
      i32.xor
      i32.const -2048144777
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 13
      i32.shr_u
      i32.xor
      i32.const -1028477379
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 16
      i32.shr_u
      i32.xor
@@ -14341,36 +14165,36 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find7
       loop $while-continue|08
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
-        local.tee $0
+        local.tee $5
         i32.const 1
         i32.and
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find7
-        local.get $0
+        local.get $5
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|08
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      i32.eqz
      if
       i32.const 0
@@ -14387,7 +14211,7 @@
      br $for-loop|1
     end
    end
-   local.get $11
+   local.get $3
    i32.load offset=20
    i32.const 100
    i32.ne
@@ -14409,16 +14233,16 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
+   local.tee $9
    i32.const 0
    i32.store
-   local.get $11
-   i32.load offset=8
-   local.set $4
-   local.get $11
-   i32.load offset=16
-   local.set $7
    local.get $3
+   i32.load offset=8
+   local.set $1
+   local.get $3
+   i32.load offset=16
+   local.set $5
+   local.get $9
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -14427,28 +14251,28 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $6
    i64.const 0
    i64.store
-   local.get $0
+   local.get $6
    i32.const 16
    i32.const 20
    call $~lib/rt/itcms/__new
-   local.tee $6
+   local.tee $10
    i32.store
-   local.get $6
+   local.get $10
    i32.const 0
    i32.store
-   local.get $6
+   local.get $10
    i32.const 0
    i32.store offset=4
-   local.get $6
+   local.get $10
    i32.const 0
    i32.store offset=8
-   local.get $6
+   local.get $10
    i32.const 0
    i32.store offset=12
-   local.get $7
+   local.get $5
    i32.const 268435455
    i32.gt_u
    if
@@ -14460,139 +14284,109 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $7
+   local.get $5
    i32.const 8
-   local.get $7
+   local.get $5
    i32.const 8
    i32.gt_u
    select
    i32.const 2
    i32.shl
-   local.tee $0
+   local.tee $6
    i32.const 0
    call $~lib/rt/itcms/__new
-   local.tee $5
+   local.tee $7
    i32.store offset=4
-   local.get $6
-   local.get $5
+   local.get $10
+   local.get $7
    i32.store
-   local.get $5
+   local.get $7
    if
-    local.get $6
-    local.get $5
+    local.get $10
+    local.get $7
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
-   local.get $6
-   local.get $5
-   i32.store offset=4
-   local.get $6
-   local.get $0
-   i32.store offset=8
-   local.get $6
+   local.get $10
    local.get $7
+   i32.store offset=4
+   local.get $10
+   local.get $6
+   i32.store offset=8
+   local.get $10
+   local.get $5
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $3
-   local.get $6
+   local.get $9
+   local.get $10
    i32.store
    loop $for-loop|02
-    local.get $7
-    local.get $9
-    i32.gt_s
+    local.get $4
+    local.get $5
+    i32.lt_s
     if
-     local.get $9
+     local.get $1
+     local.get $4
      i32.const 3
      i32.shl
-     local.get $4
      i32.add
-     local.tee $0
+     local.tee $6
      i32.load offset=4
      i32.const 1
      i32.and
      i32.eqz
      if
-      local.get $0
-      f32.load
-      local.set $2
-      local.get $1
-      local.tee $0
-      i32.const 1
-      i32.add
-      local.set $1
-      local.get $6
-      i32.load offset=12
-      local.get $0
-      i32.le_u
-      if
-       local.get $0
-       i32.const 0
-       i32.lt_s
-       if
-        i32.const 1248
-        i32.const 1616
-        i32.const 130
-        i32.const 22
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $6
-       local.get $0
-       i32.const 1
-       i32.add
-       local.tee $3
-       i32.const 2
-       i32.const 1
-       call $~lib/array/ensureCapacity
-       local.get $6
-       local.get $3
-       i32.store offset=12
-      end
-      local.get $6
+      local.get $10
       i32.load offset=4
       local.get $0
       i32.const 2
       i32.shl
       i32.add
-      local.get $2
+      local.get $6
+      f32.load
       f32.store
+      local.get $0
+      i32.const 1
+      i32.add
+      local.set $0
      end
-     local.get $9
+     local.get $4
      i32.const 1
      i32.add
-     local.set $9
+     local.set $4
      br $for-loop|02
     end
    end
-   local.get $6
-   local.get $1
+   local.get $10
+   local.get $0
    i32.const 2
-   i32.const 0
    call $~lib/array/ensureCapacity
-   local.get $6
-   local.get $1
+   local.get $10
+   local.get $0
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $8
-   local.get $6
+   local.get $10
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    call $~lib/set/Set<f32>#constructor
-   local.tee $3
+   local.tee $4
    i32.store offset=8
+   i32.const 0
+   local.set $0
    loop $for-loop|2
-    local.get $6
-    i32.load offset=12
+    local.get $0
     local.get $10
-    i32.gt_s
+    i32.load offset=12
+    i32.lt_s
     if
-     local.get $6
      local.get $10
+     local.get $0
      call $~lib/array/Array<f32>#__get
      local.tee $2
      i32.reinterpret_f32
@@ -14604,29 +14398,29 @@
      i32.rotl
      i32.const 668265263
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 15
      i32.shr_u
      i32.xor
      i32.const -2048144777
      i32.mul
-     local.tee $0
-     local.get $0
+     local.tee $1
+     local.get $1
      i32.const 13
      i32.shr_u
      i32.xor
      i32.const -1028477379
      i32.mul
-     local.set $0
-     local.get $11
+     local.set $1
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
-     local.get $0
-     local.get $0
+     local.get $1
      i32.const 16
      i32.shr_u
+     local.get $1
      i32.xor
      i32.and
      i32.const 2
@@ -14640,19 +14434,19 @@
        if
         local.get $1
         i32.load offset=4
-        local.tee $0
+        local.tee $5
         i32.const 1
         i32.and
         if (result i32)
          i32.const 0
         else
-         local.get $2
          local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find10
-        local.get $0
+        local.get $5
         i32.const -2
         i32.and
         local.set $1
@@ -14672,21 +14466,21 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $3
-     local.get $6
+     local.get $4
      local.get $10
+     local.get $0
      call $~lib/array/Array<f32>#__get
      call $~lib/set/Set<f32>#add
-     local.get $10
+     local.get $0
      i32.const 1
      i32.add
-     local.set $10
+     local.set $0
      br $for-loop|2
     end
    end
-   local.get $3
+   local.get $4
    i32.load offset=20
-   local.get $11
+   local.get $3
    i32.load offset=20
    i32.ne
    if
@@ -14704,9 +14498,9 @@
     f32.const 50
     f32.lt
     if
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -14742,12 +14536,12 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find13
       loop $while-continue|014
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
         local.tee $0
         i32.const 1
@@ -14755,23 +14549,23 @@
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find13
         local.get $0
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|014
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      i32.eqz
      if
       i32.const 0
@@ -14781,12 +14575,12 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $11
+     local.get $3
      local.get $2
      call $~lib/set/Set<f32>#delete
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -14822,12 +14616,12 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find16
       loop $while-continue|017
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
         local.tee $0
         i32.const 1
@@ -14835,23 +14629,23 @@
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find16
         local.get $0
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|017
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      if
       i32.const 0
       i32.const 1568
@@ -14867,7 +14661,7 @@
      br $for-loop|3
     end
    end
-   local.get $11
+   local.get $3
    i32.load offset=20
    i32.const 50
    i32.ne
@@ -14886,9 +14680,9 @@
     f32.const 50
     f32.lt
     if
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -14924,12 +14718,12 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find19
       loop $while-continue|020
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
         local.tee $0
         i32.const 1
@@ -14937,23 +14731,23 @@
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find19
         local.get $0
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|020
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      if
       i32.const 0
       i32.const 1568
@@ -14962,12 +14756,12 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $11
+     local.get $3
      local.get $2
      call $~lib/set/Set<f32>#add
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -15003,12 +14797,12 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find22
       loop $while-continue|023
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
         local.tee $0
         i32.const 1
@@ -15016,23 +14810,23 @@
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find22
         local.get $0
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|023
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      i32.eqz
      if
       i32.const 0
@@ -15042,12 +14836,12 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $11
+     local.get $3
      local.get $2
      call $~lib/set/Set<f32>#delete
-     local.get $11
+     local.get $3
      i32.load
-     local.get $11
+     local.get $3
      i32.load offset=4
      local.get $2
      i32.reinterpret_f32
@@ -15083,12 +14877,12 @@
      i32.shl
      i32.add
      i32.load
-     local.set $3
+     local.set $1
      block $__inlined_func$~lib/set/Set<f32>#find25
       loop $while-continue|026
-       local.get $3
+       local.get $1
        if
-        local.get $3
+        local.get $1
         i32.load offset=4
         local.tee $0
         i32.const 1
@@ -15096,23 +14890,23 @@
         if (result i32)
          i32.const 0
         else
-         local.get $2
-         local.get $3
+         local.get $1
          f32.load
+         local.get $2
          f32.eq
         end
         br_if $__inlined_func$~lib/set/Set<f32>#find25
         local.get $0
         i32.const -2
         i32.and
-        local.set $3
+        local.set $1
         br $while-continue|026
        end
       end
       i32.const 0
-      local.set $3
+      local.set $1
      end
-     local.get $3
+     local.get $1
      if
       i32.const 0
       i32.const 1568
@@ -15128,7 +14922,7 @@
      br $for-loop|4
     end
    end
-   local.get $11
+   local.get $3
    i32.load offset=20
    i32.const 50
    i32.ne
@@ -15140,9 +14934,9 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $11
+   local.get $3
    call $~lib/set/Set<i8>#clear
-   local.get $11
+   local.get $3
    i32.load offset=20
    if
     i32.const 0
@@ -15232,9 +15026,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $0
       f64.load
+      local.get $1
       f64.eq
      end
      br_if $__inlined_func$~lib/set/Set<f64>#find
@@ -15331,6 +15125,8 @@
      local.tee $5
      f64.store
      local.get $2
+     local.get $8
+     local.get $1
      local.get $5
      i64.reinterpret_f64
      local.tee $4
@@ -15373,11 +15169,9 @@
      i32.shr_u
      local.get $10
      i32.xor
-     local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $8
      i32.add
      local.tee $10
      i32.load
@@ -15500,9 +15294,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $2
       f64.load
+      local.get $1
       f64.eq
      end
      br_if $__inlined_func$~lib/set/Set<f64>#find
@@ -15550,7 +15344,6 @@
    end
    local.get $0
    i32.load offset=8
-   local.set $2
    local.get $0
    local.get $0
    i32.load offset=16
@@ -15561,7 +15354,6 @@
    local.get $5
    i32.const 4
    i32.shl
-   local.get $2
    i32.add
    local.tee $2
    local.get $1
@@ -15575,9 +15367,9 @@
    local.get $2
    local.get $0
    i32.load
+   local.get $4
    local.get $0
    i32.load offset=4
-   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -15591,10 +15383,10 @@
   end
  )
  (func $~lib/array/Array<f64>#__get (param $0 i32) (param $1 i32) (result f64)
+  local.get $1
   local.get $0
   i32.load offset=12
-  local.get $1
-  i32.le_u
+  i32.ge_u
   if
    i32.const 1248
    i32.const 1616
@@ -15679,9 +15471,9 @@
      if (result i32)
       i32.const 0
      else
-      local.get $1
       local.get $2
       f64.load
+      local.get $1
       f64.eq
      end
      br_if $__inlined_func$~lib/set/Set<f64>#find
@@ -15749,9 +15541,9 @@
  )
  (func $std/set/testNumeric<f64>
   (local $0 i32)
-  (local $1 i32)
+  (local $1 f64)
   (local $2 i32)
-  (local $3 f64)
+  (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -15759,7 +15551,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -15770,23 +15561,23 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $2
    i64.const 0
    i64.store
-   local.get $0
+   local.get $2
    i32.const 0
    i32.store offset=8
-   local.get $0
+   local.get $2
    call $~lib/set/Set<f64>#constructor
-   local.tee $10
+   local.tee $2
    i32.store
    loop $for-loop|0
-    local.get $3
+    local.get $1
     f64.const 100
     f64.lt
     if
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      if
       i32.const 0
@@ -15796,11 +15587,11 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#add
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      i32.eqz
      if
@@ -15811,14 +15602,14 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $3
+     local.get $1
      f64.const 1
      f64.add
-     local.set $3
+     local.set $1
      br $for-loop|0
     end
    end
-   local.get $10
+   local.get $2
    i32.load offset=20
    i32.const 100
    i32.ne
@@ -15831,14 +15622,14 @@
     unreachable
    end
    f64.const 50
-   local.set $3
+   local.set $1
    loop $for-loop|1
-    local.get $3
+    local.get $1
     f64.const 100
     f64.lt
     if
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      i32.eqz
      if
@@ -15849,11 +15640,11 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#add
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      i32.eqz
      if
@@ -15864,14 +15655,14 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $3
+     local.get $1
      f64.const 1
      f64.add
-     local.set $3
+     local.set $1
      br $for-loop|1
     end
    end
-   local.get $10
+   local.get $2
    i32.load offset=20
    i32.const 100
    i32.ne
@@ -15884,7 +15675,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $7
+   local.tee $5
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -15893,16 +15684,16 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
+   local.tee $9
    i32.const 0
    i32.store
-   local.get $10
+   local.get $2
    i32.load offset=8
    local.set $6
-   local.get $10
-   i32.load offset=16
-   local.set $8
    local.get $2
+   i32.load offset=16
+   local.set $4
+   local.get $9
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -15911,28 +15702,28 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $7
    i64.const 0
    i64.store
-   local.get $0
+   local.get $7
    i32.const 16
    i32.const 22
    call $~lib/rt/itcms/__new
-   local.tee $4
+   local.tee $10
    i32.store
-   local.get $4
+   local.get $10
    i32.const 0
    i32.store
-   local.get $4
+   local.get $10
    i32.const 0
    i32.store offset=4
-   local.get $4
+   local.get $10
    i32.const 0
    i32.store offset=8
-   local.get $4
+   local.get $10
    i32.const 0
    i32.store offset=12
-   local.get $8
+   local.get $4
    i32.const 134217727
    i32.gt_u
    if
@@ -15944,140 +15735,110 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $8
+   local.get $4
    i32.const 8
-   local.get $8
+   local.get $4
    i32.const 8
    i32.gt_u
    select
    i32.const 3
    i32.shl
-   local.tee $0
+   local.tee $7
    i32.const 0
    call $~lib/rt/itcms/__new
-   local.tee $5
+   local.tee $8
    i32.store offset=4
-   local.get $4
-   local.get $5
+   local.get $10
+   local.get $8
    i32.store
-   local.get $5
+   local.get $8
    if
-    local.get $4
-    local.get $5
+    local.get $10
+    local.get $8
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
-   local.get $4
-   local.get $5
-   i32.store offset=4
-   local.get $4
-   local.get $0
-   i32.store offset=8
-   local.get $4
+   local.get $10
    local.get $8
+   i32.store offset=4
+   local.get $10
+   local.get $7
+   i32.store offset=8
+   local.get $10
+   local.get $4
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $2
-   local.get $4
+   local.get $9
+   local.get $10
    i32.store
    loop $for-loop|02
-    local.get $8
-    local.get $9
-    i32.gt_s
+    local.get $3
+    local.get $4
+    i32.lt_s
     if
-     local.get $9
+     local.get $6
+     local.get $3
      i32.const 4
      i32.shl
-     local.get $6
      i32.add
-     local.tee $0
+     local.tee $7
      i32.load offset=8
      i32.const 1
      i32.and
      i32.eqz
      if
-      local.get $0
-      f64.load
-      local.set $3
-      local.get $1
-      local.tee $0
-      i32.const 1
-      i32.add
-      local.set $1
-      local.get $4
-      i32.load offset=12
-      local.get $0
-      i32.le_u
-      if
-       local.get $0
-       i32.const 0
-       i32.lt_s
-       if
-        i32.const 1248
-        i32.const 1616
-        i32.const 130
-        i32.const 22
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $4
-       local.get $0
-       i32.const 1
-       i32.add
-       local.tee $2
-       i32.const 3
-       i32.const 1
-       call $~lib/array/ensureCapacity
-       local.get $4
-       local.get $2
-       i32.store offset=12
-      end
-      local.get $4
+      local.get $10
       i32.load offset=4
       local.get $0
       i32.const 3
       i32.shl
       i32.add
-      local.get $3
+      local.get $7
+      f64.load
       f64.store
+      local.get $0
+      i32.const 1
+      i32.add
+      local.set $0
      end
-     local.get $9
+     local.get $3
      i32.const 1
      i32.add
-     local.set $9
+     local.set $3
      br $for-loop|02
     end
    end
-   local.get $4
-   local.get $1
+   local.get $10
+   local.get $0
    i32.const 3
-   i32.const 0
    call $~lib/array/ensureCapacity
-   local.get $4
-   local.get $1
+   local.get $10
+   local.get $0
    i32.store offset=12
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $7
-   local.get $4
+   local.get $5
+   local.get $10
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    call $~lib/set/Set<f64>#constructor
-   local.tee $0
+   local.tee $3
    i32.store offset=8
+   i32.const 0
+   local.set $0
    loop $for-loop|2
-    local.get $4
+    local.get $0
+    local.get $10
     i32.load offset=12
-    local.get $11
-    i32.gt_s
+    i32.lt_s
     if
+     local.get $2
      local.get $10
-     local.get $4
-     local.get $11
+     local.get $0
      call $~lib/array/Array<f64>#__get
      call $~lib/set/Set<f64>#has
      i32.eqz
@@ -16089,21 +15850,21 @@
       call $~lib/builtins/abort
       unreachable
      end
+     local.get $3
+     local.get $10
      local.get $0
-     local.get $4
-     local.get $11
      call $~lib/array/Array<f64>#__get
      call $~lib/set/Set<f64>#add
-     local.get $11
+     local.get $0
      i32.const 1
      i32.add
-     local.set $11
+     local.set $0
      br $for-loop|2
     end
    end
-   local.get $0
+   local.get $3
    i32.load offset=20
-   local.get $10
+   local.get $2
    i32.load offset=20
    i32.ne
    if
@@ -16115,14 +15876,14 @@
     unreachable
    end
    f64.const 0
-   local.set $3
+   local.set $1
    loop $for-loop|3
-    local.get $3
+    local.get $1
     f64.const 50
     f64.lt
     if
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      i32.eqz
      if
@@ -16133,11 +15894,11 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#delete
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      if
       i32.const 0
@@ -16147,14 +15908,14 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $3
+     local.get $1
      f64.const 1
      f64.add
-     local.set $3
+     local.set $1
      br $for-loop|3
     end
    end
-   local.get $10
+   local.get $2
    i32.load offset=20
    i32.const 50
    i32.ne
@@ -16167,14 +15928,14 @@
     unreachable
    end
    f64.const 0
-   local.set $3
+   local.set $1
    loop $for-loop|4
-    local.get $3
+    local.get $1
     f64.const 50
     f64.lt
     if
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      if
       i32.const 0
@@ -16184,11 +15945,11 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#add
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      i32.eqz
      if
@@ -16199,11 +15960,11 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#delete
-     local.get $10
-     local.get $3
+     local.get $2
+     local.get $1
      call $~lib/set/Set<f64>#has
      if
       i32.const 0
@@ -16213,14 +15974,14 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $3
+     local.get $1
      f64.const 1
      f64.add
-     local.set $3
+     local.set $1
      br $for-loop|4
     end
    end
-   local.get $10
+   local.get $2
    i32.load offset=20
    i32.const 50
    i32.ne
@@ -16232,9 +15993,9 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $10
+   local.get $2
    call $~lib/set/Set<i64>#clear
-   local.get $10
+   local.get $2
    i32.load offset=20
    if
     i32.const 0

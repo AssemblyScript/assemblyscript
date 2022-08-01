@@ -36,49 +36,52 @@ export enum CommonFlags {
   GET = 1 << 11,
   /** Has a `set` modifier. */
   SET = 1 << 12,
+  /** Has a `override` modifier.  */
+  OVERRIDE = 1 << 13,
+
   /** Has a definite assignment assertion `!` as in `x!: i32;`. */
-  DEFINITELY_ASSIGNED = 1 << 13,
+  DEFINITELY_ASSIGNED = 1 << 14,
 
   // Extended modifiers usually derived from basic modifiers
 
   /** Is ambient, that is either declared or nested in a declared element. */
-  AMBIENT = 1 << 14,
+  AMBIENT = 1 << 15,
   /** Is generic. */
-  GENERIC = 1 << 15,
+  GENERIC = 1 << 16,
   /** Is part of a generic context. */
-  GENERIC_CONTEXT = 1 << 16,
+  GENERIC_CONTEXT = 1 << 17,
   /** Is an instance member. */
-  INSTANCE = 1 << 17,
+  INSTANCE = 1 << 18,
   /** Is a constructor. */
-  CONSTRUCTOR = 1 << 18,
+  CONSTRUCTOR = 1 << 19,
   /** Is a module export. */
-  MODULE_EXPORT = 1 << 19,
+  MODULE_EXPORT = 1 << 20,
   /** Is a module import. */
-  MODULE_IMPORT = 1 << 20,
+  MODULE_IMPORT = 1 << 21,
 
   // Compilation states
 
   /** Is resolved. */
-  RESOLVED = 1 << 21,
+  RESOLVED = 1 << 22,
   /** Is compiled. */
-  COMPILED = 1 << 22,
+  COMPILED = 1 << 23,
   /** Did error. */
-  ERRORED = 1 << 23,
+  ERRORED = 1 << 24,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 24,
+  INLINED = 1 << 25,
   /** Is scoped. */
-  SCOPED = 1 << 25,
+  SCOPED = 1 << 26,
   /** Is a stub. */
-  STUB = 1 << 26,
+  STUB = 1 << 27,
   /** Is a virtual method. */
-  VIRTUAL = 1 << 27,
+  VIRTUAL = 1 << 28,
   /** Is (part of) a closure. */
-  CLOSURE = 1 << 28,
+  CLOSURE = 1 << 29,
 
   // Other
 
   /** Is quoted. */
-  QUOTED = 1 << 29
+  QUOTED = 1 << 30
 }
 
 /** Path delimiter inserted between file system levels. */
@@ -207,6 +210,7 @@ export namespace CommonNames {
   export const I31ref = "I31ref";
   export const Dataref = "Dataref";
   export const String = "String";
+  export const RegExp = "RegExp";
   export const Object = "Object";
   export const Array = "Array";
   export const StaticArray = "StaticArray";

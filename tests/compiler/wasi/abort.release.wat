@@ -31,10 +31,10 @@
    end
    unreachable
   end
+  local.get $0
   local.get $1
   i32.const 1
   i32.shl
-  local.get $0
   i32.add
   local.set $3
   local.get $2
@@ -83,11 +83,11 @@
       local.get $4
       i32.const 56320
       i32.lt_u
-      local.get $3
       local.get $0
       i32.const 2
       i32.add
-      i32.gt_u
+      local.get $3
+      i32.lt_u
       i32.and
       local.get $4
       i32.const 63488

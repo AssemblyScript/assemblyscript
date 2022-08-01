@@ -71,12 +71,12 @@
      f64.div
      br $__inlined_func$~lib/math/NativeMath.mod
     end
-    local.get $5
     local.get $7
     i64.const 1
     i64.shl
     local.tee $3
-    i64.ge_u
+    local.get $5
+    i64.le_u
     if
      local.get $0
      local.get $3
@@ -331,12 +331,12 @@
      f32.div
      br $__inlined_func$~lib/math/NativeMathf.mod
     end
-    local.get $4
     local.get $6
     i32.const 1
     i32.shl
     local.tee $3
-    i32.ge_u
+    local.get $4
+    i32.le_u
     if
      local.get $0
      local.get $3

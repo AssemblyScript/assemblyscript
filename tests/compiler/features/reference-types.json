@@ -1,7 +1,6 @@
 {
   "features": [
-    "reference-types",
-    "gc"
+    "reference-types"
   ],
   "asc_flags": [
   ]

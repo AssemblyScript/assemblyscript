@@ -1862,6 +1862,7 @@ export class Parser extends DiagnosticEmitter {
     //   'declare'?
     //   ('public' | 'private' | 'protected')?
     //   ('static' | 'abstract')?
+    //   'override'?
     //   'readonly'?
     //   ('get' | 'set')?
     //   Identifier ...
@@ -1991,6 +1992,22 @@ export class Parser extends DiagnosticEmitter {
       if (parent.flags & CommonFlags.GENERIC) flags |= CommonFlags.GENERIC_CONTEXT;
     }
 
+    var overrideStart = 0;
+    var overrideEnd = 0;
+    if (tn.skip(Token.OVERRIDE)) {
+      if (isInterface || parent.extendsType == null) {
+        this.error(
+          DiagnosticCode._0_modifier_cannot_be_used_here,
+          tn.range(), "override"
+        );
+      } else {
+        flags |= CommonFlags.OVERRIDE;
+        overrideStart = tn.tokenPos;
+        overrideEnd = tn.pos;
+      }
+      if (!startPos) startPos = tn.tokenPos;
+    }
+
     var readonlyStart = 0;
     var readonlyEnd = 0;
     if (tn.peek() == Token.READONLY) {
@@ -2095,7 +2112,7 @@ export class Parser extends DiagnosticEmitter {
         } else if (flags & CommonFlags.PRIVATE) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "protected"
+            tn.range(accessStart, accessEnd), "private"
           ); // recoverable
         }
         if (flags & CommonFlags.STATIC) {
@@ -2103,6 +2120,12 @@ export class Parser extends DiagnosticEmitter {
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(staticStart, staticEnd), "static"
           ); // recoverable
+        }
+        if (flags & CommonFlags.OVERRIDE) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            tn.range(overrideStart, overrideEnd), "override"
+          );
         }
         if (flags & CommonFlags.ABSTRACT) {
           this.error(
@@ -2483,8 +2506,16 @@ export class Parser extends DiagnosticEmitter {
         );
         while (!tn.skip(Token.CLOSEBRACE)) {
           let member = this.parseTopLevelStatement(tn, declaration);
-          if (member) members.push(member);
-          else {
+          if (member) {
+            if (member.kind == NodeKind.EXPORT) {
+              this.error(
+                DiagnosticCode.A_default_export_can_only_be_used_in_a_module,
+                member.range,
+              );
+              return null;
+            }
+            members.push(member);
+          } else {
             this.skipStatement(tn);
             if (tn.skip(Token.ENDOFFILE)) {
               this.error(
@@ -3478,6 +3509,40 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  private getRecursiveDepthForTypeDeclaration(
+    identifierName: string,
+    type: TypeNode,
+    depth: i32 = 0
+  ): i32 {
+    switch (type.kind) {
+      case NodeKind.NAMEDTYPE: {
+        let typeArguments = (<NamedTypeNode>type).typeArguments;
+        if (typeArguments) {
+          for (let i = 0, k = typeArguments.length; i < k; i++) {
+            let res = this.getRecursiveDepthForTypeDeclaration(identifierName, typeArguments[i], depth + 1);
+            if (res != -1) return res;
+          }
+        }
+        if ((<NamedTypeNode>type).name.identifier.text == identifierName) {
+          return depth;
+        }
+        break;
+      }
+      case NodeKind.FUNCTIONTYPE: {
+        let fnType = <FunctionTypeNode>type;
+        let res = this.getRecursiveDepthForTypeDeclaration(identifierName, fnType.returnType, depth + 1);
+        if (res != -1) return res;
+        let params = fnType.parameters;
+        for (let i = 0, k = params.length; i < k; i++) {
+          res = this.getRecursiveDepthForTypeDeclaration(identifierName, params[i].type, depth + 1);
+          if (res != -1) return res;
+        }
+        break;
+      }
+    }
+    return -1;
+  }
+
   parseTypeDeclaration(
     tn: Tokenizer,
     flags: CommonFlags,
@@ -3499,6 +3564,21 @@ export class Parser extends DiagnosticEmitter {
         tn.skip(Token.BAR);
         let type = this.parseType(tn);
         if (!type) return null;
+        let depth = this.getRecursiveDepthForTypeDeclaration(name.text, type);
+        if (depth >= 0) {
+          if (depth == 0) {
+            this.error(
+              DiagnosticCode.Type_alias_0_circularly_references_itself,
+              tn.range(), name.text
+            );
+          } else {
+            this.error(
+              DiagnosticCode.Not_implemented_0,
+              tn.range(), "Recursion in type aliases"
+            );
+          }
+          return null;
+        }
         let ret = Node.createTypeDeclaration(
           name,
           decorators,
