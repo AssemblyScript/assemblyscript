@@ -1,6 +1,11 @@
 import { E_INVALIDDATE } from "util/error";
 import { Date as Date_binding } from "./bindings/dom";
-import { clock_time_get, clockid, tempbuf } from "./bindings/wasi";
+import {
+  clockid,
+  clock_time_get,
+  errnoToString,
+  tempbuf
+} from "./bindings/wasi";
 
 // @ts-ignore: decorator
 @inline const
@@ -36,7 +41,11 @@ export class Date {
   @inline static now(): i64 {
     if (isDefined(ASC_WASI)) {
       let err = clock_time_get(clockid.REALTIME, 1000000, tempbuf);
-      if (err) unreachable();
+      if (ASC_NO_ASSERT) {
+        if (err) unreachable();
+      } else {
+        if (err) throw new Error(errnoToString(err));
+      }
       return load<u64>(tempbuf) / 1000000;
     } else {
       return <i64>Date_binding.now();
