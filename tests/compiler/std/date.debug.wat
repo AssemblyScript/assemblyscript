@@ -372,6 +372,14 @@
   i32.const 16
   i32.shr_u
   local.set $12
+  local.get $10
+  i32.const 65535
+  i32.and
+  i32.const 2141
+  i32.div_s
+  i32.const 1
+  i32.add
+  global.set $~lib/date/_day
   local.get $9
   i32.const 306
   i32.ge_u
@@ -385,14 +393,6 @@
    i32.add
    local.set $11
   end
-  local.get $10
-  i32.const 65535
-  i32.and
-  i32.const 2141
-  i32.div_s
-  i32.const 1
-  i32.add
-  global.set $~lib/date/_day
   local.get $12
   global.set $~lib/date/_month
   local.get $11

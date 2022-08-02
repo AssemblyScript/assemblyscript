@@ -329,18 +329,15 @@ function invalidDate(millis: i64): bool {
 // Paper: https://arxiv.org/pdf/2102.06959.pdf
 function dateFromEpoch(ms: i64): i32 {
   var da = (<i32>floorDiv(ms, MILLIS_PER_DAY) * 4 + EPOCH_OFFSET * 4) | 3;
-  var q0 = <u32>floorDiv(da, DAYS_PER_EPOCH); // [0, 146096]
+  var q0 = floorDiv(da, DAYS_PER_EPOCH); // [0, 146096]
   var r1 = <u32>da - q0 * DAYS_PER_EPOCH;
-  var u1 = <u64>(r1 | 3) * 2939745;
+  var u1 = u64(r1 | 3) * 2939745;
   var dm1 = <u32>u1 / 11758980;
   var n1 = 2141 * dm1 + 197913;
-  var year = 100 * q0 + <u32>(u1 >>> 32);
+  var year = 100 * q0 + i32(u1 >>> 32);
   var mo = n1 >>> 16;
-  if (dm1 >= 306) {
-    mo -= 12;
-    ++year;
-  }
   _day = (n1 & 0xFFFF) / 2141 + 1; // [1, 31]
+  if (dm1 >= 306) { mo -= 12; ++year; }
   _month = mo; // [1, 12]
   return year;
 }
