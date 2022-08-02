@@ -2,7 +2,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_f64 (func (result f64)))
  (type $none_=>_none (func))
- (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
@@ -19,7 +19,7 @@
    loop $do-loop|0
     i32.const 1024
     i32.const 8
-    call $~lib/bindings/wasi_snapshot_preview1/random_get
+    call $~lib/bindings/internal/wasi_snapshot_preview1/random_get
     drop
     i32.const 1024
     i64.load

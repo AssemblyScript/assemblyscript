@@ -12,8 +12,8 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
- (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
+ (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/internal/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit (param i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
@@ -154,7 +154,7 @@
   local.get $1
   i32.store
  )
- (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
+ (func $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
@@ -649,7 +649,7 @@
   end
   unreachable
  )
- (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
+ (func $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store offset=4
@@ -661,7 +661,7 @@
   (local $7 i32)
   i32.const 0
   i32.const 12
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf
   i32.const 12
   local.set $4
   local.get $4
@@ -801,15 +801,15 @@
   local.get $4
   i32.const 12
   i32.sub
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
   i32.const 2
   i32.const 0
   i32.const 1
   i32.const 8
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   i32.const 255
-  call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+  call $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit
  )
  (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
   local.get $0
@@ -3734,18 +3734,18 @@
   local.set $11
   local.get $9
   local.get $11
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf
   local.get $11
   i64.const 9071406388179572
   i64.store
   local.get $9
   i32.const 7
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
   i32.const 2
   local.get $9
   i32.const 1
   local.get $10
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   local.get $9
   local.get $0
@@ -3757,12 +3757,12 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/string/String.UTF8.encodeUnsafe@varargs
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
   i32.const 2
   local.get $9
   i32.const 1
   local.get $10
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   local.get $1
   if
@@ -3787,12 +3787,12 @@
    i32.const 0
    call $~lib/string/String.UTF8.encodeUnsafe@varargs
    i32.add
-   call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+   call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
    i32.const 2
    local.get $9
    i32.const 1
    local.get $10
-   call $~lib/bindings/wasi_snapshot_preview1/fd_write
+   call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
    drop
    local.get $1
    i32.const 1
@@ -3811,12 +3811,12 @@
     i32.const 0
     call $~lib/string/String.UTF8.encodeUnsafe@varargs
     i32.add
-    call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+    call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
     i32.const 2
     local.get $9
     i32.const 1
     local.get $10
-    call $~lib/bindings/wasi_snapshot_preview1/fd_write
+    call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
     drop
     local.get $1
     i32.const 2
@@ -3835,12 +3835,12 @@
      i32.const 0
      call $~lib/string/String.UTF8.encodeUnsafe@varargs
      i32.add
-     call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+     call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
      i32.const 2
      local.get $9
      i32.const 1
      local.get $10
-     call $~lib/bindings/wasi_snapshot_preview1/fd_write
+     call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
      drop
      local.get $1
      i32.const 3
@@ -3859,12 +3859,12 @@
       i32.const 0
       call $~lib/string/String.UTF8.encodeUnsafe@varargs
       i32.add
-      call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+      call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
       i32.const 2
       local.get $9
       i32.const 1
       local.get $10
-      call $~lib/bindings/wasi_snapshot_preview1/fd_write
+      call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
       drop
       local.get $1
       i32.const 4
@@ -3883,12 +3883,12 @@
        i32.const 0
        call $~lib/string/String.UTF8.encodeUnsafe@varargs
        i32.add
-       call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+       call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
        i32.const 2
        local.get $9
        i32.const 1
        local.get $10
-       call $~lib/bindings/wasi_snapshot_preview1/fd_write
+       call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
        drop
       end
      end
@@ -3904,12 +3904,12 @@
   i32.store8
   local.get $9
   i32.const 1
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
   i32.const 2
   local.get $9
   i32.const 1
   local.get $10
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   local.get $9
   call $~lib/rt/tlsf/__free

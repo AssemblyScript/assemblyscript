@@ -12,9 +12,9 @@
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $none_=>_i64 (func (result i64)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
- (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
- (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/internal/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit (param i32)))
+ (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
@@ -803,10 +803,10 @@
   i32.const 0
   i32.const 1
   i32.const 8
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   i32.const 255
-  call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+  call $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1840,13 +1840,13 @@
     i32.const 1136
     i32.const 1
     i32.const 1148
-    call $~lib/bindings/wasi_snapshot_preview1/fd_write
+    call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
     local.tee $0
     i32.const 65535
     i32.and
     if
      local.get $0
-     call $~lib/bindings/wasi_errors/errnoToString
+     call $~lib/bindings/internal/wasi_errors/errnoToString
      i32.const 4608
      i32.const 211
      i32.const 16
@@ -1968,7 +1968,7 @@
   i32.const 1136
   i32.const 1
   i32.const 1144
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   local.set $0
   local.get $1
   call $~lib/rt/tlsf/__free
@@ -1977,7 +1977,7 @@
   i32.and
   if
    local.get $0
-   call $~lib/bindings/wasi_errors/errnoToString
+   call $~lib/bindings/internal/wasi_errors/errnoToString
    i32.const 4608
    i32.const 222
    i32.const 12
@@ -2715,13 +2715,13 @@
   i32.const 1
   i64.const 0
   i32.const 1136
-  call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
+  call $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get
   local.tee $0
   i32.const 65535
   i32.and
   if
    local.get $0
-   call $~lib/bindings/wasi_errors/errnoToString
+   call $~lib/bindings/internal/wasi_errors/errnoToString
    i32.const 4608
    i32.const 75
    i32.const 16
@@ -3677,7 +3677,7 @@
   call $~lib/wasi/index/abort
   unreachable
  )
- (func $~lib/bindings/wasi_errors/errnoToString (param $0 i32) (result i32)
+ (func $~lib/bindings/internal/wasi_errors/errnoToString (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4

@@ -11,14 +11,14 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
- (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
- (import "wasi_snapshot_preview1" "args_sizes_get" (func $~lib/bindings/wasi_snapshot_preview1/args_sizes_get (param i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "args_get" (func $~lib/bindings/wasi_snapshot_preview1/args_get (param i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "environ_sizes_get" (func $~lib/bindings/wasi_snapshot_preview1/environ_sizes_get (param i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "environ_get" (func $~lib/bindings/wasi_snapshot_preview1/environ_get (param i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
- (import "wasi_snapshot_preview1" "fd_read" (func $~lib/bindings/wasi_snapshot_preview1/fd_read (param i32 i32 i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/internal/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit (param i32)))
+ (import "wasi_snapshot_preview1" "args_sizes_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/args_sizes_get (param i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "args_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/args_get (param i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "environ_sizes_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/environ_sizes_get (param i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "environ_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/environ_get (param i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "fd_read" (func $~lib/bindings/internal/wasi_snapshot_preview1/fd_read (param i32 i32 i32 i32) (result i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
@@ -794,10 +794,10 @@
   i32.const 0
   i32.const 1
   i32.const 8
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   i32.const 255
-  call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+  call $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1831,13 +1831,13 @@
     i32.const 1088
     i32.const 1
     i32.const 1100
-    call $~lib/bindings/wasi_snapshot_preview1/fd_write
+    call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
     local.tee $0
     i32.const 65535
     i32.and
     if
      local.get $0
-     call $~lib/bindings/wasi_errors/errnoToString
+     call $~lib/bindings/internal/wasi_errors/errnoToString
      i32.const 4560
      i32.const 211
      i32.const 16
@@ -1959,7 +1959,7 @@
   i32.const 1088
   i32.const 1
   i32.const 1096
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   local.set $1
   local.get $0
   call $~lib/rt/tlsf/__free
@@ -1968,7 +1968,7 @@
   i32.and
   if
    local.get $1
-   call $~lib/bindings/wasi_errors/errnoToString
+   call $~lib/bindings/internal/wasi_errors/errnoToString
    i32.const 4560
    i32.const 222
    i32.const 12
@@ -3211,7 +3211,7 @@
   global.set $~started
   call $start:std-wasi/process
  )
- (func $~lib/bindings/wasi_errors/errnoToString (param $0 i32) (result i32)
+ (func $~lib/bindings/internal/wasi_errors/errnoToString (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3392,13 +3392,13 @@
    i64.store offset=8
    i32.const 1088
    i32.const 1092
-   call $~lib/bindings/wasi_snapshot_preview1/environ_sizes_get
+   call $~lib/bindings/internal/wasi_snapshot_preview1/environ_sizes_get
    local.tee $0
    i32.const 65535
    i32.and
    if
     local.get $0
-    call $~lib/bindings/wasi_errors/errnoToString
+    call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 4560
     i32.const 114
     i32.const 14
@@ -3429,13 +3429,13 @@
    local.get $0
    local.get $1
    i32.add
-   call $~lib/bindings/wasi_snapshot_preview1/environ_get
+   call $~lib/bindings/internal/wasi_snapshot_preview1/environ_get
    local.tee $0
    i32.const 65535
    i32.and
    if
     local.get $0
-    call $~lib/bindings/wasi_errors/errnoToString
+    call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 4560
     i32.const 121
     i32.const 14
@@ -3726,13 +3726,13 @@
    i64.store
    i32.const 1088
    i32.const 1092
-   call $~lib/bindings/wasi_snapshot_preview1/args_sizes_get
+   call $~lib/bindings/internal/wasi_snapshot_preview1/args_sizes_get
    local.tee $3
    i32.const 65535
    i32.and
    if
     local.get $3
-    call $~lib/bindings/wasi_errors/errnoToString
+    call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 4560
     i32.const 89
     i32.const 14
@@ -3763,13 +3763,13 @@
    local.get $3
    local.get $6
    i32.add
-   call $~lib/bindings/wasi_snapshot_preview1/args_get
+   call $~lib/bindings/internal/wasi_snapshot_preview1/args_get
    local.tee $3
    i32.const 65535
    i32.and
    if
     local.get $3
-    call $~lib/bindings/wasi_errors/errnoToString
+    call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 4560
     i32.const 96
     i32.const 14
@@ -4055,13 +4055,13 @@
    i32.const 0
    i64.const 1000000
    i32.const 1088
-   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
+   call $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get
    local.tee $0
    i32.const 65535
    i32.and
    if
     local.get $0
-    call $~lib/bindings/wasi_errors/errnoToString
+    call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 4560
     i32.const 65
     i32.const 16
@@ -4269,13 +4269,13 @@
    i32.const 1
    i64.const 0
    i32.const 1088
-   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
+   call $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get
    local.tee $0
    i32.const 65535
    i32.and
    if
     local.get $0
-    call $~lib/bindings/wasi_errors/errnoToString
+    call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 4560
     i32.const 75
     i32.const 16
@@ -4452,7 +4452,7 @@
    i32.const 7664
    call $~lib/console/console.log
    i32.const 42
-   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+   call $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit
    i32.const 0
    call $~lib/arraybuffer/ArrayBuffer#constructor
    local.set $0
@@ -4474,13 +4474,13 @@
    i32.const 1088
    i32.const 1
    i32.const 1096
-   call $~lib/bindings/wasi_snapshot_preview1/fd_read
+   call $~lib/bindings/internal/wasi_snapshot_preview1/fd_read
    local.tee $0
    i32.const 65535
    i32.and
    if
     local.get $0
-    call $~lib/bindings/wasi_errors/errnoToString
+    call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 4560
     i32.const 173
     i32.const 14

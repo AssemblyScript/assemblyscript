@@ -7,8 +7,8 @@
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
+ (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/internal/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit (param i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
@@ -27,7 +27,7 @@
  (export "test" (func $wasi/abort/test))
  (export "memory" (memory $0))
  (export "_initialize" (func $~start))
- (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
+ (func $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
@@ -522,7 +522,7 @@
   end
   unreachable
  )
- (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
+ (func $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store offset=4
@@ -534,7 +534,7 @@
   (local $7 i32)
   i32.const 0
   i32.const 12
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf
   i32.const 12
   local.set $4
   local.get $4
@@ -674,15 +674,15 @@
   local.get $4
   i32.const 12
   i32.sub
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
   i32.const 2
   i32.const 0
   i32.const 1
   i32.const 8
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   i32.const 255
-  call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+  call $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit
  )
  (func $wasi/abort/test
   i32.const 0

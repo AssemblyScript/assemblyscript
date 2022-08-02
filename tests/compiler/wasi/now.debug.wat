@@ -10,9 +10,9 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i64 (func (result i64)))
- (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
- (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
+ (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/internal/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit (param i32)))
  (global $~lib/bindings/wasi/tempbuf i32 (i32.const 16))
  (global $~lib/native/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
@@ -20,7 +20,7 @@
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/bindings/wasi_errors/ERRNO_TO_STRING i32 (i32.const 3104))
+ (global $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING i32 (i32.const 3104))
  (global $~lib/memory/__data_end i32 (i32.const 3580))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19964))
  (global $~lib/memory/__heap_base i32 (i32.const 19964))
@@ -115,7 +115,7 @@
  (export "test_performance_now" (func $wasi/now/test_performance_now))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
+ (func $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
@@ -610,7 +610,7 @@
   end
   unreachable
  )
- (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
+ (func $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store offset=4
@@ -622,7 +622,7 @@
   (local $7 i32)
   i32.const 0
   i32.const 12
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf
   i32.const 12
   local.set $4
   local.get $4
@@ -762,15 +762,15 @@
   local.get $4
   i32.const 12
   i32.sub
-  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+  call $~lib/bindings/internal/wasi_snapshot_preview1/iovec#set:buf_len
   i32.const 2
   i32.const 0
   i32.const 1
   i32.const 8
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   i32.const 255
-  call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+  call $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit
  )
  (func $~lib/staticarray/StaticArray<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -788,7 +788,7 @@
    i32.const 0
    i64.const 1000000
    global.get $~lib/bindings/wasi/tempbuf
-   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
+   call $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get
    local.set $0
    i32.const 0
    drop
@@ -797,7 +797,7 @@
    i32.and
    if
     local.get $0
-    call $~lib/bindings/wasi_errors/errnoToString
+    call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 3488
     i32.const 47
     i32.const 18
@@ -818,7 +818,7 @@
   i32.const 1
   i64.const 1000
   global.get $~lib/bindings/wasi/tempbuf
-  call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
+  call $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get
   local.set $0
   i32.const 0
   drop
@@ -827,7 +827,7 @@
   i32.and
   if
    local.get $0
-   call $~lib/bindings/wasi_errors/errnoToString
+   call $~lib/bindings/internal/wasi_errors/errnoToString
    i32.const 3536
    i32.const 19
    i32.const 18
@@ -860,7 +860,7 @@
    unreachable
   end
  )
- (func $~lib/bindings/wasi_errors/errnoToString (param $0 i32) (result i32)
+ (func $~lib/bindings/internal/wasi_errors/errnoToString (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -876,7 +876,7 @@
   i32.const 77
   i32.lt_u
   if
-   global.get $~lib/bindings/wasi_errors/ERRNO_TO_STRING
+   global.get $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING
    local.set $1
    global.get $~lib/memory/__stack_pointer
    local.get $1

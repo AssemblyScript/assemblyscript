@@ -9,9 +9,9 @@
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
- (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
- (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/internal/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit (param i32)))
+ (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -637,10 +637,10 @@
   i32.const 0
   i32.const 1
   i32.const 8
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   drop
   i32.const 255
-  call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+  call $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit
  )
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
@@ -2161,13 +2161,13 @@
   i32.add
   local.get $0
   i32.load offset=8
-  call $~lib/bindings/wasi_snapshot_preview1/random_get
+  call $~lib/bindings/internal/wasi_snapshot_preview1/random_get
   local.tee $0
   i32.const 65535
   i32.and
   if
    local.get $0
-   call $~lib/bindings/wasi_errors/errnoToString
+   call $~lib/bindings/internal/wasi_errors/errnoToString
    i32.const 5056
    i32.const 17
    i32.const 18
@@ -2837,13 +2837,13 @@
     i32.const 7008
     i32.const 1
     i32.const 7020
-    call $~lib/bindings/wasi_snapshot_preview1/fd_write
+    call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
     local.tee $0
     i32.const 65535
     i32.and
     if
      local.get $0
-     call $~lib/bindings/wasi_errors/errnoToString
+     call $~lib/bindings/internal/wasi_errors/errnoToString
      i32.const 7056
      i32.const 211
      i32.const 16
@@ -2965,7 +2965,7 @@
   i32.const 7008
   i32.const 1
   i32.const 7016
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  call $~lib/bindings/internal/wasi_snapshot_preview1/fd_write
   local.set $1
   local.get $0
   call $~lib/rt/tlsf/__free
@@ -2974,7 +2974,7 @@
   i32.and
   if
    local.get $1
-   call $~lib/bindings/wasi_errors/errnoToString
+   call $~lib/bindings/internal/wasi_errors/errnoToString
    i32.const 7056
    i32.const 222
    i32.const 12
@@ -3066,7 +3066,7 @@
   global.set $~started
   call $start:std-wasi/crypto
  )
- (func $~lib/bindings/wasi_errors/errnoToString (param $0 i32) (result i32)
+ (func $~lib/bindings/internal/wasi_errors/errnoToString (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
