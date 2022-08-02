@@ -1,8 +1,7 @@
 // Phase: wasi_snapshot_preview1
 // See: https://github.com/WebAssembly/WASI/tree/main/phases/snapshot/witx
 
-import { errno, errnoToString } from "./wasi_errors";
-export { errno, errnoToString };
+import { errno } from "./wasi_errors";
 
 // helper types to be more explicit
 type char = u8;

@@ -1,3 +1,4 @@
+export * from "./wasi_errors";
 export * from "./wasi_snapshot_preview1";
 
 // A WASI-wide reusable temporary buffer to store and work with out values. Must
