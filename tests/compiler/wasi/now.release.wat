@@ -618,25 +618,17 @@
   i64.const 1000
   i32.const 1024
   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
+  local.tee $0
   i32.const 65535
   i32.and
   if
-   i32.const 1
-   i64.const 1000000
-   i32.const 1024
-   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
-   local.tee $0
-   i32.const 65535
-   i32.and
-   if
-    local.get $0
-    call $~lib/bindings/wasi_errors/errnoToString
-    i32.const 4544
-    i32.const 22
-    i32.const 20
-    call $~lib/wasi/index/abort
-    unreachable
-   end
+   local.get $0
+   call $~lib/bindings/wasi_errors/errnoToString
+   i32.const 4544
+   i32.const 19
+   i32.const 18
+   call $~lib/wasi/index/abort
+   unreachable
   end
   i32.const 1024
   i64.load

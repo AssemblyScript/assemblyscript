@@ -820,29 +820,19 @@
   global.get $~lib/bindings/wasi/tempbuf
   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
   local.set $0
+  i32.const 0
+  drop
   local.get $0
   i32.const 65535
   i32.and
   if
-   i32.const 1
-   i64.const 1000000
-   global.get $~lib/bindings/wasi/tempbuf
-   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
-   local.set $0
-   i32.const 0
-   drop
    local.get $0
-   i32.const 65535
-   i32.and
-   if
-    local.get $0
-    call $~lib/bindings/wasi_errors/errnoToString
-    i32.const 3536
-    i32.const 22
-    i32.const 20
-    call $~lib/wasi/index/abort
-    unreachable
-   end
+   call $~lib/bindings/wasi_errors/errnoToString
+   i32.const 3536
+   i32.const 19
+   i32.const 18
+   call $~lib/wasi/index/abort
+   unreachable
   end
   global.get $~lib/bindings/wasi/tempbuf
   i64.load
