@@ -10,7 +10,7 @@ import { Date as Date_binding } from "./bindings/dom";
 
   YEARS_PER_EPOCH = 400,
   DAYS_PER_EPOCH = 146097,
-  UNIX_EPOCH_OFFSET = 719468, // Jan 1, 1970
+  EPOCH_OFFSET = 719468, // Jan 1, 1970
   MILLIS_LIMIT = 8640000000000000;
 
 // ymdFromEpochDays returns values via globals to avoid allocations
@@ -328,7 +328,7 @@ function invalidDate(millis: i64): bool {
 // Based on "Euclidean Affine Functions and Applications to Calendar Algorithms"
 // Paper: https://arxiv.org/pdf/2102.06959.pdf
 function dateFromEpoch(ms: i64): i32 {
-  var da = (<i32>floorDiv(ms, MILLIS_PER_DAY) * 4 + UNIX_EPOCH_OFFSET * 4) | 3;
+  var da = (<i32>floorDiv(ms, MILLIS_PER_DAY) * 4 + EPOCH_OFFSET * 4) | 3;
   var q0 = <u32>floorDiv(da, DAYS_PER_EPOCH); // [0, 146096]
   var r1 = <u32>da - q0 * DAYS_PER_EPOCH;
   var u1 = <u64>(r1 | 3) * 2939745;
@@ -352,7 +352,7 @@ function daysSinceEpoch(y: i32, m: i32, d: i32): i32 {
   var yoe = <u32>y - era * YEARS_PER_EPOCH; // [0, 399]
   var doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
   var doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
-  return era * 146097 + doe - UNIX_EPOCH_OFFSET;
+  return era * 146097 + doe - EPOCH_OFFSET;
 }
 
 // TomohikoSakamoto algorithm from https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
