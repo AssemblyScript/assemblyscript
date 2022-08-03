@@ -41,11 +41,8 @@ export function setColorsEnabled(isEnabled: bool): bool {
 /** Wraps the specified text in the specified terminal color code. */
 export function colorize(text: string, color: string, bold: bool = false): string {
   if (colorsEnabled) {
-    if (bold) {
-      return BOLD + color + text + COLOR_RESET;
-    } else {
-      return color + text + COLOR_RESET;
-    }
+    if (bold) color = BOLD + color;
+    return color + text + COLOR_RESET;
   }
   return text;
 }
