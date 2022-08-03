@@ -778,20 +778,18 @@
   i32.and
   i32.const 77
   i32.lt_u
-  if
+  if (result i32)
    global.get $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING
    local.get $0
-   i32.const 2
-   i32.const 15
-   i32.and
-   i32.shl
    i32.const 65535
    i32.and
+   i32.const 2
+   i32.shl
    i32.add
    i32.load
-   return
+  else
+   i32.const 3424
   end
-  i32.const 3424
  )
  (func $wasi/now/test_date_now (result i64)
   (local $0 i32)

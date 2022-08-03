@@ -2975,20 +2975,18 @@
   i32.and
   i32.const 77
   i32.lt_u
-  if
+  if (result i32)
    global.get $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING
    local.get $0
-   i32.const 2
-   i32.const 15
-   i32.and
-   i32.shl
    i32.const 65535
    i32.and
+   i32.const 2
+   i32.shl
    i32.add
    i32.load
-   return
+  else
+   i32.const 3968
   end
-  i32.const 3968
  )
  (func $~lib/crypto/crypto.getRandomValues (param $0 i32)
   (local $1 i32)

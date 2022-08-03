@@ -1844,23 +1844,21 @@
     i32.const 65535
     i32.and
     if
-     block $__inlined_func$~lib/bindings/internal/wasi_errors/errnoToString (result i32)
+     local.get $0
+     i32.const 65535
+     i32.and
+     i32.const 77
+     i32.lt_u
+     if (result i32)
       local.get $0
       i32.const 65535
       i32.and
-      i32.const 77
-      i32.lt_u
-      if
-       local.get $0
-       i32.const 2
-       i32.shl
-       i32.const 65535
-       i32.and
-       i32.const 4204
-       i32.add
-       i32.load
-       br $__inlined_func$~lib/bindings/internal/wasi_errors/errnoToString
-      end
+      i32.const 2
+      i32.shl
+      i32.const 4204
+      i32.add
+      i32.load
+     else
       i32.const 4544
      end
      i32.const 4592
@@ -1992,23 +1990,21 @@
   i32.const 65535
   i32.and
   if
-   block $__inlined_func$~lib/bindings/internal/wasi_errors/errnoToString0 (result i32)
+   local.get $0
+   i32.const 65535
+   i32.and
+   i32.const 77
+   i32.lt_u
+   if (result i32)
     local.get $0
     i32.const 65535
     i32.and
-    i32.const 77
-    i32.lt_u
-    if
-     local.get $0
-     i32.const 2
-     i32.shl
-     i32.const 65535
-     i32.and
-     i32.const 4204
-     i32.add
-     i32.load
-     br $__inlined_func$~lib/bindings/internal/wasi_errors/errnoToString0
-    end
+    i32.const 2
+    i32.shl
+    i32.const 4204
+    i32.add
+    i32.load
+   else
     i32.const 4544
    end
    i32.const 4592
@@ -2751,23 +2747,21 @@
   i32.const 65535
   i32.and
   if
-   block $__inlined_func$~lib/bindings/internal/wasi_errors/errnoToString (result i32)
+   local.get $0
+   i32.const 65535
+   i32.and
+   i32.const 77
+   i32.lt_u
+   if (result i32)
     local.get $0
     i32.const 65535
     i32.and
-    i32.const 77
-    i32.lt_u
-    if
-     local.get $0
-     i32.const 2
-     i32.shl
-     i32.const 65535
-     i32.and
-     i32.const 4204
-     i32.add
-     i32.load
-     br $__inlined_func$~lib/bindings/internal/wasi_errors/errnoToString
-    end
+    i32.const 2
+    i32.shl
+    i32.const 4204
+    i32.add
+    i32.load
+   else
     i32.const 4544
    end
    i32.const 4592

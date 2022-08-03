@@ -1,5 +1,7 @@
 // TODO: generate this automatically
 
+export type errno = u16;
+
 /** Error codes returned by functions. */
 export namespace errno {
   /** No error occurred. System call completed successfully. */
@@ -312,10 +314,8 @@ export namespace errno {
   export const NOTCAPABLE: errno = 76;
 }
 
-export type errno = u16;
-
 // @ts-ignore: decorator
-@inline const ERROR_COUNT = errno.NOTCAPABLE + 1;
+@inline const ERRNO_COUNT = errno.NOTCAPABLE + 1;
 // @ts-ignore: decorator
 @lazy export const ERRNO_TO_STRING = memory.data<usize>([
   changetype<usize>("SUCCESS"), /* errno.SUCCESS */
@@ -399,6 +399,7 @@ export type errno = u16;
 
 /** Translates an error code to a string. */
 export function errnoToString(err: errno): string {
-  if (err < ERROR_COUNT) return load<string>(ERRNO_TO_STRING + (err << 2));
-  return "UNKNOWN";
+  return err < ERRNO_COUNT
+    ? load<string>(ERRNO_TO_STRING + (<usize>err << alignof<usize>()))
+    : "UNKNOWN";
 }
