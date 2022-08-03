@@ -3,6 +3,10 @@
  * @license Apache-2.0
  */
 
+/** Code to reset any colors. */
+export const RESET: string;
+/** Code for bolding text. */
+export const BOLD: string;
 /** Color code for gray. */
 export const GRAY: string;
 /** Color code for red. */
@@ -19,8 +23,6 @@ export const MAGENTA: string;
 export const CYAN: string;
 /** Color code for white. */
 export const WHITE: string;
-/** Code to reset any colors. */
-export const RESET: string;
 
 /** Color utility class. */
 export class Colors {
@@ -29,21 +31,21 @@ export class Colors {
   /** Whether terminal colors are enabled. */
   enabled: boolean;
   /** Colors a string in gray if {@link enabled}. */
-  gray(text: string): string;
+  gray(text: string, bold?: boolean): string;
   /** Colors a string in red if {@link enabled}. */
-  red(text: string): string;
+  red(text: string, bold?: boolean): string;
   /** Colors a string in green if {@link enabled}. */
-  green(text: string): string;
+  green(text: string, bold?: boolean): string;
   /** Colors a string in yellow if {@link enabled}. */
-  yellow(text: string): string;
+  yellow(text: string, bold?: boolean): string;
   /** Colors a string in blue if {@link enabled}. */
-  blue(text: string): string;
+  blue(text: string, bold?: boolean): string;
   /** Colors a string in magenta if {@link enabled}. */
-  magenta(text: string): string;
+  magenta(text: string, bold?: boolean): string;
   /** Colors a string in cyan if {@link enabled}. */
-  cyan(text: string): string;
+  cyan(text: string, bold?: boolean): string;
   /** Colors a string in white if {@link enabled}. */
-  white(text: string): string;
+  white(text: string, bold?: boolean): string;
 }
 
 /** Color utility for stdout. */

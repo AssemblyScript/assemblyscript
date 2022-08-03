@@ -78,7 +78,9 @@ if (args.help) {
   process.exit(0);
 }
 
-const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
+const features = process.env.ASC_FEATURES
+  ? process.env.ASC_FEATURES.split(",")
+  : [];
 const featuresConfig = require("./features.json");
 const basedir = path.join(dirname, "compiler");
 
@@ -90,7 +92,10 @@ function getTests() {
   if (argv.length) { // run matching tests only
     tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
     if (!tests.length) {
-      console.log(stdoutColors.red("FAILURE: ") + stdoutColors.white("No matching tests: " + argv.join(" ") + "\n"));
+      console.log(
+        stdoutColors.red("FAILURE: ", true) +
+        stdoutColors.white("No matching tests: " + argv.join(" ") + "\n")
+      );
       process.exit(1);
     }
   }
@@ -115,13 +120,14 @@ function section(title) {
     end(code) {
       const time = measureEnd(start);
       switch (code) {
-        case SUCCESS: console.log("  " + stdoutColors.green("SUCCESS") + " (" + time + ")\n"); break;
-        default: console.log("  " + stdoutColors.red("FAILURE") + " (" + time + ")\n"); break;
-        case SKIPPED: console.log("  " + stdoutColors.yellow("SKIPPED") + " (" + time + ")\n"); break;
+        case SUCCESS: console.log(`  ${stdoutColors.green("SUCCESS", true)} (${time})\n`); break;
+        default:      console.log(`  ${stdoutColors.red("FAILURE", true)} (${time})\n`); break;
+        case SKIPPED: console.log(`  ${stdoutColors.yellow("SKIPPED")} (${time})\n`); break;
       }
     }
   };
 }
+
 const SUCCESS = 0;
 const FAILURE = 1;
 const SKIPPED = 2;
@@ -171,12 +177,14 @@ async function runTest(basename) {
       }
     });
     if (missing_features.length) {
-      console.log("- " + stdoutColors.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
-      return prepareResult(SKIPPED, "feature not enabled: " + missing_features.join(", "));
+      console.log(`- ${stdoutColors.yellow("feature SKIPPED")} (${missing_features.join(", ")})\n`);
+      return prepareResult(SKIPPED, `feature not enabled: ${missing_features.join(", ")}`);
     }
   }
   if (config.asc_flags) {
-    config.asc_flags.forEach(flag => { asc_flags.push(...flag.split(" ")); });
+    config.asc_flags.forEach(flag => {
+      asc_flags.push(...flag.split(" "));
+    });
   }
 
   // Build debug

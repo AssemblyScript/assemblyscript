@@ -24,6 +24,7 @@ import {
   COLOR_RED,
   COLOR_MAGENTA,
   COLOR_RESET,
+  BOLD,
   isColorsEnabled,
   setColorsEnabled,
   CharCode
@@ -170,7 +171,10 @@ export function formatDiagnosticMessage(
 
   // general information
   var sb: string[] = [];
-  if (isColorsEnabled()) sb.push(diagnosticCategoryToColor(message.category));
+  if (isColorsEnabled()) {
+    if (message.category != DiagnosticCategory.INFO) sb.push(BOLD);
+    sb.push(diagnosticCategoryToColor(message.category));
+  }
   sb.push(diagnosticCategoryToString(message.category));
   if (isColorsEnabled()) sb.push(COLOR_RESET);
   sb.push(message.code < 1000 ? " AS" : " TS");
@@ -233,13 +237,13 @@ function formatDiagnosticContext(range: Range): string {
   while (start < len && isWhiteSpace(text.charCodeAt(start))) start++;
   // Find next line break
   while (end < len && !isLineBreak(text.charCodeAt(end))) end++;
-  var sb: string[] = [
+  var sb = [
     lineSpace,
     "  :\n ",
     lineNumber,
     " │ ",
     text.substring(start, end).replaceAll("\t", "  "),
-    "\n ", 
+    "\n ",
     lineSpace,
     " │ "
   ];
