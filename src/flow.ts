@@ -82,7 +82,10 @@ import {
   uniqueMap
 } from "./util";
 
-import { NarrowedTypeMap, TypeNarrowChecker } from "./narrow";
+import {
+  NarrowedTypeMap,
+  TypeNarrowChecker
+} from "./narrow";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
