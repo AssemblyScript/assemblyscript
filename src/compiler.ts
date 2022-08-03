@@ -213,6 +213,8 @@ import {
   ShadowStackPass
 } from "./passes/shadowstack";
 
+import { typeOr } from "./narrow";
+
 /** Compiler options. */
 export class Options {
   constructor() { /* as internref */ }
@@ -3141,7 +3143,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (initExpr) {
           initializers.push(
-            this.makeLocalAssignment(local, initExpr, initType ? initType : type, false)
+            this.makeLocalAssignment(local, initExpr, initType || type, false)
           );
         } else {
           // no need to assign zero
@@ -4669,7 +4671,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             flow.freeTempLocal(temp);
           }
-          this.currentType = leftType;
+          this.currentType = assert(typeOr(leftType.nonNullableType, rightType));
         }
         break;
       }
@@ -7788,7 +7790,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.LOCAL: {
         let local = <Local>target;
         let narrowedType = flow.getNarrowedType(local);
-        let localType = narrowedType ? narrowedType : local.type;
+        let localType = narrowedType || local.type;
         assert(localType != Type.void);
         if (this.pendingElements.has(local)) {
           this.error(
@@ -7823,7 +7825,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         let narrowedType = flow.getNarrowedType(global);
-        let globalType = narrowedType ? narrowedType : global.type;
+        let globalType = narrowedType || global.type;
         if (this.pendingElements.has(global)) {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,

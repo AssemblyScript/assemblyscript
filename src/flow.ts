@@ -1061,9 +1061,9 @@ export class Flow {
       let beforeNarrowedTypes = before.narrowedTypes;
       let afterNarrowedTypes = after.narrowedTypes;
       let beforeType = beforeNarrowedTypes ? beforeNarrowedTypes.get(local) : null;
-      beforeType = beforeType ? beforeType : local.type;
+      beforeType = beforeType || local.type;
       let afterType = afterNarrowedTypes ? afterNarrowedTypes.get(local) : null;
-      afterType = afterType ? afterType : local.type;
+      afterType = afterType || local.type;
       if (type.isNullableReference) {
         if (beforeType != afterType) {
           return true;
@@ -1101,13 +1101,13 @@ export class Flow {
         if (!isLocalTee(expr)) break;
         let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
         let localType = thisNarrowedTypes ? thisNarrowedTypes.get(local) : null;
-        localType = localType ? localType : local.type;
+        localType = localType || local.type;
         return !localType.isNullableReference;
       }
       case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
         let localType = thisNarrowedTypes ? thisNarrowedTypes.get(local) : null;
-        localType = localType ? localType : local.type;
+        localType = localType || local.type;
         return !localType.isNullableReference;
       }
     }

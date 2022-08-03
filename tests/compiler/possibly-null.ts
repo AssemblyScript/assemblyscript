@@ -125,3 +125,8 @@ export function testNeverNull(a: Ref | null): void {
     a!; // INFO AS225: Expression is never 'null'.
   }
 }
+
+export function testLogicalOrTypeInfer(a: Ref | null, b: Ref): void {
+  let c: Ref = a || b;
+  requireNonNull(c);
+}
