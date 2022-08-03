@@ -1,15 +1,15 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_f64 (func (result f64)))
- (type $none_=>_none (func))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i64 (func (result i64)))
+ (type $none_=>_none (func))
  (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/internal/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/internal/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit (param i32)))
@@ -20,10 +20,10 @@
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING i32 (i32.const 3104))
- (global $~lib/memory/__data_end i32 (i32.const 3580))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19964))
- (global $~lib/memory/__heap_base i32 (i32.const 19964))
+ (global $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING i32 (i32.const 3084))
+ (global $~lib/memory/__data_end i32 (i32.const 3564))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19948))
+ (global $~lib/memory/__heap_base i32 (i32.const 19948))
  (memory $0 1)
  (data (i32.const 16) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00U\00n\00p\00a\00i\00r\00e\00d\00 \00s\00u\00r\00r\00o\00g\00a\00t\00e\00\00\00\00\00\00\00\00\00")
@@ -105,10 +105,10 @@
  (data (i32.const 2972) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00T\00X\00T\00B\00S\00Y\00")
  (data (i32.const 3004) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00X\00D\00E\00V\00\00\00\00\00")
  (data (i32.const 3036) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00N\00O\00T\00C\00A\00P\00A\00B\00L\00E\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3084) "L\01\00\00\00\00\00\00\00\00\00\00\03\00\00\004\01\00\00\b0\00\00\00\e0\00\00\00\00\01\00\00 \01\00\00P\01\00\00\80\01\00\00\b0\01\00\00\d0\01\00\00\00\02\00\00 \02\00\00@\02\00\00`\02\00\00\90\02\00\00\b0\02\00\00\e0\02\00\00\10\03\00\00@\03\00\00`\03\00\00\90\03\00\00\b0\03\00\00\d0\03\00\00\f0\03\00\00\10\04\00\000\04\00\00`\04\00\00\80\04\00\00\a0\04\00\00\d0\04\00\00\f0\04\00\00\10\05\00\000\05\00\00P\05\00\00p\05\00\00\90\05\00\00\b0\05\00\00\d0\05\00\00\00\06\00\000\06\00\00`\06\00\00\90\06\00\00\c0\06\00\00\f0\06\00\00\10\07\00\000\07\00\00P\07\00\00p\07\00\00\90\07\00\00\b0\07\00\00\d0\07\00\00\f0\07\00\00\10\08\00\00@\08\00\00`\08\00\00\80\08\00\00\b0\08\00\00\d0\08\00\00\00\t\00\000\t\00\00`\t\00\00\80\t\00\00\a0\t\00\00\c0\t\00\00\f0\t\00\00 \n\00\00@\n\00\00`\n\00\00\80\n\00\00\b0\n\00\00\e0\n\00\00\00\0b\00\00 \0b\00\00@\0b\00\00`\0b\00\00\80\0b\00\00\b0\0b\00\00\d0\0b\00\00\f0\0b\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3420) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00U\00N\00K\00N\00O\00W\00N\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3468) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00d\00a\00t\00e\00.\00t\00s\00\00\00\00\00")
- (data (i32.const 3516) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00p\00e\00r\00f\00o\00r\00m\00a\00n\00c\00e\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 3084) "\b0\00\00\00\e0\00\00\00\00\01\00\00 \01\00\00P\01\00\00\80\01\00\00\b0\01\00\00\d0\01\00\00\00\02\00\00 \02\00\00@\02\00\00`\02\00\00\90\02\00\00\b0\02\00\00\e0\02\00\00\10\03\00\00@\03\00\00`\03\00\00\90\03\00\00\b0\03\00\00\d0\03\00\00\f0\03\00\00\10\04\00\000\04\00\00`\04\00\00\80\04\00\00\a0\04\00\00\d0\04\00\00\f0\04\00\00\10\05\00\000\05\00\00P\05\00\00p\05\00\00\90\05\00\00\b0\05\00\00\d0\05\00\00\00\06\00\000\06\00\00`\06\00\00\90\06\00\00\c0\06\00\00\f0\06\00\00\10\07\00\000\07\00\00P\07\00\00p\07\00\00\90\07\00\00\b0\07\00\00\d0\07\00\00\f0\07\00\00\10\08\00\00@\08\00\00`\08\00\00\80\08\00\00\b0\08\00\00\d0\08\00\00\00\t\00\000\t\00\00`\t\00\00\80\t\00\00\a0\t\00\00\c0\t\00\00\f0\t\00\00 \n\00\00@\n\00\00`\n\00\00\80\n\00\00\b0\n\00\00\e0\n\00\00\00\0b\00\00 \0b\00\00@\0b\00\00`\0b\00\00\80\0b\00\00\b0\0b\00\00\d0\0b\00\00\f0\0b\00\00")
+ (data (i32.const 3404) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00U\00N\00K\00N\00O\00W\00N\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3452) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00d\00a\00t\00e\00.\00t\00s\00\00\00\00\00")
+ (data (i32.const 3500) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00p\00e\00r\00f\00o\00r\00m\00a\00n\00c\00e\00.\00t\00s\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "test_date_now" (func $wasi/now/test_date_now))
@@ -772,13 +772,26 @@
   i32.const 255
   call $~lib/bindings/internal/wasi_snapshot_preview1/proc_exit
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/bindings/internal/wasi_errors/errnoToString (param $0 i32) (result i32)
   local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
+  i32.const 65535
+  i32.and
+  i32.const 77
+  i32.lt_u
+  if
+   global.get $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING
+   local.get $0
+   i32.const 2
+   i32.const 15
+   i32.and
+   i32.shl
+   i32.const 65535
+   i32.and
+   i32.add
+   i32.load
+   return
+  end
+  i32.const 3424
  )
  (func $wasi/now/test_date_now (result i64)
   (local $0 i32)
@@ -798,7 +811,7 @@
    if
     local.get $0
     call $~lib/bindings/internal/wasi_errors/errnoToString
-    i32.const 3488
+    i32.const 3472
     i32.const 47
     i32.const 18
     call $~lib/wasi/index/abort
@@ -828,7 +841,7 @@
   if
    local.get $0
    call $~lib/bindings/internal/wasi_errors/errnoToString
-   i32.const 3536
+   i32.const 3520
    i32.const 19
    i32.const 18
    call $~lib/wasi/index/abort
@@ -846,60 +859,5 @@
  )
  (func $~start
   nop
- )
- (func $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__data_end
-  i32.lt_s
-  if
-   i32.const 19984
-   i32.const 20032
-   i32.const 1
-   i32.const 1
-   call $~lib/wasi/index/abort
-   unreachable
-  end
- )
- (func $~lib/bindings/internal/wasi_errors/errnoToString (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 65535
-  i32.and
-  i32.const 77
-  i32.lt_u
-  if
-   global.get $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store
-   local.get $1
-   local.get $0
-   i32.const 65535
-   i32.and
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uget
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $1
-   return
-  end
-  i32.const 3440
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
 )

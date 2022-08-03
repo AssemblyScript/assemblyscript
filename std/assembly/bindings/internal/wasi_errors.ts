@@ -311,94 +311,94 @@ export namespace errno {
   @inline
   export const NOTCAPABLE: errno = 76;
 }
-// @ts-ignore: decorator
-@inline const ERROR_COUNT = errno.NOTCAPABLE + 1;
 
 export type errno = u16;
 
 // @ts-ignore: decorator
-@lazy export const ERRNO_TO_STRING: StaticArray<string> = [
-  "SUCCESS", /* errno.SUCCESS */
-  "TOOBIG", /* errno.TOOBIG */
-  "ACCES", /* errno.ACCES */
-  "ADDRINUSE", /* errno.ADDRINUSE */
-  "ADDRNOTAVAIL", /* errno.ADDRNOTAVAIL */
-  "AFNOSUPPORT", /* errno.AFNOSUPPORT */
-  "AGAIN", /* errno.AGAIN */
-  "ALREADY", /* errno.ALREADY */
-  "BADF", /* errno.BADF */
-  "BADMSG", /* errno.BADMSG */
-  "BUSY", /* errno.BUSY */
-  "CANCELED", /* errno.CANCELED */
-  "CHILD", /* errno.CHILD */
-  "CONNABORTED", /* errno.CONNABORTED */
-  "CONNREFUSED", /* errno.CONNREFUSED */
-  "CONNRESET", /* errno.CONNRESET */
-  "DEADLK", /* errno.DEADLK */
-  "DESTADDRREQ", /* errno.DESTADDRREQ */
-  "DOM", /* errno.DOM */
-  "DQUOT", /* errno.DQUOT */
-  "EXIST", /* errno.EXIST */
-  "FAULT", /* errno.FAULT */
-  "FBIG", /* errno.FBIG */
-  "HOSTUNREACH", /* errno.HOSTUNREACH */
-  "IDRM", /* errno.IDRM */
-  "ILSEQ", /* errno.ILSEQ */
-  "INPROGRESS", /* errno.INPROGRESS */
-  "INTR", /* errno.INTR */
-  "INVAL", /* errno.INVAL */
-  "IO", /* errno.IO */
-  "ISCONN", /* errno.ISCONN */
-  "ISDIR", /* errno.ISDIR */
-  "LOOP", /* errno.LOOP */
-  "MFILE", /* errno.MFILE */
-  "MLINK", /* errno.MLINK */
-  "MSGSIZE", /* errno.MSGSIZE */
-  "MULTIHOP", /* errno.MULTIHOP */
-  "NAMETOOLONG", /* errno.NAMETOOLONG */
-  "NETDOWN", /* errno.NETDOWN */
-  "NETRESET", /* errno.NETRESET */
-  "NETUNREACH", /* errno.NETUNREACH */
-  "NFILE", /* errno.NFILE */
-  "NOBUFS", /* errno.NOBUFS */
-  "NODEV", /* errno.NODEV */
-  "NOENT", /* errno.NOENT */
-  "NOEXEC", /* errno.NOEXEC */
-  "NOLCK", /* errno.NOLCK */
-  "NOLINK", /* errno.NOLINK */
-  "NOMEM", /* errno.NOMEM */
-  "NOMSG", /* errno.NOMSG */
-  "NOPROTOOPT", /* errno.NOPROTOOPT */
-  "NOSPC", /* errno.NOSPC */
-  "NOSYS", /* errno.NOSYS */
-  "NOTCONN", /* errno.NOTCONN */
-  "NOTDIR", /* errno.NOTDIR */
-  "NOTEMPTY", /* errno.NOTEMPTY */
-  "NOTRECOVERABLE", /* errno.NOTRECOVERABLE */
-  "NOTSOCK", /* errno.NOTSOCK */
-  "NOTSUP", /* errno.NOTSUP */
-  "NOTTY", /* errno.NOTTY */
-  "NXIO", /* errno.NXIO */
-  "OVERFLOW", /* errno.OVERFLOW */
-  "OWNERDEAD", /* errno.OWNERDEAD */
-  "PERM", /* errno.PERM */
-  "PIPE", /* errno.PIPE */
-  "PROTO", /* errno.PROTO */
-  "PROTONOSUPPORT", /* errno.PROTONOSUPPORT */
-  "PROTOTYPE", /* errno.PROTOTYPE */
-  "RANGE", /* errno.RANGE */
-  "ROFS", /* errno.ROFS */
-  "SPIPE", /* errno.SPIPE */
-  "SRCH", /* errno.SRCH */
-  "STALE", /* errno.STALE */
-  "TIMEDOUT", /* errno.TIMEDOUT */
-  "TXTBSY", /* errno.TXTBSY */
-  "XDEV", /* errno.XDEV */
-  "NOTCAPABLE", /* errno.NOTCAPABLE */
-];
+@inline const ERROR_COUNT = errno.NOTCAPABLE + 1;
+// @ts-ignore: decorator
+@lazy export const ERRNO_TO_STRING = memory.data<usize>([
+  changetype<usize>("SUCCESS"), /* errno.SUCCESS */
+  changetype<usize>("TOOBIG"), /* errno.TOOBIG */
+  changetype<usize>("ACCES"), /* errno.ACCES */
+  changetype<usize>("ADDRINUSE"), /* errno.ADDRINUSE */
+  changetype<usize>("ADDRNOTAVAIL"), /* errno.ADDRNOTAVAIL */
+  changetype<usize>("AFNOSUPPORT"), /* errno.AFNOSUPPORT */
+  changetype<usize>("AGAIN"), /* errno.AGAIN */
+  changetype<usize>("ALREADY"), /* errno.ALREADY */
+  changetype<usize>("BADF"), /* errno.BADF */
+  changetype<usize>("BADMSG"), /* errno.BADMSG */
+  changetype<usize>("BUSY"), /* errno.BUSY */
+  changetype<usize>("CANCELED"), /* errno.CANCELED */
+  changetype<usize>("CHILD"), /* errno.CHILD */
+  changetype<usize>("CONNABORTED"), /* errno.CONNABORTED */
+  changetype<usize>("CONNREFUSED"), /* errno.CONNREFUSED */
+  changetype<usize>("CONNRESET"), /* errno.CONNRESET */
+  changetype<usize>("DEADLK"), /* errno.DEADLK */
+  changetype<usize>("DESTADDRREQ"), /* errno.DESTADDRREQ */
+  changetype<usize>("DOM"), /* errno.DOM */
+  changetype<usize>("DQUOT"), /* errno.DQUOT */
+  changetype<usize>("EXIST"), /* errno.EXIST */
+  changetype<usize>("FAULT"), /* errno.FAULT */
+  changetype<usize>("FBIG"), /* errno.FBIG */
+  changetype<usize>("HOSTUNREACH"), /* errno.HOSTUNREACH */
+  changetype<usize>("IDRM"), /* errno.IDRM */
+  changetype<usize>("ILSEQ"), /* errno.ILSEQ */
+  changetype<usize>("INPROGRESS"), /* errno.INPROGRESS */
+  changetype<usize>("INTR"), /* errno.INTR */
+  changetype<usize>("INVAL"), /* errno.INVAL */
+  changetype<usize>("IO"), /* errno.IO */
+  changetype<usize>("ISCONN"), /* errno.ISCONN */
+  changetype<usize>("ISDIR"), /* errno.ISDIR */
+  changetype<usize>("LOOP"), /* errno.LOOP */
+  changetype<usize>("MFILE"), /* errno.MFILE */
+  changetype<usize>("MLINK"), /* errno.MLINK */
+  changetype<usize>("MSGSIZE"), /* errno.MSGSIZE */
+  changetype<usize>("MULTIHOP"), /* errno.MULTIHOP */
+  changetype<usize>("NAMETOOLONG"), /* errno.NAMETOOLONG */
+  changetype<usize>("NETDOWN"), /* errno.NETDOWN */
+  changetype<usize>("NETRESET"), /* errno.NETRESET */
+  changetype<usize>("NETUNREACH"), /* errno.NETUNREACH */
+  changetype<usize>("NFILE"), /* errno.NFILE */
+  changetype<usize>("NOBUFS"), /* errno.NOBUFS */
+  changetype<usize>("NODEV"), /* errno.NODEV */
+  changetype<usize>("NOENT"), /* errno.NOENT */
+  changetype<usize>("NOEXEC"), /* errno.NOEXEC */
+  changetype<usize>("NOLCK"), /* errno.NOLCK */
+  changetype<usize>("NOLINK"), /* errno.NOLINK */
+  changetype<usize>("NOMEM"), /* errno.NOMEM */
+  changetype<usize>("NOMSG"), /* errno.NOMSG */
+  changetype<usize>("NOPROTOOPT"), /* errno.NOPROTOOPT */
+  changetype<usize>("NOSPC"), /* errno.NOSPC */
+  changetype<usize>("NOSYS"), /* errno.NOSYS */
+  changetype<usize>("NOTCONN"), /* errno.NOTCONN */
+  changetype<usize>("NOTDIR"), /* errno.NOTDIR */
+  changetype<usize>("NOTEMPTY"), /* errno.NOTEMPTY */
+  changetype<usize>("NOTRECOVERABLE"), /* errno.NOTRECOVERABLE */
+  changetype<usize>("NOTSOCK"), /* errno.NOTSOCK */
+  changetype<usize>("NOTSUP"), /* errno.NOTSUP */
+  changetype<usize>("NOTTY"), /* errno.NOTTY */
+  changetype<usize>("NXIO"), /* errno.NXIO */
+  changetype<usize>("OVERFLOW"), /* errno.OVERFLOW */
+  changetype<usize>("OWNERDEAD"), /* errno.OWNERDEAD */
+  changetype<usize>("PERM"), /* errno.PERM */
+  changetype<usize>("PIPE"), /* errno.PIPE */
+  changetype<usize>("PROTO"), /* errno.PROTO */
+  changetype<usize>("PROTONOSUPPORT"), /* errno.PROTONOSUPPORT */
+  changetype<usize>("PROTOTYPE"), /* errno.PROTOTYPE */
+  changetype<usize>("RANGE"), /* errno.RANGE */
+  changetype<usize>("ROFS"), /* errno.ROFS */
+  changetype<usize>("SPIPE"), /* errno.SPIPE */
+  changetype<usize>("SRCH"), /* errno.SRCH */
+  changetype<usize>("STALE"), /* errno.STALE */
+  changetype<usize>("TIMEDOUT"), /* errno.TIMEDOUT */
+  changetype<usize>("TXTBSY"), /* errno.TXTBSY */
+  changetype<usize>("XDEV"), /* errno.XDEV */
+  changetype<usize>("NOTCAPABLE"), /* errno.NOTCAPABLE */
+]);
 
 /** Translates an error code to a string. */
 export function errnoToString(err: errno): string {
-  if (err < ERROR_COUNT) return unchecked(ERRNO_TO_STRING[err]);
+  if (err < ERROR_COUNT) return load<string>(ERRNO_TO_STRING + (err << 2));
   return "UNKNOWN";
 }

@@ -36,16 +36,16 @@
  (global $std-wasi/crypto/ab (mut i32) (i32.const 0))
  (global $std-wasi/crypto/buf (mut i32) (i32.const 0))
  (global $~lib/native/ASC_NO_ASSERT i32 (i32.const 0))
- (global $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING i32 (i32.const 3648))
+ (global $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING i32 (i32.const 3628))
  (global $~lib/process/process.stdout i32 (i32.const 1))
- (global $~lib/bindings/wasi/tempbuf i32 (i32.const 5984))
+ (global $~lib/bindings/wasi/tempbuf i32 (i32.const 5968))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $std-wasi/crypto/b1 (mut i32) (i32.const 0))
  (global $std-wasi/crypto/b2 (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 6176))
- (global $~lib/memory/__data_end i32 (i32.const 6220))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22604))
- (global $~lib/memory/__heap_base i32 (i32.const 22604))
+ (global $~lib/rt/__rtti_base i32 (i32.const 6160))
+ (global $~lib/memory/__data_end i32 (i32.const 6196))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22580))
+ (global $~lib/memory/__heap_base i32 (i32.const 22580))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00U\00n\00p\00a\00i\00r\00e\00d\00 \00s\00u\00r\00r\00o\00g\00a\00t\00e\00\00\00\00\00\00\00\00\00")
@@ -138,23 +138,23 @@
  (data (i32.const 3516) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00T\00X\00T\00B\00S\00Y\00")
  (data (i32.const 3548) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00X\00D\00E\00V\00\00\00\00\00")
  (data (i32.const 3580) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00N\00O\00T\00C\00A\00P\00A\00B\00L\00E\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3628) "L\01\00\00\00\00\00\00\00\00\00\00\04\00\00\004\01\00\00\d0\02\00\00\00\03\00\00 \03\00\00@\03\00\00p\03\00\00\a0\03\00\00\d0\03\00\00\f0\03\00\00 \04\00\00@\04\00\00`\04\00\00\80\04\00\00\b0\04\00\00\d0\04\00\00\00\05\00\000\05\00\00`\05\00\00\80\05\00\00\b0\05\00\00\d0\05\00\00\f0\05\00\00\10\06\00\000\06\00\00P\06\00\00\80\06\00\00\a0\06\00\00\c0\06\00\00\f0\06\00\00\10\07\00\000\07\00\00P\07\00\00p\07\00\00\90\07\00\00\b0\07\00\00\d0\07\00\00\f0\07\00\00 \08\00\00P\08\00\00\80\08\00\00\b0\08\00\00\e0\08\00\00\10\t\00\000\t\00\00P\t\00\00p\t\00\00\90\t\00\00\b0\t\00\00\d0\t\00\00\f0\t\00\00\10\n\00\000\n\00\00`\n\00\00\80\n\00\00\a0\n\00\00\d0\n\00\00\f0\n\00\00 \0b\00\00P\0b\00\00\80\0b\00\00\a0\0b\00\00\c0\0b\00\00\e0\0b\00\00\10\0c\00\00@\0c\00\00`\0c\00\00\80\0c\00\00\a0\0c\00\00\d0\0c\00\00\00\0d\00\00 \0d\00\00@\0d\00\00`\0d\00\00\80\0d\00\00\a0\0d\00\00\d0\0d\00\00\f0\0d\00\00\10\0e\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3964) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00U\00N\00K\00N\00O\00W\00N\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4012) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00c\00r\00y\00p\00t\00o\00.\00t\00s\00")
- (data (i32.const 4060) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\000\00\00\00c\00r\00y\00p\00t\00o\00.\00g\00e\00t\00R\00a\00n\00d\00o\00m\00V\00a\00l\00u\00e\00s\00:\00 \00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4140) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4172) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4300) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 4364) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\000\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4396) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
- (data (i32.const 4796) "\1c\04\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\04\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\000\00a\000\00b\000\00c\000\00d\000\00e\000\00f\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\001\00a\001\00b\001\00c\001\00d\001\00e\001\00f\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\002\00a\002\00b\002\00c\002\00d\002\00e\002\00f\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\003\00a\003\00b\003\00c\003\00d\003\00e\003\00f\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\004\00a\004\00b\004\00c\004\00d\004\00e\004\00f\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\005\00a\005\00b\005\00c\005\00d\005\00e\005\00f\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\006\00a\006\00b\006\00c\006\00d\006\00e\006\00f\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\007\00a\007\00b\007\00c\007\00d\007\00e\007\00f\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\008\00a\008\00b\008\00c\008\00d\008\00e\008\00f\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\009\00a\009\00b\009\00c\009\00d\009\00e\009\00f\00a\000\00a\001\00a\002\00a\003\00a\004\00a\005\00a\006\00a\007\00a\008\00a\009\00a\00a\00a\00b\00a\00c\00a\00d\00a\00e\00a\00f\00b\000\00b\001\00b\002\00b\003\00b\004\00b\005\00b\006\00b\007\00b\008\00b\009\00b\00a\00b\00b\00b\00c\00b\00d\00b\00e\00b\00f\00c\000\00c\001\00c\002\00c\003\00c\004\00c\005\00c\006\00c\007\00c\008\00c\009\00c\00a\00c\00b\00c\00c\00c\00d\00c\00e\00c\00f\00d\000\00d\001\00d\002\00d\003\00d\004\00d\005\00d\006\00d\007\00d\008\00d\009\00d\00a\00d\00b\00d\00c\00d\00d\00d\00e\00d\00f\00e\000\00e\001\00e\002\00e\003\00e\004\00e\005\00e\006\00e\007\00e\008\00e\009\00e\00a\00e\00b\00e\00c\00e\00d\00e\00e\00e\00f\00f\000\00f\001\00f\002\00f\003\00f\004\00f\005\00f\006\00f\007\00f\008\00f\009\00f\00a\00f\00b\00f\00c\00f\00d\00f\00e\00f\00f\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5852) "\\\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00\00\00\00\00")
- (data (i32.const 5948) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5984) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 6012) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00p\00r\00o\00c\00e\00s\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 6076) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 6108) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00-\00w\00a\00s\00i\00/\00c\00r\00y\00p\00t\00o\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data (i32.const 6176) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\00\00\00\02\00\00\00\04A\00\00\00\00\00\00")
+ (data (i32.const 3628) "\d0\02\00\00\00\03\00\00 \03\00\00@\03\00\00p\03\00\00\a0\03\00\00\d0\03\00\00\f0\03\00\00 \04\00\00@\04\00\00`\04\00\00\80\04\00\00\b0\04\00\00\d0\04\00\00\00\05\00\000\05\00\00`\05\00\00\80\05\00\00\b0\05\00\00\d0\05\00\00\f0\05\00\00\10\06\00\000\06\00\00P\06\00\00\80\06\00\00\a0\06\00\00\c0\06\00\00\f0\06\00\00\10\07\00\000\07\00\00P\07\00\00p\07\00\00\90\07\00\00\b0\07\00\00\d0\07\00\00\f0\07\00\00 \08\00\00P\08\00\00\80\08\00\00\b0\08\00\00\e0\08\00\00\10\t\00\000\t\00\00P\t\00\00p\t\00\00\90\t\00\00\b0\t\00\00\d0\t\00\00\f0\t\00\00\10\n\00\000\n\00\00`\n\00\00\80\n\00\00\a0\n\00\00\d0\n\00\00\f0\n\00\00 \0b\00\00P\0b\00\00\80\0b\00\00\a0\0b\00\00\c0\0b\00\00\e0\0b\00\00\10\0c\00\00@\0c\00\00`\0c\00\00\80\0c\00\00\a0\0c\00\00\d0\0c\00\00\00\0d\00\00 \0d\00\00@\0d\00\00`\0d\00\00\80\0d\00\00\a0\0d\00\00\d0\0d\00\00\f0\0d\00\00\10\0e\00\00")
+ (data (i32.const 3948) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00U\00N\00K\00N\00O\00W\00N\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3996) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00c\00r\00y\00p\00t\00o\00.\00t\00s\00")
+ (data (i32.const 4044) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\000\00\00\00c\00r\00y\00p\00t\00o\00.\00g\00e\00t\00R\00a\00n\00d\00o\00m\00V\00a\00l\00u\00e\00s\00:\00 \00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4156) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4284) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 4348) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\000\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4380) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
+ (data (i32.const 4780) "\1c\04\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\04\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\000\00a\000\00b\000\00c\000\00d\000\00e\000\00f\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\001\00a\001\00b\001\00c\001\00d\001\00e\001\00f\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\002\00a\002\00b\002\00c\002\00d\002\00e\002\00f\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\003\00a\003\00b\003\00c\003\00d\003\00e\003\00f\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\004\00a\004\00b\004\00c\004\00d\004\00e\004\00f\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\005\00a\005\00b\005\00c\005\00d\005\00e\005\00f\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\006\00a\006\00b\006\00c\006\00d\006\00e\006\00f\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\007\00a\007\00b\007\00c\007\00d\007\00e\007\00f\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\008\00a\008\00b\008\00c\008\00d\008\00e\008\00f\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\009\00a\009\00b\009\00c\009\00d\009\00e\009\00f\00a\000\00a\001\00a\002\00a\003\00a\004\00a\005\00a\006\00a\007\00a\008\00a\009\00a\00a\00a\00b\00a\00c\00a\00d\00a\00e\00a\00f\00b\000\00b\001\00b\002\00b\003\00b\004\00b\005\00b\006\00b\007\00b\008\00b\009\00b\00a\00b\00b\00b\00c\00b\00d\00b\00e\00b\00f\00c\000\00c\001\00c\002\00c\003\00c\004\00c\005\00c\006\00c\007\00c\008\00c\009\00c\00a\00c\00b\00c\00c\00c\00d\00c\00e\00c\00f\00d\000\00d\001\00d\002\00d\003\00d\004\00d\005\00d\006\00d\007\00d\008\00d\009\00d\00a\00d\00b\00d\00c\00d\00d\00d\00e\00d\00f\00e\000\00e\001\00e\002\00e\003\00e\004\00e\005\00e\006\00e\007\00e\008\00e\009\00e\00a\00e\00b\00e\00c\00e\00d\00e\00e\00e\00f\00f\000\00f\001\00f\002\00f\003\00f\004\00f\005\00f\006\00f\007\00f\008\00f\009\00f\00a\00f\00b\00f\00c\00f\00d\00f\00e\00f\00f\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5836) "\\\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00\00\00\00\00")
+ (data (i32.const 5932) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5968) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5996) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00p\00r\00o\00c\00e\00s\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 6060) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 6092) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00-\00w\00a\00s\00i\00/\00c\00r\00y\00p\00t\00o\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 6160) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\00\00\00\02\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -2969,13 +2969,26 @@
   i32.load
   i32.sub
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/bindings/internal/wasi_errors/errnoToString (param $0 i32) (result i32)
   local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
+  i32.const 65535
+  i32.and
+  i32.const 77
+  i32.lt_u
+  if
+   global.get $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING
+   local.get $0
+   i32.const 2
+   i32.const 15
+   i32.and
+   i32.shl
+   i32.const 65535
+   i32.and
+   i32.add
+   i32.load
+   return
+  end
+  i32.const 3968
  )
  (func $~lib/crypto/crypto.getRandomValues (param $0 i32)
   (local $1 i32)
@@ -2998,7 +3011,7 @@
   if
    local.get $1
    call $~lib/bindings/internal/wasi_errors/errnoToString
-   i32.const 4032
+   i32.const 4016
    i32.const 17
    i32.const 18
    call $~lib/wasi/index/abort
@@ -3044,14 +3057,14 @@
     i32.const 100
     i32.rem_u
     local.set $7
-    i32.const 4396
+    i32.const 4380
     local.get $6
     i32.const 2
     i32.shl
     i32.add
     i64.load32_u
     local.set $8
-    i32.const 4396
+    i32.const 4380
     local.get $7
     i32.const 2
     i32.shl
@@ -3094,7 +3107,7 @@
    i32.const 2
    i32.sub
    local.set $2
-   i32.const 4396
+   i32.const 4380
    local.get $10
    i32.const 2
    i32.shl
@@ -3117,7 +3130,7 @@
    i32.const 2
    i32.sub
    local.set $2
-   i32.const 4396
+   i32.const 4380
    local.get $1
    i32.const 2
    i32.shl
@@ -3167,7 +3180,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 4816
+    i32.const 4800
     local.get $1
     i32.wrap_i64
     i32.const 255
@@ -3189,7 +3202,7 @@
   i32.and
   if
    local.get $0
-   i32.const 4816
+   i32.const 4800
    local.get $1
    i32.wrap_i64
    i32.const 6
@@ -3311,7 +3324,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 5872
+    i32.const 5856
     local.get $1
     local.get $6
     i64.and
@@ -3345,7 +3358,7 @@
     i32.const 1
     i32.shl
     i32.add
-    i32.const 5872
+    i32.const 5856
     local.get $1
     local.get $6
     local.get $4
@@ -3683,7 +3696,7 @@
     if
      local.get $7
      call $~lib/bindings/internal/wasi_errors/errnoToString
-     i32.const 6032
+     i32.const 6016
      i32.const 211
      i32.const 16
      call $~lib/wasi/index/abort
@@ -3712,7 +3725,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 6032
+   i32.const 6016
    i32.const 217
    i32.const 3
    call $~lib/wasi/index/abort
@@ -3742,7 +3755,7 @@
   if
    local.get $10
    call $~lib/bindings/internal/wasi_errors/errnoToString
-   i32.const 6032
+   i32.const 6016
    i32.const 222
    i32.const 12
    call $~lib/wasi/index/abort
@@ -3859,19 +3872,12 @@
   i32.const 32
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 4816
+  i32.const 4800
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 5872
+  i32.const 5856
   local.get $0
   call $~lib/rt/itcms/__visit
-  global.get $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
  )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -3889,81 +3895,30 @@
   local.get $1
   call $~lib/arraybuffer/ArrayBufferView~visit
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  i32.const 1
-  drop
-  local.get $0
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.add
-  local.set $3
-  loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $4
-   local.get $4
-   if
-    local.get $2
-    i32.load
-    local.set $5
-    local.get $5
-    if
-     local.get $5
-     local.get $1
-     call $~lib/rt/itcms/__visit
-    end
-    local.get $2
-    i32.const 4
-    i32.add
-    local.set $2
-    br $while-continue|0
-   end
-  end
- )
- (func $~lib/staticarray/StaticArray<~lib/string/String>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/staticarray/StaticArray<~lib/string/String>#__visit
- )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $~lib/staticarray/StaticArray<~lib/string/String>
-    block $~lib/typedarray/Uint8Array
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Uint8Array $~lib/staticarray/StaticArray<~lib/string/String> $invalid
-       end
-       return
+   block $~lib/typedarray/Uint8Array
+    block $~lib/arraybuffer/ArrayBufferView
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/typedarray/Uint8Array $invalid
       end
       return
      end
-     local.get $0
-     local.get $1
-     call $~lib/arraybuffer/ArrayBufferView~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/typedarray/Uint8Array~visit
+    call $~lib/arraybuffer/ArrayBufferView~visit
     return
    end
    local.get $0
    local.get $1
-   call $~lib/staticarray/StaticArray<~lib/string/String>~visit
+   call $~lib/typedarray/Uint8Array~visit
    return
   end
   unreachable
@@ -3982,55 +3937,13 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 22624
-   i32.const 22672
+   i32.const 22608
+   i32.const 22656
    i32.const 1
    i32.const 1
    call $~lib/wasi/index/abort
    unreachable
   end
- )
- (func $~lib/bindings/internal/wasi_errors/errnoToString (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 65535
-  i32.and
-  i32.const 77
-  i32.lt_u
-  if
-   global.get $~lib/bindings/internal/wasi_errors/ERRNO_TO_STRING
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store
-   local.get $1
-   local.get $0
-   i32.const 65535
-   i32.and
-   call $~lib/staticarray/StaticArray<~lib/string/String>#__uget
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $1
-   return
-  end
-  i32.const 3984
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
  (func $~lib/typedarray/Uint8Array#toString (param $0 i32) (result i32)
   (local $1 i32)
@@ -4043,7 +3956,7 @@
   i32.const 0
   i32.store
   local.get $0
-  i32.const 5968
+  i32.const 5952
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -4076,7 +3989,7 @@
   local.get $0
   call $~lib/process/WritableStream#write<~lib/string/String>
   local.get $1
-  i32.const 6096
+  i32.const 6080
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
@@ -4141,7 +4054,7 @@
   i32.store
   local.get $2
   call $~lib/crypto/crypto.getRandomValues
-  i32.const 4080
+  i32.const 4064
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
@@ -4193,7 +4106,7 @@
   i32.store
   local.get $2
   call $~lib/crypto/crypto.getRandomValues
-  i32.const 4080
+  i32.const 4064
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
@@ -4269,7 +4182,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 6128
+     i32.const 6112
      i32.const 17
      i32.const 3
      call $~lib/wasi/index/abort
@@ -4313,7 +4226,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 6128
+     i32.const 6112
      i32.const 20
      i32.const 3
      call $~lib/wasi/index/abort
@@ -4516,8 +4429,8 @@
    i32.gt_s
   end
   if
-   i32.const 4192
-   i32.const 4320
+   i32.const 4176
+   i32.const 4304
    i32.const 350
    i32.const 5
    call $~lib/wasi/index/abort
@@ -4526,7 +4439,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 4384
+   i32.const 4368
    local.set $7
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -4714,7 +4627,7 @@
   local.get $10
   i32.eqz
   if
-   i32.const 4160
+   i32.const 4144
    local.set $12
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -4790,7 +4703,7 @@
   i32.const 0
   i32.lt_s
   if
-   i32.const 4160
+   i32.const 4144
    local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -4966,7 +4879,7 @@
   i32.const 0
   i32.eq
   if
-   i32.const 4160
+   i32.const 4144
    local.set $6
    global.get $~lib/memory/__stack_pointer
    i32.const 4
