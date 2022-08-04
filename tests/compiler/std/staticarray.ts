@@ -65,9 +65,9 @@ arr4 = changetype<StaticArray<Ref>>(0);
 
 {
   let source: StaticArray<i32> = [1, 2];
-  let result = StaticArray.concat(source, [1]);
+  let result = source.concat<StaticArray<i32>>([1]);
   assert(result.length == 3);
-  result = StaticArray.concat(source, []);
+  result = source.concat<StaticArray<i32>>([]);
   assert(result.length == source.length);
 }
 
