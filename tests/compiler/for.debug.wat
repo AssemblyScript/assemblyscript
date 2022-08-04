@@ -2544,6 +2544,7 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2559,10 +2560,10 @@
   call $for/Ref#constructor
   local.tee $1
   i32.store
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $1
-   local.set $2
-   local.get $2
+   local.set $3
+   local.get $3
    if
     local.get $0
     i32.const 1
@@ -2580,7 +2581,7 @@
      local.tee $1
      i32.store
     end
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $0
