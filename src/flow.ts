@@ -628,19 +628,15 @@ export class Flow {
   setNarrowedType(element: TypedElement, type: Type): void {
     assert(element.kind == ElementKind.LOCAL, "type narrowing only support Local");
     if (!type.isReference) return;
-    if (this.narrowedTypes == null) {
-      this.narrowedTypes = new NarrowedTypeMap();
-    }
-    let narrowedTypes = assert(this.narrowedTypes);
+    let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
+    this.narrowedTypes = narrowedTypes;
     narrowedTypes.set(element, type);
   }
   /** get type narrow, return null if not exist */
   getNarrowedType(element: TypedElement): Type | null {
     if (element.kind != ElementKind.LOCAL) return null;
-    if (this.narrowedTypes == null) {
-      this.narrowedTypes = new NarrowedTypeMap();
-    }
-    let narrowedTypes = assert(this.narrowedTypes);
+    const narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
+    this.narrowedTypes = narrowedTypes;
     return narrowedTypes.get(element);
   }
   /** do not trace `element` type narrow */
@@ -662,10 +658,8 @@ export class Flow {
   inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
     let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfTrue(condi, this);
     if (condiNarrow.size != 0) {
-      if (this.narrowedTypes == null) {
-        this.narrowedTypes = new NarrowedTypeMap();
-      }
-      let narrowedTypes = assert(this.narrowedTypes);
+      let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
+      this.narrowedTypes = narrowedTypes;
       narrowedTypes.mergeOr(condiNarrow);
     }
   }
@@ -673,10 +667,8 @@ export class Flow {
   inheritNarrowedTypeIfFalse(condi: ExpressionRef): void {
     let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfFalse(condi, this);
     if (condiNarrow.size != 0) {
-      if (this.narrowedTypes == null) {
-        this.narrowedTypes = new NarrowedTypeMap();
-      }
-      let narrowedTypes = assert(this.narrowedTypes);
+      let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
+      this.narrowedTypes = narrowedTypes;
       narrowedTypes.mergeOr(condiNarrow);
     }
   }
