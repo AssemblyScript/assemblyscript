@@ -5950,7 +5950,7 @@ export class Compiler extends DiagnosticEmitter {
     var valueExpr = this.compileExpression(valueExpression, targetType);
     var valueType = this.currentType;
 
-    let assignmentExpression = this.makeAssignment(
+    return this.makeAssignment(
       target,
       this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
       valueType,
@@ -5959,7 +5959,6 @@ export class Compiler extends DiagnosticEmitter {
       elementExpression,
       contextualType != Type.void
     );
-    return assignmentExpression;
   }
 
   /** Makes an assignment expression or block, assigning a value to a target. */
