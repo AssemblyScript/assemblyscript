@@ -619,12 +619,14 @@ export class Flow {
 
   /** set type assign */
   setAssignType(expr: ExpressionRef, element: TypedElement, type: Type): void {
+    assert(element.kind == ElementKind.LOCAL, "type narrowing only support Local");
     if (type && !type.isReference) return;
     this.setNarrowedType(element, type);
     this.conditionalNarrowedType.setAssignType(expr, element, type);
   }
   /** set type narrow */
   setNarrowedType(element: TypedElement, type: Type): void {
+    assert(element.kind == ElementKind.LOCAL, "type narrowing only support Local");
     if (!type.isReference) return;
     if (this.narrowedTypes == null) {
       this.narrowedTypes = new NarrowedTypeMap();
@@ -634,6 +636,7 @@ export class Flow {
   }
   /** get type narrow, return null if not exist */
   getNarrowedType(element: TypedElement): Type | null {
+    if (element.kind != ElementKind.LOCAL) return null;
     if (this.narrowedTypes == null) {
       this.narrowedTypes = new NarrowedTypeMap();
     }
@@ -642,6 +645,7 @@ export class Flow {
   }
   /** do not trace `element` type narrow */
   removeNarrowedType(element: TypedElement): void {
+    assert(element.kind == ElementKind.LOCAL, "type narrowing only support Local");
     let thisNarrowedTypes = this.narrowedTypes;
     if (thisNarrowedTypes) thisNarrowedTypes.delete(element);
     this.conditionalNarrowedType.removeElement(element);
@@ -649,6 +653,7 @@ export class Flow {
 
   /** set conditional type narrow */
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type): void {
+    assert(element.kind == ElementKind.LOCAL, "type narrowing only support Local");
     if (type && !type.isReference) return;
     this.conditionalNarrowedType.setConditionNarrowedType(expr, element, type);
   }

@@ -23,8 +23,6 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $typenarrow/value (mut i32) (i32.const 0))
- (global $typenarrow/condi (mut i32) (i32.const 1))
  (global $~lib/rt/__rtti_base i32 (i32.const 448))
  (global $~lib/memory/__data_end i32 (i32.const 508))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16892))
@@ -2192,6 +2190,8 @@
   if
    local.get $0
    call $typenarrow/B#b1
+   local.get $0
+   local.set $2
   end
   local.get $0
   local.tee $2
@@ -2209,6 +2209,8 @@
   else
    local.get $0
    call $typenarrow/B#b1
+   local.get $0
+   local.set $2
   end
   local.get $0
   local.tee $2
@@ -2228,6 +2230,8 @@
   if
    local.get $0
    call $typenarrow/B#b1
+   local.get $0
+   local.set $2
   end
   local.get $1
   if (result i32)
@@ -2247,6 +2251,8 @@
   if
    local.get $0
    call $typenarrow/B#b1
+   local.get $0
+   local.set $2
   end
   local.get $1
   if (result i32)
@@ -2269,6 +2275,8 @@
   else
    i32.const 432
    drop
+   local.get $0
+   local.set $2
   end
   local.get $0
   local.tee $2
@@ -2291,6 +2299,8 @@
   else
    i32.const 432
    drop
+   local.get $0
+   local.set $2
   end
   local.get $0
   local.tee $2
@@ -2330,6 +2340,87 @@
   end
   if
    nop
+  end
+  local.get $0
+  local.tee $2
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $2
+   i32.const 6
+   call $~lib/rt/__instanceof
+  end
+  if (result i32)
+   i32.const 1
+  else
+   i32.const 0
+  end
+  if
+   local.get $0
+   i32.load
+   drop
+   local.get $0
+   call $typenarrow/B#b1
+  end
+  local.get $0
+  local.tee $2
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $2
+   i32.const 4
+   call $~lib/rt/__instanceof
+  end
+  if (result i32)
+   i32.const 1
+  else
+   local.get $0
+   local.tee $2
+   i32.eqz
+   if (result i32)
+    i32.const 0
+   else
+    local.get $2
+    i32.const 6
+    call $~lib/rt/__instanceof
+   end
+  end
+  if
+   local.get $0
+   call $typenarrow/B#b1
+  end
+  local.get $0
+  local.tee $2
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $2
+   i32.const 4
+   call $~lib/rt/__instanceof
+  end
+  if (result i32)
+   local.get $0
+   local.tee $2
+   i32.eqz
+   if (result i32)
+    i32.const 0
+   else
+    local.get $2
+    i32.const 6
+    call $~lib/rt/__instanceof
+   end
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   nop
+  else
+   local.get $0
+   call $typenarrow/B#b1
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2338,13 +2429,6 @@
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
-  global.get $typenarrow/value
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
   i32.const 224
   local.get $0
   call $~lib/rt/itcms/__visit
@@ -2412,32 +2496,6 @@
   unreachable
  )
  (func $~start
-  call $start:typenarrow
- )
- (func $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__data_end
-  i32.lt_s
-  if
-   i32.const 16912
-   i32.const 16960
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $start:typenarrow
-  (local $0 i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
   memory.size
   i32.const 16
   i32.shl
@@ -2455,354 +2513,19 @@
   i32.const 320
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
-  i32.const 0
-  call $typenarrow/A#constructor
-  global.set $typenarrow/value
+ )
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  end
+  global.get $~lib/memory/__data_end
+  i32.lt_s
   if
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#b1
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  end
-  i32.eqz
-  if
-   nop
-  else
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#b1
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  end
-  if (result i32)
-   global.get $typenarrow/condi
-  else
-   i32.const 0
-  end
-  if
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#b1
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-  end
-  global.get $typenarrow/condi
-  if (result i32)
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-   local.get $0
-   i32.eqz
-   if (result i32)
-    i32.const 0
-   else
-    local.get $0
-    i32.const 4
-    call $~lib/rt/__instanceof
-   end
-  else
-   i32.const 0
-  end
-  if
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#b1
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-  end
-  global.get $typenarrow/condi
-  if (result i32)
+   i32.const 16912
+   i32.const 16960
    i32.const 1
-  else
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-   local.get $0
-   i32.eqz
-   if (result i32)
-    i32.const 0
-   else
-    local.get $0
-    i32.const 4
-    call $~lib/rt/__instanceof
-   end
-   i32.eqz
-  end
-  if
-   nop
-  else
-   i32.const 432
-   drop
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  end
-  i32.eqz
-  if (result i32)
    i32.const 1
-  else
-   global.get $typenarrow/condi
+   call $~lib/builtins/abort
+   unreachable
   end
-  if
-   nop
-  else
-   i32.const 432
-   drop
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  end
-  if (result i32)
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#check
-  else
-   i32.const 0
-  end
-  if
-   nop
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  end
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#check
-  end
-  if
-   nop
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 6
-   call $~lib/rt/__instanceof
-  end
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
-  if
-   global.get $typenarrow/value
-   i32.load
-   drop
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#b1
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  end
-  if (result i32)
-   i32.const 1
-  else
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-   local.get $0
-   i32.eqz
-   if (result i32)
-    i32.const 0
-   else
-    local.get $0
-    i32.const 6
-    call $~lib/rt/__instanceof
-   end
-  end
-  if
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#b1
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $typenarrow/value
-  local.tee $0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  end
-  if (result i32)
-   global.get $~lib/memory/__stack_pointer
-   global.get $typenarrow/value
-   local.tee $0
-   i32.store
-   local.get $0
-   i32.eqz
-   if (result i32)
-    i32.const 0
-   else
-    local.get $0
-    i32.const 6
-    call $~lib/rt/__instanceof
-   end
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   nop
-  else
-   global.get $typenarrow/value
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store offset=4
-   local.get $1
-   call $typenarrow/B#b1
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $typenarrow/A#constructor (param $0 i32) (result i32)
   (local $1 i32)

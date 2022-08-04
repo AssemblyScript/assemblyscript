@@ -88,7 +88,6 @@ import {
   IndexSignature,
   File,
   mangleInternalName,
-  TypedElement
 } from "./program";
 
 import {
@@ -6228,13 +6227,6 @@ export class Compiler extends DiagnosticEmitter {
         valueExpr
       );
     }
-    if (type.isReference) {
-      let narrowedType = valueType;
-      if (!valueType.isNullableReference || flow.isNonnull(valueExpr, type)) {
-        narrowedType = valueType.nonNullableType;
-      }
-      flow.setAssignType(expressionRef, global, narrowedType);
-    }
     return expressionRef;
   }
 
@@ -7938,8 +7930,8 @@ export class Compiler extends DiagnosticEmitter {
     let instanceExpression = this.makeInstanceofType(expression, expectedType);
     if (expression.expression.kind == NodeKind.IDENTIFIER) {
       let element = flow.lookup((<IdentifierExpression>expression.expression).text);
-      if (element instanceof TypedElement) {
-        flow.setConditionNarrowedType(instanceExpression, <TypedElement>element, expectedType);
+      if (element instanceof Local) {
+        flow.setConditionNarrowedType(instanceExpression, <Local>element, expectedType);
       }
     }
     return instanceExpression;
