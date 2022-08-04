@@ -4554,7 +4554,7 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  block $~lib/util/bytes/FILL<i32>|inlined.0
+  block $~lib/util/bytes/FILL<u32>|inlined.0
    local.get $0
    i32.load offset=4
    local.set $8
@@ -4656,7 +4656,7 @@
      i32.shl
      memory.fill
     end
-    br $~lib/util/bytes/FILL<i32>|inlined.0
+    br $~lib/util/bytes/FILL<u32>|inlined.0
    end
    loop $for-loop|0
     local.get $5
