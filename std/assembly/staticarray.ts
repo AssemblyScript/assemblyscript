@@ -37,32 +37,9 @@ export class StaticArray<T> {
     return out;
   }
 
+  /** @deprecated Please use source.concat<StaticArray<T>> instead. */
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T> {
-    var sourceLen = source.length;
-    var otherLen = other.length;
-    var outLen = sourceLen + otherLen;
-    if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<StaticArray<T>>(__new(<usize>outLen << alignof<T>(), idof<StaticArray<T>>()));
-    var outStart = changetype<usize>(out);
-    var sourceSize = <usize>sourceLen << alignof<T>();
-    if (isManaged<T>()) {
-      for (let offset: usize = 0; offset < sourceSize; offset += sizeof<T>()) {
-        let ref = load<usize>(changetype<usize>(source) + offset);
-        store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
-      }
-      outStart += sourceSize;
-      let otherSize = <usize>otherLen << alignof<T>();
-      for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
-        let ref = load<usize>(changetype<usize>(other) + offset);
-        store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
-      }
-    } else {
-      memory.copy(outStart, changetype<usize>(source), sourceSize);
-      memory.copy(outStart + sourceSize, changetype<usize>(other), <usize>otherLen << alignof<T>());
-    }
-    return out;
+    return source.concat<StaticArray<T>>(other);
   }
 
   /** @deprecated Please use source.slice<StaticArray<T>> instead. */
@@ -237,38 +214,6 @@ export class StaticArray<T> {
     return -1;
   }
 
-  concat(other: Array<T>): Array<T> {
-    var thisLen = this.length;
-    var otherLen = other.length;
-    var outLen = thisLen + otherLen;
-    if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<Array<T>>(__newArray(outLen, alignof<T>(), idof<Array<T>>()));
-    var outStart = out.dataStart;
-    var thisSize = <usize>thisLen << alignof<T>();
-    if (isManaged<T>()) {
-      let thisStart = changetype<usize>(this);
-      for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
-        let ref = load<usize>(thisStart + offset);
-        store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
-      }
-      outStart += thisSize;
-      let otherStart = other.dataStart;
-      let otherSize = <usize>otherLen << alignof<T>();
-      for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
-        let ref = load<usize>(otherStart + offset);
-        store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
-      }
-    } else {
-      memory.copy(outStart, changetype<usize>(this), thisSize);
-      memory.copy(outStart + thisSize, other.dataStart, <usize>otherLen << alignof<T>());
-    }
-    return out;
-  }
-
-  /*
-  TODO: use this version when all infer issues are gone
   concat<U extends ArrayLike<T> = Array<T>>(other: U): U {
     let sourceLen = this.length;
     let otherLen = other.length;
@@ -330,7 +275,6 @@ export class StaticArray<T> {
     }
     return out;
   }
-  */
 
   slice<U extends ArrayLike<T> = Array<T>>(start: i32 = 0, end: i32 = i32.MAX_VALUE): U {
     var length = this.length;

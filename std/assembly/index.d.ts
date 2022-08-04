@@ -1774,6 +1774,7 @@ declare class Array<T> {
 declare class StaticArray<T> {
   [key: number]: T;
   static fromArray<T>(source: Array<T>): StaticArray<T>;
+  /** @deprecated */
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T>;
   /** @deprecated */
   static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
@@ -1795,6 +1796,7 @@ declare class StaticArray<T> {
   every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
+  concat<U extends ArrayLike<T>>(other: U): U;
   slice(from?: i32, to?: i32): Array<T>;
   slice<U extends ArrayLike<T>>(from?: i32, to?: i32): U;
   sort(comparator?: (a: T, b: T) => i32): this;

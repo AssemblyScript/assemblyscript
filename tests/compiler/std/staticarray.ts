@@ -111,7 +111,9 @@ arr4 = changetype<StaticArray<Ref>>(0);
 {
   const source: StaticArray<string> = ['ant', 'bison', 'camel', 'duck', 'elephant'];
 
-  let result = source.concat([]);
+  // TODO: omit default generic type after
+  // when https://github.com/AssemblyScript/assemblyscript/issues/2405 fixed
+  let result = source.concat<string[]>([]);
   assert(result.length == source.length);
   assert(isArray(result));
 
