@@ -1795,7 +1795,8 @@ declare class StaticArray<T> {
   every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
-  slice<U extends ArrayLike<T> = Array<T>>(from?: i32, to?: i32): U;
+  slice(from?: i32, to?: i32): Array<T>;
+  slice<U extends ArrayLike<T>>(from?: i32, to?: i32): U;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): this;
