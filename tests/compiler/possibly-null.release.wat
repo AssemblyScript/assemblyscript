@@ -23,6 +23,7 @@
  (export "testLogicalAndMulti" (func $export:possibly-null/testLogicalAndMulti))
  (export "testLogicalOrMulti" (func $export:possibly-null/testLogicalAndMulti))
  (export "testAssign" (func $export:possibly-null/testLogicalAndMulti))
+ (export "testAssignInCondi" (func $export:possibly-null/testTrue))
  (export "testNeverNull" (func $export:possibly-null/testTrue))
  (export "testLogicalOrTypeInfer" (func $export:possibly-null/testLogicalOrTypeInfer))
  (func $export:possibly-null/testTrue (param $0 i32)

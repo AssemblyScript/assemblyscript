@@ -318,7 +318,7 @@ export class TypeNarrowChecker {
       typeMap.mergeElementOr(narrowedTypeElement);
     }
     const assignMap = this.assignMap;
-    if (assignMap.has(expr)) {
+    if (assignMap.has(expr)) {     
       const assignTypeElement = assert(assignMap.get(expr));
       typeMap.set(assignTypeElement.element, assignTypeElement.type);
     }
@@ -326,8 +326,10 @@ export class TypeNarrowChecker {
     // nullable check
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
-        const local = flow.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-        typeMap.setNonnull(local);
+        if (isLocalTee(expr)) {
+          const local = flow.parentFunction.localsByIndex[getLocalSetIndex(expr)];
+          typeMap.setNonnull(local);
+        }
         break;
       }
       case ExpressionId.LocalGet: {

@@ -1,19 +1,57 @@
-class Example {}
+class Ref {}
 
-function notNullable(a: Example): void {}
+declare function getBool(): bool;
+function notNullable(a: Ref): void {}
 
+// "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
 notNullable(null);
 
-function test(): void {
-  let value: Example | null = new Example();
-  if (value != null) {
-    // value = null;
-    true && (value = null);
-    // "TS2322: Type 'nullable/Example | null' is not assignable to type 'nullable/Example'.",
-    notNullable(value);
+export function testAssign(v: Ref | null): void {
+  if (v != null) {
+    v = null;
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
+  }
+}
+export function testAssignLogicAnd(v: Ref | null): void {
+  if (v != null) {
+    getBool() && (v = null);
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
+  }
+}
+export function testAssignLogicOr(v: Ref | null): void {
+  if (v != null) {
+    getBool() || (v = null);
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
   }
 }
 
-test();
-
-ERROR("EOF");
+export function testAssignInCondiLogicAnd(v: Ref | null): void {
+  if (getBool() && !(v = null)) {
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
+  } else {
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
+  }
+  if (getBool() && (v = null)) {
+  } else {
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
+  }
+}
+export function testAssignInCondiLogicOr(v: Ref | null): void {
+  if (getBool() || (v = null)) {
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
+  } else {
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
+  }
+  if (getBool() || !(v = null)) {
+    // "TS2322: Type 'nullable/Ref | null' is not assignable to type 'nullable/Ref'.",
+    notNullable(v);
+  }
+}

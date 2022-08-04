@@ -119,6 +119,13 @@ export function testAssign(a: Ref | null, b: Ref): void {
   a = b;
   if (isNullable(a)) ERROR("should be non-nullable");
 }
+export function testAssignInCondi(a: Ref | null): void {
+  if ((a = null)) {
+    if (isNullable(a)) ERROR("should be non-nullable");
+  } else {
+    if (!isNullable(a)) ERROR("should be non-nullable");
+  }
+}
 
 export function testNeverNull(a: Ref | null): void {
   if (a) {
@@ -128,5 +135,5 @@ export function testNeverNull(a: Ref | null): void {
 
 export function testLogicalOrTypeInfer(a: Ref | null, b: Ref): void {
   let c: Ref = a || b;
-  requireNonNull(c);
+  if (isNullable(c)) ERROR("should be non-nullable");
 }

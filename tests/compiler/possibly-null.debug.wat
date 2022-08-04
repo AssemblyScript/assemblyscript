@@ -29,6 +29,7 @@
  (export "testLogicalAndMulti" (func $export:possibly-null/testLogicalAndMulti))
  (export "testLogicalOrMulti" (func $export:possibly-null/testLogicalOrMulti))
  (export "testAssign" (func $export:possibly-null/testAssign))
+ (export "testAssignInCondi" (func $export:possibly-null/testAssignInCondi))
  (export "testNeverNull" (func $export:possibly-null/testNeverNull))
  (export "testLogicalOrTypeInfer" (func $export:possibly-null/testLogicalOrTypeInfer))
  (func $possibly-null/testTrue (param $0 i32)
@@ -252,6 +253,18 @@
   i32.const 0
   drop
  )
+ (func $possibly-null/testAssignInCondi (param $0 i32)
+  i32.const 0
+  local.tee $0
+  if
+   i32.const 0
+   drop
+  else
+   i32.const 1
+   i32.eqz
+   drop
+  end
+ )
  (func $possibly-null/testNeverNull (param $0 i32)
   local.get $0
   if
@@ -278,8 +291,7 @@
   end
   local.tee $2
   i32.store
-  local.get $2
-  call $possibly-null/requireNonNull
+  i32.const 0
   drop
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -588,6 +600,22 @@
   call $possibly-null/testAssign
   global.get $~lib/memory/__stack_pointer
   i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $export:possibly-null/testAssignInCondi (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $possibly-null/testAssignInCondi
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
