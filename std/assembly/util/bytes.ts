@@ -53,14 +53,13 @@ export function REVERSE<T>(ptr: usize, len: usize): void {
   }
 }
 
-// @ts-ignore
-@inline export function FILL<T>(
+export function FILL<T>(
   ptr: usize,
   len: usize,
   value: T,
   start: isize,
   end: isize,
-  self: usize = ptr
+  self: usize
 ): void {
   start = start < 0 ? max(len + start, 0) : min(start, len);
   end   = end   < 0 ? max(len + end,   0) : min(end,   len);

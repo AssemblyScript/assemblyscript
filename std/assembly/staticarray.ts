@@ -142,7 +142,7 @@ export class StaticArray<T> {
   }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    FILL<T>(changetype<usize>(this), this.length, value, start, end);
+    FILL<T>(changetype<usize>(this), this.length, value, start, end, changetype<usize>(this));
     return this;
   }
 

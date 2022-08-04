@@ -62,7 +62,7 @@ export class Int8Array extends ArrayBufferView {
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end, 0);
     return this;
   }
 
@@ -204,7 +204,7 @@ export class Uint8Array extends ArrayBufferView {
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end, 0);
     return this;
   }
 
@@ -347,7 +347,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
     value = ~(value >> 31) & (((255 - value) >> 31) | value);
-    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end, 0);
     return this;
   }
 
@@ -489,7 +489,7 @@ export class Int16Array extends ArrayBufferView {
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
-    FILL<u16>(this.dataStart, this.length, u16(value), start, end);
+    FILL<u16>(this.dataStart, this.length, u16(value), start, end, 0);
     return this;
   }
 
@@ -631,7 +631,7 @@ export class Uint16Array extends ArrayBufferView {
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
-    FILL<u16>(this.dataStart, this.length, u16(value), start, end);
+    FILL<u16>(this.dataStart, this.length, u16(value), start, end, 0);
     return this;
   }
 
@@ -773,7 +773,7 @@ export class Int32Array extends ArrayBufferView {
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
-    FILL<u32>(this.dataStart, this.length, u32(value), start, end);
+    FILL<u32>(this.dataStart, this.length, u32(value), start, end, 0);
     return this;
   }
 
@@ -915,7 +915,7 @@ export class Uint32Array extends ArrayBufferView {
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
-    FILL<u32>(this.dataStart, this.length, value, start, end);
+    FILL<u32>(this.dataStart, this.length, value, start, end, 0);
     return this;
   }
 
@@ -1057,7 +1057,7 @@ export class Int64Array extends ArrayBufferView {
   }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
-    FILL<u64>(this.dataStart, this.length, u64(value), start, end);
+    FILL<u64>(this.dataStart, this.length, u64(value), start, end, 0);
     return this;
   }
 
@@ -1199,7 +1199,7 @@ export class Uint64Array extends ArrayBufferView {
   }
 
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
-    FILL<u64>(this.dataStart, this.length, value, start, end);
+    FILL<u64>(this.dataStart, this.length, value, start, end, 0);
     return this;
   }
 
@@ -1341,7 +1341,7 @@ export class Float32Array extends ArrayBufferView {
   }
 
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
-    FILL<f32>(this.dataStart, this.length, value, start, end);
+    FILL<f32>(this.dataStart, this.length, value, start, end, 0);
     return this;
   }
 
@@ -1483,7 +1483,7 @@ export class Float64Array extends ArrayBufferView {
   }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
-    FILL<f64>(this.dataStart, this.length, value, start, end);
+    FILL<f64>(this.dataStart, this.length, value, start, end, 0);
     return this;
   }
 

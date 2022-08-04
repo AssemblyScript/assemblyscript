@@ -5120,7 +5120,7 @@
    local.tee $0
    local.get $0
    i32.const 3
-   i32.gt_u
+   i32.gt_s
    select
    local.tee $2
    i32.const 2

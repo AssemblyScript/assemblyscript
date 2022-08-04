@@ -11,9 +11,9 @@
  (type $f32_i32_i32_=>_i32 (func (param f32 i32 i32) (result i32)))
  (type $f64_i32_i32_=>_i32 (func (param f64 i32 i32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
+ (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
- (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i64_i64_i32_i32_=>_i64 (func (param i64 i64 i32 i32) (result i64)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
@@ -4342,75 +4342,55 @@
   local.get $2
   i32.store8
  )
- (func $~lib/typedarray/Int8Array#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  (local $5 i32)
+ (func $~lib/util/bytes/FILL<u8> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $8
-  local.get $0
-  call $~lib/typedarray/Int8Array#get:length
-  local.set $7
-  local.get $1
-  local.set $6
-  local.get $2
-  local.set $5
   local.get $3
-  local.set $4
-  local.get $8
-  local.set $9
-  local.get $5
   i32.const 0
   i32.lt_s
   if (result i32)
-   local.get $7
-   local.get $5
+   local.get $1
+   local.get $3
    i32.add
-   local.tee $10
+   local.tee $6
    i32.const 0
-   local.tee $11
-   local.get $10
-   local.get $11
+   local.tee $7
+   local.get $6
+   local.get $7
    i32.gt_u
    select
   else
-   local.get $5
-   local.tee $11
+   local.get $3
+   local.tee $7
+   local.get $1
+   local.tee $6
    local.get $7
-   local.tee $10
-   local.get $11
-   local.get $10
+   local.get $6
    i32.lt_s
    select
   end
-  local.set $5
+  local.set $3
   local.get $4
   i32.const 0
   i32.lt_s
   if (result i32)
-   local.get $7
+   local.get $1
    local.get $4
    i32.add
-   local.tee $10
+   local.tee $6
    i32.const 0
-   local.tee $11
-   local.get $10
-   local.get $11
+   local.tee $7
+   local.get $6
+   local.get $7
    i32.gt_u
    select
   else
    local.get $4
-   local.tee $11
+   local.tee $7
+   local.get $1
+   local.tee $6
    local.get $7
-   local.tee $10
-   local.get $11
-   local.get $10
+   local.get $6
    i32.lt_s
    select
   end
@@ -4421,19 +4401,30 @@
   i32.const 1
   i32.eq
   drop
-  local.get $5
+  local.get $3
   local.get $4
   i32.lt_s
   if
-   local.get $8
-   local.get $5
+   local.get $0
+   local.get $3
    i32.add
-   local.get $6
+   local.get $2
    local.get $4
-   local.get $5
+   local.get $3
    i32.sub
    memory.fill
   end
+ )
+ (func $~lib/typedarray/Int8Array#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $0
+  call $~lib/typedarray/Int8Array#get:length
+  local.get $1
+  local.get $2
+  local.get $3
+  i32.const 0
+  call $~lib/util/bytes/FILL<u8>
   local.get $0
  )
  (func $~lib/rt/__newBuffer (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -4545,141 +4536,130 @@
   end
   i32.const 1
  )
- (func $~lib/typedarray/Int32Array#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  (local $5 i32)
+ (func $~lib/util/bytes/FILL<u32> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  block $~lib/util/bytes/FILL<u32>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $8
-   local.get $0
-   call $~lib/typedarray/Int32Array#get:length
-   local.set $7
+  local.get $3
+  i32.const 0
+  i32.lt_s
+  if (result i32)
    local.get $1
-   local.set $6
-   local.get $2
-   local.set $5
    local.get $3
-   local.set $4
-   local.get $8
-   local.set $9
-   local.get $5
+   i32.add
+   local.tee $6
    i32.const 0
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.gt_u
+   select
+  else
+   local.get $3
+   local.tee $7
+   local.get $1
+   local.tee $6
+   local.get $7
+   local.get $6
    i32.lt_s
-   if (result i32)
-    local.get $7
-    local.get $5
-    i32.add
-    local.tee $10
-    i32.const 0
-    local.tee $11
-    local.get $10
-    local.get $11
-    i32.gt_u
-    select
-   else
-    local.get $5
-    local.tee $11
-    local.get $7
-    local.tee $10
-    local.get $11
-    local.get $10
-    i32.lt_s
-    select
-   end
-   local.set $5
+   select
+  end
+  local.set $3
+  local.get $4
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $1
    local.get $4
+   i32.add
+   local.tee $6
    i32.const 0
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.gt_u
+   select
+  else
+   local.get $4
+   local.tee $7
+   local.get $1
+   local.tee $6
+   local.get $7
+   local.get $6
    i32.lt_s
-   if (result i32)
-    local.get $7
-    local.get $4
-    i32.add
-    local.tee $10
-    i32.const 0
-    local.tee $11
-    local.get $10
-    local.get $11
-    i32.gt_u
-    select
-   else
-    local.get $4
-    local.tee $11
-    local.get $7
-    local.tee $10
-    local.get $11
-    local.get $10
-    i32.lt_s
-    select
-   end
-   local.set $4
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 0
-   i32.const 1
-   i32.le_s
-   drop
-   i32.const 1
-   drop
-   local.get $6
-   i32.const 0
-   i32.eq
-   local.get $6
-   i32.const -1
-   i32.eq
-   i32.or
+   select
+  end
+  local.set $4
+  i32.const 0
+  drop
+  i32.const 4
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 1
+  i32.le_s
+  drop
+  i32.const 1
+  drop
+  local.get $2
+  i32.const 0
+  i32.eq
+  local.get $2
+  i32.const -1
+  i32.eq
+  i32.or
+  if
+   local.get $3
+   local.get $4
+   i32.lt_s
    if
-    local.get $5
+    local.get $0
+    local.get $3
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $2
     local.get $4
-    i32.lt_s
-    if
-     local.get $8
-     local.get $5
-     i32.const 2
-     i32.shl
-     i32.add
-     local.get $6
-     local.get $4
-     local.get $5
-     i32.sub
-     i32.const 2
-     i32.shl
-     memory.fill
-    end
-    br $~lib/util/bytes/FILL<u32>|inlined.0
+    local.get $3
+    i32.sub
+    i32.const 2
+    i32.shl
+    memory.fill
    end
-   loop $for-loop|0
-    local.get $5
-    local.get $4
-    i32.lt_s
-    local.set $11
-    local.get $11
-    if
-     local.get $8
-     local.get $5
-     i32.const 2
-     i32.shl
-     i32.add
-     local.get $6
-     i32.store
-     local.get $5
-     i32.const 1
-     i32.add
-     local.set $5
-     br $for-loop|0
-    end
+   return
+  end
+  loop $for-loop|0
+   local.get $3
+   local.get $4
+   i32.lt_s
+   local.set $7
+   local.get $7
+   if
+    local.get $0
+    local.get $3
+    i32.const 2
+    i32.shl
+    i32.add
+    local.get $2
+    i32.store
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|0
    end
   end
+ )
+ (func $~lib/typedarray/Int32Array#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $0
+  call $~lib/typedarray/Int32Array#get:length
+  local.get $1
+  local.get $2
+  local.get $3
+  i32.const 0
+  call $~lib/util/bytes/FILL<u32>
   local.get $0
  )
  (func $~lib/array/Array<i32>#get:length (param $0 i32) (result i32)

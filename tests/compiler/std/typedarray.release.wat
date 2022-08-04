@@ -3806,7 +3806,7 @@
   i32.lt_s
   select
   local.set $2
-  block $~lib/util/bytes/FILL<u32>|inlined.0
+  block $__inlined_func$~lib/util/bytes/FILL<u32>
    local.get $1
    i32.eqz
    local.get $1
@@ -3831,7 +3831,7 @@
      i32.shl
      memory.fill
     end
-    br $~lib/util/bytes/FILL<u32>|inlined.0
+    br $__inlined_func$~lib/util/bytes/FILL<u32>
    end
    loop $for-loop|0
     local.get $0
