@@ -4,7 +4,7 @@ import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { Runtime } from "shared/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
 import { REVERSE } from "./util/bytes";
-import { idof } from "./builtins";
+import { idof, isArray } from "./builtins";
 import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
@@ -65,26 +65,9 @@ export class StaticArray<T> {
     return out;
   }
 
+  /** @deprecated Please use source.slice<StaticArray<T>> instead. */
   static slice<T>(source: StaticArray<T>, start: i32 = 0, end: i32 = i32.MAX_VALUE): StaticArray<T> {
-    var length = source.length;
-    start = start < 0 ? max(start + length, 0) : min(start, length);
-    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
-    length = max(end - start, 0);
-    var sliceSize = <usize>length << alignof<T>();
-    var slice = changetype<StaticArray<T>>(__new(sliceSize, idof<StaticArray<T>>()));
-    var sourcePtr = changetype<usize>(source) + (<usize>start << alignof<T>());
-    if (isManaged<T>()) {
-      let off: usize = 0;
-      while (off < sliceSize) {
-        let ref = load<usize>(sourcePtr + off);
-        store<usize>(changetype<usize>(slice) + off, ref);
-        __link(changetype<usize>(slice), ref, true);
-        off += sizeof<usize>();
-      }
-    } else {
-      memory.copy(changetype<usize>(slice), sourcePtr, sliceSize);
-    }
-    return slice;
+    return source.slice<StaticArray<T>>(start, end);
   }
 
   constructor(length: i32) {
@@ -284,27 +267,49 @@ export class StaticArray<T> {
     return out;
   }
 
-  slice(start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
+  slice<U extends ArrayLike<T> = Array<T>>(start: i32 = 0, end: i32 = i32.MAX_VALUE): U {
     var length = this.length;
     start = start < 0 ? max(start + length, 0) : min(start, length);
-    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
+    end   = end   < 0 ? max(end   + length, 0) : min(end,   length);
     length = max(end - start, 0);
-    var slice = changetype<Array<T>>(__newArray(length, alignof<T>(), idof<Array<T>>()));
-    var sliceBase = slice.dataStart;
-    var thisBase = changetype<usize>(this) + (<usize>start << alignof<T>());
-    if (isManaged<T>()) {
-      let off = <usize>0;
-      let end = <usize>length << alignof<usize>();
-      while (off < end) {
-        let ref = load<usize>(thisBase + off);
-        store<usize>(sliceBase + off, ref);
-        __link(changetype<usize>(slice), ref, true);
-        off += sizeof<usize>();
+
+    var sourceBase = changetype<usize>(this) + (<usize>start << alignof<T>());
+    var size = <usize>length << alignof<T>();
+    let res!: U;
+
+    if (isArray<U>()) {
+      // return Array
+      res = changetype<U>(__newArray(length, alignof<T>(), idof<Array<T>>()));
+      let targetBase = changetype<Array<T>>(res).dataStart;
+      if (isManaged<T>()) {
+        let off: usize = 0;
+        while (off < size) {
+          let ref = load<usize>(sourceBase + off);
+          store<usize>(targetBase + off, ref);
+          __link(changetype<usize>(res), ref, true);
+          off += sizeof<usize>();
+        }
+      } else {
+        memory.copy(targetBase, sourceBase, size);
       }
     } else {
-      memory.copy(sliceBase, thisBase, length << alignof<T>());
+      assert(res instanceof StaticArray<T>);
+      // return StaticArray
+      res = changetype<U>(__new(size, idof<StaticArray<T>>()));
+      let targetBase = changetype<usize>(res);
+      if (isManaged<T>()) {
+        let off: usize = 0;
+        while (off < size) {
+          let ref = load<usize>(sourceBase + off);
+          store<usize>(targetBase + off, ref);
+          __link(targetBase, ref, true);
+          off += sizeof<usize>();
+        }
+      } else {
+        memory.copy(targetBase, sourceBase, size);
+      }
     }
-    return slice;
+    return res;
   }
 
   findIndex(fn: (value: T, index: i32, array: StaticArray<T>) => bool): i32 {

@@ -173,7 +173,7 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 118
+   i32.const 101
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -197,7 +197,7 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 133
+   i32.const 116
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -3510,7 +3510,7 @@
    local.get $2
    i32.const 0
    i32.const 2147483647
-   call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+   call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
    local.tee $0
    i32.store offset=4
    local.get $0
@@ -3581,7 +3581,7 @@
    local.get $2
    i32.const 1
    i32.const 3
-   call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+   call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
    local.tee $0
    i32.store offset=4
    local.get $0
@@ -3650,7 +3650,7 @@
    local.get $2
    i32.const 1
    i32.const 2147483647
-   call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+   call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
    local.tee $0
    i32.store offset=4
    local.get $2
@@ -3680,7 +3680,7 @@
    local.get $2
    i32.const 0
    i32.const 50
-   call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+   call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
    local.tee $0
    i32.store offset=4
    local.get $0
@@ -3708,7 +3708,7 @@
    local.get $2
    i32.const 100
    i32.const 2147483647
-   call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+   call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
    local.tee $0
    i32.store offset=4
    local.get $0
@@ -3729,7 +3729,7 @@
    local.get $2
    i32.const -1
    i32.const 2147483647
-   call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+   call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
    local.tee $0
    i32.store offset=4
    local.get $0
@@ -3775,7 +3775,7 @@
    local.get $2
    i32.const -2
    i32.const -2
-   call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+   call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
    local.tee $0
    i32.store offset=4
    local.get $0
@@ -3796,7 +3796,7 @@
    local.get $2
    i32.const 2
    i32.const -2
-   call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+   call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
    local.tee $0
    i32.store offset=4
    local.get $0
@@ -6518,7 +6518,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $4
  )
- (func $~lib/staticarray/StaticArray.slice<~lib/string/String> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/memory/__stack_pointer
@@ -6546,6 +6546,7 @@
   i32.const 2
   i32.shr_u
   local.set $3
+  local.get $0
   local.get $1
   i32.const 0
   i32.lt_s
@@ -6553,9 +6554,9 @@
    local.get $1
    local.get $3
    i32.add
-   local.tee $1
+   local.tee $0
    i32.const 0
-   local.get $1
+   local.get $0
    i32.const 0
    i32.gt_s
    select
@@ -6567,7 +6568,11 @@
    i32.lt_s
    select
   end
-  local.set $4
+  local.tee $0
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $2
   i32.const 0
@@ -6576,9 +6581,9 @@
    local.get $2
    local.get $3
    i32.add
-   local.tee $1
+   local.tee $2
    i32.const 0
-   local.get $1
+   local.get $2
    i32.const 0
    i32.gt_s
    select
@@ -6590,11 +6595,11 @@
    i32.lt_s
    select
   end
-  local.get $4
+  local.get $0
   i32.sub
-  local.tee $1
+  local.tee $0
   i32.const 0
-  local.get $1
+  local.get $0
   i32.const 0
   i32.gt_s
   select
@@ -6603,14 +6608,8 @@
   local.tee $3
   i32.const 8
   call $~lib/rt/itcms/__new
-  local.tee $1
+  local.tee $4
   i32.store
-  local.get $0
-  local.get $4
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $0
   i32.const 0
   local.set $2
   loop $while-continue|0
@@ -6618,19 +6617,19 @@
    local.get $3
    i32.lt_u
    if
+    local.get $2
+    local.get $4
+    i32.add
     local.get $1
     local.get $2
     i32.add
-    local.get $0
-    local.get $2
-    i32.add
     i32.load
-    local.tee $4
+    local.tee $0
     i32.store
-    local.get $4
+    local.get $0
     if
-     local.get $1
      local.get $4
+     local.get $0
      i32.const 1
      call $byn-split-outlined-A$~lib/rt/itcms/__link
     end
@@ -6645,7 +6644,7 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $4
  )
  (func $~lib/staticarray/StaticArray<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -6677,7 +6676,7 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 118
+   i32.const 101
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -6696,7 +6695,7 @@
   if
    i32.const 2176
    i32.const 1152
-   i32.const 122
+   i32.const 105
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -6749,7 +6748,7 @@
   if
    i32.const 1680
    i32.const 1152
-   i32.const 261
+   i32.const 244
    i32.const 60
    call $~lib/builtins/abort
    unreachable

@@ -74,35 +74,35 @@ arr4 = changetype<StaticArray<Ref>>(0);
 // slice
 {
   const source: StaticArray<string> = ['ant', 'bison', 'camel', 'duck', 'elephant'];
-  let result = StaticArray.slice(source);
+  let result = source.slice<StaticArray<string>>();
   assert(result.length == source.length);
 
   for(let i = 0; i < source.length; i++) {
     assert(source[i] == result[i]);
   }
 
-  result = StaticArray.slice(source, 1, 3);
+  result = source.slice<StaticArray<string>>(1, 3);
   assert(result.length == 2);
   assert(result[0] == "bison");
   assert(result[1] == "camel");
 
-  result = StaticArray.slice(source, 1);
+  result = source.slice<StaticArray<string>>(1);
   assert(result.length == (source.length - 1));
 
-  result = StaticArray.slice(source, 0, 50);
+  result = source.slice<StaticArray<string>>(0, 50);
   assert(result.length == source.length);
 
-  result = StaticArray.slice(source, 100);
+  result = source.slice<StaticArray<string>>(100);
   assert(result.length == 0);
 
-  result = StaticArray.slice(source, -1);
+  result = source.slice<StaticArray<string>>(-1);
   assert(result.length == 1);
   assert(result[0] == "elephant");
 
-  result = StaticArray.slice(source, -2, -2);
+  result = source.slice<StaticArray<string>>(-2, -2);
   assert(result.length == 0);
 
-  result = StaticArray.slice(source, 2, -2);
+  result = source.slice<StaticArray<string>>(2, -2);
   assert(result.length == 1);
   assert(result[0] == "camel");
 }
