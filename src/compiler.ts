@@ -6207,26 +6207,23 @@ export class Compiler extends DiagnosticEmitter {
     /** Whether to tee the value. */
     tee: bool
   ): ExpressionRef {
-    let expressionRef: ExpressionRef;
     var module = this.module;
     var type = global.type;
-    var flow = this.currentFlow;
     assert(type != Type.void);
     var typeRef = type.toRef();
     valueExpr = this.ensureSmallIntegerWrap(valueExpr, type); // globals must be wrapped
     if (tee) { // (global = value), global
       this.currentType = type;
-      expressionRef = module.block(null, [
+      return module.block(null, [
         module.global_set(global.internalName, valueExpr),
         module.global_get(global.internalName, typeRef)
       ], typeRef);
     } else { // global = value
       this.currentType = Type.void;
-      expressionRef = module.global_set(global.internalName,
+      return module.global_set(global.internalName,
         valueExpr
       );
     }
-    return expressionRef;
   }
 
   /** Makes an assignment to a field. */
