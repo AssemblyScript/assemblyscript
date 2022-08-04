@@ -2588,7 +2588,7 @@
   call $while/Ref#constructor
   local.tee $1
   i32.store
-  loop $while-continue|1
+  loop $while-continue|0
    local.get $1
    local.set $2
    local.get $2
@@ -2609,7 +2609,7 @@
      local.tee $1
      i32.store
     end
-    br $while-continue|1
+    br $while-continue|0
    end
   end
   local.get $0
@@ -2665,8 +2665,8 @@
   call $while/Ref#constructor
   local.tee $1
   i32.store
-  block $while-break|1
-   loop $while-continue|1
+  block $while-break|0
+   loop $while-continue|0
     call $while/getRef
     local.set $2
     local.get $2
@@ -2680,9 +2680,9 @@
      if
       i32.const 0
       local.set $1
-      br $while-break|1
+      br $while-break|0
      end
-     br $while-continue|1
+     br $while-continue|0
     end
    end
   end
