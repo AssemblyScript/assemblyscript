@@ -4,7 +4,7 @@ import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { Runtime } from "shared/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
 import { REVERSE } from "./util/bytes";
-import { idof, isArray } from "./builtins";
+import { idof } from "./builtins";
 import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
