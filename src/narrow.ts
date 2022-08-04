@@ -347,7 +347,6 @@ export class TypeNarrowChecker {
           case UnaryOp.EqzI32:
           case UnaryOp.EqzI64: {
             this.collectNarrowedTypeIfTrue(getUnaryValue(expr), flow, typeMap); // !value -> value must have been true
-
             break;
           }
         }
