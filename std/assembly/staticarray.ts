@@ -3,7 +3,7 @@
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { Runtime } from "shared/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
-import { REVERSE } from "./util/bytes";
+import { REVERSE, FILL } from "./util/bytes";
 import { idof } from "./builtins";
 import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
@@ -142,56 +142,7 @@ export class StaticArray<T> {
   }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    var ptr = changetype<usize>(this);
-    var len = this.length;
-    start = start < 0 ? max(len + start, 0) : min(start, len);
-    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
-    if (isManaged<T>()) {
-      for (; start < end; ++start) {
-        store<usize>(ptr + (<usize>start << alignof<T>()), changetype<usize>(value));
-        __link(changetype<usize>(this), changetype<usize>(value), true);
-      }
-    } else if (sizeof<T>() == 1) {
-      if (start < end) {
-        memory.fill(
-          ptr + <usize>start,
-          u8(value),
-          <usize>(end - start)
-        );
-      }
-    } else {
-      if (ASC_SHRINK_LEVEL <= 1) {
-        if (isInteger<T>()) {
-          // @ts-ignore
-          if (value == <T>0 | value == <T>-1) {
-            if (start < end) {
-              memory.fill(
-                ptr + (<usize>start << alignof<T>()),
-                u8(value),
-                <usize>(end - start) << alignof<T>()
-              );
-            }
-            return this;
-          }
-        } else if (isFloat<T>()) {
-          // for floating non-negative zeros we can use fast memory.fill
-          if ((sizeof<T>() == 4 && reinterpret<u32>(f32(value)) == 0) ||
-              (sizeof<T>() == 8 && reinterpret<u64>(f64(value)) == 0)) {
-            if (start < end) {
-              memory.fill(
-                ptr + (<usize>start << alignof<T>()),
-                0,
-                <usize>(end - start) << alignof<T>()
-              );
-            }
-            return this;
-          }
-        }
-      }
-      for (; start < end; ++start) {
-        store<T>(ptr + (<usize>start << alignof<T>()), value);
-      }
-    }
+    FILL<T>(changetype<usize>(this), this.length, value, start, end);
     return this;
   }
 

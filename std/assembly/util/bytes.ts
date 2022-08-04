@@ -52,3 +52,63 @@ export function REVERSE<T>(ptr: usize, len: usize): void {
     }
   }
 }
+
+// @ts-ignore
+@inline export function FILL<T>(
+  ptr: usize,
+  len: usize,
+  value: T,
+  start: isize,
+  end: isize,
+  self: usize = ptr
+): void {
+  start = start < 0 ? max(len + start, 0) : min(start, len);
+  end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+
+  if (isManaged<T>()) {
+    for (; start < end; ++start) {
+      store<usize>(ptr + (<usize>start << alignof<T>()), changetype<usize>(value));
+      __link(self, changetype<usize>(value), true);
+    }
+  } else if (sizeof<T>() == 1) {
+    if (start < end) {
+      memory.fill(
+        ptr + <usize>start,
+        u8(value),
+        <usize>(end - start)
+      );
+    }
+  } else {
+    if (ASC_SHRINK_LEVEL <= 1) {
+      if (isInteger<T>()) {
+        // @ts-ignore
+        if (value == <T>0 | value == <T>-1) {
+          if (start < end) {
+            memory.fill(
+              ptr + (<usize>start << alignof<T>()),
+              u8(value),
+              <usize>(end - start) << alignof<T>()
+            );
+          }
+          return;
+        }
+      } else if (isFloat<T>()) {
+        // for floating non-negative zeros we can use fast memory.fill
+        if ((sizeof<T>() == 4 && reinterpret<u32>(f32(value)) == 0) ||
+            (sizeof<T>() == 8 && reinterpret<u64>(f64(value)) == 0)) {
+          if (start < end) {
+            memory.fill(
+              ptr + (<usize>start << alignof<T>()),
+              0,
+              <usize>(end - start) << alignof<T>()
+            );
+          }
+          return;
+        }
+      }
+    }
+    for (; start < end; ++start) {
+      store<T>(ptr + (<usize>start << alignof<T>()), value);
+    }
+  }
+}

@@ -2214,99 +2214,85 @@
  )
  (func $~lib/array/Array<u32>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load offset=4
-  local.set $4
+  local.set $5
   local.get $0
   i32.load offset=12
-  local.set $0
+  local.tee $4
+  local.get $2
+  i32.add
+  local.get $2
+  local.get $4
+  local.get $2
+  local.get $4
+  i32.lt_s
+  select
   local.get $2
   i32.const 0
   i32.lt_s
-  if (result i32)
-   local.get $0
-   local.get $2
-   i32.add
-   local.tee $2
-   i32.const 0
-   local.get $2
-   i32.const 0
-   i32.gt_s
-   select
-  else
-   local.get $2
-   local.get $0
-   local.get $0
-   local.get $2
-   i32.gt_s
-   select
-  end
-  local.set $2
+  select
+  local.set $0
+  local.get $3
+  local.get $4
+  i32.add
+  local.get $3
+  local.get $4
+  local.get $3
+  local.get $4
+  i32.lt_s
+  select
   local.get $3
   i32.const 0
   i32.lt_s
-  if (result i32)
-   local.get $0
-   local.get $3
-   i32.add
-   local.tee $0
-   i32.const 0
-   local.get $0
-   i32.const 0
-   i32.gt_s
-   select
-  else
-   local.get $3
-   local.get $0
-   local.get $0
-   local.get $3
-   i32.gt_s
-   select
-  end
-  local.set $0
-  local.get $1
-  i32.eqz
-  local.get $1
-  i32.const -1
-  i32.eq
-  i32.or
-  if
-   local.get $0
-   local.get $2
-   i32.gt_s
+  select
+  local.set $2
+  block $~lib/util/bytes/FILL<u32>|inlined.0
+   local.get $1
+   i32.eqz
+   local.get $1
+   i32.const -1
+   i32.eq
+   i32.or
    if
-    local.get $4
-    local.get $2
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $1
     local.get $0
     local.get $2
-    i32.sub
-    i32.const 2
-    i32.shl
-    memory.fill
+    i32.lt_s
+    if
+     local.get $5
+     local.get $0
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $1
+     local.get $2
+     local.get $0
+     i32.sub
+     i32.const 2
+     i32.shl
+     memory.fill
+    end
+    br $~lib/util/bytes/FILL<u32>|inlined.0
    end
-   return
-  end
-  loop $for-loop|0
-   local.get $0
-   local.get $2
-   i32.gt_s
-   if
-    local.get $4
+   loop $for-loop|0
+    local.get $0
     local.get $2
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $1
-    i32.store
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    br $for-loop|0
+    i32.lt_s
+    if
+     local.get $5
+     local.get $0
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $1
+     i32.store
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     br $for-loop|0
+    end
    end
   end
  )
@@ -2378,96 +2364,82 @@
  )
  (func $~lib/array/Array<f32>#fill (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load offset=4
-  local.set $4
+  local.set $5
   local.get $0
   i32.load offset=12
-  local.set $0
+  local.tee $4
+  local.get $2
+  i32.add
+  local.get $2
+  local.get $4
+  local.get $2
+  local.get $4
+  i32.lt_s
+  select
   local.get $2
   i32.const 0
   i32.lt_s
-  if (result i32)
-   local.get $0
-   local.get $2
-   i32.add
-   local.tee $2
-   i32.const 0
-   local.get $2
-   i32.const 0
-   i32.gt_s
-   select
-  else
-   local.get $2
-   local.get $0
-   local.get $0
-   local.get $2
-   i32.gt_s
-   select
-  end
-  local.set $2
+  select
+  local.set $0
+  local.get $3
+  local.get $4
+  i32.add
+  local.get $3
+  local.get $4
+  local.get $3
+  local.get $4
+  i32.lt_s
+  select
   local.get $3
   i32.const 0
   i32.lt_s
-  if (result i32)
-   local.get $0
-   local.get $3
-   i32.add
-   local.tee $0
-   i32.const 0
-   local.get $0
-   i32.const 0
-   i32.gt_s
-   select
-  else
-   local.get $3
-   local.get $0
-   local.get $0
-   local.get $3
-   i32.gt_s
-   select
-  end
-  local.set $0
-  local.get $1
-  i32.reinterpret_f32
-  i32.eqz
-  if
-   local.get $0
-   local.get $2
-   i32.gt_s
+  select
+  local.set $2
+  block $~lib/util/bytes/FILL<f32>|inlined.0
+   local.get $1
+   i32.reinterpret_f32
+   i32.eqz
    if
-    local.get $4
-    local.get $2
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.const 0
     local.get $0
     local.get $2
-    i32.sub
-    i32.const 2
-    i32.shl
-    memory.fill
+    i32.lt_s
+    if
+     local.get $5
+     local.get $0
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.const 0
+     local.get $2
+     local.get $0
+     i32.sub
+     i32.const 2
+     i32.shl
+     memory.fill
+    end
+    br $~lib/util/bytes/FILL<f32>|inlined.0
    end
-   return
-  end
-  loop $for-loop|0
-   local.get $0
-   local.get $2
-   i32.gt_s
-   if
-    local.get $4
+   loop $for-loop|0
+    local.get $0
     local.get $2
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $1
-    f32.store
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    br $for-loop|0
+    i32.lt_s
+    if
+     local.get $5
+     local.get $0
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $1
+     f32.store
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     br $for-loop|0
+    end
    end
   end
  )
@@ -2746,7 +2718,7 @@
   if
    i32.const 2640
    i32.const 1104
-   i32.const 319
+   i32.const 270
    i32.const 18
    call $~lib/builtins/abort
    unreachable
@@ -13377,12 +13349,6 @@
    i32.const 3
    i32.sub
    local.tee $9
-   i32.const 0
-   local.get $9
-   i32.const 0
-   i32.gt_s
-   select
-   local.tee $9
    i32.lt_s
    if
     local.get $8
@@ -13423,15 +13389,10 @@
    local.tee $9
    i32.const 2
    i32.sub
-   local.tee $10
-   i32.const 0
-   local.get $10
-   i32.const 0
-   i32.gt_s
-   select
-   local.tee $10
+   local.set $10
    local.get $9
-   i32.lt_s
+   local.get $10
+   i32.gt_s
    if
     local.get $8
     local.get $10
@@ -15393,7 +15354,7 @@
    if
     i32.const 2640
     i32.const 1104
-    i32.const 378
+    i32.const 329
     i32.const 18
     call $~lib/builtins/abort
     unreachable
@@ -27271,7 +27232,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 272
+   i32.const 223
    i32.const 60
    call $~lib/builtins/abort
    unreachable
