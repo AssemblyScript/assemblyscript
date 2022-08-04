@@ -241,8 +241,8 @@ export class Flow {
   thisFieldFlags: Map<Field,FieldFlags> | null = null;
   /** type narrow */
   narrowedTypes: NarrowedTypeMap | null = null;
-  /** conditional type narrow, eg if (condi) */
-  conditionalNarrowedType: TypeNarrowChecker = new TypeNarrowChecker();
+  /** handle conditional type narrow, eg if (condi) */
+  typeNarrowChecker: TypeNarrowChecker = new TypeNarrowChecker();
   
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null = null;
@@ -320,7 +320,7 @@ export class Flow {
     branch.localFlags = this.localFlags.slice();
     let narrowedTypes = this.narrowedTypes;
     branch.narrowedTypes = narrowedTypes ? narrowedTypes.clone() : null;
-    branch.conditionalNarrowedType = this.conditionalNarrowedType;
+    branch.typeNarrowChecker = this.typeNarrowChecker;
     if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
       branch.thisFieldFlags = uniqueMap<Field,FieldFlags>(thisFieldFlags);
@@ -622,7 +622,7 @@ export class Flow {
     assert(element.kind == ElementKind.LOCAL, "type narrowing only support Local");
     if (type && !type.isReference) return;
     this.setNarrowedType(element, type);
-    this.conditionalNarrowedType.setAssignType(expr, element, type);
+    this.typeNarrowChecker.setAssignType(expr, element, type);
   }
   /** set type narrow */
   setNarrowedType(element: TypedElement, type: Type): void {
@@ -644,19 +644,19 @@ export class Flow {
     assert(element.kind == ElementKind.LOCAL, "type narrowing only support Local");
     let thisNarrowedTypes = this.narrowedTypes;
     if (thisNarrowedTypes) thisNarrowedTypes.delete(element);
-    this.conditionalNarrowedType.removeElement(element);
+    this.typeNarrowChecker.removeElement(element);
   }
 
   /** set conditional type narrow */
   setConditionNarrowedType(expr: ExpressionRef, element: TypedElement, type: Type): void {
     assert(element.kind == ElementKind.LOCAL, "type narrowing only support Local");
     if (type && !type.isReference) return;
-    this.conditionalNarrowedType.setConditionNarrowedType(expr, element, type);
+    this.typeNarrowChecker.setConditionNarrowedType(expr, element, type);
   }
 
   /** take effect conditional type narrow if condition is true */
   inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
-    let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfTrue(condi, this);
+    let condiNarrow = this.typeNarrowChecker.collectNarrowedTypeIfTrue(condi, this);
     if (condiNarrow.size != 0) {
       let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
       this.narrowedTypes = narrowedTypes;
@@ -665,7 +665,7 @@ export class Flow {
   }
   /** take effect conditional type narrow if condition is false */
   inheritNarrowedTypeIfFalse(condi: ExpressionRef): void {
-    let condiNarrow = this.conditionalNarrowedType.collectNarrowedTypeIfFalse(condi, this);
+    let condiNarrow = this.typeNarrowChecker.collectNarrowedTypeIfFalse(condi, this);
     if (condiNarrow.size != 0) {
       let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
       this.narrowedTypes = narrowedTypes;
