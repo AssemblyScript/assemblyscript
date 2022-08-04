@@ -10,10 +10,10 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
  (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
  (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
- (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/staticarray/arr1 i32 (i32.const 32))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
@@ -2908,9 +2908,9 @@
   call $~lib/util/string/joinStringArray
   return
  )
- (func $~lib/util/bytes/FILL<i32> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
+ (func $~lib/util/bytes/FILL<i32> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $3
   i32.const 0
   i32.lt_s
@@ -2918,20 +2918,20 @@
    local.get $1
    local.get $3
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_u
    select
   else
    local.get $3
-   local.tee $7
-   local.get $1
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
@@ -2943,26 +2943,24 @@
    local.get $1
    local.get $4
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_u
    select
   else
    local.get $4
-   local.tee $7
-   local.get $1
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
   local.set $4
-  i32.const 0
-  drop
   i32.const 4
   i32.const 1
   i32.eq
@@ -3004,8 +3002,8 @@
    local.get $3
    local.get $4
    i32.lt_s
-   local.set $7
-   local.get $7
+   local.set $6
+   local.get $6
    if
     local.get $0
     local.get $3
@@ -3023,13 +3021,14 @@
   end
  )
  (func $~lib/staticarray/StaticArray<i32>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  i32.const 0
+  drop
   local.get $0
   local.get $0
   call $~lib/staticarray/StaticArray<i32>#get:length
   local.get $1
   local.get $2
   local.get $3
-  local.get $0
   call $~lib/util/bytes/FILL<i32>
   local.get $0
  )
@@ -7724,7 +7723,7 @@
   if
    i32.const 656
    i32.const 128
-   i32.const 212
+   i32.const 217
    i32.const 60
    call $~lib/builtins/abort
    unreachable

@@ -142,7 +142,12 @@ export class StaticArray<T> {
   }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    FILL<T>(changetype<usize>(this), this.length, value, start, end, changetype<usize>(this));
+    if (isManaged<T>()) {
+      FILL<usize>(changetype<usize>(this), this.length, changetype<usize>(value), start, end);
+      __link(changetype<usize>(this), changetype<usize>(value), false);
+    } else {
+      FILL<T>(changetype<usize>(this), this.length, value, start, end);
+    }
     return this;
   }
 

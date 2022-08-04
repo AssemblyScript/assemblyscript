@@ -58,18 +58,12 @@ export function FILL<T>(
   len: usize,
   value: T,
   start: isize,
-  end: isize,
-  self: usize
+  end: isize
 ): void {
   start = start < 0 ? max(len + start, 0) : min(start, len);
   end   = end   < 0 ? max(len + end,   0) : min(end,   len);
 
-  if (isManaged<T>()) {
-    for (; start < end; ++start) {
-      store<usize>(ptr + (<usize>start << alignof<T>()), changetype<usize>(value));
-      __link(self, changetype<usize>(value), true);
-    }
-  } else if (sizeof<T>() == 1) {
+  if (sizeof<T>() == 1) {
     if (start < end) {
       memory.fill(
         ptr + <usize>start,

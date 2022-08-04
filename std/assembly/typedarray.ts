@@ -62,7 +62,7 @@ export class Int8Array extends ArrayBufferView {
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    FILL<u8>(this.dataStart, this.length, u8(value), start, end, 0);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
     return this;
   }
 
@@ -204,7 +204,7 @@ export class Uint8Array extends ArrayBufferView {
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    FILL<u8>(this.dataStart, this.length, u8(value), start, end, 0);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
     return this;
   }
 
@@ -347,7 +347,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
     value = ~(value >> 31) & (((255 - value) >> 31) | value);
-    FILL<u8>(this.dataStart, this.length, u8(value), start, end, 0);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
     return this;
   }
 
@@ -488,12 +488,12 @@ export class Int16Array extends ArrayBufferView {
     return LAST_INDEX_OF<Int16Array, i16>(this, searchElement, fromIndex);
   }
 
-  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
-    FILL<u16>(this.dataStart, this.length, u16(value), start, end, 0);
+  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    FILL<u16>(this.dataStart, this.length, u16(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: i16, b: i16) => i32 = COMPARATOR<i16>()): Int16Array {
+  sort(comparator: (a: i16, b: i16) => i32 = COMPARATOR<i16>()): this {
     SORT<i16>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -630,12 +630,12 @@ export class Uint16Array extends ArrayBufferView {
     return LAST_INDEX_OF<Uint16Array, u16>(this, searchElement, fromIndex);
   }
 
-  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
-    FILL<u16>(this.dataStart, this.length, u16(value), start, end, 0);
+  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    FILL<u16>(this.dataStart, this.length, u16(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: u16, b: u16) => i32 = COMPARATOR<u16>()): Uint16Array {
+  sort(comparator: (a: u16, b: u16) => i32 = COMPARATOR<u16>()): this {
     SORT<u16>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -772,12 +772,12 @@ export class Int32Array extends ArrayBufferView {
     return LAST_INDEX_OF<Int32Array, i32>(this, searchElement, fromIndex);
   }
 
-  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
-    FILL<u32>(this.dataStart, this.length, u32(value), start, end, 0);
+  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    FILL<u32>(this.dataStart, this.length, u32(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: i32, b: i32) => i32 = COMPARATOR<i32>()): Int32Array {
+  sort(comparator: (a: i32, b: i32) => i32 = COMPARATOR<i32>()): this {
     SORT<i32>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -914,12 +914,12 @@ export class Uint32Array extends ArrayBufferView {
     return LAST_INDEX_OF<Uint32Array, u32>(this, searchElement, fromIndex);
   }
 
-  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
-    FILL<u32>(this.dataStart, this.length, value, start, end, 0);
+  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    FILL<u32>(this.dataStart, this.length, value, start, end);
     return this;
   }
 
-  sort(comparator: (a: u32, b: u32) => i32 = COMPARATOR<u32>()): Uint32Array {
+  sort(comparator: (a: u32, b: u32) => i32 = COMPARATOR<u32>()): this {
     SORT<u32>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -1056,12 +1056,12 @@ export class Int64Array extends ArrayBufferView {
     return LAST_INDEX_OF<Int64Array, i64>(this, searchElement, fromIndex);
   }
 
-  fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
-    FILL<u64>(this.dataStart, this.length, u64(value), start, end, 0);
+  fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    FILL<u64>(this.dataStart, this.length, u64(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: i64, b: i64) => i32 = COMPARATOR<i64>()): Int64Array {
+  sort(comparator: (a: i64, b: i64) => i32 = COMPARATOR<i64>()): this {
     SORT<i64>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -1198,12 +1198,12 @@ export class Uint64Array extends ArrayBufferView {
     return LAST_INDEX_OF<Uint64Array, u64>(this, searchElement, fromIndex);
   }
 
-  fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
-    FILL<u64>(this.dataStart, this.length, value, start, end, 0);
+  fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    FILL<u64>(this.dataStart, this.length, value, start, end);
     return this;
   }
 
-  sort(comparator: (a: u64, b: u64) => i32 = COMPARATOR<u64>()): Uint64Array {
+  sort(comparator: (a: u64, b: u64) => i32 = COMPARATOR<u64>()): this {
     SORT<u64>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -1340,12 +1340,12 @@ export class Float32Array extends ArrayBufferView {
     return LAST_INDEX_OF<Float32Array, f32>(this, searchElement, fromIndex);
   }
 
-  fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
-    FILL<f32>(this.dataStart, this.length, value, start, end, 0);
+  fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    FILL<f32>(this.dataStart, this.length, value, start, end);
     return this;
   }
 
-  sort(comparator: (a: f32, b: f32) => i32 = COMPARATOR<f32>()): Float32Array {
+  sort(comparator: (a: f32, b: f32) => i32 = COMPARATOR<f32>()): this {
     SORT<f32>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -1482,12 +1482,12 @@ export class Float64Array extends ArrayBufferView {
     return LAST_INDEX_OF<Float64Array, f64>(this, searchElement, fromIndex);
   }
 
-  fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
-    FILL<f64>(this.dataStart, this.length, value, start, end, 0);
+  fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    FILL<f64>(this.dataStart, this.length, value, start, end);
     return this;
   }
 
-  sort(comparator: (a: f64, b: f64) => i32 = COMPARATOR<f64>()): Float64Array {
+  sort(comparator: (a: f64, b: f64) => i32 = COMPARATOR<f64>()): this {
     SORT<f64>(this.dataStart, this.length, comparator);
     return this;
   }

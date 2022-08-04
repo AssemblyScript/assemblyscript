@@ -155,7 +155,12 @@ export class Array<T> {
   }
 
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    FILL<T>(this.dataStart, this.length_, value, start, end, changetype<usize>(this));
+    if (isManaged<T>()) {
+      FILL<usize>(this.dataStart, this.length_, changetype<usize>(value), start, end);
+      __link(changetype<usize>(this), changetype<usize>(value), false);
+    } else {
+      FILL<T>(this.dataStart, this.length_, value, start, end);
+    }
     return this;
   }
 

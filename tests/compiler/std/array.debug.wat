@@ -5,10 +5,10 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
- (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $none_=>_f64 (func (result f64)))
@@ -23,7 +23,7 @@
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_f32_i32_i32_i32_=>_none (func (param i32 i32 f32 i32 i32 i32)))
+ (type $i32_i32_f32_i32_i32_=>_none (func (param i32 i32 f32 i32 i32)))
  (type $i32_f32_i32_i32_=>_i32 (func (param i32 f32 i32 i32) (result i32)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i64_=>_none (func (param i64)))
@@ -2640,9 +2640,9 @@
   end
   local.get $3
  )
- (func $~lib/util/bytes/FILL<u8> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
+ (func $~lib/util/bytes/FILL<u8> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $3
   i32.const 0
   i32.lt_s
@@ -2650,20 +2650,20 @@
    local.get $1
    local.get $3
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_u
    select
   else
    local.get $3
-   local.tee $7
-   local.get $1
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
@@ -2675,26 +2675,24 @@
    local.get $1
    local.get $4
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_u
    select
   else
    local.get $4
-   local.tee $7
-   local.get $1
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
   local.set $4
-  i32.const 0
-  drop
   i32.const 1
   i32.const 1
   i32.eq
@@ -2714,6 +2712,8 @@
   end
  )
  (func $~lib/array/Array<u8>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $0
@@ -2721,7 +2721,6 @@
   local.get $1
   local.get $2
   local.get $3
-  local.get $0
   call $~lib/util/bytes/FILL<u8>
   local.get $0
  )
@@ -2811,9 +2810,9 @@
   end
   i32.const 1
  )
- (func $~lib/util/bytes/FILL<u32> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
+ (func $~lib/util/bytes/FILL<u32> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $3
   i32.const 0
   i32.lt_s
@@ -2821,20 +2820,20 @@
    local.get $1
    local.get $3
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_u
    select
   else
    local.get $3
-   local.tee $7
-   local.get $1
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
@@ -2846,26 +2845,24 @@
    local.get $1
    local.get $4
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_u
    select
   else
    local.get $4
-   local.tee $7
-   local.get $1
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
   local.set $4
-  i32.const 0
-  drop
   i32.const 4
   i32.const 1
   i32.eq
@@ -2907,8 +2904,8 @@
    local.get $3
    local.get $4
    i32.lt_s
-   local.set $7
-   local.get $7
+   local.set $6
+   local.get $6
    if
     local.get $0
     local.get $3
@@ -2926,6 +2923,8 @@
   end
  )
  (func $~lib/array/Array<u32>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $0
@@ -2933,7 +2932,6 @@
   local.get $1
   local.get $2
   local.get $3
-  local.get $0
   call $~lib/util/bytes/FILL<u32>
   local.get $0
  )
@@ -3023,9 +3021,9 @@
   end
   i32.const 1
  )
- (func $~lib/util/bytes/FILL<f32> (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32) (param $4 i32) (param $5 i32)
+ (func $~lib/util/bytes/FILL<f32> (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32) (param $4 i32)
+  (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $3
   i32.const 0
   i32.lt_s
@@ -3033,20 +3031,20 @@
    local.get $1
    local.get $3
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_u
    select
   else
    local.get $3
-   local.tee $7
-   local.get $1
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
@@ -3058,26 +3056,24 @@
    local.get $1
    local.get $4
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
    i32.gt_u
    select
   else
    local.get $4
-   local.tee $7
-   local.get $1
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
   local.set $4
-  i32.const 0
-  drop
   i32.const 4
   i32.const 1
   i32.eq
@@ -3125,8 +3121,8 @@
    local.get $3
    local.get $4
    i32.lt_s
-   local.set $7
-   local.get $7
+   local.set $6
+   local.get $6
    if
     local.get $0
     local.get $3
@@ -3144,6 +3140,8 @@
   end
  )
  (func $~lib/array/Array<f32>#fill (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $0
@@ -3151,7 +3149,6 @@
   local.get $1
   local.get $2
   local.get $3
-  local.get $0
   call $~lib/util/bytes/FILL<f32>
   local.get $0
  )
@@ -3509,7 +3506,7 @@
   if
    i32.const 1616
    i32.const 80
-   i32.const 270
+   i32.const 275
    i32.const 18
    call $~lib/builtins/abort
    unreachable
@@ -3837,7 +3834,7 @@
   if
    i32.const 1616
    i32.const 80
-   i32.const 329
+   i32.const 334
    i32.const 18
    call $~lib/builtins/abort
    unreachable
@@ -32254,7 +32251,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 223
+   i32.const 228
    i32.const 60
    call $~lib/builtins/abort
    unreachable
