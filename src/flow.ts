@@ -198,7 +198,7 @@ export class Flow {
 
   /** Creates the parent flow of the specified function. */
   static createParent(parentFunction: Function): Flow {
-    var flow = new Flow(parentFunction);
+    var flow = new Flow(parentFunction, null);
     if (parentFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }
@@ -207,7 +207,7 @@ export class Flow {
 
   /** Creates an inline flow within `parentFunction`. */
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
-    var flow = new Flow(parentFunction);
+    var flow = new Flow(parentFunction, null);
     flow.inlineFunction = inlineFunction;
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -218,9 +218,10 @@ export class Flow {
 
   private constructor(
     /** Function this flow belongs to. */
-    public parentFunction: Function
+    public parentFunction: Function,
+    typeNarrowChecker: TypeNarrowChecker | null
   ) {
-    /* nop */
+    this.typeNarrowChecker = typeNarrowChecker || new TypeNarrowChecker();
   }
 
   /** Parent flow. */
@@ -242,7 +243,7 @@ export class Flow {
   /** type narrow */
   narrowedTypes: NarrowedTypeMap | null = null;
   /** handle conditional type narrow, eg if (condi) */
-  typeNarrowChecker: TypeNarrowChecker = new TypeNarrowChecker();
+  typeNarrowChecker: TypeNarrowChecker;
   
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null = null;
@@ -302,7 +303,7 @@ export class Flow {
 
   /** Forks this flow to a child flow. */
   fork(resetBreakContext: bool = false): Flow {
-    var branch = new Flow(this.parentFunction);
+    var branch = new Flow(this.parentFunction, this.typeNarrowChecker);
     branch.parent = this;
     branch.outer = this.outer;
     if (resetBreakContext) {
@@ -320,7 +321,6 @@ export class Flow {
     branch.localFlags = this.localFlags.slice();
     let narrowedTypes = this.narrowedTypes;
     branch.narrowedTypes = narrowedTypes ? narrowedTypes.clone() : null;
-    branch.typeNarrowChecker = this.typeNarrowChecker;
     if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
       branch.thisFieldFlags = uniqueMap<Field,FieldFlags>(thisFieldFlags);
