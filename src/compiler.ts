@@ -211,7 +211,6 @@ import {
 import {
   ShadowStackPass
 } from "./passes/shadowstack";
-
 import { typeOr } from "./narrow";
 
 /** Compiler options. */
@@ -4670,7 +4669,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             flow.freeTempLocal(temp);
           }
-          this.currentType = assert(typeOr(leftType.nonNullableType, rightType));
+          this.currentType = typeOr(leftType.nonNullableType, rightType) || rightType;
         }
         break;
       }
