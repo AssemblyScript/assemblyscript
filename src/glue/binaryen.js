@@ -9,6 +9,9 @@ export const {
   _BinaryenTypeCreate,
   _BinaryenTypeArity,
   _BinaryenTypeExpand,
+  _BinaryenTypeGetHeapType,
+  _BinaryenTypeFromHeapType,
+  _BinaryenTypeIsNullable,
 
   _BinaryenTypeFuncref,
   _BinaryenTypeExternref,
@@ -20,6 +23,16 @@ export const {
   _BinaryenTypeStringviewWTF8,
   _BinaryenTypeStringviewWTF16,
   _BinaryenTypeStringviewIter,
+
+  _BinaryenHeapTypeFunc,
+  _BinaryenHeapTypeAny,
+  _BinaryenHeapTypeEq,
+  _BinaryenHeapTypeI31,
+  _BinaryenHeapTypeData,
+  _BinaryenHeapTypeString,
+  _BinaryenHeapTypeStringviewWTF8,
+  _BinaryenHeapTypeStringviewWTF16,
+  _BinaryenHeapTypeStringviewIter,
 
   _BinaryenModuleCreate,
   _BinaryenModuleDispose,

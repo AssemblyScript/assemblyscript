@@ -9,6 +9,8 @@
  */
 module "binaryen";
 
+type Ref = usize;
+
 export type Index = u32;
 export type ExpressionId = i32;
 export type FeatureFlags = u32;
@@ -16,10 +18,11 @@ export type Op = i32;
 export type ExternalKind = u32;
 export type SideEffects = u32;
 export type ExpressionRunnerFlags = u32;
-type Ref = usize;
+
 export type StringRef = Ref;
 export type ArrayRef<T> = Ref;
 export type TypeRef = Ref;
+export type HeapTypeRef = Ref;
 export type ModuleRef = Ref;
 export type LiteralRef = Ref;
 export type ExpressionRef = Ref;
@@ -38,6 +41,9 @@ export type BinaryenModuleAllocateAndWriteResultRef = Ref;
 export declare function _BinaryenTypeCreate(types: ArrayRef<TypeRef>, numTypes: u32): TypeRef;
 export declare function _BinaryenTypeArity(type: TypeRef): u32;
 export declare function _BinaryenTypeExpand(type: TypeRef, typesOut: ArrayRef<TypeRef>): void;
+export declare function _BinaryenTypeGetHeapType(type: TypeRef): HeapTypeRef;
+export declare function _BinaryenTypeFromHeapType(heapType: HeapTypeRef, nullable: bool): TypeRef;
+export declare function _BinaryenTypeIsNullable(type: TypeRef): bool;
 
 export declare function _BinaryenTypeFuncref(): TypeRef;
 export declare function _BinaryenTypeExternref(): TypeRef;
@@ -49,6 +55,16 @@ export declare function _BinaryenTypeStringref(): TypeRef;
 export declare function _BinaryenTypeStringviewWTF8(): TypeRef;
 export declare function _BinaryenTypeStringviewWTF16(): TypeRef;
 export declare function _BinaryenTypeStringviewIter(): TypeRef;
+
+export declare function _BinaryenHeapTypeFunc(): HeapTypeRef;
+export declare function _BinaryenHeapTypeAny(): HeapTypeRef;
+export declare function _BinaryenHeapTypeEq(): HeapTypeRef;
+export declare function _BinaryenHeapTypeI31(): HeapTypeRef;
+export declare function _BinaryenHeapTypeData(): HeapTypeRef;
+export declare function _BinaryenHeapTypeString(): HeapTypeRef;
+export declare function _BinaryenHeapTypeStringviewWTF8(): HeapTypeRef;
+export declare function _BinaryenHeapTypeStringviewWTF16(): HeapTypeRef;
+export declare function _BinaryenHeapTypeStringviewIter(): HeapTypeRef;
 
 export declare function _BinaryenModuleCreate(): ModuleRef;
 export declare function _BinaryenModuleDispose(module: ModuleRef): void;
