@@ -7,51 +7,93 @@ class B extends A {
   b5: i32;
   b6: i32;
 }
-class C extends A {
+class C extends B {
   c1: i32;
 }
 
-let value = new A();
-let condi = true;
-
-// or
-if (condi || value instanceof B) {
-  // TS2339: Property 'b1' does not exist on type 'typenarrow-error/A'.
-  value.b1;
+export function testAssign(v0: A): void {
+  // TS2339: Property 'b1' does not exist on type 'typenarrow-error/A
+  if (v0 instanceof B) {
+    v0 = new A();
+    v0.b1;
+  }
 }
 
-if (value instanceof B) {
-  value = new A();
-  // TS2339: Property 'b2' does not exist on type 'typenarrow-error/A
-  value.b2;
+export function testOr(v0: A, v1: A): void {
+  // TS2339: Property 'b2' does not exist on type 'typenarrow-error/A'.
+  if (v0 instanceof B || v1 instanceof B) {
+    v0.b2;
+    v1.b2;
+  } else {
+    v0.b2;
+    v1.b2;
+  }
+  if (!(v0 instanceof B) || !(v1 instanceof B)) {
+    v0.b2;
+    v1.b2;
+  }
+  if (v0 instanceof B || !(v1 instanceof B)) {
+    v0.b2;
+    v1.b2;
+  } else {
+    v0.b2;
+  }
+  if (!(v0 instanceof B) || v1 instanceof B) {
+    v0.b2;
+    v1.b2;
+  } else {
+    v1.b2;
+  }
 }
 
-if (value instanceof B || condi) {
-  // TS2339: Property 'b3' does not exist on type 'typenarrow-error/A
-  value.b3;
+export function testAnd(v0: A, v1: A): void {
+  // TS2339: Property 'b3' does not exist on type 'typenarrow-error/A'.
+  if (v0 instanceof B && v1 instanceof B) {
+  } else {
+    v0.b3;
+    v1.b3;
+  }
+  if (!(v0 instanceof B) && !(v1 instanceof B)) {
+    v0.b3;
+    v1.b3;
+  } else {
+    v0.b3;
+    v1.b3;
+  }
+  if (v0 instanceof B && !(v1 instanceof B)) {
+    v1.b3;
+  } else {
+    v0.b3;
+    v1.b3;
+  }
+  if (!(v0 instanceof B) && v1 instanceof B) {
+    v0.b3;
+  } else {
+    v0.b3;
+    v1.b3;
+  }
 }
 
-// incompatibility
-if (value instanceof B && value instanceof C) {
+export function testAssignOr(v0: A, v1: A): void {
+  // TS2339: Property 'b4' does not exist on type 'typenarrow-error/A
+  if (v0 instanceof B || (v0 = v1)) {
+    v0.b4;
+  } else {
+    v0.b4;
+  }
+}
+export function testAssignAnd(v0: A, v1: A): void {
+  // TS2339: Property 'b4' does not exist on type 'typenarrow-error/A
+  if (v0 instanceof B && (v0 = v1)) {
+    v0.b4;
+  } else {
+    v0.b4;
+  }
+}
+
+export function testLogicOr(v0: A): void {
   // TS2339: Property 'c1' does not exist on type 'typenarrow-error/A
-  value.c1;
+  if (v0 instanceof B || v0 instanceof C) {
+    v0.c1;
+  }
 }
-
-// TS2339: Property 'b4' does not exist on type 'typenarrow-error/A
-if (value instanceof B || value.b4) {
-}
-
-if (value instanceof B && (value = new A())) {
-  // TS2339: Property 'b5' does not exist on type 'typenarrow-error/A
-  value.b5;
-}
-
-declare function externalBool(): bool;
-
-// externalBool may return `true` while `value` isn't instanceof C
-if (externalBool() || value instanceof B) {
-  // TS2339: Property 'b6' does not exist on type 'typenarrow-error/A'
-  value.b6;
-}
-
-ERROR("EOF");

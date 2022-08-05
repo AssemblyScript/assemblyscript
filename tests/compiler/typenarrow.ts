@@ -9,65 +9,68 @@ class B extends A {
 class C extends B {
   c1: i32;
 }
+class D extends A {
+  d1: i32;
+}
 
-export function testlocal(): void {
-  let value = new A();
-  let condi = true;
-
+export function condiNarrow(v0: A, v1: A): void {
   // noraml
-  if (value instanceof B) {
-    value.b1();
-    let t: B = value;
+  if (v0 instanceof B) {
+    v0.b1();
+    let t: B = v0;
   }
 
   // not
-  if (!(value instanceof B)) {
+  if (!(v0 instanceof B)) {
   } else {
-    value.b1();
-    let t: B = value;
+    v0.b1();
+    let t: B = v0;
   }
 
   // and
-  if (value instanceof B && condi) {
-    value.b1();
-    let t: B = value;
+  if (v0 instanceof B && v1 instanceof B) {
+    v0.b1();
+    v1.b1();
   }
-  if (condi && value instanceof B) {
-    value.b1();
-    let t: B = value;
+  if (v0 instanceof B && !(v1 instanceof B)) {
+    v0.b1();
+  }
+  if (!(v0 instanceof B) && v1 instanceof B) {
+    v1.b1();
   }
 
   // or
-  if (condi || !(value instanceof B)) {
+  if (!(v0 instanceof B) || !(v1 instanceof B)) {
   } else {
-    value.b1;
-    let t: B = value;
+    v0.b1;
+    v1.b1;
   }
-
-  if (!(value instanceof B) || condi) {
+  if (v0 instanceof B || !(v1 instanceof B)) {
   } else {
-    value.b1;
-    let t: B = value;
+    v1.b1;
+  }
+  if (!(v0 instanceof B) || v1 instanceof B) {
+  } else {
+    v0.b1;
   }
 
   // in condition check for logic operator
-  if (value instanceof B && value.check()) {
+  if (v0 instanceof B && v0.check()) {
   }
-  if (!(value instanceof B) || value.check()) {
+  if (!(v0 instanceof B) || v0.check()) {
   }
 
   // compatibiltiy
-  if (value instanceof C && value instanceof B) {
-    value.c1;
-    value.b1();
+  if (v0 instanceof C && v0 instanceof B) {
+    v0.c1;
+    v0.b1();
   }
-
-  if (value instanceof B || value instanceof C) {
-    value.b1();
+  if (v0 instanceof B || v0 instanceof C) {
+    v0.b1();
   }
-
-  if (!(value instanceof B && value instanceof C)) {
+  if (!(v0 instanceof B && v0 instanceof C)) {
   } else {
-    value.b1();
+    v0.b1();
+    v0.c1;
   }
 }
