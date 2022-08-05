@@ -71,6 +71,19 @@ export namespace TypeRef {
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
+export type HeapTypeRef = binaryen.HeapTypeRef;
+export namespace HeapTypeRef {
+  export const Func = binaryen._BinaryenHeapTypeFunc();
+  export const Any = binaryen._BinaryenHeapTypeAny();
+  export const Eq = binaryen._BinaryenHeapTypeEq();
+  export const I31 = binaryen._BinaryenHeapTypeI31();
+  export const Data = binaryen._BinaryenHeapTypeData();
+  export const String = binaryen._BinaryenHeapTypeString();
+  export const StringviewWTF8 = binaryen._BinaryenHeapTypeStringviewWTF8();
+  export const StringviewWTF16 = binaryen._BinaryenHeapTypeStringviewWTF16();
+  export const StringviewIter = binaryen._BinaryenHeapTypeStringviewIter();
+}
+
 /** Binaryen feature constants. */
 export enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
@@ -155,18 +168,16 @@ export enum ExpressionId {
   RefTest = 57 /* _BinaryenRefTestId */,
   RefCast = 58 /* _BinaryenRefCastId */,
   BrOn = 59 /* _BinaryenBrOnId */,
-  RttCanon = 60 /* _BinaryenRttCanonId */,
-  RttSub = 61 /* _BinaryenRttSubId */,
-  StructNew = 62 /* _BinaryenStructNewId */,
-  StructGet = 63 /* _BinaryenStructGetId */,
-  StructSet = 64 /* _BinaryenStructSetId */,
-  ArrayNew = 65 /* _BinaryenArrayNewId */,
-  ArrayInit = 66 /* _BinaryenArrayInitId */,
-  ArrayGet = 67 /* _BinaryenArrayGetId */,
-  ArraySet = 68 /* _BinaryenArraySetId */,
-  ArrayLen = 69 /* _BinaryenArrayLenId */,
-  ArrayCopy = 70 /* _BinaryenArrayCopyId */,
-  RefAs = 71 /* _BinaryenRefAsId */
+  StructNew = 60 /* _BinaryenStructNewId */,
+  StructGet = 61 /* _BinaryenStructGetId */,
+  StructSet = 62 /* _BinaryenStructSetId */,
+  ArrayNew = 63 /* _BinaryenArrayNewId */,
+  ArrayInit = 64 /* _BinaryenArrayInitId */,
+  ArrayGet = 65 /* _BinaryenArrayGetId */,
+  ArraySet = 66 /* _BinaryenArraySetId */,
+  ArrayLen = 67 /* _BinaryenArrayLenId */,
+  ArrayCopy = 68 /* _BinaryenArrayCopyId */,
+  RefAs = 69 /* _BinaryenRefAsId */
 }
 
 /** Binaryen external kind constants. */
@@ -2602,8 +2613,7 @@ export class Module {
       case ExpressionId.Nop:
       case ExpressionId.Unreachable:
       case ExpressionId.DataDrop:
-      case ExpressionId.RefNull:
-      case ExpressionId.RttCanon: return this.copyExpression(expr);
+      case ExpressionId.RefNull: return this.copyExpression(expr);
     }
     return 0;
   }
