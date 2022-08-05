@@ -198,7 +198,7 @@ export class Flow {
 
   /** Creates the parent flow of the specified function. */
   static createParent(parentFunction: Function): Flow {
-    var flow = new Flow(parentFunction, null);
+    var flow = new Flow(parentFunction);
     if (parentFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }
@@ -207,7 +207,7 @@ export class Flow {
 
   /** Creates an inline flow within `parentFunction`. */
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
-    var flow = new Flow(parentFunction, null);
+    var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -219,9 +219,9 @@ export class Flow {
   private constructor(
     /** Function this flow belongs to. */
     public parentFunction: Function,
-    typeNarrowChecker: TypeNarrowChecker | null
+    typeNarrowChecker: TypeNarrowChecker = new TypeNarrowChecker()
   ) {
-    this.typeNarrowChecker = typeNarrowChecker || new TypeNarrowChecker();
+    this.typeNarrowChecker = typeNarrowChecker;
   }
 
   /** Parent flow. */
