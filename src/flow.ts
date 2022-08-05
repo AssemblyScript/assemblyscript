@@ -656,21 +656,15 @@ export class Flow {
 
   /** take effect conditional type narrow if condition is true */
   inheritNarrowedTypeIfTrue(condi: ExpressionRef): void {
-    let condiNarrow = this.typeNarrowChecker.collectNarrowedTypeIfTrue(condi, this);
-    if (condiNarrow.size != 0) {
-      let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
-      this.narrowedTypes = narrowedTypes;
-      narrowedTypes.mergeOr(condiNarrow);
-    }
+    let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
+    this.narrowedTypes = narrowedTypes;
+    this.typeNarrowChecker.collectNarrowedTypeIfTrue(condi, this, narrowedTypes);
   }
   /** take effect conditional type narrow if condition is false */
   inheritNarrowedTypeIfFalse(condi: ExpressionRef): void {
-    let condiNarrow = this.typeNarrowChecker.collectNarrowedTypeIfFalse(condi, this);
-    if (condiNarrow.size != 0) {
-      let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
-      this.narrowedTypes = narrowedTypes;
-      narrowedTypes.mergeOr(condiNarrow);
-    }
+    let narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
+    this.narrowedTypes = narrowedTypes;
+    this.typeNarrowChecker.collectNarrowedTypeIfFalse(condi, this, narrowedTypes);
   }
 
   /** Initializes `this` field flags. */

@@ -234,10 +234,10 @@ export class TypeNarrowChecker {
         if (ifFalse && isConstNonZero(ifTrue)) {
           // Logical OR: (if (condition 1 ifFalse))
           // the only way this had become false is if condition and ifFalse are false
-          let subMapTrue = this.collectNarrowedTypeIfTrue(condition, flow, typeMap.clone());
-          let subMapFalse = this.collectNarrowedTypeIfTrue(ifFalse, flow, typeMap.clone());
-          subMapTrue.mergeAnd(subMapFalse);
-          typeMap.mergeOr(subMapTrue);
+          let subMapFalse =  typeMap.clone();
+          this.collectNarrowedTypeIfTrue(condition, flow, typeMap);
+          this.collectNarrowedTypeIfTrue(ifFalse, flow, subMapFalse);
+          typeMap.mergeAnd(subMapFalse);
         }
         break;
       }
@@ -318,7 +318,7 @@ export class TypeNarrowChecker {
       typeMap.mergeElementOr(narrowedTypeElement);
     }
     const assignMap = this.assignMap;
-    if (assignMap.has(expr)) {     
+    if (assignMap.has(expr)) {
       const assignTypeElement = assert(assignMap.get(expr));
       typeMap.set(assignTypeElement.element, assignTypeElement.type);
     }
@@ -337,7 +337,7 @@ export class TypeNarrowChecker {
         typeMap.setNonnull(local);
       }
     }
-    
+
     return typeMap;
   }
 
@@ -423,6 +423,12 @@ export class TypeNarrowChecker {
         }
         break;
       }
+    }
+    // update expr
+    const assignMap = this.assignMap;
+    if (assignMap.has(expr)) {
+      const assignTypeElement = assert(assignMap.get(expr));
+      typeMap.set(assignTypeElement.element, assignTypeElement.type);
     }
     return typeMap;
   }
