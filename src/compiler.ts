@@ -758,9 +758,9 @@ export class Compiler extends DiagnosticEmitter {
     if (!startIsEmpty || exportStart != null) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && exportStart != null) {
-        module.addGlobal(BuiltinNames.started, TypeRef.I32, true, module.i32(0));
+        module.addGlobal(BuiltinNames.started, TypeRef.I32, true, module.false());
         startFunctionBody.unshift(
-          module.global_set(BuiltinNames.started, module.i32(1))
+          module.global_set(BuiltinNames.started, module.true())
         );
         startFunctionBody.unshift(
           module.if(
@@ -2535,7 +2535,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.flatten(stmts);
       }
     } else {
-      condExpr = module.i32(1);
+      condExpr = module.true();
       condKind = ConditionKind.TRUE;
     }
 
@@ -4563,7 +4563,7 @@ export class Compiler extends DiagnosticEmitter {
             if (condKind == ConditionKind.TRUE) {
               expr = rightExpr;
             } else {
-              expr = module.if(leftExpr, rightExpr, module.i32(0));
+              expr = module.if(leftExpr, rightExpr, module.false());
             }
           }
           this.currentFlow = flow;
@@ -4627,7 +4627,7 @@ export class Compiler extends DiagnosticEmitter {
             if (condKind == ConditionKind.FALSE) {
               expr = rightExpr;
             } else {
-              expr = module.if(leftExpr, module.i32(1), rightExpr);
+              expr = module.if(leftExpr, module.true(), rightExpr);
             }
           }
           this.currentFlow = flow;
@@ -7662,11 +7662,11 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.TRUE: {
         this.currentType = Type.bool;
-        return module.i32(1);
+        return module.true();
       }
       case NodeKind.FALSE: {
         this.currentType = Type.bool;
-        return module.i32(0);
+        return module.false();
       }
       case NodeKind.THIS: {
         let thisType = actualFunction.signature.thisType;
@@ -7920,12 +7920,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // instanceof <value> - must be exact
     if (expectedType.isValue) {
-      return module.maybeDropCondition(expr, module.i32(actualType == expectedType ? 1 : 0));
+      return module.maybeDropCondition(expr, module.bool(actualType == expectedType));
     }
 
     // <value> instanceof <nonValue> - always false
     if (actualType.isValue) {
-      return module.maybeDropCondition(expr, module.i32(0));
+      return module.maybeDropCondition(expr, module.false());
     }
 
     // both LHS and RHS are references now
@@ -7959,7 +7959,7 @@ export class Compiler extends DiagnosticEmitter {
                 : UnaryOp.EqzI32,
               module.local_tee(temp.index, expr, actualType.isManaged),
             ),
-            module.i32(0),
+            module.false(),
             this.makeCallDirect(instanceofInstance, [
               module.local_get(temp.index, sizeTypeRef),
               module.i32(expectedType.classReference!.id)
@@ -7986,7 +7986,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // downcast - check statically
       if (actualType.isAssignableTo(expectedType)) {
-        return module.maybeDropCondition(expr, module.i32(1));
+        return module.maybeDropCondition(expr, module.true());
 
       // upcast - check dynamically
       } else if (expectedType.isAssignableTo(actualType)) {
@@ -8005,7 +8005,7 @@ export class Compiler extends DiagnosticEmitter {
                 : UnaryOp.EqzI32,
               module.local_tee(temp.index, expr, actualType.isManaged),
             ),
-            module.i32(0),
+            module.false(),
             this.makeCallDirect(instanceofInstance, [
               module.local_get(temp.index, sizeTypeRef),
               module.i32(expectedType.classReference!.id)
@@ -8023,7 +8023,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // false
-    return module.maybeDropCondition(expr, module.i32(0));
+    return module.maybeDropCondition(expr, module.false());
   }
 
   private makeInstanceofClass(expression: InstanceOfExpression, prototype: ClassPrototype): ExpressionRef {
@@ -8053,7 +8053,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // <nonNullable> is just `true`
         } else {
-          return module.maybeDropCondition(expr, module.i32(1));
+          return module.maybeDropCondition(expr, module.true());
         }
 
       // dynamic check against all possible concrete ids
@@ -8064,7 +8064,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // false
-    return module.maybeDropCondition(expr, module.i32(0));
+    return module.maybeDropCondition(expr, module.false());
   }
 
   private compileLiteralExpression(
@@ -10343,7 +10343,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         assert(false);
-        return module.i32(0);
+        return module.false();
       }
     }
   }

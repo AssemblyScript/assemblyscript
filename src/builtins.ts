@@ -766,7 +766,7 @@ function builtin_isBoolean(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isBooleanValue ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isBooleanValue));
 }
 builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
 
@@ -777,7 +777,7 @@ function builtin_isInteger(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isIntegerValue ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isIntegerValue));
 }
 builtins.set(BuiltinNames.isInteger, builtin_isInteger);
 
@@ -788,7 +788,7 @@ function builtin_isSigned(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isSignedIntegerValue ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isSignedIntegerValue));
 }
 builtins.set(BuiltinNames.isSigned, builtin_isSigned);
 
@@ -799,7 +799,7 @@ function builtin_isFloat(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isFloatValue ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isFloatValue));
 }
 builtins.set(BuiltinNames.isFloat, builtin_isFloat);
 
@@ -810,7 +810,7 @@ function builtin_isVector(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isVectorValue ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isVectorValue));
 }
 builtins.set(BuiltinNames.isVector, builtin_isVector);
 
@@ -821,7 +821,7 @@ function builtin_isReference(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isReference ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isReference));
 }
 builtins.set(BuiltinNames.isReference, builtin_isReference);
 
@@ -834,10 +834,9 @@ function builtin_isString(ctx: BuiltinContext): ExpressionRef {
   if (!type) return module.unreachable();
   var classReference = type.getClass();
   return reifyConstantType(ctx,
-    module.i32(
-      classReference && classReference.isAssignableTo(compiler.program.stringInstance)
-        ? 1
-        : 0
+    module.bool(
+      classReference != null &&
+      classReference.isAssignableTo(compiler.program.stringInstance)
     )
   );
 }
@@ -852,10 +851,9 @@ function builtin_isArray(ctx: BuiltinContext): ExpressionRef {
   if (!type) return module.unreachable();
   var classReference = type.getClass();
   return reifyConstantType(ctx,
-    module.i32(
-      classReference && classReference.extends(compiler.program.arrayPrototype)
-        ? 1
-        : 0
+    module.bool(
+      classReference != null &&
+      classReference.extends(compiler.program.arrayPrototype)
     )
   );
 }
@@ -870,10 +868,9 @@ function builtin_isArrayLike(ctx: BuiltinContext): ExpressionRef {
   if (!type) return module.unreachable();
   var classReference = type.getClass();
   return reifyConstantType(ctx,
-    module.i32(
-      classReference && classReference.isArrayLike
-        ? 1
-        : 0
+    module.bool(
+      classReference != null &&
+      classReference.isArrayLike
     )
   );
 }
@@ -886,7 +883,7 @@ function builtin_isFunction(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isFunction ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isFunction));
 }
 builtins.set(BuiltinNames.isFunction, builtin_isFunction);
 
@@ -897,7 +894,7 @@ function builtin_isNullable(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isNullableReference ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isNullableReference));
 }
 builtins.set(BuiltinNames.isNullable, builtin_isNullable);
 
@@ -920,7 +917,7 @@ function builtin_isDefined(ctx: BuiltinContext): ExpressionRef {
     Type.auto,
     ReportMode.SWALLOW
   );
-  return module.i32(element ? 1 : 0);
+  return module.bool(element != null);
 }
 builtins.set(BuiltinNames.isDefined, builtin_isDefined);
 
@@ -936,11 +933,11 @@ function builtin_isConstant(ctx: BuiltinContext): ExpressionRef {
   var expr = compiler.compileExpression(ctx.operands[0], Type.auto);
   compiler.currentType = Type.bool;
   if (!mustPreserveSideEffects(expr, module.ref)) {
-    return module.i32(module.isConstExpression(expr) ? 1 : 0);
+    return module.bool(module.isConstExpression(expr));
   }
   return module.block(null, [
     module.maybeDrop(expr),
-    module.i32(0)
+    module.false()
   ], getExpressionType(expr));
 }
 builtins.set(BuiltinNames.isConstant, builtin_isConstant);
@@ -952,7 +949,7 @@ function builtin_isManaged(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.isManaged ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.isManaged));
 }
 builtins.set(BuiltinNames.isManaged, builtin_isManaged);
 
@@ -963,7 +960,7 @@ function builtin_isVoid(ctx: BuiltinContext): ExpressionRef {
   var type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.kind == TypeKind.VOID ? 1 : 0));
+  return reifyConstantType(ctx, module.bool(type.kind == TypeKind.VOID));
 }
 builtins.set(BuiltinNames.isVoid, builtin_isVoid);
 
@@ -2006,7 +2003,7 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32:
       case TypeKind.U64:
       case TypeKind.USIZE: {
-        return module.maybeDropCondition(arg0, module.i32(0));
+        return module.maybeDropCondition(arg0, module.false());
       }
       // (t = arg0) != t
       case TypeKind.F32: {
@@ -2082,7 +2079,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32:
       case TypeKind.U64:
       case TypeKind.USIZE: {
-        return module.maybeDropCondition(arg0, module.i32(1));
+        return module.maybeDropCondition(arg0, module.true());
       }
       // (t = arg0) - t == 0
       case TypeKind.F32: {

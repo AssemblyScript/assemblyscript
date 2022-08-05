@@ -1119,6 +1119,18 @@ export class Module {
 
   // constants
 
+  true(): ExpressionRef {
+    return this.i32(1);
+  }
+
+  false(): ExpressionRef {
+    return this.i32(0);
+  }
+
+  bool(value: bool): ExpressionRef {
+    return this.i32(value ? 1 : 0);
+  }
+
   i32(value: i32): ExpressionRef {
     var out = this.lit;
     binaryen._BinaryenLiteralInt32(out, value);
