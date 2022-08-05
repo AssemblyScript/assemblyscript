@@ -1793,7 +1793,11 @@ export class Module {
   ref_is_null(
     expr: ExpressionRef
   ): ExpressionRef {
-    return binaryen._BinaryenRefIs(this.ref, RefIsOp.RefIsNull, expr);
+    if (isNullableType(getExpressionType(expr))) {
+      return binaryen._BinaryenRefIs(this.ref, RefIsOp.RefIsNull, expr);
+    } else {
+      return this.i32(0); // false literal
+    }
   }
 
   ref_as(
@@ -1806,7 +1810,11 @@ export class Module {
   ref_as_nonnull(
     expr: ExpressionRef
   ): ExpressionRef {
-    return binaryen._BinaryenRefAs(this.ref, RefAsOp.RefAsNonNull, expr);
+    if (isNullableType(getExpressionType(expr))) {
+      return binaryen._BinaryenRefAs(this.ref, RefAsOp.RefAsNonNull, expr);
+    } else {
+      return expr;
+    }
   }
 
   ref_func(
@@ -2710,6 +2718,10 @@ export function expandType(type: TypeRef): TypeRef[] {
   }
   binaryen._free(cArr);
   return types;
+}
+
+export function isNullableType(type: TypeRef): bool {
+  return binaryen._BinaryenTypeIsNullable(type);
 }
 
 // expressions
