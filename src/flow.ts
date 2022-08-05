@@ -332,6 +332,18 @@ export class Flow {
     return branch;
   }
 
+  /** Fork this flow to a child flow in branch */
+  forkTrueBranch(condExpr: ExpressionRef, resetBreakContext: bool = false): Flow {
+    let branch = this.fork(resetBreakContext);
+    branch.inheritNarrowedTypeIfTrue(condExpr);
+    return branch;
+  }
+  forkFalseBranch(condExpr: ExpressionRef, resetBreakContext: bool = false): Flow {
+    let branch = this.fork(resetBreakContext);
+    branch.inheritNarrowedTypeIfFalse(condExpr);
+    return branch;
+  }
+
   /** Gets a free temporary local of the specified type. */
   getTempLocal(type: Type, except: BitSet | null = null): Local {
     var parentFunction = this.parentFunction;

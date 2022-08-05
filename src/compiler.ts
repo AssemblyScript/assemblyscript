@@ -2555,8 +2555,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = flow;
 
     // Compile the body assuming the condition turned out true
-    var bodyFlow = flow.fork();
-    bodyFlow.inheritNarrowedTypeIfTrue(condExpr);
+    var bodyFlow = flow.forkTrueBranch(condExpr);
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
     var body = statement.statement;
@@ -2699,9 +2698,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile ifTrue assuming the condition turned out true
     var thenStmts = new Array<ExpressionRef>();
-    var thenFlow = flow.fork();
+    var thenFlow = flow.forkTrueBranch(condExpr);
     this.currentFlow = thenFlow;
-    thenFlow.inheritNarrowedTypeIfTrue(condExpr);
     
     if (ifTrue.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>ifTrue).statements, false, thenStmts);
@@ -2718,9 +2716,8 @@ export class Compiler extends DiagnosticEmitter {
     // Compile ifFalse assuming the condition turned out false, if present
     if (ifFalse) {
       let elseStmts = new Array<ExpressionRef>();
-      let elseFlow = flow.fork();
+      let elseFlow = flow.forkFalseBranch(condExpr);
       this.currentFlow = elseFlow;
-      elseFlow.inheritNarrowedTypeIfFalse(condExpr);
       if (ifFalse.kind == NodeKind.BLOCK) {
         this.compileStatements((<BlockStatement>ifFalse).statements, false, elseStmts);
       } else {
@@ -3240,8 +3237,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = flow;
 
     // Compile the body assuming the condition turned out true
-    var bodyFlow = flow.fork();
-    bodyFlow.inheritNarrowedTypeIfTrue(condExpr);
+    var bodyFlow = flow.forkTrueBranch(condExpr);
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
     var body = statement.statement;
@@ -4547,9 +4543,8 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
         leftType = this.currentType;
 
-        let rightFlow = flow.fork();
+        let rightFlow = flow.forkTrueBranch(leftExpr);
         this.currentFlow = rightFlow;
-        rightFlow.inheritNarrowedTypeIfTrue(leftExpr);
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
@@ -4613,9 +4608,8 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
         leftType = this.currentType;
 
-        let rightFlow = flow.fork();
+        let rightFlow = flow.forkFalseBranch(leftExpr);
         this.currentFlow = rightFlow;
-        rightFlow.inheritNarrowedTypeIfFalse(leftExpr);
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
@@ -9284,14 +9278,12 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var outerFlow = this.currentFlow;
-    var ifThenFlow = outerFlow.fork();
-    ifThenFlow.inheritNarrowedTypeIfTrue(condExpr);
+    var ifThenFlow = outerFlow.forkTrueBranch(condExpr);
     this.currentFlow = ifThenFlow;
     var ifThenExpr = this.compileExpression(ifThen, ctxType);
     var ifThenType = this.currentType;
 
-    var ifElseFlow = outerFlow.fork();
-    ifElseFlow.inheritNarrowedTypeIfFalse(condExpr);
+    var ifElseFlow = outerFlow.forkFalseBranch(condExpr);
     this.currentFlow = ifElseFlow;
     var ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType);
     var ifElseType = this.currentType;
