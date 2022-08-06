@@ -2737,9 +2737,6 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       flow.inheritNarrowedTypeIfFalse(condExpr);
       flow.inheritBranch(thenFlow);
-      if (thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
-        flow.inheritNarrowedTypeIfFalse(condExpr);
-      }
       return module.if(condExpr,
         module.flatten(thenStmts)
       );

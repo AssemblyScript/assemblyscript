@@ -1380,10 +1380,10 @@
    call $while/Ref#constructor
    local.tee $1
    i32.store
-   loop $while-continue|110
+   loop $while-continue|010
     call $while/Ref#constructor
     if
-     block $while-break|19
+     block $while-break|09
       local.get $3
       i32.const 1
       i32.add
@@ -1393,9 +1393,9 @@
       if
        i32.const 0
        local.set $1
-       br $while-break|19
+       br $while-break|09
       end
-      br $while-continue|110
+      br $while-continue|010
      end
     end
    end

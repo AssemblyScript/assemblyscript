@@ -884,10 +884,12 @@ export class Flow {
     }
 
     // narrowed types
-    let thisNarrowedTypes = this.narrowedTypes;
-    let otherNarrowedTypes = other.narrowedTypes;
-    if (thisNarrowedTypes && otherNarrowedTypes) {
-      thisNarrowedTypes.mergeAnd(otherNarrowedTypes);
+    if (!other.isAny(FlowFlags.BREAKS | FlowFlags.TERMINATES)) {
+      let thisNarrowedTypes = this.narrowedTypes;
+      let otherNarrowedTypes = other.narrowedTypes;
+      if (thisNarrowedTypes && otherNarrowedTypes) {
+        thisNarrowedTypes.mergeAnd(otherNarrowedTypes);
+      }
     }
 
     // field flags do not matter here since there's only INITIALIZED, which can
