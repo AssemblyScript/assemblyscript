@@ -3520,7 +3520,6 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
 
-    // void to void
     if (fromType.kind == TypeKind.VOID) {
       if (toType.kind == TypeKind.VOID) {
         // void to void
