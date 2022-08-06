@@ -344,7 +344,7 @@ export class Type {
   /** Computes the truncating mask in the target type. */
   computeSmallIntegerMask(targetType: Type): i32 {
     var size = this.size;
-    size = this.is(TypeFlags.UNSIGNED) ? size : size - 1;
+    if (!this.is(TypeFlags.UNSIGNED)) size -= 1;
     return ~0 >>> (targetType.size - size);
   }
 
