@@ -322,7 +322,7 @@ function daysSinceEpoch(y: i32, m: i32, d: i32): i64 {
   var yoe = <u32>y - era * YEARS_PER_EPOCH; // [0, 399]
   var doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
   var doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
-  return <i64><i32>(era * 146097 + doe - 719468);
+  return <i64><i32>(era * 146097 + doe - EPOCH_OFFSET);
 }
 
 // TomohikoSakamoto algorithm from https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week

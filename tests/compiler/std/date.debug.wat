@@ -7,12 +7,8 @@
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
-<<<<<<< HEAD
- (type $i32_i32_i32_=>_i64 (func (param i32 i32 i32) (result i64)))
- (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
-=======
->>>>>>> main
  (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_i32_i32_=>_i64 (func (param i32 i32 i32) (result i64)))
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))

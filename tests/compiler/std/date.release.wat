@@ -1,11 +1,11 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -2032,18 +2032,10 @@
   i32.const 2
   i32.le_s
   i32.sub
-<<<<<<< HEAD
   local.tee $0
-  local.get $0
-  i32.const 399
-  i32.sub
-  local.get $0
-=======
-  local.tee $3
   i32.const 399
   i32.const 0
-  local.get $3
->>>>>>> main
+  local.get $0
   i32.const 0
   i32.lt_s
   select
@@ -2154,38 +2146,6 @@
    local.get $1
    i32.const 1
    i32.add
-<<<<<<< HEAD
-=======
-   local.tee $1
-   i32.const 2
-   i32.le_s
-   i32.sub
-   local.tee $0
-   i32.const 399
-   i32.const 0
-   local.get $0
-   i32.const 0
-   i32.lt_s
-   select
-   i32.sub
-   i32.const 400
-   i32.div_s
-   local.set $4
-   local.get $1
-   i32.const -3
-   i32.const 9
-   local.get $1
-   i32.const 2
-   i32.gt_s
-   select
-   i32.add
-   i32.const 153
-   i32.mul
-   i32.const 2
-   i32.add
-   i32.const 5
-   i32.div_u
->>>>>>> main
    local.get $2
    local.get $0
    i64.load offset=16
@@ -2205,37 +2165,6 @@
   local.get $1
   local.get $0
   i32.load offset=4
-<<<<<<< HEAD
-=======
-  local.tee $4
-  i32.const 2
-  i32.le_s
-  i32.sub
-  local.tee $3
-  i32.const 399
-  i32.const 0
-  local.get $3
-  i32.const 0
-  i32.lt_s
-  select
-  i32.sub
-  i32.const 400
-  i32.div_s
-  local.set $1
-  local.get $0
-  i64.const 86400000
-  i64.const 0
-  local.get $0
-  i64.load offset=16
-  i64.const 86400000
-  i64.rem_s
-  local.tee $2
-  i64.const 0
-  i64.lt_s
-  select
-  local.get $2
-  i64.add
->>>>>>> main
   local.get $0
   i32.load offset=8
   local.get $0
@@ -3904,59 +3833,31 @@
   i32.const 1579
   i32.add
   i32.load8_u
-<<<<<<< HEAD
-  local.get $5
   local.get $5
   local.get $5
   i32.const 3
-  i32.sub
+  i32.const 0
   local.get $5
-  i32.const 0
-  i32.ge_s
-  local.tee $6
-=======
-  local.get $6
-  local.get $6
-  i32.const 3
-  i32.const 0
-  local.get $6
   i32.const 0
   i32.lt_s
-  local.tee $0
->>>>>>> main
+  local.tee $6
   select
   i32.sub
   i32.const 4
   i32.div_s
-<<<<<<< HEAD
   local.get $5
-  local.get $5
-  i32.const 99
-  i32.sub
-  local.get $6
-=======
-  local.get $6
   i32.const 99
   i32.const 0
-  local.get $0
->>>>>>> main
+  local.get $6
   select
   i32.sub
   i32.const 100
   i32.div_s
   i32.sub
-<<<<<<< HEAD
   local.get $5
-  local.get $5
-  i32.const 399
-  i32.sub
-  local.get $6
-=======
-  local.get $6
   i32.const 399
   i32.const 0
-  local.get $0
->>>>>>> main
+  local.get $6
   select
   i32.sub
   i32.const 400
@@ -4256,20 +4157,11 @@
   i32.const 1579
   i32.add
   i32.load8_u
-<<<<<<< HEAD
   local.get $6
   local.get $6
-  local.get $6
-  i32.const 3
-  i32.sub
-  local.get $6
-=======
-  local.get $1
-  local.get $1
   i32.const 3
   i32.const 0
-  local.get $1
->>>>>>> main
+  local.get $6
   i32.const 0
   i32.lt_s
   local.tee $8
@@ -4277,12 +4169,7 @@
   i32.sub
   i32.const 4
   i32.div_s
-<<<<<<< HEAD
   local.get $6
-  local.get $6
-=======
-  local.get $1
->>>>>>> main
   i32.const 99
   i32.const 0
   local.get $8
@@ -4291,12 +4178,7 @@
   i32.const 100
   i32.div_s
   i32.sub
-<<<<<<< HEAD
   local.get $6
-  local.get $6
-=======
-  local.get $1
->>>>>>> main
   i32.const 399
   i32.const 0
   local.get $8
