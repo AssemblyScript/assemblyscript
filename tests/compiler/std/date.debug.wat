@@ -7,8 +7,8 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_i64_=>_i64 (func (param i32 i64) (result i64)))
@@ -172,17 +172,17 @@
   i32.const 400
   local.set $3
   local.get $4
+  local.get $4
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $4
-  else
-   local.get $4
    local.get $3
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $3
   i32.div_s
   local.set $5
@@ -265,127 +265,137 @@
  )
  (func $~lib/date/invalidDate (param $0 i64) (result i32)
   local.get $0
-  i64.const -8640000000000000
+  i64.const 0
+  i64.const 8640000000000000
+  i64.sub
   i64.lt_s
   local.get $0
   i64.const 8640000000000000
   i64.gt_s
   i32.or
  )
- (func $~lib/date/ymdFromEpochDays (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
+ (func $~lib/date/dateFromEpoch (param $0 i64) (result i32)
+  (local $1 i64)
+  (local $2 i64)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  local.get $0
-  i32.const 719468
-  i32.add
-  local.set $0
+  (local $8 i64)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   local.get $0
   local.set $2
-  i32.const 146097
+  i32.const 86400000
+  i64.extend_i32_s
   local.set $1
   local.get $2
-  i32.const 0
-  i32.ge_s
-  if (result i32)
-   local.get $2
-  else
-   local.get $2
+  local.get $2
+  i64.const 0
+  i64.lt_s
+  if (result i64)
    local.get $1
-   i32.sub
-   i32.const 1
-   i32.add
+   i64.const 1
+   i64.sub
+  else
+   i64.const 0
   end
+  i64.sub
   local.get $1
-  i32.div_s
+  i64.div_s
+  i32.wrap_i64
+  i32.const 4
+  i32.mul
+  i32.const 719468
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.const 3
+  i32.or
   local.set $3
-  local.get $0
   local.get $3
+  local.set $5
+  i32.const 146097
+  local.set $4
+  local.get $5
+  local.get $5
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $4
+   i32.const 1
+   i32.sub
+  else
+   i32.const 0
+  end
+  i32.sub
+  local.get $4
+  i32.div_s
+  local.set $6
+  local.get $3
+  local.get $6
   i32.const 146097
   i32.mul
   i32.sub
-  local.set $4
-  local.get $4
-  local.get $4
-  i32.const 1460
-  i32.div_u
-  i32.sub
-  local.get $4
-  i32.const 36524
-  i32.div_u
-  i32.add
-  local.get $4
-  i32.const 146096
-  i32.div_u
-  i32.sub
-  i32.const 365
-  i32.div_u
-  local.set $5
-  local.get $5
-  local.get $3
-  i32.const 400
-  i32.mul
-  i32.add
-  local.set $6
-  local.get $4
-  i32.const 365
-  local.get $5
-  i32.mul
-  local.get $5
-  i32.const 4
-  i32.div_u
-  i32.add
-  local.get $5
-  i32.const 100
-  i32.div_u
-  i32.sub
-  i32.sub
   local.set $7
-  i32.const 5
   local.get $7
-  i32.mul
-  i32.const 2
-  i32.add
-  i32.const 153
-  i32.div_s
+  i32.const 3
+  i32.or
+  i64.extend_i32_u
+  i64.const 2939745
+  i64.mul
   local.set $8
-  local.get $7
-  i32.const 153
   local.get $8
-  i32.mul
-  i32.const 2
-  i32.add
-  i32.const 5
+  i32.wrap_i64
+  i32.const 11758980
   i32.div_u
-  i32.sub
+  local.set $9
+  i32.const 2141
+  local.get $9
+  i32.mul
+  i32.const 197913
+  i32.add
+  local.set $10
+  i32.const 100
+  local.get $6
+  i32.mul
+  local.get $8
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.add
+  local.set $11
+  local.get $10
+  i32.const 16
+  i32.shr_u
+  local.set $12
+  local.get $10
+  i32.const 65535
+  i32.and
+  i32.const 2141
+  i32.div_s
   i32.const 1
   i32.add
   global.set $~lib/date/_day
-  local.get $8
-  local.get $8
-  i32.const 10
-  i32.lt_s
-  if (result i32)
-   i32.const 3
-  else
-   i32.const -9
+  local.get $9
+  i32.const 306
+  i32.ge_u
+  if
+   local.get $12
+   i32.const 12
+   i32.sub
+   local.set $12
+   local.get $11
+   i32.const 1
+   i32.add
+   local.set $11
   end
-  i32.add
-  local.set $8
-  local.get $8
+  local.get $12
   global.set $~lib/date/_month
-  local.get $6
-  local.get $8
-  i32.const 2
-  i32.le_s
-  i32.add
-  local.set $6
-  local.get $6
+  local.get $11
  )
  (func $~lib/date/Date#set:year (param $0 i32) (param $1 i32)
   local.get $0
@@ -2480,14 +2490,12 @@
   i64.store offset=16
  )
  (func $~lib/date/Date#setTime (param $0 i32) (param $1 i64) (result i64)
-  (local $2 i64)
-  (local $3 i64)
   local.get $1
   call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
-   i32.const 107
+   i32.const 112
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -2497,26 +2505,7 @@
   call $~lib/date/Date#set:epochMillis
   local.get $0
   local.get $1
-  local.set $3
-  i32.const 86400000
-  i64.extend_i32_s
-  local.set $2
-  local.get $3
-  i64.const 0
-  i64.ge_s
-  if (result i64)
-   local.get $3
-  else
-   local.get $3
-   local.get $2
-   i64.sub
-   i64.const 1
-   i64.add
-  end
-  local.get $2
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/dateFromEpoch
   call $~lib/date/Date#set:year
   local.get $0
   global.get $~lib/date/_month
@@ -2880,17 +2869,17 @@
   i32.const 4
   local.set $3
   local.get $4
+  local.get $4
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $4
-  else
-   local.get $4
    local.get $3
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $3
   i32.div_s
   local.get $0
@@ -2898,17 +2887,17 @@
   i32.const 100
   local.set $3
   local.get $4
+  local.get $4
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $4
-  else
-   local.get $4
    local.get $3
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $3
   i32.div_s
   i32.sub
@@ -2917,17 +2906,17 @@
   i32.const 400
   local.set $3
   local.get $4
+  local.get $4
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   if (result i32)
-   local.get $4
-  else
-   local.get $4
    local.get $3
-   i32.sub
    i32.const 1
-   i32.add
+   i32.sub
+  else
+   i32.const 0
   end
+  i32.sub
   local.get $3
   i32.div_s
   i32.add
@@ -5832,7 +5821,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 45
+   i32.const 50
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5898,7 +5887,7 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 62
+    i32.const 67
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -6127,7 +6116,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 31
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6190,7 +6179,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 31
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6253,7 +6242,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 31
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6316,7 +6305,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 31
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6379,7 +6368,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 31
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6442,7 +6431,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 31
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -6505,7 +6494,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 31
+   i32.const 36
    i32.const 26
    call $~lib/builtins/abort
    unreachable
@@ -9253,9 +9242,7 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/date/Date#constructor (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i64)
-  (local $3 i64)
-  (local $4 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -9291,33 +9278,14 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 95
+   i32.const 100
    i32.const 35
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $1
-  local.set $3
-  i32.const 86400000
-  i64.extend_i32_s
-  local.set $2
-  local.get $3
-  i64.const 0
-  i64.ge_s
-  if (result i64)
-   local.get $3
-  else
-   local.get $3
-   local.get $2
-   i64.sub
-   i64.const 1
-   i64.add
-  end
-  local.get $2
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/dateFromEpoch
   call $~lib/date/Date#set:year
   local.get $0
   global.get $~lib/date/_month
@@ -9326,12 +9294,12 @@
   global.get $~lib/date/_day
   call $~lib/date/Date#set:day
   local.get $0
-  local.set $4
+  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $2
  )
  (func $~lib/util/number/itoa32 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
