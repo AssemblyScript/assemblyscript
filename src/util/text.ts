@@ -450,10 +450,16 @@ export function indent(sb: string[], level: i32): void {
     }
   } else {
     let indents: string;
-    if (indentCache.has(level)) {
-      indents = assert(indentCache.get(level));
+    // Limit number of indent entries to 1024 for avoiding unnecessary
+    // memory consumetion
+    if (indentCache.size <= 1024) {
+      if (indentCache.has(level)) {
+        indents = assert(indentCache.get(level));
+      } else {
+        indentCache.set(level, (indents = indentX1.repeat(level)));
+      }
     } else {
-      indentCache.set(level, (indents = indentX1.repeat(level)));
+      indents = indentX1.repeat(level);
     }
     sb.push(indents);
   }
