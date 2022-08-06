@@ -61,12 +61,12 @@ export class Int8Array extends ArrayBufferView {
     return LAST_INDEX_OF<Int8Array, i8>(this, searchElement, fromIndex);
   }
 
-  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
     FILL<u8>(this.dataStart, this.length, u8(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: i8, b: i8) => i32 = COMPARATOR<i8>()): this {
+  sort(comparator: (a: i8, b: i8) => i32 = COMPARATOR<i8>()): Int8Array {
     SORT<i8>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -125,7 +125,7 @@ export class Int8Array extends ArrayBufferView {
     FOREACH<Int8Array, i8>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Int8Array {
     REVERSE<u8>(this.dataStart, this.length);
     return this;
   }
@@ -203,12 +203,12 @@ export class Uint8Array extends ArrayBufferView {
     return LAST_INDEX_OF<Uint8Array, u8>(this, searchElement, fromIndex);
   }
 
-  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
     FILL<u8>(this.dataStart, this.length, u8(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): this {
+  sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8Array {
     SORT<u8>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -267,7 +267,7 @@ export class Uint8Array extends ArrayBufferView {
     FOREACH<Uint8Array, u8>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint8Array {
     REVERSE<u8>(this.dataStart, this.length);
     return this;
   }
@@ -345,13 +345,13 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return LAST_INDEX_OF<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
   }
 
-  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
     value = ~(value >> 31) & (((255 - value) >> 31) | value);
     FILL<u8>(this.dataStart, this.length, u8(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): this {
+  sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8ClampedArray {
     SORT<u8>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -410,7 +410,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
     FOREACH<Uint8ClampedArray, u8>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint8ClampedArray {
     REVERSE<u8>(this.dataStart, this.length);
     return this;
   }
@@ -488,12 +488,12 @@ export class Int16Array extends ArrayBufferView {
     return LAST_INDEX_OF<Int16Array, i16>(this, searchElement, fromIndex);
   }
 
-  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
     FILL<u16>(this.dataStart, this.length, u16(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: i16, b: i16) => i32 = COMPARATOR<i16>()): this {
+  sort(comparator: (a: i16, b: i16) => i32 = COMPARATOR<i16>()): Int16Array {
     SORT<i16>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -552,7 +552,7 @@ export class Int16Array extends ArrayBufferView {
     FOREACH<Int16Array, i16>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Int16Array {
     REVERSE<u16>(this.dataStart, this.length);
     return this;
   }
@@ -630,12 +630,12 @@ export class Uint16Array extends ArrayBufferView {
     return LAST_INDEX_OF<Uint16Array, u16>(this, searchElement, fromIndex);
   }
 
-  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
     FILL<u16>(this.dataStart, this.length, u16(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: u16, b: u16) => i32 = COMPARATOR<u16>()): this {
+  sort(comparator: (a: u16, b: u16) => i32 = COMPARATOR<u16>()): Uint16Array {
     SORT<u16>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -694,7 +694,7 @@ export class Uint16Array extends ArrayBufferView {
     FOREACH<Uint16Array, u16>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint16Array {
     REVERSE<u16>(this.dataStart, this.length);
     return this;
   }
@@ -772,12 +772,12 @@ export class Int32Array extends ArrayBufferView {
     return LAST_INDEX_OF<Int32Array, i32>(this, searchElement, fromIndex);
   }
 
-  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
     FILL<u32>(this.dataStart, this.length, u32(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: i32, b: i32) => i32 = COMPARATOR<i32>()): this {
+  sort(comparator: (a: i32, b: i32) => i32 = COMPARATOR<i32>()): Int32Array {
     SORT<i32>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -836,7 +836,7 @@ export class Int32Array extends ArrayBufferView {
     FOREACH<Int32Array, i32>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Int32Array {
     REVERSE<u32>(this.dataStart, this.length);
     return this;
   }
@@ -914,12 +914,12 @@ export class Uint32Array extends ArrayBufferView {
     return LAST_INDEX_OF<Uint32Array, u32>(this, searchElement, fromIndex);
   }
 
-  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
     FILL<u32>(this.dataStart, this.length, value, start, end);
     return this;
   }
 
-  sort(comparator: (a: u32, b: u32) => i32 = COMPARATOR<u32>()): this {
+  sort(comparator: (a: u32, b: u32) => i32 = COMPARATOR<u32>()): Uint32Array {
     SORT<u32>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -978,7 +978,7 @@ export class Uint32Array extends ArrayBufferView {
     FOREACH<Uint32Array, u32>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint32Array {
     REVERSE<u32>(this.dataStart, this.length);
     return this;
   }
@@ -1056,12 +1056,12 @@ export class Int64Array extends ArrayBufferView {
     return LAST_INDEX_OF<Int64Array, i64>(this, searchElement, fromIndex);
   }
 
-  fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
     FILL<u64>(this.dataStart, this.length, u64(value), start, end);
     return this;
   }
 
-  sort(comparator: (a: i64, b: i64) => i32 = COMPARATOR<i64>()): this {
+  sort(comparator: (a: i64, b: i64) => i32 = COMPARATOR<i64>()): Int64Array {
     SORT<i64>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -1120,7 +1120,7 @@ export class Int64Array extends ArrayBufferView {
     FOREACH<Int64Array, i64>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Int64Array {
     REVERSE<u64>(this.dataStart, this.length);
     return this;
   }
@@ -1198,12 +1198,12 @@ export class Uint64Array extends ArrayBufferView {
     return LAST_INDEX_OF<Uint64Array, u64>(this, searchElement, fromIndex);
   }
 
-  fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
     FILL<u64>(this.dataStart, this.length, value, start, end);
     return this;
   }
 
-  sort(comparator: (a: u64, b: u64) => i32 = COMPARATOR<u64>()): this {
+  sort(comparator: (a: u64, b: u64) => i32 = COMPARATOR<u64>()): Uint64Array {
     SORT<u64>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -1262,7 +1262,7 @@ export class Uint64Array extends ArrayBufferView {
     FOREACH<Uint64Array, u64>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint64Array {
     REVERSE<u64>(this.dataStart, this.length);
     return this;
   }
@@ -1340,12 +1340,12 @@ export class Float32Array extends ArrayBufferView {
     return LAST_INDEX_OF<Float32Array, f32>(this, searchElement, fromIndex);
   }
 
-  fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
     FILL<f32>(this.dataStart, this.length, value, start, end);
     return this;
   }
 
-  sort(comparator: (a: f32, b: f32) => i32 = COMPARATOR<f32>()): this {
+  sort(comparator: (a: f32, b: f32) => i32 = COMPARATOR<f32>()): Float32Array {
     SORT<f32>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -1404,7 +1404,7 @@ export class Float32Array extends ArrayBufferView {
     FOREACH<Float32Array, f32>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Float32Array {
     REVERSE<f32>(this.dataStart, this.length);
     return this;
   }
@@ -1482,12 +1482,12 @@ export class Float64Array extends ArrayBufferView {
     return LAST_INDEX_OF<Float64Array, f64>(this, searchElement, fromIndex);
   }
 
-  fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
     FILL<f64>(this.dataStart, this.length, value, start, end);
     return this;
   }
 
-  sort(comparator: (a: f64, b: f64) => i32 = COMPARATOR<f64>()): this {
+  sort(comparator: (a: f64, b: f64) => i32 = COMPARATOR<f64>()): Float64Array {
     SORT<f64>(this.dataStart, this.length, comparator);
     return this;
   }
@@ -1546,7 +1546,7 @@ export class Float64Array extends ArrayBufferView {
     FOREACH<Float64Array, f64>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Float64Array {
     REVERSE<f64>(this.dataStart, this.length);
     return this;
   }

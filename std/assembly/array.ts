@@ -154,7 +154,7 @@ export class Array<T> {
     return value;
   }
 
-  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
     if (isManaged<T>()) {
       FILL<usize>(this.dataStart, this.length_, changetype<usize>(value), start, end);
       __link(changetype<usize>(this), changetype<usize>(value), false);
@@ -251,7 +251,7 @@ export class Array<T> {
     return out;
   }
 
-  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Array<T> {
     var ptr = this.dataStart;
     var len = this.length_;
 
@@ -422,12 +422,12 @@ export class Array<T> {
     return result;
   }
 
-  reverse(): this {
+  reverse(): Array<T> {
     REVERSE<T>(this.dataStart, this.length_);
     return this;
   }
 
-  sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
+  sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): Array<T> {
     SORT<T>(this.dataStart, this.length_, comparator);
     return this;
   }

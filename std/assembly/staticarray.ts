@@ -141,7 +141,7 @@ export class StaticArray<T> {
     }
   }
 
-  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): StaticArray<T> {
     if (isManaged<T>()) {
       FILL<usize>(changetype<usize>(this), this.length, changetype<usize>(value), start, end);
       __link(changetype<usize>(this), changetype<usize>(value), false);
@@ -151,7 +151,7 @@ export class StaticArray<T> {
     return this;
   }
 
-  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): StaticArray<T> {
     var ptr = changetype<usize>(this);
     var len = this.length;
 
@@ -342,7 +342,7 @@ export class StaticArray<T> {
     return false;
   }
 
-  sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
+  sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): StaticArray<T> {
     SORT<T>(changetype<usize>(this), this.length, comparator);
     return this;
   }
@@ -359,7 +359,7 @@ export class StaticArray<T> {
     return <string>unreachable();
   }
 
-  reverse(): this {
+  reverse(): StaticArray<T> {
     REVERSE<T>(changetype<usize>(this), this.length);
     return this;
   }
