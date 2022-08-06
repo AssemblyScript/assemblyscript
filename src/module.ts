@@ -1200,8 +1200,8 @@ export class Module {
         case UnaryOp.CtzSize:    op = isWam64 ? UnaryOp.CtzI64    : UnaryOp.CtzI32; break;
         case UnaryOp.PopcntSize: op = isWam64 ? UnaryOp.PopcntI64 : UnaryOp.PopcntI32; break;
         case UnaryOp.EqzSize:    op = isWam64 ? UnaryOp.EqzI64    : UnaryOp.EqzI32; break;
+        default: assert(false);
       }
-      assert(false);
     }
     return binaryen._BinaryenUnary(this.ref, op, value);
   }
@@ -1239,8 +1239,8 @@ export class Module {
         case BinaryOp.GtUSize:  op = isWasm64 ? BinaryOp.GtU64   : BinaryOp.GtU32; break;
         case BinaryOp.GeISize:  op = isWasm64 ? BinaryOp.GeI64   : BinaryOp.GeI32; break;
         case BinaryOp.GeUSize:  op = isWasm64 ? BinaryOp.GeU64   : BinaryOp.GeU32; break;
+        default: assert(false);
       }
-      assert(false);
     }
     return binaryen._BinaryenBinary(this.ref, op, left, right);
   }
