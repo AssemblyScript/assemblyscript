@@ -195,7 +195,7 @@ import {
   writeF32,
   writeF64,
   writeV128,
-  uniqueMap,
+  cloneMap,
   isPowerOf2,
   v128_zero,
   readI32,
@@ -921,58 +921,7 @@ export class Compiler extends DiagnosticEmitter {
       element.identifierNode.range
     );
   }
-
-  // === Elements =================================================================================
-
-  /** Compiles any element. */
-  compileElement(element: Element, compileMembers: bool = true): void {
-    switch (element.kind) {
-      case ElementKind.GLOBAL: {
-        this.compileGlobal(<Global>element);
-        break;
-      }
-      case ElementKind.ENUM: {
-        this.compileEnum(<Enum>element);
-        break;
-      }
-      case ElementKind.FUNCTION_PROTOTYPE: {
-        if (!element.is(CommonFlags.GENERIC)) {
-          let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          if (functionInstance) this.compileFunction(functionInstance);
-        }
-        break;
-      }
-      case ElementKind.CLASS_PROTOTYPE: {
-        if (!element.is(CommonFlags.GENERIC)) {
-          let classInstance = this.resolver.resolveClass(<ClassPrototype>element, null);
-          if (classInstance) this.compileClass(classInstance);
-        }
-        break;
-      }
-      case ElementKind.PROPERTY_PROTOTYPE: {
-        let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
-        if (propertyInstance) this.compileProperty(propertyInstance);
-        break;
-      }
-      case ElementKind.INTERFACE_PROTOTYPE:
-      case ElementKind.NAMESPACE:
-      case ElementKind.TYPEDEFINITION:
-      case ElementKind.ENUMVALUE:
-      case ElementKind.INDEXSIGNATURE: break;
-      default: assert(false);
-    }
-    if (compileMembers) {
-      let members = element.members;
-      if (members) {
-        // TODO: for (let element of members.values()) {
-        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-          let element = unchecked(_values[i]);
-          this.compileElement(element);
-        }
-      }
-    }
-  }
-
+  
   // files
 
   /** Compiles the file matching the specified path. */
@@ -1628,87 +1577,6 @@ export class Compiler extends DiagnosticEmitter {
       return false; // not recoverable
     }
 
-    return true;
-  }
-
-  // === Classes ==================================================================================
-
-  /** Compiles a priorly resolved class. */
-  compileClass(instance: Class): bool {
-    if (instance.is(CommonFlags.COMPILED)) return true;
-    instance.set(CommonFlags.COMPILED);
-    var prototype = instance.prototype;
-    var staticMembers = (<ClassPrototype>prototype).members;
-    if (staticMembers) {
-      // TODO: for (let element of staticMembers.values()) {
-      for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
-        let element = unchecked(_values[i]);
-        switch (element.kind) {
-          case ElementKind.GLOBAL: {
-            this.compileGlobal(<Global>element);
-            break;
-          }
-          case ElementKind.FUNCTION_PROTOTYPE: {
-            if (element.is(CommonFlags.GENERIC)) break;
-            let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-            if (!functionInstance) break;
-            element = functionInstance;
-            // fall-through
-          }
-          case ElementKind.FUNCTION: {
-            this.compileFunction(<Function>element);
-            break;
-          }
-          case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
-            if (!propertyInstance) break;
-            element = propertyInstance;
-            // fall-through
-          }
-          case ElementKind.PROPERTY: {
-            this.compileProperty(<Property>element);
-            break;
-          }
-        }
-      }
-    }
-    this.ensureConstructor(instance, instance.identifierNode);
-    this.checkFieldInitialization(instance);
-
-    var instanceMembers = instance.members;
-    if (instanceMembers) {
-      // TODO: for (let element of instanceMembers.values()) {
-      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
-        let element = unchecked(_values[i]);
-        switch (element.kind) {
-          case ElementKind.FUNCTION_PROTOTYPE: {
-            if (element.is(CommonFlags.GENERIC)) break;
-            let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-            if (!functionInstance) break;
-            element = functionInstance;
-            // fall-through
-          }
-          case ElementKind.FUNCTION: {
-            this.compileFunction(<Function>element);
-            break;
-          }
-          case ElementKind.FIELD: {
-            this.compileField(<Field>element);
-            break;
-          }
-          case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
-            if (!propertyInstance) break;
-            element = propertyInstance;
-            // fall-through
-          }
-          case ElementKind.PROPERTY: {
-            this.compileProperty(<Property>element);
-            break;
-          }
-        }
-      }
-    }
     return true;
   }
 
@@ -2980,7 +2848,7 @@ export class Compiler extends DiagnosticEmitter {
         type = resolver.resolveType( // reports
           typeNode,
           flow.actualFunction,
-          uniqueMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
         this.checkTypeSupported(type, typeNode);
@@ -3758,7 +3626,7 @@ export class Compiler extends DiagnosticEmitter {
         let toType = this.resolver.resolveType( // reports
           assert(expression.toType),
           flow.actualFunction,
-          uniqueMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!toType) return this.module.unreachable();
         return this.compileExpression(expression.expression, toType, inheritedConstraints | Constraints.CONV_EXPLICIT);
@@ -6551,7 +6419,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(typeParameterNodes),
         typeArgumentNodes,
         this.currentFlow.actualFunction.parent,
-        uniqueMap<string,Type>(this.currentFlow.contextualTypeArguments), // don't update
+        cloneMap(this.currentFlow.contextualTypeArguments), // don't update
         expression
       );
     }
@@ -7465,7 +7333,7 @@ export class Compiler extends DiagnosticEmitter {
       DecoratorFlags.NONE
     );
     var instance: Function | null;
-    var contextualTypeArguments = uniqueMap(flow.contextualTypeArguments);
+    var contextualTypeArguments = cloneMap(flow.contextualTypeArguments);
     var module = this.module;
 
     // compile according to context. this differs from a normal function in that omitted parameter
@@ -7847,7 +7715,7 @@ export class Compiler extends DiagnosticEmitter {
         let functionInstance = this.resolver.resolveFunction(
           functionPrototype,
           null,
-          uniqueMap<string,Type>(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
@@ -7902,7 +7770,7 @@ export class Compiler extends DiagnosticEmitter {
     var expectedType = this.resolver.resolveType(
       expression.isType,
       flow.actualFunction,
-      uniqueMap(flow.contextualTypeArguments)
+      cloneMap(flow.contextualTypeArguments)
     );
     if (!expectedType) {
       this.currentType = Type.bool;
@@ -8280,7 +8148,7 @@ export class Compiler extends DiagnosticEmitter {
           let instance = this.resolver.resolveFunction(
             <FunctionPrototype>target,
             null,
-            uniqueMap<string,Type>(),
+            new Map(),
             ReportMode.SWALLOW
           );
           if (!instance) break;
@@ -8866,14 +8734,14 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,
-        uniqueMap<string,Type>(flow.contextualTypeArguments)
+        cloneMap(flow.contextualTypeArguments)
       );
     } else {
       classInstance = this.resolver.resolveClassInclTypeArguments(
         classPrototype,
         typeArguments,
         flow.actualFunction.parent, // relative to caller
-        uniqueMap<string,Type>(flow.contextualTypeArguments),
+        cloneMap(flow.contextualTypeArguments),
         expression
       );
     }
@@ -8905,7 +8773,7 @@ export class Compiler extends DiagnosticEmitter {
       // clone base constructor if a derived class. note that we cannot just
       // call the base ctor since the derived class may have additional fields.
       let baseClass = classInstance.base;
-      let contextualTypeArguments = uniqueMap(classInstance.contextualTypeArguments);
+      let contextualTypeArguments = cloneMap(classInstance.contextualTypeArguments);
       if (baseClass) {
         let baseCtor = this.ensureConstructor(baseClass, reportNode);
         this.checkFieldInitialization(baseClass, reportNode);
