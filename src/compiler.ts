@@ -195,7 +195,7 @@ import {
   writeF32,
   writeF64,
   writeV128,
-  uniqueMap,
+  cloneMap,
   isPowerOf2,
   v128_zero,
   readI32,
@@ -2848,7 +2848,7 @@ export class Compiler extends DiagnosticEmitter {
         type = resolver.resolveType( // reports
           typeNode,
           flow.actualFunction,
-          uniqueMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
         this.checkTypeSupported(type, typeNode);
@@ -3626,7 +3626,7 @@ export class Compiler extends DiagnosticEmitter {
         let toType = this.resolver.resolveType( // reports
           assert(expression.toType),
           flow.actualFunction,
-          uniqueMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!toType) return this.module.unreachable();
         return this.compileExpression(expression.expression, toType, inheritedConstraints | Constraints.CONV_EXPLICIT);
@@ -6419,7 +6419,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(typeParameterNodes),
         typeArgumentNodes,
         this.currentFlow.actualFunction.parent,
-        uniqueMap<string,Type>(this.currentFlow.contextualTypeArguments), // don't update
+        cloneMap(this.currentFlow.contextualTypeArguments), // don't update
         expression
       );
     }
@@ -7333,7 +7333,7 @@ export class Compiler extends DiagnosticEmitter {
       DecoratorFlags.NONE
     );
     var instance: Function | null;
-    var contextualTypeArguments = uniqueMap(flow.contextualTypeArguments);
+    var contextualTypeArguments = cloneMap(flow.contextualTypeArguments);
     var module = this.module;
 
     // compile according to context. this differs from a normal function in that omitted parameter
@@ -7715,7 +7715,7 @@ export class Compiler extends DiagnosticEmitter {
         let functionInstance = this.resolver.resolveFunction(
           functionPrototype,
           null,
-          uniqueMap<string,Type>(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
@@ -7770,7 +7770,7 @@ export class Compiler extends DiagnosticEmitter {
     var expectedType = this.resolver.resolveType(
       expression.isType,
       flow.actualFunction,
-      uniqueMap(flow.contextualTypeArguments)
+      cloneMap(flow.contextualTypeArguments)
     );
     if (!expectedType) {
       this.currentType = Type.bool;
@@ -8148,7 +8148,7 @@ export class Compiler extends DiagnosticEmitter {
           let instance = this.resolver.resolveFunction(
             <FunctionPrototype>target,
             null,
-            uniqueMap<string,Type>(),
+            new Map(),
             ReportMode.SWALLOW
           );
           if (!instance) break;
@@ -8734,14 +8734,14 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,
-        uniqueMap<string,Type>(flow.contextualTypeArguments)
+        cloneMap(flow.contextualTypeArguments)
       );
     } else {
       classInstance = this.resolver.resolveClassInclTypeArguments(
         classPrototype,
         typeArguments,
         flow.actualFunction.parent, // relative to caller
-        uniqueMap<string,Type>(flow.contextualTypeArguments),
+        cloneMap(flow.contextualTypeArguments),
         expression
       );
     }
@@ -8773,7 +8773,7 @@ export class Compiler extends DiagnosticEmitter {
       // clone base constructor if a derived class. note that we cannot just
       // call the base ctor since the derived class may have additional fields.
       let baseClass = classInstance.base;
-      let contextualTypeArguments = uniqueMap(classInstance.contextualTypeArguments);
+      let contextualTypeArguments = cloneMap(classInstance.contextualTypeArguments);
       if (baseClass) {
         let baseCtor = this.ensureConstructor(baseClass, reportNode);
         this.checkFieldInitialization(baseClass, reportNode);
