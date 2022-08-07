@@ -199,6 +199,11 @@ export function setBasenameHint(options: Options, basename: string): void {
   options.basenameHint = basename;
 }
 
+/** Gives the compiler a hint that bindings will be generated. */
+export function setBindingsHint(options: Options, bindings: bool): void {
+  options.bindingsHint = bindings;
+}
+
 /** Sets the `pedantic` option. */
 export function setPedantic(options: Options, pedantic: bool): void {
   options.pedantic = pedantic;
