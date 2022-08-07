@@ -15,10 +15,6 @@ export const E_INVALIDLENGTH: string = "Invalid length";
 
 // @ts-ignore: decorator
 @lazy @inline
-export const E_ILLEGALGENTYPE: string = "Illegal generic type";
-
-// @ts-ignore: decorator
-@lazy @inline
 export const E_EMPTYARRAY: string = "Array is empty";
 
 // @ts-ignore: decorator
