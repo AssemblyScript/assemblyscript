@@ -941,23 +941,6 @@ export class JSBuilder extends ExportsWalker {
     return moduleId;
   }
 
-  isPlainObject(clazz: Class): bool {
-    // A plain object does not inherit and does not have a constructor or private properties
-    if (clazz.base) return false;
-    var members = clazz.members;
-    if (members) {
-      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-        let member = _values[i];
-        if (member.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED)) return false;
-        if (member.is(CommonFlags.CONSTRUCTOR)) {
-          // a generated constructor is ok
-          if (member.declaration.range != this.program.nativeRange) return false;
-        }
-      }
-    }
-    return true;
-  }
-
   /** Lifts a WebAssembly value to a JavaScript value. */
   makeLiftFromValue(name: string, type: Type, sb: string[] = this.sb): void {
     if (type.isInternalReference) {
@@ -996,7 +979,7 @@ export class JSBuilder extends ExportsWalker {
         }
         sb.push(", ");
         this.needsLiftTypedArray = true;
-      } else if (this.isPlainObject(clazz)) {
+      } else if (isPlainObject(clazz)) {
         sb.push("__liftRecord");
         sb.push(clazz.id.toString());
         sb.push("(");
@@ -1076,7 +1059,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push(clazz.getArrayValueType().alignLog2.toString());
         sb.push(", ");
         this.needsLowerTypedArray = true;
-      } else if (this.isPlainObject(clazz)) {
+      } else if (isPlainObject(clazz)) {
         sb.push("__lowerRecord");
         sb.push(clazz.id.toString());
         sb.push("(");
@@ -1237,7 +1220,7 @@ export class JSBuilder extends ExportsWalker {
   }
 
   makeLiftRecord(clazz: Class): string {
-    assert(this.isPlainObject(clazz));
+    assert(isPlainObject(clazz));
     var sb = new Array<string>();
     indent(sb, this.indentLevel);
     sb.push("function __liftRecord");
@@ -1275,7 +1258,7 @@ export class JSBuilder extends ExportsWalker {
   }
 
   makeLowerRecord(clazz: Class): string {
-    assert(this.isPlainObject(clazz));
+    assert(isPlainObject(clazz));
     var sb = new Array<string>();
     indent(sb, this.indentLevel);
     sb.push("function __lowerRecord");
@@ -1350,6 +1333,23 @@ function isPlainFunction(signature: Signature, mode: Mode): bool {
   return true;
 }
 
+function isPlainObject(clazz: Class): bool {
+  // A plain object does not inherit and does not have a constructor or private properties
+  if (clazz.base) return false;
+  var members = clazz.members;
+  if (members) {
+    for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+      let member = _values[i];
+      if (member.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED)) return false;
+      if (member.is(CommonFlags.CONSTRUCTOR)) {
+        // a generated constructor is ok
+        if (member.declaration.range != member.program.nativeRange) return false;
+      }
+    }
+  }
+  return true;
+}
+
 function indentText(text: string, indentLevel: i32, sb: string[], butFirst: bool = false): void {
   var lineStart = 0;
   var length = text.length;
@@ -1366,4 +1366,57 @@ function indentText(text: string, indentLevel: i32, sb: string[], butFirst: bool
     if (!butFirst) indent(sb, indentLevel);
     sb.push(text.substring(lineStart));
   }
+}
+
+export function liftRequiresExportRuntime(type: Type): bool {
+  if (!type.isInternalReference) return false;
+  let clazz = type.classReference;
+  if (!clazz) {
+    // functions lift as internref using __pin
+    assert(type.signatureReference);
+    return true;
+  }
+  let program = clazz.program;
+  // flat collections lift via memory copy
+  if (
+    clazz.extends(program.arrayBufferInstance.prototype) ||
+    clazz.extends(program.stringInstance.prototype) ||
+    clazz.extends(program.arrayBufferViewInstance.prototype)
+  ) {
+    return false;
+  }
+  // nested collections lift depending on element type
+  if (
+    clazz.extends(program.arrayPrototype) ||
+    clazz.extends(program.staticArrayPrototype)
+  ) {
+    return liftRequiresExportRuntime(clazz.getArrayValueType());
+  }
+  // complex objects lift as internref using __pin. plain objects may or may not
+  // involve the runtime: assume that they do to avoid potentially costly checks
+  return true;
+}
+
+export function lowerRequiresExportRuntime(type: Type): bool {
+  if (!type.isInternalReference) return false;
+  let clazz = type.classReference;
+  if (!clazz) {
+    // lowers by reference
+    assert(type.signatureReference);
+    return false;
+  }
+  // lowers using __new
+  let program = clazz.program;
+  if (
+    clazz.extends(program.arrayBufferInstance.prototype) ||
+    clazz.extends(program.stringInstance.prototype) ||
+    clazz.extends(program.arrayBufferViewInstance.prototype) ||
+    clazz.extends(program.arrayPrototype) ||
+    clazz.extends(program.staticArrayPrototype)
+  ) {
+    return true;
+  }
+  // complex objects lower via internref by reference,
+  // while plain objects lower using __new
+  return isPlainObject(clazz);
 }
