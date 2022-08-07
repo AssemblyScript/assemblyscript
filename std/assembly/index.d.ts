@@ -1666,7 +1666,7 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
   join(separator?: string): string;
   /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
-  set<U extends ArrayBufferView>(source: U, offset?: i32): void
+  set<U extends ArrayLike<number>>(source: U, offset?: i32): void
   /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
   toString(): string;
 }

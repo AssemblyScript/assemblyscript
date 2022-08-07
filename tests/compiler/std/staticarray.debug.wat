@@ -10,9 +10,9 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
  (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
  (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
- (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/staticarray/arr1 i32 (i32.const 32))
@@ -2908,68 +2908,59 @@
   call $~lib/util/string/joinStringArray
   return
  )
- (func $~lib/staticarray/StaticArray<i32>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
+ (func $~lib/util/bytes/FILL<i32> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  local.get $0
-  local.set $4
-  local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
-  local.set $5
-  local.get $2
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $5
-   local.get $2
-   i32.add
-   local.tee $6
-   i32.const 0
-   local.tee $7
-   local.get $6
-   local.get $7
-   i32.gt_s
-   select
-  else
-   local.get $2
-   local.tee $7
-   local.get $5
-   local.tee $6
-   local.get $7
-   local.get $6
-   i32.lt_s
-   select
-  end
-  local.set $2
   local.get $3
   i32.const 0
   i32.lt_s
   if (result i32)
-   local.get $5
+   local.get $1
    local.get $3
    i32.add
-   local.tee $6
+   local.tee $5
    i32.const 0
-   local.tee $7
+   local.tee $6
+   local.get $5
    local.get $6
-   local.get $7
-   i32.gt_s
+   i32.gt_u
    select
   else
    local.get $3
-   local.tee $7
-   local.get $5
    local.tee $6
-   local.get $7
+   local.get $1
+   local.tee $5
    local.get $6
+   local.get $5
    i32.lt_s
    select
   end
   local.set $3
+  local.get $4
   i32.const 0
-  drop
+  i32.lt_s
+  if (result i32)
+   local.get $1
+   local.get $4
+   i32.add
+   local.tee $5
+   i32.const 0
+   local.tee $6
+   local.get $5
+   local.get $6
+   i32.gt_u
+   select
+  else
+   local.get $4
+   local.tee $6
+   local.get $1
+   local.tee $5
+   local.get $6
+   local.get $5
+   i32.lt_s
+   select
+  end
+  local.set $4
   i32.const 4
   i32.const 1
   i32.eq
@@ -2980,55 +2971,65 @@
   drop
   i32.const 1
   drop
-  local.get $1
+  local.get $2
   i32.const 0
   i32.eq
-  local.get $1
+  local.get $2
   i32.const -1
   i32.eq
   i32.or
   if
-   local.get $2
    local.get $3
+   local.get $4
    i32.lt_s
    if
-    local.get $4
-    local.get $2
+    local.get $0
+    local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.get $1
-    local.get $3
     local.get $2
+    local.get $4
+    local.get $3
     i32.sub
     i32.const 2
     i32.shl
     memory.fill
    end
-   local.get $0
    return
   end
   loop $for-loop|0
-   local.get $2
    local.get $3
+   local.get $4
    i32.lt_s
-   local.set $7
-   local.get $7
+   local.set $6
+   local.get $6
    if
-    local.get $4
-    local.get $2
+    local.get $0
+    local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.get $1
-    i32.store
     local.get $2
+    i32.store
+    local.get $3
     i32.const 1
     i32.add
-    local.set $2
+    local.set $3
     br $for-loop|0
    end
   end
+ )
+ (func $~lib/staticarray/StaticArray<i32>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  i32.const 0
+  drop
+  local.get $0
+  local.get $0
+  call $~lib/staticarray/StaticArray<i32>#get:length
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/util/bytes/FILL<i32>
   local.get $0
  )
  (func $~lib/util/bytes/REVERSE<i32> (param $0 i32) (param $1 i32)
@@ -7720,8 +7721,13 @@
   if
    i32.const 656
    i32.const 128
+<<<<<<< HEAD
    i32.const 222
    i32.const 7
+=======
+   i32.const 217
+   i32.const 60
+>>>>>>> main
    call $~lib/builtins/abort
    unreachable
   end

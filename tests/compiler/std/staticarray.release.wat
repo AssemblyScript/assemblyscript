@@ -5120,7 +5120,7 @@
    local.tee $0
    local.get $0
    i32.const 3
-   i32.gt_u
+   i32.gt_s
    select
    local.tee $2
    i32.const 2
@@ -6748,8 +6748,13 @@
   if
    i32.const 1680
    i32.const 1152
+<<<<<<< HEAD
    i32.const 222
    i32.const 7
+=======
+   i32.const 217
+   i32.const 60
+>>>>>>> main
    call $~lib/builtins/abort
    unreachable
   end
