@@ -3953,7 +3953,7 @@
   call $~lib/util/bytes/REVERSE<i32>
   local.get $0
  )
- (func $~lib/polyfills/bswap<u64> (param $0 i64) (result i64)
+ (func $~lib/util/bytes/bswap<u64> (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -4064,12 +4064,12 @@
      local.set $7
      local.get $6
      i64.load
-     call $~lib/polyfills/bswap<u64>
+     call $~lib/util/bytes/bswap<u64>
      local.set $8
      local.get $6
      local.get $7
      i64.load
-     call $~lib/polyfills/bswap<u64>
+     call $~lib/util/bytes/bswap<u64>
      i64.store
      local.get $7
      local.get $8

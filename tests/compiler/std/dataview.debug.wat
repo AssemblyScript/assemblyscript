@@ -2267,7 +2267,7 @@
   i32.load
   i32.sub
  )
- (func $~lib/polyfills/bswap<u32> (param $0 i32) (result i32)
+ (func $~lib/util/bytes/bswap<u32> (param $0 i32) (result i32)
   i32.const 1
   drop
   i32.const 4
@@ -2327,11 +2327,11 @@
    local.get $1
    i32.add
    i32.load
-   call $~lib/polyfills/bswap<u32>
+   call $~lib/util/bytes/bswap<u32>
    f32.reinterpret_i32
   end
  )
- (func $~lib/polyfills/bswap<u64> (param $0 i64) (result i64)
+ (func $~lib/util/bytes/bswap<u64> (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -2420,7 +2420,7 @@
    local.get $1
    i32.add
    i64.load
-   call $~lib/polyfills/bswap<u64>
+   call $~lib/util/bytes/bswap<u64>
    f64.reinterpret_i64
   end
  )
@@ -2443,7 +2443,7 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/polyfills/bswap<u16> (param $0 i32) (result i32)
+ (func $~lib/util/bytes/bswap<u16> (param $0 i32) (result i32)
   i32.const 1
   drop
   i32.const 2
@@ -2500,7 +2500,7 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<u16>
+   call $~lib/util/bytes/bswap<u16>
   end
  )
  (func $~lib/dataview/DataView#getInt32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2534,7 +2534,7 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<u32>
+   call $~lib/util/bytes/bswap<u32>
   end
  )
  (func $~lib/dataview/DataView#getInt64 (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
@@ -2568,7 +2568,7 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<u64>
+   call $~lib/util/bytes/bswap<u64>
   end
  )
  (func $~lib/dataview/DataView#getUint8 (param $0 i32) (param $1 i32) (result i32)
@@ -2621,7 +2621,7 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<u16>
+   call $~lib/util/bytes/bswap<u16>
   end
  )
  (func $~lib/dataview/DataView#getUint32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2655,7 +2655,7 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<u32>
+   call $~lib/util/bytes/bswap<u32>
   end
  )
  (func $~lib/dataview/DataView#getUint64 (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
@@ -2689,7 +2689,7 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<u64>
+   call $~lib/util/bytes/bswap<u64>
   end
  )
  (func $~lib/dataview/DataView#setFloat32 (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
@@ -2726,7 +2726,7 @@
    i32.add
    local.get $2
    i32.reinterpret_f32
-   call $~lib/polyfills/bswap<u32>
+   call $~lib/util/bytes/bswap<u32>
    i32.store
   end
  )
@@ -2764,7 +2764,7 @@
    i32.add
    local.get $2
    i64.reinterpret_f64
-   call $~lib/polyfills/bswap<u64>
+   call $~lib/util/bytes/bswap<u64>
    i64.store
   end
  )
@@ -2816,7 +2816,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<u16>
+   call $~lib/util/bytes/bswap<u16>
   end
   i32.store16
  )
@@ -2848,7 +2848,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<u32>
+   call $~lib/util/bytes/bswap<u32>
   end
   i32.store
  )
@@ -2880,7 +2880,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<u64>
+   call $~lib/util/bytes/bswap<u64>
   end
   i64.store
  )
@@ -2932,7 +2932,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<u16>
+   call $~lib/util/bytes/bswap<u16>
   end
   i32.store16
  )
@@ -2964,7 +2964,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<u32>
+   call $~lib/util/bytes/bswap<u32>
   end
   i32.store
  )
@@ -2996,7 +2996,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<u64>
+   call $~lib/util/bytes/bswap<u64>
   end
   i64.store
  )

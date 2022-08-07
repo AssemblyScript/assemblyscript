@@ -295,12 +295,10 @@ declare namespace f64 {
   export function parseInt(string: string, radix?: i32): f64;
 }
 
-// Polyfills
+// Byte utils
 
-/** [Polyfill] Performs the sign-agnostic reverse bytes **/
+/** Performs the sign-agnostic reverse bytes **/
 declare function bswap<T = i32 | u32 | isize | usize>(value: T): T;
-/** [Polyfill] Performs the sign-agnostic reverse bytes only for last 16-bit **/
-declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
 
 // Standard library
 
