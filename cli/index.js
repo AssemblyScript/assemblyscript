@@ -328,6 +328,7 @@ export async function main(argv, options) {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);
+  assemblyscript.setBindingsHint(compilerOptions, opts.bindings && opts.bindings.length > 0);
 
   // Instrument callback to perform GC
   // prepareResult = (original => {

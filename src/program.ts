@@ -2979,7 +2979,7 @@ export abstract class DeclaredElement extends Element {
     if (kind == base.kind) {
       switch (kind) {
         case ElementKind.FUNCTION: {
-          return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
+          return (<Function>self).signature.isAssignableTo((<Function>base).signature);
         }
         case ElementKind.PROPERTY: {
           let selfProperty = <Property>self;
@@ -2987,7 +2987,7 @@ export abstract class DeclaredElement extends Element {
           let selfGetter = selfProperty.getterInstance;
           let baseGetter = baseProperty.getterInstance;
           if (selfGetter) {
-            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
+            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature)) {
               return false;
             }
           } else if (baseGetter) {
@@ -2996,7 +2996,7 @@ export abstract class DeclaredElement extends Element {
           let selfSetter = selfProperty.setterInstance;
           let baseSetter = baseProperty.setterInstance;
           if (selfSetter) {
-            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
+            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature)) {
               return false;
             }
           } else if (baseSetter) {
