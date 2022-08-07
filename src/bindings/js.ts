@@ -1094,28 +1094,28 @@ export class JSBuilder extends ExportsWalker {
       sb.push(name);
       if (clazz.extends(this.program.staticArrayPrototype)) {
         // optional last argument for __lowerStaticArray
-        let valueType = clazz.getArrayValueType();
-        if (valueType.isNumericValue) {
+        let type = clazz.getArrayValueType();
+        if (type.isNumericValue) {
           sb.push(", ");
-          if (valueType == Type.u8 || valueType == Type.bool) {
+          if (type == Type.u8 || type == Type.bool) {
             sb.push("Uint8Array");
-          } else if (valueType == Type.i8) {
+          } else if (type == Type.i8) {
             sb.push("Int8Array");
-          } else if (valueType == Type.u16) {
+          } else if (type == Type.u16) {
             sb.push("Uint16Array");
-          } else if (valueType == Type.i16) {
+          } else if (type == Type.i16) {
             sb.push("Int16Array");
-          } else if (valueType == Type.u32) {
+          } else if (type == Type.u32 || type == Type.usize32) {
             sb.push("Uint32Array");
-          } else if (valueType == Type.i32) {
+          } else if (type == Type.i32 || type == Type.isize32) {
             sb.push("Int32Array");
-          } else if (valueType == Type.u64) {
+          } else if (type == Type.u64 || type == Type.usize64) {
             sb.push("BigUint64Array");
-          } else if (valueType == Type.i64) {
+          } else if (type == Type.i64 || type == Type.isize64) {
             sb.push("BigInt64Array");
-          } else if (valueType == Type.f32) {
+          } else if (type == Type.f32) {
             sb.push("Float32Array");
-          } else if (valueType == Type.f64) {
+          } else if (type == Type.f64) {
             sb.push("Float64Array");
           } else {
             // unreachable
