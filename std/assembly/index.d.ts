@@ -844,9 +844,9 @@ declare namespace v128 {
   /** Computes the maximum of each lane. */
   export function max<T>(a: v128, b: v128): v128;
   /** Computes the pseudo-minimum of each lane. */
-  export function pmin<T>(a: v128, b: v128): v128;
+  export function pmin<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the pseudo-maximum of each lane. */
-  export function pmax<T>(a: v128, b: v128): v128;
+  export function pmax<T extends f32 | f64>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T extends i16>(a: v128, b: v128): v128;
   /** Computes the average of each lane. */
@@ -1349,9 +1349,9 @@ declare abstract class i31 {
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */
-declare type indexof<T extends unknown[]> = keyof T;
+declare type indexof<T extends ArrayLike<unknown>> = keyof T;
 /** Special type evaluating the indexed access value type. */
-declare type valueof<T extends unknown[]> = T[0];
+declare type valueof<T extends ArrayLike<unknown>> = T[0];
 /** A special type evaluated to the return type of T if T is a callable function. */
 declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 /** A special type evaluated to the return type of T if T is a callable function. */
@@ -1666,7 +1666,7 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
   join(separator?: string): string;
   /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
-  set<U extends ArrayBufferView>(source: U, offset?: i32): void
+  set<U extends ArrayLike<number>>(source: U, offset?: i32): void
   /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
   toString(): string;
 }

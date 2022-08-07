@@ -85,7 +85,7 @@ import {
 
 import {
   BitSet,
-  uniqueMap
+  cloneMap
 } from "./util";
 
 import {
@@ -314,7 +314,7 @@ export class Flow {
     branch.localFlags = this.localFlags.slice();
     if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
-      branch.thisFieldFlags = uniqueMap<Field,FieldFlags>(thisFieldFlags);
+      branch.thisFieldFlags = cloneMap(thisFieldFlags);
     } else {
       assert(!this.thisFieldFlags);
     }

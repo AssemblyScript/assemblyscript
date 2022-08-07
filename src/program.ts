@@ -634,6 +634,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _stringInstance: Class | null = null;
 
+  /** Gets the standard `RegExp` instance. */
+  get regexpInstance(): Class {
+    var cached = this._regexpInstance;
+    if (!cached) this._regexpInstance = cached = this.requireClass(CommonNames.RegExp);
+    return cached;
+  }
+  private _regexpInstance: Class | null = null;
+
   /** Gets the standard `Object` instance. */
   get objectInstance(): Class {
     var cached = this._objectInstance;
@@ -1309,7 +1317,15 @@ export class Program extends DiagnosticEmitter {
               Range.join(thisPrototype.identifierNode.range, extendsNode.range)
             );
           }
-          thisPrototype.basePrototype = basePrototype;
+          if (!thisPrototype.extends(basePrototype)) {
+            thisPrototype.basePrototype = basePrototype;
+          } else {
+            this.error(
+              DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+              basePrototype.identifierNode.range,
+              basePrototype.identifierNode.text,
+            );
+          }
         } else {
           this.error(
             DiagnosticCode.A_class_may_only_extend_another_class,
@@ -1318,7 +1334,16 @@ export class Program extends DiagnosticEmitter {
         }
       } else if (thisPrototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
         if (baseElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
-          thisPrototype.basePrototype = <InterfacePrototype>baseElement;
+          const basePrototype = <InterfacePrototype>baseElement;
+          if (!thisPrototype.extends(basePrototype)) {
+            thisPrototype.basePrototype = basePrototype;
+          } else {
+            this.error(
+              DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+              basePrototype.identifierNode.range,
+              basePrototype.identifierNode.text,
+            );
+          }
         } else {
           this.error(
             DiagnosticCode.An_interface_can_only_extend_an_interface,
@@ -2954,7 +2979,7 @@ export abstract class DeclaredElement extends Element {
     if (kind == base.kind) {
       switch (kind) {
         case ElementKind.FUNCTION: {
-          return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
+          return (<Function>self).signature.isAssignableTo((<Function>base).signature);
         }
         case ElementKind.PROPERTY: {
           let selfProperty = <Property>self;
@@ -2962,7 +2987,7 @@ export abstract class DeclaredElement extends Element {
           let selfGetter = selfProperty.getterInstance;
           let baseGetter = baseProperty.getterInstance;
           if (selfGetter) {
-            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
+            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature)) {
               return false;
             }
           } else if (baseGetter) {
@@ -2971,7 +2996,7 @@ export abstract class DeclaredElement extends Element {
           let selfSetter = selfProperty.setterInstance;
           let baseSetter = baseProperty.setterInstance;
           if (selfSetter) {
-            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
+            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature)) {
               return false;
             }
           } else if (baseSetter) {

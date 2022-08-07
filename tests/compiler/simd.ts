@@ -121,6 +121,73 @@ function test_v128(): void {
     );
     __free(ptr);
   }
+  {
+    assert(
+      v128.pmin<f32>(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+      ==
+      f32x4(-1, -1, -1, -1)
+    );
+  }
+  {
+    assert(
+      v128.pmax<f32>(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+      ==
+      f32x4(1, 1, 1, 1)
+    );
+  }
+  {
+    assert(
+      v128.add<i32>(i32x4(1, 2, 3, 4), i32x4(1, 2, 3, 4))
+      ==
+      i32x4(2, 4, 6, 8));
+  }
+  {
+    assert(
+      v128.sub<i32>(i32x4(1, 2, 3, 4), i32x4(1, 2, 3, 4))
+      ==
+      i32x4(0, 0, 0, 0));
+  }
+  {
+    assert(
+      v128.dot<i16>(i32x4(1, 2, 3, 4), i32x4(2, 2, 2, 2))
+      ==
+      i32x4(2, 4, 6, 8)
+    );
+  }
+  {
+    assert(
+      v128.trunc<f32>(f32x4(1.1, 2.5, 3.9, 4.0))
+      ==
+      f32x4(1.0, 2.0, 3.0, 4.0)
+    );
+  }
+  {
+    assert(
+      v128.nearest<f32>(f32x4(1.1, 2.5, 3.51, 4.0))
+      ==
+      f32x4(1.0, 2.0, 4.0, 4.0)
+    );
+  }
+  {
+    let v: v128 = v128.convert<i32>(i32x4(1, 2, 3, 4));
+    assert(v == f32x4(1.0, 2.0, 3.0, 4.0));
+    v = v128.trunc_sat<i32>(v);
+    assert(v == i32x4(1, 2, 3, 4));
+  }
+  {
+    let v: v128 = v128.convert_low<i32>(i32x4(1, 2, 0, 0));
+    assert(v == f64x2(1.0, 2.0));
+    v = v128.trunc_sat_zero<i32>(v);
+    assert(v == i32x4(1, 2, 0, 0));
+  }
+  {
+    var ptr = __alloc(16);
+    store<i32>(ptr, 42);
+    var v: v128 = v128(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    v = v128.load_lane<i32>(ptr, v, 0);
+    assert(v == i32x4(42, 0, 0, 0));
+    __free(ptr);
+  }
   // TODO: missing C-API in Binaryen (see also passes/pass.ts)
   // v128.load8_lane
   // v128.load16_lane
