@@ -180,7 +180,7 @@
     "category": "Features",
     "description": [
       "Always exports the runtime helpers (__new, __collect, __pin etc.).",
-      "When host \"bindings\" is enabled it will be determined automatically."
+      "Automatically determined when generation of --bindings is enabled."
     ],
     "type": "b",
     "default": false
