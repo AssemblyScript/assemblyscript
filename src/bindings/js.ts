@@ -1088,13 +1088,13 @@ export class JSBuilder extends ExportsWalker {
             sb.push("Uint16Array");
           } else if (valueType == Type.i16) {
             sb.push("Int16Array");
-          } else if (valueType == Type.u32) {
+          } else if (valueType == Type.u32 || valueType == Type.usize32) {
             sb.push("Uint32Array");
-          } else if (valueType == Type.i32) {
+          } else if (valueType == Type.i32 || valueType == Type.isize32) {
             sb.push("Int32Array");
-          } else if (valueType == Type.u64) {
+          } else if (valueType == Type.u64 || valueType == Type.usize64) {
             sb.push("BigUint64Array");
-          } else if (valueType == Type.i64) {
+          } else if (valueType == Type.i64 || valueType == Type.isize64) {
             sb.push("BigInt64Array");
           } else if (valueType == Type.f32) {
             sb.push("Float32Array");
