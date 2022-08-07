@@ -6484,7 +6484,7 @@
   if
    i32.const 1680
    i32.const 1152
-   i32.const 222
+   i32.const 178
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -6748,13 +6748,8 @@
   if
    i32.const 1680
    i32.const 1152
-<<<<<<< HEAD
-   i32.const 222
+   i32.const 178
    i32.const 7
-=======
-   i32.const 217
-   i32.const 60
->>>>>>> main
    call $~lib/builtins/abort
    unreachable
   end
