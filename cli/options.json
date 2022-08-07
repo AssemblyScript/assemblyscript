@@ -178,7 +178,10 @@
   },
   "exportRuntime": {
     "category": "Features",
-    "description": "Exports the runtime helpers (__new, __collect etc.).",
+    "description": [
+      "Always exports the runtime helpers (__new, __collect, __pin etc.).",
+      "Automatically determined when generation of --bindings is enabled."
+    ],
     "type": "b",
     "default": false
   },
@@ -315,7 +318,7 @@
   },
   "disableWarning": {
     "description": [
-      "Disables warnings matching the given diagnostic code.", 
+      "Disables warnings matching the given diagnostic code.",
       "If no diagnostic code is given, all warnings are disabled."
     ],
     "type": "I"
