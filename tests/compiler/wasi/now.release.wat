@@ -569,7 +569,7 @@
     i32.const 4432
    end
    i32.const 4480
-   i32.const 47
+   i32.const 52
    call $~lib/wasi/index/abort
    unreachable
   end

@@ -810,7 +810,7 @@
     local.get $0
     call $~lib/bindings/internal/wasi_errors/errnoToString
     i32.const 3472
-    i32.const 47
+    i32.const 52
     i32.const 18
     call $~lib/wasi/index/abort
     unreachable
