@@ -853,6 +853,63 @@ function test_i64x2(): void {
   i64x2.extmul_low_i32x4_u(a, a);
   i64x2.extmul_high_i32x4_s(a, a);
   i64x2.extmul_high_i32x4_u(a, a);
+  assert(i64x2.eq(i64x2(12, 12),i64x2(12, 12)) == i64x2(-1, -1));
+  assert(i64x2.eq(i64x2(12, 12),i64x2(12, 13)) == i64x2(-1, 0));
+  assert(i64x2.ne(i64x2(12, 12),i64x2(12, 13)) == i64x2(0, -1));
+  assert(i64x2.ne(i64x2(11, 12),i64x2(12, 13)) == i64x2(-1, -1));
+  assert(i64x2.lt_s(i64x2(1, 0), i64x2(2, 0)) == i64x2(-1, 0));
+  assert(i64x2.lt_s(i64x2(1, 0), i64x2(2, 1)) == i64x2(-1, -1));
+  assert(i64x2.le_s(i64x2(1, 0), i64x2(2, 0)) == i64x2(-1, -1));
+  assert(i64x2.le_s(i64x2(1, 0), i64x2(2, 1)) == i64x2(-1, -1));
+  assert(i64x2.gt_s(i64x2(2, 0), i64x2(1, 0)) == i64x2(-1, 0));
+  assert(i64x2.gt_s(i64x2(2, 1), i64x2(1, 0)) == i64x2(-1, -1));
+  assert(i64x2.ge_s(i64x2(2, 0), i64x2(1, 0)) == i64x2(-1, -1));
+  assert(i64x2.ge_s(i64x2(2, 1), i64x2(1, 0)) == i64x2(-1, -1));
+  assert(i64x2.extend_low_i32x4_s(i32x4(-1, 1, 1, -1)) == i64x2(-1, 1));
+  assert(i64x2.extend_low_i32x4_s(i32x4(0, 0, 1, -1)) == i64x2(0, 0));
+  assert(i64x2.extend_low_i32x4_s(i32x4(1, 1, 0, 0)) == i64x2(1, 1));
+  assert(i64x2.extend_low_i32x4_s(i32x4(1, 0, 1, 0)) == i64x2(1, 0));
+  assert(i64x2.extend_low_i32x4_s(i32x4(-2147483648, -2147483648, 2147483647, 2147483647)) == i64x2(-2147483648, -2147483648));
+  assert(i64x2.extend_low_i32x4_s(i32x4(-1, -1, 2147483647, 2147483647)) == i64x2(-1, -1));
+  assert(i64x2.extend_low_i32x4_u(i32x4(0, 0, 0, 0)) == i64x2(0, 0));
+  assert(i64x2.extend_low_i32x4_u(i32x4(0, 0, 1, -1)) == i64x2(0, 0));
+  assert(i64x2.extend_low_i32x4_u(i32x4(1, 1, 0, 0)) == i64x2(1, 1));
+  assert(i64x2.extend_low_i32x4_u(i32x4(-1, -1, 0, 0)) == i64x2(4294967295, 4294967295));
+  assert(i64x2.extend_low_i32x4_u(i32x4(-2147483648, -2147483648, -2147483648, -2147483648)) 
+    == 
+    i64x2(2147483648, 2147483648)
+  );
+  assert(i64x2.extend_low_i32x4_u(i32x4(-1, -1, 2147483647, 2147483647)) 
+    == 
+    i64x2(4294967295, 4294967295)
+  );
+  assert(i64x2.extend_high_i32x4_s(i32x4(-1, 1, 1, -1)) == i64x2(1, -1));
+  assert(i64x2.extend_high_i32x4_s(i32x4(0, 0, 1, -1)) == i64x2(1, -1));
+  assert(i64x2.extend_high_i32x4_s(i32x4(1, 1, 0, 0)) == i64x2(0, 0));
+  assert(i64x2.extend_high_i32x4_s(i32x4(1, 0, 1, 0)) == i64x2(1, 0));
+  assert(i64x2.extend_high_i32x4_s(i32x4(-2147483648, -2147483648, 2147483647, 2147483647)) == i64x2(2147483647, 2147483647));
+  assert(i64x2.extend_high_i32x4_s(i32x4(-1, -1, 2147483647, 2147483647)) == i64x2(2147483647, 2147483647));
+  assert(i64x2.extend_high_i32x4_u(i32x4(0, 0, 0, 0)) == i64x2(0, 0));
+  assert(i64x2.extend_high_i32x4_u(i32x4(0, 0, 1, -1)) == i64x2(1, 4294967295));
+  assert(i64x2.extend_high_i32x4_u(i32x4(1, 1, 0, 0)) == i64x2(0, 0));
+  assert(i64x2.extend_high_i32x4_u(i32x4(0, 0, -1, -1)) == i64x2(4294967295, 4294967295));
+  assert(i64x2.extend_high_i32x4_u(i32x4(-2147483648, -2147483648, -2147483648, -2147483648)) 
+    == 
+    i64x2(2147483648, 2147483648)
+  );
+  assert(i64x2.extend_high_i32x4_u(i32x4(2147483647, 2147483647, -1, -1)) 
+    == 
+    i64x2(4294967295, 4294967295)
+  );
+  assert(i64x2.abs(i64x2(1, 1)) == i64x2(1, 1));
+  assert(i64x2.abs(i64x2(u64.MAX_VALUE, u64.MAX_VALUE)) == i64x2(1, 1));
+  assert(i64x2.abs(i64x2(-9223372036854775808, -9223372036854775808)) == i64x2(9223372036854775808, 9223372036854775808));
+  assert(
+    i64x2.bitmask(i64x2(0xFFFFFFFF_FFFFFFFF, 0xFFFFFFFF_FFFFFFFF)) == 0x00000003
+  );
+  assert(
+    i64x2.bitmask(i64x2(-1, 0xF)) == 0x00000001
+  );
 }
 
 function test_f32x4(): void {
