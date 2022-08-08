@@ -12,7 +12,6 @@
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $i32_i32_i32_=>_f64 (func (param i32 i32 i32) (result f64)))
  (type $i32_i32_f32_i32_=>_none (func (param i32 i32 f32 i32)))
  (type $i32_i32_f64_i32_=>_none (func (param i32 i32 f64 i32)))
@@ -2267,35 +2266,8 @@
   i32.load
   i32.sub
  )
- (func $~lib/util/bytes/bswap<u32> (param $0 i32) (result i32)
-  i32.const 1
-  drop
-  i32.const 4
-  i32.const 1
-  i32.eq
-  drop
-  i32.const 4
-  i32.const 2
-  i32.eq
-  drop
-  i32.const 4
-  i32.const 4
-  i32.eq
-  drop
-  local.get $0
-  i32.const -16711936
-  i32.and
-  i32.const 8
-  i32.rotl
-  local.get $0
-  i32.const 16711935
-  i32.and
-  i32.const 8
-  i32.rotr
-  i32.or
-  return
- )
  (func $~lib/dataview/DataView#getFloat32 (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+  (local $3 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2327,68 +2299,23 @@
    local.get $1
    i32.add
    i32.load
-   call $~lib/util/bytes/bswap<u32>
+   local.tee $3
+   i32.const -16711936
+   i32.and
+   i32.const 8
+   i32.rotl
+   local.get $3
+   i32.const 16711935
+   i32.and
+   i32.const 8
+   i32.rotr
+   i32.or
    f32.reinterpret_i32
   end
  )
- (func $~lib/util/bytes/bswap<u64> (param $0 i64) (result i64)
-  (local $1 i64)
-  (local $2 i64)
-  (local $3 i64)
-  i32.const 1
-  drop
-  i32.const 8
-  i32.const 1
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 2
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 4
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 8
-  i32.eq
-  drop
-  local.get $0
-  i64.const 8
-  i64.shr_u
-  i64.const 71777214294589695
-  i64.and
-  local.set $1
-  local.get $0
-  i64.const 71777214294589695
-  i64.and
-  i64.const 8
-  i64.shl
-  local.set $2
-  local.get $1
-  local.get $2
-  i64.or
-  local.set $3
-  local.get $3
-  i64.const 16
-  i64.shr_u
-  i64.const 281470681808895
-  i64.and
-  local.set $1
-  local.get $3
-  i64.const 281470681808895
-  i64.and
-  i64.const 16
-  i64.shl
-  local.set $2
-  local.get $1
-  local.get $2
-  i64.or
-  i64.const 32
-  i64.rotr
-  return
- )
  (func $~lib/dataview/DataView#getFloat64 (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
+  (local $3 i64)
+  (local $4 i64)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2420,7 +2347,30 @@
    local.get $1
    i32.add
    i64.load
-   call $~lib/util/bytes/bswap<u64>
+   local.tee $3
+   i64.const 8
+   i64.shr_u
+   i64.const 71777214294589695
+   i64.and
+   local.get $3
+   i64.const 71777214294589695
+   i64.and
+   i64.const 8
+   i64.shl
+   i64.or
+   local.tee $4
+   i64.const 16
+   i64.shr_u
+   i64.const 281470681808895
+   i64.and
+   local.get $4
+   i64.const 281470681808895
+   i64.and
+   i64.const 16
+   i64.shl
+   i64.or
+   i64.const 32
+   i64.rotr
    f64.reinterpret_i64
   end
  )
@@ -2443,34 +2393,9 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/util/bytes/bswap<u16> (param $0 i32) (result i32)
-  i32.const 1
-  drop
-  i32.const 2
-  i32.const 1
-  i32.eq
-  drop
-  i32.const 2
-  i32.const 2
-  i32.eq
-  drop
-  local.get $0
-  i32.const 8
-  i32.const 15
-  i32.and
-  i32.shl
-  local.get $0
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.const 15
-  i32.and
-  i32.shr_u
-  i32.or
-  return
- )
  (func $~lib/dataview/DataView#getInt16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2500,11 +2425,22 @@
    local.get $3
   else
    local.get $3
-   call $~lib/util/bytes/bswap<u16>
+   i32.const 65535
+   i32.and
+   local.tee $4
+   i32.const 8
+   i32.shl
+   local.get $4
+   i32.const 8
+   i32.shr_u
+   i32.or
+   i32.const 65535
+   i32.and
   end
  )
  (func $~lib/dataview/DataView#getInt32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2534,11 +2470,23 @@
    local.get $3
   else
    local.get $3
-   call $~lib/util/bytes/bswap<u32>
+   local.tee $4
+   i32.const -16711936
+   i32.and
+   i32.const 8
+   i32.rotl
+   local.get $4
+   i32.const 16711935
+   i32.and
+   i32.const 8
+   i32.rotr
+   i32.or
   end
  )
  (func $~lib/dataview/DataView#getInt64 (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i64)
+  (local $4 i64)
+  (local $5 i64)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2568,7 +2516,30 @@
    local.get $3
   else
    local.get $3
-   call $~lib/util/bytes/bswap<u64>
+   local.tee $4
+   i64.const 8
+   i64.shr_u
+   i64.const 71777214294589695
+   i64.and
+   local.get $4
+   i64.const 71777214294589695
+   i64.and
+   i64.const 8
+   i64.shl
+   i64.or
+   local.tee $5
+   i64.const 16
+   i64.shr_u
+   i64.const 281470681808895
+   i64.and
+   local.get $5
+   i64.const 281470681808895
+   i64.and
+   i64.const 16
+   i64.shl
+   i64.or
+   i64.const 32
+   i64.rotr
   end
  )
  (func $~lib/dataview/DataView#getUint8 (param $0 i32) (param $1 i32) (result i32)
@@ -2592,6 +2563,7 @@
  )
  (func $~lib/dataview/DataView#getUint16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2621,11 +2593,20 @@
    local.get $3
   else
    local.get $3
-   call $~lib/util/bytes/bswap<u16>
+   local.tee $4
+   i32.const 8
+   i32.shl
+   local.get $4
+   i32.const 8
+   i32.shr_u
+   i32.or
+   i32.const 65535
+   i32.and
   end
  )
  (func $~lib/dataview/DataView#getUint32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2655,11 +2636,23 @@
    local.get $3
   else
    local.get $3
-   call $~lib/util/bytes/bswap<u32>
+   local.tee $4
+   i32.const -16711936
+   i32.and
+   i32.const 8
+   i32.rotl
+   local.get $4
+   i32.const 16711935
+   i32.and
+   i32.const 8
+   i32.rotr
+   i32.or
   end
  )
  (func $~lib/dataview/DataView#getUint64 (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i64)
+  (local $4 i64)
+  (local $5 i64)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2689,10 +2682,34 @@
    local.get $3
   else
    local.get $3
-   call $~lib/util/bytes/bswap<u64>
+   local.tee $4
+   i64.const 8
+   i64.shr_u
+   i64.const 71777214294589695
+   i64.and
+   local.get $4
+   i64.const 71777214294589695
+   i64.and
+   i64.const 8
+   i64.shl
+   i64.or
+   local.tee $5
+   i64.const 16
+   i64.shr_u
+   i64.const 281470681808895
+   i64.and
+   local.get $5
+   i64.const 281470681808895
+   i64.and
+   i64.const 16
+   i64.shl
+   i64.or
+   i64.const 32
+   i64.rotr
   end
  )
  (func $~lib/dataview/DataView#setFloat32 (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2726,11 +2743,23 @@
    i32.add
    local.get $2
    i32.reinterpret_f32
-   call $~lib/util/bytes/bswap<u32>
+   local.tee $4
+   i32.const -16711936
+   i32.and
+   i32.const 8
+   i32.rotl
+   local.get $4
+   i32.const 16711935
+   i32.and
+   i32.const 8
+   i32.rotr
+   i32.or
    i32.store
   end
  )
  (func $~lib/dataview/DataView#setFloat64 (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
+  (local $4 i64)
+  (local $5 i64)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2764,7 +2793,30 @@
    i32.add
    local.get $2
    i64.reinterpret_f64
-   call $~lib/util/bytes/bswap<u64>
+   local.tee $4
+   i64.const 8
+   i64.shr_u
+   i64.const 71777214294589695
+   i64.and
+   local.get $4
+   i64.const 71777214294589695
+   i64.and
+   i64.const 8
+   i64.shl
+   i64.or
+   local.tee $5
+   i64.const 16
+   i64.shr_u
+   i64.const 281470681808895
+   i64.and
+   local.get $5
+   i64.const 281470681808895
+   i64.and
+   i64.const 16
+   i64.shl
+   i64.or
+   i64.const 32
+   i64.rotr
    i64.store
   end
  )
@@ -2789,6 +2841,7 @@
   i32.store8
  )
  (func $~lib/dataview/DataView#setInt16 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2816,11 +2869,22 @@
    local.get $2
   else
    local.get $2
-   call $~lib/util/bytes/bswap<u16>
+   i32.const 65535
+   i32.and
+   local.tee $4
+   i32.const 8
+   i32.shl
+   local.get $4
+   i32.const 8
+   i32.shr_u
+   i32.or
+   i32.const 65535
+   i32.and
   end
   i32.store16
  )
  (func $~lib/dataview/DataView#setInt32 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2848,11 +2912,23 @@
    local.get $2
   else
    local.get $2
-   call $~lib/util/bytes/bswap<u32>
+   local.tee $4
+   i32.const -16711936
+   i32.and
+   i32.const 8
+   i32.rotl
+   local.get $4
+   i32.const 16711935
+   i32.and
+   i32.const 8
+   i32.rotr
+   i32.or
   end
   i32.store
  )
  (func $~lib/dataview/DataView#setInt64 (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+  (local $4 i64)
+  (local $5 i64)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2880,7 +2956,30 @@
    local.get $2
   else
    local.get $2
-   call $~lib/util/bytes/bswap<u64>
+   local.tee $4
+   i64.const 8
+   i64.shr_u
+   i64.const 71777214294589695
+   i64.and
+   local.get $4
+   i64.const 71777214294589695
+   i64.and
+   i64.const 8
+   i64.shl
+   i64.or
+   local.tee $5
+   i64.const 16
+   i64.shr_u
+   i64.const 281470681808895
+   i64.and
+   local.get $5
+   i64.const 281470681808895
+   i64.and
+   i64.const 16
+   i64.shl
+   i64.or
+   i64.const 32
+   i64.rotr
   end
   i64.store
  )
@@ -2905,6 +3004,7 @@
   i32.store8
  )
  (func $~lib/dataview/DataView#setUint16 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2932,11 +3032,22 @@
    local.get $2
   else
    local.get $2
-   call $~lib/util/bytes/bswap<u16>
+   i32.const 65535
+   i32.and
+   local.tee $4
+   i32.const 8
+   i32.shl
+   local.get $4
+   i32.const 8
+   i32.shr_u
+   i32.or
+   i32.const 65535
+   i32.and
   end
   i32.store16
  )
  (func $~lib/dataview/DataView#setUint32 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2964,11 +3075,23 @@
    local.get $2
   else
    local.get $2
-   call $~lib/util/bytes/bswap<u32>
+   local.tee $4
+   i32.const -16711936
+   i32.and
+   i32.const 8
+   i32.rotl
+   local.get $4
+   i32.const 16711935
+   i32.and
+   i32.const 8
+   i32.rotr
+   i32.or
   end
   i32.store
  )
  (func $~lib/dataview/DataView#setUint64 (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
+  (local $4 i64)
+  (local $5 i64)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -2996,7 +3119,30 @@
    local.get $2
   else
    local.get $2
-   call $~lib/util/bytes/bswap<u64>
+   local.tee $4
+   i64.const 8
+   i64.shr_u
+   i64.const 71777214294589695
+   i64.and
+   local.get $4
+   i64.const 71777214294589695
+   i64.and
+   i64.const 8
+   i64.shl
+   i64.or
+   local.tee $5
+   i64.const 16
+   i64.shr_u
+   i64.const 281470681808895
+   i64.and
+   local.get $5
+   i64.const 281470681808895
+   i64.and
+   i64.const 16
+   i64.shl
+   i64.or
+   i64.const 32
+   i64.rotr
   end
   i64.store
  )
@@ -4070,8 +4216,6 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 57590
   i32.eq
   i32.eqz
@@ -4087,8 +4231,6 @@
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 22752
   i32.eq
   i32.eqz
@@ -4104,8 +4246,6 @@
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 40792
   i32.eq
   i32.eqz
@@ -4121,8 +4261,6 @@
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 33439
   i32.eq
   i32.eqz
@@ -4138,8 +4276,6 @@
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 25986
   i32.eq
   i32.eqz
@@ -4155,8 +4291,6 @@
   i32.const 5
   i32.const 1
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 17253
   i32.eq
   i32.eqz
@@ -4172,8 +4306,6 @@
   i32.const 6
   i32.const 1
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 24387
   i32.eq
   i32.eqz
@@ -4189,8 +4321,6 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 63200
   i32.eq
   i32.eqz
@@ -4206,8 +4336,6 @@
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 57432
   i32.eq
   i32.eqz
@@ -4223,8 +4351,6 @@
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 22687
   i32.eq
   i32.eqz
@@ -4240,8 +4366,6 @@
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 40834
   i32.eq
   i32.eqz
@@ -4257,8 +4381,6 @@
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 33381
   i32.eq
   i32.eqz
@@ -4274,8 +4396,6 @@
   i32.const 5
   i32.const 0
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 25923
   i32.eq
   i32.eqz
@@ -4291,8 +4411,6 @@
   i32.const 6
   i32.const 0
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 17247
   i32.eq
   i32.eqz
@@ -4731,8 +4849,6 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 58856
   i32.eq
   i32.eqz
@@ -4753,8 +4869,6 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getUint16
-  i32.const 65535
-  i32.and
   i32.const 60400
   i32.eq
   i32.eqz

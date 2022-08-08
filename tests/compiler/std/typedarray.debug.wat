@@ -45,7 +45,6 @@
  (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
@@ -11766,63 +11765,6 @@
    end
   end
  )
- (func $~lib/util/bytes/bswap<u64> (param $0 i64) (result i64)
-  (local $1 i64)
-  (local $2 i64)
-  (local $3 i64)
-  i32.const 1
-  drop
-  i32.const 8
-  i32.const 1
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 2
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 4
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 8
-  i32.eq
-  drop
-  local.get $0
-  i64.const 8
-  i64.shr_u
-  i64.const 71777214294589695
-  i64.and
-  local.set $1
-  local.get $0
-  i64.const 71777214294589695
-  i64.and
-  i64.const 8
-  i64.shl
-  local.set $2
-  local.get $1
-  local.get $2
-  i64.or
-  local.set $3
-  local.get $3
-  i64.const 16
-  i64.shr_u
-  i64.const 281470681808895
-  i64.and
-  local.set $1
-  local.get $3
-  i64.const 281470681808895
-  i64.and
-  i64.const 16
-  i64.shl
-  local.set $2
-  local.get $1
-  local.get $2
-  i64.or
-  i64.const 32
-  i64.rotr
-  return
- )
  (func $~lib/util/bytes/REVERSE<u8> (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11831,9 +11773,11 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
-  (local $9 i32)
-  (local $10 i32)
+  (local $9 i64)
+  (local $10 i64)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
   local.get $1
   i32.const 1
   i32.gt_u
@@ -11877,12 +11821,58 @@
      local.set $7
      local.get $6
      i64.load
-     call $~lib/util/bytes/bswap<u64>
+     local.tee $8
+     i64.const 8
+     i64.shr_u
+     i64.const 71777214294589695
+     i64.and
+     local.get $8
+     i64.const 71777214294589695
+     i64.and
+     i64.const 8
+     i64.shl
+     i64.or
+     local.tee $9
+     i64.const 16
+     i64.shr_u
+     i64.const 281470681808895
+     i64.and
+     local.get $9
+     i64.const 281470681808895
+     i64.and
+     i64.const 16
+     i64.shl
+     i64.or
+     i64.const 32
+     i64.rotr
      local.set $8
      local.get $6
      local.get $7
      i64.load
-     call $~lib/util/bytes/bswap<u64>
+     local.tee $9
+     i64.const 8
+     i64.shr_u
+     i64.const 71777214294589695
+     i64.and
+     local.get $9
+     i64.const 71777214294589695
+     i64.and
+     i64.const 8
+     i64.shl
+     i64.or
+     local.tee $10
+     i64.const 16
+     i64.shr_u
+     i64.const 281470681808895
+     i64.and
+     local.get $10
+     i64.const 281470681808895
+     i64.and
+     i64.const 16
+     i64.shl
+     i64.or
+     i64.const 32
+     i64.rotr
      i64.store
      local.get $7
      local.get $8
@@ -11914,7 +11904,7 @@
      i32.const 0
      i32.shl
      i32.add
-     local.set $9
+     local.set $11
      local.get $0
      local.get $3
      local.get $2
@@ -11922,16 +11912,16 @@
      i32.const 0
      i32.shl
      i32.add
-     local.set $10
-     local.get $9
+     local.set $12
+     local.get $11
      i32.load8_u
-     local.set $11
-     local.get $9
-     local.get $10
+     local.set $13
+     local.get $11
+     local.get $12
      i32.load8_u
      i32.store8
-     local.get $10
-     local.get $11
+     local.get $12
+     local.get $13
      i32.store8
      local.get $2
      i32.const 1
