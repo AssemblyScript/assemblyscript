@@ -786,6 +786,19 @@ function test_i32x4(): void {
   i32x4.extmul_low_i16x8_u(a, a);
   i32x4.extmul_high_i16x8_s(a, a);
   i32x4.extmul_high_i16x8_u(a, a);
+  assert(i32x4.abs(i32x4(1, 1, 1, 1)) == i32x4(1, 1, 1, 1));
+  assert(i32x4.abs(i32x4(-1, -1, -1, -1)) == i32x4(1, 1, 1, 1));
+  assert(i32x4.abs(i32x4(u32.MAX_VALUE, u32.MAX_VALUE, u32.MAX_VALUE, u32.MAX_VALUE)) == i32x4(1, 1, 1, 1));
+  assert(i32x4.abs(i32x4(-2147483648, -2147483648, -2147483648, -2147483648)) == i32x4(2147483648, 2147483648, 2147483648, 2147483648));
+  assert(
+    i32x4.bitmask(i32x4(1, -1, 1, -1)) == 10
+  );
+  assert(
+    i32x4.bitmask(i32x4(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF)) == 0x0000000F
+  );
+  assert(
+    i32x4.bitmask(i32x4(-1, 0, 1, 0xF)) == 1
+  );
 }
 
 function test_i64x2(): void {
