@@ -413,6 +413,55 @@ function test_i8x16(): void {
     );
     assert(i8x16.popcnt(a) == v128(0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4));
   }
+
+  assert(i8x16.abs(i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)) == i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i8x16.abs(i8x16(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)) == i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i8x16.abs(i8x16(u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE))
+    == 
+    i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+  );
+  assert(i8x16.abs(i8x16(-128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128)) 
+    == 
+    i8x16(i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128))
+  );
+  assert(
+    i8x16.bitmask(i8x16(u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE
+      ,u8.MAX_VALUE)) 
+      == 
+      0x0000FFFF
+  );
+  assert(
+    i8x16.bitmask(i8x16(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
+  );
 }
 
 function test_i16x8(): void {
