@@ -999,6 +999,7 @@
  )
  (func $simd/test_v128
   (local $0 i32)
+  (local $1 v128)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -1219,6 +1220,100 @@
   end
   local.get $0
   call $~lib/rt/tlsf/__free
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   call $~lib/rt/tlsf/initialize
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  i32.const 16
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 4
+  i32.add
+  local.tee $0
+  i32.const 42
+  i32.store
+  local.get $0
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+  v128.load32_lane 0
+  local.tee $1
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 196
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  v128.load8_lane 0
+  local.tee $1
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 198
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  v128.load16_lane 0
+  local.tee $1
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 200
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  v128.load32_lane 0
+  local.tee $1
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 202
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  v128.load64_lane 0
+  v128.const i32x4 0x0000002a 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 204
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
  )
  (func $simd/test_vars_i8x16_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
   v128.const i32x4 0x03000100 0x07000504 0x0b0a0908 0x000e0d0c
@@ -1396,7 +1491,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 459
+   i32.const 544
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1410,7 +1505,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 464
+   i32.const 549
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1448,7 +1543,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 590
+   i32.const 675
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1462,7 +1557,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 595
+   i32.const 680
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1494,7 +1589,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 649
+   i32.const 734
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1508,7 +1603,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 654
+   i32.const 739
    i32.const 5
    call $~lib/builtins/abort
    unreachable

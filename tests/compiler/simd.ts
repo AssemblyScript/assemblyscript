@@ -188,6 +188,91 @@ function test_v128(): void {
     assert(v == i32x4(42, 0, 0, 0));
     __free(ptr);
   }
+  {
+    let ptr = __alloc(16);
+    store<i32>(ptr, 42);
+    let v: v128 = v128(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    v = v128.load_lane<i32>(ptr, v, 0);
+    assert(v == i32x4(42, 0, 0, 0));
+    v = v128.load8_lane(ptr, v, 0);
+    assert(v == v128(42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+    v = v128.load16_lane(ptr, v, 0);
+    assert(v == i16x8(42, 0, 0, 0, 0, 0, 0, 0));
+    v = v128.load32_lane(ptr, v, 0);
+    assert(v == i32x4(42, 0, 0, 0));
+    v = v128.load64_lane(ptr, v, 0);
+    assert(v == i64x2(42, 0));
+    __free(ptr);
+  }
+  {
+    let v: v128 = v128.ceil<f32>(f32x4(1.1, -0.25, 70.01, 4.0));
+    assert(v128.extract_lane<f32>(v, 0) == 2.0);
+    assert(v128.extract_lane<f32>(v, 1) == 0.0);
+    assert(v128.extract_lane<f32>(v, 2) == 71.0);
+    assert(v128.extract_lane<f32>(v, 3) == 4.0);
+  }
+  {
+    let v: v128 =v128.floor<f32>(f32x4(1.1, -0.25, 70.01, 4.0))
+    assert(v128.extract_lane<f32>(v, 0) == 1.0);
+    assert(v128.extract_lane<f32>(v, 1) == -1);
+    assert(v128.extract_lane<f32>(v, 2) == 70.0);
+    assert(v128.extract_lane<f32>(v, 3) == 4.0);
+  }
+  {
+    assert(
+      v128.bitmask<i8>(i8x16(u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE
+        ,u8.MAX_VALUE)) 
+        == 
+        0x0000FFFF
+    );
+    assert(
+      v128.bitmask<i8>(i8x16(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
+    );
+    assert(
+      v128.bitmask<i16>(i16x8(u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE))
+        == 
+        0x000000FF
+    );
+    assert(
+      v128.bitmask<i16>(i16x8(-1, 0, 1, 2, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
+    );
+    assert(
+      v128.bitmask<i32>(i32x4(1, -1, 1, -1)) == 10
+    );
+    assert(
+      v128.bitmask<i32>(i32x4(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF)) == 0x0000000F
+    );
+    assert(
+      v128.bitmask<i32>(i32x4(-1, 0, 1, 0xF)) == 1
+    );
+    assert(
+      v128.bitmask<i64>(i64x2(0xFFFFFFFF_FFFFFFFF, 0xFFFFFFFF_FFFFFFFF)) == 0x00000003
+    );
+    assert(
+      v128.bitmask<i64>(i64x2(-1, 0xF)) == 0x00000001
+    );
+  }
   // TODO: missing C-API in Binaryen (see also passes/pass.ts)
   // v128.load8_lane
   // v128.load16_lane
