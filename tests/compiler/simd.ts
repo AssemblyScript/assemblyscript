@@ -212,7 +212,7 @@ function test_v128(): void {
     assert(v128.extract_lane<f32>(v, 3) == 4.0);
   }
   {
-    let v: v128 =v128.floor<f32>(f32x4(1.1, -0.25, 70.01, 4.0))
+    let v: v128 =v128.floor<f32>(f32x4(1.1, -0.25, 70.01, 4.0));
     assert(v128.extract_lane<f32>(v, 0) == 1.0);
     assert(v128.extract_lane<f32>(v, 1) == -1);
     assert(v128.extract_lane<f32>(v, 2) == 70.0);
