@@ -1186,7 +1186,7 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32:
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
-        if (type.size == 32 && !compiler.options.isWasm64) {
+        if (type.size == 32) {
           // rotl(x & 0xFF00FF00, 8) | rotr(x & 0x00FF00FF, 8)
           let flow = compiler.currentFlow;
           let temp = flow.getTempLocal(type, findUsedLocals(arg0));
