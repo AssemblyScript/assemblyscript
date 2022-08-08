@@ -5299,6 +5299,7 @@
   (local $5 v128)
   (local $6 v128)
   (local $7 v128)
+  (local $8 v128)
   v128.const i32x4 0x00000000 0x3ff80000 0x00000000 0x40040000
   local.set $0
   local.get $0
@@ -5683,6 +5684,98 @@
   drop
   local.get $0
   f64x2.promote_low_f32x4
+  drop
+  v128.const i32x4 0x00000000 0x3ff00000 0x00000000 0xbff00000
+  v128.const i32x4 0x00000000 0xbff00000 0x00000000 0x3ff00000
+  f64x2.pmin
+  v128.const i32x4 0x00000000 0xbff00000 0x00000000 0xbff00000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000000 0x3ff00000 0x00000000 0xbff00000
+  v128.const i32x4 0x00000000 0xbff00000 0x00000000 0x3ff00000
+  f64x2.pmax
+  v128.const i32x4 0x00000000 0x3ff00000 0x00000000 0x3ff00000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x9999999a 0x3ff19999 0x00000000 0xbfd00000
+  f64x2.ceil
+  local.set $8
+  local.get $8
+  f64x2.extract_lane 0
+  f64.const 2
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 160
+   i32.const 1059
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $8
+  f64x2.extract_lane 1
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 160
+   i32.const 1060
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  v128.const i32x4 0x9999999a 0x3ff19999 0x00000000 0xbfd00000
+  f64x2.floor
+  local.set $8
+  local.get $8
+  f64x2.extract_lane 0
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 160
+   i32.const 1064
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $8
+  f64x2.extract_lane 1
+  f64.const -1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 160
+   i32.const 1065
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  v128.const i32x4 0x9999999a 0x3ff19999 0x33333333 0x400f3333
+  f64x2.trunc
+  v128.const i32x4 0x00000000 0x3ff00000 0x00000000 0x40080000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x9999999a 0x3ff19999 0xe147ae14 0x400c147a
+  f64x2.nearest
+  v128.const i32x4 0x00000000 0x3ff00000 0x00000000 0x40100000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
   drop
  )
  (func $simd/test_const (result v128)

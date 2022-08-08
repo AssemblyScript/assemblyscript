@@ -1044,6 +1044,36 @@ function test_f64x2(): void {
   f64x2.convert_low_i32x4_s(a);
   f64x2.convert_low_i32x4_u(a);
   f64x2.promote_low_f32x4(a);
+  assert(
+    f64x2.pmin(f64x2(1, -1), f64x2(-1, 1))
+    ==
+    f64x2(-1, -1)
+  );
+  assert(
+    f64x2.pmax(f64x2(1, -1), f64x2(-1, 1))
+    ==
+    f64x2(1, 1)
+  );
+  {
+    let v: v128 = f64x2.ceil(f64x2(1.1, -0.25));
+    assert(v128.extract_lane<f64>(v, 0) == 2.0);
+    assert(v128.extract_lane<f64>(v, 1) == 0.0);
+  }
+  {
+    let v: v128 =f64x2.floor(f64x2(1.1, -0.25))
+    assert(v128.extract_lane<f64>(v, 0) == 1.0);
+    assert(v128.extract_lane<f64>(v, 1) == -1);
+  }
+  assert(
+    f64x2.trunc(f64x2(1.1, 3.9))
+    ==
+    f64x2(1.0, 3.0)
+  );
+  assert(
+    f64x2.nearest(f64x2(1.1, 3.51))
+    ==
+    f64x2(1.0, 4.0)
+  );
 }
 
 function test_const(): v128 {
