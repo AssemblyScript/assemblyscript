@@ -1147,8 +1147,16 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
 
   var typeArguments = ctx.typeArguments;
   var arg0 = typeArguments
-    ? compiler.compileExpression(ctx.operands[0], typeArguments[0].toUnsigned(), Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(ctx.operands[0], Type.u32, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(
+        ctx.operands[0],
+        typeArguments[0].toUnsigned(),
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      )
+    : compiler.compileExpression(
+        ctx.operands[0],
+        Type.u32,
+        Constraints.MUST_WRAP
+      );
 
   var type = compiler.currentType;
   if (type.isValue) {
