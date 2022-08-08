@@ -982,7 +982,7 @@ function test_f32x4(): void {
     assert(v128.extract_lane<f32>(v, 3) == 4.0);
   }
   {
-    let v: v128 =f32x4.floor(f32x4(1.1, -0.25, 70.01, 4.0))
+    let v: v128 =f32x4.floor(f32x4(1.1, -0.25, 70.01, 4.0));
     assert(v128.extract_lane<f32>(v, 0) == 1.0);
     assert(v128.extract_lane<f32>(v, 1) == -1);
     assert(v128.extract_lane<f32>(v, 2) == 70.0);
@@ -1060,7 +1060,7 @@ function test_f64x2(): void {
     assert(v128.extract_lane<f64>(v, 1) == 0.0);
   }
   {
-    let v: v128 =f64x2.floor(f64x2(1.1, -0.25))
+    let v: v128 =f64x2.floor(f64x2(1.1, -0.25));
     assert(v128.extract_lane<f64>(v, 0) == 1.0);
     assert(v128.extract_lane<f64>(v, 1) == -1);
   }
