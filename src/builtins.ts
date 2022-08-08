@@ -1171,22 +1171,23 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
         let temp = flow.getTempLocal(type);
         flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
 
-        let res = compiler.ensureSmallIntegerWrap(
+        let res = module.binary(
+          BinaryOp.OrI32,
           module.binary(
-            BinaryOp.OrI32,
-            module.binary(
-              BinaryOp.ShlI32,
-              module.local_tee(temp.index, arg0, false),
-              module.i32(8)
-            ),
-            module.binary(
-              BinaryOp.ShrU32,
-              module.local_get(temp.index, TypeRef.I32),
-              module.i32(8)
-            )
+            BinaryOp.ShlI32,
+            module.local_tee(temp.index, arg0, false),
+            module.i32(8)
           ),
-          type
+          module.binary(
+            BinaryOp.ShrU32,
+            module.local_get(temp.index, TypeRef.I32),
+            module.i32(8)
+          )
         );
+        // avoid wrapping for u16 due to it's already done for input arg
+        if (type.kind == TypeKind.I16) {
+          res = compiler.ensureSmallIntegerWrap(res, Type.i16);
+        }
         flow.freeTempLocal(temp);
         return res;
       }

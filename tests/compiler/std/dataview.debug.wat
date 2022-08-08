@@ -2434,8 +2434,6 @@
    i32.const 8
    i32.shr_u
    i32.or
-   i32.const 65535
-   i32.and
   end
  )
  (func $~lib/dataview/DataView#getInt32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2600,8 +2598,6 @@
    i32.const 8
    i32.shr_u
    i32.or
-   i32.const 65535
-   i32.and
   end
  )
  (func $~lib/dataview/DataView#getUint32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2878,8 +2874,6 @@
    i32.const 8
    i32.shr_u
    i32.or
-   i32.const 65535
-   i32.and
   end
   i32.store16
  )
@@ -3041,8 +3035,6 @@
    i32.const 8
    i32.shr_u
    i32.or
-   i32.const 65535
-   i32.and
   end
   i32.store16
  )
@@ -4216,6 +4208,8 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 57590
   i32.eq
   i32.eqz
@@ -4231,6 +4225,8 @@
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 22752
   i32.eq
   i32.eqz
@@ -4246,6 +4242,8 @@
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 40792
   i32.eq
   i32.eqz
@@ -4261,6 +4259,8 @@
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 33439
   i32.eq
   i32.eqz
@@ -4276,6 +4276,8 @@
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 25986
   i32.eq
   i32.eqz
@@ -4291,6 +4293,8 @@
   i32.const 5
   i32.const 1
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 17253
   i32.eq
   i32.eqz
@@ -4306,6 +4310,8 @@
   i32.const 6
   i32.const 1
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 24387
   i32.eq
   i32.eqz
@@ -4321,6 +4327,8 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 63200
   i32.eq
   i32.eqz
@@ -4336,6 +4344,8 @@
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 57432
   i32.eq
   i32.eqz
@@ -4351,6 +4361,8 @@
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 22687
   i32.eq
   i32.eqz
@@ -4366,6 +4378,8 @@
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 40834
   i32.eq
   i32.eqz
@@ -4381,6 +4395,8 @@
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 33381
   i32.eq
   i32.eqz
@@ -4396,6 +4412,8 @@
   i32.const 5
   i32.const 0
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 25923
   i32.eq
   i32.eqz
@@ -4411,6 +4429,8 @@
   i32.const 6
   i32.const 0
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 17247
   i32.eq
   i32.eqz
@@ -4849,6 +4869,8 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 58856
   i32.eq
   i32.eqz
@@ -4869,6 +4891,8 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getUint16
+  i32.const 65535
+  i32.and
   i32.const 60400
   i32.eq
   i32.eqz
