@@ -3800,10 +3800,10 @@
   i32.eq
   drop
   i32.const 43707
-  local.tee $1
+  local.tee $8
   i32.const 8
   i32.shl
-  local.get $1
+  local.get $8
   i32.const 8
   i32.shr_u
   i32.or
@@ -3816,10 +3816,10 @@
   i32.extend16_s
   i32.const 65535
   i32.and
-  local.tee $0
+  local.tee $8
   i32.const 8
   i32.shl
-  local.get $0
+  local.get $8
   i32.const 8
   i32.shr_u
   i32.or
@@ -3829,12 +3829,12 @@
   i32.eq
   drop
   i32.const -1430532899
-  local.tee $6
+  local.tee $8
   i32.const -16711936
   i32.and
   i32.const 8
   i32.rotl
-  local.get $6
+  local.get $8
   i32.const 16711935
   i32.and
   i32.const 8
@@ -3844,12 +3844,12 @@
   i32.eq
   drop
   i32.const -1430532899
-  local.tee $7
+  local.tee $8
   i32.const -16711936
   i32.and
   i32.const 8
   i32.rotl
-  local.get $7
+  local.get $8
   i32.const 16711935
   i32.and
   i32.const 8
@@ -3930,12 +3930,12 @@
   i32.eq
   drop
   i32.const -1430532899
-  local.tee $1
+  local.tee $8
   i32.const -16711936
   i32.and
   i32.const 8
   i32.rotl
-  local.get $1
+  local.get $8
   i32.const 16711935
   i32.and
   i32.const 8

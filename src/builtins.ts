@@ -1168,7 +1168,7 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: {
         // <T>(x << 8 | x >> 8)
         let flow = compiler.currentFlow;
-        let temp = flow.getTempLocal(type, findUsedLocals(arg0));
+        let temp = flow.getTempLocal(type);
         flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
 
         let res = compiler.ensureSmallIntegerWrap(
@@ -1197,7 +1197,7 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
         if (type.size == 32) {
           // rotl(x & 0xFF00FF00, 8) | rotr(x & 0x00FF00FF, 8)
           let flow = compiler.currentFlow;
-          let temp = flow.getTempLocal(type, findUsedLocals(arg0));
+          let temp = flow.getTempLocal(type);
           flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
 
           let res = module.binary(
