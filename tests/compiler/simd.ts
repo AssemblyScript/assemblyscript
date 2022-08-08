@@ -964,6 +964,40 @@ function test_f32x4(): void {
 
   // TODO: unimp in Binaryen's interpreter
   f32x4.demote_f64x2_zero(a);
+  assert(
+    f32x4.pmin(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+    ==
+    f32x4(-1, -1, -1, -1)
+  );
+  assert(
+    f32x4.pmax(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+    ==
+    f32x4(1, 1, 1, 1)
+  );
+  {
+    let v: v128 = f32x4.ceil(f32x4(1.1, -0.25, 70.01, 4.0));
+    assert(v128.extract_lane<f32>(v, 0) == 2.0);
+    assert(v128.extract_lane<f32>(v, 1) == 0.0);
+    assert(v128.extract_lane<f32>(v, 2) == 71.0);
+    assert(v128.extract_lane<f32>(v, 3) == 4.0);
+  }
+  {
+    let v: v128 =f32x4.floor(f32x4(1.1, -0.25, 70.01, 4.0))
+    assert(v128.extract_lane<f32>(v, 0) == 1.0);
+    assert(v128.extract_lane<f32>(v, 1) == -1);
+    assert(v128.extract_lane<f32>(v, 2) == 70.0);
+    assert(v128.extract_lane<f32>(v, 3) == 4.0);
+  }
+  assert(
+    f32x4.trunc(f32x4(1.1, 2.5, 3.9, 4.0))
+    ==
+    f32x4(1.0, 2.0, 3.0, 4.0)
+  );
+  assert(
+    f32x4.nearest(f32x4(1.1, 2.5, 3.51, 4.0))
+    ==
+    f32x4(1.0, 2.0, 4.0, 4.0)
+  );
 }
 
 function test_f64x2(): void {
