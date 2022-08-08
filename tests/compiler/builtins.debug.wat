@@ -3859,23 +3859,23 @@
   i32.eq
   drop
   i64.const 4822679907192029
-  local.tee $3
+  local.tee $2
   i64.const 8
   i64.shr_u
   i64.const 71777214294589695
   i64.and
-  local.get $3
+  local.get $2
   i64.const 71777214294589695
   i64.and
   i64.const 8
   i64.shl
   i64.or
-  local.tee $2
+  local.tee $3
   i64.const 16
   i64.shr_u
   i64.const 281470681808895
   i64.and
-  local.get $2
+  local.get $3
   i64.const 281470681808895
   i64.and
   i64.const 16

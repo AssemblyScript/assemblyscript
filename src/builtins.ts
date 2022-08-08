@@ -1239,7 +1239,7 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
         // rotr(res, 32)
 
         let flow = compiler.currentFlow;
-        let temp1 = flow.getTempLocal(type, findUsedLocals(arg0));
+        let temp1 = flow.getTempLocal(type);
         flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
         let temp2 = flow.getTempLocal(type);
         flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
