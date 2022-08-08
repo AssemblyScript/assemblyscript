@@ -143,6 +143,8 @@ export namespace BuiltinNames {
   export const isManaged = "~lib/builtins/isManaged";
   export const isVoid = "~lib/builtins/isVoid";
 
+  export const bswap = "~lib/builtins/bswap";
+
   export const add = "~lib/builtins/add";
   export const sub = "~lib/builtins/sub";
   export const mul = "~lib/builtins/mul";
@@ -1133,6 +1135,178 @@ function builtin_idof(ctx: BuiltinContext): ExpressionRef {
   return module.unreachable();
 }
 builtins.set(BuiltinNames.idof, builtin_idof);
+
+// bswap<T?>(value: T) -> T
+function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkTypeOptional(ctx, true) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+
+  var typeArguments = ctx.typeArguments;
+  var arg0 = typeArguments
+    ? compiler.compileExpression(ctx.operands[0], typeArguments[0].asMaybeUnsigned(), Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
+    : compiler.compileExpression(ctx.operands[0], Type.u32, Constraints.MUST_WRAP);
+
+  var type = compiler.currentType;
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.BOOL:
+      case TypeKind.I8:
+      case TypeKind.U8: return arg0;
+      case TypeKind.I16:
+      case TypeKind.U16: {
+        // <T>(x << 8 | x >> 8)
+        let flow = compiler.currentFlow;
+        let temp = flow.getTempLocal(type, findUsedLocals(arg0));
+        flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+
+        let res = compiler.ensureSmallIntegerWrap(
+          module.binary(
+            BinaryOp.OrI32,
+            module.binary(
+              BinaryOp.ShlI32,
+              module.local_tee(temp.index, arg0, false),
+              module.i32(8)
+            ),
+            module.binary(
+              BinaryOp.ShrU32,
+              module.local_get(temp.index, TypeRef.I32),
+              module.i32(8)
+            )
+          ),
+          type
+        );
+        flow.freeTempLocal(temp);
+        return res;
+      }
+      case TypeKind.I32:
+      case TypeKind.U32:
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        if (type.size == 32 && !compiler.options.isWasm64) {
+          // rotl(x & 0xFF00FF00, 8) | rotr(x & 0x00FF00FF, 8)
+          let flow = compiler.currentFlow;
+          let temp = flow.getTempLocal(type, findUsedLocals(arg0));
+          flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+
+          let res = module.binary(
+            BinaryOp.OrI32,
+            module.binary(
+              BinaryOp.RotlI32,
+              module.binary(
+                BinaryOp.AndI32,
+                module.local_tee(temp.index, arg0, false),
+                module.i32(0xFF00FF00)
+              ),
+              module.i32(8)
+            ),
+            module.binary(
+              BinaryOp.RotrI32,
+              module.binary(
+                BinaryOp.AndI32,
+                module.local_get(temp.index, TypeRef.I32),
+                module.i32(0x00FF00FF)
+              ),
+              module.i32(8)
+            ),
+          );
+          flow.freeTempLocal(temp);
+          return res;
+        }
+        // fall-through
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        // let t =
+        //   ((x >>> 8) & 0x00FF00FF00FF00FF) |
+        //   ((x & 0x00FF00FF00FF00FF) << 8)
+        //
+        // let res =
+        //   ((t >>> 16) & 0x0000FFFF0000FFFF) |
+        //   ((t & 0x0000FFFF0000FFFF) << 16)
+        //
+        // rotr(res, 32)
+
+        let flow = compiler.currentFlow;
+        let temp1 = flow.getTempLocal(type, findUsedLocals(arg0));
+        flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+        let temp2 = flow.getTempLocal(type);
+        flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+
+        // t = ((x >>> 8) & 0x00FF00FF00FF00FF) | ((x & 0x00FF00FF00FF00FF) << 8)
+        let expr = module.local_tee(
+          temp2.index,
+          module.binary(
+            BinaryOp.OrI64,
+            module.binary(
+              BinaryOp.AndI64,
+              module.binary(
+                BinaryOp.ShrU64,
+                module.local_tee(temp1.index, arg0, false),
+                module.i64(8)
+              ),
+              module.i64(0x00FF00FF, 0x00FF00FF)
+            ),
+            module.binary(
+              BinaryOp.ShlI64,
+              module.binary(
+                BinaryOp.AndI64,
+                module.local_get(temp1.index, TypeRef.I64),
+                module.i64(0x00FF00FF, 0x00FF00FF)
+              ),
+              module.i64(8)
+            ),
+          ),
+          false
+        );
+
+        // ((t >>> 16) & 0x0000FFFF0000FFFF) | ((t & 0x0000FFFF0000FFFF) << 16)
+        let res = module.binary(
+          BinaryOp.OrI64,
+          module.binary(
+            BinaryOp.AndI64,
+            module.binary(
+              BinaryOp.ShrU64,
+              expr,
+              module.i64(16)
+            ),
+            module.i64(0x0000FFFF, 0x0000FFFF)
+          ),
+          module.binary(
+            BinaryOp.ShlI64,
+            module.binary(
+              BinaryOp.AndI64,
+              module.local_get(temp2.index, TypeRef.I64),
+              module.i64(0x0000FFFF, 0x0000FFFF)
+            ),
+            module.i64(16)
+          ),
+        );
+
+        // rotr(res, 32)
+        res = module.binary(
+          BinaryOp.RotrI64,
+          res,
+          module.i64(32)
+        );
+
+        flow.freeTempLocal(temp2);
+        flow.freeTempLocal(temp1);
+
+        return res;
+      }
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "bswap", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.bswap, builtin_bswap);
 
 // === Math ===================================================================================
 

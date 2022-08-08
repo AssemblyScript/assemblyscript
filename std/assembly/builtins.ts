@@ -64,6 +64,10 @@ export declare function isVoid<T>(): bool;
 @builtin
 export declare function lengthof<T>(func?: T): i32;
 
+// @ts-ignore
+@builtin
+export declare function bswap<T>(value: T): T;
+
 // @ts-ignore: decorator
 @builtin
 export declare function clz<T>(value: T): T;

@@ -1,3 +1,4 @@
+/*
 // @ts-ignore: decodator
 @global
 export function bswap<T extends number>(value: T): T {
@@ -27,6 +28,7 @@ export function bswap<T extends number>(value: T): T {
   }
   ERROR("Unsupported generic type");
 }
+*/
 
 export function REVERSE<T>(ptr: usize, len: usize): void {
   if (len > 1) {
