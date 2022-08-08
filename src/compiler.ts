@@ -4637,8 +4637,8 @@ export class Compiler extends DiagnosticEmitter {
         // falls through
       }
       case TypeKind.U32: return module.binary(BinaryOp.LtU32, leftExpr, rightExpr);
-      case TypeKind.USIZE: return module.binary(BinaryOp.LtUSize, leftExpr, rightExpr);
       case TypeKind.U64: return module.binary(BinaryOp.LtU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.LtUSize, leftExpr, rightExpr);
       case TypeKind.F32: return module.binary(BinaryOp.LtF32, leftExpr, rightExpr);
       case TypeKind.F64: return module.binary(BinaryOp.LtF64, leftExpr, rightExpr);
     }
@@ -4657,8 +4657,8 @@ export class Compiler extends DiagnosticEmitter {
         // falls through
       }
       case TypeKind.I32: return module.binary(BinaryOp.GtI32, leftExpr, rightExpr);
-      case TypeKind.ISIZE: return module.binary(BinaryOp.GtISize, leftExpr, rightExpr);
       case TypeKind.I64: return module.binary(BinaryOp.GtI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.GtISize, leftExpr, rightExpr);
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.BOOL: {
@@ -4667,8 +4667,8 @@ export class Compiler extends DiagnosticEmitter {
         // falls through
       }
       case TypeKind.U32: return module.binary(BinaryOp.GtU32, leftExpr, rightExpr);
-      case TypeKind.USIZE: return module.binary(BinaryOp.GtUSize, leftExpr, rightExpr);
       case TypeKind.U64: return module.binary(BinaryOp.GtU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.GtUSize, leftExpr, rightExpr);
       case TypeKind.F32: return module.binary(BinaryOp.GtF32, leftExpr, rightExpr);
       case TypeKind.F64: return module.binary(BinaryOp.GtF64, leftExpr, rightExpr);
     }
@@ -4687,10 +4687,8 @@ export class Compiler extends DiagnosticEmitter {
         // falls through
       }
       case TypeKind.I32: return module.binary(BinaryOp.LeI32, leftExpr, rightExpr);
+      case TypeKind.I64: return module.binary(BinaryOp.LeI64, leftExpr, rightExpr);
       case TypeKind.ISIZE: return module.binary(BinaryOp.LeISize, leftExpr, rightExpr);
-      case TypeKind.I64: {
-        return module.binary(BinaryOp.LeI64, leftExpr, rightExpr);
-      }
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.BOOL: {
@@ -4699,8 +4697,8 @@ export class Compiler extends DiagnosticEmitter {
         // falls through
       }
       case TypeKind.U32: return module.binary(BinaryOp.LeU32, leftExpr, rightExpr);
-      case TypeKind.USIZE: return module.binary(BinaryOp.LeUSize, leftExpr, rightExpr);
       case TypeKind.U64: return module.binary(BinaryOp.LeU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.LeUSize, leftExpr, rightExpr);
       case TypeKind.F32: return module.binary(BinaryOp.LeF32, leftExpr, rightExpr);
       case TypeKind.F64: return module.binary(BinaryOp.LeF64, leftExpr, rightExpr);
     }
@@ -4719,8 +4717,8 @@ export class Compiler extends DiagnosticEmitter {
         // falls through
       }
       case TypeKind.I32: return module.binary(BinaryOp.GeI32, leftExpr, rightExpr);
-      case TypeKind.ISIZE: return module.binary(BinaryOp.GeISize, leftExpr, rightExpr);
       case TypeKind.I64: return module.binary(BinaryOp.GeI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.GeISize, leftExpr, rightExpr);
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.BOOL: {
@@ -4729,8 +4727,8 @@ export class Compiler extends DiagnosticEmitter {
         // falls through
       }
       case TypeKind.U32: return module.binary(BinaryOp.GeU32, leftExpr, rightExpr);
-      case TypeKind.USIZE: return module.binary(BinaryOp.GeUSize, leftExpr, rightExpr);
       case TypeKind.U64: return module.binary(BinaryOp.GeU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.GeUSize, leftExpr, rightExpr);
       case TypeKind.F32: return module.binary(BinaryOp.GeF32, leftExpr, rightExpr);
       case TypeKind.F64: return module.binary(BinaryOp.GeF64, leftExpr, rightExpr);
     }
@@ -4753,10 +4751,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.EqI32, leftExpr, rightExpr);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.binary(BinaryOp.EqSize, leftExpr, rightExpr);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.EqI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.EqSize, leftExpr, rightExpr);
       case TypeKind.F32: return module.binary(BinaryOp.EqF32, leftExpr, rightExpr);
       case TypeKind.F64: return module.binary(BinaryOp.EqF64, leftExpr, rightExpr);
       case TypeKind.V128: {
@@ -4798,10 +4796,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.NeI32, leftExpr, rightExpr);
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: return module.binary(BinaryOp.NeSize, leftExpr, rightExpr);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.NeI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.NeSize, leftExpr, rightExpr);
       case TypeKind.F32: return module.binary(BinaryOp.NeF32, leftExpr, rightExpr);
       case TypeKind.F64: return module.binary(BinaryOp.NeF64, leftExpr, rightExpr);
       case TypeKind.V128: {
@@ -5275,8 +5273,8 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U32: return module.binary(BinaryOp.ShlI32, leftExpr, rightExpr);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.ShlI64, leftExpr, rightExpr);
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: return module.binary(BinaryOp.ShlSize, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.ShlSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5349,8 +5347,8 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U32: return module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: return module.binary(BinaryOp.ShrUSize, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.ShrUSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5369,8 +5367,8 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U32: return module.binary(BinaryOp.AndI32, leftExpr, rightExpr);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.AndI64, leftExpr, rightExpr);
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: return module.binary(BinaryOp.AndSize, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.AndSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5389,8 +5387,8 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U32: return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.OrI64, leftExpr, rightExpr);
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: return module.binary(BinaryOp.OrSize, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.OrSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -8996,21 +8994,21 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              BinaryOp.AddSize,
-              getValue,
-              this.makeOne(this.currentType)
-            );
-            break;
-          }
           case TypeKind.I64:
           case TypeKind.U64: {
             expr = module.binary(
               BinaryOp.AddI64,
               getValue,
               module.i64(1)
+            );
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            expr = module.binary(
+              BinaryOp.AddSize,
+              getValue,
+              this.makeOne(this.currentType)
             );
             break;
           }
@@ -9082,21 +9080,21 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              BinaryOp.SubSize,
-              getValue,
-              this.makeOne(this.currentType)
-            );
-            break;
-          }
           case TypeKind.I64:
           case TypeKind.U64: {
             expr = module.binary(
               BinaryOp.SubI64,
               getValue,
               module.i64(1)
+            );
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            expr = module.binary(
+              BinaryOp.SubSize,
+              getValue,
+              this.makeOne(this.currentType)
             );
             break;
           }
@@ -9248,18 +9246,18 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.binary(BinaryOp.SubI32, module.i32(0), expr);
             break;
           }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
+          case TypeKind.I64:
+          case TypeKind.U64: {
+            expr = module.binary(BinaryOp.SubI64, module.i64(0), expr);
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
             expr = module.binary(
               BinaryOp.SubSize,
               this.makeZero(this.currentType),
               expr
             );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.SubI64, module.i64(0), expr);
             break;
           }
           case TypeKind.F32: {
@@ -9317,18 +9315,18 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.binary(BinaryOp.AddI32, expr, this.module.i32(1));
             break;
           }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
+          case TypeKind.I64:
+          case TypeKind.U64: {
+            expr = module.binary(BinaryOp.AddI64, expr, module.i64(1));
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
             expr = module.binary(
               BinaryOp.AddSize,
               expr,
               this.makeOne(this.currentType)
             );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.AddI64, expr, module.i64(1));
             break;
           }
           case TypeKind.F32: {
@@ -9386,18 +9384,18 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.binary(BinaryOp.SubI32, expr, module.i32(1));
             break;
           }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
+          case TypeKind.I64:
+          case TypeKind.U64: {
+            expr = module.binary(BinaryOp.SubI64, expr, module.i64(1));
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
             expr = module.binary(
               BinaryOp.SubSize,
               expr,
               this.makeOne(this.currentType)
             );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.SubI64, expr, module.i64(1));
             break;
           }
           case TypeKind.F32: {
@@ -9475,18 +9473,18 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.binary(BinaryOp.XorI32, expr, module.i32(-1));
             break;
           }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
+          case TypeKind.I64:
+          case TypeKind.U64: {
+            expr = module.binary(BinaryOp.XorI64, expr, module.i64(-1, -1));
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
             expr = module.binary(
               BinaryOp.XorSize,
               expr,
               this.makeNegOne(this.currentType)
             );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.XorI64, expr, module.i64(-1, -1));
             break;
           }
           default: {
@@ -9879,15 +9877,11 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.BOOL: // not a mask, just != 0
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return expr;
-      }
+      case TypeKind.U32: return expr;
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.NeI64, expr, module.i64(0));
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
+      case TypeKind.U64: return module.binary(BinaryOp.NeI64, expr, module.i64(0));
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
         return type.size == 64
           ? module.binary(BinaryOp.NeI64, expr, module.i64(0))
           : expr;

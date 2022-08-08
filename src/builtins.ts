@@ -1487,12 +1487,12 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
         flow.freeTempLocal(temp1);
         return ret;
       }
-      case TypeKind.USIZE:
+      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.BOOL: return arg0;
+      case TypeKind.USIZE: return arg0;
       case TypeKind.F32: return module.unary(UnaryOp.AbsF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.AbsF64, arg0);
     }
@@ -1666,12 +1666,12 @@ function builtin_ceil(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32:
       case TypeKind.I64:
       case TypeKind.ISIZE:
+      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE:
-      case TypeKind.BOOL: return arg0; // considered rounded
+      case TypeKind.USIZE: return arg0; // considered rounded
       case TypeKind.F32: return module.unary(UnaryOp.CeilF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.CeilF64, arg0);
     }
@@ -1705,12 +1705,12 @@ function builtin_floor(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32:
       case TypeKind.I64:
       case TypeKind.ISIZE:
+      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE:
-      case TypeKind.BOOL: return arg0; // considered rounded
+      case TypeKind.USIZE: return arg0; // considered rounded
       case TypeKind.F32: return module.unary(UnaryOp.FloorF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.FloorF64, arg0);
     }
@@ -1774,12 +1774,12 @@ function builtin_nearest(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32:
       case TypeKind.I64:
       case TypeKind.ISIZE:
+      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE:
-      case TypeKind.BOOL: return arg0;
+      case TypeKind.USIZE: return arg0;
       case TypeKind.F32: return module.unary(UnaryOp.NearestF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.NearestF64, arg0);
     }
@@ -1902,12 +1902,12 @@ function builtin_trunc(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32:
       case TypeKind.I64:
       case TypeKind.ISIZE:
+      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE:
-      case TypeKind.BOOL: return arg0; // considered truncated
+      case TypeKind.USIZE: return arg0; // considered truncated
       case TypeKind.F32: return module.unary(UnaryOp.TruncF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.TruncF64, arg0);
     }
