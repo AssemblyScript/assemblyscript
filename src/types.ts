@@ -368,7 +368,7 @@ export class Type {
   }
 
   /** Try to use unsigned type for according size. */
-  asMaybeUnsigned(): Type {
+  tryToUnsigned(): Type {
     switch (this.kind) {
       case TypeKind.I8:    return Type.u8;
       case TypeKind.I16:   return Type.u16;
