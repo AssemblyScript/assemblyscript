@@ -2119,11 +2119,11 @@
  (func $managed-cast/Animal#tame (param $0 i32)
   nop
  )
- (func $managed-cast/testDowncast (param $0 i32)
+ (func $managed-cast/testUpcast (param $0 i32)
   local.get $0
   call $managed-cast/Animal#tame
  )
- (func $managed-cast/testDowncastToNullable (param $0 i32)
+ (func $managed-cast/testUpcastToNullable (param $0 i32)
   (local $1 i32)
   local.get $0
   local.set $1
@@ -2133,7 +2133,7 @@
    call $managed-cast/Animal#tame
   end
  )
- (func $managed-cast/testDowncastFromToNullable (param $0 i32)
+ (func $managed-cast/testUpcastFromToNullable (param $0 i32)
   (local $1 i32)
   local.get $0
   local.set $1
@@ -2183,7 +2183,7 @@
  (func $managed-cast/Cat#meow (param $0 i32)
   nop
  )
- (func $managed-cast/testUpcastToNullable (param $0 i32)
+ (func $managed-cast/testDowncastToNullable (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2221,7 +2221,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $managed-cast/testUpcastFromToNullable (param $0 i32)
+ (func $managed-cast/testDowncastFromToNullable (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2379,7 +2379,7 @@
    unreachable
   end
  )
- (func $managed-cast/testDowncastFromNullable (param $0 i32)
+ (func $managed-cast/testUpcastFromNullable (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2413,7 +2413,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $managed-cast/testUpcast (param $0 i32)
+ (func $managed-cast/testDowncast (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2449,7 +2449,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $managed-cast/testUpcastFromNullable (param $0 i32)
+ (func $managed-cast/testDowncastFromNullable (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2533,38 +2533,6 @@
   local.get $0
   i32.store
   local.get $0
-  call $managed-cast/testDowncast
-  i32.const 0
-  call $managed-cast/Cat#constructor
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $managed-cast/testDowncastFromNullable
-  i32.const 0
-  call $managed-cast/Cat#constructor
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $managed-cast/testDowncastToNullable
-  i32.const 0
-  call $managed-cast/Cat#constructor
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  call $managed-cast/testDowncastFromToNullable
-  i32.const 0
-  call $managed-cast/Cat#constructor
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
   call $managed-cast/testUpcast
   i32.const 0
   call $managed-cast/Cat#constructor
@@ -2590,6 +2558,38 @@
   i32.store
   local.get $0
   call $managed-cast/testUpcastFromToNullable
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $managed-cast/testDowncast
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $managed-cast/testDowncastFromNullable
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $managed-cast/testDowncastToNullable
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $managed-cast/testDowncastFromToNullable
   global.get $~lib/memory/__heap_base
   global.set $~lib/memory/__stack_pointer
   call $~lib/rt/itcms/__collect
