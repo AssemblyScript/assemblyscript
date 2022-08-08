@@ -614,6 +614,49 @@ function test_i16x8(): void {
   i16x8.extmul_low_i8x16_u(a, a);
   i16x8.extmul_high_i8x16_s(a, a);
   i16x8.extmul_high_i8x16_u(a, a);
+  assert(i16x8.abs(i16x8(1, 1, 1, 1, 1, 1, 1, 1)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i16x8.abs(i16x8(-1, -1, -1, -1, -1, -1, -1, -1)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i16x8.abs(i16x8(u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i16x8.abs(i16x8(-32768,
+    -32768,
+    -32768,
+    -32768,
+    -32768,
+    -32768,
+    -32768,
+    -32768)) 
+    == 
+    i16x8(i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768))
+  );
+  assert(
+    i16x8.bitmask(i16x8(u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE))
+      == 
+      0x000000FF
+  );
+  assert(
+    i16x8.bitmask(i16x8(-1, 0, 1, 2, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
+  );
 }
 
 function test_i32x4(): void {
