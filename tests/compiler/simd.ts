@@ -1,5 +1,9 @@
 // hint: asc tests/compiler/simd --enable simd
-
+{
+  //test static array literal
+  let arr = [i32x4(1, 2, 3, 4)];
+  assert(v128.extract_lane<i32>(arr[0], 0) == 1);
+}
 function test_v128(): void {
   // check trueish
   // @ts-ignore
