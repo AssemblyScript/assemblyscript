@@ -822,8 +822,8 @@
     f32.const 3.141592502593994
     f32.const 0
     local.get $2
-    i32.const 31
-    i32.shr_u
+    i32.const 0
+    i32.lt_s
     select
     return
    end
@@ -4580,9 +4580,9 @@
   local.tee $5
   i64.const 32
   i64.shr_u
-  i64.const 2147483647
-  i64.and
   i32.wrap_i64
+  i32.const 2147483647
+  i32.and
   local.set $3
   local.get $5
   i64.const 63
@@ -8675,7 +8675,7 @@
   (local $3 i64)
   (local $4 i64)
   (local $5 i32)
-  (local $6 i32)
+  (local $6 i64)
   (local $7 i64)
   (local $8 f64)
   local.get $1
@@ -8692,7 +8692,7 @@
   i64.eqz
   local.get $0
   i64.reinterpret_f64
-  local.tee $2
+  local.tee $6
   i64.const 52
   i64.shr_u
   i64.const 2047
@@ -8714,7 +8714,7 @@
    f64.div
    return
   end
-  local.get $2
+  local.get $6
   i64.const 1
   i64.shl
   i64.eqz
@@ -8722,18 +8722,13 @@
    local.get $0
    return
   end
-  local.get $2
-  i64.const 63
-  i64.shr_u
-  i32.wrap_i64
-  local.set $6
   local.get $3
   i64.eqz
   if (result i64)
-   local.get $2
+   local.get $6
    i64.const 1
    local.get $3
-   local.get $2
+   local.get $6
    i64.const 12
    i64.shl
    i64.clz
@@ -8742,7 +8737,7 @@
    i64.sub
    i64.shl
   else
-   local.get $2
+   local.get $6
    i64.const 4503599627370495
    i64.and
    i64.const 4503599627370496
@@ -8907,6 +8902,8 @@
   f64.neg
   local.get $0
   local.get $6
+  i64.const 0
+  i64.lt_s
   select
  )
  (func $~lib/math/NativeMathf.rem (param $0 f32) (param $1 f32) (result f32)
@@ -8931,7 +8928,7 @@
   f32.ne
   local.get $0
   i32.reinterpret_f32
-  local.tee $2
+  local.tee $6
   i32.const 23
   i32.shr_u
   i32.const 255
@@ -8954,7 +8951,7 @@
    f32.div
    return
   end
-  local.get $2
+  local.get $6
   i32.const 1
   i32.shl
   i32.eqz
@@ -8962,22 +8959,18 @@
    local.get $0
    return
   end
-  local.get $2
-  i32.const 31
-  i32.shr_u
-  local.set $6
   local.get $3
   if (result i32)
-   local.get $2
+   local.get $6
    i32.const 8388607
    i32.and
    i32.const 8388608
    i32.or
   else
-   local.get $2
+   local.get $6
    i32.const 1
    local.get $3
-   local.get $2
+   local.get $6
    i32.const 9
    i32.shl
    i32.clz
@@ -9143,6 +9136,8 @@
   f32.neg
   local.get $0
   local.get $6
+  i32.const 0
+  i32.lt_s
   select
  )
  (func $~lib/math/NativeMath.sin (param $0 f64) (result f64)
@@ -11679,9 +11674,8 @@
     i32.sub
     local.get $2
     local.get $3
-    i64.const 63
-    i64.shr_u
-    i32.wrap_i64
+    i64.const 0
+    i64.lt_s
     select
    else
     i32.const 0
@@ -11722,9 +11716,8 @@
     i32.sub
     local.get $2
     local.get $3
-    i64.const 63
-    i64.shr_u
-    i32.wrap_i64
+    i64.const 0
+    i64.lt_s
     select
    else
     i32.const 0

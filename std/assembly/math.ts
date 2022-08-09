@@ -381,7 +381,7 @@ function dtoi32(x: f64): i32 {
       let v = (u & ((<u64>1 << 52) - 1)) | (<u64>1 << 52);
       v = v << e - 1023 - 52 + 32;
       result = <i32>(v >> 32);
-      result = select<i32>(-result, result, u >> 63);
+      result = select<i32>(-result, result, <i64>u < 0);
     }
     return result;
   }
@@ -843,18 +843,19 @@ export namespace NativeMath {
       Ox1p1023    = reinterpret<f64>(0x7FE0000000000000); //  0x1p1023
 
     var u = reinterpret<u64>(x);
-    var hx = <u32>(u >> 32 & 0x7FFFFFFF);
-    var k = 0, sign_ = <i32>(u >> 63);
+    var hx = u32(u >> 32) & 0x7FFFFFFF;
+    var sign = u32(u >> 63);
+    var k = 0;
     if (hx >= 0x4043687A) {
       if (isNaN(x)) return x;
-      if (sign_) return -1;
+      if (sign) return -1;
       if (x > o_threshold) return x * Ox1p1023;
     }
     var c = 0.0, t: f64;
     if (hx > 0x3FD62E42) {
       k = select<i32>(
-        1 - (sign_ << 1),
-        <i32>(invln2 * x + builtin_copysign<f64>(0.5, x)),
+        1 - (sign << 1),
+        i32(invln2 * x + builtin_copysign<f64>(0.5, x)),
         hx < 0x3FF0A2B2
       );
       t = <f64>k;
@@ -921,8 +922,8 @@ export namespace NativeMath {
       ux = uy;
       uy = ut;
     }
-    var ex = <i32>(ux >> 52);
-    var ey = <i32>(uy >> 52);
+    var ex = i32(ux >> 52);
+    var ey = i32(uy >> 52);
     y = reinterpret<f64>(uy);
     if (ey == 0x7FF) return y;
     x = reinterpret<f64>(ux);
@@ -1037,14 +1038,14 @@ export namespace NativeMath {
       k -= 54;
       x *= Ox1p54;
       u = reinterpret<u64>(x);
-      hx = <u32>(u >> 32);
+      hx = u32(u >> 32);
     } else if (hx >= 0x7FF00000) {
       return x;
     } else if (hx == 0x3FF00000 && u << 32 == 0) {
       return 0;
     }
     hx += 0x3FF00000 - 0x3FE6A09E;
-    k += <i32>(hx >> 20) - 0x3FF;
+    k += i32(hx >> 20) - 0x3FF;
     hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
     u = <u64>hx << 32 | (u & 0xFFFFFFFF);
     x = reinterpret<f64>(u);
@@ -1100,9 +1101,9 @@ export namespace NativeMath {
     } else if (hx >= 0x7FF00000) return x;
     if (k) {
       u = reinterpret<u64>(1 + x);
-      let hu = <u32>(u >> 32);
+      let hu = u32(u >> 32);
       hu += 0x3FF00000 - 0x3FE6A09E;
-      k = <i32>(hu >> 20) - 0x3FF;
+      k = i32(hu >> 20) - 0x3FF;
       if (k < 54) {
         let uf = reinterpret<f64>(u);
         c = k >= 2 ? 1 - (uf - x) : x - (uf - 1);
@@ -1156,7 +1157,7 @@ export namespace NativeMath {
         return 0;
       }
       hx += 0x3FF00000 - 0x3FE6A09E;
-      k += <i32>(hx >> 20) - 0x3FF;
+      k += i32(hx >> 20) - 0x3FF;
       hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
       u = <u64>hx << 32 | (u & 0xFFFFFFFF);
       x = reinterpret<f64>(u);
@@ -1243,10 +1244,10 @@ export namespace NativeMath {
         inv3    = reinterpret<f64>(0x3FD5555555555555); //  0.3333333333333333333333
 
       let u_ = reinterpret<u64>(x);
-      let hx = <i32>(u_ >> 32);
+      let hx = i32(u_ >> 32);
       let lx = <u32>u_;
       u_ = reinterpret<u64>(y);
-      let hy = <i32>(u_ >> 32);
+      let hy = i32(u_ >> 32);
       let ly = <u32>u_;
       let ix = hx & 0x7FFFFFFF;
       let iy = hy & 0x7FFFFFFF;
@@ -1345,7 +1346,7 @@ export namespace NativeMath {
         ss = u * v;
         s_h = ss;
         s_h = reinterpret<f64>(reinterpret<u64>(s_h) & 0xFFFFFFFF00000000);
-        t_h = reinterpret<f64>(<u64>(((ix >> 1) | 0x20000000) + 0x00080000 + (k << 18)) << 32);
+        t_h = reinterpret<f64>(u64(((ix >> 1) | 0x20000000) + 0x00080000 + (k << 18)) << 32);
         t_l = ax - (t_h - bp);
         s_l = v * ((u - s_h * t_h) - s_h * t_l);
         s2 = ss * ss;
@@ -1375,7 +1376,7 @@ export namespace NativeMath {
       p_h = y1 * t1;
       z = p_l + p_h;
       u_ = reinterpret<u64>(z);
-      j = <u32>(u_ >> 32);
+      j = u32(u_ >> 32);
       let i = <i32>u_;
       if (j >= 0x40900000) {
         if (((j - 0x40900000) | i) != 0) return s * huge * huge;
@@ -1391,7 +1392,7 @@ export namespace NativeMath {
         n = j + (0x00100000 >> (k + 1));
         k = ((n & 0x7FFFFFFF) >> 20) - 0x3FF;
         t = 0.0;
-        t = reinterpret<f64>(<u64>(n & ~(0x000FFFFF >> k)) << 32);
+        t = reinterpret<f64>(u64(n & ~(0x000FFFFF >> k)) << 32);
         n = ((n & 0x000FFFFF) | 0x00100000) >> (20 - k);
         if (j < 0) n = -n;
         p_h -= t;
@@ -1406,7 +1407,7 @@ export namespace NativeMath {
       t1 = z - t * (P1 + t * (P2 + t * (P3 + t * (P4 + t * P5))));
       r = (z * t1) / (t1 - 2.0) - (w + z * w);
       z = 1.0 - (r - z);
-      j = <u32>(reinterpret<u64>(z) >> 32);
+      j = u32(reinterpret<u64>(z) >> 32);
       j += n << 20;
       if ((j >> 20) <= 0) z = scalbn(z, n);
       else z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF | (<u64>j << 32));
@@ -1538,7 +1539,7 @@ export namespace NativeMath {
     var u = reinterpret<u64>(x);
     u &= 0x7FFFFFFFFFFFFFFF;
     var y = reinterpret<f64>(u);
-    var w = <u32>(u >> 32);
+    var w = u32(u >> 32);
     var t: f64;
     if (w > 0x3FE193EA) {
       if (w > 0x40340000) {
@@ -1599,8 +1600,8 @@ export namespace NativeMath {
     }
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
-    var ex = <i64>(ux >> 52 & 0x7FF);
-    var ey = <i64>(uy >> 52 & 0x7FF);
+    var ex = i64(ux >> 52 & 0x7FF);
+    var ey = i64(uy >> 52 & 0x7FF);
     var sx = ux >> 63;
     var uy1 = uy << 1;
     if (uy1 == 0 || ex == 0x7FF || isNaN<f64>(y)) {
@@ -1615,14 +1616,14 @@ export namespace NativeMath {
       ex -= builtin_clz<i64>(ux << 12);
       ux <<= 1 - ex;
     } else {
-      ux &= <u64>-1 >> 12;
+      ux &= u64(-1) >> 12;
       ux |= 1 << 52;
     }
     if (!ey) {
       ey -= builtin_clz<i64>(uy << 12);
       uy <<= 1 - ey;
     } else {
-      uy &= <u64>-1 >> 12;
+      uy &= u64(-1) >> 12;
       uy |= 1 << 52;
     }
     while (ex > ey) {
@@ -1653,9 +1654,8 @@ export namespace NativeMath {
   export function rem(x: f64, y: f64): f64 { // see: musl/src/math/remquo.c
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
-    var ex = <i64>(ux >> 52 & 0x7FF);
-    var ey = <i64>(uy >> 52 & 0x7FF);
-    var sx = <i32>(ux >> 63);
+    var ex = i64(ux >> 52 & 0x7FF);
+    var ey = i64(uy >> 52 & 0x7FF);
     if (uy << 1 == 0 || ex == 0x7FF || isNaN(y)) {
       let m = x * y;
       return m / m;
@@ -1666,14 +1666,14 @@ export namespace NativeMath {
       ex -= builtin_clz<i64>(uxi << 12);
       uxi <<= 1 - ex;
     } else {
-      uxi &= <u64>-1 >> 12;
+      uxi &= u64(-1) >> 12;
       uxi |= 1 << 52;
     }
     if (!ey) {
       ey -= builtin_clz<i64>(uy << 12);
       uy <<= 1 - ey;
     } else {
-      uy &= <u64>-1 >> 12;
+      uy &= u64(-1) >> 12;
       uy |= 1 << 52;
     }
     var q: u32 = 0;
@@ -1717,7 +1717,7 @@ export namespace NativeMath {
       x -= y;
       // ++q;
     }
-    return sx ? -x : x;
+    return <i64>ux < 0 ? -x : x;
   }
 
   export function sincos(x: f64): void { // see: musl/tree/src/math/sincos.c
@@ -1792,7 +1792,7 @@ function expo2f(x: f32, sign: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   const                                // see: musl/src/math/__expo2f.c
     k    = <u32>235,
     kln2 = reinterpret<f32>(0x4322E3BC); // 0x1.45c778p+7f
-  var scale = reinterpret<f32>(<u32>(0x7F + (k >> 1)) << 23);
+  var scale = reinterpret<f32>(u32(0x7F + (k >> 1)) << 23);
   // in directed rounding correct sign before rounding or overflow is important
   return NativeMathf.exp(x - kln2) * (sign * scale) * scale;
 }
@@ -1803,7 +1803,7 @@ function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/mast
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
 
   var offset = (u >> 23) - 152;
-  var shift  = <u64>(offset & 63);
+  var shift  = u64(offset & 63);
   var tblPtr = PIO2F_TABLE + (offset >> 6 << 3);
 
   var b0 = load<u64>(tblPtr, 0 << 3);
@@ -1822,7 +1822,7 @@ function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/mast
   var mantissa: u64 = (u & 0x007FFFFF) | 0x00800000;
   var product = mantissa * hi + (mantissa * lo >> 32);
   var r: i64 = product << 2;
-  var q = <i32>((product >> 62) + (r >>> 63));
+  var q = i32((product >> 62) + (r >>> 63));
   rempio2f_y = copysign<f64>(coeff, x) * <f64>r;
   return q;
 }
@@ -1859,7 +1859,7 @@ function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
   var w = z * z;
   var r = S3 + z * S4;
   var s = z * x;
-  return <f32>((x + s * (S1 + z * S2)) + s * w * r);
+  return f32((x + s * (S1 + z * S2)) + s * w * r);
 }
 
 // |cos(x) - c(x)| < 2**-34.1 (~[-5.37e-11, 5.295e-11]).
@@ -1875,7 +1875,7 @@ function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
   var z = x * x;
   var w = z * z;
   var r = C2 + z * C3;
-  return <f32>(((1 + z * C0) + w * C1) + (w * z) * r);
+  return f32(((1 + z * C0) + w * C1) + (w * z) * r);
 }
 
 // |tan(x)/x - t(x)| < 2**-25.5 (~[-2e-08, 2e-08]).
@@ -1898,7 +1898,7 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
   var u = T0 + z * T1;
 
   r = (x + s * u) + (s * w) * (t + w * r);
-  return <f32>(odd ? -1 / r : r);
+  return f32(odd ? -1 / r : r);
 }
 
 // See: jdh8/metallic/src/math/float/log2f.c and jdh8/metallic/src/math/float/kernel/atanh.h
@@ -2001,7 +2001,7 @@ export namespace NativeMathf {
     var ix = hx & 0x7FFFFFFF;
     if (ix >= 0x3F800000) {
       if (ix == 0x3F800000) {
-        return select<f32>(2 * pio2_hi + Ox1p_120f, 0, hx >>> 31);
+        return select<f32>(2 * pio2_hi + Ox1p_120f, 0, <i32>hx < 0);
       }
       return 0 / (x - x);
     }
@@ -2060,7 +2060,7 @@ export namespace NativeMathf {
     // var z: f32 = (1 - builtin_abs<f32>(x)) * 0.5;
     var z: f32 = 0.5 - builtin_abs<f32>(x) * 0.5;
     var s = builtin_sqrt<f64>(z); // sic
-    x = <f32>(pio2 - 2 * (s + s * Rf(z)));
+    x = f32(pio2 - 2 * (s + s * Rf(z)));
     return builtin_copysign(x, sx);
   }
 
@@ -2315,7 +2315,7 @@ export namespace NativeMathf {
         Ox1p127f = reinterpret<f32>(0x7F000000); //  0x1p+127f
 
       let hx = reinterpret<u32>(x);
-      let sign = u32(hx >> 31);
+      let sign = hx >> 31;
       hx &= 0x7FFFFFFF;
       if (hx >= 0x42AEAC50) {
         if (hx > 0x7F800000) return x; // NaN
@@ -2328,7 +2328,7 @@ export namespace NativeMathf {
       let k: i32;
       if (hx > 0x3EB17218) {
         if (hx > 0x3F851592) {
-          k = <i32>(invln2 * x + builtin_copysign<f32>(0.5, x));
+          k = i32(invln2 * x + builtin_copysign<f32>(0.5, x));
         } else {
           k = 1 - (sign << 1);
         }
@@ -2364,7 +2364,7 @@ export namespace NativeMathf {
 
     var u = reinterpret<u32>(x);
     var hx = u & 0x7FFFFFFF;
-    var sign = u32(u >> 31);
+    var sign = u >> 31;
     if (hx >= 0x4195B844) {
       if (hx > 0x7F800000) return x;
       if (sign) return -1;
@@ -2377,7 +2377,7 @@ export namespace NativeMathf {
     if (hx > 0x3EB17218) {
       k = select<i32>(
         1 - (sign << 1),
-        <i32>(invln2 * x + builtin_copysign<f32>(0.5, x)),
+        i32(invln2 * x + builtin_copysign<f32>(0.5, x)),
         hx < 0x3F851592
       );
       t = <f32>k;
@@ -2451,7 +2451,7 @@ export namespace NativeMathf {
       x *= Ox1p90f;
       y *= Ox1p90f;
     }
-    return z * builtin_sqrt<f32>(<f32>(<f64>x * x + <f64>y * y));
+    return z * builtin_sqrt<f32>(f32(<f64>x * x + <f64>y * y));
   }
 
   // @ts-ignore: decorator
@@ -2495,7 +2495,7 @@ export namespace NativeMathf {
         return 0;
       }
       u += 0x3F800000 - 0x3F3504F3;
-      k += <u32>(<i32>u >> 23) - 0x7F;
+      k += i32(u >> 23) - 0x7F;
       u = (u & 0x007FFFFF) + 0x3F3504F3;
       x = reinterpret<f32>(u);
       let f = x - 1.0;
@@ -2538,7 +2538,7 @@ export namespace NativeMathf {
       return 0;
     }
     ux += 0x3F800000 - 0x3F3504F3;
-    k += <i32>(ux >> 23) - 0x7F;
+    k += i32(ux >> 23) - 0x7F;
     ux = (ux & 0x007FFFFF) + 0x3F3504F3;
     x = reinterpret<f32>(ux);
     var f = x - 1.0;
@@ -2568,9 +2568,10 @@ export namespace NativeMathf {
       Lg4    = reinterpret<f32>(0x3E789E26); // 0xf89e26.0p-26f, 0.24279078841f
 
     var ix = reinterpret<u32>(x);
-    var c: f32 = 0, f: f32 = 0;
-    var k: i32 = 1;
-    if (ix < 0x3ED413D0 || <bool>(ix >> 31)) {
+    var c: f32 = 0;
+    var f: f32 = 0;
+    var k = 1;
+    if (ix < 0x3ED413D0 || bool(ix >> 31)) {
       if (ix >= 0xBF800000) {
         if (x == -1) return x / 0.0;
         return (x - x) / 0.0;
@@ -2586,7 +2587,7 @@ export namespace NativeMathf {
       let uf: f32 = 1 + x;
       let iu = reinterpret<u32>(uf);
       iu += 0x3F800000 - 0x3F3504F3;
-      k = <i32>(iu >> 23) - 0x7F;
+      k = i32(iu >> 23) - 0x7F;
       if (k < 25) {
         c = k >= 2 ? 1 - (uf - x) : x - (uf - 1);
         c /= uf;
@@ -2633,7 +2634,7 @@ export namespace NativeMathf {
         return 0;
       }
       ux += 0x3F800000 - 0x3F3504F3;
-      k += <i32>(ux >> 23) - 0x7F;
+      k += i32(ux >> 23) - 0x7F;
       ux = (ux & 0x007FFFFF) + 0x3F3504F3;
       x = reinterpret<f32>(ux);
       let f = x - 1.0;
@@ -2705,9 +2706,9 @@ export namespace NativeMathf {
       if (ux == 0x3F800000) { // x == 1
         m = sx | u32((uy & 0x7FFFFFFF) == 0x7F800000) ? 0x7FC00000 : 0x3F800000;
       } else if (ux == 0) {
-        m = uy >> 31 ? 0x7F800000 : 0;
+        m = <i32>uy < 0 ? 0x7F800000 : 0;
       } else if (ux == 0x7F800000) {
-        m = uy >> 31 ? 0 : 0x7F800000;
+        m = <i32>uy < 0 ? 0 : 0x7F800000;
       } else if (sx) {
         m = 0x7FC00000;
       } else {
@@ -2931,8 +2932,8 @@ export namespace NativeMathf {
     }
     var ux = reinterpret<u32>(x);
     var uy = reinterpret<u32>(y);
-    var ex = <i32>(ux >> 23 & 0xFF);
-    var ey = <i32>(uy >> 23 & 0xFF);
+    var ex = i32(ux >> 23 & 0xFF);
+    var ey = i32(uy >> 23 & 0xFF);
     var sm = ux & 0x80000000;
     var uy1 = uy << 1;
     if (uy1 == 0 || ex == 0xFF || isNaN<f32>(y)) {
@@ -2954,7 +2955,7 @@ export namespace NativeMathf {
       ey -= builtin_clz<u32>(uy << 9);
       uy <<= 1 - ey;
     } else {
-      uy &= <u32>-1 >> 9;
+      uy &= u32(-1) >> 9;
       uy |= 1 << 23;
     }
     while (ex > ey) {
@@ -2987,7 +2988,6 @@ export namespace NativeMathf {
     var uy = reinterpret<u32>(y);
     var ex = i32(ux >> 23 & 0xFF);
     var ey = i32(uy >> 23 & 0xFF);
-    var sx = i32(ux >> 31);
     var uxi = ux;
     if (uy << 1 == 0 || ex == 0xFF || isNaN(y)) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
@@ -2995,14 +2995,14 @@ export namespace NativeMathf {
       ex -= builtin_clz<u32>(uxi << 9);
       uxi <<= 1 - ex;
     } else {
-      uxi &= <u32>-1 >> 9;
+      uxi &= u32(-1) >> 9;
       uxi |= 1 << 23;
     }
     if (!ey) {
       ey -= builtin_clz<u32>(uy << 9);
       uy <<= 1 - ey;
     } else {
-      uy &= <u32>-1 >> 9;
+      uy &= u32(-1) >> 9;
       uy |= 1 << 23;
     }
     var q = 0;
@@ -3042,11 +3042,11 @@ export namespace NativeMathf {
     x = reinterpret<f32>(uxi);
     y = builtin_abs<f32>(y);
     var x2 = x + x;
-    if (ex == ey || (ex + 1 == ey && (<f32>x2 > y || (<f32>x2 == y && <bool>(q & 1))))) {
+    if (ex == ey || (ex + 1 == ey && (<f32>x2 > y || (<f32>x2 == y && bool(q & 1))))) {
       x -= y;
       // q++;
     }
-    return sx ? -x : x;
+    return <i32>ux < 0 ? -x : x;
   }
 
   export function sincos(x: f32): void { // see: musl/tree/src/math/sincosf.c
