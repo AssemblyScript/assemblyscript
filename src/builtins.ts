@@ -1410,6 +1410,12 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
+      case TypeKind.BOOL:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.U64:
+      case TypeKind.USIZE: return arg0;
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32: {
@@ -1487,12 +1493,6 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
         flow.freeTempLocal(temp1);
         return ret;
       }
-      case TypeKind.BOOL:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.U64:
-      case TypeKind.USIZE: return arg0;
       case TypeKind.F32: return module.unary(UnaryOp.AbsF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.AbsF64, arg0);
     }
@@ -1535,10 +1535,10 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:   { op = BinaryOp.GtI32; break; }
+      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL:  { op = BinaryOp.GtU32; break; }
+      case TypeKind.U32:   { op = BinaryOp.GtU32; break; }
       case TypeKind.I64:   { op = BinaryOp.GtI64; break; }
       case TypeKind.U64:   { op = BinaryOp.GtU64; break; }
       case TypeKind.ISIZE: { op = BinaryOp.GtISize; break; }
@@ -1605,10 +1605,10 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:   { op = BinaryOp.LtI32; break; }
+      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL:  { op = BinaryOp.LtU32; break; }
+      case TypeKind.U32:   { op = BinaryOp.LtU32; break; }
       case TypeKind.I64:   { op = BinaryOp.LtI64; break; }
       case TypeKind.U64:   { op = BinaryOp.LtU64; break; }
       case TypeKind.ISIZE: { op = BinaryOp.LtISize; break; }
@@ -1661,12 +1661,12 @@ function builtin_ceil(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
       case TypeKind.ISIZE:
-      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
@@ -1700,12 +1700,12 @@ function builtin_floor(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
       case TypeKind.ISIZE:
-      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
@@ -1769,12 +1769,12 @@ function builtin_nearest(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
       case TypeKind.ISIZE:
-      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
@@ -1897,12 +1897,12 @@ function builtin_trunc(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
       case TypeKind.ISIZE:
-      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
@@ -3266,13 +3266,13 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
   if (contextualType == Type.void) { // simplify if dropped anyway
     compiler.currentType = Type.void;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL: return module.if(module.unary(UnaryOp.EqzI32, arg0), abort);
+      case TypeKind.U32: return module.if(module.unary(UnaryOp.EqzI32, arg0), abort);
       case TypeKind.I64:
       case TypeKind.U64: return module.if(module.unary(UnaryOp.EqzI64, arg0), abort);
       case TypeKind.ISIZE:
@@ -3292,13 +3292,13 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
     compiler.currentType = type.nonNullableType;
     let flow = compiler.currentFlow;
     switch (compiler.currentType.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL: {
+      case TypeKind.U32: {
         let temp = flow.getTempLocal(type);
         flow.setLocalFlag(temp.index, LocalFlags.WRAPPED); // arg0 is wrapped
         let ret = module.if(
