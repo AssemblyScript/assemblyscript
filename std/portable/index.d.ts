@@ -52,6 +52,8 @@ declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 
 // Builtins
 
+/** Performs the sign-agnostic reverse bytes **/
+declare function bswap<T = i32 | u32 | isize | usize>(value: T): T;
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T = i32>(value: T): T;
 /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit integer. All zero bits are considered trailing if the value is zero. */
@@ -294,11 +296,6 @@ declare namespace f64 {
   /** Converts A string to an integer. */
   export function parseInt(string: string, radix?: i32): f64;
 }
-
-// Byte utils
-
-/** Performs the sign-agnostic reverse bytes **/
-declare function bswap<T = i32 | u32 | isize | usize>(value: T): T;
 
 // Standard library
 
