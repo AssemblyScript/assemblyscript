@@ -212,7 +212,7 @@ function test_v128(): void {
     assert(v128.extract_lane<f32>(v, 3) == 4.0);
   }
   {
-    let v: v128 =v128.floor<f32>(f32x4(1.1, -0.25, 70.01, 4.0));
+    let v: v128 = v128.floor<f32>(f32x4(1.1, -0.25, 70.01, 4.0));
     assert(v128.extract_lane<f32>(v, 0) == 1.0);
     assert(v128.extract_lane<f32>(v, 1) == -1);
     assert(v128.extract_lane<f32>(v, 2) == 70.0);
@@ -220,24 +220,23 @@ function test_v128(): void {
   }
   {
     assert(
-      v128.bitmask<i8>(i8x16(u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE
-        ,u8.MAX_VALUE)) 
-        == 
-        0x0000FFFF
+      v128.bitmask<i8>(i8x16(
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE)) == 0x0000FFFF
     );
     assert(
       v128.bitmask<i8>(i8x16(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
@@ -250,9 +249,7 @@ function test_v128(): void {
         u16.MAX_VALUE, 
         u16.MAX_VALUE, 
         u16.MAX_VALUE, 
-        u16.MAX_VALUE))
-        == 
-        0x000000FF
+        u16.MAX_VALUE)) == 0x000000FF
     );
     assert(
       v128.bitmask<i16>(i16x8(-1, 0, 1, 2, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
@@ -416,7 +413,8 @@ function test_i8x16(): void {
 
   assert(i8x16.abs(i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)) == i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
   assert(i8x16.abs(i8x16(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)) == i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
-  assert(i8x16.abs(i8x16(u8.MAX_VALUE,
+  assert(i8x16.abs(i8x16(
+    u8.MAX_VALUE,
     u8.MAX_VALUE,
     u8.MAX_VALUE,
     u8.MAX_VALUE,
@@ -440,24 +438,23 @@ function test_i8x16(): void {
     i8x16(i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128))
   );
   assert(
-    i8x16.bitmask(i8x16(u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE
-      ,u8.MAX_VALUE)) 
-      == 
-      0x0000FFFF
+    i8x16.bitmask(i8x16(
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE)) == 0x0000FFFF
   );
   assert(
     i8x16.bitmask(i8x16(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
@@ -633,7 +630,8 @@ function test_i16x8(): void {
     -32768,
     -32768)) 
     == 
-    i16x8(i16(32768),
+    i16x8(
+      i16(32768),
       i16(32768),
       i16(32768),
       i16(32768),
@@ -643,16 +641,15 @@ function test_i16x8(): void {
       i16(32768))
   );
   assert(
-    i16x8.bitmask(i16x8(u16.MAX_VALUE, 
+    i16x8.bitmask(i16x8(
       u16.MAX_VALUE, 
       u16.MAX_VALUE, 
       u16.MAX_VALUE, 
       u16.MAX_VALUE, 
       u16.MAX_VALUE, 
       u16.MAX_VALUE, 
-      u16.MAX_VALUE))
-      == 
-      0x000000FF
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE)) == 0x000000FF
   );
   assert(
     i16x8.bitmask(i16x8(-1, 0, 1, 2, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
@@ -982,11 +979,8 @@ function test_f32x4(): void {
     assert(v128.extract_lane<f32>(v, 3) == 4.0);
   }
   {
-    let v: v128 =f32x4.floor(f32x4(1.1, -0.25, 70.01, 4.0));
-    assert(v128.extract_lane<f32>(v, 0) == 1.0);
-    assert(v128.extract_lane<f32>(v, 1) == -1);
-    assert(v128.extract_lane<f32>(v, 2) == 70.0);
-    assert(v128.extract_lane<f32>(v, 3) == 4.0);
+    let v: v128 = f32x4.floor(f32x4(1.1, -0.25, 70.01, 4.0));
+    assert(v == f32x4(1, -1, 70, 4));
   }
   assert(
     f32x4.trunc(f32x4(1.1, 2.5, 3.9, 4.0))
