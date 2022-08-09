@@ -4852,9 +4852,9 @@
    local.tee $2
    i64.const 52
    i64.shr_u
-   i64.const 2047
-   i64.and
    i32.wrap_i64
+   i32.const 2047
+   i32.and
    local.tee $1
    i32.const 969
    i32.sub
@@ -4890,9 +4890,8 @@
      f64.const 0
      f64.const inf
      local.get $2
-     i64.const 63
-     i64.shr_u
-     i32.wrap_i64
+     i64.const 0
+     i64.lt_s
      select
      br $~lib/util/math/exp_lut|inlined.0
     end
@@ -5549,9 +5548,9 @@
    local.tee $4
    i64.const 52
    i64.shr_u
-   i64.const 2047
-   i64.and
    i32.wrap_i64
+   i32.const 2047
+   i32.and
    local.tee $3
    i32.const 969
    i32.sub
@@ -7535,9 +7534,8 @@
      f64.div
      local.get $0
      local.get $12
-     i64.const 63
-     i64.shr_u
-     i32.wrap_i64
+     i64.const 0
+     i64.lt_s
      select
      br $~lib/util/math/pow_lut|inlined.0
     end
@@ -7832,9 +7830,8 @@
      br_if $~lib/util/math/exp_inline|inlined.0
      drop
      local.get $2
-     i64.const 63
-     i64.shr_u
-     i32.wrap_i64
+     i64.const 0
+     i64.lt_s
      if (result f64)
       f64.const -1.2882297539194267e-231
       f64.const 1.2882297539194267e-231
@@ -8250,8 +8247,8 @@
      f32.div
      local.get $0
      local.get $7
-     i32.const 31
-     i32.shr_u
+     i32.const 0
+     i32.lt_s
      select
      br $~lib/util/math/powf_lut|inlined.0
     end
