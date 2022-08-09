@@ -3075,10 +3075,8 @@
      br $~lib/util/math/pow_lut|inlined.0
     end
     local.get $5
-    i64.const 63
-    i64.shr_u
     i64.const 0
-    i64.ne
+    i64.lt_s
     if
      block $~lib/util/math/checkint|inlined.1 (result i32)
       local.get $6

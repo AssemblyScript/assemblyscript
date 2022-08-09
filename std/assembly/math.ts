@@ -470,7 +470,7 @@ export namespace NativeMath {
     if (ix >= 0x3FF00000) {
       let lx = <u32>reinterpret<u64>(x);
       if ((ix - 0x3FF00000 | lx) == 0) {
-        if (hx >> 31) return 2 * pio2_hi + Ox1p_120f;
+        if (<i32>hx < 0) return 2 * pio2_hi + Ox1p_120f;
         return 0;
       }
       return 0 / (x - x);
@@ -480,7 +480,7 @@ export namespace NativeMath {
       return pio2_hi - (x - (pio2_lo - x * R(x * x)));
     }
     var s: f64, w: f64, z: f64;
-    if (hx >> 31) {
+    if (<i32>hx < 0) {
       // z = (1.0 + x) * 0.5;
       z = 0.5 + x * 0.5;
       s = builtin_sqrt<f64>(z);
@@ -535,8 +535,7 @@ export namespace NativeMath {
       let c = (z - f * f) / (s + f);
       x = 0.5 * pio2_hi - (2 * s * r - (pio2_lo - 2 * c) - (0.5 * pio2_hi - 2 * f));
     }
-    if (hx >> 31) return -x;
-    return x;
+    return select(-x, x, <i32>hx < 0);
   }
 
   export function asinh(x: f64): f64 { // see: musl/src/math/asinh.c
@@ -733,21 +732,21 @@ export namespace NativeMath {
 
   export function cos(x: f64): f64 { // see: musl/src/math/cos.c
     var u  = reinterpret<u64>(x);
-    var ix = <u32>(u >> 32);
-    var sign = ix >> 31;
+    var ux = u32(u >> 32);
+    var sign = ux >> 31;
 
-    ix &= 0x7FFFFFFF;
+    ux &= 0x7FFFFFFF;
 
     // |x| ~< pi/4
-    if (ix <= 0x3FE921FB) {
-      if (ix < 0x3E46A09E) {  // |x| < 2**-27 * sqrt(2)
+    if (ux <= 0x3FE921FB) {
+      if (ux < 0x3E46A09E) {  // |x| < 2**-27 * sqrt(2)
         return 1.0;
       }
       return cos_kern(x, 0);
     }
 
     // sin(Inf or NaN) is NaN
-    if (ix >= 0x7FF00000) return x - x;
+    if (ux >= 0x7FF00000) return x - x;
 
     // argument reduction needed
     var n  = rempio2(x, u, sign);
@@ -795,8 +794,8 @@ export namespace NativeMath {
         underflow = reinterpret<f64>(0xC0874910D52D3051), // -745.13321910194110842
         Ox1p1023  = reinterpret<f64>(0x7FE0000000000000); //  0x1p1023
 
-      let hx = <u32>(reinterpret<u64>(x) >> 32);
-      let sign_ = <i32>(hx >> 31);
+      let hx = u32(reinterpret<u64>(x) >> 32);
+      let sign = hx >> 31;
       hx &= 0x7FFFFFFF;
       if (hx >= 0x4086232B) {
         if (isNaN(x)) return x;
@@ -807,9 +806,9 @@ export namespace NativeMath {
       let k = 0;
       if (hx > 0x3FD62E42) {
         if (hx >= 0x3FF0A2B2) {
-          k = <i32>(invln2 * x + builtin_copysign<f64>(0.5, x));
+          k = i32(invln2 * x + builtin_copysign<f64>(0.5, x));
         } else {
-          k = 1 - (sign_ << 1);
+          k = 1 - (sign << 1);
         }
         hi = x - k * ln2hi;
         lo = k * ln2lo;
@@ -980,15 +979,16 @@ export namespace NativeMath {
         Ox1p54 = reinterpret<f64>(0x4350000000000000); // 0x1p54
 
       let u = reinterpret<u64>(x);
-      let hx = <u32>(u >> 32);
+      let hx = u32(u >> 32);
       let k = 0;
-      if (hx < 0x00100000 || <bool>(hx >> 31)) {
+      let sign = hx >> 31;
+      if (sign || hx < 0x00100000) {
         if (u << 1 == 0) return -1 / (x * x);
-        if (hx >> 31)    return (x - x) / 0.0;
+        if (sign) return (x - x) / 0.0;
         k -= 54;
         x *= Ox1p54;
         u = reinterpret<u64>(x);
-        hx = <u32>(u >> 32);
+        hx = u32(u >> 32);
       } else if (hx >= 0x7FF00000) {
         return x;
       } else if (hx == 0x3FF00000 && u << 32 == 0) {
@@ -1028,11 +1028,12 @@ export namespace NativeMath {
       Ox1p54    = reinterpret<f64>(0x4350000000000000); // 0x1p54
 
     var u = reinterpret<u64>(x);
-    var hx = <u32>(u >> 32);
+    var hx = u32(u >> 32);
     var k = 0;
-    if (hx < 0x00100000 || <bool>(hx >> 31)) {
+    var sign = hx >> 31;
+    if (sign || hx < 0x00100000) {
       if (u << 1 == 0) return -1 / (x * x);
-      if (hx >> 31) return (x - x) / 0.0;
+      if (sign) return (x - x) / 0.0;
       k -= 54;
       x *= Ox1p54;
       u = reinterpret<u64>(x);
@@ -1082,10 +1083,10 @@ export namespace NativeMath {
       Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244); // 1.479819860511658591e-01
 
     var u = reinterpret<u64>(x);
-    var hx = <u32>(u >> 32);
+    var hx = u32(u >> 32);
     var k = 1;
     var c = 0.0, f = 0.0;
-    if (hx < 0x3FDA827A || <bool>(hx >> 31)) {
+    if (hx < 0x3FDA827A || bool(hx >> 31)) {
       if (hx >= 0xBFF00000) {
         if (x == -1) return x / 0.0;
         return (x - x) / 0.0;
@@ -1139,15 +1140,16 @@ export namespace NativeMath {
         Ox1p54  = reinterpret<f64>(0x4350000000000000); // 1p54
 
       let u = reinterpret<u64>(x);
-      let hx = <u32>(u >> 32);
+      let hx = u32(u >> 32);
       let k = 0;
-      if (hx < 0x00100000 || <bool>(hx >> 31)) {
+      let sign = hx >> 31;
+      if (sign || hx < 0x00100000) {
         if (u << 1 == 0) return -1 / (x * x);
-        if (hx >> 31) return (x - x) / 0.0;
+        if (sign) return (x - x) / 0.0;
         k -= 54;
         x *= Ox1p54;
         u = reinterpret<u64>(x);
-        hx = <u32>(u >> 32);
+        hx = u32(u >> 32);
       } else if (hx >= 0x7FF00000) {
         return x;
       } else if (hx == 0x3FF00000 && u << 32 == 0) {
@@ -1458,26 +1460,26 @@ export namespace NativeMath {
   // @ts-ignore: decorator
   @inline
   export function signbit(x: f64): bool {
-    return <bool>(reinterpret<u64>(x) >>> 63);
+    return bool(reinterpret<u64>(x) >>> 63);
   }
 
   export function sin(x: f64): f64 { // see: musl/src/math/sin.c
     var u  = reinterpret<u64>(x);
-    var ix = <u32>(u >> 32);
-    var sign = ix >> 31;
+    var ux = u32(u >> 32);
+    var sign = ux >> 31;
 
-    ix &= 0x7FFFFFFF;
+    ux &= 0x7FFFFFFF;
 
     // |x| ~< pi/4
-    if (ix <= 0x3FE921FB) {
-      if (ix < 0x3E500000) { // |x| < 2**-26
+    if (ux <= 0x3FE921FB) {
+      if (ux < 0x3E500000) { // |x| < 2**-26
         return x;
       }
       return sin_kern(x, 0.0, 0);
     }
 
     // sin(Inf or NaN) is NaN
-    if (ix >= 0x7FF00000) return x - x;
+    if (ux >= 0x7FF00000) return x - x;
 
     // argument reduction needed
     var n  = rempio2(x, u, sign);
@@ -1491,7 +1493,7 @@ export namespace NativeMath {
   export function sinh(x: f64): f64 { // see: musl/src/math/sinh.c
     var u = reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF;
     var a = reinterpret<f64>(u);
-    var w = <u32>(u >> 32);
+    var w = u32(u >> 32);
     var h = builtin_copysign(0.5, x);
     if (w < 0x40862E42) {
       let t = expm1(a);
@@ -1512,21 +1514,21 @@ export namespace NativeMath {
 
   export function tan(x: f64): f64 { // see: musl/src/math/tan.c
     var u = reinterpret<u64>(x);
-    var ix = <i32>(u >> 32);
-    var sign = ix >>> 31;
+    var ux = u32(u >> 32);
+    var sign = ux >>> 31;
 
-    ix &= 0x7FFFFFFF;
+    ux &= 0x7FFFFFFF;
 
     // |x| ~< pi/4
-    if (ix <= 0x3FE921FB) {
-      if (ix < 0x3E400000) { // |x| < 2**-27
+    if (ux <= 0x3FE921FB) {
+      if (ux < 0x3E400000) { // |x| < 2**-27
         return x;
       }
       return tan_kern(x, 0.0, 1);
     }
 
     // tan(Inf or NaN) is NaN
-    if (ix >= 0x7FF00000) return x - x;
+    if (ux >= 0x7FF00000) return x - x;
 
     var n = rempio2(x, u, sign);
     return tan_kern(rempio2_y0, rempio2_y1, 1 - ((n & 1) << 1));
@@ -1720,12 +1722,12 @@ export namespace NativeMath {
 
   export function sincos(x: f64): void { // see: musl/tree/src/math/sincos.c
     var u = reinterpret<u64>(x);
-    var ix = <u32>(u >> 32);
-    var sign = ix >> 31;
-    ix &= 0x7FFFFFFF;
+    var ux = u32(u >> 32);
+    var sign = ux >> 31;
+    ux &= 0x7FFFFFFF;
 
-    if (ix <= 0x3FE921FB) {  // |x| ~<= π/4
-      if (ix < 0x3E46A09E) { // if |x| < 2**-27 * sqrt(2)
+    if (ux <= 0x3FE921FB) {  // |x| ~<= π/4
+      if (ux < 0x3E46A09E) { // if |x| < 2**-27 * sqrt(2)
         sincos_sin = x;
         sincos_cos = 1;
         return;
@@ -1735,7 +1737,7 @@ export namespace NativeMath {
       return;
     }
     // sin(Inf or NaN) is NaN
-    if (ix >= 0x7F800000) {
+    if (ux >= 0x7F800000) {
       let xx = x - x;
       sincos_sin = xx;
       sincos_cos = xx;
@@ -1999,8 +2001,7 @@ export namespace NativeMathf {
     var ix = hx & 0x7FFFFFFF;
     if (ix >= 0x3F800000) {
       if (ix == 0x3F800000) {
-        if (hx >> 31) return 2 * pio2_hi + Ox1p_120f;
-        return 0;
+        return select<f32>(2 * pio2_hi + Ox1p_120f, 0, hx >>> 31);
       }
       return 0 / (x - x);
     }
@@ -2009,7 +2010,7 @@ export namespace NativeMathf {
       return pio2_hi - (x - (pio2_lo - x * Rf(x * x)));
     }
     var z: f32, w: f32, s: f32;
-    if (hx >> 31) {
+    if (<i32>hx < 0) {
       // z = (1 + x) * 0.5;
       z = 0.5 + x * 0.5;
       s = builtin_sqrt<f32>(z);
@@ -2157,7 +2158,7 @@ export namespace NativeMathf {
     var ix = reinterpret<u32>(x);
     var iy = reinterpret<u32>(y);
     if (ix == 0x3F800000) return atan(y);
-    var m = <u32>(((iy >> 31) & 1) | ((ix >> 30) & 2));
+    var m = u32(((iy >> 31) & 1) | ((ix >> 30) & 2));
     ix &= 0x7FFFFFFF;
     iy &= 0x7FFFFFFF;
     if (iy == 0) {
@@ -2237,12 +2238,12 @@ export namespace NativeMathf {
       c3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // M_PI_2 * 3
       c4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
 
-    var ix = reinterpret<u32>(x);
-    var sign = ix >> 31;
-    ix &= 0x7FFFFFFF;
+    var ux = reinterpret<u32>(x);
+    var sign = ux >> 31;
+    ux &= 0x7FFFFFFF;
 
-    if (ix <= 0x3F490FDA) {  // |x| ~<= π/4
-      if (ix < 0x39800000) { // |x| < 2**-12
+    if (ux <= 0x3F490FDA) {  // |x| ~<= π/4
+      if (ux < 0x39800000) { // |x| < 2**-12
         // raise inexact if x != 0
         return 1;
       }
@@ -2250,15 +2251,15 @@ export namespace NativeMathf {
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407B53D1) {  // |x| ~<= 5π/4
-        if (ix > 0x4016CBE3) { // |x|  ~> 3π/4
+      if (ux <= 0x407B53D1) {  // |x| ~<= 5π/4
+        if (ux > 0x4016CBE3) { // |x|  ~> 3π/4
           return -cos_kernf(sign ? x + c2pio2 : x - c2pio2);
         } else {
           return sign ? sin_kernf(x + c1pio2) : sin_kernf(c1pio2 - x);
         }
       }
-      if (ix <= 0x40E231D5) {  // |x| ~<= 9π/4
-        if (ix > 0x40AFEDDF) { // |x|  ~> 7π/4
+      if (ux <= 0x40E231D5) {  // |x| ~<= 9π/4
+        if (ux > 0x40AFEDDF) { // |x|  ~> 7π/4
           return cos_kernf(sign ? x + c4pio2 : x - c4pio2);
         } else {
           return sign ? sin_kernf(-x - c3pio2) : sin_kernf(x - c3pio2);
@@ -2267,10 +2268,10 @@ export namespace NativeMathf {
     }
 
     // cos(Inf or NaN) is NaN
-    if (ix >= 0x7F800000) return x - x;
+    if (ux >= 0x7F800000) return x - x;
 
     // general argument reduction needed
-    var n = rempio2f(x, ix, sign);
+    var n = rempio2f(x, ux, sign);
     var y = rempio2f_y;
 
     var t = n & 1 ? sin_kernf(y) : cos_kernf(y);
@@ -2314,12 +2315,12 @@ export namespace NativeMathf {
         Ox1p127f = reinterpret<f32>(0x7F000000); //  0x1p+127f
 
       let hx = reinterpret<u32>(x);
-      let sign_ = <i32>(hx >> 31);
+      let sign = u32(hx >> 31);
       hx &= 0x7FFFFFFF;
       if (hx >= 0x42AEAC50) {
         if (hx > 0x7F800000) return x; // NaN
         if (hx >= 0x42B17218) {
-          if (!sign_) return x * Ox1p127f;
+          if (!sign) return x * Ox1p127f;
           else if (hx >= 0x42CFF1B5) return 0;
         }
       }
@@ -2329,7 +2330,7 @@ export namespace NativeMathf {
         if (hx > 0x3F851592) {
           k = <i32>(invln2 * x + builtin_copysign<f32>(0.5, x));
         } else {
-          k = 1 - (sign_ << 1);
+          k = 1 - (sign << 1);
         }
         hi = x - <f32>k * ln2hi;
         lo = <f32>k * ln2lo;
@@ -2363,10 +2364,10 @@ export namespace NativeMathf {
 
     var u = reinterpret<u32>(x);
     var hx = u & 0x7FFFFFFF;
-    var sign_ = <i32>(u >> 31);
+    var sign = u32(u >> 31);
     if (hx >= 0x4195B844) {
       if (hx > 0x7F800000) return x;
-      if (sign_) return -1;
+      if (sign) return -1;
       if (hx > 0x42B17217) { // x > log(FLT_MAX)
         x *= Ox1p127f;
         return x;
@@ -2375,7 +2376,7 @@ export namespace NativeMathf {
     var c: f32 = 0.0, t: f32, k: i32;
     if (hx > 0x3EB17218) {
       k = select<i32>(
-        1 - (sign_ << 1),
+        1 - (sign << 1),
         <i32>(invln2 * x + builtin_copysign<f32>(0.5, x)),
         hx < 0x3F851592
       );
@@ -2481,9 +2482,10 @@ export namespace NativeMathf {
 
       let u = reinterpret<u32>(x);
       let k = 0;
-      if (u < 0x00800000 || <bool>(u >> 31)) {
+      let sign = u >> 31;
+      if (sign || u < 0x00800000) {
         if (u << 1 == 0) return -1 / (x * x);
-        if (u >> 31) return (x - x) / 0;
+        if (sign) return (x - x) / 0;
         k -= 25;
         x *= Ox1p25f;
         u = reinterpret<u32>(x);
@@ -2521,23 +2523,24 @@ export namespace NativeMathf {
       Lg4       = reinterpret<f32>(0x3E789E26), //  0xf89e26.0p-26f, 0.24279078841f
       Ox1p25f   = reinterpret<f32>(0x4C000000); //  0x1p25f
 
-    var ix = reinterpret<u32>(x);
+    var ux = reinterpret<u32>(x);
     var k = 0;
-    if (ix < 0x00800000 || <bool>(ix >> 31)) {
-      if (ix << 1 == 0) return -1 / (x * x);
-      if (ix >> 31) return (x - x) / 0.0;
+    var sign = ux >> 31;
+    if (sign || ux < 0x00800000) {
+      if (ux << 1 == 0) return -1 / (x * x);
+      if (sign) return (x - x) / 0.0;
       k -= 25;
       x *= Ox1p25f;
-      ix = reinterpret<u32>(x);
-    } else if (ix >= 0x7F800000) {
+      ux = reinterpret<u32>(x);
+    } else if (ux >= 0x7F800000) {
       return x;
-    } else if (ix == 0x3F800000) {
+    } else if (ux == 0x3F800000) {
       return 0;
     }
-    ix += 0x3F800000 - 0x3F3504F3;
-    k += <i32>(ix >> 23) - 0x7F;
-    ix = (ix & 0x007FFFFF) + 0x3F3504F3;
-    x = reinterpret<f32>(ix);
+    ux += 0x3F800000 - 0x3F3504F3;
+    k += <i32>(ux >> 23) - 0x7F;
+    ux = (ux & 0x007FFFFF) + 0x3F3504F3;
+    x = reinterpret<f32>(ux);
     var f = x - 1.0;
     var s = f / (2.0 + f);
     var z = s * s;
@@ -2547,9 +2550,9 @@ export namespace NativeMathf {
     var r = t2 + t1;
     var hfsq: f32 = 0.5 * f * f;
     var hi = f - hfsq;
-    ix = reinterpret<u32>(hi);
-    ix &= 0xFFFFF000;
-    hi = reinterpret<f32>(ix);
+    ux = reinterpret<u32>(hi);
+    ux &= 0xFFFFF000;
+    hi = reinterpret<f32>(ux);
     var lo = f - hi - hfsq + s * (hfsq + r);
     var dk = <f32>k;
     return dk * log10_2lo + (lo + hi) * ivln10lo + lo * ivln10hi + hi * ivln10hi + dk * log10_2hi;
@@ -2615,23 +2618,24 @@ export namespace NativeMathf {
         Lg4     = reinterpret<f32>(0x3E789E26), //  0xf89e26.0p-26f, 0.24279078841f
         Ox1p25f = reinterpret<f32>(0x4C000000); //  0x1p25f
 
-      let ix = reinterpret<u32>(x);
-      let k: i32 = 0;
-      if (ix < 0x00800000 || <bool>(ix >> 31)) {
-        if (ix << 1 == 0) return -1 / (x * x);
-        if (ix >> 31) return (x - x) / 0.0;
+      let ux = reinterpret<u32>(x);
+      let k = 0;
+      let sign = ux >> 31;
+      if (sign || ux < 0x00800000) {
+        if (ux << 1 == 0) return -1 / (x * x);
+        if (sign) return (x - x) / 0.0;
         k -= 25;
         x *= Ox1p25f;
-        ix = reinterpret<u32>(x);
-      } else if (ix >= 0x7F800000) {
+        ux = reinterpret<u32>(x);
+      } else if (ux >= 0x7F800000) {
         return x;
-      } else if (ix == 0x3F800000) {
+      } else if (ux == 0x3F800000) {
         return 0;
       }
-      ix += 0x3F800000 - 0x3F3504F3;
-      k += <i32>(ix >> 23) - 0x7F;
-      ix = (ix & 0x007FFFFF) + 0x3F3504F3;
-      x = reinterpret<f32>(ix);
+      ux += 0x3F800000 - 0x3F3504F3;
+      k += <i32>(ux >> 23) - 0x7F;
+      ux = (ux & 0x007FFFFF) + 0x3F3504F3;
+      x = reinterpret<f32>(ux);
       let f = x - 1.0;
       let s = f / (2.0 + f);
       let z = s * s;
@@ -2764,27 +2768,27 @@ export namespace NativeMathf {
       s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // M_PI_2 * 3
       s4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
 
-    var ix = reinterpret<u32>(x);
-    var sign = ix >> 31;
-    ix &= 0x7FFFFFFF;
+    var ux = reinterpret<u32>(x);
+    var sign = ux >> 31;
+    ux &= 0x7FFFFFFF;
 
-    if (ix <= 0x3F490FDA) {  // |x| ~<= π/4
-      if (ix < 0x39800000) { // |x| < 2**-12
+    if (ux <= 0x3F490FDA) {  // |x| ~<= π/4
+      if (ux < 0x39800000) { // |x| < 2**-12
         return x;
       }
       return sin_kernf(x);
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407B53D1) {   // |x| ~<= 5π/4
-        if (ix <= 0x4016CBE3) { // |x| ~<= 3π/4
+      if (ux <= 0x407B53D1) {   // |x| ~<= 5π/4
+        if (ux <= 0x4016CBE3) { // |x| ~<= 3π/4
           return sign ? -cos_kernf(x + s1pio2) : cos_kernf(x - s1pio2);
         }
         return sin_kernf(-(sign ? x + s2pio2 : x - s2pio2));
       }
 
-      if (ix <= 0x40E231D5) {   // |x| ~<= 9π/4
-        if (ix <= 0x40AFEDDF) { // |x| ~<= 7π/4
+      if (ux <= 0x40E231D5) {   // |x| ~<= 9π/4
+        if (ux <= 0x40AFEDDF) { // |x| ~<= 7π/4
           return sign ? cos_kernf(x + s3pio2) : -cos_kernf(x - s3pio2);
         }
         return sin_kernf(sign ? x + s4pio2 : x - s4pio2);
@@ -2792,9 +2796,9 @@ export namespace NativeMathf {
     }
 
     // sin(Inf or NaN) is NaN
-    if (ix >= 0x7F800000) return x - x;
+    if (ux >= 0x7F800000) return x - x;
 
-    var n = rempio2f(x, ix, sign);
+    var n = rempio2f(x, ux, sign);
     var y = rempio2f_y;
 
     var t = n & 1 ? cos_kernf(y) : sin_kernf(y);
@@ -2829,27 +2833,27 @@ export namespace NativeMathf {
       t3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // 3 * M_PI_2
       t4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
 
-    var ix = reinterpret<u32>(x);
-    var sign = ix >> 31;
-    ix &= 0x7FFFFFFF;
+    var ux = reinterpret<u32>(x);
+    var sign = ux >> 31;
+    ux &= 0x7FFFFFFF;
 
-    if (ix <= 0x3F490FDA) {  // |x| ~<= π/4
-      if (ix < 0x39800000) { // |x| < 2**-12
+    if (ux <= 0x3F490FDA) {  // |x| ~<= π/4
+      if (ux < 0x39800000) { // |x| < 2**-12
         return x;
       }
       return tan_kernf(x, 0);
     }
 
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407B53D1) {   // |x| ~<= 5π/4
-        if (ix <= 0x4016CBE3) { // |x| ~<= 3π/4
+      if (ux <= 0x407B53D1) {   // |x| ~<= 5π/4
+        if (ux <= 0x4016CBE3) { // |x| ~<= 3π/4
           return tan_kernf((sign ? x + t1pio2 : x - t1pio2), 1);
         } else {
           return tan_kernf((sign ? x + t2pio2 : x - t2pio2), 0);
         }
       }
-      if (ix <= 0x40E231D5) {   // |x| ~<= 9π/4
-        if (ix <= 0x40AFEDDF) { // |x| ~<= 7π/4
+      if (ux <= 0x40E231D5) {   // |x| ~<= 9π/4
+        if (ux <= 0x40AFEDDF) { // |x| ~<= 7π/4
           return tan_kernf((sign ? x + t3pio2 : x - t3pio2), 1);
         } else {
           return tan_kernf((sign ? x + t4pio2 : x - t4pio2), 0);
@@ -2858,10 +2862,10 @@ export namespace NativeMathf {
     }
 
     // tan(Inf or NaN) is NaN
-    if (ix >= 0x7F800000) return x - x;
+    if (ux >= 0x7F800000) return x - x;
 
     // argument reduction
-    var n = rempio2f(x, ix, sign);
+    var n = rempio2f(x, ux, sign);
     var y = rempio2f_y;
     return tan_kernf(y, n & 1);
   }
@@ -2981,9 +2985,9 @@ export namespace NativeMathf {
   export function rem(x: f32, y: f32): f32 { // see: musl/src/math/remquof.c
     var ux = reinterpret<u32>(x);
     var uy = reinterpret<u32>(y);
-    var ex = <i32>(ux >> 23 & 0xFF);
-    var ey = <i32>(uy >> 23 & 0xFF);
-    var sx = <i32>(ux >> 31);
+    var ex = i32(ux >> 23 & 0xFF);
+    var ey = i32(uy >> 23 & 0xFF);
+    var sx = i32(ux >> 31);
     var uxi = ux;
     if (uy << 1 == 0 || ex == 0xFF || isNaN(y)) return (x * y) / (x * y);
     if (ux << 1 == 0) return x;
@@ -3052,12 +3056,12 @@ export namespace NativeMathf {
       s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // 3 * M_PI_2
       s4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
 
-    var ix = reinterpret<u32>(x);
-    var sign = ix >> 31;
-    ix &= 0x7FFFFFFF;
+    var ux = reinterpret<u32>(x);
+    var sign = ux >> 31;
+    ux &= 0x7FFFFFFF;
 
-    if (ix <= 0x3F490FDA) {  // |x| ~<= π/4
-      if (ix < 0x39800000) { // |x| < 2**-12
+    if (ux <= 0x3F490FDA) {  // |x| ~<= π/4
+      if (ux < 0x39800000) { // |x| < 2**-12
         sincos_sin = x;
         sincos_cos = 1;
         return;
@@ -3067,8 +3071,8 @@ export namespace NativeMathf {
       return;
     }
     if (ASC_SHRINK_LEVEL < 1) {
-      if (ix <= 0x407B53D1) {   // |x| ~<= 5π/4
-        if (ix <= 0x4016CBE3) { // |x| ~<= 3π/4
+      if (ux <= 0x407B53D1) {   // |x| ~<= 5π/4
+        if (ux <= 0x4016CBE3) { // |x| ~<= 3π/4
           if (sign) {
             sincos_sin = -cos_kernf(x + s1pio2);
             sincos_cos =  sin_kernf(x + s1pio2);
@@ -3083,8 +3087,8 @@ export namespace NativeMathf {
         sincos_cos = -cos_kernf(sign ? x + s2pio2 : x - s2pio2);
         return;
       }
-      if (ix <= 0x40E231D5) {   // |x| ~<= 9π/4
-        if (ix <= 0x40AFEDDF) { // |x| ~<= 7π/4
+      if (ux <= 0x40E231D5) {   // |x| ~<= 9π/4
+        if (ux <= 0x40AFEDDF) { // |x| ~<= 7π/4
           if (sign) {
             sincos_sin =  cos_kernf(x + s3pio2);
             sincos_cos = -sin_kernf(x + s3pio2);
@@ -3100,14 +3104,14 @@ export namespace NativeMathf {
       }
     }
     // sin(Inf or NaN) is NaN
-    if (ix >= 0x7F800000) {
+    if (ux >= 0x7F800000) {
       let xx = x - x;
       sincos_sin = xx;
       sincos_cos = xx;
       return;
     }
     // general argument reduction needed
-    var n = rempio2f(x, ix, sign);
+    var n = rempio2f(x, ux, sign);
     var y = rempio2f_y;
     var s = sin_kernf(y);
     var c = cos_kernf(y);

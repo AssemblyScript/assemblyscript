@@ -426,7 +426,7 @@ export function powf_lut(x: f32, y: f32): f32 {
       return iy >> 31 ? 1 / x2 : x2;
     }
     // x and y are non-zero finite.
-    if (ix >> 31) {
+    if (<i32>ix < 0) {
       // Finite x < 0.
       let yint = checkintf(iy);
       if (yint == 0) return (x - x) / (x - x);
@@ -763,7 +763,7 @@ export function exp2_lut(x: f64): f64 {
     if (abstop >= 0x409) {
       if (ux == 0xFFF0000000000000) return 0;
       if (abstop >= 0x7FF) return 1.0 + x;
-      if (!(ux >> 63)) return Infinity;
+      if (<i64>ux >= 0) return Infinity;
       else if (ux >= 0xC090CC0000000000) return 0;
     }
     if ((ux << 1) > 0x811A000000000000) abstop = 0; // Large x is special cased below.
@@ -1877,7 +1877,7 @@ export function pow_lut(x: f64, y: f64): f64 {
       return iy >> 63 ? 1 / x2 : x2;
     }
     // Here x and y are non-zero finite
-    if (ix >> 63) {
+    if (<i64>ix < 0) {
       // Finite x < 0
       let yint = checkint(iy);
       if (yint == 0) return (x - x) / (x - x);
