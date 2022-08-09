@@ -240,7 +240,8 @@ function test_v128(): void {
       v128.bitmask<i8>(i8x16(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
     );
     assert(
-      v128.bitmask<i16>(i16x8(u16.MAX_VALUE, 
+      v128.bitmask<i16>(i16x8(
+        u16.MAX_VALUE, 
         u16.MAX_VALUE, 
         u16.MAX_VALUE, 
         u16.MAX_VALUE, 
@@ -611,7 +612,8 @@ function test_i16x8(): void {
   i16x8.extmul_high_i8x16_u(a, a);
   assert(i16x8.abs(i16x8(1, 1, 1, 1, 1, 1, 1, 1)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
   assert(i16x8.abs(i16x8(-1, -1, -1, -1, -1, -1, -1, -1)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
-  assert(i16x8.abs(i16x8(u16.MAX_VALUE,
+  assert(i16x8.abs(i16x8(
+    u16.MAX_VALUE,
     u16.MAX_VALUE,
     u16.MAX_VALUE,
     u16.MAX_VALUE,
@@ -619,7 +621,8 @@ function test_i16x8(): void {
     u16.MAX_VALUE,
     u16.MAX_VALUE,
     u16.MAX_VALUE)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
-  assert(i16x8.abs(i16x8(-32768,
+  assert(i16x8.abs(i16x8(
+    -32768,
     -32768,
     -32768,
     -32768,
