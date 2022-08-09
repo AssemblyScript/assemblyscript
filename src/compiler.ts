@@ -197,10 +197,11 @@ import {
   writeV128,
   cloneMap,
   isPowerOf2,
-  v128_zero,
   readI32,
   isIdentifier,
-  accuratePow64
+  accuratePow64,
+  v128_zero,
+  v128_ones,
 } from "./util";
 
 import {
@@ -957,7 +958,7 @@ export class Compiler extends DiagnosticEmitter {
       element.identifierNode.range
     );
   }
-  
+
   // files
 
   /** Compiles the file matching the specified path. */
@@ -10187,6 +10188,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: return module.i64(-1, -1);
       case TypeKind.F32: return module.f32(-1);
       case TypeKind.F64: return module.f64(-1);
+      case TypeKind.V128: return module.v128(v128_ones);
       case TypeKind.I31REF: return module.i31_new(module.i32(-1));
     }
   }
