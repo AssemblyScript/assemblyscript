@@ -4629,9 +4629,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I32: return module.binary(BinaryOp.LtI32, leftExpr, rightExpr);
       case TypeKind.I64: return module.binary(BinaryOp.LtI64, leftExpr, rightExpr);
       case TypeKind.ISIZE: return module.binary(BinaryOp.LtISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
@@ -4659,9 +4659,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I32: return module.binary(BinaryOp.GtI32, leftExpr, rightExpr);
       case TypeKind.I64: return module.binary(BinaryOp.GtI64, leftExpr, rightExpr);
       case TypeKind.ISIZE: return module.binary(BinaryOp.GtISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
@@ -4689,9 +4689,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I32: return module.binary(BinaryOp.LeI32, leftExpr, rightExpr);
       case TypeKind.I64: return module.binary(BinaryOp.LeI64, leftExpr, rightExpr);
       case TypeKind.ISIZE: return module.binary(BinaryOp.LeISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
@@ -4719,9 +4719,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I32: return module.binary(BinaryOp.GeI32, leftExpr, rightExpr);
       case TypeKind.I64: return module.binary(BinaryOp.GeI64, leftExpr, rightExpr);
       case TypeKind.ISIZE: return module.binary(BinaryOp.GeISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
@@ -4740,11 +4740,11 @@ export class Compiler extends DiagnosticEmitter {
     // Cares about garbage bits
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
@@ -4785,11 +4785,11 @@ export class Compiler extends DiagnosticEmitter {
     // Cares about garbage bits
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
@@ -4834,11 +4834,11 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.AddI32, leftExpr, rightExpr);
       case TypeKind.I64:
@@ -4856,11 +4856,11 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.SubI32, leftExpr, rightExpr);
       case TypeKind.I64:
@@ -4878,11 +4878,11 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.MulI32, leftExpr, rightExpr);
       case TypeKind.I64:
@@ -5148,9 +5148,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I32: return module.binary(BinaryOp.DivI32, leftExpr, rightExpr);
       case TypeKind.I64: return module.binary(BinaryOp.DivI64, leftExpr, rightExpr);
       case TypeKind.ISIZE: return module.binary(BinaryOp.DivISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
@@ -5178,9 +5178,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I32: return module.binary(BinaryOp.RemI32, leftExpr, rightExpr);
       case TypeKind.I64: return module.binary(BinaryOp.RemI64, leftExpr, rightExpr);
       case TypeKind.ISIZE: return module.binary(BinaryOp.RemISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
+      case TypeKind.U16: {
         leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
@@ -5358,12 +5358,12 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
       case TypeKind.U32: return module.binary(BinaryOp.AndI32, leftExpr, rightExpr);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.AndI64, leftExpr, rightExpr);
@@ -5378,11 +5378,11 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
+      case TypeKind.U16: return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
       case TypeKind.I64:
@@ -5398,11 +5398,11 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
+      case TypeKind.U16: return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
       case TypeKind.I64:
@@ -8382,6 +8382,7 @@ export class Compiler extends DiagnosticEmitter {
 
       switch (fieldType.kind) {
         // Number Types (and Number alias types)
+        case TypeKind.BOOL:
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32:
@@ -8392,7 +8393,6 @@ export class Compiler extends DiagnosticEmitter {
         case TypeKind.U32:
         case TypeKind.U64:
         case TypeKind.USIZE:
-        case TypeKind.BOOL:
         case TypeKind.F32:
         case TypeKind.F64: {
           exprs.push(
@@ -8980,13 +8980,13 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(
               BinaryOp.AddI32,
               getValue,
@@ -9066,13 +9066,13 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(
               BinaryOp.SubI32,
               getValue,
@@ -9236,13 +9236,13 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.SubI32, module.i32(0), expr);
             break;
           }
@@ -9305,13 +9305,13 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.AddI32, expr, this.module.i32(1));
             break;
           }
@@ -9374,13 +9374,13 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.SubI32, expr, module.i32(1));
             break;
           }
@@ -9463,13 +9463,13 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.convertExpression(expr, this.currentType, this.currentType.intType, false, expression.operand);
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.XorI32, expr, module.i32(-1));
             break;
           }
@@ -9616,6 +9616,16 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var flow = this.currentFlow;
     switch (type.kind) {
+      case TypeKind.BOOL: {
+        if (flow.canOverflow(expr, type)) {
+          // bool is special in that it compares to 0 instead of masking with 0x1
+          expr = module.binary(BinaryOp.NeI32,
+            expr,
+            module.i32(0)
+          );
+        }
+        break;
+      }
       case TypeKind.I8: {
         if (flow.canOverflow(expr, type)) {
           expr = this.options.hasFeature(Feature.SIGN_EXTENSION)
@@ -9658,16 +9668,6 @@ export class Compiler extends DiagnosticEmitter {
           expr = module.binary(BinaryOp.AndI32,
             expr,
             module.i32(0xffff)
-          );
-        }
-        break;
-      }
-      case TypeKind.BOOL: {
-        if (flow.canOverflow(expr, type)) {
-          // bool is special in that it compares to 0 instead of masking with 0x1
-          expr = module.binary(BinaryOp.NeI32,
-            expr,
-            module.i32(0)
           );
         }
         break;
@@ -9798,13 +9798,13 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     switch (type.kind) {
       default: assert(false);
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL: return module.i32(0);
+      case TypeKind.U32: return module.i32(0);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (type.size != 64) return module.i32(0);
       case TypeKind.I64:
@@ -9826,13 +9826,13 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     switch (type.kind) {
       default: assert(false);
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL: return module.i32(1);
+      case TypeKind.U32: return module.i32(1);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (type.size != 64) return module.i32(1);
       case TypeKind.I64:

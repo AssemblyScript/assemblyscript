@@ -16,6 +16,8 @@ import {
 
 /** Indicates the kind of a type. */
 export const enum TypeKind {
+  /** A 1-bit unsigned integer. */
+  BOOL,
 
   // signed integers
 
@@ -42,8 +44,6 @@ export const enum TypeKind {
   U64,
   /** A 32-bit/64-bit unsigned integer, depending on the target. Also the base of class types. */
   USIZE,
-  /** A 1-bit unsigned integer. */
-  BOOL, // sic
 
   // floats
 
