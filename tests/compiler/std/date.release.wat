@@ -4752,8 +4752,8 @@
    i32.or
    br_if $folding-inner0
    local.get $1
-   i64.eqz
-   i32.eqz
+   i64.const 0
+   i64.ne
    if
     i32.const 0
     i32.const 1152
@@ -4779,8 +4779,8 @@
    i32.or
    br_if $folding-inner0
    local.get $1
-   i64.eqz
-   i32.eqz
+   i64.const 0
+   i64.ne
    if
     i32.const 0
     i32.const 1152
@@ -4806,8 +4806,8 @@
    i32.or
    br_if $folding-inner0
    local.get $1
-   i64.eqz
-   i32.eqz
+   i64.const 0
+   i64.ne
    if
     i32.const 0
     i32.const 1152

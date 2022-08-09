@@ -55819,8 +55819,8 @@
   i64.const 0
   i64.const 1
   call $~lib/math/ipow64
-  i64.eqz
-  i32.eqz
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -55832,8 +55832,8 @@
   i64.const 0
   i64.const 2
   call $~lib/math/ipow64
-  i64.eqz
-  i32.eqz
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -55845,8 +55845,8 @@
   i64.const 0
   i64.const 3
   call $~lib/math/ipow64
-  i64.eqz
-  i32.eqz
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -56092,8 +56092,8 @@
   i64.const 2
   i64.const 64
   call $~lib/math/ipow64
-  i64.eqz
-  i32.eqz
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -56144,8 +56144,8 @@
   i64.const 2
   i64.const -1
   call $~lib/math/ipow64
-  i64.eqz
-  i32.eqz
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -56157,8 +56157,8 @@
   i64.const 2
   i64.const 64
   call $~lib/math/ipow64
-  i64.eqz
-  i32.eqz
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -56170,8 +56170,8 @@
   i64.const 2
   i64.const 128
   call $~lib/math/ipow64
-  i64.eqz
-  i32.eqz
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056

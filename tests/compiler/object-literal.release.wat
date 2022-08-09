@@ -2180,8 +2180,8 @@
    end
    local.get $1
    i64.load offset=8
-   i64.eqz
-   i32.eqz
+   i64.const 0
+   i64.ne
    if
     i32.const 0
     i32.const 1504
@@ -2192,8 +2192,8 @@
    end
    local.get $1
    i64.load offset=16
-   i64.eqz
-   i32.eqz
+   i64.const 0
+   i64.ne
    if
     i32.const 0
     i32.const 1504

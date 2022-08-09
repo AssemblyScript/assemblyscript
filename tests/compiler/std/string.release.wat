@@ -4243,8 +4243,8 @@
        else
         local.get $6
         local.get $4
-        i32.eqz
-        i32.eqz
+        i32.const 0
+        i32.ne
         i64.extend_i32_u
         i64.or
        end
