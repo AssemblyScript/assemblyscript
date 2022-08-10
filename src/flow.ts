@@ -995,14 +995,16 @@ export class Flow {
         for (let i = 0, k = rightLocalFlags.length; i < k; ++i) {
           thisLocalFlags[i] = rightLocalFlags[i];
         }
-        this.narrowedTypes = right.narrowedTypes;
+        let rightNarrowedTypes = right.narrowedTypes;
+        this.narrowedTypes = rightNarrowedTypes ?  rightNarrowedTypes.clone() : null;
       }
     } else if (rightFlags & FlowFlags.TERMINATES) {
       let leftLocalFlags = left.localFlags;
       for (let i = 0, k = leftLocalFlags.length; i < k; ++i) {
         thisLocalFlags[i] = leftLocalFlags[i];
       }
-      this.narrowedTypes = left.narrowedTypes;
+      let leftNarrowedTypes = left.narrowedTypes;
+      this.narrowedTypes = leftNarrowedTypes ?  leftNarrowedTypes.clone() : null;
     } else {
       let leftLocalFlags = left.localFlags;
       let numLeftLocalFlags = leftLocalFlags.length;
