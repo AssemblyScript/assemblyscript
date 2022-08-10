@@ -885,9 +885,10 @@ export class Compiler extends DiagnosticEmitter {
               }
               let hasVectorValueOperands = signature.hasVectorValueOperands;
               if (hasVectorValueOperands) {
-                // Modify signatures from v128 to i32/i64 pointers
-                let operandIndices = signature.getVectorValueOperandIndices();
-
+                this.warning(
+                  DiagnosticCode.Type_0_in_exported_function_does_not_support_for_all_runtimes,
+                  functionInstance.identifierNode.range, "v128"
+                );
               }
             }
             return;
@@ -919,6 +920,12 @@ export class Compiler extends DiagnosticEmitter {
                 this.desiresExportRuntime = true;
               }
             }
+          }
+          if (global.type == Type.v128) {
+            this.warning(
+              DiagnosticCode.Type_0_of_exported_global_does_not_support_for_all_runtimes,
+              global.identifierNode.range, "v128"
+            );
           }
           return;
         }
