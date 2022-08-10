@@ -1369,6 +1369,7 @@ function indentText(text: string, indentLevel: i32, sb: string[], butFirst: bool
 }
 
 export function liftRequiresExportRuntime(type: Type): bool {
+  if (type.isVectorValue) return true;
   if (!type.isInternalReference) return false;
   let clazz = type.classReference;
   if (!clazz) {
@@ -1398,6 +1399,7 @@ export function liftRequiresExportRuntime(type: Type): bool {
 }
 
 export function lowerRequiresExportRuntime(type: Type): bool {
+  if (type.isVectorValue) return true;
   if (!type.isInternalReference) return false;
   let clazz = type.classReference;
   if (!clazz) {

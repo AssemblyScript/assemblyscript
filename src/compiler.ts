@@ -883,6 +883,12 @@ export class Compiler extends DiagnosticEmitter {
                   }
                 }
               }
+              let hasVectorValueOperands = signature.hasVectorValueOperands;
+              if (hasVectorValueOperands) {
+                // Modify signatures from v128 to i32/i64 pointers
+                let operandIndices = signature.getVectorValueOperandIndices();
+
+              }
             }
             return;
           }
@@ -957,7 +963,7 @@ export class Compiler extends DiagnosticEmitter {
       element.identifierNode.range
     );
   }
-  
+
   // files
 
   /** Compiles the file matching the specified path. */

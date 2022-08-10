@@ -9,6 +9,7 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_v128 (func (result v128)))
+ (type $v128_=>_v128 (func (param v128) (result v128)))
  (type $i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
  (type $i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
  (type $i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32) (result v128)))
@@ -36,6 +37,7 @@
  (data (i32.const 140) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00s\00i\00m\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
+ (export "reexport" (func $simd/reexport))
  (export "test_vars_i8x16_partial" (func $simd/test_vars_i8x16_partial))
  (export "test_vars_i8x16_full" (func $simd/test_vars_i8x16_full))
  (export "test_vars_i16x8_partial" (func $simd/test_vars_i16x8_partial))
@@ -4841,6 +4843,11 @@
   call $simd/test_f64x2
   call $simd/test_const
   drop
+ )
+ (func $simd/reexport (param $0 v128) (result v128)
+  local.get $0
+  local.get $0
+  i32x4.mul
  )
  (func $simd/test_vars_i8x16_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
   v128.const i32x4 0x03000100 0x07000504 0x0b0a0908 0x000e0d0c
