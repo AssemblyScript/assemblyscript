@@ -26,6 +26,7 @@
  (export "testAssignInCondi" (func $export:possibly-null/testTrue))
  (export "testNeverNull" (func $export:possibly-null/testTrue))
  (export "testLogicalOrTypeInfer" (func $export:possibly-null/testLogicalOrTypeInfer))
+ (export "testInit" (func $export:possibly-null/testInit))
  (func $export:possibly-null/testTrue (param $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -232,6 +233,53 @@
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   return
+  end
+  i32.const 17440
+  i32.const 17488
+  i32.const 1
+  i32.const 1
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $export:possibly-null/testInit (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  block $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1024
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $1
+   local.get $0
+   i32.store
+   local.get $1
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1024
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $1
+   i32.const 0
+   i32.store
+   local.get $1
+   local.get $0
+   i32.store
+   local.get $1
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

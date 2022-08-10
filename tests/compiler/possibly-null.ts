@@ -137,3 +137,10 @@ export function testLogicalOrTypeInfer(a: Ref | null, b: Ref): void {
   let c: Ref = a || b;
   if (isNullable(c)) ERROR("should be non-nullable");
 }
+
+export function testInit(a: Ref): void {
+  let b: Ref | null = a;
+  if (isNullable(b)) ERROR("should be non-nullable");
+  let c: Ref | null = requireNonNull(a);
+  if (isNullable(c)) ERROR("should be non-nullable");
+}
