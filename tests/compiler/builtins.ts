@@ -678,7 +678,7 @@ function rotr3(a: i8, b: i8, c: i8): i32 {
 }
 assert(rotr3(48, 8, 1) == 3);
 
-// bswap / bswap16 tests
+// bswap tests
 
 // check bswap<T> for i8/u8
 assert(bswap<u8>(<u8>0xaa) == <u8>0xaa);
