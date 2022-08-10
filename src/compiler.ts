@@ -4571,8 +4571,8 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
-          rightFlow.freeScopedLocals();
           flow.inheritBranch(rightFlow);
+          rightFlow.freeScopedLocals();
           this.currentFlow = flow;
 
           // simplify if copying left is trivial
@@ -4636,8 +4636,8 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
-          rightFlow.freeScopedLocals();
           flow.inheritBranch(rightFlow);
+          rightFlow.freeScopedLocals();
           this.currentFlow = flow;
 
           // simplify if copying left is trivial
