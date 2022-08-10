@@ -1707,41 +1707,6 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
-  /** Compiles a property to a getter and potentially a setter. */
-  compileProperty(instance: Property): bool {
-    this.compilePropertyGetter(instance);
-    this.compilePropertySetter(instance);
-    return instance.is(CommonFlags.COMPILED);
-  }
-
-  /* Compiles the getter of the specified property. */
-  compilePropertyGetter(instance: Property): bool {
-    var getterInstance = instance.getterInstance;
-    if (getterInstance) {
-      let ret = this.compileFunction(getterInstance);
-      let setterInstance = instance.setterInstance;
-      if (getterInstance.is(CommonFlags.COMPILED) && (!setterInstance || setterInstance.is(CommonFlags.COMPILED))) {
-        instance.set(CommonFlags.COMPILED);
-      }
-      return ret;
-    }
-    return false;
-  }
-
-  /** Compiles the setter of the specified property. */
-  compilePropertySetter(instance: Property): bool {
-    var setterInstance = instance.setterInstance;
-    if (setterInstance) {
-      let ret = this.compileFunction(setterInstance);
-      let getterInstance = instance.getterInstance;
-      if (getterInstance && getterInstance.is(CommonFlags.COMPILED) && setterInstance.is(CommonFlags.COMPILED)) {
-        instance.set(CommonFlags.COMPILED);
-      }
-      return ret;
-    }
-    return false;
-  }
-
   // === Memory ===================================================================================
 
   /** Adds a static memory segment with the specified data. */
