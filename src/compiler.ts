@@ -7767,8 +7767,7 @@ export class Compiler extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.LOCAL: {
         let local = <Local>target;
-        let narrowedType = flow.getNarrowedType(local);
-        let localType = narrowedType || local.type;
+        let localType = flow.getVariantType(local);
         assert(localType != Type.void);
         if (this.pendingElements.has(local)) {
           this.error(
@@ -7802,8 +7801,8 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(global)) { // reports; not yet compiled if a static field
           return module.unreachable();
         }
-        let narrowedType = flow.getNarrowedType(global);
-        let globalType = narrowedType || global.type;
+        // TODO: global type narrow
+        let globalType = global.type;
         if (this.pendingElements.has(global)) {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,

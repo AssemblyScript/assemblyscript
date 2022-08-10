@@ -645,11 +645,11 @@ export class Flow {
     narrowedTypes.set(element, type);
   }
   /** get type narrow, return null if not exist */
-  getNarrowedType(element: TypedElement): Type | null {
-    if (element.kind != ElementKind.LOCAL) return null;
+  getVariantType(element: TypedElement): Type {
+    if (element.kind != ElementKind.LOCAL) return element.type;
     const narrowedTypes = this.narrowedTypes || new NarrowedTypeMap();
     this.narrowedTypes = narrowedTypes;
-    return narrowedTypes.get(element);
+    return narrowedTypes.get(element) || element.type;
   }
   /** do not trace `element` type narrow */
   removeNarrowedType(element: TypedElement): void {
@@ -1068,12 +1068,8 @@ export class Flow {
           return true;
         }
       }
-      let beforeNarrowedTypes = before.narrowedTypes;
-      let afterNarrowedTypes = after.narrowedTypes;
-      let beforeType = beforeNarrowedTypes ? beforeNarrowedTypes.get(local) : null;
-      beforeType = beforeType || local.type;
-      let afterType = afterNarrowedTypes ? afterNarrowedTypes.get(local) : null;
-      afterType = afterType || local.type;
+      let beforeType = before.getVariantType(local);
+      let afterType = after.getVariantType(local);
       if (type.isNullableReference) {
         if (beforeType != afterType) {
           return true;
@@ -1102,7 +1098,6 @@ export class Flow {
   /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
   isNonnull(expr: ExpressionRef, type: Type): bool {
     if (!type.isNullableReference) return true;
-    let thisNarrowedTypes = this.narrowedTypes;
     // below, only teeLocal/getLocal are relevant because these are the only expressions that
     // depend on a dynamic nullable state (flag = LocalFlags.NONNULL), while everything else
     // has already been handled by the nullable type check above.
@@ -1110,14 +1105,12 @@ export class Flow {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
         let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-        let localType = thisNarrowedTypes ? thisNarrowedTypes.get(local) : null;
-        localType = localType || local.type;
+        let localType = this.getVariantType(local);
         return !localType.isNullableReference;
       }
       case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-        let localType = thisNarrowedTypes ? thisNarrowedTypes.get(local) : null;
-        localType = localType || local.type;
+        let localType = this.getVariantType(local);
         return !localType.isNullableReference;
       }
     }
