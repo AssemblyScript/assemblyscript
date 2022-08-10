@@ -886,7 +886,7 @@ export class Compiler extends DiagnosticEmitter {
               let hasVectorValueOperands = signature.hasVectorValueOperands;
               if (hasVectorValueOperands) {
                 this.warning(
-                  DiagnosticCode.Type_0_in_exported_function_does_not_support_for_all_runtimes,
+                  DiagnosticCode.External_0_type_does_not_support_for_all_host_runtimes,
                   functionInstance.identifierNode.range, "v128"
                 );
               }
@@ -923,7 +923,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           if (global.type == Type.v128) {
             this.warning(
-              DiagnosticCode.Type_0_of_exported_global_does_not_support_for_all_runtimes,
+              DiagnosticCode.External_0_type_does_not_support_for_all_host_runtimes,
               global.identifierNode.range, "v128"
             );
           }

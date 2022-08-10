@@ -20,7 +20,7 @@
  (type $f64_=>_v128 (func (param f64) (result v128)))
  (type $f64_f64_=>_v128 (func (param f64 f64) (result v128)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/native/ASC_FEATURE_SIMD i32 (i32.const 1))
+ (global $simd/vec (mut v128) (v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/builtins/i16.MAX_VALUE i32 (i32.const 32767))
@@ -50,6 +50,7 @@
  (export "test_vars_f32x4_full" (func $simd/test_vars_f32x4_full))
  (export "test_vars_f64x2_partial" (func $simd/test_vars_f64x2_partial))
  (export "test_vars_f64x2_full" (func $simd/test_vars_f64x2_full))
+ (export "vec" (global $simd/vec))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
@@ -4823,7 +4824,8 @@
  )
  (func $start:simd
   i32.const 1
-  drop
+  i32x4.splat
+  global.set $simd/vec
   i32.const 1
   drop
   i32.const 0
