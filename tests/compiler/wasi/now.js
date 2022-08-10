@@ -27,7 +27,8 @@ export function postInstantiate(instance) {
   console.log("trace: performance.now diff (AS): " + (test_performance_now() - actualPerfNow));
   console.log();
 
-  if (actualDateNow - expectedDateNow > 1) {
+  const diff = actualDateNow - expectedDateNow;
+  if (diff < 0 || diff > 1) {
     throw Error("node.js Date.now and AS/Wasi Date.now results mismatch!");
   }
 }
