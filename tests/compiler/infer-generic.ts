@@ -18,13 +18,21 @@ export function test2(arr: f32[]): f32[] {
   return inferEncapsulatedClass(arr);
 }
 
+// () => R should infer R
+function inferEncapsulatedFunctionNull<R>(fn: () => R): () => R {
+  return fn;
+}
+export function test3(fn: () => f64): () => f64 {
+  return inferEncapsulatedFunctionNull(fn);
+}
+
 // (a: T) => R should infer T,R
 
 function inferEncapsulatedFunction<T,R>(fn: (a: T) => R): (a: T) => R {
   return fn;
 }
 
-export function test3(fn: (a: f32) => f64): (a: f32) => f64 {
+export function test4(fn: (a: f32) => f64): (a: f32) => f64 {
   return inferEncapsulatedFunction(fn);
 }
 
@@ -34,7 +42,7 @@ function inferEncapsulatedFunctionMixed<T,R>(fn: (a: T, b: i32) => R): (a: T, b:
   return fn;
 }
 
-export function test4(fn: (a: f32, b: i32) => f64): (a: f32, b: i32) => f64 {
+export function test5(fn: (a: f32, b: i32) => f64): (a: f32, b: i32) => f64 {
   return inferEncapsulatedFunctionMixed(fn);
 }
 

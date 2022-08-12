@@ -29,9 +29,9 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 592))
- (global $~lib/memory/__data_end i32 (i32.const 660))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17044))
- (global $~lib/memory/__heap_base i32 (i32.const 17044))
+ (global $~lib/memory/__data_end i32 (i32.const 668))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17052))
+ (global $~lib/memory/__heap_base i32 (i32.const 17052))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 76) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
@@ -45,7 +45,7 @@
  (data (i32.const 444) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 496) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 524) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 592) "\08\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\19\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 592) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\19\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $start:infer-generic~anonymous|0)
  (export "test1" (func $infer-generic/test1))
@@ -53,6 +53,7 @@
  (export "test2" (func $export:infer-generic/test2))
  (export "test3" (func $export:infer-generic/test3))
  (export "test4" (func $export:infer-generic/test4))
+ (export "test5" (func $export:infer-generic/test5))
  (start $~start)
  (func $infer-generic/inferCompatible<f64> (param $0 f64) (param $1 f64) (result i32)
   local.get $0
@@ -2219,17 +2220,24 @@
   local.get $0
   call $infer-generic/inferEncapsulatedClass<f32>
  )
- (func $infer-generic/inferEncapsulatedFunction<f32,f64> (param $0 i32) (result i32)
+ (func $infer-generic/inferEncapsulatedFunctionNull<f64> (param $0 i32) (result i32)
   local.get $0
  )
  (func $infer-generic/test3 (param $0 i32) (result i32)
+  local.get $0
+  call $infer-generic/inferEncapsulatedFunctionNull<f64>
+ )
+ (func $infer-generic/inferEncapsulatedFunction<f32,f64> (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $infer-generic/test4 (param $0 i32) (result i32)
   local.get $0
   call $infer-generic/inferEncapsulatedFunction<f32,f64>
  )
  (func $infer-generic/inferEncapsulatedFunctionMixed<f32,f64> (param $0 i32) (result i32)
   local.get $0
  )
- (func $infer-generic/test4 (param $0 i32) (result i32)
+ (func $infer-generic/test5 (param $0 i32) (result i32)
   local.get $0
   call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
  )
@@ -2284,6 +2292,17 @@
   local.get $1
   call $~lib/function/Function<%28bool%2Cf32%2Ci32%2C~lib/array/Array<f32>%29=>bool>#__visit
  )
+ (func $~lib/function/Function<%28%29=>f64>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28%29=>f64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28%29=>f64>#__visit
+ )
  (func $~lib/function/Function<%28f32%29=>f64>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
@@ -2310,37 +2329,43 @@
   block $invalid
    block $~lib/function/Function<%28f32%2Ci32%29=>f64>
     block $~lib/function/Function<%28f32%29=>f64>
-     block $infer-generic/Ref
-      block $~lib/function/Function<%28bool%2Cf32%2Ci32%2C~lib/array/Array<f32>%29=>bool>
-       block $~lib/array/Array<f32>
-        block $~lib/arraybuffer/ArrayBufferView
-         block $~lib/string/String
-          block $~lib/arraybuffer/ArrayBuffer
-           local.get $0
-           i32.const 8
-           i32.sub
-           i32.load
-           br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<f32> $~lib/function/Function<%28bool%2Cf32%2Ci32%2C~lib/array/Array<f32>%29=>bool> $infer-generic/Ref $~lib/function/Function<%28f32%29=>f64> $~lib/function/Function<%28f32%2Ci32%29=>f64> $invalid
+     block $~lib/function/Function<%28%29=>f64>
+      block $infer-generic/Ref
+       block $~lib/function/Function<%28bool%2Cf32%2Ci32%2C~lib/array/Array<f32>%29=>bool>
+        block $~lib/array/Array<f32>
+         block $~lib/arraybuffer/ArrayBufferView
+          block $~lib/string/String
+           block $~lib/arraybuffer/ArrayBuffer
+            local.get $0
+            i32.const 8
+            i32.sub
+            i32.load
+            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<f32> $~lib/function/Function<%28bool%2Cf32%2Ci32%2C~lib/array/Array<f32>%29=>bool> $infer-generic/Ref $~lib/function/Function<%28%29=>f64> $~lib/function/Function<%28f32%29=>f64> $~lib/function/Function<%28f32%2Ci32%29=>f64> $invalid
+           end
+           return
           end
           return
          end
+         local.get $0
+         local.get $1
+         call $~lib/arraybuffer/ArrayBufferView~visit
          return
         end
         local.get $0
         local.get $1
-        call $~lib/arraybuffer/ArrayBufferView~visit
+        call $~lib/array/Array<f32>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/array/Array<f32>~visit
+       call $~lib/function/Function<%28bool%2Cf32%2Ci32%2C~lib/array/Array<f32>%29=>bool>~visit
        return
       end
-      local.get $0
-      local.get $1
-      call $~lib/function/Function<%28bool%2Cf32%2Ci32%2C~lib/array/Array<f32>%29=>bool>~visit
       return
      end
+     local.get $0
+     local.get $1
+     call $~lib/function/Function<%28%29=>f64>~visit
      return
     end
     local.get $0
@@ -2393,7 +2418,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 46
+   i32.const 54
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2421,7 +2446,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 60
+   i32.const 68
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2464,7 +2489,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 61
+   i32.const 69
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2555,6 +2580,25 @@
   i32.store
   local.get $0
   call $infer-generic/test4
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $export:infer-generic/test5 (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $infer-generic/test5
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4

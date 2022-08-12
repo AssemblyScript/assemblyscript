@@ -19,7 +19,7 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18068))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18076))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s")
@@ -39,7 +39,7 @@
  (data (i32.const 1480) "\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 1548) "<")
  (data (i32.const 1560) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1616) "\08\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1616) "\t\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1644) "\02\19")
  (data (i32.const 1660) " ")
  (table $0 2 2 funcref)
@@ -49,6 +49,7 @@
  (export "test2" (func $export:infer-generic/test2))
  (export "test3" (func $export:infer-generic/test2))
  (export "test4" (func $export:infer-generic/test2))
+ (export "test5" (func $export:infer-generic/test2))
  (start $~start)
  (func $start:infer-generic~anonymous|0 (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
   local.get $1
@@ -777,7 +778,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 18068
+      i32.const 18076
       i32.lt_u
       if
        local.get $0
@@ -877,7 +878,7 @@
      unreachable
     end
     local.get $0
-    i32.const 18068
+    i32.const 18076
     i32.lt_u
     if
      local.get $0
@@ -900,7 +901,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 18068
+     i32.const 18076
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1263,7 +1264,7 @@
         i32.const 8
         i32.sub
         i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner1 $folding-inner1 $folding-inner0 $infer-generic/Ref $folding-inner0 $folding-inner0 $invalid
+        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner1 $folding-inner1 $folding-inner0 $infer-generic/Ref $folding-inner0 $folding-inner0 $folding-inner0 $invalid
        end
        return
       end
@@ -1301,7 +1302,7 @@
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1684
+   i32.const 1692
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1356,7 +1357,7 @@
    memory.size
    i32.const 16
    i32.shl
-   i32.const 18068
+   i32.const 18076
    i32.sub
    i32.const 1
    i32.shr_u
@@ -1391,7 +1392,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1684
+   i32.const 1692
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1438,7 +1439,7 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 1684
+  i32.const 1692
   i32.lt_s
   if
    i32.const 18096
@@ -1501,7 +1502,7 @@
     if
      i32.const 0
      local.get $1
-     i32.const 18068
+     i32.const 18076
      i32.lt_u
      local.get $1
      i32.load offset=8

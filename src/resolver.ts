@@ -832,20 +832,21 @@ export class Resolver extends DiagnosticEmitter {
     } else if (node.kind == NodeKind.FUNCTIONTYPE) { // foo<T>(bar: (baz: T) => i32))
       let functionTypeNode = <FunctionTypeNode>node;
       let parameterNodes = functionTypeNode.parameters;
-      if (parameterNodes && parameterNodes.length > 0) {
-        let signatureReference = type.signatureReference;
-        if (signatureReference) {
-          let parameterTypes = signatureReference.parameterTypes;
-          let thisType = signatureReference.thisType;
-          if (parameterTypes.length == parameterNodes.length && !thisType == !functionTypeNode.explicitThisType) {
-            for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-              this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxElement, ctxTypes, typeParameterNames);
-            }
-            this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxElement, ctxTypes, typeParameterNames);
-            if (thisType) this.propagateInferredGenericTypes(functionTypeNode.explicitThisType!, thisType, ctxElement, ctxTypes, typeParameterNames);
-            return;
-          }
+      let signatureReference = type.signatureReference;
+      if (signatureReference) {
+        let parameterTypes = signatureReference.parameterTypes;
+        for (let i = 0, k = min(parameterTypes.length, parameterNodes.length) ; i < k; ++i) {
+          this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxElement, ctxTypes, typeParameterNames);
         }
+        if (signatureReference.returnType != Type.void) {
+          this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxElement, ctxTypes, typeParameterNames);
+        }
+        let thisType = signatureReference.thisType;
+        let explicitThisType = functionTypeNode.explicitThisType;
+        if (thisType && explicitThisType) {
+          this.propagateInferredGenericTypes(explicitThisType, thisType, ctxElement, ctxTypes, typeParameterNames);
+        }
+        return;
       }
     }
   }
