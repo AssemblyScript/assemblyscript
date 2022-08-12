@@ -8111,12 +8111,13 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // Compile to a `StaticArray<string>#join("") in the general case
-      let length = numParts + numExpressions;
-      let values = new Array<usize>(length);
-      values[0] = this.ensureStaticString(parts[0]);
+      let expressionPositions = new Array<i32>(numExpressions);
+      let values = new Array<usize>();
+      if (parts[0].length > 0) values.push(this.ensureStaticString(parts[0]));
       for (let i = 1; i < numParts; ++i) {
-        values[2 * i - 1] = module.usize(0);
-        values[2 * i] = this.ensureStaticString(parts[i]);
+        expressionPositions[i-1] = values.length;
+        values.push(module.usize(0));
+        if (parts[i].length > 0) values.push(this.ensureStaticString(parts[i]));
       }
       let arrayInstance = assert(this.resolver.resolveClass(this.program.staticArrayPrototype, [ stringType ]));
       let segment = this.addStaticBuffer(stringType, values, arrayInstance.id);
@@ -8145,7 +8146,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0; i < numExpressions; ++i) {
         stmts[numExpressions + i] = this.makeCallDirect(indexedSetInstance, [
           module.usize(offset),
-          module.i32(2 * i + 1),
+          module.i32(expressionPositions[i]),
           module.local_get(temps[i].index, stringType.toRef())
         ], expression);
         flow.freeTempLocal(temps[i]);
