@@ -8115,7 +8115,7 @@ export class Compiler extends DiagnosticEmitter {
       let values = new Array<usize>();
       if (parts[0].length > 0) values.push(this.ensureStaticString(parts[0]));
       for (let i = 1; i < numParts; ++i) {
-        expressionPositions[i-1] = values.length;
+        expressionPositions[i - 1] = values.length;
         values.push(module.usize(0));
         if (parts[i].length > 0) values.push(this.ensureStaticString(parts[i]));
       }
