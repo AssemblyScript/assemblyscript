@@ -53,6 +53,7 @@
  (export "test2" (func $export:infer-generic/test2))
  (export "test3" (func $export:infer-generic/test3))
  (export "test4" (func $export:infer-generic/test4))
+ (export "inferAssert" (func $export:infer-generic/inferAssert))
  (start $~start)
  (func $infer-generic/inferCompatible<f64> (param $0 f64) (param $1 f64) (result i32)
   local.get $0
@@ -2233,6 +2234,24 @@
   local.get $0
   call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
  )
+ (func $infer-generic/inferAssert (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  local.tee $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+   i32.const 32
+   i32.const 67
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  else
+   local.get $1
+  end
+  i32.load
+  drop
+ )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   global.get $infer-generic/arr
@@ -2421,7 +2440,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 60
+   i32.const 62
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2464,7 +2483,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 61
+   i32.const 63
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2561,5 +2580,21 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $export:infer-generic/inferAssert (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $infer-generic/inferAssert
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )
