@@ -1212,12 +1212,12 @@ export class Module {
     if (op > UnaryOp._last) {
       let isWam64 = this.sizeType == TypeRef.I64;
       switch (op) {
-        case UnaryOp.ClzSize: return this.unary(isWam64 ? UnaryOp.ClzI64 : UnaryOp.ClzI32, value);
-        case UnaryOp.CtzSize: return this.unary(isWam64 ? UnaryOp.CtzI64 : UnaryOp.CtzI32, value);
-        case UnaryOp.PopcntSize: return this.unary(isWam64 ? UnaryOp.PopcntI64 : UnaryOp.PopcntI32, value);
-        case UnaryOp.EqzSize: return this.unary(isWam64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32, value);
+        case UnaryOp.ClzSize:    op = isWam64 ? UnaryOp.ClzI64    : UnaryOp.ClzI32; break;
+        case UnaryOp.CtzSize:    op = isWam64 ? UnaryOp.CtzI64    : UnaryOp.CtzI32; break;
+        case UnaryOp.PopcntSize: op = isWam64 ? UnaryOp.PopcntI64 : UnaryOp.PopcntI32; break;
+        case UnaryOp.EqzSize:    op = isWam64 ? UnaryOp.EqzI64    : UnaryOp.EqzI32; break;
+        default: assert(false);
       }
-      assert(false);
     }
     return binaryen._BinaryenUnary(this.ref, op, value);
   }
@@ -1230,33 +1230,33 @@ export class Module {
     if (op > BinaryOp._last) {
       let isWasm64 = this.sizeType == TypeRef.I64;
       switch (op) {
-        case BinaryOp.AddSize: return this.binary(isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32, left, right);
-        case BinaryOp.SubSize: return this.binary(isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32, left, right);
-        case BinaryOp.MulSize: return this.binary(isWasm64 ? BinaryOp.MulI64 : BinaryOp.MulI32, left, right);
-        case BinaryOp.DivISize: return this.binary(isWasm64 ? BinaryOp.DivI64 : BinaryOp.DivI32, left, right);
-        case BinaryOp.DivUSize: return this.binary(isWasm64 ? BinaryOp.DivU64 : BinaryOp.DivU32, left, right);
-        case BinaryOp.RemISize: return this.binary(isWasm64 ? BinaryOp.RemI64 : BinaryOp.RemI32, left, right);
-        case BinaryOp.RemUSize: return this.binary(isWasm64 ? BinaryOp.RemU64 : BinaryOp.RemU32, left, right);
-        case BinaryOp.AndSize: return this.binary(isWasm64 ? BinaryOp.AndI64 : BinaryOp.AndI32, left, right);
-        case BinaryOp.OrSize: return this.binary(isWasm64 ? BinaryOp.OrI64 : BinaryOp.OrI32, left, right);
-        case BinaryOp.XorSize: return this.binary(isWasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32, left, right);
-        case BinaryOp.ShlSize: return this.binary(isWasm64 ? BinaryOp.ShlI64 : BinaryOp.ShlI32, left, right);
-        case BinaryOp.ShrISize: return this.binary(isWasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32, left, right);
-        case BinaryOp.ShrUSize: return this.binary(isWasm64 ? BinaryOp.ShrU64 : BinaryOp.ShrU32, left, right);
-        case BinaryOp.RotlSize: return this.binary(isWasm64 ? BinaryOp.RotlI64 : BinaryOp.RotlI32, left, right);
-        case BinaryOp.RotrSize: return this.binary(isWasm64 ? BinaryOp.RotrI64 : BinaryOp.RotrI32, left, right);
-        case BinaryOp.EqSize: return this.binary(isWasm64 ? BinaryOp.EqI64 : BinaryOp.EqI32, left, right);
-        case BinaryOp.NeSize: return this.binary(isWasm64 ? BinaryOp.NeI64 : BinaryOp.NeI32, left, right);
-        case BinaryOp.LtISize: return this.binary(isWasm64 ? BinaryOp.LtI64 : BinaryOp.LtI32, left, right);
-        case BinaryOp.LtUSize: return this.binary(isWasm64 ? BinaryOp.LtU64 : BinaryOp.LtU32, left, right);
-        case BinaryOp.LeISize: return this.binary(isWasm64 ? BinaryOp.LeI64 : BinaryOp.LeI32, left, right);
-        case BinaryOp.LeUSize: return this.binary(isWasm64 ? BinaryOp.LeU64 : BinaryOp.LeU32, left, right);
-        case BinaryOp.GtISize: return this.binary(isWasm64 ? BinaryOp.GtI64 : BinaryOp.GtI32, left, right);
-        case BinaryOp.GtUSize: return this.binary(isWasm64 ? BinaryOp.GtU64 : BinaryOp.GtU32, left, right);
-        case BinaryOp.GeISize: return this.binary(isWasm64 ? BinaryOp.GeI64 : BinaryOp.GeI32, left, right);
-        case BinaryOp.GeUSize: return this.binary(isWasm64 ? BinaryOp.GeU64 : BinaryOp.GeU32, left, right);
+        case BinaryOp.AddSize:  op = isWasm64 ? BinaryOp.AddI64  : BinaryOp.AddI32; break;
+        case BinaryOp.SubSize:  op = isWasm64 ? BinaryOp.SubI64  : BinaryOp.SubI32; break;
+        case BinaryOp.MulSize:  op = isWasm64 ? BinaryOp.MulI64  : BinaryOp.MulI32; break;
+        case BinaryOp.DivISize: op = isWasm64 ? BinaryOp.DivI64  : BinaryOp.DivI32; break;
+        case BinaryOp.DivUSize: op = isWasm64 ? BinaryOp.DivU64  : BinaryOp.DivU32; break;
+        case BinaryOp.RemISize: op = isWasm64 ? BinaryOp.RemI64  : BinaryOp.RemI32; break;
+        case BinaryOp.RemUSize: op = isWasm64 ? BinaryOp.RemU64  : BinaryOp.RemU32; break;
+        case BinaryOp.AndSize:  op = isWasm64 ? BinaryOp.AndI64  : BinaryOp.AndI32; break;
+        case BinaryOp.OrSize:   op = isWasm64 ? BinaryOp.OrI64   : BinaryOp.OrI32; break;
+        case BinaryOp.XorSize:  op = isWasm64 ? BinaryOp.XorI64  : BinaryOp.XorI32; break;
+        case BinaryOp.ShlSize:  op = isWasm64 ? BinaryOp.ShlI64  : BinaryOp.ShlI32; break;
+        case BinaryOp.ShrISize: op = isWasm64 ? BinaryOp.ShrI64  : BinaryOp.ShrI32; break;
+        case BinaryOp.ShrUSize: op = isWasm64 ? BinaryOp.ShrU64  : BinaryOp.ShrU32; break;
+        case BinaryOp.RotlSize: op = isWasm64 ? BinaryOp.RotlI64 : BinaryOp.RotlI32; break;
+        case BinaryOp.RotrSize: op = isWasm64 ? BinaryOp.RotrI64 : BinaryOp.RotrI32; break;
+        case BinaryOp.EqSize:   op = isWasm64 ? BinaryOp.EqI64   : BinaryOp.EqI32; break;
+        case BinaryOp.NeSize:   op = isWasm64 ? BinaryOp.NeI64   : BinaryOp.NeI32; break;
+        case BinaryOp.LtISize:  op = isWasm64 ? BinaryOp.LtI64   : BinaryOp.LtI32; break;
+        case BinaryOp.LtUSize:  op = isWasm64 ? BinaryOp.LtU64   : BinaryOp.LtU32; break;
+        case BinaryOp.LeISize:  op = isWasm64 ? BinaryOp.LeI64   : BinaryOp.LeI32; break;
+        case BinaryOp.LeUSize:  op = isWasm64 ? BinaryOp.LeU64   : BinaryOp.LeU32; break;
+        case BinaryOp.GtISize:  op = isWasm64 ? BinaryOp.GtI64   : BinaryOp.GtI32; break;
+        case BinaryOp.GtUSize:  op = isWasm64 ? BinaryOp.GtU64   : BinaryOp.GtU32; break;
+        case BinaryOp.GeISize:  op = isWasm64 ? BinaryOp.GeI64   : BinaryOp.GeI32; break;
+        case BinaryOp.GeUSize:  op = isWasm64 ? BinaryOp.GeU64   : BinaryOp.GeU32; break;
+        default: assert(false);
       }
-      assert(false);
     }
     return binaryen._BinaryenBinary(this.ref, op, left, right);
   }
