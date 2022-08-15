@@ -1177,7 +1177,7 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, s: v128): v128;
+  export declare function swizzle(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @unsafe @builtin
@@ -1647,7 +1647,7 @@ export namespace i8x16 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function swizzle(a: v128, s: v128): v128;
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1839,6 +1839,17 @@ export namespace i16x8 {
   // @ts-ignore: decorator
   @builtin
   export declare function extmul_high_i8x16_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(
+    a: v128, b: v128,
+    l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8
+  ): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2014,6 +2025,14 @@ export namespace i32x4 {
   // @ts-ignore: decorator
   @builtin
   export declare function extmul_high_i16x8_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2129,6 +2148,14 @@ export namespace i64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function extmul_high_i32x4_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2244,6 +2271,14 @@ export namespace f32x4 {
   // @ts-ignore: decorator
   @builtin
   export declare function demote_f64x2_zero(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2359,6 +2394,14 @@ export namespace f64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function promote_low_f32x4(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, b: v128): v128;
 }
 
 @final
