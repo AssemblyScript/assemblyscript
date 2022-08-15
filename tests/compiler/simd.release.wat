@@ -8,6 +8,7 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $v128_=>_v128 (func (param v128) (result v128)))
  (type $i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
  (type $i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
  (type $i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32) (result v128)))
@@ -28,6 +29,7 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $simd/vec (mut v128) (v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18012))
  (memory $0 1)
  (data (i32.const 1036) ",")
@@ -48,6 +50,7 @@
  (data (i32.const 1544) "\01\00\00\00\0e\00\00\00s\00i\00m\00d\00.\00t\00s")
  (data (i32.const 1584) "\05\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1612) "\02\04\00\00\00\00\00\00\02\t")
+ (export "reexport" (func $simd/reexport))
  (export "test_vars_i8x16_partial" (func $simd/test_vars_i8x16_partial))
  (export "test_vars_i8x16_full" (func $simd/test_vars_i8x16_full))
  (export "test_vars_i16x8_partial" (func $simd/test_vars_i16x8_partial))
@@ -60,6 +63,7 @@
  (export "test_vars_f32x4_full" (func $simd/test_vars_f32x4_full))
  (export "test_vars_f64x2_partial" (func $simd/test_vars_f64x2_partial))
  (export "test_vars_f64x2_full" (func $simd/test_vars_f64x2_full))
+ (export "vec" (global $simd/vec))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -2009,6 +2013,8 @@
     call $~lib/builtins/abort
     unreachable
    end
+   v128.const i32x4 0x00000001 0x00000001 0x00000001 0x00000001
+   global.set $simd/vec
    call $simd/test_v128
    global.get $~lib/rt/tlsf/ROOT
    i32.eqz
@@ -2184,6 +2190,11 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
+ )
+ (func $simd/reexport (param $0 v128) (result v128)
+  local.get $0
+  local.get $0
+  i32x4.mul
  )
  (func $simd/test_vars_i8x16_partial (param $0 i32) (param $1 i32) (param $2 i32) (result v128)
   v128.const i32x4 0x03000100 0x07000504 0x0b0a0908 0x000e0d0c
