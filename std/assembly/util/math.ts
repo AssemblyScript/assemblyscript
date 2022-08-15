@@ -320,10 +320,10 @@ function log2f_inline(ux: u32): f64 {
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
   var tmp  = ux - 0x3F330000;
-  var i    = <usize>((tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK);
+  var i    = usize((tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK);
   var top  = tmp & 0xFF800000;
   var uz   = ux - top;
-  var k    = <i32>(<i32>top >> 23);
+  var k    = <i32>top >> 23;
 
   var invc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
   var logc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
@@ -423,10 +423,10 @@ export function powf_lut(x: f32, y: f32): f32 {
     if (zeroinfnanf(ix)) {
       let x2 = x * x;
       if ((ix >> 31) && checkintf(iy) == 1) x2 = -x2;
-      return iy >> 31 ? 1 / x2 : x2;
+      return <i32>iy < 0 ? 1 / x2 : x2;
     }
     // x and y are non-zero finite.
-    if (ix >> 31) {
+    if (<i32>ix < 0) {
       // Finite x < 0.
       let yint = checkintf(iy);
       if (yint == 0) return (x - x) / (x - x);
@@ -651,13 +651,16 @@ export function exp_lut(x: f64): f64 {
     C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
 
   var ux = reinterpret<u64>(x);
-  var abstop = <u32>(ux >> 52 & 0x7FF);
+  var abstop = u32(ux >> 52) & 0x7FF;
   if (abstop - 0x3C9 >= 0x03F) {
     if (abstop - 0x3C9 >= 0x80000000) return 1;
     if (abstop >= 0x409) {
       if (ux == 0xFFF0000000000000) return 0;
-      if (abstop >= 0x7FF) return 1.0 + x;
-      return select<f64>(0, Infinity, ux >> 63);
+      if (abstop >= 0x7FF) {
+        return 1.0 + x;
+      } else {
+        return select<f64>(0, Infinity, <i64>ux < 0);
+      }
     }
     // Large x is special cased below.
     abstop = 0;
@@ -682,7 +685,7 @@ export function exp_lut(x: f64): f64 {
   // #endif
   var r = x + kd * NegLn2hiN + kd * NegLn2loN;
   // 2^(k/N) ~= scale * (1 + tail).
-  var idx = <usize>((ki & N_MASK) << 1);
+  var idx = usize((ki & N_MASK) << 1);
   var top = ki << (52 - EXP_TABLE_BITS);
 
   var tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()))); // T[idx]
@@ -757,13 +760,13 @@ export function exp2_lut(x: f64): f64 {
     C5 = reinterpret<f64>(0x3F55D7E09B4E3A84); // 0x1.5d7e09b4e3a84p-10
 
   var ux = reinterpret<u64>(x);
-  var abstop = <u32>(ux >> 52 & 0x7ff);
+  var abstop = u32(ux >> 52) & 0x7ff;
   if (abstop - 0x3C9 >= 0x03F) {
     if (abstop - 0x3C9 >= 0x80000000) return 1.0;
     if (abstop >= 0x409) {
       if (ux == 0xFFF0000000000000) return 0;
       if (abstop >= 0x7FF) return 1.0 + x;
-      if (!(ux >> 63)) return Infinity;
+      if (<i64>ux >= 0) return Infinity;
       else if (ux >= 0xC090CC0000000000) return 0;
     }
     if ((ux << 1) > 0x811A000000000000) abstop = 0; // Large x is special cased below.
@@ -776,7 +779,7 @@ export function exp2_lut(x: f64): f64 {
   kd -= shift; // k/N for int k
   var r = x - kd;
   // 2^(k/N) ~= scale * (1 + tail)
-  var idx = <usize>((ki & N_MASK) << 1);
+  var idx = usize((ki & N_MASK) << 1);
   var top = ki << (52 - EXP_TABLE_BITS);
 
   var tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
@@ -1023,7 +1026,7 @@ export function log2_lut(x: f64): f64 {
           r4 * (B6 + r * B7 + r2 * (B8 + r * B9)));
     return y + lo;
   }
-  var top = <u32>(ix >> 48);
+  var top = u32(ix >> 48);
   if (top - 0x0010 >= 0x7ff0 - 0x0010) {
     // x < 0x1p-1022 or inf or nan.
     if ((ix << 1) == 0) return -1.0 / (x * x);
@@ -1715,7 +1718,7 @@ function log_inline(ix: u64): f64 {
   // The range is split into N subintervals.
   // The ith subinterval contains z and c is near its center.
   var tmp = ix - 0x3fE6955500000000;
-  var i   = <usize>((tmp >> (52 - POW_LOG_TABLE_BITS)) & N_MASK);
+  var i   = usize((tmp >> (52 - POW_LOG_TABLE_BITS)) & N_MASK);
   var k   = <i64>tmp >> 52;
   var iz  = ix - (tmp & u64(0xFFF) << 52);
   var z   = reinterpret<f64>(iz);
@@ -1791,7 +1794,7 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   var kd: f64, z: f64, r: f64, r2: f64, scale: f64, tail: f64, tmp: f64;
 
   var ux = reinterpret<u64>(x);
-  abstop = <u32>(ux >> 52) & 0x7FF;
+  abstop = u32(ux >> 52) & 0x7FF;
   if (abstop - 0x3C9 >= 0x03F) {
     if (abstop - 0x3C9 >= 0x80000000) {
       // Avoid spurious underflow for tiny x.
@@ -1800,7 +1803,9 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
     }
     if (abstop >= 0x409) { // top12(1024.0)
       // Note: inf and nan are already handled.
-      return ux >> 63 ? uflow(sign_bias) : oflow(sign_bias);
+      return <i64>ux < 0
+        ? uflow(sign_bias)
+        : oflow(sign_bias);
     }
     // Large x is special cased below.
     abstop = 0;
@@ -1828,7 +1833,7 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   // The code assumes 2^-200 < |xtail| < 2^-8/N
   r += xtail;
   // 2^(k/N) ~= scale * (1 + tail)
-  idx = <usize>((ki & N_MASK) << 1);
+  idx = usize((ki & N_MASK) << 1);
   top = (ki + sign_bias) << (52 - EXP_TABLE_BITS);
 
   tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>())));
@@ -1874,10 +1879,10 @@ export function pow_lut(x: f64, y: f64): f64 {
     if (zeroinfnan(ix)) {
       let x2 = x * x;
       if (i32(ix >> 63) && checkint(iy) == 1) x2 = -x2;
-      return iy >> 63 ? 1 / x2 : x2;
+      return <i64>iy < 0 ? 1 / x2 : x2;
     }
     // Here x and y are non-zero finite
-    if (ix >> 63) {
+    if (<i64>ix < 0) {
       // Finite x < 0
       let yint = checkint(iy);
       if (yint == 0) return (x - x) / (x - x);
