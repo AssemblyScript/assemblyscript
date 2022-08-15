@@ -165,10 +165,6 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     return a | b;
   };
 
-  globalScope["bswap16"] = function bswap16(value) {
-    return ((value << 8) & 0xFF00) | ((value >> 8) & 0x00FF) | (value & 0xFFFF0000);
-  };
-
   function UnreachableError() {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, UnreachableError);
