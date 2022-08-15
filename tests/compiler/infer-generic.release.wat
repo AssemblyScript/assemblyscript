@@ -1,10 +1,10 @@
 (module
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_f32_i32_i32_=>_i32 (func (param i32 f32 i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
@@ -49,6 +49,7 @@
  (export "test2" (func $export:infer-generic/test2))
  (export "test3" (func $export:infer-generic/test2))
  (export "test4" (func $export:infer-generic/test2))
+ (export "inferAssert" (func $export:infer-generic/inferAssert))
  (start $~start)
  (func $start:infer-generic~anonymous|0 (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
   local.get $1
@@ -1459,6 +1460,43 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $0
+ )
+ (func $export:infer-generic/inferAssert (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1684
+  i32.lt_s
+  if
+   i32.const 18096
+   i32.const 18144
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 67
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load
+  drop
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)

@@ -1677,18 +1677,22 @@
   local.get $1
   i32.add
   i32.load16_s
-  local.tee $0
-  local.get $0
-  i32.const 8
-  i32.shl
-  local.get $0
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.shr_u
-  i32.or
+  local.set $0
   local.get $2
-  select
+  if (result i32)
+   local.get $0
+  else
+   local.get $0
+   i32.const 65535
+   i32.and
+   local.tee $0
+   i32.const 8
+   i32.shl
+   local.get $0
+   i32.const 8
+   i32.shr_u
+   i32.or
+  end
  )
  (func $~lib/dataview/DataView#getInt32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
@@ -2029,18 +2033,21 @@
   end
   local.get $0
   i32.load offset=4
-  local.get $1
-  local.get $1
-  i32.const 8
-  i32.shl
-  local.get $1
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.shr_u
-  i32.or
   local.get $2
-  select
+  if (result i32)
+   local.get $1
+  else
+   local.get $1
+   i32.const 65535
+   i32.and
+   local.tee $0
+   i32.const 8
+   i32.shl
+   local.get $0
+   i32.const 8
+   i32.shr_u
+   i32.or
+  end
   i32.store16
  )
  (func $~lib/dataview/DataView#setInt32 (param $0 i32) (param $1 i32) (param $2 i32)
@@ -2137,18 +2144,21 @@
   end
   local.get $0
   i32.load offset=4
-  local.get $1
-  local.get $1
-  i32.const 8
-  i32.shl
-  local.get $1
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.shr_u
-  i32.or
   local.get $2
-  select
+  if (result i32)
+   local.get $1
+  else
+   local.get $1
+   i32.const 65535
+   i32.and
+   local.tee $0
+   i32.const 8
+   i32.shl
+   local.get $0
+   i32.const 8
+   i32.shr_u
+   i32.or
+  end
   i32.store16
  )
  (func $~lib/dataview/DataView#setUint32 (param $0 i32) (param $1 i32) (param $2 i32)
