@@ -1527,6 +1527,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (instance.is(CommonFlags.AMBIENT) || instance.is(CommonFlags.EXPORT)) {
+      // Verify and print warn if signature has v128 type for imported or exported functions
       let hasVectorValueOperands = signature.hasVectorValueOperands;
       if (hasVectorValueOperands) {
         let range: Range;
