@@ -37,54 +37,14 @@ export class StaticArray<T> {
     return out;
   }
 
+  /** @deprecated Please use source.concat<StaticArray<T>> instead. */
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T> {
-    var sourceLen = source.length;
-    var otherLen = other.length;
-    var outLen = sourceLen + otherLen;
-    if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<StaticArray<T>>(__new(<usize>outLen << alignof<T>(), idof<StaticArray<T>>()));
-    var outStart = changetype<usize>(out);
-    var sourceSize = <usize>sourceLen << alignof<T>();
-    if (isManaged<T>()) {
-      for (let offset: usize = 0; offset < sourceSize; offset += sizeof<T>()) {
-        let ref = load<usize>(changetype<usize>(source) + offset);
-        store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
-      }
-      outStart += sourceSize;
-      let otherSize = <usize>otherLen << alignof<T>();
-      for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
-        let ref = load<usize>(changetype<usize>(other) + offset);
-        store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
-      }
-    } else {
-      memory.copy(outStart, changetype<usize>(source), sourceSize);
-      memory.copy(outStart + sourceSize, changetype<usize>(other), <usize>otherLen << alignof<T>());
-    }
-    return out;
+    return source.concat<StaticArray<T>>(other);
   }
 
+  /** @deprecated Please use source.slice<StaticArray<T>> instead. */
   static slice<T>(source: StaticArray<T>, start: i32 = 0, end: i32 = i32.MAX_VALUE): StaticArray<T> {
-    var length = source.length;
-    start = start < 0 ? max(start + length, 0) : min(start, length);
-    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
-    length = max(end - start, 0);
-    var sliceSize = <usize>length << alignof<T>();
-    var slice = changetype<StaticArray<T>>(__new(sliceSize, idof<StaticArray<T>>()));
-    var sourcePtr = changetype<usize>(source) + (<usize>start << alignof<T>());
-    if (isManaged<T>()) {
-      let off: usize = 0;
-      while (off < sliceSize) {
-        let ref = load<usize>(sourcePtr + off);
-        store<usize>(changetype<usize>(slice) + off, ref);
-        __link(changetype<usize>(slice), ref, true);
-        off += sizeof<usize>();
-      }
-    } else {
-      memory.copy(changetype<usize>(slice), sourcePtr, sliceSize);
-    }
-    return slice;
+    return source.slice<StaticArray<T>>(start, end);
   }
 
   constructor(length: i32) {
@@ -210,57 +170,112 @@ export class StaticArray<T> {
     return -1;
   }
 
-  concat(other: Array<T>): Array<T> {
-    var thisLen = this.length;
-    var otherLen = other.length;
-    var outLen = thisLen + otherLen;
-    if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<Array<T>>(__newArray(outLen, alignof<T>(), idof<Array<T>>()));
-    var outStart = out.dataStart;
-    var thisSize = <usize>thisLen << alignof<T>();
-    if (isManaged<T>()) {
+  concat<U extends ArrayLike<T> = Array<T>>(other: U): U {
+    let sourceLen = this.length;
+    let otherLen = other.length;
+    let outLen = sourceLen + otherLen;
+    if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) {
+      throw new Error(E_INVALIDLENGTH);
+    }
+    let sourceSize = <usize>sourceLen << alignof<T>();
+    let out!: U;
+
+    if (out instanceof Array<T>) {
+      out = changetype<U>(__newArray(outLen, alignof<T>(), idof<Array<T>>()));
+      let outStart = changetype<Array<T>>(out).dataStart;
+      let otherStart = changetype<Array<T>>(other).dataStart;
       let thisStart = changetype<usize>(this);
-      for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
-        let ref = load<usize>(thisStart + offset);
-        store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
+
+      if (isManaged<T>()) {
+        for (let offset: usize = 0; offset < sourceSize; offset += sizeof<T>()) {
+          let ref = load<usize>(thisStart + offset);
+          store<usize>(outStart + offset, ref);
+          __link(changetype<usize>(out), ref, true);
+        }
+        outStart += sourceSize;
+        let otherSize = <usize>otherLen << alignof<T>();
+        for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
+          let ref = load<usize>(otherStart + offset);
+          store<usize>(outStart + offset, ref);
+          __link(changetype<usize>(out), ref, true);
+        }
+      } else {
+        memory.copy(outStart, thisStart, sourceSize);
+        memory.copy(outStart + sourceSize, otherStart, <usize>otherLen << alignof<T>());
       }
-      outStart += thisSize;
-      let otherStart = other.dataStart;
-      let otherSize = <usize>otherLen << alignof<T>();
-      for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
-        let ref = load<usize>(otherStart + offset);
-        store<usize>(outStart + offset, ref);
-        __link(changetype<usize>(out), ref, true);
+    } else if (out instanceof StaticArray<T>) {
+      out = changetype<U>(__new(<usize>outLen << alignof<T>(), idof<StaticArray<T>>()));
+      let outStart = changetype<usize>(out);
+      let otherStart = changetype<usize>(other);
+      let thisStart = changetype<usize>(this);
+
+      if (isManaged<T>()) {
+        for (let offset: usize = 0; offset < sourceSize; offset += sizeof<T>()) {
+          let ref = load<usize>(thisStart + offset);
+          store<usize>(outStart + offset, ref);
+          __link(outStart, ref, true);
+        }
+        outStart += sourceSize;
+        let otherSize = <usize>otherLen << alignof<T>();
+        for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
+          let ref = load<usize>(otherStart + offset);
+          store<usize>(outStart + offset, ref);
+          __link(outStart, ref, true);
+        }
+      } else {
+        memory.copy(outStart, thisStart, sourceSize);
+        memory.copy(outStart + sourceSize, otherStart, <usize>otherLen << alignof<T>());
       }
     } else {
-      memory.copy(outStart, changetype<usize>(this), thisSize);
-      memory.copy(outStart + thisSize, other.dataStart, <usize>otherLen << alignof<T>());
+      ERROR("Only Array<T> and StaticArray<T> accept for 'U' parameter");
     }
     return out;
   }
 
-  slice(start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
+  slice<U extends ArrayLike<T> = Array<T>>(start: i32 = 0, end: i32 = i32.MAX_VALUE): U {
     var length = this.length;
     start = start < 0 ? max(start + length, 0) : min(start, length);
-    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
+    end   = end   < 0 ? max(end   + length, 0) : min(end,   length);
     length = max(end - start, 0);
-    var slice = changetype<Array<T>>(__newArray(length, alignof<T>(), idof<Array<T>>()));
-    var sliceBase = slice.dataStart;
-    var thisBase = changetype<usize>(this) + (<usize>start << alignof<T>());
-    if (isManaged<T>()) {
-      let off = <usize>0;
-      let end = <usize>length << alignof<usize>();
-      while (off < end) {
-        let ref = load<usize>(thisBase + off);
-        store<usize>(sliceBase + off, ref);
-        __link(changetype<usize>(slice), ref, true);
-        off += sizeof<usize>();
+
+    var sourceStart = changetype<usize>(this) + (<usize>start << alignof<T>());
+    var size = <usize>length << alignof<T>();
+    let out!: U;
+
+    if (out instanceof Array<T>) {
+      // return Array
+      out = changetype<U>(__newArray(length, alignof<T>(), idof<Array<T>>()));
+      let outStart = changetype<Array<T>>(out).dataStart;
+      if (isManaged<T>()) {
+        let off: usize = 0;
+        while (off < size) {
+          let ref = load<usize>(sourceStart + off);
+          store<usize>(outStart + off, ref);
+          __link(changetype<usize>(out), ref, true);
+          off += sizeof<usize>();
+        }
+      } else {
+        memory.copy(outStart, sourceStart, size);
+      }
+    } else if (out instanceof StaticArray<T>) {
+      // return StaticArray
+      out = changetype<U>(__new(size, idof<StaticArray<T>>()));
+      let outStart = changetype<usize>(out);
+      if (isManaged<T>()) {
+        let off: usize = 0;
+        while (off < size) {
+          let ref = load<usize>(sourceStart + off);
+          store<usize>(outStart + off, ref);
+          __link(outStart, ref, true);
+          off += sizeof<usize>();
+        }
+      } else {
+        memory.copy(outStart, sourceStart, size);
       }
     } else {
-      memory.copy(sliceBase, thisBase, length << alignof<T>());
+      ERROR("Only Array<T> and StaticArray<T> accept for 'U' parameter");
     }
-    return slice;
+    return out;
   }
 
   findIndex(fn: (value: T, index: i32, array: StaticArray<T>) => bool): i32 {
