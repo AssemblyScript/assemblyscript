@@ -886,9 +886,16 @@ export class Compiler extends DiagnosticEmitter {
               }
               let hasVectorValueOperands = signature.hasVectorValueOperands;
               if (hasVectorValueOperands) {
+                let range: Range;
+                if (signature.returnType == Type.v128) {
+                  range = functionInstance.prototype.functionTypeNode.returnType.range;
+                } else {
+                  let firstIndex = signature.getVectorValueOperandIndices()[0];
+                  range = functionInstance.prototype.functionTypeNode.parameters[firstIndex].range;
+                }
                 this.warning(
-                  DiagnosticCode.External_0_type_does_not_support_for_all_host_runtimes,
-                  functionInstance.identifierNode.range, "v128"
+                  DiagnosticCode.Exchange_of_0_values_is_not_supported_by_all_embeddings,
+                  range, "v128"
                 );
               }
             }
@@ -924,8 +931,8 @@ export class Compiler extends DiagnosticEmitter {
           }
           if (global.type == Type.v128) {
             this.warning(
-              DiagnosticCode.External_0_type_does_not_support_for_all_host_runtimes,
-              global.identifierNode.range, "v128"
+              DiagnosticCode.Exchange_of_0_values_is_not_supported_by_all_embeddings,
+              global.typeNode ? global.typeNode.range : global.identifierNode.range, "v128"
             );
           }
           return;
