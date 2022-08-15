@@ -887,11 +887,12 @@ export class Compiler extends DiagnosticEmitter {
               let hasVectorValueOperands = signature.hasVectorValueOperands;
               if (hasVectorValueOperands) {
                 let range: Range;
+                let fnTypeNode = functionInstance.prototype.functionTypeNode;
                 if (signature.returnType == Type.v128) {
-                  range = functionInstance.prototype.functionTypeNode.returnType.range;
+                  range = fnTypeNode.returnType.range;
                 } else {
                   let firstIndex = signature.getVectorValueOperandIndices()[0];
-                  range = functionInstance.prototype.functionTypeNode.parameters[firstIndex].range;
+                  range = fnTypeNode.parameters[firstIndex].range;
                 }
                 this.warning(
                   DiagnosticCode.Exchange_of_0_values_is_not_supported_by_all_embeddings,
