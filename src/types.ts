@@ -367,6 +367,18 @@ export class Type {
     return nullableType;
   }
 
+  /** Use unsigned type for according size if possible. */
+  toUnsigned(): Type {
+    switch (this.kind) {
+      case TypeKind.I8:    return Type.u8;
+      case TypeKind.I16:   return Type.u16;
+      case TypeKind.I32:   return Type.u32;
+      case TypeKind.I64:   return Type.u64;
+      case TypeKind.ISIZE: return this.size == 64 ? Type.usize64 : Type.usize32;
+    }
+    return this;
+  }
+
   /** Tests if this type equals the specified. */
   equals(other: Type): bool {
     if (this.kind != other.kind) return false;

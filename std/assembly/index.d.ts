@@ -107,6 +107,8 @@ declare const ASC_VERSION_PATCH: i32;
 
 // Builtins
 
+/** Performs the sign-agnostic reverse bytes **/
+declare function bswap<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T extends i32 | i64>(value: T): T;
 /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
@@ -1469,13 +1471,6 @@ declare function ERROR(message?: any): never;
 declare function WARNING(message?: any): void;
 /** Emits a user-defined diagnostic info when encountered. */
 declare function INFO(message?: any): void;
-
-// Polyfills
-
-/** Performs the sign-agnostic reverse bytes **/
-declare function bswap<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
-/** Performs the sign-agnostic reverse bytes only for last 16-bit **/
-declare function bswap16<T extends i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 // Standard library
 
