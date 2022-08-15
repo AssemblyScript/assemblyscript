@@ -848,6 +848,7 @@
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
+  local.set $2
   local.get $0
   i32.const 4
   i32.sub
@@ -880,6 +881,7 @@
   i32.const 1
   i32.or
   i32.store
+  local.get $2
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
@@ -1460,13 +1462,13 @@
     end
     global.get $~lib/rt/itcms/total
     local.tee $1
+    local.get $1
     global.get $~lib/rt/itcms/threshold
     i32.sub
     i32.const 1024
     i32.lt_u
     i32.const 10
     i32.shl
-    local.get $1
     i32.add
     global.set $~lib/rt/itcms/threshold
    end

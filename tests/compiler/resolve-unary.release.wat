@@ -950,6 +950,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -982,6 +983,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1479,7 +1481,7 @@
    i32.shr_u
    i32.const 1
    i32.shl
-   local.tee $4
+   local.tee $3
    select
    local.tee $0
    i32.const 100000
@@ -1530,16 +1532,16 @@
    local.tee $1
    i32.const 1
    i32.shl
-   local.get $4
+   local.get $3
    i32.add
    i32.const 1
    call $~lib/rt/itcms/__new
    local.tee $2
    i32.store
    local.get $2
-   local.get $4
+   local.get $3
    i32.add
-   local.set $3
+   local.set $5
    loop $while-continue|0
     local.get $0
     i32.const 10000
@@ -1548,12 +1550,12 @@
      local.get $0
      i32.const 10000
      i32.rem_u
-     local.set $5
+     local.set $4
      local.get $0
      i32.const 10000
      i32.div_u
      local.set $0
-     local.get $3
+     local.get $5
      local.get $1
      i32.const 4
      i32.sub
@@ -1561,7 +1563,7 @@
      i32.const 1
      i32.shl
      i32.add
-     local.get $5
+     local.get $4
      i32.const 100
      i32.div_u
      i32.const 2
@@ -1569,7 +1571,7 @@
      i32.const 1660
      i32.add
      i64.load32_u
-     local.get $5
+     local.get $4
      i32.const 100
      i32.rem_u
      i32.const 2
@@ -1588,7 +1590,7 @@
    i32.const 100
    i32.ge_u
    if
-    local.get $3
+    local.get $5
     local.get $1
     i32.const 2
     i32.sub
@@ -1614,7 +1616,7 @@
    i32.const 10
    i32.ge_u
    if
-    local.get $3
+    local.get $5
     local.get $1
     i32.const 2
     i32.sub
@@ -1629,7 +1631,7 @@
     i32.load
     i32.store
    else
-    local.get $3
+    local.get $5
     local.get $1
     i32.const 1
     i32.sub
@@ -1641,7 +1643,7 @@
     i32.add
     i32.store16
    end
-   local.get $4
+   local.get $3
    if
     local.get $2
     i32.const 45
@@ -2560,19 +2562,17 @@
     i32.const 32
     i32.and
    end
-   if (result i32)
-    global.get $~lib/rt/itcms/white
-    i32.eqz
-   else
-    i32.const 2
-   end
    local.set $3
    local.get $2
    i32.load offset=8
    local.set $0
    local.get $1
-   local.get $2
+   global.get $~lib/rt/itcms/white
+   i32.eqz
+   i32.const 2
    local.get $3
+   select
+   local.get $2
    i32.or
    i32.store offset=4
    local.get $1
