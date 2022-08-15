@@ -884,21 +884,6 @@ export class Compiler extends DiagnosticEmitter {
                   }
                 }
               }
-              let hasVectorValueOperands = signature.hasVectorValueOperands;
-              if (hasVectorValueOperands) {
-                let range: Range;
-                let fnTypeNode = functionInstance.prototype.functionTypeNode;
-                if (signature.returnType == Type.v128) {
-                  range = fnTypeNode.returnType.range;
-                } else {
-                  let firstIndex = signature.getVectorValueOperandIndices()[0];
-                  range = fnTypeNode.parameters[firstIndex].range;
-                }
-                this.warning(
-                  DiagnosticCode.Exchange_of_0_values_is_not_supported_by_all_embeddings,
-                  range, "v128"
-                );
-              }
             }
             return;
           }
@@ -1539,6 +1524,24 @@ export class Compiler extends DiagnosticEmitter {
       );
       funcRef = 0; // TODO?
       instance.set(CommonFlags.ERRORED);
+    }
+
+    if (instance.is(CommonFlags.AMBIENT) || instance.is(CommonFlags.EXPORT)) {
+      let hasVectorValueOperands = signature.hasVectorValueOperands;
+      if (hasVectorValueOperands) {
+        let range: Range;
+        let fnTypeNode = instance.prototype.functionTypeNode;
+        if (signature.returnType == Type.v128) {
+          range = fnTypeNode.returnType.range;
+        } else {
+          let firstIndex = signature.getVectorValueOperandIndices()[0];
+          range = fnTypeNode.parameters[firstIndex].range;
+        }
+        this.warning(
+          DiagnosticCode.Exchange_of_0_values_is_not_supported_by_all_embeddings,
+          range, "v128"
+        );
+      }
     }
 
     instance.finalize(module, funcRef);
