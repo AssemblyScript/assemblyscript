@@ -1,5 +1,9 @@
 // hint: asc tests/compiler/simd --enable simd
-
+{
+  // test static array literal
+  let arr = [i32x4(1, 2, 3, 4)];
+  assert(v128.extract_lane<i32>(arr[0], 0) == 1);
+}
 function test_v128(): void {
   // check trueish
   // @ts-ignore
@@ -133,6 +137,136 @@ function test_v128(): void {
       v128.pmax<f32>(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
       ==
       f32x4(1, 1, 1, 1)
+    );
+  }
+  {
+    assert(
+      v128.add<i32>(i32x4(1, 2, 3, 4), i32x4(1, 2, 3, 4))
+      ==
+      i32x4(2, 4, 6, 8));
+  }
+  {
+    assert(
+      v128.sub<i32>(i32x4(1, 2, 3, 4), i32x4(1, 2, 3, 4))
+      ==
+      i32x4(0, 0, 0, 0));
+  }
+  {
+    assert(
+      v128.dot<i16>(i32x4(1, 2, 3, 4), i32x4(2, 2, 2, 2))
+      ==
+      i32x4(2, 4, 6, 8)
+    );
+  }
+  {
+    assert(
+      v128.trunc<f32>(f32x4(1.1, 2.5, 3.9, 4.0))
+      ==
+      f32x4(1.0, 2.0, 3.0, 4.0)
+    );
+  }
+  {
+    assert(
+      v128.nearest<f32>(f32x4(1.1, 2.5, 3.51, 4.0))
+      ==
+      f32x4(1.0, 2.0, 4.0, 4.0)
+    );
+  }
+  {
+    let v: v128 = v128.convert<i32>(i32x4(1, 2, 3, 4));
+    assert(v == f32x4(1.0, 2.0, 3.0, 4.0));
+    v = v128.trunc_sat<i32>(v);
+    assert(v == i32x4(1, 2, 3, 4));
+  }
+  {
+    let v: v128 = v128.convert_low<i32>(i32x4(1, 2, 0, 0));
+    assert(v == f64x2(1.0, 2.0));
+    v = v128.trunc_sat_zero<i32>(v);
+    assert(v == i32x4(1, 2, 0, 0));
+  }
+  {
+    var ptr = __alloc(16);
+    store<i32>(ptr, 42);
+    var v: v128 = v128(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    v = v128.load_lane<i32>(ptr, v, 0);
+    assert(v == i32x4(42, 0, 0, 0));
+    __free(ptr);
+  }
+  {
+    let ptr = __alloc(16);
+    store<i32>(ptr, 42);
+    let v: v128 = v128(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    v = v128.load_lane<i32>(ptr, v, 0);
+    assert(v == i32x4(42, 0, 0, 0));
+    v = v128.load8_lane(ptr, v, 0);
+    assert(v == v128(42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+    v = v128.load16_lane(ptr, v, 0);
+    assert(v == i16x8(42, 0, 0, 0, 0, 0, 0, 0));
+    v = v128.load32_lane(ptr, v, 0);
+    assert(v == i32x4(42, 0, 0, 0));
+    v = v128.load64_lane(ptr, v, 0);
+    assert(v == i64x2(42, 0));
+    __free(ptr);
+  }
+  {
+    let v: v128 = v128.ceil<f32>(f32x4(1.1, -0.25, 70.01, 4.0));
+    assert(v == f32x4(2, -0.0, 71, 4));
+  }
+  {
+    let v: v128 = v128.floor<f32>(f32x4(1.1, -0.25, 70.01, 4.0));
+    assert(v == f32x4(1, -1, 70, 4));
+  }
+  {
+    assert(
+      v128.bitmask<i8>(i8x16(
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE,
+        u8.MAX_VALUE)) == 0x0000FFFF
+    );
+    assert(
+      v128.bitmask<i8>(i8x16(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
+    );
+    assert(
+      v128.bitmask<i16>(i16x8(
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE, 
+        u16.MAX_VALUE)) == 0x000000FF
+    );
+    assert(
+      v128.bitmask<i16>(i16x8(-1, 0, 1, 2, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
+    );
+    assert(
+      v128.bitmask<i32>(i32x4(1, -1, 1, -1)) == 10
+    );
+    assert(
+      v128.bitmask<i32>(i32x4(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF)) == 0x0000000F
+    );
+    assert(
+      v128.bitmask<i32>(i32x4(-1, 0, 1, 0xF)) == 1
+    );
+    assert(
+      v128.bitmask<i64>(i64x2(0xFFFFFFFF_FFFFFFFF, 0xFFFFFFFF_FFFFFFFF)) == 0x00000003
+    );
+    assert(
+      v128.bitmask<i64>(i64x2(-1, 0xF)) == 0x00000001
     );
   }
   // TODO: missing C-API in Binaryen (see also passes/pass.ts)
@@ -275,6 +409,55 @@ function test_i8x16(): void {
     );
     assert(i8x16.popcnt(a) == v128(0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4));
   }
+
+  assert(i8x16.abs(i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)) == i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i8x16.abs(i8x16(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)) == i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i8x16.abs(i8x16(
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE,
+    u8.MAX_VALUE))
+    == 
+    i8x16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+  );
+  assert(i8x16.abs(i8x16(-128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128)) 
+    == 
+    i8x16(i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128), i8(128))
+  );
+  assert(
+    i8x16.bitmask(i8x16(
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE,
+      u8.MAX_VALUE)) == 0x0000FFFF
+  );
+  assert(
+    i8x16.bitmask(i8x16(-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
+  );
 }
 
 function test_i16x8(): void {
@@ -393,6 +576,16 @@ function test_i16x8(): void {
   assert(i16x8.extend_low_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(255));
   assert(i16x8.extend_high_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(-1));
   assert(i16x8.extend_high_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(255));
+  assert(
+    i16x8.shuffle(a, b, 0, 1, 2, 3, 12, 13, 14, 15)
+    ==
+    v128.shuffle<i16>(a, b, 0, 1, 2, 3, 12, 13, 14, 15)
+  );
+  assert(
+    i16x8.swizzle(a, b)
+    ==
+    v128.swizzle(a, b)
+  );
   {
     let ptr = __alloc(16);
     store<i8>(ptr, 1);
@@ -427,6 +620,51 @@ function test_i16x8(): void {
   i16x8.extmul_low_i8x16_u(a, a);
   i16x8.extmul_high_i8x16_s(a, a);
   i16x8.extmul_high_i8x16_u(a, a);
+  assert(i16x8.abs(i16x8(1, 1, 1, 1, 1, 1, 1, 1)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i16x8.abs(i16x8(-1, -1, -1, -1, -1, -1, -1, -1)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i16x8.abs(i16x8(
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE,
+    u16.MAX_VALUE)) == i16x8(1, 1, 1, 1, 1, 1, 1, 1));
+  assert(i16x8.abs(i16x8(
+    -32768,
+    -32768,
+    -32768,
+    -32768,
+    -32768,
+    -32768,
+    -32768,
+    -32768)) 
+    == 
+    i16x8(
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768),
+      i16(32768))
+  );
+  assert(
+    i16x8.bitmask(i16x8(
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE, 
+      u16.MAX_VALUE)) == 0x000000FF
+  );
+  assert(
+    i16x8.bitmask(i16x8(-1, 0, 1, 2, 0xB, 0xC, 0xD, 0xF)) == 0x00000001
+  );
 }
 
 function test_i32x4(): void {
@@ -528,6 +766,11 @@ function test_i32x4(): void {
   assert(i32x4.extend_low_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(65535));
   assert(i32x4.extend_high_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(-1));
   assert(i32x4.extend_high_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(65535));
+  assert(
+    i32x4.shuffle(a, b, 0, 1, 6, 7)
+    ==
+    v128.shuffle<i32>(a, b, 0, 1, 6, 7)
+  );
   {
     let ptr = __alloc(16);
     store<i16>(ptr, 1);
@@ -556,6 +799,19 @@ function test_i32x4(): void {
   i32x4.extmul_low_i16x8_u(a, a);
   i32x4.extmul_high_i16x8_s(a, a);
   i32x4.extmul_high_i16x8_u(a, a);
+  assert(i32x4.abs(i32x4(1, 1, 1, 1)) == i32x4(1, 1, 1, 1));
+  assert(i32x4.abs(i32x4(-1, -1, -1, -1)) == i32x4(1, 1, 1, 1));
+  assert(i32x4.abs(i32x4(u32.MAX_VALUE, u32.MAX_VALUE, u32.MAX_VALUE, u32.MAX_VALUE)) == i32x4(1, 1, 1, 1));
+  assert(i32x4.abs(i32x4(-2147483648, -2147483648, -2147483648, -2147483648)) == i32x4(2147483648, 2147483648, 2147483648, 2147483648));
+  assert(
+    i32x4.bitmask(i32x4(1, -1, 1, -1)) == 10
+  );
+  assert(
+    i32x4.bitmask(i32x4(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF)) == 0x0000000F
+  );
+  assert(
+    i32x4.bitmask(i32x4(-1, 0, 1, 0xF)) == 1
+  );
 }
 
 function test_i64x2(): void {
@@ -610,6 +866,63 @@ function test_i64x2(): void {
   i64x2.extmul_low_i32x4_u(a, a);
   i64x2.extmul_high_i32x4_s(a, a);
   i64x2.extmul_high_i32x4_u(a, a);
+  assert(i64x2.eq(i64x2(12, 12),i64x2(12, 12)) == i64x2(-1, -1));
+  assert(i64x2.eq(i64x2(12, 12),i64x2(12, 13)) == i64x2(-1, 0));
+  assert(i64x2.ne(i64x2(12, 12),i64x2(12, 13)) == i64x2(0, -1));
+  assert(i64x2.ne(i64x2(11, 12),i64x2(12, 13)) == i64x2(-1, -1));
+  assert(i64x2.lt_s(i64x2(1, 0), i64x2(2, 0)) == i64x2(-1, 0));
+  assert(i64x2.lt_s(i64x2(1, 0), i64x2(2, 1)) == i64x2(-1, -1));
+  assert(i64x2.le_s(i64x2(1, 0), i64x2(2, 0)) == i64x2(-1, -1));
+  assert(i64x2.le_s(i64x2(1, 0), i64x2(2, 1)) == i64x2(-1, -1));
+  assert(i64x2.gt_s(i64x2(2, 0), i64x2(1, 0)) == i64x2(-1, 0));
+  assert(i64x2.gt_s(i64x2(2, 1), i64x2(1, 0)) == i64x2(-1, -1));
+  assert(i64x2.ge_s(i64x2(2, 0), i64x2(1, 0)) == i64x2(-1, -1));
+  assert(i64x2.ge_s(i64x2(2, 1), i64x2(1, 0)) == i64x2(-1, -1));
+  assert(i64x2.extend_low_i32x4_s(i32x4(-1, 1, 1, -1)) == i64x2(-1, 1));
+  assert(i64x2.extend_low_i32x4_s(i32x4(0, 0, 1, -1)) == i64x2(0, 0));
+  assert(i64x2.extend_low_i32x4_s(i32x4(1, 1, 0, 0)) == i64x2(1, 1));
+  assert(i64x2.extend_low_i32x4_s(i32x4(1, 0, 1, 0)) == i64x2(1, 0));
+  assert(i64x2.extend_low_i32x4_s(i32x4(-2147483648, -2147483648, 2147483647, 2147483647)) == i64x2(-2147483648, -2147483648));
+  assert(i64x2.extend_low_i32x4_s(i32x4(-1, -1, 2147483647, 2147483647)) == i64x2(-1, -1));
+  assert(i64x2.extend_low_i32x4_u(i32x4(0, 0, 0, 0)) == i64x2(0, 0));
+  assert(i64x2.extend_low_i32x4_u(i32x4(0, 0, 1, -1)) == i64x2(0, 0));
+  assert(i64x2.extend_low_i32x4_u(i32x4(1, 1, 0, 0)) == i64x2(1, 1));
+  assert(i64x2.extend_low_i32x4_u(i32x4(-1, -1, 0, 0)) == i64x2(4294967295, 4294967295));
+  assert(i64x2.extend_low_i32x4_u(i32x4(-2147483648, -2147483648, -2147483648, -2147483648)) 
+    == 
+    i64x2(2147483648, 2147483648)
+  );
+  assert(i64x2.extend_low_i32x4_u(i32x4(-1, -1, 2147483647, 2147483647)) 
+    == 
+    i64x2(4294967295, 4294967295)
+  );
+  assert(i64x2.extend_high_i32x4_s(i32x4(-1, 1, 1, -1)) == i64x2(1, -1));
+  assert(i64x2.extend_high_i32x4_s(i32x4(0, 0, 1, -1)) == i64x2(1, -1));
+  assert(i64x2.extend_high_i32x4_s(i32x4(1, 1, 0, 0)) == i64x2(0, 0));
+  assert(i64x2.extend_high_i32x4_s(i32x4(1, 0, 1, 0)) == i64x2(1, 0));
+  assert(i64x2.extend_high_i32x4_s(i32x4(-2147483648, -2147483648, 2147483647, 2147483647)) == i64x2(2147483647, 2147483647));
+  assert(i64x2.extend_high_i32x4_s(i32x4(-1, -1, 2147483647, 2147483647)) == i64x2(2147483647, 2147483647));
+  assert(i64x2.extend_high_i32x4_u(i32x4(0, 0, 0, 0)) == i64x2(0, 0));
+  assert(i64x2.extend_high_i32x4_u(i32x4(0, 0, 1, -1)) == i64x2(1, 4294967295));
+  assert(i64x2.extend_high_i32x4_u(i32x4(1, 1, 0, 0)) == i64x2(0, 0));
+  assert(i64x2.extend_high_i32x4_u(i32x4(0, 0, -1, -1)) == i64x2(4294967295, 4294967295));
+  assert(i64x2.extend_high_i32x4_u(i32x4(-2147483648, -2147483648, -2147483648, -2147483648)) 
+    == 
+    i64x2(2147483648, 2147483648)
+  );
+  assert(i64x2.extend_high_i32x4_u(i32x4(2147483647, 2147483647, -1, -1)) 
+    == 
+    i64x2(4294967295, 4294967295)
+  );
+  assert(i64x2.abs(i64x2(1, 1)) == i64x2(1, 1));
+  assert(i64x2.abs(i64x2(u64.MAX_VALUE, u64.MAX_VALUE)) == i64x2(1, 1));
+  assert(i64x2.abs(i64x2(-9223372036854775808, -9223372036854775808)) == i64x2(9223372036854775808, 9223372036854775808));
+  assert(
+    i64x2.bitmask(i64x2(0xFFFFFFFF_FFFFFFFF, 0xFFFFFFFF_FFFFFFFF)) == 0x00000003
+  );
+  assert(
+    i64x2.bitmask(i64x2(-1, 0xF)) == 0x00000001
+  );
 }
 
 function test_f32x4(): void {
@@ -664,6 +977,34 @@ function test_f32x4(): void {
 
   // TODO: unimp in Binaryen's interpreter
   f32x4.demote_f64x2_zero(a);
+  assert(
+    f32x4.pmin(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+    ==
+    f32x4(-1, -1, -1, -1)
+  );
+  assert(
+    f32x4.pmax(f32x4(1, -1, 1, -1), f32x4(-1, 1, -1, 1))
+    ==
+    f32x4(1, 1, 1, 1)
+  );
+  {
+    let v: v128 = f32x4.ceil(f32x4(1.1, -0.25, 70.01, 4.0));
+    assert(v == f32x4(2, -0.0, 71, 4));
+  }
+  {
+    let v: v128 =f32x4.floor(f32x4(1.1, -0.25, 70.01, 4.0));
+    assert(v == f32x4(1, -1, 70, 4));
+  }
+  assert(
+    f32x4.trunc(f32x4(1.1, 2.5, 3.9, 4.0))
+    ==
+    f32x4(1.0, 2.0, 3.0, 4.0)
+  );
+  assert(
+    f32x4.nearest(f32x4(1.1, 2.5, 3.51, 4.0))
+    ==
+    f32x4(1.0, 2.0, 4.0, 4.0)
+  );
 }
 
 function test_f64x2(): void {
@@ -710,6 +1051,34 @@ function test_f64x2(): void {
   f64x2.convert_low_i32x4_s(a);
   f64x2.convert_low_i32x4_u(a);
   f64x2.promote_low_f32x4(a);
+  assert(
+    f64x2.pmin(f64x2(1, -1), f64x2(-1, 1))
+    ==
+    f64x2(-1, -1)
+  );
+  assert(
+    f64x2.pmax(f64x2(1, -1), f64x2(-1, 1))
+    ==
+    f64x2(1, 1)
+  );
+  {
+    let v: v128 = f64x2.ceil(f64x2(1.1, -0.25));
+    assert(v == f64x2(2, -0.0));
+  }
+  {
+    let v: v128 =f64x2.floor(f64x2(1.1, -0.25));
+    assert(v == f64x2(1, -1));
+  }
+  assert(
+    f64x2.trunc(f64x2(1.1, 3.9))
+    ==
+    f64x2(1.0, 3.0)
+  );
+  assert(
+    f64x2.nearest(f64x2(1.1, 3.51))
+    ==
+    f64x2(1.0, 4.0)
+  );
 }
 
 function test_const(): v128 {

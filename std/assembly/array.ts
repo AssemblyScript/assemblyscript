@@ -6,7 +6,7 @@ import { COMPARATOR, SORT } from "./util/sort";
 import { REVERSE, FILL } from "./util/bytes";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
-import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
 // @ts-ignore: decorator
 @inline @lazy const MIN_SIZE: usize = 8;
@@ -450,7 +450,7 @@ export class Array<T> {
 
   flat(): T {
     if (!isArray<T>()) {
-      throw new TypeError(E_ILLEGALGENTYPE);
+      ERROR("Cannot call flat() on Array<T> where T is not an Array.");
     }
     // Get the length and data start values
     var ptr = this.dataStart;
