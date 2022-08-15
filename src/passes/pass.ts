@@ -431,14 +431,6 @@ export abstract class Visitor {
     // unimp
   }
 
-  visitRttCanon(expr: ExpressionRef): void {
-    // unimp
-  }
-
-  visitRttSub(expr: ExpressionRef): void {
-    // unimp
-  }
-
   visitStructNew(expr: ExpressionRef): void {
     // unimp
   }
@@ -923,20 +915,6 @@ export abstract class Visitor {
         assert(false); // TODO
         assert(this.stack.pop() == expr);
         this.visitBrOn(expr);
-        break;
-      }
-      case ExpressionId.RttCanon: {
-        this.stack.push(expr);
-        assert(false); // TODO
-        assert(this.stack.pop() == expr);
-        this.visitRttCanon(expr);
-        break;
-      }
-      case ExpressionId.RttSub: {
-        this.stack.push(expr);
-        assert(false); // TODO
-        assert(this.stack.pop() == expr);
-        this.visitRttSub(expr);
         break;
       }
       case ExpressionId.StructNew: {
@@ -1619,14 +1597,6 @@ export function replaceChild(
       break;
     }
     case ExpressionId.BrOn: {
-      assert(false); // TODO
-      break;
-    }
-    case ExpressionId.RttCanon: {
-      assert(false); // TODO
-      break;
-    }
-    case ExpressionId.RttSub: {
       assert(false); // TODO
       break;
     }

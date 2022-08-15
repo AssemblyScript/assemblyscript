@@ -65,7 +65,7 @@
   i32.add
  )
  (func $start:function-call~fn2|4 (param $0 i32) (result i32)
-  local.get $0
+  i32.const 1
  )
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
@@ -922,6 +922,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -954,6 +955,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1069,13 +1071,13 @@
     end
     global.get $~lib/rt/itcms/total
     local.tee $0
+    local.get $0
     global.get $~lib/rt/itcms/threshold
     i32.sub
     i32.const 1024
     i32.lt_u
     i32.const 10
     i32.shl
-    local.get $0
     i32.add
     global.set $~lib/rt/itcms/threshold
    end
@@ -1267,9 +1269,7 @@
   nop
  )
  (func $function-call/Foo#fnRet (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $1
-  local.get $2
-  i32.add
+  i32.const 3
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $folding-inner0
@@ -1363,16 +1363,7 @@
    i32.const 1248
    i32.load
    call_indirect $0 (type $i32_=>_i32)
-   i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1152
-    i32.const 20
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
+   drop
    memory.size
    i32.const 16
    i32.shl
@@ -1439,16 +1430,7 @@
    i32.const 1712
    i32.load
    call_indirect $0 (type $i32_=>_i32)
-   i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1152
-    i32.const 33
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
+   drop
    global.get $~lib/memory/__stack_pointer
    global.get $function-call/foo
    local.tee $0
@@ -1596,19 +1578,17 @@
     i32.const 32
     i32.and
    end
-   if (result i32)
-    global.get $~lib/rt/itcms/white
-    i32.eqz
-   else
-    i32.const 2
-   end
    local.set $3
    local.get $2
    i32.load offset=8
    local.set $0
    local.get $1
-   local.get $2
+   global.get $~lib/rt/itcms/white
+   i32.eqz
+   i32.const 2
    local.get $3
+   select
+   local.get $2
    i32.or
    i32.store offset=4
    local.get $1

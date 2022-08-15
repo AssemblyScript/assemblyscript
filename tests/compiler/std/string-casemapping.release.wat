@@ -1337,6 +1337,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1369,6 +1370,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -2663,10 +2665,12 @@
   i32.const 1
   i32.shl
   call $~lib/rt/itcms/__renew
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $start:std/string-casemapping
   (local $0 i64)
@@ -5827,10 +5831,12 @@
   i32.const 1
   i32.shl
   call $~lib/rt/itcms/__renew
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/string/String.fromCodePoint (param $0 i32) (result i32)
   (local $1 i32)
@@ -6298,19 +6304,17 @@
     i32.const 32
     i32.and
    end
-   if (result i32)
-    global.get $~lib/rt/itcms/white
-    i32.eqz
-   else
-    i32.const 2
-   end
    local.set $3
    local.get $2
    i32.load offset=8
    local.set $0
    local.get $1
-   local.get $2
+   global.get $~lib/rt/itcms/white
+   i32.eqz
+   i32.const 2
    local.get $3
+   select
+   local.get $2
    i32.or
    i32.store offset=4
    local.get $1
