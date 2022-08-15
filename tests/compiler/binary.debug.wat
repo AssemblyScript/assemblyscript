@@ -549,10 +549,8 @@
       local.set $10
      end
      local.get $6
-     i64.const 63
-     i64.shr_u
      i64.const 0
-     i64.ne
+     i64.lt_s
      if (result f64)
       f64.const 1
       local.get $10
@@ -563,10 +561,8 @@
      br $~lib/util/math/pow_lut|inlined.0
     end
     local.get $5
-    i64.const 63
-    i64.shr_u
     i64.const 0
-    i64.ne
+    i64.lt_s
     if
      block $~lib/util/math/checkint|inlined.1 (result i32)
       local.get $6
@@ -980,10 +976,8 @@
      i32.ge_u
      if
       local.get $9
-      i64.const 63
-      i64.shr_u
       i64.const 0
-      i64.ne
+      i64.lt_s
       if (result f64)
        local.get $12
        local.set $41
@@ -1755,8 +1749,8 @@
       local.set $9
      end
      local.get $6
-     i32.const 31
-     i32.shr_u
+     i32.const 0
+     i32.lt_s
      if (result f32)
       f32.const 1
       local.get $9
@@ -1767,8 +1761,8 @@
      br $~lib/util/math/powf_lut|inlined.0
     end
     local.get $5
-    i32.const 31
-    i32.shr_u
+    i32.const 0
+    i32.lt_s
     if
      block $~lib/util/math/checkintf|inlined.1 (result i32)
       local.get $6
