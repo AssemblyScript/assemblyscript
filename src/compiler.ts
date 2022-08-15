@@ -932,7 +932,10 @@ export class Compiler extends DiagnosticEmitter {
           if (global.type == Type.v128) {
             this.warning(
               DiagnosticCode.Exchange_of_0_values_is_not_supported_by_all_embeddings,
-              global.typeNode ? global.typeNode.range : global.identifierNode.range, "v128"
+              global.typeNode
+                ? assert(global.typeNode).range
+                : global.identifierNode.range,
+              "v128"
             );
           }
           return;
