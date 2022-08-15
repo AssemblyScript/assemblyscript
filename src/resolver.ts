@@ -732,7 +732,12 @@ export class Resolver extends DiagnosticEmitter {
       // infer types with generic components while updating contextual types
       for (let i = 0; i < numParameters; ++i) {
         let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
-        if (!argumentExpression) { // missing initializer -> too few arguments
+        if (!argumentExpression) {
+          // optional but not have initializer should be handled in the other place
+          if (parameterNodes[i].parameterKind == ParameterKind.OPTIONAL) {
+            continue;
+          }
+          // missing initializer -> too few arguments
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Expected_0_arguments_but_got_1,
