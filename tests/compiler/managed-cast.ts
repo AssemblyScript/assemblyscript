@@ -5,49 +5,49 @@ class Cat extends Animal {
   meow(): void {}
 }
 
-function testDowncast(cat: Cat): void {
+function testUpcast(cat: Cat): void {
   (<Animal>cat).tame();
-}
-testDowncast(new Cat());
-
-function testDowncastFromNullable(cat: Cat | null): void {
-  (<Animal>cat).tame();
-}
-testDowncastFromNullable(new Cat());
-
-function testDowncastToNullable(cat: Cat): void {
-  var maybeAnimal = <Animal | null>cat;
-  if (maybeAnimal) maybeAnimal.tame();
-}
-testDowncastToNullable(new Cat());
-
-function testDowncastFromToNullable(cat: Cat | null): void {
-  var maybeAnimal = <Animal | null>cat;
-  if (maybeAnimal) maybeAnimal.tame();
-}
-testDowncastFromToNullable(new Cat());
-
-function testUpcast(animal: Animal): void {
-  (<Cat>animal).meow();
 }
 testUpcast(new Cat());
 
-function testUpcastFromNullable(animal: Animal | null): void {
-  (<Cat>animal).meow();
+function testUpcastFromNullable(cat: Cat | null): void {
+  (<Animal>cat).tame();
 }
 testUpcastFromNullable(new Cat());
 
-function testUpcastToNullable(animal: Animal): void {
-  var maybeCat = <Cat | null>animal;
-  if (maybeCat) maybeCat.meow();
+function testUpcastToNullable(cat: Cat): void {
+  var maybeAnimal = <Animal | null>cat;
+  if (maybeAnimal) maybeAnimal.tame();
 }
 testUpcastToNullable(new Cat());
 
-function testUpcastFromToNullable(animal: Animal | null): void {
+function testUpcastFromToNullable(cat: Cat | null): void {
+  var maybeAnimal = <Animal | null>cat;
+  if (maybeAnimal) maybeAnimal.tame();
+}
+testUpcastFromToNullable(new Cat());
+
+function testDowncast(animal: Animal): void {
+  (<Cat>animal).meow();
+}
+testDowncast(new Cat());
+
+function testDowncastFromNullable(animal: Animal | null): void {
+  (<Cat>animal).meow();
+}
+testDowncastFromNullable(new Cat());
+
+function testDowncastToNullable(animal: Animal): void {
   var maybeCat = <Cat | null>animal;
   if (maybeCat) maybeCat.meow();
 }
-testUpcastFromToNullable(new Cat());
+testDowncastToNullable(new Cat());
+
+function testDowncastFromToNullable(animal: Animal | null): void {
+  var maybeCat = <Cat | null>animal;
+  if (maybeCat) maybeCat.meow();
+}
+testDowncastFromToNullable(new Cat());
 
 __stack_pointer = __heap_base;
 __collect();

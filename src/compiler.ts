@@ -3435,12 +3435,12 @@ export class Compiler extends DiagnosticEmitter {
         }
         fromType = fromType.nonNullableType;
       }
-      if (fromType.isAssignableTo(toType)) { // downcast or same
+      if (fromType.isAssignableTo(toType)) { // upcast or same
         assert(toType.isExternalReference || fromType.kind == toType.kind);
         this.currentType = toType;
         return expr;
       }
-      if (explicit && toType.nonNullableType.isAssignableTo(fromType)) { // upcast
+      if (explicit && toType.nonNullableType.isAssignableTo(fromType)) { // downcast
         // <Cat | null>(<Animal>maybeCat)
         if (toType.isExternalReference) {
           this.error(
@@ -3453,7 +3453,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         assert(fromType.kind == toType.kind);
         if (!this.options.noAssert) {
-          expr = this.makeRuntimeUpcastCheck(expr, fromType, toType, reportNode);
+          expr = this.makeRuntimeDowncastCheck(expr, fromType, toType, reportNode);
         }
         this.currentType = toType;
         return expr;
@@ -7511,7 +7511,7 @@ export class Compiler extends DiagnosticEmitter {
     // <nullable> instanceof <nonNullable> - LHS must be != 0
     if (actualType.isNullableReference && !expectedType.isNullableReference) {
 
-      // downcast - check statically
+      // upcast - check statically
       if (actualType.nonNullableType.isAssignableTo(expectedType)) {
         return module.binary(
           sizeTypeRef == TypeRef.I64
@@ -7522,7 +7522,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-      // upcast - check dynamically
+      // downcast - check dynamically
       if (expectedType.isAssignableTo(actualType)) {
         let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
@@ -7561,11 +7561,11 @@ export class Compiler extends DiagnosticEmitter {
     // either none or both nullable
     } else {
 
-      // downcast - check statically
+      // upcast - check statically
       if (actualType.isAssignableTo(expectedType)) {
         return module.maybeDropCondition(expr, module.i32(1));
 
-      // upcast - check dynamically
+      // downcast - check dynamically
       } else if (expectedType.isAssignableTo(actualType)) {
         let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
@@ -10179,9 +10179,9 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
-  /** Makes a runtime upcast check, e.g. on `<Child>parent`. */
-  makeRuntimeUpcastCheck(
-    /** Expression being upcast. */
+  /** Makes a runtime downcast check, e.g. on `<Child>parent`. */
+  makeRuntimeDowncastCheck(
+    /** Expression being downcast. */
     expr: ExpressionRef,
     /** Type of the expression. */
     type: Type,
@@ -10198,7 +10198,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(this.compileFunction(instanceofInstance));
 
     var staticAbortCallExpr = this.makeStaticAbort(
-      this.ensureStaticString("unexpected upcast"),
+      this.ensureStaticString("unexpected downcast"),
       reportNode
     ); // TODO: throw
 
