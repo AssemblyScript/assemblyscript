@@ -1551,6 +1551,10 @@ export class Resolver extends DiagnosticEmitter {
     if (ctxType.isValue) {
       // compile to contextual type if matching
       switch (ctxType.kind) {
+        case TypeKind.BOOL: {
+          if (i64_is_bool(intValue)) return Type.bool;
+          break;
+        }
         case TypeKind.I8: {
           if (i64_is_i8(intValue)) return Type.i8;
           break;
@@ -1573,10 +1577,6 @@ export class Resolver extends DiagnosticEmitter {
         }
         case TypeKind.U32: {
           if (i64_is_u32(intValue)) return Type.u32;
-          break;
-        }
-        case TypeKind.BOOL: {
-          if (i64_is_bool(intValue)) return Type.bool;
           break;
         }
         case TypeKind.ISIZE: {
