@@ -1086,6 +1086,10 @@ function test_const(): v128 {
   return one;                 // should not inline
 }
 
+export function reexport(a: v128): v128 {
+  return i32x4.mul(a, a);
+}
+
 export function test_vars_i8x16_partial(a: i8, b: i8, c: i8): v128 {
   return i8x16(0, 1, a, 3, 4, 5, b, 7, 8, 9, 10, 11, 12, 13, 14, c);
 }
@@ -1142,20 +1146,21 @@ export function test_vars_f64x2_full(a: f64, b: f64): v128 {
   return f64x2(a, b);
 }
 
-if (ASC_FEATURE_SIMD) {
-  // test builtins
-  assert(isVector<v128>());
-  assert(!isVector<i32>());
+// test exported var
+export let vec: v128 = i32x4.splat(1);
 
-  assert(isVector(i32x4.splat(0)));
-  assert(!isVector(0));
+// test builtins
+assert(isVector<v128>());
+assert(!isVector<i32>());
 
-  test_v128();
-  test_i8x16();
-  test_i16x8();
-  test_i32x4();
-  test_i64x2();
-  test_f32x4();
-  test_f64x2();
-  test_const();
-}
+assert(isVector(i32x4.splat(0)));
+assert(!isVector(0));
+
+test_v128();
+test_i8x16();
+test_i16x8();
+test_i32x4();
+test_i64x2();
+test_f32x4();
+test_f64x2();
+test_const();

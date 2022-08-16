@@ -87,12 +87,10 @@
   i32.const 1
  )
  (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.add
+  i32.const 3
  )
  (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
+  i32.const 1
  )
  (func $start:function-expression~anonymous|6 (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
@@ -1083,6 +1081,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1115,6 +1114,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1192,7 +1192,7 @@
   end
  )
  (func $function-expression/semanticallyAnonymous~fnDecl|0 (param $0 i64) (result i64)
-  local.get $0
+  unreachable
  )
  (func $function-expression/semanticallyAnonymous
   (local $0 i32)

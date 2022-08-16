@@ -930,6 +930,38 @@ export class Signature {
     return indices;
   }
 
+  /** Tests if this signature has at least one v128 operand. */
+  get hasVectorValueOperands(): bool {
+    var thisType = this.thisType;
+    if (thisType && thisType.isVectorValue) {
+      return true;
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (unchecked(parameterTypes[i]).isVectorValue) return true;
+    }
+    return false;
+  }
+
+  /** Gets the indices of all v128 operands. */
+  getVectorValueOperandIndices(): i32[] {
+    var indices = new Array<i32>();
+    var index = 0;
+    var thisType = this.thisType;
+    if (thisType) {
+      if (thisType.isVectorValue) indices.push(index);
+      ++index;
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (unchecked(parameterTypes[i]).isVectorValue) {
+        indices.push(index);
+      }
+      ++index;
+    }
+    return indices;
+  }
+
   /** Converts this signature to a string. */
   toString(validWat: bool = false): string {
     var sb = new Array<string>();

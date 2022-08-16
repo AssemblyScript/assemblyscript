@@ -856,6 +856,10 @@ export async function main(argv, options) {
 
   // Prepare output
   if (!opts.noEmit) {
+    if (opts.binaryFile) {
+      // We catched lagacy field for binary output (before 0.20)
+      return prepareResult(Error("Usage of the --binaryFile compiler option is no longer supported. Use --outFile instead."));
+    }
     let bindings = opts.bindings || [];
     let hasStdout = false;
     let hasOutFile = opts.outFile != null;
