@@ -25,14 +25,14 @@
  (export "renamed_mul" (func $export/mul))
  (export "memory" (memory $0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
- (func $exports/add (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $exports/add (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.add
  )
- (func $exports/subOpt (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $exports/subOpt (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.sub
  )
  (func $exports/subOpt@varargs (param $0 i32) (param $1 i32) (result i32)
@@ -53,9 +53,9 @@
   local.get $1
   call $exports/subOpt
  )
- (func $export/mul (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $export/mul (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.mul
  )
  (func $~setArgumentsLength (param $0 i32)

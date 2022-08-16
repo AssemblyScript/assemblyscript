@@ -317,7 +317,7 @@ export class ShadowStackPass extends Pass {
     var module = this.module;
     if (!this.hasStackCheckFunction) {
       this.hasStackCheckFunction = true;
-      module.addFunction("~stack_check", TypeRef.None, TypeRef.None, null,
+      module.addFunction("~stack_check", TypeRef.None, TypeRef.None, null, null,
         module.if(
           module.binary(BinaryOp.LtI32,
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),

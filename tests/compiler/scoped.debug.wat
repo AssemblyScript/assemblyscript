@@ -12,58 +12,58 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $scoped/fn (param $0 i32)
-  (local $1 i32)
+ (func $scoped/fn (param $c i32)
+  (local $var$1 i32)
   i32.const 0
-  local.set $1
-  local.get $0
-  local.set $1
+  local.set $var$1
+  local.get $c
+  local.set $var$1
  )
  (func $start:scoped
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i64)
-  (local $4 f32)
+  (local $anotherStartFunctionLocal i32)
+  (local $var$1 i32)
+  (local $var$2 i32)
+  (local $var$3 i64)
+  (local $var$4 f32)
   i32.const 0
-  local.set $0
+  local.set $anotherStartFunctionLocal
   loop $for-loop|0
-   local.get $0
+   local.get $anotherStartFunctionLocal
    i32.const 1
    i32.lt_s
-   local.set $1
-   local.get $1
+   local.set $var$1
+   local.get $var$1
    if
     nop
-    local.get $0
+    local.get $anotherStartFunctionLocal
     i32.const 1
     i32.add
-    local.set $0
+    local.set $anotherStartFunctionLocal
     br $for-loop|0
    end
   end
   i32.const 0
-  local.set $1
+  local.set $var$1
   loop $for-loop|1
-   local.get $1
+   local.get $var$1
    i32.const 1
    i32.lt_s
-   local.set $2
-   local.get $2
+   local.set $var$2
+   local.get $var$2
    if
-    local.get $1
+    local.get $var$1
     drop
-    local.get $1
+    local.get $var$1
     i32.const 1
     i32.add
-    local.set $1
+    local.set $var$1
     br $for-loop|1
    end
   end
   i64.const 5
-  local.set $3
+  local.set $var$3
   f32.const 10
-  local.set $4
+  local.set $var$4
   i32.const 42
   call $scoped/fn
  )

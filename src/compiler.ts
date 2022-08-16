@@ -749,7 +749,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
-      module.addFunction(BuiltinNames.setArgumentsLength, TypeRef.I32, TypeRef.None, null,
+      module.addFunction(BuiltinNames.setArgumentsLength, TypeRef.I32, TypeRef.None, null, null,
         module.global_set(this.ensureArgumentsLength(), module.local_get(0, TypeRef.I32))
       );
       module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
@@ -784,6 +784,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.paramRefs,
         signature.resultRefs,
         typesToRefs(startFunctionInstance.additionalLocals),
+        startFunctionInstance.localsByIndex.map<string>(local => local.internalName),
         module.flatten(startFunctionBody)
       );
       startFunctionInstance.finalize(module, funcRef);
@@ -1024,6 +1025,7 @@ export class Compiler extends DiagnosticEmitter {
         startSignature.paramRefs,
         startSignature.resultRefs,
         varTypes,
+        startFunction.localsByIndex.map<string>(locals => locals.internalName),
         module.flatten(startFunctionBody)
       );
       previousBody.push(
@@ -1475,6 +1477,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.paramRefs,
         signature.resultRefs,
         typesToRefs(instance.additionalLocals),
+        instance.localsByIndex.map<string>(local => local.internalName),
         module.flatten(stmts, instance.signature.returnType.toRef())
       );
 
@@ -1514,6 +1517,7 @@ export class Compiler extends DiagnosticEmitter {
         instance.internalName,
         signature.paramRefs,
         signature.resultRefs,
+        null,
         null,
         module.unreachable()
       );
@@ -1680,7 +1684,7 @@ export class Compiler extends DiagnosticEmitter {
     var valueTypeRef = valueType.toRef();
     var thisTypeRef = this.options.sizeTypeRef;
     // return this.field
-    instance.getterRef = module.addFunction(instance.internalGetterName, thisTypeRef, valueTypeRef, null,
+    instance.getterRef = module.addFunction(instance.internalGetterName, thisTypeRef, valueTypeRef, null, null,
       module.load(valueType.byteSize, valueType.isSignedIntegerValue,
         module.local_get(0, thisTypeRef),
         valueTypeRef, instance.memoryOffset
@@ -1724,7 +1728,10 @@ export class Compiler extends DiagnosticEmitter {
         ], TypeRef.None);
       }
     }
-    instance.setterRef = module.addFunction(instance.internalSetterName, createType([ thisTypeRef, valueTypeRef ]), TypeRef.None, null,
+    instance.setterRef = module.addFunction(
+      instance.internalSetterName,
+      createType([ thisTypeRef, valueTypeRef ]),
+      TypeRef.None, null, null,
       bodyExpr
     );
     if (instance.getterRef) {
@@ -6565,6 +6572,7 @@ export class Compiler extends DiagnosticEmitter {
       stub.signature.paramRefs,
       stub.signature.resultRefs,
       typesToRefs(stub.additionalLocals),
+      null,
       module.flatten(stmts, returnType.toRef())
     );
     stub.set(CommonFlags.COMPILED);
@@ -6588,7 +6596,7 @@ export class Compiler extends DiagnosticEmitter {
       stub.internalName,
       stub.signature.paramRefs,
       stub.signature.resultRefs,
-      null,
+      null, null,
       module.unreachable()
     );
     this.virtualStubs.add(original);
@@ -6713,6 +6721,7 @@ export class Compiler extends DiagnosticEmitter {
       stub.signature.paramRefs,
       stub.signature.resultRefs,
       [ TypeRef.I32 ],
+      null, 
       module.block(null, [
         builder.render(tempIndex),
         body
@@ -8610,6 +8619,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.paramRefs,
         signature.resultRefs,
         varTypes,
+        instance.localsByIndex.map<string>(local => local.internalName),
         module.flatten(stmts, sizeTypeRef)
       );
       instance.finalize(module, funcRef);

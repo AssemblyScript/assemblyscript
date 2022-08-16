@@ -144,7 +144,7 @@ export class MiniStack extends Pass {
           module.local_get(numParams, results)
         );
       }
-      module.addFunction(wrapperName, params, results, vars,
+      module.addFunction(wrapperName, params, results, vars, null,
         module.block(null, stmts, results)
       );
     }

@@ -1896,6 +1896,7 @@ export class Module {
     params: TypeRef,
     results: TypeRef,
     varTypes: TypeRef[] | null,
+    localNames: string[] | null,
     body: ExpressionRef
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
@@ -1910,6 +1911,22 @@ export class Module {
       body
     );
     binaryen._free(cArr);
+    if (localNames) {
+      let localNameMap = new Set<string>();
+      for (let i = 0, k = localNames.length; i < k; i++) {
+        let localNameParts = localNames[i].split("~");
+        let localName = localNameParts[localNameParts.length - 1];
+        if (localNameMap.has(localName)) {
+          let repeat = 0;
+          while (localNameMap.has(`${localName}_${repeat}`)) {
+            repeat++;
+          }
+          localName = `${localName}_${repeat}`;
+        }
+        localNameMap.add(localName);
+        binaryen._BinaryenFunctionSetLocalName(ret, i, this.allocStringCached(localName));
+      }
+    }
     return ret;
   }
 
