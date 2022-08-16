@@ -784,7 +784,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.paramRefs,
         signature.resultRefs,
         typesToRefs(startFunctionInstance.additionalLocals),
-        startFunctionInstance.localsByIndex.map<string>(local => local.internalName),
+        startFunctionInstance.localsByIndex.map<string>(local => local.name),
         module.flatten(startFunctionBody)
       );
       startFunctionInstance.finalize(module, funcRef);
@@ -1025,7 +1025,7 @@ export class Compiler extends DiagnosticEmitter {
         startSignature.paramRefs,
         startSignature.resultRefs,
         varTypes,
-        startFunction.localsByIndex.map<string>(locals => locals.internalName),
+        startFunction.localsByIndex.map<string>(locals => locals.name),
         module.flatten(startFunctionBody)
       );
       previousBody.push(
@@ -1477,7 +1477,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.paramRefs,
         signature.resultRefs,
         typesToRefs(instance.additionalLocals),
-        instance.localsByIndex.map<string>(local => local.internalName),
+        instance.localsByIndex.map<string>(local => local.name),
         module.flatten(stmts, instance.signature.returnType.toRef())
       );
 
@@ -8619,7 +8619,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.paramRefs,
         signature.resultRefs,
         varTypes,
-        instance.localsByIndex.map<string>(local => local.internalName),
+        instance.localsByIndex.map<string>(local => local.name),
         module.flatten(stmts, sizeTypeRef)
       );
       instance.finalize(module, funcRef);

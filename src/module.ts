@@ -1911,23 +1911,25 @@ export class Module {
       body
     );
     binaryen._free(cArr);
-    if (localNames) {
-      let localNameMap = new Set<string>();
-      for (let i = 0, k = localNames.length; i < k; i++) {
-        let localNameParts = localNames[i].split("~");
-        let localName = localNameParts[localNameParts.length - 1];
-        if (localNameMap.has(localName)) {
-          let repeat = 0;
-          while (localNameMap.has(`${localName}_${repeat}`)) {
-            repeat++;
-          }
-          localName = `${localName}_${repeat}`;
-        }
-        localNameMap.add(localName);
-        binaryen._BinaryenFunctionSetLocalName(ret, i, this.allocStringCached(localName));
-      }
-    }
+    this.setLocalNames(ret, localNames);
     return ret;
+  }
+
+  setLocalNames(funcRef: FunctionRef, localNames: string[] | null): void {
+    if (localNames == null) return;
+    let localNameMap = new Set<string>();
+    for (let i = 0, k = localNames.length; i < k; i++) {
+      let localName = localNames[i];
+      if (localNameMap.has(localName)) {
+        let repeat = 0;
+        while (localNameMap.has(`${localName}_${repeat}`)) {
+          repeat++;
+        }
+        localName = `${localName}_${repeat}`;
+      }
+      localNameMap.add(localName);
+      binaryen._BinaryenFunctionSetLocalName(funcRef, i, this.allocStringCached(localName));
+    }
   }
 
   getFunction(
