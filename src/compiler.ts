@@ -1731,7 +1731,9 @@ export class Compiler extends DiagnosticEmitter {
     instance.setterRef = module.addFunction(
       instance.internalSetterName,
       createType([ thisTypeRef, valueTypeRef ]),
-      TypeRef.None, null, null,
+      TypeRef.None,
+      null,
+      null,
       bodyExpr
     );
     if (instance.getterRef) {
@@ -6596,7 +6598,8 @@ export class Compiler extends DiagnosticEmitter {
       stub.internalName,
       stub.signature.paramRefs,
       stub.signature.resultRefs,
-      null, null,
+      null,
+      null,
       module.unreachable()
     );
     this.virtualStubs.add(original);
