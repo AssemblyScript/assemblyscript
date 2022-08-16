@@ -85,7 +85,7 @@ export namespace HeapTypeRef {
 }
 
 /** Binaryen feature constants. */
-export enum FeatureFlags {
+export const enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
   Atomics = 1 /* _BinaryenFeatureAtomics */,
   MutableGlobals = 2 /* _BinaryenFeatureMutableGlobals */,
@@ -107,7 +107,7 @@ export enum FeatureFlags {
 }
 
 /** Binaryen expression id constants. */
-export enum ExpressionId {
+export const enum ExpressionId {
   Invalid = 0 /* _BinaryenInvalidId */,
   Block = 1 /* _BinaryenBlockId */,
   If = 2 /* _BinaryenIfId */,
@@ -181,7 +181,7 @@ export enum ExpressionId {
 }
 
 /** Binaryen external kind constants. */
-export enum ExternalKind {
+export const enum ExternalKind {
   Function = 0 /* _BinaryenExternalFunction */,
   Table = 1 /* _BinaryenExternalTable */,
   Memory = 2 /* _BinaryenExternalMemory */,
@@ -190,7 +190,7 @@ export enum ExternalKind {
 }
 
 /** Binaryen unary operation constants. */
-export enum UnaryOp {
+export const enum UnaryOp {
   /** i32.clz */
   ClzI32 = 0 /* _BinaryenClzInt32 */,
   /** i64.clz */
@@ -466,7 +466,7 @@ export enum UnaryOp {
 }
 
 /** Binaryen binary operation constants. */
-export enum BinaryOp {
+export const enum BinaryOp {
   /** i32.add */
   AddI32 = 0 /* _BinaryenAddInt32 */,
   /** i32.sub */
@@ -920,7 +920,7 @@ export enum BinaryOp {
 }
 
 /** Binaryen atomic read-modify-write operation constants. */
-export enum AtomicRMWOp {
+export const enum AtomicRMWOp {
   /** i32.atomic.rmw.add, i32.atomic.rmw8.add_u, i32.atomic.rmw16.add_u, i64.atomic.rmw.add, i64.atomic.rmw8.add_u, i64.atomic.rmw16.add_u, i64.atomic.rmw32.add_u */
   Add = 0 /* _BinaryenAtomicRMWAdd */,
   /** i32.atomic.rmw.sub, i32.atomic.rmw8.sub_u, i32.atomic.rmw16.sub_u, i64.atomic.rmw.sub, i64.atomic.rmw8.sub_u, i64.atomic.rmw16.sub_u, i64.atomic.rmw32.sub_u */
@@ -936,7 +936,7 @@ export enum AtomicRMWOp {
 }
 
 /** Binaryen SIMD extract operation constants. */
-export enum SIMDExtractOp {
+export const enum SIMDExtractOp {
   /** i8x16.extract_lane_s */
   ExtractLaneI8x16 = 0 /* _BinaryenExtractLaneSVecI8x16 */,
   /** i8x16.extract_lane_u */
@@ -956,7 +956,7 @@ export enum SIMDExtractOp {
 }
 
 /** Binaryen SIMD replace operation constants. */
-export enum SIMDReplaceOp {
+export const enum SIMDReplaceOp {
   /** i8x16.replace_lane */
   ReplaceLaneI8x16 = 0 /* _BinaryenReplaceLaneVecI8x16 */,
   /** i16x8.replace_lane */
@@ -972,7 +972,7 @@ export enum SIMDReplaceOp {
 }
 
 /** Binaryen SIMD shift operation constants. */
-export enum SIMDShiftOp {
+export const enum SIMDShiftOp {
   /** i8x16.shl */
   ShlI8x16 = 0 /* _BinaryenShlVecI8x16 */,
   /** i8x16.shr_s */
@@ -1000,7 +1000,7 @@ export enum SIMDShiftOp {
 }
 
 /** Binaryen SIMD load operation constants. */
-export enum SIMDLoadOp {
+export const enum SIMDLoadOp {
   /** v128.load8_splat */
   Load8Splat = 0 /* _BinaryenLoad8SplatVec128 */,
   /** v128.load16_splat */
@@ -1028,7 +1028,7 @@ export enum SIMDLoadOp {
 }
 
 /** Binaryen SIMD load/store lane operation constants. */
-export enum SIMDLoadStoreLaneOp {
+export const enum SIMDLoadStoreLaneOp {
   /** v128.load8_lane */
   Load8Lane = 0 /* _BinaryenLoad8LaneVec128 */,
   /** v128.load16_lane */
@@ -1048,13 +1048,13 @@ export enum SIMDLoadStoreLaneOp {
 }
 
 /** Binaryen SIMD ternary operation constants. */
-export enum SIMDTernaryOp {
+export const enum SIMDTernaryOp {
   /** v128.bitselect */
   Bitselect = 0 /* _BinaryenBitselectVec128 */
 }
 
 /** Binaryen RefIs operation constants. */
-export enum RefIsOp {
+export const enum RefIsOp {
   /** ref.is_null */
   RefIsNull = 0 /* _BinaryenRefIsNull */,
   /** ref.is_func */
@@ -1066,7 +1066,7 @@ export enum RefIsOp {
 }
 
 /** Binaryen RefAs operation constants. */
-export enum RefAsOp {
+export const enum RefAsOp {
   /** ref.as_non_null */
   RefAsNonNull = 0 /* _BinaryenRefAsNonNull */,
   /** ref.as_func */
@@ -1078,7 +1078,7 @@ export enum RefAsOp {
 }
 
 /** Binaryen BrOn operation constants. */
-export enum BrOnOp {
+export const enum BrOnOp {
   /** br_on_null */
   BrOnNull = 0 /* TODO_BinaryenBrOnNull */,
   /** br_on_cast */
@@ -1092,7 +1092,7 @@ export enum BrOnOp {
 }
 
 /** Binaryen expression runner flags. */
-export enum ExpressionRunnerFlags {
+export const enum ExpressionRunnerFlags {
   Default = 0 /* _ExpressionRunnerFlagsDefault */,
   PreserveSideeffects = 1 /* _ExpressionRunnerFlagsPreserveSideeffects */,
   TraverseCalls = 2 /* _ExpressionRunnerFlagsTraverseCalls */
@@ -3127,7 +3127,7 @@ export class SwitchBuilder {
   }
 }
 
-export enum SideEffects {
+export const enum SideEffects {
   None = 0 /* _BinaryenSideEffectNone */,
   Branches = 1 /* _BinaryenSideEffectBranches */,
   Calls = 2 /* _BinaryenSideEffectCalls */,

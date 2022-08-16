@@ -1,12 +1,12 @@
 {
   "extends": "../std/portable.json",
   "compilerOptions": {
+    "target": "esnext",
     "outDir": "../build",
     "types" : ["node"],
     "allowJs": false,
     "sourceMap": true,
     "skipLibCheck": true,
-    "target": "esnext",
     "useDefineForClassFields": false,
     "strict": true,
     "noImplicitReturns": true,
