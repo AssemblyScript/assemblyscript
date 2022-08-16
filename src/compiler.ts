@@ -786,7 +786,9 @@ export class Compiler extends DiagnosticEmitter {
         typesToRefs(startFunctionInstance.additionalLocals),
         module.flatten(startFunctionBody)
       );
-      module.setLocalNames(funcRef, startFunctionInstance.localsByIndex.map<string>(local => local.name));
+      if (!options.willOptimize) {
+        module.setLocalNames(funcRef, startFunctionInstance.localsByIndex.map<string>(local => local.name));
+      }
       startFunctionInstance.finalize(module, funcRef);
       if (exportStart == null) module.setStart(funcRef);
       else {
@@ -1027,7 +1029,9 @@ export class Compiler extends DiagnosticEmitter {
         varTypes,
         module.flatten(startFunctionBody)
       );
-      module.setLocalNames(funcRef, startFunction.localsByIndex.map<string>(local => local.name));
+      if (!this.options.willOptimize) {
+        module.setLocalNames(funcRef, startFunction.localsByIndex.map<string>(local => local.name));
+      }
       previousBody.push(
         module.call(startFunction.internalName, null, TypeRef.None)
       );
@@ -1479,7 +1483,9 @@ export class Compiler extends DiagnosticEmitter {
         typesToRefs(instance.additionalLocals),
         module.flatten(stmts, instance.signature.returnType.toRef())
       );
-      module.setLocalNames(funcRef, instance.localsByIndex.map<string>(local => local.name));
+      if (!this.options.willOptimize) {
+        module.setLocalNames(funcRef, instance.localsByIndex.map<string>(local => local.name));
+      }
 
     // imported function
     } else if (instance.is(CommonFlags.AMBIENT)) {
@@ -8615,7 +8621,9 @@ export class Compiler extends DiagnosticEmitter {
         varTypes,
         module.flatten(stmts, sizeTypeRef)
       );
-      module.setLocalNames(funcRef, instance.localsByIndex.map<string>(local => local.name));
+      if (!this.options.willOptimize) {
+        module.setLocalNames(funcRef, instance.localsByIndex.map<string>(local => local.name));
+      }
       instance.finalize(module, funcRef);
     }
 
