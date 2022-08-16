@@ -1896,7 +1896,6 @@ export class Module {
     params: TypeRef,
     results: TypeRef,
     varTypes: TypeRef[] | null,
-    localNames: string[] | null,
     body: ExpressionRef
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
@@ -1911,7 +1910,6 @@ export class Module {
       body
     );
     binaryen._free(cArr);
-    this.setLocalNames(ret, localNames);
     return ret;
   }
 

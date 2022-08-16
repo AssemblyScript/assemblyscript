@@ -10198,7 +10198,6 @@ export function compileVisitGlobals(compiler: Compiler): void {
     TypeRef.I32,  // cookie
     TypeRef.None, // => void
     [ sizeTypeRef ],
-    null,
     exprs.length
       ? module.block(null, exprs)
       : module.nop()
@@ -10305,7 +10304,6 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
     createType([sizeTypeRef, TypeRef.I32]),
     TypeRef.None,
     needsTempValue ? [ sizeTypeRef ] : null,
-    null,
     module.flatten(body, TypeRef.None)
   );
 
@@ -10387,7 +10385,6 @@ export function compileVisitMembers(compiler: Compiler): void {
   module.addFunction(BuiltinNames.visit_members,
     createType([ sizeTypeRef, TypeRef.I32 ]), // this, cookie
     TypeRef.None, // => void
-    null,
     null,
     module.flatten([
       current,
@@ -10524,7 +10521,6 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
     `${prototype.internalName}~instanceof`,
     sizeTypeRef,
     TypeRef.I32,
-    null,
     null,
     module.flatten(stmts)
   );
