@@ -57,6 +57,7 @@ import {
 } from "./compiler";
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticMessage,
   DiagnosticEmitter
@@ -70,8 +71,7 @@ import {
 } from "./types";
 
 import {
-  Token,
-  Range
+  Token
 } from "./tokenizer";
 
 import {
@@ -2677,7 +2677,7 @@ export class Program extends DiagnosticEmitter {
 }
 
 /** Indicates the specific kind of an {@link Element}. */
-export enum ElementKind {
+export const enum ElementKind {
   /** A {@link Global}. */
   GLOBAL,
   /** A {@link Local}. */
