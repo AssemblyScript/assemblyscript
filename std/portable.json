@@ -4,8 +4,6 @@
     "target": "esnext",
     "module": "commonjs",
     "allowJs": true,
-    "downlevelIteration": true,
-    "preserveConstEnums": false,
     "typeRoots": [ "types" ],
     "types": [ "portable" ],
     "lib": ["esnext", "esnext.string"]
