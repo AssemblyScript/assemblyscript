@@ -5,7 +5,7 @@
     "module": "commonjs",
     "allowJs": true,
     "downlevelIteration": true,
-    "preserveConstEnums": true,
+    "preserveConstEnums": false,
     "typeRoots": [ "types" ],
     "types": [ "portable" ],
     "lib": ["esnext", "esnext.string"]
