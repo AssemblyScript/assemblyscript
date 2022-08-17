@@ -12,6 +12,7 @@
  */
 
 import {
+  Range,
   DiagnosticEmitter,
   DiagnosticCode
 } from "./diagnostics";
@@ -43,10 +44,6 @@ import {
 import {
   Flow
 } from "./flow";
-
-import {
-  Range
-} from "./tokenizer";
 
 import {
   FunctionTypeNode,
@@ -109,7 +106,7 @@ import {
 } from "./builtins";
 
 /** Indicates whether errors are reported or not. */
-export enum ReportMode {
+export const enum ReportMode {
   /** Report errors. */
   REPORT,
   /** Swallow errors. */
@@ -732,7 +729,12 @@ export class Resolver extends DiagnosticEmitter {
       // infer types with generic components while updating contextual types
       for (let i = 0; i < numParameters; ++i) {
         let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
-        if (!argumentExpression) { // missing initializer -> too few arguments
+        if (!argumentExpression) {
+          // optional but not have initializer should be handled in the other place
+          if (parameterNodes[i].parameterKind == ParameterKind.OPTIONAL) {
+            continue;
+          }
+          // missing initializer -> too few arguments
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Expected_0_arguments_but_got_1,
@@ -1552,6 +1554,10 @@ export class Resolver extends DiagnosticEmitter {
     if (ctxType.isValue) {
       // compile to contextual type if matching
       switch (ctxType.kind) {
+        case TypeKind.BOOL: {
+          if (i64_is_bool(intValue)) return Type.bool;
+          break;
+        }
         case TypeKind.I8: {
           if (i64_is_i8(intValue)) return Type.i8;
           break;
@@ -1574,10 +1580,6 @@ export class Resolver extends DiagnosticEmitter {
         }
         case TypeKind.U32: {
           if (i64_is_u32(intValue)) return Type.u32;
-          break;
-        }
-        case TypeKind.BOOL: {
-          if (i64_is_bool(intValue)) return Type.bool;
           break;
         }
         case TypeKind.ISIZE: {

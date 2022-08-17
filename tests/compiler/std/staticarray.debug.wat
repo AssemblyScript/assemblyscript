@@ -40,9 +40,9 @@
  (global $std/staticarray/maxVal (mut i32) (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/rt/__rtti_base i32 (i32.const 2704))
- (global $~lib/memory/__data_end i32 (i32.const 2844))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19228))
- (global $~lib/memory/__heap_base i32 (i32.const 19228))
+ (global $~lib/memory/__data_end i32 (i32.const 2836))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19220))
+ (global $~lib/memory/__heap_base i32 (i32.const 19220))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
@@ -69,21 +69,21 @@
  (data (i32.const 972) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00c\00a\00m\00e\00l\00\00\00")
  (data (i32.const 1004) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00d\00u\00c\00k\00\00\00\00\00")
  (data (i32.const 1036) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00e\00l\00e\00p\00h\00a\00n\00t\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1084) ",\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\14\00\00\00\a0\03\00\00\c0\03\00\00\e0\03\00\00\00\04\00\00 \04\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1084) ",\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\14\00\00\00\a0\03\00\00\c0\03\00\00\e0\03\00\00\00\04\00\00 \04\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1132) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1260) ",\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\14\00\00\00\a0\03\00\00\c0\03\00\00\e0\03\00\00\00\04\00\00 \04\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1260) ",\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\14\00\00\00\a0\03\00\00\c0\03\00\00\e0\03\00\00\00\04\00\00 \04\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1308) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1340) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00f\00o\00o\00\00\00\00\00\00\00")
  (data (i32.const 1372) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00P\05\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1404) ",\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\14\00\00\00\a0\03\00\00\c0\03\00\00\e0\03\00\00\00\04\00\00 \04\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1452) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\00\00\00\00\00\00\f8\7f\00\00\00\00")
- (data (i32.const 1484) "\1c\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\04\00\00\00\00\00\c0\7f\00\00\00\00\00\00\00\00")
+ (data (i32.const 1404) ",\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\14\00\00\00\a0\03\00\00\c0\03\00\00\e0\03\00\00\00\04\00\00 \04\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1452) "\1c\00\00\00\00\00\00\00\00\00\00\00\t\00\00\00\08\00\00\00\00\00\00\00\00\00\f8\7f\00\00\00\00")
+ (data (i32.const 1484) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\04\00\00\00\00\00\c0\7f\00\00\00\00\00\00\00\00")
  (data (i32.const 1516) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\0c\00\00\00\02\00\00\00\t\00\00\00\t\00\00\00")
  (data (i32.const 1548) ",\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\10\00\00\00\02\00\00\00\05\00\00\00\t\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1596) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00F\00i\00r\00e\00\00\00\00\00")
  (data (i32.const 1628) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00A\00i\00r\00\00\00\00\00\00\00")
  (data (i32.const 1660) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00W\00a\00t\00e\00r\00\00\00")
- (data (i32.const 1692) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\0c\00\00\00P\06\00\00p\06\00\00\90\06\00\00")
+ (data (i32.const 1692) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\0c\00\00\00P\06\00\00p\06\00\00\90\06\00\00")
  (data (i32.const 1724) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1756) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00,\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1788) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00F\00i\00r\00e\00,\00A\00i\00r\00,\00W\00a\00t\00e\00r\00")
@@ -96,22 +96,22 @@
  (data (i32.const 2092) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
  (data (i32.const 2124) ",\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\14\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 2172) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
- (data (i32.const 2204) "\1c\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2236) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2268) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2300) "\1c\00\00\00\00\00\00\00\00\00\00\00\0f\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2332) "\1c\00\00\00\00\00\00\00\00\00\00\00\0f\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2364) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2396) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2428) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2460) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2492) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2524) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\0b\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2556) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2588) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2204) "\1c\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2236) "\1c\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2268) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2300) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2332) "\1c\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2364) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2396) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2428) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2460) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2492) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2524) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\0b\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2556) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2588) "\1c\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 2620) ",\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\10\00\00\00\00\00\00\00\03\00\00\00\02\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2668) "\1c\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2704) "\11\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00$\t\00\00\00\00\00\00 \00\00\00\00\00\00\00\04A\00\00\00\00\00\00\02\t\00\00\00\00\00\00\02\01\00\00\00\00\00\00\04A\00\00\00\00\00\00\02A\00\00\00\00\00\00$\1a\00\00\00\00\00\00$\19\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2668) "\1c\00\00\00\00\00\00\00\00\00\00\00\0f\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2704) "\10\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00$\t\00\00\00\00\00\00 \00\00\00\00\00\00\00\04A\00\00\00\00\00\00\02\t\00\00\00\00\00\00\04A\00\00\00\00\00\00\02A\00\00\00\00\00\00$\1a\00\00\00\00\00\00$\19\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 15 15 funcref)
  (elem $0 (i32.const 1) $start:std/staticarray~anonymous|0 $start:std/staticarray~anonymous|1 $start:std/staticarray~anonymous|2 $start:std/staticarray~anonymous|3 $start:std/staticarray~anonymous|4 $start:std/staticarray~anonymous|5 $start:std/staticarray~anonymous|6 $start:std/staticarray~anonymous|7 $start:std/staticarray~anonymous|8 $start:std/staticarray~anonymous|9 $start:std/staticarray~anonymous|10 $start:std/staticarray~anonymous|11 $start:std/staticarray~anonymous|12 $~lib/util/sort/COMPARATOR<i32>~anonymous|0)
  (export "memory" (memory $0))
@@ -133,7 +133,7 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 118
+   i32.const 78
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -168,7 +168,7 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 133
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -4901,19 +4901,6 @@
   local.get $1
   call $~lib/array/Array<i32>#__visit
  )
- (func $~lib/array/Array<usize>#__visit (param $0 i32) (param $1 i32)
-  i32.const 0
-  drop
-  local.get $0
-  i32.load
-  local.get $1
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/array/Array<usize>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<usize>#__visit
- )
  (func $~lib/staticarray/StaticArray<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5075,46 +5062,40 @@
          block $~lib/staticarray/StaticArray<f64>
           block $~lib/array/Array<~lib/string/String>
            block $~lib/staticarray/StaticArray<~lib/string/String>
-            block $~lib/array/Array<usize>
-             block $~lib/array/Array<i32>
-              block $~lib/staticarray/StaticArray<std/staticarray/Ref>
-               block $std/staticarray/Ref
-                block $~lib/staticarray/StaticArray<i32>
-                 block $~lib/arraybuffer/ArrayBufferView
-                  block $~lib/string/String
-                   block $~lib/arraybuffer/ArrayBuffer
-                    local.get $0
-                    i32.const 8
-                    i32.sub
-                    i32.load
-                    br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/staticarray/StaticArray<i32> $std/staticarray/Ref $~lib/staticarray/StaticArray<std/staticarray/Ref> $~lib/array/Array<i32> $~lib/array/Array<usize> $~lib/staticarray/StaticArray<~lib/string/String> $~lib/array/Array<~lib/string/String> $~lib/staticarray/StaticArray<f64> $~lib/staticarray/StaticArray<f32> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>bool> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $invalid
-                   end
-                   return
+            block $~lib/array/Array<i32>
+             block $~lib/staticarray/StaticArray<std/staticarray/Ref>
+              block $std/staticarray/Ref
+               block $~lib/staticarray/StaticArray<i32>
+                block $~lib/arraybuffer/ArrayBufferView
+                 block $~lib/string/String
+                  block $~lib/arraybuffer/ArrayBuffer
+                   local.get $0
+                   i32.const 8
+                   i32.sub
+                   i32.load
+                   br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/staticarray/StaticArray<i32> $std/staticarray/Ref $~lib/staticarray/StaticArray<std/staticarray/Ref> $~lib/array/Array<i32> $~lib/staticarray/StaticArray<~lib/string/String> $~lib/array/Array<~lib/string/String> $~lib/staticarray/StaticArray<f64> $~lib/staticarray/StaticArray<f32> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>bool> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/staticarray/StaticArray<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $invalid
                   end
                   return
                  end
-                 local.get $0
-                 local.get $1
-                 call $~lib/arraybuffer/ArrayBufferView~visit
                  return
                 end
+                local.get $0
+                local.get $1
+                call $~lib/arraybuffer/ArrayBufferView~visit
                 return
                end
                return
               end
-              local.get $0
-              local.get $1
-              call $~lib/staticarray/StaticArray<std/staticarray/Ref>~visit
               return
              end
              local.get $0
              local.get $1
-             call $~lib/array/Array<i32>~visit
+             call $~lib/staticarray/StaticArray<std/staticarray/Ref>~visit
              return
             end
             local.get $0
             local.get $1
-            call $~lib/array/Array<usize>~visit
+            call $~lib/array/Array<i32>~visit
             return
            end
            local.get $0
@@ -5778,7 +5759,7 @@
   local.get $5
   i32.store offset=12
   local.get $5
-  call $~lib/staticarray/StaticArray.concat<i32>
+  call $~lib/staticarray/StaticArray<i32>#concat<~lib/staticarray/StaticArray<i32>>
   local.tee $1
   i32.store offset=8
   local.get $1
@@ -5805,7 +5786,7 @@
   local.get $5
   i32.store offset=12
   local.get $5
-  call $~lib/staticarray/StaticArray.concat<i32>
+  call $~lib/staticarray/StaticArray<i32>#concat<~lib/staticarray/StaticArray<i32>>
   local.tee $1
   i32.store offset=8
   local.get $1
@@ -5824,7 +5805,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 20
-  i32.const 8
+  i32.const 7
   i32.const 1104
   call $~lib/rt/__newBuffer
   local.tee $1
@@ -5833,7 +5814,7 @@
   local.get $1
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $0
   i32.store offset=4
   local.get $0
@@ -5897,7 +5878,7 @@
   local.get $1
   i32.const 1
   i32.const 3
-  call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $0
   i32.store offset=4
   local.get $0
@@ -5965,7 +5946,7 @@
   local.get $1
   i32.const 1
   global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $0
   i32.store offset=4
   local.get $0
@@ -5988,7 +5969,7 @@
   local.get $1
   i32.const 0
   i32.const 50
-  call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $0
   i32.store offset=4
   local.get $0
@@ -6009,7 +5990,7 @@
   local.get $1
   i32.const 100
   global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $0
   i32.store offset=4
   local.get $0
@@ -6029,7 +6010,7 @@
   local.get $1
   i32.const -1
   global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $0
   i32.store offset=4
   local.get $0
@@ -6073,7 +6054,7 @@
   local.get $1
   i32.const -2
   i32.const -2
-  call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $0
   i32.store offset=4
   local.get $0
@@ -6093,7 +6074,7 @@
   local.get $1
   i32.const 2
   i32.const -2
-  call $~lib/staticarray/StaticArray.slice<~lib/string/String>
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
   local.tee $0
   i32.store offset=4
   local.get $0
@@ -6135,7 +6116,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 20
-  i32.const 8
+  i32.const 7
   i32.const 1280
   call $~lib/rt/__newBuffer
   local.tee $0
@@ -6144,7 +6125,7 @@
   local.get $0
   i32.const 0
   i32.const 2
-  i32.const 9
+  i32.const 8
   i32.const 1328
   call $~lib/rt/__newArray
   local.set $5
@@ -6152,7 +6133,7 @@
   local.get $5
   i32.store offset=12
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#concat
+  call $~lib/staticarray/StaticArray<~lib/string/String>#concat<~lib/array/Array<~lib/string/String>>
   local.tee $3
   i32.store offset=16
   local.get $3
@@ -6164,7 +6145,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 115
+   i32.const 117
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6175,7 +6156,7 @@
   local.get $0
   i32.const 1
   i32.const 2
-  i32.const 9
+  i32.const 8
   i32.const 1392
   call $~lib/rt/__newArray
   local.set $5
@@ -6183,7 +6164,7 @@
   local.get $5
   i32.store offset=12
   local.get $5
-  call $~lib/staticarray/StaticArray<~lib/string/String>#concat
+  call $~lib/staticarray/StaticArray<~lib/string/String>#concat<~lib/array/Array<~lib/string/String>>
   local.tee $3
   i32.store offset=16
   local.get $3
@@ -6197,7 +6178,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 119
+   i32.const 121
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6206,7 +6187,7 @@
   drop
   global.get $~lib/memory/__stack_pointer
   i32.const 20
-  i32.const 8
+  i32.const 7
   i32.const 1424
   call $~lib/rt/__newBuffer
   local.tee $3
@@ -6226,7 +6207,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 126
+   i32.const 128
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6246,7 +6227,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 127
+   i32.const 129
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6266,7 +6247,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 128
+   i32.const 130
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6286,13 +6267,13 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 129
+   i32.const 131
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 8
-  i32.const 10
+  i32.const 9
   i32.const 1472
   call $~lib/rt/__newBuffer
   local.set $5
@@ -6309,13 +6290,13 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 131
+   i32.const 133
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 4
-  i32.const 11
+  i32.const 10
   i32.const 1504
   call $~lib/rt/__newBuffer
   local.set $5
@@ -6332,7 +6313,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 132
+   i32.const 134
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6354,7 +6335,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 138
+   i32.const 140
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6369,7 +6350,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 139
+   i32.const 141
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6384,7 +6365,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 140
+   i32.const 142
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6399,7 +6380,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 141
+   i32.const 143
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6414,7 +6395,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 142
+   i32.const 144
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6438,7 +6419,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 148
+   i32.const 150
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6455,7 +6436,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 149
+   i32.const 151
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6470,7 +6451,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 150
+   i32.const 152
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6485,7 +6466,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 151
+   i32.const 153
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6500,7 +6481,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 152
+   i32.const 154
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6515,14 +6496,14 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 153
+   i32.const 155
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 12
-  i32.const 8
+  i32.const 7
   i32.const 1712
   call $~lib/rt/__newBuffer
   local.tee $3
@@ -6551,7 +6532,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 159
+   i32.const 161
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6580,7 +6561,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 160
+   i32.const 162
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6609,7 +6590,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 161
+   i32.const 163
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6638,7 +6619,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 162
+   i32.const 164
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6668,7 +6649,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 163
+   i32.const 165
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6695,7 +6676,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 171
+   i32.const 173
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6709,7 +6690,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 172
+   i32.const 174
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6733,35 +6714,35 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 180
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $3
-  i32.const 1
-  call $~lib/staticarray/StaticArray<i32>#__get
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
-   i32.const 181
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $3
-  i32.const 2
-  call $~lib/staticarray/StaticArray<i32>#__get
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
    i32.const 182
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $3
+  i32.const 1
+  call $~lib/staticarray/StaticArray<i32>#__get
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 183
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $3
+  i32.const 2
+  call $~lib/staticarray/StaticArray<i32>#__get
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 184
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6788,7 +6769,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 190
+   i32.const 192
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6802,7 +6783,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 191
+   i32.const 193
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6816,7 +6797,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 192
+   i32.const 194
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6830,7 +6811,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 193
+   i32.const 195
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6844,7 +6825,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 194
+   i32.const 196
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6876,7 +6857,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 203
+   i32.const 205
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6890,7 +6871,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 204
+   i32.const 206
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6904,7 +6885,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 205
+   i32.const 207
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6924,7 +6905,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 209
+   i32.const 211
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6948,7 +6929,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 213
+   i32.const 215
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6962,7 +6943,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 214
+   i32.const 216
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6976,7 +6957,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 215
+   i32.const 217
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6998,7 +6979,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 219
+   i32.const 221
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7020,7 +7001,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 223
+   i32.const 225
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7037,7 +7018,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 226
+   i32.const 228
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7055,7 +7036,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 227
+   i32.const 229
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7072,7 +7053,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 230
+   i32.const 232
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7090,7 +7071,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 231
+   i32.const 233
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7109,7 +7090,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 234
+   i32.const 236
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7128,7 +7109,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 235
+   i32.const 237
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7147,7 +7128,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 238
+   i32.const 240
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7166,7 +7147,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 239
+   i32.const 241
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7193,40 +7174,40 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 248
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $4
-  i32.const 1
-  call $~lib/staticarray/StaticArray<i32>#__get
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
-   i32.const 249
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $4
-  i32.const 2
-  call $~lib/staticarray/StaticArray<i32>#__get
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
    i32.const 250
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   local.get $4
+  i32.const 1
+  call $~lib/staticarray/StaticArray<i32>#__get
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 251
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  i32.const 2
+  call $~lib/staticarray/StaticArray<i32>#__get
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 192
+   i32.const 252
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
   i32.const 3
   call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 3
@@ -7235,7 +7216,7 @@
   if
    i32.const 0
    i32.const 192
-   i32.const 251
+   i32.const 253
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7296,7 +7277,7 @@
   if
    i32.const 656
    i32.const 128
-   i32.const 91
+   i32.const 51
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -7416,7 +7397,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $4
  )
- (func $~lib/staticarray/StaticArray.concat<i32> (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#concat<~lib/staticarray/StaticArray<i32>> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7424,6 +7405,8 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -7450,48 +7433,56 @@
   if
    i32.const 656
    i32.const 128
-   i32.const 44
-   i32.const 60
+   i32.const 178
+   i32.const 7
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $2
+  i32.const 2
+  i32.shl
+  local.set $5
+  i32.const 0
+  drop
+  i32.const 1
+  drop
   global.get $~lib/memory/__stack_pointer
   local.get $4
   i32.const 2
   i32.shl
   i32.const 3
   call $~lib/rt/itcms/__new
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
-  local.set $6
-  local.get $2
-  i32.const 2
-  i32.shl
+  local.get $6
   local.set $7
+  local.get $1
+  local.set $8
+  local.get $0
+  local.set $9
   i32.const 0
   drop
-  local.get $6
-  local.get $0
   local.get $7
+  local.get $9
+  local.get $5
   memory.copy
-  local.get $6
   local.get $7
+  local.get $5
   i32.add
-  local.get $1
+  local.get $8
   local.get $3
   i32.const 2
   i32.shl
   memory.copy
-  local.get $5
-  local.set $8
+  local.get $6
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $10
  )
- (func $~lib/staticarray/StaticArray.slice<~lib/string/String> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7500,6 +7491,7 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -7572,61 +7564,67 @@
   i32.gt_s
   select
   local.set $3
-  local.get $3
-  i32.const 2
-  i32.shl
-  local.set $6
-  global.get $~lib/memory/__stack_pointer
-  local.get $6
-  i32.const 8
-  call $~lib/rt/itcms/__new
-  local.tee $7
-  i32.store
   local.get $0
   local.get $1
   i32.const 2
   i32.shl
   i32.add
-  local.set $8
+  local.set $6
+  local.get $3
+  i32.const 2
+  i32.shl
+  local.set $7
+  i32.const 0
+  drop
+  i32.const 1
+  drop
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.const 7
+  call $~lib/rt/itcms/__new
+  local.tee $4
+  i32.store
+  local.get $4
+  local.set $5
   i32.const 1
   drop
   i32.const 0
-  local.set $4
+  local.set $8
   loop $while-continue|0
-   local.get $4
-   local.get $6
+   local.get $8
+   local.get $7
    i32.lt_u
-   local.set $5
-   local.get $5
+   local.set $9
+   local.get $9
    if
+    local.get $6
     local.get $8
-    local.get $4
     i32.add
     i32.load
-    local.set $9
-    local.get $7
-    local.get $4
+    local.set $10
+    local.get $5
+    local.get $8
     i32.add
-    local.get $9
+    local.get $10
     i32.store
-    local.get $7
-    local.get $9
+    local.get $5
+    local.get $10
     i32.const 1
     call $~lib/rt/itcms/__link
-    local.get $4
+    local.get $8
     i32.const 4
     i32.add
-    local.set $4
+    local.set $8
     br $while-continue|0
    end
   end
-  local.get $7
-  local.set $10
+  local.get $4
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $10
+  local.get $11
  )
  (func $~lib/staticarray/StaticArray<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -7646,7 +7644,7 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 118
+   i32.const 78
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -7670,7 +7668,7 @@
   if
    i32.const 1152
    i32.const 128
-   i32.const 122
+   i32.const 82
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -7683,7 +7681,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
- (func $~lib/staticarray/StaticArray<~lib/string/String>#concat (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<~lib/string/String>#concat<~lib/array/Array<~lib/string/String>> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7723,67 +7721,69 @@
   if
    i32.const 656
    i32.const 128
-   i32.const 217
-   i32.const 60
+   i32.const 178
+   i32.const 7
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.const 2
-  i32.const 9
-  i32.const 0
-  call $~lib/rt/__newArray
-  local.tee $5
-  i32.store
-  local.get $5
-  i32.load offset=4
-  local.set $6
   local.get $2
   i32.const 2
   i32.shl
-  local.set $7
+  local.set $5
   i32.const 1
   drop
-  local.get $0
-  local.set $8
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.const 2
+  i32.const 8
   i32.const 0
+  call $~lib/rt/__newArray
+  local.tee $6
+  i32.store
+  local.get $6
+  i32.load offset=4
+  local.set $7
+  local.get $1
+  i32.load offset=4
+  local.set $8
+  local.get $0
   local.set $9
+  i32.const 1
+  drop
+  i32.const 0
+  local.set $10
   loop $for-loop|0
-   local.get $9
-   local.get $7
-   i32.lt_u
-   local.set $10
    local.get $10
+   local.get $5
+   i32.lt_u
+   local.set $11
+   local.get $11
    if
-    local.get $8
     local.get $9
+    local.get $10
     i32.add
     i32.load
-    local.set $11
-    local.get $6
-    local.get $9
+    local.set $12
+    local.get $7
+    local.get $10
     i32.add
-    local.get $11
+    local.get $12
     i32.store
-    local.get $5
-    local.get $11
+    local.get $6
+    local.get $12
     i32.const 1
     call $~lib/rt/itcms/__link
-    local.get $9
+    local.get $10
     i32.const 4
     i32.add
-    local.set $9
+    local.set $10
     br $for-loop|0
    end
   end
-  local.get $6
   local.get $7
+  local.get $5
   i32.add
-  local.set $6
-  local.get $1
-  i32.load offset=4
-  local.set $9
+  local.set $7
   local.get $3
   i32.const 2
   i32.shl
@@ -7797,17 +7797,17 @@
    local.set $12
    local.get $12
    if
-    local.get $9
+    local.get $8
     local.get $11
     i32.add
     i32.load
     local.set $13
-    local.get $6
+    local.get $7
     local.get $11
     i32.add
     local.get $13
     i32.store
-    local.get $5
+    local.get $6
     local.get $13
     i32.const 1
     call $~lib/rt/itcms/__link
@@ -7818,7 +7818,7 @@
     br $for-loop|1
    end
   end
-  local.get $5
+  local.get $6
   local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 4

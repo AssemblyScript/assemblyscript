@@ -16,6 +16,8 @@ import {
 
 /** Indicates the kind of a type. */
 export const enum TypeKind {
+  /** A 1-bit unsigned integer. */
+  BOOL,
 
   // signed integers
 
@@ -42,8 +44,6 @@ export const enum TypeKind {
   U64,
   /** A 32-bit/64-bit unsigned integer, depending on the target. Also the base of class types. */
   USIZE,
-  /** A 1-bit unsigned integer. */
-  BOOL, // sic
 
   // floats
 
@@ -145,19 +145,19 @@ export class Type {
   get intType(): Type {
     if (this == Type.auto) return this; // keep auto as a hint
     switch (this.kind) {
-      case TypeKind.I8: return Type.i8;
-      case TypeKind.I16: return Type.i16;
-      case TypeKind.F32:
-      case TypeKind.I32: return Type.i32;
-      case TypeKind.F64:
-      case TypeKind.I64: return Type.i64;
-      case TypeKind.ISIZE: return this.size == 64 ? Type.isize64 : Type.isize32;
-      case TypeKind.U8: return Type.u8;
-      case TypeKind.U16: return Type.u16;
-      case TypeKind.U32: return Type.u32;
-      case TypeKind.U64: return Type.u64;
-      case TypeKind.USIZE: return this.size == 64 ? Type.usize64 : Type.usize32;
       case TypeKind.BOOL:
+      case TypeKind.I32:
+      case TypeKind.F32:   return Type.i32;
+      case TypeKind.I8:    return Type.i8;
+      case TypeKind.I16:   return Type.i16;
+      case TypeKind.F64:
+      case TypeKind.I64:   return Type.i64;
+      case TypeKind.ISIZE: return this.size == 64 ? Type.isize64 : Type.isize32;
+      case TypeKind.U8:    return Type.u8;
+      case TypeKind.U16:   return Type.u16;
+      case TypeKind.U32:   return Type.u32;
+      case TypeKind.U64:   return Type.u64;
+      case TypeKind.USIZE: return this.size == 64 ? Type.usize64 : Type.usize32;
       default: return Type.i32;
     }
   }
@@ -367,6 +367,18 @@ export class Type {
     return nullableType;
   }
 
+  /** Use unsigned type for according size if possible. */
+  toUnsigned(): Type {
+    switch (this.kind) {
+      case TypeKind.I8:    return Type.u8;
+      case TypeKind.I16:   return Type.u16;
+      case TypeKind.I32:   return Type.u32;
+      case TypeKind.I64:   return Type.u64;
+      case TypeKind.ISIZE: return this.size == 64 ? Type.usize64 : Type.usize32;
+    }
+    return this;
+  }
+
   /** Tests if this type equals the specified. */
   equals(other: Type): bool {
     if (this.kind != other.kind) return false;
@@ -488,6 +500,7 @@ export class Type {
       }
     }
     switch (this.kind) {
+      case TypeKind.BOOL: return "bool";
       case TypeKind.I8: return "i8";
       case TypeKind.I16: return "i16";
       case TypeKind.I32: return "i32";
@@ -498,7 +511,6 @@ export class Type {
       case TypeKind.U32: return "u32";
       case TypeKind.U64: return "u64";
       case TypeKind.USIZE: return "usize";
-      case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
       case TypeKind.V128: return "v128";
@@ -519,19 +531,19 @@ export class Type {
   toRef(): TypeRef {
     switch (this.kind) {
       default: assert(false);
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL: return TypeRef.I32;
+      case TypeKind.U32: return TypeRef.I32;
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (this.size != 64) return TypeRef.I32;
       case TypeKind.I64:
-      case TypeKind.U64: return TypeRef.I64;
-      case TypeKind.F32: return TypeRef.F32;
-      case TypeKind.F64: return TypeRef.F64;
+      case TypeKind.U64:  return TypeRef.I64;
+      case TypeKind.F32:  return TypeRef.F32;
+      case TypeKind.F64:  return TypeRef.F64;
       case TypeKind.V128: return TypeRef.V128;
       // TODO: nullable/non-nullable refs have different type refs
       case TypeKind.FUNCREF: return TypeRef.Funcref;
@@ -911,6 +923,38 @@ export class Signature {
     var parameterTypes = this.parameterTypes;
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
       if (unchecked(parameterTypes[i]).isManaged) {
+        indices.push(index);
+      }
+      ++index;
+    }
+    return indices;
+  }
+
+  /** Tests if this signature has at least one v128 operand. */
+  get hasVectorValueOperands(): bool {
+    var thisType = this.thisType;
+    if (thisType && thisType.isVectorValue) {
+      return true;
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (unchecked(parameterTypes[i]).isVectorValue) return true;
+    }
+    return false;
+  }
+
+  /** Gets the indices of all v128 operands. */
+  getVectorValueOperandIndices(): i32[] {
+    var indices = new Array<i32>();
+    var index = 0;
+    var thisType = this.thisType;
+    if (thisType) {
+      if (thisType.isVectorValue) indices.push(index);
+      ++index;
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (unchecked(parameterTypes[i]).isVectorValue) {
         indices.push(index);
       }
       ++index;

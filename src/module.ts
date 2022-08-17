@@ -58,17 +58,34 @@ export namespace TypeRef {
   export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
-  export const Funcref: TypeRef = 7 /* _BinaryenTypeFuncref */;
-  export const Externref: TypeRef = 8 /* _BinaryenTypeExternref */;
-  export const Anyref: TypeRef = 8 /* _BinaryenTypeAnyref */;
-  export const Eqref: TypeRef = 9 /* _BinaryenTypeEqref */;
-  export const I31ref: TypeRef = 10 /* _BinaryenTypeI31ref */;
-  export const Dataref: TypeRef = 11 /* _BinaryenTypeDataref */;
+  export const Funcref = binaryen._BinaryenTypeFuncref();
+  export const Externref = binaryen._BinaryenTypeExternref();
+  export const Anyref = binaryen._BinaryenTypeAnyref();
+  export const Eqref = binaryen._BinaryenTypeEqref();
+  export const I31ref = binaryen._BinaryenTypeI31ref();
+  export const Dataref = binaryen._BinaryenTypeDataref();
+  export const Stringref = binaryen._BinaryenTypeStringref();
+  export const StringviewWTF8 = binaryen._BinaryenTypeStringviewWTF8();
+  export const StringviewWTF16 = binaryen._BinaryenTypeStringviewWTF16();
+  export const StringviewIter = binaryen._BinaryenTypeStringviewIter();
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
+export type HeapTypeRef = binaryen.HeapTypeRef;
+export namespace HeapTypeRef {
+  export const Func = binaryen._BinaryenHeapTypeFunc();
+  export const Any = binaryen._BinaryenHeapTypeAny();
+  export const Eq = binaryen._BinaryenHeapTypeEq();
+  export const I31 = binaryen._BinaryenHeapTypeI31();
+  export const Data = binaryen._BinaryenHeapTypeData();
+  export const String = binaryen._BinaryenHeapTypeString();
+  export const StringviewWTF8 = binaryen._BinaryenHeapTypeStringviewWTF8();
+  export const StringviewWTF16 = binaryen._BinaryenHeapTypeStringviewWTF16();
+  export const StringviewIter = binaryen._BinaryenHeapTypeStringviewIter();
+}
+
 /** Binaryen feature constants. */
-export enum FeatureFlags {
+export const enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
   Atomics = 1 /* _BinaryenFeatureAtomics */,
   MutableGlobals = 2 /* _BinaryenFeatureMutableGlobals */,
@@ -85,11 +102,12 @@ export enum FeatureFlags {
   FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
-  All = 57343 /* _BinaryenFeatureAll */
+  Strings = 65536 /* _BinaryenFeatureStrings */,
+  All = 122879 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
-export enum ExpressionId {
+export const enum ExpressionId {
   Invalid = 0 /* _BinaryenInvalidId */,
   Block = 1 /* _BinaryenBlockId */,
   If = 2 /* _BinaryenIfId */,
@@ -150,22 +168,20 @@ export enum ExpressionId {
   RefTest = 57 /* _BinaryenRefTestId */,
   RefCast = 58 /* _BinaryenRefCastId */,
   BrOn = 59 /* _BinaryenBrOnId */,
-  RttCanon = 60 /* _BinaryenRttCanonId */,
-  RttSub = 61 /* _BinaryenRttSubId */,
-  StructNew = 62 /* _BinaryenStructNewId */,
-  StructGet = 63 /* _BinaryenStructGetId */,
-  StructSet = 64 /* _BinaryenStructSetId */,
-  ArrayNew = 65 /* _BinaryenArrayNewId */,
-  ArrayInit = 66 /* _BinaryenArrayInitId */,
-  ArrayGet = 67 /* _BinaryenArrayGetId */,
-  ArraySet = 68 /* _BinaryenArraySetId */,
-  ArrayLen = 69 /* _BinaryenArrayLenId */,
-  ArrayCopy = 70 /* _BinaryenArrayCopyId */,
-  RefAs = 71 /* _BinaryenRefAsId */
+  StructNew = 60 /* _BinaryenStructNewId */,
+  StructGet = 61 /* _BinaryenStructGetId */,
+  StructSet = 62 /* _BinaryenStructSetId */,
+  ArrayNew = 63 /* _BinaryenArrayNewId */,
+  ArrayInit = 64 /* _BinaryenArrayInitId */,
+  ArrayGet = 65 /* _BinaryenArrayGetId */,
+  ArraySet = 66 /* _BinaryenArraySetId */,
+  ArrayLen = 67 /* _BinaryenArrayLenId */,
+  ArrayCopy = 68 /* _BinaryenArrayCopyId */,
+  RefAs = 69 /* _BinaryenRefAsId */
 }
 
 /** Binaryen external kind constants. */
-export enum ExternalKind {
+export const enum ExternalKind {
   Function = 0 /* _BinaryenExternalFunction */,
   Table = 1 /* _BinaryenExternalTable */,
   Memory = 2 /* _BinaryenExternalMemory */,
@@ -174,7 +190,7 @@ export enum ExternalKind {
 }
 
 /** Binaryen unary operation constants. */
-export enum UnaryOp {
+export const enum UnaryOp {
   /** i32.clz */
   ClzI32 = 0 /* _BinaryenClzInt32 */,
   /** i64.clz */
@@ -450,7 +466,7 @@ export enum UnaryOp {
 }
 
 /** Binaryen binary operation constants. */
-export enum BinaryOp {
+export const enum BinaryOp {
   /** i32.add */
   AddI32 = 0 /* _BinaryenAddInt32 */,
   /** i32.sub */
@@ -904,7 +920,7 @@ export enum BinaryOp {
 }
 
 /** Binaryen atomic read-modify-write operation constants. */
-export enum AtomicRMWOp {
+export const enum AtomicRMWOp {
   /** i32.atomic.rmw.add, i32.atomic.rmw8.add_u, i32.atomic.rmw16.add_u, i64.atomic.rmw.add, i64.atomic.rmw8.add_u, i64.atomic.rmw16.add_u, i64.atomic.rmw32.add_u */
   Add = 0 /* _BinaryenAtomicRMWAdd */,
   /** i32.atomic.rmw.sub, i32.atomic.rmw8.sub_u, i32.atomic.rmw16.sub_u, i64.atomic.rmw.sub, i64.atomic.rmw8.sub_u, i64.atomic.rmw16.sub_u, i64.atomic.rmw32.sub_u */
@@ -920,7 +936,7 @@ export enum AtomicRMWOp {
 }
 
 /** Binaryen SIMD extract operation constants. */
-export enum SIMDExtractOp {
+export const enum SIMDExtractOp {
   /** i8x16.extract_lane_s */
   ExtractLaneI8x16 = 0 /* _BinaryenExtractLaneSVecI8x16 */,
   /** i8x16.extract_lane_u */
@@ -940,7 +956,7 @@ export enum SIMDExtractOp {
 }
 
 /** Binaryen SIMD replace operation constants. */
-export enum SIMDReplaceOp {
+export const enum SIMDReplaceOp {
   /** i8x16.replace_lane */
   ReplaceLaneI8x16 = 0 /* _BinaryenReplaceLaneVecI8x16 */,
   /** i16x8.replace_lane */
@@ -956,7 +972,7 @@ export enum SIMDReplaceOp {
 }
 
 /** Binaryen SIMD shift operation constants. */
-export enum SIMDShiftOp {
+export const enum SIMDShiftOp {
   /** i8x16.shl */
   ShlI8x16 = 0 /* _BinaryenShlVecI8x16 */,
   /** i8x16.shr_s */
@@ -984,7 +1000,7 @@ export enum SIMDShiftOp {
 }
 
 /** Binaryen SIMD load operation constants. */
-export enum SIMDLoadOp {
+export const enum SIMDLoadOp {
   /** v128.load8_splat */
   Load8Splat = 0 /* _BinaryenLoad8SplatVec128 */,
   /** v128.load16_splat */
@@ -1012,7 +1028,7 @@ export enum SIMDLoadOp {
 }
 
 /** Binaryen SIMD load/store lane operation constants. */
-export enum SIMDLoadStoreLaneOp {
+export const enum SIMDLoadStoreLaneOp {
   /** v128.load8_lane */
   Load8Lane = 0 /* _BinaryenLoad8LaneVec128 */,
   /** v128.load16_lane */
@@ -1032,13 +1048,13 @@ export enum SIMDLoadStoreLaneOp {
 }
 
 /** Binaryen SIMD ternary operation constants. */
-export enum SIMDTernaryOp {
+export const enum SIMDTernaryOp {
   /** v128.bitselect */
   Bitselect = 0 /* _BinaryenBitselectVec128 */
 }
 
 /** Binaryen RefIs operation constants. */
-export enum RefIsOp {
+export const enum RefIsOp {
   /** ref.is_null */
   RefIsNull = 0 /* _BinaryenRefIsNull */,
   /** ref.is_func */
@@ -1050,7 +1066,7 @@ export enum RefIsOp {
 }
 
 /** Binaryen RefAs operation constants. */
-export enum RefAsOp {
+export const enum RefAsOp {
   /** ref.as_non_null */
   RefAsNonNull = 0 /* _BinaryenRefAsNonNull */,
   /** ref.as_func */
@@ -1062,7 +1078,7 @@ export enum RefAsOp {
 }
 
 /** Binaryen BrOn operation constants. */
-export enum BrOnOp {
+export const enum BrOnOp {
   /** br_on_null */
   BrOnNull = 0 /* TODO_BinaryenBrOnNull */,
   /** br_on_cast */
@@ -1076,7 +1092,7 @@ export enum BrOnOp {
 }
 
 /** Binaryen expression runner flags. */
-export enum ExpressionRunnerFlags {
+export const enum ExpressionRunnerFlags {
   Default = 0 /* _ExpressionRunnerFlagsDefault */,
   PreserveSideeffects = 1 /* _ExpressionRunnerFlagsPreserveSideeffects */,
   TraverseCalls = 2 /* _ExpressionRunnerFlagsTraverseCalls */
@@ -1173,7 +1189,7 @@ export class Module {
     assert(bytes.length == 16);
     var out = this.lit;
     for (let i = 0; i < 16; ++i) {
-      binaryen.__i32_store8(out + i, bytes[i]);
+      binaryen.__i32_store8(out + i, unchecked(bytes[i]));
     }
     binaryen._BinaryenLiteralVec128(out, out);
     return binaryen._BinaryenConst(this.ref, out);
@@ -1545,7 +1561,7 @@ export class Module {
     var numNames = names.length;
     var strs = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
-      strs[i] = this.allocStringCached(names[i]);
+      unchecked(strs[i] = this.allocStringCached(names[i]));
     }
     var cArr = allocPtrArray(strs);
     var cStr = this.allocStringCached(defaultName);
@@ -1777,7 +1793,11 @@ export class Module {
   ref_is_null(
     expr: ExpressionRef
   ): ExpressionRef {
-    return binaryen._BinaryenRefIs(this.ref, RefIsOp.RefIsNull, expr);
+    if (isNullableType(getExpressionType(expr))) {
+      return binaryen._BinaryenRefIs(this.ref, RefIsOp.RefIsNull, expr);
+    } else {
+      return this.i32(0); // false literal
+    }
   }
 
   ref_as(
@@ -1790,7 +1810,11 @@ export class Module {
   ref_as_nonnull(
     expr: ExpressionRef
   ): ExpressionRef {
-    return binaryen._BinaryenRefAs(this.ref, RefAsOp.RefAsNonNull, expr);
+    if (isNullableType(getExpressionType(expr))) {
+      return binaryen._BinaryenRefAs(this.ref, RefAsOp.RefAsNonNull, expr);
+    } else {
+      return expr;
+    }
   }
 
   ref_func(
@@ -2080,15 +2104,16 @@ export class Module {
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
-      let segment = segments[i];
+      let segment = unchecked(segments[i]);
       let buffer = segment.buffer;
       let offset = segment.offset;
-      segs[i] = allocU8Array(buffer);
-      psvs[i] = 0; // no passive segments currently
-      offs[i] = target == Target.WASM64
+      unchecked(segs[i] = allocU8Array(buffer));
+      unchecked(psvs[i] = 0); // no passive segments currently
+      unchecked(offs[i] = target == Target.WASM64
         ? this.i64(i64_low(offset), i64_high(offset))
-        : this.i32(i64_low(offset));
-      sizs[i] = buffer.length;
+        : this.i32(i64_low(offset))
+      );
+      unchecked(sizs[i] = buffer.length);
     }
     var cArr1 = allocPtrArray(segs);
     var cArr2 = allocU8Array(psvs);
@@ -2102,7 +2127,7 @@ export class Module {
     binaryen._free(cArr2);
     binaryen._free(cArr1);
     for (let i = k - 1; i >= 0; --i) {
-      binaryen._free(segs[i]);
+      binaryen._free(unchecked(segs[i]));
     }
   }
 
@@ -2122,7 +2147,7 @@ export class Module {
     var numNames = funcs.length;
     var names = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
-      names[i] = this.allocStringCached(funcs[i]);
+      unchecked(names[i] = this.allocStringCached(funcs[i]));
     }
     var cArr = allocPtrArray(names);
     var tableRef = binaryen._BinaryenGetTable(this.ref, cStr);
@@ -2347,6 +2372,8 @@ export class Module {
         passes.push("merge-blocks");
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
+        passes.push("gufa-optimizing");
+        passes.push("dae-optimizing");
       }
       if (optimizeLevel >= 3) {
         passes.push("simplify-locals-nostructure");
@@ -2357,7 +2384,6 @@ export class Module {
         passes.push("licm");
         passes.push("merge-locals");
         passes.push("reorder-locals");
-        passes.push("dae-optimizing");
       }
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
@@ -2488,6 +2514,9 @@ export class Module {
       }
       // clean up
       passes.push("duplicate-function-elimination");
+      if (shrinkLevel >= 2) {
+        passes.push("merge-similar-functions");
+      }
       passes.push("memory-packing");
       passes.push("remove-unused-module-elements");
 
@@ -2504,24 +2533,41 @@ export class Module {
   }
 
   toBinary(sourceMapUrl: string | null = null): BinaryModule {
-    var out = this.lit; // safe to reuse as long as..
-    assert(binaryen._BinaryenSizeofLiteral() >= 12);
-    var cStr = allocString(sourceMapUrl);
-    var binaryPtr: usize = 0;
-    var sourceMapPtr: usize = 0;
-    binaryen._BinaryenModuleAllocateAndWrite(out, this.ref, cStr);
-    binaryPtr = assert(binaryen.__i32_load(out));
-    var binaryLen = binaryen.__i32_load(out + 4);
-    sourceMapPtr = binaryen.__i32_load(out + 8); // may be NULL
-    var binary = new BinaryModule(readBuffer(binaryPtr, binaryLen), readString(sourceMapPtr));
-    if (cStr) binaryen._free(cStr);
+    assert(
+      binaryen._BinaryenSizeofLiteral() >=
+      binaryen._BinaryenSizeofAllocateAndWriteResult()
+    );
+
+    // now safely reuse lit buffer for BinaryenModuleAllocateAndWriteResult
+    var resPtr = this.lit;
+    var urlPtr = allocString(sourceMapUrl);
+
+    binaryen._BinaryenModuleAllocateAndWrite(resPtr, this.ref, urlPtr);
+
+    // read BinaryenModuleAllocateAndWriteResult struct
+    var binaryPtr = binaryen.__i32_load(resPtr + 0) as usize; // non-nullabe
+    var binaryLen = binaryen.__i32_load(resPtr + 4);
+    var srcMapPtr = binaryen.__i32_load(resPtr + 8) as usize; // nullable
+
+    var binary = new BinaryModule(
+      readBuffer(assert(binaryPtr), binaryLen),
+      readString(srcMapPtr)
+    );
+
+    if (urlPtr) binaryen._free(urlPtr);
+    if (srcMapPtr) binaryen._free(srcMapPtr);
     binaryen._free(binaryPtr);
-    if (sourceMapPtr) binaryen._free(sourceMapPtr);
+
     return binary;
   }
 
   toText(watFormat: bool = true): string {
-    throw new Error("not implemented"); // JS glue overrides this
+    var textPtr = watFormat
+      ? binaryen._BinaryenModuleAllocateAndWriteStackIR(this.ref, true)
+      : binaryen._BinaryenModuleAllocateAndWriteText(this.ref);
+    var text = readString(textPtr);
+    if (textPtr) binaryen._free(textPtr);
+    return text || "";
   }
 
   private cachedStringsToPointers: Map<string,usize> = new Map();
@@ -2575,8 +2621,7 @@ export class Module {
       case ExpressionId.Nop:
       case ExpressionId.Unreachable:
       case ExpressionId.DataDrop:
-      case ExpressionId.RefNull:
-      case ExpressionId.RttCanon: return this.copyExpression(expr);
+      case ExpressionId.RefNull: return this.copyExpression(expr);
     }
     return 0;
   }
@@ -2602,7 +2647,7 @@ export class Module {
     return precomp;
   }
 
-  isConstExpression(expr: ExpressionRef, features: FeatureFlags = 0): bool {
+  isConstExpression(expr: ExpressionRef): bool {
     switch (getExpressionId(expr)) {
       case ExpressionId.Const:
       case ExpressionId.RefNull:
@@ -2669,10 +2714,14 @@ export function expandType(type: TypeRef): TypeRef[] {
   binaryen._BinaryenTypeExpand(type, cArr);
   var types = new Array<TypeRef>(arity);
   for (let i: u32 = 0; i < arity; ++i) {
-    types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+    unchecked(types[i] = binaryen.__i32_load(cArr + (<usize>i << 2)));
   }
   binaryen._free(cArr);
   return types;
+}
+
+export function isNullableType(type: TypeRef): bool {
+  return binaryen._BinaryenTypeIsNullable(type);
 }
 
 // expressions
@@ -2906,7 +2955,7 @@ export function getFunctionVars(func: FunctionRef): TypeRef[] {
   var count = binaryen._BinaryenFunctionGetNumVars(func);
   var types = new Array<TypeRef>(count);
   for (let i: Index = 0; i < count; ++i) {
-    types[i] = binaryen._BinaryenFunctionGetVar(func, i);
+    unchecked(types[i] = binaryen._BinaryenFunctionGetVar(func, i));
   }
   return types;
 }
@@ -3042,17 +3091,17 @@ export class SwitchBuilder {
     var entry = new Array<ExpressionRef>(1 + numValues + 1);
     var labels = new Array<string>(numCases);
     for (let i = 0; i < numCases; ++i) {
-      labels[i] = `case${i}${labelPostfix}`;
+      unchecked(labels[i] = `case${i}${labelPostfix}`);
     }
     entry[0] = module.local_set(localIndex, this.condition, false); // u32
     for (let i = 0; i < numValues; ++i) {
-      let index = indexes[i];
-      entry[1 + i] = module.br(labels[index],
+      let index = unchecked(indexes[i]);
+      unchecked(entry[1 + i] = module.br(labels[index],
         module.binary(BinaryOp.EqI32,
           module.local_get(localIndex, TypeRef.I32),
           module.i32(values[i])
         )
-      );
+      ));
     }
     var defaultIndex = this.defaultIndex;
     var defaultLabel = `default${labelPostfix}`;
@@ -3065,7 +3114,7 @@ export class SwitchBuilder {
     for (let i = 1; i < numCases; ++i) {
       let block = cases[i - 1];
       block.unshift(current);
-      current = module.block(labels[i], block);
+      current = module.block(unchecked(labels[i]), block);
     }
     var lastCase = cases[numCases - 1];
     lastCase.unshift(current);
@@ -3078,7 +3127,7 @@ export class SwitchBuilder {
   }
 }
 
-export enum SideEffects {
+export const enum SideEffects {
   None = 0 /* _BinaryenSideEffectNone */,
   Branches = 1 /* _BinaryenSideEffectBranches */,
   Calls = 2 /* _BinaryenSideEffectCalls */,
@@ -3114,7 +3163,7 @@ function allocU8Array(u8s: Uint8Array | null): usize {
   var len = u8s.length;
   var ptr = binaryen._malloc(len);
   for (let i = 0; i < len; ++i) {
-    binaryen.__i32_store8(ptr + i, u8s[i]);
+    binaryen.__i32_store8(ptr + i, unchecked(u8s[i]));
   }
   return ptr;
 }
@@ -3125,7 +3174,7 @@ function allocI32Array(i32s: i32[] | null): usize {
   var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
   for (let i = 0; i < len; ++i) {
-    let val = i32s[i];
+    let val = unchecked(i32s[i]);
     binaryen.__i32_store(idx, val);
     idx += 4;
   }
@@ -3138,7 +3187,7 @@ function allocU32Array(u32s: u32[] | null): usize {
   var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
   for (let i = 0; i < len; ++i) {
-    let val = u32s[i];
+    let val = unchecked(u32s[i]);
     binaryen.__i32_store(idx, val);
     idx += 4;
   }
@@ -3153,7 +3202,7 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
   var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
   for (let i = 0, k = len; i < k; ++i) {
-    let val = ptrs[i];
+    let val = unchecked(ptrs[i]);
     binaryen.__i32_store(idx, <i32>val);
     idx += 4;
   }
@@ -3224,7 +3273,7 @@ function allocString(str: string | null): usize {
 function readBuffer(ptr: usize, len: i32): Uint8Array {
   var ret = new Uint8Array(len);
   for (let i = 0; i < len; ++i) {
-    ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
+    unchecked(ret[i] = binaryen.__i32_load8_u(ptr + <usize>i));
   }
   return ret;
 }

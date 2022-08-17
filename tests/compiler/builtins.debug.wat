@@ -3788,6 +3788,162 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 170
+  i32.const 170
+  i32.eq
+  drop
+  i32.const 170
+  i32.extend8_s
+  i32.const 255
+  i32.and
+  i32.const 170
+  i32.eq
+  drop
+  i32.const 43707
+  local.tee $8
+  i32.const 8
+  i32.shl
+  local.get $8
+  i32.const 8
+  i32.shr_u
+  i32.or
+  i32.const 65535
+  i32.and
+  i32.const 48042
+  i32.eq
+  drop
+  i32.const 43707
+  i32.extend16_s
+  i32.const 65535
+  i32.and
+  local.tee $8
+  i32.const 8
+  i32.shl
+  local.get $8
+  i32.const 8
+  i32.shr_u
+  i32.or
+  i32.const 65535
+  i32.and
+  i32.const 48042
+  i32.eq
+  drop
+  i32.const -1430532899
+  local.tee $8
+  i32.const -16711936
+  i32.and
+  i32.const 8
+  i32.rotl
+  local.get $8
+  i32.const 16711935
+  i32.and
+  i32.const 8
+  i32.rotr
+  i32.or
+  i32.const -573785174
+  i32.eq
+  drop
+  i32.const -1430532899
+  local.tee $8
+  i32.const -16711936
+  i32.and
+  i32.const 8
+  i32.rotl
+  local.get $8
+  i32.const 16711935
+  i32.and
+  i32.const 8
+  i32.rotr
+  i32.or
+  i32.const -573785174
+  i32.eq
+  drop
+  i64.const 4822679907192029
+  local.tee $2
+  i64.const 8
+  i64.shr_u
+  i64.const 71777214294589695
+  i64.and
+  local.get $2
+  i64.const 71777214294589695
+  i64.and
+  i64.const 8
+  i64.shl
+  i64.or
+  local.tee $3
+  i64.const 16
+  i64.shr_u
+  i64.const 281470681808895
+  i64.and
+  local.get $3
+  i64.const 281470681808895
+  i64.and
+  i64.const 16
+  i64.shl
+  i64.or
+  i64.const 32
+  i64.rotr
+  i64.const -2464388556401798912
+  i64.eq
+  drop
+  i64.const 4822679907192029
+  local.tee $2
+  i64.const 8
+  i64.shr_u
+  i64.const 71777214294589695
+  i64.and
+  local.get $2
+  i64.const 71777214294589695
+  i64.and
+  i64.const 8
+  i64.shl
+  i64.or
+  local.tee $3
+  i64.const 16
+  i64.shr_u
+  i64.const 281470681808895
+  i64.and
+  local.get $3
+  i64.const 281470681808895
+  i64.and
+  i64.const 16
+  i64.shl
+  i64.or
+  i64.const 32
+  i64.rotr
+  i64.const -2464388556401798912
+  i64.eq
+  drop
+  i32.const -1430532899
+  local.tee $8
+  i32.const -16711936
+  i32.and
+  i32.const 8
+  i32.rotl
+  local.get $8
+  i32.const 16711935
+  i32.and
+  i32.const 8
+  i32.rotr
+  i32.or
+  i32.const -573785174
+  i32.eq
+  drop
+  i32.const -1430532899
+  local.tee $8
+  i32.const -16711936
+  i32.and
+  i32.const 8
+  i32.rotl
+  local.get $8
+  i32.const 16711935
+  i32.and
+  i32.const 8
+  i32.rotr
+  i32.or
+  i32.const -573785174
+  i32.eq
+  drop
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add

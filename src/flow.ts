@@ -162,7 +162,7 @@ export const enum FlowFlags {
 }
 
 /** Flags indicating the current state of a local. */
-export enum LocalFlags {
+export const enum LocalFlags {
   /** No specific conditions. */
   NONE = 0,
 
@@ -177,7 +177,7 @@ export enum LocalFlags {
 }
 
 /** Flags indicating the current state of a field. */
-export enum FieldFlags {
+export const enum FieldFlags {
   NONE = 0,
   INITIALIZED = 1 << 0
 }
@@ -1417,11 +1417,11 @@ export class Flow {
           default: assert(false);
         }
         switch (type.kind) {
-          case TypeKind.I8: return value < <i32>i8.MIN_VALUE || value > <i32>i8.MAX_VALUE;
-          case TypeKind.I16: return value < <i32>i16.MIN_VALUE || value > <i32>i16.MAX_VALUE;
-          case TypeKind.U8: return value < 0 || value > <i32>u8.MAX_VALUE;
-          case TypeKind.U16: return value < 0 || value > <i32>u16.MAX_VALUE;
           case TypeKind.BOOL: return (value & ~1) != 0;
+          case TypeKind.I8:   return value < <i32>i8.MIN_VALUE  || value > <i32>i8.MAX_VALUE;
+          case TypeKind.I16:  return value < <i32>i16.MIN_VALUE || value > <i32>i16.MAX_VALUE;
+          case TypeKind.U8:   return value < 0 || value > <i32>u8.MAX_VALUE;
+          case TypeKind.U16:  return value < 0 || value > <i32>u16.MAX_VALUE;
         }
         break;
       }

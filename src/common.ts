@@ -4,7 +4,7 @@
  */
 
 /** Indicates traits of a {@link Node} or {@link Element}. */
-export enum CommonFlags {
+export const enum CommonFlags {
   /** No flags set. */
   NONE = 0,
 
