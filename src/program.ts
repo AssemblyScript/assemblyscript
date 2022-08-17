@@ -781,11 +781,6 @@ export class Program extends DiagnosticEmitter {
 
   // Utility
 
-  /** Tests whether this is a WASI program. */
-  get isWasi(): bool {
-    return this.elementsByName.has(CommonNames.ASC_WASI);
-  }
-
   /** Obtains the source matching the specified internal path. */
   getSource(internalPath: string): string | null {
     var sources = this.sources;
@@ -1401,7 +1396,6 @@ export class Program extends DiagnosticEmitter {
     {
       let globalAliases = options.globalAliases;
       if (!globalAliases) globalAliases = new Map();
-      let isWasi = this.isWasi;
       if (!globalAliases.has(CommonNames.abort)) {
         globalAliases.set(CommonNames.abort, BuiltinNames.abort);
       }
