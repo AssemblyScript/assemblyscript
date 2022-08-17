@@ -1,13 +1,6 @@
 import {
-  process
-} from "./process";
-
-import {
   console as binding
 } from "./bindings/dom";
-
-// @ts-ignore: decorator
-@lazy var timers = new Map<string,u64>();
 
 export namespace console {
 
