@@ -1403,25 +1403,13 @@ export class Program extends DiagnosticEmitter {
       if (!globalAliases) globalAliases = new Map();
       let isWasi = this.isWasi;
       if (!globalAliases.has(CommonNames.abort)) {
-        globalAliases.set(CommonNames.abort,
-          isWasi
-            ? BuiltinNames.wasiAbort
-            : BuiltinNames.abort
-        );
+        globalAliases.set(CommonNames.abort, BuiltinNames.abort);
       }
       if (!globalAliases.has(CommonNames.trace)) {
-        globalAliases.set(CommonNames.trace,
-          isWasi
-            ? BuiltinNames.wasiTrace
-            : BuiltinNames.trace
-        );
+        globalAliases.set(CommonNames.trace, BuiltinNames.trace);
       }
       if (!globalAliases.has(CommonNames.seed)) {
-        globalAliases.set(CommonNames.seed,
-          isWasi
-            ? BuiltinNames.wasiSeed
-            : BuiltinNames.seed
-        );
+        globalAliases.set(CommonNames.seed, BuiltinNames.seed);
       }
       if (!globalAliases.has(CommonNames.Math)) {
         globalAliases.set(CommonNames.Math, CommonNames.NativeMath);

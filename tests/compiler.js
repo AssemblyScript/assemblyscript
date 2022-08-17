@@ -5,7 +5,6 @@ import v8 from "v8";
 import cluster from "cluster";
 import { createRequire } from "module";
 import { fileURLToPath, pathToFileURL } from "url";
-import { WASI } from "wasi";
 import glob from "glob";
 import { stderrColors, stdoutColors } from "../util/terminal.js";
 import * as optionsUtil from "../util/options.js";
@@ -292,13 +291,13 @@ async function runTest(basename) {
       instantiateDebug.end(SKIPPED);
     } else {
 
-      if (!await testInstantiate(debugBuffer, glue, stderr, config.asc_wasi)) {
+      if (!await testInstantiate(debugBuffer, glue, stderr)) {
         instantiateDebug.end(FAILURE);
         return prepareResult(FAILURE, "instantiate error (debug)");
       }
       instantiateDebug.end(SUCCESS);
       const instantiateRelease = section("instantiate release");
-      if (!await testInstantiate(releaseBuffer, glue, stderr, config.asc_wasi)) {
+      if (!await testInstantiate(releaseBuffer, glue, stderr)) {
         instantiateRelease.end(FAILURE);
         return prepareResult(FAILURE, "instantiate error (release)");
       }
@@ -335,7 +334,7 @@ async function runTest(basename) {
 
     const rtracedBuffer = stdout.toBuffer();
     const instantiateRtrace = section("instantiate rtrace");
-    if (!await testInstantiate(rtracedBuffer, glue, stderr, config.asc_wasi)) {
+    if (!await testInstantiate(rtracedBuffer, glue, stderr)) {
       instantiateRtrace.end(FAILURE);
       return prepareResult(FAILURE, "rtrace error");
     }
@@ -346,7 +345,7 @@ async function runTest(basename) {
 }
 
 // Tests if instantiation of a module succeeds
-async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
+async function testInstantiate(binaryBuffer, glue, stderr) {
   var failed = false;
   try {
     const memory = new WebAssembly.Memory({ initial: 10 });
@@ -421,8 +420,6 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
       await glue.preInstantiate(imports, exports);
       console.log("  [return glue.preInstantiate] " + measureEnd(start));
     }
-    const wasi = wasiOptions ? new WASI(wasiOptions) : null;
-    if (wasi) imports.wasi_snapshot_preview1 = wasi.wasiImport;
     const { instance } = await WebAssembly.instantiate(binaryBuffer, imports);
     Object.setPrototypeOf(exports, instance.exports);
     if (glue.postInstantiate) {
@@ -431,12 +428,7 @@ async function testInstantiate(binaryBuffer, glue, stderr, wasiOptions) {
       await glue.postInstantiate(instance);
       console.log("  [return glue.postInstantiate] " + measureEnd(start));
     }
-    if (wasi) {
-      console.log("  [invoke wasi.start]");
-      const start = measureStart();
-      const code = wasi.start(instance);
-      console.log("  [return wasi.start] code=" + code + ", " + measureEnd(start));
-    } else if (exports._start) {
+    if (exports._start) {
       console.log("  [invoke exports._start]");
       const start = measureStart();
       exports._start();
