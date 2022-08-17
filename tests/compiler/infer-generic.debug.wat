@@ -53,11 +53,8 @@
  (export "test2" (func $export:infer-generic/test2))
  (export "test3" (func $export:infer-generic/test3))
  (export "test4" (func $export:infer-generic/test4))
-<<<<<<< HEAD
  (export "test5" (func $export:infer-generic/test5))
-=======
  (export "inferAssert" (func $export:infer-generic/inferAssert))
->>>>>>> main
  (start $~start)
  (func $infer-generic/inferCompatible<f64> (param $0 f64) (param $1 f64) (result i32)
   local.get $0
@@ -2253,7 +2250,7 @@
   if (result i32)
    i32.const 0
    i32.const 32
-   i32.const 67
+   i32.const 75
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2468,11 +2465,7 @@
   if
    i32.const 0
    i32.const 32
-<<<<<<< HEAD
-   i32.const 68
-=======
-   i32.const 62
->>>>>>> main
+   i32.const 70
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2515,11 +2508,7 @@
   if
    i32.const 0
    i32.const 32
-<<<<<<< HEAD
-   i32.const 69
-=======
-   i32.const 63
->>>>>>> main
+   i32.const 71
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2617,12 +2606,8 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
-<<<<<<< HEAD
  (func $export:infer-generic/test5 (param $0 i32) (result i32)
   (local $1 i32)
-=======
- (func $export:infer-generic/inferAssert (param $0 i32)
->>>>>>> main
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2632,19 +2617,28 @@
   local.get $0
   i32.store
   local.get $0
-<<<<<<< HEAD
   call $infer-generic/test5
   local.set $1
-=======
-  call $infer-generic/inferAssert
->>>>>>> main
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-<<<<<<< HEAD
   local.get $1
-=======
->>>>>>> main
+ )
+ (func $export:infer-generic/inferAssert (param $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  call $infer-generic/inferAssert
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

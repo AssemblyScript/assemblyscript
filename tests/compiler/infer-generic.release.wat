@@ -49,11 +49,8 @@
  (export "test2" (func $export:infer-generic/test2))
  (export "test3" (func $export:infer-generic/test2))
  (export "test4" (func $export:infer-generic/test2))
-<<<<<<< HEAD
  (export "test5" (func $export:infer-generic/test2))
-=======
  (export "inferAssert" (func $export:infer-generic/inferAssert))
->>>>>>> main
  (start $~start)
  (func $start:infer-generic~anonymous|0 (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
   local.get $1
@@ -1471,7 +1468,7 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 1684
+  i32.const 1692
   i32.lt_s
   if
    i32.const 18096
@@ -1489,7 +1486,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 67
+   i32.const 75
    i32.const 3
    call $~lib/builtins/abort
    unreachable
