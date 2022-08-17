@@ -787,7 +787,7 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(startFunctionBody)
       );
       if (!options.willOptimize) {
-        module.setLocalNames(funcRef, startFunctionInstance.localsByIndex.map<string>(local => local.name));
+        setFunctionLocalNames(module, funcRef, startFunctionInstance);
       }
       startFunctionInstance.finalize(module, funcRef);
       if (exportStart == null) module.setStart(funcRef);
@@ -1030,7 +1030,7 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(startFunctionBody)
       );
       if (!this.options.willOptimize) {
-        module.setLocalNames(funcRef, startFunction.localsByIndex.map<string>(local => local.name));
+        setFunctionLocalNames(module, funcRef, startFunction);
       }
       previousBody.push(
         module.call(startFunction.internalName, null, TypeRef.None)
@@ -1484,7 +1484,7 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(stmts, instance.signature.returnType.toRef())
       );
       if (!this.options.willOptimize) {
-        module.setLocalNames(funcRef, instance.localsByIndex.map<string>(local => local.name));
+        setFunctionLocalNames(module, funcRef, instance);
       }
 
     // imported function
@@ -8622,7 +8622,7 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(stmts, sizeTypeRef)
       );
       if (!this.options.willOptimize) {
-        module.setLocalNames(funcRef, instance.localsByIndex.map<string>(local => local.name));
+        setFunctionLocalNames(module, funcRef, instance);
       }
       instance.finalize(module, funcRef);
     }
@@ -10274,6 +10274,11 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
+
+/** add local name into custom section */
+function setFunctionLocalNames(module: Module, funcRef: FunctionRef, func: Function): void {
+  module.setLocalNames(funcRef, func.localsByIndex.map<string>(local => local.name));
+}
 
 function mangleImportName(
   element: Element,
