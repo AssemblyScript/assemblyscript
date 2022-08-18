@@ -3451,6 +3451,15 @@ export class Compiler extends DiagnosticEmitter {
     // any to void
     if (toType.kind == TypeKind.VOID) return module.drop(expr);
 
+    // v128 to any / any to v128
+    if (toType.kind == TypeKind.V128 || fromType.kind == TypeKind.V128) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
+      return module.unreachable();
+    }
+
     // reference involved
     if (fromType.isReference || toType.isReference) {
       if (this.currentFlow.isNonnull(expr, fromType)) {
