@@ -38,6 +38,8 @@ export class Date {
   }
 
   @inline static now(): i64 {
+    // @ts-ignore: allow global override
+    if (isDefined(Date_now)) return Date_now();
     return <i64>Date_binding.now();
   }
 
