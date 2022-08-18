@@ -30,10 +30,10 @@
  (global $class/a (mut i32) (i32.const 0))
  (global $class/zero (mut i32) (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
- (global $~lib/rt/__rtti_base i32 (i32.const 688))
- (global $~lib/memory/__data_end i32 (i32.const 748))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17132))
- (global $~lib/memory/__heap_base i32 (i32.const 17132))
+ (global $~lib/rt/__rtti_base i32 (i32.const 560))
+ (global $~lib/memory/__data_end i32 (i32.const 620))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17004))
+ (global $~lib/memory/__heap_base i32 (i32.const 17004))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -46,17 +46,10 @@
  (data (i32.const 412) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00c\00l\00a\00s\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 460) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 508) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 556) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d\00\00\00")
- (data (i32.const 620) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00")
- (data (i32.const 688) "\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
+ (data (i32.const 560) "\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "testGenericInitializer" (func $class/testGenericInitializer))
- (export "__new" (func $~lib/rt/itcms/__new))
- (export "__pin" (func $~lib/rt/itcms/__pin))
- (export "__unpin" (func $~lib/rt/itcms/__unpin))
- (export "__collect" (func $~lib/rt/itcms/__collect))
- (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory" (memory $0))
  (export "test" (func $export:class/test))
  (start $~start)
@@ -2362,124 +2355,6 @@
   call $class/GenericInitializer<i32>#constructor
   drop
  )
- (func $~lib/rt/itcms/__pin (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   local.set $1
-   local.get $1
-   call $~lib/rt/itcms/Object#get:color
-   i32.const 3
-   i32.eq
-   if
-    i32.const 576
-    i32.const 96
-    i32.const 337
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   call $~lib/rt/itcms/Object#unlink
-   local.get $1
-   global.get $~lib/rt/itcms/pinSpace
-   i32.const 3
-   call $~lib/rt/itcms/Object#linkTo
-  end
-  local.get $0
- )
- (func $~lib/rt/itcms/__unpin (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.set $1
-  local.get $1
-  call $~lib/rt/itcms/Object#get:color
-  i32.const 3
-  i32.ne
-  if
-   i32.const 640
-   i32.const 96
-   i32.const 351
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/rt/itcms/state
-  i32.const 1
-  i32.eq
-  if
-   local.get $1
-   call $~lib/rt/itcms/Object#makeGray
-  else
-   local.get $1
-   call $~lib/rt/itcms/Object#unlink
-   local.get $1
-   global.get $~lib/rt/itcms/fromSpace
-   global.get $~lib/rt/itcms/white
-   call $~lib/rt/itcms/Object#linkTo
-  end
- )
- (func $~lib/rt/itcms/__collect
-  (local $0 i32)
-  i32.const 0
-  drop
-  global.get $~lib/rt/itcms/state
-  i32.const 0
-  i32.gt_s
-  if
-   loop $while-continue|0
-    global.get $~lib/rt/itcms/state
-    i32.const 0
-    i32.ne
-    local.set $0
-    local.get $0
-    if
-     call $~lib/rt/itcms/step
-     drop
-     br $while-continue|0
-    end
-   end
-  end
-  call $~lib/rt/itcms/step
-  drop
-  loop $while-continue|1
-   global.get $~lib/rt/itcms/state
-   i32.const 0
-   i32.ne
-   local.set $0
-   local.get $0
-   if
-    call $~lib/rt/itcms/step
-    drop
-    br $while-continue|1
-   end
-  end
-  global.get $~lib/rt/itcms/total
-  i64.extend_i32_u
-  i32.const 200
-  i64.extend_i32_u
-  i64.mul
-  i64.const 100
-  i64.div_u
-  i32.wrap_i64
-  i32.const 1024
-  i32.add
-  global.set $~lib/rt/itcms/threshold
-  i32.const 0
-  drop
-  i32.const 0
-  drop
- )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   global.get $class/a
@@ -2496,12 +2371,6 @@
   local.get $0
   call $~lib/rt/itcms/__visit
   i32.const 32
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 576
-  local.get $0
-  call $~lib/rt/itcms/__visit
-  i32.const 640
   local.get $0
   call $~lib/rt/itcms/__visit
  )
@@ -2588,8 +2457,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17152
-   i32.const 17200
+   i32.const 17024
+   i32.const 17072
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2688,7 +2557,7 @@
    i32.const 0
    i32.const 432
    i32.const 67
-   i32.const 3
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -2700,7 +2569,7 @@
    i32.const 0
    i32.const 432
    i32.const 68
-   i32.const 3
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -2719,7 +2588,7 @@
    i32.const 0
    i32.const 432
    i32.const 70
-   i32.const 3
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
