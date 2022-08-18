@@ -40,3 +40,31 @@ class GenericInitializer<T> {
 export function testGenericInitializer(): void {
   new GenericInitializer<i32>();
 }
+
+class PropertyPrototypeClass {
+  private static _one: i32 = 10;
+  two:i32 = 2;
+  private _three: i32 = 11;
+  static get one(): i32 { return PropertyPrototypeClass._one; }
+  static set one(a: i32) {
+    PropertyPrototypeClass._one = a;
+  }
+  get three():i32 {return this._three;}
+  set three(a:i32){this._three = a;}
+  changeOne():void{
+    PropertyPrototypeClass.one = 11;
+  }
+}
+
+let a = new PropertyPrototypeClass();
+let zero = i32(0);
+while(a.three = zero) {
+  zero = 1;
+}
+while(a.two = zero) {
+  zero = 1;
+}
+assert(a.three == 0);
+assert(zero == 0);
+a.changeOne();
+assert(PropertyPrototypeClass.one == 11);
