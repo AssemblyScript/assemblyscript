@@ -304,6 +304,7 @@ export async function main(argv, options) {
     default: runtime = 2; break;
   }
   assemblyscript.setTarget(compilerOptions, 0);
+  assemblyscript.setDebugInfo(opts.debug != null);
   assemblyscript.setRuntime(compilerOptions, runtime);
   assemblyscript.setNoAssert(compilerOptions, opts.noAssert);
   assemblyscript.setExportMemory(compilerOptions, !opts.noExportMemory);
