@@ -19,7 +19,8 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $optional-typeparameters/tConcrete (mut i32) (i32.const 0))
  (global $optional-typeparameters/tDerived (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17868))
+ (global $optional-typeparameters/tMethodDerived (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17884))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
@@ -31,8 +32,8 @@
  (data (i32.const 1304) "\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 1372) "<")
  (data (i32.const 1384) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1440) "\05\00\00\00 \00\00\00\00\00\00\00 ")
- (data (i32.const 1468) " \00\00\00\00\00\00\00 ")
+ (data (i32.const 1440) "\07\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1468) " \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\02A")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -45,6 +46,12 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $optional-typeparameters/tDerived
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+  global.get $optional-typeparameters/tMethodDerived
   local.tee $0
   if
    local.get $0
@@ -623,10 +630,10 @@
   if
    unreachable
   end
-  i32.const 17872
+  i32.const 17888
   i32.const 0
   i32.store
-  i32.const 19440
+  i32.const 19456
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -637,7 +644,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 17872
+    i32.const 17888
     i32.add
     i32.const 0
     i32.store offset=4
@@ -655,7 +662,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 17872
+      i32.const 17888
       i32.add
       i32.const 0
       i32.store offset=96
@@ -673,13 +680,13 @@
     br $for-loop|0
    end
   end
-  i32.const 17872
-  i32.const 19444
+  i32.const 17888
+  i32.const 19460
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 17872
+  i32.const 17888
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (result i32)
@@ -764,7 +771,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 17868
+      i32.const 17884
       i32.lt_u
       if
        local.get $0
@@ -864,7 +871,7 @@
      unreachable
     end
     local.get $0
-    i32.const 17868
+    i32.const 17884
     i32.lt_u
     if
      local.get $0
@@ -887,7 +894,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 17868
+     i32.const 17884
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1240,36 +1247,72 @@
   local.get $0
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $invalid
-   block $optional-typeparameters/TestDerived<f64,f64>
-    block $optional-typeparameters/TestConcrete<i32,i32>
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $optional-typeparameters/TestConcrete<i32,i32> $optional-typeparameters/TestDerived<f64,f64> $invalid
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  block $folding-inner0
+   block $invalid
+    block $~lib/array/Array<~lib/string/String>
+     block $optional-typeparameters/TestMethodDerived<~lib/string/String>
+      block $optional-typeparameters/TestDerived<f64,f64>
+       block $optional-typeparameters/TestConcrete<i32,i32>
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $optional-typeparameters/TestConcrete<i32,i32> $optional-typeparameters/TestDerived<f64,f64> $optional-typeparameters/TestMethodDerived<~lib/string/String> $~lib/array/Array<~lib/string/String> $invalid
+         end
+         return
+        end
+        return
        end
        return
       end
       return
      end
-     local.get $0
-     i32.load
-     local.tee $0
-     if
-      local.get $0
-      call $byn-split-outlined-A$~lib/rt/itcms/__visit
-     end
      return
     end
-    return
+    local.get $0
+    i32.load offset=4
+    local.tee $1
+    local.get $0
+    i32.load offset=12
+    i32.const 2
+    i32.shl
+    i32.add
+    local.set $3
+    loop $while-continue|0
+     local.get $1
+     local.get $3
+     i32.lt_u
+     if
+      local.get $1
+      i32.load
+      local.tee $2
+      if
+       local.get $2
+       call $byn-split-outlined-A$~lib/rt/itcms/__visit
+      end
+      local.get $1
+      i32.const 4
+      i32.add
+      local.set $1
+      br $while-continue|0
+     end
+    end
+    br $folding-inner0
    end
-   return
+   unreachable
   end
-  unreachable
+  local.get $0
+  i32.load
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
  )
  (func $~start
   (local $0 i32)
@@ -1279,7 +1322,7 @@
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1484
+   i32.const 1500
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1289,7 +1332,7 @@
    memory.size
    i32.const 16
    i32.shl
-   i32.const 17868
+   i32.const 17884
    i32.sub
    i32.const 1
    i32.shr_u
@@ -1323,7 +1366,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1484
+   i32.const 1500
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1349,7 +1392,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1484
+   i32.const 1500
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1372,12 +1415,38 @@
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1500
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
+   global.set $optional-typeparameters/tMethodDerived
+   global.get $~lib/memory/__stack_pointer
+   global.get $optional-typeparameters/tMethodDerived
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 17888
-  i32.const 17936
+  i32.const 17904
+  i32.const 17952
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -1426,7 +1495,7 @@
     if
      i32.const 0
      local.get $1
-     i32.const 17868
+     i32.const 17884
      i32.lt_u
      local.get $1
      i32.load offset=8
