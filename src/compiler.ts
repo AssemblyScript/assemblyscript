@@ -225,6 +225,8 @@ export class Options {
   target: Target = Target.WASM32;
   /** Runtime type. Defaults to Incremental GC. */
   runtime: Runtime = Runtime.Incremental;
+  /** If true, indicates that debug information will be emitted by Binaryen. */
+  debugInfo: bool = false;
   /** If true, replaces assertions with nops. */
   noAssert: bool = false;
   /** It true, exports the memory to the embedder. */
