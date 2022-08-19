@@ -1467,11 +1467,13 @@ export class Program extends DiagnosticEmitter {
     // TODO: make this work with interfaaces as well
     var thisInstanceMembers = thisPrototype.instanceMembers;
     if (thisInstanceMembers) {
+      let thisMembers = Map_values(thisInstanceMembers);
+      let isOverrided = thisMembers.map<bool>(member => !member.is(CommonFlags.OVERRIDE));
       do {
         let baseInstanceMembers = basePrototype.instanceMembers;
         if (baseInstanceMembers) {
-          for (let _values = Map_values(thisInstanceMembers), j = 0, l = _values.length; j < l; ++j) {
-            let thisMember = _values[j];
+          for (let j = 0, l = thisMembers.length; j < l; ++j) {
+            let thisMember = thisMembers[j];
             if (
               !thisMember.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.PRIVATE) &&
               baseInstanceMembers.has(thisMember.name)
@@ -1549,11 +1551,8 @@ export class Program extends DiagnosticEmitter {
                 }
               }
             }
-            if (thisMember.is(CommonFlags.OVERRIDE) && !baseInstanceMembers.has(thisMember.name)) {
-              this.error(
-                DiagnosticCode.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0,
-                thisMember.identifierNode.range, basePrototype.name
-              );
+            if (!isOverrided[j] && baseInstanceMembers.has(thisMember.name)) {
+              isOverrided[j] = true;
             }
           }
         }
@@ -1561,6 +1560,16 @@ export class Program extends DiagnosticEmitter {
         if (!nextPrototype) break;
         basePrototype = nextPrototype;
       } while (true);
+      // check override
+      for (let j = 0, l = thisMembers.length; j < l; ++j) {
+        if (!isOverrided[j]) {
+          this.error(
+            DiagnosticCode.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0,
+            thisMembers[j].identifierNode.range,
+            basePrototype.name
+          );
+        }
+      }
     }
   }
 
