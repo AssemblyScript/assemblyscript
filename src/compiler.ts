@@ -3507,7 +3507,7 @@ export class Compiler extends DiagnosticEmitter {
     // except v128 to bool
     if (
       toType.kind != TypeKind.BOOL &&
-      (toType.kind == TypeKind.V128 || fromType.kind == TypeKind.V128)
+      (toType.isVectorValue || fromType.isVectorValue)
     ) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
