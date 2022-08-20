@@ -9885,38 +9885,74 @@ export class Compiler extends DiagnosticEmitter {
           : expr;
       }
       case TypeKind.F32: {
-        // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
-        // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
-        //
-        // and finally:
-        // (reinterpret<u32>(x) << 1) - (1 << 1) <= ((0x7F800000 - 1) << 1)
-        return module.binary(BinaryOp.LeU32,
-          module.binary(BinaryOp.SubI32,
-            module.binary(BinaryOp.ShlI32,
-              module.unary(UnaryOp.ReinterpretF32ToI32, expr),
-              module.i32(1)
+        let options = this.options;
+        if (
+          options.shrinkLevelHint > 1 &&
+          options.hasFeature(Feature.NONTRAPPING_F2I)
+        ) {
+          // Use more compact but slower 5-byte (3 bytes in best case) approach
+          // !!(i32.trunc_sat_f32_u(f32.ceil(f32.abs(x))))
+          return module.unary(UnaryOp.EqzI32,
+            module.unary(UnaryOp.EqzI32,
+              module.unary(UnaryOp.TruncSatF32ToU32,
+                module.unary(UnaryOp.CeilF32,
+                  module.unary(UnaryOp.AbsF32, expr)
+                )
+              )
+            )
+          );
+        } else {
+          // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
+          // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
+          //
+          // and finally:
+          // (reinterpret<u32>(x) << 1) - (1 << 1) <= ((0x7F800000 - 1) << 1)
+          return module.binary(BinaryOp.LeU32,
+            module.binary(BinaryOp.SubI32,
+              module.binary(BinaryOp.ShlI32,
+                module.unary(UnaryOp.ReinterpretF32ToI32, expr),
+                module.i32(1)
+              ),
+              module.i32(2) // 1 << 1
             ),
-            module.i32(2) // 1 << 1
-          ),
-          module.i32(0xFEFFFFFE) // (0x7F800000 - 1) << 1
-        );
+            module.i32(0xFEFFFFFE) // (0x7F800000 - 1) << 1
+          );
+        }
       }
       case TypeKind.F64: {
-        // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
-        // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
-        //
-        // and finally:
-        // (reinterpret<u64>(x) << 1) - (1 << 1) <= ((0x7FF0000000000000 - 1) << 1)
-        return module.binary(BinaryOp.LeU64,
-          module.binary(BinaryOp.SubI64,
-            module.binary(BinaryOp.ShlI64,
-              module.unary(UnaryOp.ReinterpretF64ToI64, expr),
-              module.i64(1)
+        let options = this.options;
+        if (
+          options.shrinkLevelHint > 1 &&
+          options.hasFeature(Feature.NONTRAPPING_F2I)
+        ) {
+          // Use more compact but slower 5-byte (3 bytes in best case) approach
+          // !!(i32.trunc_sat_f64_u(f64.ceil(f64.abs(x))))
+          return module.unary(UnaryOp.EqzI32,
+            module.unary(UnaryOp.EqzI32,
+              module.unary(UnaryOp.TruncSatF64ToU32,
+                module.unary(UnaryOp.CeilF64,
+                  module.unary(UnaryOp.AbsF64, expr)
+                )
+              )
+            )
+          );
+        } else {
+          // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
+          // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
+          //
+          // and finally:
+          // (reinterpret<u64>(x) << 1) - (1 << 1) <= ((0x7FF0000000000000 - 1) << 1)
+          return module.binary(BinaryOp.LeU64,
+            module.binary(BinaryOp.SubI64,
+              module.binary(BinaryOp.ShlI64,
+                module.unary(UnaryOp.ReinterpretF64ToI64, expr),
+                module.i64(1)
+              ),
+              module.i64(2) // 1 << 1
             ),
-            module.i64(2) // 1 << 1
-          ),
-          module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
-        );
+            module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
+          );
+        }
       }
       case TypeKind.V128: {
         return module.unary(UnaryOp.AnyTrueV128, expr);
