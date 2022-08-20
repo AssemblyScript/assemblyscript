@@ -16,13 +16,13 @@ import {
 import {
   Tokenizer,
   Token,
-  Range,
   CommentHandler,
   IdentifierHandling,
   isIllegalVariableIdentifier
 } from "./tokenizer";
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticEmitter,
   DiagnosticMessage
@@ -122,10 +122,10 @@ export class Parser extends DiagnosticEmitter {
   /** Constructs a new parser. */
   constructor(
     diagnostics: DiagnosticMessage[] | null = null,
-    sources: Source[] | null = null
+    sources: Source[] = []
   ) {
     super(diagnostics);
-    this.sources = sources ? sources : new Array<Source>();
+    this.sources = sources;
   }
 
   /** Parses a file and adds its definitions to the program. */

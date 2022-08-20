@@ -14,13 +14,31 @@
  * When compiling to WebAssembly `glue/wasm/index.ts` must be included.
  */
 
-import { Target, Runtime, Feature } from "./common";
-import { Compiler, Options } from "./compiler";
-import { TSDBuilder, JSBuilder } from "./bindings";
-import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
+import {
+  Target,
+  Runtime,
+  Feature
+} from "./common";
+
+import {
+  Compiler,
+  Options
+} from "./compiler";
+
+import {
+  TSDBuilder,
+  JSBuilder
+} from "./bindings";
+
+import {
+  Range,
+  DiagnosticMessage,
+  DiagnosticCategory,
+  formatDiagnosticMessage
+} from "./diagnostics";
+
 import { Module } from "./module";
 import { Program } from "./program";
-import { Range } from "./tokenizer";
 import { Source } from "./ast";
 
 // Options
@@ -207,6 +225,10 @@ export function setBindingsHint(options: Options, bindings: bool): void {
 /** Sets the `pedantic` option. */
 export function setPedantic(options: Options, pedantic: bool): void {
   options.pedantic = pedantic;
+}
+
+export function setDebugInfo(options: Options, debug: bool): void {
+  options.debugInfo = debug;
 }
 
 // Program
