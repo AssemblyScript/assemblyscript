@@ -3506,7 +3506,7 @@ export class Compiler extends DiagnosticEmitter {
     // v128 to any / any to v128
     // except v128 to bool
     if (
-      toType.kind != TypeKind.BOOL &&
+      !toType.isBooleanValue &&
       (toType.isVectorValue || fromType.isVectorValue)
     ) {
       this.error(
