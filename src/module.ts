@@ -1913,7 +1913,7 @@ export class Module {
     return ret;
   }
 
-  setLocalName(funcRef: FunctionRef, index:u32, name: string): void {
+  setLocalName(funcRef: FunctionRef, index: u32, name: string): void {
     binaryen._BinaryenFunctionSetLocalName(funcRef, index, this.allocStringCached(name));
   }
 
