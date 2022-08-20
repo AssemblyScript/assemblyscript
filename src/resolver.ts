@@ -2627,7 +2627,7 @@ export class Resolver extends DiagnosticEmitter {
     ) {
       // (x) => ret, infer return type accordingt to `ret`
       const expr = (<ExpressionStatement>body).expression;
-      const type = this.resolveExpression(expr, ctxFlow, ctxType, ReportMode.SWALLOW);
+      const type = this.resolveExpression(expr, ctxFlow, ctxType, reportMode);
       if (type) {
         let signatureReference = assert(functionType.getSignature());
         signatureReference.returnType = type;
