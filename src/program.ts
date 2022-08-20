@@ -2841,10 +2841,6 @@ export abstract class Element {
     return this.parent.lookup(name, isType);
   }
 
-  lookupGenericType(name: string): Type | null {
-    return this.parent.lookupGenericType(name);
-  }
-
   /** Adds an element as a member of this one. Reports and returns `false` if a duplicate. */
   add(name: string, element: DeclaredElement, localIdentifierIfImport: IdentifierExpression | null = null): bool {
     var originalDeclaration = element.declaration;
@@ -3126,10 +3122,6 @@ export class File extends Element {
     var element = this.getMember(name);
     if (element) return element;
     return this.program.lookup(name); // has no meaningful parent
-  }
-
-  override lookupGenericType(name: string): Type | null {
-    return null;
   }
 
   /** Ensures that an element is an export of this file. */
@@ -3693,14 +3685,6 @@ export class Function extends TypedElement {
     }
     this.flow = Flow.createParent(this);
     registerConcreteElement(program, this);
-  }
-
-  override lookupGenericType(name: string): Type | null {
-    let contextualTypeArguments = this.contextualTypeArguments;
-    if (contextualTypeArguments && contextualTypeArguments.has(name)) {
-      return assert(contextualTypeArguments.get(name));
-    }
-    return this.parent.lookupGenericType(name);
   }
 
   /** Gets the name of the parameter at the specified index. */
@@ -4311,14 +4295,6 @@ export class Class extends TypedElement {
       throw new Error("type argument count mismatch");
     }
     registerConcreteElement(program, this);
-  }
-
-  override lookupGenericType(name: string): Type | null {
-    let contextualTypeArguments = this.contextualTypeArguments;
-    if (contextualTypeArguments && contextualTypeArguments.has(name)) {
-      return assert(contextualTypeArguments.get(name));
-    }
-    return this.parent.lookupGenericType(name);
   }
 
   /** Sets the base class. */

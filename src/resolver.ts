@@ -188,13 +188,8 @@ export class Resolver extends DiagnosticEmitter {
     // Look up in contextual types if a simple type
     if (isSimpleType) {
       let simpleName = nameNode.identifier.text;
-      let type: Type | null = null;
       if (ctxTypes && ctxTypes.has(simpleName)) {
-        type = assert(ctxTypes.get(simpleName));
-      } else {
-        type = ctxElement.lookupGenericType(simpleName);
-      }
-      if (type) {
+        let type = assert(ctxTypes.get(simpleName));
         if (typeArgumentNodes && typeArgumentNodes.length > 0) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
@@ -768,7 +763,7 @@ export class Resolver extends DiagnosticEmitter {
           }
           let defaultType = typeParameterNode.defaultType;
           if (defaultType) {
-            let resolvedDefaultType = this.resolveType(defaultType, prototype, contextualTypeArguments, reportMode);
+            let resolvedDefaultType = this.resolveType(defaultType, ctxFlow.actualFunction, contextualTypeArguments, reportMode);
             if (!resolvedDefaultType) return null;
             resolvedTypeArguments[i] = resolvedDefaultType;
             continue;
