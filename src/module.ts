@@ -1261,12 +1261,14 @@ export class Module {
     return binaryen._BinaryenBinary(this.ref, op, left, right);
   }
 
-  memory_size(): ExpressionRef {
-    return binaryen._BinaryenMemorySize(this.ref);
+  memory_size(name: string | null = null): ExpressionRef {
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenMemorySize(this.ref, cStr);
   }
 
-  memory_grow(delta: ExpressionRef): ExpressionRef {
-    return binaryen._BinaryenMemoryGrow(this.ref, delta);
+  memory_grow(delta: ExpressionRef, name: string | null = null): ExpressionRef {
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenMemoryGrow(this.ref, delta, cStr);
   }
 
   table_size(name: string): ExpressionRef {
@@ -1331,9 +1333,11 @@ export class Module {
     ptr: ExpressionRef,
     type: TypeRef,
     offset: Index = 0,
-    align: Index = bytes // naturally aligned by default
+    align: Index = bytes, // naturally aligned by default
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenLoad(this.ref, bytes, signed, offset, align, type, ptr);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenLoad(this.ref, bytes, signed, offset, align, type, ptr, cStr);
   }
 
   store(
@@ -1342,18 +1346,22 @@ export class Module {
     value: ExpressionRef,
     type: TypeRef,
     offset: Index = 0,
-    align: Index = bytes // naturally aligned by default
+    align: Index = bytes, // naturally aligned by default
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenStore(this.ref, bytes, offset, align, ptr, value, type);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenStore(this.ref, bytes, offset, align, ptr, value, type, cStr);
   }
 
   atomic_load(
     bytes: Index,
     ptr: ExpressionRef,
     type: TypeRef,
-    offset: Index = 0
+    offset: Index = 0,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr, cStr);
   }
 
   atomic_store(
@@ -1361,9 +1369,11 @@ export class Module {
     ptr: ExpressionRef,
     value: ExpressionRef,
     type: TypeRef,
-    offset: Index = 0
+    offset: Index = 0,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type, cStr);
   }
 
   atomic_rmw(
@@ -1372,9 +1382,11 @@ export class Module {
     offset: Index,
     ptr: ExpressionRef,
     value: ExpressionRef,
-    type: TypeRef
+    type: TypeRef,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type, cStr);
   }
 
   atomic_cmpxchg(
@@ -1383,29 +1395,36 @@ export class Module {
     ptr: ExpressionRef,
     expected: ExpressionRef,
     replacement: ExpressionRef,
-    type: TypeRef
+    type: TypeRef,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type, cStr);
   }
 
   atomic_wait(
     ptr: ExpressionRef,
     expected: ExpressionRef,
     timeout: ExpressionRef,
-    expectedType: TypeRef
+    expectedType: TypeRef,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType, cStr);
   }
 
   atomic_notify(
     ptr: ExpressionRef,
-    notifyCount: ExpressionRef
+    notifyCount: ExpressionRef,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenAtomicNotify(this.ref, ptr, notifyCount);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenAtomicNotify(this.ref, ptr, notifyCount, cStr);
   }
 
-  atomic_fence(): ExpressionRef {
-    return binaryen._BinaryenAtomicFence(this.ref);
+  atomic_fence(name: string | null = null): ExpressionRef {
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenAtomicFence(this.ref, cStr);
   }
 
   // statements
@@ -1645,9 +1664,11 @@ export class Module {
   memory_fill(
     dest: ExpressionRef,
     value: ExpressionRef,
-    size: ExpressionRef
+    size: ExpressionRef,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenMemoryFill(this.ref, dest, value, size);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenMemoryFill(this.ref, dest, value, size, cStr);
   }
 
   // exception handling
@@ -1765,9 +1786,11 @@ export class Module {
     op: SIMDLoadOp,
     ptr: ExpressionRef,
     offset: u32,
-    align: u32
+    align: u32,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr, cStr);
   }
 
   simd_loadstorelane(
@@ -1776,9 +1799,11 @@ export class Module {
     offset: u32,
     align: u32,
     index: u8,
-    vec: ExpressionRef
+    vec: ExpressionRef,
+    name: string | null = null
   ): ExpressionRef {
-    return binaryen._BinaryenSIMDLoadStoreLane(this.ref, op, offset, align, index, ptr, vec);
+    var cStr = name ? this.allocStringCached(name) : this.allocStringCached("0");
+    return binaryen._BinaryenSIMDLoadStoreLane(this.ref, op, offset, align, index, ptr, vec, cStr);
   }
 
   // reference types / gc
@@ -2095,9 +2120,11 @@ export class Module {
     segments: MemorySegment[],
     target: Target,
     exportName: string | null = null,
-    shared: bool = false
+    shared: bool = false,
+    name: string | null = null
   ): void {
-    var cStr = this.allocStringCached(exportName);
+    var cStr1 = this.allocStringCached(exportName);
+    var cStr2 = name ? this.allocStringCached(name) : this.allocStringCached("0");
     var k = segments.length;
     var segs = new Array<usize>(k);
     var psvs = new Uint8Array(k);
@@ -2120,7 +2147,7 @@ export class Module {
     var cArr3 = allocPtrArray(offs);
     var cArr4 = allocU32Array(sizs);
     binaryen._BinaryenSetMemory(
-      this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared
+      this.ref, initial, maximum, cStr1, cArr1, cArr2, cArr3, cArr4, k, shared, cStr2
     );
     binaryen._free(cArr4);
     binaryen._free(cArr3);
