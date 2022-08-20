@@ -157,8 +157,8 @@
     "category": "Features",
     "description": [
       "Exports the start function using the specified name instead",
-      "of calling it implicitly. Useful for WASI or to obtain the",
-      "exported memory before executing any code accessing it."
+      "of calling it implicitly. Useful to obtain the exported memory",
+      "before executing any code accessing it."
     ],
     "type": "s"
   },

@@ -762,11 +762,6 @@ export class Compiler extends DiagnosticEmitter {
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
     var exportStart = options.exportStart;
-    if (program.isWasi && !exportStart) {
-      // Try to do the right thing for WASI. If the module has custom function
-      // exports it is likely a reactor, otherwise it is likely a command.
-      exportStart = this.hasCustomFunctionExports ? "_initialize" : "_start";
-    }
     if (!startIsEmpty || exportStart != null) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && exportStart != null) {
