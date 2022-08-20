@@ -3128,8 +3128,7 @@ export class File extends Element {
     return this.program.lookup(name); // has no meaningful parent
   }
 
-  /* @override */
-  lookupGenericType(name: string): Type | null {
+  override lookupGenericType(name: string): Type | null {
     return null;
   }
 
@@ -3696,13 +3695,12 @@ export class Function extends TypedElement {
     registerConcreteElement(program, this);
   }
 
-  /* @override */
-  lookupGenericType(name: string): Type | null {
+  override lookupGenericType(name: string): Type | null {
     let contextualTypeArguments = this.contextualTypeArguments;
     if (contextualTypeArguments && contextualTypeArguments.has(name)) {
       return assert(contextualTypeArguments.get(name));
     }
-    return super.lookupGenericType(name);
+    return this.parent.lookupGenericType(name);
   }
 
   /** Gets the name of the parameter at the specified index. */
@@ -4315,13 +4313,12 @@ export class Class extends TypedElement {
     registerConcreteElement(program, this);
   }
 
-  /* @override */
-  lookupGenericType(name: string): Type | null {
+  override lookupGenericType(name: string): Type | null {
     let contextualTypeArguments = this.contextualTypeArguments;
     if (contextualTypeArguments && contextualTypeArguments.has(name)) {
       return assert(contextualTypeArguments.get(name));
     }
-    return super.lookupGenericType(name);
+    return this.parent.lookupGenericType(name);
   }
 
   /** Sets the base class. */
