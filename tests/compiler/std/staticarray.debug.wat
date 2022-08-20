@@ -2868,7 +2868,7 @@
   end
   i32.const -1
  )
- (func $~lib/staticarray/StaticArray<i32>#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#lastIndexOf@varargs (param $this i32) (param $value i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -2879,13 +2879,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/staticarray/StaticArray<i32>#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $value
+  local.get $fromIndex
   call $~lib/staticarray/StaticArray<i32>#lastIndexOf
  )
  (func $~lib/staticarray/StaticArray<~lib/string/String>#join (param $this i32) (param $separator i32) (result i32)

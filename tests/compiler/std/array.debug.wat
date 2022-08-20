@@ -4562,7 +4562,7 @@
   end
   i32.const -1
  )
- (func $~lib/array/Array<i32>#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/array/Array<i32>#lastIndexOf@varargs (param $this i32) (param $value i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -4573,13 +4573,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    i32.load offset=12
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $value
+  local.get $fromIndex
   call $~lib/array/Array<i32>#lastIndexOf
  )
  (func $~lib/array/Array<i32>#includes (param $this i32) (param $value i32) (param $fromIndex i32) (result i32)
@@ -13537,7 +13537,7 @@
    i32.sub
   end
  )
- (func $std/array/assertSorted<~lib/string/String|null>@varargs (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<~lib/string/String|null>@varargs (param $arr i32) (param $comparator i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -13567,11 +13567,11 @@
     i32.const 8800
     br $~lib/util/sort/COMPARATOR<~lib/string/String|null>|inlined.0
    end
-   local.tee $1
+   local.tee $comparator
    i32.store
   end
-  local.get $0
-  local.get $1
+  local.get $arr
+  local.get $comparator
   call $std/array/assertSorted<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -14609,7 +14609,7 @@
    i32.sub
   end
  )
- (func $std/array/assertSorted<~lib/string/String>@varargs (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<~lib/string/String>@varargs (param $arr i32) (param $comparator i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -14639,11 +14639,11 @@
     i32.const 8832
     br $~lib/util/sort/COMPARATOR<~lib/string/String>|inlined.0
    end
-   local.tee $1
+   local.tee $comparator
    i32.store
   end
-  local.get $0
-  local.get $1
+  local.get $arr
+  local.get $comparator
   call $std/array/assertSorted<~lib/string/String>
   global.get $~lib/memory/__stack_pointer
   i32.const 4

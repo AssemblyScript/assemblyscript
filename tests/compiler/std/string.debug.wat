@@ -2901,7 +2901,7 @@
    i32.eqz
   end
  )
- (func $~lib/string/String.fromCharCode@varargs (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromCharCode@varargs (param $unit i32) (param $surr i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -2913,10 +2913,10 @@
     unreachable
    end
    i32.const -1
-   local.set $1
+   local.set $surr
   end
-  local.get $0
-  local.get $1
+  local.get $unit
+  local.get $surr
   call $~lib/string/String.fromCharCode
  )
  (func $~lib/rt/__newBuffer (param $size i32) (param $id i32) (param $data i32) (result i32)

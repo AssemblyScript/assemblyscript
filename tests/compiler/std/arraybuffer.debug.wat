@@ -2449,7 +2449,7 @@
   local.get $1
   i32.store offset=8
  )
- (func $~lib/dataview/DataView#constructor@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor@varargs (param $this i32) (param $buffer i32) (param $byteOffset i32) (param $byteLength i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -2462,16 +2462,16 @@
      unreachable
     end
     i32.const 0
-    local.set $2
+    local.set $byteOffset
    end
-   local.get $1
+   local.get $buffer
    call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   local.set $3
+   local.set $byteLength
   end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
+  local.get $this
+  local.get $buffer
+  local.get $byteOffset
+  local.get $byteLength
   call $~lib/dataview/DataView#constructor
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView> (param $value i32) (result i32)

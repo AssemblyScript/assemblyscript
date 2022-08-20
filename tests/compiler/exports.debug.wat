@@ -35,7 +35,7 @@
   local.get $b
   i32.sub
  )
- (func $exports/subOpt@varargs (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt@varargs (param $a i32) (param $b i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -47,10 +47,10 @@
     unreachable
    end
    i32.const 0
-   local.set $1
+   local.set $b
   end
-  local.get $0
-  local.get $1
+  local.get $a
+  local.get $b
   call $exports/subOpt
  )
  (func $export/mul (param $a i32) (param $b i32) (result i32)

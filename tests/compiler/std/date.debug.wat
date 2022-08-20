@@ -2765,7 +2765,7 @@
   call $~lib/date/Date#setTime
   drop
  )
- (func $~lib/date/Date#setUTCMonth@varargs (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/date/Date#setUTCMonth@varargs (param $this i32) (param $month i32) (param $day i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -2776,13 +2776,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    i32.load offset=8
-   local.set $2
+   local.set $day
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $month
+  local.get $day
   call $~lib/date/Date#setUTCMonth
  )
  (func $~lib/date/Date#setUTCFullYear (param $this i32) (param $year i32)

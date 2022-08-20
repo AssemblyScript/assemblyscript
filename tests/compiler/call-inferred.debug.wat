@@ -27,7 +27,7 @@
  (func $call-inferred/bar<f32> (param $a f32) (result f32)
   local.get $a
  )
- (func $call-inferred/bar<f32>@varargs (param $0 f32) (result f32)
+ (func $call-inferred/bar<f32>@varargs (param $a f32) (result f32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -37,9 +37,9 @@
     unreachable
    end
    f32.const 42
-   local.set $0
+   local.set $a
   end
-  local.get $0
+  local.get $a
   call $call-inferred/bar<f32>
  )
  (func $start:call-inferred

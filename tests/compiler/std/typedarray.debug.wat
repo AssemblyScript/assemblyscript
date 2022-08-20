@@ -12603,7 +12603,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Int8Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int8Array#lastIndexOf@varargs (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -12614,13 +12614,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Int8Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Int8Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Int8Array,i8>
@@ -13272,7 +13272,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Uint8Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#lastIndexOf@varargs (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -13283,13 +13283,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Uint8Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Uint8Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint8Array,u8>
@@ -13942,7 +13942,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Uint8ClampedArray#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8ClampedArray#lastIndexOf@varargs (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -13953,13 +13953,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Uint8ClampedArray#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Uint8ClampedArray#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint8ClampedArray,u8>
@@ -14610,7 +14610,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Int16Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int16Array#lastIndexOf@varargs (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -14621,13 +14621,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Int16Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Int16Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Int16Array,i16>
@@ -15279,7 +15279,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Uint16Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint16Array#lastIndexOf@varargs (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -15290,13 +15290,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Uint16Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Uint16Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint16Array,u16>
@@ -15945,7 +15945,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Int32Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#lastIndexOf@varargs (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -15956,13 +15956,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Int32Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Int32Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Int32Array,i32>
@@ -16609,7 +16609,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Uint32Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint32Array#lastIndexOf@varargs (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -16620,13 +16620,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Uint32Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Uint32Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint32Array,u32>
@@ -17273,7 +17273,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Int64Array#lastIndexOf@varargs (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int64Array#lastIndexOf@varargs (param $this i32) (param $searchElement i64) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -17284,13 +17284,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Int64Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Int64Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Int64Array,i64>
@@ -17938,7 +17938,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Uint64Array#lastIndexOf@varargs (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint64Array#lastIndexOf@varargs (param $this i32) (param $searchElement i64) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -17949,13 +17949,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Uint64Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Uint64Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint64Array,u64>
@@ -18603,7 +18603,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Float32Array#lastIndexOf@varargs (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Float32Array#lastIndexOf@varargs (param $this i32) (param $searchElement f32) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -18614,13 +18614,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Float32Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Float32Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Float32Array,f32>
@@ -19268,7 +19268,7 @@
    i32.const -1
   end
  )
- (func $~lib/typedarray/Float64Array#lastIndexOf@varargs (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Float64Array#lastIndexOf@varargs (param $this i32) (param $searchElement f64) (param $fromIndex i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -19279,13 +19279,13 @@
     end
     unreachable
    end
-   local.get $0
+   local.get $this
    call $~lib/typedarray/Float64Array#get:length
-   local.set $2
+   local.set $fromIndex
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $this
+  local.get $searchElement
+  local.get $fromIndex
   call $~lib/typedarray/Float64Array#lastIndexOf
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Float64Array,f64>
@@ -22930,7 +22930,7 @@
   i32.sub
   i32.load offset=16
  )
- (func $~lib/typedarray/Uint8Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -22943,17 +22943,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Uint8Array.wrap
  )
- (func $~lib/typedarray/Int8Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int8Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -22966,17 +22966,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Int8Array.wrap
  )
- (func $~lib/typedarray/Uint8ClampedArray.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8ClampedArray.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -22989,17 +22989,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Uint8ClampedArray.wrap
  )
- (func $~lib/typedarray/Int16Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int16Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -23012,17 +23012,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Int16Array.wrap
  )
- (func $~lib/typedarray/Uint16Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint16Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -23035,17 +23035,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Uint16Array.wrap
  )
- (func $~lib/typedarray/Int32Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int32Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -23058,17 +23058,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Int32Array.wrap
  )
- (func $~lib/typedarray/Uint32Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint32Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -23081,17 +23081,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Uint32Array.wrap
  )
- (func $~lib/typedarray/Int64Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Int64Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -23104,17 +23104,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Int64Array.wrap
  )
- (func $~lib/typedarray/Uint64Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint64Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -23127,17 +23127,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Uint64Array.wrap
  )
- (func $~lib/typedarray/Float32Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Float32Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -23150,17 +23150,17 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Float32Array.wrap
  )
- (func $~lib/typedarray/Float64Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Float64Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -23173,14 +23173,14 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Float64Array.wrap
  )
  (func $~lib/typedarray/Int8Array#set<~lib/array/Array<i32>> (param $this i32) (param $source i32) (param $offset i32)

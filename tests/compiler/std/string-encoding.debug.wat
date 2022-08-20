@@ -2673,7 +2673,7 @@
   local.get $buf
   i32.sub
  )
- (func $~lib/string/String.UTF8.encode@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String.UTF8.encode@varargs (param $str i32) (param $nullTerminated i32) (param $errorMode i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -2686,14 +2686,14 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $nullTerminated
    end
    i32.const 0
-   local.set $2
+   local.set $errorMode
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $str
+  local.get $nullTerminated
+  local.get $errorMode
   call $~lib/string/String.UTF8.encode
  )
  (func $~lib/rt/itcms/__renew (param $oldPtr i32) (param $size i32) (result i32)

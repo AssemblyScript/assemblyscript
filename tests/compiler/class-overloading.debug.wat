@@ -2320,7 +2320,7 @@
   i32.const 592
   global.set $class-overloading/which
  )
- (func $class-overloading/IA#foo (param $0 i32)
+ (func $class-overloading/IA#foo (param $this i32)
   unreachable
  )
  (func $class-overloading/A2#foo (param $this i32) (result i32)

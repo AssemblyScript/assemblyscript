@@ -571,7 +571,7 @@
   local.get $buf
   i32.sub
  )
- (func $~lib/string/String.UTF8.encodeUnsafe@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/string/String.UTF8.encodeUnsafe@varargs (param $str i32) (param $len i32) (param $buf i32) (param $nullTerminated i32) (param $errorMode i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -584,16 +584,16 @@
      unreachable
     end
     i32.const 0
-    local.set $3
+    local.set $nullTerminated
    end
    i32.const 0
-   local.set $4
+   local.set $errorMode
   end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  local.get $4
+  local.get $str
+  local.get $len
+  local.get $buf
+  local.get $nullTerminated
+  local.get $errorMode
   call $~lib/string/String.UTF8.encodeUnsafe
  )
  (func $~lib/util/number/decimalCount32 (param $value i32) (result i32)
@@ -4389,7 +4389,7 @@
   local.get $1
   i32.store offset=8
  )
- (func $~lib/typedarray/Uint8Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array.wrap@varargs (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -4402,14 +4402,14 @@
      unreachable
     end
     i32.const 0
-    local.set $1
+    local.set $byteOffset
    end
    i32.const -1
-   local.set $2
+   local.set $length
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $buffer
+  local.get $byteOffset
+  local.get $length
   call $~lib/typedarray/Uint8Array.wrap
  )
  (func $~lib/typedarray/Uint8Array#__get (param $this i32) (param $index i32) (result i32)
