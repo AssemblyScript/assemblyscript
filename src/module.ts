@@ -1913,21 +1913,8 @@ export class Module {
     return ret;
   }
 
-  setLocalNames(funcRef: FunctionRef, localNames: string[] | null): void {
-    if (localNames == null) return;
-    let localNameMap = new Set<string>();
-    for (let i = 0, k = localNames.length; i < k; i++) {
-      let localName = localNames[i];
-      if (localNameMap.has(localName)) {
-        let repeat = 0;
-        while (localNameMap.has(`${localName}_${repeat}`)) {
-          repeat++;
-        }
-        localName = `${localName}_${repeat}`;
-      }
-      localNameMap.add(localName);
-      binaryen._BinaryenFunctionSetLocalName(funcRef, i, this.allocStringCached(localName));
-    }
+  setLocalName(funcRef: FunctionRef, index:u32, name: string): void {
+    binaryen._BinaryenFunctionSetLocalName(funcRef, index, this.allocStringCached(name));
   }
 
   getFunction(

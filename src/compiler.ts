@@ -788,9 +788,6 @@ export class Compiler extends DiagnosticEmitter {
         typesToRefs(startFunctionInstance.additionalLocals),
         module.flatten(startFunctionBody)
       );
-      if (options.debugInfo) {
-        setFunctionLocalNames(module, funcRef, startFunctionInstance);
-      }
       startFunctionInstance.finalize(module, funcRef);
       if (exportStart == null) module.setStart(funcRef);
       else {
@@ -1031,9 +1028,7 @@ export class Compiler extends DiagnosticEmitter {
         varTypes,
         module.flatten(startFunctionBody)
       );
-      if (this.options.debugInfo) {
-        setFunctionLocalNames(module, funcRef, startFunction);
-      }
+      startFunction.finalize(module, funcRef);
       previousBody.push(
         module.call(startFunction.internalName, null, TypeRef.None)
       );
@@ -1485,9 +1480,6 @@ export class Compiler extends DiagnosticEmitter {
         typesToRefs(instance.additionalLocals),
         module.flatten(stmts, instance.signature.returnType.toRef())
       );
-      if (this.options.debugInfo) {
-        setFunctionLocalNames(module, funcRef, instance);
-      }
 
     // imported function
     } else if (instance.is(CommonFlags.AMBIENT)) {
@@ -8623,9 +8615,6 @@ export class Compiler extends DiagnosticEmitter {
         varTypes,
         module.flatten(stmts, sizeTypeRef)
       );
-      if (this.options.debugInfo) {
-        setFunctionLocalNames(module, funcRef, instance);
-      }
       instance.finalize(module, funcRef);
     }
 
@@ -10276,12 +10265,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
-/** add local name into custom section */
-function setFunctionLocalNames(module: Module, funcRef: FunctionRef, func: Function): void {
-  module.setLocalNames(funcRef, func.localsByIndex.map<string>(local => local.name));
-}
-
 function mangleImportName(
   element: Element,
   declaration: DeclarationStatement
