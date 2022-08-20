@@ -788,7 +788,7 @@ export class Compiler extends DiagnosticEmitter {
         typesToRefs(startFunctionInstance.additionalLocals),
         module.flatten(startFunctionBody)
       );
-      if (!options.willOptimize) {
+      if (options.debugInfo) {
         setFunctionLocalNames(module, funcRef, startFunctionInstance);
       }
       startFunctionInstance.finalize(module, funcRef);
@@ -1031,7 +1031,7 @@ export class Compiler extends DiagnosticEmitter {
         varTypes,
         module.flatten(startFunctionBody)
       );
-      if (!this.options.willOptimize) {
+      if (this.options.debugInfo) {
         setFunctionLocalNames(module, funcRef, startFunction);
       }
       previousBody.push(
@@ -1485,7 +1485,7 @@ export class Compiler extends DiagnosticEmitter {
         typesToRefs(instance.additionalLocals),
         module.flatten(stmts, instance.signature.returnType.toRef())
       );
-      if (!this.options.willOptimize) {
+      if (this.options.debugInfo) {
         setFunctionLocalNames(module, funcRef, instance);
       }
 
@@ -8623,7 +8623,7 @@ export class Compiler extends DiagnosticEmitter {
         varTypes,
         module.flatten(stmts, sizeTypeRef)
       );
-      if (!this.options.willOptimize) {
+      if (this.options.debugInfo) {
         setFunctionLocalNames(module, funcRef, instance);
       }
       instance.finalize(module, funcRef);
