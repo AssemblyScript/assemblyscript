@@ -766,13 +766,19 @@ export class Resolver extends DiagnosticEmitter {
           let defaultType = typeParameterNode.defaultType;
           if (defaultType) {
             // Default parameters are resolved in context of the called function, not the calling function
+            let parent = prototype.parent;
             let defaultTypeContextualTypeArguments: Map<string, Type> | null = null;
-            if (prototype.parent.kind == ElementKind.CLASS) {
-              defaultTypeContextualTypeArguments = (<Class>prototype.parent).contextualTypeArguments;
-            } else if (prototype.parent.kind == ElementKind.FUNCTION) {
-              defaultTypeContextualTypeArguments = (<Function>prototype.parent).contextualTypeArguments;
+            if (parent.kind == ElementKind.CLASS) {
+              defaultTypeContextualTypeArguments = (<Class>parent).contextualTypeArguments;
+            } else if (parent.kind == ElementKind.FUNCTION) {
+              defaultTypeContextualTypeArguments = (<Function>parent).contextualTypeArguments;
             }
-            let resolvedDefaultType = this.resolveType(defaultType, prototype, defaultTypeContextualTypeArguments, reportMode);
+            let resolvedDefaultType = this.resolveType(
+              defaultType,
+              prototype,
+              defaultTypeContextualTypeArguments,
+              reportMode
+            );
             if (!resolvedDefaultType) return null;
             resolvedTypeArguments[i] = resolvedDefaultType;
             continue;
@@ -825,7 +831,13 @@ export class Resolver extends DiagnosticEmitter {
             let typeArguments = classReference.typeArguments;
             if (typeArguments && typeArguments.length == typeArgumentNodes.length) {
               for (let i = 0, k = typeArguments.length; i < k; ++i) {
-                this.propagateInferredGenericTypes(typeArgumentNodes[i], typeArguments[i], ctxElement, ctxTypes, typeParameterNames);
+                this.propagateInferredGenericTypes(
+                  typeArgumentNodes[i],
+                  typeArguments[i],
+                  ctxElement,
+                  ctxTypes,
+                  typeParameterNames
+                );
               }
               return;
             }
@@ -847,10 +859,23 @@ export class Resolver extends DiagnosticEmitter {
       if (signatureReference) {
         let parameterTypes = signatureReference.parameterTypes;
         for (let i = 0, k = min(parameterTypes.length, parameterNodes.length) ; i < k; ++i) {
-          this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxElement, ctxTypes, typeParameterNames);
+          this.propagateInferredGenericTypes(
+            parameterNodes[i].type,
+            parameterTypes[i],
+            ctxElement,
+            ctxTypes,
+            typeParameterNames
+          );
         }
-        if (signatureReference.returnType != Type.void) {
-          this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxElement, ctxTypes, typeParameterNames);
+        let returnType = signatureReference.returnType;
+        if (returnType != Type.void) {
+          this.propagateInferredGenericTypes(
+            functionTypeNode.returnType,
+            returnType,
+            ctxElement,
+            ctxTypes,
+            typeParameterNames
+          );
         }
         let thisType = signatureReference.thisType;
         let explicitThisType = functionTypeNode.explicitThisType;
@@ -1251,13 +1276,15 @@ export class Resolver extends DiagnosticEmitter {
   /** Resolves a lazily compiled global, i.e. a static class field or annotated `@lazy`. */
   private ensureResolvedLazyGlobal(global: Global, reportMode: ReportMode = ReportMode.REPORT): bool {
     if (global.is(CommonFlags.RESOLVED)) return true;
-    var type: Type | null;
     var typeNode = global.typeNode;
-    if (typeNode) {
-      type = this.resolveType(typeNode, global.parent, null, reportMode);
-    } else {
-      type = this.resolveExpression(assert(global.initializerNode), global.file.startFunction.flow, Type.auto, reportMode);
-    }
+    var type = typeNode
+      ? this.resolveType(typeNode, global.parent, null, reportMode)
+      : this.resolveExpression(
+          assert(global.initializerNode),
+          global.file.startFunction.flow,
+          Type.auto,
+          reportMode
+        );
     if (!type) return false;
     global.setType(type); // also sets resolved
     return true;
@@ -2632,7 +2659,7 @@ export class Resolver extends DiagnosticEmitter {
     if (
       functionType &&
       declaration.arrowKind != ArrowKind.NONE &&
-      body && body.kind == NodeKind.EXPRESSION && 
+      body && body.kind == NodeKind.EXPRESSION &&
       isTypeOmitted(signature.returnType)
     ) {
       // (x) => ret, infer return type accordingt to `ret`
