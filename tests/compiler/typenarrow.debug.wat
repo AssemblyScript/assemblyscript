@@ -20,74 +20,74 @@
  (elem $0 (i32.const 1) $typenarrow/B#b1)
  (export "memory" (memory $0))
  (export "condiNarrow" (func $export:typenarrow/condiNarrow))
- (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
+ (func $~lib/rt/__instanceof (param $ptr i32) (param $classId i32) (result i32)
+  (local $id i32)
+  (local $rttiBase i32)
+  local.get $ptr
   i32.const 20
   i32.sub
   i32.load offset=12
-  local.set $2
+  local.set $id
   global.get $~lib/rt/__rtti_base
-  local.set $3
-  local.get $2
-  local.get $3
+  local.set $rttiBase
+  local.get $id
+  local.get $rttiBase
   i32.load
   i32.le_u
   if
    loop $do-loop|0
-    local.get $2
-    local.get $1
+    local.get $id
+    local.get $classId
     i32.eq
     if
      i32.const 1
      return
     end
-    local.get $3
+    local.get $rttiBase
     i32.const 4
     i32.add
-    local.get $2
+    local.get $id
     i32.const 8
     i32.mul
     i32.add
     i32.load offset=4
-    local.tee $2
+    local.tee $id
     br_if $do-loop|0
    end
   end
   i32.const 0
  )
- (func $typenarrow/B#b1 (param $0 i32)
+ (func $typenarrow/B#b1 (param $this i32)
   nop
  )
- (func $typenarrow/B#check (param $0 i32) (result i32)
+ (func $typenarrow/B#check (param $this i32) (result i32)
   i32.const 1
  )
- (func $typenarrow/condiNarrow (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  local.tee $2
+ (func $typenarrow/condiNarrow (param $v0 i32) (param $v1 i32)
+  (local $var$2 i32)
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
   if
-   local.get $0
+   local.get $v0
    call $typenarrow/B#b1
-   local.get $0
-   local.set $2
+   local.get $v0
+   local.set $var$2
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -95,29 +95,29 @@
   if
    nop
   else
-   local.get $0
+   local.get $v0
    call $typenarrow/B#b1
-   local.get $0
-   local.set $2
+   local.get $v0
+   local.set $var$2
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
   if (result i32)
-   local.get $1
-   local.tee $2
+   local.get $v1
+   local.tee $var$2
    i32.eqz
    if (result i32)
     i32.const 0
    else
-    local.get $2
+    local.get $var$2
     i32.const 4
     call $~lib/rt/__instanceof
    end
@@ -125,29 +125,29 @@
    i32.const 0
   end
   if
-   local.get $0
+   local.get $v0
    call $typenarrow/B#b1
-   local.get $1
+   local.get $v1
    call $typenarrow/B#b1
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
   if (result i32)
-   local.get $1
-   local.tee $2
+   local.get $v1
+   local.tee $var$2
    i32.eqz
    if (result i32)
     i32.const 0
    else
-    local.get $2
+    local.get $var$2
     i32.const 4
     call $~lib/rt/__instanceof
    end
@@ -156,28 +156,28 @@
    i32.const 0
   end
   if
-   local.get $0
+   local.get $v0
    call $typenarrow/B#b1
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
   i32.eqz
   if (result i32)
-   local.get $1
-   local.tee $2
+   local.get $v1
+   local.tee $var$2
    i32.eqz
    if (result i32)
     i32.const 0
    else
-    local.get $2
+    local.get $var$2
     i32.const 4
     call $~lib/rt/__instanceof
    end
@@ -185,16 +185,16 @@
    i32.const 0
   end
   if
-   local.get $1
+   local.get $v1
    call $typenarrow/B#b1
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -202,13 +202,13 @@
   if (result i32)
    i32.const 1
   else
-   local.get $1
-   local.tee $2
+   local.get $v1
+   local.tee $var$2
    i32.eqz
    if (result i32)
     i32.const 0
    else
-    local.get $2
+    local.get $var$2
     i32.const 4
     call $~lib/rt/__instanceof
    end
@@ -222,26 +222,26 @@
    i32.const 32
    drop
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
   if (result i32)
    i32.const 1
   else
-   local.get $1
-   local.tee $2
+   local.get $v1
+   local.tee $var$2
    i32.eqz
    if (result i32)
     i32.const 0
    else
-    local.get $2
+    local.get $var$2
     i32.const 4
     call $~lib/rt/__instanceof
    end
@@ -253,13 +253,13 @@
    i32.const 32
    drop
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -267,13 +267,13 @@
   if (result i32)
    i32.const 1
   else
-   local.get $1
-   local.tee $2
+   local.get $v1
+   local.tee $var$2
    i32.eqz
    if (result i32)
     i32.const 0
    else
-    local.get $2
+    local.get $var$2
     i32.const 4
     call $~lib/rt/__instanceof
    end
@@ -284,18 +284,18 @@
    i32.const 32
    drop
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
   if (result i32)
-   local.get $0
+   local.get $v0
    call $typenarrow/B#check
   else
    i32.const 0
@@ -303,13 +303,13 @@
   if
    nop
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -317,19 +317,19 @@
   if (result i32)
    i32.const 1
   else
-   local.get $0
+   local.get $v0
    call $typenarrow/B#check
   end
   if
    nop
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 6
    call $~lib/rt/__instanceof
   end
@@ -339,58 +339,58 @@
    i32.const 0
   end
   if
-   local.get $0
+   local.get $v0
    i32.load
    drop
-   local.get $0
+   local.get $v0
    call $typenarrow/B#b1
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
   if (result i32)
    i32.const 1
   else
-   local.get $0
-   local.tee $2
+   local.get $v0
+   local.tee $var$2
    i32.eqz
    if (result i32)
     i32.const 0
    else
-    local.get $2
+    local.get $var$2
     i32.const 6
     call $~lib/rt/__instanceof
    end
   end
   if
-   local.get $0
+   local.get $v0
    call $typenarrow/B#b1
   end
-  local.get $0
-  local.tee $2
+  local.get $v0
+  local.tee $var$2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $2
+   local.get $var$2
    i32.const 4
    call $~lib/rt/__instanceof
   end
   if (result i32)
-   local.get $0
-   local.tee $2
+   local.get $v0
+   local.tee $var$2
    i32.eqz
    if (result i32)
     i32.const 0
    else
-    local.get $2
+    local.get $var$2
     i32.const 6
     call $~lib/rt/__instanceof
    end
@@ -401,9 +401,9 @@
   if
    nop
   else
-   local.get $0
+   local.get $v0
    call $typenarrow/B#b1
-   local.get $0
+   local.get $v0
    i32.load
    drop
   end
