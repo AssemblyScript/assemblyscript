@@ -17,8 +17,8 @@
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
  (export "memory" (memory $0))
  (start $~start)
- (func $if/ifThenElse (param $0 i32) (result i32)
-  local.get $0
+ (func $if/ifThenElse (param $n i32) (result i32)
+  local.get $n
   if
    i32.const 1
    return
@@ -28,16 +28,16 @@
   end
   unreachable
  )
- (func $if/ifThen (param $0 i32) (result i32)
-  local.get $0
+ (func $if/ifThen (param $n i32) (result i32)
+  local.get $n
   if
    i32.const 1
    return
   end
   i32.const 0
  )
- (func $if/ifThenElseBlock (param $0 i32) (result i32)
-  local.get $0
+ (func $if/ifThenElseBlock (param $n i32) (result i32)
+  local.get $n
   if
    i32.const 1
    return
@@ -127,8 +127,8 @@
    unreachable
   end
  )
- (func $if/ifAlwaysReturns (param $0 i32) (result i32)
-  local.get $0
+ (func $if/ifAlwaysReturns (param $n i32) (result i32)
+  local.get $n
   if
    i32.const 1
    return

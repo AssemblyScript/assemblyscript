@@ -227,6 +227,10 @@ export function setPedantic(options: Options, pedantic: bool): void {
   options.pedantic = pedantic;
 }
 
+export function setDebugInfo(options: Options, debug: bool): void {
+  options.debugInfo = debug;
+}
+
 // Program
 
 /** Creates a new Program. */

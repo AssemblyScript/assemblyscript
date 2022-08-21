@@ -15,13 +15,13 @@
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $features/gc/test_i31
-  (local $0 i31ref)
-  (local $1 i32)
-  (local $2 i32)
+  (local $ref i31ref)
+  (local $val i32)
+  (local $uval i32)
   i32.const 123
   i31.new
-  local.set $0
-  local.get $0
+  local.set $ref
+  local.get $ref
   ref.is_null
   if
    i32.const 0
@@ -31,12 +31,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $ref
   i31.get_s
-  local.set $1
-  local.get $0
+  local.set $val
+  local.get $ref
   i31.get_u
-  local.set $2
+  local.set $uval
  )
  (func $start:features/gc
   call $features/gc/test_i31
