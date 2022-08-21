@@ -2640,9 +2640,10 @@ export class Resolver extends DiagnosticEmitter {
       let signatureReference = assert(functionType.getSignature());
       // create a temp flow to resolve expression
       let tempFlow = Flow.createParent(ctxFlow.actualFunction);
-      assert(signatureReference.parameterTypes.length ==  signature.parameters.length);
-      for (let i = 0, k = signature.parameters.length;i<k;i++) {
-        const parameter = signature.parameters[i];
+      let parameters = signature.parameters;
+      assert(signatureReference.parameterTypes.length ==  parameters.length);
+      for (let i = 0, k = parameters.length; i < k; i++) {
+        const parameter = parameters[i];
         const type = signatureReference.parameterTypes[i];
         tempFlow.addScopedDummyLocal(parameter.name.text, type, parameter);
       }
