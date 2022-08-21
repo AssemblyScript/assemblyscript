@@ -12,19 +12,19 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $export/add (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $export/add (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.add
  )
- (func $export/sub (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $export/sub (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.sub
  )
- (func $export/mul (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $export/mul (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.mul
  )
  (func $export/ns.two

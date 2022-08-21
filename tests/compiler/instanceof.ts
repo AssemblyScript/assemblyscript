@@ -15,7 +15,7 @@ assert(!(I instanceof A));
 assert(!(f instanceof A));
 assert(!(F instanceof A));
 
-// assert(!(a instanceof B)); // dynamic upcast, checked in rt/instanceof
+// assert(!(a instanceof B)); // dynamic downcast, checked in rt/instanceof
 assert(  b instanceof B );
 assert(!(i instanceof B));
 assert(!(I instanceof B));

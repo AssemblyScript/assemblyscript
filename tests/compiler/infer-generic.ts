@@ -18,23 +18,31 @@ export function test2(arr: f32[]): f32[] {
   return inferEncapsulatedClass(arr);
 }
 
+// () => R should infer R
+function inferEncapsulatedFunctionNull<R>(fn: () => R): () => R {
+  return fn;
+}
+export function test3(fn: () => f64): () => f64 {
+  return inferEncapsulatedFunctionNull(fn);
+}
+
 // (a: T) => R should infer T,R
 
-function inferEncapsulatedFunction<T,R>(fn: (a: T) => R): (a: T) => R {
+function inferEncapsulatedFunction<T, R>(fn: (a: T) => R): (a: T) => R {
   return fn;
 }
 
-export function test3(fn: (a: f32) => f64): (a: f32) => f64 {
+export function test4(fn: (a: f32) => f64): (a: f32) => f64 {
   return inferEncapsulatedFunction(fn);
 }
 
 // (a: T, b: i32) => R should not bail out on non-inferred i32
 
-function inferEncapsulatedFunctionMixed<T,R>(fn: (a: T, b: i32) => R): (a: T, b: i32) => R {
+function inferEncapsulatedFunctionMixed<T, R>(fn: (a: T, b: i32) => R): (a: T, b: i32) => R {
   return fn;
 }
 
-export function test4(fn: (a: f32, b: i32) => f64): (a: f32, b: i32) => f64 {
+export function test5(fn: (a: f32, b: i32) => f64): (a: f32, b: i32) => f64 {
   return inferEncapsulatedFunctionMixed(fn);
 }
 
@@ -53,9 +61,16 @@ arr.reduce(((acc, cur) => acc && cur != 0), false);
 
 // should fall back to default type
 
-class Ref { x: i32; }
+class Ref {
+  x: i32;
+}
 function inferDefault<T = Ref>(a: T): T {
   return a;
 }
 assert(inferDefault(1) == 1);
 assert(inferDefault({ x: 2 }) instanceof Ref);
+
+// infer builtin assert generic
+export function inferAssert(v: Ref | null): void {
+  assert(v).x;
+}

@@ -753,7 +753,7 @@ testArrayWrap<Uint64Array, u64>();
 testArrayWrap<Float32Array, f32>();
 testArrayWrap<Float64Array, f64>();
 
-function valuesEqual<T extends ArrayBufferView>(target: T, compare: valueof<T>[]): void {
+function valuesEqual<T extends TypedArray<number>>(target: T, compare: valueof<T>[]): void {
   let len = target.length;
   assert(len == compare.length);
   for (let i = 0; i < len; i++) {
@@ -771,7 +771,7 @@ let setSource2: f32[] = [4, 5, 6];
 let setSource3: f64[] = [Infinity, NaN, -Infinity];
 let setSource7: i8[] = [-110, -111, -112];
 
-function testTypedArraySet<T extends ArrayBufferView>(): void {
+function testTypedArraySet<T extends TypedArray<number>>(): void {
   let setSource4 = new Int64Array(3);
   setSource4[0] = 7;
   setSource4[1] = 8;
@@ -812,9 +812,16 @@ function testTypedArraySet<T extends ArrayBufferView>(): void {
     valuesEqual<T>(a, [100, 101, 102, 103, 255, 255, 255, 0, 0, 0]);
   } else {
     // explicitly case the input values to valueof<T>
-    valuesEqual<T>(a, [100, 101, 102, 103, <valueof<T>>1000, <valueof<T>>1001, <valueof<T>>1002, <valueof<T>>-110, <valueof<T>>-111, <valueof<T>>-112]);
+    valuesEqual<T>(a, [
+      100, 101, 102, 103,
+      <valueof<T>>1000,
+      <valueof<T>>1001,
+      <valueof<T>>1002,
+      <valueof<T>>-110,
+      <valueof<T>>-111,
+      <valueof<T>>-112
+    ]);
   }
-
 }
 
 testTypedArraySet<Int8Array>();

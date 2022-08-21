@@ -139,10 +139,12 @@
   end
   local.get $0
   i32.load
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $export:assert-nonnull/testProp (param $0 i32) (result i32)
   (local $1 i32)
@@ -536,10 +538,8 @@
   local.get $0
   i32.load
   call_indirect $0 (type $none_=>_i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
+  drop
+  unreachable
  )
  (func $export:assert-nonnull/testFn2 (param $0 i32) (result i32)
   (local $1 i32)
@@ -584,15 +584,8 @@
    local.get $0
    i32.load
    call_indirect $0 (type $none_=>_i32)
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   return
+   drop
+   unreachable
   end
   i32.const 17808
   i32.const 17856
@@ -625,35 +618,13 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
    i32.const 0
    i32.store
-   local.get $1
    local.get $0
    i32.load
    call_indirect $0 (type $none_=>_i32)
-   local.tee $0
-   i32.store
-   local.get $0
-   i32.eqz
-   if
-    i32.const 1056
-    i32.const 1120
-    i32.const 44
-    i32.const 10
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $0
-   return
+   drop
+   unreachable
   end
   i32.const 17808
   i32.const 17856
@@ -685,10 +656,8 @@
   i32.load offset=4
   i32.load
   call_indirect $0 (type $none_=>_i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
+  drop
+  unreachable
  )
  (func $export:assert-nonnull/testObjRet (param $0 i32) (result i32)
   (local $1 i32)
@@ -714,36 +683,14 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
    i32.const 0
    i32.store
-   local.get $1
    local.get $0
    i32.load offset=4
    i32.load
    call_indirect $0 (type $none_=>_i32)
-   local.tee $0
-   i32.store
-   local.get $0
-   i32.eqz
-   if
-    i32.const 1056
-    i32.const 1120
-    i32.const 52
-    i32.const 10
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $0
-   return
+   drop
+   unreachable
   end
   i32.const 17808
   i32.const 17856

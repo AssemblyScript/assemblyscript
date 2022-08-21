@@ -12,6 +12,7 @@
  */
 
 import {
+  Range,
   DiagnosticEmitter,
   DiagnosticCode
 } from "./diagnostics";
@@ -45,10 +46,6 @@ import {
 } from "./flow";
 
 import {
-  Range
-} from "./tokenizer";
-
-import {
   FunctionTypeNode,
   ParameterKind,
   TypeNode,
@@ -79,7 +76,9 @@ import {
   isTypeOmitted,
   FunctionExpression,
   NewExpression,
-  ArrayLiteralExpression
+  ArrayLiteralExpression,
+  ArrowKind,
+  ExpressionStatement
 } from "./ast";
 
 import {
@@ -95,7 +94,7 @@ import {
 } from "./common";
 
 import {
-  uniqueMap,
+  cloneMap,
   isPowerOf2
 } from "./util";
 
@@ -109,7 +108,7 @@ import {
 } from "./builtins";
 
 /** Indicates whether errors are reported or not. */
-export enum ReportMode {
+export const enum ReportMode {
   /** Report errors. */
   REPORT,
   /** Swallow errors. */
@@ -255,7 +254,7 @@ export class Resolver extends DiagnosticEmitter {
           <ClassPrototype>element,
           typeArgumentNodes,
           ctxElement,
-          uniqueMap<string,Type>(ctxTypes), // don't inherit
+          cloneMap(ctxTypes), // don't inherit
           node,
           reportMode
         );
@@ -309,7 +308,7 @@ export class Resolver extends DiagnosticEmitter {
           typeParameterNodes,
           typeArgumentNodes,
           ctxElement,
-          ctxTypes = uniqueMap(ctxTypes), // update
+          ctxTypes = cloneMap(ctxTypes), // update
           node,
           reportMode
         );
@@ -626,7 +625,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual element. */
     ctxElement: Element,
     /** Contextual types, i.e. `T`. Updated in place with the new set of contextual types. */
-    ctxTypes: Map<string,Type> = uniqueMap<string,Type>(),
+    ctxTypes: Map<string,Type> = new Map(),
     /** Alternative report node in case of empty type arguments. */
     alternativeReportNode: Node | null = null,
     /** How to proceed with eventual diagnostics. */
@@ -656,7 +655,7 @@ export class Resolver extends DiagnosticEmitter {
       return null;
     }
     var typeArguments = new Array<Type>(maxParameterCount);
-    var oldCtxTypes = uniqueMap<string,Type>(ctxTypes);
+    var oldCtxTypes = cloneMap(ctxTypes);
     ctxTypes.clear();
     for (let i = 0; i < maxParameterCount; ++i) {
       let type = i < argumentCount
@@ -669,7 +668,7 @@ export class Resolver extends DiagnosticEmitter {
         : this.resolveType( // reports
             assert(typeParameters[i].defaultType),
             ctxElement,
-            uniqueMap<string,Type>(ctxTypes), // don't update
+            cloneMap(ctxTypes), // don't update
             reportMode
           );
       if (!type) return null;
@@ -704,7 +703,7 @@ export class Resolver extends DiagnosticEmitter {
         prototype,
         typeArguments,
         ctxFlow.actualFunction,
-        uniqueMap(ctxFlow.contextualTypeArguments), // don't inherit
+        cloneMap(ctxFlow.contextualTypeArguments), // don't inherit
         node,
         reportMode
       );
@@ -712,7 +711,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // infer generic call if type arguments have been omitted
     if (prototype.is(CommonFlags.GENERIC)) {
-      let contextualTypeArguments = uniqueMap<string,Type>(ctxFlow.contextualTypeArguments);
+      let contextualTypeArguments = cloneMap(ctxFlow.contextualTypeArguments);
 
       // fill up contextual types with auto for each generic component
       let typeParameterNodes = assert(prototype.typeParameterNodes);
@@ -732,7 +731,12 @@ export class Resolver extends DiagnosticEmitter {
       // infer types with generic components while updating contextual types
       for (let i = 0; i < numParameters; ++i) {
         let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
-        if (!argumentExpression) { // missing initializer -> too few arguments
+        if (!argumentExpression) {
+          // optional but not have initializer should be handled in the other place
+          if (parameterNodes[i].parameterKind == ParameterKind.OPTIONAL) {
+            continue;
+          }
+          // missing initializer -> too few arguments
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Expected_0_arguments_but_got_1,
@@ -761,7 +765,14 @@ export class Resolver extends DiagnosticEmitter {
           }
           let defaultType = typeParameterNode.defaultType;
           if (defaultType) {
-            let resolvedDefaultType = this.resolveType(defaultType, ctxFlow.actualFunction, contextualTypeArguments, reportMode);
+            // Default parameters are resolved in context of the called function, not the calling function
+            let defaultTypeContextualTypeArguments: Map<string, Type> | null = null;
+            if (prototype.parent.kind == ElementKind.CLASS) {
+              defaultTypeContextualTypeArguments = (<Class>prototype.parent).contextualTypeArguments;
+            } else if (prototype.parent.kind == ElementKind.FUNCTION) {
+              defaultTypeContextualTypeArguments = (<Function>prototype.parent).contextualTypeArguments;
+            }
+            let resolvedDefaultType = this.resolveType(defaultType, prototype, defaultTypeContextualTypeArguments, reportMode);
             if (!resolvedDefaultType) return null;
             resolvedTypeArguments[i] = resolvedDefaultType;
             continue;
@@ -780,13 +791,13 @@ export class Resolver extends DiagnosticEmitter {
       return this.resolveFunction(
         prototype,
         resolvedTypeArguments,
-        uniqueMap<string,Type>(ctxFlow.contextualTypeArguments),
+        cloneMap(ctxFlow.contextualTypeArguments),
         reportMode
       );
     }
 
     // otherwise resolve the non-generic call as usual
-    return this.resolveFunction(prototype, null, uniqueMap<string,Type>(), reportMode);
+    return this.resolveFunction(prototype, null, new Map(), reportMode);
   }
 
   /** Updates contextual types with a possibly encapsulated inferred type. */
@@ -832,20 +843,21 @@ export class Resolver extends DiagnosticEmitter {
     } else if (node.kind == NodeKind.FUNCTIONTYPE) { // foo<T>(bar: (baz: T) => i32))
       let functionTypeNode = <FunctionTypeNode>node;
       let parameterNodes = functionTypeNode.parameters;
-      if (parameterNodes && parameterNodes.length > 0) {
-        let signatureReference = type.signatureReference;
-        if (signatureReference) {
-          let parameterTypes = signatureReference.parameterTypes;
-          let thisType = signatureReference.thisType;
-          if (parameterTypes.length == parameterNodes.length && !thisType == !functionTypeNode.explicitThisType) {
-            for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-              this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxElement, ctxTypes, typeParameterNames);
-            }
-            this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxElement, ctxTypes, typeParameterNames);
-            if (thisType) this.propagateInferredGenericTypes(functionTypeNode.explicitThisType!, thisType, ctxElement, ctxTypes, typeParameterNames);
-            return;
-          }
+      let signatureReference = type.signatureReference;
+      if (signatureReference) {
+        let parameterTypes = signatureReference.parameterTypes;
+        for (let i = 0, k = min(parameterTypes.length, parameterNodes.length) ; i < k; ++i) {
+          this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxElement, ctxTypes, typeParameterNames);
         }
+        if (signatureReference.returnType != Type.void) {
+          this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxElement, ctxTypes, typeParameterNames);
+        }
+        let thisType = signatureReference.thisType;
+        let explicitThisType = functionTypeNode.explicitThisType;
+        if (thisType && explicitThisType) {
+          this.propagateInferredGenericTypes(explicitThisType, thisType, ctxElement, ctxTypes, typeParameterNames);
+        }
+        return;
       }
     }
   }
@@ -1220,7 +1232,7 @@ export class Resolver extends DiagnosticEmitter {
     var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
     if (!element) return null;
     if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
-      let instance = this.resolveFunction(<FunctionPrototype>element, null, uniqueMap<string,Type>(), reportMode);
+      let instance = this.resolveFunction(<FunctionPrototype>element, null, new Map(), reportMode);
       if (!instance) return null;
       element = instance;
     }
@@ -1357,7 +1369,7 @@ export class Resolver extends DiagnosticEmitter {
           // Inherit from 'Function' if not overridden, i.e. fn.call
           let ownMember = target.getMember(propertyName);
           if (!ownMember) {
-            let functionInstance = this.resolveFunction(<FunctionPrototype>target, null, uniqueMap<string,Type>(), ReportMode.SWALLOW);
+            let functionInstance = this.resolveFunction(<FunctionPrototype>target, null, new Map(), ReportMode.SWALLOW);
             if (functionInstance) {
               let wrapper = functionInstance.type.getClassOrWrapper(this.program);
               if (wrapper) target = wrapper;
@@ -1551,6 +1563,10 @@ export class Resolver extends DiagnosticEmitter {
     if (ctxType.isValue) {
       // compile to contextual type if matching
       switch (ctxType.kind) {
+        case TypeKind.BOOL: {
+          if (i64_is_bool(intValue)) return Type.bool;
+          break;
+        }
         case TypeKind.I8: {
           if (i64_is_i8(intValue)) return Type.i8;
           break;
@@ -1573,10 +1589,6 @@ export class Resolver extends DiagnosticEmitter {
         }
         case TypeKind.U32: {
           if (i64_is_u32(intValue)) return Type.u32;
-          break;
-        }
-        case TypeKind.BOOL: {
-          if (i64_is_bool(intValue)) return Type.bool;
           break;
         }
         case TypeKind.ISIZE: {
@@ -2538,7 +2550,7 @@ export class Resolver extends DiagnosticEmitter {
         <ClassPrototype>element,
         node.typeArguments,
         ctxFlow.actualFunction,
-        uniqueMap<string,Type>(ctxFlow.contextualTypeArguments),
+        cloneMap(ctxFlow.contextualTypeArguments),
         node,
         reportMode
       );
@@ -2613,7 +2625,25 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    return this.resolveFunctionType(node.declaration.signature, ctxFlow.actualFunction, ctxFlow.contextualTypeArguments, reportMode);
+    const declaration = node.declaration;
+    const signature = declaration.signature;
+    const body = declaration.body;
+    let functionType = this.resolveFunctionType(signature, ctxFlow.actualFunction, ctxFlow.contextualTypeArguments, reportMode);
+    if (
+      functionType &&
+      declaration.arrowKind != ArrowKind.NONE &&
+      body && body.kind == NodeKind.EXPRESSION && 
+      isTypeOmitted(signature.returnType)
+    ) {
+      // (x) => ret, infer return type accordingt to `ret`
+      const expr = (<ExpressionStatement>body).expression;
+      const type = this.resolveExpression(expr, ctxFlow, ctxType, reportMode);
+      if (type) {
+        let signatureReference = assert(functionType.getSignature());
+        signatureReference.returnType = type;
+      }
+    }
+    return functionType;
   }
 
   // ==================================================== Elements =====================================================
@@ -2625,7 +2655,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Type arguments provided. */
     typeArguments: Type[] | null,
     /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> = uniqueMap<string,Type>(),
+    ctxTypes: Map<string,Type> = new Map(),
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
@@ -2927,7 +2957,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Type arguments provided. */
     typeArguments: Type[] | null,
     /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> = uniqueMap<string,Type>(),
+    ctxTypes: Map<string,Type> = new Map(),
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Class | null {
@@ -2988,7 +3018,7 @@ export class Resolver extends DiagnosticEmitter {
         basePrototype,
         extendsNode.typeArguments,
         prototype.parent, // relative to derived class
-        uniqueMap(ctxTypes), // don't inherit
+        cloneMap(ctxTypes), // don't inherit
         extendsNode,
         reportMode
       );
@@ -3024,7 +3054,7 @@ export class Resolver extends DiagnosticEmitter {
           interfacePrototype,
           implementsNode.typeArguments,
           prototype.parent,
-          uniqueMap(ctxTypes),
+          cloneMap(ctxTypes),
           implementsNode,
           reportMode
         );
@@ -3346,14 +3376,14 @@ export class Resolver extends DiagnosticEmitter {
         operatorInstance = this.resolveFunction(
           boundPrototype,
           null,
-          uniqueMap<string,Type>(),
+          new Map(),
           reportMode
         );
       } else {
         operatorInstance = this.resolveFunction(
           overloadPrototype,
           null,
-          uniqueMap<string,Type>(),
+          new Map(),
           reportMode
         );
       }
@@ -3491,7 +3521,7 @@ export class Resolver extends DiagnosticEmitter {
       let getterInstance = this.resolveFunction(
         getterPrototype,
         null,
-        uniqueMap<string,Type>(),
+        new Map(),
         reportMode
       );
       if (getterInstance) {
@@ -3504,7 +3534,7 @@ export class Resolver extends DiagnosticEmitter {
       let setterInstance = this.resolveFunction(
         setterPrototype,
         null,
-        uniqueMap<string,Type>(),
+        new Map(),
         reportMode
       );
       if (setterInstance) {

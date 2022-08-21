@@ -35,61 +35,43 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/console/console.assert<bool> (param $0 i32) (param $1 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.assert<bool> (param $condition i32) (param $message i32)
+  local.get $condition
   i32.eqz
   i32.eqz
-  local.get $1
+  local.get $message
   call $~lib/bindings/dom/console.assert
  )
- (func $~lib/console/console.log (param $0 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.log (param $message i32)
+  local.get $message
   call $~lib/bindings/dom/console.log
  )
- (func $~lib/console/console.debug (param $0 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.debug (param $message i32)
+  local.get $message
   call $~lib/bindings/dom/console.debug
  )
- (func $~lib/console/console.info (param $0 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.info (param $message i32)
+  local.get $message
   call $~lib/bindings/dom/console.info
  )
- (func $~lib/console/console.warn (param $0 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.warn (param $message i32)
+  local.get $message
   call $~lib/bindings/dom/console.warn
  )
- (func $~lib/console/console.error (param $0 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.error (param $message i32)
+  local.get $message
   call $~lib/bindings/dom/console.error
  )
- (func $~lib/console/console.time (param $0 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.time (param $label i32)
+  local.get $label
   call $~lib/bindings/dom/console.time
  )
- (func $~lib/console/console.timeLog (param $0 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.timeLog (param $label i32)
+  local.get $label
   call $~lib/bindings/dom/console.timeLog
  )
- (func $~lib/console/console.timeEnd (param $0 i32)
-  i32.const 0
-  drop
-  local.get $0
+ (func $~lib/console/console.timeEnd (param $label i32)
+  local.get $label
   call $~lib/bindings/dom/console.timeEnd
  )
  (func $~start

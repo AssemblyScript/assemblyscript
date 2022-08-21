@@ -25,7 +25,7 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "binaryen": "108.0.0-nightly.20220528",
+    "binaryen": "109.0.0-nightly.20220813",
     "long": "^5.2.0"
   },
   "devDependencies": {
@@ -33,10 +33,10 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "diff": "^5.0.0",
-    "esbuild": "^0.14.1",
+    "esbuild": "^0.14.50",
     "eslint": "^8.2.0",
     "glob": "^7.2.0",
-    "typescript": "~4.5.2"
+    "typescript": "~4.7.4"
   },
   "type": "module",
   "exports": {
@@ -72,7 +72,7 @@
     "watch": "node scripts/build --watch",
     "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:asconfig && npm run test:transform",
     "test:parser": "node --enable-source-maps tests/parser",
-    "test:compiler": "node --enable-source-maps --experimental-wasi-unstable-preview1 --no-warnings tests/compiler",
+    "test:compiler": "node --enable-source-maps --no-warnings tests/compiler",
     "test:browser": "node --enable-source-maps tests/browser",
     "test:asconfig": "cd tests/asconfig && npm run test",
     "test:transform": "npm run test:transform:esm && npm run test:transform:cjs",

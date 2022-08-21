@@ -1,7 +1,7 @@
 import { COMPARATOR, SORT } from "./util/sort";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_NOTIMPLEMENTED } from "./util/error";
 import { joinIntegerArray, joinFloatArray } from "./util/string";
-import { REVERSE } from "./util/bytes";
+import { REVERSE, FILL } from "./util/bytes";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
 
@@ -62,7 +62,8 @@ export class Int8Array extends ArrayBufferView {
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
-    return FILL<Int8Array, i8>(this, value, start, end);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
+    return this;
   }
 
   sort(comparator: (a: i8, b: i8) => i32 = COMPARATOR<i8>()): Int8Array {
@@ -82,14 +83,14 @@ export class Int8Array extends ArrayBufferView {
     return COPY_WITHIN<Int8Array, i8>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: i8, index: i32, array: Int8Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Int8Array, i8, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: i8, index: i32, array: Int8Array) => T,
     initialValue: T,
   ): T {
@@ -124,7 +125,7 @@ export class Int8Array extends ArrayBufferView {
     FOREACH<Int8Array, i8>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Int8Array {
     REVERSE<u8>(this.dataStart, this.length);
     return this;
   }
@@ -137,8 +138,8 @@ export class Int8Array extends ArrayBufferView {
     return this.join();
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Int8Array, i8, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int8Array {
@@ -203,7 +204,8 @@ export class Uint8Array extends ArrayBufferView {
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
-    return FILL<Uint8Array, u8>(this, value, start, end);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
+    return this;
   }
 
   sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8Array {
@@ -223,14 +225,14 @@ export class Uint8Array extends ArrayBufferView {
     return COPY_WITHIN<Uint8Array, u8>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: u8, index: i32, array: Uint8Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Uint8Array, u8, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: u8, index: i32, array: Uint8Array) => T,
     initialValue: T,
   ): T {
@@ -265,7 +267,7 @@ export class Uint8Array extends ArrayBufferView {
     FOREACH<Uint8Array, u8>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint8Array {
     REVERSE<u8>(this.dataStart, this.length);
     return this;
   }
@@ -274,8 +276,8 @@ export class Uint8Array extends ArrayBufferView {
     return joinIntegerArray<u8>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Uint8Array, u8, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -343,8 +345,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return LAST_INDEX_OF<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
   }
 
-  fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
-    return FILL<Uint8ClampedArray, u8>(this, value, start, end);
+  fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
+    value = ~(value >> 31) & (((255 - value) >> 31) | value);
+    FILL<u8>(this.dataStart, this.length, u8(value), start, end);
+    return this;
   }
 
   sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8ClampedArray {
@@ -364,14 +368,14 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return COPY_WITHIN<Uint8ClampedArray, u8>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: u8, index: i32, array: Uint8ClampedArray) => T,
     initialValue: T,
   ): T {
     return REDUCE<Uint8ClampedArray, u8, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: u8, index: i32, array: Uint8ClampedArray) => T,
     initialValue: T,
   ): T {
@@ -406,7 +410,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
     FOREACH<Uint8ClampedArray, u8>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint8ClampedArray {
     REVERSE<u8>(this.dataStart, this.length);
     return this;
   }
@@ -415,8 +419,8 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return joinIntegerArray<u8>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Uint8ClampedArray, u8, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -485,7 +489,8 @@ export class Int16Array extends ArrayBufferView {
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
-    return FILL<Int16Array, i16>(this, value, start, end);
+    FILL<u16>(this.dataStart, this.length, u16(value), start, end);
+    return this;
   }
 
   sort(comparator: (a: i16, b: i16) => i32 = COMPARATOR<i16>()): Int16Array {
@@ -505,14 +510,14 @@ export class Int16Array extends ArrayBufferView {
     return COPY_WITHIN<Int16Array, i16>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: i16, index: i32, array: Int16Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Int16Array, i16, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: i16, index: i32, array: Int16Array) => T,
     initialValue: T,
   ): T {
@@ -547,7 +552,7 @@ export class Int16Array extends ArrayBufferView {
     FOREACH<Int16Array, i16>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Int16Array {
     REVERSE<u16>(this.dataStart, this.length);
     return this;
   }
@@ -556,8 +561,8 @@ export class Int16Array extends ArrayBufferView {
     return joinIntegerArray<i16>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Int16Array, i16, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -626,7 +631,8 @@ export class Uint16Array extends ArrayBufferView {
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
-    return FILL<Uint16Array, u16>(this, value, start, end);
+    FILL<u16>(this.dataStart, this.length, u16(value), start, end);
+    return this;
   }
 
   sort(comparator: (a: u16, b: u16) => i32 = COMPARATOR<u16>()): Uint16Array {
@@ -646,14 +652,14 @@ export class Uint16Array extends ArrayBufferView {
     return COPY_WITHIN<Uint16Array, u16>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: u16, index: i32, array: Uint16Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Uint16Array, u16, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: u16, index: i32, array: Uint16Array) => T,
     initialValue: T,
   ): T {
@@ -688,7 +694,7 @@ export class Uint16Array extends ArrayBufferView {
     FOREACH<Uint16Array, u16>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint16Array {
     REVERSE<u16>(this.dataStart, this.length);
     return this;
   }
@@ -697,8 +703,8 @@ export class Uint16Array extends ArrayBufferView {
     return joinIntegerArray<u16>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Uint16Array, u16, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -767,7 +773,8 @@ export class Int32Array extends ArrayBufferView {
   }
 
   fill(value: i32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
-    return FILL<Int32Array, i32>(this, value, start, end);
+    FILL<u32>(this.dataStart, this.length, u32(value), start, end);
+    return this;
   }
 
   sort(comparator: (a: i32, b: i32) => i32 = COMPARATOR<i32>()): Int32Array {
@@ -787,14 +794,14 @@ export class Int32Array extends ArrayBufferView {
     return COPY_WITHIN<Int32Array, i32>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: i32, index: i32, array: Int32Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Int32Array, i32, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: i32, index: i32, array: Int32Array) => T,
     initialValue: T,
   ): T {
@@ -829,7 +836,7 @@ export class Int32Array extends ArrayBufferView {
     FOREACH<Int32Array, i32>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Int32Array {
     REVERSE<u32>(this.dataStart, this.length);
     return this;
   }
@@ -838,8 +845,8 @@ export class Int32Array extends ArrayBufferView {
     return joinIntegerArray<i32>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Int32Array, i32, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -908,7 +915,8 @@ export class Uint32Array extends ArrayBufferView {
   }
 
   fill(value: u32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
-    return FILL<Uint32Array, u32>(this, value, start, end);
+    FILL<u32>(this.dataStart, this.length, value, start, end);
+    return this;
   }
 
   sort(comparator: (a: u32, b: u32) => i32 = COMPARATOR<u32>()): Uint32Array {
@@ -928,14 +936,14 @@ export class Uint32Array extends ArrayBufferView {
     return COPY_WITHIN<Uint32Array, u32>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: u32, index: i32, array: Uint32Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Uint32Array, u32, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: u32, index: i32, array: Uint32Array) => T,
     initialValue: T,
   ): T {
@@ -970,7 +978,7 @@ export class Uint32Array extends ArrayBufferView {
     FOREACH<Uint32Array, u32>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint32Array {
     REVERSE<u32>(this.dataStart, this.length);
     return this;
   }
@@ -979,8 +987,8 @@ export class Uint32Array extends ArrayBufferView {
     return joinIntegerArray<u32>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Uint32Array, u32, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1049,7 +1057,8 @@ export class Int64Array extends ArrayBufferView {
   }
 
   fill(value: i64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
-    return FILL<Int64Array, i64>(this, value, start, end);
+    FILL<u64>(this.dataStart, this.length, u64(value), start, end);
+    return this;
   }
 
   sort(comparator: (a: i64, b: i64) => i32 = COMPARATOR<i64>()): Int64Array {
@@ -1069,14 +1078,14 @@ export class Int64Array extends ArrayBufferView {
     return COPY_WITHIN<Int64Array, i64>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: i64, index: i32, array: Int64Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Int64Array, i64, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: i64, index: i32, array: Int64Array) => T,
     initialValue: T,
   ): T {
@@ -1111,7 +1120,7 @@ export class Int64Array extends ArrayBufferView {
     FOREACH<Int64Array, i64>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Int64Array {
     REVERSE<u64>(this.dataStart, this.length);
     return this;
   }
@@ -1120,8 +1129,8 @@ export class Int64Array extends ArrayBufferView {
     return joinIntegerArray<i64>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Int64Array, i64, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1190,7 +1199,8 @@ export class Uint64Array extends ArrayBufferView {
   }
 
   fill(value: u64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
-    return FILL<Uint64Array, u64>(this, value, start, end);
+    FILL<u64>(this.dataStart, this.length, value, start, end);
+    return this;
   }
 
   sort(comparator: (a: u64, b: u64) => i32 = COMPARATOR<u64>()): Uint64Array {
@@ -1210,14 +1220,14 @@ export class Uint64Array extends ArrayBufferView {
     return COPY_WITHIN<Uint64Array, u64>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: u64, index: i32, array: Uint64Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Uint64Array, u64, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: u64, index: i32, array: Uint64Array) => T,
     initialValue: T,
   ): T {
@@ -1252,7 +1262,7 @@ export class Uint64Array extends ArrayBufferView {
     FOREACH<Uint64Array, u64>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Uint64Array {
     REVERSE<u64>(this.dataStart, this.length);
     return this;
   }
@@ -1261,8 +1271,8 @@ export class Uint64Array extends ArrayBufferView {
     return joinIntegerArray<u64>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Uint64Array, u64, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1331,7 +1341,8 @@ export class Float32Array extends ArrayBufferView {
   }
 
   fill(value: f32, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
-    return FILL<Float32Array, f32>(this, value, start, end);
+    FILL<f32>(this.dataStart, this.length, value, start, end);
+    return this;
   }
 
   sort(comparator: (a: f32, b: f32) => i32 = COMPARATOR<f32>()): Float32Array {
@@ -1351,14 +1362,14 @@ export class Float32Array extends ArrayBufferView {
     return COPY_WITHIN<Float32Array, f32>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: f32, index: i32, array: Float32Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Float32Array, f32, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: f32, index: i32, array: Float32Array) => T,
     initialValue: T,
   ): T {
@@ -1393,7 +1404,7 @@ export class Float32Array extends ArrayBufferView {
     FOREACH<Float32Array, f32>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Float32Array {
     REVERSE<f32>(this.dataStart, this.length);
     return this;
   }
@@ -1402,8 +1413,8 @@ export class Float32Array extends ArrayBufferView {
     return joinFloatArray<f32>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Float32Array, f32, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1472,7 +1483,8 @@ export class Float64Array extends ArrayBufferView {
   }
 
   fill(value: f64, start: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
-    return FILL<Float64Array, f64>(this, value, start, end);
+    FILL<f64>(this.dataStart, this.length, value, start, end);
+    return this;
   }
 
   sort(comparator: (a: f64, b: f64) => i32 = COMPARATOR<f64>()): Float64Array {
@@ -1492,14 +1504,14 @@ export class Float64Array extends ArrayBufferView {
     return COPY_WITHIN<Float64Array, f64>(this, target, start, end);
   }
 
-  reduce<T>(
+  reduce<T extends number>(
     fn: (accumulator: T, value: f64, index: i32, array: Float64Array) => T,
     initialValue: T,
   ): T {
     return REDUCE<Float64Array, f64, T>(this, fn, initialValue);
   }
 
-  reduceRight<T>(
+  reduceRight<T extends number>(
     fn: (accumulator: T, value: f64, index: i32, array: Float64Array) => T,
     initialValue: T,
   ): T {
@@ -1534,7 +1546,7 @@ export class Float64Array extends ArrayBufferView {
     FOREACH<Float64Array, f64>(this, fn);
   }
 
-  reverse(): this {
+  reverse(): Float64Array {
     REVERSE<f64>(this.dataStart, this.length);
     return this;
   }
@@ -1543,8 +1555,8 @@ export class Float64Array extends ArrayBufferView {
     return joinFloatArray<f64>(this.dataStart, this.length, separator);
   }
 
-  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
-    SET<Float64Array, f64, U, valueof<U>>(this, source, offset);
+  set<U extends ArrayLike<number>>(source: U, offset: i32 = 0): void {
+    SET(this, source, offset);
   }
 
   toString(): string {
@@ -1558,57 +1570,7 @@ export class Float64Array extends ArrayBufferView {
 
 // @ts-ignore: decorator
 @inline
-function FILL<TArray extends ArrayBufferView, T extends number>(
-  array: TArray,
-  value: native<T>,
-  start: i32,
-  end: i32
-): TArray {
-  var ptr = array.dataStart;
-  var len = array.length;
-  start = start < 0 ? max(len + start, 0) : min(start, len);
-  end   = end   < 0 ? max(len + end,   0) : min(end,   len);
-  if (sizeof<T>() == 1) {
-    if (start < end) memory.fill(ptr + <usize>start, <u8>value, <usize>(end - start));
-  } else {
-    if (ASC_SHRINK_LEVEL <= 1) {
-      if (isInteger<T>()) {
-        // @ts-ignore
-        if (value == <T>0 | value == <T>-1) {
-          if (start < end) {
-            memory.fill(
-              ptr + (<usize>start << alignof<T>()),
-              u8(value),
-              <usize>(end - start) << alignof<T>()
-            );
-          }
-          return array;
-        }
-      } else if (isFloat<T>()) {
-        // for floating non-negative zeros we can use fast memory.fill
-        if ((sizeof<T>() == 4 && reinterpret<u32>(f32(value)) == 0) ||
-            (sizeof<T>() == 8 && reinterpret<u64>(f64(value)) == 0)) {
-          if (start < end) {
-            memory.fill(
-              ptr + (<usize>start << alignof<T>()),
-              0,
-              <usize>(end - start) << alignof<T>()
-            );
-          }
-          return array;
-        }
-      }
-    }
-    for (; start < end; ++start) {
-      store<T>(ptr + (<usize>start << alignof<T>()), value);
-    }
-  }
-  return array;
-}
-
-// @ts-ignore: decorator
-@inline
-function SLICE<TArray extends ArrayBufferView, T>(
+function SLICE<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   start: i32,
   end: i32
@@ -1628,7 +1590,7 @@ function SLICE<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function SUBARRAY<TArray extends ArrayBufferView, T>(
+function SUBARRAY<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   begin: i32,
   end: i32
@@ -1649,7 +1611,7 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function COPY_WITHIN<TArray extends ArrayBufferView, T>(
+function COPY_WITHIN<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   target: i32,
   start: i32,
@@ -1674,7 +1636,7 @@ function COPY_WITHIN<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function REDUCE<TArray extends ArrayBufferView, T, TRet>(
+function REDUCE<TArray extends ArrayBufferView, T extends number, TRet extends number>(
   array: TArray,
   fn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
@@ -1688,7 +1650,7 @@ function REDUCE<TArray extends ArrayBufferView, T, TRet>(
 
 // @ts-ignore: decorator
 @inline
-function REDUCE_RIGHT<TArray extends ArrayBufferView, T, TRet>(
+function REDUCE_RIGHT<TArray extends ArrayBufferView, T extends number, TRet extends number>(
   array: TArray,
   fn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
@@ -1702,7 +1664,7 @@ function REDUCE_RIGHT<TArray extends ArrayBufferView, T, TRet>(
 
 // @ts-ignore: decorator
 @inline
-function MAP<TArray extends ArrayBufferView, T>(
+function MAP<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   fn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
@@ -1727,7 +1689,7 @@ function MAP<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function FILTER<TArray extends ArrayBufferView, T>(
+function FILTER<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   fn: (value: T, index: i32, self: TArray) => bool,
 ): TArray {
@@ -1757,7 +1719,7 @@ function FILTER<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function FIND_INDEX<TArray extends ArrayBufferView, T>(
+function FIND_INDEX<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
 ): i32 {
@@ -1770,7 +1732,7 @@ function FIND_INDEX<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function FIND_LAST_INDEX<TArray extends ArrayBufferView, T>(
+function FIND_LAST_INDEX<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
 ): i32 {
@@ -1783,7 +1745,7 @@ function FIND_LAST_INDEX<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function INCLUDES<TArray extends ArrayBufferView, T>(
+function INCLUDES<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   searchElement: T,
   fromIndex: i32,
@@ -1808,7 +1770,7 @@ function INCLUDES<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function INDEX_OF<TArray extends ArrayBufferView, T>(
+function INDEX_OF<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   searchElement: T,
   fromIndex: i32,
@@ -1827,7 +1789,7 @@ function INDEX_OF<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function LAST_INDEX_OF<TArray extends ArrayBufferView, T>(
+function LAST_INDEX_OF<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   searchElement: T,
   fromIndex: i32,
@@ -1847,7 +1809,7 @@ function LAST_INDEX_OF<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function SOME<TArray extends ArrayBufferView, T>(
+function SOME<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
@@ -1860,7 +1822,7 @@ function SOME<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function EVERY<TArray extends ArrayBufferView, T>(
+function EVERY<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
@@ -1874,7 +1836,7 @@ function EVERY<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function FOREACH<TArray extends ArrayBufferView, T>(
+function FOREACH<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => void,
 ): void {
@@ -1922,73 +1884,61 @@ function WRAP<TArray extends ArrayBufferView, T>(
 
 // @ts-ignore: decorator
 @inline
-function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, U>(
+function SET<
+  TArray extends ArrayLike<number>,
+  UArray extends ArrayLike<number>
+>(
   target: TArray,
   source: UArray,
   offset: i32 = 0
 ): void {
   // need to assert at compile time that U is not a reference or a function
-  if (isReference<U>()) {
+  if (isReference<valueof<UArray>>()) {
     ERROR(E_NOTIMPLEMENTED);
   }
-
-  // Uncaught RangeError: offset is out of bounds
-  if (offset < 0) throw new RangeError(E_INDEXOUTOFRANGE);
-  if (source.length + offset > target.length) throw new RangeError(E_INDEXOUTOFRANGE);
-
+  let sourceLen = source.length;
+  if (offset < 0 || sourceLen + offset > target.length) {
+    // offset is out of bounds
+    throw new RangeError(E_INDEXOUTOFRANGE);
+  }
+  // @ts-ignore: dataStart
+  var targetStart = target.dataStart + (<usize>offset << (alignof<valueof<TArray>>()));
+  // @ts-ignore: dataStart
+  var sourceStart = source.dataStart;
   // if the types align and match, use memory.copy() instead of manual loop
-  if (isInteger<T>() == isInteger<U>() && alignof<T>() == alignof<U>() &&
-    !(target instanceof Uint8ClampedArray && isSigned<U>())) {
-    memory.copy(
-      target.dataStart + (<usize>offset << alignof<T>()),
-      source.dataStart,
-      source.byteLength
-    );
+  if (
+    isInteger<valueof<TArray>>() == isInteger<valueof<UArray>>() &&
+    alignof<valueof<TArray>>() == alignof<valueof<UArray>>() &&
+    !(isSigned<valueof<UArray>>() && target instanceof Uint8ClampedArray)
+  ) {
+    memory.copy(targetStart, sourceStart, <usize>sourceLen << (alignof<valueof<UArray>>()));
   } else {
-    let targetDataStart = target.dataStart + (<usize>offset << alignof<T>());
-    let sourceDataStart = source.dataStart;
-    let count = source.length;
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < sourceLen; i++) {
+      let ptr = targetStart + (<usize>i << (alignof<valueof<TArray>>()));
+      let value = load<valueof<UArray>>(sourceStart + (<usize>i << (alignof<valueof<UArray>>())));
       // if TArray is Uint8ClampedArray, then values must be clamped
       if (target instanceof Uint8ClampedArray) {
-        if (isFloat<U>()) {
-          let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
-          store<T>(
-            targetDataStart + (<usize>i << alignof<T>()),
-            isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : <T>0
+        if (isFloat<valueof<UArray>>()) {
+          store<valueof<TArray>>(ptr,
+            isFinite<valueof<UArray>>(value)
+              ? <valueof<TArray>>max<valueof<UArray>>(0, min<valueof<UArray>>(255, value))
+              : 0
           );
         } else {
-          let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
-          if (!isSigned<U>()) {
-            store<T>(
-              targetDataStart + (<usize>i << alignof<T>()),
-              // @ts-ignore: cast to T is valid for numeric types here
-              min<U>(255, value)
-            );
-          } else if (sizeof<T>() <= 4) {
-            store<T>(
-              targetDataStart + (<usize>i << alignof<T>()),
-              // @ts-ignore: cast to T is valid for numeric types here
-              ~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value)
-            );
+          if (!isSigned<valueof<UArray>>()) {
+            store<valueof<TArray>>(ptr, min<valueof<UArray>>(255, value));
+          } else if (sizeof<valueof<TArray>>() <= 4) {
+            store<valueof<TArray>>(ptr, ~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value));
           } else {
-            store<T>(
-              targetDataStart + (<usize>i << alignof<T>()),
-              // @ts-ignore: cast to T is valid for numeric types here
-              ~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value)
-            );
+            store<valueof<TArray>>(ptr, ~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value));
           }
         }
-        // if U is a float, then casting float to int must include a finite check
-      } else if (isFloat<U>() && !isFloat<T>()) {
-        let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
-        // @ts-ignore: cast to T is valid for numeric types here
-        store<T>(targetDataStart + (<usize>i << alignof<T>()), isFinite<U>(value) ? <T>value : 0);
-      } else if (isFloat<T>() && !isFloat<U>()) {
-        // @ts-ignore: In this case the <T> conversion is required
-        store<T>(targetDataStart + (<usize>i << alignof<T>()), <T>load<U>(sourceDataStart + (<usize>i << alignof<U>())));
       } else {
-        store<T>(targetDataStart + (<usize>i << alignof<T>()), load<U>(sourceDataStart + (<usize>i << alignof<U>())));
+        if (isFloat<valueof<UArray>>() && !isFloat<valueof<TArray>>()) {
+          store<valueof<TArray>>(ptr, isFinite<valueof<UArray>>(value) ? <valueof<TArray>>value : 0);
+        } else {
+          store<valueof<TArray>>(ptr, <valueof<TArray>>value);
+        }
       }
     }
   }

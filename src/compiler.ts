@@ -15,6 +15,7 @@ import {
 } from "./builtins";
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticEmitter
 } from "./diagnostics";
@@ -107,7 +108,6 @@ import {
 
 import {
   Token,
-  Range,
   operatorTokenToString
 } from "./tokenizer";
 
@@ -196,12 +196,13 @@ import {
   writeF32,
   writeF64,
   writeV128,
-  uniqueMap,
+  cloneMap,
   isPowerOf2,
-  v128_zero,
   readI32,
   isIdentifier,
-  accuratePow64
+  accuratePow64,
+  v128_zero,
+  v128_ones,
 } from "./util";
 
 import {
@@ -213,6 +214,11 @@ import {
 } from "./passes/shadowstack";
 import { typeOr } from "./narrow";
 
+import {
+  liftRequiresExportRuntime,
+  lowerRequiresExportRuntime
+} from "./bindings/js";
+
 /** Compiler options. */
 export class Options {
   constructor() { /* as internref */ }
@@ -221,6 +227,8 @@ export class Options {
   target: Target = Target.WASM32;
   /** Runtime type. Defaults to Incremental GC. */
   runtime: Runtime = Runtime.Incremental;
+  /** If true, indicates that debug information will be emitted by Binaryen. */
+  debugInfo: bool = false;
   /** If true, replaces assertions with nops. */
   noAssert: bool = false;
   /** It true, exports the memory to the embedder. */
@@ -277,6 +285,8 @@ export class Options {
   shrinkLevelHint: i32 = 0;
   /** Hinted basename. */
   basenameHint: string = "output";
+  /** Hinted bindings generation. */
+  bindingsHint: bool = false;
 
   /** Tests if the target is WASM64 or, otherwise, WASM32. */
   get isWasm64(): bool {
@@ -412,6 +422,8 @@ export class Compiler extends DiagnosticEmitter {
   shadowStack!: ShadowStackPass;
   /** Whether the module has custom function exports. */
   hasCustomFunctionExports: bool = false;
+  /** Whether the module would use the exported runtime to lift/lower. */
+  desiresExportRuntime: bool = false;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -482,11 +494,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // add mutable data, heap and rtti offset dummies
     if (options.isWasm64) {
-      module.addGlobal(BuiltinNames.data_end, TypeRef.I64, true, module.i64(0));
+      module.addGlobal(BuiltinNames.data_end,  TypeRef.I64, true, module.i64(0));
       module.addGlobal(BuiltinNames.heap_base, TypeRef.I64, true, module.i64(0));
       module.addGlobal(BuiltinNames.rtti_base, TypeRef.I64, true, module.i64(0));
     } else {
-      module.addGlobal(BuiltinNames.data_end, TypeRef.I32, true, module.i32(0));
+      module.addGlobal(BuiltinNames.data_end,  TypeRef.I32, true, module.i32(0));
       module.addGlobal(BuiltinNames.heap_base, TypeRef.I32, true, module.i32(0));
       module.addGlobal(BuiltinNames.rtti_base, TypeRef.I32, true, module.i32(0));
     }
@@ -502,8 +514,8 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // compile and export runtime if requested
-    if (this.options.exportRuntime) {
+    // compile and export runtime if requested or necessary
+    if (this.options.exportRuntime || (this.options.bindingsHint && this.desiresExportRuntime)) {
       for (let i = 0, k = runtimeFunctions.length; i < k; ++i) {
         let name = runtimeFunctions[i];
         let instance = program.requireFunction(name);
@@ -752,11 +764,6 @@ export class Compiler extends DiagnosticEmitter {
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
     var exportStart = options.exportStart;
-    if (program.isWasi && !exportStart) {
-      // Try to do the right thing for WASI. If the module has custom function
-      // exports it is likely a reactor, otherwise it is likely a command.
-      exportStart = this.hasCustomFunctionExports ? "_initialize" : "_start";
-    }
     if (!startIsEmpty || exportStart != null) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && exportStart != null) {
@@ -855,8 +862,26 @@ export class Compiler extends DiagnosticEmitter {
             if (!module.hasExport(exportName)) {
               module.addFunctionExport(functionInstance.internalName, exportName);
               this.hasCustomFunctionExports = true;
-              if (signature.hasManagedOperands) {
+              let hasManagedOperands = signature.hasManagedOperands;
+              if (hasManagedOperands) {
                 this.shadowStack.noteExport(exportName, signature.getManagedOperandIndices());
+              }
+              if (!this.desiresExportRuntime) {
+                let thisType = signature.thisType;
+                if (
+                  thisType && lowerRequiresExportRuntime(thisType) ||
+                  liftRequiresExportRuntime(signature.returnType)
+                ) {
+                  this.desiresExportRuntime = true;
+                } else {
+                  let parameterTypes = signature.parameterTypes;
+                  for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+                    if (lowerRequiresExportRuntime(parameterTypes[i])) {
+                      this.desiresExportRuntime = true;
+                      break;
+                    }
+                  }
+                }
               }
             }
             return;
@@ -879,6 +904,24 @@ export class Compiler extends DiagnosticEmitter {
           let exportName = prefix + name;
           if (!module.hasExport(exportName)) {
             module.addGlobalExport(element.internalName, exportName);
+            if (!this.desiresExportRuntime) {
+              let type = global.type;
+              if (
+                liftRequiresExportRuntime(type) ||
+                !global.is(CommonFlags.CONST) && lowerRequiresExportRuntime(type)
+              ) {
+                this.desiresExportRuntime = true;
+              }
+            }
+          }
+          if (global.type == Type.v128) {
+            this.warning(
+              DiagnosticCode.Exchange_of_0_values_is_not_supported_by_all_embeddings,
+              global.typeNode
+                ? assert(global.typeNode).range
+                : global.identifierNode.range,
+              "v128"
+            );
           }
           return;
         }
@@ -922,57 +965,6 @@ export class Compiler extends DiagnosticEmitter {
       DiagnosticCode.Only_variables_functions_and_enums_become_WebAssembly_module_exports,
       element.identifierNode.range
     );
-  }
-
-  // === Elements =================================================================================
-
-  /** Compiles any element. */
-  compileElement(element: Element, compileMembers: bool = true): void {
-    switch (element.kind) {
-      case ElementKind.GLOBAL: {
-        this.compileGlobal(<Global>element);
-        break;
-      }
-      case ElementKind.ENUM: {
-        this.compileEnum(<Enum>element);
-        break;
-      }
-      case ElementKind.FUNCTION_PROTOTYPE: {
-        if (!element.is(CommonFlags.GENERIC)) {
-          let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          if (functionInstance) this.compileFunction(functionInstance);
-        }
-        break;
-      }
-      case ElementKind.CLASS_PROTOTYPE: {
-        if (!element.is(CommonFlags.GENERIC)) {
-          let classInstance = this.resolver.resolveClass(<ClassPrototype>element, null);
-          if (classInstance) this.compileClass(classInstance);
-        }
-        break;
-      }
-      case ElementKind.PROPERTY_PROTOTYPE: {
-        let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
-        if (propertyInstance) this.compileProperty(propertyInstance);
-        break;
-      }
-      case ElementKind.INTERFACE_PROTOTYPE:
-      case ElementKind.NAMESPACE:
-      case ElementKind.TYPEDEFINITION:
-      case ElementKind.ENUMVALUE:
-      case ElementKind.INDEXSIGNATURE: break;
-      default: assert(false);
-    }
-    if (compileMembers) {
-      let members = element.members;
-      if (members) {
-        // TODO: for (let element of members.values()) {
-        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-          let element = unchecked(_values[i]);
-          this.compileElement(element);
-        }
-      }
-    }
   }
 
   // files
@@ -1026,13 +1018,14 @@ export class Compiler extends DiagnosticEmitter {
       let numLocals = locals.length;
       let varTypes = new Array<TypeRef>(numLocals);
       for (let i = 0; i < numLocals; ++i) varTypes[i] = locals[i].type.toRef();
-      module.addFunction(
+      const funcRef = module.addFunction(
         startFunction.internalName,
         startSignature.paramRefs,
         startSignature.resultRefs,
         varTypes,
         module.flatten(startFunctionBody)
       );
+      startFunction.finalize(module, funcRef);
       previousBody.push(
         module.call(startFunction.internalName, null, TypeRef.None)
       );
@@ -1140,6 +1133,9 @@ export class Compiler extends DiagnosticEmitter {
           !isDeclaredConstant
         );
         pendingElements.delete(global);
+        if (!this.desiresExportRuntime && lowerRequiresExportRuntime(type)) {
+          this.desiresExportRuntime = true;
+        }
         return true;
       }
 
@@ -1494,6 +1490,23 @@ export class Compiler extends DiagnosticEmitter {
         signature.resultRefs
       );
       funcRef = module.getFunction(instance.internalName);
+      if (!this.desiresExportRuntime) {
+        let thisType = signature.thisType;
+        if (
+          thisType && liftRequiresExportRuntime(thisType) ||
+          lowerRequiresExportRuntime(signature.returnType)
+        ) {
+          this.desiresExportRuntime = true;
+        } else {
+          let parameterTypes = signature.parameterTypes;
+          for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+            if (liftRequiresExportRuntime(parameterTypes[i])) {
+              this.desiresExportRuntime = true;
+              break;
+            }
+          }
+        }
+      }
 
     // abstract or interface function
     } else if (instance.is(CommonFlags.ABSTRACT) || instance.parent.kind == ElementKind.INTERFACE) {
@@ -1511,6 +1524,25 @@ export class Compiler extends DiagnosticEmitter {
       );
       funcRef = 0; // TODO?
       instance.set(CommonFlags.ERRORED);
+    }
+
+    if (instance.is(CommonFlags.AMBIENT) || instance.is(CommonFlags.EXPORT)) {
+      // Verify and print warn if signature has v128 type for imported or exported functions
+      let hasVectorValueOperands = signature.hasVectorValueOperands;
+      if (hasVectorValueOperands) {
+        let range: Range;
+        let fnTypeNode = instance.prototype.functionTypeNode;
+        if (signature.returnType == Type.v128) {
+          range = fnTypeNode.returnType.range;
+        } else {
+          let firstIndex = signature.getVectorValueOperandIndices()[0];
+          range = fnTypeNode.parameters[firstIndex].range;
+        }
+        this.warning(
+          DiagnosticCode.Exchange_of_0_values_is_not_supported_by_all_embeddings,
+          range, "v128"
+        );
+      }
     }
 
     instance.finalize(module, funcRef);
@@ -1633,87 +1665,6 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
-  // === Classes ==================================================================================
-
-  /** Compiles a priorly resolved class. */
-  compileClass(instance: Class): bool {
-    if (instance.is(CommonFlags.COMPILED)) return true;
-    instance.set(CommonFlags.COMPILED);
-    var prototype = instance.prototype;
-    var staticMembers = (<ClassPrototype>prototype).members;
-    if (staticMembers) {
-      // TODO: for (let element of staticMembers.values()) {
-      for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
-        let element = unchecked(_values[i]);
-        switch (element.kind) {
-          case ElementKind.GLOBAL: {
-            this.compileGlobal(<Global>element);
-            break;
-          }
-          case ElementKind.FUNCTION_PROTOTYPE: {
-            if (element.is(CommonFlags.GENERIC)) break;
-            let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-            if (!functionInstance) break;
-            element = functionInstance;
-            // fall-through
-          }
-          case ElementKind.FUNCTION: {
-            this.compileFunction(<Function>element);
-            break;
-          }
-          case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
-            if (!propertyInstance) break;
-            element = propertyInstance;
-            // fall-through
-          }
-          case ElementKind.PROPERTY: {
-            this.compileProperty(<Property>element);
-            break;
-          }
-        }
-      }
-    }
-    this.ensureConstructor(instance, instance.identifierNode);
-    this.checkFieldInitialization(instance);
-
-    var instanceMembers = instance.members;
-    if (instanceMembers) {
-      // TODO: for (let element of instanceMembers.values()) {
-      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
-        let element = unchecked(_values[i]);
-        switch (element.kind) {
-          case ElementKind.FUNCTION_PROTOTYPE: {
-            if (element.is(CommonFlags.GENERIC)) break;
-            let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-            if (!functionInstance) break;
-            element = functionInstance;
-            // fall-through
-          }
-          case ElementKind.FUNCTION: {
-            this.compileFunction(<Function>element);
-            break;
-          }
-          case ElementKind.FIELD: {
-            this.compileField(<Field>element);
-            break;
-          }
-          case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
-            if (!propertyInstance) break;
-            element = propertyInstance;
-            // fall-through
-          }
-          case ElementKind.PROPERTY: {
-            this.compileProperty(<Property>element);
-            break;
-          }
-        }
-      }
-    }
-    return true;
-  }
-
   /** Compiles an instance field to a getter and a setter. */
   compileField(instance: Field): bool {
     this.compileFieldGetter(instance);
@@ -1783,41 +1734,6 @@ export class Compiler extends DiagnosticEmitter {
       if (typeNode) this.checkTypeSupported(instance.type, typeNode);
     }
     return true;
-  }
-
-  /** Compiles a property to a getter and potentially a setter. */
-  compileProperty(instance: Property): bool {
-    this.compilePropertyGetter(instance);
-    this.compilePropertySetter(instance);
-    return instance.is(CommonFlags.COMPILED);
-  }
-
-  /* Compiles the getter of the specified property. */
-  compilePropertyGetter(instance: Property): bool {
-    var getterInstance = instance.getterInstance;
-    if (getterInstance) {
-      let ret = this.compileFunction(getterInstance);
-      let setterInstance = instance.setterInstance;
-      if (getterInstance.is(CommonFlags.COMPILED) && (!setterInstance || setterInstance.is(CommonFlags.COMPILED))) {
-        instance.set(CommonFlags.COMPILED);
-      }
-      return ret;
-    }
-    return false;
-  }
-
-  /** Compiles the setter of the specified property. */
-  compilePropertySetter(instance: Property): bool {
-    var setterInstance = instance.setterInstance;
-    if (setterInstance) {
-      let ret = this.compileFunction(setterInstance);
-      let getterInstance = instance.getterInstance;
-      if (getterInstance && getterInstance.is(CommonFlags.COMPILED) && setterInstance.is(CommonFlags.COMPILED)) {
-        instance.set(CommonFlags.COMPILED);
-      }
-      return ret;
-    }
-    return false;
   }
 
   // === Memory ===================================================================================
@@ -2977,7 +2893,7 @@ export class Compiler extends DiagnosticEmitter {
         type = resolver.resolveType( // reports
           typeNode,
           flow.actualFunction,
-          uniqueMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
         this.checkTypeSupported(type, typeNode);
@@ -3544,12 +3460,12 @@ export class Compiler extends DiagnosticEmitter {
         }
         fromType = fromType.nonNullableType;
       }
-      if (fromType.isAssignableTo(toType)) { // downcast or same
+      if (fromType.isAssignableTo(toType)) { // upcast or same
         assert(toType.isExternalReference || fromType.kind == toType.kind);
         this.currentType = toType;
         return expr;
       }
-      if (explicit && toType.nonNullableType.isAssignableTo(fromType)) { // upcast
+      if (explicit && toType.nonNullableType.isAssignableTo(fromType)) { // downcast
         // <Cat | null>(<Animal>maybeCat)
         if (toType.isExternalReference) {
           this.error(
@@ -3562,7 +3478,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         assert(fromType.kind == toType.kind);
         if (!this.options.noAssert) {
-          expr = this.makeRuntimeUpcastCheck(expr, fromType, toType, reportNode);
+          expr = this.makeRuntimeDowncastCheck(expr, fromType, toType, reportNode);
         }
         this.currentType = toType;
         return expr;
@@ -3577,6 +3493,28 @@ export class Compiler extends DiagnosticEmitter {
 
     // not dealing with references from here on
     assert(!fromType.isReference && !toType.isReference);
+
+    // Early return if we have same types
+    if (toType.kind == fromType.kind) {
+      this.currentType = toType;
+      return expr;
+    }
+
+    // v128 to any / any to v128
+    // except v128 to bool
+    //
+    // NOTE:In case we would have more conversions to and from v128 type it's better
+    // to make these checks more individual and integrate in below flow.
+    if (
+      !toType.isBooleanValue &&
+      (toType.isVectorValue || fromType.isVectorValue)
+    ) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
+      return module.unreachable();
+    }
 
     if (!fromType.isAssignableTo(toType)) {
       if (!explicit) {
@@ -3757,7 +3695,7 @@ export class Compiler extends DiagnosticEmitter {
         let toType = this.resolver.resolveType( // reports
           assert(expression.toType),
           flow.actualFunction,
-          uniqueMap(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!toType) return this.module.unreachable();
         return this.compileExpression(expression.expression, toType, inheritedConstraints | Constraints.CONV_EXPLICIT);
@@ -4699,53 +4637,25 @@ export class Compiler extends DiagnosticEmitter {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.I32: {
-        return module.binary(BinaryOp.LtI32, leftExpr, rightExpr);
-      }
-      case TypeKind.I64: {
-        return module.binary(BinaryOp.LtI64, leftExpr, rightExpr);
-      }
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.LtI64
-            : BinaryOp.LtI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.I32: return module.binary(BinaryOp.LtI32, leftExpr, rightExpr);
+      case TypeKind.I64: return module.binary(BinaryOp.LtI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.LtISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+      case TypeKind.U16: {
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.LtU32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.LtU64
-            : BinaryOp.LtU32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.LtU64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.LtF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.LtF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.LtU32, leftExpr, rightExpr);
+      case TypeKind.U64: return module.binary(BinaryOp.LtU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.LtUSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.LtF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.LtF64, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -4757,53 +4667,25 @@ export class Compiler extends DiagnosticEmitter {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.I32: {
-        return module.binary(BinaryOp.GtI32, leftExpr, rightExpr);
-      }
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.GtI64
-            : BinaryOp.GtI32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.I64: {
-        return module.binary(BinaryOp.GtI64, leftExpr, rightExpr);
-      }
+      case TypeKind.I32: return module.binary(BinaryOp.GtI32, leftExpr, rightExpr);
+      case TypeKind.I64: return module.binary(BinaryOp.GtI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.GtISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+      case TypeKind.U16: {
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.GtU32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.GtU64
-            : BinaryOp.GtU32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.GtU64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.GtF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.GtF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.GtU32, leftExpr, rightExpr);
+      case TypeKind.U64: return module.binary(BinaryOp.GtU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.GtUSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.GtF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.GtF64, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -4815,53 +4697,25 @@ export class Compiler extends DiagnosticEmitter {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.I32: {
-        return module.binary(BinaryOp.LeI32, leftExpr, rightExpr);
-      }
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.LeI64
-            : BinaryOp.LeI32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.I64: {
-        return module.binary(BinaryOp.LeI64, leftExpr, rightExpr);
-      }
+      case TypeKind.I32: return module.binary(BinaryOp.LeI32, leftExpr, rightExpr);
+      case TypeKind.I64: return module.binary(BinaryOp.LeI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.LeISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+      case TypeKind.U16: {
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.LeU32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.LeU64
-            : BinaryOp.LeU32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.LeU64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.LeF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.LeF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.LeU32, leftExpr, rightExpr);
+      case TypeKind.U64: return module.binary(BinaryOp.LeU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.LeUSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.LeF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.LeF64, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -4873,53 +4727,25 @@ export class Compiler extends DiagnosticEmitter {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.I32: {
-        return module.binary(BinaryOp.GeI32, leftExpr, rightExpr);
-      }
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.GeI64
-            : BinaryOp.GeI32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.I64: {
-        return module.binary(BinaryOp.GeI64, leftExpr, rightExpr);
-      }
+      case TypeKind.I32: return module.binary(BinaryOp.GeI32, leftExpr, rightExpr);
+      case TypeKind.I64: return module.binary(BinaryOp.GeI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.GeISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+      case TypeKind.U16: {
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.GeU32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.GeU64
-            : BinaryOp.GeU32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.GeU64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.GeF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.GeF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.GeU32, leftExpr, rightExpr);
+      case TypeKind.U64: return module.binary(BinaryOp.GeU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.GeUSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.GeF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.GeF64, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -4929,39 +4755,23 @@ export class Compiler extends DiagnosticEmitter {
     // Cares about garbage bits
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+      case TypeKind.U16: {
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.EqI32, leftExpr, rightExpr);
-      }
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.EqI64
-            : BinaryOp.EqI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.EqI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.EqI64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.EqF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.EqF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.EqI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.EqSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.EqF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.EqF64, leftExpr, rightExpr);
       case TypeKind.V128: {
         return module.unary(UnaryOp.AllTrueI8x16,
           module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
@@ -4969,9 +4779,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.EQREF:
       case TypeKind.I31REF:
-      case TypeKind.DATAREF: {
-        return module.ref_eq(leftExpr, rightExpr);
-      }
+      case TypeKind.DATAREF: return module.ref_eq(leftExpr, rightExpr);
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF: {
@@ -4992,39 +4800,23 @@ export class Compiler extends DiagnosticEmitter {
     // Cares about garbage bits
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+      case TypeKind.U16: {
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.NeI32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.NeI64
-            : BinaryOp.NeI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.NeI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.NeI64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.NeF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.NeF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.NeI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.NeSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.NeF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.NeF64, leftExpr, rightExpr);
       case TypeKind.V128: {
         return module.unary(UnaryOp.AnyTrueV128,
           module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
@@ -5057,35 +4849,19 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.AddI32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.AddI64
-            : BinaryOp.AddI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.AddI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.AddI64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.AddF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.AddF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.AddI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.AddSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.AddF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.AddF64, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5095,35 +4871,19 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.SubI32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.SubI64
-            : BinaryOp.SubI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.SubI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.SubI64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.SubF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.SubF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.SubI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.SubSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.SubF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.SubF64, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5133,35 +4893,19 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.MulI32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.MulI64
-            : BinaryOp.MulI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.MulI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.MulI64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.MulF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.MulF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.MulI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.MulSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.MulF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.MulF64, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5183,7 +4927,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U8:
       case TypeKind.I16:
       case TypeKind.U16: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
@@ -5193,10 +4937,10 @@ export class Compiler extends DiagnosticEmitter {
           // Precompute power if LHS and RHS constants
           // TODO: move this optimization to AIR
           if (
-            getExpressionId(leftExpr) == ExpressionId.Const &&
+            getExpressionId(leftExpr)  == ExpressionId.Const &&
             getExpressionId(rightExpr) == ExpressionId.Const
           ) {
-            let leftValue = getConstValueI32(leftExpr);
+            let leftValue  = getConstValueI32(leftExpr);
             let rightValue = getConstValueI32(rightExpr);
             this.currentType = type;
             return module.i32(i64_low(i64_pow(
@@ -5274,13 +5018,13 @@ export class Compiler extends DiagnosticEmitter {
             getExpressionId(rightExpr) == ExpressionId.Const
           ) {
             if (isWasm64) {
-              let leftValue = i64_new(getConstValueI64Low(leftExpr), getConstValueI64High(leftExpr));
+              let leftValue  = i64_new(getConstValueI64Low(leftExpr), getConstValueI64High(leftExpr));
               let rightValue = i64_new(getConstValueI64Low(rightExpr), getConstValueI64High(rightExpr));
               let result = i64_pow(leftValue, rightValue);
               this.currentType = type;
               return module.i64(i64_low(result), i64_high(result));
             } else {
-              let leftValue = getConstValueI32(leftExpr);
+              let leftValue  = getConstValueI32(leftExpr);
               let rightValue = getConstValueI32(rightExpr);
               this.currentType = type;
               return module.i32(i64_low(i64_pow(
@@ -5290,9 +5034,14 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
         }
-        let instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
+        let instance = isWasm64
+          ? this.i64PowInstance
+          : this.i32PowInstance;
         if (!instance) {
-          let prototype = this.program.lookup(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
+          let prototype = this.program.lookup(isWasm64
+            ? CommonNames.ipow64
+            : CommonNames.ipow32
+          );
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5318,10 +5067,10 @@ export class Compiler extends DiagnosticEmitter {
           // Precompute power if LHS and RHS constants
           // TODO: move this optimization to AIR
           if (
-            getExpressionId(leftExpr) == ExpressionId.Const &&
+            getExpressionId(leftExpr)  == ExpressionId.Const &&
             getExpressionId(rightExpr) == ExpressionId.Const
           ) {
-            let leftValue = getConstValueF32(leftExpr);
+            let leftValue  = getConstValueF32(leftExpr);
             let rightValue = getConstValueF32(rightExpr);
             this.currentType = type;
             return module.f32(f32(accuratePow64(leftValue, rightValue)));
@@ -5360,10 +5109,10 @@ export class Compiler extends DiagnosticEmitter {
           // Precompute power if LHS and RHS constants
           // TODO: move this optimization to AIR
           if (
-            getExpressionId(leftExpr) == ExpressionId.Const &&
+            getExpressionId(leftExpr)  == ExpressionId.Const &&
             getExpressionId(rightExpr) == ExpressionId.Const
           ) {
-            let leftValue = getConstValueF64(leftExpr);
+            let leftValue  = getConstValueF64(leftExpr);
             let rightValue = getConstValueF64(rightExpr);
             this.currentType = type;
             return module.f64(accuratePow64(leftValue, rightValue));
@@ -5407,53 +5156,25 @@ export class Compiler extends DiagnosticEmitter {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.I32: {
-        return module.binary(BinaryOp.DivI32, leftExpr, rightExpr);
-      }
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.DivI64
-            : BinaryOp.DivI32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.I64: {
-        return module.binary(BinaryOp.DivI64, leftExpr, rightExpr);
-      }
+      case TypeKind.I32: return module.binary(BinaryOp.DivI32, leftExpr, rightExpr);
+      case TypeKind.I64: return module.binary(BinaryOp.DivI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.DivISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+      case TypeKind.U16: {
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.DivU32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.DivU64
-            : BinaryOp.DivU32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.DivU64, leftExpr, rightExpr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.DivF32, leftExpr, rightExpr);
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.DivF64, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.DivU32, leftExpr, rightExpr);
+      case TypeKind.U64: return module.binary(BinaryOp.DivU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.DivUSize, leftExpr, rightExpr);
+      case TypeKind.F32: return module.binary(BinaryOp.DivF32, leftExpr, rightExpr);
+      case TypeKind.F64: return module.binary(BinaryOp.DivF64, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5465,47 +5186,23 @@ export class Compiler extends DiagnosticEmitter {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.I32: {
-        return module.binary(BinaryOp.RemI32, leftExpr, rightExpr);
-      }
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.RemI64
-            : BinaryOp.RemI32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.I64: {
-        return module.binary(BinaryOp.RemI64, leftExpr, rightExpr);
-      }
+      case TypeKind.I32: return module.binary(BinaryOp.RemI32, leftExpr, rightExpr);
+      case TypeKind.I64: return module.binary(BinaryOp.RemI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.RemISize, leftExpr, rightExpr);
+      case TypeKind.BOOL:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+      case TypeKind.U16: {
+        leftExpr  = this.ensureSmallIntegerWrap(leftExpr, type);
         rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
         // falls through
       }
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.RemU32, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.RemU64
-            : BinaryOp.RemU32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.RemU64, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.RemU32, leftExpr, rightExpr);
+      case TypeKind.U64: return module.binary(BinaryOp.RemU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.RemUSize, leftExpr, rightExpr);
       case TypeKind.F32: {
         let instance = this.f32ModInstance;
         if (!instance) {
@@ -5580,27 +5277,19 @@ export class Compiler extends DiagnosticEmitter {
         return module.binary(
           BinaryOp.ShlI32,
           leftExpr,
-          module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
+          module.binary(
+            BinaryOp.AndI32,
+            rightExpr,
+            module.i32(type.size - 1)
+          )
         );
       }
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.ShlI32, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.ShlI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.ShlI64, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.ShlI64
-            : BinaryOp.ShlI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.ShlI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.ShlSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5618,7 +5307,11 @@ export class Compiler extends DiagnosticEmitter {
         return module.binary(
           BinaryOp.ShrI32,
           this.ensureSmallIntegerWrap(leftExpr, type),
-          module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
+          module.binary(
+            BinaryOp.AndI32,
+            rightExpr,
+            module.i32(type.size - 1)
+          )
         );
       }
       case TypeKind.U8:
@@ -5627,39 +5320,19 @@ export class Compiler extends DiagnosticEmitter {
         return module.binary(
           BinaryOp.ShrU32,
           this.ensureSmallIntegerWrap(leftExpr, type),
-          module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
+          module.binary(
+            BinaryOp.AndI32,
+            rightExpr,
+            module.i32(type.size - 1)
+          )
         );
       }
-      case TypeKind.I32: {
-        return module.binary(BinaryOp.ShrI32, leftExpr, rightExpr);
-      }
-      case TypeKind.I64: {
-        return module.binary(BinaryOp.ShrI64, leftExpr, rightExpr);
-      }
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.ShrI64
-            : BinaryOp.ShrI32,
-          leftExpr,
-          rightExpr
-        );
-      }
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
-      }
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.ShrU64
-            : BinaryOp.ShrU32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.I32: return module.binary(BinaryOp.ShrI32, leftExpr, rightExpr);
+      case TypeKind.I64: return module.binary(BinaryOp.ShrI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE: return module.binary(BinaryOp.ShrISize, leftExpr, rightExpr);
+      case TypeKind.U32: return module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
+      case TypeKind.U64: return module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
+      case TypeKind.USIZE: return module.binary(BinaryOp.ShrUSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5678,27 +5351,19 @@ export class Compiler extends DiagnosticEmitter {
         return module.binary(
           BinaryOp.ShrU32,
           this.ensureSmallIntegerWrap(leftExpr, type),
-          module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
+          module.binary(
+            BinaryOp.AndI32,
+            rightExpr,
+            module.i32(type.size - 1)
+          )
         );
       }
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.ShrU64
-            : BinaryOp.ShrU32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.ShrUSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5708,29 +5373,17 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.BOOL:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.AndI32, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.AndI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.AndI64, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.AndI64
-            : BinaryOp.AndI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.AndI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.AndSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5740,31 +5393,17 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
-      }
+      case TypeKind.U16: return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.OrI64, leftExpr, rightExpr);
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.OrI64
-            : BinaryOp.OrI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.OrI64, leftExpr, rightExpr);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.binary(BinaryOp.OrSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -5774,31 +5413,17 @@ export class Compiler extends DiagnosticEmitter {
     // Does not care about garbage bits or signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
-      }
+      case TypeKind.U16: return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
-      }
+      case TypeKind.U32: return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.XorI64, leftExpr, rightExpr);
-      }
+      case TypeKind.U64: return module.binary(BinaryOp.XorI64, leftExpr, rightExpr);
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
-        return module.binary(
-          this.options.isWasm64
-            ? BinaryOp.XorI64
-            : BinaryOp.XorI32,
-          leftExpr,
-          rightExpr
-        );
-      }
+      case TypeKind.USIZE: return module.binary(BinaryOp.XorSize, leftExpr, rightExpr);
     }
     assert(false);
     return module.unreachable();
@@ -6557,7 +6182,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(typeParameterNodes),
         typeArgumentNodes,
         this.currentFlow.actualFunction.parent,
-        uniqueMap<string,Type>(this.currentFlow.contextualTypeArguments), // don't update
+        cloneMap(this.currentFlow.contextualTypeArguments), // don't update
         expression
       );
     }
@@ -7471,7 +7096,7 @@ export class Compiler extends DiagnosticEmitter {
       DecoratorFlags.NONE
     );
     var instance: Function | null;
-    var contextualTypeArguments = uniqueMap(flow.contextualTypeArguments);
+    var contextualTypeArguments = cloneMap(flow.contextualTypeArguments);
     var module = this.module;
 
     // compile according to context. this differs from a normal function in that omitted parameter
@@ -7851,7 +7476,7 @@ export class Compiler extends DiagnosticEmitter {
         let functionInstance = this.resolver.resolveFunction(
           functionPrototype,
           null,
-          uniqueMap<string,Type>(flow.contextualTypeArguments)
+          cloneMap(flow.contextualTypeArguments)
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
@@ -7906,7 +7531,7 @@ export class Compiler extends DiagnosticEmitter {
     var expectedType = this.resolver.resolveType(
       expression.isType,
       flow.actualFunction,
-      uniqueMap(flow.contextualTypeArguments)
+      cloneMap(flow.contextualTypeArguments)
     );
     if (!expectedType) {
       this.currentType = Type.bool;
@@ -7945,7 +7570,7 @@ export class Compiler extends DiagnosticEmitter {
     // <nullable> instanceof <nonNullable> - LHS must be != 0
     if (actualType.isNullableReference && !expectedType.isNullableReference) {
 
-      // downcast - check statically
+      // upcast - check statically
       if (actualType.nonNullableType.isAssignableTo(expectedType)) {
         return module.binary(
           sizeTypeRef == TypeRef.I64
@@ -7956,7 +7581,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-      // upcast - check dynamically
+      // downcast - check dynamically
       if (expectedType.isAssignableTo(actualType)) {
         let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
@@ -7995,11 +7620,11 @@ export class Compiler extends DiagnosticEmitter {
     // either none or both nullable
     } else {
 
-      // downcast - check statically
+      // upcast - check statically
       if (actualType.isAssignableTo(expectedType)) {
         return module.maybeDropCondition(expr, module.i32(1));
 
-      // upcast - check dynamically
+      // downcast - check dynamically
       } else if (expectedType.isAssignableTo(actualType)) {
         let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
@@ -8233,12 +7858,13 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // Compile to a `StaticArray<string>#join("") in the general case
-      let length = numParts + numExpressions;
-      let values = new Array<usize>(length);
-      values[0] = this.ensureStaticString(parts[0]);
+      let expressionPositions = new Array<i32>(numExpressions);
+      let values = new Array<usize>();
+      if (parts[0].length > 0) values.push(this.ensureStaticString(parts[0]));
       for (let i = 1; i < numParts; ++i) {
-        values[2 * i - 1] = module.usize(0);
-        values[2 * i] = this.ensureStaticString(parts[i]);
+        expressionPositions[i - 1] = values.length;
+        values.push(module.usize(0));
+        if (parts[i].length > 0) values.push(this.ensureStaticString(parts[i]));
       }
       let arrayInstance = assert(this.resolver.resolveClass(this.program.staticArrayPrototype, [ stringType ]));
       let segment = this.addStaticBuffer(stringType, values, arrayInstance.id);
@@ -8267,7 +7893,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0; i < numExpressions; ++i) {
         stmts[numExpressions + i] = this.makeCallDirect(indexedSetInstance, [
           module.usize(offset),
-          module.i32(2 * i + 1),
+          module.i32(expressionPositions[i]),
           module.local_get(temps[i].index, stringType.toRef())
         ], expression);
         flow.freeTempLocal(temps[i]);
@@ -8291,7 +7917,7 @@ export class Compiler extends DiagnosticEmitter {
           let instance = this.resolver.resolveFunction(
             <FunctionPrototype>target,
             null,
-            uniqueMap<string,Type>(),
+            new Map(),
             ReportMode.SWALLOW
           );
           if (!instance) break;
@@ -8782,6 +8408,7 @@ export class Compiler extends DiagnosticEmitter {
 
       switch (fieldType.kind) {
         // Number Types (and Number alias types)
+        case TypeKind.BOOL:
         case TypeKind.I8:
         case TypeKind.I16:
         case TypeKind.I32:
@@ -8792,7 +8419,6 @@ export class Compiler extends DiagnosticEmitter {
         case TypeKind.U32:
         case TypeKind.U64:
         case TypeKind.USIZE:
-        case TypeKind.BOOL:
         case TypeKind.F32:
         case TypeKind.F64: {
           exprs.push(
@@ -8877,14 +8503,14 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,
-        uniqueMap<string,Type>(flow.contextualTypeArguments)
+        cloneMap(flow.contextualTypeArguments)
       );
     } else {
       classInstance = this.resolver.resolveClassInclTypeArguments(
         classPrototype,
         typeArguments,
         flow.actualFunction.parent, // relative to caller
-        uniqueMap<string,Type>(flow.contextualTypeArguments),
+        cloneMap(flow.contextualTypeArguments),
         expression
       );
     }
@@ -8916,7 +8542,7 @@ export class Compiler extends DiagnosticEmitter {
       // clone base constructor if a derived class. note that we cannot just
       // call the base ctor since the derived class may have additional fields.
       let baseClass = classInstance.base;
-      let contextualTypeArguments = uniqueMap(classInstance.contextualTypeArguments);
+      let contextualTypeArguments = cloneMap(classInstance.contextualTypeArguments);
       if (baseClass) {
         let baseCtor = this.ensureConstructor(baseClass, reportNode);
         this.checkFieldInitialization(baseClass, reportNode);
@@ -9378,29 +9004,17 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(
               BinaryOp.AddI32,
               getValue,
               module.i32(1)
-            );
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            let options = this.options;
-            expr = module.binary(
-              options.isWasm64
-                ? BinaryOp.AddI64
-                : BinaryOp.AddI32,
-              getValue,
-              this.makeOne(this.currentType)
             );
             break;
           }
@@ -9410,6 +9024,15 @@ export class Compiler extends DiagnosticEmitter {
               BinaryOp.AddI64,
               getValue,
               module.i64(1)
+            );
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            expr = module.binary(
+              BinaryOp.AddSize,
+              getValue,
+              this.makeOne(this.currentType)
             );
             break;
           }
@@ -9467,29 +9090,17 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(
               BinaryOp.SubI32,
               getValue,
               module.i32(1)
-            );
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            let options = this.options;
-            expr = module.binary(
-              options.isWasm64
-                ? BinaryOp.SubI64
-                : BinaryOp.SubI32,
-              getValue,
-              this.makeOne(this.currentType)
             );
             break;
           }
@@ -9499,6 +9110,15 @@ export class Compiler extends DiagnosticEmitter {
               BinaryOp.SubI64,
               getValue,
               module.i64(1)
+            );
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            expr = module.binary(
+              BinaryOp.SubSize,
+              getValue,
+              this.makeOne(this.currentType)
             );
             break;
           }
@@ -9640,30 +9260,28 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.SubI32, module.i32(0), expr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.SubI64
-                : BinaryOp.SubI32,
-              this.makeZero(this.currentType),
-              expr
-            );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
             expr = module.binary(BinaryOp.SubI64, module.i64(0), expr);
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            expr = module.binary(
+              BinaryOp.SubSize,
+              this.makeZero(this.currentType),
+              expr
+            );
             break;
           }
           case TypeKind.F32: {
@@ -9711,30 +9329,28 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.AddI32, expr, this.module.i32(1));
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.AddI64
-                : BinaryOp.AddI32,
-              expr,
-              this.makeOne(this.currentType)
-            );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
             expr = module.binary(BinaryOp.AddI64, expr, module.i64(1));
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            expr = module.binary(
+              BinaryOp.AddSize,
+              expr,
+              this.makeOne(this.currentType)
+            );
             break;
           }
           case TypeKind.F32: {
@@ -9782,30 +9398,28 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.SubI32, expr, module.i32(1));
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.SubI64
-                : BinaryOp.SubI32,
-              expr,
-              this.makeOne(this.currentType)
-            );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
             expr = module.binary(BinaryOp.SubI64, expr, module.i64(1));
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            expr = module.binary(
+              BinaryOp.SubSize,
+              expr,
+              this.makeOne(this.currentType)
+            );
             break;
           }
           case TypeKind.F32: {
@@ -9873,30 +9487,28 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.convertExpression(expr, this.currentType, this.currentType.intType, false, expression.operand);
 
         switch (this.currentType.kind) {
+          case TypeKind.BOOL:
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
           case TypeKind.U8:
           case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
+          case TypeKind.U32: {
             expr = module.binary(BinaryOp.XorI32, expr, module.i32(-1));
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.XorI64
-                : BinaryOp.XorI32,
-              expr,
-              this.makeNegOne(this.currentType)
-            );
             break;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
             expr = module.binary(BinaryOp.XorI64, expr, module.i64(-1, -1));
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            expr = module.binary(
+              BinaryOp.XorSize,
+              expr,
+              this.makeNegOne(this.currentType)
+            );
             break;
           }
           default: {
@@ -10028,6 +9640,16 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var flow = this.currentFlow;
     switch (type.kind) {
+      case TypeKind.BOOL: {
+        if (flow.canOverflow(expr, type)) {
+          // bool is special in that it compares to 0 instead of masking with 0x1
+          expr = module.binary(BinaryOp.NeI32,
+            expr,
+            module.i32(0)
+          );
+        }
+        break;
+      }
       case TypeKind.I8: {
         if (flow.canOverflow(expr, type)) {
           expr = this.options.hasFeature(Feature.SIGN_EXTENSION)
@@ -10070,16 +9692,6 @@ export class Compiler extends DiagnosticEmitter {
           expr = module.binary(BinaryOp.AndI32,
             expr,
             module.i32(0xffff)
-          );
-        }
-        break;
-      }
-      case TypeKind.BOOL: {
-        if (flow.canOverflow(expr, type)) {
-          // bool is special in that it compares to 0 instead of masking with 0x1
-          expr = module.binary(BinaryOp.NeI32,
-            expr,
-            module.i32(0)
           );
         }
         break;
@@ -10210,13 +9822,13 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     switch (type.kind) {
       default: assert(false);
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL: return module.i32(0);
+      case TypeKind.U32: return module.i32(0);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (type.size != 64) return module.i32(0);
       case TypeKind.I64:
@@ -10238,13 +9850,13 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     switch (type.kind) {
       default: assert(false);
+      case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
-      case TypeKind.BOOL: return module.i32(1);
+      case TypeKind.U32: return module.i32(1);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (type.size != 64) return module.i32(1);
       case TypeKind.I64:
@@ -10272,6 +9884,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: return module.i64(-1, -1);
       case TypeKind.F32: return module.f32(-1);
       case TypeKind.F64: return module.f64(-1);
+      case TypeKind.V128: return module.v128(v128_ones);
       case TypeKind.I31REF: return module.i31_new(module.i32(-1));
     }
   }
@@ -10289,52 +9902,84 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.BOOL: // not a mask, just != 0
       case TypeKind.I32:
-      case TypeKind.U32: {
-        return expr;
-      }
+      case TypeKind.U32: return expr;
       case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.binary(BinaryOp.NeI64, expr, module.i64(0));
-      }
-      case TypeKind.USIZE:
-      case TypeKind.ISIZE: {
+      case TypeKind.U64: return module.binary(BinaryOp.NeI64, expr, module.i64(0));
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
         return type.size == 64
           ? module.binary(BinaryOp.NeI64, expr, module.i64(0))
           : expr;
       }
       case TypeKind.F32: {
-        // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
-        // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
-        //
-        // and finally:
-        // (reinterpret<u32>(x) << 1) - (1 << 1) <= ((0x7F800000 - 1) << 1)
-        return module.binary(BinaryOp.LeU32,
-          module.binary(BinaryOp.SubI32,
-            module.binary(BinaryOp.ShlI32,
-              module.unary(UnaryOp.ReinterpretF32ToI32, expr),
-              module.i32(1)
+        let options = this.options;
+        if (
+          options.shrinkLevelHint > 1 &&
+          options.hasFeature(Feature.NONTRAPPING_F2I)
+        ) {
+          // Use more compact but slower 5-byte (3 bytes in best case) approach
+          // !!(i32.trunc_sat_f32_u(f32.ceil(f32.abs(x))))
+          return module.unary(UnaryOp.EqzI32,
+            module.unary(UnaryOp.EqzI32,
+              module.unary(UnaryOp.TruncSatF32ToU32,
+                module.unary(UnaryOp.CeilF32,
+                  module.unary(UnaryOp.AbsF32, expr)
+                )
+              )
+            )
+          );
+        } else {
+          // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
+          // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
+          //
+          // and finally:
+          // (reinterpret<u32>(x) << 1) - (1 << 1) <= ((0x7F800000 - 1) << 1)
+          return module.binary(BinaryOp.LeU32,
+            module.binary(BinaryOp.SubI32,
+              module.binary(BinaryOp.ShlI32,
+                module.unary(UnaryOp.ReinterpretF32ToI32, expr),
+                module.i32(1)
+              ),
+              module.i32(2) // 1 << 1
             ),
-            module.i32(2) // 1 << 1
-          ),
-          module.i32(0xFEFFFFFE) // (0x7F800000 - 1) << 1
-        );
+            module.i32(0xFEFFFFFE) // (0x7F800000 - 1) << 1
+          );
+        }
       }
       case TypeKind.F64: {
-        // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
-        // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
-        //
-        // and finally:
-        // (reinterpret<u64>(x) << 1) - (1 << 1) <= ((0x7FF0000000000000 - 1) << 1)
-        return module.binary(BinaryOp.LeU64,
-          module.binary(BinaryOp.SubI64,
-            module.binary(BinaryOp.ShlI64,
-              module.unary(UnaryOp.ReinterpretF64ToI64, expr),
-              module.i64(1)
+        let options = this.options;
+        if (
+          options.shrinkLevelHint > 1 &&
+          options.hasFeature(Feature.NONTRAPPING_F2I)
+        ) {
+          // Use more compact but slower 5-byte (3 bytes in best case) approach
+          // !!(i32.trunc_sat_f64_u(f64.ceil(f64.abs(x))))
+          return module.unary(UnaryOp.EqzI32,
+            module.unary(UnaryOp.EqzI32,
+              module.unary(UnaryOp.TruncSatF64ToU32,
+                module.unary(UnaryOp.CeilF64,
+                  module.unary(UnaryOp.AbsF64, expr)
+                )
+              )
+            )
+          );
+        } else {
+          // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
+          // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
+          //
+          // and finally:
+          // (reinterpret<u64>(x) << 1) - (1 << 1) <= ((0x7FF0000000000000 - 1) << 1)
+          return module.binary(BinaryOp.LeU64,
+            module.binary(BinaryOp.SubI64,
+              module.binary(BinaryOp.ShlI64,
+                module.unary(UnaryOp.ReinterpretF64ToI64, expr),
+                module.i64(1)
+              ),
+              module.i64(2) // 1 << 1
             ),
-            module.i64(2) // 1 << 1
-          ),
-          module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
-        );
+            module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
+          );
+        }
       }
       case TypeKind.V128: {
         return module.unary(UnaryOp.AnyTrueV128, expr);
@@ -10627,9 +10272,9 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
-  /** Makes a runtime upcast check, e.g. on `<Child>parent`. */
-  makeRuntimeUpcastCheck(
-    /** Expression being upcast. */
+  /** Makes a runtime downcast check, e.g. on `<Child>parent`. */
+  makeRuntimeDowncastCheck(
+    /** Expression being downcast. */
     expr: ExpressionRef,
     /** Type of the expression. */
     type: Type,
@@ -10646,7 +10291,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(this.compileFunction(instanceofInstance));
 
     var staticAbortCallExpr = this.makeStaticAbort(
-      this.ensureStaticString("unexpected upcast"),
+      this.ensureStaticString("unexpected downcast"),
       reportNode
     ); // TODO: throw
 
@@ -10682,7 +10327,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
 function mangleImportName(
   element: Element,
   declaration: DeclarationStatement

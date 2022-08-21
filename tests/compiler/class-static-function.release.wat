@@ -43,16 +43,7 @@
   i32.const 1056
   i32.load
   call_indirect $0 (type $none_=>_i32)
-  i32.const 42
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1088
-   i32.const 11
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add

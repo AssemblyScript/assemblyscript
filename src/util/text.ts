@@ -433,22 +433,35 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
   return false;
 }
 
+/** Creates an indentation matching the number of specified levels. */
 const indentX1 = "  ";
 const indentX2 = "    ";
+const indentX3 = "      ";
 const indentX4 = "        ";
+const indentCache = new Map<i32,string>();
 
-/** Creates an indentation matching the number of specified levels. */
 export function indent(sb: string[], level: i32): void {
-  while (level >= 4) {
-    sb.push(indentX4);
-    level -= 4;
-  }
-  if (level >= 2) {
-    sb.push(indentX2);
-    level -= 2;
-  }
-  if (level) {
-    sb.push(indentX1);
+  if (level <= 4) {
+    switch (level) {
+      case 1: sb.push(indentX1); break;
+      case 2: sb.push(indentX2); break;
+      case 3: sb.push(indentX3); break;
+      case 4: sb.push(indentX4); break;
+    }
+  } else {
+    let indents: string;
+    // Limit number of indent entries to 1024 for avoiding unnecessary
+    // memory consumetion
+    if (indentCache.size <= 1024) {
+      if (indentCache.has(level)) {
+        indents = assert(indentCache.get(level));
+      } else {
+        indentCache.set(level, (indents = indentX1.repeat(level)));
+      }
+    } else {
+      indents = indentX1.repeat(level);
+    }
+    sb.push(indents);
   }
 }
 
