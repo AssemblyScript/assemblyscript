@@ -2134,14 +2134,14 @@
   local.get $b
   f64.add
  )
- (func $optional-typeparameters/TestMethodDerived<~lib/string/String>#test<~lib/array/Array<~lib/string/String>> (param $0 i32)
+ (func $optional-typeparameters/TestMethodDerived<~lib/string/String>#test<~lib/array/Array<~lib/string/String>> (param $this i32)
   i32.const 6
   i32.const 6
   i32.eq
   drop
  )
- (func $optional-typeparameters/TestMethodDerived2<f64>#foo (param $0 i32) (param $1 i32)
-  local.get $1
+ (func $optional-typeparameters/TestMethodDerived2<f64>#foo (param $this i32) (param $v i32)
+  local.get $v
   call $optional-typeparameters/TestMethodDerived<~lib/string/String>#test<~lib/array/Array<~lib/string/String>>
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
@@ -2192,49 +2192,49 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit (param $this i32) (param $cookie i32)
+  (local $var$2 i32)
+  (local $var$3 i32)
+  (local $var$4 i32)
+  (local $val i32)
   i32.const 1
   drop
-  local.get $0
+  local.get $this
   i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
+  local.set $var$2
+  local.get $var$2
+  local.get $this
   i32.load offset=12
   i32.const 2
   i32.shl
   i32.add
-  local.set $3
+  local.set $var$3
   loop $while-continue|0
-   local.get $2
-   local.get $3
+   local.get $var$2
+   local.get $var$3
    i32.lt_u
-   local.set $4
-   local.get $4
+   local.set $var$4
+   local.get $var$4
    if
-    local.get $2
+    local.get $var$2
     i32.load
-    local.set $5
-    local.get $5
+    local.set $val
+    local.get $val
     if
-     local.get $5
-     local.get $1
+     local.get $val
+     local.get $cookie
      call $~lib/rt/itcms/__visit
     end
-    local.get $2
+    local.get $var$2
     i32.const 4
     i32.add
-    local.set $2
+    local.set $var$2
     br $while-continue|0
    end
   end
-  local.get $0
+  local.get $this
   i32.load
-  local.get $1
+  local.get $cookie
   call $~lib/rt/itcms/__visit
  )
  (func $~lib/array/Array<~lib/string/String>~visit (param $0 i32) (param $1 i32)
