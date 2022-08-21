@@ -14,150 +14,150 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $memmove/memmove (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $0
-  local.set $3
-  local.get $0
-  local.get $1
+ (func $memmove/memmove (param $dest i32) (param $src i32) (param $n i32) (result i32)
+  (local $ret i32)
+  (local $var$4 i32)
+  (local $var$5 i32)
+  local.get $dest
+  local.set $ret
+  local.get $dest
+  local.get $src
   i32.eq
   if
-   local.get $3
+   local.get $ret
    return
   end
-  local.get $0
-  local.get $1
+  local.get $dest
+  local.get $src
   i32.lt_u
   if
-   local.get $1
+   local.get $src
    i32.const 8
    i32.rem_u
-   local.get $0
+   local.get $dest
    i32.const 8
    i32.rem_u
    i32.eq
    if
     loop $while-continue|0
-     local.get $0
+     local.get $dest
      i32.const 8
      i32.rem_u
-     local.set $4
-     local.get $4
+     local.set $var$4
+     local.get $var$4
      if
-      local.get $2
+      local.get $n
       i32.eqz
       if
-       local.get $3
+       local.get $ret
        return
       end
-      local.get $2
+      local.get $n
       i32.const 1
       i32.sub
-      local.set $2
-      local.get $0
-      local.tee $5
+      local.set $n
+      local.get $dest
+      local.tee $var$5
       i32.const 1
       i32.add
-      local.set $0
-      local.get $5
-      local.get $1
-      local.tee $5
+      local.set $dest
+      local.get $var$5
+      local.get $src
+      local.tee $var$5
       i32.const 1
       i32.add
-      local.set $1
-      local.get $5
+      local.set $src
+      local.get $var$5
       i32.load8_u
       i32.store8
       br $while-continue|0
      end
     end
     loop $while-continue|1
-     local.get $2
+     local.get $n
      i32.const 8
      i32.ge_u
-     local.set $4
-     local.get $4
+     local.set $var$4
+     local.get $var$4
      if
-      local.get $0
-      local.get $1
+      local.get $dest
+      local.get $src
       i64.load
       i64.store
-      local.get $2
+      local.get $n
       i32.const 8
       i32.sub
-      local.set $2
-      local.get $0
+      local.set $n
+      local.get $dest
       i32.const 8
       i32.add
-      local.set $0
-      local.get $1
+      local.set $dest
+      local.get $src
       i32.const 8
       i32.add
-      local.set $1
+      local.set $src
       br $while-continue|1
      end
     end
    end
    loop $while-continue|2
-    local.get $2
-    local.set $4
-    local.get $4
+    local.get $n
+    local.set $var$4
+    local.get $var$4
     if
-     local.get $0
-     local.tee $5
+     local.get $dest
+     local.tee $var$5
      i32.const 1
      i32.add
-     local.set $0
-     local.get $5
-     local.get $1
-     local.tee $5
+     local.set $dest
+     local.get $var$5
+     local.get $src
+     local.tee $var$5
      i32.const 1
      i32.add
-     local.set $1
-     local.get $5
+     local.set $src
+     local.get $var$5
      i32.load8_u
      i32.store8
-     local.get $2
+     local.get $n
      i32.const 1
      i32.sub
-     local.set $2
+     local.set $n
      br $while-continue|2
     end
    end
   else
-   local.get $1
+   local.get $src
    i32.const 8
    i32.rem_u
-   local.get $0
+   local.get $dest
    i32.const 8
    i32.rem_u
    i32.eq
    if
     loop $while-continue|3
-     local.get $0
-     local.get $2
+     local.get $dest
+     local.get $n
      i32.add
      i32.const 8
      i32.rem_u
-     local.set $4
-     local.get $4
+     local.set $var$4
+     local.get $var$4
      if
-      local.get $2
+      local.get $n
       i32.eqz
       if
-       local.get $3
+       local.get $ret
        return
       end
-      local.get $0
-      local.get $2
+      local.get $dest
+      local.get $n
       i32.const 1
       i32.sub
-      local.tee $2
+      local.tee $n
       i32.add
-      local.get $1
-      local.get $2
+      local.get $src
+      local.get $n
       i32.add
       i32.load8_u
       i32.store8
@@ -165,21 +165,21 @@
      end
     end
     loop $while-continue|4
-     local.get $2
+     local.get $n
      i32.const 8
      i32.ge_u
-     local.set $4
-     local.get $4
+     local.set $var$4
+     local.get $var$4
      if
-      local.get $2
+      local.get $n
       i32.const 8
       i32.sub
-      local.set $2
-      local.get $0
-      local.get $2
+      local.set $n
+      local.get $dest
+      local.get $n
       i32.add
-      local.get $1
-      local.get $2
+      local.get $src
+      local.get $n
       i32.add
       i64.load
       i64.store
@@ -188,18 +188,18 @@
     end
    end
    loop $while-continue|5
-    local.get $2
-    local.set $4
-    local.get $4
+    local.get $n
+    local.set $var$4
+    local.get $var$4
     if
-     local.get $0
-     local.get $2
+     local.get $dest
+     local.get $n
      i32.const 1
      i32.sub
-     local.tee $2
+     local.tee $n
      i32.add
-     local.get $1
-     local.get $2
+     local.get $src
+     local.get $n
      i32.add
      i32.load8_u
      i32.store8
@@ -207,7 +207,7 @@
     end
    end
   end
-  local.get $3
+  local.get $ret
  )
  (func $start:memmove
   global.get $memmove/base

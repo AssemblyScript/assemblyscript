@@ -22,24 +22,24 @@
  (func $start:return~anonymous|0
   call $return/nop
  )
- (func $return/testVoidReturnFunction (param $0 i32) (param $1 i32)
-  local.get $0
+ (func $return/testVoidReturnFunction (param $cond i32) (param $fn i32)
+  local.get $cond
   if
    i32.const 0
    global.set $~argumentsLength
-   local.get $1
+   local.get $fn
    i32.load
    call_indirect $0 (type $none_=>_none)
    return
   end
   i32.const 0
   global.set $~argumentsLength
-  local.get $1
+  local.get $fn
   i32.load
   call_indirect $0 (type $none_=>_none)
  )
- (func $return/testVoidReturn (param $0 i32)
-  local.get $0
+ (func $return/testVoidReturn (param $cond i32)
+  local.get $cond
   if
    call $return/nop
    return

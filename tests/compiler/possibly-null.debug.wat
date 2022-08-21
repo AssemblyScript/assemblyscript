@@ -30,15 +30,15 @@
  (export "testLogicalOrMulti" (func $export:possibly-null/testLogicalOrMulti))
  (export "testAssign" (func $export:possibly-null/testAssign))
  (export "testNeverNull" (func $export:possibly-null/testNeverNull))
- (func $possibly-null/testTrue (param $0 i32)
-  local.get $0
+ (func $possibly-null/testTrue (param $a i32)
+  local.get $a
   if
    i32.const 0
    drop
   end
  )
- (func $possibly-null/testFalseElse (param $0 i32)
-  local.get $0
+ (func $possibly-null/testFalseElse (param $a i32)
+  local.get $a
   i32.eqz
   if
    return
@@ -47,8 +47,8 @@
    drop
   end
  )
- (func $possibly-null/testFalseContinuation (param $0 i32)
-  local.get $0
+ (func $possibly-null/testFalseContinuation (param $a i32)
+  local.get $a
   i32.eqz
   if
    return
@@ -56,8 +56,8 @@
   i32.const 0
   drop
  )
- (func $possibly-null/testNeNull (param $0 i32)
-  local.get $0
+ (func $possibly-null/testNeNull (param $a i32)
+  local.get $a
   i32.const 0
   i32.ne
   if
@@ -65,8 +65,8 @@
    drop
   end
  )
- (func $possibly-null/testEqNullElse (param $0 i32)
-  local.get $0
+ (func $possibly-null/testEqNullElse (param $a i32)
+  local.get $a
   i32.const 0
   i32.eq
   if
@@ -76,8 +76,8 @@
    drop
   end
  )
- (func $possibly-null/testEqNullContinuation (param $0 i32)
-  local.get $0
+ (func $possibly-null/testEqNullContinuation (param $a i32)
+  local.get $a
   i32.const 0
   i32.eq
   if
@@ -86,8 +86,8 @@
   i32.const 0
   drop
  )
- (func $possibly-null/testNotEqNull (param $0 i32)
-  local.get $0
+ (func $possibly-null/testNotEqNull (param $a i32)
+  local.get $a
   i32.const 0
   i32.eq
   i32.eqz
@@ -96,8 +96,8 @@
    drop
   end
  )
- (func $possibly-null/testNotNeNullElse (param $0 i32)
-  local.get $0
+ (func $possibly-null/testNotNeNullElse (param $a i32)
+  local.get $a
   i32.const 0
   i32.ne
   i32.eqz
@@ -108,8 +108,8 @@
    drop
   end
  )
- (func $possibly-null/testNotNeNullContinuation (param $0 i32)
-  local.get $0
+ (func $possibly-null/testNotNeNullContinuation (param $a i32)
+  local.get $a
   i32.const 0
   i32.ne
   i32.eqz
@@ -119,17 +119,17 @@
   i32.const 0
   drop
  )
- (func $possibly-null/testWhile (param $0 i32)
-  (local $1 i32)
+ (func $possibly-null/testWhile (param $a i32)
+  (local $var$1 i32)
   loop $while-continue|0
-   local.get $0
-   local.set $1
-   local.get $1
+   local.get $a
+   local.set $var$1
+   local.get $var$1
    if
     i32.const 0
     drop
     i32.const 0
-    local.set $0
+    local.set $a
     i32.const 1
     i32.eqz
     drop
@@ -137,17 +137,17 @@
    end
   end
  )
- (func $possibly-null/testWhile2 (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $possibly-null/testWhile2 (param $a i32) (param $b i32)
+  (local $var$2 i32)
   loop $while-continue|0
-   local.get $0
-   local.set $2
-   local.get $2
+   local.get $a
+   local.set $var$2
+   local.get $var$2
    if
     i32.const 0
     drop
-    local.get $1
-    local.set $0
+    local.get $b
+    local.set $a
     i32.const 1
     i32.eqz
     drop
@@ -155,19 +155,19 @@
    end
   end
  )
- (func $possibly-null/testWhile3 (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $possibly-null/testWhile3 (param $a i32) (param $b i32)
+  (local $var$2 i32)
   loop $while-continue|0
-   local.get $0
-   local.set $2
-   local.get $2
+   local.get $a
+   local.set $var$2
+   local.get $var$2
    if
     i32.const 0
     drop
-    local.get $1
+    local.get $b
     if
-     local.get $1
-     local.set $0
+     local.get $b
+     local.set $a
      i32.const 0
      drop
     end
@@ -175,36 +175,36 @@
    end
   end
  )
- (func $possibly-null/requireNonNull (param $0 i32) (result i32)
-  local.get $0
+ (func $possibly-null/requireNonNull (param $a i32) (result i32)
+  local.get $a
  )
- (func $possibly-null/testLogicalAnd (param $0 i32)
-  local.get $0
+ (func $possibly-null/testLogicalAnd (param $a i32)
+  local.get $a
   if (result i32)
-   local.get $0
+   local.get $a
    call $possibly-null/requireNonNull
   else
    i32.const 0
   end
   drop
  )
- (func $possibly-null/testLogicalOr (param $0 i32)
-  local.get $0
+ (func $possibly-null/testLogicalOr (param $a i32)
+  local.get $a
   i32.eqz
   if (result i32)
    i32.const 1
   else
-   local.get $0
+   local.get $a
    call $possibly-null/requireNonNull
    i32.const 0
    i32.ne
   end
   drop
  )
- (func $possibly-null/testLogicalAndMulti (param $0 i32) (param $1 i32)
-  local.get $0
+ (func $possibly-null/testLogicalAndMulti (param $a i32) (param $b i32)
+  local.get $a
   if (result i32)
-   local.get $1
+   local.get $b
   else
    i32.const 0
   end
@@ -222,13 +222,13 @@
    drop
   end
  )
- (func $possibly-null/testLogicalOrMulti (param $0 i32) (param $1 i32)
-  local.get $0
+ (func $possibly-null/testLogicalOrMulti (param $a i32) (param $b i32)
+  local.get $a
   i32.eqz
   if (result i32)
    i32.const 1
   else
-   local.get $1
+   local.get $b
    i32.eqz
   end
   if
@@ -245,16 +245,16 @@
    drop
   end
  )
- (func $possibly-null/testAssign (param $0 i32) (param $1 i32)
-  local.get $1
-  local.set $0
+ (func $possibly-null/testAssign (param $a i32) (param $b i32)
+  local.get $b
+  local.set $a
   i32.const 0
   drop
  )
- (func $possibly-null/testNeverNull (param $0 i32)
-  local.get $0
+ (func $possibly-null/testNeverNull (param $a i32)
+  local.get $a
   if
-   local.get $0
+   local.get $a
    drop
   end
  )

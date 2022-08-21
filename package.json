@@ -72,7 +72,7 @@
     "watch": "node scripts/build --watch",
     "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:asconfig && npm run test:transform",
     "test:parser": "node --enable-source-maps tests/parser",
-    "test:compiler": "node --enable-source-maps --experimental-wasi-unstable-preview1 --no-warnings tests/compiler",
+    "test:compiler": "node --enable-source-maps --no-warnings tests/compiler",
     "test:browser": "node --enable-source-maps tests/browser",
     "test:asconfig": "cd tests/asconfig && npm run test",
     "test:transform": "npm run test:transform:esm && npm run test:transform:cjs",
