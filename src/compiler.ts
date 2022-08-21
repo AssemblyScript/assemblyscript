@@ -3436,9 +3436,13 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
 
-    // void to any
     if (fromType.kind == TypeKind.VOID) {
-      assert(toType.kind != TypeKind.VOID); // convertExpression should not be called with void -> void
+      if (toType.kind == TypeKind.VOID) {
+        // void to void: Can happen as a result of a foregoing error. Since we
+        // have an `expr` here that is already supposed to be void, return it.
+        return expr;
+      }
+      // void to any
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         reportNode.range, fromType.toString(), toType.toString()
