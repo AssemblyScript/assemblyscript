@@ -293,11 +293,11 @@ export class Resolver extends DiagnosticEmitter {
       // Handle special built-in types
       if (isSimpleType) {
         let text = nameNode.identifier.text;
-        if (text == CommonNames.native) return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.indexof) return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.valueof) return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.native)   return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.indexof)  return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.valueof)  return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
         if (text == CommonNames.returnof) return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.nonnull) return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.nonnull)  return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, reportMode);
       }
 
       // Resolve normally
@@ -447,17 +447,17 @@ export class Resolver extends DiagnosticEmitter {
     switch (typeArgument.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
-      case TypeKind.I32: return Type.i32;
+      case TypeKind.I32:  return Type.i32;
       case TypeKind.ISIZE: if (!this.program.options.isWasm64) return Type.i32;
-      case TypeKind.I64: return Type.i64;
+      case TypeKind.I64:  return Type.i64;
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.BOOL: return Type.u32;
       case TypeKind.USIZE: if (!this.program.options.isWasm64) return Type.u32;
-      case TypeKind.U64: return Type.u64;
-      case TypeKind.F32: return Type.f32;
-      case TypeKind.F64: return Type.f64;
+      case TypeKind.U64:  return Type.u64;
+      case TypeKind.F32:  return Type.f32;
+      case TypeKind.F64:  return Type.f64;
       case TypeKind.V128: return Type.v128;
       case TypeKind.VOID: return Type.void;
       default: assert(false);
@@ -491,12 +491,13 @@ export class Resolver extends DiagnosticEmitter {
     }
     var overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
     if (overload) {
+      let parameterTypes = overload.signature.parameterTypes;
       if (overload.is(CommonFlags.STATIC)) {
-        assert(overload.signature.parameterTypes.length == 2);
-        return overload.signature.parameterTypes[1];
+        assert(parameterTypes.length == 2);
+        return parameterTypes[1];
       } else {
-        assert(overload.signature.parameterTypes.length == 1);
-        return overload.signature.parameterTypes[0];
+        assert(parameterTypes.length == 1);
+        return parameterTypes[0];
       }
     }
     if (reportMode == ReportMode.REPORT) {
@@ -631,8 +632,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type[] | null {
-    var minParameterCount = 0;
-    var maxParameterCount = 0;
+    var
+      minParameterCount = 0,
+      maxParameterCount = 0;
     for (let i = 0, k = typeParameters.length; i < k; ++i) {
       if (!typeParameters[i].defaultType) ++minParameterCount;
       ++maxParameterCount;
@@ -730,7 +732,9 @@ export class Resolver extends DiagnosticEmitter {
 
       // infer types with generic components while updating contextual types
       for (let i = 0; i < numParameters; ++i) {
-        let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
+        let argumentExpression = i < numArguments
+          ? argumentNodes[i]
+          : parameterNodes[i].initializer;
         if (!argumentExpression) {
           // optional but not have initializer should be handled in the other place
           if (parameterNodes[i].parameterKind == ParameterKind.OPTIONAL) {
@@ -748,7 +752,15 @@ export class Resolver extends DiagnosticEmitter {
         let typeNode = parameterNodes[i].type;
         if (typeNode.hasGenericComponent(typeParameterNodes)) {
           let type = this.resolveExpression(argumentExpression, ctxFlow, Type.auto, ReportMode.SWALLOW);
-          if (type) this.propagateInferredGenericTypes(typeNode, type, prototype, contextualTypeArguments, typeParameterNames);
+          if (type) {
+            this.propagateInferredGenericTypes(
+              typeNode,
+              type,
+              prototype,
+              contextualTypeArguments,
+              typeParameterNames
+            );
+          }
         }
       }
 
@@ -847,9 +859,10 @@ export class Resolver extends DiagnosticEmitter {
         let name = namedTypeNode.name.identifier.text;
         if (ctxTypes.has(name)) {
           let currentType = assert(ctxTypes.get(name));
-          if (currentType == Type.auto || (typeParameterNames.has(name) && currentType.isAssignableTo(type))) {
-            ctxTypes.set(name, type);
-          }
+          if (
+            currentType == Type.auto ||
+            (typeParameterNames.has(name) && currentType.isAssignableTo(type))
+          ) ctxTypes.set(name, type);
         }
       }
     } else if (node.kind == NodeKind.FUNCTIONTYPE) { // foo<T>(bar: (baz: T) => i32))
@@ -880,7 +893,13 @@ export class Resolver extends DiagnosticEmitter {
         let thisType = signatureReference.thisType;
         let explicitThisType = functionTypeNode.explicitThisType;
         if (thisType && explicitThisType) {
-          this.propagateInferredGenericTypes(explicitThisType, thisType, ctxElement, ctxTypes, typeParameterNames);
+          this.propagateInferredGenericTypes(
+            explicitThisType,
+            thisType,
+            ctxElement,
+            ctxTypes,
+            typeParameterNames
+          );
         }
         return;
       }
