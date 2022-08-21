@@ -3503,6 +3503,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // v128 to any / any to v128
     // except v128 to bool
+    //
+    // NOTE:In case we would have more conversions to and from v128 type it's better
+    // to make these checks more individual and integrate in below flow.
     if (
       !toType.isBooleanValue &&
       (toType.isVectorValue || fromType.isVectorValue)
