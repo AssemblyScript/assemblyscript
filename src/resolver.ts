@@ -763,12 +763,13 @@ export class Resolver extends DiagnosticEmitter {
           }
           let defaultType = typeParameterNode.defaultType;
           if (defaultType) {
+            // Default parameters are resolved in context of the called function, not the calling function
             let defaultTypeContextualTypeArguments: Map<string, Type> | null = null;
             if (prototype.parent.kind == ElementKind.CLASS) {
               defaultTypeContextualTypeArguments = (<Class>prototype.parent).contextualTypeArguments;
             } else if (prototype.parent.kind == ElementKind.FUNCTION) {
               defaultTypeContextualTypeArguments = (<Function>prototype.parent).contextualTypeArguments;
-            } 
+            }
             let resolvedDefaultType = this.resolveType(defaultType, prototype, defaultTypeContextualTypeArguments, reportMode);
             if (!resolvedDefaultType) return null;
             resolvedTypeArguments[i] = resolvedDefaultType;
