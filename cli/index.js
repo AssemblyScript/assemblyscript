@@ -304,6 +304,7 @@ export async function main(argv, options) {
     default: runtime = 2; break;
   }
   assemblyscript.setTarget(compilerOptions, 0);
+  assemblyscript.setDebugInfo(compilerOptions, !!opts.debug);
   assemblyscript.setRuntime(compilerOptions, runtime);
   assemblyscript.setNoAssert(compilerOptions, opts.noAssert);
   assemblyscript.setExportMemory(compilerOptions, !opts.noExportMemory);
@@ -313,7 +314,7 @@ export async function main(argv, options) {
   assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  if (opts.exportStart) {
+  if (opts.exportStart != null) {
     assemblyscript.setExportStart(compilerOptions, isNonEmptyString(opts.exportStart) ? opts.exportStart : "_start");
   }
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
@@ -328,6 +329,7 @@ export async function main(argv, options) {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
   assemblyscript.setStackSize(compilerOptions, opts.stackSize);
+  assemblyscript.setBindingsHint(compilerOptions, opts.bindings && opts.bindings.length > 0);
 
   // Instrument callback to perform GC
   // prepareResult = (original => {
@@ -855,6 +857,10 @@ export async function main(argv, options) {
 
   // Prepare output
   if (!opts.noEmit) {
+    if (opts.binaryFile) {
+      // We catched lagacy field for binary output (before 0.20)
+      return prepareResult(Error("Usage of the --binaryFile compiler option is no longer supported. Use --outFile instead."));
+    }
     let bindings = opts.bindings || [];
     let hasStdout = false;
     let hasOutFile = opts.outFile != null;

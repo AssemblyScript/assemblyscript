@@ -3,10 +3,10 @@
 import { BLOCK_MAXSIZE } from "./rt/common";
 import { Runtime } from "shared/runtime";
 import { COMPARATOR, SORT } from "./util/sort";
-import { REVERSE } from "./util/bytes";
+import { REVERSE, FILL } from "./util/bytes";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
-import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
 // @ts-ignore: decorator
 @inline @lazy const MIN_SIZE: usize = 8;
@@ -154,56 +154,12 @@ export class Array<T> {
     return value;
   }
 
-  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
-    var ptr = this.dataStart;
-    var len = this.length_;
-    start = start < 0 ? max(len + start, 0) : min(start, len);
-    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
     if (isManaged<T>()) {
-      for (; start < end; ++start) {
-        store<usize>(ptr + (<usize>start << alignof<T>()), changetype<usize>(value));
-        __link(changetype<usize>(this), changetype<usize>(value), true);
-      }
-    } else if (sizeof<T>() == 1) {
-      if (start < end) {
-        memory.fill(
-          ptr + <usize>start,
-          u8(value),
-          <usize>(end - start)
-        );
-      }
+      FILL<usize>(this.dataStart, this.length_, changetype<usize>(value), start, end);
+      __link(changetype<usize>(this), changetype<usize>(value), false);
     } else {
-      if (ASC_SHRINK_LEVEL <= 1) {
-        if (isInteger<T>()) {
-          // @ts-ignore
-          if (value == <T>0 | value == <T>-1) {
-            if (start < end) {
-              memory.fill(
-                ptr + (<usize>start << alignof<T>()),
-                u8(value),
-                <usize>(end - start) << alignof<T>()
-              );
-            }
-            return this;
-          }
-        } else if (isFloat<T>()) {
-          // for floating non-negative zeros we can use fast memory.fill
-          if ((sizeof<T>() == 4 && reinterpret<u32>(f32(value)) == 0) ||
-              (sizeof<T>() == 8 && reinterpret<u64>(f64(value)) == 0)) {
-            if (start < end) {
-              memory.fill(
-                ptr + (<usize>start << alignof<T>()),
-                0,
-                <usize>(end - start) << alignof<T>()
-              );
-            }
-            return this;
-          }
-        }
-      }
-      for (; start < end; ++start) {
-        store<T>(ptr + (<usize>start << alignof<T>()), value);
-      }
+      FILL<T>(this.dataStart, this.length_, value, start, end);
     }
     return this;
   }
@@ -295,7 +251,7 @@ export class Array<T> {
     return out;
   }
 
-  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): Array<T> {
     var ptr = this.dataStart;
     var len = this.length_;
 
@@ -466,12 +422,12 @@ export class Array<T> {
     return result;
   }
 
-  reverse(): this {
+  reverse(): Array<T> {
     REVERSE<T>(this.dataStart, this.length_);
     return this;
   }
 
-  sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
+  sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): Array<T> {
     SORT<T>(this.dataStart, this.length_, comparator);
     return this;
   }
@@ -494,7 +450,7 @@ export class Array<T> {
 
   flat(): T {
     if (!isArray<T>()) {
-      throw new TypeError(E_ILLEGALGENTYPE);
+      ERROR("Cannot call flat() on Array<T> where T is not an Array.");
     }
     // Get the length and data start values
     var ptr = this.dataStart;

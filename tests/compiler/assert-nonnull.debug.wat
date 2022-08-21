@@ -33,12 +33,12 @@
  (export "testRet" (func $export:assert-nonnull/testRet))
  (export "testObjFn" (func $export:assert-nonnull/testObjFn))
  (export "testObjRet" (func $export:assert-nonnull/testObjRet))
- (func $assert-nonnull/testVar (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  local.tee $1
+ (func $assert-nonnull/testVar (param $n i32) (result i32)
+  (local $var$1 i32)
+  local.get $n
+  local.tee $var$1
   if (result i32)
-   local.get $1
+   local.get $var$1
   else
    i32.const 32
    i32.const 96
@@ -48,12 +48,12 @@
    unreachable
   end
  )
- (func $assert-nonnull/testObj (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  local.tee $1
+ (func $assert-nonnull/testObj (param $foo i32) (result i32)
+  (local $var$1 i32)
+  local.get $foo
+  local.tee $var$1
   if (result i32)
-   local.get $1
+   local.get $var$1
   else
    i32.const 32
    i32.const 96
@@ -64,17 +64,17 @@
   end
   i32.load
  )
- (func $assert-nonnull/testFn (param $0 i32) (result i32)
+ (func $assert-nonnull/testFn (param $fn i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
-  local.get $0
+  local.get $fn
   i32.load
   call_indirect $0 (type $none_=>_i32)
  )
- (func $assert-nonnull/testObjFn (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjFn (param $foo i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
-  local.get $0
+  local.get $foo
   i32.load offset=4
   i32.load
   call_indirect $0 (type $none_=>_i32)

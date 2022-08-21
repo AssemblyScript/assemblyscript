@@ -34,7 +34,7 @@
  (data (i32.const 1500) "<")
  (data (i32.const 1512) "\01\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s")
  (data (i32.const 1564) "<")
- (data (i32.const 1576) "\01\00\00\00\"\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00u\00p\00c\00a\00s\00t")
+ (data (i32.const 1576) "\01\00\00\00&\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00d\00o\00w\00n\00c\00a\00s\00t")
  (data (i32.const 1632) "\05\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1660) " \00\00\00\04\00\00\00 ")
  (export "memory" (memory $0))
@@ -888,6 +888,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -920,6 +921,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -1035,13 +1037,13 @@
     end
     global.get $~lib/rt/itcms/total
     local.tee $1
+    local.get $1
     global.get $~lib/rt/itcms/threshold
     i32.sub
     i32.const 1024
     i32.lt_u
     i32.const 10
     i32.shl
-    local.get $1
     i32.add
     global.set $~lib/rt/itcms/threshold
    end
@@ -1851,19 +1853,17 @@
     i32.const 32
     i32.and
    end
-   if (result i32)
-    global.get $~lib/rt/itcms/white
-    i32.eqz
-   else
-    i32.const 2
-   end
    local.set $3
    local.get $2
    i32.load offset=8
    local.set $0
    local.get $1
-   local.get $2
+   global.get $~lib/rt/itcms/white
+   i32.eqz
+   i32.const 2
    local.get $3
+   select
+   local.get $2
    i32.or
    i32.store offset=4
    local.get $1

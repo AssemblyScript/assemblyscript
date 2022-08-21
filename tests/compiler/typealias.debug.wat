@@ -8,7 +8,7 @@
  (elem $0 (i32.const 1))
  (export "alias" (func $typealias/alias))
  (export "memory" (memory $0))
- (func $typealias/alias (param $0 i32) (result i32)
-  local.get $0
+ (func $typealias/alias (param $a i32) (result i32)
+  local.get $a
  )
 )

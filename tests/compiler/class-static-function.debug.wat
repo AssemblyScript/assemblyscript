@@ -18,10 +18,10 @@
  (func $class-static-function/Example.staticFunc (result i32)
   i32.const 42
  )
- (func $class-static-function/call (param $0 i32) (result i32)
+ (func $class-static-function/call (param $func i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
-  local.get $0
+  local.get $func
   i32.load
   call_indirect $0 (type $none_=>_i32)
  )

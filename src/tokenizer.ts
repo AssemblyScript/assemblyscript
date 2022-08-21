@@ -12,6 +12,7 @@
  */
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticMessage,
   DiagnosticEmitter
@@ -35,7 +36,7 @@ import {
 } from "./util";
 
 /** Named token types. */
-export enum Token {
+export const enum Token {
 
   // keywords
   // discarded: ANY, BOOLEAN, NEVER, NUMBER, STRING, SYMBOL, UNDEFINED, LESSTHAN_SLASH
@@ -173,7 +174,7 @@ export enum Token {
   ENDOFFILE
 }
 
-export enum IdentifierHandling {
+export const enum IdentifierHandling {
   DEFAULT,
   PREFER,
   ALWAYS
@@ -440,49 +441,6 @@ export function operatorTokenToString(token: Token): string {
       assert(false);
       return "";
     }
-  }
-}
-
-export class Range {
-
-  start: i32;
-  end: i32;
-  source!: Source;
-  debugInfoRef: usize = 0;
-
-  constructor(start: i32, end: i32) {
-    this.start = start;
-    this.end = end;
-  }
-
-  static join(a: Range, b: Range): Range {
-    if (a.source != b.source) throw new Error("source mismatch");
-    let range = new Range(
-      a.start < b.start ? a.start : b.start,
-      a.end > b.end ? a.end : b.end
-    );
-    range.source = a.source;
-    return range;
-  }
-
-  equals(other: Range): bool {
-    return this.source == other.source && this.start == other.start && this.end == other.end;
-  }
-
-  get atStart(): Range {
-    let range = new Range(this.start, this.start);
-    range.source = this.source;
-    return range;
-  }
-
-  get atEnd(): Range {
-    let range = new Range(this.end, this.end);
-    range.source = this.source;
-    return range;
-  }
-
-  toString(): string {
-    return this.source.text.substring(this.start, this.end);
   }
 }
 

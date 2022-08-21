@@ -22,24 +22,24 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $infer-type/locals
-  (local $0 i32)
-  (local $1 i64)
-  (local $2 f64)
-  (local $3 i32)
-  (local $4 i64)
-  (local $5 f64)
+  (local $li i32)
+  (local $lI i64)
+  (local $lF f64)
+  (local $ai i32)
+  (local $aI i64)
+  (local $aF f64)
   i32.const 10
-  local.set $0
+  local.set $li
   i64.const 4294967296
-  local.set $1
+  local.set $lI
   f64.const 1.5
-  local.set $2
+  local.set $lF
   global.get $infer-type/i
-  local.set $3
+  local.set $ai
   global.get $infer-type/I
-  local.set $4
+  local.set $aI
   global.get $infer-type/F
-  local.set $5
+  local.set $aF
  )
  (func $infer-type/reti (result i32)
   i32.const 0
@@ -54,9 +54,9 @@
   f64.const 0
  )
  (func $start:infer-type
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
+  (local $a i32)
+  (local $b i32)
+  (local $var$2 i32)
   global.get $infer-type/i
   drop
   global.get $infer-type/I
@@ -81,20 +81,20 @@
   global.get $infer-type/rF
   drop
   i32.const 0
-  local.set $0
+  local.set $a
   i32.const 10
-  local.set $1
+  local.set $b
   loop $for-loop|0
-   local.get $0
-   local.get $1
+   local.get $a
+   local.get $b
    i32.lt_s
-   local.set $2
-   local.get $2
+   local.set $var$2
+   local.get $var$2
    if
-    local.get $0
+    local.get $a
     i32.const 1
     i32.add
-    local.set $0
+    local.set $a
     br $for-loop|0
    end
   end

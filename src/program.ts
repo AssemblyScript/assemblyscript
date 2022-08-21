@@ -57,6 +57,7 @@ import {
 } from "./compiler";
 
 import {
+  Range,
   DiagnosticCode,
   DiagnosticMessage,
   DiagnosticEmitter
@@ -70,8 +71,7 @@ import {
 } from "./types";
 
 import {
-  Token,
-  Range
+  Token
 } from "./tokenizer";
 
 import {
@@ -781,11 +781,6 @@ export class Program extends DiagnosticEmitter {
 
   // Utility
 
-  /** Tests whether this is a WASI program. */
-  get isWasi(): bool {
-    return this.elementsByName.has(CommonNames.ASC_WASI);
-  }
-
   /** Obtains the source matching the specified internal path. */
   getSource(internalPath: string): string | null {
     var sources = this.sources;
@@ -1401,27 +1396,14 @@ export class Program extends DiagnosticEmitter {
     {
       let globalAliases = options.globalAliases;
       if (!globalAliases) globalAliases = new Map();
-      let isWasi = this.isWasi;
       if (!globalAliases.has(CommonNames.abort)) {
-        globalAliases.set(CommonNames.abort,
-          isWasi
-            ? BuiltinNames.wasiAbort
-            : BuiltinNames.abort
-        );
+        globalAliases.set(CommonNames.abort, BuiltinNames.abort);
       }
       if (!globalAliases.has(CommonNames.trace)) {
-        globalAliases.set(CommonNames.trace,
-          isWasi
-            ? BuiltinNames.wasiTrace
-            : BuiltinNames.trace
-        );
+        globalAliases.set(CommonNames.trace, BuiltinNames.trace);
       }
       if (!globalAliases.has(CommonNames.seed)) {
-        globalAliases.set(CommonNames.seed,
-          isWasi
-            ? BuiltinNames.wasiSeed
-            : BuiltinNames.seed
-        );
+        globalAliases.set(CommonNames.seed, BuiltinNames.seed);
       }
       if (!globalAliases.has(CommonNames.Math)) {
         globalAliases.set(CommonNames.Math, CommonNames.NativeMath);
@@ -2677,7 +2659,7 @@ export class Program extends DiagnosticEmitter {
 }
 
 /** Indicates the specific kind of an {@link Element}. */
-export enum ElementKind {
+export const enum ElementKind {
   /** A {@link Global}. */
   GLOBAL,
   /** A {@link Local}. */
@@ -2979,7 +2961,7 @@ export abstract class DeclaredElement extends Element {
     if (kind == base.kind) {
       switch (kind) {
         case ElementKind.FUNCTION: {
-          return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
+          return (<Function>self).signature.isAssignableTo((<Function>base).signature);
         }
         case ElementKind.PROPERTY: {
           let selfProperty = <Property>self;
@@ -2987,7 +2969,7 @@ export abstract class DeclaredElement extends Element {
           let selfGetter = selfProperty.getterInstance;
           let baseGetter = baseProperty.getterInstance;
           if (selfGetter) {
-            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
+            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature)) {
               return false;
             }
           } else if (baseGetter) {
@@ -2996,7 +2978,7 @@ export abstract class DeclaredElement extends Element {
           let selfSetter = selfProperty.setterInstance;
           let baseSetter = baseProperty.setterInstance;
           if (selfSetter) {
-            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
+            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature)) {
               return false;
             }
           } else if (baseSetter) {
@@ -3789,6 +3771,22 @@ export class Function extends TypedElement {
           source.lineAt(range.start),
           source.columnAt() - 1 // source maps are 0-based
         );
+      }
+    }
+    if (this.program.options.debugInfo) {
+      let localNameMap = new Set<string>();
+      let localsByIndex = this.localsByIndex;
+      for (let i = 0, k = localsByIndex.length; i < k; i++) {
+        let localName = localsByIndex[i].name;
+        if (localNameMap.has(localName)) {
+          let repeat = 0;
+          while (localNameMap.has(`${localName}_${repeat}`)) {
+            repeat++;
+          }
+          localName = `${localName}_${repeat}`;
+        }
+        localNameMap.add(localName);
+        module.setLocalName(ref, i, localName);
       }
     }
   }

@@ -15,185 +15,185 @@
  (export "memcpy" (func $memcpy/memcpy))
  (export "memory" (memory $0))
  (start $~start)
- (func $memcpy/memcpy (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  local.get $0
-  local.set $3
+ (func $memcpy/memcpy (param $dest i32) (param $src i32) (param $n i32) (result i32)
+  (local $ret i32)
+  (local $w i32)
+  (local $x i32)
+  (local $var$6 i32)
+  (local $var$7 i32)
+  local.get $dest
+  local.set $ret
   loop $while-continue|0
-   local.get $2
+   local.get $n
    if (result i32)
-    local.get $1
+    local.get $src
     i32.const 4
     i32.rem_u
    else
     i32.const 0
    end
-   local.set $6
-   local.get $6
+   local.set $var$6
+   local.get $var$6
    if
-    local.get $0
-    local.tee $7
+    local.get $dest
+    local.tee $var$7
     i32.const 1
     i32.add
-    local.set $0
-    local.get $7
-    local.get $1
-    local.tee $7
+    local.set $dest
+    local.get $var$7
+    local.get $src
+    local.tee $var$7
     i32.const 1
     i32.add
-    local.set $1
-    local.get $7
+    local.set $src
+    local.get $var$7
     i32.load8_u
     i32.store8
-    local.get $2
+    local.get $n
     i32.const 1
     i32.sub
-    local.set $2
+    local.set $n
     br $while-continue|0
    end
   end
-  local.get $0
+  local.get $dest
   i32.const 4
   i32.rem_u
   i32.const 0
   i32.eq
   if
    loop $while-continue|1
-    local.get $2
+    local.get $n
     i32.const 16
     i32.ge_u
-    local.set $6
-    local.get $6
+    local.set $var$6
+    local.get $var$6
     if
-     local.get $0
-     local.get $1
+     local.get $dest
+     local.get $src
      i32.load
      i32.store
-     local.get $0
+     local.get $dest
      i32.const 4
      i32.add
-     local.get $1
+     local.get $src
      i32.const 4
      i32.add
      i32.load
      i32.store
-     local.get $0
+     local.get $dest
      i32.const 8
      i32.add
-     local.get $1
+     local.get $src
      i32.const 8
      i32.add
      i32.load
      i32.store
-     local.get $0
+     local.get $dest
      i32.const 12
      i32.add
-     local.get $1
+     local.get $src
      i32.const 12
      i32.add
      i32.load
      i32.store
-     local.get $1
+     local.get $src
      i32.const 16
      i32.add
-     local.set $1
-     local.get $0
+     local.set $src
+     local.get $dest
      i32.const 16
      i32.add
-     local.set $0
-     local.get $2
+     local.set $dest
+     local.get $n
      i32.const 16
      i32.sub
-     local.set $2
+     local.set $n
      br $while-continue|1
     end
    end
-   local.get $2
+   local.get $n
    i32.const 8
    i32.and
    if
-    local.get $0
-    local.get $1
+    local.get $dest
+    local.get $src
     i32.load
     i32.store
-    local.get $0
+    local.get $dest
     i32.const 4
     i32.add
-    local.get $1
+    local.get $src
     i32.const 4
     i32.add
     i32.load
     i32.store
-    local.get $0
+    local.get $dest
     i32.const 8
     i32.add
-    local.set $0
-    local.get $1
+    local.set $dest
+    local.get $src
     i32.const 8
     i32.add
-    local.set $1
+    local.set $src
    end
-   local.get $2
+   local.get $n
    i32.const 4
    i32.and
    if
-    local.get $0
-    local.get $1
+    local.get $dest
+    local.get $src
     i32.load
     i32.store
-    local.get $0
+    local.get $dest
     i32.const 4
     i32.add
-    local.set $0
-    local.get $1
+    local.set $dest
+    local.get $src
     i32.const 4
     i32.add
-    local.set $1
+    local.set $src
    end
-   local.get $2
+   local.get $n
    i32.const 2
    i32.and
    if
-    local.get $0
-    local.get $1
+    local.get $dest
+    local.get $src
     i32.load16_u
     i32.store16
-    local.get $0
+    local.get $dest
     i32.const 2
     i32.add
-    local.set $0
-    local.get $1
+    local.set $dest
+    local.get $src
     i32.const 2
     i32.add
-    local.set $1
+    local.set $src
    end
-   local.get $2
+   local.get $n
    i32.const 1
    i32.and
    if
-    local.get $0
-    local.tee $6
+    local.get $dest
+    local.tee $var$6
     i32.const 1
     i32.add
-    local.set $0
-    local.get $6
-    local.get $1
-    local.tee $6
+    local.set $dest
+    local.get $var$6
+    local.get $src
+    local.tee $var$6
     i32.const 1
     i32.add
-    local.set $1
-    local.get $6
+    local.set $src
+    local.get $var$6
     i32.load8_u
     i32.store8
    end
-   local.get $3
+   local.get $ret
    return
   end
-  local.get $2
+  local.get $n
   i32.const 32
   i32.ge_u
   if
@@ -201,848 +201,848 @@
     block $case2|2
      block $case1|2
       block $case0|2
-       local.get $0
+       local.get $dest
        i32.const 4
        i32.rem_u
-       local.set $6
-       local.get $6
+       local.set $var$6
+       local.get $var$6
        i32.const 1
        i32.eq
        br_if $case0|2
-       local.get $6
+       local.get $var$6
        i32.const 2
        i32.eq
        br_if $case1|2
-       local.get $6
+       local.get $var$6
        i32.const 3
        i32.eq
        br_if $case2|2
        br $break|2
       end
-      local.get $1
+      local.get $src
       i32.load
-      local.set $4
-      local.get $0
-      local.tee $6
+      local.set $w
+      local.get $dest
+      local.tee $var$6
       i32.const 1
       i32.add
-      local.set $0
-      local.get $6
-      local.get $1
-      local.tee $6
+      local.set $dest
+      local.get $var$6
+      local.get $src
+      local.tee $var$6
       i32.const 1
       i32.add
-      local.set $1
-      local.get $6
+      local.set $src
+      local.get $var$6
       i32.load8_u
       i32.store8
-      local.get $0
-      local.tee $6
+      local.get $dest
+      local.tee $var$6
       i32.const 1
       i32.add
-      local.set $0
-      local.get $6
-      local.get $1
-      local.tee $6
+      local.set $dest
+      local.get $var$6
+      local.get $src
+      local.tee $var$6
       i32.const 1
       i32.add
-      local.set $1
-      local.get $6
+      local.set $src
+      local.get $var$6
       i32.load8_u
       i32.store8
-      local.get $0
-      local.tee $6
+      local.get $dest
+      local.tee $var$6
       i32.const 1
       i32.add
-      local.set $0
-      local.get $6
-      local.get $1
-      local.tee $6
+      local.set $dest
+      local.get $var$6
+      local.get $src
+      local.tee $var$6
       i32.const 1
       i32.add
-      local.set $1
-      local.get $6
+      local.set $src
+      local.get $var$6
       i32.load8_u
       i32.store8
-      local.get $2
+      local.get $n
       i32.const 3
       i32.sub
-      local.set $2
+      local.set $n
       loop $while-continue|3
-       local.get $2
+       local.get $n
        i32.const 17
        i32.ge_u
-       local.set $6
-       local.get $6
+       local.set $var$6
+       local.get $var$6
        if
-        local.get $1
+        local.get $src
         i32.const 1
         i32.add
         i32.load
-        local.set $5
-        local.get $0
-        local.get $4
+        local.set $x
+        local.get $dest
+        local.get $w
         i32.const 24
         i32.shr_u
-        local.get $5
+        local.get $x
         i32.const 8
         i32.shl
         i32.or
         i32.store
-        local.get $1
+        local.get $src
         i32.const 5
         i32.add
         i32.load
-        local.set $4
-        local.get $0
+        local.set $w
+        local.get $dest
         i32.const 4
         i32.add
-        local.get $5
+        local.get $x
         i32.const 24
         i32.shr_u
-        local.get $4
+        local.get $w
         i32.const 8
         i32.shl
         i32.or
         i32.store
-        local.get $1
+        local.get $src
         i32.const 9
         i32.add
         i32.load
-        local.set $5
-        local.get $0
+        local.set $x
+        local.get $dest
         i32.const 8
         i32.add
-        local.get $4
+        local.get $w
         i32.const 24
         i32.shr_u
-        local.get $5
+        local.get $x
         i32.const 8
         i32.shl
         i32.or
         i32.store
-        local.get $1
+        local.get $src
         i32.const 13
         i32.add
         i32.load
-        local.set $4
-        local.get $0
+        local.set $w
+        local.get $dest
         i32.const 12
         i32.add
-        local.get $5
+        local.get $x
         i32.const 24
         i32.shr_u
-        local.get $4
+        local.get $w
         i32.const 8
         i32.shl
         i32.or
         i32.store
-        local.get $1
+        local.get $src
         i32.const 16
         i32.add
-        local.set $1
-        local.get $0
+        local.set $src
+        local.get $dest
         i32.const 16
         i32.add
-        local.set $0
-        local.get $2
+        local.set $dest
+        local.get $n
         i32.const 16
         i32.sub
-        local.set $2
+        local.set $n
         br $while-continue|3
        end
       end
       br $break|2
      end
-     local.get $1
+     local.get $src
      i32.load
-     local.set $4
-     local.get $0
-     local.tee $6
+     local.set $w
+     local.get $dest
+     local.tee $var$6
      i32.const 1
      i32.add
-     local.set $0
-     local.get $6
-     local.get $1
-     local.tee $6
+     local.set $dest
+     local.get $var$6
+     local.get $src
+     local.tee $var$6
      i32.const 1
      i32.add
-     local.set $1
-     local.get $6
+     local.set $src
+     local.get $var$6
      i32.load8_u
      i32.store8
-     local.get $0
-     local.tee $6
+     local.get $dest
+     local.tee $var$6
      i32.const 1
      i32.add
-     local.set $0
-     local.get $6
-     local.get $1
-     local.tee $6
+     local.set $dest
+     local.get $var$6
+     local.get $src
+     local.tee $var$6
      i32.const 1
      i32.add
-     local.set $1
-     local.get $6
+     local.set $src
+     local.get $var$6
      i32.load8_u
      i32.store8
-     local.get $2
+     local.get $n
      i32.const 2
      i32.sub
-     local.set $2
+     local.set $n
      loop $while-continue|4
-      local.get $2
+      local.get $n
       i32.const 18
       i32.ge_u
-      local.set $6
-      local.get $6
+      local.set $var$6
+      local.get $var$6
       if
-       local.get $1
+       local.get $src
        i32.const 2
        i32.add
        i32.load
-       local.set $5
-       local.get $0
-       local.get $4
+       local.set $x
+       local.get $dest
+       local.get $w
        i32.const 16
        i32.shr_u
-       local.get $5
+       local.get $x
        i32.const 16
        i32.shl
        i32.or
        i32.store
-       local.get $1
+       local.get $src
        i32.const 6
        i32.add
        i32.load
-       local.set $4
-       local.get $0
+       local.set $w
+       local.get $dest
        i32.const 4
        i32.add
-       local.get $5
+       local.get $x
        i32.const 16
        i32.shr_u
-       local.get $4
+       local.get $w
        i32.const 16
        i32.shl
        i32.or
        i32.store
-       local.get $1
+       local.get $src
        i32.const 10
        i32.add
        i32.load
-       local.set $5
-       local.get $0
+       local.set $x
+       local.get $dest
        i32.const 8
        i32.add
-       local.get $4
+       local.get $w
        i32.const 16
        i32.shr_u
-       local.get $5
+       local.get $x
        i32.const 16
        i32.shl
        i32.or
        i32.store
-       local.get $1
+       local.get $src
        i32.const 14
        i32.add
        i32.load
-       local.set $4
-       local.get $0
+       local.set $w
+       local.get $dest
        i32.const 12
        i32.add
-       local.get $5
+       local.get $x
        i32.const 16
        i32.shr_u
-       local.get $4
+       local.get $w
        i32.const 16
        i32.shl
        i32.or
        i32.store
-       local.get $1
+       local.get $src
        i32.const 16
        i32.add
-       local.set $1
-       local.get $0
+       local.set $src
+       local.get $dest
        i32.const 16
        i32.add
-       local.set $0
-       local.get $2
+       local.set $dest
+       local.get $n
        i32.const 16
        i32.sub
-       local.set $2
+       local.set $n
        br $while-continue|4
       end
      end
      br $break|2
     end
-    local.get $1
+    local.get $src
     i32.load
-    local.set $4
-    local.get $0
-    local.tee $6
+    local.set $w
+    local.get $dest
+    local.tee $var$6
     i32.const 1
     i32.add
-    local.set $0
-    local.get $6
-    local.get $1
-    local.tee $6
+    local.set $dest
+    local.get $var$6
+    local.get $src
+    local.tee $var$6
     i32.const 1
     i32.add
-    local.set $1
-    local.get $6
+    local.set $src
+    local.get $var$6
     i32.load8_u
     i32.store8
-    local.get $2
+    local.get $n
     i32.const 1
     i32.sub
-    local.set $2
+    local.set $n
     loop $while-continue|5
-     local.get $2
+     local.get $n
      i32.const 19
      i32.ge_u
-     local.set $6
-     local.get $6
+     local.set $var$6
+     local.get $var$6
      if
-      local.get $1
+      local.get $src
       i32.const 3
       i32.add
       i32.load
-      local.set $5
-      local.get $0
-      local.get $4
+      local.set $x
+      local.get $dest
+      local.get $w
       i32.const 8
       i32.shr_u
-      local.get $5
+      local.get $x
       i32.const 24
       i32.shl
       i32.or
       i32.store
-      local.get $1
+      local.get $src
       i32.const 7
       i32.add
       i32.load
-      local.set $4
-      local.get $0
+      local.set $w
+      local.get $dest
       i32.const 4
       i32.add
-      local.get $5
+      local.get $x
       i32.const 8
       i32.shr_u
-      local.get $4
+      local.get $w
       i32.const 24
       i32.shl
       i32.or
       i32.store
-      local.get $1
+      local.get $src
       i32.const 11
       i32.add
       i32.load
-      local.set $5
-      local.get $0
+      local.set $x
+      local.get $dest
       i32.const 8
       i32.add
-      local.get $4
+      local.get $w
       i32.const 8
       i32.shr_u
-      local.get $5
+      local.get $x
       i32.const 24
       i32.shl
       i32.or
       i32.store
-      local.get $1
+      local.get $src
       i32.const 15
       i32.add
       i32.load
-      local.set $4
-      local.get $0
+      local.set $w
+      local.get $dest
       i32.const 12
       i32.add
-      local.get $5
+      local.get $x
       i32.const 8
       i32.shr_u
-      local.get $4
+      local.get $w
       i32.const 24
       i32.shl
       i32.or
       i32.store
-      local.get $1
+      local.get $src
       i32.const 16
       i32.add
-      local.set $1
-      local.get $0
+      local.set $src
+      local.get $dest
       i32.const 16
       i32.add
-      local.set $0
-      local.get $2
+      local.set $dest
+      local.get $n
       i32.const 16
       i32.sub
-      local.set $2
+      local.set $n
       br $while-continue|5
      end
     end
     br $break|2
    end
   end
-  local.get $2
+  local.get $n
   i32.const 16
   i32.and
   if
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
   end
-  local.get $2
+  local.get $n
   i32.const 8
   i32.and
   if
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
   end
-  local.get $2
+  local.get $n
   i32.const 4
   i32.and
   if
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
   end
-  local.get $2
+  local.get $n
   i32.const 2
   i32.and
   if
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
   end
-  local.get $2
+  local.get $n
   i32.const 1
   i32.and
   if
-   local.get $0
-   local.tee $6
+   local.get $dest
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $0
-   local.get $6
-   local.get $1
-   local.tee $6
+   local.set $dest
+   local.get $var$6
+   local.get $src
+   local.tee $var$6
    i32.const 1
    i32.add
-   local.set $1
-   local.get $6
+   local.set $src
+   local.get $var$6
    i32.load8_u
    i32.store8
   end
-  local.get $3
+  local.get $ret
  )
  (func $start:memcpy
   global.get $memcpy/base

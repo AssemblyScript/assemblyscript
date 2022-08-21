@@ -15,14 +15,14 @@
  (elem $0 (i32.const 1) $call-optional/opt@varargs)
  (export "memory" (memory $0))
  (start $~start)
- (func $call-optional/opt (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $call-optional/opt (param $a i32) (param $b i32) (param $c i32) (result i32)
+  local.get $a
+  local.get $b
   i32.add
-  local.get $2
+  local.get $c
   i32.add
  )
- (func $call-optional/opt@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $call-optional/opt@varargs (param $a i32) (param $b i32) (param $c i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -35,14 +35,14 @@
      unreachable
     end
     i32.const -1
-    local.set $1
+    local.set $b
    end
    i32.const -2
-   local.set $2
+   local.set $c
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $a
+  local.get $b
+  local.get $c
   call $call-optional/opt
  )
  (func $start:call-optional

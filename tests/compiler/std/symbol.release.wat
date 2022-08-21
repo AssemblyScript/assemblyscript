@@ -1118,6 +1118,7 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
+      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -1150,6 +1151,7 @@
       i32.const 1
       i32.or
       i32.store
+      local.get $1
       local.get $2
       call $~lib/rt/tlsf/insertBlock
      end
@@ -2335,10 +2337,12 @@
      end
      local.get $0
      i32.load offset=4
+     local.set $0
      global.get $~lib/memory/__stack_pointer
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
+     local.get $0
      return
     end
    else
@@ -2464,11 +2468,11 @@
     global.set $~lib/symbol/idToString
    end
    global.get $~lib/symbol/nextId
-   local.tee $2
+   local.tee $3
    i32.const 1
    i32.add
    global.set $~lib/symbol/nextId
-   local.get $2
+   local.get $3
    i32.eqz
    if
     unreachable
@@ -2497,7 +2501,7 @@
    local.tee $0
    if
     local.get $0
-    local.get $2
+    local.get $3
     i32.store offset=4
    else
     local.get $4
@@ -2566,7 +2570,7 @@
      i32.store offset=4
      local.get $4
      i32.load offset=8
-     local.tee $3
+     local.tee $2
      local.get $4
      i32.load offset=16
      i32.const 12
@@ -2576,18 +2580,18 @@
      local.get $1
      local.set $0
      loop $while-continue|0
-      local.get $3
+      local.get $2
       local.get $9
       i32.ne
       if
-       local.get $3
+       local.get $2
        i32.load offset=8
        i32.const 1
        i32.and
        i32.eqz
        if
         global.get $~lib/memory/__stack_pointer
-        local.get $3
+        local.get $2
         i32.load
         local.tee $10
         i32.store offset=8
@@ -2595,7 +2599,7 @@
         local.get $10
         i32.store
         local.get $0
-        local.get $3
+        local.get $2
         i32.load offset=4
         i32.store offset=4
         local.get $0
@@ -2618,10 +2622,10 @@
         i32.add
         local.set $0
        end
-       local.get $3
+       local.get $2
        i32.const 12
        i32.add
-       local.set $3
+       local.set $2
        br $while-continue|0
       end
      end
@@ -2685,7 +2689,7 @@
     i32.const 1
     call $byn-split-outlined-A$~lib/rt/itcms/__link
     local.get $0
-    local.get $2
+    local.get $3
     i32.store offset=4
     local.get $4
     local.get $4
@@ -2731,7 +2735,7 @@
    i32.store
    local.get $4
    i32.load
-   local.get $2
+   local.get $3
    i32.const -1028477379
    i32.mul
    i32.const 374761397
@@ -2741,23 +2745,23 @@
    i32.const 668265263
    i32.mul
    local.tee $0
+   local.get $0
    i32.const 15
    i32.shr_u
-   local.get $0
    i32.xor
    i32.const -2048144777
    i32.mul
    local.tee $0
+   local.get $0
    i32.const 13
    i32.shr_u
-   local.get $0
    i32.xor
    i32.const -1028477379
    i32.mul
    local.tee $0
+   local.get $0
    i32.const 16
    i32.shr_u
-   local.get $0
    i32.xor
    local.tee $5
    local.get $4
@@ -2782,7 +2786,7 @@
       else
        local.get $0
        i32.load
-       local.get $2
+       local.get $3
        i32.eq
       end
       br_if $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
@@ -2869,7 +2873,7 @@
      i32.store offset=4
      local.get $4
      i32.load offset=8
-     local.tee $3
+     local.tee $2
      local.get $4
      i32.load offset=16
      i32.const 12
@@ -2879,23 +2883,23 @@
      local.get $1
      local.set $0
      loop $while-continue|00
-      local.get $3
+      local.get $2
       local.get $9
       i32.ne
       if
-       local.get $3
+       local.get $2
        i32.load offset=8
        i32.const 1
        i32.and
        i32.eqz
        if
         local.get $0
-        local.get $3
+        local.get $2
         i32.load
         local.tee $10
         i32.store
         local.get $0
-        local.get $3
+        local.get $2
         i32.load offset=4
         i32.store offset=4
         local.get $0
@@ -2944,10 +2948,10 @@
         i32.add
         local.set $0
        end
-       local.get $3
+       local.get $2
        i32.const 12
        i32.add
-       local.set $3
+       local.set $2
        br $while-continue|00
       end
      end
@@ -3004,7 +3008,7 @@
     i32.mul
     i32.add
     local.tee $0
-    local.get $2
+    local.get $3
     i32.store
     local.get $0
     i32.const 1056
@@ -3044,7 +3048,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $3
    return
   end
   i32.const 19104
@@ -3162,10 +3166,12 @@
   else
    i32.const 0
   end
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $~lib/symbol/_Symbol#toString (param $0 i32) (result i32)
   (local $1 i32)
@@ -3399,10 +3405,12 @@
   local.get $0
   i32.const 2400
   call $~lib/string/String.__concat
+  local.set $0
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.add
   global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $start:std/symbol
   (local $0 i32)

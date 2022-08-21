@@ -4,7 +4,7 @@
  */
 
 /** Indicates traits of a {@link Node} or {@link Element}. */
-export enum CommonFlags {
+export const enum CommonFlags {
   /** No flags set. */
   NONE = 0,
 
@@ -169,7 +169,6 @@ export namespace CommonNames {
   export const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
   export const ASC_LOW_MEMORY_LIMIT = "ASC_LOW_MEMORY_LIMIT";
   export const ASC_EXPORT_RUNTIME = "ASC_EXPORT_RUNTIME";
-  export const ASC_WASI = "ASC_WASI";
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
   export const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
   export const ASC_FEATURE_NONTRAPPING_F2I = "ASC_FEATURE_NONTRAPPING_F2I";

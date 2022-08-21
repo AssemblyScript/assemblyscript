@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--enable", "simd"
+  ],
+  "stderr": [
+    "TS2322: Type 'f32' is not assignable to type 'v128'.",
+    "TS2322: Type 'i32' is not assignable to type 'v128'.",
+    "EOF"
+  ]
+}

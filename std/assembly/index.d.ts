@@ -107,6 +107,8 @@ declare const ASC_VERSION_PATCH: i32;
 
 // Builtins
 
+/** Performs the sign-agnostic reverse bytes **/
+declare function bswap<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
 /** Performs the sign-agnostic count leading zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered leading if the value is zero. */
 declare function clz<T extends i32 | i64>(value: T): T;
 /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit or 64-bit integer. All zero bits are considered trailing if the value is zero. */
@@ -1075,6 +1077,10 @@ declare namespace i16x8 {
   export function extmul_high_i8x16_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 8-bit unsigned integer extended multiplication of the eight higher lanes producing twice wider 16-bit integer results. */
   export function extmul_high_i8x16_u(a: v128, b: v128): v128;
+  /** Selects 16-bit lanes from either vector according to the specified [0-7] respectively [8-15] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -1163,6 +1169,10 @@ declare namespace i32x4 {
   export function extmul_high_i16x8_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 16-bit unsigned integer extended multiplication of the four higher lanes producing twice wider 32-bit integer results. */
   export function extmul_high_i16x8_u(a: v128, b: v128): v128;
+  /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -1221,6 +1231,10 @@ declare namespace i64x2 {
   export function extmul_high_i32x4_s(a: v128, b: v128): v128;
   /** Performs the lane-wise 32-bit unsigned integer extended multiplication of the two higher lanes producing twice wider 64-bit integer results. */
   export function extmul_high_i32x4_u(a: v128, b: v128): v128;
+  /** Selects 64-bit lanes from either vector according to the specified [0-1] respectively [2-3] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -1279,6 +1293,10 @@ declare namespace f32x4 {
   export function convert_i32x4_u(a: v128): v128;
   /** Demotes each 64-bit float lane of a vector to single-precision. The higher lanes of the result are initialized to zero. */
   export function demote_f64x2_zero(a: v128): v128;
+  /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -1337,6 +1355,10 @@ declare namespace f64x2 {
   export function convert_low_i32x4_u(a: v128): v128;
   /** Promotes the low 32-bit float lanes of a vector to double-precision. */
   export function promote_low_f32x4(a: v128): v128;
+  /** Selects 64-bit lanes from either vector according to the specified [0-1] respectively [2-3] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 
 declare abstract class i31 {
@@ -1449,13 +1471,6 @@ declare function ERROR(message?: any): never;
 declare function WARNING(message?: any): void;
 /** Emits a user-defined diagnostic info when encountered. */
 declare function INFO(message?: any): void;
-
-// Polyfills
-
-/** Performs the sign-agnostic reverse bytes **/
-declare function bswap<T extends i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
-/** Performs the sign-agnostic reverse bytes only for last 16-bit **/
-declare function bswap16<T extends i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 // Standard library
 
@@ -1666,7 +1681,7 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
   join(separator?: string): string;
   /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
-  set<U extends ArrayBufferView>(source: U, offset?: i32): void
+  set<U extends ArrayLike<number>>(source: U, offset?: i32): void
   /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
   toString(): string;
 }
@@ -1774,7 +1789,9 @@ declare class Array<T> {
 declare class StaticArray<T> {
   [key: number]: T;
   static fromArray<T>(source: Array<T>): StaticArray<T>;
+  /** @deprecated */
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T>;
+  /** @deprecated */
   static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
   readonly length: i32;
   constructor(length?: i32);
@@ -1794,7 +1811,9 @@ declare class StaticArray<T> {
   every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
+  concat<U extends ArrayLike<T>>(other: U): U;
   slice(from?: i32, to?: i32): Array<T>;
+  slice<U extends ArrayLike<T>>(from?: i32, to?: i32): U;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): this;
@@ -2156,7 +2175,7 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 /** Environmental seeding function. */
 declare function seed(): f64;
 
-/** Node-like process on top of WASI. */
+/** Node-like process. */
 declare namespace process {
   /** String representing the CPU architecture for which the binary was compiled. Either `wasm32` or `wasm64`. */
   export const arch: string;
@@ -2195,7 +2214,7 @@ declare namespace process {
   }
 }
 
-/** Browser-like console on top of WASI. */
+/** Browser-like console. */
 declare namespace console {
   /** Logs `message` to console if `assertion` is false-ish. */
   export function assert<T>(assertion: T, message?: string): void;
@@ -2217,7 +2236,7 @@ declare namespace console {
   export function timeEnd(label?: string): void;
 }
 
-/** Browser-like crypto utilities on top of WASI. */
+/** Browser-like crypto utilities. */
 declare namespace crypto {
   /** Fills `array` with cryptographically strong random values. */
   export function getRandomValues(array: Uint8Array): void;
