@@ -2294,14 +2294,10 @@
  (func $class-overloading-cast/A<~lib/string/String>#foo (param $this i32) (param $a i32) (result i32)
   i32.const 432
  )
-<<<<<<< HEAD
- (func $class-overloading-cast/D#bar (param $0 i32) (param $1 f32) (result i32)
+ (func $class-overloading-cast/D#bar (param $this i32) (param $a f32) (result i32)
   i32.const 608
  )
- (func $class-overloading-cast/B<i32,f64>#foo (param $0 i32) (param $1 i32) (result i32)
-=======
  (func $class-overloading-cast/B<i32,f64>#foo (param $this i32) (param $a i32) (result i32)
->>>>>>> main
   i32.const 464
  )
  (func $class-overloading-cast/B<f64,~lib/string/String>#foo (param $this i32) (param $a f64) (result i32)
