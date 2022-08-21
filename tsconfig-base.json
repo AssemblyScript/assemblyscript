@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
+    "strict": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noEmitOnError": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "preserveConstEnums": false,
+    "downlevelIteration": true
   }
 }

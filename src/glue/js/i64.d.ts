@@ -48,7 +48,7 @@ declare function i64_lt(left: i64, right: i64): boolean;
 declare function i64_lt_u(left: i64, right: i64): boolean;
 
 declare function i64_align(value: i64, alignment: i32): i64;
-declare function i64_signbit(value): boolean;
+declare function i64_signbit(value: i64): boolean;
 
 declare function i64_is_i8(value: i64): boolean;
 declare function i64_is_i16(value: i64): boolean;
