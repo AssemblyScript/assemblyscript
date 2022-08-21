@@ -27,8 +27,17 @@ var tDerived = new TestDerived<f64>();
 tDerived.test<f64>(1, 2);
 
 class TestMethodDerived<T> {
-  test<U = T[]>(): void {}
+  test<U = T[]>(): void {
+    assert(idof<U>() == idof<T[]>());
+  }
+}
+class TestMethodDerived2<T> {
+  foo(v: TestMethodDerived<string>): void {
+    v.test();
+  }
 }
 
 var tMethodDerived = new TestMethodDerived<string>();
 tMethodDerived.test();
+var tMethodDerived2 = new TestMethodDerived2<f64>();
+tMethodDerived2.foo(tMethodDerived);
