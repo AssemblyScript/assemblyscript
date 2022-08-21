@@ -76,7 +76,9 @@ import {
   isTypeOmitted,
   FunctionExpression,
   NewExpression,
-  ArrayLiteralExpression
+  ArrayLiteralExpression,
+  ArrowKind,
+  ExpressionStatement
 } from "./ast";
 
 import {
@@ -2615,7 +2617,25 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    return this.resolveFunctionType(node.declaration.signature, ctxFlow.actualFunction, ctxFlow.contextualTypeArguments, reportMode);
+    const declaration = node.declaration;
+    const signature = declaration.signature;
+    const body = declaration.body;
+    let functionType = this.resolveFunctionType(signature, ctxFlow.actualFunction, ctxFlow.contextualTypeArguments, reportMode);
+    if (
+      functionType &&
+      declaration.arrowKind != ArrowKind.NONE &&
+      body && body.kind == NodeKind.EXPRESSION && 
+      isTypeOmitted(signature.returnType)
+    ) {
+      // (x) => ret, infer return type accordingt to `ret`
+      const expr = (<ExpressionStatement>body).expression;
+      const type = this.resolveExpression(expr, ctxFlow, ctxType, reportMode);
+      if (type) {
+        let signatureReference = assert(functionType.getSignature());
+        signatureReference.returnType = type;
+      }
+    }
+    return functionType;
   }
 
   // ==================================================== Elements =====================================================
