@@ -3773,6 +3773,22 @@ export class Function extends TypedElement {
         );
       }
     }
+    if (this.program.options.debugInfo) {
+      let localNameMap = new Set<string>();
+      let localsByIndex = this.localsByIndex;
+      for (let i = 0, k = localsByIndex.length; i < k; i++) {
+        let localName = localsByIndex[i].name;
+        if (localNameMap.has(localName)) {
+          let repeat = 0;
+          while (localNameMap.has(`${localName}_${repeat}`)) {
+            repeat++;
+          }
+          localName = `${localName}_${repeat}`;
+        }
+        localNameMap.add(localName);
+        module.setLocalName(ref, i, localName);
+      }
+    }
   }
 }
 
