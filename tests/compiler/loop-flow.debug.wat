@@ -26,11 +26,11 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $loop-flow/whileReturn (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   loop $while-continue|0
    i32.const 1
-   local.set $0
-   local.get $0
+   local.set $var$0
+   local.get $var$0
    if
     i32.const 1
     return
@@ -38,21 +38,21 @@
   end
   unreachable
  )
- (func $loop-flow/whileAny (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $loop-flow/whileAny (param $a i32) (result i32)
+  (local $var$1 i32)
   loop $while-continue|0
    i32.const 1
-   local.set $1
-   local.get $1
+   local.set $var$1
+   local.get $var$1
    if
-    local.get $0
+    local.get $a
     i32.const 1
     i32.eq
     if
      i32.const 1
      return
     else
-     local.get $0
+     local.get $a
      i32.const 2
      i32.eq
      if
@@ -73,11 +73,11 @@
   unreachable
  )
  (func $loop-flow/forReturn (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   loop $for-loop|0
    i32.const 1
-   local.set $0
-   local.get $0
+   local.set $var$0
+   local.get $var$0
    if
     i32.const 1
     return
@@ -85,22 +85,22 @@
   end
   unreachable
  )
- (func $loop-flow/forAny (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $loop-flow/forAny (param $a i32) (result i32)
+  (local $var$1 i32)
   loop $for-loop|0
    i32.const 1
-   local.set $1
-   local.get $1
+   local.set $var$1
+   local.get $var$1
    if
     block $for-continue|0
-     local.get $0
+     local.get $a
      i32.const 1
      i32.eq
      if
       i32.const 1
       return
      else
-      local.get $0
+      local.get $a
       i32.const 2
       i32.eq
       if
@@ -129,17 +129,17 @@
   end
   unreachable
  )
- (func $loop-flow/doAny (param $0 i32) (result i32)
+ (func $loop-flow/doAny (param $a i32) (result i32)
   loop $do-loop|0
    block $do-continue|0
-    local.get $0
+    local.get $a
     i32.const 1
     i32.eq
     if
      i32.const 1
      return
     else
-     local.get $0
+     local.get $a
      i32.const 2
      i32.eq
      if
@@ -240,11 +240,11 @@
   end
  )
  (func $loop-flow/whileThrow (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   loop $while-continue|0
    i32.const 1
-   local.set $0
-   local.get $0
+   local.set $var$0
+   local.get $var$0
    if
     i32.const 80
     i32.const 32
@@ -257,11 +257,11 @@
   unreachable
  )
  (func $loop-flow/whileContinue (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   loop $while-continue|0
    i32.const 1
-   local.set $0
-   local.get $0
+   local.set $var$0
+   local.get $var$0
    if
     br $while-continue|0
    end
@@ -269,11 +269,11 @@
   unreachable
  )
  (func $loop-flow/forThrow (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   loop $for-loop|0
    i32.const 1
-   local.set $0
-   local.get $0
+   local.set $var$0
+   local.get $var$0
    if
     i32.const 80
     i32.const 32
@@ -286,11 +286,11 @@
   unreachable
  )
  (func $loop-flow/forContinue (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   loop $for-loop|0
    i32.const 1
-   local.set $0
-   local.get $0
+   local.set $var$0
+   local.get $var$0
    if
     block $for-continue|0
      br $for-continue|0

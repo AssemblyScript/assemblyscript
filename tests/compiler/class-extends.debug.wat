@@ -22,17 +22,17 @@
   local.get $1
   i32.store16 offset=4
  )
- (func $class-extends/test (param $0 i32)
-  local.get $0
+ (func $class-extends/test (param $b i32)
+  local.get $b
   i32.load
   drop
-  local.get $0
+  local.get $b
   i32.load16_s offset=4
   drop
-  local.get $0
+  local.get $b
   i32.const 2
   call $class-extends/A#set:a
-  local.get $0
+  local.get $b
   i32.const 3
   call $class-extends/B#set:b
  )

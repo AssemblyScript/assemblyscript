@@ -14,14 +14,14 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $start:comma
-  (local $0 i32)
-  (local $1 i32)
+  (local $var$0 i32)
+  (local $c i32)
   global.get $comma/a
-  local.tee $0
+  local.tee $var$0
   i32.const 1
   i32.add
   global.set $comma/a
-  local.get $0
+  local.get $var$0
   global.set $comma/b
   global.get $comma/a
   drop
@@ -146,27 +146,27 @@
    unreachable
   end
   i32.const 0
-  local.set $1
+  local.set $c
   loop $for-loop|0
-   local.get $1
+   local.get $c
    global.get $comma/a
    i32.lt_s
-   local.set $0
-   local.get $0
+   local.set $var$0
+   local.get $var$0
    if
     nop
     global.get $comma/a
     i32.const 1
     i32.sub
     global.set $comma/a
-    local.get $1
+    local.get $c
     i32.const 1
     i32.add
-    local.set $1
+    local.set $c
     br $for-loop|0
    end
   end
-  local.get $1
+  local.get $c
   i32.const 1
   i32.eq
   i32.eqz

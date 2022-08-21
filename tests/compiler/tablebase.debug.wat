@@ -18,8 +18,8 @@
  (func $tablebase/foo
   nop
  )
- (func $~lib/function/Function<%28%29=>void>#get:index (param $0 i32) (result i32)
-  local.get $0
+ (func $~lib/function/Function<%28%29=>void>#get:index (param $this i32) (result i32)
+  local.get $this
   i32.load
  )
  (func $~start

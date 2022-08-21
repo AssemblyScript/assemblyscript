@@ -11,11 +11,11 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "test" (func $export:resolve-localortype/test))
- (func $resolve-localortype/foo<~lib/string/String> (param $0 i32) (result i32)
-  local.get $0
+ (func $resolve-localortype/foo<~lib/string/String> (param $s i32) (result i32)
+  local.get $s
  )
- (func $resolve-localortype/test (param $0 i32) (result i32)
-  local.get $0
+ (func $resolve-localortype/test (param $string i32) (result i32)
+  local.get $string
   call $resolve-localortype/foo<~lib/string/String>
  )
  (func $~stack_check
