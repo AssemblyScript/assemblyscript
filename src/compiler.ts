@@ -3495,6 +3495,28 @@ export class Compiler extends DiagnosticEmitter {
     // not dealing with references from here on
     assert(!fromType.isReference && !toType.isReference);
 
+    // Early return if we have same types
+    if (toType.kind == fromType.kind) {
+      this.currentType = toType;
+      return expr;
+    }
+
+    // v128 to any / any to v128
+    // except v128 to bool
+    //
+    // NOTE:In case we would have more conversions to and from v128 type it's better
+    // to make these checks more individual and integrate in below flow.
+    if (
+      !toType.isBooleanValue &&
+      (toType.isVectorValue || fromType.isVectorValue)
+    ) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
+      return module.unreachable();
+    }
+
     if (!fromType.isAssignableTo(toType)) {
       if (!explicit) {
         this.error(
