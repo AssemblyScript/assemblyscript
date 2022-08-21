@@ -5344,7 +5344,7 @@
    end
   end
  )
- (func $start:std/array~anonymous|25 (param $value i32) (param $$1 i32) (param $$2 i32) (result f32)
+ (func $start:std/array~anonymous|25 (param $value i32) (param $index i32) (param $arr i32) (result f32)
   local.get $value
   f32.convert_i32_s
  )
