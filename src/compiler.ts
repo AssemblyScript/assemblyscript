@@ -3438,7 +3438,8 @@ export class Compiler extends DiagnosticEmitter {
 
     if (fromType.kind == TypeKind.VOID) {
       if (toType.kind == TypeKind.VOID) {
-        // void to void
+        // void to void: Can happen as a result of a foregoing error. Since we
+        // have an `expr` here that is already supposed to be void, return it.
         return expr;
       }
       // void to any
