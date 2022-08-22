@@ -548,8 +548,6 @@ export class Compiler extends DiagnosticEmitter {
         isSharedMemory = false;
       }
     }
-    // setup memory & table
-    this.initMemoryAndTable(memoryOffset, initialPages, maximumPages, isSharedMemory);
 
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
@@ -687,9 +685,9 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // TODO: Rmove this when binaryen's API improved
-    // update memory with collected data segments
-    this.finalizeMemory(initialPages, maximumPages, isSharedMemory);
+    // setup memory & table
+    this.initMemory(memoryOffset, initialPages, maximumPages, isSharedMemory);
+    this.initTable();
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
@@ -755,7 +753,7 @@ export class Compiler extends DiagnosticEmitter {
     return module;
   }
 
-  private initMemoryAndTable(
+  private initMemory(
     memoryOffset: i64,
     initialPages: Index,
     maximumPages: Index,
@@ -792,6 +790,11 @@ export class Compiler extends DiagnosticEmitter {
     if (options.importMemory) {
       module.addMemoryImport("0", "env", ExportNames.memory, isSharedMemory);
     }
+  }
+
+  private initTable(): void {
+    var options = this.options;
+    var module = this.module;
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
@@ -830,21 +833,6 @@ export class Compiler extends DiagnosticEmitter {
       options.importTable || options.exportTable ? Module.UNLIMITED_TABLE : tableSize,
       functionTableNames,
       module.i32(tableBase)
-    );
-  }
-
-  private finalizeMemory(initPages: Index, maxPages: Index, isSharedMemory: bool): void {
-    // update memory with collected data segments
-    var options = this.options;
-    var module = this.module;
-
-    module.setMemory(
-      initPages,
-      maxPages,
-      this.memorySegments,
-      options.target,
-      options.exportMemory ? ExportNames.memory : null,
-      isSharedMemory
     );
   }
 
