@@ -225,6 +225,8 @@ export class Options {
   target: Target = Target.WASM32;
   /** Runtime type. Defaults to Incremental GC. */
   runtime: Runtime = Runtime.Incremental;
+  /** If true, indicates that debug information will be emitted by Binaryen. */
+  debugInfo: bool = false;
   /** If true, replaces assertions with nops. */
   noAssert: bool = false;
   /** It true, exports the memory to the embedder. */
@@ -760,11 +762,6 @@ export class Compiler extends DiagnosticEmitter {
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
     var exportStart = options.exportStart;
-    if (program.isWasi && !exportStart) {
-      // Try to do the right thing for WASI. If the module has custom function
-      // exports it is likely a reactor, otherwise it is likely a command.
-      exportStart = this.hasCustomFunctionExports ? "_initialize" : "_start";
-    }
     if (!startIsEmpty || exportStart != null) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && exportStart != null) {
@@ -1019,13 +1016,14 @@ export class Compiler extends DiagnosticEmitter {
       let numLocals = locals.length;
       let varTypes = new Array<TypeRef>(numLocals);
       for (let i = 0; i < numLocals; ++i) varTypes[i] = locals[i].type.toRef();
-      module.addFunction(
+      const funcRef = module.addFunction(
         startFunction.internalName,
         startSignature.paramRefs,
         startSignature.resultRefs,
         varTypes,
         module.flatten(startFunctionBody)
       );
+      startFunction.finalize(module, funcRef);
       previousBody.push(
         module.call(startFunction.internalName, null, TypeRef.None)
       );
@@ -3438,9 +3436,13 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
 
-    // void to any
     if (fromType.kind == TypeKind.VOID) {
-      assert(toType.kind != TypeKind.VOID); // convertExpression should not be called with void -> void
+      if (toType.kind == TypeKind.VOID) {
+        // void to void: Can happen as a result of a foregoing error. Since we
+        // have an `expr` here that is already supposed to be void, return it.
+        return expr;
+      }
+      // void to any
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         reportNode.range, fromType.toString(), toType.toString()
@@ -3496,6 +3498,28 @@ export class Compiler extends DiagnosticEmitter {
 
     // not dealing with references from here on
     assert(!fromType.isReference && !toType.isReference);
+
+    // Early return if we have same types
+    if (toType.kind == fromType.kind) {
+      this.currentType = toType;
+      return expr;
+    }
+
+    // v128 to any / any to v128
+    // except v128 to bool
+    //
+    // NOTE:In case we would have more conversions to and from v128 type it's better
+    // to make these checks more individual and integrate in below flow.
+    if (
+      !toType.isBooleanValue &&
+      (toType.isVectorValue || fromType.isVectorValue)
+    ) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
+      return module.unreachable();
+    }
 
     if (!fromType.isAssignableTo(toType)) {
       if (!explicit) {
@@ -9883,38 +9907,74 @@ export class Compiler extends DiagnosticEmitter {
           : expr;
       }
       case TypeKind.F32: {
-        // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
-        // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
-        //
-        // and finally:
-        // (reinterpret<u32>(x) << 1) - (1 << 1) <= ((0x7F800000 - 1) << 1)
-        return module.binary(BinaryOp.LeU32,
-          module.binary(BinaryOp.SubI32,
-            module.binary(BinaryOp.ShlI32,
-              module.unary(UnaryOp.ReinterpretF32ToI32, expr),
-              module.i32(1)
+        let options = this.options;
+        if (
+          options.shrinkLevelHint > 1 &&
+          options.hasFeature(Feature.NONTRAPPING_F2I)
+        ) {
+          // Use more compact but slower 5-byte (3 bytes in best case) approach
+          // !!(i32.trunc_sat_f32_u(f32.ceil(f32.abs(x))))
+          return module.unary(UnaryOp.EqzI32,
+            module.unary(UnaryOp.EqzI32,
+              module.unary(UnaryOp.TruncSatF32ToU32,
+                module.unary(UnaryOp.CeilF32,
+                  module.unary(UnaryOp.AbsF32, expr)
+                )
+              )
+            )
+          );
+        } else {
+          // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
+          // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
+          //
+          // and finally:
+          // (reinterpret<u32>(x) << 1) - (1 << 1) <= ((0x7F800000 - 1) << 1)
+          return module.binary(BinaryOp.LeU32,
+            module.binary(BinaryOp.SubI32,
+              module.binary(BinaryOp.ShlI32,
+                module.unary(UnaryOp.ReinterpretF32ToI32, expr),
+                module.i32(1)
+              ),
+              module.i32(2) // 1 << 1
             ),
-            module.i32(2) // 1 << 1
-          ),
-          module.i32(0xFEFFFFFE) // (0x7F800000 - 1) << 1
-        );
+            module.i32(0xFEFFFFFE) // (0x7F800000 - 1) << 1
+          );
+        }
       }
       case TypeKind.F64: {
-        // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
-        // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
-        //
-        // and finally:
-        // (reinterpret<u64>(x) << 1) - (1 << 1) <= ((0x7FF0000000000000 - 1) << 1)
-        return module.binary(BinaryOp.LeU64,
-          module.binary(BinaryOp.SubI64,
-            module.binary(BinaryOp.ShlI64,
-              module.unary(UnaryOp.ReinterpretF64ToI64, expr),
-              module.i64(1)
+        let options = this.options;
+        if (
+          options.shrinkLevelHint > 1 &&
+          options.hasFeature(Feature.NONTRAPPING_F2I)
+        ) {
+          // Use more compact but slower 5-byte (3 bytes in best case) approach
+          // !!(i32.trunc_sat_f64_u(f64.ceil(f64.abs(x))))
+          return module.unary(UnaryOp.EqzI32,
+            module.unary(UnaryOp.EqzI32,
+              module.unary(UnaryOp.TruncSatF64ToU32,
+                module.unary(UnaryOp.CeilF64,
+                  module.unary(UnaryOp.AbsF64, expr)
+                )
+              )
+            )
+          );
+        } else {
+          // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
+          // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
+          //
+          // and finally:
+          // (reinterpret<u64>(x) << 1) - (1 << 1) <= ((0x7FF0000000000000 - 1) << 1)
+          return module.binary(BinaryOp.LeU64,
+            module.binary(BinaryOp.SubI64,
+              module.binary(BinaryOp.ShlI64,
+                module.unary(UnaryOp.ReinterpretF64ToI64, expr),
+                module.i64(1)
+              ),
+              module.i64(2) // 1 << 1
             ),
-            module.i64(2) // 1 << 1
-          ),
-          module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
-        );
+            module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
+          );
+        }
       }
       case TypeKind.V128: {
         return module.unary(UnaryOp.AnyTrueV128, expr);
@@ -10262,7 +10322,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
 function mangleImportName(
   element: Element,
   declaration: DeclarationStatement

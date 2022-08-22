@@ -734,11 +734,6 @@ export namespace BuiltinNames {
   export const String_eq = "~lib/string/String.__eq";
   export const String_ne = "~lib/string/String.__ne";
   export const String_not = "~lib/string/String.__not";
-
-  // std/bindings/wasi.ts
-  export const wasiAbort = "~lib/wasi/index/abort";
-  export const wasiTrace = "~lib/wasi/index/trace";
-  export const wasiSeed = "~lib/wasi/index/seed";
 }
 
 /** Builtin compilation context. */

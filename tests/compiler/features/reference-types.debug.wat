@@ -36,9 +36,9 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $features/reference-types/testLocal<funcref>
-  (local $0 funcref)
-  (local $1 funcref)
-  local.get $0
+  (local $local funcref)
+  (local $localInit funcref)
+  local.get $local
   ref.is_null
   i32.eqz
   i32.eqz
@@ -52,8 +52,8 @@
    unreachable
   end
   ref.null func
-  local.set $0
-  local.get $0
+  local.set $local
+  local.get $local
   ref.is_null
   i32.eqz
   i32.eqz
@@ -67,8 +67,8 @@
    unreachable
   end
   ref.null func
-  local.set $1
-  local.get $1
+  local.set $localInit
+  local.get $localInit
   ref.is_null
   i32.eqz
   i32.eqz
@@ -83,9 +83,9 @@
   end
  )
  (func $features/reference-types/testLocal<externref>
-  (local $0 anyref)
-  (local $1 anyref)
-  local.get $0
+  (local $local anyref)
+  (local $localInit anyref)
+  local.get $local
   ref.is_null
   i32.eqz
   i32.eqz
@@ -99,8 +99,8 @@
    unreachable
   end
   ref.null any
-  local.set $0
-  local.get $0
+  local.set $local
+  local.get $local
   ref.is_null
   i32.eqz
   i32.eqz
@@ -114,8 +114,8 @@
    unreachable
   end
   ref.null any
-  local.set $1
-  local.get $1
+  local.set $localInit
+  local.get $localInit
   ref.is_null
   i32.eqz
   i32.eqz
@@ -133,8 +133,8 @@
   nop
  )
  (func $start:features/reference-types
-  (local $0 funcref)
-  (local $1 anyref)
+  (local $var$0 funcref)
+  (local $var$1 anyref)
   call $features/reference-types/somethingReal
   ref.is_null
   i32.eqz
@@ -308,8 +308,8 @@
    unreachable
   end
   ref.func $features/reference-types/someFunc
-  local.set $0
-  local.get $0
+  local.set $var$0
+  local.get $var$0
   ref.is_null
   if
    i32.const 0
@@ -320,7 +320,7 @@
    unreachable
   end
   global.get $features/reference-types/otherFuncGlobal
-  local.tee $0
+  local.tee $var$0
   ref.is_null
   if (result funcref)
    i32.const 112
@@ -330,11 +330,11 @@
    call $~lib/builtins/abort
    unreachable
   else
-   local.get $0
+   local.get $var$0
   end
   global.set $features/reference-types/nonNullFunc
   call $features/reference-types/somethingReal
-  local.tee $1
+  local.tee $var$1
   ref.is_null
   if (result anyref)
    i32.const 112
@@ -344,24 +344,24 @@
    call $~lib/builtins/abort
    unreachable
   else
-   local.get $1
+   local.get $var$1
   end
   global.set $features/reference-types/nonNullReal
  )
- (func $features/reference-types/internal (param $0 anyref) (result anyref)
-  (local $1 anyref)
-  (local $2 anyref)
-  (local $3 anyref)
-  local.get $0
+ (func $features/reference-types/internal (param $a anyref) (result anyref)
+  (local $var$1 anyref)
+  (local $var$2 anyref)
+  (local $d anyref)
+  local.get $a
   call $features/reference-types/external
-  local.set $1
-  local.get $1
+  local.set $var$1
+  local.get $var$1
   call $features/reference-types/external
-  local.set $2
-  local.get $2
+  local.set $var$2
+  local.get $var$2
   call $features/reference-types/external
-  local.set $3
-  local.get $3
+  local.set $d
+  local.get $d
  )
  (func $~start
   call $start:features/reference-types

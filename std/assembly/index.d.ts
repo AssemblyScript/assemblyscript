@@ -2175,7 +2175,7 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 /** Environmental seeding function. */
 declare function seed(): f64;
 
-/** Node-like process on top of WASI. */
+/** Node-like process. */
 declare namespace process {
   /** String representing the CPU architecture for which the binary was compiled. Either `wasm32` or `wasm64`. */
   export const arch: string;
@@ -2214,7 +2214,7 @@ declare namespace process {
   }
 }
 
-/** Browser-like console on top of WASI. */
+/** Browser-like console. */
 declare namespace console {
   /** Logs `message` to console if `assertion` is false-ish. */
   export function assert<T>(assertion: T, message?: string): void;
@@ -2236,7 +2236,7 @@ declare namespace console {
   export function timeEnd(label?: string): void;
 }
 
-/** Browser-like crypto utilities on top of WASI. */
+/** Browser-like crypto utilities. */
 declare namespace crypto {
   /** Fills `array` with cryptographically strong random values. */
   export function getRandomValues(array: Uint8Array): void;

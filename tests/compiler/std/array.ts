@@ -780,7 +780,7 @@ var i: i32;
 // Array#map ///////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let newArr = arr.map<f32>((value: i32) => <f32>value);
+  let newArr = arr.map((value: i32, index: i32, arr: Array<i32>) => <f32>value);
   assert(newArr.length == 4);
   assert(newArr[0] == <f32>arr[0]);
 

@@ -17,8 +17,8 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $start:exports-lazy
-  (local $0 i32)
-  (local $1 i32)
+  (local $var$0 i32)
+  (local $var$1 i32)
   global.get $exports-lazy/lazyGlobalUsed
   drop
   call $exports-lazy/lazyFuncUsed

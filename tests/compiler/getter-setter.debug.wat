@@ -17,8 +17,8 @@
  (func $getter-setter/Foo.get:bar (result i32)
   global.get $getter-setter/Foo._bar
  )
- (func $getter-setter/Foo.set:bar (param $0 i32)
-  local.get $0
+ (func $getter-setter/Foo.set:bar (param $bar i32)
+  local.get $bar
   global.set $getter-setter/Foo._bar
  )
  (func $start:getter-setter
