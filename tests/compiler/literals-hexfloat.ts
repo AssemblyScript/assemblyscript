@@ -27,7 +27,6 @@ assert(-0x0.0p2 == -0.0 && Math.signbit(-0x0.0p2));
 assert(-0x0.1p4 == -1.0);
 assert(-0x1.1 == -1.0625);
 assert(-0x0.1 == -0.0625);
-assert(-0x1 == -1.0);
 assert(-0x1p-1 == -0.5);
 assert(-0x1p1 == -2.0);
 assert(-0x1p+8 == -256);

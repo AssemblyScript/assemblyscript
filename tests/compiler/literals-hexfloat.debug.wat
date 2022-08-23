@@ -116,11 +116,6 @@
   f64.const -0.0625
   f64.eq
   drop
-  i32.const -1
-  f64.convert_i32_s
-  f64.const -1
-  f64.eq
-  drop
   f64.const -0.5
   f64.const -0.5
   f64.eq
