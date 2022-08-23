@@ -1407,7 +1407,7 @@ export class Tokenizer extends DiagnosticEmitter {
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (isDecimal(c)) {
-        // value = value * 10 + c - CharCode._0
+        // value * 10 + c - CharCode._0
         nextValue = i64_add(
           i64_mul(value, i64_10),
           i64_new(c - CharCode._0)
@@ -1472,7 +1472,7 @@ export class Tokenizer extends DiagnosticEmitter {
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (isOctal(c)) {
-        // value = (value << 3) + c - CharCode._0;
+        // (value << 3) + c - CharCode._0
         nextValue = i64_add(
           i64_shl(value, i64_3),
           i64_new(c - CharCode._0)
