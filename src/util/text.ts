@@ -3,6 +3,8 @@
  * @license Apache-2.0
  */
 
+import { scalbn } from "./math";
+
 /** An enum of named character codes. */
 export const enum CharCode {
 
@@ -234,10 +236,15 @@ export function isOctal(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._7;
 }
 
+/** Tests if the specified character code is a valid hexadecimal symbol [a-f]. */
+export function isHexPart(c: i32): bool {
+  let c0 = c | 32; // unify uppercases and lowercases a|A - f|F
+  return c0 >= CharCode.a && c0 <= CharCode.f;
+}
+
 /** Tests if the specified character code is a valid hexadecimal digit. */
 export function isHex(c: i32): bool {
-  let c0 = c | 32; // unify uppercases and lowercases a|A - f|F
-  return isDecimal(c) || (c0 >= CharCode.a && c0 <= CharCode.f);
+  return isDecimal(c) || isHexPart(c);
 }
 
 /** Tests if the specified character code is trivially alphanumeric. */
@@ -558,4 +565,34 @@ export function escapeString(str: string, quote: CharCode): string {
   }
   if (i > off) sb.push(str.substring(off, i));
   return sb.join("");
+}
+
+export function parseHexFloat(str: string): f64 {
+  var sign = 1, pPos = -1, dotPos = -1;
+  for (let i = 0, k = str.length; i < k; ++i) {
+    const c = str.charCodeAt(i);
+    if (i == 0 && c == CharCode.MINUS) {
+      sign = -1;
+    } else if ((c | 32) == CharCode.p) {
+      pPos = i;
+    } else if (c == CharCode.DOT) {
+      dotPos = i;
+    }
+  }
+  var mant: f64;
+  var mantissa = ~pPos ? str.substring(0, pPos) : str;
+  if (~dotPos) {
+    const integer  = mantissa.substring(0, dotPos);
+    const fraction = mantissa.substring(dotPos + 1);
+    const intVal   = parseInt(integer, 16);
+    const fracVal  = fraction.length
+      ? scalbn(parseInt(fraction, 16), -(fraction.length << 2))
+      : 0;
+    mant = intVal + sign * fracVal;
+  } else {
+    mant = parseInt(mantissa, 16);
+  }
+  return ~pPos
+    ? scalbn(mant, parseInt(str.substring(pPos + 1)))
+    : mant;
 }
