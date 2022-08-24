@@ -707,12 +707,13 @@ export class Compiler extends DiagnosticEmitter {
 
     var options = this.options;
     var module = this.module;
+    var memorySegments = this.memorySegments;
 
     var initialPages: u32 = 0;
     var maximumPages = Module.UNLIMITED_MEMORY;
     var isSharedMemory = false;
 
-    if (options.memoryBase /* is specified */ || this.memorySegments.length) {
+    if (options.memoryBase /* is specified */ || memorySegments.length) {
       initialPages = u32(i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16))));
     }
 
@@ -774,7 +775,7 @@ export class Compiler extends DiagnosticEmitter {
     module.setMemory(
       initialPages,
       maximumPages,
-      this.memorySegments,
+      memorySegments,
       options.target,
       options.exportMemory ? ExportNames.memory : null,
       "0",
