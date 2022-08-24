@@ -49,13 +49,13 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store offset=8
+  i32.store $0 offset=8
   local.get $0
   local.get $1
   local.get $2

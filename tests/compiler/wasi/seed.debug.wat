@@ -30,7 +30,7 @@
    call $~lib/bindings/wasi_snapshot_preview1/random_get
    drop
    global.get $~lib/bindings/wasi/tempbuf
-   i64.load
+   i64.load $0
    local.set $0
    local.get $0
    i64.const 0

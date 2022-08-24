@@ -29,14 +29,14 @@
   end
   local.get $0
   local.get $1
-  i32.store8
+  i32.store8 $0
   local.get $0
   local.get $2
   i32.add
   i32.const 1
   i32.sub
   local.get $1
-  i32.store8
+  i32.store8 $0
   local.get $2
   i32.const 2
   i32.le_u
@@ -48,26 +48,26 @@
   i32.const 1
   i32.add
   local.get $1
-  i32.store8
+  i32.store8 $0
   local.get $0
   i32.const 2
   i32.add
   local.get $1
-  i32.store8
+  i32.store8 $0
   local.get $0
   local.get $2
   i32.add
   i32.const 2
   i32.sub
   local.get $1
-  i32.store8
+  i32.store8 $0
   local.get $0
   local.get $2
   i32.add
   i32.const 3
   i32.sub
   local.get $1
-  i32.store8
+  i32.store8 $0
   local.get $2
   i32.const 6
   i32.le_u
@@ -79,14 +79,14 @@
   i32.const 3
   i32.add
   local.get $1
-  i32.store8
+  i32.store8 $0
   local.get $0
   local.get $2
   i32.add
   i32.const 4
   i32.sub
   local.get $1
-  i32.store8
+  i32.store8 $0
   local.get $2
   i32.const 8
   i32.le_u
@@ -122,14 +122,14 @@
   local.set $5
   local.get $0
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   local.get $2
   i32.add
   i32.const 4
   i32.sub
   local.get $5
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 8
   i32.le_u
@@ -141,26 +141,26 @@
   i32.const 4
   i32.add
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 8
   i32.add
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   local.get $2
   i32.add
   i32.const 12
   i32.sub
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   local.get $2
   i32.add
   i32.const 8
   i32.sub
   local.get $5
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 24
   i32.le_u
@@ -172,50 +172,50 @@
   i32.const 12
   i32.add
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 16
   i32.add
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 20
   i32.add
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 24
   i32.add
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   local.get $2
   i32.add
   i32.const 28
   i32.sub
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   local.get $2
   i32.add
   i32.const 24
   i32.sub
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   local.get $2
   i32.add
   i32.const 20
   i32.sub
   local.get $5
-  i32.store
+  i32.store $0
   local.get $0
   local.get $2
   i32.add
   i32.const 16
   i32.sub
   local.get $5
-  i32.store
+  i32.store $0
   i32.const 24
   local.get $0
   i32.const 4
@@ -247,22 +247,22 @@
    if
     local.get $0
     local.get $6
-    i64.store
+    i64.store $0
     local.get $0
     i32.const 8
     i32.add
     local.get $6
-    i64.store
+    i64.store $0
     local.get $0
     i32.const 16
     i32.add
     local.get $6
-    i64.store
+    i64.store $0
     local.get $0
     i32.const 24
     i32.add
     local.get $6
-    i64.store
+    i64.store $0
     local.get $2
     i32.const 32
     i32.sub
@@ -285,7 +285,7 @@
   call $memset/memset
   drop
   global.get $memset/dest
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.eq
   i32.eqz
@@ -300,7 +300,7 @@
   global.get $memset/dest
   i32.const 15
   i32.add
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.eq
   i32.eqz
@@ -320,7 +320,7 @@
   call $memset/memset
   drop
   global.get $memset/dest
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.eq
   i32.eqz
@@ -335,7 +335,7 @@
   global.get $memset/dest
   i32.const 1
   i32.add
-  i32.load8_u
+  i32.load8_u $0
   i32.const 2
   i32.eq
   i32.eqz
@@ -350,7 +350,7 @@
   global.get $memset/dest
   i32.const 14
   i32.add
-  i32.load8_u
+  i32.load8_u $0
   i32.const 2
   i32.eq
   i32.eqz
@@ -365,7 +365,7 @@
   global.get $memset/dest
   i32.const 15
   i32.add
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.eq
   i32.eqz

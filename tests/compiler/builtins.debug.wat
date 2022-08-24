@@ -100,7 +100,7 @@
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index (param $0 i32) (result i32)
   local.get $0
-  i32.load
+  i32.load $0
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (param $0 i32) (result i32)
   i32.const 32
@@ -109,7 +109,7 @@
   local.get $0
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -154,9 +154,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $5
-     i64.load
+     i64.load $0
      local.get $6
-     i64.load
+     i64.load $0
      i64.ne
      if
       br $do-break|0
@@ -191,10 +191,10 @@
    local.get $7
    if
     local.get $5
-    i32.load16_u
+    i32.load16_u $0
     local.set $8
     local.get $6
-    i32.load16_u
+    i32.load16_u $0
     local.set $9
     local.get $8
     local.get $9
@@ -442,10 +442,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store offset=8
+  i32.store $0 offset=8
   i32.const 1
   drop
   i32.const 0
@@ -2120,132 +2120,132 @@
   f32.div
   global.set $builtins/f
   i32.const 8
-  i32.load
+  i32.load $0
   global.set $builtins/i
   i32.const 8
   global.get $builtins/i
-  i32.store
+  i32.store $0
   i32.const 8
   i32.const 8
-  i32.load
-  i32.store
+  i32.load $0
+  i32.store $0
   i32.const 8
-  i64.load
+  i64.load $0
   global.set $builtins/I
   i32.const 8
   global.get $builtins/I
-  i64.store
+  i64.store $0
   i32.const 8
   i32.const 8
-  i64.load
-  i64.store
+  i64.load $0
+  i64.store $0
   i32.const 8
-  f32.load
+  f32.load $0
   global.set $builtins/f
   i32.const 8
   global.get $builtins/f
-  f32.store
+  f32.store $0
   i32.const 8
   i32.const 8
-  f32.load
-  f32.store
+  f32.load $0
+  f32.store $0
   i32.const 8
-  f64.load
+  f64.load $0
   global.set $builtins/F
   i32.const 8
   global.get $builtins/F
-  f64.store
+  f64.store $0
   i32.const 8
   i32.const 8
-  f64.load
-  f64.store
+  f64.load $0
+  f64.store $0
   i32.const 0
-  i32.load offset=8
+  i32.load $0 offset=8
   global.set $builtins/i
   i32.const 0
   global.get $builtins/i
-  i32.store offset=8
+  i32.store $0 offset=8
   i32.const 0
   i32.const 0
-  i32.load offset=8
-  i32.store offset=8
+  i32.load $0 offset=8
+  i32.store $0 offset=8
   i32.const 0
-  i64.load offset=8
+  i64.load $0 offset=8
   global.set $builtins/I
   i32.const 0
   global.get $builtins/I
-  i64.store offset=8
+  i64.store $0 offset=8
   i32.const 0
   i32.const 0
-  i64.load offset=8
-  i64.store offset=8
+  i64.load $0 offset=8
+  i64.store $0 offset=8
   i32.const 0
-  f32.load offset=8
+  f32.load $0 offset=8
   global.set $builtins/f
   i32.const 0
   global.get $builtins/f
-  f32.store offset=8
+  f32.store $0 offset=8
   i32.const 0
   i32.const 0
-  f32.load offset=8
-  f32.store offset=8
+  f32.load $0 offset=8
+  f32.store $0 offset=8
   i32.const 0
-  f64.load offset=8
+  f64.load $0 offset=8
   global.set $builtins/F
   i32.const 0
   global.get $builtins/F
-  f64.store offset=8
+  f64.store $0 offset=8
   i32.const 0
   i32.const 0
-  f64.load offset=8
-  f64.store offset=8
+  f64.load $0 offset=8
+  f64.store $0 offset=8
   i32.const 8
-  i32.load8_s
+  i32.load8_s $0
   global.set $builtins/i
   i32.const 8
-  i32.load16_s
+  i32.load16_s $0
   global.set $builtins/i
   i32.const 8
-  i32.load
+  i32.load $0
   global.set $builtins/i
   i32.const 8
-  i32.load8_u
+  i32.load8_u $0
   global.set $builtins/i
   i32.const 8
-  i32.load16_u
+  i32.load16_u $0
   global.set $builtins/i
   i32.const 8
-  i32.load
+  i32.load $0
   global.set $builtins/i
   i32.const 8
-  i32.load8_u
+  i32.load8_u $0
   global.set $builtins/u
   i32.const 8
-  i32.load16_u
+  i32.load16_u $0
   global.set $builtins/u
   i32.const 8
-  i32.load
+  i32.load $0
   global.set $builtins/u
   i32.const 8
-  i32.load8_s
+  i32.load8_s $0
   global.set $builtins/u
   i32.const 8
-  i32.load16_s
+  i32.load16_s $0
   global.set $builtins/u
   i32.const 8
-  i32.load
+  i32.load $0
   global.set $builtins/u
   i32.const 8
-  i64.load8_s
+  i64.load8_s $0
   global.set $builtins/I
   i32.const 8
-  i64.load16_s
+  i64.load16_s $0
   global.set $builtins/I
   i32.const 8
-  i64.load32_s
+  i64.load32_s $0
   global.set $builtins/I
   i32.const 8
-  i64.load
+  i64.load $0
   global.set $builtins/I
   i32.const 15
   i32.const 4
@@ -2264,42 +2264,42 @@
    unreachable
   end
   i32.const 8
-  i64.load8_u
+  i64.load8_u $0
   global.set $builtins/U
   i32.const 8
-  i64.load16_u
+  i64.load16_u $0
   global.set $builtins/U
   i32.const 8
-  i64.load32_u
+  i64.load32_u $0
   global.set $builtins/U
   i32.const 8
-  i64.load
+  i64.load $0
   global.set $builtins/U
   i32.const 8
   i32.const 1
-  i32.store8
+  i32.store8 $0
   i32.const 8
   i32.const 1
-  i32.store16
+  i32.store16 $0
   i32.const 8
   i32.const 1
-  i32.store
+  i32.store $0
   i32.const 8
   i64.const 1
-  i64.store8
+  i64.store8 $0
   i32.const 8
   i64.const 1
-  i64.store16
+  i64.store16 $0
   i32.const 8
   i64.const 1
-  i64.store32
+  i64.store32 $0
   i32.const 8
   i64.const 1
-  i64.store
+  i64.store $0
   i32.const 8
   i32.const 1
   i64.extend_i32_s
-  i64.store
+  i64.store $0
   i64.const 15
   i64.const 4
   i64.rem_u
@@ -2340,15 +2340,15 @@
   i64.const 25
   f64.reinterpret_i64
   global.set $builtins/F
-  memory.size
+  memory.size $0
   drop
   i32.const 1
-  memory.grow
+  memory.grow $0
   drop
-  memory.size
+  memory.size $0
   global.set $builtins/s
   i32.const 1
-  memory.grow
+  memory.grow $0
   global.set $builtins/s
   i32.const 10
   i32.const 20
@@ -2400,7 +2400,7 @@
   i32.const 2
   global.set $~argumentsLength
   global.get $builtins/fn
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.eq
@@ -2420,7 +2420,7 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index
   call_indirect $0 (type $i32_i32_=>_i32)
@@ -2438,19 +2438,19 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=8
+  i32.store $0 offset=8
   local.get $9
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 32
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -2466,7 +2466,7 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length
   i32.const 2
@@ -2484,7 +2484,7 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length
   i32.const 2
@@ -2502,19 +2502,19 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=8
+  i32.store $0 offset=8
   local.get $9
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 176
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -2899,46 +2899,46 @@
   i64.div_u
   drop
   i32.const 8
-  i32.load8_s
+  i32.load8_s $0
   drop
   i32.const 8
-  i32.load8_u
+  i32.load8_u $0
   drop
   i32.const 8
-  i32.load16_s
+  i32.load16_s $0
   drop
   i32.const 8
-  i32.load16_u
+  i32.load16_u $0
   drop
   i32.const 8
-  i32.load
+  i32.load $0
   drop
   i32.const 8
-  i64.load8_s
+  i64.load8_s $0
   drop
   i32.const 8
-  i64.load8_u
+  i64.load8_u $0
   drop
   i32.const 8
-  i64.load16_s
+  i64.load16_s $0
   drop
   i32.const 8
-  i64.load16_u
+  i64.load16_u $0
   drop
   i32.const 8
-  i64.load32_s
+  i64.load32_s $0
   drop
   i32.const 8
-  i64.load32_u
+  i64.load32_u $0
   drop
   i32.const 8
-  i64.load
+  i64.load $0
   drop
   i32.const 8
-  f32.load
+  f32.load $0
   drop
   i32.const 8
-  f64.load
+  f64.load $0
   drop
   f32.const 1
   f32.const 2
@@ -3024,31 +3024,31 @@
   drop
   i32.const 8
   i32.const 1
-  i32.store8
+  i32.store8 $0
   i32.const 8
   i32.const 1
-  i32.store16
+  i32.store16 $0
   i32.const 8
   i32.const 1
-  i32.store
+  i32.store $0
   i32.const 8
   i64.const 1
-  i64.store8
+  i64.store8 $0
   i32.const 8
   i64.const 1
-  i64.store16
+  i64.store16 $0
   i32.const 8
   i64.const 1
-  i64.store32
+  i64.store32 $0
   i32.const 8
   i64.const 1
-  i64.store
+  i64.store $0
   i32.const 8
   f32.const 1
-  f32.store
+  f32.store $0
   i32.const 8
   f64.const 1
-  f64.store
+  f64.store $0
   f32.const 1
   f32.trunc
   drop
@@ -3160,7 +3160,7 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 5
   local.get $1
@@ -3226,13 +3226,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 352
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3248,13 +3248,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 352
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3270,13 +3270,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 400
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3292,13 +3292,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 432
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3314,13 +3314,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 464
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3336,13 +3336,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 496
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3358,13 +3358,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 528
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3380,13 +3380,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 560
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3402,13 +3402,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 592
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3424,13 +3424,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 624
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3446,13 +3446,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 656
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3468,13 +3468,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 688
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3490,13 +3490,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 720
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3512,13 +3512,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 752
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3534,13 +3534,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 784
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3556,13 +3556,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 816
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3578,13 +3578,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 848
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3600,13 +3600,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 880
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3622,13 +3622,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 432
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz
@@ -3644,13 +3644,13 @@
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store
+  i32.store $0
   local.get $9
   i32.const 352
   local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $9
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $9
   call $~lib/string/String.__eq
   i32.eqz

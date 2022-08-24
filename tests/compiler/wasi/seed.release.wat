@@ -22,7 +22,7 @@
     call $~lib/bindings/wasi_snapshot_preview1/random_get
     drop
     i32.const 1024
-    i64.load
+    i64.load $0
     local.tee $0
     i64.eqz
     br_if $do-loop|0

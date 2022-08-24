@@ -15,19 +15,19 @@
  (func $class-extends/A#set:a (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $class-extends/B#set:b (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store16 offset=4
+  i32.store16 $0 offset=4
  )
  (func $class-extends/test (param $0 i32)
   local.get $0
-  i32.load
+  i32.load $0
   drop
   local.get $0
-  i32.load16_s offset=4
+  i32.load16_s $0 offset=4
   drop
   local.get $0
   i32.const 2
@@ -57,7 +57,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $class-extends/test
   global.get $~lib/memory/__stack_pointer

@@ -22,7 +22,7 @@
   local.get $0
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -67,9 +67,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $5
-     i64.load
+     i64.load $0
      local.get $6
-     i64.load
+     i64.load $0
      i64.ne
      if
       br $do-break|0
@@ -104,10 +104,10 @@
    local.get $7
    if
     local.get $5
-    i32.load16_u
+    i32.load16_u $0
     local.set $8
     local.get $6
-    i32.load16_u
+    i32.load16_u $0
     local.set $9
     local.get $8
     local.get $9
@@ -200,11 +200,11 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 32
   local.tee $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 0
   call $~lib/string/String.__ne

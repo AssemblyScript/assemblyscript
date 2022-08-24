@@ -101,7 +101,7 @@
   i32.const 1
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i32_i32_i32_=>_i32)
   i32.const 0
   i32.eq
@@ -120,7 +120,7 @@
   i32.const 2
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i32_i32_i32_=>_i32)
   i32.const 5
   i32.eq
@@ -139,7 +139,7 @@
   i32.const 3
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i32_i32_i32_=>_i32)
   i32.const 12
   i32.eq

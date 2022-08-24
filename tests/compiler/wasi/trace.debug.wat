@@ -57,7 +57,7 @@
   local.get $0
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.add
   local.set $3
   local.get $1
@@ -73,7 +73,7 @@
     local.get $5
     if
      local.get $2
-     i32.load16_u
+     i32.load16_u $0
      local.set $6
      local.get $6
      i32.const 128
@@ -116,7 +116,7 @@
        end
        if
         local.get $2
-        i32.load16_u offset=2
+        i32.load16_u $0 offset=2
         i32.const 64512
         i32.and
         i32.const 56320
@@ -152,18 +152,18 @@
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -208,9 +208,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $5
-     i64.load
+     i64.load $0
      local.get $6
-     i64.load
+     i64.load $0
      i64.ne
      if
       br $do-break|0
@@ -245,10 +245,10 @@
    local.get $7
    if
     local.get $5
-    i32.load16_u
+    i32.load16_u $0
     local.set $8
     local.get $6
-    i32.load16_u
+    i32.load16_u $0
     local.set $9
     local.get $8
     local.get $9
@@ -346,7 +346,7 @@
    local.get $7
    if
     local.get $0
-    i32.load16_u
+    i32.load16_u $0
     local.set $8
     local.get $8
     i32.const 128
@@ -354,7 +354,7 @@
     if
      local.get $6
      local.get $8
-     i32.store8
+     i32.store8 $0
      local.get $6
      i32.const 1
      i32.add
@@ -392,7 +392,7 @@
       i32.shl
       local.get $9
       i32.or
-      i32.store16
+      i32.store16 $0
       local.get $6
       i32.const 2
       i32.add
@@ -418,7 +418,7 @@
        end
        if
         local.get $0
-        i32.load16_u offset=2
+        i32.load16_u $0 offset=2
         local.set $10
         local.get $10
         i32.const 64512
@@ -480,7 +480,7 @@
          i32.or
          local.get $9
          i32.or
-         i32.store
+         i32.store $0
          local.get $6
          i32.const 4
          i32.add
@@ -537,10 +537,10 @@
       i32.shl
       local.get $10
       i32.or
-      i32.store16
+      i32.store16 $0
       local.get $6
       local.get $12
-      i32.store8 offset=2
+      i32.store8 $0 offset=2
       local.get $6
       i32.const 3
       i32.add
@@ -563,7 +563,7 @@
    local.set $6
    local.get $7
    i32.const 0
-   i32.store8
+   i32.store8 $0
   end
   local.get $6
   local.get $2
@@ -652,7 +652,7 @@
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
@@ -666,7 +666,7 @@
   local.set $4
   local.get $4
   i64.const 9071471065260641
-  i64.store
+  i64.store $0
   local.get $4
   i32.const 7
   i32.add
@@ -690,7 +690,7 @@
   end
   local.get $4
   i32.const 544106784
-  i32.store
+  i32.store $0
   local.get $4
   i32.const 4
   i32.add
@@ -719,7 +719,7 @@
   local.set $4
   local.get $5
   i32.const 40
-  i32.store8
+  i32.store8 $0
   local.get $2
   call $~lib/util/number/decimalCount32
   local.set $6
@@ -741,7 +741,7 @@
    i32.const 10
    i32.rem_u
    i32.add
-   i32.store8
+   i32.store8 $0
    local.get $5
    local.set $2
    local.get $2
@@ -758,7 +758,7 @@
   local.set $4
   local.get $7
   i32.const 58
-  i32.store8
+  i32.store8 $0
   local.get $3
   call $~lib/util/number/decimalCount32
   local.set $6
@@ -780,7 +780,7 @@
    i32.const 10
    i32.rem_u
    i32.add
-   i32.store8
+   i32.store8 $0
    local.get $7
    local.set $3
    local.get $3
@@ -792,7 +792,7 @@
   local.set $4
   local.get $4
   i32.const 2601
-  i32.store16
+  i32.store16 $0
   local.get $4
   i32.const 2
   i32.add
@@ -814,17 +814,17 @@
  (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $~lib/rt/tlsf/Block#set:prev (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/rt/tlsf/Block#set:next (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=8
+  i32.store $0 offset=8
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -838,7 +838,7 @@
   (local $10 i32)
   (local $11 i32)
   local.get $1
-  i32.load
+  i32.load $0
   local.set $2
   i32.const 1
   drop
@@ -938,10 +938,10 @@
    unreachable
   end
   local.get $1
-  i32.load offset=4
+  i32.load $0 offset=4
   local.set $8
   local.get $1
-  i32.load offset=8
+  i32.load $0 offset=8
   local.set $9
   local.get $8
   if
@@ -971,7 +971,7 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load offset=96
+  i32.load $0 offset=96
   i32.eq
   if
    local.get $0
@@ -992,7 +992,7 @@
    i32.shl
    i32.add
    local.get $7
-   i32.store offset=96
+   i32.store $0 offset=96
    local.get $9
    i32.eqz
    if
@@ -1005,7 +1005,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load offset=4
+    i32.load $0 offset=4
     local.set $6
     local.get $0
     local.set $7
@@ -1026,13 +1026,13 @@
     i32.shl
     i32.add
     local.get $10
-    i32.store offset=4
+    i32.store $0 offset=4
     local.get $6
     i32.eqz
     if
      local.get $0
      local.get $0
-     i32.load
+     i32.load $0
      i32.const 1
      local.get $4
      i32.shl
@@ -1070,7 +1070,7 @@
    unreachable
   end
   local.get $1
-  i32.load
+  i32.load $0
   local.set $2
   i32.const 1
   drop
@@ -1092,7 +1092,7 @@
   i32.const 4
   i32.add
   local.get $3
-  i32.load
+  i32.load $0
   i32.const 3
   i32.const -1
   i32.xor
@@ -1100,7 +1100,7 @@
   i32.add
   local.set $4
   local.get $4
-  i32.load
+  i32.load $0
   local.set $5
   local.get $5
   i32.const 1
@@ -1127,7 +1127,7 @@
    i32.const 4
    i32.add
    local.get $3
-   i32.load
+   i32.load $0
    i32.const 3
    i32.const -1
    i32.xor
@@ -1135,7 +1135,7 @@
    i32.add
    local.set $4
    local.get $4
-   i32.load
+   i32.load $0
    local.set $5
   end
   local.get $2
@@ -1147,10 +1147,10 @@
    local.get $3
    i32.const 4
    i32.sub
-   i32.load
+   i32.load $0
    local.set $3
    local.get $3
-   i32.load
+   i32.load $0
    local.set $6
    i32.const 1
    drop
@@ -1231,7 +1231,7 @@
   i32.const 4
   i32.sub
   local.get $1
-  i32.store
+  i32.store $0
   local.get $7
   i32.const 256
   i32.lt_u
@@ -1310,7 +1310,7 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load offset=96
+  i32.load $0 offset=96
   local.set $11
   local.get $1
   i32.const 0
@@ -1342,10 +1342,10 @@
   i32.shl
   i32.add
   local.get $6
-  i32.store offset=96
+  i32.store $0 offset=96
   local.get $0
   local.get $0
-  i32.load
+  i32.load $0
   i32.const 1
   local.get $8
   i32.shl
@@ -1364,7 +1364,7 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 1
   local.get $9
   i32.shl
@@ -1376,7 +1376,7 @@
   i32.shl
   i32.add
   local.get $10
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1421,7 +1421,7 @@
   local.get $0
   local.set $3
   local.get $3
-  i32.load offset=1568
+  i32.load $0 offset=1568
   local.set $4
   i32.const 0
   local.set $5
@@ -1454,7 +1454,7 @@
     i32.sub
     local.set $1
     local.get $4
-    i32.load
+    i32.load $0
     local.set $5
    else
     nop
@@ -1532,7 +1532,7 @@
   local.set $3
   local.get $9
   local.get $3
-  i32.store offset=1568
+  i32.store $0 offset=1568
   local.get $0
   local.get $8
   call $~lib/rt/tlsf/insertBlock
@@ -1562,7 +1562,7 @@
   i32.xor
   i32.and
   local.set $0
-  memory.size
+  memory.size $0
   local.set $1
   local.get $0
   i32.const 1572
@@ -1583,7 +1583,7 @@
    local.get $2
    local.get $1
    i32.sub
-   memory.grow
+   memory.grow $0
    i32.const 0
    i32.lt_s
   else
@@ -1603,7 +1603,7 @@
   local.set $4
   local.get $5
   local.get $4
-  i32.store offset=1568
+  i32.store $0 offset=1568
   i32.const 0
   local.set $5
   loop $for-loop|0
@@ -1625,7 +1625,7 @@
     i32.shl
     i32.add
     local.get $6
-    i32.store offset=4
+    i32.store $0 offset=4
     i32.const 0
     local.set $8
     loop $for-loop|1
@@ -1653,7 +1653,7 @@
       i32.shl
       i32.add
       local.get $6
-      i32.store offset=96
+      i32.store $0 offset=96
       local.get $8
       i32.const 1
       i32.add
@@ -1676,7 +1676,7 @@
   drop
   local.get $3
   local.get $12
-  memory.size
+  memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
@@ -1809,7 +1809,7 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 0
   i32.const -1
   i32.xor
@@ -1823,7 +1823,7 @@
   i32.eqz
   if
    local.get $0
-   i32.load
+   i32.load $0
    i32.const 0
    i32.const -1
    i32.xor
@@ -1851,7 +1851,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load offset=4
+    i32.load $0 offset=4
     local.set $6
     i32.const 1
     drop
@@ -1881,7 +1881,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load offset=96
+    i32.load $0 offset=96
     local.set $7
    end
   else
@@ -1901,7 +1901,7 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load offset=96
+   i32.load $0 offset=96
    local.set $7
   end
   local.get $7
@@ -1931,7 +1931,7 @@
    i32.add
    local.set $1
   end
-  memory.size
+  memory.size $0
   local.set $2
   local.get $1
   i32.const 4
@@ -1943,7 +1943,7 @@
   local.get $0
   local.set $3
   local.get $3
-  i32.load offset=1568
+  i32.load $0 offset=1568
   i32.ne
   i32.shl
   i32.add
@@ -1968,19 +1968,19 @@
   select
   local.set $6
   local.get $6
-  memory.grow
+  memory.grow $0
   i32.const 0
   i32.lt_s
   if
    local.get $4
-   memory.grow
+   memory.grow $0
    i32.const 0
    i32.lt_s
    if
     unreachable
    end
   end
-  memory.size
+  memory.size $0
   local.set $7
   local.get $0
   local.get $2
@@ -1997,7 +1997,7 @@
   (local $4 i32)
   (local $5 i32)
   local.get $1
-  i32.load
+  i32.load $0
   local.set $3
   i32.const 1
   drop
@@ -2067,7 +2067,7 @@
    i32.const 4
    i32.add
    local.get $5
-   i32.load
+   i32.load $0
    i32.const 3
    i32.const -1
    i32.xor
@@ -2079,13 +2079,13 @@
    i32.const 4
    i32.add
    local.get $5
-   i32.load
+   i32.load $0
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   i32.load
+   i32.load $0
    i32.const 2
    i32.const -1
    i32.xor
@@ -2129,7 +2129,7 @@
   i32.const 1
   drop
   local.get $3
-  i32.load
+  i32.load $0
   i32.const 3
   i32.const -1
   i32.xor
@@ -2404,7 +2404,7 @@
      i32.const 65535
      i32.and
      i32.add
-     i32.store16
+     i32.store16 $0
     end
     local.get $13
     i32.const 1
@@ -2439,7 +2439,7 @@
      i32.const 2
      i32.shl
      i32.add
-     i64.load32_u
+     i64.load32_u $0
      local.get $7
      i64.extend_i32_s
      i64.shl
@@ -2455,7 +2455,7 @@
      i32.add
      local.set $24
      local.get $24
-     i32.load16_u
+     i32.load16_u $0
      local.set $25
      loop $while-continue|3
       local.get $21
@@ -2508,7 +2508,7 @@
      end
      local.get $24
      local.get $25
-     i32.store16
+     i32.store16 $0
      local.get $14
      return
     end
@@ -2556,7 +2556,7 @@
      i32.const 65535
      i32.and
      i32.add
-     i32.store16
+     i32.store16 $0
     end
     local.get $12
     local.get $9
@@ -2582,7 +2582,7 @@
      i32.const 2
      i32.shl
      i32.add
-     i64.load32_u
+     i64.load32_u $0
      i64.mul
      local.set $10
      local.get $0
@@ -2606,7 +2606,7 @@
      i32.add
      local.set $25
      local.get $25
-     i32.load16_u
+     i32.load16_u $0
      local.set $24
      loop $while-continue|6
       local.get $21
@@ -2659,7 +2659,7 @@
      end
      local.get $25
      local.get $24
-     i32.store16
+     i32.store16 $0
      local.get $14
      return
     end
@@ -2708,14 +2708,14 @@
     i32.const 2
     i32.shl
     i32.add
-    i64.load32_u
+    i64.load32_u $0
     local.set $8
     i32.const 1216
     local.get $7
     i32.const 2
     i32.shl
     i32.add
-    i64.load32_u
+    i64.load32_u $0
     local.set $9
     local.get $2
     i32.const 4
@@ -2731,7 +2731,7 @@
     i64.const 32
     i64.shl
     i64.or
-    i64.store
+    i64.store $0
     br $while-continue|0
    end
   end
@@ -2758,7 +2758,7 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load
+   i32.load $0
    local.set $11
    local.get $0
    local.get $2
@@ -2766,7 +2766,7 @@
    i32.shl
    i32.add
    local.get $11
-   i32.store
+   i32.store $0
   end
   local.get $1
   i32.const 10
@@ -2781,7 +2781,7 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load
+   i32.load $0
    local.set $11
    local.get $0
    local.get $2
@@ -2789,7 +2789,7 @@
    i32.shl
    i32.add
    local.get $11
-   i32.store
+   i32.store $0
   else
    local.get $2
    i32.const 1
@@ -2805,7 +2805,7 @@
    i32.shl
    i32.add
    local.get $11
-   i32.store16
+   i32.store16 $0
   end
  )
  (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2831,7 +2831,7 @@
    i32.const 16
    i32.shl
    i32.or
-   i32.store
+   i32.store $0
    local.get $1
    i32.const 2
    i32.add
@@ -2867,7 +2867,7 @@
      i32.shl
      i32.add
      i32.const 48
-     i32.store16
+     i32.store16 $0
      local.get $4
      i32.const 1
      i32.add
@@ -2885,7 +2885,7 @@
    i32.const 16
    i32.shl
    i32.or
-   i32.store
+   i32.store $0
    local.get $3
    i32.const 2
    i32.add
@@ -2917,14 +2917,14 @@
     i32.sub
     i32.const 1
     i32.shl
-    memory.copy
+    memory.copy $0 $0
     local.get $0
     local.get $3
     i32.const 1
     i32.shl
     i32.add
     i32.const 46
-    i32.store16
+    i32.store16 $0
     local.get $1
     i32.const 1
     i32.add
@@ -2954,14 +2954,14 @@
      local.get $1
      i32.const 1
      i32.shl
-     memory.copy
+     memory.copy $0 $0
      local.get $0
      i32.const 48
      i32.const 46
      i32.const 16
      i32.shl
      i32.or
-     i32.store
+     i32.store $0
      i32.const 2
      local.set $5
      loop $for-loop|1
@@ -2977,7 +2977,7 @@
        i32.shl
        i32.add
        i32.const 48
-       i32.store16
+       i32.store16 $0
        local.get $5
        i32.const 1
        i32.add
@@ -2996,7 +2996,7 @@
      if
       local.get $0
       i32.const 101
-      i32.store16 offset=2
+      i32.store16 $0 offset=2
       local.get $0
       i32.const 4
       i32.add
@@ -3040,7 +3040,7 @@
       i32.const 43
       local.get $4
       select
-      i32.store16
+      i32.store16 $0
       local.get $7
       local.set $1
       local.get $1
@@ -3061,15 +3061,15 @@
       local.get $7
       i32.const 2
       i32.sub
-      memory.copy
+      memory.copy $0 $0
       local.get $0
       i32.const 46
-      i32.store16 offset=2
+      i32.store16 $0 offset=2
       local.get $0
       local.get $7
       i32.add
       i32.const 101
-      i32.store16 offset=2
+      i32.store16 $0 offset=2
       local.get $1
       local.get $0
       local.get $7
@@ -3116,7 +3116,7 @@
       i32.const 43
       local.get $4
       select
-      i32.store16
+      i32.store16 $0
       local.get $5
       i32.add
       local.set $1
@@ -3172,7 +3172,7 @@
    local.set $1
    local.get $0
    i32.const 45
-   i32.store16
+   i32.store16 $0
   end
   local.get $1
   local.set $5
@@ -3301,14 +3301,14 @@
   i32.const 3
   i32.shl
   i32.add
-  i64.load
+  i64.load $0
   global.set $~lib/util/number/_frc_pow
   i32.const 1000
   local.get $14
   i32.const 1
   i32.shl
   i32.add
-  i32.load16_s
+  i32.load16_s $0
   global.set $~lib/util/number/_exp_pow
   local.get $9
   i64.clz
@@ -3567,13 +3567,13 @@
   if
    local.get $0
    i32.const 48
-   i32.store16
+   i32.store16 $0
    local.get $0
    i32.const 46
-   i32.store16 offset=2
+   i32.store16 $0 offset=2
    local.get $0
    i32.const 48
-   i32.store16 offset=4
+   i32.store16 $0 offset=4
    i32.const 3
    return
   end
@@ -3590,13 +3590,13 @@
    if
     local.get $0
     i32.const 78
-    i32.store16
+    i32.store16 $0
     local.get $0
     i32.const 97
-    i32.store16 offset=2
+    i32.store16 $0 offset=2
     local.get $0
     i32.const 78
-    i32.store16 offset=4
+    i32.store16 $0 offset=4
     i32.const 3
     return
    else
@@ -3608,7 +3608,7 @@
     if
      local.get $0
      i32.const 45
-     i32.store16
+     i32.store16 $0
      local.get $0
      i32.const 2
      i32.add
@@ -3616,10 +3616,10 @@
     end
     local.get $0
     i64.const 29555310648492105
-    i64.store
+    i64.store $0
     local.get $0
     i64.const 34058970405077102
-    i64.store offset=8
+    i64.store $0 offset=8
     i32.const 8
     local.get $2
     i32.add
@@ -3650,7 +3650,7 @@
   end
   if (result i32)
    local.get $1
-   i32.load
+   i32.load $0
    i32.const 1
    i32.and
    i32.eqz
@@ -3673,7 +3673,7 @@
   drop
   local.get $1
   local.get $1
-  i32.load
+  i32.load $0
   i32.const 1
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
@@ -3737,7 +3737,7 @@
   call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
   local.get $11
   i64.const 9071406388179572
-  i64.store
+  i64.store $0
   local.get $9
   i32.const 7
   call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
@@ -3773,7 +3773,7 @@
    local.set $11
    local.get $7
    i32.const 32
-   i32.store8
+   i32.store8 $0
    local.get $9
    i32.const 1
    local.get $11
@@ -3901,7 +3901,7 @@
   end
   local.get $11
   i32.const 10
-  i32.store8
+  i32.store8 $0
   local.get $9
   i32.const 1
   call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
@@ -3945,12 +3945,12 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   i32.const 32
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 0
   f64.const 0
@@ -3963,7 +3963,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 1
   f64.const 1.5
@@ -3976,7 +3976,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 5
   f64.const -2.00001

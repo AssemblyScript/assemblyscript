@@ -30,13 +30,13 @@
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -81,9 +81,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $5
-     i64.load
+     i64.load $0
      local.get $6
-     i64.load
+     i64.load $0
      i64.ne
      if
       br $do-break|0
@@ -118,10 +118,10 @@
    local.get $7
    if
     local.get $5
-    i32.load16_u
+    i32.load16_u $0
     local.set $8
     local.get $6
-    i32.load16_u
+    i32.load16_u $0
     local.set $9
     local.get $8
     local.get $9
@@ -219,7 +219,7 @@
    local.get $7
    if
     local.get $0
-    i32.load16_u
+    i32.load16_u $0
     local.set $8
     local.get $8
     i32.const 128
@@ -227,7 +227,7 @@
     if
      local.get $6
      local.get $8
-     i32.store8
+     i32.store8 $0
      local.get $6
      i32.const 1
      i32.add
@@ -265,7 +265,7 @@
       i32.shl
       local.get $9
       i32.or
-      i32.store16
+      i32.store16 $0
       local.get $6
       i32.const 2
       i32.add
@@ -291,7 +291,7 @@
        end
        if
         local.get $0
-        i32.load16_u offset=2
+        i32.load16_u $0 offset=2
         local.set $10
         local.get $10
         i32.const 64512
@@ -353,7 +353,7 @@
          i32.or
          local.get $9
          i32.or
-         i32.store
+         i32.store $0
          local.get $6
          i32.const 4
          i32.add
@@ -410,10 +410,10 @@
       i32.shl
       local.get $10
       i32.or
-      i32.store16
+      i32.store16 $0
       local.get $6
       local.get $12
-      i32.store8 offset=2
+      i32.store8 $0 offset=2
       local.get $6
       i32.const 3
       i32.add
@@ -436,7 +436,7 @@
    local.set $6
    local.get $7
    i32.const 0
-   i32.store8
+   i32.store8 $0
   end
   local.get $6
   local.get $2
@@ -525,7 +525,7 @@
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
@@ -539,7 +539,7 @@
   local.set $4
   local.get $4
   i64.const 9071471065260641
-  i64.store
+  i64.store $0
   local.get $4
   i32.const 7
   i32.add
@@ -563,7 +563,7 @@
   end
   local.get $4
   i32.const 544106784
-  i32.store
+  i32.store $0
   local.get $4
   i32.const 4
   i32.add
@@ -592,7 +592,7 @@
   local.set $4
   local.get $5
   i32.const 40
-  i32.store8
+  i32.store8 $0
   local.get $2
   call $~lib/util/number/decimalCount32
   local.set $6
@@ -614,7 +614,7 @@
    i32.const 10
    i32.rem_u
    i32.add
-   i32.store8
+   i32.store8 $0
    local.get $5
    local.set $2
    local.get $2
@@ -631,7 +631,7 @@
   local.set $4
   local.get $7
   i32.const 58
-  i32.store8
+  i32.store8 $0
   local.get $3
   call $~lib/util/number/decimalCount32
   local.set $6
@@ -653,7 +653,7 @@
    i32.const 10
    i32.rem_u
    i32.add
-   i32.store8
+   i32.store8 $0
    local.get $7
    local.set $3
    local.get $3
@@ -665,7 +665,7 @@
   local.set $4
   local.get $4
   i32.const 2601
-  i32.store16
+  i32.store16 $0
   local.get $4
   i32.const 2
   i32.add

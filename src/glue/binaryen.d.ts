@@ -399,7 +399,7 @@ export declare function _BinaryenDataDrop(module: ModuleRef, segmentIndex: u32):
 export declare function _BinaryenDataDropGetSegment(expr: ExpressionRef): u32;
 export declare function _BinaryenDataDropSetSegment(expr: ExpressionRef, segmentIndex: u32): void;
 
-export declare function _BinaryenMemoryCopy(module: ModuleRef, destExpr: ExpressionRef, sourceExpr: ExpressionRef, sizeExpr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenMemoryCopy(module: ModuleRef, destExpr: ExpressionRef, sourceExpr: ExpressionRef, sizeExpr: ExpressionRef, destMemoryName: StringRef, sourceMemoryName: StringRef): ExpressionRef;
 export declare function _BinaryenMemoryCopyGetDest(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenMemoryCopySetDest(expr: ExpressionRef, destExpr: ExpressionRef): void;
 export declare function _BinaryenMemoryCopyGetSource(expr: ExpressionRef): ExpressionRef;

@@ -303,7 +303,7 @@
  (func $retain-i32/testLocalRetain
   (local $0 i32)
   i32.const 0
-  i32.load8_s
+  i32.load8_s $0
   local.set $0
   i32.const 1
   drop
@@ -744,7 +744,7 @@
    unreachable
   end
   i32.const 0
-  i32.load8_s
+  i32.load8_s $0
   global.set $retain-i32/ri
   i32.const 1
   drop

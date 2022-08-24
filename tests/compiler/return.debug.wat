@@ -28,14 +28,14 @@
    i32.const 0
    global.set $~argumentsLength
    local.get $1
-   i32.load
+   i32.load $0
    call_indirect $0 (type $none_=>_none)
    return
   end
   i32.const 0
   global.set $~argumentsLength
   local.get $1
-  i32.load
+  i32.load $0
   call_indirect $0 (type $none_=>_none)
  )
  (func $return/testVoidReturn (param $0 i32)
@@ -71,13 +71,13 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   i32.const 1
   i32.const 32
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $return/testVoidReturnFunction
   global.get $~lib/memory/__stack_pointer
@@ -93,7 +93,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store
+  i32.store $0
   local.get $0
   local.get $1
   call $return/testVoidReturnFunction

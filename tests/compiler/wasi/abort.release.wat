@@ -45,14 +45,14 @@
    i32.lt_u
    if
     local.get $0
-    i32.load16_u
+    i32.load16_u $0
     local.tee $4
     i32.const 128
     i32.lt_u
     if (result i32)
      local.get $1
      local.get $4
-     i32.store8
+     i32.store8 $0
      local.get $1
      i32.const 1
      i32.add
@@ -75,7 +75,7 @@
       i32.const 8
       i32.shl
       i32.or
-      i32.store16
+      i32.store16 $0
       local.get $1
       i32.const 2
       i32.add
@@ -97,7 +97,7 @@
       i32.and
       if
        local.get $0
-       i32.load16_u offset=2
+       i32.load16_u $0 offset=2
        local.tee $5
        i32.const 64512
        i32.and
@@ -149,7 +149,7 @@
         i32.const 240
         i32.or
         i32.or
-        i32.store
+        i32.store $0
         local.get $1
         i32.const 4
         i32.add
@@ -177,14 +177,14 @@
       i32.const 8
       i32.shl
       i32.or
-      i32.store16
+      i32.store16 $0
       local.get $1
       local.get $4
       i32.const 63
       i32.and
       i32.const 128
       i32.or
-      i32.store8 offset=2
+      i32.store8 $0 offset=2
       local.get $1
       i32.const 3
       i32.add
@@ -213,12 +213,12 @@
   local.set $2
   i32.const 0
   i32.const 12
-  i32.store
+  i32.store $0
   i32.const 12
   i64.const 9071471065260641
-  i64.store
+  i64.store $0
   i32.const 1164
-  i32.load
+  i32.load $0
   i32.const 1
   i32.shr_u
   local.set $0
@@ -232,9 +232,9 @@
   i32.add
   local.tee $3
   i32.const 544106784
-  i32.store
+  i32.store $0
   i32.const 1212
-  i32.load
+  i32.load $0
   i32.const 1
   i32.shr_u
   local.set $0
@@ -251,7 +251,7 @@
   i32.add
   local.tee $0
   i32.const 40
-  i32.store8
+  i32.store8 $0
   local.get $0
   i32.const 2
   i32.add
@@ -266,7 +266,7 @@
    i32.rem_u
    i32.const 48
    i32.add
-   i32.store8
+   i32.store8 $0
    local.get $2
    i32.const 10
    i32.div_u
@@ -278,7 +278,7 @@
   i32.add
   local.tee $0
   i32.const 58
-  i32.store8
+  i32.store8 $0
   local.get $0
   i32.const 2
   i32.add
@@ -293,7 +293,7 @@
    i32.rem_u
    i32.const 48
    i32.add
-   i32.store8
+   i32.store8 $0
    local.get $1
    i32.const 10
    i32.div_u
@@ -305,12 +305,12 @@
   i32.add
   local.tee $0
   i32.const 2601
-  i32.store16
+  i32.store16 $0
   i32.const 4
   local.get $0
   i32.const 10
   i32.sub
-  i32.store
+  i32.store $0
   i32.const 2
   i32.const 0
   i32.const 1

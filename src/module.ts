@@ -1656,9 +1656,13 @@ export class Module {
   memory_copy(
     dest: ExpressionRef,
     source: ExpressionRef,
-    size: ExpressionRef
+    size: ExpressionRef,
+    destName: string = "0",
+    sourceName: string = "0"
   ): ExpressionRef {
-    return binaryen._BinaryenMemoryCopy(this.ref, dest, source, size);
+    var cStr1 = this.allocStringCached(destName);
+    var cStr2 = this.allocStringCached(sourceName);
+    return binaryen._BinaryenMemoryCopy(this.ref, dest, source, size, cStr1, cStr2);
   }
 
   memory_fill(

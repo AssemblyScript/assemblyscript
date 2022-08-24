@@ -51,13 +51,13 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   i32.const 1
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 32
   local.tee $2
-  i32.store
+  i32.store $0
   local.get $0
   if
    local.get $1
@@ -77,13 +77,13 @@
    i32.const 0
    global.set $~argumentsLength
    local.get $1
-   i32.load
+   i32.load $0
    call_indirect $0 (type $none_=>_none)
   else
    i32.const 0
    global.set $~argumentsLength
    local.get $1
-   i32.load
+   i32.load $0
    call_indirect $0 (type $none_=>_none)
   end
   local.get $0
@@ -91,7 +91,7 @@
    i32.const 0
    global.set $~argumentsLength
    local.get $1
-   i32.load
+   i32.load $0
    call_indirect $0 (type $none_=>_none)
   else
    i32.const 1
@@ -105,7 +105,7 @@
    i32.const 0
    global.set $~argumentsLength
    local.get $1
-   i32.load
+   i32.load $0
    call_indirect $0 (type $none_=>_none)
   end
  )
@@ -133,7 +133,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store
+  i32.store $0
   local.get $0
   local.get $1
   call $ternary/testVoidInclTypeMismatch

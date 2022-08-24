@@ -52,12 +52,12 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   i32.const 32
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 0
   f64.const 0
@@ -70,7 +70,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 0
   f64.const 0
@@ -83,7 +83,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 1
   f64.const 1
@@ -96,7 +96,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 2
   f64.const 1
@@ -109,7 +109,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 3
   f64.const 1
@@ -122,7 +122,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 4
   f64.const 1
@@ -135,7 +135,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 5
   f64.const 1
@@ -148,7 +148,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 5
   f64.const 1.1
