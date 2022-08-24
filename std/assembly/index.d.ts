@@ -1390,8 +1390,10 @@ declare class _Integer {
   static readonly MIN_VALUE: number;
   /** Largest representable value. */
   static readonly MAX_VALUE: number;
-  /** Converts a string to an integer of this type. */
+  /** @deprecated Converts a string to an integer of this type. Please use "parse" method. */
   static parseInt(value: string, radix?: number): number;
+  /** Converts a string to an integer of this type. */
+  static parse(value: string, radix?: number): number;
   /** Converts this integer to a string. */
   toString(radix?: number): string;
 }
@@ -1423,10 +1425,12 @@ declare class _Float {
   static isSafeInteger(value: f32 | f64): bool;
   /** Returns true if the value passed is an integer, false otherwise. */
   static isInteger(value: f32 | f64): bool;
-  /** Converts a string to an integer. */
+  /** @deprecated Converts a string to an integer. Please use "parse" method. */
   static parseInt(value: string, radix?: i32): f32 | f64;
-  /** Converts a string to a floating-point number. */
+  /** @deprecated Converts a string to a floating-point number. Please use "parse" method. */
   static parseFloat(value: string): f32 | f64;
+  /** Converts a string to a floating-point number. */
+  static parse(value: string): f32 | f64;
   /** Converts this floating-point number to a string. */
   toString(radix?: number): string;
 }

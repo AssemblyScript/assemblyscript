@@ -28,7 +28,12 @@ export abstract class I8 {
   @lazy
   static readonly MAX_VALUE: i8 = i8.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): i8 {
+    return <i8>strtol<i32>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): i8 {
     return <i8>strtol<i32>(value, radix);
   }
 
@@ -48,7 +53,12 @@ export abstract class I16 {
   @lazy
   static readonly MAX_VALUE: i16 = i16.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): i16 {
+    return <i16>strtol<i32>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): i16 {
     return <i16>strtol<i32>(value, radix);
   }
 
@@ -68,7 +78,12 @@ export abstract class I32 {
   @lazy
   static readonly MAX_VALUE: i32 = i32.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): i32 {
+    return <i32>strtol<i32>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): i32 {
     return <i32>strtol<i32>(value, radix);
   }
 
@@ -88,7 +103,12 @@ export abstract class I64 {
   @lazy
   static readonly MAX_VALUE: i64 = i64.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): i64 {
+    return strtol<i64>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): i64 {
     return strtol<i64>(value, radix);
   }
 
@@ -108,7 +128,12 @@ export abstract class Isize {
   @lazy
   static readonly MAX_VALUE: isize = isize.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): isize {
+    return <isize>strtol<i64>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): isize {
     return <isize>strtol<i64>(value, radix);
   }
 
@@ -132,7 +157,12 @@ export abstract class U8 {
   @lazy
   static readonly MAX_VALUE: u8 = u8.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): u8 {
+    return <u8>strtol<i32>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): u8 {
     return <u8>strtol<i32>(value, radix);
   }
 
@@ -152,7 +182,12 @@ export abstract class U16 {
   @lazy
   static readonly MAX_VALUE: u16 = u16.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): u16 {
+    return <u16>strtol<i32>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): u16 {
     return <u16>strtol<i32>(value, radix);
   }
 
@@ -172,7 +207,12 @@ export abstract class U32 {
   @lazy
   static readonly MAX_VALUE: u32 = u32.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): u32 {
+    return <u32>strtol<i32>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): u32 {
     return <u32>strtol<i32>(value, radix);
   }
 
@@ -192,7 +232,12 @@ export abstract class U64 {
   @lazy
   static readonly MAX_VALUE: u64 = u64.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): u64 {
+    return <u64>strtol<i64>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): u64 {
     return <u64>strtol<i64>(value, radix);
   }
 
@@ -212,7 +257,12 @@ export abstract class Usize {
   @lazy
   static readonly MAX_VALUE: usize = usize.MAX_VALUE;
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): usize {
+    return <usize>strtol<i64>(value, radix);
+  }
+
+  static parse(value: string, radix: i32 = 0): usize {
     return <usize>strtol<i64>(value, radix);
   }
 
@@ -294,11 +344,17 @@ export abstract class F32 {
     return isFinite<f32>(value) && trunc<f32>(value) == value;
   }
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): f32 {
     return <f32>strtol<f64>(value, radix);
   }
 
+  /** @deprecated */
   static parseFloat(value: string): f32 {
+    return <f32>parseFloat(value);
+  }
+
+  static parse(value: string): f32 {
     return <f32>parseFloat(value);
   }
 
@@ -358,11 +414,17 @@ export abstract class F64 {
     return isFinite<f64>(value) && trunc<f64>(value) == value;
   }
 
+  /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): f64 {
     return strtol<f64>(value, radix);
   }
 
+  /** @deprecated */
   static parseFloat(value: string): f64 {
+    return parseFloat(value);
+  }
+
+  static parse(value: string): f64 {
     return parseFloat(value);
   }
 
