@@ -33,10 +33,6 @@ export abstract class I8 {
     return <i8>strtol<i32>(value, radix);
   }
 
-  static parse(value: string, radix: i32 = 0): i8 {
-    return <i8>strtol<i32>(value, radix);
-  }
-
   toString(this: i8, radix: i32 = 10): String {
     return itoa32(this, radix);
   }
@@ -55,10 +51,6 @@ export abstract class I16 {
 
   /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): i16 {
-    return <i16>strtol<i32>(value, radix);
-  }
-
-  static parse(value: string, radix: i32 = 0): i16 {
     return <i16>strtol<i32>(value, radix);
   }
 
@@ -83,10 +75,6 @@ export abstract class I32 {
     return <i32>strtol<i32>(value, radix);
   }
 
-  static parse(value: string, radix: i32 = 0): i32 {
-    return <i32>strtol<i32>(value, radix);
-  }
-
   toString(this: i32, radix: i32 = 10): String {
     return itoa32(this, radix);
   }
@@ -108,10 +96,6 @@ export abstract class I64 {
     return strtol<i64>(value, radix);
   }
 
-  static parse(value: string, radix: i32 = 0): i64 {
-    return strtol<i64>(value, radix);
-  }
-
   toString(this: i64, radix: i32 = 10): String {
     return itoa64(this, radix);
   }
@@ -130,10 +114,6 @@ export abstract class Isize {
 
   /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): isize {
-    return <isize>strtol<i64>(value, radix);
-  }
-
-  static parse(value: string, radix: i32 = 0): isize {
     return <isize>strtol<i64>(value, radix);
   }
 
@@ -162,10 +142,6 @@ export abstract class U8 {
     return <u8>strtol<i32>(value, radix);
   }
 
-  static parse(value: string, radix: i32 = 0): u8 {
-    return <u8>strtol<i32>(value, radix);
-  }
-
   toString(this: u8, radix: i32 = 10): String {
     return utoa32(this, radix);
   }
@@ -184,10 +160,6 @@ export abstract class U16 {
 
   /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): u16 {
-    return <u16>strtol<i32>(value, radix);
-  }
-
-  static parse(value: string, radix: i32 = 0): u16 {
     return <u16>strtol<i32>(value, radix);
   }
 
@@ -212,10 +184,6 @@ export abstract class U32 {
     return <u32>strtol<i32>(value, radix);
   }
 
-  static parse(value: string, radix: i32 = 0): u32 {
-    return <u32>strtol<i32>(value, radix);
-  }
-
   toString(this: u32, radix: i32 = 10): String {
     return utoa32(this, radix);
   }
@@ -237,10 +205,6 @@ export abstract class U64 {
     return <u64>strtol<i64>(value, radix);
   }
 
-  static parse(value: string, radix: i32 = 0): u64 {
-    return <u64>strtol<i64>(value, radix);
-  }
-
   toString(this: u64, radix: i32 = 10): String {
     return utoa64(this, radix);
   }
@@ -259,10 +223,6 @@ export abstract class Usize {
 
   /** @deprecated */
   static parseInt(value: string, radix: i32 = 0): usize {
-    return <usize>strtol<i64>(value, radix);
-  }
-
-  static parse(value: string, radix: i32 = 0): usize {
     return <usize>strtol<i64>(value, radix);
   }
 
@@ -354,10 +314,6 @@ export abstract class F32 {
     return <f32>parseFloat(value);
   }
 
-  static parse(value: string): f32 {
-    return <f32>parseFloat(value);
-  }
-
   toString(this: f32, radix: i32 = 0): String {
     return dtoa(this);
   }
@@ -421,10 +377,6 @@ export abstract class F64 {
 
   /** @deprecated */
   static parseFloat(value: string): f64 {
-    return parseFloat(value);
-  }
-
-  static parse(value: string): f64 {
     return parseFloat(value);
   }
 

@@ -4966,12 +4966,12 @@
   local.get $str
   call $~lib/util/string/strtod
  )
- (func $~lib/number/F32.parse (param $value i32) (result f32)
+ (func $~lib/number/F32.parseFloat (param $value i32) (result f32)
   local.get $value
   call $~lib/string/parseFloat
   f32.demote_f64
  )
- (func $~lib/number/F64.parse (param $value i32) (result f64)
+ (func $~lib/number/F64.parseFloat (param $value i32) (result f64)
   local.get $value
   call $~lib/string/parseFloat
  )
@@ -5284,7 +5284,7 @@
   local.get $num
   i32.mul
  )
- (func $~lib/number/I32.parse (param $value i32) (param $radix i32) (result i32)
+ (func $~lib/number/I32.parseInt (param $value i32) (param $radix i32) (result i32)
   local.get $value
   local.get $radix
   call $~lib/util/string/strtol<i32>
@@ -5600,7 +5600,7 @@
   local.get $num
   i64.mul
  )
- (func $~lib/number/I64.parse (param $value i32) (param $radix i32) (result i64)
+ (func $~lib/number/I64.parseInt (param $value i32) (param $radix i32) (result i64)
   local.get $value
   local.get $radix
   call $~lib/util/string/strtol<i64>
@@ -11474,7 +11474,7 @@
   local.get $4
   i32.store
   local.get $4
-  call $~lib/number/F32.parse
+  call $~lib/number/F32.parseFloat
   local.tee $3
   local.get $3
   f32.ne
@@ -11493,7 +11493,7 @@
   local.get $4
   i32.store
   local.get $4
-  call $~lib/number/F64.parse
+  call $~lib/number/F64.parseFloat
   local.tee $2
   local.get $2
   f64.ne
@@ -11550,7 +11550,7 @@
   i32.store
   local.get $4
   i32.const 0
-  call $~lib/number/I32.parse
+  call $~lib/number/I32.parseInt
   global.get $~lib/number/I32.MAX_VALUE
   i32.eq
   i32.eqz
@@ -11589,7 +11589,7 @@
   i32.store
   local.get $4
   i32.const 0
-  call $~lib/number/I64.parse
+  call $~lib/number/I64.parseInt
   global.get $~lib/number/I64.MAX_VALUE
   i64.eq
   i32.eqz
