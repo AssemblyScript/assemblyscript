@@ -148,9 +148,13 @@ assert(isNaN(parseInt("🔥")));
 assert(isNaN(parseInt("badnum")));
 assert(isNaN(F32.parse("badnum")));
 assert(isNaN(F64.parse("badnum")));
+assert(isNaN(f32.parse("badnum")));
+assert(isNaN(f64.parse("badnum")));
 
 assert(I32.parse("0x7FFFFFFF") == I32.MAX_VALUE);
+assert(i32.parse("0x7FFFFFFF") == I32.MAX_VALUE);
 assert(I64.parse("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
+assert(i64.parse("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
 
 // quick draft tests
 assert(parseFloat("0") == 0);

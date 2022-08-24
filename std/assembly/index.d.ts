@@ -310,6 +310,8 @@ declare namespace i32 {
   export const MIN_VALUE: i32;
   /** Largest representable value. */
   export const MAX_VALUE: i32;
+  /** Converts a string to an i32 of this type. */
+  export function parse(value: string, radix?: i32): i32;
   /** Loads an 8-bit signed integer value from memory and returns it as a 32-bit integer. */
   export function load8_s(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -433,6 +435,8 @@ declare namespace i64 {
   export const MIN_VALUE: i64;
   /** Largest representable value. */
   export const MAX_VALUE: i64;
+  /** Converts a string to an i64 of this type. */
+  export function parse(value: string, radix?: i32): i64;
   /** Loads an 8-bit signed integer value from memory and returns it as a 64-bit integer. */
   export function load8_s(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -585,6 +589,8 @@ declare namespace u8 {
   export const MIN_VALUE: u8;
   /** Largest representable value. */
   export const MAX_VALUE: u8;
+  /** Converts a string to an u8 of this type. */
+  export function parse(value: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
 declare function u16(value: any): u16;
@@ -593,6 +599,8 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
+  /** Converts a string to an u16 of this type. */
+  export function parse(value: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: any): u32;
@@ -601,6 +609,8 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
+  /** Converts a string to an u32 of this type. */
+  export function parse(value: string, radix?: i32): u32;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
 declare function u64(value: any): u64;
@@ -609,6 +619,8 @@ declare namespace u64 {
   export const MIN_VALUE: u64;
   /** Largest representable value. */
   export const MAX_VALUE: u64;
+  /** Converts a string to an u64 of this type. */
+  export function parse(value: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare var usize: typeof u32 | typeof u64;
@@ -641,6 +653,8 @@ declare namespace f32 {
   export const NaN: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
+  /** Converts a string to an f32 of this type. */
+  export function parse(value: string, radix?: i32): f32;
   /** Loads a 32-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
@@ -699,6 +713,8 @@ declare namespace f64 {
   export const NaN: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
+  /** Converts a string to an f64 of this type. */
+  export function parse(value: string, radix?: i32): f64;
   /** Loads a 64-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
