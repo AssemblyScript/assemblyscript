@@ -57,6 +57,7 @@ export declare function _BinaryenTypeStringviewWTF16(): TypeRef;
 export declare function _BinaryenTypeStringviewIter(): TypeRef;
 
 export declare function _BinaryenHeapTypeFunc(): HeapTypeRef;
+export declare function _BinaryenHeapTypeExt():HeapTypeRef;
 export declare function _BinaryenHeapTypeAny(): HeapTypeRef;
 export declare function _BinaryenHeapTypeEq(): HeapTypeRef;
 export declare function _BinaryenHeapTypeI31(): HeapTypeRef;
