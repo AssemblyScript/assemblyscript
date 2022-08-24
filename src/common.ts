@@ -257,6 +257,10 @@ export namespace CommonNames {
   export const newArray = "__newArray";
   export const BLOCK = "~lib/rt/common/BLOCK";
   export const OBJECT = "~lib/rt/common/OBJECT";
+  // default memory name
+  export const defaultMemoryName = "0";
+  // default table name
+  export const defaultTableName = "0";
 }
 
 // shared

@@ -357,6 +357,8 @@ export const enum RuntimeFeatures {
 
 /** Imported default names of compiler-generated elements. */
 export namespace ImportNames {
+  /** Name of the default namespace */
+  export const defaultNamespace = "env";
   /** Name of the memory instance, if imported. */
   export const memory = "memory";
   /** Name of the table instance, if imported. */
@@ -786,13 +788,18 @@ export class Compiler extends DiagnosticEmitter {
       memorySegments,
       options.target,
       options.exportMemory ? ExportNames.memory : null,
-      "0",
+      CommonNames.defaultMemoryName,
       isSharedMemory
     );
 
     // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) {
-      module.addMemoryImport("0", "env", ImportNames.memory, isSharedMemory);
+      module.addMemoryImport(
+        CommonNames.defaultMemoryName,
+        ImportNames.defaultNamespace,
+        ImportNames.memory,
+        isSharedMemory
+      );
     }
   }
 
@@ -802,7 +809,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
-      module.addTableImport("0", "env", ImportNames.table);
+      module.addTableImport(
+        CommonNames.defaultTableName,
+        ImportNames.defaultNamespace,
+        ImportNames.table
+      );
       if (options.pedantic && options.willOptimize) {
         this.pedantic(
           DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
@@ -811,7 +822,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     if (options.exportTable) {
-      module.addTableExport("0", ExportNames.table);
+      module.addTableExport(CommonNames.defaultTableName, ExportNames.table);
       if (options.pedantic && options.willOptimize) {
         this.pedantic(
           DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
@@ -831,7 +842,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var tableSize = tableBase + functionTable.length;
     module.addFunctionTable(
-      "0",
+      CommonNames.defaultTableName,
       tableSize,
       // use fixed size for non-imported and non-exported tables
       options.importTable || options.exportTable ? Module.UNLIMITED_TABLE : tableSize,
