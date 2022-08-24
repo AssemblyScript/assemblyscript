@@ -51,34 +51,41 @@ export type RelooperBlockRef = binaryen.RelooperBlockRef;
 /** Reference to a Binaryen type. */
 export type TypeRef = binaryen.TypeRef;
 export namespace TypeRef {
+  // special types
   export const None: TypeRef = 0 /* _BinaryenTypeNone */;
   export const Unreachable: TypeRef = 1 /* _BinaryenTypeUnreachable */;
+  // value types
   export const I32: TypeRef = 2 /* _BinaryenTypeInt32 */;
   export const I64: TypeRef = 3 /* _BinaryenTypeInt64 */;
   export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
+  // nullable reference & GC types
   export const Funcref = binaryen._BinaryenTypeFuncref();
   export const Externref = binaryen._BinaryenTypeExternref();
   export const Anyref = binaryen._BinaryenTypeAnyref();
   export const Eqref = binaryen._BinaryenTypeEqref();
   export const I31ref = binaryen._BinaryenTypeI31ref();
   export const Dataref = binaryen._BinaryenTypeDataref();
+  // nullable string reference types
   export const Stringref = binaryen._BinaryenTypeStringref();
   export const StringviewWTF8 = binaryen._BinaryenTypeStringviewWTF8();
   export const StringviewWTF16 = binaryen._BinaryenTypeStringviewWTF16();
   export const StringviewIter = binaryen._BinaryenTypeStringviewIter();
+
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
 export type HeapTypeRef = binaryen.HeapTypeRef;
 export namespace HeapTypeRef {
+  // reference & GC heap types
   export const Func = binaryen._BinaryenHeapTypeFunc();
   export const Ext = binaryen._BinaryenHeapTypeExt();
   export const Any = binaryen._BinaryenHeapTypeAny();
   export const Eq = binaryen._BinaryenHeapTypeEq();
   export const I31 = binaryen._BinaryenHeapTypeI31();
   export const Data = binaryen._BinaryenHeapTypeData();
+  // string heap types
   export const String = binaryen._BinaryenHeapTypeString();
   export const StringviewWTF8 = binaryen._BinaryenHeapTypeStringviewWTF8();
   export const StringviewWTF16 = binaryen._BinaryenHeapTypeStringviewWTF16();
