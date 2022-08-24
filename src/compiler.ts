@@ -358,23 +358,23 @@ export const enum RuntimeFeatures {
 /** Imported default names of compiler-generated elements. */
 export namespace ImportNames {
   /** Name of the default namespace */
-  export const defaultNamespace = "env";
+  export const DefaultNamespace = "env";
   /** Name of the memory instance, if imported. */
-  export const memory = "memory";
+  export const Memory = "memory";
   /** Name of the table instance, if imported. */
-  export const table = "table";
+  export const Table = "table";
 }
 
 /** Exported names of compiler-generated elements. */
 export namespace ExportNames {
+  /** Name of the memory instance, if exported. */
+  export const Memory = "memory";
+  /** Name of the table instance, if exported. */
+  export const Table = "table";
   /** Name of the argumentsLength varargs helper global. */
   export const argumentsLength = "__argumentsLength";
   /** Name of the alternative argumentsLength setter function. */
   export const setArgumentsLength = "__setArgumentsLength";
-  /** Name of the memory instance, if exported. */
-  export const memory = "memory";
-  /** Name of the table instance, if exported. */
-  export const table = "table";
 }
 
 /** Functions to export if `--exportRuntime` is set. */
@@ -787,17 +787,17 @@ export class Compiler extends DiagnosticEmitter {
       maximumPages,
       memorySegments,
       options.target,
-      options.exportMemory ? ExportNames.memory : null,
-      CommonNames.defaultMemoryName,
+      options.exportMemory ? ExportNames.Memory : null,
+      CommonNames.DefaultMemory,
       isSharedMemory
     );
 
     // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) {
       module.addMemoryImport(
-        CommonNames.defaultMemoryName,
-        ImportNames.defaultNamespace,
-        ImportNames.memory,
+        CommonNames.DefaultMemory,
+        ImportNames.DefaultNamespace,
+        ImportNames.Memory,
         isSharedMemory
       );
     }
@@ -810,9 +810,9 @@ export class Compiler extends DiagnosticEmitter {
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
       module.addTableImport(
-        CommonNames.defaultTableName,
-        ImportNames.defaultNamespace,
-        ImportNames.table
+        CommonNames.DefaultTable,
+        ImportNames.DefaultNamespace,
+        ImportNames.Table
       );
       if (options.pedantic && options.willOptimize) {
         this.pedantic(
@@ -822,7 +822,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     if (options.exportTable) {
-      module.addTableExport(CommonNames.defaultTableName, ExportNames.table);
+      module.addTableExport(CommonNames.DefaultTable, ExportNames.Table);
       if (options.pedantic && options.willOptimize) {
         this.pedantic(
           DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
@@ -853,7 +853,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     module.addFunctionTable(
-      CommonNames.defaultTableName,
+      CommonNames.DefaultTable,
       initialTableSize,
       maximumTableSize,
       functionTableNames,
