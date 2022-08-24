@@ -355,6 +355,14 @@ export const enum RuntimeFeatures {
   setArgumentsLength = 1 << 6
 }
 
+/** Imported default names of compiler-generated elements. */
+export namespace ImportNames {
+  /** Name of the memory instance, if imported. */
+  export const memory = "memory";
+  /** Name of the table instance, if imported. */
+  export const table = "table";
+}
+
 /** Exported names of compiler-generated elements. */
 export namespace ExportNames {
   /** Name of the argumentsLength varargs helper global. */
@@ -784,7 +792,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) {
-      module.addMemoryImport("0", "env", ExportNames.memory, isSharedMemory);
+      module.addMemoryImport("0", "env", ImportNames.memory, isSharedMemory);
     }
   }
 
@@ -794,7 +802,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
-      module.addTableImport("0", "env", ExportNames.table);
+      module.addTableImport("0", "env", ImportNames.table);
       if (options.pedantic && options.willOptimize) {
         this.pedantic(
           DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
