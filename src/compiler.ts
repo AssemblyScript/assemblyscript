@@ -1044,13 +1044,14 @@ export class Compiler extends DiagnosticEmitter {
       let numLocals = locals.length;
       let varTypes = new Array<TypeRef>(numLocals);
       for (let i = 0; i < numLocals; ++i) varTypes[i] = locals[i].type.toRef();
-      module.addFunction(
+      const funcRef = module.addFunction(
         startFunction.internalName,
         startSignature.paramRefs,
         startSignature.resultRefs,
         varTypes,
         module.flatten(startFunctionBody)
       );
+      startFunction.finalize(module, funcRef);
       previousBody.push(
         module.call(startFunction.internalName, null, TypeRef.None)
       );
@@ -3463,9 +3464,13 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
 
-    // void to any
     if (fromType.kind == TypeKind.VOID) {
-      assert(toType.kind != TypeKind.VOID); // convertExpression should not be called with void -> void
+      if (toType.kind == TypeKind.VOID) {
+        // void to void: Can happen as a result of a foregoing error. Since we
+        // have an `expr` here that is already supposed to be void, return it.
+        return expr;
+      }
+      // void to any
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         reportNode.range, fromType.toString(), toType.toString()
@@ -3521,6 +3526,28 @@ export class Compiler extends DiagnosticEmitter {
 
     // not dealing with references from here on
     assert(!fromType.isReference && !toType.isReference);
+
+    // Early return if we have same types
+    if (toType.kind == fromType.kind) {
+      this.currentType = toType;
+      return expr;
+    }
+
+    // v128 to any / any to v128
+    // except v128 to bool
+    //
+    // NOTE:In case we would have more conversions to and from v128 type it's better
+    // to make these checks more individual and integrate in below flow.
+    if (
+      !toType.isBooleanValue &&
+      (toType.isVectorValue || fromType.isVectorValue)
+    ) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
+      return module.unreachable();
+    }
 
     if (!fromType.isAssignableTo(toType)) {
       if (!explicit) {
@@ -10323,7 +10350,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
 function mangleImportName(
   element: Element,
   declaration: DeclarationStatement

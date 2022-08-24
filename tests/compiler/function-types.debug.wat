@@ -23,59 +23,59 @@
  (elem $0 (i32.const 1) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/addI32)
  (export "memory" (memory $0))
  (start $~start)
- (func $function-types/makeAdder<i32>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $function-types/makeAdder<i32>~anonymous|0 (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.add
  )
  (func $function-types/makeAdder<i32> (result i32)
   i32.const 32
  )
- (func $function-types/makeAdder<i64>~anonymous|0 (param $0 i64) (param $1 i64) (result i64)
-  local.get $0
-  local.get $1
+ (func $function-types/makeAdder<i64>~anonymous|0 (param $a i64) (param $b i64) (result i64)
+  local.get $a
+  local.get $b
   i64.add
  )
  (func $function-types/makeAdder<i64> (result i32)
   i32.const 128
  )
- (func $function-types/makeAdder<f64>~anonymous|0 (param $0 f64) (param $1 f64) (result f64)
-  local.get $0
-  local.get $1
+ (func $function-types/makeAdder<f64>~anonymous|0 (param $a f64) (param $b f64) (result f64)
+  local.get $a
+  local.get $b
   f64.add
  )
  (func $function-types/makeAdder<f64> (result i32)
   i32.const 160
  )
- (func $function-types/doAddWithFn<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $function-types/doAddWithFn<i32> (param $a i32) (param $b i32) (param $fn i32) (result i32)
+  local.get $a
+  local.get $b
   i32.const 2
   global.set $~argumentsLength
-  local.get $2
+  local.get $fn
   i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
  )
- (func $function-types/doAdd<i32> (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $function-types/doAdd<i32> (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.const 2
   global.set $~argumentsLength
   call $function-types/makeAdder<i32>
   i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
  )
- (func $function-types/addI32 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $function-types/addI32 (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
   i32.add
  )
- (func $function-types/makeAndAdd<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
-  local.get $1
+ (func $function-types/makeAndAdd<i32> (param $a i32) (param $b i32) (param $adder i32) (result i32)
+  local.get $a
+  local.get $b
   i32.const 2
   global.set $~argumentsLength
-  local.get $2
+  local.get $adder
   i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
  )

@@ -26,10 +26,10 @@
  (export "stringArrayMethodCall" (func $export:std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $export:std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $export:std/array-access/stringArrayArrayMethodCall))
- (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $1
-  local.get $0
+ (func $~lib/array/Array<i32>#__get (param $this i32) (param $index i32) (result i32)
+  (local $value i32)
+  local.get $index
+  local.get $this
   i32.load $0 offset=12
   i32.ge_u
   if
@@ -40,56 +40,56 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $this
   i32.load $0 offset=4
-  local.get $1
+  local.get $index
   i32.const 2
   i32.shl
   i32.add
   i32.load $0
-  local.set $2
+  local.set $value
   i32.const 0
   drop
-  local.get $2
+  local.get $value
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
+ (func $~lib/string/String#get:length (param $this i32) (result i32)
+  local.get $this
   i32.const 20
   i32.sub
   i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/util/string/compareImpl (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
+  (local $ptr1 i32)
+  (local $ptr2 i32)
+  (local $var$7 i32)
+  (local $a i32)
+  (local $b i32)
+  local.get $str1
+  local.get $index1
   i32.const 1
   i32.shl
   i32.add
-  local.set $5
-  local.get $2
-  local.get $3
+  local.set $ptr1
+  local.get $str2
+  local.get $index2
   i32.const 1
   i32.shl
   i32.add
-  local.set $6
+  local.set $ptr2
   i32.const 0
   i32.const 2
   i32.lt_s
   drop
-  local.get $4
+  local.get $len
   i32.const 4
   i32.ge_u
   if (result i32)
-   local.get $5
+   local.get $ptr1
    i32.const 7
    i32.and
-   local.get $6
+   local.get $ptr2
    i32.const 7
    i32.and
    i32.or
@@ -100,27 +100,27 @@
   if
    block $do-break|0
     loop $do-loop|0
-     local.get $5
+     local.get $ptr1
      i64.load $0
-     local.get $6
+     local.get $ptr2
      i64.load $0
      i64.ne
      if
       br $do-break|0
      end
-     local.get $5
+     local.get $ptr1
      i32.const 8
      i32.add
-     local.set $5
-     local.get $6
+     local.set $ptr1
+     local.get $ptr2
      i32.const 8
      i32.add
-     local.set $6
-     local.get $4
+     local.set $ptr2
+     local.get $len
      i32.const 4
      i32.sub
-     local.set $4
-     local.get $4
+     local.set $len
+     local.get $len
      i32.const 4
      i32.ge_u
      br_if $do-loop|0
@@ -128,85 +128,85 @@
    end
   end
   loop $while-continue|1
-   local.get $4
-   local.tee $7
+   local.get $len
+   local.tee $var$7
    i32.const 1
    i32.sub
-   local.set $4
-   local.get $7
-   local.set $7
-   local.get $7
+   local.set $len
+   local.get $var$7
+   local.set $var$7
+   local.get $var$7
    if
-    local.get $5
+    local.get $ptr1
     i32.load16_u $0
-    local.set $8
-    local.get $6
+    local.set $a
+    local.get $ptr2
     i32.load16_u $0
-    local.set $9
-    local.get $8
-    local.get $9
+    local.set $b
+    local.get $a
+    local.get $b
     i32.ne
     if
-     local.get $8
-     local.get $9
+     local.get $a
+     local.get $b
      i32.sub
      return
     end
-    local.get $5
+    local.get $ptr1
     i32.const 2
     i32.add
-    local.set $5
-    local.get $6
+    local.set $ptr1
+    local.get $ptr2
     i32.const 2
     i32.add
-    local.set $6
+    local.set $ptr2
     br $while-continue|1
    end
   end
   i32.const 0
  )
- (func $~lib/string/String#startsWith (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  local.get $0
+ (func $~lib/string/String#startsWith (param $this i32) (param $search i32) (param $start i32) (result i32)
+  (local $len i32)
+  (local $var$4 i32)
+  (local $var$5 i32)
+  (local $searchStart i32)
+  (local $searchLength i32)
+  local.get $this
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $2
-  local.tee $4
+  local.set $len
+  local.get $start
+  local.tee $var$4
   i32.const 0
-  local.tee $5
-  local.get $4
-  local.get $5
+  local.tee $var$5
+  local.get $var$4
+  local.get $var$5
   i32.gt_s
   select
-  local.tee $5
-  local.get $3
-  local.tee $4
-  local.get $5
-  local.get $4
+  local.tee $var$5
+  local.get $len
+  local.tee $var$4
+  local.get $var$5
+  local.get $var$4
   i32.lt_s
   select
-  local.set $6
-  local.get $1
+  local.set $searchStart
+  local.get $search
   call $~lib/string/String#get:length
-  local.set $7
-  local.get $7
-  local.get $6
+  local.set $searchLength
+  local.get $searchLength
+  local.get $searchStart
   i32.add
-  local.get $3
+  local.get $len
   i32.gt_s
   if
    i32.const 0
    return
   end
-  local.get $0
-  local.get $6
-  local.get $1
+  local.get $this
+  local.get $searchStart
+  local.get $search
   i32.const 0
-  local.get $7
+  local.get $searchLength
   call $~lib/util/string/compareImpl
   i32.eqz
  )

@@ -15,19 +15,19 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $call-inferred/foo<i32> (param $0 i32) (result i32)
-  local.get $0
+ (func $call-inferred/foo<i32> (param $a i32) (result i32)
+  local.get $a
  )
- (func $call-inferred/foo<f64> (param $0 f64) (result f64)
-  local.get $0
+ (func $call-inferred/foo<f64> (param $a f64) (result f64)
+  local.get $a
  )
- (func $call-inferred/foo<f32> (param $0 f32) (result f32)
-  local.get $0
+ (func $call-inferred/foo<f32> (param $a f32) (result f32)
+  local.get $a
  )
- (func $call-inferred/bar<f32> (param $0 f32) (result f32)
-  local.get $0
+ (func $call-inferred/bar<f32> (param $a f32) (result f32)
+  local.get $a
  )
- (func $call-inferred/bar<f32>@varargs (param $0 f32) (result f32)
+ (func $call-inferred/bar<f32>@varargs (param $a f32) (result f32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -37,9 +37,9 @@
     unreachable
    end
    f32.const 42
-   local.set $0
+   local.set $a
   end
-  local.get $0
+  local.get $a
   call $call-inferred/bar<f32>
  )
  (func $start:call-inferred

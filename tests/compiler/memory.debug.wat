@@ -38,16 +38,16 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $memory/test (result i32)
-  (local $0 i32)
+  (local $value i32)
   i32.const 16
   i32.load $0
-  local.set $0
+  local.set $value
   i32.const 16
-  local.get $0
+  local.get $value
   i32.const 1
   i32.add
   i32.store $0
-  local.get $0
+  local.get $value
  )
  (func $memory/testGeneric<v128> (result i32)
   i32.const 144

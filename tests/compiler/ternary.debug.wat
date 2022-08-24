@@ -33,17 +33,17 @@
   i32.const 1
   global.set $ternary/a
  )
- (func $ternary/test (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
+ (func $ternary/test (param $x i32) (param $y i32) (param $z i32) (result i32)
+  local.get $x
   if (result i32)
-   local.get $1
+   local.get $y
   else
-   local.get $2
+   local.get $z
   end
  )
- (func $ternary/testDropWithTypeMismatch (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
+ (func $ternary/testDropWithTypeMismatch (param $cond i32)
+  (local $x i32)
+  (local $y i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -53,17 +53,17 @@
   i32.const 0
   i32.store $0
   i32.const 1
-  local.set $1
+  local.set $x
   global.get $~lib/memory/__stack_pointer
   i32.const 32
-  local.tee $2
+  local.tee $y
   i32.store $0
-  local.get $0
+  local.get $cond
   if
-   local.get $1
+   local.get $x
    drop
   else
-   local.get $2
+   local.get $y
    drop
   end
   global.get $~lib/memory/__stack_pointer
@@ -71,40 +71,40 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $ternary/testVoidInclTypeMismatch (param $0 i32) (param $1 i32)
-  local.get $0
+ (func $ternary/testVoidInclTypeMismatch (param $cond i32) (param $nop i32)
+  local.get $cond
   if
    i32.const 0
    global.set $~argumentsLength
-   local.get $1
+   local.get $nop
    i32.load $0
    call_indirect $0 (type $none_=>_none)
   else
    i32.const 0
    global.set $~argumentsLength
-   local.get $1
+   local.get $nop
    i32.load $0
    call_indirect $0 (type $none_=>_none)
   end
-  local.get $0
+  local.get $cond
   if
    i32.const 0
    global.set $~argumentsLength
-   local.get $1
+   local.get $nop
    i32.load $0
    call_indirect $0 (type $none_=>_none)
   else
    i32.const 1
    drop
   end
-  local.get $0
+  local.get $cond
   if
    i32.const 1
    drop
   else
    i32.const 0
    global.set $~argumentsLength
-   local.get $1
+   local.get $nop
    i32.load $0
    call_indirect $0 (type $none_=>_none)
   end

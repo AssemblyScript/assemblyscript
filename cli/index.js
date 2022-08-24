@@ -314,7 +314,7 @@ export async function main(argv, options) {
   assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, opts.importTable);
   assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  if (opts.exportStart) {
+  if (opts.exportStart != null) {
     assemblyscript.setExportStart(compilerOptions, isNonEmptyString(opts.exportStart) ? opts.exportStart : "_start");
   }
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);

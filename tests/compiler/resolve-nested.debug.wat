@@ -25,7 +25,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "outer" (func $export:resolve-nested/outer))
- (func $resolve-nested/outer (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $resolve-nested/outer (param $a i32) (param $b i32) (param $c i32)
   nop
  )
  (func $~stack_check

@@ -13,268 +13,268 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $memset/memset (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i64)
-  (local $7 i32)
-  local.get $0
-  local.set $3
-  local.get $2
+ (func $memset/memset (param $dest i32) (param $c i32) (param $n i32) (result i32)
+  (local $ret i32)
+  (local $k i32)
+  (local $c32 i32)
+  (local $c64 i64)
+  (local $var$7 i32)
+  local.get $dest
+  local.set $ret
+  local.get $n
   i32.eqz
   if
-   local.get $3
+   local.get $ret
    return
   end
-  local.get $0
-  local.get $1
+  local.get $dest
+  local.get $c
   i32.store8 $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 1
   i32.sub
-  local.get $1
+  local.get $c
   i32.store8 $0
-  local.get $2
+  local.get $n
   i32.const 2
   i32.le_u
   if
-   local.get $3
+   local.get $ret
    return
   end
-  local.get $0
+  local.get $dest
   i32.const 1
   i32.add
-  local.get $1
+  local.get $c
   i32.store8 $0
-  local.get $0
+  local.get $dest
   i32.const 2
   i32.add
-  local.get $1
+  local.get $c
   i32.store8 $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 2
   i32.sub
-  local.get $1
+  local.get $c
   i32.store8 $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 3
   i32.sub
-  local.get $1
+  local.get $c
   i32.store8 $0
-  local.get $2
+  local.get $n
   i32.const 6
   i32.le_u
   if
-   local.get $3
+   local.get $ret
    return
   end
-  local.get $0
+  local.get $dest
   i32.const 3
   i32.add
-  local.get $1
+  local.get $c
   i32.store8 $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 4
   i32.sub
-  local.get $1
+  local.get $c
   i32.store8 $0
-  local.get $2
+  local.get $n
   i32.const 8
   i32.le_u
   if
-   local.get $3
+   local.get $ret
    return
   end
   i32.const 0
-  local.get $0
+  local.get $dest
   i32.sub
   i32.const 3
   i32.and
-  local.set $4
-  local.get $0
-  local.get $4
+  local.set $k
+  local.get $dest
+  local.get $k
   i32.add
-  local.set $0
-  local.get $2
-  local.get $4
+  local.set $dest
+  local.get $n
+  local.get $k
   i32.sub
-  local.set $2
-  local.get $2
+  local.set $n
+  local.get $n
   i32.const -4
   i32.and
-  local.set $2
+  local.set $n
   i32.const -1
   i32.const 255
   i32.div_u
-  local.get $1
+  local.get $c
   i32.const 255
   i32.and
   i32.mul
-  local.set $5
-  local.get $0
-  local.get $5
+  local.set $c32
+  local.get $dest
+  local.get $c32
   i32.store $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 4
   i32.sub
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $2
+  local.get $n
   i32.const 8
   i32.le_u
   if
-   local.get $3
+   local.get $ret
    return
   end
-  local.get $0
+  local.get $dest
   i32.const 4
   i32.add
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
+  local.get $dest
   i32.const 8
   i32.add
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 12
   i32.sub
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 8
   i32.sub
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $2
+  local.get $n
   i32.const 24
   i32.le_u
   if
-   local.get $3
+   local.get $ret
    return
   end
-  local.get $0
+  local.get $dest
   i32.const 12
   i32.add
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
+  local.get $dest
   i32.const 16
   i32.add
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
+  local.get $dest
   i32.const 20
   i32.add
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
+  local.get $dest
   i32.const 24
   i32.add
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 28
   i32.sub
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 24
   i32.sub
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 20
   i32.sub
-  local.get $5
+  local.get $c32
   i32.store $0
-  local.get $0
-  local.get $2
+  local.get $dest
+  local.get $n
   i32.add
   i32.const 16
   i32.sub
-  local.get $5
+  local.get $c32
   i32.store $0
   i32.const 24
-  local.get $0
+  local.get $dest
   i32.const 4
   i32.and
   i32.add
-  local.set $4
-  local.get $0
-  local.get $4
+  local.set $k
+  local.get $dest
+  local.get $k
   i32.add
-  local.set $0
-  local.get $2
-  local.get $4
+  local.set $dest
+  local.get $n
+  local.get $k
   i32.sub
-  local.set $2
-  local.get $5
+  local.set $n
+  local.get $c32
   i64.extend_i32_u
-  local.get $5
+  local.get $c32
   i64.extend_i32_u
   i64.const 32
   i64.shl
   i64.or
-  local.set $6
+  local.set $c64
   loop $while-continue|0
-   local.get $2
+   local.get $n
    i32.const 32
    i32.ge_u
-   local.set $7
-   local.get $7
+   local.set $var$7
+   local.get $var$7
    if
-    local.get $0
-    local.get $6
+    local.get $dest
+    local.get $c64
     i64.store $0
-    local.get $0
+    local.get $dest
     i32.const 8
     i32.add
-    local.get $6
+    local.get $c64
     i64.store $0
-    local.get $0
+    local.get $dest
     i32.const 16
     i32.add
-    local.get $6
+    local.get $c64
     i64.store $0
-    local.get $0
+    local.get $dest
     i32.const 24
     i32.add
-    local.get $6
+    local.get $c64
     i64.store $0
-    local.get $2
+    local.get $n
     i32.const 32
     i32.sub
-    local.set $2
-    local.get $0
+    local.set $n
+    local.get $dest
     i32.const 32
     i32.add
-    local.set $0
+    local.set $dest
     br $while-continue|0
    end
   end
-  local.get $3
+  local.get $ret
  )
  (func $start:memset
   global.get $~lib/memory/__heap_base
