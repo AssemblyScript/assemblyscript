@@ -840,12 +840,22 @@ export class Compiler extends DiagnosticEmitter {
       functionTableNames[i] = functionTable[i].internalName;
     }
 
-    var tableSize = tableBase + functionTable.length;
+    var initialTableSize = <Index>tableBase + functionTable.length;
+    var maximumTableSize = Module.UNLIMITED_TABLE;
+
+    if (!(options.importTable || options.exportTable)) {
+      // use fixed size for non-imported and non-exported tables
+      maximumTableSize = initialTableSize;
+      if (options.willOptimize) {
+        // Hint for directize pass which indicate table's content will not change
+        // and can be better optimized
+        module.setPassArgument("directize-initial-contents-immutable", "true");
+      }
+    }
     module.addFunctionTable(
       CommonNames.defaultTableName,
-      tableSize,
-      // use fixed size for non-imported and non-exported tables
-      options.importTable || options.exportTable ? Module.UNLIMITED_TABLE : tableSize,
+      initialTableSize,
+      maximumTableSize,
       functionTableNames,
       module.i32(tableBase)
     );
