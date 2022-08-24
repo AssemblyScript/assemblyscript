@@ -74,6 +74,7 @@ export namespace TypeRef {
 export type HeapTypeRef = binaryen.HeapTypeRef;
 export namespace HeapTypeRef {
   export const Func = binaryen._BinaryenHeapTypeFunc();
+  export const Ext = binaryen._BinaryenHeapTypeExt();
   export const Any = binaryen._BinaryenHeapTypeAny();
   export const Eq = binaryen._BinaryenHeapTypeEq();
   export const I31 = binaryen._BinaryenHeapTypeI31();
