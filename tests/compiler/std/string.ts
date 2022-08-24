@@ -146,11 +146,11 @@ assert(isNaN(parseInt("+")));
 assert(isNaN(parseInt("123", 37)));
 assert(isNaN(parseInt("🔥")));
 assert(isNaN(parseInt("badnum")));
-assert(isNaN(F32.parseInt("badnum")));
-assert(isNaN(F64.parseInt("badnum")));
+assert(isNaN(F32.parse("badnum")));
+assert(isNaN(F64.parse("badnum")));
 
-assert(I32.parseInt("0x7FFFFFFF") == I32.MAX_VALUE);
-assert(I64.parseInt("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
+assert(I32.parse("0x7FFFFFFF") == I32.MAX_VALUE);
+assert(I64.parse("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
 
 // quick draft tests
 assert(parseFloat("0") == 0);
