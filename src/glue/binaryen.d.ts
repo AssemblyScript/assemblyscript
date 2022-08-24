@@ -184,9 +184,9 @@ export declare function _BinaryenGlobalSetSetName(expr: ExpressionRef, name: Str
 export declare function _BinaryenGlobalSetGetValue(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenGlobalSetSetValue(expr: ExpressionRef, valueExpr: ExpressionRef): void;
 
-export declare function _BinaryenMemorySize(module: ModuleRef, memoryName: StringRef): ExpressionRef;
+export declare function _BinaryenMemorySize(module: ModuleRef, memoryName: StringRef, memoryIs64: bool): ExpressionRef;
 
-export declare function _BinaryenMemoryGrow(module: ModuleRef, delta: ExpressionRef, memoryName: StringRef): ExpressionRef;
+export declare function _BinaryenMemoryGrow(module: ModuleRef, delta: ExpressionRef, memoryName: StringRef, memoryIs64: bool): ExpressionRef;
 export declare function _BinaryenMemoryGrowGetDelta(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenMemoryGrowSetDelta(expr: ExpressionRef, delta: ExpressionRef): void;
 

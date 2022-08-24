@@ -501,54 +501,6 @@ export class Compiler extends DiagnosticEmitter {
       module.addGlobal(BuiltinNames.rtti_base, TypeRef.I32, true, module.i32(0));
     }
 
-    var memoryOffset = i64_align(this.memoryOffset, options.usizeType.byteSize);
-    var initialPages: u32 = 0;
-    var maximumPages = Module.UNLIMITED_MEMORY;
-    var isSharedMemory = false;
-
-    if (options.memoryBase /* is specified */ || this.memorySegments.length) {
-      initialPages = u32(i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16))));
-    }
-    if (options.initialMemory) {
-      if (options.initialMemory < initialPages) {
-        this.error(
-          DiagnosticCode.Module_requires_at_least_0_pages_of_initial_memory,
-          null,
-          initialPages.toString()
-        );
-      } else {
-        initialPages = options.initialMemory;
-      }
-    }
-    if (options.maximumMemory) {
-      if (options.maximumMemory < initialPages) {
-        this.error(
-          DiagnosticCode.Module_requires_at_least_0_pages_of_maximum_memory,
-          null,
-          initialPages.toString()
-        );
-      } else {
-        maximumPages = options.maximumMemory;
-      }
-    }
-    if (options.sharedMemory) {
-      isSharedMemory = true;
-      if (!options.maximumMemory) {
-        this.error(
-          DiagnosticCode.Shared_memory_requires_maximum_memory_to_be_defined,
-          null
-        );
-        isSharedMemory = false;
-      }
-      if (!options.hasFeature(Feature.THREADS)) {
-        this.error(
-          DiagnosticCode.Shared_memory_requires_feature_threads_to_be_enabled,
-          null
-        );
-        isSharedMemory = false;
-      }
-    }
-
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
     // TODO: for (let file of files.values()) {
@@ -639,6 +591,8 @@ export class Compiler extends DiagnosticEmitter {
     if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
 
+    var memoryOffset = i64_align(this.memoryOffset, options.usizeType.byteSize);
+
     // finalize data
     module.removeGlobal(BuiltinNames.data_end);
     if ((this.runtimeFeatures & RuntimeFeatures.DATA) != 0 || hasShadowStack) {
@@ -686,7 +640,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // setup memory & table
-    this.initMemory(memoryOffset, initialPages, maximumPages, isSharedMemory);
+    this.initMemory(memoryOffset);
     this.initTable();
 
     // expose the arguments length helper if there are varargs exports
@@ -753,16 +707,61 @@ export class Compiler extends DiagnosticEmitter {
     return module;
   }
 
-  private initMemory(
-    memoryOffset: i64,
-    initialPages: Index,
-    maximumPages: Index,
-    isSharedMemory: bool
-  ): void {
+  private initMemory(memoryOffset: i64): void {
+    this.memoryOffset = memoryOffset;
+
     var options = this.options;
     var module = this.module;
 
-    this.memoryOffset = memoryOffset;
+    var initialPages: u32 = 0;
+    var maximumPages = Module.UNLIMITED_MEMORY;
+    var isSharedMemory = false;
+
+    if (options.memoryBase /* is specified */ || this.memorySegments.length) {
+      initialPages = u32(i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16))));
+    }
+
+    if (options.initialMemory) {
+      if (options.initialMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_initial_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        initialPages = options.initialMemory;
+      }
+    }
+
+    if (options.maximumMemory) {
+      if (options.maximumMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_maximum_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        maximumPages = options.maximumMemory;
+      }
+    }
+
+    if (options.sharedMemory) {
+      isSharedMemory = true;
+      if (!options.maximumMemory) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_maximum_memory_to_be_defined,
+          null
+        );
+        isSharedMemory = false;
+      }
+      if (!options.hasFeature(Feature.THREADS)) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_feature_threads_to_be_enabled,
+          null
+        );
+        isSharedMemory = false;
+      }
+    }
 
     // check that we didn't exceed lowMemoryLimit already
     var lowMemoryLimit32 = options.lowMemoryLimit;
@@ -782,7 +781,8 @@ export class Compiler extends DiagnosticEmitter {
       maximumPages,
       this.memorySegments,
       options.target,
-      null,
+      options.exportMemory ? ExportNames.memory : null,
+      "0",
       isSharedMemory
     );
 
