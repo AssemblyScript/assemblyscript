@@ -852,10 +852,8 @@ export function strtob(str: string): bool {
   }
   size -= offset;
   if (size < 8) return false;
-  return (
-    load<u64>(changetype<usize>(str) + offset) ==
-    0x00_65_00_75_00_72_00_74 // true (as \00\e\00\u\00\e\00\t)
-  );
+  // "true" represents as \00\e\00\u\00\e\00\t (00 65 00 75 00 72 00 74)
+  return load<u64>(changetype<usize>(str) + offset) == 0x0065_0075_0072_0074;
 }
 
 export function joinBooleanArray(dataStart: usize, length: i32, separator: string): string {
