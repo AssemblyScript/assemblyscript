@@ -3,13 +3,14 @@
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_v128 (func (param i32 i32 i32) (result v128)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_v128 (func (param i32 i32) (result v128)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $none_=>_v128 (func (result v128)))
  (type $v128_=>_v128 (func (param v128) (result v128)))
  (type $i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_i32_=>_v128 (func (param i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32) (result v128)))
@@ -45,10 +46,13 @@
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/builtins/u64.MAX_VALUE i64 (i64.const -1))
- (global $~lib/rt/__rtti_base i32 (i32.const 560))
- (global $~lib/memory/__data_end i32 (i32.const 604))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16988))
- (global $~lib/memory/__heap_base i32 (i32.const 16988))
+ (global $~lib/process/process.arch i32 (i32.const 576))
+ (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/builtins/usize.MAX_VALUE i32 (i32.const -1))
+ (global $~lib/rt/__rtti_base i32 (i32.const 624))
+ (global $~lib/memory/__data_end i32 (i32.const 668))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17052))
+ (global $~lib/memory/__heap_base i32 (i32.const 17052))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 60) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -61,7 +65,9 @@
  (data (i32.const 396) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 460) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
  (data (i32.const 508) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00s\00i\00m\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 560) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\04\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
+ (data (i32.const 556) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00w\00a\00s\00m\003\002\00")
+ (data (i32.const 588) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00w\00a\00s\00m\006\004\00")
+ (data (i32.const 624) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\04\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "reexport" (func $simd/reexport))
@@ -6445,6 +6451,161 @@
   i32.ne
   drop
  )
+ (func $~lib/string/String#get:length (param $this i32) (result i32)
+  local.get $this
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
+ )
+ (func $~lib/util/string/compareImpl (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
+  (local $ptr1 i32)
+  (local $ptr2 i32)
+  (local $var$7 i32)
+  (local $a i32)
+  (local $b i32)
+  local.get $str1
+  local.get $index1
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $ptr1
+  local.get $str2
+  local.get $index2
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $ptr2
+  i32.const 0
+  i32.const 2
+  i32.lt_s
+  drop
+  local.get $len
+  i32.const 4
+  i32.ge_u
+  if (result i32)
+   local.get $ptr1
+   i32.const 7
+   i32.and
+   local.get $ptr2
+   i32.const 7
+   i32.and
+   i32.or
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if
+   block $do-break|0
+    loop $do-loop|0
+     local.get $ptr1
+     i64.load
+     local.get $ptr2
+     i64.load
+     i64.ne
+     if
+      br $do-break|0
+     end
+     local.get $ptr1
+     i32.const 8
+     i32.add
+     local.set $ptr1
+     local.get $ptr2
+     i32.const 8
+     i32.add
+     local.set $ptr2
+     local.get $len
+     i32.const 4
+     i32.sub
+     local.set $len
+     local.get $len
+     i32.const 4
+     i32.ge_u
+     br_if $do-loop|0
+    end
+   end
+  end
+  loop $while-continue|1
+   local.get $len
+   local.tee $var$7
+   i32.const 1
+   i32.sub
+   local.set $len
+   local.get $var$7
+   local.set $var$7
+   local.get $var$7
+   if
+    local.get $ptr1
+    i32.load16_u
+    local.set $a
+    local.get $ptr2
+    i32.load16_u
+    local.set $b
+    local.get $a
+    local.get $b
+    i32.ne
+    if
+     local.get $a
+     local.get $b
+     i32.sub
+     return
+    end
+    local.get $ptr1
+    i32.const 2
+    i32.add
+    local.set $ptr1
+    local.get $ptr2
+    i32.const 2
+    i32.add
+    local.set $ptr2
+    br $while-continue|1
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
+  (local $leftLength i32)
+  local.get $left
+  local.get $right
+  i32.eq
+  if
+   i32.const 1
+   return
+  end
+  local.get $left
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $right
+   i32.const 0
+   i32.eq
+  end
+  if
+   i32.const 0
+   return
+  end
+  local.get $left
+  call $~lib/string/String#get:length
+  local.set $leftLength
+  local.get $leftLength
+  local.get $right
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $left
+  i32.const 0
+  local.get $right
+  i32.const 0
+  local.get $leftLength
+  call $~lib/util/string/compareImpl
+  i32.eqz
+ )
  (func $simd/test_const (result v128)
   (local $var$0 v128)
   v128.const i32x4 0x00000001 0x00000001 0x00000001 0x00000001
@@ -6522,6 +6683,8 @@
   call $simd/test_i64x2
   call $simd/test_f32x4
   call $simd/test_f64x2
+  call $simd/test_usize
+  call $simd/test_isize
   call $simd/test_const
   drop
   global.get $~lib/memory/__stack_pointer
@@ -6666,6 +6829,13 @@
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
+  global.get $~lib/process/process.arch
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
   i32.const 272
   local.get $0
   call $~lib/rt/itcms/__visit
@@ -6752,13 +6922,803 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17008
-   i32.const 17056
+   i32.const 17072
+   i32.const 17120
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $simd/test_usize
+  (local $0 i32)
+  (local $1 v128)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.mul
+  i32.const 42
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 2
+  i32x4.splat
+  i32x4.mul
+  i32.const 84
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 24
+  i32x4.splat
+  i32x4.add
+  i32.const 66
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32x4.extract_lane 0
+  i32.const 42
+  i32.eq
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 24
+  i32x4.replace_lane 0
+  i32x4.extract_lane 0
+  i32.const 24
+  i32.eq
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.add
+  i32.const 43
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.sub
+  i32.const 41
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.eq
+  i32.const 0
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i32x4.eq
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.ne
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i32x4.ne
+  i32.const 0
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  global.get $~lib/process/process.arch
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  i32.const 576
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/string/String.__eq
+  if
+   i32.const 1
+   i32x4.splat
+   i32.const 42
+   i32x4.splat
+   i32x4.le_u
+   i32.const -1
+   i32x4.splat
+   i8x16.eq
+   i8x16.all_true
+   i32.const 0
+   i32.ne
+   drop
+   i32.const 1
+   i32x4.splat
+   i32.const 1
+   i32x4.splat
+   i32x4.le_u
+   i32.const -1
+   i32x4.splat
+   i8x16.eq
+   i8x16.all_true
+   i32.const 0
+   i32.ne
+   drop
+   i32.const 1
+   i32x4.splat
+   i32.const 42
+   i32x4.splat
+   i32x4.lt_u
+   i32.const -1
+   i32x4.splat
+   i8x16.eq
+   i8x16.all_true
+   i32.const 0
+   i32.ne
+   drop
+   i32.const 1
+   i32x4.splat
+   i32.const 1
+   i32x4.splat
+   i32x4.lt_u
+   i32.const 0
+   i32x4.splat
+   i8x16.eq
+   i8x16.all_true
+   i32.const 0
+   i32.ne
+   drop
+   i32.const 42
+   i32x4.splat
+   i32.const 1
+   i32x4.splat
+   i32x4.ge_u
+   i32.const -1
+   i32x4.splat
+   i8x16.eq
+   i8x16.all_true
+   i32.const 0
+   i32.ne
+   drop
+   i32.const 1
+   i32x4.splat
+   i32.const 1
+   i32x4.splat
+   i32x4.ge_u
+   i32.const -1
+   i32x4.splat
+   i8x16.eq
+   i8x16.all_true
+   i32.const 0
+   i32.ne
+   drop
+   i32.const 42
+   i32x4.splat
+   i32.const 1
+   i32x4.splat
+   i32x4.gt_u
+   i32.const -1
+   i32x4.splat
+   i8x16.eq
+   i8x16.all_true
+   i32.const 0
+   i32.ne
+   drop
+   i32.const 1
+   i32x4.splat
+   i32.const 1
+   i32x4.splat
+   i32x4.gt_u
+   i32.const 0
+   i32x4.splat
+   i8x16.eq
+   i8x16.all_true
+   i32.const 0
+   i32.ne
+   drop
+  end
+  i32.const 1
+  i32x4.splat
+  i32x4.neg
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  global.get $~lib/builtins/usize.MAX_VALUE
+  i32x4.splat
+  i32x4.neg
+  i32.const 1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i32x4.eq
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32.const 1
+  i32x4.shl
+  i32.const 2
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 2
+  i32x4.splat
+  i32.const 1
+  i32x4.shr_u
+  i32.const 1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32x4.all_true
+  i32.const 0
+  i32.ne
+  drop
+  global.get $~lib/process/process.arch
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  i32.const 576
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/string/String.__eq
+  if
+   global.get $~lib/builtins/usize.MAX_VALUE
+   i32x4.splat
+   i32x4.bitmask
+   i32.const 15
+   i32.eq
+   drop
+   i32.const 0
+   i32x4.splat
+   i32x4.bitmask
+   i32.const 0
+   i32.eq
+   drop
+  end
+  global.get $~lib/process/process.arch
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  i32.const 608
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/string/String.__eq
+  if
+   global.get $~lib/builtins/usize.MAX_VALUE
+   i32x4.splat
+   i32x4.bitmask
+   i32.const 3
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 528
+    i32.const 1137
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 0
+   i32x4.splat
+   i32x4.bitmask
+   i32.const 0
+   i32.eq
+   drop
+  end
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.set $0
+  local.get $0
+  i32.const 42
+  i32.store
+  i32.const 0
+  i32x4.splat
+  local.set $1
+  local.get $0
+  local.get $1
+  v128.load32_lane 0
+  local.set $1
+  local.get $1
+  i32x4.extract_lane 0
+  i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 528
+   i32.const 1153
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $simd/test_isize
+  (local $0 i32)
+  (local $1 v128)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  i32.const 42
+  i32x4.splat
+  i32x4.extract_lane 0
+  i32.const 42
+  i32.eq
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 24
+  i32x4.replace_lane 0
+  i32x4.extract_lane 0
+  i32.const 24
+  i32.eq
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.add
+  i32.const 43
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.mul
+  i32.const 42
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.sub
+  i32.const 41
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.eq
+  i32.const 0
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i32x4.eq
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.ne
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i32x4.ne
+  i32.const 0
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i32x4.le_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.le_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i32x4.lt_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.lt_s
+  i32.const 0
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.ge_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.ge_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.gt_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32.const 1
+  i32x4.splat
+  i32x4.gt_s
+  i32.const 0
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32.const 42
+  i32x4.splat
+  i32x4.eq
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32x4.neg
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i32x4.splat
+  i32x4.neg
+  i32.const 1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  global.get $~lib/builtins/usize.MAX_VALUE
+  i32x4.splat
+  i32x4.neg
+  i32.const 1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 42
+  i32x4.splat
+  i32x4.abs
+  i32.const 42
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32.const 1
+  i32x4.shl
+  i32.const 2
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 2
+  i32x4.splat
+  i32.const 1
+  i32x4.shr_s
+  i32.const 1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i32x4.splat
+  i32x4.all_true
+  i32.const 0
+  i32.ne
+  drop
+  global.get $~lib/process/process.arch
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  i32.const 576
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/string/String.__eq
+  if
+   global.get $~lib/builtins/usize.MAX_VALUE
+   i32x4.splat
+   i32x4.bitmask
+   i32.const 15
+   i32.eq
+   drop
+   i32.const 0
+   i32x4.splat
+   i32x4.bitmask
+   i32.const 0
+   i32.eq
+   drop
+  end
+  global.get $~lib/process/process.arch
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
+  i32.const 608
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  call $~lib/string/String.__eq
+  if
+   global.get $~lib/builtins/usize.MAX_VALUE
+   i32x4.splat
+   i32x4.bitmask
+   i32.const 3
+   i32.eq
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 528
+    i32.const 1197
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 0
+   i32x4.splat
+   i32x4.bitmask
+   i32.const 0
+   i32.eq
+   drop
+  end
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.set $0
+  local.get $0
+  i32.const 42
+  i32.store
+  i32.const 0
+  i32x4.splat
+  local.set $1
+  local.get $0
+  local.get $1
+  v128.load32_lane 0
+  local.set $1
+  local.get $1
+  i32x4.extract_lane 0
+  i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 528
+   i32.const 1213
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/rt/__newArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)

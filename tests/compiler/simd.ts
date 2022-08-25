@@ -1080,6 +1080,140 @@ function test_f64x2(): void {
     f64x2(1.0, 4.0)
   );
 }
+function test_usize(): void {
+  assert(
+    v128.mul<usize>(v128.splat<usize>(42), v128.splat<usize>(1)) 
+    == 
+    v128.splat<usize>(42)
+  );
+  assert(
+    v128.mul<usize>(v128.splat<usize>(42), v128.splat<usize>(2)) 
+    == 
+    v128.splat<usize>(84)
+  );
+  assert(
+    v128.add<usize>(v128.splat<usize>(42), v128.splat<usize>(24))
+    == 
+    v128.splat<usize>(66)
+  );
+  assert(v128.extract_lane<usize>(v128.splat<usize>(42), 0) == 42);
+  assert(v128.extract_lane<usize>(v128.replace_lane<usize>(v128.splat<usize>(42), 0, 24), 0) == 24);
+  assert(v128.add<usize>(v128.splat<usize>(42), v128.splat<usize>(1)) == v128.splat<usize>(43));
+  assert(v128.sub<usize>(v128.splat<usize>(42), v128.splat<usize>(1)) == v128.splat<usize>(41));
+  assert(v128.eq<usize>(v128.splat<usize>(42), v128.splat<usize>(1)) == v128.splat<isize>(0));
+  assert(v128.eq<usize>(v128.splat<usize>(42), v128.splat<usize>(42)) == v128.splat<isize>(-1));
+  assert(v128.ne<usize>(v128.splat<usize>(42), v128.splat<usize>(1)) == v128.splat<isize>(-1));
+  assert(v128.ne<usize>(v128.splat<usize>(42), v128.splat<usize>(42)) == v128.splat<isize>(0));
+  if (process.arch == "wasm32") { // binary does not have opcode: LtU64x2, LeU64x2, GtU64x2, GeU64x2
+    assert(v128.le<usize>(v128.splat<usize>(1), v128.splat<usize>(42)) == v128.splat<isize>(-1));
+    assert(v128.le<usize>(v128.splat<usize>(1), v128.splat<usize>(1)) == v128.splat<isize>(-1));
+    assert(v128.lt<usize>(v128.splat<usize>(1), v128.splat<usize>(42)) == v128.splat<isize>(-1));
+    assert(v128.lt<usize>(v128.splat<usize>(1), v128.splat<usize>(1)) == v128.splat<isize>(0));
+    assert(v128.ge<usize>(v128.splat<usize>(42), v128.splat<usize>(1)) == v128.splat<isize>(-1));
+    assert(v128.ge<usize>(v128.splat<usize>(1), v128.splat<usize>(1)) == v128.splat<isize>(-1));
+    assert(v128.gt<usize>(v128.splat<usize>(42), v128.splat<usize>(1)) == v128.splat<isize>(-1));
+    assert(v128.gt<usize>(v128.splat<usize>(1), v128.splat<usize>(1)) == v128.splat<isize>(0));
+  }
+  assert(v128.neg<usize>(v128.splat<usize>(1)) == v128.splat<isize>(-1));
+  assert(v128.neg<usize>(v128.splat<usize>(usize.MAX_VALUE)) == v128.splat<isize>(1));
+  assert(v128.eq<usize>(v128.splat<usize>(42), v128.splat<usize>(42)) == v128.splat<isize>(-1));
+  assert(v128.abs<usize>(v128.splat<usize>(42)) == v128.splat<usize>(42));
+  assert(v128.shl<usize>(v128.splat<usize>(1), 1) == v128.splat<usize>(2));
+  assert(v128.shr<usize>(v128.splat<usize>(2), 1) == v128.splat<usize>(1));
+  assert(v128.all_true<usize>(v128.splat<usize>(1)));
+  if (process.arch == "wasm32") { //bitmask will return different value depends on compile target
+    assert(
+      v128.bitmask<usize>(v128.splat<usize>(usize.MAX_VALUE))
+      ==
+      0xf
+    );
+    assert(
+      v128.bitmask<usize>(v128.splat<usize>(0))
+      ==
+      0
+    );
+  }
+  if (process.arch == "wasm64") {
+    assert(
+      v128.bitmask<usize>(v128.splat<usize>(usize.MAX_VALUE))
+      ==
+      0x3
+    );
+    assert(
+      v128.bitmask<usize>(v128.splat<usize>(0))
+      ==
+      0
+    );
+  }
+  {
+    let ptr = __alloc(16);
+    store<usize>(ptr, 42);
+    let v: v128 = v128.splat<usize>(0);
+    v = v128.load_lane<usize>(ptr, v, 0);
+    assert(v128.extract_lane<usize>(v, 0) == 42);
+    __free(ptr);
+  }
+}
+
+function test_isize(): void {
+  assert(v128.extract_lane<isize>(v128.splat<usize>(42), 0) == 42);
+  assert(v128.extract_lane<isize>(v128.replace_lane<usize>(v128.splat<usize>(42), 0, 24), 0) == 24);
+  assert(v128.add<isize>(v128.splat<isize>(42), v128.splat<isize>(1)) == v128.splat<isize>(43));
+  assert(v128.mul<isize>(v128.splat<isize>(42), v128.splat<isize>(1)) == v128.splat<isize>(42));
+  assert(v128.sub<isize>(v128.splat<isize>(42), v128.splat<isize>(1)) == v128.splat<isize>(41));
+  assert(v128.eq<isize>(v128.splat<isize>(42), v128.splat<isize>(1)) == v128.splat<isize>(0));
+  assert(v128.eq<isize>(v128.splat<isize>(42), v128.splat<isize>(42)) == v128.splat<isize>(-1));
+  assert(v128.ne<isize>(v128.splat<isize>(42), v128.splat<isize>(1)) == v128.splat<isize>(-1));
+  assert(v128.ne<isize>(v128.splat<isize>(42), v128.splat<isize>(42)) == v128.splat<isize>(0));
+  assert(v128.le<isize>(v128.splat<isize>(1), v128.splat<isize>(42)) == v128.splat<isize>(-1));
+  assert(v128.le<isize>(v128.splat<isize>(1), v128.splat<isize>(1)) == v128.splat<isize>(-1));
+  assert(v128.lt<isize>(v128.splat<isize>(1), v128.splat<isize>(42)) == v128.splat<isize>(-1));
+  assert(v128.lt<isize>(v128.splat<isize>(1), v128.splat<isize>(1)) == v128.splat<isize>(0));
+  assert(v128.ge<isize>(v128.splat<isize>(42), v128.splat<isize>(1)) == v128.splat<isize>(-1));
+  assert(v128.ge<isize>(v128.splat<isize>(1), v128.splat<isize>(1)) == v128.splat<isize>(-1));
+  assert(v128.gt<isize>(v128.splat<isize>(42), v128.splat<isize>(1)) == v128.splat<isize>(-1));
+  assert(v128.gt<isize>(v128.splat<isize>(1), v128.splat<isize>(1)) == v128.splat<isize>(0));
+  assert(v128.eq<isize>(v128.splat<isize>(42), v128.splat<isize>(42)) == v128.splat<isize>(-1));
+  assert(v128.neg<isize>(v128.splat<isize>(1)) == v128.splat<isize>(-1));
+  assert(v128.neg<isize>(v128.splat<isize>(-1)) == v128.splat<isize>(1));
+  assert(v128.neg<isize>(v128.splat<isize>(usize.MAX_VALUE)) == v128.splat<isize>(1));
+  assert(v128.abs<isize>(v128.splat<isize>(42)) == v128.splat<isize>(42));
+  assert(v128.shl<isize>(v128.splat<isize>(1), 1) == v128.splat<isize>(2));
+  assert(v128.shr<isize>(v128.splat<isize>(2), 1) == v128.splat<isize>(1));
+  assert(v128.all_true<isize>(v128.splat<isize>(1)));
+  if (process.arch == "wasm32") { //bitmask will return different value depends on compile target
+    assert(
+      v128.bitmask<isize>(v128.splat<isize>(usize.MAX_VALUE))
+      ==
+      0xf
+    );
+    assert(
+      v128.bitmask<isize>(v128.splat<isize>(0))
+      ==
+      0
+    );
+  }
+  if (process.arch == "wasm64") {
+    assert(
+      v128.bitmask<isize>(v128.splat<isize>(usize.MAX_VALUE))
+      ==
+      0x3
+    );
+    assert(
+      v128.bitmask<isize>(v128.splat<isize>(0))
+      ==
+      0
+    );
+  }
+  {
+    let ptr = __alloc(16);
+    store<isize>(ptr, 42);
+    let v: v128 = v128.splat<isize>(0);
+    v = v128.load_lane<isize>(ptr, v, 0);
+    assert(v128.extract_lane<isize>(v, 0) == 42);
+    __free(ptr);
+  }
+}
 
 function test_const(): v128 {
   const one = i32x4.splat(1); // should precompute
@@ -1163,4 +1297,6 @@ test_i32x4();
 test_i64x2();
 test_f32x4();
 test_f64x2();
+test_usize();
+test_isize();
 test_const();
