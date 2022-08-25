@@ -1,4 +1,4 @@
-import { strtol, strtod } from "./util/string";
+import { strtol, strtod, strtob } from "./util/string";
 
 type auto = i32;
 
@@ -986,7 +986,7 @@ export namespace bool {
   export const MAX_VALUE: bool = true;
 
   export function parse(value: string): bool {
-    return value == "true";
+    return strtob(value);
   }
 }
 

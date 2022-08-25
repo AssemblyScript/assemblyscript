@@ -843,6 +843,21 @@ export function strtod(str: string): f64 {
   return copysign<f64>(scientific(x, position - min(capacity, consumed) + parseExp(ptr, len)), sign);
 }
 
+export function strtob(str: string): bool {
+  // skip whitespaces
+  var size = <usize>str.length << 1;
+  var offset: usize = 0;
+  while (offset < size && isSpace(load<u16>(changetype<usize>(str) + offset))) {
+    offset += 2;
+  }
+  size -= offset;
+  if (size < 8) return false;
+  return (
+    load<u64>(changetype<usize>(str) + offset) ==
+    0x00_65_00_75_00_72_00_74 // true (as \00\e\00\u\00\e\00\t)
+  );
+}
+
 export function joinBooleanArray(dataStart: usize, length: i32, separator: string): string {
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";

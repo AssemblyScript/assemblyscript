@@ -107,6 +107,14 @@ assert("".trim() == "");
 assert("ab c".trim() == "ab c");
 assert(" \n\t\rabc \t\r ".trim() == "abc");
 
+assert(bool.parse("true") == true);
+assert(bool.parse("\t\n true") == true);
+assert(bool.parse("  trueabc") == true);
+assert(bool.parse("") == false);
+assert(bool.parse("tru") == false);
+assert(bool.parse("True") == false);
+assert(bool.parse("false") == false);
+
 assert(parseInt("0") == 0);
 assert(parseInt("000") == 0);
 assert(parseInt("1") == 1);
