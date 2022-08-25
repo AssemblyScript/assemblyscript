@@ -985,6 +985,8 @@ export namespace bool {
   @lazy
   export const MAX_VALUE: bool = true;
 
+  // @ts-ignore: decorator
+  @inline
   export function parse(value: string): bool {
     return strtob(value);
   }

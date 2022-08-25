@@ -8977,11 +8977,10 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3152
-  i32.store
+  i32.store offset=20
   i32.const 3152
   call $~lib/util/string/strtob
-  i32.const 1
-  i32.ne
+  i32.eqz
   if
    i32.const 0
    i32.const 1120
@@ -8992,11 +8991,10 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3184
-  i32.store
+  i32.store offset=24
   i32.const 3184
   call $~lib/util/string/strtob
-  i32.const 1
-  i32.ne
+  i32.eqz
   if
    i32.const 0
    i32.const 1120
@@ -9007,11 +9005,10 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3232
-  i32.store
+  i32.store offset=20
   i32.const 3232
   call $~lib/util/string/strtob
-  i32.const 1
-  i32.ne
+  i32.eqz
   if
    i32.const 0
    i32.const 1120
@@ -9022,7 +9019,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 1712
-  i32.store
+  i32.store offset=24
   i32.const 1712
   call $~lib/util/string/strtob
   if
@@ -9035,7 +9032,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3280
-  i32.store
+  i32.store offset=20
   i32.const 3280
   call $~lib/util/string/strtob
   if
@@ -9048,7 +9045,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3312
-  i32.store
+  i32.store offset=24
   i32.const 3312
   call $~lib/util/string/strtob
   if
@@ -9061,7 +9058,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3344
-  i32.store
+  i32.store offset=20
   i32.const 3344
   call $~lib/util/string/strtob
   if
@@ -9730,7 +9727,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4640
-  i32.store offset=20
+  i32.store offset=24
   i32.const 4640
   call $~lib/util/string/strtod
   f32.demote_f64
@@ -9747,7 +9744,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4640
-  i32.store offset=24
+  i32.store offset=20
   i32.const 4640
   call $~lib/util/string/strtod
   local.tee $1
@@ -9777,7 +9774,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4864
-  i32.store offset=20
+  i32.store offset=24
   call $~lib/util/string/strtol<i32>
   i32.const 2147483647
   i32.ne
@@ -9805,7 +9802,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4912
-  i32.store offset=20
+  i32.store offset=24
   call $~lib/util/string/strtol<i64>
   i64.const 9223372036854775807
   i64.ne
@@ -12111,7 +12108,7 @@
   i32.const 13312
   call $~lib/string/String#concat
   local.tee $0
-  i32.store offset=24
+  i32.store offset=20
   global.get $~lib/memory/__stack_pointer
   i32.const 13344
   i32.store offset=4
@@ -13006,7 +13003,7 @@
   i32.const 65377
   call $~lib/string/String.fromCodePoint
   local.tee $3
-  i32.store offset=24
+  i32.store offset=20
   global.get $~lib/memory/__stack_pointer
   local.set $4
   i32.const 55296
@@ -13026,7 +13023,7 @@
   local.get $0
   call $~lib/string/String#concat
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $3
   local.get $0
   call $~lib/string/String.__gt
@@ -15275,7 +15272,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 1
@@ -15320,7 +15317,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   if
@@ -15344,7 +15341,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 1
@@ -15389,7 +15386,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 1
@@ -15434,7 +15431,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 3
@@ -15515,7 +15512,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 3
@@ -15596,7 +15593,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 4
@@ -15695,7 +15692,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 4
@@ -15794,7 +15791,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 4
@@ -15893,7 +15890,7 @@
   i32.const 2147483647
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 3
@@ -15974,7 +15971,7 @@
   i32.const 0
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   if
@@ -15998,7 +15995,7 @@
   i32.const 1
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 1
@@ -16043,7 +16040,7 @@
   i32.const 1
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 1
@@ -16088,7 +16085,7 @@
   i32.const 4
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 3
@@ -16169,7 +16166,7 @@
   i32.const -1
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 3
@@ -16250,7 +16247,7 @@
   i32.const -1
   call $~lib/string/String#split
   local.tee $0
-  i32.store offset=20
+  i32.store offset=24
   local.get $0
   i32.load offset=12
   i32.const 3
