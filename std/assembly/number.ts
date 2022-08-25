@@ -1,5 +1,5 @@
 import { itoa32, utoa32, itoa64, utoa64, dtoa } from "./util/number";
-import { strtol } from "./util/string";
+import { strtol, strtod } from "./util/string";
 
 // @ts-ignore: decorator
 @builtin @inline
@@ -311,7 +311,7 @@ export abstract class F32 {
 
   /** @deprecated */
   static parseFloat(value: string): f32 {
-    return <f32>parseFloat(value);
+    return <f32>strtod(value);
   }
 
   toString(this: f32, radix: i32 = 0): String {
@@ -377,7 +377,7 @@ export abstract class F64 {
 
   /** @deprecated */
   static parseFloat(value: string): f64 {
-    return parseFloat(value);
+    return strtod(value);
   }
 
   toString(this: f64, radix: i32 = 0): String {

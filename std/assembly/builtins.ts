@@ -1,4 +1,4 @@
-import { strtol } from "./util/string";
+import { strtol, strtod } from "./util/string";
 
 type auto = i32;
 
@@ -1031,7 +1031,7 @@ export namespace f32 {
   // @ts-ignore: decorator
   @inline
   export function parse(value: string): f32 {
-    return <f32>parseFloat(value);
+    return <f32>strtod(value);
   }
 
   // @ts-ignore: decorator
@@ -1152,7 +1152,7 @@ export namespace f64 {
   // @ts-ignore: decorator
   @inline
   export function parse(value: string): f64 {
-    return parseFloat(value);
+    return strtod(value);
   }
 
   // @ts-ignore: decorator

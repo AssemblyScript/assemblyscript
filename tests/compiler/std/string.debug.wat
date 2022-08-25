@@ -4962,18 +4962,14 @@
   local.get $sign
   f64.copysign
  )
- (func $~lib/string/parseFloat (param $str i32) (result f64)
-  local.get $str
-  call $~lib/util/string/strtod
- )
  (func $~lib/number/F32.parseFloat (param $value i32) (result f32)
   local.get $value
-  call $~lib/string/parseFloat
+  call $~lib/util/string/strtod
   f32.demote_f64
  )
  (func $~lib/number/F64.parseFloat (param $value i32) (result f64)
   local.get $value
-  call $~lib/string/parseFloat
+  call $~lib/util/string/strtod
  )
  (func $~lib/util/string/strtol<i32> (param $str i32) (param $radix i32) (result i32)
   (local $len i32)
@@ -5604,6 +5600,10 @@
   local.get $value
   local.get $radix
   call $~lib/util/string/strtol<i64>
+ )
+ (func $~lib/string/parseFloat (param $str i32) (result f64)
+  local.get $str
+  call $~lib/util/string/strtod
  )
  (func $~lib/string/String.__concat (param $left i32) (param $right i32) (result i32)
   local.get $left
@@ -11511,7 +11511,7 @@
   local.tee $0
   i32.store offset=20
   local.get $0
-  call $~lib/string/parseFloat
+  call $~lib/util/string/strtod
   f32.demote_f64
   local.tee $3
   local.get $3
@@ -11530,7 +11530,7 @@
   local.tee $1
   i32.store offset=24
   local.get $1
-  call $~lib/string/parseFloat
+  call $~lib/util/string/strtod
   local.tee $2
   local.get $2
   f64.ne
