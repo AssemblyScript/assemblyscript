@@ -1,5 +1,17 @@
-import { itoa32, utoa32, itoa64, utoa64, dtoa, itoa_buffered, dtoa_buffered, MAX_DOUBLE_LENGTH } from "./number";
-import { ipow32 } from "../math";
+import {
+  itoa32,
+  utoa32,
+  itoa64,
+  utoa64,
+  dtoa,
+  itoa_buffered,
+  dtoa_buffered,
+  MAX_DOUBLE_LENGTH
+} from "./number";
+
+import {
+  ipow32
+} from "../math";
 
 // All tables are stored as two staged lookup tables (static tries)
 // because the full range of Unicode symbols can't be efficiently
