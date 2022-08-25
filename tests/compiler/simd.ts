@@ -1121,7 +1121,7 @@ function test_usize(): void {
   assert(v128.shl<usize>(v128.splat<usize>(1), 1) == v128.splat<usize>(2));
   assert(v128.shr<usize>(v128.splat<usize>(2), 1) == v128.splat<usize>(1));
   assert(v128.all_true<usize>(v128.splat<usize>(1)));
-  if (process.arch == "wasm32") { //bitmask will return different value depends on compile target
+  if (process.arch == "wasm32") { // bitmask will return different value depends on compile target
     assert(
       v128.bitmask<usize>(v128.splat<usize>(usize.MAX_VALUE))
       ==
@@ -1181,7 +1181,7 @@ function test_isize(): void {
   assert(v128.shl<isize>(v128.splat<isize>(1), 1) == v128.splat<isize>(2));
   assert(v128.shr<isize>(v128.splat<isize>(2), 1) == v128.splat<isize>(1));
   assert(v128.all_true<isize>(v128.splat<isize>(1)));
-  if (process.arch == "wasm32") { //bitmask will return different value depends on compile target
+  if (process.arch == "wasm32") { // bitmask will return different value depends on compile target
     assert(
       v128.bitmask<isize>(v128.splat<isize>(usize.MAX_VALUE))
       ==
