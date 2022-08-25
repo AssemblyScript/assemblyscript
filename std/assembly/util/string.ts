@@ -844,14 +844,19 @@ export function strtod(str: string): f64 {
 }
 
 export function strtob(str: string): bool {
-  // skip whitespaces
-  var size = <usize>str.length << 1;
+  var size: usize = str.length << 1;
   var offset: usize = 0;
-  while (offset < size && isSpace(load<u16>(changetype<usize>(str) + offset))) {
-    offset += 2;
+  if (size > 8) {
+    // trim end whitespaces
+    while (size && isSpace(load<u16>(changetype<usize>(str) + size - 2))) size -= 2;
   }
-  size -= offset;
   if (size < 8) return false;
+  if (size > 8) {
+    // trim start whitespaces
+    while (offset < size && isSpace(load<u16>(changetype<usize>(str) + offset))) offset += 2;
+    size -= offset;
+  }
+  if (size != 8) return false;
   // "true" represents as \00\e\00\u\00\e\00\t (00 65 00 75 00 72 00 74)
   return load<u64>(changetype<usize>(str) + offset) == 0x0065_0075_0072_0074;
 }
