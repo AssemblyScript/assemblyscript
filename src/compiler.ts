@@ -4629,6 +4629,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType,
       right,
       resolver.currentThisExpression,
+      Type.i32,
       resolver.currentElementExpression,
       contextualType != Type.void
     );
@@ -5477,6 +5478,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return this.module.unreachable();
     var thisExpression = resolver.currentThisExpression;
     var elementExpression = resolver.currentElementExpression;
+    var elementType = Type.i32;
 
     // to compile just the value, we need to know the target's type
     var targetType: Type;
@@ -5544,6 +5546,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.unreachable();
         }
         assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
+        elementType = indexedSet.signature.parameterTypes[0];    // 1st parameter is the index
         targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
         if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         if (!isUnchecked && this.options.pedantic) {
@@ -5573,6 +5576,7 @@ export class Compiler extends DiagnosticEmitter {
       valueType,
       valueExpression,
       thisExpression,
+      elementType,
       elementExpression,
       contextualType != Type.void
     );
@@ -5590,6 +5594,8 @@ export class Compiler extends DiagnosticEmitter {
     valueExpression: Expression,
     /** `this` expression reference if a field or property set. */
     thisExpression: Expression | null,
+    /** Index expression type. */
+    indexType: Type,
     /** Index expression reference if an indexed set. */
     indexExpression: Expression | null,
     /** Whether to tee the value. */
@@ -5735,7 +5741,7 @@ export class Compiler extends DiagnosticEmitter {
           thisType,
           Constraints.CONV_IMPLICIT | Constraints.IS_THIS
         );
-        let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
+        let elementExpr = this.compileExpression(assert(indexExpression), indexType, Constraints.CONV_IMPLICIT);
         let elementType = this.currentType;
         if (tee) {
           let tempTarget = flow.getTempLocal(thisType);
@@ -9164,6 +9170,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType,
         expression.operand,
         resolver.currentThisExpression,
+        Type.i32,
         resolver.currentElementExpression,
         false
       );
@@ -9176,6 +9183,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType,
       expression.operand,
       resolver.currentThisExpression,
+      Type.i32,
       resolver.currentElementExpression,
       false
     );
@@ -9541,6 +9549,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType,
       expression.operand,
       resolver.currentThisExpression,
+      Type.i32,
       resolver.currentElementExpression,
       contextualType != Type.void
     );

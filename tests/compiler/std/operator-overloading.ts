@@ -330,3 +330,32 @@ aii1++; // 2, 3
 var aii2 = new TesterInlineInstance(2, 3);
 var aii  = aii1 + aii2;
 assert(aii.x == 4 && aii.y == 6);
+
+// test custom element access overloading with string keys
+class TesterElementAccess {
+  [key: string]: number;
+  constructor(
+    public x: f32,
+    public y: f32
+  ) {}
+  @operator("[]")
+  __get(key: string): f32 {
+    return key == "x" ? this.x : this.y;
+  }
+  @operator("[]=")
+  __set(key: string, value: f32): void {
+    if (key == "x") this.x = value;
+    else this.y = value;
+  }
+}
+
+var tea = new TesterElementAccess(1, 2);
+
+tea["x"] = -1.0;
+tea["y"] = -2.0;
+
+assert(tea.x == f32(-1.0));
+assert(tea["x"] == f32(-1.0));
+
+assert(tea.y == f32(-2.0));
+assert(tea["y"] == f32(-2.0));
