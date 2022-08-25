@@ -2916,13 +2916,6 @@
   end
   local.get $1
   i32.const 8
-  i32.lt_u
-  if
-   i32.const 0
-   return
-  end
-  local.get $1
-  i32.const 8
   i32.gt_u
   if (result i32)
    loop $while-continue|1

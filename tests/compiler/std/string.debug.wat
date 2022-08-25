@@ -3457,13 +3457,6 @@
   end
   local.get $size
   i32.const 8
-  i32.lt_u
-  if
-   i32.const 0
-   return
-  end
-  local.get $size
-  i32.const 8
   i32.gt_u
   if
    loop $while-continue|1

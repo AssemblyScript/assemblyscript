@@ -850,7 +850,6 @@ export function strtob(str: string): bool {
     // trim end whitespaces
     while (size && isSpace(load<u16>(changetype<usize>(str) + size - 2))) size -= 2;
   }
-  if (size < 8) return false;
   if (size > 8) {
     // trim start whitespaces
     while (offset < size && isSpace(load<u16>(changetype<usize>(str) + offset))) offset += 2;
