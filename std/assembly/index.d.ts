@@ -631,6 +631,8 @@ declare namespace bool {
   export const MIN_VALUE: bool;
   /** Largest representable value. */
   export const MAX_VALUE: bool;
+  /** Converts a string to an bool of this type. */
+  export function parse(value: string): bool;
 }
 /** Converts any other numeric value to a 32-bit float. */
 declare function f32(value: any): f32;

@@ -984,6 +984,10 @@ export namespace bool {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: bool = true;
+
+  export function parse(value: string): bool {
+    return value == "true";
+  }
 }
 
 // @ts-ignore: decorator
