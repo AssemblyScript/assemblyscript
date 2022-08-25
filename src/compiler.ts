@@ -5545,9 +5545,12 @@ export class Compiler extends DiagnosticEmitter {
           }
           return this.module.unreachable();
         }
-        assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
-        elementType = indexedSet.signature.parameterTypes[0];    // 1st parameter is the index
-        targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
+        let parameterTypes = indexedSet.signature.parameterTypes;
+
+        assert(parameterTypes.length == 2); // parser must guarantee this
+        elementType = parameterTypes[0];    // 1st parameter is the index
+        targetType = parameterTypes[1];     // 2nd parameter is the element
+
         if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         if (!isUnchecked && this.options.pedantic) {
           this.pedantic(
