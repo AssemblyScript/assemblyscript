@@ -2829,7 +2829,7 @@
   local.tee $1
   i32.const 8
   i32.gt_u
-  if
+  if (result i32)
    loop $while-continue|0
     local.get $1
     if (result i32)
@@ -2913,97 +2913,99 @@
      br $while-continue|0
     end
    end
-  end
-  local.get $1
-  i32.const 8
-  i32.gt_u
-  if (result i32)
-   loop $while-continue|1
-    local.get $1
-    local.get $2
-    i32.gt_u
-    if (result i32)
-     block $__inlined_func$~lib/util/string/isSpace0 (result i32)
-      local.get $0
-      local.get $2
-      i32.add
-      i32.load16_u
-      local.tee $3
-      i32.const 5760
-      i32.lt_u
-      if
-       local.get $3
-       i32.const 128
-       i32.or
-       i32.const 160
-       i32.eq
-       local.get $3
-       i32.const 9
-       i32.sub
-       i32.const 4
-       i32.le_u
-       i32.or
-       br $__inlined_func$~lib/util/string/isSpace0
-      end
-      i32.const 1
-      local.get $3
-      i32.const -8192
-      i32.add
-      i32.const 10
-      i32.le_u
-      br_if $__inlined_func$~lib/util/string/isSpace0
-      drop
-      block $break|01
-       block $case6|02
+   local.get $1
+   i32.const 8
+   i32.gt_u
+   if (result i32)
+    loop $while-continue|1
+     local.get $1
+     local.get $2
+     i32.gt_u
+     if (result i32)
+      block $__inlined_func$~lib/util/string/isSpace0 (result i32)
+       local.get $0
+       local.get $2
+       i32.add
+       i32.load16_u
+       local.tee $3
+       i32.const 5760
+       i32.lt_u
+       if
         local.get $3
-        i32.const 5760
+        i32.const 128
+        i32.or
+        i32.const 160
         i32.eq
-        br_if $case6|02
         local.get $3
-        i32.const 8232
-        i32.eq
-        br_if $case6|02
-        local.get $3
-        i32.const 8233
-        i32.eq
-        br_if $case6|02
-        local.get $3
-        i32.const 8239
-        i32.eq
-        br_if $case6|02
-        local.get $3
-        i32.const 8287
-        i32.eq
-        br_if $case6|02
-        local.get $3
-        i32.const 12288
-        i32.eq
-        br_if $case6|02
-        local.get $3
-        i32.const 65279
-        i32.eq
-        br_if $case6|02
-        br $break|01
+        i32.const 9
+        i32.sub
+        i32.const 4
+        i32.le_u
+        i32.or
+        br $__inlined_func$~lib/util/string/isSpace0
        end
        i32.const 1
-       br $__inlined_func$~lib/util/string/isSpace0
+       local.get $3
+       i32.const -8192
+       i32.add
+       i32.const 10
+       i32.le_u
+       br_if $__inlined_func$~lib/util/string/isSpace0
+       drop
+       block $break|01
+        block $case6|02
+         local.get $3
+         i32.const 5760
+         i32.eq
+         br_if $case6|02
+         local.get $3
+         i32.const 8232
+         i32.eq
+         br_if $case6|02
+         local.get $3
+         i32.const 8233
+         i32.eq
+         br_if $case6|02
+         local.get $3
+         i32.const 8239
+         i32.eq
+         br_if $case6|02
+         local.get $3
+         i32.const 8287
+         i32.eq
+         br_if $case6|02
+         local.get $3
+         i32.const 12288
+         i32.eq
+         br_if $case6|02
+         local.get $3
+         i32.const 65279
+         i32.eq
+         br_if $case6|02
+         br $break|01
+        end
+        i32.const 1
+        br $__inlined_func$~lib/util/string/isSpace0
+       end
+       i32.const 0
       end
+     else
       i32.const 0
      end
-    else
-     i32.const 0
+     if
+      local.get $2
+      i32.const 2
+      i32.add
+      local.set $2
+      br $while-continue|1
+     end
     end
-    if
-     local.get $2
-     i32.const 2
-     i32.add
-     local.set $2
-     br $while-continue|1
-    end
+    local.get $1
+    local.get $2
+    i32.sub
+   else
+    local.get $1
    end
-   local.get $1
-   local.get $2
-   i32.sub
   else
    local.get $1
   end

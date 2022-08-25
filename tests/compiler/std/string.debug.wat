@@ -3454,38 +3454,38 @@
      br $while-continue|0
     end
    end
-  end
-  local.get $size
-  i32.const 8
-  i32.gt_u
-  if
-   loop $while-continue|1
-    local.get $offset
-    local.get $size
-    i32.lt_u
-    if (result i32)
-     local.get $str
-     local.get $offset
-     i32.add
-     i32.load16_u
-     call $~lib/util/string/isSpace
-    else
-     i32.const 0
-    end
-    local.set $var$3
-    local.get $var$3
-    if
-     local.get $offset
-     i32.const 2
-     i32.add
-     local.set $offset
-     br $while-continue|1
-    end
-   end
    local.get $size
-   local.get $offset
-   i32.sub
-   local.set $size
+   i32.const 8
+   i32.gt_u
+   if
+    loop $while-continue|1
+     local.get $offset
+     local.get $size
+     i32.lt_u
+     if (result i32)
+      local.get $str
+      local.get $offset
+      i32.add
+      i32.load16_u
+      call $~lib/util/string/isSpace
+     else
+      i32.const 0
+     end
+     local.set $var$3
+     local.get $var$3
+     if
+      local.get $offset
+      i32.const 2
+      i32.add
+      local.set $offset
+      br $while-continue|1
+     end
+    end
+    local.get $size
+    local.get $offset
+    i32.sub
+    local.set $size
+   end
   end
   local.get $size
   i32.const 8

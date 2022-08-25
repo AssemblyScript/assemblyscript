@@ -847,13 +847,13 @@ export function strtob(str: string): bool {
   var size: usize = str.length << 1;
   var offset: usize = 0;
   if (size > 8) {
-    // trim end whitespaces
+    // try trim end whitespaces first
     while (size && isSpace(load<u16>(changetype<usize>(str) + size - 2))) size -= 2;
-  }
-  if (size > 8) {
-    // trim start whitespaces
-    while (offset < size && isSpace(load<u16>(changetype<usize>(str) + offset))) offset += 2;
-    size -= offset;
+    if (size > 8) {
+      // trim start whitespaces
+      while (offset < size && isSpace(load<u16>(changetype<usize>(str) + offset))) offset += 2;
+      size -= offset;
+    }
   }
   if (size != 8) return false;
   // "true" represents as \00\e\00\u\00\e\00\t (00 65 00 75 00 72 00 74)
