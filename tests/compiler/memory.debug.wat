@@ -40,13 +40,13 @@
  (func $memory/test (result i32)
   (local $value i32)
   i32.const 16
-  i32.load
+  i32.load $0
   local.set $value
   i32.const 16
   local.get $value
   i32.const 1
   i32.add
-  i32.store
+  i32.store $0
   local.get $value
  )
  (func $memory/testGeneric<v128> (result i32)
@@ -294,7 +294,7 @@
   i32.const 161
   global.set $memory/ptr
   global.get $memory/ptr
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.eq
   i32.eqz
@@ -307,7 +307,7 @@
    unreachable
   end
   global.get $memory/ptr
-  i32.load8_u offset=1
+  i32.load8_u $0 offset=1
   i32.const 2
   i32.eq
   i32.eqz
@@ -320,7 +320,7 @@
    unreachable
   end
   global.get $memory/ptr
-  i32.load8_u offset=2
+  i32.load8_u $0 offset=2
   i32.const 3
   i32.eq
   i32.eqz
@@ -335,7 +335,7 @@
   i32.const 164
   global.set $memory/ptr
   global.get $memory/ptr
-  f32.load
+  f32.load $0
   f32.const 1.5
   f32.eq
   i32.eqz
@@ -348,7 +348,7 @@
    unreachable
   end
   global.get $memory/ptr
-  f32.load offset=4
+  f32.load $0 offset=4
   f32.const 2.5
   f32.eq
   i32.eqz
@@ -361,7 +361,7 @@
    unreachable
   end
   global.get $memory/ptr
-  f32.load offset=8
+  f32.load $0 offset=8
   f32.const 3.5
   f32.eq
   i32.eqz

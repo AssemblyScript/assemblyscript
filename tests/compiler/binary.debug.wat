@@ -752,7 +752,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load
+   f64.load $0
    local.set $var$16
    i32.const 8
    local.get $var$12
@@ -761,7 +761,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load offset=16
+   f64.load $0 offset=16
    local.set $var$17
    i32.const 8
    local.get $var$12
@@ -770,7 +770,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load offset=24
+   f64.load $0 offset=24
    local.set $var$18
    local.get $var$14
    i64.const 2147483648
@@ -1066,7 +1066,7 @@
     i32.const 3
     i32.shl
     i32.add
-    i64.load
+    i64.load $0
     f64.reinterpret_i64
     local.set $var$25
     i32.const 4104
@@ -1074,7 +1074,7 @@
     i32.const 3
     i32.shl
     i32.add
-    i64.load offset=8
+    i64.load $0 offset=8
     local.get $var$13
     i64.add
     local.set $var$11
@@ -1895,7 +1895,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load
+   f64.load $0
    local.set $var$15
    i32.const 6152
    local.get $var$11
@@ -1904,7 +1904,7 @@
    i32.add
    i32.shl
    i32.add
-   f64.load offset=8
+   f64.load $0 offset=8
    local.set $var$16
    local.get $var$13
    f32.reinterpret_i32
@@ -2039,7 +2039,7 @@
    i32.const 3
    i32.shl
    i32.add
-   i64.load
+   i64.load $0
    local.set $var$24
    local.get $var$24
    local.get $var$23

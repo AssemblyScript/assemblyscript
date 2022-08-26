@@ -355,16 +355,26 @@ export const enum RuntimeFeatures {
   setArgumentsLength = 1 << 6
 }
 
+/** Imported default names of compiler-generated elements. */
+export namespace ImportNames {
+  /** Name of the default namespace */
+  export const DefaultNamespace = "env";
+  /** Name of the memory instance, if imported. */
+  export const Memory = "memory";
+  /** Name of the table instance, if imported. */
+  export const Table = "table";
+}
+
 /** Exported names of compiler-generated elements. */
 export namespace ExportNames {
+  /** Name of the memory instance, if exported. */
+  export const Memory = "memory";
+  /** Name of the table instance, if exported. */
+  export const Table = "table";
   /** Name of the argumentsLength varargs helper global. */
   export const argumentsLength = "__argumentsLength";
   /** Name of the alternative argumentsLength setter function. */
   export const setArgumentsLength = "__setArgumentsLength";
-  /** Name of the memory instance, if exported. */
-  export const memory = "memory";
-  /** Name of the table instance, if exported. */
-  export const table = "table";
 }
 
 /** Functions to export if `--exportRuntime` is set. */
@@ -639,115 +649,9 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    this.memoryOffset = memoryOffset;
-
-    // check that we didn't exceed lowMemoryLimit already
-    var lowMemoryLimit32 = this.options.lowMemoryLimit;
-    if (lowMemoryLimit32) {
-      let lowMemoryLimit = i64_new(lowMemoryLimit32 & ~15);
-      if (i64_gt(memoryOffset, lowMemoryLimit)) {
-        this.error(
-          DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
-          null, i64_to_string(memoryOffset), i64_to_string(lowMemoryLimit)
-        );
-      }
-    }
-
-    // set up memory
-    var initialPages: u32 = 0;
-    if (this.options.memoryBase /* is specified */ || this.memorySegments.length) {
-      initialPages = u32(i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16))));
-    }
-    if (options.initialMemory) {
-      if (options.initialMemory < initialPages) {
-        this.error(
-          DiagnosticCode.Module_requires_at_least_0_pages_of_initial_memory,
-          null,
-          initialPages.toString()
-        );
-      } else {
-        initialPages = options.initialMemory;
-      }
-    }
-    var maximumPages = Module.UNLIMITED_MEMORY;
-    if (options.maximumMemory) {
-      if (options.maximumMemory < initialPages) {
-        this.error(
-          DiagnosticCode.Module_requires_at_least_0_pages_of_maximum_memory,
-          null,
-          initialPages.toString()
-        );
-      } else {
-        maximumPages = options.maximumMemory;
-      }
-    }
-    var isSharedMemory = false;
-    if (options.sharedMemory) {
-      isSharedMemory = true;
-      if (!options.maximumMemory) {
-        this.error(
-          DiagnosticCode.Shared_memory_requires_maximum_memory_to_be_defined,
-          null
-        );
-        isSharedMemory = false;
-      }
-      if (!options.hasFeature(Feature.THREADS)) {
-        this.error(
-          DiagnosticCode.Shared_memory_requires_feature_threads_to_be_enabled,
-          null
-        );
-        isSharedMemory = false;
-      }
-    }
-    module.setMemory(
-      initialPages,
-      maximumPages,
-      this.memorySegments,
-      options.target,
-      options.exportMemory ? ExportNames.memory : null,
-      isSharedMemory
-    );
-
-    // import memory if requested (default memory is named '0' by Binaryen)
-    if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
-
-    // import and/or export table if requested (default table is named '0' by Binaryen)
-    if (options.importTable) {
-      module.addTableImport("0", "env", "table");
-      if (options.pedantic && options.willOptimize) {
-        this.pedantic(
-          DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
-          null
-        );
-      }
-    }
-    if (options.exportTable) {
-      module.addTableExport("0", ExportNames.table);
-      if (options.pedantic && options.willOptimize) {
-        this.pedantic(
-          DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
-          null
-        );
-      }
-    }
-
-    // set up function table (first elem is blank)
-    var tableBase = this.options.tableBase;
-    if (!tableBase) tableBase = 1; // leave first elem blank
-    var functionTableNames = new Array<string>(functionTable.length);
-    for (let i = 0, k = functionTable.length; i < k; ++i) {
-      functionTableNames[i] = functionTable[i].internalName;
-    }
-
-    var tableSize = tableBase + functionTable.length;
-    module.addFunctionTable(
-      "0",
-      tableSize,
-      // use fixed size for non-imported and non-exported tables
-      options.importTable || options.exportTable ? Module.UNLIMITED_TABLE : tableSize,
-      functionTableNames,
-      module.i32(tableBase)
-    );
+    // setup default memory & table
+    this.initDefaultMemory(memoryOffset);
+    this.initDefaultTable();
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
@@ -806,6 +710,155 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     return module;
+  }
+
+  private initDefaultMemory(memoryOffset: i64): void {
+    this.memoryOffset = memoryOffset;
+
+    var options = this.options;
+    var module = this.module;
+    var memorySegments = this.memorySegments;
+
+    var initialPages: u32 = 0;
+    var maximumPages = Module.UNLIMITED_MEMORY;
+    var isSharedMemory = false;
+
+    if (options.memoryBase /* is specified */ || memorySegments.length) {
+      initialPages = u32(i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16))));
+    }
+
+    if (options.initialMemory) {
+      if (options.initialMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_initial_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        initialPages = options.initialMemory;
+      }
+    }
+
+    if (options.maximumMemory) {
+      if (options.maximumMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_maximum_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        maximumPages = options.maximumMemory;
+      }
+    }
+
+    if (options.sharedMemory) {
+      isSharedMemory = true;
+      if (!options.maximumMemory) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_maximum_memory_to_be_defined,
+          null
+        );
+        isSharedMemory = false;
+      }
+      if (!options.hasFeature(Feature.THREADS)) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_feature_threads_to_be_enabled,
+          null
+        );
+        isSharedMemory = false;
+      }
+    }
+
+    // check that we didn't exceed lowMemoryLimit already
+    var lowMemoryLimit32 = options.lowMemoryLimit;
+    if (lowMemoryLimit32) {
+      let lowMemoryLimit = i64_new(lowMemoryLimit32 & ~15);
+      if (i64_gt(memoryOffset, lowMemoryLimit)) {
+        this.error(
+          DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
+          null, i64_to_string(memoryOffset), i64_to_string(lowMemoryLimit)
+        );
+      }
+    }
+
+    // Just stubbed memory. Will update later in finalizeMemory
+    module.setMemory(
+      initialPages,
+      maximumPages,
+      memorySegments,
+      options.target,
+      options.exportMemory ? ExportNames.Memory : null,
+      CommonNames.DefaultMemory,
+      isSharedMemory
+    );
+
+    // import memory if requested (default memory is named '0' by Binaryen)
+    if (options.importMemory) {
+      module.addMemoryImport(
+        CommonNames.DefaultMemory,
+        ImportNames.DefaultNamespace,
+        ImportNames.Memory,
+        isSharedMemory
+      );
+    }
+  }
+
+  private initDefaultTable(): void {
+    var options = this.options;
+    var module = this.module;
+
+    // import and/or export table if requested (default table is named '0' by Binaryen)
+    if (options.importTable) {
+      module.addTableImport(
+        CommonNames.DefaultTable,
+        ImportNames.DefaultNamespace,
+        ImportNames.Table
+      );
+      if (options.pedantic && options.willOptimize) {
+        this.pedantic(
+          DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
+          null
+        );
+      }
+    }
+    if (options.exportTable) {
+      module.addTableExport(CommonNames.DefaultTable, ExportNames.Table);
+      if (options.pedantic && options.willOptimize) {
+        this.pedantic(
+          DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
+          null
+        );
+      }
+    }
+
+    // set up function table (first elem is blank)
+    var tableBase = options.tableBase;
+    if (!tableBase) tableBase = 1; // leave first elem blank
+    var functionTable = this.functionTable;
+    var functionTableNames = new Array<string>(functionTable.length);
+    for (let i = 0, k = functionTable.length; i < k; ++i) {
+      functionTableNames[i] = functionTable[i].internalName;
+    }
+
+    var initialTableSize = <Index>tableBase + functionTable.length;
+    var maximumTableSize = Module.UNLIMITED_TABLE;
+
+    if (!(options.importTable || options.exportTable)) {
+      // use fixed size for non-imported and non-exported tables
+      maximumTableSize = initialTableSize;
+      if (options.willOptimize) {
+        // Hint for directize pass which indicate table's content will not change
+        // and can be better optimized
+        module.setPassArgument("directize-initial-contents-immutable", "true");
+      }
+    }
+    module.addFunctionTable(
+      CommonNames.DefaultTable,
+      initialTableSize,
+      maximumTableSize,
+      functionTableNames,
+      module.i32(tableBase)
+    );
   }
 
   // === Exports ==================================================================================

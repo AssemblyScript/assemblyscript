@@ -30,7 +30,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -104,7 +104,7 @@
       local.get $var$5
       local.set $var$12
       local.get $var$4
-      i32.load
+      i32.load $0
       local.set $var$11
       local.get $var$12
       local.get $var$11
@@ -119,7 +119,7 @@
       local.get $var$6
       local.set $var$12
       local.get $var$4
-      i32.load offset=4
+      i32.load $0 offset=4
       local.set $var$11
       local.get $var$12
       local.get $var$11
@@ -134,7 +134,7 @@
       local.get $var$7
       local.set $var$12
       local.get $var$4
-      i32.load offset=8
+      i32.load $0 offset=8
       local.set $var$11
       local.get $var$12
       local.get $var$11
@@ -149,7 +149,7 @@
       local.get $var$8
       local.set $var$12
       local.get $var$4
-      i32.load offset=12
+      i32.load $0 offset=12
       local.set $var$11
       local.get $var$12
       local.get $var$11
@@ -209,7 +209,7 @@
     if
      local.get $var$2
      local.get $var$4
-     i32.load
+     i32.load $0
      i32.const -1028477379
      i32.mul
      i32.add
@@ -240,7 +240,7 @@
     if
      local.get $var$2
      local.get $var$4
-     i32.load8_u
+     i32.load8_u $0
      i32.const 374761393
      i32.mul
      i32.add
@@ -361,7 +361,7 @@
       local.get $var$5
       local.set $var$12
       local.get $var$4
-      i32.load
+      i32.load $0
       local.set $var$11
       local.get $var$12
       local.get $var$11
@@ -376,7 +376,7 @@
       local.get $var$6
       local.set $var$12
       local.get $var$4
-      i32.load offset=4
+      i32.load $0 offset=4
       local.set $var$11
       local.get $var$12
       local.get $var$11
@@ -391,7 +391,7 @@
       local.get $var$7
       local.set $var$12
       local.get $var$4
-      i32.load offset=8
+      i32.load $0 offset=8
       local.set $var$11
       local.get $var$12
       local.get $var$11
@@ -406,7 +406,7 @@
       local.get $var$8
       local.set $var$12
       local.get $var$4
-      i32.load offset=12
+      i32.load $0 offset=12
       local.set $var$11
       local.get $var$12
       local.get $var$11
@@ -466,7 +466,7 @@
     if
      local.get $var$2
      local.get $var$4
-     i32.load
+     i32.load $0
      i32.const -1028477379
      i32.mul
      i32.add
@@ -497,7 +497,7 @@
     if
      local.get $var$2
      local.get $var$4
-     i32.load8_u
+     i32.load8_u $0
      i32.const 374761393
      i32.mul
      i32.add
@@ -719,7 +719,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   i32.const 0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   call $std/hash/check
@@ -728,7 +728,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -737,7 +737,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -746,7 +746,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -755,7 +755,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -764,7 +764,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -773,7 +773,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -782,7 +782,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -791,7 +791,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -800,7 +800,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check
@@ -809,7 +809,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $~lib/util/hash/HASH<~lib/string/String>
   call $std/hash/check

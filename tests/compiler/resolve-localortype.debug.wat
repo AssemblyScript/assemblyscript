@@ -40,7 +40,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $resolve-localortype/test
   local.set $1
