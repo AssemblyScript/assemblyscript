@@ -29,7 +29,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -74,9 +74,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $ptr1
-     i64.load
+     i64.load $0
      local.get $ptr2
-     i64.load
+     i64.load $0
      i64.ne
      if
       br $do-break|0
@@ -111,10 +111,10 @@
    local.get $var$7
    if
     local.get $ptr1
-    i32.load16_u
+    i32.load16_u $0
     local.set $a
     local.get $ptr2
-    i32.load16_u
+    i32.load16_u $0
     local.set $b
     local.get $a
     local.get $b
@@ -238,21 +238,21 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store offset=8
+  i32.store $0 offset=8
   i32.const 32
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store
+  i32.store $0
   local.get $1
   i32.const 32
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
@@ -268,13 +268,13 @@
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store
+  i32.store $0
   local.get $1
   i32.const 112
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
@@ -290,13 +290,13 @@
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store
+  i32.store $0
   local.get $1
   i32.const 144
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
@@ -311,7 +311,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $NonNullable/z
   local.tee $0
-  i32.store offset=8
+  i32.store $0 offset=8
   local.get $0
   if (result i32)
    local.get $0
@@ -326,14 +326,14 @@
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store
+  i32.store $0
   local.get $1
   call $NonNullable/assertNonNull<~lib/string/String>
   global.get $NonNullable/z
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store
+  i32.store $0
   local.get $1
   call $NonNullable/safetyCheck<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer

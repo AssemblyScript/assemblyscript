@@ -53,7 +53,7 @@
   i32.const 2
   global.set $~argumentsLength
   local.get $fn
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
  )
  (func $function-types/doAdd<i32> (param $a i32) (param $b i32) (result i32)
@@ -62,7 +62,7 @@
   i32.const 2
   global.set $~argumentsLength
   call $function-types/makeAdder<i32>
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
  )
  (func $function-types/addI32 (param $a i32) (param $b i32) (result i32)
@@ -76,7 +76,7 @@
   i32.const 2
   global.set $~argumentsLength
   local.get $adder
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
  )
  (func $~start
@@ -104,7 +104,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
   i32.const 1
@@ -112,7 +112,7 @@
   i32.const 2
   global.set $~argumentsLength
   global.get $function-types/i32Adder
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.eq
@@ -132,7 +132,7 @@
   i32.const 2
   global.set $~argumentsLength
   global.get $function-types/i64Adder
-  i32.load
+  i32.load $0
   call_indirect $0 (type $i64_i64_=>_i64)
   i64.const 30
   i64.eq
@@ -150,7 +150,7 @@
   i32.const 2
   global.set $~argumentsLength
   call $function-types/makeAdder<f64>
-  i32.load
+  i32.load $0
   call_indirect $0 (type $f64_f64_=>_f64)
   f64.const 4
   f64.eq
@@ -169,7 +169,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $function-types/doAddWithFn<i32>
   i32.const 5
@@ -203,7 +203,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $function-types/doAddWithFn<i32>
   i32.const 9
@@ -240,7 +240,7 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $function-types/makeAndAdd<i32>
   i32.const 3
@@ -268,7 +268,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -282,7 +282,7 @@
    global.get $~lib/memory/__stack_pointer
    call $function-types/makeAdder<i32>
    local.tee $2
-   i32.store
+   i32.store $0
   end
   local.get $0
   local.get $1

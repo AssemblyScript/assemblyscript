@@ -1,3 +1,5 @@
+import { strtol, strtod, strtob } from "./util/string";
+
 type auto = i32;
 
 // @ts-ignore: decorator
@@ -283,6 +285,12 @@ export namespace i8 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: i8 =  127;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): i8 {
+    return <i8>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -298,6 +306,12 @@ export namespace i16 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: i16 =  32767;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): i16 {
+    return <i16>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -313,6 +327,12 @@ export namespace i32 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: i32 =  2147483647;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): i32 {
+    return strtol<i32>(value, radix);
+  }
 
   // @ts-ignore: decorator
   @builtin
@@ -544,6 +564,12 @@ export namespace i64 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: i64 =  9223372036854775807;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): i64 {
+    return strtol<i64>(value, radix);
+  }
 
   // @ts-ignore: decorator
   @builtin
@@ -830,6 +856,12 @@ export namespace isize {
   export const MAX_VALUE: isize = sizeof<i32>() == sizeof<isize>()
     ? 2147483647
     : <isize>9223372036854775807;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): isize {
+    return <isize>strtol<i64>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -845,6 +877,12 @@ export namespace u8 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: u8 = 255;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): u8 {
+    return <u8>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -860,6 +898,12 @@ export namespace u16 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: u16 = 65535;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): u16 {
+    return <u16>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -875,6 +919,12 @@ export namespace u32 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: u32 = 4294967295;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): u32 {
+    return <u32>strtol<i32>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -890,6 +940,12 @@ export namespace u64 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: u64 = 18446744073709551615;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): u64 {
+    return <u64>strtol<i64>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -907,6 +963,12 @@ export namespace usize {
   export const MAX_VALUE: usize = sizeof<u32>() == sizeof<usize>()
     ? 4294967295
     : <usize>18446744073709551615;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string, radix: i32 = 0): usize {
+    return <usize>strtol<i64>(value, radix);
+  }
 }
 
 // @ts-ignore: decorator
@@ -922,6 +984,12 @@ export namespace bool {
   // @ts-ignore: decorator
   @lazy
   export const MAX_VALUE: bool = true;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string): bool {
+    return strtob(value);
+  }
 }
 
 // @ts-ignore: decorator
@@ -965,6 +1033,12 @@ export namespace f32 {
   // @ts-ignore: decorator
   @lazy
   export const NaN: f32 = 0.0 / 0.0;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string): f32 {
+    return <f32>strtod(value);
+  }
 
   // @ts-ignore: decorator
   @builtin
@@ -1080,6 +1154,12 @@ export namespace f64 {
   // @ts-ignore: decorator
   @lazy
   export const NaN: f64 = 0.0 / 0.0;
+
+  // @ts-ignore: decorator
+  @inline
+  export function parse(value: string): f64 {
+    return strtod(value);
+  }
 
   // @ts-ignore: decorator
   @builtin

@@ -31,8 +31,8 @@ import {
   isIdentifierPart,
   isDecimal,
   isOctal,
-  isHex,
-  isHexPart,
+  isHexBase,
+  isHexOrDecimal,
   isHighSurrogate,
   isLowSurrogate,
   parseHexFloat
@@ -1283,7 +1283,7 @@ export class Tokenizer extends DiagnosticEmitter {
       if (c != CharCode._) {
         if (hex) {
           if ((c | 32) == CharCode.p) return false;
-          if (!isHex(c)) break;
+          if (!isHexOrDecimal(c)) break;
         } else {
           if ((c | 32) == CharCode.e) return false;
           if (!isDecimal(c)) break;
@@ -1345,7 +1345,7 @@ export class Tokenizer extends DiagnosticEmitter {
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
-      } else if (isHexPart(c)) {
+      } else if (isHexBase(c)) {
         // (value << 4) + (c | 32) + (10 - CharCode.a)
         nextValue = i64_add(
           i64_shl(value, i64_4),
@@ -1531,11 +1531,11 @@ export class Tokenizer extends DiagnosticEmitter {
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c == CharCode._0) {
-        // value = (value << 1);
+        // value << 1 | 0
         nextValue = i64_shl(value, i64_one);
       } else if (c == CharCode._1) {
-        // value = (value << 1) + 1;
-        nextValue = i64_add(
+        // value << 1 | 1
+        nextValue = i64_or(
           i64_shl(value, i64_one),
           i64_one
         );
@@ -1646,7 +1646,7 @@ export class Tokenizer extends DiagnosticEmitter {
         ++sepCount;
       } else {
         if (isHexadecimal) {
-          if (!isHex(c)) break;
+          if (!isHexOrDecimal(c)) break;
         } else {
           if (!isDecimal(c)) break;
         }
@@ -1683,7 +1683,7 @@ export class Tokenizer extends DiagnosticEmitter {
         if (
           ++this.pos < end &&
           (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
-          isHex(text.charCodeAt(this.pos + 1))
+          isHexOrDecimal(text.charCodeAt(this.pos + 1))
         ) {
           ++this.pos;
         }
@@ -1705,7 +1705,7 @@ export class Tokenizer extends DiagnosticEmitter {
       let c = text.charCodeAt(pos++);
       if (isDecimal(c)) {
         value = (value << 4) + c - CharCode._0;
-      } else if (isHexPart(c)) {
+      } else if (isHexBase(c)) {
         value = (value << 4) + (c | 32) + (10 - CharCode.a);
       } else if (~startIfTaggedTemplate) {
         this.pos = --pos;

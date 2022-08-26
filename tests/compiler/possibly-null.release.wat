@@ -44,7 +44,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store
+  i32.store $0
   local.get $1
   i32.const 4
   i32.add
@@ -68,7 +68,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   loop $while-continue|0
    local.get $0
    if
@@ -102,10 +102,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   local.get $0
-  i32.store
+  i32.store $0
   local.get $2
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   loop $while-continue|0
    local.get $0
    if
@@ -139,10 +139,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   local.get $0
-  i32.store
+  i32.store $0
   local.get $2
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   loop $while-continue|0
    local.get $0
    if
@@ -179,10 +179,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   local.get $0
-  i32.store
+  i32.store $0
   local.get $2
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $2
   i32.const 8
   i32.add

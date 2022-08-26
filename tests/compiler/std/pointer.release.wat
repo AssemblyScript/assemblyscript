@@ -21,12 +21,12 @@
   global.set $std/pointer/two
   i32.const 8
   i32.const 1
-  i32.store
+  i32.store $0
   i32.const 12
   i32.const 2
-  i32.store
+  i32.store $0
   i32.const 8
-  i32.load
+  i32.load $0
   i32.const 1
   i32.ne
   if
@@ -38,7 +38,7 @@
    unreachable
   end
   global.get $std/pointer/one
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 2
   i32.ne
   if
@@ -150,7 +150,7 @@
    unreachable
   end
   global.get $std/pointer/two
-  i32.load
+  i32.load $0
   i32.const 1
   i32.ne
   if
@@ -162,7 +162,7 @@
    unreachable
   end
   global.get $std/pointer/two
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 2
   i32.ne
   if
@@ -180,12 +180,12 @@
   if
    local.get $0
    local.get $1
-   i64.load align=1
-   i64.store align=1
+   i64.load $0 align=1
+   i64.store $0 align=1
   else
    local.get $0
    i64.const 0
-   i64.store align=1
+   i64.store $0 align=1
   end
   global.get $std/pointer/one
   global.get $std/pointer/two
@@ -199,7 +199,7 @@
    unreachable
   end
   global.get $std/pointer/one
-  i32.load
+  i32.load $0
   i32.const 1
   i32.ne
   if
@@ -211,7 +211,7 @@
    unreachable
   end
   global.get $std/pointer/one
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 2
   i32.ne
   if
@@ -224,12 +224,12 @@
   end
   i32.const 0
   f32.const 1.100000023841858
-  f32.store
+  f32.store $0
   i32.const 4
   f32.const 1.2000000476837158
-  f32.store
+  f32.store $0
   i32.const 0
-  f32.load
+  f32.load $0
   f32.const 1.100000023841858
   f32.ne
   if
@@ -241,7 +241,7 @@
    unreachable
   end
   i32.const 4
-  f32.load
+  f32.load $0
   f32.const 1.2000000476837158
   f32.ne
   if
@@ -253,7 +253,7 @@
    unreachable
   end
   i32.const 0
-  f32.load
+  f32.load $0
   f32.const 1.100000023841858
   f32.ne
   if
@@ -265,7 +265,7 @@
    unreachable
   end
   i32.const 4
-  f32.load
+  f32.load $0
   f32.const 1.2000000476837158
   f32.ne
   if
@@ -277,7 +277,7 @@
    unreachable
   end
   i32.const 0
-  f32.load
+  f32.load $0
   f32.const 1.100000023841858
   f32.ne
   if
@@ -289,7 +289,7 @@
    unreachable
   end
   i32.const 4
-  f32.load
+  f32.load $0
   f32.const 1.2000000476837158
   f32.ne
   if
@@ -302,9 +302,9 @@
   end
   i32.const 8
   f32.const 1.2999999523162842
-  f32.store
+  f32.store $0
   i32.const 8
-  f32.load
+  f32.load $0
   f32.const 1.2999999523162842
   f32.ne
   if
@@ -316,7 +316,7 @@
    unreachable
   end
   i32.const 8
-  f32.load
+  f32.load $0
   f32.const 1.2999999523162842
   f32.ne
   if
@@ -328,7 +328,7 @@
    unreachable
   end
   i32.const 8
-  f32.load
+  f32.load $0
   f32.const 1.2999999523162842
   f32.ne
   if
@@ -341,9 +341,9 @@
   end
   i32.const 0
   f32.const 1.399999976158142
-  f32.store
+  f32.store $0
   i32.const 0
-  f32.load
+  f32.load $0
   f32.const 1.399999976158142
   f32.ne
   if
@@ -355,7 +355,7 @@
    unreachable
   end
   i32.const 0
-  f32.load
+  f32.load $0
   f32.const 1.399999976158142
   f32.ne
   if

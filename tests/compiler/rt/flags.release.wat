@@ -17,7 +17,7 @@
  (func $~lib/rt/__typeinfo (param $0 i32) (result i32)
   local.get $0
   i32.const 1200
-  i32.load
+  i32.load $0
   i32.gt_u
   if
    i32.const 1056
@@ -32,7 +32,7 @@
   i32.shl
   i32.const 1204
   i32.add
-  i32.load
+  i32.load $0
  )
  (func $start:rt/flags
   block $folding-inner0

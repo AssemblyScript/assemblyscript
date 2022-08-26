@@ -279,7 +279,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testTrue
   global.get $~lib/memory/__stack_pointer
@@ -295,7 +295,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testFalseElse
   global.get $~lib/memory/__stack_pointer
@@ -311,7 +311,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testFalseContinuation
   global.get $~lib/memory/__stack_pointer
@@ -327,7 +327,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testNeNull
   global.get $~lib/memory/__stack_pointer
@@ -343,7 +343,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testEqNullElse
   global.get $~lib/memory/__stack_pointer
@@ -359,7 +359,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testEqNullContinuation
   global.get $~lib/memory/__stack_pointer
@@ -375,7 +375,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testNotEqNull
   global.get $~lib/memory/__stack_pointer
@@ -391,7 +391,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testNotNeNullElse
   global.get $~lib/memory/__stack_pointer
@@ -407,7 +407,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testNotNeNullContinuation
   global.get $~lib/memory/__stack_pointer
@@ -423,7 +423,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testWhile
   global.get $~lib/memory/__stack_pointer
@@ -439,10 +439,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   local.get $1
   call $possibly-null/testWhile2
@@ -459,10 +459,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   local.get $1
   call $possibly-null/testWhile3
@@ -479,7 +479,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testLogicalAnd
   global.get $~lib/memory/__stack_pointer
@@ -495,7 +495,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testLogicalOr
   global.get $~lib/memory/__stack_pointer
@@ -511,10 +511,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   local.get $1
   call $possibly-null/testLogicalAndMulti
@@ -531,10 +531,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   local.get $1
   call $possibly-null/testLogicalOrMulti
@@ -551,10 +551,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   local.get $1
   call $possibly-null/testAssign
@@ -571,7 +571,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $possibly-null/testNeverNull
   global.get $~lib/memory/__stack_pointer

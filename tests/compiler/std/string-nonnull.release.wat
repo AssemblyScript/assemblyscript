@@ -28,17 +28,17 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i32.const 0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 1056
-  i32.store
+  i32.store $0
   i32.const 1052
-  i32.load
+  i32.load $0
   i32.const 1
   i32.shr_u
   if
    i32.const 1052
-   i32.load
+   i32.load $0
    drop
   end
   global.get $~lib/memory/__stack_pointer
