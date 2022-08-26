@@ -5742,7 +5742,7 @@ export class Compiler extends DiagnosticEmitter {
         let getterIndexType = getterInstance.signature.parameterTypes[0];
         if (!setterIndexType.equals(getterIndexType)) {
           this.error(
-            DiagnosticCode.Index_signature_type_should_be_the_same_for_getter_and_setter_in_0_class,
+            DiagnosticCode.Index_signature_type_should_be_the_same_for_element_accessors_in_0_class,
             valueExpression.range, classInstance.internalName
           );
           this.currentType = tee ? getterInstance.signature.returnType : Type.void;
