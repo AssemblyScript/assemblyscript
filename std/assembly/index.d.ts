@@ -1294,7 +1294,7 @@ declare namespace f32x4 {
   /** Demotes each 64-bit float lane of a vector to single-precision. The higher lanes of the result are initialized to zero. */
   export function demote_f64x2_zero(a: v128): v128;
   /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8): v128;
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
 }
