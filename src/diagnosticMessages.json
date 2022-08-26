@@ -12,7 +12,6 @@
   "Start function name '{0}' is invalid or conflicts with another export.": 110,
   "Element '{0}' not found.": 111,
   "Exchange of '{0}' values is not supported by all embeddings": 112,
-  "Index signature accessors in type '{0}' differ in types.": 113,
 
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,
@@ -49,6 +48,7 @@
   "Expression does not compile to a value at runtime.": 234,
   "Only variables, functions and enums become WebAssembly module exports.": 235,
   "Literal '{0}' does not fit into 'i64' or 'u64' types.": 236,
+  "Index signature accessors in type '{0}' differ in types.": 237,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,
