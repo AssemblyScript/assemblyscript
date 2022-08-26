@@ -1056,25 +1056,25 @@ export const enum SIMDTernaryOp {
 /** Binaryen RefIs operation constants. */
 export const enum RefIsOp {
   /** ref.is_null */
-  RefIsNull = 0 /* _BinaryenRefIsNull */,
+  Null = 0 /* _BinaryenRefIsNull */,
   /** ref.is_func */
-  RefIsFunc = 1 /* _BinaryenRefIsFunc */,
+  Func = 1 /* _BinaryenRefIsFunc */,
   /** ref.is_data */
-  RefIsData = 2 /* _BinaryenRefIsData */,
+  Data = 2 /* _BinaryenRefIsData */,
   /** ref.is_i31 */
-  RefIsI31 = 3 /* _BinaryenRefIsI31 */
+  I31 = 3 /* _BinaryenRefIsI31 */
 }
 
 /** Binaryen RefAs operation constants. */
 export const enum RefAsOp {
   /** ref.as_non_null */
-  RefAsNonNull = 0 /* _BinaryenRefAsNonNull */,
+  NonNull = 0 /* _BinaryenRefAsNonNull */,
   /** ref.as_func */
-  RefAsFunc = 1 /* _BinaryenRefAsFunc */,
+  Func = 1 /* _BinaryenRefAsFunc */,
   /** ref.as_data */
-  RefAsData = 2 /* _BinaryenRefAsData */,
+  Data = 2 /* _BinaryenRefAsData */,
   /** ref.as_i31 */
-  RefAsI31 = 3 /* _BinaryenRefAsI31 */
+  I31 = 3 /* _BinaryenRefAsI31 */
 }
 
 /** Binaryen BrOn operation constants. */
@@ -1880,7 +1880,7 @@ export class Module {
     expr: ExpressionRef
   ): ExpressionRef {
     if (isNullableType(getExpressionType(expr))) {
-      return binaryen._BinaryenRefIs(this.ref, RefIsOp.RefIsNull, expr);
+      return binaryen._BinaryenRefIs(this.ref, RefIsOp.Null, expr);
     } else {
       return this.i32(0); // false literal
     }
@@ -1897,7 +1897,7 @@ export class Module {
     expr: ExpressionRef
   ): ExpressionRef {
     if (isNullableType(getExpressionType(expr))) {
-      return binaryen._BinaryenRefAs(this.ref, RefAsOp.RefAsNonNull, expr);
+      return binaryen._BinaryenRefAs(this.ref, RefAsOp.NonNull, expr);
     } else {
       return expr;
     }
