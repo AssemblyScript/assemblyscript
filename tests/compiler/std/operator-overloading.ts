@@ -340,12 +340,15 @@ class TesterElementAccess {
   ) {}
   @operator("[]")
   __get(key: string): f32 {
-    return key == "x" ? this.x : this.y;
+    return key == "x"
+      ? this.x
+      : this.y;
   }
   @operator("[]=")
   __set(key: string, value: f32): void {
-    if (key == "x") this.x = value;
-    else this.y = value;
+    key == "x"
+      ? this.x = value
+      : this.y = value;
   }
 }
 
