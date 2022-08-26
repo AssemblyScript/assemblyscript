@@ -2641,7 +2641,7 @@ export class Resolver extends DiagnosticEmitter {
       // create a temp flow to resolve expression
       let tempFlow = Flow.createParent(ctxFlow.actualFunction);
       let parameters = signature.parameters;
-      assert(signatureReference.parameterTypes.length ==  parameters.length);
+      assert(signatureReference.parameterTypes.length == parameters.length);
       for (let i = 0, k = parameters.length; i < k; i++) {
         const parameter = parameters[i];
         const type = signatureReference.parameterTypes[i];
