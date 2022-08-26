@@ -1101,6 +1101,20 @@ export const enum BrOnOp {
   NonI31 = 9 /* TODO_BinaryenBrOnNonI31 */
 }
 
+/** Binaryen common operations */
+export const enum StringOp {
+  /** string.const */
+  Const = 0 /* TODO_BinaryenStringConst */,
+  /** string.concat */
+  Concat = 1 /** TODO_BinaryenStringConcat */,
+  /** string.eq */
+  Eq = 2 /** TODO_BinaryenStringEq */,
+  /** stringview_wtf8.advance */
+  WTF8Advance = 3 /** TODO_BinaryenStringWTF8Advance */,
+  /** stringview_wtf16.get_codeunit */
+  WTF16Get = 4  /** TODO_BinaryenStringWTF16Get */
+}
+
 /** Binaryen StringNew operation constants. */
 export const enum StringNewOp {
   /** string.new_wtf8 utf8 */
@@ -1162,11 +1176,13 @@ export const enum StringAsOp {
 }
 
 /** Binaryen StringIterMove operation constants. */
-export const enum StringIterMoveOp {
+export const enum StringIterOp {
+  /** stringview_iter.next */
+  Next = 0 /* TODO_BinaryenStringIterNext */,
   /** stringview_iter.advance */
-  Advance = 0 /* TODO_BinaryenStringIterMoveAdvance */,
+  Advance = 1 /* TODO_BinaryenStringIterMoveAdvance */,
   /** stringview_iter.rewind */
-  Rewind = 1 /* TODO_BinaryenStringIterMoveRewind */
+  Rewind = 2 /* TODO_BinaryenStringIterMoveRewind */
 }
 
 /** Binaryen StringSlice operation constants. */
