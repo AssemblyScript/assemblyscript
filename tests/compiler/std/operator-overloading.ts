@@ -366,5 +366,5 @@ assert(tea["y"] == f32(-2.0));
 tea["x"]++;
 --tea["y"];
 
-assert(tea["y"] == f32(-1.0));
+assert(tea["x"] == f32(-1.0));
 assert(tea["y"] == f32(-3.0));
