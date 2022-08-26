@@ -5744,7 +5744,7 @@ export class Compiler extends DiagnosticEmitter {
           this.errorRelated(
             DiagnosticCode.Index_signature_accessors_in_type_0_differ_in_types,
             valueExpression.range,
-            assert(indexExpression).range,
+            setterInstance.identifierAndSignatureRange,
             classInstance.internalName,
           );
           this.currentType = tee ? getterInstance.signature.returnType : Type.void;
