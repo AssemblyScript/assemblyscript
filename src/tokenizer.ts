@@ -31,7 +31,6 @@ import {
   isIdentifierPart,
   isDecimal,
   isOctal,
-  isHex,
   isHexPart,
   isHighSurrogate,
   isLowSurrogate
