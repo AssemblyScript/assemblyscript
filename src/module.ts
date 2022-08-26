@@ -1064,39 +1064,125 @@ export const enum SIMDTernaryOp {
 /** Binaryen RefIs operation constants. */
 export const enum RefIsOp {
   /** ref.is_null */
-  RefIsNull = 0 /* _BinaryenRefIsNull */,
+  Null = 0 /* _BinaryenRefIsNull */,
   /** ref.is_func */
-  RefIsFunc = 1 /* _BinaryenRefIsFunc */,
+  Func = 1 /* _BinaryenRefIsFunc */,
   /** ref.is_data */
-  RefIsData = 2 /* _BinaryenRefIsData */,
+  Data = 2 /* _BinaryenRefIsData */,
   /** ref.is_i31 */
-  RefIsI31 = 3 /* _BinaryenRefIsI31 */
+  I31 = 3 /* _BinaryenRefIsI31 */
 }
 
 /** Binaryen RefAs operation constants. */
 export const enum RefAsOp {
   /** ref.as_non_null */
-  RefAsNonNull = 0 /* _BinaryenRefAsNonNull */,
+  NonNull = 0 /* _BinaryenRefAsNonNull */,
   /** ref.as_func */
-  RefAsFunc = 1 /* _BinaryenRefAsFunc */,
+  Func = 1 /* _BinaryenRefAsFunc */,
   /** ref.as_data */
-  RefAsData = 2 /* _BinaryenRefAsData */,
+  Data = 2 /* _BinaryenRefAsData */,
   /** ref.as_i31 */
-  RefAsI31 = 3 /* _BinaryenRefAsI31 */
+  I31 = 3 /* _BinaryenRefAsI31 */
 }
 
 /** Binaryen BrOn operation constants. */
 export const enum BrOnOp {
   /** br_on_null */
-  BrOnNull = 0 /* TODO_BinaryenBrOnNull */,
+  Null = 0 /* TODO_BinaryenBrOnNull */,
+  /** br_on_non_null */
+  NonNull = 1 /* TODO_BinaryenBrOnNonNull */,
   /** br_on_cast */
-  BrOnCast = 1 /* TODO_BinaryenBrOnCast */,
+  Cast = 2 /* TODO_BinaryenBrOnCast */,
+  /** br_on_cast_fail */
+  CastFail = 3 /* TODO_BinaryenBrOnCastFail */,
   /** br_on_func */
-  BrOnFunc = 2 /* TODO_BinaryenBrOnFunc */,
+  Func = 4 /* TODO_BinaryenBrOnFunc */,
+  /** br_on_non_func */
+  NonFunc = 5 /* TODO_BinaryenBrOnNonFunc */,
   /** br_on_data */
-  BrOnData = 3 /* TODO_BinaryenBrOnData */,
+  Data = 6 /* TODO_BinaryenBrOnData */,
+  /** br_on_non_data */
+  NonData = 7 /* TODO_BinaryenBrOnNonData */,
   /** br_on_i31 */
-  BrOnI31 = 4 /* TODO_BinaryenBrOnI31 */
+  I31 = 8 /* TODO_BinaryenBrOnI31 */,
+  /** br_on_non_i32 */
+  NonI31 = 9 /* TODO_BinaryenBrOnNonI31 */
+}
+
+/** Binaryen StringNew operation constants. */
+export const enum StringNewOp {
+  /** string.new_wtf8 utf8 */
+  UTF8 = 0 /* TODO_BinaryenStringNewUTF8 */,
+  /** string.new_wtf8 wtf8 */
+  WTF8 = 1 /* TODO_BinaryenStringNewWTF8 */,
+  /** string.new_wtf8 replace */
+  Replace = 2 /* TODO_BinaryenStringNewReplace */,
+  /** string.new_wtf16 */
+  WTF16 = 3/* TODO_BinaryenStringNewWTF16 */,
+  /** string.new_wtf8_array utf8 */
+  UTF8Array = 4 /* TODO_BinaryenStringNewUTF8Array */,
+  /** string.new_wtf8_array wtf8 */
+  WTF8Array = 5 /* TODO_BinaryenStringNewWTF8Array */,
+  /** string.new_wtf8_array replace */
+  ReplaceArray = 6 /* TODO_BinaryenStringNewReplaceArray */,
+  /** string.new_wtf16_array */
+  WTF16Array = 7 /* TODO_BinaryenStringNewUTF16Array */
+}
+
+/** Binaryen StringMeasure operation constants. */
+export const enum StringMeasureOp {
+  /** string.measure_wtf8 utf8 */
+  UTF8 = 0 /* TODO_BinaryenStringMeastureUTF8 */,
+  /** string.measure_wtf8 wtf8 */
+  WTF8 = 1 /* TODO_BinaryenStringMeastureWTF8 */,
+  /** string.measure_wtf16 */
+  WTF16 = 2 /* TODO_BinaryenStringMeastureWTF16 */,
+  /** string.is_usv_sequence */
+  IsUSV = 3 /* TODO_BinaryenStringMeasureIsUSV */,
+  /** stringview_wtf16.length */
+  WTF16View = 4 /* TODO_BinaryenStringMeasureWTF16View */
+}
+
+/** Binaryen StringEncode operation constants. */
+export const enum StringEncodeOp {
+  /** string.encode_wtf8 utf8 */
+  UTF8 = 0 /* TODO_BinaryenStringEncodeUTF8 */,
+  /** string.encode_wtf8 wtf8 */
+  WTF8 = 1 /* TODO_BinaryenStringEncodeWTF8 */,
+  /** string.encode_wtf16 */
+  WTF16 = 2 /* TODO_BinaryenStringEncodeWTF16 */,
+  /** string.encode_wtf8_array utf8 */
+  UTF8Array = 3 /* TODO_BinaryenStringEncodeUTF8Array */,
+  /** string.encode_wtf8_array wtf8 */
+  WTF8Array = 4 /* TODO_BinaryenStringEncodeWTF8Array */,
+  /** string.encode_wtf16_array */
+  WTF16Array = 5 /* TODO_BinaryenStringEncodeWTF16Array */
+}
+
+/** Binaryen StringAs operation constants. */
+export const enum StringAsOp {
+  /** string.as_wtf8 */
+  WTF8 = 0 /* TODO_BinaryenStringAsWTF8 */,
+  /** string.as_wtf16 */
+  WTF16 = 1 /* TODO_BinaryenStringAsWTF16 */,
+  /** string.as_iter */
+  Iter = 2 /* TODO_BinaryenStringAsIter */
+}
+
+/** Binaryen StringIterMove operation constants. */
+export const enum StringIterMoveOp {
+  /** stringview_iter.advance */
+  Advance = 0 /* TODO_BinaryenStringIterMoveAdvance */,
+  /** stringview_iter.rewind */
+  Rewind = 1 /* TODO_BinaryenStringIterMoveRewind */
+}
+
+/** Binaryen StringSlice operation constants. */
+export const enum StringSliceWTFOp {
+  /** stringview_wtf8.slice */
+  WTF8 = 0 /* TODO_BinaryenStringSliceWTF8 */,
+  /** stringview_wtf16.slice */
+  WTF16 = 1 /* TODO_BinaryenStringSliceWTF16 */
 }
 
 /** Binaryen expression runner flags. */
@@ -1834,7 +1920,7 @@ export class Module {
     expr: ExpressionRef
   ): ExpressionRef {
     if (isNullableType(getExpressionType(expr))) {
-      return binaryen._BinaryenRefIs(this.ref, RefIsOp.RefIsNull, expr);
+      return binaryen._BinaryenRefIs(this.ref, RefIsOp.Null, expr);
     } else {
       return this.i32(0); // false literal
     }
@@ -1851,7 +1937,7 @@ export class Module {
     expr: ExpressionRef
   ): ExpressionRef {
     if (isNullableType(getExpressionType(expr))) {
-      return binaryen._BinaryenRefAs(this.ref, RefAsOp.RefAsNonNull, expr);
+      return binaryen._BinaryenRefAs(this.ref, RefAsOp.NonNull, expr);
     } else {
       return expr;
     }
