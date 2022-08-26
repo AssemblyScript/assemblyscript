@@ -5596,8 +5596,11 @@ export class Compiler extends DiagnosticEmitter {
           }
           return this.module.unreachable();
         }
-        assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
-        targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
+        let parameterTypes = indexedSet.signature.parameterTypes;
+
+        assert(parameterTypes.length == 2); // parser must guarantee this
+        targetType = parameterTypes[1];     // 2nd parameter is the element
+
         if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         if (!isUnchecked && this.options.pedantic) {
           this.pedantic(
@@ -5788,7 +5791,19 @@ export class Compiler extends DiagnosticEmitter {
           thisType,
           Constraints.CONV_IMPLICIT | Constraints.IS_THIS
         );
-        let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
+        let setterIndexType = setterInstance.signature.parameterTypes[0];
+        let getterIndexType = getterInstance.signature.parameterTypes[0];
+        if (!setterIndexType.equals(getterIndexType)) {
+          this.errorRelated(
+            DiagnosticCode.Index_signature_accessors_in_type_0_differ_in_types,
+            getterInstance.identifierAndSignatureRange,
+            setterInstance.identifierAndSignatureRange,
+            classInstance.internalName,
+          );
+          this.currentType = tee ? getterInstance.signature.returnType : Type.void;
+          return module.unreachable();
+        }
+        let elementExpr = this.compileExpression(assert(indexExpression), setterIndexType, Constraints.CONV_IMPLICIT);
         let elementType = this.currentType;
         if (tee) {
           let tempTarget = flow.getTempLocal(thisType);
