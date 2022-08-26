@@ -649,9 +649,9 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // setup memory & table
-    this.initMemory(memoryOffset);
-    this.initTable();
+    // setup default memory & table
+    this.initDefaultMemory(memoryOffset);
+    this.initDefaultTable();
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
@@ -712,7 +712,7 @@ export class Compiler extends DiagnosticEmitter {
     return module;
   }
 
-  private initMemory(memoryOffset: i64): void {
+  private initDefaultMemory(memoryOffset: i64): void {
     this.memoryOffset = memoryOffset;
 
     var options = this.options;
@@ -803,7 +803,7 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  private initTable(): void {
+  private initDefaultTable(): void {
     var options = this.options;
     var module = this.module;
 
