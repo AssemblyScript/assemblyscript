@@ -31,6 +31,8 @@ import {
   isIdentifierPart,
   isDecimal,
   isOctal,
+  isHex,
+  isHexPart,
   isHighSurrogate,
   isLowSurrogate
 } from "./util";
@@ -1313,30 +1315,24 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = pos;
     var sepEnd = start;
-    var value = i64_new(0);
+    var value = i64_zero;
     var i64_4 = i64_new(4);
     var nextValue = value;
     var overflowOccurred = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c >= CharCode._0 && c <= CharCode._9) {
-        // value = (value << 4) + c - CharCode._0;
+      if (isDecimal(c)) {
+        // (value << 4) + c - CharCode._0
         nextValue = i64_add(
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
-      } else if (c >= CharCode.A && c <= CharCode.F) {
-        // value = (value << 4) + 10 + c - CharCode.A;
+      } else if (isHexPart(c)) {
+        // (value << 4) + (c | 32) + (10 - CharCode.a)
         nextValue = i64_add(
           i64_shl(value, i64_4),
-          i64_new(10 + c - CharCode.A)
-        );
-      } else if (c >= CharCode.a && c <= CharCode.f) {
-        // value = (value << 4) + 10 + c - CharCode.a;
-        nextValue = i64_add(
-          i64_shl(value, i64_4),
-          i64_new(10 + c - CharCode.a)
+          i64_new((c | 32) + (10 - CharCode.a))
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
@@ -1386,14 +1382,14 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = pos;
     var sepEnd = start;
-    var value = i64_new(0);
+    var value = i64_zero;
     var i64_10 = i64_new(10);
     var nextValue = value;
     var overflowOccurred = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c >= CharCode._0 && c <= CharCode._9) {
+      if (isDecimal(c)) {
         // value = value * 10 + c - CharCode._0;
         nextValue = i64_add(
           i64_mul(value, i64_10),
@@ -1451,7 +1447,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = pos;
     var sepEnd = start;
-    var value = i64_new(0);
+    var value = i64_zero;
     var i64_3 = i64_new(3);
     var nextValue = value;
     var overflowOccurred = false;
@@ -1511,21 +1507,20 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = pos;
     var sepEnd = start;
-    var value = i64_new(0);
-    var i64_1 = i64_new(1);
+    var value = i64_zero;
     var nextValue = value;
     var overflowOccurred = false;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c == CharCode._0) {
-        // value = (value << 1);
-        nextValue = i64_shl(value, i64_1);
+        // value << 1 | 0
+        nextValue = i64_shl(value, i64_one);
       } else if (c == CharCode._1) {
-        // value = (value << 1) + 1;
-        nextValue = i64_add(
-          i64_shl(value, i64_1),
-          i64_1
+        // value << 1 | 1
+        nextValue = i64_or(
+          i64_shl(value, i64_one),
+          i64_one
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
@@ -1665,12 +1660,10 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     while (pos < end) {
       let c = text.charCodeAt(pos++);
-      if (c >= CharCode._0 && c <= CharCode._9) {
+      if (isDecimal(c)) {
         value = (value << 4) + c - CharCode._0;
-      } else if (c >= CharCode.A && c <= CharCode.F) {
-        value = (value << 4) + c + (10 - CharCode.A);
-      } else if (c >= CharCode.a && c <= CharCode.f) {
-        value = (value << 4) + c + (10 - CharCode.a);
+      } else if (isHexPart(c)) {
+        value = (value << 4) + (c | 32) + (10 - CharCode.a);
       } else if (~startIfTaggedTemplate) {
         this.pos = --pos;
         return text.substring(startIfTaggedTemplate, pos);
