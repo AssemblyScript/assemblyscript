@@ -1692,7 +1692,6 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     let result = text.substring(start, this.pos);
     if (sepCount) result = result.replaceAll("_", "");
-    // console.log(">>>> ", start, this.pos, result);
     return parseHexFloat(result);
   }
 
