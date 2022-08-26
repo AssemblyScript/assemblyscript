@@ -5743,7 +5743,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!setterIndexType.equals(getterIndexType)) {
           this.errorRelated(
             DiagnosticCode.Index_signature_accessors_in_type_0_differ_in_types,
-            valueExpression.range,
+            getterInstance.identifierAndSignatureRange,
             setterInstance.identifierAndSignatureRange,
             classInstance.internalName,
           );
