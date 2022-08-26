@@ -1453,8 +1453,8 @@ export class Tokenizer extends DiagnosticEmitter {
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c >= CharCode._0 && c <= CharCode._7) {
-        // value = (value << 3) + c - CharCode._0;
+      if (isOctal(c)) {
+        // (value << 3) + c - CharCode._0
         nextValue = i64_add(
           i64_shl(value, i64_3),
           i64_new(c - CharCode._0)
