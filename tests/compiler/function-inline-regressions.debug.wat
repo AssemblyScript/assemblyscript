@@ -26,26 +26,26 @@
   i32.mul
   local.get $b
   i32.add
-  i32.load
+  i32.load $0
  )
  (func $function-inline-regressions/loadZ (result i32)
   i32.const 16
-  i32.load
+  i32.load $0
  )
  (func $function-inline-regressions/Struct#set:v0 (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $function-inline-regressions/Struct#set:v1 (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $function-inline-regressions/Struct#set:v2 (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=8
+  i32.store $0 offset=8
  )
  (func $function-inline-regressions/foo (param $v0 i32) (param $v1 i32) (param $v2 i32) (result i32)
   (local $var$3 i32)
