@@ -107,6 +107,15 @@ assert("".trim() == "");
 assert("ab c".trim() == "ab c");
 assert(" \n\t\rabc \t\r ".trim() == "abc");
 
+// assert(bool.parse("true") == true);
+assert(bool.parse("\t\n true") == true);
+assert(bool.parse("\t\n true\n\r ") == true);
+assert(bool.parse("  trueabc") == false);
+assert(bool.parse("") == false);
+assert(bool.parse("tru") == false);
+assert(bool.parse("True") == false);
+assert(bool.parse("false") == false);
+
 assert(parseInt("0") == 0);
 assert(parseInt("000") == 0);
 assert(parseInt("1") == 1);
@@ -146,11 +155,15 @@ assert(isNaN(parseInt("+")));
 assert(isNaN(parseInt("123", 37)));
 assert(isNaN(parseInt("🔥")));
 assert(isNaN(parseInt("badnum")));
-assert(isNaN(F32.parseInt("badnum")));
-assert(isNaN(F64.parseInt("badnum")));
+assert(isNaN(F32.parseFloat("badnum")));
+assert(isNaN(F64.parseFloat("badnum")));
+assert(isNaN(f32.parse("badnum")));
+assert(isNaN(f64.parse("badnum")));
 
 assert(I32.parseInt("0x7FFFFFFF") == I32.MAX_VALUE);
+assert(i32.parse("0x7FFFFFFF") == I32.MAX_VALUE);
 assert(I64.parseInt("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
+assert(i64.parse("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
 
 // quick draft tests
 assert(parseFloat("0") == 0);
