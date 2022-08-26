@@ -650,8 +650,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // setup memory & table
-    this.initMemory(memoryOffset);
-    this.initTable();
+    this.initDefaultMemoryAndTable(memoryOffset);
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
@@ -712,11 +711,13 @@ export class Compiler extends DiagnosticEmitter {
     return module;
   }
 
-  private initMemory(memoryOffset: i64): void {
-    this.memoryOffset = memoryOffset;
-
+  private initDefaultMemoryAndTable(memoryOffset: i64): void {
     var options = this.options;
     var module = this.module;
+
+    // Init default memory
+
+    this.memoryOffset = memoryOffset;
     var memorySegments = this.memorySegments;
 
     var initialPages: u32 = 0;
@@ -801,11 +802,8 @@ export class Compiler extends DiagnosticEmitter {
         isSharedMemory
       );
     }
-  }
 
-  private initTable(): void {
-    var options = this.options;
-    var module = this.module;
+    // Init default table
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
@@ -859,6 +857,12 @@ export class Compiler extends DiagnosticEmitter {
       functionTableNames,
       module.i32(tableBase)
     );
+  }
+
+  private initTable(): void {
+    var options = this.options;
+    var module = this.module;
+
   }
 
   // === Exports ==================================================================================
