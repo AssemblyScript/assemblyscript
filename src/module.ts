@@ -111,7 +111,7 @@ export const enum FeatureFlags {
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
   Strings = 65536 /* _BinaryenFeatureStrings */,
-  All = 122879 /* _BinaryenFeatureAll */
+  All = 253951 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
