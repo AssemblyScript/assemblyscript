@@ -12,6 +12,7 @@
   "Start function name '{0}' is invalid or conflicts with another export.": 110,
   "Element '{0}' not found.": 111,
   "Exchange of '{0}' values is not supported by all embeddings": 112,
+  "Index signature type should be the same for getter and setter in '{0}' class.": 113,
 
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,

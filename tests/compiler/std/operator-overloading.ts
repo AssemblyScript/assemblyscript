@@ -335,17 +335,17 @@ assert(aii.x == 4 && aii.y == 6);
 class TesterElementAccess {
   [key: string]: number;
   constructor(
-    public x: f32,
-    public y: f32
+    public x: i32,
+    public y: i32
   ) {}
   @operator("[]")
-  __get(key: string): f32 {
+  __get(key: string): i32 {
     return key == "x"
       ? this.x
       : this.y;
   }
   @operator("[]=")
-  __set(key: string, value: f32): void {
+  __set(key: string, value: i32): void {
     key == "x"
       ? this.x = value
       : this.y = value;
@@ -354,17 +354,17 @@ class TesterElementAccess {
 
 var tea = new TesterElementAccess(1, 2);
 
-tea["x"] = -1.0;
-tea["y"] = -2.0;
+tea["x"] = -1;
+tea["y"] = -2;
 
-assert(tea.x == f32(-1.0));
-assert(tea["x"] == f32(-1.0));
+assert(tea.x    == -1);
+assert(tea["x"] == -1);
 
-assert(tea.y == f32(-2.0));
-assert(tea["y"] == f32(-2.0));
+assert(tea.y    == -2);
+assert(tea["y"] == -2);
 
 tea["x"]++;
 --tea["y"];
 
-assert(tea["x"] == f32(-1.0));
-assert(tea["y"] == f32(-3.0));
+assert(tea["x"] == 0);
+assert(tea["y"] == -3);
