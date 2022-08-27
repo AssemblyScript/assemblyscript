@@ -2771,7 +2771,7 @@ export class Module {
     maxLoopIterations: i32 = 1
   ): ExpressionRef {
     var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
-    var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
+    var precomp = binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
       if (!this.isConstExpression(precomp)) return 0;
       assert(getExpressionType(precomp) == getExpressionType(expr));
@@ -2793,7 +2793,11 @@ export class Module {
             case BinaryOp.MulI32:
             case BinaryOp.AddI64:
             case BinaryOp.SubI64:
-            case BinaryOp.MulI64: return this.isConstExpression(getBinaryLeft(expr)) && this.isConstExpression(getBinaryRight(expr));
+            case BinaryOp.MulI64:
+              return (
+                this.isConstExpression(getBinaryLeft(expr)) &&
+                this.isConstExpression(getBinaryRight(expr))
+              );
           }
         }
         break;
