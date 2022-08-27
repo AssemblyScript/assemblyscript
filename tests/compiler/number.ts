@@ -77,3 +77,11 @@ assert(!(F64.NaN == 1.0));
 assert(1.0 != NaN);
 assert(NaN != F32.NaN);
 assert(f64.NaN != 1.0);
+
+// always true
+assert(+.0 == -.0);
+assert(-.0 != -.0);
+assert(-.0 == +.0);
+assert(f32(+.0) == f32(-.0));
+assert(f32(-.0) != f32(-.0));
+assert(f32(-.0) == f32(+.0));

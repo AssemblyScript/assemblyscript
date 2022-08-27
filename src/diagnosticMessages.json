@@ -57,6 +57,7 @@
   "Explicitly returning constructor drops 'this' allocation.": 905,
   "Unnecessary definite assignment.": 906,
   "Comparision with NaN is invariant. You need to use isNaN(x).": 907,
+  "Comparision with -0.0 is sign insensitive. Perhaps you want to use Object.is(x, -0.0).": 908,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

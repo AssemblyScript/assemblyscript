@@ -2921,6 +2921,23 @@ export function isConstNonZero(expr: ExpressionRef): bool {
   return false;
 }
 
+export function isConstNegZero(expr: ExpressionRef): bool {
+  if (getExpressionId(expr) != ExpressionId.Const) return false;
+  var type = getExpressionType(expr);
+  if (type == TypeRef.F32) {
+    let d = getConstValueF32(expr);
+    if (d == 0) return f32_as_i32(d) == -0x80000000;
+  }
+  if (type == TypeRef.F64) {
+    let d = getConstValueF64(expr);
+    if (d == 0) {
+      let u = f64_as_i64(d);
+      return !i64_low(u) && i64_high(u) == -0x80000000;
+    }
+  }
+  return false;
+}
+
 export function isConstNaN(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
   var type = getExpressionType(expr);

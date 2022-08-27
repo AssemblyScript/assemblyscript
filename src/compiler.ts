@@ -53,6 +53,7 @@ import {
   SwitchBuilder,
   ExpressionRunnerFlags,
   isConstZero,
+  isConstNegZero,
   isConstExpressionNaN
 } from "./module";
 
@@ -4003,6 +4004,12 @@ export class Compiler extends DiagnosticEmitter {
               expression.range
             );
           }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparision_with_0_0_is_sign_insensitive_Perhaps_you_want_to_use_Object_is_x_0_0,
+              expression.range
+            );
+          }
         }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
@@ -4046,6 +4053,12 @@ export class Compiler extends DiagnosticEmitter {
           ) {
             this.warning(
               DiagnosticCode.Comparision_with_NaN_is_invariant_You_need_to_use_isNaN_x,
+              expression.range
+            );
+          }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparision_with_0_0_is_sign_insensitive_Perhaps_you_want_to_use_Object_is_x_0_0,
               expression.range
             );
           }
