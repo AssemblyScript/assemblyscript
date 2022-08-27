@@ -10056,7 +10056,13 @@ export class Compiler extends DiagnosticEmitter {
         // Needs to be true (i.e. not zero) when the ref is _not_ null,
         // which means `ref.is_null` returns false (i.e. zero).
         return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
-
+      }
+      case TypeKind.VOID: {
+        this.error(
+          DiagnosticCode.An_expression_of_type_0_cannot_be_tested_for_truthiness,
+          reportNode.range, "void"
+        );
+        return module.i32(0);
       }
       default: {
         assert(false);
