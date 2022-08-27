@@ -1,13 +1,15 @@
-// TS1345: An expression of type 'void' cannot be tested for truthiness.
-((): void => {})() ? 1 : 0;
+const voidFn = (): void => {};
 
 // TS1345: An expression of type 'void' cannot be tested for truthiness.
-if (((): void => {})()) {}
+voidFn() ? 1 : 0;
 
 // TS1345: An expression of type 'void' cannot be tested for truthiness.
-!((): void => {})();
+if (voidFn()) {}
 
-store<void>(8, ((): void => {})());
+// TS1345: An expression of type 'void' cannot be tested for truthiness.
+!voidFn();
+
+store<void>(8, voidFn());
 load<void>(8);
 
 ERROR("EOF");
