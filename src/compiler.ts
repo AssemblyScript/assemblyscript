@@ -52,7 +52,8 @@ import {
   SideEffects,
   SwitchBuilder,
   ExpressionRunnerFlags,
-  isConstZero
+  isConstZero,
+  isConstNaN
 } from "./module";
 
 import {
@@ -3992,7 +3993,14 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-
+        if (commonType.isFloatValue) {
+          if (isConstNaN(rightExpr) || isConstNaN(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparision_with_NaN_is_invariant_You_need_to_use_isNaN_x,
+              expression.range
+            );
+          }
+        }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
         rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
@@ -4028,7 +4036,14 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-
+        if (commonType.isFloatValue) {
+          if (isConstNaN(rightExpr) || isConstNaN(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparision_with_NaN_is_invariant_You_need_to_use_isNaN_x,
+              expression.range
+            );
+          }
+        }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
         rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);

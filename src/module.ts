@@ -2917,6 +2917,14 @@ export function isConstNonZero(expr: ExpressionRef): bool {
   return false;
 }
 
+export function isConstNaN(expr: ExpressionRef): bool {
+  if (getExpressionId(expr) != ExpressionId.Const) return false;
+  var type = getExpressionType(expr);
+  if (type == TypeRef.F32) return isNaN(getConstValueF32(expr));
+  if (type == TypeRef.F64) return isNaN(getConstValueF64(expr));
+  return false;
+}
+
 export function getLocalGetIndex(expr: ExpressionRef): Index {
   return binaryen._BinaryenLocalGetGetIndex(expr);
 }

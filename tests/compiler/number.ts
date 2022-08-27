@@ -65,3 +65,13 @@ assert(F64.isInteger(f64.MIN_SAFE_INTEGER) == true);
 assert(F64.isInteger(f64.MAX_SAFE_INTEGER) == true);
 assert(F64.isInteger(+0.5) == false);
 assert(F64.isInteger(-1.5) == false);
+
+// Should produce warnings
+
+// always false
+assert(!(1.0 == NaN));
+assert(!(NaN == F32.NaN));
+
+// always true
+assert(1.0 != NaN);
+assert(NaN != F32.NaN);

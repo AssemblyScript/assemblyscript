@@ -56,6 +56,7 @@
   "Indexed access may involve bounds checking.": 904,
   "Explicitly returning constructor drops 'this' allocation.": 905,
   "Unnecessary definite assignment.": 906,
+  "Comparision with NaN is invariant. You need to use isNaN(x).": 907,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

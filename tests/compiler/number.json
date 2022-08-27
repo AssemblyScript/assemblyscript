@@ -1,4 +1,10 @@
 {
   "asc_flags": [
+  ],
+  "stderr": [
+    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
+    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
+    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
+    "AS907: Comparision with NaN is invariant. You need to use isNaN(x)."
   ]
 }
