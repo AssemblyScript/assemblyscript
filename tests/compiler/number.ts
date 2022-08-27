@@ -71,7 +71,9 @@ assert(F64.isInteger(-1.5) == false);
 // always false
 assert(!(1.0 == NaN));
 assert(!(NaN == F32.NaN));
+assert(!(F64.NaN == 1.0));
 
 // always true
 assert(1.0 != NaN);
 assert(NaN != F32.NaN);
+assert(f64.NaN != 1.0);

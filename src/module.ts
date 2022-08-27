@@ -2929,6 +2929,30 @@ export function isConstNaN(expr: ExpressionRef): bool {
   return false;
 }
 
+export function isConstExpressionNaN(module: Module, expr: ExpressionRef): bool {
+  var id = getExpressionId(expr);
+  var type = getExpressionType(expr);
+  if (type == TypeRef.F32 || type == TypeRef.F64) {
+    if (id == ExpressionId.Const) {
+      return isNaN(
+        type == TypeRef.F32
+          ? getConstValueF32(expr)
+          : getConstValueF64(expr)
+      );
+    } else if (id == ExpressionId.GlobalGet) {
+      let precomp = module.runExpression(expr, ExpressionRunnerFlags.Default, 8);
+      if (precomp) {
+        return isNaN(
+          type == TypeRef.F32
+            ? getConstValueF32(precomp)
+            : getConstValueF64(precomp)
+        );
+      }
+    }
+  }
+  return false;
+}
+
 export function getLocalGetIndex(expr: ExpressionRef): Index {
   return binaryen._BinaryenLocalGetGetIndex(expr);
 }

@@ -53,7 +53,7 @@ import {
   SwitchBuilder,
   ExpressionRunnerFlags,
   isConstZero,
-  isConstNaN
+  isConstExpressionNaN
 } from "./module";
 
 import {
@@ -3994,7 +3994,10 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         if (commonType.isFloatValue) {
-          if (isConstNaN(rightExpr) || isConstNaN(leftExpr)) {
+          if (
+            isConstExpressionNaN(module, rightExpr) ||
+            isConstExpressionNaN(module, leftExpr)
+          ) {
             this.warning(
               DiagnosticCode.Comparision_with_NaN_is_invariant_You_need_to_use_isNaN_x,
               expression.range
@@ -4037,7 +4040,10 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         if (commonType.isFloatValue) {
-          if (isConstNaN(rightExpr) || isConstNaN(leftExpr)) {
+          if (
+            isConstExpressionNaN(module, rightExpr) ||
+            isConstExpressionNaN(module, leftExpr)
+          ) {
             this.warning(
               DiagnosticCode.Comparision_with_NaN_is_invariant_You_need_to_use_isNaN_x,
               expression.range
