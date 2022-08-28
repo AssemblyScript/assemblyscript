@@ -10943,24 +10943,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $__inlined_func$~lib/object/Object.is<f64> (result i32)
-   global.get $~lib/memory/__stack_pointer
-   i32.const 7360
-   i32.store $0
-   i32.const 7360
-   call $~lib/util/string/strtod
-   local.tee $1
-   f64.const 0
-   f64.eq
-   if
-    local.get $1
-    i64.reinterpret_f64
-    i64.eqz
-    br $__inlined_func$~lib/object/Object.is<f64>
-   end
-   i32.const 0
-  end
-  i32.eqz
+  global.get $~lib/memory/__stack_pointer
+  i32.const 7360
+  i32.store $0
+  i32.const 7360
+  call $~lib/util/string/strtod
+  i64.reinterpret_f64
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1120
@@ -10969,24 +10959,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $__inlined_func$~lib/object/Object.is<f64>111 (result i32)
-   global.get $~lib/memory/__stack_pointer
-   i32.const 7392
-   i32.store $0
-   i32.const 7392
-   call $~lib/util/string/strtod
-   local.tee $1
-   f64.const 0
-   f64.eq
-   if
-    local.get $1
-    i64.reinterpret_f64
-    i64.eqz
-    br $__inlined_func$~lib/object/Object.is<f64>111
-   end
-   i32.const 0
-  end
-  i32.eqz
+  global.get $~lib/memory/__stack_pointer
+  i32.const 7392
+  i32.store $0
+  i32.const 7392
+  call $~lib/util/string/strtod
+  i64.reinterpret_f64
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1120

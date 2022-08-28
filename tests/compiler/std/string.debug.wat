@@ -5694,31 +5694,26 @@
   local.get $str
   call $~lib/util/string/strtod
  )
- (func $~lib/object/Object.is<f64> (param $value1 f64) (param $value2 f64) (result i32)
+ (func $~lib/object/Object.is<f64> (param $x f64) (param $y f64) (result i32)
   i32.const 1
   drop
-  local.get $value1
-  local.get $value2
-  f64.eq
-  if
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $value1
-   i64.reinterpret_f64
-   local.get $value2
-   i64.reinterpret_f64
-   i64.eq
-   return
-  end
-  local.get $value1
-  local.get $value1
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $x
+  local.get $x
   f64.ne
-  local.get $value2
-  local.get $value2
+  local.get $y
+  local.get $y
   f64.ne
   i32.and
+  local.get $x
+  i64.reinterpret_f64
+  local.get $y
+  i64.reinterpret_f64
+  i64.eq
+  i32.or
   return
  )
  (func $~lib/string/String.__concat (param $left i32) (param $right i32) (result i32)
@@ -13122,6 +13117,8 @@
   call $~lib/string/parseFloat
   f64.const 0
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -13140,6 +13137,8 @@
   call $~lib/string/parseFloat
   f64.const 0
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
