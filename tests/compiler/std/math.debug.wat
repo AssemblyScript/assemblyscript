@@ -11451,21 +11451,17 @@
   i32.const 0
   i32.gt_s
   drop
+  f64.const 1
+  f64.const -1
+  local.get $x
+  local.get $x
+  f64.const 0
+  f64.lt
+  select
   local.get $x
   f64.const 0
   f64.gt
-  if (result f64)
-   f64.const 1
-  else
-   local.get $x
-   f64.const 0
-   f64.lt
-   if (result f64)
-    f64.const -1
-   else
-    local.get $x
-   end
-  end
+  select
   return
  )
  (func $std/math/test_sign (param $value f64) (param $expected f64) (param $error f64) (param $flags i32) (result i32)
@@ -11491,21 +11487,17 @@
   i32.const 0
   i32.gt_s
   drop
+  f32.const 1
+  f32.const -1
+  local.get $x
+  local.get $x
+  f32.const 0
+  f32.lt
+  select
   local.get $x
   f32.const 0
   f32.gt
-  if (result f32)
-   f32.const 1
-  else
-   local.get $x
-   f32.const 0
-   f32.lt
-   if (result f32)
-    f32.const -1
-   else
-    local.get $x
-   end
-  end
+  select
   return
  )
  (func $std/math/test_signf (param $value f32) (param $expected f32) (param $error f32) (param $flags i32) (result i32)

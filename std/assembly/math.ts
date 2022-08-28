@@ -1452,9 +1452,9 @@ export namespace NativeMath {
 
   export function sign(x: f64): f64 {
     if (ASC_SHRINK_LEVEL > 0) {
-      return builtin_abs(x) > 0 ? builtin_copysign<f64>(1, x) : x;
+      return select<f64>(builtin_copysign<f64>(1, x), x, builtin_abs(x) > 0);
     } else {
-      return x > 0 ? 1 : x < 0 ? -1 : x;
+      return select<f64>(1, select<f64>(-1, x, x < 0), x > 0);
     }
   }
 
@@ -2750,9 +2750,9 @@ export namespace NativeMathf {
 
   export function sign(x: f32): f32 {
     if (ASC_SHRINK_LEVEL > 0) {
-      return builtin_abs(x) > 0 ? builtin_copysign<f32>(1, x) : x;
+      return select<f32>(builtin_copysign<f32>(1, x), x, builtin_abs(x) > 0);
     } else {
-      return x > 0 ? 1 : x < 0 ? -1 : x;
+      return select<f32>(1, select<f32>(-1, x, x < 0), x > 0);
     }
   }
 
