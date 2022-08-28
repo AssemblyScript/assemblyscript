@@ -19,13 +19,13 @@ check(HASH<string>("abcdefghi"));
 check(HASH<f32>(0.0));
 check(HASH<f32>(1.0));
 check(HASH<f32>(1.1));
-check(HASH<f32>(-0));
+check(HASH<f32>(-0.0));
 check(HASH<f32>(Infinity));
 check(HASH<f32>(NaN));
 
 check(HASH<f64>(0.0));
 check(HASH<f64>(1.0));
 check(HASH<f64>(1.1));
-check(HASH<f64>(-0));
+check(HASH<f64>(-0.0));
 check(HASH<f64>(Infinity));
 check(HASH<f64>(NaN));

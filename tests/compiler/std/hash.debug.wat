@@ -826,7 +826,7 @@
   call $~lib/util/hash/HASH<f32>
   call $std/hash/check
   drop
-  f32.const 0
+  f32.const -0
   call $~lib/util/hash/HASH<f32>
   call $std/hash/check
   drop
@@ -850,7 +850,7 @@
   call $~lib/util/hash/HASH<f64>
   call $std/hash/check
   drop
-  f64.const 0
+  f64.const -0
   call $~lib/util/hash/HASH<f64>
   call $std/hash/check
   drop
