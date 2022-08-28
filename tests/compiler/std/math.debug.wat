@@ -11388,92 +11388,89 @@
   f32.const 1
   f32.sub
  )
+ (func $~lib/math/NativeMath.round (param $x f64) (result f64)
+  (local $var$1 f64)
+  i32.const 0
+  i32.const 0
+  i32.gt_s
+  drop
+  local.get $x
+  f64.ceil
+  local.set $var$1
+  local.get $var$1
+  local.get $var$1
+  f64.const 1
+  f64.sub
+  local.get $var$1
+  f64.const 0.5
+  f64.sub
+  local.get $x
+  f64.le
+  select
+  return
+ )
  (func $std/math/test_round (param $value f64) (param $expected f64) (param $error f64) (param $flags i32) (result i32)
-  (local $var$4 f64)
-  (local $var$5 f64)
-  block $~lib/math/NativeMath.round|inlined.0 (result f64)
-   local.get $value
-   local.set $var$4
-   i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$4
-   f64.ceil
-   local.set $var$5
-   local.get $var$5
-   local.get $var$5
-   f64.const 1
-   f64.sub
-   local.get $var$5
-   f64.const 0.5
-   f64.sub
-   local.get $var$4
-   f64.le
-   select
-   br $~lib/math/NativeMath.round|inlined.0
-  end
+  local.get $value
+  call $~lib/math/NativeMath.round
   local.get $expected
   local.get $error
   local.get $flags
   call $std/math/check<f64>
  )
+ (func $~lib/math/NativeMathf.round (param $x f32) (result f32)
+  (local $var$1 f32)
+  i32.const 0
+  i32.const 0
+  i32.gt_s
+  drop
+  local.get $x
+  f32.ceil
+  local.set $var$1
+  local.get $var$1
+  local.get $var$1
+  f32.const 1
+  f32.sub
+  local.get $var$1
+  f32.const 0.5
+  f32.sub
+  local.get $x
+  f32.le
+  select
+  return
+ )
  (func $std/math/test_roundf (param $value f32) (param $expected f32) (param $error f32) (param $flags i32) (result i32)
-  (local $var$4 f32)
-  (local $var$5 f32)
-  block $~lib/math/NativeMathf.round|inlined.0 (result f32)
-   local.get $value
-   local.set $var$4
-   i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$4
-   f32.ceil
-   local.set $var$5
-   local.get $var$5
-   local.get $var$5
-   f32.const 1
-   f32.sub
-   local.get $var$5
-   f32.const 0.5
-   f32.sub
-   local.get $var$4
-   f32.le
-   select
-   br $~lib/math/NativeMathf.round|inlined.0
-  end
+  local.get $value
+  call $~lib/math/NativeMathf.round
   local.get $expected
   local.get $error
   local.get $flags
   call $std/math/check<f32>
  )
- (func $std/math/test_sign (param $value f64) (param $expected f64) (param $error f64) (param $flags i32) (result i32)
-  (local $var$4 f64)
-  block $~lib/math/NativeMath.sign|inlined.0 (result f64)
-   local.get $value
-   local.set $var$4
-   i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$4
+ (func $~lib/math/NativeMath.sign (param $x f64) (result f64)
+  i32.const 0
+  i32.const 0
+  i32.gt_s
+  drop
+  local.get $x
+  f64.const 0
+  f64.gt
+  if (result f64)
+   f64.const 1
+  else
+   local.get $x
    f64.const 0
-   f64.gt
+   f64.lt
    if (result f64)
-    f64.const 1
+    f64.const -1
    else
-    local.get $var$4
-    f64.const 0
-    f64.lt
-    if (result f64)
-     f64.const -1
-    else
-     local.get $var$4
-    end
+    local.get $x
    end
-   br $~lib/math/NativeMath.sign|inlined.0
   end
+  return
+ )
+ (func $std/math/test_sign (param $value f64) (param $expected f64) (param $error f64) (param $flags i32) (result i32)
+  local.get $value
+  call $~lib/math/NativeMath.sign
   local.get $expected
   local.get $error
   local.get $flags
@@ -11489,32 +11486,31 @@
    i32.const 0
   end
  )
- (func $std/math/test_signf (param $value f32) (param $expected f32) (param $error f32) (param $flags i32) (result i32)
-  (local $var$4 f32)
-  block $~lib/math/NativeMathf.sign|inlined.0 (result f32)
-   local.get $value
-   local.set $var$4
-   i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$4
+ (func $~lib/math/NativeMathf.sign (param $x f32) (result f32)
+  i32.const 0
+  i32.const 0
+  i32.gt_s
+  drop
+  local.get $x
+  f32.const 0
+  f32.gt
+  if (result f32)
+   f32.const 1
+  else
+   local.get $x
    f32.const 0
-   f32.gt
+   f32.lt
    if (result f32)
-    f32.const 1
+    f32.const -1
    else
-    local.get $var$4
-    f32.const 0
-    f32.lt
-    if (result f32)
-     f32.const -1
-    else
-     local.get $var$4
-    end
+    local.get $x
    end
-   br $~lib/math/NativeMathf.sign|inlined.0
   end
+  return
+ )
+ (func $std/math/test_signf (param $value f32) (param $expected f32) (param $error f32) (param $flags i32) (result i32)
+  local.get $value
+  call $~lib/math/NativeMathf.sign
   local.get $expected
   local.get $error
   local.get $flags
@@ -16282,7 +16278,6 @@
   (local $var$2 i32)
   (local $var$3 i64)
   (local $var$4 f32)
-  (local $var$5 f64)
   global.get $~lib/math/NativeMath.E
   global.get $~lib/math/NativeMath.E
   f64.eq
@@ -47658,131 +47653,71 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $~lib/math/NativeMath.round|inlined.1 (result f64)
-   f64.const 9007199254740990
-   local.set $var$0
-   i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$0
-   f64.ceil
-   local.set $var$5
-   local.get $var$5
-   local.get $var$5
-   f64.const 1
-   f64.sub
-   local.get $var$5
-   f64.const 0.5
-   f64.sub
-   local.get $var$0
-   f64.le
-   select
-   br $~lib/math/NativeMath.round|inlined.1
-  end
+  f64.const 9007199254740990
+  call $~lib/math/NativeMath.round
   f64.const 9007199254740990
   f64.eq
-  drop
-  block $~lib/math/NativeMath.round|inlined.2 (result f64)
-   f64.const -9007199254740990
-   local.set $var$5
+  i32.eqz
+  if
    i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$5
-   f64.ceil
-   local.set $var$0
-   local.get $var$0
-   local.get $var$0
-   f64.const 1
-   f64.sub
-   local.get $var$0
-   f64.const 0.5
-   f64.sub
-   local.get $var$5
-   f64.le
-   select
-   br $~lib/math/NativeMath.round|inlined.2
+   i32.const 32
+   i32.const 3052
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
   f64.const -9007199254740990
+  call $~lib/math/NativeMath.round
+  f64.const -9007199254740990
   f64.eq
-  drop
-  block $~lib/math/NativeMath.round|inlined.3 (result f64)
-   f64.const 9007199254740991
-   local.set $var$0
+  i32.eqz
+  if
    i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$0
-   f64.ceil
-   local.set $var$5
-   local.get $var$5
-   local.get $var$5
-   f64.const 1
-   f64.sub
-   local.get $var$5
-   f64.const 0.5
-   f64.sub
-   local.get $var$0
-   f64.le
-   select
-   br $~lib/math/NativeMath.round|inlined.3
+   i32.const 32
+   i32.const 3053
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
   f64.const 9007199254740991
+  call $~lib/math/NativeMath.round
+  f64.const 9007199254740991
   f64.eq
-  drop
-  block $~lib/math/NativeMath.round|inlined.4 (result f64)
-   f64.const -9007199254740991
-   local.set $var$5
+  i32.eqz
+  if
    i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$5
-   f64.ceil
-   local.set $var$0
-   local.get $var$0
-   local.get $var$0
-   f64.const 1
-   f64.sub
-   local.get $var$0
-   f64.const 0.5
-   f64.sub
-   local.get $var$5
-   f64.le
-   select
-   br $~lib/math/NativeMath.round|inlined.4
+   i32.const 32
+   i32.const 3054
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
   f64.const -9007199254740991
+  call $~lib/math/NativeMath.round
+  f64.const -9007199254740991
   f64.eq
-  drop
-  block $~lib/math/NativeMath.round|inlined.5 (result f64)
-   f64.const -1797693134862315708145274e284
-   local.set $var$0
+  i32.eqz
+  if
    i32.const 0
-   i32.const 0
-   i32.gt_s
-   drop
-   local.get $var$0
-   f64.ceil
-   local.set $var$5
-   local.get $var$5
-   local.get $var$5
-   f64.const 1
-   f64.sub
-   local.get $var$5
-   f64.const 0.5
-   f64.sub
-   local.get $var$0
-   f64.le
-   select
-   br $~lib/math/NativeMath.round|inlined.5
+   i32.const 32
+   i32.const 3055
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
   f64.const -1797693134862315708145274e284
+  call $~lib/math/NativeMath.round
+  f64.const -1797693134862315708145274e284
   f64.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3056
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   f32.const -8.066848754882812
   f32.const -8
   f32.const 0
@@ -48418,8 +48353,8 @@
    unreachable
   end
   f64.const 0
-  local.set $var$5
-  local.get $var$5
+  local.set $var$0
+  local.get $var$0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
@@ -48444,8 +48379,8 @@
   i32.eq
   drop
   f64.const 1
-  local.set $var$5
-  local.get $var$5
+  local.set $var$0
+  local.get $var$0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
@@ -48470,8 +48405,8 @@
   i32.eq
   drop
   f64.const nan:0x8000000000000
-  local.set $var$5
-  local.get $var$5
+  local.set $var$0
+  local.get $var$0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
@@ -48497,8 +48432,8 @@
   i32.eq
   drop
   f64.const inf
-  local.set $var$5
-  local.get $var$5
+  local.set $var$0
+  local.get $var$0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u

@@ -1441,8 +1441,6 @@ export namespace NativeMath {
     return reinterpret<f64>(r) - 1;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function round(x: f64): f64 {
     if (ASC_SHRINK_LEVEL > 0) {
       return builtin_ceil<f64>(x) - f64(builtin_ceil<f64>(x) - 0.5 > x);
@@ -1452,8 +1450,6 @@ export namespace NativeMath {
     }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function sign(x: f64): f64 {
     if (ASC_SHRINK_LEVEL > 0) {
       return builtin_abs(x) > 0 ? builtin_copysign<f64>(1, x) : x;
@@ -2743,8 +2739,6 @@ export namespace NativeMathf {
     return reinterpret<f32>((r >> 9) | (127 << 23)) - 1.0;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function round(x: f32): f32 {
     if (ASC_SHRINK_LEVEL > 0) {
       return builtin_ceil<f32>(x) - f32(builtin_ceil<f32>(x) - 0.5 > x);
@@ -2754,8 +2748,6 @@ export namespace NativeMathf {
     }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function sign(x: f32): f32 {
     if (ASC_SHRINK_LEVEL > 0) {
       return builtin_abs(x) > 0 ? builtin_copysign<f32>(1, x) : x;
