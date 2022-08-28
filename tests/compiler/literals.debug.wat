@@ -109,10 +109,6 @@
   drop
   i64.const 0
   drop
-  f64.const 0
-  drop
-  f32.const 0
-  drop
  )
  (func $~start
   call $start:literals
