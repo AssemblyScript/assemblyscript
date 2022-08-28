@@ -1596,12 +1596,19 @@ export class Resolver extends DiagnosticEmitter {
   ): Type {
     let intValue = expr.value;
     if (negate) {
+      let range = expr.range;
       // x + i64.min > 0   ->   underflow
       if (i64_gt(i64_add(intValue, i64_minimum), i64_zero)) {
-        let range = expr.range;
         this.error(
           DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
           range, range.source.text.substring(range.start - 1, range.end)
+        );
+      }
+      // <f64> -0  will be coerced to 0.0. Warn about this
+      if (ctxType.isFloatValue && i64_eq(expr.value, i64_zero)) {
+        this.warning(
+          DiagnosticCode.Literal_0_will_be_coerced_to_0_integer_first_Please_use_0_0_instead,
+          range
         );
       }
       intValue = i64_neg(intValue);

@@ -7794,7 +7794,6 @@ export class Compiler extends DiagnosticEmitter {
       case LiteralKind.INTEGER: {
         let expr = <IntegerLiteralExpression>expression;
         let type = this.resolver.determineIntegerLiteralType(expr, implicitlyNegate, contextualType);
-
         let intValue = implicitlyNegate
           ? i64_neg(expr.value)
           : expr.value;
