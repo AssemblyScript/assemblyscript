@@ -1603,7 +1603,7 @@ export class Resolver extends DiagnosticEmitter {
           DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
           range, range.source.text.substring(range.start - 1, range.end)
         );
-      } else if (ctxType.isFloatValue && i64_eq(expr.value, i64_zero)) {
+      } else if (ctxType.isFloatValue && i64_eq(intValue, i64_zero)) {
         // <f64> -0  will be coerced to 0.0. Warn about this
         this.error(
           DiagnosticCode.Literal_0_will_be_coerced_to_0_integer_first_Please_use_0_0_instead,
