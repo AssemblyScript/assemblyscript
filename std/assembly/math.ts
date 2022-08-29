@@ -1441,20 +1441,20 @@ export namespace NativeMath {
     return reinterpret<f64>(r) - 1;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function round(x: f64): f64 {
-    let roundUp = builtin_ceil<f64>(x);
-    return select<f64>(roundUp, roundUp - 1.0, roundUp - 0.5 <= x);
+    if (ASC_SHRINK_LEVEL > 0) {
+      return builtin_ceil<f64>(x) - f64(builtin_ceil<f64>(x) - 0.5 > x);
+    } else {
+      let roundUp = builtin_ceil<f64>(x);
+      return select<f64>(roundUp, roundUp - 1.0, roundUp - 0.5 <= x);
+    }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function sign(x: f64): f64 {
     if (ASC_SHRINK_LEVEL > 0) {
-      return builtin_abs(x) > 0 ? builtin_copysign<f64>(1, x) : x;
+      return select<f64>(builtin_copysign<f64>(1, x), x, builtin_abs(x) > 0);
     } else {
-      return x > 0 ? 1 : x < 0 ? -1 : x;
+      return select<f64>(1, select<f64>(-1, x, x < 0), x > 0);
     }
   }
 
@@ -2739,20 +2739,20 @@ export namespace NativeMathf {
     return reinterpret<f32>((r >> 9) | (127 << 23)) - 1.0;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function round(x: f32): f32 {
-    let roundUp = builtin_ceil<f32>(x);
-    return select<f32>(roundUp, roundUp - 1.0, roundUp - 0.5 <= x);
+    if (ASC_SHRINK_LEVEL > 0) {
+      return builtin_ceil<f32>(x) - f32(builtin_ceil<f32>(x) - 0.5 > x);
+    } else {
+      let roundUp = builtin_ceil<f32>(x);
+      return select<f32>(roundUp, roundUp - 1.0, roundUp - 0.5 <= x);
+    }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function sign(x: f32): f32 {
     if (ASC_SHRINK_LEVEL > 0) {
-      return builtin_abs(x) > 0 ? builtin_copysign<f32>(1, x) : x;
+      return select<f32>(builtin_copysign<f32>(1, x), x, builtin_abs(x) > 0);
     } else {
-      return x > 0 ? 1 : x < 0 ? -1 : x;
+      return select<f32>(1, select<f32>(-1, x, x < 0), x > 0);
     }
   }
 
