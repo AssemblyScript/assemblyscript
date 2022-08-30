@@ -751,13 +751,13 @@
    local.tee $1
    i32.eqz
    if
-    i32.const 0
+    local.get $0
+    i32.load $0 offset=8
+    i32.eqz
     local.get $0
     i32.const 32652
     i32.lt_u
-    local.get $0
-    i32.load $0 offset=8
-    select
+    i32.and
     i32.eqz
     if
      i32.const 0
@@ -8019,10 +8019,10 @@
    return
   end
   local.get $1
-  i32.const 0
-  local.get $0
-  select
   i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
   if
    i32.const 0
    return
@@ -16028,11 +16028,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf
     local.get $3
     i32.load $0 offset=4
@@ -16085,11 +16085,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf36
     local.get $3
     i32.load $0 offset=4
@@ -16144,11 +16144,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf39
     local.get $3
     i32.load $0 offset=4
@@ -16203,11 +16203,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 100
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf42
     local.get $3
     i32.load $0 offset=4
@@ -16260,11 +16260,11 @@
     local.get $1
     i32.load $0 offset=12
     local.tee $3
+    i32.eqz
+    local.get $3
     i32.const -100
     i32.le_s
-    i32.const 1
-    local.get $3
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf45
     local.get $3
     i32.const 100
@@ -16326,11 +16326,11 @@
     local.get $1
     i32.load $0 offset=12
     local.tee $3
+    i32.eqz
+    local.get $3
     i32.const -2
     i32.le_s
-    i32.const 1
-    local.get $3
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf48
     local.get $3
     i32.const 2
@@ -16392,11 +16392,11 @@
     local.get $1
     i32.load $0 offset=12
     local.tee $3
+    i32.eqz
+    local.get $3
     i32.const -4
     i32.le_s
-    i32.const 1
-    local.get $3
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf51
     local.get $3
     i32.const 4
@@ -16460,11 +16460,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf54
     local.get $3
     i32.load $0 offset=4
@@ -16519,11 +16519,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 1
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf57
     local.get $3
     i32.load $0 offset=4
@@ -16578,11 +16578,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 2
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf60
     local.get $3
     i32.load $0 offset=4
@@ -16642,11 +16642,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<f32>#indexOf
     local.get $3
     i32.load $0 offset=4
@@ -16704,11 +16704,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<f64>#indexOf
     local.get $3
     i32.load $0 offset=4
@@ -17095,11 +17095,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf14
     local.get $3
     i32.load $0 offset=4
@@ -17152,11 +17152,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf17
     local.get $3
     i32.load $0 offset=4
@@ -17209,11 +17209,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf20
     local.get $3
     i32.load $0 offset=4
@@ -17266,11 +17266,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 100
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf23
     local.get $3
     i32.load $0 offset=4
@@ -17321,11 +17321,11 @@
     local.get $1
     i32.load $0 offset=12
     local.tee $3
+    i32.eqz
+    local.get $3
     i32.const -100
     i32.le_s
-    i32.const 1
-    local.get $3
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf26
     local.get $3
     i32.const 100
@@ -17385,11 +17385,11 @@
     local.get $1
     i32.load $0 offset=12
     local.tee $3
+    i32.eqz
+    local.get $3
     i32.const -2
     i32.le_s
-    i32.const 1
-    local.get $3
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf29
     local.get $3
     i32.const 2
@@ -17449,11 +17449,11 @@
     local.get $1
     i32.load $0 offset=12
     local.tee $3
+    i32.eqz
+    local.get $3
     i32.const -4
     i32.le_s
-    i32.const 1
-    local.get $3
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf32
     local.get $3
     i32.const 4
@@ -17515,11 +17515,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf35
     local.get $3
     i32.load $0 offset=4
@@ -17572,11 +17572,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 1
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf38
     local.get $3
     i32.load $0 offset=4
@@ -17629,11 +17629,11 @@
     local.get $3
     i32.load $0 offset=12
     local.tee $8
+    i32.eqz
+    local.get $8
     i32.const 2
     i32.le_s
-    i32.const 1
-    local.get $8
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<i32>#indexOf41
     local.get $3
     i32.load $0 offset=4
@@ -17690,11 +17690,11 @@
     local.get $1
     i32.load $0 offset=12
     local.tee $3
+    i32.eqz
+    local.get $3
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $3
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<f32>#includes
     drop
     local.get $1
@@ -17755,11 +17755,11 @@
     local.get $1
     i32.load $0 offset=12
     local.tee $3
+    i32.eqz
+    local.get $3
     i32.const 0
     i32.le_s
-    i32.const 1
-    local.get $3
-    select
+    i32.or
     br_if $__inlined_func$~lib/array/Array<f64>#includes
     drop
     local.get $1
@@ -28245,14 +28245,14 @@
    i32.const 9696
    return
   end
-  i32.const 0
+  local.get $3
+  i32.eqz
   local.get $4
   local.get $1
   i32.const 1
   i32.shl
   i32.eq
-  local.get $3
-  select
+  i32.and
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4

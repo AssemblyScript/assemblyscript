@@ -1769,10 +1769,7 @@
    br_if $__inlined_func$~lib/string/String.__eq
    drop
    i32.const 0
-   i32.const 3408
-   i32.const 0
    local.get $4
-   select
    i32.eqz
    br_if $__inlined_func$~lib/string/String.__eq
    drop
@@ -1917,13 +1914,13 @@
     local.tee $0
     i32.eqz
     if
-     i32.const 0
+     local.get $1
+     i32.load $0 offset=8
+     i32.eqz
      local.get $1
      i32.const 19844
      i32.lt_u
-     local.get $1
-     i32.load $0 offset=8
-     select
+     i32.and
      i32.eqz
      if
       i32.const 0
