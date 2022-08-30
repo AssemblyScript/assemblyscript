@@ -1082,7 +1082,11 @@ export const enum RefAsOp {
   /** ref.as_data */
   Data = 2 /* _BinaryenRefAsData */,
   /** ref.as_i31 */
-  I31 = 3 /* _BinaryenRefAsI31 */
+  I31 = 3 /* _BinaryenRefAsI31 */,
+  /** extern.internalize */
+  ExternInternalize = 4 /* TODO_BinaryenExternInternalize */,
+  /** extern.externalize */
+  ExternExternalize = 5 /* TODO_BinaryenExternExternalize */
 }
 
 /** Binaryen BrOn operation constants. */
