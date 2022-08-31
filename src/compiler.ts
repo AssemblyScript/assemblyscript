@@ -4052,13 +4052,13 @@ export class Compiler extends DiagnosticEmitter {
             isConstExpressionNaN(module, leftExpr)
           ) {
             this.warning(
-              DiagnosticCode.Comparision_with_NaN_is_invariant_You_need_to_use_isNaN_x,
+              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
               expression.range
             );
           }
           if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
             this.warning(
-              DiagnosticCode.Comparision_with_0_0_is_sign_insensitive_Perhaps_you_want_to_use_Object_is_x_0_0,
+              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
               expression.range
             );
           }
