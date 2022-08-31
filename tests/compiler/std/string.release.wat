@@ -1057,10 +1057,10 @@
    return
   end
   local.get $1
-  i32.const 0
-  local.get $0
-  select
   i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
   if
    i32.const 0
    return
@@ -1180,13 +1180,13 @@
    local.tee $1
    i32.eqz
    if
-    i32.const 0
+    local.get $0
+    i32.load $0 offset=8
+    i32.eqz
     local.get $0
     i32.const 42748
     i32.lt_u
-    local.get $0
-    i32.load $0 offset=8
-    select
+    i32.and
     i32.eqz
     if
      i32.const 0
@@ -3811,13 +3811,13 @@
     i32.const 2
     i32.add
     local.set $0
-    i32.const 0
     local.get $4
     local.get $7
     i32.const 1
     i32.sub
     local.tee $7
-    select
+    i32.eqz
+    i32.and
     br_if $folding-inner0
     i32.const 1
     local.set $10
@@ -3850,17 +3850,16 @@
      f64.const 0
      return
     end
+    local.get $4
+    local.get $2
+    i32.eqz
+    i32.and
     local.get $5
     i32.const 48
     i32.sub
     i32.const 10
     i32.ge_u
-    i32.const 0
-    i32.const 0
-    local.get $4
-    local.get $2
-    select
-    select
+    i32.and
     br_if $folding-inner0
    end
    local.get $5
@@ -22072,14 +22071,14 @@
    i32.const 1712
    return
   end
-  i32.const 0
+  local.get $2
+  i32.eqz
   local.get $1
   local.get $3
   i32.const 1
   i32.shl
   i32.eq
-  local.get $2
-  select
+  i32.and
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -22227,10 +22226,10 @@
    unreachable
   end
   local.get $4
-  i32.const 0
-  local.get $1
-  select
   i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -23060,14 +23059,14 @@
    i32.const 1712
    return
   end
-  i32.const 0
+  local.get $4
+  i32.eqz
   local.get $2
   local.get $1
   i32.const 1
   i32.shl
   i32.eq
-  local.get $4
-  select
+  i32.and
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
