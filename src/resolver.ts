@@ -1603,6 +1603,16 @@ export class Resolver extends DiagnosticEmitter {
           DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
           range, range.source.text.substring(range.start - 1, range.end)
         );
+      } else if (i64_eq(intValue, i64_zero)) {
+        // Special handling for -0
+        if (ctxType.isFloatValue) {
+          return ctxType.kind == TypeKind.F32
+            ? Type.f32
+            : Type.f64;
+        } else if (!ctxType.isIntegerValue) {
+          // If it's unknown just always assume this is f64
+          return Type.f64;
+        }
       }
       intValue = i64_neg(intValue);
     }

@@ -27420,7 +27420,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0
+  f64.const -0
   f64.const 1
   f64.const 0
   call $std/math/test_exp2

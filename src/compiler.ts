@@ -7794,19 +7794,23 @@ export class Compiler extends DiagnosticEmitter {
       case LiteralKind.INTEGER: {
         let expr = <IntegerLiteralExpression>expression;
         let type = this.resolver.determineIntegerLiteralType(expr, implicitlyNegate, contextualType);
-
-        let intValue = implicitlyNegate
-          ? i64_neg(expr.value)
-          : expr.value;
-
         this.currentType = type;
+        let intValue = expr.value;
+        let sign = 1.0; // should multiply for float literals
+        if (implicitlyNegate) {
+          if (type.isFloatValue) {
+            sign = -1.0;
+          } else {
+            intValue = i64_neg(intValue);
+          }
+        }
         switch (type.kind) {
           case TypeKind.ISIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));
           case TypeKind.I64: return module.i64(i64_low(intValue), i64_high(intValue));
           case TypeKind.USIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));
           case TypeKind.U64: return module.i64(i64_low(intValue), i64_high(intValue));
-          case TypeKind.F32: return module.f32(i64_to_f32(intValue));
-          case TypeKind.F64: return module.f64(i64_to_f64(intValue));
+          case TypeKind.F32: return module.f32(<f32>sign * i64_to_f32(intValue));
+          case TypeKind.F64: return module.f64(sign * i64_to_f64(intValue));
           default: return module.i32(i64_low(intValue));
         }
       }
