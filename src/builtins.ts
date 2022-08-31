@@ -2294,10 +2294,7 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
     contextualType.size > type.size
   ) ? contextualType : type;
 
-  if (
-    !outType.isAny(TypeFlags.VALUE | TypeFlags.REFERENCE) ||
-     outType.isAny(TypeFlags.EXTERNAL)
-  ) {
+  if (!outType.isMemory) {
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, "load", outType.toString()
@@ -2364,10 +2361,7 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
           : Constraints.CONV_IMPLICIT
       );
   var inType = compiler.currentType;
-  if (
-    !inType.isAny(TypeFlags.VALUE | TypeFlags.REFERENCE) ||
-     inType.isAny(TypeFlags.EXTERNAL)
-  ) {
+  if (!inType.isMemory) {
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, "store", inType.toString()
