@@ -7801,10 +7801,10 @@ export class Compiler extends DiagnosticEmitter {
             // Specially handle negative floating points
             // it should preserve -0 -> -0.0
             return type.kind == TypeKind.F32
-              ? module.f32(-i64_to_f32(expr.value))
-              : module.f64(-i64_to_f64(expr.value));
+              ? module.f32(-i64_to_f32(intValue))
+              : module.f64(-i64_to_f64(intValue));
           } else {
-            intValue = i64_neg(expr.value);
+            intValue = i64_neg(intValue);
           }
         }
         switch (type.kind) {
