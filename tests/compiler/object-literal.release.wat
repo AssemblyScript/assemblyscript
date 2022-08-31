@@ -78,13 +78,13 @@
    local.tee $1
    i32.eqz
    if
-    i32.const 0
+    local.get $0
+    i32.load $0 offset=8
+    i32.eqz
     local.get $0
     i32.const 18156
     i32.lt_u
-    local.get $0
-    i32.load $0 offset=8
-    select
+    i32.and
     i32.eqz
     if
      i32.const 0
@@ -1535,10 +1535,10 @@
    return
   end
   local.get $1
-  i32.const 0
-  local.get $0
-  select
   i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
   if
    i32.const 0
    return
@@ -1957,14 +1957,14 @@
      local.set $0
      br $__inlined_func$~lib/string/String#substring
     end
-    i32.const 0
+    local.get $3
+    i32.eqz
     local.get $4
     local.get $0
     i32.const 1
     i32.shl
     i32.eq
-    local.get $3
-    select
+    i32.and
     if
      global.get $~lib/memory/__stack_pointer
      i32.const 4

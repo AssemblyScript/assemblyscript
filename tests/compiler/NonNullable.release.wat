@@ -32,10 +32,10 @@
    return
   end
   local.get $1
-  i32.const 0
-  local.get $0
-  select
   i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
   if
    i32.const 0
    return

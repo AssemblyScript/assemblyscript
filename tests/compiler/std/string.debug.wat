@@ -16,6 +16,7 @@
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (type $i32_=>_f32 (func (param i32) (result f32)))
+ (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
@@ -198,47 +199,47 @@
  (data (i32.const 4940) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\001\00e\00-\006\000\00\00\00")
  (data (i32.const 4972) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00e\006\000\00\00\00\00\00")
  (data (i32.const 5004) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\001\002\003\00.\004\00e\00")
- (data (i32.const 5036) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00-\00.\000\000\000\000\000\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5084) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\001\00x\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5116) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00-\001\001\00e\00-\001\00s\00t\00r\00i\00n\00g\00\00\00\00\00")
- (data (i32.const 5164) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\000\001\00e\001\00s\00t\00r\00i\00n\00g\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5212) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\000\001\000\00s\00t\00r\00i\00n\00g\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5260) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00+\00.\002\002\00e\00-\001\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5308) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\001\001\00.\00s\001\00\00\00")
- (data (i32.const 5340) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00x\005\00\00\00\00\00\00\00")
- (data (i32.const 5372) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00x\00D\00\00\00\00\00\00\00")
- (data (i32.const 5404) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00\0b\001\00.\001\00\00\00\00\00")
- (data (i32.const 5436) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\0b\00\0b\00-\001\00.\001\00")
- (data (i32.const 5468) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\0c\00\0c\00-\001\00.\001\00")
- (data (i32.const 5500) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00( ( -\001\00.\001\00")
- (data (i32.const 5532) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00) ) -\001\00.\001\00")
- (data (i32.const 5564) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\000\000\000\00\00\00")
- (data (i32.const 5596) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\000\000\00a\00\00\00")
- (data (i32.const 5628) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\000\000\001\00\00\00")
- (data (i32.const 5660) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\00.\000\000\00\00\00")
- (data (i32.const 5692) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\00.\000\00a\00\00\00")
- (data (i32.const 5724) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00e\001\00e\00\00\00\00\00")
- (data (i32.const 5756) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\001\00e\00+\000\000\000\001\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5804) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\000\00e\00+\001\000\000\00")
- (data (i32.const 5836) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\001\00.\00-\001\00.\00\00\00")
- (data (i32.const 5868) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\001\00e\00-\001\00.\002\00")
- (data (i32.const 5900) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\001\00e\00x\00\00\00\00\00\00\00")
- (data (i32.const 5932) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00e\001\00x\00\00\00\00\00")
- (data (i32.const 5964) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00e\00-\00x\00\00\00\00\00")
- (data (i32.const 5996) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\001\00e\00-\001\00x\00\00\00")
- (data (i32.const 6028) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\000\00.\001\00e\00-\001\00x\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 6076) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\000\00.\00\00\00\00\00\00\00")
- (data (i32.const 6108) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00.\000\000\00\00\00\00\00\00\00")
- (data (i32.const 6140) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00.\000\00.\00\00\00\00\00\00\00")
- (data (i32.const 6172) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00.\001\00.\00\00\00\00\00\00\00")
- (data (i32.const 6204) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00.\00.\00\00\00\00\00\00\00")
- (data (i32.const 6236) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00.\00a\00\00\00\00\00\00\00")
- (data (i32.const 6268) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00.\00.\001\00\00\00\00\00")
- (data (i32.const 6300) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\00.\001\00.\001\00\00\00")
- (data (i32.const 6332) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\000\00.\00 \001\00\00\00\00\00")
- (data (i32.const 6364) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00+\000\00.\000\00\00\00\00\00")
- (data (i32.const 6396) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00-\000\00.\000\00\00\00\00\00")
- (data (i32.const 6428) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00+\000\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5036) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\001\00x\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5068) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00-\001\001\00e\00-\001\00s\00t\00r\00i\00n\00g\00\00\00\00\00")
+ (data (i32.const 5116) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\000\001\00e\001\00s\00t\00r\00i\00n\00g\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5164) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\000\001\000\00s\00t\00r\00i\00n\00g\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5212) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00+\00.\002\002\00e\00-\001\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5260) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\001\001\00.\00s\001\00\00\00")
+ (data (i32.const 5292) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00x\005\00\00\00\00\00\00\00")
+ (data (i32.const 5324) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00x\00D\00\00\00\00\00\00\00")
+ (data (i32.const 5356) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00\0b\001\00.\001\00\00\00\00\00")
+ (data (i32.const 5388) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\0b\00\0b\00-\001\00.\001\00")
+ (data (i32.const 5420) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\0c\00\0c\00-\001\00.\001\00")
+ (data (i32.const 5452) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00( ( -\001\00.\001\00")
+ (data (i32.const 5484) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00) ) -\001\00.\001\00")
+ (data (i32.const 5516) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\000\000\000\00\00\00")
+ (data (i32.const 5548) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\000\000\00a\00\00\00")
+ (data (i32.const 5580) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\000\000\001\00\00\00")
+ (data (i32.const 5612) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\00.\000\000\00\00\00")
+ (data (i32.const 5644) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\000\00.\000\00a\00\00\00")
+ (data (i32.const 5676) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00e\001\00e\00\00\00\00\00")
+ (data (i32.const 5708) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\001\00e\00+\000\000\000\001\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5756) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\000\00e\00+\001\000\000\00")
+ (data (i32.const 5788) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\001\00.\00-\001\00.\00\00\00")
+ (data (i32.const 5820) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\001\00e\00-\001\00.\002\00")
+ (data (i32.const 5852) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\001\00e\00x\00\00\00\00\00\00\00")
+ (data (i32.const 5884) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00e\001\00x\00\00\00\00\00")
+ (data (i32.const 5916) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00e\00-\00x\00\00\00\00\00")
+ (data (i32.const 5948) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\001\00e\00-\001\00x\00\00\00")
+ (data (i32.const 5980) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\000\00.\001\00e\00-\001\00x\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 6028) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\000\00.\00\00\00\00\00\00\00")
+ (data (i32.const 6060) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00.\000\000\00\00\00\00\00\00\00")
+ (data (i32.const 6092) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00.\000\00.\00\00\00\00\00\00\00")
+ (data (i32.const 6124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00.\001\00.\00\00\00\00\00\00\00")
+ (data (i32.const 6156) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00.\00.\00\00\00\00\00\00\00")
+ (data (i32.const 6188) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00.\00a\00\00\00\00\00\00\00")
+ (data (i32.const 6220) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\00.\00.\001\00\00\00\00\00")
+ (data (i32.const 6252) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\000\00.\001\00.\001\00\00\00")
+ (data (i32.const 6284) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\000\00.\00 \001\00\00\00\00\00")
+ (data (i32.const 6316) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00+\000\00.\000\00\00\00\00\00")
+ (data (i32.const 6348) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00-\000\00.\000\00\00\00\00\00")
+ (data (i32.const 6380) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00+\000\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 6412) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00-\00.\000\000\000\000\000\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 6460) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00-\00-\000\00\00\00\00\00\00\00")
  (data (i32.const 6492) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00+\00+\000\00\00\00\00\00\00\00")
  (data (i32.const 6524) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00.\00a\00\00\00\00\00\00\00\00\00")
@@ -4316,6 +4317,8 @@
   i32.le_s
   if
    f64.const 0
+   local.get $sign
+   f64.mul
    return
   end
   i32.const 0
@@ -4385,6 +4388,8 @@
    i32.le_s
    if
     f64.const 0
+    local.get $sign
+    f64.mul
     return
    end
    local.get $position
@@ -5694,6 +5699,28 @@
  (func $~lib/string/parseFloat (param $str i32) (result f64)
   local.get $str
   call $~lib/util/string/strtod
+ )
+ (func $~lib/object/Object.is<f64> (param $x f64) (param $y f64) (result i32)
+  i32.const 1
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $x
+  local.get $x
+  f64.ne
+  local.get $y
+  local.get $y
+  f64.ne
+  i32.and
+  local.get $x
+  i64.reinterpret_f64
+  local.get $y
+  i64.reinterpret_f64
+  i64.eq
+  i32.or
+  return
  )
  (func $~lib/string/String.__concat (param $left i32) (param $right i32) (result i32)
   local.get $left
@@ -12410,7 +12437,7 @@
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const -0
+  f64.const 1
   f64.eq
   i32.eqz
   if
@@ -12421,14 +12448,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5104
+  i32.const 5088
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const 1
+  f64.const -1.1
   f64.eq
   i32.eqz
   if
@@ -12446,7 +12473,7 @@
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const -1.1
+  f64.const 10
   f64.eq
   i32.eqz
   if
@@ -12482,7 +12509,7 @@
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const 10
+  f64.const 0.022
   f64.eq
   i32.eqz
   if
@@ -12500,31 +12527,13 @@
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const 0.022
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 210
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 5328
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  call $~lib/string/parseFloat
   f64.const 11
   f64.eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 211
+   i32.const 210
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -12542,12 +12551,30 @@
   if
    i32.const 0
    i32.const 96
+   i32.const 211
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5312
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/parseFloat
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
    i32.const 212
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5360
+  i32.const 5344
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12565,25 +12592,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5392
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  call $~lib/string/parseFloat
-  f64.const 0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 214
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 5424
+  i32.const 5376
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12596,12 +12605,30 @@
   if
    i32.const 0
    i32.const 96
+   i32.const 214
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5408
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/parseFloat
+  f64.const -1.1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
    i32.const 215
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5456
+  i32.const 5440
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12619,7 +12646,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5488
+  i32.const 5472
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12637,7 +12664,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5520
+  i32.const 5504
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12655,14 +12682,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5552
+  i32.const 5536
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const -1.1
+  f64.const 0
   f64.eq
   i32.eqz
   if
@@ -12673,7 +12700,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5584
+  i32.const 5568
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12691,25 +12718,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5616
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  call $~lib/string/parseFloat
-  f64.const 0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 221
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 5648
+  i32.const 5600
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12722,12 +12731,30 @@
   if
    i32.const 0
    i32.const 96
+   i32.const 221
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5632
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/parseFloat
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
    i32.const 222
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5680
+  i32.const 5664
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12745,14 +12772,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5712
+  i32.const 5696
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const 0
+  f64.const 10
   f64.eq
   i32.eqz
   if
@@ -12763,7 +12790,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5744
+  i32.const 5728
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12788,7 +12815,7 @@
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const 10
+  f64.const 0
   f64.eq
   i32.eqz
   if
@@ -12799,25 +12826,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5824
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  call $~lib/string/parseFloat
-  f64.const 0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 227
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 5856
+  i32.const 5808
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12830,12 +12839,12 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 228
+   i32.const 227
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5888
+  i32.const 5840
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12848,12 +12857,12 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 229
+   i32.const 228
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5920
+  i32.const 5872
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12866,12 +12875,12 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 230
+   i32.const 229
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5952
+  i32.const 5904
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12884,12 +12893,12 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 231
+   i32.const 230
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 5984
+  i32.const 5936
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12902,12 +12911,12 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 232
+   i32.const 231
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6016
+  i32.const 5968
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12915,6 +12924,24 @@
   local.get $4
   call $~lib/string/parseFloat
   f64.const 0.1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 232
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 6000
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/parseFloat
+  f64.const 0.01
   f64.eq
   i32.eqz
   if
@@ -12932,7 +12959,7 @@
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const 0.01
+  f64.const 0
   f64.eq
   i32.eqz
   if
@@ -12943,7 +12970,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6096
+  i32.const 6080
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12961,7 +12988,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6128
+  i32.const 6112
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -12979,25 +13006,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6160
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  call $~lib/string/parseFloat
-  f64.const 0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 237
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 6192
+  i32.const 6144
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -13010,12 +13019,30 @@
   if
    i32.const 0
    i32.const 96
+   i32.const 237
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 6176
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/parseFloat
+  f64.const 0
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
    i32.const 238
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6224
+  i32.const 6208
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -13033,25 +13060,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6256
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  call $~lib/string/parseFloat
-  f64.const 0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 240
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 6288
+  i32.const 6240
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -13064,12 +13073,12 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 241
+   i32.const 240
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6320
+  i32.const 6272
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -13082,12 +13091,12 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 242
+   i32.const 241
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6352
+  i32.const 6304
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -13096,6 +13105,26 @@
   call $~lib/string/parseFloat
   f64.const 0
   f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 242
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 6336
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/parseFloat
+  f64.const 0
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -13105,15 +13134,17 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6384
+  i32.const 6368
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const 0
-  f64.eq
+  f64.const -0
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -13123,25 +13154,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 6416
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0
-  local.get $4
-  call $~lib/string/parseFloat
-  f64.const -0
-  f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 245
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 6448
+  i32.const 6400
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -13149,12 +13162,14 @@
   local.get $4
   call $~lib/string/parseFloat
   f64.const 0
-  f64.eq
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 246
+   i32.const 245
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -13166,8 +13181,30 @@
   i32.store $0
   local.get $4
   call $~lib/string/parseFloat
-  f64.const 0
-  f64.eq
+  f64.const -0
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 246
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 6432
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  call $~lib/string/parseFloat
+  f64.const -0
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0

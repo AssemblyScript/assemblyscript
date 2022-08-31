@@ -185,7 +185,20 @@ export const enum ExpressionId {
   ArraySet = 66 /* _BinaryenArraySetId */,
   ArrayLen = 67 /* _BinaryenArrayLenId */,
   ArrayCopy = 68 /* _BinaryenArrayCopyId */,
-  RefAs = 69 /* _BinaryenRefAsId */
+  RefAs = 69 /* _BinaryenRefAsId */,
+  StringNew = 70 /* _BinaryenStringNewId */,
+  StringConst = 71 /* _BinaryenStringConstId */,
+  StringMeasure = 72 /* _BinaryenStringMeasureId */,
+  StringEncode = 73 /* _BinaryenStringEncodeId */,
+  StringConcat = 74 /* _BinaryenStringConcatId */,
+  StringEq = 75 /* _BinaryenStringEqId */,
+  StringAs = 76 /* _BinaryenStringAsId */,
+  StringWTF8Advance = 77 /* _BinaryenStringWTF8AdvanceId */,
+  StringWTF16Get = 78 /* _BinaryenStringWTF16GetId */,
+  StringIterNext = 79 /* _BinaryenStringIterNextId */,
+  StringIterMove = 80 /* _BinaryenStringIterMoveId */,
+  StringSliceWTF = 81 /* _BinaryenStringSliceWTFId */,
+  StringSliceIter = 82 /* _BinaryenStringSliceIterId */
 }
 
 /** Binaryen external kind constants. */
@@ -1082,7 +1095,11 @@ export const enum RefAsOp {
   /** ref.as_data */
   Data = 2 /* _BinaryenRefAsData */,
   /** ref.as_i31 */
-  I31 = 3 /* _BinaryenRefAsI31 */
+  I31 = 3 /* _BinaryenRefAsI31 */,
+  /** extern.internalize */
+  ExternInternalize = 4 /* TODO_BinaryenExternInternalize */,
+  /** extern.externalize */
+  ExternExternalize = 5 /* TODO_BinaryenExternExternalize */
 }
 
 /** Binaryen BrOn operation constants. */

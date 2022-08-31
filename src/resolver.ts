@@ -1603,6 +1603,16 @@ export class Resolver extends DiagnosticEmitter {
           DiagnosticCode.Literal_0_does_not_fit_into_i64_or_u64_types,
           range, range.source.text.substring(range.start - 1, range.end)
         );
+      } else if (i64_eq(intValue, i64_zero)) {
+        // Special handling for -0
+        if (ctxType.isFloatValue) {
+          return ctxType.kind == TypeKind.F32
+            ? Type.f32
+            : Type.f64;
+        } else if (!ctxType.isIntegerValue) {
+          // If it's unknown just always assume this is f64
+          return Type.f64;
+        }
       }
       intValue = i64_neg(intValue);
     }
@@ -2683,9 +2693,19 @@ export class Resolver extends DiagnosticEmitter {
     ) {
       // (x) => ret, infer return type accordingt to `ret`
       const expr = (<ExpressionStatement>body).expression;
-      const type = this.resolveExpression(expr, ctxFlow, ctxType, reportMode);
+      let signatureReference = assert(functionType.getSignature());
+      // create a temp flow to resolve expression
+      let tempFlow = Flow.createParent(ctxFlow.actualFunction);
+      let parameters = signature.parameters;
+      // return type of resolveFunctionType should have same parameter length with signature
+      assert(signatureReference.parameterTypes.length == parameters.length);
+      for (let i = 0, k = parameters.length; i < k; i++) {
+        const parameter = parameters[i];
+        const type = signatureReference.parameterTypes[i];
+        tempFlow.addScopedDummyLocal(parameter.name.text, type, parameter);
+      }
+      const type = this.resolveExpression(expr, tempFlow, ctxType, reportMode);
       if (type) {
-        let signatureReference = assert(functionType.getSignature());
         signatureReference.returnType = type;
       }
     }
