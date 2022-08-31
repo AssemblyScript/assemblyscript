@@ -825,7 +825,7 @@ export function strtod(str: string): f64 {
     code = <u32>load<u16>(ptr += 2);
     --len;
   }
-  if (len <= 0) return 0;
+  if (len <= 0) return 0.0 * sign;
   const capacity = 19; // int(64 * 0.3010)
   var pointed = false;
   var consumed = 0;
@@ -836,7 +836,7 @@ export function strtod(str: string): f64 {
     ptr += 2; --len;
     if (!len && noDigits) return NaN;
     for (pointed = true; (code = <u32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
-    if (len <= 0) return 0;
+    if (len <= 0) return 0.0 * sign;
     if (!position && noDigits && code - CharCode._0 >= 10) return NaN;
   }
   for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {

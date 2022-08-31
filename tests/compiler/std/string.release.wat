@@ -289,88 +289,88 @@
  (data (i32.const 6008) "\01\00\00\00\08\00\00\001\00e\006\000")
  (data (i32.const 6028) "\1c")
  (data (i32.const 6040) "\01\00\00\00\0c\00\00\001\002\003\00.\004\00e")
- (data (i32.const 6060) ",")
- (data (i32.const 6072) "\01\00\00\00\0e\00\00\00-\00.\000\000\000\000\000")
- (data (i32.const 6108) "\1c")
- (data (i32.const 6120) "\01\00\00\00\04\00\00\001\00x")
+ (data (i32.const 6060) "\1c")
+ (data (i32.const 6072) "\01\00\00\00\04\00\00\001\00x")
+ (data (i32.const 6092) ",")
+ (data (i32.const 6104) "\01\00\00\00\18\00\00\00-\001\001\00e\00-\001\00s\00t\00r\00i\00n\00g")
  (data (i32.const 6140) ",")
- (data (i32.const 6152) "\01\00\00\00\18\00\00\00-\001\001\00e\00-\001\00s\00t\00r\00i\00n\00g")
+ (data (i32.const 6152) "\01\00\00\00\14\00\00\000\001\00e\001\00s\00t\00r\00i\00n\00g")
  (data (i32.const 6188) ",")
- (data (i32.const 6200) "\01\00\00\00\14\00\00\000\001\00e\001\00s\00t\00r\00i\00n\00g")
+ (data (i32.const 6200) "\01\00\00\00\12\00\00\000\001\000\00s\00t\00r\00i\00n\00g")
  (data (i32.const 6236) ",")
- (data (i32.const 6248) "\01\00\00\00\12\00\00\000\001\000\00s\00t\00r\00i\00n\00g")
- (data (i32.const 6284) ",")
- (data (i32.const 6296) "\01\00\00\00\0e\00\00\00+\00.\002\002\00e\00-\001")
- (data (i32.const 6332) "\1c")
- (data (i32.const 6344) "\01\00\00\00\n\00\00\001\001\00.\00s\001")
- (data (i32.const 6364) "\1c")
- (data (i32.const 6376) "\01\00\00\00\06\00\00\000\00x\005")
- (data (i32.const 6396) "\1c")
- (data (i32.const 6408) "\01\00\00\00\06\00\00\000\00x\00D")
- (data (i32.const 6428) "\1c")
- (data (i32.const 6440) "\01\00\00\00\08\00\00\00\0b\001\00.\001")
- (data (i32.const 6460) "\1c")
- (data (i32.const 6472) "\01\00\00\00\0c\00\00\00\0b\00\0b\00-\001\00.\001")
- (data (i32.const 6492) "\1c")
- (data (i32.const 6504) "\01\00\00\00\0c\00\00\00\0c\00\0c\00-\001\00.\001")
- (data (i32.const 6524) "\1c")
- (data (i32.const 6536) "\01\00\00\00\0c\00\00\00( ( -\001\00.\001")
- (data (i32.const 6556) "\1c")
- (data (i32.const 6568) "\01\00\00\00\0c\00\00\00) ) -\001\00.\001")
- (data (i32.const 6588) "\1c")
- (data (i32.const 6600) "\01\00\00\00\n\00\00\000\000\000\000\000")
- (data (i32.const 6620) "\1c")
- (data (i32.const 6632) "\01\00\00\00\n\00\00\000\000\000\000\00a")
- (data (i32.const 6652) "\1c")
- (data (i32.const 6664) "\01\00\00\00\n\00\00\000\000\000\000\001")
- (data (i32.const 6684) "\1c")
- (data (i32.const 6696) "\01\00\00\00\n\00\00\000\000\00.\000\000")
- (data (i32.const 6716) "\1c")
- (data (i32.const 6728) "\01\00\00\00\n\00\00\000\000\00.\000\00a")
- (data (i32.const 6748) "\1c")
- (data (i32.const 6760) "\01\00\00\00\08\00\00\001\00e\001\00e")
- (data (i32.const 6780) ",")
- (data (i32.const 6792) "\01\00\00\00\0e\00\00\001\00e\00+\000\000\000\001")
- (data (i32.const 6828) "\1c")
- (data (i32.const 6840) "\01\00\00\00\0c\00\00\000\00e\00+\001\000\000")
- (data (i32.const 6860) "\1c")
- (data (i32.const 6872) "\01\00\00\00\n\00\00\001\00.\00-\001\00.")
- (data (i32.const 6892) "\1c")
- (data (i32.const 6904) "\01\00\00\00\0c\00\00\001\00e\00-\001\00.\002")
- (data (i32.const 6924) "\1c")
- (data (i32.const 6936) "\01\00\00\00\06\00\00\001\00e\00x")
- (data (i32.const 6956) "\1c")
- (data (i32.const 6968) "\01\00\00\00\08\00\00\001\00e\001\00x")
- (data (i32.const 6988) "\1c")
- (data (i32.const 7000) "\01\00\00\00\08\00\00\001\00e\00-\00x")
- (data (i32.const 7020) "\1c")
- (data (i32.const 7032) "\01\00\00\00\n\00\00\001\00e\00-\001\00x")
- (data (i32.const 7052) ",")
- (data (i32.const 7064) "\01\00\00\00\0e\00\00\000\00.\001\00e\00-\001\00x")
- (data (i32.const 7100) "\1c")
- (data (i32.const 7112) "\01\00\00\00\06\00\00\000\000\00.")
- (data (i32.const 7132) "\1c")
- (data (i32.const 7144) "\01\00\00\00\06\00\00\00.\000\000")
- (data (i32.const 7164) "\1c")
- (data (i32.const 7176) "\01\00\00\00\06\00\00\00.\000\00.")
- (data (i32.const 7196) "\1c")
- (data (i32.const 7208) "\01\00\00\00\06\00\00\00.\001\00.")
- (data (i32.const 7228) "\1c")
- (data (i32.const 7240) "\01\00\00\00\06\00\00\000\00.\00.")
- (data (i32.const 7260) "\1c")
- (data (i32.const 7272) "\01\00\00\00\06\00\00\000\00.\00a")
- (data (i32.const 7292) "\1c")
- (data (i32.const 7304) "\01\00\00\00\08\00\00\001\00.\00.\001")
- (data (i32.const 7324) "\1c")
- (data (i32.const 7336) "\01\00\00\00\n\00\00\000\00.\001\00.\001")
- (data (i32.const 7356) "\1c")
- (data (i32.const 7368) "\01\00\00\00\08\00\00\000\00.\00 \001")
- (data (i32.const 7388) "\1c")
- (data (i32.const 7400) "\01\00\00\00\08\00\00\00+\000\00.\000")
- (data (i32.const 7420) "\1c")
- (data (i32.const 7432) "\01\00\00\00\08\00\00\00-\000\00.\000")
- (data (i32.const 7452) "\1c")
- (data (i32.const 7464) "\01\00\00\00\04\00\00\00+\000")
+ (data (i32.const 6248) "\01\00\00\00\0e\00\00\00+\00.\002\002\00e\00-\001")
+ (data (i32.const 6284) "\1c")
+ (data (i32.const 6296) "\01\00\00\00\n\00\00\001\001\00.\00s\001")
+ (data (i32.const 6316) "\1c")
+ (data (i32.const 6328) "\01\00\00\00\06\00\00\000\00x\005")
+ (data (i32.const 6348) "\1c")
+ (data (i32.const 6360) "\01\00\00\00\06\00\00\000\00x\00D")
+ (data (i32.const 6380) "\1c")
+ (data (i32.const 6392) "\01\00\00\00\08\00\00\00\0b\001\00.\001")
+ (data (i32.const 6412) "\1c")
+ (data (i32.const 6424) "\01\00\00\00\0c\00\00\00\0b\00\0b\00-\001\00.\001")
+ (data (i32.const 6444) "\1c")
+ (data (i32.const 6456) "\01\00\00\00\0c\00\00\00\0c\00\0c\00-\001\00.\001")
+ (data (i32.const 6476) "\1c")
+ (data (i32.const 6488) "\01\00\00\00\0c\00\00\00( ( -\001\00.\001")
+ (data (i32.const 6508) "\1c")
+ (data (i32.const 6520) "\01\00\00\00\0c\00\00\00) ) -\001\00.\001")
+ (data (i32.const 6540) "\1c")
+ (data (i32.const 6552) "\01\00\00\00\n\00\00\000\000\000\000\000")
+ (data (i32.const 6572) "\1c")
+ (data (i32.const 6584) "\01\00\00\00\n\00\00\000\000\000\000\00a")
+ (data (i32.const 6604) "\1c")
+ (data (i32.const 6616) "\01\00\00\00\n\00\00\000\000\000\000\001")
+ (data (i32.const 6636) "\1c")
+ (data (i32.const 6648) "\01\00\00\00\n\00\00\000\000\00.\000\000")
+ (data (i32.const 6668) "\1c")
+ (data (i32.const 6680) "\01\00\00\00\n\00\00\000\000\00.\000\00a")
+ (data (i32.const 6700) "\1c")
+ (data (i32.const 6712) "\01\00\00\00\08\00\00\001\00e\001\00e")
+ (data (i32.const 6732) ",")
+ (data (i32.const 6744) "\01\00\00\00\0e\00\00\001\00e\00+\000\000\000\001")
+ (data (i32.const 6780) "\1c")
+ (data (i32.const 6792) "\01\00\00\00\0c\00\00\000\00e\00+\001\000\000")
+ (data (i32.const 6812) "\1c")
+ (data (i32.const 6824) "\01\00\00\00\n\00\00\001\00.\00-\001\00.")
+ (data (i32.const 6844) "\1c")
+ (data (i32.const 6856) "\01\00\00\00\0c\00\00\001\00e\00-\001\00.\002")
+ (data (i32.const 6876) "\1c")
+ (data (i32.const 6888) "\01\00\00\00\06\00\00\001\00e\00x")
+ (data (i32.const 6908) "\1c")
+ (data (i32.const 6920) "\01\00\00\00\08\00\00\001\00e\001\00x")
+ (data (i32.const 6940) "\1c")
+ (data (i32.const 6952) "\01\00\00\00\08\00\00\001\00e\00-\00x")
+ (data (i32.const 6972) "\1c")
+ (data (i32.const 6984) "\01\00\00\00\n\00\00\001\00e\00-\001\00x")
+ (data (i32.const 7004) ",")
+ (data (i32.const 7016) "\01\00\00\00\0e\00\00\000\00.\001\00e\00-\001\00x")
+ (data (i32.const 7052) "\1c")
+ (data (i32.const 7064) "\01\00\00\00\06\00\00\000\000\00.")
+ (data (i32.const 7084) "\1c")
+ (data (i32.const 7096) "\01\00\00\00\06\00\00\00.\000\000")
+ (data (i32.const 7116) "\1c")
+ (data (i32.const 7128) "\01\00\00\00\06\00\00\00.\000\00.")
+ (data (i32.const 7148) "\1c")
+ (data (i32.const 7160) "\01\00\00\00\06\00\00\00.\001\00.")
+ (data (i32.const 7180) "\1c")
+ (data (i32.const 7192) "\01\00\00\00\06\00\00\000\00.\00.")
+ (data (i32.const 7212) "\1c")
+ (data (i32.const 7224) "\01\00\00\00\06\00\00\000\00.\00a")
+ (data (i32.const 7244) "\1c")
+ (data (i32.const 7256) "\01\00\00\00\08\00\00\001\00.\00.\001")
+ (data (i32.const 7276) "\1c")
+ (data (i32.const 7288) "\01\00\00\00\n\00\00\000\00.\001\00.\001")
+ (data (i32.const 7308) "\1c")
+ (data (i32.const 7320) "\01\00\00\00\08\00\00\000\00.\00 \001")
+ (data (i32.const 7340) "\1c")
+ (data (i32.const 7352) "\01\00\00\00\08\00\00\00+\000\00.\000")
+ (data (i32.const 7372) "\1c")
+ (data (i32.const 7384) "\01\00\00\00\08\00\00\00-\000\00.\000")
+ (data (i32.const 7404) "\1c")
+ (data (i32.const 7416) "\01\00\00\00\04\00\00\00+\000")
+ (data (i32.const 7436) ",")
+ (data (i32.const 7448) "\01\00\00\00\0e\00\00\00-\00.\000\000\000\000\000")
  (data (i32.const 7484) "\1c")
  (data (i32.const 7496) "\01\00\00\00\06\00\00\00-\00-\000")
  (data (i32.const 7516) "\1c")
@@ -3592,8 +3592,8 @@
   (local $7 i32)
   (local $8 i64)
   (local $9 f64)
-  (local $10 i32)
-  (local $11 f64)
+  (local $10 f64)
+  (local $11 i32)
   (local $12 i64)
   (local $13 i64)
   (local $14 i64)
@@ -3611,7 +3611,7 @@
    i32.load16_u $0
    local.set $5
    f64.const 1
-   local.set $11
+   local.set $10
    loop $while-continue|0
     local.get $7
     if (result i32)
@@ -3708,7 +3708,7 @@
     i32.eqz
     br_if $folding-inner0
     f64.const -1
-    local.set $11
+    local.set $10
     local.get $0
     i32.const 2
     i32.add
@@ -3755,7 +3755,7 @@
      i32.const 0
     end
     if
-     local.get $11
+     local.get $10
      f64.const inf
      f64.mul
      return
@@ -3796,7 +3796,9 @@
    i32.const 0
    i32.le_s
    if
+    local.get $10
     f64.const 0
+    f64.mul
     return
    end
    local.get $5
@@ -3820,7 +3822,7 @@
     i32.and
     br_if $folding-inner0
     i32.const 1
-    local.set $10
+    local.set $11
     loop $for-loop|2
      local.get $0
      i32.load16_u $0
@@ -3847,7 +3849,9 @@
     i32.const 0
     i32.le_s
     if
+     local.get $10
      f64.const 0
+     f64.mul
      return
     end
     local.get $4
@@ -3867,7 +3871,7 @@
    i32.sub
    local.set $4
    loop $for-loop|3
-    local.get $10
+    local.get $11
     i32.eqz
     local.get $5
     i32.const 46
@@ -3910,7 +3914,7 @@
        local.get $1
        local.set $2
        i32.const 1
-       local.set $10
+       local.set $11
       end
       local.get $7
       i32.const 1
@@ -3933,7 +3937,7 @@
    end
    local.get $2
    local.get $1
-   local.get $10
+   local.get $11
    select
    i32.const 19
    local.get $1
@@ -3942,7 +3946,7 @@
    i32.gt_s
    select
    i32.sub
-   local.set $10
+   local.set $11
    block $~lib/util/string/scientific|inlined.0
     local.get $6
     i64.eqz
@@ -4080,7 +4084,7 @@
      local.get $3
      i32.mul
     end
-    local.get $10
+    local.get $11
     i32.add
     local.tee $0
     i32.const -342
@@ -4379,7 +4383,7 @@
     local.set $9
    end
    local.get $9
-   local.get $11
+   local.get $10
    f64.copysign
    return
   end
@@ -10381,7 +10385,7 @@
   i32.store $0
   i32.const 6080
   call $~lib/util/string/strtod
-  f64.const -0
+  f64.const 1
   f64.ne
   if
    i32.const 0
@@ -10392,11 +10396,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6128
+  i32.const 6112
   i32.store $0
-  i32.const 6128
+  i32.const 6112
   call $~lib/util/string/strtod
-  f64.const 1
+  f64.const -1.1
   f64.ne
   if
    i32.const 0
@@ -10411,7 +10415,7 @@
   i32.store $0
   i32.const 6160
   call $~lib/util/string/strtod
-  f64.const -1.1
+  f64.const 10
   f64.ne
   if
    i32.const 0
@@ -10441,7 +10445,7 @@
   i32.store $0
   i32.const 6256
   call $~lib/util/string/strtod
-  f64.const 10
+  f64.const 0.022
   f64.ne
   if
    i32.const 0
@@ -10456,7 +10460,7 @@
   i32.store $0
   i32.const 6304
   call $~lib/util/string/strtod
-  f64.const 0.022
+  f64.const 11
   f64.ne
   if
    i32.const 0
@@ -10467,11 +10471,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6352
+  i32.const 3808
   i32.store $0
-  i32.const 6352
+  i32.const 3808
   call $~lib/util/string/strtod
-  f64.const 11
+  f64.const 0
   f64.ne
   if
    i32.const 0
@@ -10482,9 +10486,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3808
+  i32.const 6336
   i32.store $0
-  i32.const 3808
+  i32.const 6336
   call $~lib/util/string/strtod
   f64.const 0
   f64.ne
@@ -10497,9 +10501,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6384
+  i32.const 6368
   i32.store $0
-  i32.const 6384
+  i32.const 6368
   call $~lib/util/string/strtod
   f64.const 0
   f64.ne
@@ -10512,11 +10516,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6416
+  i32.const 6400
   i32.store $0
-  i32.const 6416
+  i32.const 6400
   call $~lib/util/string/strtod
-  f64.const 0
+  f64.const 1.1
   f64.ne
   if
    i32.const 0
@@ -10527,11 +10531,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6448
+  i32.const 6432
   i32.store $0
-  i32.const 6448
+  i32.const 6432
   call $~lib/util/string/strtod
-  f64.const 1.1
+  f64.const -1.1
   f64.ne
   if
    i32.const 0
@@ -10542,9 +10546,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6480
+  i32.const 6464
   i32.store $0
-  i32.const 6480
+  i32.const 6464
   call $~lib/util/string/strtod
   f64.const -1.1
   f64.ne
@@ -10557,9 +10561,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6512
+  i32.const 6496
   i32.store $0
-  i32.const 6512
+  i32.const 6496
   call $~lib/util/string/strtod
   f64.const -1.1
   f64.ne
@@ -10572,9 +10576,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6544
+  i32.const 6528
   i32.store $0
-  i32.const 6544
+  i32.const 6528
   call $~lib/util/string/strtod
   f64.const -1.1
   f64.ne
@@ -10587,11 +10591,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6576
+  i32.const 6560
   i32.store $0
-  i32.const 6576
+  i32.const 6560
   call $~lib/util/string/strtod
-  f64.const -1.1
+  f64.const 0
   f64.ne
   if
    i32.const 0
@@ -10602,9 +10606,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6608
+  i32.const 6592
   i32.store $0
-  i32.const 6608
+  i32.const 6592
   call $~lib/util/string/strtod
   f64.const 0
   f64.ne
@@ -10617,11 +10621,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6640
+  i32.const 6624
   i32.store $0
-  i32.const 6640
+  i32.const 6624
   call $~lib/util/string/strtod
-  f64.const 0
+  f64.const 1
   f64.ne
   if
    i32.const 0
@@ -10632,11 +10636,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6672
+  i32.const 6656
   i32.store $0
-  i32.const 6672
+  i32.const 6656
   call $~lib/util/string/strtod
-  f64.const 1
+  f64.const 0
   f64.ne
   if
    i32.const 0
@@ -10647,9 +10651,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6704
+  i32.const 6688
   i32.store $0
-  i32.const 6704
+  i32.const 6688
   call $~lib/util/string/strtod
   f64.const 0
   f64.ne
@@ -10662,11 +10666,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6736
+  i32.const 6720
   i32.store $0
-  i32.const 6736
+  i32.const 6720
   call $~lib/util/string/strtod
-  f64.const 0
+  f64.const 10
   f64.ne
   if
    i32.const 0
@@ -10677,9 +10681,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6768
+  i32.const 6752
   i32.store $0
-  i32.const 6768
+  i32.const 6752
   call $~lib/util/string/strtod
   f64.const 10
   f64.ne
@@ -10696,7 +10700,7 @@
   i32.store $0
   i32.const 6800
   call $~lib/util/string/strtod
-  f64.const 10
+  f64.const 0
   f64.ne
   if
    i32.const 0
@@ -10707,11 +10711,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6848
+  i32.const 6832
   i32.store $0
-  i32.const 6848
+  i32.const 6832
   call $~lib/util/string/strtod
-  f64.const 0
+  f64.const 1
   f64.ne
   if
    i32.const 0
@@ -10722,11 +10726,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6880
+  i32.const 6864
   i32.store $0
-  i32.const 6880
+  i32.const 6864
   call $~lib/util/string/strtod
-  f64.const 1
+  f64.const 0.1
   f64.ne
   if
    i32.const 0
@@ -10737,11 +10741,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6912
+  i32.const 6896
   i32.store $0
-  i32.const 6912
+  i32.const 6896
   call $~lib/util/string/strtod
-  f64.const 0.1
+  f64.const 1
   f64.ne
   if
    i32.const 0
@@ -10752,11 +10756,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6944
+  i32.const 6928
   i32.store $0
-  i32.const 6944
+  i32.const 6928
   call $~lib/util/string/strtod
-  f64.const 1
+  f64.const 10
   f64.ne
   if
    i32.const 0
@@ -10767,11 +10771,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 6976
+  i32.const 6960
   i32.store $0
-  i32.const 6976
+  i32.const 6960
   call $~lib/util/string/strtod
-  f64.const 10
+  f64.const 1
   f64.ne
   if
    i32.const 0
@@ -10782,11 +10786,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7008
+  i32.const 6992
   i32.store $0
-  i32.const 7008
+  i32.const 6992
   call $~lib/util/string/strtod
-  f64.const 1
+  f64.const 0.1
   f64.ne
   if
    i32.const 0
@@ -10797,11 +10801,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7040
+  i32.const 7024
   i32.store $0
-  i32.const 7040
+  i32.const 7024
   call $~lib/util/string/strtod
-  f64.const 0.1
+  f64.const 0.01
   f64.ne
   if
    i32.const 0
@@ -10816,7 +10820,7 @@
   i32.store $0
   i32.const 7072
   call $~lib/util/string/strtod
-  f64.const 0.01
+  f64.const 0
   f64.ne
   if
    i32.const 0
@@ -10827,9 +10831,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7120
+  i32.const 7104
   i32.store $0
-  i32.const 7120
+  i32.const 7104
   call $~lib/util/string/strtod
   f64.const 0
   f64.ne
@@ -10842,9 +10846,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7152
+  i32.const 7136
   i32.store $0
-  i32.const 7152
+  i32.const 7136
   call $~lib/util/string/strtod
   f64.const 0
   f64.ne
@@ -10857,11 +10861,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7184
+  i32.const 7168
   i32.store $0
-  i32.const 7184
+  i32.const 7168
   call $~lib/util/string/strtod
-  f64.const 0
+  f64.const 0.1
   f64.ne
   if
    i32.const 0
@@ -10872,11 +10876,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7216
+  i32.const 7200
   i32.store $0
-  i32.const 7216
+  i32.const 7200
   call $~lib/util/string/strtod
-  f64.const 0.1
+  f64.const 0
   f64.ne
   if
    i32.const 0
@@ -10887,9 +10891,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7248
+  i32.const 7232
   i32.store $0
-  i32.const 7248
+  i32.const 7232
   call $~lib/util/string/strtod
   f64.const 0
   f64.ne
@@ -10902,11 +10906,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7280
+  i32.const 7264
   i32.store $0
-  i32.const 7280
+  i32.const 7264
   call $~lib/util/string/strtod
-  f64.const 0
+  f64.const 1
   f64.ne
   if
    i32.const 0
@@ -10917,11 +10921,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7312
+  i32.const 7296
   i32.store $0
-  i32.const 7312
+  i32.const 7296
   call $~lib/util/string/strtod
-  f64.const 1
+  f64.const 0.1
   f64.ne
   if
    i32.const 0
@@ -10932,11 +10936,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7344
+  i32.const 7328
   i32.store $0
-  i32.const 7344
+  i32.const 7328
   call $~lib/util/string/strtod
-  f64.const 0.1
+  f64.const 0
   f64.ne
   if
    i32.const 0
@@ -10947,12 +10951,13 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7376
+  i32.const 7360
   i32.store $0
-  i32.const 7376
+  i32.const 7360
   call $~lib/util/string/strtod
-  f64.const 0
-  f64.ne
+  i64.reinterpret_f64
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1120
@@ -10962,12 +10967,21 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7408
+  i32.const 7392
   i32.store $0
-  i32.const 7408
+  i32.const 7392
   call $~lib/util/string/strtod
-  f64.const 0
+  local.tee $1
+  local.get $1
   f64.ne
+  i32.const 0
+  i32.and
+  local.get $1
+  i64.reinterpret_f64
+  i64.const -9223372036854775808
+  i64.eq
+  i32.or
+  i32.eqz
   if
    i32.const 0
    i32.const 1120
@@ -10977,12 +10991,13 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7440
+  i32.const 7424
   i32.store $0
-  i32.const 7440
+  i32.const 7424
   call $~lib/util/string/strtod
-  f64.const -0
-  f64.ne
+  i64.reinterpret_f64
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1120
@@ -10992,12 +11007,21 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 7472
+  i32.const 3968
   i32.store $0
-  i32.const 7472
+  i32.const 3968
   call $~lib/util/string/strtod
-  f64.const 0
+  local.tee $1
+  local.get $1
   f64.ne
+  i32.const 0
+  i32.and
+  local.get $1
+  i64.reinterpret_f64
+  i64.const -9223372036854775808
+  i64.eq
+  i32.or
+  i32.eqz
   if
    i32.const 0
    i32.const 1120
@@ -11007,12 +11031,13 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3968
+  i32.const 7456
   i32.store $0
-  i32.const 3968
+  i32.const 7456
   call $~lib/util/string/strtod
-  f64.const 0
-  f64.ne
+  i64.reinterpret_f64
+  i64.const -9223372036854775808
+  i64.ne
   if
    i32.const 0
    i32.const 1120
