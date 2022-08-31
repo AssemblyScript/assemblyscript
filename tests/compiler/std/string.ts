@@ -241,10 +241,10 @@ assert(parseFloat("1..1") == 1.0);
 assert(parseFloat("0.1.1") == 0.1);
 assert(parseFloat("0. 1") == +0.0);
 assert(Object.is(parseFloat("+0.0"), +0.0));
-// assert(Object.is(parseFloat("-0.0"), -0.0)); TODO: Failed
+assert(Object.is(parseFloat("-0.0"), -0.0));
 assert(Object.is(parseFloat("+0"), +0.0));
-// assert(Object.is(parseFloat("-0"), -0.0)); TODO: Failed
-// assert(Object.is(parseFloat("-.00000"), -0.0)); TODO: Failed
+assert(Object.is(parseFloat("-0"), -0.0));
+assert(Object.is(parseFloat("-.00000"), -0.0));
 assert(isNaN(parseFloat("+")));
 assert(isNaN(parseFloat("-")));
 assert(isNaN(parseFloat("--0")));

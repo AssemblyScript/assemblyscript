@@ -7135,13 +7135,14 @@
   i32.const 255
   i32.and
   local.set $7
+  local.get $6
   i32.const 1
-  local.get $1
-  local.get $1
-  f32.ne
+  i32.shl
+  local.tee $4
+  i32.eqz
   local.get $0
   i32.reinterpret_f32
-  local.tee $4
+  local.tee $3
   i32.const 23
   i32.shr_u
   i32.const 255
@@ -7149,13 +7150,11 @@
   local.tee $8
   i32.const 255
   i32.eq
-  i32.const 1
-  local.get $6
-  i32.const 1
-  i32.shl
-  local.tee $3
-  select
-  select
+  i32.or
+  local.get $1
+  local.get $1
+  f32.ne
+  i32.or
   if
    local.get $0
    local.get $1
@@ -7165,37 +7164,37 @@
    f32.div
    return
   end
-  local.get $4
+  local.get $3
   i32.const 1
   i32.shl
   local.tee $2
-  local.get $3
+  local.get $4
   i32.le_u
   if
    local.get $0
    local.get $2
-   local.get $3
+   local.get $4
    i32.ne
    f32.convert_i32_u
    f32.mul
    return
   end
-  local.get $4
+  local.get $3
   i32.const -2147483648
   i32.and
   local.set $5
   local.get $8
   if (result i32)
-   local.get $4
+   local.get $3
    i32.const 8388607
    i32.and
    i32.const 8388608
    i32.or
   else
-   local.get $4
+   local.get $3
    i32.const 1
    local.get $8
-   local.get $4
+   local.get $3
    i32.const 9
    i32.shl
    i32.clz
@@ -8925,10 +8924,10 @@
   i32.const 255
   i32.and
   local.set $4
+  local.get $7
   i32.const 1
-  local.get $1
-  local.get $1
-  f32.ne
+  i32.shl
+  i32.eqz
   local.get $0
   i32.reinterpret_f32
   local.tee $6
@@ -8939,12 +8938,11 @@
   local.tee $3
   i32.const 255
   i32.eq
-  i32.const 1
-  local.get $7
-  i32.const 1
-  i32.shl
-  select
-  select
+  i32.or
+  local.get $1
+  local.get $1
+  f32.ne
+  i32.or
   if
    local.get $0
    local.get $1
