@@ -1,5 +1,5 @@
 {
-  "todo_asc_flags": [
+  "asc_flags": [
     "--importMemory"
   ]
 }

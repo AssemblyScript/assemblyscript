@@ -1,1 +1,1 @@
-// assert(memory.size() == 0);
+assert(memory.size() != 0);
