@@ -7806,7 +7806,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.I64: return module.i64(i64_low(intValue), i64_high(intValue));
           case TypeKind.USIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));
           case TypeKind.U64: return module.i64(i64_low(intValue), i64_high(intValue));
-          case TypeKind.F32: return module.f32(sign * i64_to_f32(intValue));
+          case TypeKind.F32: return module.f32(<f32>sign * i64_to_f32(intValue));
           case TypeKind.F64: return module.f64(sign * i64_to_f64(intValue));
           default: return module.i32(i64_low(intValue));
         }
