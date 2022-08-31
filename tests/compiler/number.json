@@ -1,4 +1,18 @@
 {
   "asc_flags": [
+  ],
+  "stderr": [
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters."
   ]
 }

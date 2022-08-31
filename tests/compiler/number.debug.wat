@@ -4972,6 +4972,35 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f64.const 1
+  global.get $~lib/builtins/f32.NaN
+  f64.promote_f32
+  f64.eq
+  i32.eqz
+  drop
+  global.get $~lib/number/F32.NaN
+  f32.const nan:0x400000
+  f32.eq
+  i32.eqz
+  drop
+  f64.const nan:0x8000000000000
+  f64.const 1
+  f64.eq
+  i32.eqz
+  drop
+  f64.const 1
+  global.get $~lib/builtins/f32.NaN
+  f64.promote_f32
+  f64.ne
+  drop
+  global.get $~lib/number/F32.NaN
+  f32.const nan:0x400000
+  f32.ne
+  drop
+  f64.const nan:0x8000000000000
+  f64.const 1
+  f64.ne
+  drop
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add

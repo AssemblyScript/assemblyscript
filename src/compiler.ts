@@ -52,7 +52,9 @@ import {
   SideEffects,
   SwitchBuilder,
   ExpressionRunnerFlags,
-  isConstZero
+  isConstZero,
+  isConstNegZero,
+  isConstExpressionNaN
 } from "./module";
 
 import {
@@ -3992,7 +3994,23 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-
+        if (commonType.isFloatValue) {
+          if (
+            isConstExpressionNaN(module, rightExpr) ||
+            isConstExpressionNaN(module, leftExpr)
+          ) {
+            this.warning(
+              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
+              expression.range
+            );
+          }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
+              expression.range
+            );
+          }
+        }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
         rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
@@ -4028,7 +4046,23 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-
+        if (commonType.isFloatValue) {
+          if (
+            isConstExpressionNaN(module, rightExpr) ||
+            isConstExpressionNaN(module, leftExpr)
+          ) {
+            this.warning(
+              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
+              expression.range
+            );
+          }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
+              expression.range
+            );
+          }
+        }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
         rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
