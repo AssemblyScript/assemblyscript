@@ -781,7 +781,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Just stubbed memory. Will update later in finalizeMemory
+    // Setup internal memory with default name "0"
     module.setMemory(
       initialPages,
       maximumPages,

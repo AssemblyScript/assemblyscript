@@ -496,13 +496,13 @@
    local.tee $1
    i32.eqz
    if
-    i32.const 0
+    local.get $0
+    i32.load $0 offset=8
+    i32.eqz
     local.get $0
     i32.const 24236
     i32.lt_u
-    local.get $0
-    i32.load $0 offset=8
-    select
+    i32.and
     i32.eqz
     if
      i32.const 0
@@ -2501,10 +2501,10 @@
    return
   end
   local.get $1
-  i32.const 0
-  local.get $0
-  select
   i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
   if
    i32.const 0
    return
@@ -8366,14 +8366,14 @@
    i32.const 3456
    return
   end
-  i32.const 0
+  local.get $4
+  i32.eqz
   local.get $2
   local.get $1
   i32.const 1
   i32.shl
   i32.eq
-  local.get $4
-  select
+  i32.and
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4

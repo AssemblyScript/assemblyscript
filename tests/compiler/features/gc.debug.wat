@@ -15,7 +15,7 @@
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $features/gc/test_i31
-  (local $ref i31ref)
+  (local $ref (ref i31))
   (local $val i32)
   (local $uval i32)
   i32.const 123
