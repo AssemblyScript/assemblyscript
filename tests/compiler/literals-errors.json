@@ -5,8 +5,6 @@
     "AS236: Literal '-9223372036854775809' does not fit into 'i64' or 'u64' types.",
     "AS236: Literal '-0x8000000000000001' does not fit into 'i64' or 'u64' types.",
     "AS236: Literal '-0o1000000000000000000001' does not fit into 'i64' or 'u64' types.",
-    "AS237: Literal '-0' will be coerced to '0' integer first. Please use '-0.0' instead.",
-    "AS237: Literal '-0' will be coerced to '0' integer first. Please use '-0.0' instead.",
     "EOF"
   ]
 }
