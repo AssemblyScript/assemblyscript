@@ -7798,8 +7798,11 @@ export class Compiler extends DiagnosticEmitter {
         let intValue = expr.value;
         let sign = 1.0; // should multiply for float literals
         if (implicitlyNegate) {
-          intValue = i64_neg(intValue);
-          sign = -1.0;
+          if (type.isFloatValue) {
+            sign = -1.0;
+          } else {
+            intValue = i64_neg(intValue);
+          }
         }
         switch (type.kind) {
           case TypeKind.ISIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));
