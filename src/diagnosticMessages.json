@@ -56,8 +56,8 @@
   "Indexed access may involve bounds checking.": 904,
   "Explicitly returning constructor drops 'this' allocation.": 905,
   "Unnecessary definite assignment.": 906,
-  "Comparision with NaN is invariant. You need to use isNaN(x).": 907,
-  "Comparision with -0.0 is sign insensitive. Perhaps you want to use Object.is(x, -0.0).": 908,
+  "'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.": 907,
+  "Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.": 908,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

@@ -2,18 +2,17 @@
   "asc_flags": [
   ],
   "stderr": [
-    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
-    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
-    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
-    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
-    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
-    "AS907: Comparision with NaN is invariant. You need to use isNaN(x).",
-
-    "AS908: Comparision with -0.0 is sign insensitive. Perhaps you want to use Object.is(x, -0.0).",
-    "AS908: Comparision with -0.0 is sign insensitive. Perhaps you want to use Object.is(x, -0.0).",
-    "AS908: Comparision with -0.0 is sign insensitive. Perhaps you want to use Object.is(x, -0.0).",
-    "AS908: Comparision with -0.0 is sign insensitive. Perhaps you want to use Object.is(x, -0.0).",
-    "AS908: Comparision with -0.0 is sign insensitive. Perhaps you want to use Object.is(x, -0.0).",
-    "AS908: Comparision with -0.0 is sign insensitive. Perhaps you want to use Object.is(x, -0.0)."
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS907: 'NaN' does not compare equal to any other value including itself. Use isNaN(x) instead.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters.",
+    "AS908: Comparison with -0.0 is sign insensitive. Use Object.is(x, -0.0) if the sign matters."
   ]
 }
