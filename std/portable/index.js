@@ -140,7 +140,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     const INV_EPS64 = 4503599627370496.0;
     const y = Math.abs(value);
     return y < INV_EPS64
-      ? Math.abs(y + INV_EPS64 - INV_EPS64) * Math.sign(value)
+      ? globalScope.copysign(y + INV_EPS64 - INV_EPS64, value)
       : value;
   };
 
