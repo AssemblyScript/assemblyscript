@@ -25,6 +25,7 @@ export const {
   _BinaryenTypeStringviewIter,
 
   _BinaryenHeapTypeFunc,
+  _BinaryenHeapTypeExt,
   _BinaryenHeapTypeAny,
   _BinaryenHeapTypeEq,
   _BinaryenHeapTypeI31,

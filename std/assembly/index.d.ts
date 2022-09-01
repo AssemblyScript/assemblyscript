@@ -310,6 +310,8 @@ declare namespace i32 {
   export const MIN_VALUE: i32;
   /** Largest representable value. */
   export const MAX_VALUE: i32;
+  /** Converts a string to an i32 of this type. */
+  export function parse(value: string, radix?: i32): i32;
   /** Loads an 8-bit signed integer value from memory and returns it as a 32-bit integer. */
   export function load8_s(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -433,6 +435,8 @@ declare namespace i64 {
   export const MIN_VALUE: i64;
   /** Largest representable value. */
   export const MAX_VALUE: i64;
+  /** Converts a string to an i64 of this type. */
+  export function parse(value: string, radix?: i32): i64;
   /** Loads an 8-bit signed integer value from memory and returns it as a 64-bit integer. */
   export function load8_s(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -585,6 +589,8 @@ declare namespace u8 {
   export const MIN_VALUE: u8;
   /** Largest representable value. */
   export const MAX_VALUE: u8;
+  /** Converts a string to an u8 of this type. */
+  export function parse(value: string, radix?: i32): u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
 declare function u16(value: any): u16;
@@ -593,6 +599,8 @@ declare namespace u16 {
   export const MIN_VALUE: u16;
   /** Largest representable value. */
   export const MAX_VALUE: u16;
+  /** Converts a string to an u16 of this type. */
+  export function parse(value: string, radix?: i32): u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
 declare function u32(value: any): u32;
@@ -601,6 +609,8 @@ declare namespace u32 {
   export const MIN_VALUE: u32;
   /** Largest representable value. */
   export const MAX_VALUE: u32;
+  /** Converts a string to an u32 of this type. */
+  export function parse(value: string, radix?: i32): u32;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
 declare function u64(value: any): u64;
@@ -609,6 +619,8 @@ declare namespace u64 {
   export const MIN_VALUE: u64;
   /** Largest representable value. */
   export const MAX_VALUE: u64;
+  /** Converts a string to an u64 of this type. */
+  export function parse(value: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
 declare var usize: typeof u32 | typeof u64;
@@ -619,6 +631,8 @@ declare namespace bool {
   export const MIN_VALUE: bool;
   /** Largest representable value. */
   export const MAX_VALUE: bool;
+  /** Converts a string to an bool of this type. */
+  export function parse(value: string): bool;
 }
 /** Converts any other numeric value to a 32-bit float. */
 declare function f32(value: any): f32;
@@ -641,6 +655,8 @@ declare namespace f32 {
   export const NaN: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
+  /** Converts a string to an f32 of this type. */
+  export function parse(value: string, radix?: i32): f32;
   /** Loads a 32-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
@@ -699,6 +715,8 @@ declare namespace f64 {
   export const NaN: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
+  /** Converts a string to an f64 of this type. */
+  export function parse(value: string, radix?: i32): f64;
   /** Loads a 64-bit float from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
@@ -1294,7 +1312,7 @@ declare namespace f32x4 {
   /** Demotes each 64-bit float lane of a vector to single-precision. The higher lanes of the result are initialized to zero. */
   export function demote_f64x2_zero(a: v128): v128;
   /** Selects 32-bit lanes from either vector according to the specified [0-3] respectively [4-7] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8): v128;
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
 }
@@ -1390,7 +1408,7 @@ declare class _Integer {
   static readonly MIN_VALUE: number;
   /** Largest representable value. */
   static readonly MAX_VALUE: number;
-  /** Converts a string to an integer of this type. */
+  /** @deprecated Converts a string to an integer of this type. Please use "i32.parse" method. */
   static parseInt(value: string, radix?: number): number;
   /** Converts this integer to a string. */
   toString(radix?: number): string;
@@ -1423,9 +1441,9 @@ declare class _Float {
   static isSafeInteger(value: f32 | f64): bool;
   /** Returns true if the value passed is an integer, false otherwise. */
   static isInteger(value: f32 | f64): bool;
-  /** Converts a string to an integer. */
+  /** @deprecated Converts a string to an integer. Please use "i32.parse" / "i64.parse" methods. */
   static parseInt(value: string, radix?: i32): f32 | f64;
-  /** Converts a string to a floating-point number. */
+  /** @deprecated Converts a string to a floating-point number. Please use "f32.parse" / "f64.parse" methods. */
   static parseFloat(value: string): f32 | f64;
   /** Converts this floating-point number to a string. */
   toString(radix?: number): string;

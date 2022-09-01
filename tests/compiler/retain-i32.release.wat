@@ -22,7 +22,7 @@
    end
   end
   i32.const 0
-  i32.load8_s
+  i32.load8_s $0
   drop
  )
 )

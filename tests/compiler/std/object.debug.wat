@@ -24,74 +24,64 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/object/Object.is<f64> (param $value1 f64) (param $value2 f64) (result i32)
+ (func $~lib/object/Object.is<f64> (param $x f64) (param $y f64) (result i32)
   i32.const 1
   drop
-  local.get $value1
-  local.get $value2
-  f64.eq
-  if
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $value1
-   i64.reinterpret_f64
-   local.get $value2
-   i64.reinterpret_f64
-   i64.eq
-   return
-  end
-  local.get $value1
-  local.get $value1
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $x
+  local.get $x
   f64.ne
-  local.get $value2
-  local.get $value2
+  local.get $y
+  local.get $y
   f64.ne
   i32.and
+  local.get $x
+  i64.reinterpret_f64
+  local.get $y
+  i64.reinterpret_f64
+  i64.eq
+  i32.or
   return
  )
- (func $~lib/object/Object.is<f32> (param $value1 f32) (param $value2 f32) (result i32)
+ (func $~lib/object/Object.is<f32> (param $x f32) (param $y f32) (result i32)
   i32.const 1
   drop
-  local.get $value1
-  local.get $value2
-  f32.eq
-  if
-   i32.const 4
-   i32.const 8
-   i32.eq
-   drop
-   local.get $value1
-   i32.reinterpret_f32
-   local.get $value2
-   i32.reinterpret_f32
-   i32.eq
-   return
-  end
-  local.get $value1
-  local.get $value1
+  i32.const 4
+  i32.const 8
+  i32.eq
+  drop
+  local.get $x
+  local.get $x
   f32.ne
-  local.get $value2
-  local.get $value2
+  local.get $y
+  local.get $y
   f32.ne
   i32.and
+  local.get $x
+  i32.reinterpret_f32
+  local.get $y
+  i32.reinterpret_f32
+  i32.eq
+  i32.or
   return
  )
- (func $~lib/object/Object.is<i32> (param $value1 i32) (param $value2 i32) (result i32)
+ (func $~lib/object/Object.is<i32> (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
-  local.get $value1
-  local.get $value2
+  local.get $x
+  local.get $y
   i32.eq
  )
- (func $~lib/object/Object.is<bool> (param $value1 i32) (param $value2 i32) (result i32)
+ (func $~lib/object/Object.is<bool> (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
-  local.get $value1
+  local.get $x
   i32.const 0
   i32.ne
-  local.get $value2
+  local.get $y
   i32.const 0
   i32.ne
   i32.eq
@@ -100,7 +90,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -145,9 +135,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $ptr1
-     i64.load
+     i64.load $0
      local.get $ptr2
-     i64.load
+     i64.load $0
      i64.ne
      if
       br $do-break|0
@@ -182,10 +172,10 @@
    local.get $var$7
    if
     local.get $ptr1
-    i32.load16_u
+    i32.load16_u $0
     local.set $a
     local.get $ptr2
-    i32.load16_u
+    i32.load16_u $0
     local.set $b
     local.get $a
     local.get $b
@@ -251,18 +241,18 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/object/Object.is<~lib/string/String> (param $value1 i32) (param $value2 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String> (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
-  local.get $value1
-  local.get $value2
+  local.get $x
+  local.get $y
   call $~lib/string/String.__eq
  )
- (func $~lib/object/Object.is<~lib/string/String|null> (param $value1 i32) (param $value2 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String|null> (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
-  local.get $value1
-  local.get $value2
+  local.get $x
+  local.get $y
   call $~lib/string/String.__eq
  )
  (func $~start
@@ -290,10 +280,12 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -309,6 +301,8 @@
   f64.const -0
   call $~lib/object/Object.is<f64>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -322,6 +316,8 @@
   f64.const -0
   f64.const 0
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -337,6 +333,8 @@
   f64.const 1
   call $~lib/object/Object.is<f64>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -351,6 +349,8 @@
   f64.const -1
   call $~lib/object/Object.is<f64>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -364,6 +364,8 @@
   f64.const 1
   f64.const 1
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -378,6 +380,8 @@
   f64.const inf
   f64.const inf
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -394,6 +398,8 @@
   f64.const inf
   f64.neg
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -410,6 +416,8 @@
   f64.neg
   call $~lib/object/Object.is<f64>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -425,6 +433,8 @@
   f64.const inf
   call $~lib/object/Object.is<f64>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -438,6 +448,8 @@
   f64.const inf
   f64.const nan:0x8000000000000
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -453,6 +465,8 @@
   f64.const inf
   call $~lib/object/Object.is<f64>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -466,6 +480,8 @@
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -480,6 +496,8 @@
   f32.const 0
   f32.const 0
   call $~lib/object/Object.is<f32>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -495,6 +513,8 @@
   f32.const -0
   call $~lib/object/Object.is<f32>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -508,6 +528,8 @@
   f32.const -0
   f32.const 0
   call $~lib/object/Object.is<f32>
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -523,6 +545,8 @@
   f32.const 1
   call $~lib/object/Object.is<f32>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -537,6 +561,8 @@
   f32.const -1
   call $~lib/object/Object.is<f32>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -550,6 +576,8 @@
   f32.const 1
   f32.const 1
   call $~lib/object/Object.is<f32>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -564,6 +592,8 @@
   f32.const inf
   f32.const inf
   call $~lib/object/Object.is<f32>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -580,6 +610,8 @@
   f32.const inf
   f32.neg
   call $~lib/object/Object.is<f32>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -596,6 +628,8 @@
   f32.neg
   call $~lib/object/Object.is<f32>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -611,6 +645,8 @@
   f32.const inf
   call $~lib/object/Object.is<f32>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -624,6 +660,8 @@
   f32.const inf
   f32.const nan:0x400000
   call $~lib/object/Object.is<f32>
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -639,6 +677,8 @@
   f32.const inf
   call $~lib/object/Object.is<f32>
   i32.const 0
+  i32.ne
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -652,6 +692,8 @@
   f32.const nan:0x400000
   f32.const nan:0x400000
   call $~lib/object/Object.is<f32>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -663,11 +705,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0
+  f64.const -0
   f64.const 0.1
   f64.const -1e-308
   f64.mul
   call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -679,32 +723,18 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -0
-  f64.const 0.1
-  f64.const -1e-308
-  f64.mul
+  f64.const 0
+  f64.const 0
   call $~lib/object/Object.is<f64>
   i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 35
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  call $~lib/object/Object.is<f64>
+  i32.ne
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 32
-   i32.const 36
+   i32.const 35
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -718,7 +748,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 38
+   i32.const 37
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -732,7 +762,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 39
+   i32.const 38
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -741,6 +771,20 @@
   i32.const 1
   call $~lib/object/Object.is<bool>
   i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 40
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.const 0
+  call $~lib/object/Object.is<bool>
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -751,10 +795,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 0
   i32.const 0
   call $~lib/object/Object.is<bool>
-  i32.const 0
+  i32.const 1
   i32.eq
   i32.eqz
   if
@@ -765,16 +809,26 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  i32.const 0
-  call $~lib/object/Object.is<bool>
+  i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0 offset=4
+  local.get $0
+  call $~lib/object/Object.is<~lib/string/String>
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 32
-   i32.const 43
+   i32.const 44
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -783,16 +837,16 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
-  i32.const 80
+  i32.const 112
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   call $~lib/object/Object.is<~lib/string/String>
-  i32.const 1
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -807,13 +861,13 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
-  i32.const 112
+  i32.const 144
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   call $~lib/object/Object.is<~lib/string/String>
   i32.const 0
@@ -827,34 +881,29 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 80
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  local.get $0
-  i32.const 144
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  call $~lib/object/Object.is<~lib/string/String>
   i32.const 0
+  i32.const 0
+  call $~lib/object/Object.is<~lib/string/String|null>
+  i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 32
-   i32.const 47
+   i32.const 48
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
+  i32.const 176
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
   i32.const 0
   call $~lib/object/Object.is<~lib/string/String|null>
-  i32.const 1
+  i32.const 0
   i32.eq
   i32.eqz
   if
@@ -865,13 +914,13 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
   i32.const 176
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0 offset=4
   local.get $0
-  i32.const 0
   call $~lib/object/Object.is<~lib/string/String|null>
   i32.const 0
   i32.eq
@@ -880,25 +929,6 @@
    i32.const 0
    i32.const 32
    i32.const 50
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  i32.const 176
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  call $~lib/object/Object.is<~lib/string/String|null>
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 51
    i32.const 1
    call $~lib/builtins/abort
    unreachable

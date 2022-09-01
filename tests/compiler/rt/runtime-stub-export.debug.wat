@@ -29,7 +29,7 @@
   (local $var$3 i32)
   (local $var$4 i32)
   (local $var$5 i32)
-  memory.size
+  memory.size $0
   local.set $pagesBefore
   local.get $pagesBefore
   i32.const 16
@@ -67,12 +67,12 @@
    select
    local.set $var$4
    local.get $var$4
-   memory.grow
+   memory.grow $0
    i32.const 0
    i32.lt_s
    if
     local.get $var$3
-    memory.grow
+    memory.grow $0
     i32.const 0
     i32.lt_s
     if
@@ -86,7 +86,7 @@
  (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $~lib/rt/stub/__alloc (param $size i32) (result i32)
   (local $block i32)
@@ -136,22 +136,22 @@
  (func $~lib/rt/common/OBJECT#set:gcInfo (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/rt/common/OBJECT#set:gcInfo2 (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=8
+  i32.store $0 offset=8
  )
  (func $~lib/rt/common/OBJECT#set:rtId (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=12
+  i32.store $0 offset=12
  )
  (func $~lib/rt/common/OBJECT#set:rtSize (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=16
+  i32.store $0 offset=16
  )
  (func $~lib/rt/stub/__new (param $size i32) (param $id i32) (result i32)
   (local $ptr i32)

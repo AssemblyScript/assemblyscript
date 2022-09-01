@@ -301,10 +301,11 @@
     i32.const 255
     i32.and
     local.set $7
+    local.get $5
     i32.const 1
-    local.get $1
-    local.get $1
-    f32.ne
+    i32.shl
+    local.tee $4
+    i32.eqz
     local.get $0
     i32.reinterpret_f32
     local.tee $6
@@ -315,13 +316,11 @@
     local.tee $8
     i32.const 255
     i32.eq
-    i32.const 1
-    local.get $5
-    i32.const 1
-    i32.shl
-    local.tee $4
-    select
-    select
+    i32.or
+    local.get $1
+    local.get $1
+    f32.ne
+    i32.or
     if
      local.get $0
      local.get $1

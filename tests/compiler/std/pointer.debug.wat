@@ -21,12 +21,12 @@
  (func $std/pointer/Entry#set:key (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $std/pointer/Entry#set:val (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $start:std/pointer
   (local $var$0 i32)
@@ -101,7 +101,7 @@
    local.get $var$0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.2
   end
-  i32.load
+  i32.load $0
   i32.const 1
   i32.eq
   i32.eqz
@@ -121,7 +121,7 @@
    local.get $var$1
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3
   end
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 2
   i32.eq
   i32.eqz
@@ -273,7 +273,7 @@
    local.get $var$1
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4
   end
-  i32.load
+  i32.load $0
   i32.const 1
   i32.eq
   i32.eqz
@@ -293,7 +293,7 @@
    local.get $var$0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5
   end
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 2
   i32.eq
   i32.eqz
@@ -327,12 +327,12 @@
    local.get $var$2
    i32.const 0
    i32.const 8
-   memory.fill
+   memory.fill $0
   else
    local.get $var$2
    local.get $var$0
    i32.const 8
-   memory.copy
+   memory.copy $0 $0
   end
   global.get $std/pointer/one
   local.set $var$1
@@ -358,7 +358,7 @@
    local.get $var$2
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7
   end
-  i32.load
+  i32.load $0
   i32.const 1
   i32.eq
   i32.eqz
@@ -378,7 +378,7 @@
    local.get $var$1
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8
   end
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 2
   i32.eq
   i32.eqz
@@ -408,7 +408,7 @@
   i32.mul
   i32.add
   local.get $var$3
-  f32.store
+  f32.store $0
   global.get $std/pointer/buf
   local.set $var$1
   i32.const 1
@@ -421,7 +421,7 @@
   i32.mul
   i32.add
   local.get $var$3
-  f32.store
+  f32.store $0
   global.get $std/pointer/buf
   local.set $var$2
   i32.const 0
@@ -431,7 +431,7 @@
   i32.const 4
   i32.mul
   i32.add
-  f32.load
+  f32.load $0
   f32.const 1.100000023841858
   f32.eq
   i32.eqz
@@ -452,7 +452,7 @@
   i32.const 4
   i32.mul
   i32.add
-  f32.load
+  f32.load $0
   f32.const 1.2000000476837158
   f32.eq
   i32.eqz
@@ -473,7 +473,7 @@
   i32.const 4
   i32.mul
   i32.add
-  f32.load
+  f32.load $0
   f32.const 1.100000023841858
   f32.eq
   i32.eqz
@@ -494,7 +494,7 @@
   i32.const 4
   i32.mul
   i32.add
-  f32.load
+  f32.load $0
   f32.const 1.2000000476837158
   f32.eq
   i32.eqz
@@ -507,7 +507,7 @@
    unreachable
   end
   i32.const 0
-  f32.load
+  f32.load $0
   f32.const 1.100000023841858
   f32.eq
   i32.eqz
@@ -520,7 +520,7 @@
    unreachable
   end
   i32.const 4
-  f32.load
+  f32.load $0
   f32.const 1.2000000476837158
   f32.eq
   i32.eqz
@@ -544,7 +544,7 @@
   i32.mul
   i32.add
   local.get $var$3
-  f32.store
+  f32.store $0
   global.get $std/pointer/buf
   local.set $var$1
   i32.const 2
@@ -554,7 +554,7 @@
   i32.const 4
   i32.mul
   i32.add
-  f32.load
+  f32.load $0
   f32.const 1.2999999523162842
   f32.eq
   i32.eqz
@@ -575,7 +575,7 @@
   i32.const 4
   i32.mul
   i32.add
-  f32.load
+  f32.load $0
   f32.const 1.2999999523162842
   f32.eq
   i32.eqz
@@ -588,7 +588,7 @@
    unreachable
   end
   i32.const 8
-  f32.load
+  f32.load $0
   f32.const 1.2999999523162842
   f32.eq
   i32.eqz
@@ -608,14 +608,14 @@
   drop
   local.get $var$1
   local.get $var$3
-  f32.store
+  f32.store $0
   block $std/pointer/Pointer<f32>#get:value|inlined.0 (result f32)
    global.get $std/pointer/buf
    local.set $var$0
    i32.const 0
    drop
    local.get $var$0
-   f32.load
+   f32.load $0
    br $std/pointer/Pointer<f32>#get:value|inlined.0
   end
   f32.const 1.399999976158142
@@ -630,7 +630,7 @@
    unreachable
   end
   i32.const 0
-  f32.load
+  f32.load $0
   f32.const 1.399999976158142
   f32.eq
   i32.eqz

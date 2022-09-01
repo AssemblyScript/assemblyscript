@@ -28,7 +28,7 @@
   local.set $ptr
   local.get $id
   local.get $ptr
-  i32.load
+  i32.load $0
   i32.gt_u
   if
    i32.const 32
@@ -45,7 +45,7 @@
   i32.const 8
   i32.mul
   i32.add
-  i32.load
+  i32.load $0
  )
  (func $rt/flags/test<~lib/typedarray/Int8Array> (param $flags i32)
   i32.const 3

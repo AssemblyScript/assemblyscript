@@ -62,21 +62,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.load
+  i32.load $0
  )
  (func $assert-nonnull/testFn (param $fn i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
   local.get $fn
-  i32.load
+  i32.load $0
   call_indirect $0 (type $none_=>_i32)
  )
  (func $assert-nonnull/testObjFn (param $foo i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
   local.get $foo
-  i32.load offset=4
-  i32.load
+  i32.load $0 offset=4
+  i32.load $0
   call_indirect $0 (type $none_=>_i32)
  )
  (func $~stack_check
@@ -102,7 +102,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -118,7 +118,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo>#__get
@@ -139,7 +139,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -157,12 +157,12 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo|null>#__get
   local.tee $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $1
   if (result i32)
    local.get $1
@@ -174,9 +174,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.load
+  i32.load $0
   local.tee $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $1
   if (result i32)
    local.get $1
@@ -205,7 +205,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -223,12 +223,12 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo|null>#__get
   local.tee $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $1
   if (result i32)
    local.get $1
@@ -240,9 +240,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.load
+  i32.load $0
   local.tee $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $1
   if (result i32)
    local.get $1
@@ -271,12 +271,12 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.load
+  i32.load $0
   local.tee $1
-  i32.store
+  i32.store $0
   local.get $1
   if (result i32)
    local.get $1
@@ -305,10 +305,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   local.get $1
   local.get $0
-  i32.load offset=12
+  i32.load $0 offset=12
   i32.ge_u
   if
    i32.const 160
@@ -320,14 +320,14 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.load offset=4
+  i32.load $0 offset=4
   local.get $1
   i32.const 2
   i32.shl
   i32.add
-  i32.load
+  i32.load $0
   local.tee $2
-  i32.store
+  i32.store $0
   i32.const 1
   drop
   i32.const 0
@@ -361,10 +361,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   local.get $1
   local.get $0
-  i32.load offset=12
+  i32.load $0 offset=12
   i32.ge_u
   if
    i32.const 160
@@ -376,14 +376,14 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.load offset=4
+  i32.load $0 offset=4
   local.get $1
   i32.const 2
   i32.shl
   i32.add
-  i32.load
+  i32.load $0
   local.tee $2
-  i32.store
+  i32.store $0
   i32.const 1
   drop
   i32.const 1
@@ -407,13 +407,13 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo|null>#__get
   local.tee $1
-  i32.store
+  i32.store $0
   local.get $1
   if (result i32)
    local.get $1
@@ -443,7 +443,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   local.tee $1
@@ -458,11 +458,11 @@
    unreachable
   end
   local.tee $2
-  i32.store
+  i32.store $0
   i32.const 0
   global.set $~argumentsLength
   local.get $2
-  i32.load
+  i32.load $0
   call_indirect $0 (type $none_=>_i32)
   local.set $3
   global.get $~lib/memory/__stack_pointer
@@ -481,15 +481,15 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   global.set $~argumentsLength
   local.get $0
-  i32.load
+  i32.load $0
   call_indirect $0 (type $none_=>_i32)
   local.tee $1
-  i32.store
+  i32.store $0
   local.get $1
   if (result i32)
    local.get $1
@@ -518,16 +518,16 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   global.set $~argumentsLength
   local.get $0
-  i32.load offset=4
-  i32.load
+  i32.load $0 offset=4
+  i32.load $0
   call_indirect $0 (type $none_=>_i32)
   local.tee $1
-  i32.store
+  i32.store $0
   local.get $1
   if (result i32)
    local.get $1
@@ -555,7 +555,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testVar
   local.set $1
@@ -574,7 +574,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testObj
   local.set $1
@@ -593,7 +593,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testProp
   local.set $1
@@ -612,7 +612,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testArr
   local.set $1
@@ -631,7 +631,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testElem
   local.set $1
@@ -650,7 +650,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testAll
   local.set $1
@@ -669,7 +669,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testAll2
   local.set $1
@@ -688,7 +688,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testFn
   local.set $1
@@ -707,7 +707,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testFn2
   local.set $1
@@ -726,7 +726,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testRet
   local.set $1
@@ -745,7 +745,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testObjFn
   local.set $1
@@ -764,7 +764,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $assert-nonnull/testObjRet
   local.set $1

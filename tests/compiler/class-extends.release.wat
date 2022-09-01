@@ -26,19 +26,19 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
-  i32.load
+  i32.load $0
   drop
   local.get $0
-  i32.load16_s offset=4
+  i32.load16_s $0 offset=4
   drop
   local.get $0
   i32.const 2
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 3
-  i32.store16 offset=4
+  i32.store16 $0 offset=4
   local.get $1
   i32.const 4
   i32.add
