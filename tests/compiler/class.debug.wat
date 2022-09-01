@@ -6,13 +6,12 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_f32_f32_=>_f32 (func (param i32 f32 f32) (result f32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $class/Animal.ONE (mut i32) (i32.const 1))
- (global $class/PropertyPrototypeClass._one (mut i32) (i32.const 10))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -27,13 +26,11 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $class/a (mut i32) (i32.const 0))
- (global $class/zero (mut i32) (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
- (global $~lib/rt/__rtti_base i32 (i32.const 560))
- (global $~lib/memory/__data_end i32 (i32.const 620))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17004))
- (global $~lib/memory/__heap_base i32 (i32.const 17004))
+ (global $~lib/rt/__rtti_base i32 (i32.const 512))
+ (global $~lib/memory/__data_end i32 (i32.const 564))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16948))
+ (global $~lib/memory/__heap_base i32 (i32.const 16948))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -43,10 +40,9 @@
  (data (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 412) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00c\00l\00a\00s\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 460) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
- (data (i32.const 508) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 560) "\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
+ (data (i32.const 412) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
+ (data (i32.const 460) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
+ (data (i32.const 512) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "testGenericInitializer" (func $class/testGenericInitializer))
@@ -68,15 +64,106 @@
   f32.convert_i32_s
   f32.add
  )
+ (func $start:class
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  global.get $class/Animal.ONE
+  drop
+  i32.const 1
+  i32.const 2
+  call $class/Animal.add
+  drop
+  f32.const 1
+  f32.const 2
+  call $class/Animal.sub<f32>
+  drop
+ )
+ (func $class/Animal<f64>#instanceAdd (param $this i32) (param $a i32) (param $b i32) (result i32)
+  local.get $a
+  local.get $b
+  i32.add
+  global.get $class/Animal.ONE
+  i32.add
+ )
+ (func $class/Animal<f64>#instanceSub<f32> (param $this i32) (param $a f32) (param $b f32) (result f32)
+  local.get $a
+  local.get $b
+  f32.sub
+  global.get $class/Animal.ONE
+  f32.convert_i32_s
+  f32.add
+ )
+ (func $class/Animal<f64>#set:one (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store $0
+ )
+ (func $class/Animal<f64>#set:two (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store16 $0 offset=4
+ )
+ (func $class/Animal<f64>#set:three (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store8 $0 offset=6
+ )
+ (func $class/test (param $animal i32) (result i32)
+  (local $ptr i32)
+  (local $cls i32)
+  local.get $animal
+  i32.const 1
+  i32.const 2
+  call $class/Animal<f64>#instanceAdd
+  drop
+  local.get $animal
+  f32.const 1
+  f32.const 2
+  call $class/Animal<f64>#instanceSub<f32>
+  drop
+  local.get $animal
+  i32.load $0
+  drop
+  local.get $animal
+  i32.load16_s $0 offset=4
+  drop
+  local.get $animal
+  i32.load8_s $0 offset=6
+  drop
+  local.get $animal
+  i32.const 0
+  i32.const 1
+  i32.add
+  call $class/Animal<f64>#set:one
+  local.get $animal
+  i32.const 1
+  i32.const 1
+  i32.add
+  call $class/Animal<f64>#set:two
+  local.get $animal
+  i32.const 1
+  i32.const 1
+  i32.add
+  i32.const 1
+  i32.add
+  call $class/Animal<f64>#set:three
+  local.get $animal
+  local.set $ptr
+  local.get $ptr
+  local.set $cls
+  local.get $cls
+ )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/rt/itcms/Object#set:prev (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=8
+  i32.store $0 offset=8
  )
  (func $~lib/rt/itcms/initLazy (param $space i32) (result i32)
   local.get $space
@@ -89,7 +176,7 @@
  )
  (func $~lib/rt/itcms/Object#get:next (param $this i32) (result i32)
   local.get $this
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 3
   i32.const -1
   i32.xor
@@ -97,7 +184,7 @@
  )
  (func $~lib/rt/itcms/Object#get:color (param $this i32) (result i32)
   local.get $this
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 3
   i32.and
  )
@@ -149,7 +236,7 @@
  (func $~lib/rt/itcms/Object#set:color (param $this i32) (param $color i32)
   local.get $this
   local.get $this
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 3
   i32.const -1
   i32.xor
@@ -162,7 +249,7 @@
   local.get $this
   local.get $obj
   local.get $this
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 3
   i32.and
   i32.or
@@ -181,7 +268,7 @@
    i32.const 1
    drop
    local.get $this
-   i32.load offset=8
+   i32.load $0 offset=8
    i32.const 0
    i32.eq
    if (result i32)
@@ -203,7 +290,7 @@
    return
   end
   local.get $this
-  i32.load offset=8
+  i32.load $0 offset=8
   local.set $prev
   i32.const 1
   drop
@@ -230,7 +317,7 @@
   local.set $ptr
   local.get $id
   local.get $ptr
-  i32.load
+  i32.load $0
   i32.gt_u
   if
    i32.const 224
@@ -247,12 +334,12 @@
   i32.const 8
   i32.mul
   i32.add
-  i32.load
+  i32.load $0
  )
  (func $~lib/rt/itcms/Object#get:isPointerfree (param $this i32) (result i32)
   (local $rtId i32)
   local.get $this
-  i32.load offset=12
+  i32.load $0 offset=12
   local.set $rtId
   local.get $rtId
   i32.const 1
@@ -271,7 +358,7 @@
  (func $~lib/rt/itcms/Object#linkTo (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
   local.get $list
-  i32.load offset=8
+  i32.load $0 offset=8
   local.set $prev
   local.get $this
   local.get $list
@@ -295,7 +382,7 @@
   i32.eq
   if
    local.get $this
-   i32.load offset=8
+   i32.load $0 offset=8
    local.tee $var$1
    i32.eqz
    if (result i32)
@@ -363,7 +450,7 @@
    local.get $var$2
    if
     local.get $ptr
-    i32.load
+    i32.load $0
     local.get $cookie
     call $~lib/rt/itcms/__visit
     local.get $ptr
@@ -377,7 +464,7 @@
  (func $~lib/rt/itcms/Object#get:size (param $this i32) (result i32)
   i32.const 4
   local.get $this
-  i32.load
+  i32.load $0
   i32.const 3
   i32.const -1
   i32.xor
@@ -387,22 +474,22 @@
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
  )
  (func $~lib/rt/tlsf/Block#set:prev (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/rt/tlsf/Block#set:next (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=8
+  i32.store $0 offset=8
  )
  (func $~lib/rt/tlsf/removeBlock (param $root i32) (param $block i32)
   (local $blockInfo i32)
@@ -416,7 +503,7 @@
   (local $var$10 i32)
   (local $var$11 i32)
   local.get $block
-  i32.load
+  i32.load $0
   local.set $blockInfo
   i32.const 1
   drop
@@ -516,10 +603,10 @@
    unreachable
   end
   local.get $block
-  i32.load offset=4
+  i32.load $0 offset=4
   local.set $prev
   local.get $block
-  i32.load offset=8
+  i32.load $0 offset=8
   local.set $next
   local.get $prev
   if
@@ -549,7 +636,7 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load offset=96
+  i32.load $0 offset=96
   i32.eq
   if
    local.get $root
@@ -570,7 +657,7 @@
    i32.shl
    i32.add
    local.get $var$7
-   i32.store offset=96
+   i32.store $0 offset=96
    local.get $next
    i32.eqz
    if
@@ -583,7 +670,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load offset=4
+    i32.load $0 offset=4
     local.set $var$6
     local.get $root
     local.set $var$7
@@ -604,13 +691,13 @@
     i32.shl
     i32.add
     local.get $var$10
-    i32.store offset=4
+    i32.store $0 offset=4
     local.get $var$6
     i32.eqz
     if
      local.get $root
      local.get $root
-     i32.load
+     i32.load $0
      i32.const 1
      local.get $fl
      i32.shl
@@ -648,7 +735,7 @@
    unreachable
   end
   local.get $block
-  i32.load
+  i32.load $0
   local.set $blockInfo
   i32.const 1
   drop
@@ -670,7 +757,7 @@
   i32.const 4
   i32.add
   local.get $var$3
-  i32.load
+  i32.load $0
   i32.const 3
   i32.const -1
   i32.xor
@@ -678,7 +765,7 @@
   i32.add
   local.set $right
   local.get $right
-  i32.load
+  i32.load $0
   local.set $rightInfo
   local.get $rightInfo
   i32.const 1
@@ -705,7 +792,7 @@
    i32.const 4
    i32.add
    local.get $var$3
-   i32.load
+   i32.load $0
    i32.const 3
    i32.const -1
    i32.xor
@@ -713,7 +800,7 @@
    i32.add
    local.set $right
    local.get $right
-   i32.load
+   i32.load $0
    local.set $rightInfo
   end
   local.get $blockInfo
@@ -725,10 +812,10 @@
    local.get $var$3
    i32.const 4
    i32.sub
-   i32.load
+   i32.load $0
    local.set $var$3
    local.get $var$3
-   i32.load
+   i32.load $0
    local.set $var$6
    i32.const 1
    drop
@@ -809,7 +896,7 @@
   i32.const 4
   i32.sub
   local.get $block
-  i32.store
+  i32.store $0
   local.get $size
   i32.const 256
   i32.lt_u
@@ -888,7 +975,7 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load offset=96
+  i32.load $0 offset=96
   local.set $head
   local.get $block
   i32.const 0
@@ -920,10 +1007,10 @@
   i32.shl
   i32.add
   local.get $var$6
-  i32.store offset=96
+  i32.store $0 offset=96
   local.get $root
   local.get $root
-  i32.load
+  i32.load $0
   i32.const 1
   local.get $fl
   i32.shl
@@ -942,7 +1029,7 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 1
   local.get $sl
   i32.shl
@@ -954,7 +1041,7 @@
   i32.shl
   i32.add
   local.get $var$10
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $end i32) (result i32)
   (local $var$3 i32)
@@ -999,7 +1086,7 @@
   local.get $root
   local.set $var$3
   local.get $var$3
-  i32.load offset=1568
+  i32.load $0 offset=1568
   local.set $tail
   i32.const 0
   local.set $tailInfo
@@ -1032,7 +1119,7 @@
     i32.sub
     local.set $start
     local.get $tail
-    i32.load
+    i32.load $0
     local.set $tailInfo
    else
     nop
@@ -1110,7 +1197,7 @@
   local.set $var$3
   local.get $var$9
   local.get $var$3
-  i32.store offset=1568
+  i32.store $0 offset=1568
   local.get $root
   local.get $left
   call $~lib/rt/tlsf/insertBlock
@@ -1140,7 +1227,7 @@
   i32.xor
   i32.and
   local.set $rootOffset
-  memory.size
+  memory.size $0
   local.set $pagesBefore
   local.get $rootOffset
   i32.const 1572
@@ -1161,7 +1248,7 @@
    local.get $pagesNeeded
    local.get $pagesBefore
    i32.sub
-   memory.grow
+   memory.grow $0
    i32.const 0
    i32.lt_s
   else
@@ -1181,7 +1268,7 @@
   local.set $var$4
   local.get $var$5
   local.get $var$4
-  i32.store offset=1568
+  i32.store $0 offset=1568
   i32.const 0
   local.set $var$5
   loop $for-loop|0
@@ -1203,7 +1290,7 @@
     i32.shl
     i32.add
     local.get $var$6
-    i32.store offset=4
+    i32.store $0 offset=4
     i32.const 0
     local.set $var$8
     loop $for-loop|1
@@ -1231,7 +1318,7 @@
       i32.shl
       i32.add
       local.get $var$6
-      i32.store offset=96
+      i32.store $0 offset=96
       local.get $var$8
       i32.const 1
       i32.add
@@ -1254,7 +1341,7 @@
   drop
   local.get $root
   local.get $memStart
-  memory.size
+  memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
@@ -1281,7 +1368,7 @@
   end
   if (result i32)
    local.get $block
-   i32.load
+   i32.load $0
    i32.const 1
    i32.and
    i32.eqz
@@ -1304,7 +1391,7 @@
   drop
   local.get $block
   local.get $block
-  i32.load
+  i32.load $0
   i32.const 1
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
@@ -1719,7 +1806,7 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.load offset=4
+  i32.load $0 offset=4
   i32.const 0
   i32.const -1
   i32.xor
@@ -1733,7 +1820,7 @@
   i32.eqz
   if
    local.get $root
-   i32.load
+   i32.load $0
    i32.const 0
    i32.const -1
    i32.xor
@@ -1761,7 +1848,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load offset=4
+    i32.load $0 offset=4
     local.set $slMap
     i32.const 1
     drop
@@ -1791,7 +1878,7 @@
     i32.const 2
     i32.shl
     i32.add
-    i32.load offset=96
+    i32.load $0 offset=96
     local.set $head
    end
   else
@@ -1811,7 +1898,7 @@
    i32.const 2
    i32.shl
    i32.add
-   i32.load offset=96
+   i32.load $0 offset=96
    local.set $head
   end
   local.get $head
@@ -1841,7 +1928,7 @@
    i32.add
    local.set $size
   end
-  memory.size
+  memory.size $0
   local.set $pagesBefore
   local.get $size
   i32.const 4
@@ -1853,7 +1940,7 @@
   local.get $root
   local.set $var$3
   local.get $var$3
-  i32.load offset=1568
+  i32.load $0 offset=1568
   i32.ne
   i32.shl
   i32.add
@@ -1878,19 +1965,19 @@
   select
   local.set $pagesWanted
   local.get $pagesWanted
-  memory.grow
+  memory.grow $0
   i32.const 0
   i32.lt_s
   if
    local.get $pagesNeeded
-   memory.grow
+   memory.grow $0
    i32.const 0
    i32.lt_s
    if
     unreachable
    end
   end
-  memory.size
+  memory.size $0
   local.set $pagesAfter
   local.get $root
   local.get $pagesBefore
@@ -1907,7 +1994,7 @@
   (local $remaining i32)
   (local $var$5 i32)
   local.get $block
-  i32.load
+  i32.load $0
   local.set $blockInfo
   i32.const 1
   drop
@@ -1977,7 +2064,7 @@
    i32.const 4
    i32.add
    local.get $var$5
-   i32.load
+   i32.load $0
    i32.const 3
    i32.const -1
    i32.xor
@@ -1989,13 +2076,13 @@
    i32.const 4
    i32.add
    local.get $var$5
-   i32.load
+   i32.load $0
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   i32.load
+   i32.load $0
    i32.const 2
    i32.const -1
    i32.xor
@@ -2039,7 +2126,7 @@
   i32.const 1
   drop
   local.get $block
-  i32.load
+  i32.load $0
   i32.const 3
   i32.const -1
   i32.xor
@@ -2081,12 +2168,12 @@
  (func $~lib/rt/itcms/Object#set:rtId (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=12
+  i32.store $0 offset=12
  )
  (func $~lib/rt/itcms/Object#set:rtSize (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=16
+  i32.store $0 offset=16
  )
  (func $~lib/rt/itcms/__new (param $size i32) (param $id i32) (result i32)
   (local $obj i32)
@@ -2137,117 +2224,8 @@
   local.get $ptr
   i32.const 0
   local.get $size
-  memory.fill
+  memory.fill $0
   local.get $ptr
- )
- (func $class/PropertyPrototypeClass#set:two (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store
- )
- (func $class/PropertyPrototypeClass#set:_three (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store offset=4
- )
- (func $class/PropertyPrototypeClass#set:three (param $this i32) (param $a i32)
-  local.get $this
-  local.get $a
-  call $class/PropertyPrototypeClass#set:_three
- )
- (func $class/PropertyPrototypeClass#get:three (param $this i32) (result i32)
-  local.get $this
-  i32.load offset=4
- )
- (func $class/PropertyPrototypeClass#get:two (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $class/PropertyPrototypeClass.set:one (param $a i32)
-  local.get $a
-  global.set $class/PropertyPrototypeClass._one
- )
- (func $class/PropertyPrototypeClass#changeOne (param $this i32)
-  i32.const 11
-  call $class/PropertyPrototypeClass.set:one
- )
- (func $class/PropertyPrototypeClass.get:one (result i32)
-  global.get $class/PropertyPrototypeClass._one
- )
- (func $class/Animal<f64>#instanceAdd (param $this i32) (param $a i32) (param $b i32) (result i32)
-  local.get $a
-  local.get $b
-  i32.add
-  global.get $class/Animal.ONE
-  i32.add
- )
- (func $class/Animal<f64>#instanceSub<f32> (param $this i32) (param $a f32) (param $b f32) (result f32)
-  local.get $a
-  local.get $b
-  f32.sub
-  global.get $class/Animal.ONE
-  f32.convert_i32_s
-  f32.add
- )
- (func $class/Animal<f64>#set:one (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store
- )
- (func $class/Animal<f64>#set:two (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store16 offset=4
- )
- (func $class/Animal<f64>#set:three (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store8 offset=6
- )
- (func $class/test (param $animal i32) (result i32)
-  (local $ptr i32)
-  (local $cls i32)
-  local.get $animal
-  i32.const 1
-  i32.const 2
-  call $class/Animal<f64>#instanceAdd
-  drop
-  local.get $animal
-  f32.const 1
-  f32.const 2
-  call $class/Animal<f64>#instanceSub<f32>
-  drop
-  local.get $animal
-  i32.load
-  drop
-  local.get $animal
-  i32.load16_s offset=4
-  drop
-  local.get $animal
-  i32.load8_s offset=6
-  drop
-  local.get $animal
-  i32.const 0
-  i32.const 1
-  i32.add
-  call $class/Animal<f64>#set:one
-  local.get $animal
-  i32.const 1
-  i32.const 1
-  i32.add
-  call $class/Animal<f64>#set:two
-  local.get $animal
-  i32.const 1
-  i32.const 1
-  i32.add
-  i32.const 1
-  i32.add
-  call $class/Animal<f64>#set:three
-  local.get $animal
-  local.set $ptr
-  local.get $ptr
-  local.set $cls
-  local.get $cls
  )
  (func $~lib/rt/itcms/__link (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
   (local $child i32)
@@ -2320,7 +2298,7 @@
  (func $class/GenericInitializer<i32>#set:foo (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
   local.get $0
   local.get $1
   i32.const 0
@@ -2329,7 +2307,7 @@
  (func $~lib/array/Array<i32>#set:buffer (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store
+  i32.store $0
   local.get $0
   local.get $1
   i32.const 0
@@ -2338,17 +2316,17 @@
  (func $~lib/array/Array<i32>#set:dataStart (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
  )
  (func $~lib/array/Array<i32>#set:byteLength (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=8
+  i32.store $0 offset=8
  )
  (func $~lib/array/Array<i32>#set:length_ (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
-  i32.store offset=12
+  i32.store $0 offset=12
  )
  (func $class/testGenericInitializer
   i32.const 0
@@ -2357,17 +2335,10 @@
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
-  global.get $class/a
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
   i32.const 224
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 480
+  i32.const 432
   local.get $0
   call $~lib/rt/itcms/__visit
   i32.const 32
@@ -2377,7 +2348,7 @@
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
-  i32.load
+  i32.load $0
   local.tee $2
   if
    local.get $2
@@ -2388,7 +2359,7 @@
  (func $class/GenericInitializer<i32>~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
-  i32.load
+  i32.load $0
   local.tee $2
   if
    local.get $2
@@ -2400,7 +2371,7 @@
   i32.const 0
   drop
   local.get $this
-  i32.load
+  i32.load $0
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
@@ -2413,26 +2384,23 @@
   block $invalid
    block $~lib/array/Array<i32>
     block $class/GenericInitializer<i32>
-     block $class/PropertyPrototypeClass
-      block $class/Animal<f64>
-       block $~lib/arraybuffer/ArrayBufferView
-        block $~lib/string/String
-         block $~lib/arraybuffer/ArrayBuffer
-          local.get $0
-          i32.const 8
-          i32.sub
-          i32.load
-          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class/Animal<f64> $class/PropertyPrototypeClass $class/GenericInitializer<i32> $~lib/array/Array<i32> $invalid
-         end
-         return
+     block $class/Animal<f64>
+      block $~lib/arraybuffer/ArrayBufferView
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load $0
+         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class/Animal<f64> $class/GenericInitializer<i32> $~lib/array/Array<i32> $invalid
         end
         return
        end
-       local.get $0
-       local.get $1
-       call $~lib/arraybuffer/ArrayBufferView~visit
        return
       end
+      local.get $0
+      local.get $1
+      call $~lib/arraybuffer/ArrayBufferView~visit
       return
      end
      return
@@ -2451,46 +2419,7 @@
  )
  (func $~start
   call $start:class
- )
- (func $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__data_end
-  i32.lt_s
-  if
-   i32.const 17024
-   i32.const 17072
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $start:class
-  (local $0 i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  i32.const 4
-  i32.const 4
-  i32.eq
-  drop
-  global.get $class/Animal.ONE
-  drop
-  i32.const 1
-  i32.const 2
-  call $class/Animal.add
-  drop
-  f32.const 1
-  f32.const 2
-  call $class/Animal.sub<f32>
-  drop
-  memory.size
+  memory.size $0
   i32.const 16
   i32.shl
   global.get $~lib/memory/__heap_base
@@ -2507,129 +2436,19 @@
   i32.const 320
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
-  i32.const 0
-  call $class/PropertyPrototypeClass#constructor
-  global.set $class/a
-  loop $while-continue|0
-   global.get $class/a
-   local.tee $0
-   global.get $class/zero
-   call $class/PropertyPrototypeClass#set:three
-   local.get $0
-   call $class/PropertyPrototypeClass#get:three
-   local.set $0
-   local.get $0
-   if
-    i32.const 1
-    global.set $class/zero
-    br $while-continue|0
-   end
-  end
-  loop $while-continue|1
-   global.get $~lib/memory/__stack_pointer
-   global.get $class/a
-   local.tee $0
-   i32.store
-   local.get $0
-   global.get $class/zero
-   call $class/PropertyPrototypeClass#set:two
-   local.get $0
-   call $class/PropertyPrototypeClass#get:two
-   local.set $0
-   local.get $0
-   if
-    i32.const 1
-    global.set $class/zero
-    br $while-continue|1
-   end
-  end
-  global.get $class/a
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $class/PropertyPrototypeClass#get:three
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 67
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $class/zero
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 68
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $class/a
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $class/PropertyPrototypeClass#changeOne
-  call $class/PropertyPrototypeClass.get:one
-  i32.const 11
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 70
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
- (func $class/PropertyPrototypeClass#constructor (param $0 i32) (result i32)
-  (local $1 i32)
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.eqz
+  global.get $~lib/memory/__data_end
+  i32.lt_s
   if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
+   i32.const 16976
+   i32.const 17024
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
-  local.get $0
-  i32.const 2
-  call $class/PropertyPrototypeClass#set:two
-  local.get $0
-  i32.const 11
-  call $class/PropertyPrototypeClass#set:_three
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
  (func $~lib/array/Array<i32>#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2644,16 +2463,16 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   local.get $0
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 16
-   i32.const 6
+   i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store
+   i32.store $0
   end
   local.get $0
   i32.const 0
@@ -2673,8 +2492,8 @@
   i32.shr_u
   i32.gt_u
   if
+   i32.const 432
    i32.const 480
-   i32.const 528
    i32.const 70
    i32.const 60
    call $~lib/builtins/abort
@@ -2696,7 +2515,7 @@
   i32.const 0
   call $~lib/rt/itcms/__new
   local.tee $5
-  i32.store offset=4
+  i32.store $0 offset=4
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
@@ -2730,16 +2549,16 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store
+  i32.store $0
   local.get $0
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
-   i32.const 5
+   i32.const 4
    call $~lib/rt/itcms/__new
    local.tee $0
-   i32.store
+   i32.store $0
   end
   local.get $0
   i32.const 0
@@ -2763,7 +2582,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   call $class/test
   local.set $1

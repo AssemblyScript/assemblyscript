@@ -17,11 +17,11 @@
   i32.const 1
   i32.shl
   local.tee $3
-  i32.load offset=1
+  i32.load $0 offset=1
   local.get $3
-  i32.load
+  i32.load $0
   i32.const 16
-  i32.load
+  i32.load $0
   local.tee $3
   i32.add
   i32.add
@@ -30,13 +30,13 @@
   end
   i32.const 0
   local.get $0
-  i32.store
+  i32.store $0
   i32.const 4
   local.get $1
-  i32.store
+  i32.store $0
   i32.const 8
   local.get $2
-  i32.store
+  i32.store $0
   local.get $3
  )
 )

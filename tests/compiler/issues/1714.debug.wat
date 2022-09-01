@@ -45,7 +45,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -90,9 +90,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $ptr1
-     i64.load
+     i64.load $0
      local.get $ptr2
-     i64.load
+     i64.load $0
      i64.ne
      if
       br $do-break|0
@@ -127,10 +127,10 @@
    local.get $var$7
    if
     local.get $ptr1
-    i32.load16_u
+    i32.load16_u $0
     local.set $a
     local.get $ptr2
-    i32.load16_u
+    i32.load16_u $0
     local.set $b
     local.get $a
     local.get $b
@@ -221,7 +221,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   call $issues/1714/foo<i32,i64>
   i32.const 0
   i32.eq
@@ -238,13 +238,13 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 80
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   call $~lib/string/String.__eq
   i32.eqz
