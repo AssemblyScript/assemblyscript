@@ -76,20 +76,50 @@ export namespace TypeRef {
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
+/** Reference to a Binaryen heap type. */
 export type HeapTypeRef = binaryen.HeapTypeRef;
 export namespace HeapTypeRef {
   // reference & GC heap types
-  export const Func = binaryen._BinaryenHeapTypeFunc();
-  export const Ext = binaryen._BinaryenHeapTypeExt();
-  export const Any = binaryen._BinaryenHeapTypeAny();
-  export const Eq = binaryen._BinaryenHeapTypeEq();
-  export const I31 = binaryen._BinaryenHeapTypeI31();
-  export const Data = binaryen._BinaryenHeapTypeData();
+  export const Ext: HeapTypeRef = binaryen._BinaryenHeapTypeExt();
+  export const Func: HeapTypeRef = binaryen._BinaryenHeapTypeFunc();
+  export const Any: HeapTypeRef = binaryen._BinaryenHeapTypeAny();
+  export const Eq: HeapTypeRef = binaryen._BinaryenHeapTypeEq();
+  export const I31: HeapTypeRef = binaryen._BinaryenHeapTypeI31();
+  export const Data: HeapTypeRef = binaryen._BinaryenHeapTypeData();
   // string heap types
-  export const String = binaryen._BinaryenHeapTypeString();
-  export const StringviewWTF8 = binaryen._BinaryenHeapTypeStringviewWTF8();
-  export const StringviewWTF16 = binaryen._BinaryenHeapTypeStringviewWTF16();
-  export const StringviewIter = binaryen._BinaryenHeapTypeStringviewIter();
+  export const String: HeapTypeRef = binaryen._BinaryenHeapTypeString();
+  export const StringviewWTF8: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewWTF8();
+  export const StringviewWTF16: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewWTF16();
+  export const StringviewIter: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewIter();
+}
+
+/** Packed array element respectively struct field types. */
+export type PackedType = binaryen.PackedType;
+export namespace PackedType {
+  export const NotPacked: PackedType = 0 /* _BinaryenPackedTypeNotPacked */;
+  export const I8: PackedType = 1 /* _BinaryenPackedTypeInt8 */;
+  export const I16: PackedType = 2 /* _BinaryenPackedTypeInt16 */;
+}
+
+/** Type builder error reasons. */
+export type TypeBuilderErrorReason = binaryen.TypeBuilderErrorReason;
+export namespace TypeBuilderErrorReason {
+  /** Indicates a cycle in the supertype relation. */
+  export const SelfSupertype: TypeBuilderErrorReason = 0 /* _TypeBuilderErrorReasonSelfSupertype */;
+  /** Indicates that the declared supertype of a type is invalid. */
+  export const InvalidSupertype: TypeBuilderErrorReason = 1 /* _TypeBuilderErrorReasonInvalidSupertype */;
+  /** Indicates that the declared supertype is an invalid forward reference. */
+  export const ForwardSupertypeReference: TypeBuilderErrorReason = 2 /* _TypeBuilderErrorReasonForwardSupertypeReference */;
+  /** Indicates that a child of a type is an invalid forward reference. */
+  export const ForwardChildReference: TypeBuilderErrorReason = 3 /* _TypeBuilderErrorReasonForwardChildReference */;
+}
+
+/** Type system constants. */
+export type TypeSystem = binaryen.TypeSystem;
+export namespace TypeSystem {
+  export const Equirecursive: TypeSystem = 0 /* _BinaryenTypeSystemEquirecursive */;
+  export const Nominal: TypeSystem = 1 /* _BinaryenTypeSystemNominal */;
+  export const Isorecursive: TypeSystem = 2 /* _BinaryenTypeSystemIsorecursive */;
 }
 
 /** Binaryen feature constants. */
@@ -110,7 +140,7 @@ export const enum FeatureFlags {
   FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
   RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
-  Strings = 65536 /* _BinaryenFeatureStrings */,
+  Stringref = 65536 /* _BinaryenFeatureStrings */,
   All = 253951 /* _BinaryenFeatureAll */
 }
 
@@ -1095,107 +1125,111 @@ export const enum RefAsOp {
   /** ref.as_data */
   Data = 2 /* _BinaryenRefAsData */,
   /** ref.as_i31 */
-  I31 = 3 /* _BinaryenRefAsI31 */
+  I31 = 3 /* _BinaryenRefAsI31 */,
+  /** extern.internalize */
+  ExternInternalize = 4 /* _BinaryenRefAsExternInternalize */,
+  /** extern.externalize */
+  ExternExternalize = 5 /* _BinaryenRefAsExternExternalize */
 }
 
 /** Binaryen BrOn operation constants. */
 export const enum BrOnOp {
   /** br_on_null */
-  Null = 0 /* TODO_BinaryenBrOnNull */,
+  Null = 0 /* _BinaryenBrOnNull */,
   /** br_on_non_null */
-  NonNull = 1 /* TODO_BinaryenBrOnNonNull */,
+  NonNull = 1 /* _BinaryenBrOnNonNull */,
   /** br_on_cast */
-  Cast = 2 /* TODO_BinaryenBrOnCast */,
+  Cast = 2 /* _BinaryenBrOnCast */,
   /** br_on_cast_fail */
-  CastFail = 3 /* TODO_BinaryenBrOnCastFail */,
+  CastFail = 3 /* _BinaryenBrOnCastFail */,
   /** br_on_func */
-  Func = 4 /* TODO_BinaryenBrOnFunc */,
+  Func = 4 /* _BinaryenBrOnFunc */,
   /** br_on_non_func */
-  NonFunc = 5 /* TODO_BinaryenBrOnNonFunc */,
+  NonFunc = 5 /* _BinaryenBrOnNonFunc */,
   /** br_on_data */
-  Data = 6 /* TODO_BinaryenBrOnData */,
+  Data = 6 /* _BinaryenBrOnData */,
   /** br_on_non_data */
-  NonData = 7 /* TODO_BinaryenBrOnNonData */,
+  NonData = 7 /* _BinaryenBrOnNonData */,
   /** br_on_i31 */
-  I31 = 8 /* TODO_BinaryenBrOnI31 */,
+  I31 = 8 /* _BinaryenBrOnI31 */,
   /** br_on_non_i32 */
-  NonI31 = 9 /* TODO_BinaryenBrOnNonI31 */
+  NonI31 = 9 /* _BinaryenBrOnNonI31 */
 }
 
 /** Binaryen StringNew operation constants. */
 export const enum StringNewOp {
   /** string.new_wtf8 utf8 */
-  UTF8 = 0 /* TODO_BinaryenStringNewUTF8 */,
+  UTF8 = 0 /* _BinaryenStringNewUTF8 */,
   /** string.new_wtf8 wtf8 */
-  WTF8 = 1 /* TODO_BinaryenStringNewWTF8 */,
+  WTF8 = 1 /* _BinaryenStringNewWTF8 */,
   /** string.new_wtf8 replace */
-  Replace = 2 /* TODO_BinaryenStringNewReplace */,
+  Replace = 2 /* _BinaryenStringNewReplace */,
   /** string.new_wtf16 */
-  WTF16 = 3/* TODO_BinaryenStringNewWTF16 */,
+  WTF16 = 3 /* _BinaryenStringNewWTF16 */,
   /** string.new_wtf8_array utf8 */
-  UTF8Array = 4 /* TODO_BinaryenStringNewUTF8Array */,
+  UTF8Array = 4 /* _BinaryenStringNewUTF8Array */,
   /** string.new_wtf8_array wtf8 */
-  WTF8Array = 5 /* TODO_BinaryenStringNewWTF8Array */,
+  WTF8Array = 5 /* _BinaryenStringNewWTF8Array */,
   /** string.new_wtf8_array replace */
-  ReplaceArray = 6 /* TODO_BinaryenStringNewReplaceArray */,
+  ReplaceArray = 6 /* _BinaryenStringNewReplaceArray */,
   /** string.new_wtf16_array */
-  WTF16Array = 7 /* TODO_BinaryenStringNewUTF16Array */
+  WTF16Array = 7 /* _BinaryenStringNewWTF16Array */
 }
 
 /** Binaryen StringMeasure operation constants. */
 export const enum StringMeasureOp {
   /** string.measure_wtf8 utf8 */
-  UTF8 = 0 /* TODO_BinaryenStringMeastureUTF8 */,
+  UTF8 = 0 /* _BinaryenStringMeasureUTF8 */,
   /** string.measure_wtf8 wtf8 */
-  WTF8 = 1 /* TODO_BinaryenStringMeastureWTF8 */,
+  WTF8 = 1 /* _BinaryenStringMeasureWTF8 */,
   /** string.measure_wtf16 */
-  WTF16 = 2 /* TODO_BinaryenStringMeastureWTF16 */,
+  WTF16 = 2 /* _BinaryenStringMeasureWTF16 */,
   /** string.is_usv_sequence */
-  IsUSV = 3 /* TODO_BinaryenStringMeasureIsUSV */,
+  IsUSV = 3 /* _BinaryenStringMeasureIsUSV */,
   /** stringview_wtf16.length */
-  WTF16View = 4 /* TODO_BinaryenStringMeasureWTF16View */
+  WTF16View = 4 /* _BinaryenStringMeasureWTF16View */
 }
 
 /** Binaryen StringEncode operation constants. */
 export const enum StringEncodeOp {
   /** string.encode_wtf8 utf8 */
-  UTF8 = 0 /* TODO_BinaryenStringEncodeUTF8 */,
+  UTF8 = 0 /* _BinaryenStringEncodeUTF8 */,
   /** string.encode_wtf8 wtf8 */
-  WTF8 = 1 /* TODO_BinaryenStringEncodeWTF8 */,
+  WTF8 = 1 /* _BinaryenStringEncodeWTF8 */,
   /** string.encode_wtf16 */
-  WTF16 = 2 /* TODO_BinaryenStringEncodeWTF16 */,
+  WTF16 = 2 /* _BinaryenStringEncodeWTF16 */,
   /** string.encode_wtf8_array utf8 */
-  UTF8Array = 3 /* TODO_BinaryenStringEncodeUTF8Array */,
+  UTF8Array = 3 /* _BinaryenStringEncodeUTF8Array */,
   /** string.encode_wtf8_array wtf8 */
-  WTF8Array = 4 /* TODO_BinaryenStringEncodeWTF8Array */,
+  WTF8Array = 4 /* _BinaryenStringEncodeWTF8Array */,
   /** string.encode_wtf16_array */
-  WTF16Array = 5 /* TODO_BinaryenStringEncodeWTF16Array */
+  WTF16Array = 5 /* _BinaryenStringEncodeWTF16Array */
 }
 
 /** Binaryen StringAs operation constants. */
 export const enum StringAsOp {
   /** string.as_wtf8 */
-  WTF8 = 0 /* TODO_BinaryenStringAsWTF8 */,
+  WTF8 = 0 /* _BinaryenStringAsWTF8 */,
   /** string.as_wtf16 */
-  WTF16 = 1 /* TODO_BinaryenStringAsWTF16 */,
+  WTF16 = 1 /* _BinaryenStringAsWTF16 */,
   /** string.as_iter */
-  Iter = 2 /* TODO_BinaryenStringAsIter */
+  Iter = 2 /* _BinaryenStringAsIter */
 }
 
 /** Binaryen StringIterMove operation constants. */
 export const enum StringIterMoveOp {
   /** stringview_iter.advance */
-  Advance = 0 /* TODO_BinaryenStringIterMoveAdvance */,
+  Advance = 0 /* _BinaryenStringIterMoveAdvance */,
   /** stringview_iter.rewind */
-  Rewind = 1 /* TODO_BinaryenStringIterMoveRewind */
+  Rewind = 1 /* _BinaryenStringIterMoveRewind */
 }
 
 /** Binaryen StringSlice operation constants. */
 export const enum StringSliceWTFOp {
   /** stringview_wtf8.slice */
-  WTF8 = 0 /* TODO_BinaryenStringSliceWTF8 */,
+  WTF8 = 0 /* _BinaryenStringSliceWTF8 */,
   /** stringview_wtf16.slice */
-  WTF16 = 1 /* TODO_BinaryenStringSliceWTF16 */
+  WTF16 = 1 /* _BinaryenStringSliceWTF16 */
 }
 
 /** Binaryen expression runner flags. */
@@ -1308,6 +1342,10 @@ export class Module {
 
   ref_eq(left: ExpressionRef, right: ExpressionRef): ExpressionRef {
     return binaryen._BinaryenRefEq(this.ref, left, right);
+  }
+
+  string_eq(left: ExpressionRef, right: ExpressionRef): ExpressionRef {
+    return binaryen._BinaryenStringEq(this.ref, left, right);
   }
 
   // expressions

@@ -47,6 +47,14 @@ declare type eqref = object | null;
 declare type i31ref = object | null;
 /** Data reference. */
 declare type dataref = object | null;
+/** String reference. */
+declare type stringref = object | null;
+/** WTF-8 string view. */
+declare type stringview_wtf8 = object | null;
+/** WTF-16 string view. */
+declare type stringview_wtf16 = object | null;
+/** String iterator. */
+declare type stringview_iter = object | null;
 
 // Compiler hints
 
@@ -98,6 +106,8 @@ declare const ASC_FEATURE_FUNCTION_REFERENCES: bool;
 declare const ASC_FEATURE_RELAXED_SIMD: bool;
 /** Whether the extended const expression feature is enabled. */
 declare const ASC_FEATURE_EXTENDED_CONST: bool;
+/** Whether the string references feature is enabled. */
+declare const ASC_FEATURE_STRINGREF: bool;
 /** Major version of the compiler. */
 declare const ASC_VERSION_MAJOR: i32;
 /** Minor version of the compiler. */

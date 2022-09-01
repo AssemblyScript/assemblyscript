@@ -21,6 +21,7 @@
  (global $~lib/native/ASC_FEATURE_FUNCTION_REFERENCES i32 (i32.const 0))
  (global $~lib/native/ASC_FEATURE_RELAXED_SIMD i32 (i32.const 0))
  (global $~lib/native/ASC_FEATURE_EXTENDED_CONST i32 (i32.const 0))
+ (global $~lib/native/ASC_FEATURE_STRINGREF i32 (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
@@ -49,6 +50,8 @@
   i32.const 1
   drop
   i32.const 1
+  drop
+  i32.const 0
   drop
   i32.const 0
   drop

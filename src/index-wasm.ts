@@ -195,6 +195,8 @@ export const FEATURE_FUNCTION_REFERENCES = Feature.FUNCTION_REFERENCES;
 export const FEATURE_RELAXED_SIMD = Feature.RELAXED_SIMD;
 /** Extended const expressions. */
 export const FEATURE_EXTENDED_CONST = Feature.EXTENDED_CONST;
+/** String references. */
+export const FEATURE_STRINGREF = Feature.STRINGREF;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

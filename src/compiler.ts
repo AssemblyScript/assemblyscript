@@ -473,6 +473,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.FUNCTION_REFERENCES)) featureFlags |= FeatureFlags.FunctionReferences;
     if (options.hasFeature(Feature.RELAXED_SIMD)) featureFlags |= FeatureFlags.RelaxedSIMD;
     if (options.hasFeature(Feature.EXTENDED_CONST)) featureFlags |= FeatureFlags.ExtendedConst;
+    if (options.hasFeature(Feature.STRINGREF)) featureFlags |= FeatureFlags.Stringref;
     module.setFeatures(featureFlags);
 
     // set up the main start function
@@ -4836,6 +4837,10 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.EQREF:
       case TypeKind.I31REF:
       case TypeKind.DATAREF: return module.ref_eq(leftExpr, rightExpr);
+      case TypeKind.STRINGREF: return module.string_eq(leftExpr, rightExpr);
+      case TypeKind.STRINGVIEW_WTF8:
+      case TypeKind.STRINGVIEW_WTF16:
+      case TypeKind.STRINGVIEW_ITER:
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF: {
@@ -4885,6 +4890,14 @@ export class Compiler extends DiagnosticEmitter {
           module.ref_eq(leftExpr, rightExpr)
         );
       }
+      case TypeKind.STRINGREF: {
+        return module.unary(UnaryOp.EqzI32,
+          module.string_eq(leftExpr, rightExpr)
+        );
+      }
+      case TypeKind.STRINGVIEW_WTF8:
+      case TypeKind.STRINGVIEW_WTF16:
+      case TypeKind.STRINGVIEW_ITER:
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF: {
@@ -9798,6 +9811,13 @@ export class Compiler extends DiagnosticEmitter {
         return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
             && this.checkFeatureEnabled(Feature.GC, reportNode);
       }
+      case TypeKind.STRINGREF:
+      case TypeKind.STRINGVIEW_WTF8:
+      case TypeKind.STRINGVIEW_WTF16:
+      case TypeKind.STRINGVIEW_ITER: {
+        return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
+            && this.checkFeatureEnabled(Feature.STRINGREF, reportNode);
+      }
     }
     let classReference = type.getClass();
     if (classReference) {
@@ -9903,7 +9923,11 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
-      case TypeKind.DATAREF: return module.ref_null(type.toRef());
+      case TypeKind.DATAREF: 
+      case TypeKind.STRINGREF:
+      case TypeKind.STRINGVIEW_WTF8:
+      case TypeKind.STRINGVIEW_WTF16:
+      case TypeKind.STRINGVIEW_ITER: return module.ref_null(type.toRef());
       case TypeKind.I31REF: return module.i31_new(module.i32(0));
     }
   }
@@ -10052,7 +10076,11 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
       case TypeKind.I31REF:
-      case TypeKind.DATAREF: {
+      case TypeKind.DATAREF:
+      case TypeKind.STRINGREF:
+      case TypeKind.STRINGVIEW_WTF8:
+      case TypeKind.STRINGVIEW_WTF16:
+      case TypeKind.STRINGVIEW_ITER: {
         // Needs to be true (i.e. not zero) when the ref is _not_ null,
         // which means `ref.is_null` returns false (i.e. zero).
         return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
