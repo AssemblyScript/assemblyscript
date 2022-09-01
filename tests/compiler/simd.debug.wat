@@ -6455,7 +6455,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load offset=16
+  i32.load $0 offset=16
   i32.const 1
   i32.shr_u
  )
@@ -6500,9 +6500,9 @@
    block $do-break|0
     loop $do-loop|0
      local.get $ptr1
-     i64.load
+     i64.load $0
      local.get $ptr2
-     i64.load
+     i64.load $0
      i64.ne
      if
       br $do-break|0
@@ -6537,10 +6537,10 @@
    local.get $var$7
    if
     local.get $ptr1
-    i32.load16_u
+    i32.load16_u $0
     local.set $a
     local.get $ptr2
-    i32.load16_u
+    i32.load16_u $0
     local.set $b
     local.get $a
     local.get $b
@@ -6941,7 +6941,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   i32.const 42
   i32x4.splat
   i32.const 1
@@ -7068,13 +7068,13 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 576
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $2
   call $~lib/string/String.__eq
   if
@@ -7248,13 +7248,13 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 576
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $2
   call $~lib/string/String.__eq
   if
@@ -7275,13 +7275,13 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 608
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $2
   call $~lib/string/String.__eq
   if
@@ -7311,13 +7311,13 @@
   local.set $0
   local.get $0
   i32.const 42
-  i32.store
+  i32.store $0
   i32.const 0
   i32x4.splat
   local.set $1
   local.get $0
   local.get $1
-  v128.load32_lane 0
+  v128.load32_lane $0 0
   local.set $1
   local.get $1
   i32x4.extract_lane 0
@@ -7350,7 +7350,7 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
-  i64.store
+  i64.store $0
   i32.const 42
   i32x4.splat
   i32x4.extract_lane 0
@@ -7629,13 +7629,13 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 576
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $2
   call $~lib/string/String.__eq
   if
@@ -7656,13 +7656,13 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store
+  i32.store $0
   local.get $2
   i32.const 608
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $2
   call $~lib/string/String.__eq
   if
@@ -7692,13 +7692,13 @@
   local.set $0
   local.get $0
   i32.const 42
-  i32.store
+  i32.store $0
   i32.const 0
   i32x4.splat
   local.set $1
   local.get $0
   local.get $1
-  v128.load32_lane 0
+  v128.load32_lane $0 0
   local.set $1
   local.get $1
   i32x4.extract_lane 0
