@@ -331,6 +331,26 @@ export class Type {
     return classReference != null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
   }
 
+  get isMemory(): bool {
+    switch (this.kind) {
+      case TypeKind.BOOL:
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.I64:
+      case TypeKind.ISIZE:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.U64:
+      case TypeKind.USIZE:
+      case TypeKind.F32:
+      case TypeKind.F64:
+      case TypeKind.V128: return true;
+    }
+    return false;
+  }
+
   /** Gets the corresponding non-nullable type. */
   get nonNullableType(): Type {
     if (this.isExternalReference) {

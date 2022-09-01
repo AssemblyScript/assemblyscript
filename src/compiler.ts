@@ -52,7 +52,9 @@ import {
   SideEffects,
   SwitchBuilder,
   ExpressionRunnerFlags,
-  isConstZero
+  isConstZero,
+  isConstNegZero,
+  isConstExpressionNaN
 } from "./module";
 
 import {
@@ -782,7 +784,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Just stubbed memory. Will update later in finalizeMemory
+    // Setup internal memory with default name "0"
     module.setMemory(
       initialPages,
       maximumPages,
@@ -3993,7 +3995,23 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-
+        if (commonType.isFloatValue) {
+          if (
+            isConstExpressionNaN(module, rightExpr) ||
+            isConstExpressionNaN(module, leftExpr)
+          ) {
+            this.warning(
+              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
+              expression.range
+            );
+          }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
+              expression.range
+            );
+          }
+        }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
         rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
@@ -4029,7 +4047,23 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-
+        if (commonType.isFloatValue) {
+          if (
+            isConstExpressionNaN(module, rightExpr) ||
+            isConstExpressionNaN(module, leftExpr)
+          ) {
+            this.warning(
+              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
+              expression.range
+            );
+          }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
+              expression.range
+            );
+          }
+        }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
         rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
@@ -7807,19 +7841,23 @@ export class Compiler extends DiagnosticEmitter {
       case LiteralKind.INTEGER: {
         let expr = <IntegerLiteralExpression>expression;
         let type = this.resolver.determineIntegerLiteralType(expr, implicitlyNegate, contextualType);
-
-        let intValue = implicitlyNegate
-          ? i64_neg(expr.value)
-          : expr.value;
-
         this.currentType = type;
+        let intValue = expr.value;
+        let sign = 1.0; // should multiply for float literals
+        if (implicitlyNegate) {
+          if (type.isFloatValue) {
+            sign = -1.0;
+          } else {
+            intValue = i64_neg(intValue);
+          }
+        }
         switch (type.kind) {
           case TypeKind.ISIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));
           case TypeKind.I64: return module.i64(i64_low(intValue), i64_high(intValue));
           case TypeKind.USIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));
           case TypeKind.U64: return module.i64(i64_low(intValue), i64_high(intValue));
-          case TypeKind.F32: return module.f32(i64_to_f32(intValue));
-          case TypeKind.F64: return module.f64(i64_to_f64(intValue));
+          case TypeKind.F32: return module.f32(<f32>sign * i64_to_f32(intValue));
+          case TypeKind.F64: return module.f64(sign * i64_to_f64(intValue));
           default: return module.i32(i64_low(intValue));
         }
       }
@@ -10084,10 +10122,13 @@ export class Compiler extends DiagnosticEmitter {
         // Needs to be true (i.e. not zero) when the ref is _not_ null,
         // which means `ref.is_null` returns false (i.e. zero).
         return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
-
       }
+      case TypeKind.VOID:
       default: {
-        assert(false);
+        this.error(
+          DiagnosticCode.An_expression_of_type_0_cannot_be_tested_for_truthiness,
+          reportNode.range, type.toString()
+        );
         return module.i32(0);
       }
     }

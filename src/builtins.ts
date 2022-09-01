@@ -2286,12 +2286,23 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments;
   var contextualType = ctx.contextualType;
   var type = typeArguments![0];
+
   var outType = (
     contextualType != Type.auto &&
     type.isIntegerValue &&
     contextualType.isIntegerValue &&
     contextualType.size > type.size
   ) ? contextualType : type;
+
+  if (!outType.isMemory) {
+    compiler.error(
+      DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+      ctx.reportNode.typeArgumentsRange, "load", outType.toString()
+    );
+    compiler.currentType = Type.void;
+    return module.unreachable();
+  }
+
   var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
   var numOperands = operands.length;
   var immOffset = 0;
@@ -2350,6 +2361,14 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
           : Constraints.CONV_IMPLICIT
       );
   var inType = compiler.currentType;
+  if (!inType.isMemory) {
+    compiler.error(
+      DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+      ctx.reportNode.typeArgumentsRange, "store", inType.toString()
+    );
+    compiler.currentType = Type.void;
+    return module.unreachable();
+  }
   if (
     type.isIntegerValue &&
     (

@@ -29598,7 +29598,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0
+  f64.const -0
   i64.const 4607182418800017408
   f64.reinterpret_i64
   f64.const 0

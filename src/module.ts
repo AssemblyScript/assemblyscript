@@ -2822,7 +2822,7 @@ export class Module {
     maxLoopIterations: i32 = 1
   ): ExpressionRef {
     var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
-    var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
+    var precomp = binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
       if (!this.isConstExpression(precomp)) return 0;
       assert(getExpressionType(precomp) == getExpressionType(expr));
@@ -2844,7 +2844,11 @@ export class Module {
             case BinaryOp.MulI32:
             case BinaryOp.AddI64:
             case BinaryOp.SubI64:
-            case BinaryOp.MulI64: return this.isConstExpression(getBinaryLeft(expr)) && this.isConstExpression(getBinaryRight(expr));
+            case BinaryOp.MulI64:
+              return (
+                this.isConstExpression(getBinaryLeft(expr)) &&
+                this.isConstExpression(getBinaryRight(expr))
+              );
           }
         }
         break;
@@ -2965,6 +2969,52 @@ export function isConstNonZero(expr: ExpressionRef): bool {
   if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) != 0;
   if (type == TypeRef.F32) return getConstValueF32(expr) != 0;
   if (type == TypeRef.F64) return getConstValueF64(expr) != 0;
+  return false;
+}
+
+export function isConstNegZero(expr: ExpressionRef): bool {
+  if (getExpressionId(expr) != ExpressionId.Const) return false;
+  var type = getExpressionType(expr);
+  if (type == TypeRef.F32) {
+    let d = getConstValueF32(expr);
+    return d == 0 && f32_as_i32(d) < 0;
+  }
+  if (type == TypeRef.F64) {
+    let d = getConstValueF64(expr);
+    return d == 0 && i64_signbit(f64_as_i64(d));
+  }
+  return false;
+}
+
+export function isConstNaN(expr: ExpressionRef): bool {
+  if (getExpressionId(expr) != ExpressionId.Const) return false;
+  var type = getExpressionType(expr);
+  if (type == TypeRef.F32) return isNaN(getConstValueF32(expr));
+  if (type == TypeRef.F64) return isNaN(getConstValueF64(expr));
+  return false;
+}
+
+export function isConstExpressionNaN(module: Module, expr: ExpressionRef): bool {
+  var id = getExpressionId(expr);
+  var type = getExpressionType(expr);
+  if (type == TypeRef.F32 || type == TypeRef.F64) {
+    if (id == ExpressionId.Const) {
+      return isNaN(
+        type == TypeRef.F32
+          ? getConstValueF32(expr)
+          : getConstValueF64(expr)
+      );
+    } else if (id == ExpressionId.GlobalGet) {
+      let precomp = module.runExpression(expr, ExpressionRunnerFlags.Default, 8);
+      if (precomp) {
+        return isNaN(
+          type == TypeRef.F32
+            ? getConstValueF32(precomp)
+            : getConstValueF64(precomp)
+        );
+      }
+    }
+  }
   return false;
 }
 
