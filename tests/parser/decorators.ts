@@ -34,7 +34,7 @@ class B {
   @operator none(_: B): bool { return true; }
 }
 
-Checks relational operators have right arity
+// Checks relational operators have right arity
 class C {
   // Error: extra argument for non-static operator
   @operator("==") eq(a: C, _: C): bool { return true; }

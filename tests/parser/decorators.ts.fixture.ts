@@ -49,12 +49,6 @@ class B {
     return true;
   }
 }
-Checks;
-relational;
-operators;
-have;
-right;
-arity;
 class C {
   @operator("==")
   eq(a: C, _: C): bool {
