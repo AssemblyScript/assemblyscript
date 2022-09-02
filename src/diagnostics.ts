@@ -67,6 +67,12 @@ export class Range {
     );
   }
 
+  extendBy(delta: i32) {
+    let range = new Range(this.start, this.end + delta);
+    range.source = this.source;
+    return range;
+  }
+
   get atStart(): Range {
     let range = new Range(this.start, this.start);
     range.source = this.source;

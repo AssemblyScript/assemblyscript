@@ -3467,11 +3467,11 @@ export class Resolver extends DiagnosticEmitter {
         case OperatorKind.GT:
         case OperatorKind.GE:
         case OperatorKind.NOT: {
-          if (!this.validateLogicalOperators(
+          this.validateLogicalOperators(
             overloadPrototype,
             operatorInstance,
             reportMode
-          )) continue;
+          );
           break;
         }
         case OperatorKind.PREFIX_INC:
@@ -3494,6 +3494,7 @@ export class Resolver extends DiagnosticEmitter {
               }
             }
           }
+          break;
         }
       }
       if (!overloads.has(overloadKind)) {
@@ -3660,11 +3661,11 @@ export class Resolver extends DiagnosticEmitter {
     overloadPrototype: FunctionPrototype,
     overload: Function,
     reportMode: ReportMode
-  ): bool {
+  ): void {
     if (!overloadPrototype.hasAnyDecorator(
       DecoratorFlags.OPERATOR_BINARY |
       DecoratorFlags.OPERATOR_PREFIX
-    )) return true;
+    )) return;
 
     let signature  = overload.signature;
     let returnType = signature.returnType;
@@ -3701,9 +3702,13 @@ export class Resolver extends DiagnosticEmitter {
 
       if (actualNumParams != expecedNumParams) {
         if (reportMode == ReportMode.REPORT) {
+          let funType = overloadPrototype.functionTypeNode;
+          let funParams = overloadPrototype.functionTypeNode.parameters;
           this.error(
             DiagnosticCode.Expected_0_arguments_but_got_1,
-            overloadPrototype.functionTypeNode.range,
+            actualNumParams != 0
+              ? Range.join(funParams[0].range, funParams[actualNumParams - 1].range)
+              : funType.range.atStart.extendBy(2),
             expecedNumParams.toString(),
             actualNumParams.toString()
           );
@@ -3711,7 +3716,5 @@ export class Resolver extends DiagnosticEmitter {
         }
       }
     }
-
-    return true;
   }
 }

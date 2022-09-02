@@ -989,7 +989,6 @@ export class ParameterNode extends Node {
 
 /** Built-in decorator kinds. */
 export enum DecoratorKind {
-  // operators (don't rearrange this group)
   OPERATOR,
   OPERATOR_BINARY,
   OPERATOR_PREFIX,
@@ -1008,23 +1007,6 @@ export enum DecoratorKind {
 }
 
 export namespace DecoratorKind {
-
-  export function isAnyOperator(kind: DecoratorKind): bool {
-    return kind >= DecoratorKind.OPERATOR && kind <= DecoratorKind.OPERATOR_POSTFIX;
-  }
-
-  export function isBinaryOperator(kind: DecoratorKind): bool {
-    return kind == DecoratorKind.OPERATOR || kind == DecoratorKind.OPERATOR_BINARY;
-  }
-
-  export function isUnaryOperator(kind: DecoratorKind): bool {
-    return kind == DecoratorKind.OPERATOR_PREFIX || kind == DecoratorKind.OPERATOR_POSTFIX;
-  }
-
-  export function isExternal(kind: DecoratorKind): bool {
-    return kind == DecoratorKind.EXTERNAL || kind == DecoratorKind.EXTERNAL_JS;
-  }
-
   /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
   export function fromNode(nameNode: Expression): DecoratorKind {
     if (nameNode.kind == NodeKind.IDENTIFIER) {
