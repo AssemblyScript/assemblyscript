@@ -38,7 +38,8 @@ import {
   IndexSignature,
   isTypedElement,
   InterfacePrototype,
-  DeclaredElement
+  DeclaredElement,
+  DecoratorFlags
 } from "./program";
 
 import {
@@ -78,7 +79,8 @@ import {
   NewExpression,
   ArrayLiteralExpression,
   ArrowKind,
-  ExpressionStatement
+  ExpressionStatement,
+  StringLiteralExpression
 } from "./ast";
 
 import {
@@ -100,7 +102,8 @@ import {
 
 import {
   Token,
-  operatorTokenToString
+  operatorTokenToString,
+  isRelationalBinaryIdentifier
 } from "./tokenizer";
 
 import {
@@ -3456,21 +3459,37 @@ export class Resolver extends DiagnosticEmitter {
       if (!operatorInstance) continue;
       let overloads = instance.overloads;
       if (!overloads) instance.overloads = overloads = new Map();
-      // inc/dec are special in that an instance overload attempts to re-assign
-      // the corresponding value, thus requiring a matching return type, while a
-      // static overload works like any other overload.
-      if (operatorInstance.is(CommonFlags.INSTANCE)) {
-        switch (overloadKind) {
-          case OperatorKind.PREFIX_INC:
-          case OperatorKind.PREFIX_DEC:
-          case OperatorKind.POSTFIX_INC:
-          case OperatorKind.POSTFIX_DEC: {
+      switch (overloadKind) {
+        case OperatorKind.EQ:
+        case OperatorKind.NE:
+        case OperatorKind.LT:
+        case OperatorKind.LE:
+        case OperatorKind.GT:
+        case OperatorKind.GE:
+        case OperatorKind.NOT: {
+          if (!this.validateLogicalOperators(
+            overloadPrototype,
+            operatorInstance,
+            reportMode
+          )) continue;
+          break;
+        }
+        case OperatorKind.PREFIX_INC:
+        case OperatorKind.PREFIX_DEC:
+        case OperatorKind.POSTFIX_INC:
+        case OperatorKind.POSTFIX_DEC: {
+          if (operatorInstance.is(CommonFlags.INSTANCE)) {
+            // inc/dec are special in that an instance overload attempts to re-assign
+            // the corresponding value, thus requiring a matching return type, while a
+            // static overload works like any other overload.
             let returnType = operatorInstance.signature.returnType;
             if (!returnType.isAssignableTo(instance.type)) {
               if (reportMode == ReportMode.REPORT) {
                 this.error(
                   DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                  overloadPrototype.functionTypeNode.returnType.range, returnType.toString(), instance.type.toString()
+                  overloadPrototype.functionTypeNode.returnType.range,
+                  returnType.toString(),
+                  instance.type.toString()
                 );
               }
             }
@@ -3479,7 +3498,10 @@ export class Resolver extends DiagnosticEmitter {
       }
       if (!overloads.has(overloadKind)) {
         overloads.set(overloadKind, operatorInstance);
-        if (overloadKind == OperatorKind.INDEXED_GET || overloadKind == OperatorKind.INDEXED_SET) {
+        if (
+          overloadKind == OperatorKind.INDEXED_GET ||
+          overloadKind == OperatorKind.INDEXED_SET
+        ) {
           let index = instance.indexSignature;
           if (!index) instance.indexSignature = index = new IndexSignature(instance);
           if (overloadKind == OperatorKind.INDEXED_GET) {
@@ -3632,5 +3654,64 @@ export class Resolver extends DiagnosticEmitter {
       return null;
     }
     return typeArgumentNodes[0];
+  }
+
+  private validateLogicalOperators(
+    overloadPrototype: FunctionPrototype,
+    overload: Function,
+    reportMode: ReportMode
+  ): bool {
+    if (!overloadPrototype.hasAnyDecorator(
+      DecoratorFlags.OPERATOR_BINARY |
+      DecoratorFlags.OPERATOR_PREFIX
+    )) return true;
+
+    let signature  = overload.signature;
+    let returnType = signature.returnType;
+    let decorators = overloadPrototype.decoratorNodes!;
+
+    for (let i = 0, k = decorators.length; i < k; i++) {
+      // verify boolean return type
+      if (!returnType.isBooleanValue) {
+        let args = decorators[i].args;
+        if (args && args.length == 1) {
+          let arg = args[0];
+          if (arg.isStringLiteral) {
+            let value = (<StringLiteralExpression>arg).value;
+            if (value == "!" || isRelationalBinaryIdentifier(value)) {
+              if (reportMode == ReportMode.REPORT) {
+                this.errorRelated(
+                  DiagnosticCode.Only_0_accepted_for_return_type_of_relational_operators,
+                  overloadPrototype.functionTypeNode.returnType.range,
+                  arg.range, CommonNames.bool
+                );
+              }
+              break;
+            }
+          }
+        }
+      }
+      // validate input parameters and arity
+      var parameters = signature.parameterTypes;
+      let actualNumParams = parameters.length;
+      let expecedNumParams = 0;
+
+      expecedNumParams += overload.is(CommonFlags.STATIC) ? 1 : 0;
+      expecedNumParams += overloadPrototype.hasDecorator(DecoratorFlags.OPERATOR_BINARY) ? 1 : 0;
+
+      if (actualNumParams != expecedNumParams) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            overloadPrototype.functionTypeNode.range,
+            expecedNumParams.toString(),
+            actualNumParams.toString()
+          );
+          break;
+        }
+      }
+    }
+
+    return true;
   }
 }

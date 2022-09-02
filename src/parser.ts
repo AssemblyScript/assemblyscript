@@ -9,7 +9,6 @@
 
 import {
   CommonFlags,
-  CommonNames,
   LIBRARY_PREFIX,
   PATH_DELIMITER
 } from "./common";
@@ -19,8 +18,7 @@ import {
   Token,
   CommentHandler,
   IdentifierHandling,
-  isIllegalVariableIdentifier,
-  isRelationalBinaryIdentifier
+  isIllegalVariableIdentifier
 } from "./tokenizer";
 
 import {
@@ -45,7 +43,6 @@ import {
   NamedTypeNode,
   FunctionTypeNode,
   ArrowKind,
-  DecoratorKind,
 
   Expression,
   AssertionKind,
@@ -2275,10 +2272,6 @@ export class Parser extends DiagnosticEmitter {
         tn.range(signatureStart, tn.pos)
       );
 
-      if (decorators) {
-        this.validateDecorators(decorators, signature, flags);
-      }
-
       let body: Statement | null = null;
       if (tn.skip(Token.OPENBRACE)) {
         if (flags & CommonFlags.AMBIENT) {
@@ -4397,104 +4390,6 @@ export class Parser extends DiagnosticEmitter {
       potentiallyGeneric = false;
     }
     return expr;
-  }
-
-  // Check if decorators correcly defineds
-  private validateDecorators(
-    decorators: DecoratorNode[],
-    signature: FunctionTypeNode,
-    flags: CommonFlags
-  ): void {
-    var foundOperator: DecoratorNode | null = null;
-    for (let i = 0, k = decorators.length; i < k; ++i) {
-      let decorator = decorators[i];
-      if (foundOperator) {
-        // this.error Method should have only single operator decorator
-        this.errorRelated(
-          DiagnosticCode.Duplicate_decorator,
-          decorator.range,
-          foundOperator.range,
-        );
-        // recoverable
-      }
-      if (this.validateOperatorDecorator(decorator, signature, flags)) {
-        foundOperator = decorator;
-      }
-      // TODO: validate external decorator
-      // TODO: validate custom decorator
-    }
-  }
-
-  private validateOperatorDecorator(
-    decorator: DecoratorNode,
-    signature: FunctionTypeNode,
-    flags: CommonFlags
-  ): bool {
-    let decoratorKind = decorator.decoratorKind;
-    if (!DecoratorKind.isAnyOperator(decoratorKind)) {
-      return false;
-    }
-    let decoratorArgs = decorator.args;
-    if (decoratorArgs && decoratorArgs.length == 1) {
-      let operatorArg = decoratorArgs[0];
-      if (operatorArg.isStringLiteral) {
-        // now check only binary operators
-        let operator = <StringLiteralExpression>operatorArg;
-        if (operator.value == "!" || isRelationalBinaryIdentifier(operator.value)) {
-          // validate return type
-          var returnType = signature.returnType;
-          // relational operators should return boolean type only
-          if (returnType.kind == NodeKind.NAMEDTYPE) {
-            let ret = <NamedTypeNode>returnType;
-            if (!ret.contains(CommonNames.bool)) {
-              this.errorRelated(
-                DiagnosticCode.Only_0_accepted_for_return_type_of_relational_operators,
-                returnType.range,
-                operator.range, "bool"
-              );
-              // recoverable
-            }
-          }
-
-          // validate input parameters and arity
-          var parameters = signature.parameters;
-          let actualNumParams  = parameters.length;
-          let expecedNumParams = 0;
-
-          expecedNumParams += (flags & CommonFlags.STATIC) ? 1 : 0;
-          expecedNumParams += DecoratorKind.isBinaryOperator(decoratorKind) ? 1 : 0;
-
-          if (actualNumParams != expecedNumParams) {
-            // this.error
-            this.error(
-              DiagnosticCode.Expected_0_arguments_but_got_1,
-              signature.range,
-              expecedNumParams.toString(),
-              actualNumParams.toString()
-            );
-            // recoverable
-          }
-        }
-      } else {
-        // TODO: use proper error in future
-        // this.error(
-        //   DiagnosticCode.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1,
-        //   operatorArg.range, operatorArg.toString(), "<unknown>"
-        // );
-        this.error(
-          DiagnosticCode.String_literal_expected,
-          operatorArg.range
-        );
-        // recoverable
-      }
-    } else {
-      this.error(
-        DiagnosticCode.Expected_0_arguments_but_got_1,
-        decorator.range, "1", decoratorArgs ? decoratorArgs.length.toString() : "0"
-      );
-      // recoverable
-    }
-    return true;
   }
 
   /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
