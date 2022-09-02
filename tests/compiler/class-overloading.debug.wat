@@ -2810,7 +2810,7 @@
    unreachable
   end
  )
- (func $class-overloading/C#a<i32> (param $0 i32) (param $1 i32)
+ (func $class-overloading/C#a<i32> (param $this i32) (param $a i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2820,8 +2820,8 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $a
   call $class-overloading/B#a<i32>
   global.get $class-overloading/which
   local.set $2
@@ -3620,7 +3620,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $class-overloading/B2#foo (param $0 i32) (result i32)
+ (func $class-overloading/B2#foo (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3645,7 +3645,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/A#constructor (param $0 i32) (result i32)
+ (func $class-overloading/A#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3655,17 +3655,17 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 3
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3673,7 +3673,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/B#constructor (param $0 i32) (result i32)
+ (func $class-overloading/B#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3683,22 +3683,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 4
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $class-overloading/A#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3706,7 +3706,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/C#constructor (param $0 i32) (result i32)
+ (func $class-overloading/C#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3716,22 +3716,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 5
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $class-overloading/B#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3739,7 +3739,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/D#constructor (param $0 i32) (result i32)
+ (func $class-overloading/D#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3749,22 +3749,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 6
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $class-overloading/B#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3772,7 +3772,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/E#constructor (param $0 i32) (result i32)
+ (func $class-overloading/E#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3782,22 +3782,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 7
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $class-overloading/D#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3805,7 +3805,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/F#constructor (param $0 i32) (result i32)
+ (func $class-overloading/F#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3815,22 +3815,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 8
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $class-overloading/E#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3838,7 +3838,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/CA#constructor (param $0 i32) (result i32)
+ (func $class-overloading/CA#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3848,17 +3848,17 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 10
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3866,7 +3866,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/CC#constructor (param $0 i32) (result i32)
+ (func $class-overloading/CC#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3876,17 +3876,17 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 12
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3894,7 +3894,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/A2#constructor (param $0 i32) (result i32)
+ (func $class-overloading/A2#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3904,17 +3904,17 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 13
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3922,7 +3922,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/B2#constructor (param $0 i32) (result i32)
+ (func $class-overloading/B2#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3932,22 +3932,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 14
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $class-overloading/A2#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3955,7 +3955,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/A1#constructor (param $0 i32) (result i32)
+ (func $class-overloading/A1#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3965,17 +3965,17 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 16
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3983,7 +3983,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $class-overloading/B1#constructor (param $0 i32) (result i32)
+ (func $class-overloading/B1#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3993,22 +3993,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 15
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $class-overloading/A1#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4

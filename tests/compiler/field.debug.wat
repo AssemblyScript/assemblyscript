@@ -2454,10 +2454,10 @@
    unreachable
   end
  )
- (func $~lib/rt/__newArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
+ (func $~lib/rt/__newArray (param $length i32) (param $alignLog2 i32) (param $id i32) (param $data i32) (result i32)
+  (local $bufferSize i32)
+  (local $buffer i32)
+  (local $array i32)
   (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2467,38 +2467,38 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
-  local.get $1
+  local.get $length
+  local.get $alignLog2
   i32.shl
-  local.set $4
+  local.set $bufferSize
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $bufferSize
   i32.const 0
-  local.get $3
+  local.get $data
   call $~lib/rt/__newBuffer
-  local.tee $5
+  local.tee $buffer
   i32.store $0
   i32.const 16
-  local.get $2
+  local.get $id
   call $~lib/rt/itcms/__new
-  local.set $6
-  local.get $6
-  local.get $5
+  local.set $array
+  local.get $array
+  local.get $buffer
   i32.store $0
-  local.get $6
-  local.get $5
+  local.get $array
+  local.get $buffer
   i32.const 0
   call $~lib/rt/itcms/__link
-  local.get $6
-  local.get $5
+  local.get $array
+  local.get $buffer
   i32.store $0 offset=4
-  local.get $6
-  local.get $4
+  local.get $array
+  local.get $bufferSize
   i32.store $0 offset=8
-  local.get $6
-  local.get $0
+  local.get $array
+  local.get $length
   i32.store $0 offset=12
-  local.get $6
+  local.get $array
   local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2506,9 +2506,9 @@
   global.set $~lib/memory/__stack_pointer
   local.get $7
  )
- (func $field/NoStaticConflict#constructor (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
+ (func $field/NoStaticConflict#constructor (param $this i32) (result i32)
+  (local $var$1 i32)
+  (local $var$2 i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2518,24 +2518,24 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 3
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   i32.const 2
   i32.const 4
   i32.const 432
   call $~lib/rt/__newArray
   call $field/NoStaticConflict#set:a
-  local.get $0
+  local.get $this
   local.set $3
   global.get $~lib/memory/__stack_pointer
   i32.const 4
