@@ -67,7 +67,7 @@ export class Range {
     );
   }
 
-  extendBy(delta: i32) {
+  extendBy(delta: i32): Range {
     let range = new Range(this.start, this.end + delta);
     range.source = this.source;
     return range;
