@@ -1323,11 +1323,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -1587,11 +1587,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -2573,7 +2573,6 @@
  (func $~lib/string/String#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.const 20
   i32.sub
@@ -2581,9 +2580,10 @@
   i32.const 1
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -3521,14 +3521,14 @@
    i32.const 1023
    i32.gt_s
    if (result f64)
+    i32.const 1023
     local.get $1
     i32.const 1023
     i32.sub
     local.tee $1
-    i32.const 1023
     local.get $1
     i32.const 1023
-    i32.lt_s
+    i32.ge_s
     select
     local.set $1
     local.get $0
@@ -3553,14 +3553,14 @@
     i32.const -1022
     i32.lt_s
     if (result f64)
+     i32.const -1022
      local.get $1
      i32.const 969
      i32.add
      local.tee $1
-     i32.const -1022
      local.get $1
      i32.const -1022
-     i32.gt_s
+     i32.le_s
      select
      local.set $1
      local.get $0
@@ -5129,21 +5129,21 @@
    local.get $0
    i32.load $0
    local.tee $4
+   i32.const 1073741820
    local.get $5
    i32.const 1
    i32.shl
    local.tee $5
-   i32.const 1073741820
    local.get $5
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $5
-   local.get $3
    i32.const 8
    local.get $3
+   local.get $3
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 2
    i32.shl

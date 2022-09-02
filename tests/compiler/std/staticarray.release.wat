@@ -445,11 +445,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -709,11 +709,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -2633,11 +2633,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $7
    local.get $1
@@ -4595,13 +4595,13 @@
     local.tee $0
     i32.eqz
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf7
+    i32.const 3
     local.get $0
     i32.const 1
     i32.sub
-    i32.const 3
     local.get $0
     i32.const 3
-    i32.le_u
+    i32.gt_u
     select
     local.set $1
     loop $while-continue|044
@@ -4651,13 +4651,13 @@
     local.tee $0
     i32.eqz
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf45
+    i32.const 2
     local.get $0
     i32.const 1
     i32.sub
-    i32.const 2
     local.get $0
     i32.const 2
-    i32.le_u
+    i32.gt_u
     select
     local.set $1
     loop $while-continue|048
@@ -5520,21 +5520,21 @@
         unreachable
        end
        block $__inlined_func$~lib/rt/itcms/__renew
+        i32.const 1073741820
         local.get $0
         i32.const 1
         i32.shl
         local.tee $0
-        i32.const 1073741820
         local.get $0
         i32.const 1073741820
-        i32.lt_u
+        i32.ge_u
         select
         local.tee $0
-        local.get $11
         i32.const 8
         local.get $11
+        local.get $11
         i32.const 8
-        i32.gt_u
+        i32.le_u
         select
         i32.const 2
         i32.shl

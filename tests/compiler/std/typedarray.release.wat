@@ -916,11 +916,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -1180,11 +1180,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -3403,11 +3403,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $1
    local.get $5
@@ -4227,13 +4227,13 @@
  (func $~lib/typedarray/Int8Array#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4256,13 +4256,13 @@
  (func $~lib/typedarray/Uint8Array#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4285,13 +4285,13 @@
  (func $~lib/typedarray/Uint8ClampedArray#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4314,15 +4314,15 @@
  (func $~lib/typedarray/Int16Array#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   i32.const 1
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4347,15 +4347,15 @@
  (func $~lib/typedarray/Uint16Array#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   i32.const 1
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4380,15 +4380,15 @@
  (func $~lib/typedarray/Int32Array#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   i32.const 2
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4413,15 +4413,15 @@
  (func $~lib/typedarray/Uint32Array#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   i32.const 2
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4446,15 +4446,15 @@
  (func $~lib/typedarray/Int64Array#at (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   i32.const 3
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4479,15 +4479,15 @@
  (func $~lib/typedarray/Uint64Array#at (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   i32.const 3
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4512,15 +4512,15 @@
  (func $~lib/typedarray/Float32Array#at (param $0 i32) (param $1 i32) (result f32)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   i32.const 2
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -4545,15 +4545,15 @@
  (func $~lib/typedarray/Float64Array#at (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   local.get $1
-  i32.const 0
   local.get $0
   i32.load $0 offset=8
   i32.const 3
   i32.shr_u
   local.tee $2
+  i32.const 0
   local.get $1
   i32.const 0
-  i32.ge_s
+  i32.lt_s
   select
   i32.add
   local.tee $1
@@ -6285,13 +6285,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.019
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -6339,13 +6339,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -6393,13 +6393,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -6447,13 +6447,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -7778,13 +7778,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.019
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -7832,13 +7832,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -7886,13 +7886,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -7940,13 +7940,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -9270,13 +9270,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.019
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -9324,13 +9324,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -9378,13 +9378,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -9432,13 +9432,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $2
@@ -10681,13 +10681,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $4
@@ -10739,13 +10739,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $4
@@ -10797,13 +10797,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $4
@@ -10855,13 +10855,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $4
@@ -12069,13 +12069,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $4
@@ -12127,13 +12127,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $4
@@ -12185,13 +12185,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $4
@@ -12243,13 +12243,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_s
+   i32.gt_s
    select
    local.set $0
    local.get $4
@@ -13654,13 +13654,13 @@
    local.tee $1
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.019
+   i32.const 4
    local.get $1
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $1
    i32.const 4
-   i32.le_s
+   i32.gt_s
    select
    local.set $1
    local.get $3
@@ -13712,13 +13712,13 @@
    local.tee $1
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.026
+   i32.const 3
    local.get $1
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $1
    i32.const 3
-   i32.le_s
+   i32.gt_s
    select
    local.set $1
    local.get $3
@@ -13770,13 +13770,13 @@
    local.tee $1
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.029
+   i32.const 2
    local.get $1
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $1
    i32.const 2
-   i32.le_s
+   i32.gt_s
    select
    local.set $1
    local.get $3
@@ -13828,13 +13828,13 @@
    local.tee $1
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.032
+   i32.const 100
    local.get $1
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $1
    i32.const 100
-   i32.le_s
+   i32.gt_s
    select
    local.set $1
    local.get $3
@@ -15240,13 +15240,13 @@
    local.tee $1
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.019
+   i32.const 4
    local.get $1
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $1
    i32.const 4
-   i32.le_s
+   i32.gt_s
    select
    local.set $1
    local.get $3
@@ -15298,13 +15298,13 @@
    local.tee $1
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.026
+   i32.const 3
    local.get $1
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $1
    i32.const 3
-   i32.le_s
+   i32.gt_s
    select
    local.set $1
    local.get $3
@@ -15356,13 +15356,13 @@
    local.tee $1
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.029
+   i32.const 2
    local.get $1
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $1
    i32.const 2
-   i32.le_s
+   i32.gt_s
    select
    local.set $1
    local.get $3
@@ -15414,13 +15414,13 @@
    local.tee $1
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.032
+   i32.const 100
    local.get $1
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $1
    i32.const 100
-   i32.le_s
+   i32.gt_s
    select
    local.set $1
    local.get $3
@@ -16821,13 +16821,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.019
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -16879,13 +16879,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -16937,13 +16937,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -16995,13 +16995,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -18384,13 +18384,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.019
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -18442,13 +18442,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -18500,13 +18500,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -18558,13 +18558,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -19949,13 +19949,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.019
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -20007,13 +20007,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -20065,13 +20065,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -20123,13 +20123,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -21514,13 +21514,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.019
+   i32.const 4
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 4
    local.get $0
    i32.const 4
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -21572,13 +21572,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.026
+   i32.const 3
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 3
    local.get $0
    i32.const 3
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -21630,13 +21630,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.029
+   i32.const 2
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 2
    local.get $0
    i32.const 2
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -21688,13 +21688,13 @@
    local.tee $0
    i32.eqz
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.032
+   i32.const 100
    local.get $0
    i32.const 1
    i32.sub
-   i32.const 100
    local.get $0
    i32.const 100
-   i32.le_u
+   i32.gt_u
    select
    local.set $0
    local.get $2
@@ -28258,11 +28258,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $7
    local.get $1
@@ -29050,11 +29050,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $7
    local.get $1
@@ -29895,11 +29895,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $7
    local.get $1
@@ -30730,11 +30730,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $7
    local.get $1
@@ -31575,11 +31575,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $7
    local.get $1
@@ -32404,11 +32404,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $7
    local.get $1
@@ -33242,11 +33242,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $1
    local.get $5
@@ -34080,11 +34080,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $1
    local.get $5
@@ -34919,11 +34919,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $1
    local.get $5
@@ -43311,13 +43311,13 @@
                                       local.get $7
                                       i32.load $0 offset=4
                                       local.set $8
-                                      i32.const 0
                                       local.get $7
                                       i32.load $0 offset=8
                                       local.tee $9
+                                      i32.const 0
                                       local.get $9
                                       i32.const 0
-                                      i32.gt_s
+                                      i32.le_s
                                       select
                                       local.tee $10
                                       local.get $9
@@ -43356,13 +43356,13 @@
                                       local.get $7
                                       i32.load $0 offset=4
                                       local.set $8
-                                      i32.const 0
                                       local.get $7
                                       i32.load $0 offset=8
                                       local.tee $9
+                                      i32.const 0
                                       local.get $9
                                       i32.const 0
-                                      i32.gt_s
+                                      i32.le_s
                                       select
                                       local.tee $10
                                       local.get $9
@@ -43455,11 +43455,11 @@
                                       i32.gt_s
                                       select
                                       local.tee $10
-                                      i32.const 0
-                                      local.get $9
                                       local.get $9
                                       i32.const 0
-                                      i32.gt_s
+                                      local.get $9
+                                      i32.const 0
+                                      i32.le_s
                                       select
                                       local.tee $9
                                       i32.lt_s
@@ -43504,13 +43504,13 @@
                                       local.get $8
                                       i32.load $0 offset=4
                                       local.set $9
-                                      i32.const 0
                                       local.get $8
                                       i32.load $0 offset=8
                                       local.tee $10
+                                      i32.const 0
                                       local.get $10
                                       i32.const 0
-                                      i32.gt_s
+                                      i32.le_s
                                       select
                                       local.tee $11
                                       local.get $10
@@ -64307,7 +64307,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  i32.const 0
   local.get $1
   i32.const 0
   local.get $1
@@ -64327,18 +64326,19 @@
   i32.gt_s
   select
   local.tee $2
+  i32.const 0
   local.get $2
   i32.const 0
-  i32.gt_s
+  i32.le_s
   select
   i32.const 1
   i32.shl
   local.set $3
-  i32.const 0
-  local.get $2
   local.get $2
   i32.const 0
-  i32.lt_s
+  local.get $2
+  i32.const 0
+  i32.ge_s
   select
   i32.const 1
   i32.shl

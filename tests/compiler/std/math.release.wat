@@ -231,14 +231,14 @@
    i32.const 1023
    i32.gt_s
    if (result f64)
+    i32.const 1023
     local.get $1
     i32.const 1023
     i32.sub
     local.tee $1
-    i32.const 1023
     local.get $1
     i32.const 1023
-    i32.lt_s
+    i32.ge_s
     select
     local.set $1
     local.get $0
@@ -263,14 +263,14 @@
     i32.const -1022
     i32.lt_s
     if (result f64)
+     i32.const -1022
      local.get $1
      i32.const 969
      i32.add
      local.tee $1
-     i32.const -1022
      local.get $1
      i32.const -1022
-     i32.gt_s
+     i32.le_s
      select
      local.set $1
      local.get $0
@@ -484,14 +484,14 @@
     i32.const 127
     i32.gt_s
     if (result f32)
+     i32.const 127
      local.get $3
      i32.const 127
      i32.sub
      local.tee $3
-     i32.const 127
      local.get $3
      i32.const 127
-     i32.lt_s
+     i32.ge_s
      select
      local.set $3
      local.get $0
@@ -516,14 +516,14 @@
      i32.const -126
      i32.lt_s
      if (result f32)
+      i32.const -126
       local.get $3
       i32.const 102
       i32.add
       local.tee $3
-      i32.const -126
       local.get $3
       i32.const -126
-      i32.gt_s
+      i32.le_s
       select
       local.set $3
       local.get $0
@@ -5596,13 +5596,13 @@
      br_if $~lib/util/math/exp2_lut|inlined.0
      drop
     end
-    i32.const 0
     local.get $3
+    i32.const 0
     local.get $4
     i64.const 1
     i64.shl
     i64.const -9143996093422370816
-    i64.gt_u
+    i64.le_u
     select
     local.set $3
    end

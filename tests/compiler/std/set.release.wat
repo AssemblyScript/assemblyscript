@@ -271,11 +271,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -535,11 +535,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -1854,11 +1854,11 @@
     unreachable
    end
    block $__inlined_func$~lib/rt/itcms/__renew
-    local.get $1
     i32.const 8
     local.get $1
+    local.get $1
     i32.const 8
-    i32.gt_u
+    i32.le_u
     select
     local.get $2
     i32.shl
@@ -2566,11 +2566,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.const 8
    local.get $6
+   local.get $6
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    local.tee $8
    i32.const 0
@@ -4180,11 +4180,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.const 8
    local.get $6
+   local.get $6
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    local.tee $8
    i32.const 0
@@ -5797,11 +5797,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.const 8
    local.get $6
+   local.get $6
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 1
    i32.shl
@@ -7417,11 +7417,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.const 8
    local.get $6
+   local.get $6
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 1
    i32.shl
@@ -9017,11 +9017,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.const 8
    local.get $6
+   local.get $6
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 2
    i32.shl
@@ -10589,11 +10589,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $6
    i32.const 8
    local.get $6
+   local.get $6
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 2
    i32.shl
@@ -12063,11 +12063,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $4
    i32.const 8
    local.get $4
+   local.get $4
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 3
    i32.shl
@@ -13112,11 +13112,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $4
    i32.const 8
    local.get $4
+   local.get $4
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 3
    i32.shl
@@ -14304,11 +14304,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $5
    i32.const 8
    local.get $5
+   local.get $5
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 2
    i32.shl
@@ -15757,11 +15757,11 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $4
    i32.const 8
    local.get $4
+   local.get $4
    i32.const 8
-   i32.gt_u
+   i32.le_u
    select
    i32.const 3
    i32.shl
