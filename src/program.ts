@@ -3759,6 +3759,10 @@ export class Function extends TypedElement {
     this.breakStack = breakStack = null;
     this.breakLabel = null;
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
+    this.addDebugInfo(module, ref);
+  }
+
+  addDebugInfo(module: Module, ref: FunctionRef): void {
     if (this.program.options.sourceMap) {
       let debugLocations = this.debugLocations;
       for (let i = 0, k = debugLocations.length; i < k; ++i) {

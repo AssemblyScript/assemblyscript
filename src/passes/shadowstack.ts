@@ -187,6 +187,8 @@ export class ShadowStackPass extends Pass {
   exportMap: Map<string,i32[]> = new Map();
   /** Compiler reference. */
   compiler: Compiler;
+  /** Re-add function due to local count change */
+  modifiedFunction: Array<FunctionRef> = [];
 
   constructor(compiler: Compiler) {
     super(compiler.module);
@@ -477,7 +479,8 @@ export class ShadowStackPass extends Pass {
     let moduleRef = this.module.ref;
     _BinaryenRemoveFunction(moduleRef, name);
     let cArr = allocPtrArray(vars);
-    _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
+    let newFuncRef = _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
+    this.modifiedFunction.push(newFuncRef);
     _free(cArr);
   }
 

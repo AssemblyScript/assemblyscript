@@ -54,7 +54,8 @@ import {
   ExpressionRunnerFlags,
   isConstZero,
   isConstNegZero,
-  isConstExpressionNaN
+  isConstExpressionNaN,
+  getFunctionName,
 } from "./module";
 
 import {
@@ -706,6 +707,18 @@ export class Compiler extends DiagnosticEmitter {
     // Run custom passes
     if (hasShadowStack) {
       this.shadowStack.walkModule();
+      const modifiedFunction = this.shadowStack.modifiedFunction;
+      for (let i = 0, k = modifiedFunction.length; i < k; i++) {
+        const modifiedFunctionRef = modifiedFunction[i];
+        const modifiedFunctionName = getFunctionName(modifiedFunctionRef);
+        if (!modifiedFunctionName) continue;
+        if (!this.program.instancesByName.has(modifiedFunctionName)) continue;
+        const element = this.program.instancesByName.get(modifiedFunctionName);
+        if (element && element.kind == ElementKind.FUNCTION) {
+          const func = <Function>element;
+          func.addDebugInfo(module, modifiedFunctionRef);
+        }
+      }
     }
     if (program.lookup("ASC_RTRACE") != null) {
       new RtraceMemory(this).walkModule();
