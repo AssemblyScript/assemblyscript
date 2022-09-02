@@ -4435,14 +4435,13 @@ export class Parser extends DiagnosticEmitter {
       return false;
     }
     let decoratorArgs = decorator.args;
-    let isBinary = DecoratorKind.isBinaryOperator(decoratorKind);
-    // validate return type
     if (decoratorArgs && decoratorArgs.length == 1) {
       let operatorArg = decoratorArgs[0];
       if (operatorArg.isStringLiteral) {
         // now check only binary operators
         let operator = <StringLiteralExpression>changetype<Node>(operatorArg);
         if (operator.value == "!" || isRelationalBinaryIdentifier(operator.value)) {
+          // validate return type
           var returnType = signature.returnType;
           // relational operators should return boolean type only
           if (returnType.kind == NodeKind.NAMEDTYPE) {
@@ -4455,6 +4454,25 @@ export class Parser extends DiagnosticEmitter {
               );
               // recoverable
             }
+          }
+
+          // validate input parameters and arity
+          var parameters = signature.parameters;
+          let actualNumParams  = parameters.length;
+          let expecedNumParams = 0;
+
+          expecedNumParams += (flags & CommonFlags.STATIC) ? 1 : 0;
+          expecedNumParams += DecoratorKind.isBinaryOperator(decoratorKind) ? 1 : 0;
+
+          if (actualNumParams != expecedNumParams) {
+            // this.error
+            this.error(
+              DiagnosticCode.Expected_0_arguments_but_got_1,
+              signature.range,
+              expecedNumParams.toString(),
+              actualNumParams.toString()
+            );
+            // recoverable
           }
         }
       } else {
@@ -4473,25 +4491,6 @@ export class Parser extends DiagnosticEmitter {
       this.error(
         DiagnosticCode.Expected_0_arguments_but_got_1,
         decorator.range, "1", decoratorArgs ? decoratorArgs.length.toString() : "0"
-      );
-      // recoverable
-    }
-
-    // validate input parameters and arity
-    var parameters = signature.parameters;
-    let actualNumParams  = parameters.length;
-    let expecedNumParams = 0;
-
-    expecedNumParams += (flags & CommonFlags.STATIC) ? 1 : 0;
-    expecedNumParams += isBinary ? 1 : 0;
-
-    if (actualNumParams != expecedNumParams) {
-      // this.error
-      this.error(
-        DiagnosticCode.Expected_0_arguments_but_got_1,
-        signature.range,
-        expecedNumParams.toString(),
-        actualNumParams.toString()
       );
       // recoverable
     }
