@@ -2,10 +2,22 @@
   "asc_flags": [
   ],
   "stderr": [
+    "TS1141: String literal expected",
+    "TS1141: String literal expected",
+    "TS2554: Expected 1 arguments, but got 2",
+    "TS2554: Expected 1 arguments, but got 0",
+    "TS2554: Expected 1 arguments, but got 0",
     "TS2322: Type '~lib/string/String | null' is not assignable to type '~lib/string/String'",
     "a.b + a.c",
     "TS2322: Type '~lib/string/String | null' is not assignable to type '~lib/string/String'",
     "a.c + a.b",
+    "AS238: Only 'bool' accepted for return type of relational operators",
+    "AS238: Only 'bool' accepted for return type of relational operators",
+    "AS238: Only 'bool' accepted for return type of relational operators",
+    "TS2554: Expected 1 arguments, but got 2",
+    "TS2554: Expected 1 arguments, but got 0",
+    "TS2554: Expected 2 arguments, but got 3",
+    "TS2554: Expected 2 arguments, but got 1",
     "EOF"
   ]
 }
