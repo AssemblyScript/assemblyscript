@@ -1,6 +1,6 @@
 var str = "𐐷hi𤭢";
-var ÀÀ: string = "ÀÀ"; // two bytes utf8 variable
-var 变量: string = "变量"; //three bytes utf8 variable
+var ÀÀ: string = "ÀÀ"; // two bytes utf8 character
+var 变量: string = "变量"; // three bytes utf8 character
 assert(ÀÀ == "ÀÀ");
 assert(变量 == "变量");
 // utf8  : f0 90 90 b7 68 69 f0 a4 ad a2 [00]
