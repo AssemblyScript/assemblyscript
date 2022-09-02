@@ -3693,17 +3693,15 @@ export class Resolver extends DiagnosticEmitter {
         }
       }
       // validate input parameters and arity
-      var parameters = signature.parameterTypes;
-      let actualNumParams = parameters.length;
+      let actualNumParams = signature.parameterTypes.length;
       let expecedNumParams = 0;
-
       expecedNumParams += overload.is(CommonFlags.STATIC) ? 1 : 0;
       expecedNumParams += overloadPrototype.hasDecorator(DecoratorFlags.OPERATOR_BINARY) ? 1 : 0;
 
       if (actualNumParams != expecedNumParams) {
         if (reportMode == ReportMode.REPORT) {
           let funType = overloadPrototype.functionTypeNode;
-          let funParams = overloadPrototype.functionTypeNode.parameters;
+          let funParams = funType.parameters;
           this.error(
             DiagnosticCode.Expected_0_arguments_but_got_1,
             actualNumParams != 0
