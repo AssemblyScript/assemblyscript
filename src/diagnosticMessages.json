@@ -49,6 +49,7 @@
   "Only variables, functions and enums become WebAssembly module exports.": 235,
   "Literal '{0}' does not fit into 'i64' or 'u64' types.": 236,
   "Index signature accessors in type '{0}' differ in types.": 237,
+  "Only '{0}' accepted for return type of relational operators": 238,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,
@@ -139,6 +140,7 @@
   "Super calls are not permitted outside constructors or in nested functions inside constructors.": 2337,
   "Property '{0}' does not exist on type '{1}'.": 2339,
   "Property '{0}' is private and only accessible within class '{1}'.": 2341,
+  "Argument of type '{0}' is not assignable to parameter of type '{1}'.": 2345,
   "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": 2349,
   "This expression is not constructable.": 2351,
   "A function whose declared type is not 'void' must return a value.": 2355,

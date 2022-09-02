@@ -16,6 +16,7 @@
 
 import {
   CommonFlags,
+  CommonNames,
   PATH_DELIMITER,
   LIBRARY_PREFIX,
   LIBRARY_SUBST
@@ -775,6 +776,14 @@ export abstract class Node {
     return false;
   }
 
+  /** Tests if this node is a literal of a string kind. */
+  get isStringLiteral(): bool {
+    if (this.kind == NodeKind.LITERAL) {
+      return (<LiteralExpression>changetype<Node>(this)).literalKind == LiteralKind.STRING;
+    }
+    return false;
+  }
+
   /** Tests whether this node is guaranteed to compile to a constant value. */
   get compilesToConst(): bool {
     switch (this.kind) {
@@ -897,6 +906,10 @@ export class NamedTypeNode extends TypeNode {
     var typeArguments = this.typeArguments;
     return typeArguments != null && typeArguments.length > 0;
   }
+  /** Checks if this type node contains specific identifier name. */
+  contains(name: string): bool {
+    return this.name.identifier.text == name;
+  }
 }
 
 /** Represents a function type. */
@@ -977,23 +990,41 @@ export class ParameterNode extends Node {
 
 /** Built-in decorator kinds. */
 export enum DecoratorKind {
-  CUSTOM,
-  GLOBAL,
+  // operators (don't rearrange this group)
   OPERATOR,
   OPERATOR_BINARY,
   OPERATOR_PREFIX,
   OPERATOR_POSTFIX,
+
+  LAZY,
+  GLOBAL,
+  INLINE,
+  BUILTIN,
   UNMANAGED,
   FINAL,
-  INLINE,
   EXTERNAL,
   EXTERNAL_JS,
-  BUILTIN,
-  LAZY,
-  UNSAFE
+  UNSAFE,
+  CUSTOM
 }
 
 export namespace DecoratorKind {
+
+  export function isAnyOperator(kind: DecoratorKind): bool {
+    return kind >= DecoratorKind.OPERATOR && kind <= DecoratorKind.OPERATOR_POSTFIX;
+  }
+
+  export function isBinaryOperator(kind: DecoratorKind): bool {
+    return kind == DecoratorKind.OPERATOR || kind == DecoratorKind.OPERATOR_BINARY;
+  }
+
+  export function isUnaryOperator(kind: DecoratorKind): bool {
+    return kind == DecoratorKind.OPERATOR_PREFIX || kind == DecoratorKind.OPERATOR_POSTFIX;
+  }
+
+  export function isExternal(kind: DecoratorKind): bool {
+    return kind == DecoratorKind.EXTERNAL || kind == DecoratorKind.EXTERNAL_JS;
+  }
 
   /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
   export function fromNode(nameNode: Expression): DecoratorKind {
