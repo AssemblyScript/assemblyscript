@@ -4445,7 +4445,7 @@ export class Parser extends DiagnosticEmitter {
           var returnType = signature.returnType;
           // relational operators should return boolean type only
           if (returnType.kind == NodeKind.NAMEDTYPE) {
-            let ret = <NamedTypeNode>changetype<Node>(returnType);
+            let ret = <NamedTypeNode>returnType;
             if (!ret.contains(CommonNames.bool)) {
               this.errorRelated(
                 DiagnosticCode.Only_0_accepted_for_return_type_of_relational_operators,
