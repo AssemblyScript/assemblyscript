@@ -4439,7 +4439,7 @@ export class Parser extends DiagnosticEmitter {
       let operatorArg = decoratorArgs[0];
       if (operatorArg.isStringLiteral) {
         // now check only binary operators
-        let operator = <StringLiteralExpression>changetype<Node>(operatorArg);
+        let operator = <StringLiteralExpression>operatorArg;
         if (operator.value == "!" || isRelationalBinaryIdentifier(operator.value)) {
           // validate return type
           var returnType = signature.returnType;
