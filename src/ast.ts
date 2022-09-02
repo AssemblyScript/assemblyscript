@@ -16,7 +16,6 @@
 
 import {
   CommonFlags,
-  CommonNames,
   PATH_DELIMITER,
   LIBRARY_PREFIX,
   LIBRARY_SUBST

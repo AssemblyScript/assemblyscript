@@ -54,7 +54,6 @@ import {
   FunctionExpression,
   IdentifierExpression,
   StringLiteralExpression,
-  LiteralExpression,
 
   Statement,
   BlockStatement,
@@ -92,9 +91,7 @@ import {
   WhileStatement,
   ModuleDeclaration,
 
-  mangleInternalPath,
-  MethodDeclaration,
-  LiteralKind
+  mangleInternalPath
 } from "./ast";
 
 /** Represents a dependee. */
