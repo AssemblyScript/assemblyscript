@@ -32,10 +32,10 @@
  (global $resolve-unary/b (mut i32) (i32.const 1))
  (global $resolve-unary/foo (mut i32) (i32.const 0))
  (global $resolve-unary/bar (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 2816))
- (global $~lib/memory/__data_end i32 (i32.const 2868))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19252))
- (global $~lib/memory/__heap_base i32 (i32.const 19252))
+ (global $~lib/rt/__rtti_base i32 (i32.const 2784))
+ (global $~lib/memory/__data_end i32 (i32.const 2836))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19220))
+ (global $~lib/memory/__heap_base i32 (i32.const 19220))
  (memory $0 1)
  (data (i32.const 12) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
  (data (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
@@ -60,16 +60,15 @@
  (data (i32.const 2412) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00-\002\00\00\00\00\00\00\00\00\00")
  (data (i32.const 2444) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00+\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 2476) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00-\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2508) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00!\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2540) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00~\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2572) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00+\00+\00i\00\00\00\00\00\00\00")
- (data (i32.const 2604) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00-\00-\00i\00\00\00\00\00\00\00")
- (data (i32.const 2636) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\00+\00+\00\00\00\00\00\00\00")
- (data (i32.const 2668) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\00-\00-\00\00\00\00\00\00\00")
- (data (i32.const 2700) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00n\00u\00m\00b\00e\00r\00")
- (data (i32.const 2732) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2764) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 2816) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2508) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00~\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2540) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00+\00+\00i\00\00\00\00\00\00\00")
+ (data (i32.const 2572) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00-\00-\00i\00\00\00\00\00\00\00")
+ (data (i32.const 2604) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\00+\00+\00\00\00\00\00\00\00")
+ (data (i32.const 2636) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\00-\00-\00\00\00\00\00\00\00")
+ (data (i32.const 2668) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00n\00u\00m\00b\00e\00r\00")
+ (data (i32.const 2700) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2732) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2784) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 2 2 funcref)
  (elem $0 (i32.const 1) $start:resolve-unary~anonymous|0)
  (export "memory" (memory $0))
@@ -2745,10 +2744,10 @@
   local.get $this
  )
  (func $resolve-unary/Foo#not (param $this i32) (result i32)
-  i32.const 2528
+  i32.const 1
  )
  (func $resolve-unary/Foo#bitwise_not (param $this i32) (result i32)
-  i32.const 2560
+  i32.const 2528
  )
  (func $resolve-unary/Foo#postfix_inc (param $this i32) (result i32)
   local.get $this
@@ -2757,16 +2756,16 @@
   local.get $this
  )
  (func $resolve-unary/Bar.prefix_inc (param $a i32) (result i32)
-  i32.const 2592
+  i32.const 2560
  )
  (func $resolve-unary/Bar.prefix_dec (param $a i32) (result i32)
-  i32.const 2624
+  i32.const 2592
  )
  (func $resolve-unary/Bar.postfix_inc (param $a i32) (result i32)
-  i32.const 2656
+  i32.const 2624
  )
  (func $resolve-unary/Bar.postfix_dec (param $a i32) (result i32)
-  i32.const 2688
+  i32.const 2656
  )
  (func $start:resolve-unary~anonymous|0
   nop
@@ -2867,8 +2866,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 19280
-   i32.const 19328
+   i32.const 19248
+   i32.const 19296
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3270,27 +3269,11 @@
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store $0 offset=12
-  local.get $1
-  call $resolve-unary/Foo#not
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=8
-  local.get $1
-  call $~lib/string/String#toString
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
   i32.store $0
   local.get $1
-  i32.const 2528
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store $0 offset=4
-  local.get $1
-  call $~lib/string/String.__eq
+  call $resolve-unary/Foo#not
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -3318,7 +3301,7 @@
   local.get $1
   i32.store $0
   local.get $1
-  i32.const 2560
+  i32.const 2528
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -3405,7 +3388,7 @@
   local.get $1
   i32.store $0
   local.get $1
-  i32.const 2592
+  i32.const 2560
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -3439,7 +3422,7 @@
   local.get $1
   i32.store $0
   local.get $1
-  i32.const 2624
+  i32.const 2592
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -3475,7 +3458,7 @@
   local.get $1
   i32.store $0
   local.get $1
-  i32.const 2656
+  i32.const 2624
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -3511,7 +3494,7 @@
   local.get $1
   i32.store $0
   local.get $1
-  i32.const 2688
+  i32.const 2656
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -3529,7 +3512,7 @@
   end
   i32.const 1
   drop
-  i32.const 2720
+  i32.const 2688
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -3537,9 +3520,9 @@
   local.get $1
   call $~lib/string/String#get:length
   drop
-  i32.const 2752
+  i32.const 2720
   drop
-  i32.const 2784
+  i32.const 2752
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1

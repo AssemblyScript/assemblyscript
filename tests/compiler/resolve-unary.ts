@@ -68,8 +68,8 @@ class Foo {
     return this;
   }
   @operator.prefix("!")
-  not(): string {
-    return "!";
+  not(): bool {
+    return true;
   }
   @operator.prefix("~")
   bitwise_not(): string {
@@ -109,9 +109,9 @@ assert(
   foo
 );
 assert(
-  (!foo).toString()
+  !foo
   ==
-  "!"
+  true
 );
 assert(
   (~foo).toString()

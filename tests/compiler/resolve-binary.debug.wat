@@ -46,10 +46,10 @@
  (global $resolve-binary/bar (mut i32) (i32.const 0))
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
  (global $resolve-binary/baz (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 10192))
- (global $~lib/memory/__data_end i32 (i32.const 10244))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 26628))
- (global $~lib/memory/__heap_base i32 (i32.const 26628))
+ (global $~lib/rt/__rtti_base i32 (i32.const 10000))
+ (global $~lib/memory/__data_end i32 (i32.const 10052))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 26436))
+ (global $~lib/memory/__heap_base i32 (i32.const 26436))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00\00\00\00\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00\00\00")
@@ -84,19 +84,13 @@
  (data (i32.const 9708) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\004\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 9740) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\003\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 9772) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00-\001\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9804) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00l\00t\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9836) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00g\00t\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9868) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00l\00e\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9900) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00g\00e\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9932) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00e\00q\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9964) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00n\00e\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9996) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00d\00d\00\00\00\00\00\00\00")
- (data (i32.const 10028) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00s\00u\00b\00\00\00\00\00\00\00")
- (data (i32.const 10060) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00m\00u\00l\00\00\00\00\00\00\00")
- (data (i32.const 10092) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00d\00i\00v\00\00\00\00\00\00\00")
- (data (i32.const 10124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00r\00e\00m\00\00\00\00\00\00\00")
- (data (i32.const 10156) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00p\00o\00w\00\00\00\00\00\00\00")
- (data (i32.const 10192) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 9804) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00d\00d\00\00\00\00\00\00\00")
+ (data (i32.const 9836) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00s\00u\00b\00\00\00\00\00\00\00")
+ (data (i32.const 9868) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00m\00u\00l\00\00\00\00\00\00\00")
+ (data (i32.const 9900) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00d\00i\00v\00\00\00\00\00\00\00")
+ (data (i32.const 9932) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00r\00e\00m\00\00\00\00\00\00\00")
+ (data (i32.const 9964) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00p\00o\00w\00\00\00\00\00\00\00")
+ (data (i32.const 10000) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -5206,43 +5200,55 @@
   local.get $out
  )
  (func $resolve-binary/Foo#lt (param $this i32) (param $other i32) (result i32)
+  local.get $this
+  local.get $other
+  i32.lt_u
+ )
+ (func $resolve-binary/Foo#gt (param $this i32) (param $other i32) (result i32)
+  local.get $this
+  local.get $other
+  i32.gt_u
+ )
+ (func $resolve-binary/Foo#le (param $this i32) (param $other i32) (result i32)
+  local.get $this
+  local.get $other
+  i32.le_u
+ )
+ (func $resolve-binary/Foo#ge (param $this i32) (param $other i32) (result i32)
+  local.get $this
+  local.get $other
+  i32.ge_u
+ )
+ (func $resolve-binary/Foo#eq (param $this i32) (param $other i32) (result i32)
+  local.get $this
+  local.get $other
+  i32.eq
+ )
+ (func $resolve-binary/Foo#ne (param $this i32) (param $other i32) (result i32)
+  local.get $this
+  local.get $other
+  i32.ne
+ )
+ (func $resolve-binary/Foo#add (param $this i32) (param $other i32) (result i32)
   i32.const 9824
  )
  (func $~lib/string/String#toString (param $this i32) (result i32)
   local.get $this
  )
- (func $resolve-binary/Foo#gt (param $this i32) (param $other i32) (result i32)
+ (func $resolve-binary/Foo.sub (param $a i32) (param $b i32) (result i32)
   i32.const 9856
  )
- (func $resolve-binary/Foo#le (param $this i32) (param $other i32) (result i32)
+ (func $resolve-binary/Foo#mul (param $this i32) (param $other i32) (result i32)
   i32.const 9888
  )
- (func $resolve-binary/Foo#ge (param $this i32) (param $other i32) (result i32)
+ (func $resolve-binary/Foo#div (param $this i32) (param $other i32) (result i32)
   i32.const 9920
  )
- (func $resolve-binary/Foo#eq (param $this i32) (param $other i32) (result i32)
+ (func $resolve-binary/Foo#rem (param $this i32) (param $other i32) (result i32)
   i32.const 9952
  )
- (func $resolve-binary/Foo#ne (param $this i32) (param $other i32) (result i32)
-  i32.const 9984
- )
- (func $resolve-binary/Foo#add (param $this i32) (param $other i32) (result i32)
-  i32.const 10016
- )
- (func $resolve-binary/Foo.sub (param $a i32) (param $b i32) (result i32)
-  i32.const 10048
- )
- (func $resolve-binary/Foo#mul (param $this i32) (param $other i32) (result i32)
-  i32.const 10080
- )
- (func $resolve-binary/Foo#div (param $this i32) (param $other i32) (result i32)
-  i32.const 10112
- )
- (func $resolve-binary/Foo#rem (param $this i32) (param $other i32) (result i32)
-  i32.const 10144
- )
  (func $resolve-binary/Foo#pow (param $this i32) (param $other i32) (result i32)
-  i32.const 10176
+  i32.const 9984
  )
  (func $resolve-binary/Bar#add (param $this i32) (param $other i32) (result i32)
   local.get $other
@@ -5355,8 +5361,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 26656
-   i32.const 26704
+   i32.const 26464
+   i32.const 26512
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6400,38 +6406,22 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=12
+  i32.store $0
   local.get $0
   global.get $resolve-binary/foo
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=16
+  i32.store $0 offset=4
   local.get $0
   call $resolve-binary/Foo#lt
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=8
-  local.get $0
-  call $~lib/string/String#toString
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  i32.const 9824
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=4
-  local.get $0
-  call $~lib/string/String.__eq
+  i32.const 0
+  i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 263
+   i32.const 281
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6440,38 +6430,22 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=12
+  i32.store $0
   local.get $0
   global.get $resolve-binary/foo
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=16
+  i32.store $0 offset=4
   local.get $0
   call $resolve-binary/Foo#gt
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=8
-  local.get $0
-  call $~lib/string/String#toString
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  i32.const 9856
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=4
-  local.get $0
-  call $~lib/string/String.__eq
+  i32.const 0
+  i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 268
+   i32.const 286
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6480,38 +6454,22 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=12
+  i32.store $0
   local.get $0
   global.get $resolve-binary/foo
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=16
+  i32.store $0 offset=4
   local.get $0
   call $resolve-binary/Foo#le
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=8
-  local.get $0
-  call $~lib/string/String#toString
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  i32.const 9888
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=4
-  local.get $0
-  call $~lib/string/String.__eq
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 273
+   i32.const 291
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6520,38 +6478,22 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=12
+  i32.store $0
   local.get $0
   global.get $resolve-binary/foo
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=16
+  i32.store $0 offset=4
   local.get $0
   call $resolve-binary/Foo#ge
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=8
-  local.get $0
-  call $~lib/string/String#toString
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  i32.const 9920
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=4
-  local.get $0
-  call $~lib/string/String.__eq
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 278
+   i32.const 296
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6560,38 +6502,22 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=12
+  i32.store $0
   local.get $0
   global.get $resolve-binary/foo
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=16
+  i32.store $0 offset=4
   local.get $0
   call $resolve-binary/Foo#eq
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=8
-  local.get $0
-  call $~lib/string/String#toString
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  i32.const 9952
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=4
-  local.get $0
-  call $~lib/string/String.__eq
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 283
+   i32.const 301
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6600,38 +6526,22 @@
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=12
+  i32.store $0
   local.get $0
   global.get $resolve-binary/foo
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store $0 offset=16
-  local.get $0
-  call $resolve-binary/Foo#ne
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0 offset=8
-  local.get $0
-  call $~lib/string/String#toString
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store $0
-  local.get $0
-  i32.const 9984
-  local.set $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
   i32.store $0 offset=4
   local.get $0
-  call $~lib/string/String.__eq
+  call $resolve-binary/Foo#ne
+  i32.const 0
+  i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 288
+   i32.const 306
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6660,7 +6570,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  i32.const 10016
+  i32.const 9824
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -6671,7 +6581,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 293
+   i32.const 311
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6700,7 +6610,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  i32.const 10048
+  i32.const 9856
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -6711,7 +6621,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 298
+   i32.const 316
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6740,7 +6650,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  i32.const 10080
+  i32.const 9888
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -6751,7 +6661,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 303
+   i32.const 321
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6780,7 +6690,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  i32.const 10112
+  i32.const 9920
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -6791,7 +6701,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 308
+   i32.const 326
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6820,7 +6730,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  i32.const 10144
+  i32.const 9952
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -6831,7 +6741,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 313
+   i32.const 331
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6860,7 +6770,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  i32.const 10176
+  i32.const 9984
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -6871,7 +6781,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 318
+   i32.const 336
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6909,7 +6819,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 336
+   i32.const 354
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6921,7 +6831,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 341
+   i32.const 359
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6943,7 +6853,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 363
+   i32.const 381
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6962,7 +6872,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 366
+   i32.const 384
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -6981,7 +6891,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 369
+   i32.const 387
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -7000,7 +6910,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 372
+   i32.const 390
    i32.const 1
    call $~lib/builtins/abort
    unreachable

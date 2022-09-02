@@ -208,28 +208,46 @@ assert(
 // overloads
 class Foo {
   @operator("<")
-  lt(other: Foo): string {
-    return "lt";
+  lt(other: Foo): bool {
+    return (
+      changetype<usize>(this) <
+      changetype<usize>(other)
+    );
   }
   @operator(">")
-  gt(other: Foo): string {
-    return "gt";
+  gt(other: Foo): bool {
+    return (
+      changetype<usize>(this) >
+      changetype<usize>(other)
+    );
   }
   @operator("<=")
-  le(other: Foo): string {
-    return "le";
+  le(other: Foo): bool {
+    return (
+      changetype<usize>(this) <=
+      changetype<usize>(other)
+    );
   }
   @operator(">=")
-  ge(other: Foo): string {
-    return "ge";
+  ge(other: Foo): bool {
+    return (
+      changetype<usize>(this) >=
+      changetype<usize>(other)
+    );
   }
   @operator("==")
-  eq(other: Foo): string {
-    return "eq";
+  eq(other: Foo): bool {
+    return (
+      changetype<usize>(this) ==
+      changetype<usize>(other)
+    );
   }
   @operator("!=")
-  ne(other: Foo): string {
-    return "ne";
+  ne(other: Foo): bool {
+    return (
+      changetype<usize>(this) !=
+      changetype<usize>(other)
+    );
   }
   @operator("+")
   add(other: Foo): string {
@@ -261,34 +279,34 @@ class Foo {
 }
 var foo = new Foo();
 assert(
-  (foo < foo).toString()
+  (foo < foo)
   ==
-  "lt"
+  false
 );
 assert(
-  (foo > foo).toString()
+  (foo > foo)
   ==
-  "gt"
+  false
 );
 assert(
-  (foo <= foo).toString()
+  foo <= foo
   ==
-  "le"
+  true
 );
 assert(
-  (foo >= foo).toString()
+  foo >= foo
   ==
-  "ge"
+  true
 );
 assert(
-  (foo == foo).toString()
+  foo == foo
   ==
-  "eq"
+  true
 );
 assert(
-  (foo != foo).toString()
+  foo != foo
   ==
-  "ne"
+  false
 );
 assert(
   (foo + foo).toString()
