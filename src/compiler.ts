@@ -5642,7 +5642,7 @@ export class Compiler extends DiagnosticEmitter {
         if (indexedSet.is(CommonFlags.STATIC)) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            indexedSet.identifierNode.range, "static"
+            indexedSet.identifierNode.range, CommonNames.static_
           );
           return this.module.unreachable();
         }
@@ -7172,7 +7172,7 @@ export class Compiler extends DiagnosticEmitter {
           if (indexedGet.is(CommonFlags.STATIC)) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
-              indexedGet.identifierNode.range, "static"
+              indexedGet.identifierNode.range, CommonNames.static_
             );
             return module.unreachable();
           }
@@ -8706,7 +8706,7 @@ export class Compiler extends DiagnosticEmitter {
       classInstance.constructorInstance = instance;
       let members = classInstance.members;
       if (!members) classInstance.members = members = new Map();
-      members.set("constructor", instance.prototype);
+      members.set(CommonNames.constructor, instance.prototype);
 
       let previousFlow = this.currentFlow;
       let flow = instance.flow;

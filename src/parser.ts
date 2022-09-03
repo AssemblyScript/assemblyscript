@@ -9,6 +9,7 @@
 
 import {
   CommonFlags,
+  CommonNames,
   LIBRARY_PREFIX,
   PATH_DELIMITER
 } from "./common";
@@ -389,13 +390,13 @@ export class Parser extends DiagnosticEmitter {
           if (exportEnd) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(exportStart, exportEnd), "export"
+              tn.range(exportStart, exportEnd), CommonNames.export_
             ); // recoverable
           }
           if (declareEnd) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(declareStart, declareEnd), "declare"
+              tn.range(declareStart, declareEnd), CommonNames.declare_
             ); // recoverable
           }
           if (!namespace) {
@@ -1900,7 +1901,7 @@ export class Parser extends DiagnosticEmitter {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "declare"
+          tn.range(), CommonNames.declare_
         );
       } else {
         if (contextIsAmbient) {
@@ -1925,7 +1926,7 @@ export class Parser extends DiagnosticEmitter {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "public"
+          tn.range(), CommonNames.public_
         );
       } else {
         flags |= CommonFlags.PUBLIC;
@@ -1937,7 +1938,7 @@ export class Parser extends DiagnosticEmitter {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "private"
+          tn.range(), CommonNames.private_
         );
       } else {
         flags |= CommonFlags.PRIVATE;
@@ -1949,7 +1950,7 @@ export class Parser extends DiagnosticEmitter {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "protected"
+          tn.range(), CommonNames.protected_
         );
       } else {
         flags |= CommonFlags.PROTECTED;
@@ -1967,7 +1968,7 @@ export class Parser extends DiagnosticEmitter {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "static"
+          tn.range(), CommonNames.static_
         );
       } else {
         flags |= CommonFlags.STATIC;
@@ -1981,7 +1982,7 @@ export class Parser extends DiagnosticEmitter {
         if (isInterface || !parent.is(CommonFlags.ABSTRACT)) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(), "abstract"
+            tn.range(), CommonNames.abstract_
           );
         } else {
           flags |= CommonFlags.ABSTRACT;
@@ -1999,7 +2000,7 @@ export class Parser extends DiagnosticEmitter {
       if (isInterface || parent.extendsType == null) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(), "override"
+          tn.range(), CommonNames.override_
         );
       } else {
         flags |= CommonFlags.OVERRIDE;
@@ -2045,7 +2046,7 @@ export class Parser extends DiagnosticEmitter {
           if (flags & CommonFlags.READONLY) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(readonlyStart, readonlyEnd), "readonly"
+              tn.range(readonlyStart, readonlyEnd), CommonNames.readonly_
             ); // recoverable
           }
         } else {
@@ -2061,7 +2062,7 @@ export class Parser extends DiagnosticEmitter {
           if (flags & CommonFlags.READONLY) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(readonlyStart, readonlyEnd), "readonly"
+              tn.range(readonlyStart, readonlyEnd), CommonNames.readonly_
             ); // recoverable
           }
         } else {
@@ -2074,19 +2075,19 @@ export class Parser extends DiagnosticEmitter {
         if (flags & CommonFlags.STATIC) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(staticStart, staticEnd), "static"
+            tn.range(staticStart, staticEnd), CommonNames.static_
           ); // recoverable
         }
         if (flags & CommonFlags.ABSTRACT) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(abstractStart, abstractEnd), "abstract"
+            tn.range(abstractStart, abstractEnd), CommonNames.abstract_
           ); // recoverable
         }
         if (flags & CommonFlags.READONLY) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(readonlyStart, readonlyEnd), "readonly"
+            tn.range(readonlyStart, readonlyEnd), CommonNames.readonly_
           ); // recoverable
         }
       }
@@ -2103,35 +2104,35 @@ export class Parser extends DiagnosticEmitter {
         if (flags & CommonFlags.PUBLIC) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "public"
+            tn.range(accessStart, accessEnd), CommonNames.public_
           ); // recoverable
         } else if (flags & CommonFlags.PROTECTED) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "protected"
+            tn.range(accessStart, accessEnd), CommonNames.protected_
           ); // recoverable
         } else if (flags & CommonFlags.PRIVATE) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(accessStart, accessEnd), "private"
+            tn.range(accessStart, accessEnd), CommonNames.private_
           ); // recoverable
         }
         if (flags & CommonFlags.STATIC) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(staticStart, staticEnd), "static"
+            tn.range(staticStart, staticEnd), CommonNames.static_
           ); // recoverable
         }
         if (flags & CommonFlags.OVERRIDE) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(overrideStart, overrideEnd), "override"
+            tn.range(overrideStart, overrideEnd), CommonNames.override_
           );
         }
         if (flags & CommonFlags.ABSTRACT) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(abstractStart, abstractEnd), "abstract"
+            tn.range(abstractStart, abstractEnd), CommonNames.abstract_
           ); // recoverable
         }
         let retIndex = this.parseIndexSignature(tn, flags, decorators);
@@ -2139,7 +2140,7 @@ export class Parser extends DiagnosticEmitter {
           if (flags & CommonFlags.READONLY) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
-              tn.range(readonlyStart, readonlyEnd), "readonly"
+              tn.range(readonlyStart, readonlyEnd), CommonNames.readonly_
             ); // recoverable
           }
           return null;
@@ -2182,7 +2183,7 @@ export class Parser extends DiagnosticEmitter {
       if (flags & CommonFlags.DECLARE) {
         this.error(
           DiagnosticCode._0_modifier_cannot_appear_on_class_elements_of_this_kind,
-          tn.range(declareStart, declareEnd), "declare"
+          tn.range(declareStart, declareEnd), CommonNames.declare_
         ); // recoverable
       }
 
@@ -2232,10 +2233,10 @@ export class Parser extends DiagnosticEmitter {
             name.range
           );
         }
-      } else if (name.text == "constructor") {
+      } else if (name.text == CommonNames.constructor) {
         this.error(
           DiagnosticCode._0_keyword_cannot_be_used_here,
-          name.range, "constructor"
+          name.range, CommonNames.constructor
         );
       }
 
@@ -2337,7 +2338,7 @@ export class Parser extends DiagnosticEmitter {
       if (flags & CommonFlags.ABSTRACT) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
-          tn.range(abstractStart, abstractEnd), "abstract"
+          tn.range(abstractStart, abstractEnd), CommonNames.abstract_
         ); // recoverable
       }
 

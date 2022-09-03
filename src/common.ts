@@ -159,6 +159,16 @@ export namespace CommonNames {
   export const this_ = "this";
   export const super_ = "super";
   export const constructor = "constructor";
+  // modifiers
+  export const abstract_ = "abstract";
+  export const declare_ = "declare";
+  export const export_ = "export";
+  export const static_ = "static";
+  export const readonly_ = "readonly";
+  export const override_ = "override";
+  export const public_ = "public";
+  export const private_ = "private";
+  export const protected_ = "protected";
   // constants
   export const ASC_TARGET = "ASC_TARGET";
   export const ASC_RUNTIME = "ASC_RUNTIME";

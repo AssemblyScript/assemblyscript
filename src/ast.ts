@@ -16,6 +16,7 @@
 
 import {
   CommonFlags,
+  CommonNames,
   PATH_DELIMITER,
   LIBRARY_PREFIX,
   LIBRARY_SUBST
@@ -1285,7 +1286,7 @@ export class ConstructorExpression extends IdentifierExpression {
     /** Source range. */
     range: Range
   ) {
-    super("constructor", false, range);
+    super(CommonNames.constructor, false, range);
     this.kind = NodeKind.CONSTRUCTOR;
   }
 }
@@ -1394,7 +1395,7 @@ export class NullExpression extends IdentifierExpression {
     /** Source range. */
     range: Range
   ) {
-    super("null", false, range);
+    super(CommonNames.null_, false, range);
     this.kind = NodeKind.NULL;
   }
 }
@@ -1497,7 +1498,7 @@ export class SuperExpression extends IdentifierExpression {
     /** Source range. */
     range: Range
   ) {
-    super("super", false, range);
+    super(CommonNames.super_, false, range);
     this.kind = NodeKind.SUPER;
   }
 }
@@ -1526,7 +1527,7 @@ export class ThisExpression extends IdentifierExpression {
     /** Source range. */
     range: Range
   ) {
-    super("this", false, range);
+    super(CommonNames.this_, false, range);
     this.kind = NodeKind.THIS;
   }
 }
@@ -1537,7 +1538,7 @@ export class TrueExpression extends IdentifierExpression {
     /** Source range. */
     range: Range
   ) {
-    super("true", false, range);
+    super(CommonNames.true_, false, range);
     this.kind = NodeKind.TRUE;
   }
 }
@@ -1548,7 +1549,7 @@ export class FalseExpression extends IdentifierExpression {
     /** Source range. */
     range: Range
   ) {
-    super("false", false, range);
+    super(CommonNames.false_, false, range);
     this.kind = NodeKind.FALSE;
   }
 }
