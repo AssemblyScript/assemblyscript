@@ -3465,8 +3465,7 @@ export class Resolver extends DiagnosticEmitter {
           overloadKind,
           overloadPrototype,
           operatorInstance,
-          instance,
-          reportMode
+          instance
         );
       }
 
@@ -3634,8 +3633,7 @@ export class Resolver extends DiagnosticEmitter {
     overloadKind: OperatorKind,
     overloadPrototype: FunctionPrototype,
     overload: Function,
-    instance: Class,
-    reportMode: ReportMode
+    instance: Class
   ): void {
     var logical = false;
     var indexAccessors = false;
