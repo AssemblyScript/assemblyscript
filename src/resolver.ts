@@ -38,8 +38,7 @@ import {
   IndexSignature,
   isTypedElement,
   InterfacePrototype,
-  DeclaredElement,
-  DecoratorFlags
+  DeclaredElement
 } from "./program";
 
 import {
