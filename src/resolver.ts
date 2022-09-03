@@ -3656,12 +3656,24 @@ export class Resolver extends DiagnosticEmitter {
         case OperatorKind.GT:
         case OperatorKind.GE:
         case OperatorKind.NOT: {
-          // verify boolean return type
+          // verify boolean return type for logical operators
           if (!returnType.isBooleanValue) {
             this.errorRelated(
-              DiagnosticCode.Only_0_accepted_for_return_type_of_relational_operators,
+              DiagnosticCode.Only_0_accepted_for_return_type_of_1_operators,
               overloadPrototype.functionTypeNode.returnType.range,
-              arg.range, CommonNames.bool
+              arg.range, CommonNames.bool, "relational"
+            );
+          }
+          break;
+        }
+        case OperatorKind.INDEXED_SET:
+        case OperatorKind.UNCHECKED_INDEXED_SET: {
+          // verify void return type for indexed set operators
+          if (returnType != Type.void) {
+            this.errorRelated(
+              DiagnosticCode.Only_0_accepted_for_return_type_of_1_operators,
+              overloadPrototype.functionTypeNode.returnType.range,
+              arg.range, CommonNames.void_, "indexed set"
             );
           }
           break;
