@@ -18,10 +18,10 @@
    local.get $0
    i32.const 20
    i32.sub
-   i32.load offset=12
+   i32.load $0 offset=12
    local.tee $2
    i32.const 1072
-   i32.load
+   i32.load $0
    i32.le_u
    if
     loop $do-loop|0
@@ -34,7 +34,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|0
      end
@@ -46,10 +46,10 @@
    local.get $0
    i32.const 20
    i32.sub
-   i32.load offset=12
+   i32.load $0 offset=12
    local.tee $2
    i32.const 1072
-   i32.load
+   i32.load $0
    i32.le_u
    if
     loop $do-loop|02
@@ -62,7 +62,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|02
      end
@@ -75,10 +75,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|06
@@ -93,7 +93,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|06
      end
@@ -111,10 +111,10 @@
     local.get $1
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|09
@@ -129,7 +129,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|09
      end
@@ -144,10 +144,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|014
@@ -162,7 +162,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|014
      end
@@ -180,10 +180,10 @@
     local.get $1
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|017
@@ -198,7 +198,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|017
      end
@@ -213,10 +213,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|021
@@ -231,7 +231,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|021
      end
@@ -250,10 +250,10 @@
     local.get $1
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|024
@@ -268,7 +268,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|024
      end
@@ -283,10 +283,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|028
@@ -301,7 +301,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|028
      end
@@ -319,10 +319,10 @@
     local.get $1
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|031
@@ -337,7 +337,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|031
      end
@@ -352,10 +352,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|034
@@ -370,7 +370,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|034
      end
@@ -389,10 +389,10 @@
     local.get $1
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|037
@@ -407,7 +407,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|037
      end
@@ -422,10 +422,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $2
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|040
@@ -440,7 +440,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $2
       br_if $do-loop|040
      end
@@ -458,10 +458,10 @@
     local.get $1
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $1
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|043
@@ -476,7 +476,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $1
       br_if $do-loop|043
      end
@@ -490,10 +490,10 @@
    local.get $0
    i32.const 20
    i32.sub
-   i32.load offset=12
+   i32.load $0 offset=12
    local.tee $1
    i32.const 1072
-   i32.load
+   i32.load $0
    i32.le_u
    if
     loop $do-loop|046
@@ -506,7 +506,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $1
       br_if $do-loop|046
      end
@@ -518,10 +518,10 @@
    local.get $0
    i32.const 20
    i32.sub
-   i32.load offset=12
+   i32.load $0 offset=12
    local.tee $1
    i32.const 1072
-   i32.load
+   i32.load $0
    i32.le_u
    if
     loop $do-loop|049
@@ -534,7 +534,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $1
       br_if $do-loop|049
      end
@@ -547,10 +547,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $1
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|053
@@ -565,7 +565,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $1
       br_if $do-loop|053
      end
@@ -577,7 +577,7 @@
   end
   if
    local.get $0
-   i32.load
+   i32.load $0
    drop
   end
   local.get $0
@@ -586,10 +586,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $1
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|057
@@ -604,7 +604,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $1
       br_if $do-loop|057
      end
@@ -623,10 +623,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $1
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|060
@@ -641,7 +641,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $1
       br_if $do-loop|060
      end
@@ -656,10 +656,10 @@
     local.get $0
     i32.const 20
     i32.sub
-    i32.load offset=12
+    i32.load $0 offset=12
     local.tee $1
     i32.const 1072
-    i32.load
+    i32.load $0
     i32.le_u
     if
      loop $do-loop|064
@@ -674,7 +674,7 @@
       i32.shl
       i32.const 1076
       i32.add
-      i32.load offset=4
+      i32.load $0 offset=4
       local.tee $1
       br_if $do-loop|064
      end
@@ -691,10 +691,10 @@
      local.get $0
      i32.const 20
      i32.sub
-     i32.load offset=12
+     i32.load $0 offset=12
      local.tee $1
      i32.const 1072
-     i32.load
+     i32.load $0
      i32.le_u
      if
       loop $do-loop|067
@@ -709,7 +709,7 @@
        i32.shl
        i32.const 1076
        i32.add
-       i32.load offset=4
+       i32.load $0 offset=4
        local.tee $1
        br_if $do-loop|067
       end
@@ -724,7 +724,7 @@
   end
   if
    local.get $0
-   i32.load
+   i32.load $0
    drop
   end
  )
@@ -748,10 +748,10 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $2
   local.get $0
-  i32.store
+  i32.store $0
   local.get $2
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   local.get $1
   call $typenarrow/condiNarrow

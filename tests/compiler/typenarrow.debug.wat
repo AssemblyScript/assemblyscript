@@ -26,13 +26,13 @@
   local.get $ptr
   i32.const 20
   i32.sub
-  i32.load offset=12
+  i32.load $0 offset=12
   local.set $id
   global.get $~lib/rt/__rtti_base
   local.set $rttiBase
   local.get $id
   local.get $rttiBase
-  i32.load
+  i32.load $0
   i32.le_u
   if
    loop $do-loop|0
@@ -50,7 +50,7 @@
     i32.const 8
     i32.mul
     i32.add
-    i32.load offset=4
+    i32.load $0 offset=4
     local.tee $id
     br_if $do-loop|0
    end
@@ -340,7 +340,7 @@
   end
   if
    local.get $v0
-   i32.load
+   i32.load $0
    drop
    local.get $v0
    call $typenarrow/B#b1
@@ -404,7 +404,7 @@
    local.get $v0
    call $typenarrow/B#b1
    local.get $v0
-   i32.load
+   i32.load $0
    drop
   end
  )
@@ -429,10 +429,10 @@
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+  i32.store $0
   global.get $~lib/memory/__stack_pointer
   local.get $1
-  i32.store offset=4
+  i32.store $0 offset=4
   local.get $0
   local.get $1
   call $typenarrow/condiNarrow

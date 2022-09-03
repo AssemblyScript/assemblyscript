@@ -61,8 +61,8 @@
       local.set $1
       local.get $3
       local.get $4
-      i32.load8_u
-      i32.store8
+      i32.load8_u $0
+      i32.store8 $0
       br $while-continue|0
      end
     end
@@ -73,8 +73,8 @@
      if
       local.get $0
       local.get $1
-      i64.load
-      i64.store
+      i64.load $0
+      i64.store $0
       local.get $2
       i32.const 8
       i32.sub
@@ -106,8 +106,8 @@
      local.set $1
      local.get $3
      local.get $4
-     i32.load8_u
-     i32.store8
+     i32.load8_u $0
+     i32.store8 $0
      local.get $2
      i32.const 1
      i32.sub
@@ -146,8 +146,8 @@
       local.get $1
       local.get $2
       i32.add
-      i32.load8_u
-      i32.store8
+      i32.load8_u $0
+      i32.store8 $0
       br $while-continue|3
      end
     end
@@ -165,8 +165,8 @@
       local.get $1
       local.get $2
       i32.add
-      i64.load
-      i64.store
+      i64.load $0
+      i64.store $0
       br $while-continue|4
      end
     end
@@ -183,8 +183,8 @@
      local.get $1
      local.get $2
      i32.add
-     i32.load8_u
-     i32.store8
+     i32.load8_u $0
+     i32.store8 $0
      br $while-continue|5
     end
    end
@@ -194,16 +194,16 @@
  (func $~start
   i32.const 8
   i64.const 1229782938247303441
-  i64.store
+  i64.store $0
   i32.const 16
   i64.const 2459565876494606882
-  i64.store
+  i64.store $0
   i32.const 24
   i64.const 3689348814741910323
-  i64.store
+  i64.store $0
   i32.const 32
   i64.const 4919131752989213764
-  i64.store
+  i64.store $0
   i32.const 9
   i32.const 24
   i32.const 4
@@ -221,7 +221,7 @@
    unreachable
   end
   i32.const 8
-  i64.load
+  i64.load $0
   i64.const 1229783084848853777
   i64.ne
   if
@@ -249,7 +249,7 @@
    unreachable
   end
   i32.const 8
-  i64.load
+  i64.load $0
   i64.const 1229783084848853777
   i64.ne
   if
@@ -261,7 +261,7 @@
    unreachable
   end
   i32.const 16
-  i64.load
+  i64.load $0
   i64.const 2459565876494606882
   i64.ne
   if
@@ -273,7 +273,7 @@
    unreachable
   end
   i32.const 24
-  i64.load
+  i64.load $0
   i64.const 3689348814741910323
   i64.ne
   if
@@ -285,7 +285,7 @@
    unreachable
   end
   i32.const 32
-  i64.load
+  i64.load $0
   i64.const 4919131752989213764
   i64.ne
   if
@@ -302,7 +302,7 @@
   call $memmove/memmove
   global.set $memmove/dest
   i32.const 8
-  i64.load
+  i64.load $0
   i64.const 4919131679688438545
   i64.ne
   if
@@ -319,7 +319,7 @@
   call $memmove/memmove
   global.set $memmove/dest
   i32.const 8
-  i64.load
+  i64.load $0
   i64.const 4919131679688438545
   i64.ne
   if
@@ -331,7 +331,7 @@
    unreachable
   end
   i32.const 16
-  i64.load
+  i64.load $0
   i64.const 3689348814741910323
   i64.ne
   if
@@ -343,7 +343,7 @@
    unreachable
   end
   i32.const 24
-  i64.load
+  i64.load $0
   i64.const 3694152654344438852
   i64.ne
   if
@@ -355,7 +355,7 @@
    unreachable
   end
   i32.const 32
-  i64.load
+  i64.load $0
   i64.const 4919131752989213764
   i64.ne
   if
