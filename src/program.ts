@@ -2001,7 +2001,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
-        let decorator: DecoratorNode = decorators[i]; // FIXME: why does tsc want a type here?
+        let decorator = decorators[i];
         switch (decorator.decoratorKind) {
           case DecoratorKind.OPERATOR:
           case DecoratorKind.OPERATOR_BINARY:
@@ -2011,7 +2011,7 @@ export class Program extends DiagnosticEmitter {
             let numArgs = args ? args.length : 0;
             if (numArgs == 1) {
               let firstArg = (<Expression[]>decorator.args)[0];
-              if (firstArg.isLiteralKind(LiteralKind.STRING)) {
+              if (firstArg.isStringLiteral) {
                 let text = (<StringLiteralExpression>firstArg).value;
                 let kind = OperatorKind.fromDecorator(decorator.decoratorKind, text);
                 if (kind == OperatorKind.INVALID) {
