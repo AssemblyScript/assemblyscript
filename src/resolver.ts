@@ -3459,7 +3459,7 @@ export class Resolver extends DiagnosticEmitter {
       if (!overloads) instance.overloads = overloads = new Map();
 
       if (reportMode == ReportMode.REPORT) {
-        this.validateOperators(
+        this.validateReturnTypesForOperators(
           overloadPrototype,
           operatorInstance,
           instance
@@ -3626,7 +3626,7 @@ export class Resolver extends DiagnosticEmitter {
     return typeArgumentNodes[0];
   }
 
-  private validateOperators(
+  private validateReturnTypesForOperators(
     overloadPrototype: FunctionPrototype,
     overload: Function,
     instance: Class
@@ -3661,19 +3661,24 @@ export class Resolver extends DiagnosticEmitter {
             this.errorRelated(
               DiagnosticCode.Only_0_accepted_for_return_type_of_1_operators,
               overloadPrototype.functionTypeNode.returnType.range,
-              arg.range, CommonNames.bool, "relational"
+              arg.range,
+              CommonNames.bool,
+              "relational"
             );
           }
           break;
         }
         case OperatorKind.INDEXED_SET:
         case OperatorKind.UNCHECKED_INDEXED_SET: {
-          // verify void return type for indexed set operators
-          if (returnType != Type.void) {
+          // verify 'void' or 'this' return type for indexed set operators
+          if (returnType != Type.void && returnType != instance.type) {
             this.errorRelated(
-              DiagnosticCode.Only_0_accepted_for_return_type_of_1_operators,
+              DiagnosticCode.Only_0_or_1_accepted_for_return_type_of_2_operators,
               overloadPrototype.functionTypeNode.returnType.range,
-              arg.range, CommonNames.void_, "indexed set"
+              arg.range,
+              CommonNames.void_,
+              CommonNames.this_,
+              "indexed set"
             );
           }
           break;
