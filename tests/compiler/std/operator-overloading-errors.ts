@@ -22,7 +22,7 @@ class B {
   @operator none(_: B): bool { return true; }
 
   // Error: extra argument for non-static operator
-  @operator(">=") ge(a: B, _: B): bool { return true; }
+  @inline @operator(">=") ge(a: B, _: B): bool { return true; }
   // Error: none arguments for binary operator
   @operator("<=") le(): bool { return true; }
 
@@ -31,7 +31,7 @@ class B {
 
   // index accessors with wrong args
   @operator("[]=") __set(index: i32): void {}
-  @operator("[]") __get(index: i32, foo: bool): i32 { return 0; }
+  @inline @operator("[]") __get(index: i32, foo: bool): i32 { return 0; }
 }
 
 let b = new B;
