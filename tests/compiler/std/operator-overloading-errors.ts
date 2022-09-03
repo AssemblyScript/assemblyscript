@@ -28,6 +28,10 @@ class B {
 
   @operator(">") static gt(a: B, b: B, c: B): bool { return true; }
   @operator("<") static lt(a: B): bool { return true; }
+
+  // index accessors with wrong args
+  @operator("[]=") __set(index: i32): i32 { return 0; }
+  @operator("[]") __get(index: i32, foo: bool): i32 { return 0; }
 }
 
 new B();

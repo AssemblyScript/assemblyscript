@@ -3459,22 +3459,8 @@ export class Resolver extends DiagnosticEmitter {
       if (!operatorInstance) continue;
       let overloads = instance.overloads;
       if (!overloads) instance.overloads = overloads = new Map();
-      let logical = false;
-      let indexAccessors = false;
+
       switch (overloadKind) {
-        case OperatorKind.EQ:
-        case OperatorKind.NE:
-        case OperatorKind.LT:
-        case OperatorKind.LE:
-        case OperatorKind.GT:
-        case OperatorKind.GE:
-        case OperatorKind.NOT:
-          logical = true;
-          break;
-        case OperatorKind.INDEXED_GET:
-        case OperatorKind.INDEXED_SET:
-          indexAccessors = true;
-          break;
         case OperatorKind.PREFIX_INC:
         case OperatorKind.PREFIX_DEC:
         case OperatorKind.POSTFIX_INC:
@@ -3500,10 +3486,9 @@ export class Resolver extends DiagnosticEmitter {
       }
 
       this.validateOperators(
+        overloadKind,
         overloadPrototype,
         operatorInstance,
-        logical,
-        indexAccessors,
         reportMode
       );
 
@@ -3668,12 +3653,30 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   private validateOperators(
+    overloadKind: OperatorKind,
     overloadPrototype: FunctionPrototype,
     overload: Function,
-    logical: bool,
-    indexAccessors: bool,
     reportMode: ReportMode
   ): void {
+    var logical = false;
+    var indexAccessors = false;
+
+    switch (overloadKind) {
+      case OperatorKind.EQ:
+      case OperatorKind.NE:
+      case OperatorKind.LT:
+      case OperatorKind.LE:
+      case OperatorKind.GT:
+      case OperatorKind.GE:
+      case OperatorKind.NOT:
+        logical = true;
+        break;
+      case OperatorKind.INDEXED_GET:
+      case OperatorKind.INDEXED_SET:
+        indexAccessors = true;
+        break;
+    }
+
     let signature  = overload.signature;
     let returnType = signature.returnType;
     let decorators = overloadPrototype.decoratorNodes!;
@@ -3706,7 +3709,7 @@ export class Resolver extends DiagnosticEmitter {
         if (overload.is(CommonFlags.STATIC)) {
           // TODO error
         }
-        expecedNumParams = 2;
+        expecedNumParams = OperatorKind.INDEXED_SET ? 2 : 1;
       } else {
         expecedNumParams += overload.is(CommonFlags.STATIC) ? 1 : 0;
         expecedNumParams += overloadPrototype.hasDecorator(DecoratorFlags.OPERATOR_BINARY) ? 1 : 0;
