@@ -1,5 +1,17 @@
-import { itoa32, utoa32, itoa64, utoa64, dtoa, itoa_buffered, dtoa_buffered, MAX_DOUBLE_LENGTH } from "./number";
-import { ipow32 } from "../math";
+import {
+  itoa32,
+  utoa32,
+  itoa64,
+  utoa64,
+  dtoa,
+  itoa_buffered,
+  dtoa_buffered,
+  MAX_DOUBLE_LENGTH
+} from "./number";
+
+import {
+  ipow32
+} from "../math";
 
 // All tables are stored as two staged lookup tables (static tries)
 // because the full range of Unicode symbols can't be efficiently
@@ -813,7 +825,7 @@ export function strtod(str: string): f64 {
     code = <u32>load<u16>(ptr += 2);
     --len;
   }
-  if (len <= 0) return 0;
+  if (len <= 0) return 0.0 * sign;
   const capacity = 19; // int(64 * 0.3010)
   var pointed = false;
   var consumed = 0;
@@ -824,7 +836,7 @@ export function strtod(str: string): f64 {
     ptr += 2; --len;
     if (!len && noDigits) return NaN;
     for (pointed = true; (code = <u32>load<u16>(ptr)) == CharCode._0; --position, ptr += 2) --len;
-    if (len <= 0) return 0;
+    if (len <= 0) return 0.0 * sign;
     if (!position && noDigits && code - CharCode._0 >= 10) return NaN;
   }
   for (let digit = code - CharCode._0; digit < 10 || (code == CharCode.DOT && !pointed); digit = code - CharCode._0) {
@@ -841,6 +853,23 @@ export function strtod(str: string): f64 {
 
   if (!pointed) position = consumed;
   return copysign<f64>(scientific(x, position - min(capacity, consumed) + parseExp(ptr, len)), sign);
+}
+
+export function strtob(str: string): bool {
+  var size: usize = str.length << 1;
+  var offset: usize = 0;
+  if (size > 8) {
+    // try trim end whitespaces first
+    while (size && isSpace(load<u16>(changetype<usize>(str) + size - 2))) size -= 2;
+    if (size > 8) {
+      // trim start whitespaces
+      while (offset < size && isSpace(load<u16>(changetype<usize>(str) + offset))) offset += 2;
+      size -= offset;
+    }
+  }
+  if (size != 8) return false;
+  // "true" represents as \00\e\00\u\00\e\00\t (00 65 00 75 00 72 00 74)
+  return load<u64>(changetype<usize>(str) + offset) == 0x0065_0075_0072_0074;
 }
 
 export function joinBooleanArray(dataStart: usize, length: i32, separator: string): string {

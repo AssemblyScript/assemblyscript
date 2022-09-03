@@ -48,7 +48,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.store
+   i32.store $0
    i32.const 1056
    global.set $function-types/i32Adder
    i32.const 2
@@ -56,7 +56,7 @@
    i32.const 1
    i32.const 2
    i32.const 1056
-   i32.load
+   i32.load $0
    call_indirect $0 (type $i32_i32_=>_i32)
    i32.const 3
    i32.ne
@@ -73,7 +73,7 @@
    i64.const 10
    i64.const 20
    i32.const 1152
-   i32.load
+   i32.load $0
    call_indirect $0 (type $i64_i64_=>_i64)
    i64.const 30
    i64.ne
@@ -90,7 +90,7 @@
    f64.const 1.5
    f64.const 2.5
    i32.const 1184
-   i32.load
+   i32.load $0
    call_indirect $0 (type $f64_f64_=>_f64)
    f64.const 4
    f64.ne
@@ -105,13 +105,13 @@
    global.get $~lib/memory/__stack_pointer
    global.get $function-types/i32Adder
    local.tee $1
-   i32.store
+   i32.store $0
    i32.const 2
    global.set $~argumentsLength
    i32.const 2
    i32.const 3
    local.get $1
-   i32.load
+   i32.load $0
    call_indirect $0 (type $i32_i32_=>_i32)
    i32.const 5
    i32.ne
@@ -128,7 +128,7 @@
    i32.const 3
    i32.const 4
    i32.const 1056
-   i32.load
+   i32.load $0
    call_indirect $0 (type $i32_i32_=>_i32)
    i32.const 7
    i32.ne
@@ -142,13 +142,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 1216
-   i32.store
+   i32.store $0
    i32.const 2
    global.set $~argumentsLength
    i32.const 4
    i32.const 5
    i32.const 1216
-   i32.load
+   i32.load $0
    call_indirect $0 (type $i32_i32_=>_i32)
    i32.const 9
    i32.ne
@@ -172,7 +172,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.store
+   i32.store $0
    block $1of1
     block $0of1
      block $outOfRange
@@ -187,14 +187,14 @@
     local.set $0
     global.get $~lib/memory/__stack_pointer
     i32.const 1056
-    i32.store
+    i32.store $0
    end
    i32.const 2
    global.set $~argumentsLength
    i32.const 1
    i32.const 2
    local.get $0
-   i32.load
+   i32.load $0
    call_indirect $0 (type $i32_i32_=>_i32)
    local.set $0
    global.get $~lib/memory/__stack_pointer
@@ -214,13 +214,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 1056
-   i32.store
+   i32.store $0
    i32.const 2
    global.set $~argumentsLength
    i32.const 1
    i32.const 2
    i32.const 1056
-   i32.load
+   i32.load $0
    call_indirect $0 (type $i32_i32_=>_i32)
    i32.const 3
    i32.ne

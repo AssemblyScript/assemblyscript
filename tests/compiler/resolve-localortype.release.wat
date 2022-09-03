@@ -26,7 +26,7 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $1
   local.get $0
-  i32.store
+  i32.store $0
   local.get $1
   i32.const 4
   i32.add

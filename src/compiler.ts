@@ -52,7 +52,9 @@ import {
   SideEffects,
   SwitchBuilder,
   ExpressionRunnerFlags,
-  isConstZero
+  isConstZero,
+  isConstNegZero,
+  isConstExpressionNaN
 } from "./module";
 
 import {
@@ -355,16 +357,26 @@ export const enum RuntimeFeatures {
   setArgumentsLength = 1 << 6
 }
 
+/** Imported default names of compiler-generated elements. */
+export namespace ImportNames {
+  /** Name of the default namespace */
+  export const DefaultNamespace = "env";
+  /** Name of the memory instance, if imported. */
+  export const Memory = "memory";
+  /** Name of the table instance, if imported. */
+  export const Table = "table";
+}
+
 /** Exported names of compiler-generated elements. */
 export namespace ExportNames {
+  /** Name of the memory instance, if exported. */
+  export const Memory = "memory";
+  /** Name of the table instance, if exported. */
+  export const Table = "table";
   /** Name of the argumentsLength varargs helper global. */
   export const argumentsLength = "__argumentsLength";
   /** Name of the alternative argumentsLength setter function. */
   export const setArgumentsLength = "__setArgumentsLength";
-  /** Name of the memory instance, if exported. */
-  export const memory = "memory";
-  /** Name of the table instance, if exported. */
-  export const table = "table";
 }
 
 /** Functions to export if `--exportRuntime` is set. */
@@ -639,115 +651,9 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    this.memoryOffset = memoryOffset;
-
-    // check that we didn't exceed lowMemoryLimit already
-    var lowMemoryLimit32 = this.options.lowMemoryLimit;
-    if (lowMemoryLimit32) {
-      let lowMemoryLimit = i64_new(lowMemoryLimit32 & ~15);
-      if (i64_gt(memoryOffset, lowMemoryLimit)) {
-        this.error(
-          DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
-          null, i64_to_string(memoryOffset), i64_to_string(lowMemoryLimit)
-        );
-      }
-    }
-
-    // set up memory
-    var initialPages: u32 = 0;
-    if (this.options.memoryBase /* is specified */ || this.memorySegments.length) {
-      initialPages = u32(i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16))));
-    }
-    if (options.initialMemory) {
-      if (options.initialMemory < initialPages) {
-        this.error(
-          DiagnosticCode.Module_requires_at_least_0_pages_of_initial_memory,
-          null,
-          initialPages.toString()
-        );
-      } else {
-        initialPages = options.initialMemory;
-      }
-    }
-    var maximumPages = Module.UNLIMITED_MEMORY;
-    if (options.maximumMemory) {
-      if (options.maximumMemory < initialPages) {
-        this.error(
-          DiagnosticCode.Module_requires_at_least_0_pages_of_maximum_memory,
-          null,
-          initialPages.toString()
-        );
-      } else {
-        maximumPages = options.maximumMemory;
-      }
-    }
-    var isSharedMemory = false;
-    if (options.sharedMemory) {
-      isSharedMemory = true;
-      if (!options.maximumMemory) {
-        this.error(
-          DiagnosticCode.Shared_memory_requires_maximum_memory_to_be_defined,
-          null
-        );
-        isSharedMemory = false;
-      }
-      if (!options.hasFeature(Feature.THREADS)) {
-        this.error(
-          DiagnosticCode.Shared_memory_requires_feature_threads_to_be_enabled,
-          null
-        );
-        isSharedMemory = false;
-      }
-    }
-    module.setMemory(
-      initialPages,
-      maximumPages,
-      this.memorySegments,
-      options.target,
-      options.exportMemory ? ExportNames.memory : null,
-      isSharedMemory
-    );
-
-    // import memory if requested (default memory is named '0' by Binaryen)
-    if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
-
-    // import and/or export table if requested (default table is named '0' by Binaryen)
-    if (options.importTable) {
-      module.addTableImport("0", "env", "table");
-      if (options.pedantic && options.willOptimize) {
-        this.pedantic(
-          DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
-          null
-        );
-      }
-    }
-    if (options.exportTable) {
-      module.addTableExport("0", ExportNames.table);
-      if (options.pedantic && options.willOptimize) {
-        this.pedantic(
-          DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
-          null
-        );
-      }
-    }
-
-    // set up function table (first elem is blank)
-    var tableBase = this.options.tableBase;
-    if (!tableBase) tableBase = 1; // leave first elem blank
-    var functionTableNames = new Array<string>(functionTable.length);
-    for (let i = 0, k = functionTable.length; i < k; ++i) {
-      functionTableNames[i] = functionTable[i].internalName;
-    }
-
-    var tableSize = tableBase + functionTable.length;
-    module.addFunctionTable(
-      "0",
-      tableSize,
-      // use fixed size for non-imported and non-exported tables
-      options.importTable || options.exportTable ? Module.UNLIMITED_TABLE : tableSize,
-      functionTableNames,
-      module.i32(tableBase)
-    );
+    // setup default memory & table
+    this.initDefaultMemory(memoryOffset);
+    this.initDefaultTable();
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
@@ -806,6 +712,155 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     return module;
+  }
+
+  private initDefaultMemory(memoryOffset: i64): void {
+    this.memoryOffset = memoryOffset;
+
+    var options = this.options;
+    var module = this.module;
+    var memorySegments = this.memorySegments;
+
+    var initialPages: u32 = 0;
+    var maximumPages = Module.UNLIMITED_MEMORY;
+    var isSharedMemory = false;
+
+    if (options.memoryBase /* is specified */ || memorySegments.length) {
+      initialPages = u32(i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16))));
+    }
+
+    if (options.initialMemory) {
+      if (options.initialMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_initial_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        initialPages = options.initialMemory;
+      }
+    }
+
+    if (options.maximumMemory) {
+      if (options.maximumMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_maximum_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        maximumPages = options.maximumMemory;
+      }
+    }
+
+    if (options.sharedMemory) {
+      isSharedMemory = true;
+      if (!options.maximumMemory) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_maximum_memory_to_be_defined,
+          null
+        );
+        isSharedMemory = false;
+      }
+      if (!options.hasFeature(Feature.THREADS)) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_feature_threads_to_be_enabled,
+          null
+        );
+        isSharedMemory = false;
+      }
+    }
+
+    // check that we didn't exceed lowMemoryLimit already
+    var lowMemoryLimit32 = options.lowMemoryLimit;
+    if (lowMemoryLimit32) {
+      let lowMemoryLimit = i64_new(lowMemoryLimit32 & ~15);
+      if (i64_gt(memoryOffset, lowMemoryLimit)) {
+        this.error(
+          DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
+          null, i64_to_string(memoryOffset), i64_to_string(lowMemoryLimit)
+        );
+      }
+    }
+
+    // Setup internal memory with default name "0"
+    module.setMemory(
+      initialPages,
+      maximumPages,
+      memorySegments,
+      options.target,
+      options.exportMemory ? ExportNames.Memory : null,
+      CommonNames.DefaultMemory,
+      isSharedMemory
+    );
+
+    // import memory if requested (default memory is named '0' by Binaryen)
+    if (options.importMemory) {
+      module.addMemoryImport(
+        CommonNames.DefaultMemory,
+        ImportNames.DefaultNamespace,
+        ImportNames.Memory,
+        isSharedMemory
+      );
+    }
+  }
+
+  private initDefaultTable(): void {
+    var options = this.options;
+    var module = this.module;
+
+    // import and/or export table if requested (default table is named '0' by Binaryen)
+    if (options.importTable) {
+      module.addTableImport(
+        CommonNames.DefaultTable,
+        ImportNames.DefaultNamespace,
+        ImportNames.Table
+      );
+      if (options.pedantic && options.willOptimize) {
+        this.pedantic(
+          DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
+          null
+        );
+      }
+    }
+    if (options.exportTable) {
+      module.addTableExport(CommonNames.DefaultTable, ExportNames.Table);
+      if (options.pedantic && options.willOptimize) {
+        this.pedantic(
+          DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
+          null
+        );
+      }
+    }
+
+    // set up function table (first elem is blank)
+    var tableBase = options.tableBase;
+    if (!tableBase) tableBase = 1; // leave first elem blank
+    var functionTable = this.functionTable;
+    var functionTableNames = new Array<string>(functionTable.length);
+    for (let i = 0, k = functionTable.length; i < k; ++i) {
+      functionTableNames[i] = functionTable[i].internalName;
+    }
+
+    var initialTableSize = <Index>tableBase + functionTable.length;
+    var maximumTableSize = Module.UNLIMITED_TABLE;
+
+    if (!(options.importTable || options.exportTable)) {
+      // use fixed size for non-imported and non-exported tables
+      maximumTableSize = initialTableSize;
+      if (options.willOptimize) {
+        // Hint for directize pass which indicate table's content will not change
+        // and can be better optimized
+        module.setPassArgument("directize-initial-contents-immutable", "true");
+      }
+    }
+    module.addFunctionTable(
+      CommonNames.DefaultTable,
+      initialTableSize,
+      maximumTableSize,
+      functionTableNames,
+      module.i32(tableBase)
+    );
   }
 
   // === Exports ==================================================================================
@@ -3436,9 +3491,13 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
 
-    // void to any
     if (fromType.kind == TypeKind.VOID) {
-      assert(toType.kind != TypeKind.VOID); // convertExpression should not be called with void -> void
+      if (toType.kind == TypeKind.VOID) {
+        // void to void: Can happen as a result of a foregoing error. Since we
+        // have an `expr` here that is already supposed to be void, return it.
+        return expr;
+      }
+      // void to any
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         reportNode.range, fromType.toString(), toType.toString()
@@ -3494,6 +3553,28 @@ export class Compiler extends DiagnosticEmitter {
 
     // not dealing with references from here on
     assert(!fromType.isReference && !toType.isReference);
+
+    // Early return if we have same types
+    if (toType.kind == fromType.kind) {
+      this.currentType = toType;
+      return expr;
+    }
+
+    // v128 to any / any to v128
+    // except v128 to bool
+    //
+    // NOTE:In case we would have more conversions to and from v128 type it's better
+    // to make these checks more individual and integrate in below flow.
+    if (
+      !toType.isBooleanValue &&
+      (toType.isVectorValue || fromType.isVectorValue)
+    ) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
+      return module.unreachable();
+    }
 
     if (!fromType.isAssignableTo(toType)) {
       if (!explicit) {
@@ -3913,7 +3994,23 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-
+        if (commonType.isFloatValue) {
+          if (
+            isConstExpressionNaN(module, rightExpr) ||
+            isConstExpressionNaN(module, leftExpr)
+          ) {
+            this.warning(
+              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
+              expression.range
+            );
+          }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
+              expression.range
+            );
+          }
+        }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
         rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
@@ -3949,7 +4046,23 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-
+        if (commonType.isFloatValue) {
+          if (
+            isConstExpressionNaN(module, rightExpr) ||
+            isConstExpressionNaN(module, leftExpr)
+          ) {
+            this.warning(
+              DiagnosticCode._NaN_does_not_compare_equal_to_any_other_value_including_itself_Use_isNaN_x_instead,
+              expression.range
+            );
+          }
+          if (isConstNegZero(rightExpr) || isConstNegZero(leftExpr)) {
+            this.warning(
+              DiagnosticCode.Comparison_with_0_0_is_sign_insensitive_Use_Object_is_x_0_0_if_the_sign_matters,
+              expression.range
+            );
+          }
+        }
         leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
         rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
@@ -5517,8 +5630,11 @@ export class Compiler extends DiagnosticEmitter {
           }
           return this.module.unreachable();
         }
-        assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
-        targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
+        let parameterTypes = indexedSet.signature.parameterTypes;
+
+        assert(parameterTypes.length == 2); // parser must guarantee this
+        targetType = parameterTypes[1];     // 2nd parameter is the element
+
         if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         if (!isUnchecked && this.options.pedantic) {
           this.pedantic(
@@ -5709,7 +5825,19 @@ export class Compiler extends DiagnosticEmitter {
           thisType,
           Constraints.CONV_IMPLICIT | Constraints.IS_THIS
         );
-        let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
+        let setterIndexType = setterInstance.signature.parameterTypes[0];
+        let getterIndexType = getterInstance.signature.parameterTypes[0];
+        if (!setterIndexType.equals(getterIndexType)) {
+          this.errorRelated(
+            DiagnosticCode.Index_signature_accessors_in_type_0_differ_in_types,
+            getterInstance.identifierAndSignatureRange,
+            setterInstance.identifierAndSignatureRange,
+            classInstance.internalName,
+          );
+          this.currentType = tee ? getterInstance.signature.returnType : Type.void;
+          return module.unreachable();
+        }
+        let elementExpr = this.compileExpression(assert(indexExpression), setterIndexType, Constraints.CONV_IMPLICIT);
         let elementType = this.currentType;
         if (tee) {
           let tempTarget = flow.getTempLocal(thisType);
@@ -7700,19 +7828,23 @@ export class Compiler extends DiagnosticEmitter {
       case LiteralKind.INTEGER: {
         let expr = <IntegerLiteralExpression>expression;
         let type = this.resolver.determineIntegerLiteralType(expr, implicitlyNegate, contextualType);
-
-        let intValue = implicitlyNegate
-          ? i64_neg(expr.value)
-          : expr.value;
-
         this.currentType = type;
+        let intValue = expr.value;
+        let sign = 1.0; // should multiply for float literals
+        if (implicitlyNegate) {
+          if (type.isFloatValue) {
+            sign = -1.0;
+          } else {
+            intValue = i64_neg(intValue);
+          }
+        }
         switch (type.kind) {
           case TypeKind.ISIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));
           case TypeKind.I64: return module.i64(i64_low(intValue), i64_high(intValue));
           case TypeKind.USIZE: if (!this.options.isWasm64) return module.i32(i64_low(intValue));
           case TypeKind.U64: return module.i64(i64_low(intValue), i64_high(intValue));
-          case TypeKind.F32: return module.f32(i64_to_f32(intValue));
-          case TypeKind.F64: return module.f64(i64_to_f64(intValue));
+          case TypeKind.F32: return module.f32(<f32>sign * i64_to_f32(intValue));
+          case TypeKind.F64: return module.f64(sign * i64_to_f64(intValue));
           default: return module.i32(i64_low(intValue));
         }
       }
@@ -9962,10 +10094,13 @@ export class Compiler extends DiagnosticEmitter {
         // Needs to be true (i.e. not zero) when the ref is _not_ null,
         // which means `ref.is_null` returns false (i.e. zero).
         return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
-
       }
+      case TypeKind.VOID:
       default: {
-        assert(false);
+        this.error(
+          DiagnosticCode.An_expression_of_type_0_cannot_be_tested_for_truthiness,
+          reportNode.range, type.toString()
+        );
         return module.i32(0);
       }
     }

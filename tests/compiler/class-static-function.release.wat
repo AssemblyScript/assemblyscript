@@ -36,12 +36,12 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i32.const 0
-  i32.store
+  i32.store $0
   local.get $0
   i32.const 1056
-  i32.store
+  i32.store $0
   i32.const 1056
-  i32.load
+  i32.load $0
   call_indirect $0 (type $none_=>_i32)
   drop
   global.get $~lib/memory/__stack_pointer

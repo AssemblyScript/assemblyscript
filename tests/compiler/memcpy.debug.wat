@@ -47,8 +47,8 @@
     i32.add
     local.set $src
     local.get $var$7
-    i32.load8_u
-    i32.store8
+    i32.load8_u $0
+    i32.store8 $0
     local.get $n
     i32.const 1
     i32.sub
@@ -71,32 +71,32 @@
     if
      local.get $dest
      local.get $src
-     i32.load
-     i32.store
+     i32.load $0
+     i32.store $0
      local.get $dest
      i32.const 4
      i32.add
      local.get $src
      i32.const 4
      i32.add
-     i32.load
-     i32.store
+     i32.load $0
+     i32.store $0
      local.get $dest
      i32.const 8
      i32.add
      local.get $src
      i32.const 8
      i32.add
-     i32.load
-     i32.store
+     i32.load $0
+     i32.store $0
      local.get $dest
      i32.const 12
      i32.add
      local.get $src
      i32.const 12
      i32.add
-     i32.load
-     i32.store
+     i32.load $0
+     i32.store $0
      local.get $src
      i32.const 16
      i32.add
@@ -118,16 +118,16 @@
    if
     local.get $dest
     local.get $src
-    i32.load
-    i32.store
+    i32.load $0
+    i32.store $0
     local.get $dest
     i32.const 4
     i32.add
     local.get $src
     i32.const 4
     i32.add
-    i32.load
-    i32.store
+    i32.load $0
+    i32.store $0
     local.get $dest
     i32.const 8
     i32.add
@@ -143,8 +143,8 @@
    if
     local.get $dest
     local.get $src
-    i32.load
-    i32.store
+    i32.load $0
+    i32.store $0
     local.get $dest
     i32.const 4
     i32.add
@@ -160,8 +160,8 @@
    if
     local.get $dest
     local.get $src
-    i32.load16_u
-    i32.store16
+    i32.load16_u $0
+    i32.store16 $0
     local.get $dest
     i32.const 2
     i32.add
@@ -187,8 +187,8 @@
     i32.add
     local.set $src
     local.get $var$6
-    i32.load8_u
-    i32.store8
+    i32.load8_u $0
+    i32.store8 $0
    end
    local.get $ret
    return
@@ -220,7 +220,7 @@
        br $break|2
       end
       local.get $src
-      i32.load
+      i32.load $0
       local.set $w
       local.get $dest
       local.tee $var$6
@@ -234,8 +234,8 @@
       i32.add
       local.set $src
       local.get $var$6
-      i32.load8_u
-      i32.store8
+      i32.load8_u $0
+      i32.store8 $0
       local.get $dest
       local.tee $var$6
       i32.const 1
@@ -248,8 +248,8 @@
       i32.add
       local.set $src
       local.get $var$6
-      i32.load8_u
-      i32.store8
+      i32.load8_u $0
+      i32.store8 $0
       local.get $dest
       local.tee $var$6
       i32.const 1
@@ -262,8 +262,8 @@
       i32.add
       local.set $src
       local.get $var$6
-      i32.load8_u
-      i32.store8
+      i32.load8_u $0
+      i32.store8 $0
       local.get $n
       i32.const 3
       i32.sub
@@ -278,7 +278,7 @@
         local.get $src
         i32.const 1
         i32.add
-        i32.load
+        i32.load $0
         local.set $x
         local.get $dest
         local.get $w
@@ -288,11 +288,11 @@
         i32.const 8
         i32.shl
         i32.or
-        i32.store
+        i32.store $0
         local.get $src
         i32.const 5
         i32.add
-        i32.load
+        i32.load $0
         local.set $w
         local.get $dest
         i32.const 4
@@ -304,11 +304,11 @@
         i32.const 8
         i32.shl
         i32.or
-        i32.store
+        i32.store $0
         local.get $src
         i32.const 9
         i32.add
-        i32.load
+        i32.load $0
         local.set $x
         local.get $dest
         i32.const 8
@@ -320,11 +320,11 @@
         i32.const 8
         i32.shl
         i32.or
-        i32.store
+        i32.store $0
         local.get $src
         i32.const 13
         i32.add
-        i32.load
+        i32.load $0
         local.set $w
         local.get $dest
         i32.const 12
@@ -336,7 +336,7 @@
         i32.const 8
         i32.shl
         i32.or
-        i32.store
+        i32.store $0
         local.get $src
         i32.const 16
         i32.add
@@ -355,7 +355,7 @@
       br $break|2
      end
      local.get $src
-     i32.load
+     i32.load $0
      local.set $w
      local.get $dest
      local.tee $var$6
@@ -369,8 +369,8 @@
      i32.add
      local.set $src
      local.get $var$6
-     i32.load8_u
-     i32.store8
+     i32.load8_u $0
+     i32.store8 $0
      local.get $dest
      local.tee $var$6
      i32.const 1
@@ -383,8 +383,8 @@
      i32.add
      local.set $src
      local.get $var$6
-     i32.load8_u
-     i32.store8
+     i32.load8_u $0
+     i32.store8 $0
      local.get $n
      i32.const 2
      i32.sub
@@ -399,7 +399,7 @@
        local.get $src
        i32.const 2
        i32.add
-       i32.load
+       i32.load $0
        local.set $x
        local.get $dest
        local.get $w
@@ -409,11 +409,11 @@
        i32.const 16
        i32.shl
        i32.or
-       i32.store
+       i32.store $0
        local.get $src
        i32.const 6
        i32.add
-       i32.load
+       i32.load $0
        local.set $w
        local.get $dest
        i32.const 4
@@ -425,11 +425,11 @@
        i32.const 16
        i32.shl
        i32.or
-       i32.store
+       i32.store $0
        local.get $src
        i32.const 10
        i32.add
-       i32.load
+       i32.load $0
        local.set $x
        local.get $dest
        i32.const 8
@@ -441,11 +441,11 @@
        i32.const 16
        i32.shl
        i32.or
-       i32.store
+       i32.store $0
        local.get $src
        i32.const 14
        i32.add
-       i32.load
+       i32.load $0
        local.set $w
        local.get $dest
        i32.const 12
@@ -457,7 +457,7 @@
        i32.const 16
        i32.shl
        i32.or
-       i32.store
+       i32.store $0
        local.get $src
        i32.const 16
        i32.add
@@ -476,7 +476,7 @@
      br $break|2
     end
     local.get $src
-    i32.load
+    i32.load $0
     local.set $w
     local.get $dest
     local.tee $var$6
@@ -490,8 +490,8 @@
     i32.add
     local.set $src
     local.get $var$6
-    i32.load8_u
-    i32.store8
+    i32.load8_u $0
+    i32.store8 $0
     local.get $n
     i32.const 1
     i32.sub
@@ -506,7 +506,7 @@
       local.get $src
       i32.const 3
       i32.add
-      i32.load
+      i32.load $0
       local.set $x
       local.get $dest
       local.get $w
@@ -516,11 +516,11 @@
       i32.const 24
       i32.shl
       i32.or
-      i32.store
+      i32.store $0
       local.get $src
       i32.const 7
       i32.add
-      i32.load
+      i32.load $0
       local.set $w
       local.get $dest
       i32.const 4
@@ -532,11 +532,11 @@
       i32.const 24
       i32.shl
       i32.or
-      i32.store
+      i32.store $0
       local.get $src
       i32.const 11
       i32.add
-      i32.load
+      i32.load $0
       local.set $x
       local.get $dest
       i32.const 8
@@ -548,11 +548,11 @@
       i32.const 24
       i32.shl
       i32.or
-      i32.store
+      i32.store $0
       local.get $src
       i32.const 15
       i32.add
-      i32.load
+      i32.load $0
       local.set $w
       local.get $dest
       i32.const 12
@@ -564,7 +564,7 @@
       i32.const 24
       i32.shl
       i32.or
-      i32.store
+      i32.store $0
       local.get $src
       i32.const 16
       i32.add
@@ -599,8 +599,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -613,8 +613,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -627,8 +627,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -641,8 +641,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -655,8 +655,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -669,8 +669,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -683,8 +683,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -697,8 +697,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -711,8 +711,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -725,8 +725,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -739,8 +739,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -753,8 +753,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -767,8 +767,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -781,8 +781,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -795,8 +795,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -809,8 +809,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
   end
   local.get $n
   i32.const 8
@@ -828,8 +828,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -842,8 +842,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -856,8 +856,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -870,8 +870,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -884,8 +884,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -898,8 +898,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -912,8 +912,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -926,8 +926,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
   end
   local.get $n
   i32.const 4
@@ -945,8 +945,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -959,8 +959,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -973,8 +973,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -987,8 +987,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
   end
   local.get $n
   i32.const 2
@@ -1006,8 +1006,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
    local.get $dest
    local.tee $var$6
    i32.const 1
@@ -1020,8 +1020,8 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
   end
   local.get $n
   i32.const 1
@@ -1039,30 +1039,30 @@
    i32.add
    local.set $src
    local.get $var$6
-   i32.load8_u
-   i32.store8
+   i32.load8_u $0
+   i32.store8 $0
   end
   local.get $ret
  )
  (func $start:memcpy
   global.get $memcpy/base
   i64.const 1229782938247303441
-  i64.store
+  i64.store $0
   global.get $memcpy/base
   i32.const 8
   i32.add
   i64.const 2459565876494606882
-  i64.store
+  i64.store $0
   global.get $memcpy/base
   i32.const 16
   i32.add
   i64.const 3689348814741910323
-  i64.store
+  i64.store $0
   global.get $memcpy/base
   i32.const 24
   i32.add
   i64.const 4919131752989213764
-  i64.store
+  i64.store $0
   global.get $memcpy/base
   i32.const 1
   i32.add
@@ -1087,7 +1087,7 @@
    unreachable
   end
   global.get $memcpy/base
-  i64.load
+  i64.load $0
   i64.const 1229783084848853777
   i64.eq
   i32.eqz
@@ -1117,7 +1117,7 @@
    unreachable
   end
   global.get $memcpy/base
-  i64.load
+  i64.load $0
   i64.const 1229783084848853777
   i64.eq
   i32.eqz
@@ -1132,7 +1132,7 @@
   global.get $memcpy/base
   i32.const 8
   i32.add
-  i64.load
+  i64.load $0
   i64.const 2459565876494606882
   i64.eq
   i32.eqz
@@ -1147,7 +1147,7 @@
   global.get $memcpy/base
   i32.const 16
   i32.add
-  i64.load
+  i64.load $0
   i64.const 3689348814741910323
   i64.eq
   i32.eqz
@@ -1162,7 +1162,7 @@
   global.get $memcpy/base
   i32.const 24
   i32.add
-  i64.load
+  i64.load $0
   i64.const 4919131752989213764
   i64.eq
   i32.eqz
@@ -1184,7 +1184,7 @@
   call $memcpy/memcpy
   global.set $memcpy/dest
   global.get $memcpy/base
-  i64.load
+  i64.load $0
   i64.const 4919131679688438545
   i64.eq
   i32.eqz
@@ -1206,7 +1206,7 @@
   call $memcpy/memcpy
   global.set $memcpy/dest
   global.get $memcpy/base
-  i64.load
+  i64.load $0
   i64.const 4919131679688438545
   i64.eq
   i32.eqz
@@ -1221,7 +1221,7 @@
   global.get $memcpy/base
   i32.const 8
   i32.add
-  i64.load
+  i64.load $0
   i64.const 3689348814741910323
   i64.eq
   i32.eqz
@@ -1236,7 +1236,7 @@
   global.get $memcpy/base
   i32.const 16
   i32.add
-  i64.load
+  i64.load $0
   i64.const 3694152654344438852
   i64.eq
   i32.eqz
@@ -1251,7 +1251,7 @@
   global.get $memcpy/base
   i32.const 24
   i32.add
-  i64.load
+  i64.load $0
   i64.const 4919131752989213764
   i64.eq
   i32.eqz

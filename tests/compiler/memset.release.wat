@@ -18,24 +18,24 @@
    br_if $folding-inner0
    local.get $0
    local.get $1
-   i32.store8
+   i32.store8 $0
    local.get $0
    local.get $2
    i32.add
    i32.const 1
    i32.sub
    local.get $1
-   i32.store8
+   i32.store8 $0
    local.get $2
    i32.const 2
    i32.le_u
    br_if $folding-inner0
    local.get $0
    local.get $1
-   i32.store8 offset=1
+   i32.store8 $0 offset=1
    local.get $0
    local.get $1
-   i32.store8 offset=2
+   i32.store8 $0 offset=2
    local.get $0
    local.get $2
    i32.add
@@ -43,26 +43,26 @@
    i32.const 2
    i32.sub
    local.get $1
-   i32.store8
+   i32.store8 $0
    local.get $4
    i32.const 3
    i32.sub
    local.get $1
-   i32.store8
+   i32.store8 $0
    local.get $2
    i32.const 6
    i32.le_u
    br_if $folding-inner0
    local.get $0
    local.get $1
-   i32.store8 offset=3
+   i32.store8 $0 offset=3
    local.get $0
    local.get $2
    i32.add
    i32.const 4
    i32.sub
    local.get $1
-   i32.store8
+   i32.store8 $0
    local.get $2
    i32.const 8
    i32.le_u
@@ -82,7 +82,7 @@
    i32.const 16843009
    i32.mul
    local.tee $1
-   i32.store
+   i32.store $0
    local.get $2
    local.get $4
    i32.sub
@@ -94,17 +94,17 @@
    i32.const 4
    i32.sub
    local.get $1
-   i32.store
+   i32.store $0
    local.get $2
    i32.const 8
    i32.le_u
    br_if $folding-inner0
    local.get $0
    local.get $1
-   i32.store offset=4
+   i32.store $0 offset=4
    local.get $0
    local.get $1
-   i32.store offset=8
+   i32.store $0 offset=8
    local.get $0
    local.get $2
    i32.add
@@ -112,28 +112,28 @@
    i32.const 12
    i32.sub
    local.get $1
-   i32.store
+   i32.store $0
    local.get $4
    i32.const 8
    i32.sub
    local.get $1
-   i32.store
+   i32.store $0
    local.get $2
    i32.const 24
    i32.le_u
    br_if $folding-inner0
    local.get $0
    local.get $1
-   i32.store offset=12
+   i32.store $0 offset=12
    local.get $0
    local.get $1
-   i32.store offset=16
+   i32.store $0 offset=16
    local.get $0
    local.get $1
-   i32.store offset=20
+   i32.store $0 offset=20
    local.get $0
    local.get $1
-   i32.store offset=24
+   i32.store $0 offset=24
    local.get $0
    local.get $2
    i32.add
@@ -141,22 +141,22 @@
    i32.const 28
    i32.sub
    local.get $1
-   i32.store
+   i32.store $0
    local.get $4
    i32.const 24
    i32.sub
    local.get $1
-   i32.store
+   i32.store $0
    local.get $4
    i32.const 20
    i32.sub
    local.get $1
-   i32.store
+   i32.store $0
    local.get $4
    i32.const 16
    i32.sub
    local.get $1
-   i32.store
+   i32.store $0
    local.get $0
    i32.const 4
    i32.and
@@ -185,16 +185,16 @@
     if
      local.get $0
      local.get $3
-     i64.store
+     i64.store $0
      local.get $0
      local.get $3
-     i64.store offset=8
+     i64.store $0 offset=8
      local.get $0
      local.get $3
-     i64.store offset=16
+     i64.store $0 offset=16
      local.get $0
      local.get $3
-     i64.store offset=24
+     i64.store $0 offset=24
      local.get $2
      i32.const 32
      i32.sub
@@ -216,7 +216,7 @@
   i32.const 16
   call $memset/memset
   global.get $memset/dest
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.ne
   if
@@ -228,7 +228,7 @@
    unreachable
   end
   global.get $memset/dest
-  i32.load8_u offset=15
+  i32.load8_u $0 offset=15
   i32.const 1
   i32.ne
   if
@@ -246,7 +246,7 @@
   i32.const 14
   call $memset/memset
   global.get $memset/dest
-  i32.load8_u
+  i32.load8_u $0
   i32.const 1
   i32.ne
   if
@@ -258,7 +258,7 @@
    unreachable
   end
   global.get $memset/dest
-  i32.load8_u offset=1
+  i32.load8_u $0 offset=1
   i32.const 2
   i32.ne
   if
@@ -270,7 +270,7 @@
    unreachable
   end
   global.get $memset/dest
-  i32.load8_u offset=14
+  i32.load8_u $0 offset=14
   i32.const 2
   i32.ne
   if
@@ -282,7 +282,7 @@
    unreachable
   end
   global.get $memset/dest
-  i32.load8_u offset=15
+  i32.load8_u $0 offset=15
   i32.const 1
   i32.ne
   if

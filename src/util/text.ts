@@ -234,10 +234,15 @@ export function isOctal(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._7;
 }
 
-/** Tests if the specified character code is a valid hexadecimal digit. */
-export function isHex(c: i32): bool {
+/** Tests if the specified character code is a valid hexadecimal symbol [a-f]. */
+export function isHexBase(c: i32): bool {
   let c0 = c | 32; // unify uppercases and lowercases a|A - f|F
-  return isDecimal(c) || (c0 >= CharCode.a && c0 <= CharCode.f);
+  return c0 >= CharCode.a && c0 <= CharCode.f;
+}
+
+/** Tests if the specified character code is a valid hexadecimal digit. */
+export function isHexOrDecimal(c: i32): bool {
+  return isDecimal(c) || isHexBase(c);
 }
 
 /** Tests if the specified character code is trivially alphanumeric. */
