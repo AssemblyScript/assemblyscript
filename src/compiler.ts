@@ -5525,8 +5525,13 @@ export class Compiler extends DiagnosticEmitter {
     valueExpr: ExpressionRef,
     reportNode: Node
   ): ExpressionRef {
-    // FIXME: see comment in compileBinaryOverload below why recompiling on type mismatch
-    // is a bad idea currently. so this assumes that the type matches.
+    if (
+      operatorInstance.signature.parameterTypes.length !=
+      (operatorInstance.is(CommonFlags.INSTANCE) ? 0 : 1)
+    ) {
+      // error will emit in resolver
+      return this.module.unreachable();
+    }
     return this.makeCallDirect(operatorInstance, [ valueExpr ], reportNode, false);
   }
 
@@ -5542,9 +5547,13 @@ export class Compiler extends DiagnosticEmitter {
     var signature = operatorInstance.signature;
     var parameterTypes = signature.parameterTypes;
     if (operatorInstance.is(CommonFlags.INSTANCE)) {
+      // error will emit in resolver
+      if (parameterTypes.length != 1) return this.module.unreachable();
       leftExpr = this.convertExpression(leftExpr, leftType, assert(signature.thisType), false, left);
       rightType = parameterTypes[0];
     } else {
+      // error will emit in resolver
+      if (parameterTypes.length != 2) return this.module.unreachable();
       leftExpr = this.convertExpression(leftExpr, leftType, parameterTypes[0], false, left);
       rightType = parameterTypes[1];
     }
