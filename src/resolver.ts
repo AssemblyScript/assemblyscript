@@ -3636,16 +3636,17 @@ export class Resolver extends DiagnosticEmitter {
     let decorators = overloadPrototype.decoratorNodes!;
 
     for (let i = 0, k = decorators.length; i < k; i++) {
-      let args = decorators[i].args;
+      let decorator = decorators[i];
 
+      let args = decorator.args;
       if (!args || args.length != 1) continue;
+
       let arg = args[0];
       if (!arg.isStringLiteral) continue;
 
-      let argValue = (<StringLiteralExpression>arg).value;
       let overloadKind = OperatorKind.fromDecorator(
-        decorators[i].decoratorKind,
-        argValue
+        decorator.decoratorKind,
+        (<StringLiteralExpression>arg).value
       );
 
       switch (overloadKind) {
