@@ -5639,6 +5639,13 @@ export class Compiler extends DiagnosticEmitter {
           }
           return this.module.unreachable();
         }
+        if (indexedSet.is(CommonFlags.STATIC)) {
+          this.error(
+            DiagnosticCode._0_modifier_cannot_be_used_here,
+            indexedSet.identifierAndSignatureRange, "static"
+          );
+          return this.module.unreachable();
+        }
         let parameterTypes = indexedSet.signature.parameterTypes;
 
         assert(parameterTypes.length == 2); // parser must guarantee this
@@ -7162,6 +7169,13 @@ export class Compiler extends DiagnosticEmitter {
         let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
         let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (indexedGet) {
+          if (indexedGet.is(CommonFlags.STATIC)) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_be_used_here,
+              indexedGet.identifierAndSignatureRange, "static"
+            );
+            return module.unreachable();
+          }
           let thisType = assert(indexedGet.signature.thisType);
           let thisArg = this.compileExpression(targetExpression, thisType,
             Constraints.CONV_IMPLICIT

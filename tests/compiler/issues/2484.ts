@@ -12,9 +12,19 @@ class Vec2 {
   postInt(a: Vec2): Vec2 { // non-static but 1 arg
     return this;
   }
+  @operator("[]")
+  static __get(idx: i32): i32 { // static index get
+    return 1;
+  }
+  @operator("[]=")
+  static __set(idx: i32, val: i32): void { // static index set
+  }
 }
 
 let v1 = new Vec2(1, 2);
 assert(v1 == v1);
 assert(!v1);
 assert((v1++).x == v1.x);
+
+v1[0];
+v1[0] = 1;

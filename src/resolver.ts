@@ -3708,9 +3708,6 @@ export class Resolver extends DiagnosticEmitter {
       let expecedNumParams = 0;
 
       if (indexAccessors) {
-        if (overload.is(CommonFlags.STATIC)) {
-          // TODO error
-        }
         expecedNumParams += (
           overloadKind == OperatorKind.INDEXED_SET ||
           overloadKind == OperatorKind.UNCHECKED_INDEXED_SET
