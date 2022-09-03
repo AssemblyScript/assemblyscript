@@ -445,17 +445,6 @@ export function operatorTokenToString(token: Token): string {
   }
 }
 
-export function isRelationalBinaryIdentifier(op: string): bool {
-  return (
-    op == "==" ||
-    op == "!=" ||
-    op == "<"  ||
-    op == ">"  ||
-    op == ">=" ||
-    op == "<="
-  );
-}
-
 /** Handler for intercepting comments while tokenizing. */
 export type CommentHandler = (kind: CommentKind, text: string, range: Range) => void;
 
