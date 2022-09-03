@@ -3671,14 +3671,13 @@ export class Resolver extends DiagnosticEmitter {
         }
         case OperatorKind.INDEXED_SET:
         case OperatorKind.UNCHECKED_INDEXED_SET: {
-          // verify 'void' or 'this' return type for indexed set operators
-          if (returnType != Type.void && returnType != instance.type) {
+          // verify 'void' return type for indexed set operators
+          if (returnType != Type.void) {
             this.errorRelated(
-              DiagnosticCode.Only_0_or_1_accepted_for_return_type_of_2_operators,
+              DiagnosticCode.Only_0_accepted_for_return_type_of_1_operators,
               overloadPrototype.functionTypeNode.returnType.range,
               arg.range,
               CommonNames.void_,
-              CommonNames.this_,
               "indexed set"
             );
           }
