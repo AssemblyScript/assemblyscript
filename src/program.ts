@@ -89,7 +89,6 @@ import {
 
   Expression,
   IdentifierExpression,
-  LiteralKind,
   StringLiteralExpression,
 
   Statement,
