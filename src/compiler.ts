@@ -5525,11 +5525,20 @@ export class Compiler extends DiagnosticEmitter {
     valueExpr: ExpressionRef,
     reportNode: Node
   ): ExpressionRef {
-    if (
-      operatorInstance.signature.parameterTypes.length !=
-      (operatorInstance.is(CommonFlags.INSTANCE) ? 0 : 1)
-    ) {
-      // error will emit in resolver
+    var parameters = operatorInstance.signature.parameterTypes;
+    var numParams = parameters.length;
+    var expectedNumParams = operatorInstance.is(CommonFlags.INSTANCE) ? 0 : 1;
+    if (numParams != expectedNumParams) {
+      let funType = operatorInstance.prototype.functionTypeNode;
+      let funParams = funType.parameters;
+      this.error(
+        DiagnosticCode.Expected_0_arguments_but_got_1,
+        numParams != 0
+          ? Range.join(funParams[0].range, funParams[numParams - 1].range)
+          : funType.range.atStart.extendBy(2),
+        expectedNumParams.toString(),
+        numParams.toString()
+      );
       return this.module.unreachable();
     }
     return this.makeCallDirect(operatorInstance, [ valueExpr ], reportNode, false);
@@ -5546,14 +5555,40 @@ export class Compiler extends DiagnosticEmitter {
     var rightType: Type;
     var signature = operatorInstance.signature;
     var parameterTypes = signature.parameterTypes;
+    var numParams = parameterTypes.length;
+
     if (operatorInstance.is(CommonFlags.INSTANCE)) {
-      // error will emit in resolver
-      if (parameterTypes.length != 1) return this.module.unreachable();
+      // instance method
+      if (numParams != 1) {
+        let funType = operatorInstance.prototype.functionTypeNode;
+        let funParams = funType.parameters;
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          numParams != 0
+            ? Range.join(funParams[0].range, funParams[numParams - 1].range)
+            : funType.range.atStart.extendBy(2),
+          "1",
+          numParams.toString()
+        );
+        return this.module.unreachable();
+      }
       leftExpr = this.convertExpression(leftExpr, leftType, assert(signature.thisType), false, left);
       rightType = parameterTypes[0];
     } else {
-      // error will emit in resolver
-      if (parameterTypes.length != 2) return this.module.unreachable();
+      // static method
+      if (numParams != 2) {
+        let funType = operatorInstance.prototype.functionTypeNode;
+        let funParams = funType.parameters;
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          numParams != 0
+            ? Range.join(funParams[0].range, funParams[numParams - 1].range)
+            : funType.range.atStart.extendBy(2),
+          "2",
+          numParams.toString()
+        );
+        return this.module.unreachable();
+      }
       leftExpr = this.convertExpression(leftExpr, leftType, parameterTypes[0], false, left);
       rightType = parameterTypes[1];
     }
@@ -5647,8 +5682,22 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.unreachable();
         }
         let parameterTypes = indexedSet.signature.parameterTypes;
+        let numParams = parameterTypes.length;
 
-        assert(parameterTypes.length == 2); // parser must guarantee this
+        if (numParams != 2) {
+          let funType = indexedSet.prototype.functionTypeNode;
+          let funParams = funType.parameters;
+          this.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            numParams != 0
+              ? Range.join(funParams[0].range, funParams[numParams - 1].range)
+              : funType.range.atStart.extendBy(2),
+            "2",
+            numParams.toString()
+          );
+          return this.module.unreachable();
+        }
+
         targetType = parameterTypes[1];     // 2nd parameter is the element
 
         if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
@@ -7176,6 +7225,22 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.unreachable();
           }
+
+          let numParams = indexedGet.signature.parameterTypes.length;
+          if (numParams != 1) {
+            let funType = indexedGet.prototype.functionTypeNode;
+            let funParams = funType.parameters;
+            this.error(
+              DiagnosticCode.Expected_0_arguments_but_got_1,
+              numParams != 0
+                ? Range.join(funParams[0].range, funParams[numParams - 1].range)
+                : funType.range.atStart.extendBy(2),
+              "1",
+              numParams.toString()
+            );
+            return this.module.unreachable();
+          }
+
           let thisType = assert(indexedGet.signature.thisType);
           let thisArg = this.compileExpression(targetExpression, thisType,
             Constraints.CONV_IMPLICIT

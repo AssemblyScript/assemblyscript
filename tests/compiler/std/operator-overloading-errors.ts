@@ -34,6 +34,12 @@ class B {
   @operator("[]") __get(index: i32, foo: bool): i32 { return 0; }
 }
 
-new B;
+let b = new B;
+b >= b;
+b <= b;
+b > b;
+b < b;
+b[0] = 1;
+b[0];
 
 ERROR("EOF");

@@ -3637,7 +3637,6 @@ export class Resolver extends DiagnosticEmitter {
     let decorators = overloadPrototype.decoratorNodes!;
 
     for (let i = 0, k = decorators.length; i < k; i++) {
-      let indexAccessors = false;
       let args = decorators[i].args;
 
       if (!args || args.length != 1) continue;
@@ -3668,12 +3667,6 @@ export class Resolver extends DiagnosticEmitter {
           }
           break;
         }
-        case OperatorKind.INDEXED_GET:
-        case OperatorKind.INDEXED_SET:
-        case OperatorKind.UNCHECKED_INDEXED_GET:
-        case OperatorKind.UNCHECKED_INDEXED_SET:
-          indexAccessors = true;
-          break;
         case OperatorKind.PREFIX_INC:
         case OperatorKind.PREFIX_DEC:
         case OperatorKind.POSTFIX_INC:
@@ -3695,33 +3688,6 @@ export class Resolver extends DiagnosticEmitter {
           }
           break;
         }
-      }
-      // validate input parameters and arity
-      let actualNumParams = signature.parameterTypes.length;
-      let expecedNumParams = 0;
-
-      if (indexAccessors) {
-        expecedNumParams += (
-          overloadKind == OperatorKind.INDEXED_SET ||
-          overloadKind == OperatorKind.UNCHECKED_INDEXED_SET
-        ) ? 2 : 1;
-      } else {
-        expecedNumParams += overload.is(CommonFlags.STATIC) ? 1 : 0;
-        expecedNumParams += overloadPrototype.hasDecorator(DecoratorFlags.OPERATOR_BINARY) ? 1 : 0;
-      }
-
-      if (actualNumParams != expecedNumParams) {
-        let funType = overloadPrototype.functionTypeNode;
-        let funParams = funType.parameters;
-        this.error(
-          DiagnosticCode.Expected_0_arguments_but_got_1,
-          actualNumParams != 0
-            ? Range.join(funParams[0].range, funParams[actualNumParams - 1].range)
-            : funType.range.atStart.extendBy(2),
-          expecedNumParams.toString(),
-          actualNumParams.toString()
-        );
-        break;
       }
     }
   }
