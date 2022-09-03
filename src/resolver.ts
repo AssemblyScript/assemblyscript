@@ -3650,6 +3650,8 @@ export class Resolver extends DiagnosticEmitter {
         break;
       case OperatorKind.INDEXED_GET:
       case OperatorKind.INDEXED_SET:
+      case OperatorKind.UNCHECKED_INDEXED_GET:
+      case OperatorKind.UNCHECKED_INDEXED_SET:
         indexAccessors = true;
         break;
       case OperatorKind.PREFIX_INC:
@@ -3704,11 +3706,15 @@ export class Resolver extends DiagnosticEmitter {
       // validate input parameters and arity
       let actualNumParams = signature.parameterTypes.length;
       let expecedNumParams = 0;
+
       if (indexAccessors) {
         if (overload.is(CommonFlags.STATIC)) {
           // TODO error
         }
-        expecedNumParams = OperatorKind.INDEXED_SET ? 2 : 1;
+        expecedNumParams += (
+          overloadKind == OperatorKind.INDEXED_SET ||
+          overloadKind == OperatorKind.UNCHECKED_INDEXED_SET
+        ) ? 2 : 1;
       } else {
         expecedNumParams += overload.is(CommonFlags.STATIC) ? 1 : 0;
         expecedNumParams += overloadPrototype.hasDecorator(DecoratorFlags.OPERATOR_BINARY) ? 1 : 0;

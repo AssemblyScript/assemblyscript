@@ -368,3 +368,10 @@ tea["x"]++;
 
 assert(tea["x"] == 0);
 assert(tea["y"] == -3);
+
+class C {
+  @operator("{}=") private __uset(index: i32, value: native<u8>): void {}
+  @operator("[]") private __get(index: i32): i32 { return 0; }
+}
+
+new C;

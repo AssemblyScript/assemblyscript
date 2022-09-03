@@ -3,7 +3,7 @@ class A {
   c: string = "c";
 }
 
-var a = new A();
+var a = new A;
 
 a.b + a.c; // TS2322
 a.c + a.b; // TS2322
@@ -30,10 +30,10 @@ class B {
   @operator("<") static lt(a: B): bool { return true; }
 
   // index accessors with wrong args
-  @operator("[]=") __set(index: i32): i32 { return 0; }
+  @operator("[]=") __set(index: i32): void {}
   @operator("[]") __get(index: i32, foo: bool): i32 { return 0; }
 }
 
-new B();
+new B;
 
 ERROR("EOF");

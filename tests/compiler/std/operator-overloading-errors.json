@@ -18,6 +18,8 @@
     "TS2554: Expected 1 arguments, but got 0",
     "TS2554: Expected 2 arguments, but got 3",
     "TS2554: Expected 2 arguments, but got 1",
+    "TS2554: Expected 2 arguments, but got 1.",
+    "TS2554: Expected 1 arguments, but got 2",
     "EOF"
   ]
 }
