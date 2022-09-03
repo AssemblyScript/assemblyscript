@@ -479,8 +479,10 @@ export class ShadowStackPass extends Pass {
     _BinaryenRemoveFunction(moduleRef, name);
     let cArr = allocPtrArray(vars);
     let newFuncRef = _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
-    let func = Function.searchFunctionByRef(this.compiler, newFuncRef);
-    if (func) func.addDebugInfo(this.module, newFuncRef);
+    if (this.options.sourceMap || this.options.debugInfo) {
+      let func = Function.searchFunctionByRef(this.compiler, newFuncRef);
+      if (func) func.addDebugInfo(this.module, newFuncRef);
+    }
     _free(cArr);
   }
 
