@@ -3462,7 +3462,6 @@ export class Resolver extends DiagnosticEmitter {
 
       if (reportMode == ReportMode.REPORT) {
         this.validateOperators(
-          overloadKind,
           overloadPrototype,
           operatorInstance,
           instance
@@ -3630,73 +3629,72 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   private validateOperators(
-    overloadKind: OperatorKind,
     overloadPrototype: FunctionPrototype,
     overload: Function,
     instance: Class
   ): void {
-    var logical = false;
-    var indexAccessors = false;
-
-    switch (overloadKind) {
-      case OperatorKind.EQ:
-      case OperatorKind.NE:
-      case OperatorKind.LT:
-      case OperatorKind.LE:
-      case OperatorKind.GT:
-      case OperatorKind.GE:
-      case OperatorKind.NOT:
-        logical = true;
-        break;
-      case OperatorKind.INDEXED_GET:
-      case OperatorKind.INDEXED_SET:
-      case OperatorKind.UNCHECKED_INDEXED_GET:
-      case OperatorKind.UNCHECKED_INDEXED_SET:
-        indexAccessors = true;
-        break;
-      case OperatorKind.PREFIX_INC:
-      case OperatorKind.PREFIX_DEC:
-      case OperatorKind.POSTFIX_INC:
-      case OperatorKind.POSTFIX_DEC: {
-        if (overload.is(CommonFlags.INSTANCE)) {
-          // inc/dec are special in that an instance overload attempts to re-assign
-          // the corresponding value, thus requiring a matching return type, while a
-          // static overload works like any other overload.
-          let returnType = overload.signature.returnType;
-          if (!returnType.isAssignableTo(instance.type)) {
-            this.error(
-              DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-              overloadPrototype.functionTypeNode.returnType.range,
-              returnType.toString(),
-              instance.type.toString()
-            );
-          }
-        }
-        break;
-      }
-    }
-
     let signature  = overload.signature;
     let returnType = signature.returnType;
     let decorators = overloadPrototype.decoratorNodes!;
 
     for (let i = 0, k = decorators.length; i < k; i++) {
-      // verify boolean return type
-      if (logical && !returnType.isBooleanValue) {
-        let args = decorators[i].args;
-        if (args && args.length == 1) {
-          let arg = args[0];
-          if (arg.isStringLiteral) {
-            let value = (<StringLiteralExpression>arg).value;
-            if (value == "!" || isRelationalBinaryIdentifier(value)) {
-              this.errorRelated(
-                DiagnosticCode.Only_0_accepted_for_return_type_of_relational_operators,
+      let indexAccessors = false;
+      let args = decorators[i].args;
+
+      if (!args || args.length != 1) continue;
+      let arg = args[0];
+      if (!arg.isStringLiteral) continue;
+
+      let argValue = (<StringLiteralExpression>arg).value;
+      let overloadKind = OperatorKind.fromDecorator(
+        decorators[i].decoratorKind,
+        argValue
+      );
+
+      switch (overloadKind) {
+        case OperatorKind.EQ:
+        case OperatorKind.NE:
+        case OperatorKind.LT:
+        case OperatorKind.LE:
+        case OperatorKind.GT:
+        case OperatorKind.GE:
+        case OperatorKind.NOT: {
+          // verify boolean return type
+          if (!returnType.isBooleanValue) {
+            this.errorRelated(
+              DiagnosticCode.Only_0_accepted_for_return_type_of_relational_operators,
+              overloadPrototype.functionTypeNode.returnType.range,
+              arg.range, CommonNames.bool
+            );
+          }
+          break;
+        }
+        case OperatorKind.INDEXED_GET:
+        case OperatorKind.INDEXED_SET:
+        case OperatorKind.UNCHECKED_INDEXED_GET:
+        case OperatorKind.UNCHECKED_INDEXED_SET:
+          indexAccessors = true;
+          break;
+        case OperatorKind.PREFIX_INC:
+        case OperatorKind.PREFIX_DEC:
+        case OperatorKind.POSTFIX_INC:
+        case OperatorKind.POSTFIX_DEC: {
+          if (overload.is(CommonFlags.INSTANCE)) {
+            // inc/dec are special in that an instance overload attempts to re-assign
+            // the corresponding value, thus requiring a matching return type, while a
+            // static overload works like any other overload.
+            let returnType = overload.signature.returnType;
+            let instanceType = instance.type;
+            if (!returnType.isAssignableTo(instanceType)) {
+              this.error(
+                DiagnosticCode.Type_0_is_not_assignable_to_type_1,
                 overloadPrototype.functionTypeNode.returnType.range,
-                arg.range, CommonNames.bool
+                returnType.toString(),
+                instanceType.toString()
               );
-              break;
             }
           }
+          break;
         }
       }
       // validate input parameters and arity
