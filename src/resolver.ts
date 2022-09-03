@@ -3460,13 +3460,15 @@ export class Resolver extends DiagnosticEmitter {
       let overloads = instance.overloads;
       if (!overloads) instance.overloads = overloads = new Map();
 
-      this.validateOperators(
-        overloadKind,
-        overloadPrototype,
-        operatorInstance,
-        instance,
-        reportMode
-      );
+      if (reportMode == ReportMode.REPORT) {
+        this.validateOperators(
+          overloadKind,
+          overloadPrototype,
+          operatorInstance,
+          instance,
+          reportMode
+        );
+      }
 
       if (!overloads.has(overloadKind)) {
         overloads.set(overloadKind, operatorInstance);
@@ -3664,14 +3666,12 @@ export class Resolver extends DiagnosticEmitter {
           // static overload works like any other overload.
           let returnType = overload.signature.returnType;
           if (!returnType.isAssignableTo(instance.type)) {
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                overloadPrototype.functionTypeNode.returnType.range,
-                returnType.toString(),
-                instance.type.toString()
-              );
-            }
+            this.error(
+              DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+              overloadPrototype.functionTypeNode.returnType.range,
+              returnType.toString(),
+              instance.type.toString()
+            );
           }
         }
         break;
@@ -3691,13 +3691,11 @@ export class Resolver extends DiagnosticEmitter {
           if (arg.isStringLiteral) {
             let value = (<StringLiteralExpression>arg).value;
             if (value == "!" || isRelationalBinaryIdentifier(value)) {
-              if (reportMode == ReportMode.REPORT) {
-                this.errorRelated(
-                  DiagnosticCode.Only_0_accepted_for_return_type_of_relational_operators,
-                  overloadPrototype.functionTypeNode.returnType.range,
-                  arg.range, CommonNames.bool
-                );
-              }
+              this.errorRelated(
+                DiagnosticCode.Only_0_accepted_for_return_type_of_relational_operators,
+                overloadPrototype.functionTypeNode.returnType.range,
+                arg.range, CommonNames.bool
+              );
               break;
             }
           }
@@ -3718,19 +3716,17 @@ export class Resolver extends DiagnosticEmitter {
       }
 
       if (actualNumParams != expecedNumParams) {
-        if (reportMode == ReportMode.REPORT) {
-          let funType = overloadPrototype.functionTypeNode;
-          let funParams = funType.parameters;
-          this.error(
-            DiagnosticCode.Expected_0_arguments_but_got_1,
-            actualNumParams != 0
-              ? Range.join(funParams[0].range, funParams[actualNumParams - 1].range)
-              : funType.range.atStart.extendBy(2),
-            expecedNumParams.toString(),
-            actualNumParams.toString()
-          );
-          break;
-        }
+        let funType = overloadPrototype.functionTypeNode;
+        let funParams = funType.parameters;
+        this.error(
+          DiagnosticCode.Expected_0_arguments_but_got_1,
+          actualNumParams != 0
+            ? Range.join(funParams[0].range, funParams[actualNumParams - 1].range)
+            : funType.range.atStart.extendBy(2),
+          expecedNumParams.toString(),
+          actualNumParams.toString()
+        );
+        break;
       }
     }
   }
