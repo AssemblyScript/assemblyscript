@@ -102,8 +102,7 @@ import {
 
 import {
   Token,
-  operatorTokenToString,
-  isRelationalBinaryIdentifier
+  operatorTokenToString
 } from "./tokenizer";
 
 import {
