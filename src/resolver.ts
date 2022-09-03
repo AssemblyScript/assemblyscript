@@ -3460,35 +3460,11 @@ export class Resolver extends DiagnosticEmitter {
       let overloads = instance.overloads;
       if (!overloads) instance.overloads = overloads = new Map();
 
-      switch (overloadKind) {
-        case OperatorKind.PREFIX_INC:
-        case OperatorKind.PREFIX_DEC:
-        case OperatorKind.POSTFIX_INC:
-        case OperatorKind.POSTFIX_DEC: {
-          if (operatorInstance.is(CommonFlags.INSTANCE)) {
-            // inc/dec are special in that an instance overload attempts to re-assign
-            // the corresponding value, thus requiring a matching return type, while a
-            // static overload works like any other overload.
-            let returnType = operatorInstance.signature.returnType;
-            if (!returnType.isAssignableTo(instance.type)) {
-              if (reportMode == ReportMode.REPORT) {
-                this.error(
-                  DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                  overloadPrototype.functionTypeNode.returnType.range,
-                  returnType.toString(),
-                  instance.type.toString()
-                );
-              }
-            }
-          }
-          break;
-        }
-      }
-
       this.validateOperators(
         overloadKind,
         overloadPrototype,
         operatorInstance,
+        instance,
         reportMode
       );
 
@@ -3656,6 +3632,7 @@ export class Resolver extends DiagnosticEmitter {
     overloadKind: OperatorKind,
     overloadPrototype: FunctionPrototype,
     overload: Function,
+    instance: Class,
     reportMode: ReportMode
   ): void {
     var logical = false;
@@ -3675,6 +3652,28 @@ export class Resolver extends DiagnosticEmitter {
       case OperatorKind.INDEXED_SET:
         indexAccessors = true;
         break;
+      case OperatorKind.PREFIX_INC:
+      case OperatorKind.PREFIX_DEC:
+      case OperatorKind.POSTFIX_INC:
+      case OperatorKind.POSTFIX_DEC: {
+        if (overload.is(CommonFlags.INSTANCE)) {
+          // inc/dec are special in that an instance overload attempts to re-assign
+          // the corresponding value, thus requiring a matching return type, while a
+          // static overload works like any other overload.
+          let returnType = overload.signature.returnType;
+          if (!returnType.isAssignableTo(instance.type)) {
+            if (reportMode == ReportMode.REPORT) {
+              this.error(
+                DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+                overloadPrototype.functionTypeNode.returnType.range,
+                returnType.toString(),
+                instance.type.toString()
+              );
+            }
+          }
+        }
+        break;
+      }
     }
 
     let signature  = overload.signature;
