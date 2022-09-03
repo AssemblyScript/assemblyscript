@@ -53,6 +53,7 @@ import {
 } from "./common";
 
 import {
+  Compiler,
   Options
 } from "./compiler";
 
@@ -117,7 +118,8 @@ import {
 import {
   Module,
   FunctionRef,
-  MemorySegment
+  MemorySegment,
+  getFunctionName
 } from "./module";
 
 import {
@@ -3793,6 +3795,20 @@ export class Function extends TypedElement {
         module.setLocalName(ref, i, localName);
       }
     }
+  }
+
+  static searchFunctionByRef(compiler: Compiler, ref: FunctionRef): Function | null {
+    const modifiedFunctionName = getFunctionName(ref);
+    if (modifiedFunctionName) {
+      const instancesByName = compiler.program.instancesByName;
+      if (instancesByName.has(modifiedFunctionName)) {
+        const element = assert(instancesByName.get(modifiedFunctionName));
+        if (element.kind == ElementKind.FUNCTION) {
+          return <Function>element;
+        }
+      }
+    }
+    return null;
   }
 }
 

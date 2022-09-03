@@ -132,7 +132,7 @@ import {
   ExternalKind,
   ExportRef,
   expandType,
-  isConstZero
+  isConstZero,
 } from "../module";
 
 import {
@@ -147,6 +147,7 @@ import {
 import {
   BuiltinNames
 } from "../builtins";
+import { Function } from "../program";
 
 type LocalIndex = Index;
 type SlotIndex = Index;
@@ -187,8 +188,6 @@ export class ShadowStackPass extends Pass {
   exportMap: Map<string,i32[]> = new Map();
   /** Compiler reference. */
   compiler: Compiler;
-  /** Re-add function due to local count change */
-  modifiedFunction: Array<FunctionRef> = [];
 
   constructor(compiler: Compiler) {
     super(compiler.module);
@@ -480,7 +479,8 @@ export class ShadowStackPass extends Pass {
     _BinaryenRemoveFunction(moduleRef, name);
     let cArr = allocPtrArray(vars);
     let newFuncRef = _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
-    this.modifiedFunction.push(newFuncRef);
+    let func = Function.searchFunctionByRef(this.compiler, newFuncRef);
+    if (func) func.addDebugInfo(this.module, newFuncRef);
     _free(cArr);
   }
 
