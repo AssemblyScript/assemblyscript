@@ -5642,7 +5642,7 @@ export class Compiler extends DiagnosticEmitter {
         if (indexedSet.is(CommonFlags.STATIC)) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
-            indexedSet.identifierAndSignatureRange, "static"
+            indexedSet.identifierNode.range, "static"
           );
           return this.module.unreachable();
         }
@@ -7172,7 +7172,7 @@ export class Compiler extends DiagnosticEmitter {
           if (indexedGet.is(CommonFlags.STATIC)) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
-              indexedGet.identifierAndSignatureRange, "static"
+              indexedGet.identifierNode.range, "static"
             );
             return module.unreachable();
           }
