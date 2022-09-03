@@ -3,6 +3,7 @@
   ],
   "stderr": [
     "TS2554: Expected 1 arguments, but got 2.",
+    "TS2554: Expected 0 arguments, but got 1.",
     "TS2554: Expected 0 arguments, but got 1."
   ]
 }

@@ -8,8 +8,13 @@ class Vec2 {
   not(a: Vec2): bool { // non-static but 1 arg
     return true;
   }
+  @operator.postfix("++")
+  postInt(a: Vec2): Vec2 { // non-static but 1 arg
+    return this;
+  }
 }
 
-const v1 = new Vec2(1, 2);
+let v1 = new Vec2(1, 2);
 assert(v1 == v1);
 assert(!v1);
+assert((v1++).x == v1.x);

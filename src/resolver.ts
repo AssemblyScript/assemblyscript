@@ -3459,6 +3459,7 @@ export class Resolver extends DiagnosticEmitter {
       if (!operatorInstance) continue;
       let overloads = instance.overloads;
       if (!overloads) instance.overloads = overloads = new Map();
+      let logical = false;
       switch (overloadKind) {
         case OperatorKind.EQ:
         case OperatorKind.NE:
@@ -3466,14 +3467,9 @@ export class Resolver extends DiagnosticEmitter {
         case OperatorKind.LE:
         case OperatorKind.GT:
         case OperatorKind.GE:
-        case OperatorKind.NOT: {
-          this.validateLogicalOperators(
-            overloadPrototype,
-            operatorInstance,
-            reportMode
-          );
+        case OperatorKind.NOT:
+          logical = true;
           break;
-        }
         case OperatorKind.PREFIX_INC:
         case OperatorKind.PREFIX_DEC:
         case OperatorKind.POSTFIX_INC:
@@ -3497,6 +3493,14 @@ export class Resolver extends DiagnosticEmitter {
           break;
         }
       }
+
+      this.validateOperators(
+        overloadPrototype,
+        operatorInstance,
+        logical,
+        reportMode
+      );
+
       if (!overloads.has(overloadKind)) {
         overloads.set(overloadKind, operatorInstance);
         if (
@@ -3657,23 +3661,19 @@ export class Resolver extends DiagnosticEmitter {
     return typeArgumentNodes[0];
   }
 
-  private validateLogicalOperators(
+  private validateOperators(
     overloadPrototype: FunctionPrototype,
     overload: Function,
+    logical: bool,
     reportMode: ReportMode
   ): void {
-    if (!overloadPrototype.hasAnyDecorator(
-      DecoratorFlags.OPERATOR_BINARY |
-      DecoratorFlags.OPERATOR_PREFIX
-    )) return;
-
     let signature  = overload.signature;
     let returnType = signature.returnType;
     let decorators = overloadPrototype.decoratorNodes!;
 
     for (let i = 0, k = decorators.length; i < k; i++) {
       // verify boolean return type
-      if (!returnType.isBooleanValue) {
+      if (logical && !returnType.isBooleanValue) {
         let args = decorators[i].args;
         if (args && args.length == 1) {
           let arg = args[0];
