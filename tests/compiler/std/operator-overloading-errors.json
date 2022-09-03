@@ -14,7 +14,7 @@
     "AS238: Only 'bool' accepted for return type of relational operators",
     "AS238: Only 'bool' accepted for return type of relational operators",
     "AS238: Only 'bool' accepted for return type of relational operators",
-    "AS239: Only 'void' accepted for return type of indexed set operators",
+    "AS238: Only 'void' accepted for return type of indexed set operators",
     "TS2554: Expected 1 arguments, but got 2",
     "TS2554: Expected 1 arguments, but got 0",
     "TS2554: Expected 2 arguments, but got 3",
