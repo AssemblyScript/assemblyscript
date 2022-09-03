@@ -3461,6 +3461,7 @@ export class Resolver extends DiagnosticEmitter {
         instance.overloads = new Map();
       }
       let logical = false;
+      let indexAccessors = false;
       switch (overloadKind) {
         case OperatorKind.EQ:
         case OperatorKind.NE:
@@ -3470,6 +3471,10 @@ export class Resolver extends DiagnosticEmitter {
         case OperatorKind.GE:
         case OperatorKind.NOT:
           logical = true;
+          break;
+        case OperatorKind.INDEXED_GET:
+        case OperatorKind.INDEXED_SET:
+          indexAccessors = true;
           break;
         case OperatorKind.PREFIX_INC:
         case OperatorKind.PREFIX_DEC:
@@ -3499,6 +3504,7 @@ export class Resolver extends DiagnosticEmitter {
         overloadPrototype,
         operatorInstance,
         logical,
+        indexAccessors,
         reportMode
       );
 
@@ -3667,6 +3673,7 @@ export class Resolver extends DiagnosticEmitter {
     overloadPrototype: FunctionPrototype,
     overload: Function,
     logical: bool,
+    indexAccessors: bool,
     reportMode: ReportMode
   ): void {
     let signature  = overload.signature;
@@ -3697,8 +3704,15 @@ export class Resolver extends DiagnosticEmitter {
       // validate input parameters and arity
       let actualNumParams = signature.parameterTypes.length;
       let expecedNumParams = 0;
-      expecedNumParams += overload.is(CommonFlags.STATIC) ? 1 : 0;
-      expecedNumParams += overloadPrototype.hasDecorator(DecoratorFlags.OPERATOR_BINARY) ? 1 : 0;
+      if (indexAccessors) {
+        if (overload.is(CommonFlags.STATIC)) {
+          // TODO error
+        }
+        expecedNumParams = 2;
+      } else {
+        expecedNumParams += overload.is(CommonFlags.STATIC) ? 1 : 0;
+        expecedNumParams += overloadPrototype.hasDecorator(DecoratorFlags.OPERATOR_BINARY) ? 1 : 0;
+      }
 
       if (actualNumParams != expecedNumParams) {
         if (reportMode == ReportMode.REPORT) {
