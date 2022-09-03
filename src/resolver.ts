@@ -3457,9 +3457,8 @@ export class Resolver extends DiagnosticEmitter {
         );
       }
       if (!operatorInstance) continue;
-      if (!instance.overloads) {
-        instance.overloads = new Map();
-      }
+      let overloads = instance.overloads;
+      if (!overloads) instance.overloads = overloads = new Map();
       let logical = false;
       let indexAccessors = false;
       switch (overloadKind) {
@@ -3508,17 +3507,16 @@ export class Resolver extends DiagnosticEmitter {
         reportMode
       );
 
-      if (!instance.overloads.has(overloadKind)) {
-        instance.overloads.set(overloadKind, operatorInstance);
+      if (!overloads.has(overloadKind)) {
+        overloads.set(overloadKind, operatorInstance);
         if (
           overloadKind == OperatorKind.INDEXED_GET ||
           overloadKind == OperatorKind.INDEXED_SET
         ) {
-          if (!instance.indexSignature) {
-            instance.indexSignature = new IndexSignature(instance);
-          }
+          let index = instance.indexSignature;
+          if (!index) instance.indexSignature = index = new IndexSignature(instance);
           if (overloadKind == OperatorKind.INDEXED_GET) {
-            instance.indexSignature.setType(operatorInstance.signature.returnType);
+            index.setType(operatorInstance.signature.returnType);
           }
         }
       } else {
