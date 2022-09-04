@@ -19,6 +19,7 @@
  (type $f64_i32_f64_f64_i32_=>_i32 (func (param f64 i32 f64 f64 i32) (result i32)))
  (type $f32_i32_f32_f32_i32_=>_i32 (func (param f32 i32 f32 f32 i32) (result i32)))
  (type $f64_i64_=>_i32 (func (param f64 i64) (result i32)))
+ (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i64_=>_none (func (param i64)))
@@ -10566,6 +10567,28 @@
   else
    i32.const 0
   end
+ )
+ (func $~lib/object/Object.is<f64> (param $x f64) (param $y f64) (result i32)
+  i32.const 1
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $x
+  local.get $x
+  f64.ne
+  local.get $y
+  local.get $y
+  f64.ne
+  i32.and
+  local.get $x
+  i64.reinterpret_f64
+  local.get $y
+  i64.reinterpret_f64
+  i64.eq
+  i32.or
+  return
  )
  (func $~lib/math/NativeMathf.pow (param $x f32) (param $y f32) (result f32)
   (local $var$2 f32)
@@ -43070,7 +43093,9 @@
   f64.const 1
   call $~lib/math/NativeMath.pow
   f64.const 0
-  f64.eq
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -43084,7 +43109,9 @@
   f64.const 1
   call $~lib/math/NativeMath.pow
   f64.const -0
-  f64.eq
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -43228,7 +43255,9 @@
   f64.const -1
   call $~lib/math/NativeMath.pow
   f64.const 0
-  f64.eq
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -43243,7 +43272,9 @@
   f64.const -1
   call $~lib/math/NativeMath.pow
   f64.const -0
-  f64.eq
+  call $~lib/object/Object.is<f64>
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
