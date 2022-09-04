@@ -814,6 +814,10 @@ export abstract class Node {
   get isAccessOnSuper(): bool {
     return this.isAccessOn(NodeKind.SUPER);
   }
+
+  get isEmpty(): bool {
+    return this.kind == NodeKind.EMPTY;
+  }
 }
 
 // types

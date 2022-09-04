@@ -1531,7 +1531,7 @@ export class ASTBuilder {
     sb.push("while (");
     this.visitNode(node.condition);
     var body = node.body;
-    if (body.kind == NodeKind.EMPTY) {
+    if (body.isEmpty) {
       sb.push(")");
     } else {
       sb.push(") ");
