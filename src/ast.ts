@@ -46,83 +46,83 @@ import {
 /** Indicates the kind of a node. */
 export const enum NodeKind {
 
-  SOURCE,
+  Source,
 
   // types
-  NAMEDTYPE,
-  FUNCTIONTYPE,
-  TYPENAME,
-  TYPEPARAMETER,
-  PARAMETER,
+  NamedType,
+  FunctionType,
+  TypeName,
+  TypeParameter,
+  Parameter,
 
   // expressions
-  IDENTIFIER,
-  ASSERTION,
-  BINARY,
-  CALL,
-  CLASS,
-  COMMA,
-  ELEMENTACCESS,
-  FALSE,
-  FUNCTION,
-  INSTANCEOF,
-  LITERAL,
-  NEW,
-  NULL,
-  OMITTED,
-  PARENTHESIZED,
-  PROPERTYACCESS,
-  TERNARY,
-  SUPER,
-  THIS,
-  TRUE,
-  CONSTRUCTOR,
-  UNARYPOSTFIX,
-  UNARYPREFIX,
-  COMPILED,
+  Identifier,
+  Assertion,
+  Binary,
+  Call,
+  Class,
+  Comma,
+  ElementAccess,
+  False,
+  Function,
+  InstanceOf,
+  Literal,
+  New,
+  Null,
+  Omitted,
+  Parenthesized,
+  PropertyAccess,
+  Ternary,
+  Super,
+  This,
+  True,
+  Constructor,
+  UnaryPostfix,
+  UnaryPrefix,
+  Compiled,
 
   // statements
-  BLOCK,
-  BREAK,
-  CONTINUE,
-  DO,
-  EMPTY,
-  EXPORT,
-  EXPORTDEFAULT,
-  EXPORTIMPORT,
-  EXPRESSION,
-  FOR,
-  FOROF,
-  IF,
-  IMPORT,
-  RETURN,
-  SWITCH,
-  THROW,
-  TRY,
-  VARIABLE,
-  VOID,
-  WHILE,
-  MODULE,
+  Block,
+  Break,
+  Continue,
+  Do,
+  Empty,
+  Export,
+  ExportDefault,
+  ExportImport,
+  Expression,
+  For,
+  ForOf,
+  If,
+  Import,
+  Return,
+  Switch,
+  Throw,
+  Try,
+  Variable,
+  Void,
+  While,
+  Module,
 
   // declaration statements
-  CLASSDECLARATION,
-  ENUMDECLARATION,
-  ENUMVALUEDECLARATION,
-  FIELDDECLARATION,
-  FUNCTIONDECLARATION,
-  IMPORTDECLARATION,
-  INTERFACEDECLARATION,
-  METHODDECLARATION,
-  NAMESPACEDECLARATION,
-  TYPEDECLARATION,
-  VARIABLEDECLARATION,
+  ClassDeclaration,
+  EnumDeclaration,
+  EnumValueDeclaration,
+  FieldDeclaration,
+  FunctionDeclaration,
+  ImportDeclaration,
+  InterfaceDeclaration,
+  MethodDeclaration,
+  NamespaceDeclaration,
+  TypeDeclaration,
+  VariableDeclaration,
 
   // special
-  DECORATOR,
-  EXPORTMEMBER,
-  SWITCHCASE,
-  INDEXSIGNATURE,
-  COMMENT
+  Decorator,
+  ExportMember,
+  SwitchCase,
+  IndexSignature,
+  Comment
 }
 
 /** Base class of all nodes. */
@@ -760,16 +760,16 @@ export abstract class Node {
 
   /** Tests if this node is a literal of the specified kind. */
   isLiteralKind(literalKind: LiteralKind): bool {
-    return this.kind == NodeKind.LITERAL
+    return this.kind == NodeKind.Literal
         && (<LiteralExpression>changetype<Node>(this)).literalKind == literalKind; // TS
   }
 
   /** Tests if this node is a literal of a numeric kind (float or integer). */
   get isNumericLiteral(): bool {
-    if (this.kind == NodeKind.LITERAL) {
+    if (this.kind == NodeKind.Literal) {
       switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
-        case LiteralKind.FLOAT:
-        case LiteralKind.INTEGER: return true;
+        case LiteralKind.Float:
+        case LiteralKind.Integer: return true;
       }
     }
     return false;
@@ -778,27 +778,27 @@ export abstract class Node {
   /** Tests whether this node is guaranteed to compile to a constant value. */
   get compilesToConst(): bool {
     switch (this.kind) {
-      case NodeKind.LITERAL: {
+      case NodeKind.Literal: {
         switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
-          case LiteralKind.FLOAT:
-          case LiteralKind.INTEGER:
-          case LiteralKind.STRING: return true;
+          case LiteralKind.Float:
+          case LiteralKind.Integer:
+          case LiteralKind.String: return true;
         }
         break;
       }
-      case NodeKind.NULL:
-      case NodeKind.TRUE:
-      case NodeKind.FALSE: return true;
+      case NodeKind.Null:
+      case NodeKind.True:
+      case NodeKind.False: return true;
     }
     return false;
   }
 
   private isAccessOn(kind: NodeKind): bool {
     let node = changetype<Node>(this);
-    if (node.kind == NodeKind.CALL) {
+    if (node.kind == NodeKind.Call) {
       node = (<CallExpression>node).expression;
     }
-    if (node.kind == NodeKind.PROPERTYACCESS) {
+    if (node.kind == NodeKind.PropertyAccess) {
       let target = (<PropertyAccessExpression>node).expression;
       if (target.kind == kind) return true;
     }
@@ -807,16 +807,16 @@ export abstract class Node {
 
   /** Checks if this node accesses a method or property on `this`. */
   get isAccessOnThis(): bool {
-    return this.isAccessOn(NodeKind.THIS);
+    return this.isAccessOn(NodeKind.This);
   }
 
   /** Checks if this node accesses a method or property on `super`. */
   get isAccessOnSuper(): bool {
-    return this.isAccessOn(NodeKind.SUPER);
+    return this.isAccessOn(NodeKind.Super);
   }
 
   get isEmpty(): bool {
-    return this.kind == NodeKind.EMPTY;
+    return this.kind == NodeKind.Empty;
   }
 }
 
@@ -836,7 +836,7 @@ export abstract class TypeNode extends Node {
 
   /** Tests if this type has a generic component matching one of the given type parameters. */
   hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool {
-    if (this.kind == NodeKind.NAMEDTYPE) {
+    if (this.kind == NodeKind.NamedType) {
       let namedTypeNode = <NamedTypeNode>changetype<TypeNode>(this); // TS
       if (!namedTypeNode.name.next) {
         let typeArgumentNodes = namedTypeNode.typeArguments;
@@ -851,7 +851,7 @@ export abstract class TypeNode extends Node {
           }
         }
       }
-    } else if (this.kind == NodeKind.FUNCTIONTYPE) {
+    } else if (this.kind == NodeKind.FunctionType) {
       let functionTypeNode = <FunctionTypeNode>changetype<TypeNode>(this); // TS
       let parameterNodes = functionTypeNode.parameters;
       for (let i = 0, k = parameterNodes.length; i < k; ++i) {
@@ -877,7 +877,7 @@ export class TypeName extends Node {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.TYPENAME, range);
+    super(NodeKind.TypeName, range);
   }
 }
 
@@ -893,7 +893,7 @@ export class NamedTypeNode extends TypeNode {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.NAMEDTYPE, isNullable, range);
+    super(NodeKind.NamedType, isNullable, range);
   }
 
   /** Checks if this type node has type arguments. */
@@ -917,7 +917,7 @@ export class FunctionTypeNode extends TypeNode {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.FUNCTIONTYPE, isNullable, range);
+    super(NodeKind.FunctionType, isNullable, range);
   }
 }
 
@@ -933,7 +933,7 @@ export class TypeParameterNode extends Node {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.TYPEPARAMETER, range);
+    super(NodeKind.TypeParameter, range);
   }
 }
 
@@ -961,13 +961,13 @@ export class ParameterNode extends Node {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.PARAMETER, range);
+    super(NodeKind.Parameter, range);
   }
 
   /** Implicit field declaration, if applicable. */
   implicitFieldDeclaration: FieldDeclaration | null = null;
   /** Common flags indicating specific traits. */
-  flags: CommonFlags = CommonFlags.NONE;
+  flags: CommonFlags = CommonFlags.None;
 
   /** Tests if this node has the specified flag or flags. */
   is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
@@ -981,68 +981,68 @@ export class ParameterNode extends Node {
 
 /** Built-in decorator kinds. */
 export enum DecoratorKind {
-  CUSTOM,
-  GLOBAL,
-  OPERATOR,
-  OPERATOR_BINARY,
-  OPERATOR_PREFIX,
-  OPERATOR_POSTFIX,
-  UNMANAGED,
-  FINAL,
-  INLINE,
-  EXTERNAL,
-  EXTERNAL_JS,
-  BUILTIN,
-  LAZY,
-  UNSAFE
+  Custom,
+  Global,
+  Operator,
+  OperatorBinary,
+  OperatorPrefix,
+  OperatorPostfix,
+  Unmanaged,
+  Final,
+  Inline,
+  External,
+  ExternalJs,
+  Builtin,
+  Lazy,
+  Unsafe
 }
 
 export namespace DecoratorKind {
 
   /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
   export function fromNode(nameNode: Expression): DecoratorKind {
-    if (nameNode.kind == NodeKind.IDENTIFIER) {
+    if (nameNode.kind == NodeKind.Identifier) {
       let nameStr = (<IdentifierExpression>nameNode).text;
       assert(nameStr.length);
       switch (nameStr.charCodeAt(0)) {
         case CharCode.b: {
-          if (nameStr == "builtin") return DecoratorKind.BUILTIN;
+          if (nameStr == "builtin") return DecoratorKind.Builtin;
           break;
         }
         case CharCode.e: {
-          if (nameStr == "external") return DecoratorKind.EXTERNAL;
+          if (nameStr == "external") return DecoratorKind.External;
           break;
         }
         case CharCode.f: {
-          if (nameStr == "final") return DecoratorKind.FINAL;
+          if (nameStr == "final") return DecoratorKind.Final;
           break;
         }
         case CharCode.g: {
-          if (nameStr == "global") return DecoratorKind.GLOBAL;
+          if (nameStr == "global") return DecoratorKind.Global;
           break;
         }
         case CharCode.i: {
-          if (nameStr == "inline") return DecoratorKind.INLINE;
+          if (nameStr == "inline") return DecoratorKind.Inline;
           break;
         }
         case CharCode.l: {
-          if (nameStr == "lazy") return DecoratorKind.LAZY;
+          if (nameStr == "lazy") return DecoratorKind.Lazy;
           break;
         }
         case CharCode.o: {
-          if (nameStr == "operator") return DecoratorKind.OPERATOR;
+          if (nameStr == "operator") return DecoratorKind.Operator;
           break;
         }
         case CharCode.u: {
-          if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
-          if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
+          if (nameStr == "unmanaged") return DecoratorKind.Unmanaged;
+          if (nameStr == "unsafe") return DecoratorKind.Unsafe;
           break;
         }
       }
-    } else if (nameNode.kind == NodeKind.PROPERTYACCESS) {
+    } else if (nameNode.kind == NodeKind.PropertyAccess) {
       let propertyAccessNode = <PropertyAccessExpression>nameNode;
       let expression = propertyAccessNode.expression;
-      if (expression.kind == NodeKind.IDENTIFIER) {
+      if (expression.kind == NodeKind.Identifier) {
         let nameStr = (<IdentifierExpression>expression).text;
         assert(nameStr.length);
         let propStr = propertyAccessNode.property.text;
@@ -1050,26 +1050,26 @@ export namespace DecoratorKind {
         if (nameStr == "operator") {
           switch (propStr.charCodeAt(0)) {
             case CharCode.b: {
-              if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
+              if (propStr == "binary") return DecoratorKind.OperatorBinary;
               break;
             }
             case CharCode.p: {
-              if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
-              if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
+              if (propStr == "prefix") return DecoratorKind.OperatorPrefix;
+              if (propStr == "postfix") return DecoratorKind.OperatorPostfix;
               break;
             }
           }
         } else if (nameStr == "external") {
           switch (propStr.charCodeAt(0)) {
             case CharCode.j: {
-              if (propStr == "js") return DecoratorKind.EXTERNAL_JS;
+              if (propStr == "js") return DecoratorKind.ExternalJs;
               break;
             }
           }
         }
       }
     }
-    return DecoratorKind.CUSTOM;
+    return DecoratorKind.Custom;
   }
 }
 
@@ -1085,7 +1085,7 @@ export class DecoratorNode extends Node {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.DECORATOR, range);
+    super(NodeKind.Decorator, range);
   }
 }
 
@@ -1109,7 +1109,7 @@ export class CommentNode extends Node {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.COMMENT, range);
+    super(NodeKind.Comment, range);
   }
 }
 
@@ -1128,19 +1128,19 @@ export class IdentifierExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.IDENTIFIER, range);
+    super(NodeKind.Identifier, range);
   }
 }
 
 /** Indicates the kind of a literal. */
 export const enum LiteralKind {
-  FLOAT,
-  INTEGER,
-  STRING,
-  TEMPLATE,
-  REGEXP,
-  ARRAY,
-  OBJECT
+  Float,
+  Integer,
+  String,
+  Template,
+  RegExp,
+  Array,
+  Object
 }
 
 /** Base class of all literal expressions. */
@@ -1151,7 +1151,7 @@ export abstract class LiteralExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.LITERAL, range);
+    super(NodeKind.Literal, range);
   }
 }
 
@@ -1163,20 +1163,20 @@ export class ArrayLiteralExpression extends LiteralExpression {
     /** Source range. */
     range: Range
   ) {
-    super(LiteralKind.ARRAY, range);
+    super(LiteralKind.Array, range);
   }
 }
 
 /** Indicates the kind of an assertion. */
 export const enum AssertionKind {
   /** A prefix assertion, i.e. `<T>expr`. */
-  PREFIX,
+  Prefix,
   /** An as assertion, i.e. `expr as T`. */
-  AS,
+  As,
   /** A non-null assertion, i.e. `!expr`. */
-  NONNULL,
+  NonNull,
   /** A const assertion, i.e. `expr as const`. */
-  CONST
+  Const
 }
 
 /** Represents an assertion expression. */
@@ -1191,7 +1191,7 @@ export class AssertionExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.ASSERTION, range);
+    super(NodeKind.Assertion, range);
   }
 }
 
@@ -1207,7 +1207,7 @@ export class BinaryExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.BINARY, range);
+    super(NodeKind.Binary, range);
   }
 }
 
@@ -1223,7 +1223,7 @@ export class CallExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.CALL, range);
+    super(NodeKind.Call, range);
   }
 
   /** Gets the type arguments range for reporting. */
@@ -1255,7 +1255,7 @@ export class ClassExpression extends Expression {
     /** Inline class declaration. */
     public declaration: ClassDeclaration
   ) {
-    super(NodeKind.CLASS, declaration.range);
+    super(NodeKind.Class, declaration.range);
   }
 }
 
@@ -1267,7 +1267,7 @@ export class CommaExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.COMMA, range);
+    super(NodeKind.Comma, range);
   }
 }
 
@@ -1278,7 +1278,7 @@ export class ConstructorExpression extends IdentifierExpression {
     range: Range
   ) {
     super("constructor", false, range);
-    this.kind = NodeKind.CONSTRUCTOR;
+    this.kind = NodeKind.Constructor;
   }
 }
 
@@ -1292,7 +1292,7 @@ export class ElementAccessExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.ELEMENTACCESS, range);
+    super(NodeKind.ElementAccess, range);
   }
 }
 
@@ -1304,7 +1304,7 @@ export class FloatLiteralExpression extends LiteralExpression {
     /** Source range. */
     range: Range
   ) {
-    super(LiteralKind.FLOAT, range);
+    super(LiteralKind.Float, range);
   }
 }
 
@@ -1314,7 +1314,7 @@ export class FunctionExpression extends Expression {
     /** Inline function declaration. */
     public declaration: FunctionDeclaration
   ) {
-    super(NodeKind.FUNCTION, declaration.range);
+    super(NodeKind.Function, declaration.range);
   }
 }
 
@@ -1328,7 +1328,7 @@ export class InstanceOfExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.INSTANCEOF, range);
+    super(NodeKind.InstanceOf, range);
   }
 }
 
@@ -1340,7 +1340,7 @@ export class IntegerLiteralExpression extends LiteralExpression {
     /** Source range. */
     range: Range
   ) {
-    super(LiteralKind.INTEGER, range);
+    super(LiteralKind.Integer, range);
   }
 }
 
@@ -1356,7 +1356,7 @@ export class NewExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.NEW, range);
+    super(NodeKind.New, range);
   }
 
   /** Gets the type arguments range for reporting. */
@@ -1387,7 +1387,7 @@ export class NullExpression extends IdentifierExpression {
     range: Range
   ) {
     super("null", false, range);
-    this.kind = NodeKind.NULL;
+    this.kind = NodeKind.Null;
   }
 }
 
@@ -1401,7 +1401,7 @@ export class ObjectLiteralExpression extends LiteralExpression {
     /** Source range. */
     range: Range
   ) {
-    super(LiteralKind.OBJECT, range);
+    super(LiteralKind.Object, range);
   }
 }
 
@@ -1411,7 +1411,7 @@ export class OmittedExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.OMITTED, range);
+    super(NodeKind.Omitted, range);
   }
 }
 
@@ -1423,7 +1423,7 @@ export class ParenthesizedExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.PARENTHESIZED, range);
+    super(NodeKind.Parenthesized, range);
   }
 }
 
@@ -1437,7 +1437,7 @@ export class PropertyAccessExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.PROPERTYACCESS, range);
+    super(NodeKind.PropertyAccess, range);
   }
 }
 
@@ -1451,7 +1451,7 @@ export class RegexpLiteralExpression extends LiteralExpression {
     /** Source range. */
     range: Range
   ) {
-    super(LiteralKind.REGEXP, range);
+    super(LiteralKind.RegExp, range);
   }
 }
 
@@ -1467,7 +1467,7 @@ export class TernaryExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.TERNARY, range);
+    super(NodeKind.Ternary, range);
   }
 }
 
@@ -1479,7 +1479,7 @@ export class StringLiteralExpression extends LiteralExpression {
     /** Source range. */
     range: Range
   ) {
-    super(LiteralKind.STRING, range);
+    super(LiteralKind.String, range);
   }
 }
 
@@ -1490,7 +1490,7 @@ export class SuperExpression extends IdentifierExpression {
     range: Range
   ) {
     super("super", false, range);
-    this.kind = NodeKind.SUPER;
+    this.kind = NodeKind.Super;
   }
 }
 
@@ -1508,7 +1508,7 @@ export class TemplateLiteralExpression extends LiteralExpression {
     /** Source range. */
     range: Range
   ) {
-    super(LiteralKind.TEMPLATE, range);
+    super(LiteralKind.Template, range);
   }
 }
 
@@ -1519,7 +1519,7 @@ export class ThisExpression extends IdentifierExpression {
     range: Range
   ) {
     super("this", false, range);
-    this.kind = NodeKind.THIS;
+    this.kind = NodeKind.This;
   }
 }
 
@@ -1530,7 +1530,7 @@ export class TrueExpression extends IdentifierExpression {
     range: Range
   ) {
     super("true", false, range);
-    this.kind = NodeKind.TRUE;
+    this.kind = NodeKind.True;
   }
 }
 
@@ -1541,7 +1541,7 @@ export class FalseExpression extends IdentifierExpression {
     range: Range
   ) {
     super("false", false, range);
-    this.kind = NodeKind.FALSE;
+    this.kind = NodeKind.False;
   }
 }
 
@@ -1571,7 +1571,7 @@ export class UnaryPostfixExpression extends UnaryExpression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.UNARYPOSTFIX, operator, operand, range);
+    super(NodeKind.UnaryPostfix, operator, operand, range);
   }
 }
 
@@ -1585,7 +1585,7 @@ export class UnaryPrefixExpression extends UnaryExpression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.UNARYPREFIX, operator, operand, range);
+    super(NodeKind.UnaryPrefix, operator, operand, range);
   }
 }
 
@@ -1599,7 +1599,7 @@ export class CompiledExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.COMPILED, range);
+    super(NodeKind.Compiled, range);
   }
 }
 
@@ -1630,7 +1630,7 @@ export class Source extends Node {
     /** Full source text. */
     public text: string
   ) {
-    super(NodeKind.SOURCE, new Range(0, text.length));
+    super(NodeKind.Source, new Range(0, text.length));
     var internalPath = mangleInternalPath(normalizedPath);
     this.internalPath = internalPath;
     var pos = internalPath.lastIndexOf(PATH_DELIMITER);
@@ -1740,7 +1740,7 @@ export class IndexSignatureNode extends Node {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.INDEXSIGNATURE, range);
+    super(NodeKind.IndexSignature, range);
   }
 }
 
@@ -1774,7 +1774,7 @@ export class BlockStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.BLOCK, range);
+    super(NodeKind.Block, range);
   }
 }
 
@@ -1786,7 +1786,7 @@ export class BreakStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.BREAK, range);
+    super(NodeKind.Break, range);
   }
 }
 
@@ -1810,7 +1810,7 @@ export class ClassDeclaration extends DeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.CLASSDECLARATION, name, decorators, flags, range);
+    super(NodeKind.ClassDeclaration, name, decorators, flags, range);
   }
 
   /** Index signature, if present. */
@@ -1830,7 +1830,7 @@ export class ContinueStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.CONTINUE, range);
+    super(NodeKind.Continue, range);
   }
 }
 
@@ -1844,7 +1844,7 @@ export class DoStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.DO, range);
+    super(NodeKind.Do, range);
   }
 }
 
@@ -1854,7 +1854,7 @@ export class EmptyStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.EMPTY, range);
+    super(NodeKind.Empty, range);
   }
 }
 
@@ -1872,7 +1872,7 @@ export class EnumDeclaration extends DeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.ENUMDECLARATION, name, decorators, flags, range);
+    super(NodeKind.EnumDeclaration, name, decorators, flags, range);
   }
 }
 
@@ -1888,7 +1888,7 @@ export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.ENUMVALUEDECLARATION, name, null, flags, null, initializer, range);
+    super(NodeKind.EnumValueDeclaration, name, null, flags, null, initializer, range);
   }
 }
 
@@ -1902,7 +1902,7 @@ export class ExportImportStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.EXPORTIMPORT, range);
+    super(NodeKind.ExportImport, range);
   }
 }
 
@@ -1916,7 +1916,7 @@ export class ExportMember extends Node {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.EXPORTMEMBER, range);
+    super(NodeKind.ExportMember, range);
   }
 }
 
@@ -1932,7 +1932,7 @@ export class ExportStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.EXPORT, range);
+    super(NodeKind.Export, range);
     if (path) {
       let normalizedPath = normalizePath(path.value);
       if (path.value.startsWith(".")) { // relative
@@ -1958,7 +1958,7 @@ export class ExportDefaultStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.EXPORTDEFAULT, range);
+    super(NodeKind.ExportDefault, range);
   }
 }
 
@@ -1968,7 +1968,7 @@ export class ExpressionStatement extends Statement {
     /** Expression being used as a statement.*/
     public expression: Expression
   ) {
-    super(NodeKind.EXPRESSION, expression.range);
+    super(NodeKind.Expression, expression.range);
   }
 }
 
@@ -1990,7 +1990,7 @@ export class FieldDeclaration extends VariableLikeDeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.FIELDDECLARATION, name, decorators, flags, type, initializer, range);
+    super(NodeKind.FieldDeclaration, name, decorators, flags, type, initializer, range);
   }
 }
 
@@ -2008,7 +2008,7 @@ export class ForStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.FOR, range);
+    super(NodeKind.For, range);
   }
 }
 
@@ -2024,18 +2024,18 @@ export class ForOfStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.FOROF, range);
+    super(NodeKind.ForOf, range);
   }
 }
 
 /** Indicates the kind of an array function. */
 export const enum ArrowKind {
   /** Not an arrow function. */
-  NONE,
+  None,
   /** Parenthesized parameter list. */
-  ARROW_PARENTHESIZED,
+  Parenthesized,
   /** Single parameter without parenthesis. */
-  ARROW_SINGLE
+  Single
 }
 
 /** Represents a `function` declaration. */
@@ -2058,7 +2058,7 @@ export class FunctionDeclaration extends DeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.FUNCTIONDECLARATION, name, decorators, flags, range);
+    super(NodeKind.FunctionDeclaration, name, decorators, flags, range);
   }
 
   /** Gets if this function is generic. */
@@ -2094,7 +2094,7 @@ export class IfStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.IF, range);
+    super(NodeKind.If, range);
   }
 }
 
@@ -2108,7 +2108,7 @@ export class ImportDeclaration extends DeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.IMPORTDECLARATION, name, null, CommonFlags.NONE, range);
+    super(NodeKind.ImportDeclaration, name, null, CommonFlags.None, range);
   }
 }
 
@@ -2124,7 +2124,7 @@ export class ImportStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.IMPORT, range);
+    super(NodeKind.Import, range);
     var normalizedPath = normalizePath(path.value);
     if (path.value.startsWith(".")) { // relative in project
       normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
@@ -2159,7 +2159,7 @@ export class InterfaceDeclaration extends ClassDeclaration {
     range: Range
   ) {
     super(name, decorators, flags, typeParameters, extendsType, implementsTypes, members, range);
-    this.kind = NodeKind.INTERFACEDECLARATION;
+    this.kind = NodeKind.InterfaceDeclaration;
   }
 }
 
@@ -2181,8 +2181,8 @@ export class MethodDeclaration extends FunctionDeclaration {
     /** Source range. */
     range: Range
   ) {
-    super(name, decorators, flags, typeParameters, signature, body, ArrowKind.NONE, range);
-    this.kind = NodeKind.METHODDECLARATION;
+    super(name, decorators, flags, typeParameters, signature, body, ArrowKind.None, range);
+    this.kind = NodeKind.MethodDeclaration;
   }
 }
 
@@ -2200,7 +2200,7 @@ export class NamespaceDeclaration extends DeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.NAMESPACEDECLARATION, name, decorators, flags, range);
+    super(NodeKind.NamespaceDeclaration, name, decorators, flags, range);
   }
 }
 
@@ -2212,7 +2212,7 @@ export class ReturnStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.RETURN, range);
+    super(NodeKind.Return, range);
   }
 }
 
@@ -2226,7 +2226,7 @@ export class SwitchCase extends Node {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.SWITCHCASE, range);
+    super(NodeKind.SwitchCase, range);
   }
 
   get isDefault(): bool {
@@ -2244,7 +2244,7 @@ export class SwitchStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.SWITCH, range);
+    super(NodeKind.Switch, range);
   }
 }
 
@@ -2256,7 +2256,7 @@ export class ThrowStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.THROW, range);
+    super(NodeKind.Throw, range);
   }
 }
 
@@ -2274,7 +2274,7 @@ export class TryStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.TRY, range);
+    super(NodeKind.Try, range);
   }
 }
 
@@ -2288,7 +2288,7 @@ export class ModuleDeclaration extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.MODULE, range);
+    super(NodeKind.Module, range);
   }
 }
 
@@ -2308,7 +2308,7 @@ export class TypeDeclaration extends DeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.TYPEDECLARATION, name, decorators, flags, range);
+    super(NodeKind.TypeDeclaration, name, decorators, flags, range);
   }
 }
 
@@ -2328,7 +2328,7 @@ export class VariableDeclaration extends VariableLikeDeclarationStatement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.VARIABLEDECLARATION, name, decorators, flags, type, initializer, range);
+    super(NodeKind.VariableDeclaration, name, decorators, flags, type, initializer, range);
   }
 }
 
@@ -2342,7 +2342,7 @@ export class VariableStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.VARIABLE, range);
+    super(NodeKind.Variable, range);
   }
 }
 
@@ -2354,7 +2354,7 @@ export class VoidStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.VOID, range);
+    super(NodeKind.Void, range);
   }
 }
 
@@ -2368,7 +2368,7 @@ export class WhileStatement extends Statement {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.WHILE, range);
+    super(NodeKind.While, range);
   }
 }
 
@@ -2395,7 +2395,7 @@ export function mangleInternalPath(path: string): string {
 
 /** Tests if the specified type node represents an omitted type. */
 export function isTypeOmitted(type: TypeNode): bool {
-  if (type.kind == NodeKind.NAMEDTYPE) {
+  if (type.kind == NodeKind.NamedType) {
     let name = (<NamedTypeNode>type).name;
     return !(name.next || name.identifier.text.length > 0);
   }

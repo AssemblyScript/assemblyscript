@@ -136,7 +136,7 @@ export class JSBuilder extends ExportsWalker {
     var sb = this.sb;
     var type = element.type;
     this.exports.push(name);
-    if (!isPlainValue(type, Mode.EXPORT)) {
+    if (!isPlainValue(type, Mode.Export)) {
       indent(sb, this.indentLevel);
       sb.push(name);
       sb.push(": {\n");
@@ -156,7 +156,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(";\n");
       indent(sb, --this.indentLevel);
       sb.push("}");
-      if (!element.is(CommonFlags.CONST)) {
+      if (!element.is(CommonFlags.Const)) {
         sb.push(",\n");
         indent(sb, this.indentLevel);
         sb.push("set value(value) {\n");
@@ -190,11 +190,11 @@ export class JSBuilder extends ExportsWalker {
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let value = _values[i];
-        if (value.kind != ElementKind.ENUMVALUE) continue;
+        if (value.kind != ElementKind.EnumValue) continue;
         indent(sb, this.indentLevel);
         sb.push("values[values.");
         sb.push(value.name);
-        if (value.is(CommonFlags.INLINED)) {
+        if (value.is(CommonFlags.Inlined)) {
           sb.push(" = ");
           sb.push(i64_low((<EnumValue>value).constantIntegerValue).toString());
         } else {
@@ -226,7 +226,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push("\": ");
     }
     let moduleId = this.ensureModuleId(moduleName);
-    if (isPlainValue(type, Mode.IMPORT)) {
+    if (isPlainValue(type, Mode.Import)) {
       sb.push("(\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
@@ -271,7 +271,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(escapeString(name, CharCode.DOUBLEQUOTE));
       sb.push("\"");
     }
-    if (isPlainFunction(signature, Mode.IMPORT) && !code) {
+    if (isPlainFunction(signature, Mode.Import) && !code) {
       sb.push(": (\n");
       indent(sb, this.indentLevel + 1);
       sb.push("// ");
@@ -303,7 +303,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push("\n");
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         let type = parameterTypes[i];
-        if (!isPlainValue(type, Mode.EXPORT)) {
+        if (!isPlainValue(type, Mode.Export)) {
           let name = element.getParameterName(i);
           indent(sb, this.indentLevel);
           sb.push(name);
@@ -351,11 +351,11 @@ export class JSBuilder extends ExportsWalker {
   }
 
   visitFunction(name: string, element: Function): void {
-    if (element.is(CommonFlags.PRIVATE)) return;
+    if (element.is(CommonFlags.Private)) return;
     var sb = this.sb;
     var signature = element.signature;
     this.exports.push(name);
-    if (!isPlainFunction(signature, Mode.EXPORT)) {
+    if (!isPlainFunction(signature, Mode.Export)) {
       indent(sb, this.indentLevel);
       sb.push(name);
       sb.push("(");
@@ -375,7 +375,7 @@ export class JSBuilder extends ExportsWalker {
       let releases = new Array<string>();
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         let type = parameterTypes[i];
-        if (!isPlainValue(type, Mode.IMPORT)) {
+        if (!isPlainValue(type, Mode.Import)) {
           let name = element.getParameterName(i);
           indent(sb, this.indentLevel);
           sb.push(name);
@@ -465,17 +465,17 @@ export class JSBuilder extends ExportsWalker {
   }
 
   getExternalCode(element: Function): string | null {
-    let decorator = findDecorator(DecoratorKind.EXTERNAL_JS, element.decoratorNodes);
+    let decorator = findDecorator(DecoratorKind.ExternalJs, element.decoratorNodes);
     if (decorator) {
       let args = decorator.args;
       if (args && args.length == 1) {
         let codeArg = args[0];
-        if (codeArg.kind == NodeKind.LITERAL) {
+        if (codeArg.kind == NodeKind.Literal) {
           let literal = <LiteralExpression>codeArg;
-          if (literal.literalKind == LiteralKind.STRING) {
+          if (literal.literalKind == LiteralKind.String) {
             return (<StringLiteralExpression>literal).value;
           }
-          if (literal.literalKind == LiteralKind.TEMPLATE) {
+          if (literal.literalKind == LiteralKind.Template) {
             let parts = (<TemplateLiteralExpression>literal).parts;
             if (parts.length == 1) {
               return parts[0];
@@ -535,16 +535,16 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys2 = Map_keys(module), j = 0, l = _keys2.length; j < l; ++j) {
         let name = _keys2[j];
         let elem = assert(module.get(name));
-        if (elem.kind == ElementKind.FUNCTION) {
+        if (elem.kind == ElementKind.Function) {
           let func = <Function>elem;
           let code = this.getExternalCode(func);
-          if (!isPlainFunction(func.signature, Mode.IMPORT) || !isIdentifier(name) || code) {
+          if (!isPlainFunction(func.signature, Mode.Import) || !isIdentifier(name) || code) {
             this.makeFunctionImport(moduleName, name, <Function>elem, code);
             ++numInstrumented;
           }
-        } else if (elem.kind == ElementKind.GLOBAL) {
+        } else if (elem.kind == ElementKind.Global) {
           let global = <Global>elem;
-          if (!isPlainValue(global.type, Mode.IMPORT) || !isIdentifier(name)) {
+          if (!isPlainValue(global.type, Mode.Import) || !isIdentifier(name)) {
             this.makeGlobalImport(moduleName, name, global);
             ++numInstrumented;
           }
@@ -1107,7 +1107,7 @@ export class JSBuilder extends ExportsWalker {
         }
       }
       sb.push(")");
-      if (!type.is(TypeFlags.NULLABLE)) {
+      if (!type.is(TypeFlags.Nullable)) {
         this.needsNotNull = true;
         sb.push(" || __notnull()");
       }
@@ -1241,7 +1241,7 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.FIELD) continue;
+        if (member.kind != ElementKind.Field) continue;
         let field = <Field>member;
         indent(sb, this.indentLevel);
         sb.push(field.name);
@@ -1283,7 +1283,7 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.FIELD) continue;
+        if (member.kind != ElementKind.Field) continue;
         let field = <Field>member;
         indent(sb, this.indentLevel);
         this.makeLowerToMemory(field.type, sb, "pointer + " + field.memoryOffset.toString(), "value." + memberName);
@@ -1303,12 +1303,12 @@ export class JSBuilder extends ExportsWalker {
 // Helpers
 
 enum Mode {
-  IMPORT,
-  EXPORT
+  Import,
+  Export
 }
 
 function isPlainValue(type: Type, kind: Mode): bool {
-  if (kind == Mode.IMPORT) {
+  if (kind == Mode.Import) {
     // may be stored to an Uint8Array, make sure to store 1/0
     if (type == Type.bool) return false;
     // requires coercion of undefined to 0n
@@ -1325,7 +1325,7 @@ function isPlainValue(type: Type, kind: Mode): bool {
 
 function isPlainFunction(signature: Signature, mode: Mode): bool {
   var parameterTypes = signature.parameterTypes;
-  var inverseMode = mode == Mode.IMPORT ? Mode.EXPORT : Mode.IMPORT;
+  var inverseMode = mode == Mode.Import ? Mode.Export : Mode.Import;
   if (!isPlainValue(signature.returnType, mode)) return false;
   for (let i = 0, k = parameterTypes.length; i < k; ++i) {
     if (!isPlainValue(parameterTypes[i], inverseMode)) return false;
@@ -1340,8 +1340,8 @@ function isPlainObject(clazz: Class): bool {
   if (members) {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
       let member = _values[i];
-      if (member.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED)) return false;
-      if (member.is(CommonFlags.CONSTRUCTOR)) {
+      if (member.isAny(CommonFlags.Private | CommonFlags.Protected)) return false;
+      if (member.is(CommonFlags.Constructor)) {
         // a generated constructor is ok
         if (member.declaration.range != member.program.nativeRange) return false;
       }

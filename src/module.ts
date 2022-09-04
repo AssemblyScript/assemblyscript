@@ -98,7 +98,7 @@ export const enum FeatureFlags {
   Atomics = 1 /* _BinaryenFeatureAtomics */,
   MutableGlobals = 2 /* _BinaryenFeatureMutableGlobals */,
   TruncSat = 4 /* _BinaryenFeatureNontrappingFPToInt */,
-  SIMD = 8 /* _BinaryenFeatureSIMD128 */,
+  Simd = 8 /* _BinaryenFeatureSIMD128 */,
   BulkMemory = 16 /* _BinaryenFeatureBulkMemory */,
   SignExt = 32 /* _BinaryenFeatureSignExt */,
   ExceptionHandling = 64 /* _BinaryenFeatureExceptionHandling */,
@@ -108,7 +108,7 @@ export const enum FeatureFlags {
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
   FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
-  RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
+  RelaxedSimd = 16384 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
   Strings = 65536 /* _BinaryenFeatureStrings */,
   All = 253951 /* _BinaryenFeatureAll */
@@ -2258,7 +2258,7 @@ export class Module {
       let offset = segment.offset;
       unchecked(segs[i] = allocU8Array(buffer));
       unchecked(psvs[i] = 0); // no passive segments currently
-      unchecked(offs[i] = target == Target.WASM64
+      unchecked(offs[i] = target == Target.Wasm64
         ? this.i64(i64_low(offset), i64_high(offset))
         : this.i32(i64_low(offset))
       );
@@ -3396,7 +3396,7 @@ function allocU32Array(u32s: u32[] | null): usize {
 export function allocPtrArray(ptrs: usize[] | null): usize {
   if (!ptrs) return 0;
   // TODO: WASM64
-  assert(ASC_TARGET != Target.WASM64);
+  assert(ASC_TARGET != Target.Wasm64);
   var len = ptrs.length;
   var ptr = binaryen._malloc(len << 2);
   var idx = ptr;

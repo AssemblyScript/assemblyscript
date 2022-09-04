@@ -70,43 +70,43 @@ export abstract class ExportsWalker {
 
   /** Visits an element.*/
   visitElement(name: string, element: Element): void {
-    if (element.is(CommonFlags.PRIVATE) && !this.includePrivate) return;
+    if (element.is(CommonFlags.Private) && !this.includePrivate) return;
     var seen = this.seen;
-    if (!element.is(CommonFlags.INSTANCE) && seen.has(element)) {
+    if (!element.is(CommonFlags.Instance) && seen.has(element)) {
       this.visitAlias(name, element, assert(seen.get(element)));
       return;
     }
     seen.set(element, name);
     switch (element.kind) {
-      case ElementKind.GLOBAL: {
-        if (element.is(CommonFlags.COMPILED)) this.visitGlobal(name, <Global>element);
+      case ElementKind.Global: {
+        if (element.is(CommonFlags.Compiled)) this.visitGlobal(name, <Global>element);
         break;
       }
-      case ElementKind.ENUM: {
-        if (element.is(CommonFlags.COMPILED)) this.visitEnum(name, <Enum>element);
+      case ElementKind.Enum: {
+        if (element.is(CommonFlags.Compiled)) this.visitEnum(name, <Enum>element);
         break;
       }
-      case ElementKind.ENUMVALUE: break; // handled by visitEnum
-      case ElementKind.FUNCTION_PROTOTYPE: {
+      case ElementKind.EnumValue: break; // handled by visitEnum
+      case ElementKind.FunctionPrototype: {
         this.visitFunctionInstances(name, <FunctionPrototype>element);
         break;
       }
-      case ElementKind.CLASS_PROTOTYPE: {
+      case ElementKind.ClassPrototype: {
         this.visitClassInstances(name, <ClassPrototype>element);
         break;
       }
-      case ElementKind.FIELD: {
+      case ElementKind.Field: {
         let fieldInstance = <Field>element;
-        if (fieldInstance.is(CommonFlags.COMPILED)) this.visitField(name, fieldInstance);
+        if (fieldInstance.is(CommonFlags.Compiled)) this.visitField(name, fieldInstance);
         break;
       }
-      case ElementKind.PROPERTY_PROTOTYPE: {
+      case ElementKind.PropertyPrototype: {
         let propertyInstance = (<PropertyPrototype>element).instance;
         if (!propertyInstance) break;
         element = propertyInstance;
         // fall-through
       }
-      case ElementKind.PROPERTY: {
+      case ElementKind.Property: {
         let propertyInstance = <Property>element;
         let getterInstance = propertyInstance.getterInstance;
         if (getterInstance) this.visitFunction(name, getterInstance);
@@ -114,11 +114,11 @@ export abstract class ExportsWalker {
         if (setterInstance) this.visitFunction(name, setterInstance);
         break;
       }
-      case ElementKind.NAMESPACE: {
+      case ElementKind.Namespace: {
         if (hasCompiledMember(element)) this.visitNamespace(name, element);
         break;
       }
-      case ElementKind.TYPEDEFINITION: break;
+      case ElementKind.TypeDefinition: break;
       default: assert(false);
     }
   }
@@ -129,7 +129,7 @@ export abstract class ExportsWalker {
       // TODO: for (let instance of instances.values()) {
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
-        if (instance.is(CommonFlags.COMPILED)) this.visitFunction(name, instance);
+        if (instance.is(CommonFlags.Compiled)) this.visitFunction(name, instance);
       }
     }
   }
@@ -140,7 +140,7 @@ export abstract class ExportsWalker {
       // TODO: for (let instance of instances.values()) {
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
-        if (instance.is(CommonFlags.COMPILED)) this.visitClass(name, instance);
+        if (instance.is(CommonFlags.Compiled)) this.visitClass(name, instance);
       }
     }
   }
@@ -165,30 +165,30 @@ export function hasCompiledMember(element: Element): bool {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
       let member = unchecked(_values[i]);
       switch (member.kind) {
-        case ElementKind.FUNCTION_PROTOTYPE: {
+        case ElementKind.FunctionPrototype: {
           let instances = (<FunctionPrototype>member).instances;
           if (instances) {
             // TODO: for (let instance of instances.values()) {
             for (let _values = Map_values(instances), j = 0, l = _values.length; j < l; ++j) {
               let instance = unchecked(_values[j]);
-              if (instance.is(CommonFlags.COMPILED)) return true;
+              if (instance.is(CommonFlags.Compiled)) return true;
             }
           }
           break;
         }
-        case ElementKind.CLASS_PROTOTYPE: {
+        case ElementKind.ClassPrototype: {
           let instances = (<ClassPrototype>member).instances;
           if (instances) {
             // TODO: for (let instance of instances.values()) {
             for (let _values = Map_values(instances), j = 0, l = _values.length; j < l; ++j) {
               let instance = unchecked(_values[j]);
-              if (instance.is(CommonFlags.COMPILED)) return true;
+              if (instance.is(CommonFlags.Compiled)) return true;
             }
           }
           break;
         }
         default: {
-          if (member.is(CommonFlags.COMPILED) || hasCompiledMember(member)) return true;
+          if (member.is(CommonFlags.Compiled) || hasCompiledMember(member)) return true;
           break;
         }
       }

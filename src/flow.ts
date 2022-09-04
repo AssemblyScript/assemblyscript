@@ -95,101 +95,101 @@ import {
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
   /** No specific conditions. */
-  NONE = 0,
+  None = 0,
 
   // categorical
 
   /** This flow always returns. */
-  RETURNS = 1 << 0,
+  Returns = 1 << 0,
   /** This flow always returns a wrapped value. */
-  RETURNS_WRAPPED = 1 << 1,
+  ReturnsWrapped = 1 << 1,
   /** This flow always returns a non-null value. */
-  RETURNS_NONNULL = 1 << 2,
+  ReturnsNonNull = 1 << 2,
   /** This flow always throws. */
-  THROWS = 1 << 3,
+  Throws = 1 << 3,
   /** This flow always breaks. */
-  BREAKS = 1 << 4,
+  Breaks = 1 << 4,
   /** This flow always continues. */
-  CONTINUES = 1 << 5,
+  Continues = 1 << 5,
   /** This flow always accesses `this`. Constructors only. */
-  ACCESSES_THIS = 1 << 6,
+  AccessesThis = 1 << 6,
   /** This flow always calls `super`. Constructors only. */
-  CALLS_SUPER = 1 << 7,
+  CallsSuper = 1 << 7,
   /** This flow always terminates (returns, throws or continues). */
-  TERMINATES = 1 << 8, // Note that this doesn't cover BREAKS, which is separate
+  Terminates = 1 << 8, // Note that this doesn't cover BREAKS, which is separate
 
   // conditional
 
   /** This flow conditionally returns in a child flow. */
-  CONDITIONALLY_RETURNS = 1 << 9,
+  ConditionallyReturns = 1 << 9,
   /** This flow conditionally throws in a child flow. */
-  CONDITIONALLY_THROWS = 1 << 10,
+  ConditionallyThrows = 1 << 10,
   /** This flow conditionally breaks in a child flow. */
-  CONDITIONALLY_BREAKS = 1 << 11,
+  ConditionallyBreaks = 1 << 11,
   /** This flow conditionally continues in a child flow. */
-  CONDITIONALLY_CONTINUES = 1 << 12,
+  ConditionallyContinues = 1 << 12,
   /** This flow conditionally accesses `this` in a child flow. Constructors only. */
-  CONDITIONALLY_ACCESSES_THIS = 1 << 13,
+  ConditionallyAccessesThis = 1 << 13,
   /** This flow may return a non-this value. Constructors only. */
-  MAY_RETURN_NONTHIS = 1 << 14,
+  MayReturnNonThis = 1 << 14,
 
   // other
 
   /** This is a flow with explicitly disabled bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 15,
+  UncheckedContext = 1 << 15,
   /** This is a flow compiling a constructor parameter. */
-  CTORPARAM_CONTEXT = 1 << 16,
+  CtorParamContext = 1 << 16,
 
   // masks
 
   /** Any categorical flag. */
-  ANY_CATEGORICAL = FlowFlags.RETURNS
-                  | FlowFlags.RETURNS_WRAPPED
-                  | FlowFlags.RETURNS_NONNULL
-                  | FlowFlags.THROWS
-                  | FlowFlags.BREAKS
-                  | FlowFlags.CONTINUES
-                  | FlowFlags.ACCESSES_THIS
-                  | FlowFlags.CALLS_SUPER
-                  | FlowFlags.TERMINATES,
+  AnyCategorical = FlowFlags.Returns
+                 | FlowFlags.ReturnsWrapped
+                 | FlowFlags.ReturnsNonNull
+                 | FlowFlags.Throws
+                 | FlowFlags.Breaks
+                 | FlowFlags.Continues
+                 | FlowFlags.AccessesThis
+                 | FlowFlags.CallsSuper
+                 | FlowFlags.Terminates,
 
   /** Any conditional flag. */
-  ANY_CONDITIONAL = FlowFlags.CONDITIONALLY_RETURNS
-                  | FlowFlags.CONDITIONALLY_THROWS
-                  | FlowFlags.CONDITIONALLY_BREAKS
-                  | FlowFlags.CONDITIONALLY_CONTINUES
-                  | FlowFlags.CONDITIONALLY_ACCESSES_THIS
+  AnyConditional = FlowFlags.ConditionallyReturns
+                 | FlowFlags.ConditionallyThrows
+                 | FlowFlags.ConditionallyBreaks
+                 | FlowFlags.ConditionallyContinues
+                 | FlowFlags.ConditionallyAccessesThis
 }
 
 /** Flags indicating the current state of a local. */
 export const enum LocalFlags {
   /** No specific conditions. */
-  NONE = 0,
+  None = 0,
 
   /** Local is constant. */
-  CONSTANT = 1 << 0,
+  Constant = 1 << 0,
   /** Local is properly wrapped. Relevant for small integers. */
-  WRAPPED = 1 << 1,
+  Wrapped = 1 << 1,
   /** Local is non-null. */
-  NONNULL = 1 << 2,
+  NonNull = 1 << 2,
   /** Local is initialized. */
-  INITIALIZED = 1 << 3
+  Initialized = 1 << 3
 }
 
 /** Flags indicating the current state of a field. */
 export const enum FieldFlags {
-  NONE = 0,
-  INITIALIZED = 1 << 0
+  None = 0,
+  Initialized = 1 << 0
 }
 
 /** Condition kinds. */
 export const enum ConditionKind {
   /** Outcome of the condition is unknown */
-  UNKNOWN,
+  Unknown,
   /** Condition is always true. */
-  TRUE,
+  True,
   /** Condition is always false. */
-  FALSE
+  False
 }
 
 /** A control flow evaluator. */
@@ -198,7 +198,7 @@ export class Flow {
   /** Creates the parent flow of the specified function. */
   static createParent(parentFunction: Function): Flow {
     var flow = new Flow(parentFunction);
-    if (parentFunction.is(CommonFlags.CONSTRUCTOR)) {
+    if (parentFunction.is(CommonFlags.Constructor)) {
       flow.initThisFieldFlags();
     }
     return flow;
@@ -209,7 +209,7 @@ export class Flow {
     var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
-    if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
+    if (inlineFunction.is(CommonFlags.Constructor)) {
       flow.initThisFieldFlags();
     }
     return flow;
@@ -227,7 +227,7 @@ export class Flow {
   /** Outer flow. Only relevant for first-class functions. */
   outer: Flow | null = null;
   /** Flow flags indicating specific conditions. */
-  flags: FlowFlags = FlowFlags.NONE;
+  flags: FlowFlags = FlowFlags.None;
   /** The label we break to when encountering a continue statement. */
   continueLabel: string | null = null;
   /** The label we break to when encountering a break statement. */
@@ -275,21 +275,21 @@ export class Flow {
   unset(flag: FlowFlags): void { this.flags &= ~flag; }
 
   deriveConditionalFlags(): FlowFlags {
-    let condiFlags = this.flags & FlowFlags.ANY_CONDITIONAL;
-    if (this.is(FlowFlags.RETURNS)) {
-      condiFlags |= FlowFlags.CONDITIONALLY_RETURNS;
+    let condiFlags = this.flags & FlowFlags.AnyConditional;
+    if (this.is(FlowFlags.Returns)) {
+      condiFlags |= FlowFlags.ConditionallyReturns;
     }
-    if (this.is(FlowFlags.THROWS)) {
-      condiFlags |= FlowFlags.CONDITIONALLY_THROWS;
+    if (this.is(FlowFlags.Throws)) {
+      condiFlags |= FlowFlags.ConditionallyThrows;
     }
-    if (this.is(FlowFlags.BREAKS)) {
-      condiFlags |= FlowFlags.CONDITIONALLY_BREAKS;
+    if (this.is(FlowFlags.Breaks)) {
+      condiFlags |= FlowFlags.ConditionallyBreaks;
     }
-    if (this.is(FlowFlags.CONTINUES)) {
-      condiFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
+    if (this.is(FlowFlags.Continues)) {
+      condiFlags |= FlowFlags.ConditionallyContinues;
     }
-    if (this.is(FlowFlags.ACCESSES_THIS)) {
-      condiFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
+    if (this.is(FlowFlags.AccessesThis)) {
+      condiFlags |= FlowFlags.ConditionallyAccessesThis;
     }
     return condiFlags;
   }
@@ -301,10 +301,10 @@ export class Flow {
     branch.outer = this.outer;
     if (resetBreakContext) {
       branch.flags = this.flags & ~(
-        FlowFlags.BREAKS |
-        FlowFlags.CONDITIONALLY_BREAKS |
-        FlowFlags.CONTINUES |
-        FlowFlags.CONDITIONALLY_CONTINUES
+        FlowFlags.Breaks |
+        FlowFlags.ConditionallyBreaks |
+        FlowFlags.Continues |
+        FlowFlags.ConditionallyContinues
       );
     } else {
       branch.flags = this.flags;
@@ -312,7 +312,7 @@ export class Flow {
       branch.breakLabel = this.breakLabel;
     }
     branch.localFlags = this.localFlags.slice();
-    if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+    if (this.actualFunction.is(CommonFlags.Constructor)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
       branch.thisFieldFlags = cloneMap(thisFieldFlags);
     } else {
@@ -351,7 +351,7 @@ export class Flow {
             while (i < k) unchecked(temps[i] = temps[i++ + 1]);
             temps.length = k;
             local.type = type;
-            local.flags = CommonFlags.NONE;
+            local.flags = CommonFlags.None;
             this.unsetLocalFlag(local.index, ~0);
             return local;
           }
@@ -362,7 +362,7 @@ export class Flow {
       if (temps && temps.length > 0) {
         local = assert(temps.pop());
         local.type = type;
-        local.flags = CommonFlags.NONE;
+        local.flags = CommonFlags.None;
       } else {
         local = parentFunction.addLocal(type);
       }
@@ -373,7 +373,7 @@ export class Flow {
 
   /** Frees the temporary local for reuse. */
   freeTempLocal(local: Local): void {
-    if (local.is(CommonFlags.INLINED)) return;
+    if (local.is(CommonFlags.Inlined)) return;
     assert(local.index >= 0);
     var parentFunction = this.parentFunction;
     var temps: Local[];
@@ -465,7 +465,7 @@ export class Flow {
     var scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else assert(!scopedLocals.has(name));
-    scopedLocal.set(CommonFlags.SCOPED);
+    scopedLocal.set(CommonFlags.Scoped);
     scopedLocals.set(name, scopedLocal);
     return scopedLocal;
   }
@@ -481,7 +481,7 @@ export class Flow {
         declarationNode.range, name
       );
     }
-    scopedDummy.set(CommonFlags.SCOPED);
+    scopedDummy.set(CommonFlags.Scoped);
     scopedLocals.set(name, scopedDummy);
     return scopedDummy;
   }
@@ -524,7 +524,7 @@ export class Flow {
       // TODO: for (let local of scopedLocals.values()) {
       for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
         let local = unchecked(_values[i]);
-        if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
+        if (local.is(CommonFlags.Scoped)) { // otherwise an alias
           return true;
         }
       }
@@ -548,7 +548,7 @@ export class Flow {
       // TODO: for (let local of scopedLocals.values()) {
       for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
         let local = unchecked(_values[i]);
-        if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
+        if (local.is(CommonFlags.Scoped)) { // otherwise an alias
           this.freeTempLocal(local);
         }
       }
@@ -609,16 +609,16 @@ export class Flow {
   /** Initializes `this` field flags. */
   initThisFieldFlags(): void {
     var actualFunction = this.actualFunction;
-    assert(actualFunction.is(CommonFlags.CONSTRUCTOR));
+    assert(actualFunction.is(CommonFlags.Constructor));
     var actualParent = actualFunction.parent;
-    assert(actualParent.kind == ElementKind.CLASS);
+    assert(actualParent.kind == ElementKind.Class);
     var actualClass = <Class>actualParent;
     this.thisFieldFlags = new Map();
     var members = actualClass.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
-        if (member.kind == ElementKind.FIELD) {
+        if (member.kind == ElementKind.Field) {
           let field = <Field>member;
           if (
             // guaranteed by super
@@ -628,9 +628,9 @@ export class Flow {
             // is initialized as a ctor parameter
             field.prototype.parameterIndex != -1 ||
             // is safe to initialize with zero
-            field.type.isAny(TypeFlags.VALUE | TypeFlags.NULLABLE)
+            field.type.isAny(TypeFlags.Value | TypeFlags.Nullable)
           ) {
-            this.setThisFieldFlag(field, FieldFlags.INITIALIZED);
+            this.setThisFieldFlag(field, FieldFlags.Initialized);
           }
         }
       }
@@ -650,7 +650,7 @@ export class Flow {
   setThisFieldFlag(field: Field, flag: FieldFlags): void {
     var fieldFlags = this.thisFieldFlags;
     if (fieldFlags) {
-      assert(this.actualFunction.is(CommonFlags.CONSTRUCTOR));
+      assert(this.actualFunction.is(CommonFlags.Constructor));
       if (fieldFlags.has(field)) {
         let flags = changetype<FieldFlags>(fieldFlags.get(field));
         fieldFlags.set(field, flags | flag);
@@ -658,7 +658,7 @@ export class Flow {
         fieldFlags.set(field, flag);
       }
     } else {
-      assert(!this.actualFunction.is(CommonFlags.CONSTRUCTOR));
+      assert(!this.actualFunction.is(CommonFlags.Constructor));
     }
   }
 
@@ -696,13 +696,13 @@ export class Flow {
 
     // respective inner flags are irrelevant if contexts differ
     if (this.breakLabel != other.breakLabel) {
-      if (otherFlags & (FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
-        otherFlags &= ~FlowFlags.TERMINATES;
+      if (otherFlags & (FlowFlags.Breaks | FlowFlags.ConditionallyBreaks)) {
+        otherFlags &= ~FlowFlags.Terminates;
       }
-      otherFlags &= ~(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS);
+      otherFlags &= ~(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
     }
     if (this.continueLabel != other.continueLabel) {
-      otherFlags &= ~(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
+      otherFlags &= ~(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
     }
 
     this.flags = this.flags | otherFlags; // what happens before is still true
@@ -711,11 +711,11 @@ export class Flow {
   }
 
   /** Inherits flags of a conditional branch joining again with this one, i.e. then without else. */
-  inheritBranch(other: Flow, conditionKind: ConditionKind = ConditionKind.UNKNOWN): void {
+  inheritBranch(other: Flow, conditionKind: ConditionKind = ConditionKind.Unknown): void {
     assert(other.parentFunction == this.parentFunction);
     switch (conditionKind) {
-      case ConditionKind.TRUE: this.inherit(other); // always executes
-      case ConditionKind.FALSE: return;             // never executes
+      case ConditionKind.True: this.inherit(other); // always executes
+      case ConditionKind.False: return;             // never executes
     }
 
     // Note that flags in `this` flow have already happened. For instance,
@@ -725,73 +725,73 @@ export class Flow {
 
     var thisFlags = this.flags;
     var otherFlags = other.flags;
-    var newFlags = FlowFlags.NONE;
+    var newFlags = FlowFlags.None;
 
-    if (thisFlags & FlowFlags.RETURNS) { // nothing can change that
-      newFlags |= FlowFlags.RETURNS;
-    } else if (otherFlags & FlowFlags.RETURNS) {
-      newFlags |= FlowFlags.CONDITIONALLY_RETURNS;
+    if (thisFlags & FlowFlags.Returns) { // nothing can change that
+      newFlags |= FlowFlags.Returns;
+    } else if (otherFlags & FlowFlags.Returns) {
+      newFlags |= FlowFlags.ConditionallyReturns;
     } else {
-      newFlags |= (thisFlags | otherFlags) & FlowFlags.CONDITIONALLY_RETURNS;
+      newFlags |= (thisFlags | otherFlags) & FlowFlags.ConditionallyReturns;
     }
 
     // must be the case in both
-    newFlags |= thisFlags & otherFlags & FlowFlags.RETURNS_WRAPPED;
-    newFlags |= thisFlags & otherFlags & FlowFlags.RETURNS_NONNULL;
+    newFlags |= thisFlags & otherFlags & FlowFlags.ReturnsWrapped;
+    newFlags |= thisFlags & otherFlags & FlowFlags.ReturnsNonNull;
 
-    if (thisFlags & FlowFlags.THROWS) { // nothing can change that
-      newFlags |= FlowFlags.THROWS;
-    } else if (otherFlags & FlowFlags.THROWS) {
-      newFlags |= FlowFlags.CONDITIONALLY_THROWS;
+    if (thisFlags & FlowFlags.Throws) { // nothing can change that
+      newFlags |= FlowFlags.Throws;
+    } else if (otherFlags & FlowFlags.Throws) {
+      newFlags |= FlowFlags.ConditionallyThrows;
     } else {
-      newFlags |= (thisFlags | otherFlags) & FlowFlags.CONDITIONALLY_THROWS;
+      newFlags |= (thisFlags | otherFlags) & FlowFlags.ConditionallyThrows;
     }
 
-    if (thisFlags & FlowFlags.BREAKS) { // nothing can change that
-      newFlags |= FlowFlags.BREAKS;
+    if (thisFlags & FlowFlags.Breaks) { // nothing can change that
+      newFlags |= FlowFlags.Breaks;
     } else if (other.breakLabel == this.breakLabel) {
-      if (otherFlags & FlowFlags.BREAKS) {
-        newFlags |= FlowFlags.CONDITIONALLY_BREAKS;
+      if (otherFlags & FlowFlags.Breaks) {
+        newFlags |= FlowFlags.ConditionallyBreaks;
       } else {
-        newFlags |= (thisFlags | otherFlags) & FlowFlags.CONDITIONALLY_BREAKS;
+        newFlags |= (thisFlags | otherFlags) & FlowFlags.ConditionallyBreaks;
       }
     } else {
-      newFlags |= thisFlags & FlowFlags.CONDITIONALLY_BREAKS;
+      newFlags |= thisFlags & FlowFlags.ConditionallyBreaks;
     }
 
-    if (thisFlags & FlowFlags.CONTINUES) { // nothing can change that
-      newFlags |= FlowFlags.CONTINUES;
+    if (thisFlags & FlowFlags.Continues) { // nothing can change that
+      newFlags |= FlowFlags.Continues;
     } else if (other.continueLabel == this.continueLabel) {
-      if (otherFlags & FlowFlags.CONTINUES) {
-        newFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
+      if (otherFlags & FlowFlags.Continues) {
+        newFlags |= FlowFlags.ConditionallyContinues;
       } else {
-        newFlags |= (thisFlags | otherFlags) & FlowFlags.CONDITIONALLY_CONTINUES;
+        newFlags |= (thisFlags | otherFlags) & FlowFlags.ConditionallyContinues;
       }
     } else {
-      newFlags |= thisFlags & FlowFlags.CONDITIONALLY_CONTINUES;
+      newFlags |= thisFlags & FlowFlags.ConditionallyContinues;
     }
 
-    if (thisFlags & FlowFlags.ACCESSES_THIS) { // can become conditional
-      if (otherFlags & FlowFlags.ACCESSES_THIS) {
-        newFlags |= FlowFlags.ACCESSES_THIS;
+    if (thisFlags & FlowFlags.AccessesThis) { // can become conditional
+      if (otherFlags & FlowFlags.AccessesThis) {
+        newFlags |= FlowFlags.AccessesThis;
       } else {
-        newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
+        newFlags |= FlowFlags.ConditionallyAccessesThis;
       }
-    } else if (otherFlags & FlowFlags.ACCESSES_THIS) {
-      newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
+    } else if (otherFlags & FlowFlags.AccessesThis) {
+      newFlags |= FlowFlags.ConditionallyAccessesThis;
     }
 
     // may be the case in any
-    newFlags |= (thisFlags | otherFlags) & FlowFlags.MAY_RETURN_NONTHIS;
+    newFlags |= (thisFlags | otherFlags) & FlowFlags.MayReturnNonThis;
 
     // must be the case in both
-    newFlags |= thisFlags & otherFlags & FlowFlags.CALLS_SUPER;
+    newFlags |= thisFlags & otherFlags & FlowFlags.CallsSuper;
 
-    if (thisFlags & FlowFlags.TERMINATES) { // nothing can change that
-      newFlags |= FlowFlags.TERMINATES;
+    if (thisFlags & FlowFlags.Terminates) { // nothing can change that
+      newFlags |= FlowFlags.Terminates;
     }
 
-    this.flags = newFlags | (thisFlags & (FlowFlags.UNCHECKED_CONTEXT | FlowFlags.CTORPARAM_CONTEXT));
+    this.flags = newFlags | (thisFlags & (FlowFlags.UncheckedContext | FlowFlags.CtorParamContext));
 
     // local flags
     var thisLocalFlags = this.localFlags;
@@ -803,10 +803,10 @@ export class Flow {
       let thisFlags = i < numThisLocalFlags ? thisLocalFlags[i] : 0;
       let otherFlags = i < numOtherLocalFlags ? otherLocalFlags[i] : 0;
       thisLocalFlags[i] = thisFlags & otherFlags & (
-        LocalFlags.CONSTANT  |
-        LocalFlags.WRAPPED   |
-        LocalFlags.NONNULL   |
-        LocalFlags.INITIALIZED
+        LocalFlags.Constant  |
+        LocalFlags.Wrapped   |
+        LocalFlags.NonNull   |
+        LocalFlags.Initialized
       );
     }
 
@@ -823,98 +823,98 @@ export class Flow {
 
     var leftFlags = left.flags;
     var rightFlags = right.flags;
-    var newFlags = FlowFlags.NONE;
+    var newFlags = FlowFlags.None;
 
-    if (leftFlags & FlowFlags.RETURNS) {
-      if (rightFlags & FlowFlags.RETURNS) {
-        newFlags |= FlowFlags.RETURNS;
+    if (leftFlags & FlowFlags.Returns) {
+      if (rightFlags & FlowFlags.Returns) {
+        newFlags |= FlowFlags.Returns;
       } else {
-        newFlags |= FlowFlags.CONDITIONALLY_RETURNS;
+        newFlags |= FlowFlags.ConditionallyReturns;
       }
-    } else if (rightFlags & FlowFlags.RETURNS) {
-      newFlags |= FlowFlags.CONDITIONALLY_RETURNS;
+    } else if (rightFlags & FlowFlags.Returns) {
+      newFlags |= FlowFlags.ConditionallyReturns;
     } else {
-      newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_RETURNS;
+      newFlags |= (leftFlags | rightFlags) & FlowFlags.ConditionallyReturns;
     }
 
-    if ((leftFlags & FlowFlags.RETURNS_WRAPPED) && (rightFlags & FlowFlags.RETURNS_WRAPPED)) {
-      newFlags |= FlowFlags.RETURNS_WRAPPED;
+    if ((leftFlags & FlowFlags.ReturnsWrapped) && (rightFlags & FlowFlags.ReturnsWrapped)) {
+      newFlags |= FlowFlags.ReturnsWrapped;
     }
 
-    if ((leftFlags & FlowFlags.RETURNS_NONNULL) && (rightFlags & FlowFlags.RETURNS_NONNULL)) {
-      newFlags |= FlowFlags.RETURNS_NONNULL;
+    if ((leftFlags & FlowFlags.ReturnsNonNull) && (rightFlags & FlowFlags.ReturnsNonNull)) {
+      newFlags |= FlowFlags.ReturnsNonNull;
     }
 
-    if (leftFlags & FlowFlags.THROWS) {
-      if (rightFlags & FlowFlags.THROWS) {
-        newFlags |= FlowFlags.THROWS;
+    if (leftFlags & FlowFlags.Throws) {
+      if (rightFlags & FlowFlags.Throws) {
+        newFlags |= FlowFlags.Throws;
       } else {
-        newFlags |= FlowFlags.CONDITIONALLY_THROWS;
+        newFlags |= FlowFlags.ConditionallyThrows;
       }
-    } else if (rightFlags & FlowFlags.THROWS) {
-      newFlags |= FlowFlags.CONDITIONALLY_THROWS;
+    } else if (rightFlags & FlowFlags.Throws) {
+      newFlags |= FlowFlags.ConditionallyThrows;
     } else {
-      newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_THROWS;
+      newFlags |= (leftFlags | rightFlags) & FlowFlags.ConditionallyThrows;
     }
 
-    if (leftFlags & FlowFlags.BREAKS) {
-      if (rightFlags & FlowFlags.BREAKS) {
-        newFlags |= FlowFlags.BREAKS;
+    if (leftFlags & FlowFlags.Breaks) {
+      if (rightFlags & FlowFlags.Breaks) {
+        newFlags |= FlowFlags.Breaks;
       } else {
-        newFlags |= FlowFlags.CONDITIONALLY_BREAKS;
+        newFlags |= FlowFlags.ConditionallyBreaks;
       }
-    } else if (rightFlags & FlowFlags.BREAKS) {
-      newFlags |= FlowFlags.CONDITIONALLY_BREAKS;
+    } else if (rightFlags & FlowFlags.Breaks) {
+      newFlags |= FlowFlags.ConditionallyBreaks;
     } else {
-      newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_BREAKS;
+      newFlags |= (leftFlags | rightFlags) & FlowFlags.ConditionallyBreaks;
     }
 
-    if (leftFlags & FlowFlags.CONTINUES) {
-      if (rightFlags & FlowFlags.CONTINUES) {
-        newFlags |= FlowFlags.CONTINUES;
+    if (leftFlags & FlowFlags.Continues) {
+      if (rightFlags & FlowFlags.Continues) {
+        newFlags |= FlowFlags.Continues;
       } else {
-        newFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
+        newFlags |= FlowFlags.ConditionallyContinues;
       }
-    } else if (rightFlags & FlowFlags.CONTINUES) {
-      newFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
+    } else if (rightFlags & FlowFlags.Continues) {
+      newFlags |= FlowFlags.ConditionallyContinues;
     } else {
-      newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_CONTINUES;
+      newFlags |= (leftFlags | rightFlags) & FlowFlags.ConditionallyContinues;
     }
 
-    if (leftFlags & FlowFlags.ACCESSES_THIS) {
-      if (rightFlags & FlowFlags.ACCESSES_THIS) {
-        newFlags |= FlowFlags.ACCESSES_THIS;
+    if (leftFlags & FlowFlags.AccessesThis) {
+      if (rightFlags & FlowFlags.AccessesThis) {
+        newFlags |= FlowFlags.AccessesThis;
       } else {
-        newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
+        newFlags |= FlowFlags.ConditionallyAccessesThis;
       }
-    } else if (rightFlags & FlowFlags.ACCESSES_THIS) {
-      newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
+    } else if (rightFlags & FlowFlags.AccessesThis) {
+      newFlags |= FlowFlags.ConditionallyAccessesThis;
     } else {
-      newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_ACCESSES_THIS;
+      newFlags |= (leftFlags | rightFlags) & FlowFlags.ConditionallyAccessesThis;
     }
 
-    newFlags |= (leftFlags | rightFlags) & FlowFlags.MAY_RETURN_NONTHIS;
+    newFlags |= (leftFlags | rightFlags) & FlowFlags.MayReturnNonThis;
 
-    if ((leftFlags & FlowFlags.CALLS_SUPER) && (rightFlags & FlowFlags.CALLS_SUPER)) {
-      newFlags |= FlowFlags.CALLS_SUPER;
+    if ((leftFlags & FlowFlags.CallsSuper) && (rightFlags & FlowFlags.CallsSuper)) {
+      newFlags |= FlowFlags.CallsSuper;
     }
 
-    if ((leftFlags & FlowFlags.TERMINATES) && (rightFlags & FlowFlags.TERMINATES)) {
-      newFlags |= FlowFlags.TERMINATES;
+    if ((leftFlags & FlowFlags.Terminates) && (rightFlags & FlowFlags.Terminates)) {
+      newFlags |= FlowFlags.Terminates;
     }
 
-    this.flags = newFlags | (this.flags & (FlowFlags.UNCHECKED_CONTEXT | FlowFlags.CTORPARAM_CONTEXT));
+    this.flags = newFlags | (this.flags & (FlowFlags.UncheckedContext | FlowFlags.CtorParamContext));
 
     // local flags
     var thisLocalFlags = this.localFlags;
-    if (leftFlags & FlowFlags.TERMINATES) {
-      if (!(rightFlags & FlowFlags.TERMINATES)) {
+    if (leftFlags & FlowFlags.Terminates) {
+      if (!(rightFlags & FlowFlags.Terminates)) {
         let rightLocalFlags = right.localFlags;
         for (let i = 0, k = rightLocalFlags.length; i < k; ++i) {
           thisLocalFlags[i] = rightLocalFlags[i];
         }
       }
-    } else if (rightFlags & FlowFlags.TERMINATES) {
+    } else if (rightFlags & FlowFlags.Terminates) {
       let leftLocalFlags = left.localFlags;
       for (let i = 0, k = leftLocalFlags.length; i < k; ++i) {
         thisLocalFlags[i] = leftLocalFlags[i];
@@ -929,10 +929,10 @@ export class Flow {
         let leftFlags = i < numLeftLocalFlags ? leftLocalFlags[i] : 0;
         let rightFlags = i < numRightLocalFlags ? rightLocalFlags[i] : 0;
         thisLocalFlags[i] = leftFlags & rightFlags & (
-          LocalFlags.CONSTANT  |
-          LocalFlags.WRAPPED   |
-          LocalFlags.NONNULL   |
-          LocalFlags.INITIALIZED
+          LocalFlags.Constant  |
+          LocalFlags.Wrapped   |
+          LocalFlags.NonNull   |
+          LocalFlags.Initialized
         );
       }
     }
@@ -946,10 +946,10 @@ export class Flow {
         let key = _keys[i];
         let leftFlags = changetype<FieldFlags>(leftFieldFlags.get(key));
         if (
-          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) &&
-          (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.INITIALIZED)
+          (leftFlags & FieldFlags.Initialized) != 0 && rightFieldFlags.has(key) &&
+          (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.Initialized)
         ) {
-          newFieldFlags.set(key, FieldFlags.INITIALIZED);
+          newFieldFlags.set(key, FieldFlags.Initialized);
         }
       }
       this.thisFieldFlags = newFieldFlags;
@@ -970,12 +970,12 @@ export class Flow {
       let local = localsByIndex[i];
       let type = local.type;
       if (type.isShortIntegerValue) {
-        if (before.isLocalFlag(i, LocalFlags.WRAPPED) && !after.isLocalFlag(i, LocalFlags.WRAPPED)) {
+        if (before.isLocalFlag(i, LocalFlags.Wrapped) && !after.isLocalFlag(i, LocalFlags.Wrapped)) {
           return true;
         }
       }
       if (type.isNullableReference) {
-        if (before.isLocalFlag(i, LocalFlags.NONNULL) && !after.isLocalFlag(i, LocalFlags.NONNULL)) {
+        if (before.isLocalFlag(i, LocalFlags.NonNull) && !after.isLocalFlag(i, LocalFlags.NonNull)) {
           return true;
         }
       }
@@ -988,11 +988,11 @@ export class Flow {
     var numThisLocalFlags = this.localFlags.length;
     var numOtherLocalFlags = other.localFlags.length;
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
-      if (this.isLocalFlag(i, LocalFlags.WRAPPED) != other.isLocalFlag(i, LocalFlags.WRAPPED)) {
-        this.unsetLocalFlag(i, LocalFlags.WRAPPED); // assume not wrapped
+      if (this.isLocalFlag(i, LocalFlags.Wrapped) != other.isLocalFlag(i, LocalFlags.Wrapped)) {
+        this.unsetLocalFlag(i, LocalFlags.Wrapped); // assume not wrapped
       }
-      if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
-        this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
+      if (this.isLocalFlag(i, LocalFlags.NonNull) != other.isLocalFlag(i, LocalFlags.NonNull)) {
+        this.unsetLocalFlag(i, LocalFlags.NonNull); // assume possibly null
       }
     }
   }
@@ -1001,17 +1001,17 @@ export class Flow {
   isNonnull(expr: ExpressionRef, type: Type): bool {
     if (!type.isNullableReference) return true;
     // below, only teeLocal/getLocal are relevant because these are the only expressions that
-    // depend on a dynamic nullable state (flag = LocalFlags.NONNULL), while everything else
+    // depend on a dynamic nullable state (flag = LocalFlags.NonNull), while everything else
     // has already been handled by the nullable type check above.
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
         let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-        return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+        return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NonNull, false);
       }
       case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-        return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+        return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NonNull, false);
       }
     }
     return false;
@@ -1038,16 +1038,16 @@ export class Flow {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
         let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-        if (!iff || iff.isLocalFlag(local.index, LocalFlags.NONNULL)) {
-          this.setLocalFlag(local.index, LocalFlags.NONNULL);
+        if (!iff || iff.isLocalFlag(local.index, LocalFlags.NonNull)) {
+          this.setLocalFlag(local.index, LocalFlags.NonNull);
         }
         this.inheritNonnullIfTrue(getLocalSetValue(expr), iff); // must have been true-ish as well
         break;
       }
       case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-        if (!iff || iff.isLocalFlag(local.index, LocalFlags.NONNULL)) {
-          this.setLocalFlag(local.index, LocalFlags.NONNULL);
+        if (!iff || iff.isLocalFlag(local.index, LocalFlags.NonNull)) {
+          this.setLocalFlag(local.index, LocalFlags.NonNull);
         }
         break;
       }
@@ -1240,7 +1240,7 @@ export class Flow {
       // overflows if the local isn't wrapped or the conversion does
       case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-        return !this.isLocalFlag(local.index, LocalFlags.WRAPPED, true)
+        return !this.isLocalFlag(local.index, LocalFlags.Wrapped, true)
             || canConversionOverflow(local.type, type);
       }
 
@@ -1254,7 +1254,7 @@ export class Flow {
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
         let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
-        assert(global.kind == ElementKind.GLOBAL || global.kind == ElementKind.ENUMVALUE);
+        assert(global.kind == ElementKind.Global || global.kind == ElementKind.EnumValue);
         return canConversionOverflow((<TypedElement>global).type, type);
       }
 
@@ -1417,7 +1417,7 @@ export class Flow {
           default: assert(false);
         }
         switch (type.kind) {
-          case TypeKind.BOOL: return (value & ~1) != 0;
+          case TypeKind.Bool: return (value & ~1) != 0;
           case TypeKind.I8:   return value < <i32>i8.MIN_VALUE  || value > <i32>i8.MAX_VALUE;
           case TypeKind.I16:  return value < <i32>i16.MIN_VALUE || value > <i32>i16.MAX_VALUE;
           case TypeKind.U8:   return value < 0 || value > <i32>u8.MAX_VALUE;
@@ -1469,10 +1469,10 @@ export class Flow {
         let instanceName = assert(getCallTarget(expr));
         if (instancesByName.has(instanceName)) {
           let instance = assert(instancesByName.get(instanceName));
-          assert(instance.kind == ElementKind.FUNCTION);
+          assert(instance.kind == ElementKind.Function);
           let functionInstance = <Function>instance;
           let returnType = functionInstance.signature.returnType;
-          return !functionInstance.flow.is(FlowFlags.RETURNS_WRAPPED)
+          return !functionInstance.flow.is(FlowFlags.ReturnsWrapped)
               || canConversionOverflow(returnType, type);
         }
         return false; // assume no overflow for builtins
@@ -1492,21 +1492,21 @@ export class Flow {
       ++levels;
     }
     var sb = new Array<string>();
-    if (this.is(FlowFlags.RETURNS)) sb.push("RETURNS");
-    if (this.is(FlowFlags.RETURNS_WRAPPED)) sb.push("RETURNS_WRAPPED");
-    if (this.is(FlowFlags.RETURNS_NONNULL)) sb.push("RETURNS_NONNULL");
-    if (this.is(FlowFlags.THROWS)) sb.push("THROWS");
-    if (this.is(FlowFlags.BREAKS)) sb.push("BREAKS");
-    if (this.is(FlowFlags.CONTINUES)) sb.push("CONTINUES");
-    if (this.is(FlowFlags.ACCESSES_THIS)) sb.push("ACCESSES_THIS");
-    if (this.is(FlowFlags.CALLS_SUPER)) sb.push("CALLS_SUPER");
-    if (this.is(FlowFlags.TERMINATES)) sb.push("TERMINATES");
-    if (this.is(FlowFlags.CONDITIONALLY_RETURNS)) sb.push("CONDITIONALLY_RETURNS");
-    if (this.is(FlowFlags.CONDITIONALLY_THROWS)) sb.push("CONDITIONALLY_THROWS");
-    if (this.is(FlowFlags.CONDITIONALLY_BREAKS)) sb.push("CONDITIONALLY_BREAKS");
-    if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
-    if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESSES_THIS");
-    if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
+    if (this.is(FlowFlags.Returns)) sb.push("RETURNS");
+    if (this.is(FlowFlags.ReturnsWrapped)) sb.push("RETURNS_WRAPPED");
+    if (this.is(FlowFlags.ReturnsNonNull)) sb.push("RETURNS_NONNULL");
+    if (this.is(FlowFlags.Throws)) sb.push("THROWS");
+    if (this.is(FlowFlags.Breaks)) sb.push("BREAKS");
+    if (this.is(FlowFlags.Continues)) sb.push("CONTINUES");
+    if (this.is(FlowFlags.AccessesThis)) sb.push("ACCESSES_THIS");
+    if (this.is(FlowFlags.CallsSuper)) sb.push("CALLS_SUPER");
+    if (this.is(FlowFlags.Terminates)) sb.push("TERMINATES");
+    if (this.is(FlowFlags.ConditionallyReturns)) sb.push("CONDITIONALLY_RETURNS");
+    if (this.is(FlowFlags.ConditionallyThrows)) sb.push("CONDITIONALLY_THROWS");
+    if (this.is(FlowFlags.ConditionallyBreaks)) sb.push("CONDITIONALLY_BREAKS");
+    if (this.is(FlowFlags.ConditionallyContinues)) sb.push("CONDITIONALLY_CONTINUES");
+    if (this.is(FlowFlags.ConditionallyAccessesThis)) sb.push("CONDITIONALLY_ACCESSES_THIS");
+    if (this.is(FlowFlags.MayReturnNonThis)) sb.push("MAY_RETURN_NONTHIS");
     return `Flow(${this.actualFunction})[${levels}] ${sb.join(" ")}`;
   }
 }
