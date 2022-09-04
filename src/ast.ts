@@ -2228,6 +2228,10 @@ export class SwitchCase extends Node {
   ) {
     super(NodeKind.SWITCHCASE, range);
   }
+
+  get isDefault(): bool {
+    return this.label == null;
+  }
 }
 
 /** Represents a `switch` statement. */
