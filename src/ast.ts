@@ -2003,7 +2003,7 @@ export class ForStatement extends Statement {
     public condition: Expression | null,
     /** Incrementor expression, if present. */
     public incrementor: Expression | null,
-    /** Body statment being looped over. */
+    /** Body statement being looped over. */
     public body: Statement,
     /** Source range. */
     range: Range
@@ -2019,7 +2019,7 @@ export class ForOfStatement extends Statement {
     public variable: Statement,
     /** Iterable expression being iterated. */
     public iterable: Expression,
-    /** Body statment being looped over. */
+    /** Body statement being looped over. */
     public body: Statement,
     /** Source range. */
     range: Range
