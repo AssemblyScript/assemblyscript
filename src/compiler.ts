@@ -2323,7 +2323,7 @@ export class Compiler extends DiagnosticEmitter {
     var bodyFlow = flow.fork();
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
-    var body = statement.statement;
+    var body = statement.body;
     if (body.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
     } else {
@@ -2528,7 +2528,7 @@ export class Compiler extends DiagnosticEmitter {
     bodyFlow.inheritNonnullIfTrue(condExpr);
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
-    var body = statement.statement;
+    var body = statement.body;
     if (body.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
     } else {
@@ -3209,7 +3209,7 @@ export class Compiler extends DiagnosticEmitter {
     bodyFlow.inheritNonnullIfTrue(condExpr);
     this.currentFlow = bodyFlow;
     var bodyStmts = new Array<ExpressionRef>();
-    var body = statement.statement;
+    var body = statement.body;
     if (body.kind == NodeKind.BLOCK) {
       this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
     } else {

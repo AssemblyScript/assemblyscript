@@ -909,8 +909,8 @@ export class ASTBuilder {
   visitDoStatement(node: DoStatement): void {
     var sb = this.sb;
     sb.push("do ");
-    this.visitNode(node.statement);
-    if (node.statement.kind == NodeKind.BLOCK) {
+    this.visitNode(node.body);
+    if (node.body.kind == NodeKind.BLOCK) {
       sb.push(" while (");
     } else {
       sb.push(";\n");
@@ -1090,7 +1090,7 @@ export class ASTBuilder {
       sb.push(";");
     }
     sb.push(") ");
-    this.visitNode(node.statement);
+    this.visitNode(node.body);
   }
 
   visitForOfStatement(node: ForOfStatement): void {
@@ -1100,7 +1100,7 @@ export class ASTBuilder {
     sb.push(" of ");
     this.visitNode(node.iterable);
     sb.push(") ");
-    this.visitNode(node.statement);
+    this.visitNode(node.body);
   }
 
   visitFunctionDeclaration(node: FunctionDeclaration, isDefault: bool = false): void {
@@ -1530,12 +1530,12 @@ export class ASTBuilder {
     var sb = this.sb;
     sb.push("while (");
     this.visitNode(node.condition);
-    var statement = node.statement;
-    if (statement.kind == NodeKind.EMPTY) {
+    var body = node.body;
+    if (body.kind == NodeKind.EMPTY) {
       sb.push(")");
     } else {
       sb.push(") ");
-      this.visitNode(node.statement);
+      this.visitNode(body);
     }
   }
 

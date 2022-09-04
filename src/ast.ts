@@ -1833,8 +1833,8 @@ export class ContinueStatement extends Statement {
 /** Represents a `do` statement. */
 export class DoStatement extends Statement {
   constructor(
-    /** Statement being looped over. */
-    public statement: Statement,
+    /** Body statement being looped over. */
+    public body: Statement,
     /** Condition when to repeat. */
     public condition: Expression,
     /** Source range. */
@@ -1999,8 +1999,8 @@ export class ForStatement extends Statement {
     public condition: Expression | null,
     /** Incrementor expression, if present. */
     public incrementor: Expression | null,
-    /** Statement being looped over. */
-    public statement: Statement,
+    /** Body statment being looped over. */
+    public body: Statement,
     /** Source range. */
     range: Range
   ) {
@@ -2015,8 +2015,8 @@ export class ForOfStatement extends Statement {
     public variable: Statement,
     /** Iterable expression being iterated. */
     public iterable: Expression,
-    /** Statement being looped over. */
-    public statement: Statement,
+    /** Body statment being looped over. */
+    public body: Statement,
     /** Source range. */
     range: Range
   ) {
@@ -2355,8 +2355,8 @@ export class WhileStatement extends Statement {
   constructor(
     /** Condition expression. */
     public condition: Expression,
-    /** Statement being looped over. */
-    public statement: Statement,
+    /** Body statement being looped over. */
+    public body: Statement,
     /** Source range. */
     range: Range
   ) {
