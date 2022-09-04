@@ -2941,11 +2941,28 @@ export abstract class DeclaredElement extends Element {
   get identifierAndSignatureRange(): Range {
     var declaration = this.declaration;
     var identifierNode = declaration.name;
-    if (declaration.kind == NodeKind.FUNCTIONDECLARATION || declaration.kind == NodeKind.METHODDECLARATION) {
+    var kind = declaration.kind;
+    if (kind == NodeKind.FUNCTIONDECLARATION || kind == NodeKind.METHODDECLARATION) {
       let signatureNode = (<FunctionDeclaration>declaration).signature;
       return Range.join(identifierNode.range, signatureNode.range);
     }
     return identifierNode.range;
+  }
+
+  get parametersOrIdentifierRange(): Range {
+    var declaration = this.declaration;
+    var kind = declaration.kind;
+    if (kind == NodeKind.FUNCTIONDECLARATION || kind == NodeKind.METHODDECLARATION) {
+      let signatureNode = (<FunctionDeclaration>declaration).signature;
+      let parameters = signatureNode.parameters;
+      let numParams = parameters.length;
+      if (numParams != 0) {
+        return Range.join(parameters[0].range, parameters[numParams - 1].range);
+      } else {
+        return signatureNode.range.atStart.extendBy(2);
+      }
+    }
+    return declaration.name.range;
   }
 
   /** Gets the assiciated decorator nodes. */

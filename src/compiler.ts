@@ -5525,17 +5525,12 @@ export class Compiler extends DiagnosticEmitter {
     valueExpr: ExpressionRef,
     reportNode: Node
   ): ExpressionRef {
-    var parameters = operatorInstance.signature.parameterTypes;
-    var numParams = parameters.length;
+    var numParams = operatorInstance.signature.parameterTypes.length;
     var expectedNumParams = operatorInstance.is(CommonFlags.INSTANCE) ? 0 : 1;
     if (numParams != expectedNumParams) {
-      let funType = operatorInstance.prototype.functionTypeNode;
-      let funParams = funType.parameters;
       this.error(
         DiagnosticCode.Expected_0_arguments_but_got_1,
-        numParams != 0
-          ? Range.join(funParams[0].range, funParams[numParams - 1].range)
-          : funType.range.atStart.extendBy(2),
+        operatorInstance.parametersOrIdentifierRange,
         expectedNumParams.toString(),
         numParams.toString()
       );
@@ -5560,13 +5555,9 @@ export class Compiler extends DiagnosticEmitter {
     if (operatorInstance.is(CommonFlags.INSTANCE)) {
       // instance method
       if (numParams != 1) {
-        let funType = operatorInstance.prototype.functionTypeNode;
-        let funParams = funType.parameters;
         this.error(
           DiagnosticCode.Expected_0_arguments_but_got_1,
-          numParams != 0
-            ? Range.join(funParams[0].range, funParams[numParams - 1].range)
-            : funType.range.atStart.extendBy(2),
+          operatorInstance.parametersOrIdentifierRange,
           "1",
           numParams.toString()
         );
@@ -5577,13 +5568,9 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       // static method
       if (numParams != 2) {
-        let funType = operatorInstance.prototype.functionTypeNode;
-        let funParams = funType.parameters;
         this.error(
           DiagnosticCode.Expected_0_arguments_but_got_1,
-          numParams != 0
-            ? Range.join(funParams[0].range, funParams[numParams - 1].range)
-            : funType.range.atStart.extendBy(2),
+          operatorInstance.parametersOrIdentifierRange,
           "2",
           numParams.toString()
         );
@@ -5685,13 +5672,9 @@ export class Compiler extends DiagnosticEmitter {
         let numParams = parameterTypes.length;
 
         if (numParams != 2) {
-          let funType = indexedSet.prototype.functionTypeNode;
-          let funParams = funType.parameters;
           this.error(
             DiagnosticCode.Expected_0_arguments_but_got_1,
-            numParams != 0
-              ? Range.join(funParams[0].range, funParams[numParams - 1].range)
-              : funType.range.atStart.extendBy(2),
+            indexedSet.parametersOrIdentifierRange,
             "2",
             numParams.toString()
           );
@@ -7228,13 +7211,9 @@ export class Compiler extends DiagnosticEmitter {
 
           let numParams = indexedGet.signature.parameterTypes.length;
           if (numParams != 1) {
-            let funType = indexedGet.prototype.functionTypeNode;
-            let funParams = funType.parameters;
             this.error(
               DiagnosticCode.Expected_0_arguments_but_got_1,
-              numParams != 0
-                ? Range.join(funParams[0].range, funParams[numParams - 1].range)
-                : funType.range.atStart.extendBy(2),
+              indexedGet.parametersOrIdentifierRange,
               "1",
               numParams.toString()
             );

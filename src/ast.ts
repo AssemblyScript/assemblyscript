@@ -1239,10 +1239,8 @@ export class CallExpression extends Expression {
   get typeArgumentsRange(): Range {
     var typeArguments = this.typeArguments;
     var numTypeArguments: i32;
-    if (typeArguments) {
-      if (numTypeArguments = typeArguments.length) {
-        return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
-      }
+    if (typeArguments && (numTypeArguments = typeArguments.length)) {
+      return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
     }
     return this.expression.range;
   }
