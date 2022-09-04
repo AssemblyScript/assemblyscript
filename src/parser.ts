@@ -3423,11 +3423,11 @@ export class Parser extends DiagnosticEmitter {
     var startPos = tn.tokenPos;
     var stmt: Statement | null;
     if (tn.skip(Token.OPENBRACE)) {
-      let statements = new Array<Statement>();
+      let bodyStatements = new Array<Statement>();
       while (!tn.skip(Token.CLOSEBRACE)) {
         stmt = this.parseStatement(tn);
         if (!stmt) return null;
-        statements.push(stmt);
+        bodyStatements.push(stmt);
       }
       let catchVariable: IdentifierExpression | null = null;
       let catchStatements: Statement[] | null = null;
@@ -3492,7 +3492,7 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
       let ret = Node.createTryStatement(
-        statements,
+        bodyStatements,
         catchVariable,
         catchStatements,
         finallyStatements,

@@ -1420,10 +1420,10 @@ export class ASTBuilder {
     var sb = this.sb;
     sb.push("try {\n");
     var indentLevel = ++this.indentLevel;
-    var statements = node.statements;
-    for (let i = 0, k = statements.length; i < k; ++i) {
+    var bodyStatements = node.bodyStatements;
+    for (let i = 0, k = bodyStatements.length; i < k; ++i) {
       indent(sb, indentLevel);
-      this.visitNodeAndTerminate(statements[i]);
+      this.visitNodeAndTerminate(bodyStatements[i]);
     }
     var catchVariable = node.catchVariable;
     if (catchVariable) {

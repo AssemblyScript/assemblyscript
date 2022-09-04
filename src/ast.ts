@@ -473,11 +473,11 @@ export abstract class Node {
   }
 
   static createDoStatement(
-    statement: Statement,
+    body: Statement,
     condition: Expression,
     range: Range
   ): DoStatement {
-    return new DoStatement(statement, condition, range);
+    return new DoStatement(body, condition, range);
   }
 
   static createEmptyStatement(
@@ -606,19 +606,19 @@ export abstract class Node {
     initializer: Statement | null,
     condition: Expression | null,
     incrementor: Expression | null,
-    statement: Statement,
+    body: Statement,
     range: Range
   ): ForStatement {
-    return new ForStatement(initializer, condition, incrementor, statement, range);
+    return new ForStatement(initializer, condition, incrementor, body, range);
   }
 
   static createForOfStatement(
     variable: Statement,
     iterable: Expression,
-    statement: Statement,
+    body: Statement,
     range: Range
   ): ForOfStatement {
-    return new ForOfStatement(variable, iterable, statement, range);
+    return new ForOfStatement(variable, iterable, body, range);
   }
 
   static createFunctionDeclaration(
@@ -696,13 +696,13 @@ export abstract class Node {
   }
 
   static createTryStatement(
-    statements: Statement[],
+    bodyStatements: Statement[],
     catchVariable: IdentifierExpression | null,
     catchStatements: Statement[] | null,
     finallyStatements: Statement[] | null,
     range: Range
   ): TryStatement {
-    return new TryStatement(statements, catchVariable, catchStatements, finallyStatements, range);
+    return new TryStatement(bodyStatements, catchVariable, catchStatements, finallyStatements, range);
   }
 
   static createTypeDeclaration(
@@ -2264,7 +2264,7 @@ export class ThrowStatement extends Statement {
 export class TryStatement extends Statement {
   constructor(
     /** Contained statements. */
-    public statements: Statement[],
+    public bodyStatements: Statement[],
     /** Exception variable name, if a `catch` clause is present. */
     public catchVariable: IdentifierExpression | null,
     /** Statements being executed on catch, if a `catch` clause is present. */
