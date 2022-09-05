@@ -3831,7 +3831,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var operator = expression.operator;
     switch (operator) {
-      case Token.LESSTHAN: {
+      case Token.LessThan: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -3866,7 +3866,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.GREATERTHAN: {
+      case Token.GreaterThan: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -3901,7 +3901,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.LESSTHAN_EQUALS: {
+      case Token.LessThanEquals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -3936,7 +3936,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.GREATERTHAN_EQUALS: {
+      case Token.GreaterThanEquals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -3972,8 +3972,8 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
 
-      case Token.EQUALS_EQUALS_EQUALS:
-      case Token.EQUALS_EQUALS: {
+      case Token.EqualsEqualsEquals:
+      case Token.EqualsEquals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4024,8 +4024,8 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.EXCLAMATION_EQUALS_EQUALS:
-      case Token.EXCLAMATION_EQUALS: {
+      case Token.ExclamationEqualsEquals:
+      case Token.ExclamationEquals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4076,11 +4076,11 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.EQUALS: {
+      case Token.Equals: {
         return this.compileAssignment(left, right, contextualType);
       }
-      case Token.PLUS_EQUALS: compound = true;
-      case Token.PLUS: {
+      case Token.PlusEquals: compound = true;
+      case Token.Plus: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4123,8 +4123,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeAdd(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.MINUS_EQUALS: compound = true;
-      case Token.MINUS: {
+      case Token.MinusEquals: compound = true;
+      case Token.Minus: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4168,8 +4168,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeSub(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.ASTERISK_EQUALS: compound = true;
-      case Token.ASTERISK: {
+      case Token.AsteriskEquals: compound = true;
+      case Token.Asterisk: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4213,8 +4213,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeMul(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.ASTERISK_ASTERISK_EQUALS: compound = true;
-      case Token.ASTERISK_ASTERISK: {
+      case Token.AsteriskAsteriskEquals: compound = true;
+      case Token.AsteriskAsterisk: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4258,8 +4258,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makePow(leftExpr, rightExpr, commonType, expression);
         break;
       }
-      case Token.SLASH_EQUALS: compound = true;
-      case Token.SLASH: {
+      case Token.SlashEquals: compound = true;
+      case Token.Slash: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4303,8 +4303,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeDiv(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.PERCENT_EQUALS: compound = true;
-      case Token.PERCENT: {
+      case Token.PercentEquals: compound = true;
+      case Token.Percent: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4348,8 +4348,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeRem(leftExpr, rightExpr, commonType, expression);
         break;
       }
-      case Token.LESSTHAN_LESSTHAN_EQUALS: compound = true;
-      case Token.LESSTHAN_LESSTHAN: {
+      case Token.LessThanLessThanEquals: compound = true;
+      case Token.LessThanLessThan: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
@@ -4375,8 +4375,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeShl(leftExpr, rightExpr, rightType);
         break;
       }
-      case Token.GREATERTHAN_GREATERTHAN_EQUALS: compound = true;
-      case Token.GREATERTHAN_GREATERTHAN: {
+      case Token.GreaterThanGreaterThanEquals: compound = true;
+      case Token.GreaterThanGreaterThan: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
@@ -4403,8 +4403,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeShr(leftExpr, rightExpr, rightType);
         break;
       }
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: compound = true;
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: {
+      case Token.GreaterThanGreaterThanGreaterThanEquals: compound = true;
+      case Token.GreaterThanGreaterThanGreaterThan: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
@@ -4430,8 +4430,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeShru(leftExpr, rightExpr, rightType);
         break;
       }
-      case Token.AMPERSAND_EQUALS: compound = true;
-      case Token.AMPERSAND: {
+      case Token.AmpersandEquals: compound = true;
+      case Token.Ampersand: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
@@ -4475,8 +4475,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeAnd(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.BAR_EQUALS: compound = true;
-      case Token.BAR: {
+      case Token.BarEquals: compound = true;
+      case Token.Bar: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
@@ -4520,8 +4520,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeOr(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.CARET_EQUALS: compound = true;
-      case Token.CARET: {
+      case Token.CaretEquals: compound = true;
+      case Token.Caret: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
@@ -4568,7 +4568,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // logical (no overloading)
 
-      case Token.AMPERSAND_AMPERSAND: { // left && right -> (t = left) ? right : t
+      case Token.AmpersandAmpersand: { // left && right -> (t = left) ? right : t
         let flow = this.currentFlow;
         let inheritedConstraints = constraints & Constraints.MustWrap;
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
@@ -4632,7 +4632,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.BAR_BAR: { // left || right -> ((t = left) ? t : right)
+      case Token.BarBar: { // left || right -> ((t = left) ? t : right)
         let flow = this.currentFlow;
         let inheritedConstraints = constraints & Constraints.MustWrap;
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
@@ -9081,7 +9081,7 @@ export class Compiler extends DiagnosticEmitter {
     var expr: ExpressionRef;
 
     switch (expression.operator) {
-      case Token.PLUS_PLUS: {
+      case Token.PlusPlus: {
 
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
@@ -9167,7 +9167,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.MINUS_MINUS: {
+      case Token.MinusMinus: {
 
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
@@ -9310,7 +9310,7 @@ export class Compiler extends DiagnosticEmitter {
     var expr: ExpressionRef;
 
     switch (expression.operator) {
-      case Token.PLUS: {
+      case Token.Plus: {
         expr = this.compileExpression(
           expression.operand,
           contextualType.exceptVoid,
@@ -9334,7 +9334,7 @@ export class Compiler extends DiagnosticEmitter {
         // nop
         break;
       }
-      case Token.MINUS: {
+      case Token.Minus: {
         let operand = expression.operand;
         if (operand.isNumericLiteral) {
           // implicitly negate integer and float literals. also enables proper checking of literal ranges.
@@ -9407,7 +9407,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.PLUS_PLUS: {
+      case Token.PlusPlus: {
         compound = true;
         expr = this.compileExpression(
           expression.operand,
@@ -9476,7 +9476,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.MINUS_MINUS: {
+      case Token.MinusMinus: {
         compound = true;
         expr = this.compileExpression(
           expression.operand,
@@ -9545,7 +9545,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.EXCLAMATION: {
+      case Token.Exclamation: {
         expr = this.compileExpression(
           expression.operand,
           contextualType.exceptVoid,
@@ -9564,7 +9564,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.TILDE: {
+      case Token.Tilde: {
         expr = this.compileExpression(
           expression.operand,
           contextualType == Type.void
@@ -9626,10 +9626,10 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.TYPEOF: {
+      case Token.TypeOf: {
         return this.compileTypeof(expression, contextualType, constraints);
       }
-      case Token.DOT_DOT_DOT: {
+      case Token.DotDotDot: {
         this.error(
           DiagnosticCode.Not_implemented_0,
           expression.range, "Spread operator"

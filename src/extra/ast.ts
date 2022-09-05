@@ -1570,14 +1570,14 @@ export class ASTBuilder {
     if (implicitFieldDeclaration) {
       this.serializeAccessModifiers(implicitFieldDeclaration);
     }
-    if (kind == ParameterKind.REST) {
+    if (kind == ParameterKind.Rest) {
       sb.push("...");
     }
     this.visitIdentifierExpression(node.name);
     var type = node.type;
     var initializer = node.initializer;
     if (type) {
-      if (kind == ParameterKind.OPTIONAL && !initializer) sb.push("?");
+      if (kind == ParameterKind.Optional && !initializer) sb.push("?");
       if (!isTypeOmitted(type)) {
         sb.push(": ");
         this.visitTypeNode(type);

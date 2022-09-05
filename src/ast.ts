@@ -940,11 +940,11 @@ export class TypeParameterNode extends Node {
 /** Represents the kind of a parameter. */
 export const enum ParameterKind {
   /** No specific flags. */
-  DEFAULT,
+  Default,
   /** Is an optional parameter. */
-  OPTIONAL,
+  Optional,
   /** Is a rest parameter. */
-  REST
+  Rest
 }
 
 /** Represents a function parameter. */

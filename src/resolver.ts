@@ -376,11 +376,11 @@ export class Resolver extends DiagnosticEmitter {
     for (let i = 0; i < numParameters; ++i) {
       let parameterNode = parameterNodes[i];
       switch (parameterNode.parameterKind) {
-        case ParameterKind.DEFAULT: {
+        case ParameterKind.Default: {
           requiredParameters = i + 1;
           break;
         }
-        case ParameterKind.REST: {
+        case ParameterKind.Rest: {
           assert(i == numParameters);
           hasRest = true;
           break;
@@ -737,7 +737,7 @@ export class Resolver extends DiagnosticEmitter {
           : parameterNodes[i].initializer;
         if (!argumentExpression) {
           // optional but not have initializer should be handled in the other place
-          if (parameterNodes[i].parameterKind == ParameterKind.OPTIONAL) {
+          if (parameterNodes[i].parameterKind == ParameterKind.Optional) {
             continue;
           }
           // missing initializer -> too few arguments
@@ -1812,7 +1812,7 @@ export class Resolver extends DiagnosticEmitter {
     var operand = node.operand;
     var operator = node.operator;
     switch (operator) {
-      case Token.MINUS: {
+      case Token.Minus: {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
         if (operand.isLiteralKind(LiteralKind.Integer)) {
           return this.determineIntegerLiteralType(
@@ -1823,9 +1823,9 @@ export class Resolver extends DiagnosticEmitter {
         }
         // fall-through
       }
-      case Token.PLUS:
-      case Token.PLUS_PLUS:
-      case Token.MINUS_MINUS: {
+      case Token.Plus:
+      case Token.PlusPlus:
+      case Token.MinusMinus: {
         let type = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
         let classReference = type.getClassOrWrapper(this.program);
@@ -1844,7 +1844,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         return type;
       }
-      case Token.EXCLAMATION: {
+      case Token.Exclamation: {
         let type = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
         let classReference = type.getClassOrWrapper(this.program);
@@ -1854,7 +1854,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         return Type.bool; // incl. references
       }
-      case Token.TILDE: {
+      case Token.Tilde: {
         let type = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
         let classReference = type.getClassOrWrapper(this.program);
@@ -1873,7 +1873,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         return type.intType;
       }
-      case Token.DOT_DOT_DOT: {
+      case Token.DotDotDot: {
         if (reportMode == ReportMode.Report) {
           this.error(
             DiagnosticCode.Not_implemented_0,
@@ -1882,7 +1882,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         return null;
       }
-      case Token.TYPEOF: {
+      case Token.TypeOf: {
         return this.program.stringInstance.type;
       }
       default: assert(false);
@@ -1928,8 +1928,8 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     var operator = node.operator;
     switch (operator) {
-      case Token.PLUS_PLUS:
-      case Token.MINUS_MINUS: {
+      case Token.PlusPlus:
+      case Token.MinusMinus: {
         let type = this.resolveExpression(node.operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
         let classReference = type.getClassOrWrapper(this.program);
@@ -1996,28 +1996,28 @@ export class Resolver extends DiagnosticEmitter {
 
       // assignment: result is the target's type
 
-      case Token.EQUALS:
-      case Token.PLUS_EQUALS:
-      case Token.MINUS_EQUALS:
-      case Token.ASTERISK_EQUALS:
-      case Token.ASTERISK_ASTERISK_EQUALS:
-      case Token.SLASH_EQUALS:
-      case Token.PERCENT_EQUALS:
-      case Token.LESSTHAN_LESSTHAN_EQUALS:
-      case Token.GREATERTHAN_GREATERTHAN_EQUALS:
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
-      case Token.AMPERSAND_EQUALS:
-      case Token.BAR_EQUALS:
-      case Token.CARET_EQUALS: {
+      case Token.Equals:
+      case Token.PlusEquals:
+      case Token.MinusEquals:
+      case Token.AsteriskEquals:
+      case Token.AsteriskAsteriskEquals:
+      case Token.SlashEquals:
+      case Token.PercentEquals:
+      case Token.LessThanLessThanEquals:
+      case Token.GreaterThanGreaterThanEquals:
+      case Token.GreaterThanGreaterThanGreaterThanEquals:
+      case Token.AmpersandEquals:
+      case Token.BarEquals:
+      case Token.CaretEquals: {
         return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
       }
 
       // comparison: result is Bool, preferring overloads, integer/float only
 
-      case Token.LESSTHAN:
-      case Token.GREATERTHAN:
-      case Token.LESSTHAN_EQUALS:
-      case Token.GREATERTHAN_EQUALS: {
+      case Token.LessThan:
+      case Token.GreaterThan:
+      case Token.LessThanEquals:
+      case Token.GreaterThanEquals: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -2039,8 +2039,8 @@ export class Resolver extends DiagnosticEmitter {
 
       // equality: result is Bool, preferring overloads, incl. references
 
-      case Token.EQUALS_EQUALS:
-      case Token.EXCLAMATION_EQUALS: {
+      case Token.EqualsEquals:
+      case Token.ExclamationEquals: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -2053,19 +2053,19 @@ export class Resolver extends DiagnosticEmitter {
 
       // identity: result is Bool, not supporting overloads
 
-      case Token.EQUALS_EQUALS_EQUALS:
-      case Token.EXCLAMATION_EQUALS_EQUALS: {
+      case Token.EqualsEqualsEquals:
+      case Token.ExclamationEqualsEquals: {
         return Type.bool;
       }
 
       // arithmetics: result is common type of LHS and RHS, preferring overloads
 
-      case Token.PLUS:
-      case Token.MINUS:
-      case Token.ASTERISK:
-      case Token.SLASH:
-      case Token.PERCENT: // mod has special logic, but also behaves like this
-      case Token.ASTERISK_ASTERISK: {
+      case Token.Plus:
+      case Token.Minus:
+      case Token.Asterisk:
+      case Token.Slash:
+      case Token.Percent: // mod has special logic, but also behaves like this
+      case Token.AsteriskAsterisk: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -2089,9 +2089,9 @@ export class Resolver extends DiagnosticEmitter {
 
       // shift: result is LHS (RHS is converted to LHS), preferring overloads
 
-      case Token.LESSTHAN_LESSTHAN:
-      case Token.GREATERTHAN_GREATERTHAN:
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: {
+      case Token.LessThanLessThan:
+      case Token.GreaterThanGreaterThan:
+      case Token.GreaterThanGreaterThanGreaterThan: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -2113,9 +2113,9 @@ export class Resolver extends DiagnosticEmitter {
 
       // bitwise: result is common type of LHS and RHS with floats not being supported, preferring overloads
 
-      case Token.AMPERSAND:
-      case Token.BAR:
-      case Token.CARET: {
+      case Token.Ampersand:
+      case Token.Bar:
+      case Token.Caret: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -2139,8 +2139,8 @@ export class Resolver extends DiagnosticEmitter {
 
       // logical: result is LHS (RHS is converted to LHS), not supporting overloads
 
-      case Token.AMPERSAND_AMPERSAND:
-      case Token.BAR_BAR: {
+      case Token.AmpersandAmpersand:
+      case Token.BarBar: {
         return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
       }
     }
@@ -2798,7 +2798,7 @@ export class Resolver extends DiagnosticEmitter {
     var requiredParameters = 0;
     for (let i = 0; i < numSignatureParameters; ++i) {
       let parameterDeclaration = signatureParameters[i];
-      if (parameterDeclaration.parameterKind == ParameterKind.DEFAULT) {
+      if (parameterDeclaration.parameterKind == ParameterKind.Default) {
         requiredParameters = i + 1;
       }
       let typeNode = parameterDeclaration.type;

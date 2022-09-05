@@ -361,36 +361,36 @@ export namespace OperatorKind {
   /** Converts a binary operator token to the respective operator kind. */
   export function fromBinaryToken(token: Token): OperatorKind {
     switch (token) {
-      case Token.PLUS:
-      case Token.PLUS_EQUALS: return OperatorKind.ADD;
-      case Token.MINUS:
-      case Token.MINUS_EQUALS: return OperatorKind.SUB;
-      case Token.ASTERISK:
-      case Token.ASTERISK_EQUALS: return OperatorKind.MUL;
-      case Token.SLASH:
-      case Token.SLASH_EQUALS: return OperatorKind.DIV;
-      case Token.PERCENT:
-      case Token.PERCENT_EQUALS: return OperatorKind.REM;
-      case Token.ASTERISK_ASTERISK:
-      case Token.ASTERISK_ASTERISK_EQUALS: return OperatorKind.POW;
-      case Token.AMPERSAND:
-      case Token.AMPERSAND_EQUALS: return OperatorKind.BITWISE_AND;
-      case Token.BAR:
-      case Token.BAR_EQUALS: return OperatorKind.BITWISE_OR;
-      case Token.CARET:
-      case Token.CARET_EQUALS: return OperatorKind.BITWISE_XOR;
-      case Token.LESSTHAN_LESSTHAN:
-      case Token.LESSTHAN_LESSTHAN_EQUALS: return OperatorKind.BITWISE_SHL;
-      case Token.GREATERTHAN_GREATERTHAN:
-      case Token.GREATERTHAN_GREATERTHAN_EQUALS: return OperatorKind.BITWISE_SHR;
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
-      case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: return OperatorKind.BITWISE_SHR_U;
-      case Token.EQUALS_EQUALS: return OperatorKind.EQ;
-      case Token.EXCLAMATION_EQUALS: return OperatorKind.NE;
-      case Token.GREATERTHAN: return OperatorKind.GT;
-      case Token.GREATERTHAN_EQUALS: return OperatorKind.GE;
-      case Token.LESSTHAN: return OperatorKind.LT;
-      case Token.LESSTHAN_EQUALS: return OperatorKind.LE;
+      case Token.Plus:
+      case Token.PlusEquals: return OperatorKind.ADD;
+      case Token.Minus:
+      case Token.MinusEquals: return OperatorKind.SUB;
+      case Token.Asterisk:
+      case Token.AsteriskEquals: return OperatorKind.MUL;
+      case Token.Slash:
+      case Token.SlashEquals: return OperatorKind.DIV;
+      case Token.Percent:
+      case Token.PercentEquals: return OperatorKind.REM;
+      case Token.AsteriskAsterisk:
+      case Token.AsteriskAsteriskEquals: return OperatorKind.POW;
+      case Token.Ampersand:
+      case Token.AmpersandEquals: return OperatorKind.BITWISE_AND;
+      case Token.Bar:
+      case Token.BarEquals: return OperatorKind.BITWISE_OR;
+      case Token.Caret:
+      case Token.CaretEquals: return OperatorKind.BITWISE_XOR;
+      case Token.LessThanLessThan:
+      case Token.LessThanLessThanEquals: return OperatorKind.BITWISE_SHL;
+      case Token.GreaterThanGreaterThan:
+      case Token.GreaterThanGreaterThanEquals: return OperatorKind.BITWISE_SHR;
+      case Token.GreaterThanGreaterThanGreaterThan:
+      case Token.GreaterThanGreaterThanGreaterThanEquals: return OperatorKind.BITWISE_SHR_U;
+      case Token.EqualsEquals: return OperatorKind.EQ;
+      case Token.ExclamationEquals: return OperatorKind.NE;
+      case Token.GreaterThan: return OperatorKind.GT;
+      case Token.GreaterThanEquals: return OperatorKind.GE;
+      case Token.LessThan: return OperatorKind.LT;
+      case Token.LessThanEquals: return OperatorKind.LE;
     }
     return OperatorKind.INVALID;
   }
@@ -398,12 +398,12 @@ export namespace OperatorKind {
   /** Converts a unary prefix operator token to the respective operator kind. */
   export function fromUnaryPrefixToken(token: Token): OperatorKind {
     switch (token) {
-      case Token.PLUS: return OperatorKind.PLUS;
-      case Token.MINUS: return OperatorKind.MINUS;
-      case Token.EXCLAMATION: return OperatorKind.NOT;
-      case Token.TILDE: return OperatorKind.BITWISE_NOT;
-      case Token.PLUS_PLUS: return OperatorKind.PREFIX_INC;
-      case Token.MINUS_MINUS: return OperatorKind.PREFIX_DEC;
+      case Token.Plus: return OperatorKind.PLUS;
+      case Token.Minus: return OperatorKind.MINUS;
+      case Token.Exclamation: return OperatorKind.NOT;
+      case Token.Tilde: return OperatorKind.BITWISE_NOT;
+      case Token.PlusPlus: return OperatorKind.PREFIX_INC;
+      case Token.MinusMinus: return OperatorKind.PREFIX_DEC;
     }
     return OperatorKind.INVALID;
   }
@@ -411,8 +411,8 @@ export namespace OperatorKind {
   /** Converts a unary postfix operator token to the respective operator kind. */
   export function fromUnaryPostfixToken(token: Token): OperatorKind {
     switch (token) {
-      case Token.PLUS_PLUS: return OperatorKind.POSTFIX_INC;
-      case Token.MINUS_MINUS: return OperatorKind.POSTFIX_DEC;
+      case Token.PlusPlus: return OperatorKind.POSTFIX_INC;
+      case Token.MinusMinus: return OperatorKind.POSTFIX_DEC;
     }
     return OperatorKind.INVALID;
   }
@@ -2506,7 +2506,7 @@ export class Program extends DiagnosticEmitter {
           Node.createFunctionType(
             [
               Node.createParameter(
-                ParameterKind.DEFAULT,
+                ParameterKind.Default,
                 declaration.name,
                 typeNode,
                 null,
