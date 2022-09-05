@@ -4683,11 +4683,12 @@ export class Compiler extends DiagnosticEmitter {
           // if not possible, tee left to a temp. local
           } else {
             let temp = flow.getTempLocal(leftType);
-            if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.Wrapped);
-            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.NonNull);
+            let tempIndex = temp.index;
+            if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempIndex, LocalFlags.Wrapped);
+            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempIndex, LocalFlags.NonNull);
             expr = module.if(
-              this.makeIsTrueish(module.local_tee(temp.index, leftExpr, leftType.isManaged), leftType, left),
-              module.local_get(temp.index, leftType.toRef()),
+              this.makeIsTrueish(module.local_tee(tempIndex, leftExpr, leftType.isManaged), leftType, left),
+              module.local_get(tempIndex, leftType.toRef()),
               rightExpr
             );
             flow.freeTempLocal(temp);
@@ -7102,10 +7103,11 @@ export class Compiler extends DiagnosticEmitter {
     if (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionArg));
+      let tempIndex = temp.index;
       functionArg = module.block(null, [
-        module.local_set(temp.index, functionArg, true), // Function
+        module.local_set(tempIndex, functionArg, true), // Function
         module.global_set(argumentsLength, module.i32(numArguments)),
-        module.local_get(temp.index, sizeTypeRef)
+        module.local_get(tempIndex, sizeTypeRef)
       ], sizeTypeRef);
       flow.freeTempLocal(temp);
     } else { // simplify
@@ -7685,6 +7687,7 @@ export class Compiler extends DiagnosticEmitter {
         let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
           let temp = flow.getTempLocal(actualType);
+          let tempIndex = temp.index;
           let instanceofInstance = assert(program.instanceofInstance);
           this.compileFunction(instanceofInstance);
           let ret = module.if(
@@ -7692,11 +7695,11 @@ export class Compiler extends DiagnosticEmitter {
               sizeTypeRef == TypeRef.I64
                 ? UnaryOp.EqzI64
                 : UnaryOp.EqzI32,
-              module.local_tee(temp.index, expr, actualType.isManaged),
+              module.local_tee(tempIndex, expr, actualType.isManaged),
             ),
             module.i32(0),
             this.makeCallDirect(instanceofInstance, [
-              module.local_get(temp.index, sizeTypeRef),
+              module.local_get(tempIndex, sizeTypeRef),
               module.i32(expectedType.classReference!.id)
             ], expression)
           );
@@ -7731,6 +7734,7 @@ export class Compiler extends DiagnosticEmitter {
           // perform null checking, which would error earlier when checking
           // uninitialized (thus zero) `var a: A` to be an instance of something.
           let temp = flow.getTempLocal(actualType);
+          let tempIndex = temp.index;
           let instanceofInstance = assert(program.instanceofInstance);
           this.compileFunction(instanceofInstance);
           let ret = module.if(
@@ -7738,11 +7742,11 @@ export class Compiler extends DiagnosticEmitter {
               sizeTypeRef == TypeRef.I64
                 ? UnaryOp.EqzI64
                 : UnaryOp.EqzI32,
-              module.local_tee(temp.index, expr, actualType.isManaged),
+              module.local_tee(tempIndex, expr, actualType.isManaged),
             ),
             module.i32(0),
             this.makeCallDirect(instanceofInstance, [
-              module.local_get(temp.index, sizeTypeRef),
+              module.local_get(tempIndex, sizeTypeRef),
               module.i32(expectedType.classReference!.id)
             ], expression)
           );
