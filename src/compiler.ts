@@ -10319,9 +10319,9 @@ export class Compiler extends DiagnosticEmitter {
     var abortInstance = program.abortInstance;
     if (!abortInstance || !this.compileFunction(abortInstance)) return module.unreachable();
 
-    var filenameExpr = this.ensureStaticString(codeLocation.range.source.normalizedPath);
     var range = codeLocation.range;
     var source = range.source;
+    var filenameExpr = this.ensureStaticString(source.normalizedPath);
     return module.block(null, [
       module.call(
         abortInstance.internalName, [
@@ -10348,8 +10348,9 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var flow = this.currentFlow;
     var temp = flow.getTempLocal(type);
-    if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.Wrapped);
-    flow.setLocalFlag(temp.index, LocalFlags.NonNull);
+    var tempIndex = temp.index;
+    if (!flow.canOverflow(expr, type)) flow.setLocalFlag(tempIndex, LocalFlags.Wrapped);
+    flow.setLocalFlag(tempIndex, LocalFlags.NonNull);
 
     var staticAbortCallExpr = this.makeStaticAbort(
       this.ensureStaticString("unexpected null"),
@@ -10357,21 +10358,21 @@ export class Compiler extends DiagnosticEmitter {
     ); // TODO: throw
 
     if (type.isExternalReference) {
-      let nonNullExpr = module.local_get(temp.index, type.toRef());
+      let nonNullExpr = module.local_get(tempIndex, type.toRef());
       if (this.options.hasFeature(Feature.GC)) {
         nonNullExpr = module.ref_as_nonnull(nonNullExpr);
       }
       expr = module.if(
         module.ref_is_null(
-          module.local_tee(temp.index, expr, false)
+          module.local_tee(tempIndex, expr, false)
         ),
         staticAbortCallExpr,
         nonNullExpr
       );
     } else {
       expr = module.if(
-        module.local_tee(temp.index, expr, type.isManaged),
-        module.local_get(temp.index, type.toRef()),
+        module.local_tee(tempIndex, expr, type.isManaged),
+        module.local_get(tempIndex, type.toRef()),
         staticAbortCallExpr
       );
     }
@@ -10395,6 +10396,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var flow = this.currentFlow;
     var temp = flow.getTempLocal(type);
+    var tempIndex = temp.index;
     var instanceofInstance = this.program.instanceofInstance;
     assert(this.compileFunction(instanceofInstance));
 
@@ -10408,21 +10410,21 @@ export class Compiler extends DiagnosticEmitter {
       // null-check would have been emitted separately so is not necessary here.
       expr = module.if(
         module.call(instanceofInstance.internalName, [
-          module.local_tee(temp.index, expr, type.isManaged),
+          module.local_tee(tempIndex, expr, type.isManaged),
           module.i32(toType.classReference!.id)
         ], TypeRef.I32),
-        module.local_get(temp.index, type.toRef()),
+        module.local_get(tempIndex, type.toRef()),
         staticAbortCallExpr
       );
     } else {
       expr = module.if(
-        module.local_tee(temp.index, expr, type.isManaged),
+        module.local_tee(tempIndex, expr, type.isManaged),
         module.if(
           module.call(instanceofInstance.internalName, [
-            module.local_get(temp.index, type.toRef()),
+            module.local_get(tempIndex, type.toRef()),
             module.i32(toType.classReference!.id)
           ], TypeRef.I32),
-          module.local_get(temp.index, type.toRef()),
+          module.local_get(tempIndex, type.toRef()),
           staticAbortCallExpr
         ),
         module.usize(0)
