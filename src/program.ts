@@ -53,7 +53,6 @@ import {
 } from "./common";
 
 import {
-  Compiler,
   Options
 } from "./compiler";
 
@@ -812,6 +811,20 @@ export class Program extends DiagnosticEmitter {
     // BLOCK | OBJECT+align | data...
     // └     = TOTAL      ┘ ^ 16b alignment
     return this.blockOverhead + this.objectOverhead;
+  }
+
+  searchFunctionByRef(ref: FunctionRef): Function | null {
+    const modifiedFunctionName = getFunctionName(ref);
+    if (modifiedFunctionName) {
+      const instancesByName = this.instancesByName;
+      if (instancesByName.has(modifiedFunctionName)) {
+        const element = assert(instancesByName.get(modifiedFunctionName));
+        if (element.kind == ElementKind.FUNCTION) {
+          return <Function>element;
+        }
+      }
+    }
+    return null;
   }
 
   /** Computes the next properly aligned offset of a memory manager block, given the current bump offset. */
@@ -3795,20 +3808,6 @@ export class Function extends TypedElement {
         module.setLocalName(ref, i, localName);
       }
     }
-  }
-
-  static searchFunctionByRef(compiler: Compiler, ref: FunctionRef): Function | null {
-    const modifiedFunctionName = getFunctionName(ref);
-    if (modifiedFunctionName) {
-      const instancesByName = compiler.program.instancesByName;
-      if (instancesByName.has(modifiedFunctionName)) {
-        const element = assert(instancesByName.get(modifiedFunctionName));
-        if (element.kind == ElementKind.FUNCTION) {
-          return <Function>element;
-        }
-      }
-    }
-    return null;
   }
 }
 

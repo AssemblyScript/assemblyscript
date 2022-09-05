@@ -147,7 +147,6 @@ import {
 import {
   BuiltinNames
 } from "../builtins";
-import { Function } from "../program";
 
 type LocalIndex = Index;
 type SlotIndex = Index;
@@ -480,7 +479,7 @@ export class ShadowStackPass extends Pass {
     let cArr = allocPtrArray(vars);
     let newFuncRef = _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
     if (this.options.sourceMap || this.options.debugInfo) {
-      let func = Function.searchFunctionByRef(this.compiler, newFuncRef);
+      let func = this.compiler.program.searchFunctionByRef(newFuncRef);
       if (func) func.addDebugInfo(this.module, newFuncRef);
     }
     _free(cArr);
