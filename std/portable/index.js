@@ -140,7 +140,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
     const INV_EPS64 = 4503599627370496.0;
     const y = Math.abs(value);
     return y < INV_EPS64
-      ? globalScope.copysign(y + INV_EPS64 - INV_EPS64, value)
+      ? Math.abs(y + INV_EPS64 - INV_EPS64) * Math.sign(value)
       : value;
   };
 
@@ -153,10 +153,15 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   globalScope["trunc"] = Math.trunc;
 
   globalScope["copysign"] = function copysign(x, y) {
-    F64[0] = y; y = U64[1] & 0x80000000;
-    F64[0] = x;
-    U64[1] = U64[1] & 0x7FFFFFFF | y;
-    return F64[0];
+    if (y) {
+      // fast path
+      return Math.abs(x) * Math.sign(y);
+    } else { // 0, -0, +NaN, -NaN
+      F64[0] = y; y = U64[1] & 0x80000000;
+      F64[0] = x;
+      U64[1] = U64[1] & 0x7FFFFFFF | y;
+      return F64[0];
+    }
   };
 
   globalScope["bswap"] = function bswap(value) {
