@@ -489,7 +489,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       return null;
     }
-    var overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
+    var overload = classReference.lookupOverload(OperatorKind.IndexedGet);
     if (overload) {
       let parameterTypes = overload.signature.parameterTypes;
       if (overload.is(CommonFlags.Static)) {
@@ -525,7 +525,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!typeArgument) return null;
     var classReference = typeArgument.getClassOrWrapper(this.program);
     if (classReference) {
-      let overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
+      let overload = classReference.lookupOverload(OperatorKind.IndexedGet);
       if (overload) return overload.signature.returnType;
     }
     if (reportMode == ReportMode.Report) {
@@ -1376,7 +1376,7 @@ export class Resolver extends DiagnosticEmitter {
         assert(parent.kind == ElementKind.Class);
         let classInstance = <Class>parent;
         let elementExpression = assert(this.currentElementExpression);
-        let indexedGet = classInstance.lookupOverload(OperatorKind.INDEXED_GET);
+        let indexedGet = classInstance.lookupOverload(OperatorKind.IndexedGet);
         if (!indexedGet) {
           if (reportMode == ReportMode.Report) {
             this.error(
@@ -1849,7 +1849,7 @@ export class Resolver extends DiagnosticEmitter {
         if (!type) return null;
         let classReference = type.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.NOT);
+          let overload = classReference.lookupOverload(OperatorKind.Not);
           if (overload) return overload.signature.returnType;
         }
         return Type.bool; // incl. references
@@ -1859,7 +1859,7 @@ export class Resolver extends DiagnosticEmitter {
         if (!type) return null;
         let classReference = type.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BITWISE_NOT);
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseNot);
           if (overload) return overload.signature.returnType;
         }
         if (!type.isNumericValue) {
@@ -3431,7 +3431,7 @@ export class Resolver extends DiagnosticEmitter {
     for (let _keys = Map_keys(overloadPrototypes), i = 0, k = _keys.length; i < k; ++i) {
       let overloadKind = unchecked(_keys[i]);
       let overloadPrototype = assert(overloadPrototypes.get(overloadKind));
-      assert(overloadKind != OperatorKind.INVALID);
+      assert(overloadKind != OperatorKind.Invalid);
       if (overloadPrototype.is(CommonFlags.Generic)) {
         // Already errored during initialization: AS212: Decorator '@operator' is not valid here
         continue;
@@ -3461,10 +3461,10 @@ export class Resolver extends DiagnosticEmitter {
       // static overload works like any other overload.
       if (operatorInstance.is(CommonFlags.Instance)) {
         switch (overloadKind) {
-          case OperatorKind.PREFIX_INC:
-          case OperatorKind.PREFIX_DEC:
-          case OperatorKind.POSTFIX_INC:
-          case OperatorKind.POSTFIX_DEC: {
+          case OperatorKind.PrefixInc:
+          case OperatorKind.PrefixDec:
+          case OperatorKind.PostfixInc:
+          case OperatorKind.PostfixDec: {
             let returnType = operatorInstance.signature.returnType;
             if (!returnType.isAssignableTo(instance.type)) {
               if (reportMode == ReportMode.Report) {
@@ -3479,10 +3479,10 @@ export class Resolver extends DiagnosticEmitter {
       }
       if (!overloads.has(overloadKind)) {
         overloads.set(overloadKind, operatorInstance);
-        if (overloadKind == OperatorKind.INDEXED_GET || overloadKind == OperatorKind.INDEXED_SET) {
+        if (overloadKind == OperatorKind.IndexedGet || overloadKind == OperatorKind.IndexedSet) {
           let index = instance.indexSignature;
           if (!index) instance.indexSignature = index = new IndexSignature(instance);
-          if (overloadKind == OperatorKind.INDEXED_GET) {
+          if (overloadKind == OperatorKind.IndexedGet) {
             index.setType(operatorInstance.signature.returnType);
           }
         }

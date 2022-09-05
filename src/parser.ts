@@ -164,12 +164,12 @@ export class Parser extends DiagnosticEmitter {
     // create the source element
     var source = new Source(
       isEntry
-        ? SourceKind.USER_ENTRY
+        ? SourceKind.UserEntry
         : path.startsWith(LIBRARY_PREFIX)
           ? path.indexOf(PATH_DELIMITER, LIBRARY_PREFIX.length) < 0
-            ? SourceKind.LIBRARY_ENTRY
-            : SourceKind.LIBRARY
-          : SourceKind.USER,
+            ? SourceKind.LibraryEntry
+            : SourceKind.Library
+          : SourceKind.User,
       normalizedPath,
       text
     );
@@ -322,7 +322,7 @@ export class Parser extends DiagnosticEmitter {
       case Token.Namespace: {
         let state = tn.mark();
         tn.next();
-        if (tn.peek(false, IdentifierHandling.PREFER) == Token.Identifier) {
+        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
           tn.discard(state);
           statement = this.parseNamespace(tn, flags, decorators, startPos);
           decorators = null;
@@ -345,7 +345,7 @@ export class Parser extends DiagnosticEmitter {
       case Token.Type: { // also identifier
         let state = tn.mark();
         tn.next();
-        if (tn.peek(false, IdentifierHandling.PREFER) == Token.Identifier) {
+        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
           tn.discard(state);
           statement = this.parseTypeDeclaration(tn, flags, decorators, startPos);
           decorators = null;
@@ -371,7 +371,7 @@ export class Parser extends DiagnosticEmitter {
 
         // handle plain exports
         if (flags & CommonFlags.Export) {
-          if (defaultEnd && tn.skipIdentifier(IdentifierHandling.PREFER)) {
+          if (defaultEnd && tn.skipIdentifier(IdentifierHandling.Prefer)) {
             if (declareEnd) {
               this.error(
                 DiagnosticCode.An_export_assignment_cannot_have_modifiers,
@@ -886,7 +886,7 @@ export class Parser extends DiagnosticEmitter {
       let name = tn.readIdentifier();
       let expression: Expression = Node.createIdentifierExpression(name, tn.range(startPos, tn.pos));
       while (tn.skip(Token.Dot)) {
-        if (tn.skipIdentifier(IdentifierHandling.PREFER)) {
+        if (tn.skipIdentifier(IdentifierHandling.Prefer)) {
           name = tn.readIdentifier();
           expression = Node.createPropertyAccessExpression(
             expression,
@@ -2035,7 +2035,7 @@ export class Parser extends DiagnosticEmitter {
     var setEnd = 0;
     if (!isInterface) {
       if (tn.skip(Token.Get)) {
-        if (tn.peek(true, IdentifierHandling.PREFER) == Token.Identifier && !tn.nextTokenOnNewLine) {
+        if (tn.peek(true, IdentifierHandling.Prefer) == Token.Identifier && !tn.nextTokenOnNewLine) {
           flags |= CommonFlags.Get;
           isGetter = true;
           getStart = tn.tokenPos;
@@ -2051,7 +2051,7 @@ export class Parser extends DiagnosticEmitter {
           tn.reset(state);
         }
       } else if (tn.skip(Token.Set)) {
-        if (tn.peek(true, IdentifierHandling.PREFER) == Token.Identifier && !tn.nextTokenOnNewLine) {
+        if (tn.peek(true, IdentifierHandling.Prefer) == Token.Identifier && !tn.nextTokenOnNewLine) {
           flags |= CommonFlags.Set;
           isSetter = true;
           setStart = tn.tokenPos;
@@ -2146,7 +2146,7 @@ export class Parser extends DiagnosticEmitter {
         tn.skip(Token.Semicolon);
         return retIndex;
       }
-      if (!tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
+      if (!tn.skipIdentifier(IdentifierHandling.Always)) {
         this.error(
           DiagnosticCode.Identifier_expected,
           tn.range()
@@ -2638,11 +2638,11 @@ export class Parser extends DiagnosticEmitter {
 
     // before: Identifier ('as' Identifier)?
 
-    if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
+    if (tn.skipIdentifier(IdentifierHandling.Always)) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let asIdentifier: IdentifierExpression | null = null;
       if (tn.skip(Token.As)) {
-        if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
+        if (tn.skipIdentifier(IdentifierHandling.Always)) {
           asIdentifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
         } else {
           this.error(
@@ -2743,7 +2743,7 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-    } else if (tn.skip(Token.Identifier, IdentifierHandling.PREFER)) { // import Name from "file"
+    } else if (tn.skip(Token.Identifier, IdentifierHandling.Prefer)) { // import Name from "file"
       let name = tn.readIdentifier();
       let range = tn.range();
       members = [
@@ -2804,7 +2804,7 @@ export class Parser extends DiagnosticEmitter {
 
     // before: Identifier ('as' Identifier)?
 
-    if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
+    if (tn.skipIdentifier(IdentifierHandling.Always)) {
       let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
       let asIdentifier: IdentifierExpression | null = null;
       if (tn.skip(Token.As)) {
@@ -2956,7 +2956,7 @@ export class Parser extends DiagnosticEmitter {
         break;
       }
       case Token.Type: { // also identifier
-        if (tn.peek(false, IdentifierHandling.PREFER) == Token.Identifier) {
+        if (tn.peek(false, IdentifierHandling.Prefer) == Token.Identifier) {
           statement = this.parseTypeDeclaration(tn, CommonFlags.None, null, tn.tokenPos);
           break;
         }
@@ -3011,7 +3011,7 @@ export class Parser extends DiagnosticEmitter {
 
     var identifier: IdentifierExpression | null = null;
     if (tn.peek(true) == Token.Identifier && !tn.nextTokenOnNewLine) {
-      tn.next(IdentifierHandling.PREFER);
+      tn.next(IdentifierHandling.Prefer);
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
     var ret = Node.createBreakStatement(identifier, tn.range());
@@ -3027,7 +3027,7 @@ export class Parser extends DiagnosticEmitter {
 
     var identifier: IdentifierExpression | null = null;
     if (tn.peek(true) == Token.Identifier && !tn.nextTokenOnNewLine) {
-      tn.next(IdentifierHandling.PREFER);
+      tn.next(IdentifierHandling.Prefer);
       identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
     var ret = Node.createContinueStatement(identifier, tn.range());
@@ -3671,7 +3671,7 @@ export class Parser extends DiagnosticEmitter {
   parseExpressionStart(
     tn: Tokenizer
   ): Expression | null {
-    var token = tn.next(IdentifierHandling.PREFER);
+    var token = tn.next(IdentifierHandling.Prefer);
     var startPos = tn.tokenPos;
     switch (token) {
 
@@ -3762,7 +3762,7 @@ export class Parser extends DiagnosticEmitter {
         let state = tn.mark();
         let again = true;
         do {
-          switch (tn.next(IdentifierHandling.PREFER)) {
+          switch (tn.next(IdentifierHandling.Prefer)) {
 
             // function expression
             case Token.DotDotDot: {
@@ -4226,7 +4226,7 @@ export class Parser extends DiagnosticEmitter {
         }
         // PropertyAccessExpression
         case Token.Dot: {
-          if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) { // expr '.' Identifier
+          if (tn.skipIdentifier(IdentifierHandling.Always)) { // expr '.' Identifier
             let next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
             expr = Node.createPropertyAccessExpression(
               expr,

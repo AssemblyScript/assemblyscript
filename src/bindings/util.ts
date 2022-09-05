@@ -44,7 +44,7 @@ export abstract class ExportsWalker {
     // TODO: for (let file of this.program.filesByName.values()) {
     for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
-      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.visitFile(file);
+      if (file.source.sourceKind == SourceKind.UserEntry) this.visitFile(file);
     }
   }
 

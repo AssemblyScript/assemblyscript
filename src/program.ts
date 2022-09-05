@@ -197,49 +197,49 @@ class QueuedExportStar {
 
 /** Represents the kind of an operator overload. */
 export enum OperatorKind {
-  INVALID,
+  Invalid,
 
   // indexed access
-  INDEXED_GET,            // a[]
-  INDEXED_SET,            // a[]=b
-  UNCHECKED_INDEXED_GET,  // unchecked(a[])
-  UNCHECKED_INDEXED_SET,  // unchecked(a[]=b)
+  IndexedGet,          // a[]
+  IndexedSet,          // a[]=b
+  UncheckedIndexedGet, // unchecked(a[])
+  UncheckedIndexedSet, // unchecked(a[]=b)
 
   // binary
-  ADD,                    // a + b
-  SUB,                    // a - b
-  MUL,                    // a * b
-  DIV,                    // a / b
-  REM,                    // a % b
-  POW,                    // a ** b
-  BITWISE_AND,            // a & b
-  BITWISE_OR,             // a | b
-  BITWISE_XOR,            // a ^ b
-  BITWISE_SHL,            // a << b
-  BITWISE_SHR,            // a >> b
-  BITWISE_SHR_U,          // a >>> b
-  EQ,                     // a == b, a === b
-  NE,                     // a != b, a !== b
-  GT,                     // a > b
-  GE,                     // a >= b
-  LT,                     // a < b
-  LE,                     // a <= b
+  Add,                 // a + b
+  Sub,                 // a - b
+  Mul,                 // a * b
+  Div,                 // a / b
+  Rem,                 // a % b
+  Pow,                 // a ** b
+  BitwiseAnd,          // a & b
+  BitwiseOr,           // a | b
+  BitwiseXor,          // a ^ b
+  BitwiseShl,          // a << b
+  BitwiseShr,          // a >> b
+  BitwiseShrU,         // a >>> b
+  Eq,                  // a == b, a === b
+  Ne,                  // a != b, a !== b
+  Gt,                  // a > b
+  Ge,                  // a >= b
+  Lt,                  // a < b
+  Le,                  // a <= b
 
   // unary prefix
-  PLUS,                   // +a
-  MINUS,                  // -a
-  NOT,                    // !a
-  BITWISE_NOT,            // ~a
-  PREFIX_INC,             // ++a
-  PREFIX_DEC,             // --a
+  Plus,                // +a
+  Minus,               // -a
+  Not,                 // !a
+  BitwiseNot,          // ~a
+  PrefixInc,           // ++a
+  PrefixDec,           // --a
 
   // unary postfix
-  POSTFIX_INC,            // a++
-  POSTFIX_DEC             // a--
+  PostfixInc,          // a++
+  PostfixDec           // a--
 
   // not overridable:
-  // LOGICAL_AND          // a && b
-  // LOGICAL_OR           // a || b
+  // LogicalAnd        // a && b
+  // LogicalOr         // a || b
 }
 
 export namespace OperatorKind {
@@ -252,67 +252,67 @@ export namespace OperatorKind {
       case DecoratorKind.OperatorBinary: {
         switch (arg.charCodeAt(0)) {
           case CharCode.OpenBracket: {
-            if (arg == "[]") return OperatorKind.INDEXED_GET;
-            if (arg == "[]=") return OperatorKind.INDEXED_SET;
+            if (arg == "[]") return OperatorKind.IndexedGet;
+            if (arg == "[]=") return OperatorKind.IndexedSet;
             break;
           }
           case CharCode.OpenBrace: {
-            if (arg == "{}") return OperatorKind.UNCHECKED_INDEXED_GET;
-            if (arg == "{}=") return OperatorKind.UNCHECKED_INDEXED_SET;
+            if (arg == "{}") return OperatorKind.UncheckedIndexedGet;
+            if (arg == "{}=") return OperatorKind.UncheckedIndexedSet;
             break;
           }
           case CharCode.Plus: {
-            if (arg == "+") return OperatorKind.ADD;
+            if (arg == "+") return OperatorKind.Add;
             break;
           }
           case CharCode.Minus: {
-            if (arg == "-") return OperatorKind.SUB;
+            if (arg == "-") return OperatorKind.Sub;
             break;
           }
           case CharCode.Asterisk: {
-            if (arg == "*") return OperatorKind.MUL;
-            if (arg == "**") return OperatorKind.POW;
+            if (arg == "*") return OperatorKind.Mul;
+            if (arg == "**") return OperatorKind.Pow;
             break;
           }
           case CharCode.Slash: {
-            if (arg == "/") return OperatorKind.DIV;
+            if (arg == "/") return OperatorKind.Div;
             break;
           }
           case CharCode.Percent: {
-            if (arg == "%") return OperatorKind.REM;
+            if (arg == "%") return OperatorKind.Rem;
             break;
           }
           case CharCode.Ampersand: {
-            if (arg == "&") return OperatorKind.BITWISE_AND;
+            if (arg == "&") return OperatorKind.BitwiseAnd;
             break;
           }
           case CharCode.Bar: {
-            if (arg == "|") return OperatorKind.BITWISE_OR;
+            if (arg == "|") return OperatorKind.BitwiseOr;
             break;
           }
           case CharCode.Caret: {
-            if (arg == "^") return OperatorKind.BITWISE_XOR;
+            if (arg == "^") return OperatorKind.BitwiseXor;
             break;
           }
           case CharCode.Equals: {
-            if (arg == "==") return OperatorKind.EQ;
+            if (arg == "==") return OperatorKind.Eq;
             break;
           }
           case CharCode.Exclamation: {
-            if (arg == "!=") return OperatorKind.NE;
+            if (arg == "!=") return OperatorKind.Ne;
             break;
           }
           case CharCode.GreaterThan: {
-            if (arg == ">") return OperatorKind.GT;
-            if (arg == ">=") return OperatorKind.GE;
-            if (arg == ">>") return OperatorKind.BITWISE_SHR;
-            if (arg == ">>>") return OperatorKind.BITWISE_SHR_U;
+            if (arg == ">") return OperatorKind.Gt;
+            if (arg == ">=") return OperatorKind.Ge;
+            if (arg == ">>") return OperatorKind.BitwiseShr;
+            if (arg == ">>>") return OperatorKind.BitwiseShrU;
             break;
           }
           case CharCode.LessThan: {
-            if (arg == "<") return OperatorKind.LT;
-            if (arg == "<=") return OperatorKind.LE;
-            if (arg == "<<") return OperatorKind.BITWISE_SHL;
+            if (arg == "<") return OperatorKind.Lt;
+            if (arg == "<=") return OperatorKind.Le;
+            if (arg == "<<") return OperatorKind.BitwiseShl;
             break;
           }
         }
@@ -321,21 +321,21 @@ export namespace OperatorKind {
       case DecoratorKind.OperatorPrefix: {
         switch (arg.charCodeAt(0)) {
           case CharCode.Plus: {
-            if (arg == "+") return OperatorKind.PLUS;
-            if (arg == "++") return OperatorKind.PREFIX_INC;
+            if (arg == "+") return OperatorKind.Plus;
+            if (arg == "++") return OperatorKind.PrefixInc;
             break;
           }
           case CharCode.Minus: {
-            if (arg == "-") return OperatorKind.MINUS;
-            if (arg == "--") return OperatorKind.PREFIX_DEC;
+            if (arg == "-") return OperatorKind.Minus;
+            if (arg == "--") return OperatorKind.PrefixDec;
             break;
           }
           case CharCode.Exclamation: {
-            if (arg == "!") return OperatorKind.NOT;
+            if (arg == "!") return OperatorKind.Not;
             break;
           }
           case CharCode.Tilde: {
-            if (arg == "~") return OperatorKind.BITWISE_NOT;
+            if (arg == "~") return OperatorKind.BitwiseNot;
             break;
           }
         }
@@ -344,77 +344,77 @@ export namespace OperatorKind {
       case DecoratorKind.OperatorPostfix: {
         switch (arg.charCodeAt(0)) {
           case CharCode.Plus: {
-            if (arg == "++") return OperatorKind.POSTFIX_INC;
+            if (arg == "++") return OperatorKind.PostfixInc;
             break;
           }
           case CharCode.Minus: {
-            if (arg == "--") return OperatorKind.POSTFIX_DEC;
+            if (arg == "--") return OperatorKind.PostfixDec;
             break;
           }
         }
         break;
       }
     }
-    return OperatorKind.INVALID;
+    return OperatorKind.Invalid;
   }
 
   /** Converts a binary operator token to the respective operator kind. */
   export function fromBinaryToken(token: Token): OperatorKind {
     switch (token) {
       case Token.Plus:
-      case Token.PlusEquals: return OperatorKind.ADD;
+      case Token.PlusEquals: return OperatorKind.Add;
       case Token.Minus:
-      case Token.MinusEquals: return OperatorKind.SUB;
+      case Token.MinusEquals: return OperatorKind.Sub;
       case Token.Asterisk:
-      case Token.AsteriskEquals: return OperatorKind.MUL;
+      case Token.AsteriskEquals: return OperatorKind.Mul;
       case Token.Slash:
-      case Token.SlashEquals: return OperatorKind.DIV;
+      case Token.SlashEquals: return OperatorKind.Div;
       case Token.Percent:
-      case Token.PercentEquals: return OperatorKind.REM;
+      case Token.PercentEquals: return OperatorKind.Rem;
       case Token.AsteriskAsterisk:
-      case Token.AsteriskAsteriskEquals: return OperatorKind.POW;
+      case Token.AsteriskAsteriskEquals: return OperatorKind.Pow;
       case Token.Ampersand:
-      case Token.AmpersandEquals: return OperatorKind.BITWISE_AND;
+      case Token.AmpersandEquals: return OperatorKind.BitwiseAnd;
       case Token.Bar:
-      case Token.BarEquals: return OperatorKind.BITWISE_OR;
+      case Token.BarEquals: return OperatorKind.BitwiseOr;
       case Token.Caret:
-      case Token.CaretEquals: return OperatorKind.BITWISE_XOR;
+      case Token.CaretEquals: return OperatorKind.BitwiseXor;
       case Token.LessThanLessThan:
-      case Token.LessThanLessThanEquals: return OperatorKind.BITWISE_SHL;
+      case Token.LessThanLessThanEquals: return OperatorKind.BitwiseShl;
       case Token.GreaterThanGreaterThan:
-      case Token.GreaterThanGreaterThanEquals: return OperatorKind.BITWISE_SHR;
+      case Token.GreaterThanGreaterThanEquals: return OperatorKind.BitwiseShr;
       case Token.GreaterThanGreaterThanGreaterThan:
-      case Token.GreaterThanGreaterThanGreaterThanEquals: return OperatorKind.BITWISE_SHR_U;
-      case Token.EqualsEquals: return OperatorKind.EQ;
-      case Token.ExclamationEquals: return OperatorKind.NE;
-      case Token.GreaterThan: return OperatorKind.GT;
-      case Token.GreaterThanEquals: return OperatorKind.GE;
-      case Token.LessThan: return OperatorKind.LT;
-      case Token.LessThanEquals: return OperatorKind.LE;
+      case Token.GreaterThanGreaterThanGreaterThanEquals: return OperatorKind.BitwiseShrU;
+      case Token.EqualsEquals: return OperatorKind.Eq;
+      case Token.ExclamationEquals: return OperatorKind.Ne;
+      case Token.GreaterThan: return OperatorKind.Gt;
+      case Token.GreaterThanEquals: return OperatorKind.Ge;
+      case Token.LessThan: return OperatorKind.Lt;
+      case Token.LessThanEquals: return OperatorKind.Le;
     }
-    return OperatorKind.INVALID;
+    return OperatorKind.Invalid;
   }
 
   /** Converts a unary prefix operator token to the respective operator kind. */
   export function fromUnaryPrefixToken(token: Token): OperatorKind {
     switch (token) {
-      case Token.Plus: return OperatorKind.PLUS;
-      case Token.Minus: return OperatorKind.MINUS;
-      case Token.Exclamation: return OperatorKind.NOT;
-      case Token.Tilde: return OperatorKind.BITWISE_NOT;
-      case Token.PlusPlus: return OperatorKind.PREFIX_INC;
-      case Token.MinusMinus: return OperatorKind.PREFIX_DEC;
+      case Token.Plus: return OperatorKind.Plus;
+      case Token.Minus: return OperatorKind.Minus;
+      case Token.Exclamation: return OperatorKind.Not;
+      case Token.Tilde: return OperatorKind.BitwiseNot;
+      case Token.PlusPlus: return OperatorKind.PrefixInc;
+      case Token.MinusMinus: return OperatorKind.PrefixDec;
     }
-    return OperatorKind.INVALID;
+    return OperatorKind.Invalid;
   }
 
   /** Converts a unary postfix operator token to the respective operator kind. */
   export function fromUnaryPostfixToken(token: Token): OperatorKind {
     switch (token) {
-      case Token.PlusPlus: return OperatorKind.POSTFIX_INC;
-      case Token.MinusMinus: return OperatorKind.POSTFIX_DEC;
+      case Token.PlusPlus: return OperatorKind.PostfixInc;
+      case Token.MinusMinus: return OperatorKind.PostfixDec;
     }
-    return OperatorKind.INVALID;
+    return OperatorKind.Invalid;
   }
 }
 
@@ -429,7 +429,7 @@ export class Program extends DiagnosticEmitter {
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
-    var nativeSource = new Source(SourceKind.LIBRARY_ENTRY, LIBRARY_PREFIX + "native.ts", "[native code]");
+    var nativeSource = new Source(SourceKind.LibraryEntry, LIBRARY_PREFIX + "native.ts", "[native code]");
     this.nativeSource = nativeSource;
     this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
@@ -1438,7 +1438,7 @@ export class Program extends DiagnosticEmitter {
     // TODO: for (let file of this.filesByName.values()) {
     for (let _values = Map_values(this.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
-      if (file.source.sourceKind == SourceKind.USER_ENTRY) {
+      if (file.source.sourceKind == SourceKind.UserEntry) {
         this.markModuleExports(file);
       }
     }
@@ -2014,7 +2014,7 @@ export class Program extends DiagnosticEmitter {
               if (firstArg.isLiteralKind(LiteralKind.String)) {
                 let text = (<StringLiteralExpression>firstArg).value;
                 let kind = OperatorKind.fromDecorator(decorator.decoratorKind, text);
-                if (kind == OperatorKind.INVALID) {
+                if (kind == OperatorKind.Invalid) {
                   this.error(
                     DiagnosticCode._0_is_not_a_valid_operator,
                     firstArg.range, text
@@ -3111,7 +3111,7 @@ export class File extends Element {
     var exports = this.exports;
     if (!exports) this.exports = exports = new Map();
     exports.set(name, element);
-    if (this.source.sourceKind == SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
+    if (this.source.sourceKind == SourceKind.LibraryEntry) this.program.ensureGlobal(name, element);
 
     // Also, add to the namespaces that capture our exports
     for(let i = 0; i < this.aliasNamespaces.length; i++) {
@@ -3473,7 +3473,7 @@ export class Local extends VariableLikeElement {
 export class FunctionPrototype extends DeclaredElement {
 
   /** Operator kind, if an overload. */
-  operatorKind: OperatorKind = OperatorKind.INVALID;
+  operatorKind: OperatorKind = OperatorKind.Invalid;
   /** Already resolved instances. */
   instances: Map<string,Function> | null = null;
   /** Methods overloading this one, if any. These are unbound. */
@@ -4046,12 +4046,12 @@ export class IndexSignature extends TypedElement {
 
   /** Obtains the getter instance. */
   getGetterInstance(isUnchecked: bool): Function | null {
-    return (<Class>this.parent).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+    return (<Class>this.parent).lookupOverload(OperatorKind.IndexedGet, isUnchecked);
   }
 
   /** Obtains the setter instance. */
   getSetterInstance(isUnchecked: bool): Function | null {
-    return (<Class>this.parent).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+    return (<Class>this.parent).lookupOverload(OperatorKind.IndexedSet, isUnchecked);
   }
 }
 
@@ -4236,8 +4236,8 @@ export class Class extends TypedElement {
         (<PropertyPrototype>lengthField).getterPrototype != null // TODO: resolve & check type?
       )
     ) && (
-      this.lookupOverload(OperatorKind.INDEXED_GET) != null ||
-      this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) != null
+      this.lookupOverload(OperatorKind.IndexedGet) != null ||
+      this.lookupOverload(OperatorKind.UncheckedIndexedGet) != null
     );
   }
 
@@ -4354,13 +4354,13 @@ export class Class extends TypedElement {
   lookupOverload(kind: OperatorKind, unchecked: bool = false): Function | null {
     if (unchecked) {
       switch (kind) {
-        case OperatorKind.INDEXED_GET: {
-          let uncheckedOverload = this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET);
+        case OperatorKind.IndexedGet: {
+          let uncheckedOverload = this.lookupOverload(OperatorKind.UncheckedIndexedGet);
           if (uncheckedOverload) return uncheckedOverload;
           break;
         }
-        case OperatorKind.INDEXED_SET: {
-          let uncheckedOverload = this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_SET);
+        case OperatorKind.IndexedSet: {
+          let uncheckedOverload = this.lookupOverload(OperatorKind.UncheckedIndexedSet);
           if (uncheckedOverload) return uncheckedOverload;
           break;
         }

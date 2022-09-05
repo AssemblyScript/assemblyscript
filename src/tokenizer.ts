@@ -176,9 +176,9 @@ export const enum Token {
 }
 
 export const enum IdentifierHandling {
-  DEFAULT,
-  PREFER,
-  ALWAYS
+  Default,
+  Prefer,
+  Always
 }
 
 export function tokenFromKeyword(text: string): Token {
@@ -502,7 +502,7 @@ export class Tokenizer extends DiagnosticEmitter {
     this.end = end;
   }
 
-  next(identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): Token {
+  next(identifierHandling: IdentifierHandling = IdentifierHandling.Default): Token {
     this.nextToken = -1;
     var token: Token;
     do token = this.unsafeNext(identifierHandling);
@@ -512,7 +512,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   private unsafeNext(
-    identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT,
+    identifierHandling: IdentifierHandling = IdentifierHandling.Default,
     maxTokenLength: i32 = i32.MAX_VALUE
   ): Token {
     var text = this.source.text;
@@ -688,13 +688,13 @@ export class Tokenizer extends DiagnosticEmitter {
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
             if (chr == CharCode.Slash) { // single-line
-              let commentKind = CommentKind.LINE;
+              let commentKind = CommentKind.Line;
               if (
                 pos + 1 < end &&
                 text.charCodeAt(pos + 1) == CharCode.Slash
               ) {
                 ++pos;
-                commentKind = CommentKind.TRIPLE;
+                commentKind = CommentKind.Triple;
               }
               while (++pos < end) {
                 if (text.charCodeAt(pos) == CharCode.LineFeed) {
@@ -732,7 +732,7 @@ export class Tokenizer extends DiagnosticEmitter {
                 );
               } else if (this.onComment) {
                 this.onComment(
-                  CommentKind.BLOCK,
+                  CommentKind.Block,
                   text.substring(commentStartPos, pos),
                   this.range(commentStartPos, pos)
                 );
@@ -919,12 +919,12 @@ export class Tokenizer extends DiagnosticEmitter {
               ++pos < end &&
               isIdentifierPart(c = text.charCodeAt(pos))
             ) { /* nop */ }
-            if (identifierHandling != IdentifierHandling.ALWAYS) {
+            if (identifierHandling != IdentifierHandling.Always) {
               let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
               if (
                 maybeKeywordToken != Token.Invalid &&
                 !(
-                  identifierHandling == IdentifierHandling.PREFER &&
+                  identifierHandling == IdentifierHandling.Prefer &&
                   tokenIsAlsoIdentifier(maybeKeywordToken)
                 )
               ) {
@@ -958,7 +958,7 @@ export class Tokenizer extends DiagnosticEmitter {
 
   peek(
     checkOnNewLine: bool = false,
-    identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT,
+    identifierHandling: IdentifierHandling = IdentifierHandling.Default,
     maxCompoundLength: i32 = i32.MAX_VALUE
   ): Token {
     var text = this.source.text;
@@ -987,11 +987,11 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.nextToken;
   }
 
-  skipIdentifier(identifierHandling: IdentifierHandling = IdentifierHandling.PREFER): bool {
+  skipIdentifier(identifierHandling: IdentifierHandling = IdentifierHandling.Prefer): bool {
     return this.skip(Token.Identifier, identifierHandling);
   }
 
-  skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): bool {
+  skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.Default): bool {
     var posBefore = this.pos;
     var tokenBefore = this.token;
     var tokenPosBefore = this.tokenPos;

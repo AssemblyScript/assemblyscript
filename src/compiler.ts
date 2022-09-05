@@ -518,7 +518,7 @@ export class Compiler extends DiagnosticEmitter {
     // TODO: for (let file of files.values()) {
     for (let _values = Map_values(files), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
-      if (file.source.sourceKind == SourceKind.USER_ENTRY) {
+      if (file.source.sourceKind == SourceKind.UserEntry) {
         this.compileFile(file);
         this.compileModuleExports(file);
       }
@@ -3838,7 +3838,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.LT);
+          let overload = classReference.lookupOverload(OperatorKind.Lt);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -3873,7 +3873,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.GT);
+          let overload = classReference.lookupOverload(OperatorKind.Gt);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -3908,7 +3908,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.LE);
+          let overload = classReference.lookupOverload(OperatorKind.Le);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -3943,7 +3943,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.GE);
+          let overload = classReference.lookupOverload(OperatorKind.Ge);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -3980,7 +3980,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.EQ);
+          let overload = classReference.lookupOverload(OperatorKind.Eq);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4032,7 +4032,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClass();
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.NE);
+          let overload = classReference.lookupOverload(OperatorKind.Ne);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4087,7 +4087,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.ADD);
+          let overload = classReference.lookupOverload(OperatorKind.Add);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4131,7 +4131,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.SUB);
+          let overload = classReference.lookupOverload(OperatorKind.Sub);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4176,7 +4176,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.MUL);
+          let overload = classReference.lookupOverload(OperatorKind.Mul);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4221,7 +4221,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.POW);
+          let overload = classReference.lookupOverload(OperatorKind.Pow);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4266,7 +4266,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.DIV);
+          let overload = classReference.lookupOverload(OperatorKind.Div);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4311,7 +4311,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.REM);
+          let overload = classReference.lookupOverload(OperatorKind.Rem);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4356,7 +4356,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BITWISE_SHL);
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseShl);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4383,7 +4383,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BITWISE_SHR);
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseShr);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4411,7 +4411,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BITWISE_SHR_U);
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseShrU);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4438,7 +4438,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overloadd
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BITWISE_AND);
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseAnd);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4483,7 +4483,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BITWISE_OR);
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseOr);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -4528,7 +4528,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BITWISE_XOR);
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseXor);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, leftType, right, expression);
             break;
@@ -5619,9 +5619,9 @@ export class Compiler extends DiagnosticEmitter {
         assert(parent.kind == ElementKind.Class);
         let classInstance = <Class>parent;
         let isUnchecked = flow.is(FlowFlags.UncheckedContext);
-        let indexedSet = classInstance.lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+        let indexedSet = classInstance.lookupOverload(OperatorKind.IndexedSet, isUnchecked);
         if (!indexedSet) {
-          let indexedGet = classInstance.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+          let indexedGet = classInstance.lookupOverload(OperatorKind.IndexedGet, isUnchecked);
           if (!indexedGet) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -5806,7 +5806,7 @@ export class Compiler extends DiagnosticEmitter {
         let classInstance = <Class>parent;
         assert(classInstance.kind == ElementKind.Class);
         let isUnchecked = flow.is(FlowFlags.UncheckedContext);
-        let getterInstance = classInstance.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+        let getterInstance = classInstance.lookupOverload(OperatorKind.IndexedGet, isUnchecked);
         if (!getterInstance) {
           this.error(
             DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -5814,7 +5814,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.unreachable();
         }
-        let setterInstance = classInstance.lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+        let setterInstance = classInstance.lookupOverload(OperatorKind.IndexedSet, isUnchecked);
         if (!setterInstance) {
           this.error(
             DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
@@ -7157,7 +7157,7 @@ export class Compiler extends DiagnosticEmitter {
       let classReference = targetType.getClassOrWrapper(this.program);
       if (classReference) {
         let isUnchecked = this.currentFlow.is(FlowFlags.UncheckedContext);
-        let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+        let indexedGet = classReference.lookupOverload(OperatorKind.IndexedGet, isUnchecked);
         if (indexedGet) {
           let thisType = assert(indexedGet.signature.thisType);
           let thisArg = this.compileExpression(targetExpression, thisType,
@@ -7978,7 +7978,7 @@ export class Compiler extends DiagnosticEmitter {
       this.program.OBJECTInstance.writeField("gcInfo", 3, segment.buffer, 0); // use transparent gcinfo
       let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
-      let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
+      let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.IndexedSet, true));
       let stmts = new Array<ExpressionRef>(2 * numExpressions + 1);
       // Use one local per toString'ed subexpression, since otherwise recursion on the same
       // static array would overwrite already prepared parts. Avoids a temporary array.
@@ -8172,7 +8172,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise compile an explicit instantiation with indexed sets
-    var indexedSet = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
+    var indexedSet = arrayInstance.lookupOverload(OperatorKind.IndexedSet, true);
     if (!indexedSet) {
       flow.freeTempLocal(tempThis);
       flow.freeTempLocal(tempDataStart);
@@ -8334,7 +8334,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise compile an explicit instantiation with indexed sets
-    var indexedSet = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
+    var indexedSet = arrayInstance.lookupOverload(OperatorKind.IndexedSet, true);
     if (!indexedSet) {
       flow.freeTempLocal(tempThis);
       this.error(
@@ -9090,7 +9090,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.POSTFIX_INC);
+          let overload = classReference.lookupOverload(OperatorKind.PostfixInc);
           if (overload) {
             let isInstance = overload.is(CommonFlags.Instance);
             if (tempLocal && !isInstance) { // revert: static overload simply returns
@@ -9176,7 +9176,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.POSTFIX_DEC);
+          let overload = classReference.lookupOverload(OperatorKind.PostfixDec);
           if (overload) {
             let isInstance = overload.is(CommonFlags.Instance);
             if (tempLocal && !isInstance) { // revert: static overload simply returns
@@ -9324,7 +9324,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.PLUS);
+          let overload = classReference.lookupOverload(OperatorKind.Plus);
           if (overload) return this.compileUnaryOverload(overload, expression.operand, expr, expression);
         }
         if (!this.currentType.isValue) {
@@ -9357,7 +9357,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.MINUS);
+          let overload = classReference.lookupOverload(OperatorKind.Minus);
           if (overload) return this.compileUnaryOverload(overload, expression.operand, expr, expression);
         }
         if (!this.currentType.isValue) {
@@ -9422,7 +9422,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.PREFIX_INC);
+          let overload = classReference.lookupOverload(OperatorKind.PrefixInc);
           if (overload) {
             expr = this.compileUnaryOverload(overload, expression.operand, expr, expression);
             if (overload.is(CommonFlags.Instance)) break; // re-assign
@@ -9491,7 +9491,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.PREFIX_DEC);
+          let overload = classReference.lookupOverload(OperatorKind.PrefixDec);
           if (overload) {
             expr = this.compileUnaryOverload(overload, expression.operand, expr, expression);
             if (overload.is(CommonFlags.Instance)) break; // re-assign
@@ -9559,7 +9559,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.NOT);
+          let overload = classReference.lookupOverload(OperatorKind.Not);
           if (overload) return this.compileUnaryOverload(overload, expression.operand, expr, expression);
           // fall back to compare by value
         }
@@ -9582,7 +9582,7 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.BITWISE_NOT);
+          let overload = classReference.lookupOverload(OperatorKind.BitwiseNot);
           if (overload) return this.compileUnaryOverload(overload, expression.operand, expr, expression);
         }
         if (!this.currentType.isValue) {

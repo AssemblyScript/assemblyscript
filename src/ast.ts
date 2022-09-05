@@ -1092,11 +1092,11 @@ export class DecoratorNode extends Node {
 /** Comment kinds. */
 export const enum CommentKind {
   /** Line comment. */
-  LINE,
+  Line,
   /** Triple-slash line comment. */
-  TRIPLE,
+  Triple,
   /** Block comment. */
-  BLOCK
+  Block
 }
 
 /** Represents a comment. */
@@ -1611,13 +1611,13 @@ export abstract class Statement extends Node { }
 /** Indicates the specific kind of a source. */
 export const enum SourceKind {
   /** User-provided file. */
-  USER = 0,
+  User = 0,
   /** User-provided entry file. */
-  USER_ENTRY = 1,
+  UserEntry = 1,
   /** Library-provided file. */
-  LIBRARY = 2,
+  Library = 2,
   /** Library-provided entry file. */
-  LIBRARY_ENTRY = 3
+  LibraryEntry = 3
 }
 
 /** A top-level source node. */
@@ -1657,7 +1657,7 @@ export class Source extends Node {
   /** Checks if this source is part of the (standard) library. */
   get isLibrary(): bool {
     var kind = this.sourceKind;
-    return kind == SourceKind.LIBRARY || kind == SourceKind.LIBRARY_ENTRY;
+    return kind == SourceKind.Library || kind == SourceKind.LibraryEntry;
   }
 
   /** Cached line starts. */
