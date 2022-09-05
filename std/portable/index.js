@@ -153,10 +153,9 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   globalScope["trunc"] = Math.trunc;
 
   globalScope["copysign"] = function copysign(x, y) {
-    return Math.abs(x) * (y
-      ? Math.sign(y)
-      : (F64[0] = y, U64[1] >>> 31 ? -1 : 1) // +0, -0, -NaN, +NaN
-    );
+    return y
+      ? Math.abs(x) * Math.sign(y)
+      : (F64[0] = y, U64[1] >>> 31 ? -1 : 1); // +0, -0, -NaN, +NaN
   };
 
   globalScope["bswap"] = function bswap(value) {
