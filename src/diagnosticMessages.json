@@ -50,6 +50,7 @@
   "Literal '{0}' does not fit into 'i64' or 'u64' types.": 236,
   "Index signature accessors in type '{0}' differ in types.": 237,
   "Only '{0}' accepted for return type of {1} operators.": 238,
+  "At least one parameter type should match with instance type for static operators.": 239,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,

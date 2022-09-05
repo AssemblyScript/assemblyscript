@@ -79,7 +79,8 @@ import {
   ArrayLiteralExpression,
   ArrowKind,
   ExpressionStatement,
-  StringLiteralExpression
+  StringLiteralExpression,
+  DecoratorKind
 } from "./ast";
 
 import {
@@ -3459,7 +3460,7 @@ export class Resolver extends DiagnosticEmitter {
       if (!overloads) instance.overloads = overloads = new Map();
 
       if (reportMode == ReportMode.REPORT) {
-        this.validateReturnTypesForOperators(
+        this.validateOperators(
           overloadPrototype,
           operatorInstance,
           instance
@@ -3626,7 +3627,7 @@ export class Resolver extends DiagnosticEmitter {
     return typeArgumentNodes[0];
   }
 
-  private validateReturnTypesForOperators(
+  private validateOperators(
     overloadPrototype: FunctionPrototype,
     overload: Function,
     instance: Class
@@ -3644,10 +3645,36 @@ export class Resolver extends DiagnosticEmitter {
       let arg = args[0];
       if (!arg.isStringLiteral) continue;
 
-      let overloadKind = OperatorKind.fromDecorator(
-        decorator.decoratorKind,
-        (<StringLiteralExpression>arg).value
-      );
+      let decoratorKind = decorator.decoratorKind;
+      let operationName = (<StringLiteralExpression>arg).value;
+      let overloadKind = OperatorKind.fromDecorator(decoratorKind, operationName);
+
+      if (overloadPrototype.is(CommonFlags.STATIC)) {
+        let paramTypes = signature.parameterTypes;
+        let firstParamType = assert(paramTypes[0]).nonNullableType;
+        if (firstParamType != instance.type) {
+          let parameters = overloadPrototype.functionTypeNode.parameters;
+          if (paramTypes.length > 1 && (
+            decoratorKind == DecoratorKind.OPERATOR ||
+            decoratorKind == DecoratorKind.OPERATOR_BINARY
+          )) {
+            let secondParamType = paramTypes[1].nonNullableType;
+            if (secondParamType != instance.type) {
+              this.errorRelated(
+                DiagnosticCode.At_least_one_parameter_type_should_match_with_instance_type_for_static_operators,
+                parameters[1].type.range,
+                instance.identifierNode.range
+              );
+            }
+          } else {
+            this.errorRelated(
+              DiagnosticCode.At_least_one_parameter_type_should_match_with_instance_type_for_static_operators,
+              parameters[0].type.range,
+              instance.identifierNode.range
+            );
+          }
+        }
+      }
 
       switch (overloadKind) {
         case OperatorKind.EQ:

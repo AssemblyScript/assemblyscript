@@ -131,19 +131,19 @@ assert(
 class Bar {
   // static inc/dec don't reassign and can have different return type
   @operator.prefix("++")
-  static prefix_inc(a: Foo): string {
+  static prefix_inc(a: Bar): string {
     return "++i";
   }
   @operator.prefix("--")
-  static prefix_dec(a: Foo): string {
+  static prefix_dec(a: Bar): string {
     return "--i";
   }
   @operator.postfix("++")
-  static postfix_inc(a: Foo): string {
+  static postfix_inc(a: Bar): string {
     return "i++";
   }
   @operator.postfix("--")
-  static postfix_dec(a: Foo): string {
+  static postfix_dec(a: Bar): string {
     return "i--";
   }
 }

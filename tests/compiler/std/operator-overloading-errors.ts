@@ -36,6 +36,10 @@ class B {
 
   // Error: indexed set with non-void rturn type
   @operator("{}=") __uset(index: i32, val: i32): i32 { return 1; }
+
+  // Error: mismatched LHS type of argument with instance type
+  @operator.postfix("++") static postInc(a: i32): B { return new B; }
+  @operator.binary("+") static add(a: i32, b: i32): i32 { return a + b; }
 }
 
 var b = new B;
@@ -46,5 +50,8 @@ b > b;
 b < b;
 b[0] = 1;
 b[0];
+
+b++;
+b + b;
 
 ERROR("EOF");
