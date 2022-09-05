@@ -686,7 +686,7 @@ export class ASTBuilder {
   visitStringLiteral(str: string): void {
     var sb = this.sb;
     sb.push("\"");
-    sb.push(escapeString(str, CharCode.DOUBLEQUOTE));
+    sb.push(escapeString(str, CharCode.DoubleQuote));
     sb.push("\"");
   }
 
@@ -701,13 +701,13 @@ export class ASTBuilder {
     var expressions = node.expressions;
     if (tag) this.visitNode(tag);
     sb.push("`");
-    sb.push(escapeString(parts[0], CharCode.BACKTICK));
+    sb.push(escapeString(parts[0], CharCode.Backtick));
     assert(parts.length == expressions.length + 1);
     for (let i = 0, k = expressions.length; i < k; ++i) {
       sb.push("${");
       this.visitNode(expressions[i]);
       sb.push("}");
-      sb.push(escapeString(parts[i + 1], CharCode.BACKTICK));
+      sb.push(escapeString(parts[i + 1], CharCode.Backtick));
     }
     sb.push("`");
   }
@@ -787,8 +787,8 @@ export class ASTBuilder {
       let last = sb[sb.length - 1];
       let lastCharPos = last.length - 1;
       if (lastCharPos >= 0 && (
-        last.charCodeAt(lastCharPos) == CharCode.CLOSEBRACE ||
-        last.charCodeAt(lastCharPos) == CharCode.SEMICOLON)
+        last.charCodeAt(lastCharPos) == CharCode.CloseBrace ||
+        last.charCodeAt(lastCharPos) == CharCode.Semicolon)
       ) {
         sb.push("\n");
       } else {
@@ -1484,7 +1484,7 @@ export class ASTBuilder {
       sb.push("declare ");
     }
     sb.push("module \"");
-    sb.push(escapeString(node.moduleName, CharCode.DOUBLEQUOTE));
+    sb.push(escapeString(node.moduleName, CharCode.DoubleQuote));
     sb.push("\"");
   }
 

@@ -199,11 +199,11 @@ export class JSBuilder extends ExportsWalker {
           sb.push(i64_low((<EnumValue>value).constantIntegerValue).toString());
         } else {
           sb.push(" = exports[\"");
-          sb.push(escapeString(name + "." + value.name, CharCode.DOUBLEQUOTE));
+          sb.push(escapeString(name + "." + value.name, CharCode.DoubleQuote));
           sb.push("\"].valueOf()");
         }
         sb.push("] = \"");
-        sb.push(escapeString(value.name, CharCode.DOUBLEQUOTE));
+        sb.push(escapeString(value.name, CharCode.DoubleQuote));
         sb.push("\",\n");
       }
     }
@@ -222,7 +222,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(name);
     } else {
       sb.push("\"");
-      sb.push(escapeString(name, CharCode.DOUBLEQUOTE));
+      sb.push(escapeString(name, CharCode.DoubleQuote));
       sb.push("\": ");
     }
     let moduleId = this.ensureModuleId(moduleName);
@@ -268,7 +268,7 @@ export class JSBuilder extends ExportsWalker {
       sb.push(name);
     } else {
       sb.push("\"");
-      sb.push(escapeString(name, CharCode.DOUBLEQUOTE));
+      sb.push(escapeString(name, CharCode.DoubleQuote));
       sb.push("\"");
     }
     if (isPlainFunction(signature, Mode.Import) && !code) {
@@ -514,7 +514,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push(moduleName);
       } else {
         sb.push("\"");
-        sb.push(escapeString(moduleName, CharCode.DOUBLEQUOTE));
+        sb.push(escapeString(moduleName, CharCode.DoubleQuote));
         sb.push("\"");
       }
       let resetPos = sb.length;
@@ -590,7 +590,7 @@ export class JSBuilder extends ExportsWalker {
           map.push(moduleName);
         } else {
           map.push("[\"");
-          map.push(escapeString(moduleName, CharCode.DOUBLEQUOTE));
+          map.push(escapeString(moduleName, CharCode.DoubleQuote));
           map.push("\"]");
         }
         map.push(";\n");
@@ -901,7 +901,7 @@ export class JSBuilder extends ExportsWalker {
             sb.push(moduleName);
           } else {
             sb.push("\"");
-            sb.push(escapeString(moduleName, CharCode.DOUBLEQUOTE));
+            sb.push(escapeString(moduleName, CharCode.DoubleQuote));
             sb.push("\"");
           }
           sb.push(": __maybeDefault(__import");
@@ -910,14 +910,14 @@ export class JSBuilder extends ExportsWalker {
           importExpr.push("import * as __import");
           importExpr.push(moduleId.toString());
           importExpr.push(" from \"");
-          importExpr.push(escapeString(moduleName, CharCode.DOUBLEQUOTE));
+          importExpr.push(escapeString(moduleName, CharCode.DoubleQuote));
           importExpr.push("\";\n");
           needsMaybeDefault = true;
         }
       }
       sb[0] = importExpr.join("");
       sb.push(`  }
-))(new URL("${escapeString(options.basenameHint, CharCode.DOUBLEQUOTE)}.wasm", import.meta.url));
+))(new URL("${escapeString(options.basenameHint, CharCode.DoubleQuote)}.wasm", import.meta.url));
 `);
       if (needsMaybeDefault) {
         sb.push(`function __maybeDefault(module) {
@@ -1355,7 +1355,7 @@ function indentText(text: string, indentLevel: i32, sb: string[], butFirst: bool
   var length = text.length;
   var pos = 0;
   while (pos < length) {
-    if (text.charCodeAt(pos) == CharCode.LINEFEED) {
+    if (text.charCodeAt(pos) == CharCode.LineFeed) {
       if (butFirst) butFirst = false;
       else indent(sb, indentLevel);
       sb.push(text.substring(lineStart, lineStart = pos + 1));

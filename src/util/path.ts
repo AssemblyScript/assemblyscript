@@ -11,7 +11,7 @@ import {
   PATH_DELIMITER
 } from "../common";
 
-const separator = CharCode.SLASH;
+const separator = CharCode.Slash;
 
 /**
  * Normalizes the specified path, removing interior placeholders.
@@ -23,7 +23,7 @@ export function normalizePath(path: string): string {
 
   // trim leading './'
   while (pos + 1 < len &&
-    path.charCodeAt(pos) == CharCode.DOT &&
+    path.charCodeAt(pos) == CharCode.Dot &&
     path.charCodeAt(pos + 1) == separator
   ) {
     pos += 2;
@@ -42,7 +42,7 @@ export function normalizePath(path: string): string {
     // we are only interested in '/.' sequences ...
     if (
       path.charCodeAt(pos) == separator &&
-      path.charCodeAt(pos + 1) == CharCode.DOT
+      path.charCodeAt(pos + 1) == CharCode.Dot
     ) {
       // '/.' ( '/' | $ )
       atEnd = pos + 2 == len;
@@ -59,9 +59,9 @@ export function normalizePath(path: string): string {
 
       // '/.' ( './' | '.' $ )
       atEnd = pos + 3 == len;
-      if (atEnd && path.charCodeAt(pos + 2) == CharCode.DOT ||
+      if (atEnd && path.charCodeAt(pos + 2) == CharCode.Dot ||
         pos + 3 < len &&
-        path.charCodeAt(pos + 2) == CharCode.DOT &&
+        path.charCodeAt(pos + 2) == CharCode.Dot &&
         path.charCodeAt(pos + 3) == separator
       ) {
         // find preceeding '/'
@@ -69,8 +69,8 @@ export function normalizePath(path: string): string {
         while (--ipos >= 0) {
           if (path.charCodeAt(ipos) == separator) {
             if (pos - ipos != 3 ||
-              path.charCodeAt(ipos + 1) != CharCode.DOT ||
-              path.charCodeAt(ipos + 2) != CharCode.DOT
+              path.charCodeAt(ipos + 1) != CharCode.Dot ||
+              path.charCodeAt(ipos + 2) != CharCode.Dot
             ) { // exclude '..' itself
               path = atEnd
                 ? path.substring(0, ipos)
@@ -85,8 +85,8 @@ export function normalizePath(path: string): string {
         // if there's no preceeding '/', trim start if non-empty
         if (ipos < 0 && pos > 0) {
           if (pos != 2 ||
-            path.charCodeAt(0) != CharCode.DOT ||
-            path.charCodeAt(1) != CharCode.DOT
+            path.charCodeAt(0) != CharCode.Dot ||
+            path.charCodeAt(1) != CharCode.Dot
           ) { // exclude '..' itself
             path = path.substring(pos + 4);
             len = path.length;

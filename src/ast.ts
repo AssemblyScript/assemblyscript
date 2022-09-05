@@ -1676,7 +1676,7 @@ export class Source extends Node {
       let off = 0;
       let end = text.length;
       while (off < end) {
-        if (text.charCodeAt(off++) == CharCode.LINEFEED) lineCache.push(off);
+        if (text.charCodeAt(off++) == CharCode.LineFeed) lineCache.push(off);
       }
       lineCache.push(0x7fffffff);
     }

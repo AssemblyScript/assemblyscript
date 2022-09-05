@@ -251,65 +251,65 @@ export namespace OperatorKind {
       case DecoratorKind.Operator:
       case DecoratorKind.OperatorBinary: {
         switch (arg.charCodeAt(0)) {
-          case CharCode.OPENBRACKET: {
+          case CharCode.OpenBracket: {
             if (arg == "[]") return OperatorKind.INDEXED_GET;
             if (arg == "[]=") return OperatorKind.INDEXED_SET;
             break;
           }
-          case CharCode.OPENBRACE: {
+          case CharCode.OpenBrace: {
             if (arg == "{}") return OperatorKind.UNCHECKED_INDEXED_GET;
             if (arg == "{}=") return OperatorKind.UNCHECKED_INDEXED_SET;
             break;
           }
-          case CharCode.PLUS: {
+          case CharCode.Plus: {
             if (arg == "+") return OperatorKind.ADD;
             break;
           }
-          case CharCode.MINUS: {
+          case CharCode.Minus: {
             if (arg == "-") return OperatorKind.SUB;
             break;
           }
-          case CharCode.ASTERISK: {
+          case CharCode.Asterisk: {
             if (arg == "*") return OperatorKind.MUL;
             if (arg == "**") return OperatorKind.POW;
             break;
           }
-          case CharCode.SLASH: {
+          case CharCode.Slash: {
             if (arg == "/") return OperatorKind.DIV;
             break;
           }
-          case CharCode.PERCENT: {
+          case CharCode.Percent: {
             if (arg == "%") return OperatorKind.REM;
             break;
           }
-          case CharCode.AMPERSAND: {
+          case CharCode.Ampersand: {
             if (arg == "&") return OperatorKind.BITWISE_AND;
             break;
           }
-          case CharCode.BAR: {
+          case CharCode.Bar: {
             if (arg == "|") return OperatorKind.BITWISE_OR;
             break;
           }
-          case CharCode.CARET: {
+          case CharCode.Caret: {
             if (arg == "^") return OperatorKind.BITWISE_XOR;
             break;
           }
-          case CharCode.EQUALS: {
+          case CharCode.Equals: {
             if (arg == "==") return OperatorKind.EQ;
             break;
           }
-          case CharCode.EXCLAMATION: {
+          case CharCode.Exclamation: {
             if (arg == "!=") return OperatorKind.NE;
             break;
           }
-          case CharCode.GREATERTHAN: {
+          case CharCode.GreaterThan: {
             if (arg == ">") return OperatorKind.GT;
             if (arg == ">=") return OperatorKind.GE;
             if (arg == ">>") return OperatorKind.BITWISE_SHR;
             if (arg == ">>>") return OperatorKind.BITWISE_SHR_U;
             break;
           }
-          case CharCode.LESSTHAN: {
+          case CharCode.LessThan: {
             if (arg == "<") return OperatorKind.LT;
             if (arg == "<=") return OperatorKind.LE;
             if (arg == "<<") return OperatorKind.BITWISE_SHL;
@@ -320,21 +320,21 @@ export namespace OperatorKind {
       }
       case DecoratorKind.OperatorPrefix: {
         switch (arg.charCodeAt(0)) {
-          case CharCode.PLUS: {
+          case CharCode.Plus: {
             if (arg == "+") return OperatorKind.PLUS;
             if (arg == "++") return OperatorKind.PREFIX_INC;
             break;
           }
-          case CharCode.MINUS: {
+          case CharCode.Minus: {
             if (arg == "-") return OperatorKind.MINUS;
             if (arg == "--") return OperatorKind.PREFIX_DEC;
             break;
           }
-          case CharCode.EXCLAMATION: {
+          case CharCode.Exclamation: {
             if (arg == "!") return OperatorKind.NOT;
             break;
           }
-          case CharCode.TILDE: {
+          case CharCode.Tilde: {
             if (arg == "~") return OperatorKind.BITWISE_NOT;
             break;
           }
@@ -343,11 +343,11 @@ export namespace OperatorKind {
       }
       case DecoratorKind.OperatorPostfix: {
         switch (arg.charCodeAt(0)) {
-          case CharCode.PLUS: {
+          case CharCode.Plus: {
             if (arg == "++") return OperatorKind.POSTFIX_INC;
             break;
           }
-          case CharCode.MINUS: {
+          case CharCode.Minus: {
             if (arg == "--") return OperatorKind.POSTFIX_DEC;
             break;
           }

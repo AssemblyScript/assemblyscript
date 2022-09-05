@@ -282,7 +282,7 @@ function formatDiagnosticContext(range: Range): string {
     " │ "
   ];
   while (start < range.start) {
-    if (text.charCodeAt(start) == CharCode.TAB) {
+    if (text.charCodeAt(start) == CharCode.Tab) {
       sb.push("  ");
       start += 2;
     } else {
@@ -296,7 +296,7 @@ function formatDiagnosticContext(range: Range): string {
   } else {
     while (start++ < range.end) {
       let cc = text.charCodeAt(start);
-      if (cc == CharCode.TAB) {
+      if (cc == CharCode.Tab) {
         sb.push("~~");
       } else if (isLineBreak(cc)) {
         sb.push(start == range.start + 1 ? "^" : "~");

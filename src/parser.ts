@@ -4327,7 +4327,7 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-      parts.push(tn.readString(CharCode.BACKTICK, tag != null));
+      parts.push(tn.readString(CharCode.Backtick, tag != null));
       rawParts.push(tn.source.text.substring(tn.readStringStart, tn.readStringEnd));
     }
     return Node.createTemplateLiteralExpression(tag, parts, rawParts, exprs, tn.range(startPos, tn.pos));
@@ -4470,7 +4470,7 @@ export class Parser extends DiagnosticEmitter {
           tn.readString();
           while(tn.readingTemplateString){
             this.skipBlock(tn);
-            tn.readString(CharCode.BACKTICK);
+            tn.readString(CharCode.Backtick);
           }
           break;
         }

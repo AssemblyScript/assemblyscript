@@ -478,7 +478,7 @@ export class Tokenizer extends DiagnosticEmitter {
     // skip bom
     if (
       pos < end &&
-      text.charCodeAt(pos) == CharCode.BYTEORDERMARK
+      text.charCodeAt(pos) == CharCode.ByteOrderMark
     ) {
       ++pos;
     }
@@ -486,13 +486,13 @@ export class Tokenizer extends DiagnosticEmitter {
     // skip shebang
     if (
       pos + 1 < end &&
-      text.charCodeAt(pos) == CharCode.HASH &&
-      text.charCodeAt(pos + 1) == CharCode.EXCLAMATION
+      text.charCodeAt(pos) == CharCode.Hash &&
+      text.charCodeAt(pos + 1) == CharCode.Exclamation
     ) {
       pos += 2;
       while (
         pos < end &&
-        text.charCodeAt(pos) != CharCode.LINEFEED
+        text.charCodeAt(pos) != CharCode.LineFeed
       ) {
         ++pos;
       }
@@ -522,31 +522,31 @@ export class Tokenizer extends DiagnosticEmitter {
       this.tokenPos = pos;
       let c = text.charCodeAt(pos);
       switch (c) {
-        case CharCode.CARRIAGERETURN: {
+        case CharCode.CarriageReturn: {
           if (!(
             ++pos < end &&
-            text.charCodeAt(pos) == CharCode.LINEFEED
+            text.charCodeAt(pos) == CharCode.LineFeed
           )) break;
           // otherwise fall-through
         }
-        case CharCode.LINEFEED:
-        case CharCode.TAB:
-        case CharCode.VERTICALTAB:
-        case CharCode.FORMFEED:
-        case CharCode.SPACE: {
+        case CharCode.LineFeed:
+        case CharCode.Tab:
+        case CharCode.VerticalTab:
+        case CharCode.FormFeed:
+        case CharCode.Space: {
           ++pos;
           break;
         }
-        case CharCode.EXCLAMATION: {
+        case CharCode.Exclamation: {
           ++pos;
           if (
             maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
+            text.charCodeAt(pos) == CharCode.Equals
           ) {
             ++pos;
             if (
               maxTokenLength > 2 && pos < end &&
-              text.charCodeAt(pos) == CharCode.EQUALS
+              text.charCodeAt(pos) == CharCode.Equals
             ) {
               this.pos = pos + 1;
               return Token.ExclamationEqualsEquals;
@@ -557,20 +557,20 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Exclamation;
         }
-        case CharCode.DOUBLEQUOTE:
-        case CharCode.SINGLEQUOTE: {
+        case CharCode.DoubleQuote:
+        case CharCode.SingleQuote: {
           this.pos = pos;
           return Token.StringLiteral;
         }
-        case CharCode.BACKTICK: {
+        case CharCode.Backtick: {
           this.pos = pos;
           return Token.TemplateLiteral;
         }
-        case CharCode.PERCENT: {
+        case CharCode.Percent: {
           ++pos;
           if (
             maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
+            text.charCodeAt(pos) == CharCode.Equals
           ) {
             this.pos = pos + 1;
             return Token.PercentEquals;
@@ -578,15 +578,15 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Percent;
         }
-        case CharCode.AMPERSAND: {
+        case CharCode.Ampersand: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.AMPERSAND) {
+            if (chr == CharCode.Ampersand) {
               this.pos = pos + 1;
               return Token.AmpersandAmpersand;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
               return Token.AmpersandEquals;
             }
@@ -594,27 +594,27 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Ampersand;
         }
-        case CharCode.OPENPAREN: {
+        case CharCode.OpenParen: {
           this.pos = pos + 1;
           return Token.OpenParen;
         }
-        case CharCode.CLOSEPAREN: {
+        case CharCode.CloseParen: {
           this.pos = pos + 1;
           return Token.CloseParen;
         }
-        case CharCode.ASTERISK: {
+        case CharCode.Asterisk: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
               return Token.AsteriskEquals;
             }
-            if (chr == CharCode.ASTERISK) {
+            if (chr == CharCode.Asterisk) {
               ++pos;
               if (
                 maxTokenLength > 2 && pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
+                text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
                 return Token.AsteriskAsteriskEquals;
@@ -626,15 +626,15 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Asterisk;
         }
-        case CharCode.PLUS: {
+        case CharCode.Plus: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.PLUS) {
+            if (chr == CharCode.Plus) {
               this.pos = pos + 1;
               return Token.PlusPlus;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
               return Token.PlusEquals;
             }
@@ -642,19 +642,19 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Plus;
         }
-        case CharCode.COMMA: {
+        case CharCode.Comma: {
           this.pos = pos + 1;
           return Token.Comma;
         }
-        case CharCode.MINUS: {
+        case CharCode.Minus: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.MINUS) {
+            if (chr == CharCode.Minus) {
               this.pos = pos + 1;
               return Token.MinusMinus;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
               return Token.MinusEquals;
             }
@@ -662,7 +662,7 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Minus;
         }
-        case CharCode.DOT: {
+        case CharCode.Dot: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
@@ -672,8 +672,8 @@ export class Tokenizer extends DiagnosticEmitter {
             }
             if (
               maxTokenLength > 2 && pos + 1 < end &&
-              chr == CharCode.DOT &&
-              text.charCodeAt(pos + 1) == CharCode.DOT
+              chr == CharCode.Dot &&
+              text.charCodeAt(pos + 1) == CharCode.Dot
             ) {
               this.pos = pos + 2;
               return Token.DotDotDot;
@@ -682,22 +682,22 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Dot;
         }
-        case CharCode.SLASH: {
+        case CharCode.Slash: {
           let commentStartPos = pos;
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.SLASH) { // single-line
+            if (chr == CharCode.Slash) { // single-line
               let commentKind = CommentKind.LINE;
               if (
                 pos + 1 < end &&
-                text.charCodeAt(pos + 1) == CharCode.SLASH
+                text.charCodeAt(pos + 1) == CharCode.Slash
               ) {
                 ++pos;
                 commentKind = CommentKind.TRIPLE;
               }
               while (++pos < end) {
-                if (text.charCodeAt(pos) == CharCode.LINEFEED) {
+                if (text.charCodeAt(pos) == CharCode.LineFeed) {
                   ++pos;
                   break;
                 }
@@ -711,14 +711,14 @@ export class Tokenizer extends DiagnosticEmitter {
               }
               break;
             }
-            if (chr == CharCode.ASTERISK) { // multi-line
+            if (chr == CharCode.Asterisk) { // multi-line
               let closed = false;
               while (++pos < end) {
                 c = text.charCodeAt(pos);
                 if (
-                  c == CharCode.ASTERISK &&
+                  c == CharCode.Asterisk &&
                   pos + 1 < end &&
-                  text.charCodeAt(pos + 1) == CharCode.SLASH
+                  text.charCodeAt(pos + 1) == CharCode.Slash
                 ) {
                   pos += 2;
                   closed = true;
@@ -739,7 +739,7 @@ export class Tokenizer extends DiagnosticEmitter {
               }
               break;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
               return Token.SlashEquals;
             }
@@ -762,24 +762,24 @@ export class Tokenizer extends DiagnosticEmitter {
             ? Token.IntegerLiteral // expects a call to readInteger
             : Token.FloatLiteral;  // expects a call to readFloat
         }
-        case CharCode.COLON: {
+        case CharCode.Colon: {
           this.pos = pos + 1;
           return Token.Colon;
         }
-        case CharCode.SEMICOLON: {
+        case CharCode.Semicolon: {
           this.pos = pos + 1;
           return Token.Semicolon;
         }
-        case CharCode.LESSTHAN: {
+        case CharCode.LessThan: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.LESSTHAN) {
+            if (chr == CharCode.LessThan) {
               ++pos;
               if (
                 maxTokenLength > 2 &&
                 pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
+                text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
                 return Token.LessThanLessThanEquals;
@@ -787,7 +787,7 @@ export class Tokenizer extends DiagnosticEmitter {
               this.pos = pos;
               return Token.LessThanLessThan;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
               return Token.LessThanEquals;
             }
@@ -795,16 +795,16 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.LessThan;
         }
-        case CharCode.EQUALS: {
+        case CharCode.Equals: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               ++pos;
               if (
                 maxTokenLength > 2 &&
                 pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
+                text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
                 return Token.EqualsEqualsEquals;
@@ -812,7 +812,7 @@ export class Tokenizer extends DiagnosticEmitter {
               this.pos = pos;
               return Token.EqualsEquals;
             }
-            if (chr == CharCode.GREATERTHAN) {
+            if (chr == CharCode.GreaterThan) {
               this.pos = pos + 1;
               return Token.EqualsGreaterThan;
             }
@@ -820,19 +820,19 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Equals;
         }
-        case CharCode.GREATERTHAN: {
+        case CharCode.GreaterThan: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.GREATERTHAN) {
+            if (chr == CharCode.GreaterThan) {
               ++pos;
               if (maxTokenLength > 2 && pos < end) {
                 chr = text.charCodeAt(pos);
-                if (chr == CharCode.GREATERTHAN) {
+                if (chr == CharCode.GreaterThan) {
                   ++pos;
                   if (
                     maxTokenLength > 3 && pos < end &&
-                    text.charCodeAt(pos) == CharCode.EQUALS
+                    text.charCodeAt(pos) == CharCode.Equals
                   ) {
                     this.pos = pos + 1;
                     return Token.GreaterThanGreaterThanGreaterThanEquals;
@@ -840,7 +840,7 @@ export class Tokenizer extends DiagnosticEmitter {
                   this.pos = pos;
                   return Token.GreaterThanGreaterThanGreaterThan;
                 }
-                if (chr == CharCode.EQUALS) {
+                if (chr == CharCode.Equals) {
                   this.pos = pos + 1;
                   return Token.GreaterThanGreaterThanEquals;
                 }
@@ -848,7 +848,7 @@ export class Tokenizer extends DiagnosticEmitter {
               this.pos = pos;
               return Token.GreaterThanGreaterThan;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
               return Token.GreaterThanEquals;
             }
@@ -856,23 +856,23 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.GreaterThan;
         }
-        case CharCode.QUESTION: {
+        case CharCode.Question: {
           this.pos = pos + 1;
           return Token.Question;
         }
-        case CharCode.OPENBRACKET: {
+        case CharCode.OpenBracket: {
           this.pos = pos + 1;
           return Token.OpenBracket;
         }
-        case CharCode.CLOSEBRACKET: {
+        case CharCode.CloseBracket: {
           this.pos = pos + 1;
           return Token.CloseBracket;
         }
-        case CharCode.CARET: {
+        case CharCode.Caret: {
           ++pos;
           if (
             maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
+            text.charCodeAt(pos) == CharCode.Equals
           ) {
             this.pos = pos + 1;
             return Token.CaretEquals;
@@ -880,19 +880,19 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Caret;
         }
-        case CharCode.OPENBRACE: {
+        case CharCode.OpenBrace: {
           this.pos = pos + 1;
           return Token.OpenBrace;
         }
-        case CharCode.BAR: {
+        case CharCode.Bar: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.BAR) {
+            if (chr == CharCode.Bar) {
               this.pos = pos + 1;
               return Token.BarBar;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
               return Token.BarEquals;
             }
@@ -900,15 +900,15 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos;
           return Token.Bar;
         }
-        case CharCode.CLOSEBRACE: {
+        case CharCode.CloseBrace: {
           this.pos = pos + 1;
           return Token.CloseBrace;
         }
-        case CharCode.TILDE: {
+        case CharCode.Tilde: {
           this.pos = pos + 1;
           return Token.Tilde;
         }
-        case CharCode.AT: {
+        case CharCode.At: {
           this.pos = pos + 1;
           return Token.At;
         }
@@ -1092,7 +1092,7 @@ export class Tokenizer extends DiagnosticEmitter {
         result += text.substring(start, pos++);
         break;
       }
-      if (c == CharCode.BACKSLASH) {
+      if (c == CharCode.Backslash) {
         result += text.substring(start, pos);
         this.pos = pos; // save
         result += this.readEscapeSequence(isTaggedTemplate);
@@ -1100,8 +1100,8 @@ export class Tokenizer extends DiagnosticEmitter {
         start = pos;
         continue;
       }
-      if (quote == CharCode.BACKTICK) {
-        if (c == CharCode.DOLLAR && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OPENBRACE) {
+      if (quote == CharCode.Backtick) {
+        if (c == CharCode.Dollar && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OpenBrace) {
           result += text.substring(start, pos);
           this.readStringEnd = pos;
           this.pos = pos + 2;
@@ -1152,12 +1152,12 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.v: return "\v";
       case CharCode.f: return "\f";
       case CharCode.r: return "\r";
-      case CharCode.SINGLEQUOTE: return "'";
-      case CharCode.DOUBLEQUOTE: return "\"";
+      case CharCode.SingleQuote: return "'";
+      case CharCode.DoubleQuote: return "\"";
       case CharCode.u: {
         if (
           this.pos < end &&
-          text.charCodeAt(this.pos) == CharCode.OPENBRACE
+          text.charCodeAt(this.pos) == CharCode.OpenBrace
         ) {
           ++this.pos;
           return this.readExtendedUnicodeEscape(isTaggedTemplate ? start : -1); // \u{DDDDDDDD}
@@ -1167,18 +1167,18 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.x: {
         return this.readHexadecimalEscape(2, isTaggedTemplate ? start : - 1); // \xDD
       }
-      case CharCode.CARRIAGERETURN: {
+      case CharCode.CarriageReturn: {
         if (
           this.pos < end &&
-          text.charCodeAt(this.pos) == CharCode.LINEFEED
+          text.charCodeAt(this.pos) == CharCode.LineFeed
         ) {
           ++this.pos;
         }
         // fall through
       }
-      case CharCode.LINEFEED:
-      case CharCode.LINESEPARATOR:
-      case CharCode.PARAGRAPHSEPARATOR: return "";
+      case CharCode.LineFeed:
+      case CharCode.LineSeparator:
+      case CharCode.ParagraphSeparator: return "";
       default: return String.fromCodePoint(c);
     }
   }
@@ -1196,13 +1196,13 @@ export class Tokenizer extends DiagnosticEmitter {
         );
         break;
       }
-      if (text.charCodeAt(this.pos) == CharCode.BACKSLASH) {
+      if (text.charCodeAt(this.pos) == CharCode.Backslash) {
         ++this.pos;
         escaped = true;
         continue;
       }
       let c = text.charCodeAt(this.pos);
-      if (!escaped && c == CharCode.SLASH) break;
+      if (!escaped && c == CharCode.Slash) break;
       if (isLineBreak(c)) {
         this.error(
           DiagnosticCode.Unterminated_regular_expression_literal,
@@ -1268,7 +1268,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || (c | 32) == CharCode.e) return false;
+      if (c == CharCode.Dot || (c | 32) == CharCode.e) return false;
       if (c != CharCode._ && (c < CharCode._0 || c > CharCode._9)) break;
       // does not validate separator placement (this is done in readXYInteger)
       pos++;
@@ -1581,7 +1581,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var start = this.pos;
     var sepCount = this.readDecimalFloatPartial(false);
-    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
+    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.Dot) {
       ++this.pos;
       sepCount += this.readDecimalFloatPartial();
     }
@@ -1590,7 +1590,7 @@ export class Tokenizer extends DiagnosticEmitter {
       if ((c | 32) == CharCode.e) {
         if (
           ++this.pos < end &&
-          (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
+          (c = text.charCodeAt(this.pos)) == CharCode.Minus || c == CharCode.Plus &&
           isDecimal(text.charCodeAt(this.pos + 1))
         ) {
           ++this.pos;
@@ -1733,7 +1733,7 @@ export class Tokenizer extends DiagnosticEmitter {
         );
       }
       invalid = true;
-    } else if (text.charCodeAt(this.pos) == CharCode.CLOSEBRACE) {
+    } else if (text.charCodeAt(this.pos) == CharCode.CloseBrace) {
       ++this.pos;
     } else {
       if (startIfTaggedTemplate == -1) {
