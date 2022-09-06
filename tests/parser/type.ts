@@ -16,3 +16,7 @@ export type T7 = Array<T7>;
 export type T8 = Map<string, Array<T8>>;
 export type T9 = Array<() => T9>;
 export type T10 = T6<T10>;
+
+export type T11 = T1 | null
+export type T12 = null | T1
+

@@ -3,6 +3,8 @@ type int32_t = i32;
 export type uint64_t = u64;
 export type T1 = int32_t;
 export type T2 = int32_t;
+export type T11 = T1 | null;
+export type T12 = T1 | null;
 // ERROR 2456: "Type alias 'T3' circularly references itself." in type.ts(11,23+4)
 // ERROR 100: "Not implemented: Recursion in type aliases" in type.ts(12,29+3)
 // ERROR 100: "Not implemented: Recursion in type aliases" in type.ts(13,24+2)
