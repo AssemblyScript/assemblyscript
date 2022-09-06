@@ -830,6 +830,14 @@ export abstract class TypeNode extends Node {
     super(kind, range);
   }
 
+  isNullType(): bool {
+    if (this.kind == NodeKind.NAMEDTYPE) {
+      let namedTypeNode = <NamedTypeNode>changetype<TypeNode>(this); // TS
+      return namedTypeNode.name.identifier.text == "null";
+    }
+    return false;
+  }
+
   /** Tests if this type has a generic component matching one of the given type parameters. */
   hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool {
     if (this.kind == NodeKind.NAMEDTYPE) {

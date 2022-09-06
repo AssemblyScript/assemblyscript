@@ -634,20 +634,31 @@ export class Parser extends DiagnosticEmitter {
       }
       return null;
     }
-    // ... | null
+    // ... | type
     while (tn.skip(Token.BAR)) {
-      if (tn.skip(Token.NULL)) {
-        type.isNullable = true;
-      } else {
-        let notNullStart = tn.pos;
-        let notNull = this.parseType(tn, false, true);
+      let nextType = this.parseType(tn, false, true);
+      if (nextType == null) {
+        return null;
+      }
+      let nextTypeIsNull = nextType.isNullType();
+      let typeIsNull = type.isNullType();
+      if (!typeIsNull && !nextTypeIsNull) {
         if (!suppressErrors) {
           this.error(
-            DiagnosticCode._0_expected,
-            notNull ? notNull.range : tn.range(notNullStart), "null"
+            DiagnosticCode.Not_implemented_0, nextType.range, "union types"
           );
         }
         return null;
+      } else if (nextTypeIsNull) {
+        type.isNullable = true;
+        type.range.end = nextType.range.end;
+      } else if (typeIsNull) {
+        nextType.range.start = type.range.start;
+        nextType.isNullable = true;
+        type = nextType;
+      } else {
+        // `null | null` still `null`
+        type.range.end = nextType.range.end;
       }
     }
     // ... [][]
@@ -672,8 +683,8 @@ export class Parser extends DiagnosticEmitter {
         } else {
           if (!suppressErrors) {
             this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), "null"
+              DiagnosticCode.Not_implemented_0,
+              tn.range(), "union types"
             );
           }
           return null;
