@@ -507,12 +507,12 @@ export class Parser extends DiagnosticEmitter {
     // '(' ...
     if (token == Token.OPENPAREN) {
 
-      // '(' FunctionSignature ')' '|' 'null'?
-      let isNullableSignature = tn.skip(Token.OPENPAREN);
+      // '(' FunctionSignature ')'
+      let isOpenParen = tn.skip(Token.OPENPAREN);
       // FunctionSignature?
       let signature = this.tryParseFunctionType(tn);
       if (signature) {
-        if (isNullableSignature) {
+        if (isOpenParen) {
           if (!tn.skip(Token.CLOSEPAREN)) {
             this.error(
               DiagnosticCode._0_expected,
@@ -520,32 +520,17 @@ export class Parser extends DiagnosticEmitter {
             );
             return null;
           }
-          if (!tn.skip(Token.BAR)) {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), "|"
-            );
-            return null;
-          }
-          if (!tn.skip(Token.NULL)) {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), "null"
-            );
-          }
-          signature.isNullable = true;
         }
-        return signature;
-      } else if (isNullableSignature || this.tryParseSignatureIsSignature) {
+        type = signature;
+      } else if (isOpenParen || this.tryParseSignatureIsSignature) {
         this.error(
           DiagnosticCode.Unexpected_token,
           tn.range()
         );
         return null;
       }
-
       // Type (',' Type)* ')'
-      if (acceptParenthesized) {
+      else if (acceptParenthesized) {
         let innerType = this.parseType(tn, false, suppressErrors);
         if (!innerType) return null;
         if (!tn.skip(Token.CLOSEPAREN)) {
