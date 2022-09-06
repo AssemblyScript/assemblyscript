@@ -625,8 +625,8 @@ export class Parser extends DiagnosticEmitter {
       if (nextType == null) {
         return null;
       }
-      let nextTypeIsNull = nextType.isNullType();
-      let typeIsNull = type.isNullType();
+      let nextTypeIsNull = nextType.kind == NodeKind.NAMEDTYPE && (<NamedTypeNode>nextType).name.identifier.text == "null";
+      let typeIsNull = type.kind == NodeKind.NAMEDTYPE && (<NamedTypeNode>type).name.identifier.text == "null";
       if (!typeIsNull && !nextTypeIsNull) {
         if (!suppressErrors) {
           this.error(
