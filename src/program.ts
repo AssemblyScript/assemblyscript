@@ -3015,19 +3015,32 @@ export abstract class DeclaredElement extends Element {
       // class A implement I, class B extends A implement I
       let selfField = <Field>self;
       let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
+      if (!selfField.internalGetterSignature || !selfField.internalSetterSignature || !baseProperty) {
+        return false;
+      }
+      let baseGetterInsance = baseProperty.getterInstance;
+      let baseSetterInsance = baseProperty.setterInstance;
+      if (baseGetterInsance && baseSetterInsance) {
+        if (!selfField.internalGetterSignature.isAssignableTo(baseGetterInsance.signature)
+          || !selfField.internalSetterSignature.isAssignableTo(baseSetterInsance.signature)) {
+          return false;
+        }
+      } else {
+        return false;
+      }
 
-      if (!selfField.internalGetterSignature
-        || !baseProperty
-        || !baseProperty.getterInstance
-        || !selfField.internalGetterSignature.isAssignableTo(baseProperty.getterInstance.signature)) {
-        return false;
-      }
-      if (!selfField.internalSetterSignature
-        || !baseProperty
-        || !baseProperty.setterInstance
-        || !selfField.internalSetterSignature.isAssignableTo(baseProperty.setterInstance.signature)) {
-        return false;
-      }
+      // if (!selfField.internalGetterSignature
+      //   || !baseProperty
+      //   || !baseProperty.getterInstance
+      //   || !selfField.internalGetterSignature.isAssignableTo(baseProperty.getterInstance.signature)) {
+      //   return false;
+      // }
+      // if (!selfField.internalSetterSignature
+      //   || !baseProperty
+      //   || !baseProperty.setterInstance
+      //   || !selfField.internalSetterSignature.isAssignableTo(baseProperty.setterInstance.signature)) {
+      //   return false;
+      // }
       return true;
     }
     return false;
