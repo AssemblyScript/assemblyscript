@@ -3028,19 +3028,6 @@ export abstract class DeclaredElement extends Element {
       } else {
         return false;
       }
-
-      // if (!selfField.internalGetterSignature
-      //   || !baseProperty
-      //   || !baseProperty.getterInstance
-      //   || !selfField.internalGetterSignature.isAssignableTo(baseProperty.getterInstance.signature)) {
-      //   return false;
-      // }
-      // if (!selfField.internalSetterSignature
-      //   || !baseProperty
-      //   || !baseProperty.setterInstance
-      //   || !selfField.internalSetterSignature.isAssignableTo(baseProperty.setterInstance.signature)) {
-      //   return false;
-      // }
       return true;
     }
     return false;
