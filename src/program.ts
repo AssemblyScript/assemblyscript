@@ -3011,6 +3011,25 @@ export abstract class DeclaredElement extends Element {
         }
       }
     }
+    if (self.kind == ElementKind.FIELD && base.kind == ElementKind.PROPERTY_PROTOTYPE) {
+      // class A implement I, class B extends A implement I
+      let selfField = <Field>self;
+      let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
+
+      if (!selfField.internalGetterSignature
+        || !baseProperty
+        || !baseProperty.getterInstance
+        || !selfField.internalGetterSignature.isAssignableTo(baseProperty.getterInstance.signature)) {
+        return false;
+      }
+      if (!selfField.internalSetterSignature
+        || !baseProperty
+        || !baseProperty.setterInstance
+        || !selfField.internalSetterSignature.isAssignableTo(baseProperty.setterInstance.signature)) {
+        return false;
+      }
+      return true;
+    }
     return false;
   }
 }
@@ -3932,7 +3951,7 @@ export class Field extends VariableLikeElement {
   get internalSetterSignature(): Signature {
     var cached = this._internalSetterSignature;
     if (!cached) {
-      this._internalGetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
+      this._internalSetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
     }
     return cached;
   }
