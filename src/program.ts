@@ -2954,6 +2954,33 @@ export abstract class DeclaredElement extends Element {
     return this.declaration.decorators;
   }
 
+  /** Determine if two properties are compatibal during override by their getter and setter signature . */
+  private _isCampatibalOverrideProperty(selfProperty: Property|null, baseProperty: Property|null, ignoreInheritLineCheck: bool = false): bool {
+    if (!selfProperty || !baseProperty) {
+      return false;
+    } else {
+      let selfGetter = selfProperty.getterInstance;
+      let baseGetter = baseProperty.getterInstance;
+      if (selfGetter) {
+        if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
+          return false;
+        }
+      } else if (baseGetter) {
+        return false;
+      }
+      let selfSetter = selfProperty.setterInstance;
+      let baseSetter = baseProperty.setterInstance;
+      if (selfSetter) {
+        if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
+          return false;
+        }
+      } else if (baseSetter) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /** Checks if this element is a compatible override of the specified. */
   isCompatibleOverride(base: DeclaredElement): bool {
     var self: DeclaredElement = this; // TS
@@ -2963,28 +2990,24 @@ export abstract class DeclaredElement extends Element {
         case ElementKind.FUNCTION: {
           return (<Function>self).signature.isAssignableTo((<Function>base).signature);
         }
+        case ElementKind.FUNCTION_PROTOTYPE : {
+          let selfFunction = this.program.resolver.resolveFunction(<FunctionPrototype>self, null);
+          let baseFunction = this.program.resolver.resolveFunction(<FunctionPrototype>base, null);
+          if (selfFunction && baseFunction) {
+            return selfFunction.signature.isAssignableTo(baseFunction.signature, true);
+          } else {
+            return false;
+          }
+        }
+        case ElementKind.PROPERTY_PROTOTYPE: {
+          let selfProperty = this.program.resolver.resolveProperty(<PropertyPrototype>self);
+          let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
+          return this._isCampatibalOverrideProperty(selfProperty, baseProperty, true);
+        }
         case ElementKind.PROPERTY: {
           let selfProperty = <Property>self;
           let baseProperty = <Property>base;
-          let selfGetter = selfProperty.getterInstance;
-          let baseGetter = baseProperty.getterInstance;
-          if (selfGetter) {
-            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature)) {
-              return false;
-            }
-          } else if (baseGetter) {
-            return false;
-          }
-          let selfSetter = selfProperty.setterInstance;
-          let baseSetter = baseProperty.setterInstance;
-          if (selfSetter) {
-            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature)) {
-              return false;
-            }
-          } else if (baseSetter) {
-            return false;
-          }
-          return true;
+          return self._isCampatibalOverrideProperty(selfProperty, baseProperty);
         }
       }
     }
