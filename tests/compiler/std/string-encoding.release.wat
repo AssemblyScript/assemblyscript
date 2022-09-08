@@ -3446,10 +3446,8 @@
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   memory.copy $0 $0
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3537,10 +3535,8 @@
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   i32.add
   local.set $6
   block $__inlined_func$~lib/string/String.UTF8.encodeUnsafe

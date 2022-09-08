@@ -2822,10 +2822,8 @@
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.tee $1
   i32.const 8
   i32.gt_u
@@ -21350,20 +21348,16 @@
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.tee $3
   i32.eqz
   local.get $0
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.tee $5
   local.get $1
   i32.const 1
@@ -21473,20 +21467,16 @@
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.tee $3
   i32.eqz
   local.get $0
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.tee $4
   local.get $1
   i32.const 1
@@ -21602,10 +21592,8 @@
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.set $2
   loop $while-continue|0
    local.get $1
@@ -21757,10 +21745,8 @@
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.tee $3
   local.set $1
   loop $while-continue|0
@@ -22156,19 +22142,15 @@
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.tee $2
   local.get $1
   i32.const 20
   i32.sub
   i32.load $0 offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
+  i32.const -2
+  i32.and
   local.tee $3
   i32.add
   local.tee $4

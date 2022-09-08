@@ -8259,19 +8259,15 @@
    i32.const 20
    i32.sub
    i32.load $0 offset=16
-   i32.const 1
-   i32.shr_u
-   i32.const 1
-   i32.shl
+   i32.const -2
+   i32.and
    local.tee $3
    local.get $1
    i32.const 20
    i32.sub
    i32.load $0 offset=16
-   i32.const 1
-   i32.shr_u
-   i32.const 1
-   i32.shl
+   i32.const -2
+   i32.and
    local.tee $4
    i32.add
    local.tee $2
@@ -28789,10 +28785,8 @@
    i32.const 20
    i32.sub
    i32.load $0 offset=16
-   i32.const 1
-   i32.shr_u
-   i32.const 1
-   i32.shl
+   i32.const -2
+   i32.and
    memory.copy $0 $0
   end
   global.get $~lib/memory/__stack_pointer

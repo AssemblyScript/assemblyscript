@@ -5236,10 +5236,8 @@
    i64.sub
    local.set $6
    local.get $5
-   i64.const 63
-   i64.shr_u
-   i64.const 63
-   i64.shl
+   i64.const -9223372036854775808
+   i64.and
    local.get $3
    local.get $4
    i64.shl
