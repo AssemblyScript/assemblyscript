@@ -459,7 +459,63 @@ export abstract class Visitor {
     // unimp
   }
 
+  visitArrayCopy(expr: ExpressionRef): void {
+    // unimp
+  }
+
   visitRefAs(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringNew(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringConst(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringMeasure(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringEncode(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringConcat(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringEq(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringAs(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringWTF8Advance(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringWTF16Get(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringIterNext(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringIterMove(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringSliceWTF(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringSliceIter(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -966,11 +1022,109 @@ export abstract class Visitor {
         this.visitArrayLen(expr);
         break;
       }
+      case ExpressionId.ArrayCopy: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitArrayCopy(expr);
+        break;
+      }
       case ExpressionId.RefAs: {
         this.stack.push(expr);
         this.visit(_BinaryenRefAsGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitRefAs(expr);
+        break;
+      }
+      case ExpressionId.StringNew: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringNew(expr);
+        break;
+      }
+      case ExpressionId.StringConst: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringConst(expr);
+        break;
+      }
+      case ExpressionId.StringMeasure: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringMeasure(expr);
+        break;
+      }
+      case ExpressionId.StringEncode: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringEncode(expr);
+        break;
+      }
+      case ExpressionId.StringConcat: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringConcat(expr);
+        break;
+      }
+      case ExpressionId.StringEq: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringEq(expr);
+        break;
+      }
+      case ExpressionId.StringAs: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringAs(expr);
+        break;
+      }
+      case ExpressionId.StringWTF8Advance: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringWTF8Advance(expr);
+        break;
+      }
+      case ExpressionId.StringWTF16Get: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringWTF16Get(expr);
+        break;
+      }
+      case ExpressionId.StringIterNext: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringIterNext(expr);
+        break;
+      }
+      case ExpressionId.StringIterMove: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringIterMove(expr);
+        break;
+      }
+      case ExpressionId.StringSliceWTF: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringSliceWTF(expr);
+        break;
+      }
+      case ExpressionId.StringSliceIter: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStringSliceIter(expr);
         break;
       }
       default: throw new Error("unexpected expression kind");
