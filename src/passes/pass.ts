@@ -447,6 +447,10 @@ export abstract class Visitor {
     // unimp
   }
 
+  visitArrayInit(expr: ExpressionRef): void {
+    // unimp
+  }
+
   visitArrayGet(expr: ExpressionRef): void {
     // unimp
   }
@@ -999,6 +1003,13 @@ export abstract class Visitor {
         assert(false); // TODO
         assert(this.stack.pop() == expr);
         this.visitArrayNew(expr);
+        break;
+      }
+      case ExpressionId.ArrayInit: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitArrayInit(expr);
         break;
       }
       case ExpressionId.ArrayGet: {
