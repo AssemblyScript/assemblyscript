@@ -533,7 +533,7 @@ export declare function _BinaryenI31GetSetI31(expr: ExpressionRef, i31Expr: Expr
 export declare function _BinaryenI31GetIsSigned(expr: ExpressionRef): bool;
 export declare function _BinaryenI31GetSetSigned(expr: ExpressionRef, signed: bool): void;
 
-export declare function _BinaryenCallRef(module: ModuleRef, target: ExpressionRef, operands: ArrayRef<ExpressionRef>, numOperands: Index, type: TypeRef, isReturn: bool);
+export declare function _BinaryenCallRef(module: ModuleRef, target: ExpressionRef, operands: ArrayRef<ExpressionRef>, numOperands: Index, type: TypeRef, isReturn: bool): ExpressionRef;
 export declare function _BinaryenCallRefGetNumOperands(expr: ExpressionRef): Index;
 export declare function _BinaryenCallRefGetOperandAt(expr: ExpressionRef, index: Index): ExpressionRef;
 export declare function _BinaryenCallRefSetOperandAt(expr: ExpressionRef, index: Index, operandExpr: ExpressionRef): void;
