@@ -178,7 +178,62 @@ import {
   _BinaryenI31NewGetValue,
   _BinaryenI31GetGetI31,
   _BinaryenI31NewSetValue,
-  _BinaryenI31GetSetI31
+  _BinaryenI31GetSetI31,
+  _BinaryenCallRefGetNumOperands,
+  _BinaryenCallRefGetOperandAt,
+  _BinaryenCallRefGetTarget,
+  _BinaryenRefTestGetRef,
+  _BinaryenRefCastGetRef,
+  _BinaryenBrOnGetName,
+  _BinaryenBrOnGetRef,
+  _BinaryenStructNewGetNumOperands,
+  _BinaryenStructNewGetOperandAt,
+  _BinaryenStructGetGetRef,
+  _BinaryenStructSetGetRef,
+  _BinaryenStructSetGetValue,
+  _BinaryenStructSetGetIndex,
+  _BinaryenStructGetGetIndex,
+  _BinaryenArrayNewGetSize,
+  _BinaryenArrayNewGetInit,
+  _BinaryenArrayInitGetNumValues,
+  _BinaryenArrayInitGetValueAt,
+  _BinaryenArrayGetGetRef,
+  _BinaryenArrayGetGetIndex,
+  _BinaryenArraySetGetRef,
+  _BinaryenArraySetGetIndex,
+  _BinaryenArraySetGetValue,
+  _BinaryenArrayLenGetRef,
+  _BinaryenArrayCopyGetDestRef,
+  _BinaryenArrayCopyGetDestIndex,
+  _BinaryenArrayCopyGetSrcRef,
+  _BinaryenArrayCopyGetSrcIndex,
+  _BinaryenArrayCopyGetLength,
+  _BinaryenStringNewGetPtr,
+  _BinaryenStringNewGetLength,
+  _BinaryenStringNewGetStart,
+  _BinaryenStringNewGetEnd,
+  _BinaryenStringMeasureGetRef,
+  _BinaryenStringEncodeGetPtr,
+  _BinaryenStringEncodeGetRef,
+  _BinaryenStringEncodeGetStart,
+  _BinaryenStringConcatGetLeft,
+  _BinaryenStringConcatGetRight,
+  _BinaryenStringEqGetLeft,
+  _BinaryenStringEqGetRight,
+  _BinaryenStringAsGetRef,
+  _BinaryenStringWTF8AdvanceGetRef,
+  _BinaryenStringWTF8AdvanceGetPos,
+  _BinaryenStringWTF8AdvanceGetBytes,
+  _BinaryenStringWTF16GetGetRef,
+  _BinaryenStringWTF16GetGetPos,
+  _BinaryenStringIterNextGetRef,
+  _BinaryenStringIterMoveGetRef,
+  _BinaryenStringIterMoveGetNum,
+  _BinaryenStringSliceWTFGetRef,
+  _BinaryenStringSliceWTFGetStart,
+  _BinaryenStringSliceWTFGetEnd,
+  _BinaryenStringSliceIterGetRef,
+  _BinaryenStringSliceIterGetNum
 } from "../glue/binaryen";
 
 /** Base class of custom Binaryen visitors. */
@@ -951,91 +1006,120 @@ export abstract class Visitor {
       }
       case ExpressionId.CallRef: {
         this.stack.push(expr);
-        assert(false); // TODO
+        let numOperands = _BinaryenCallRefGetNumOperands(expr);
+        if (numOperands) {
+          for (let i: Index = 0; i < numOperands; ++i) {
+            this.visit(_BinaryenCallRefGetOperandAt(expr, i));
+          }
+        }
+        this.visit(_BinaryenCallRefGetTarget(expr));
         assert(this.stack.pop() == expr);
         this.visitCallRef(expr);
         break;
       }
       case ExpressionId.RefTest: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenRefTestGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitRefTest(expr);
         break;
       }
       case ExpressionId.RefCast: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenRefCastGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitRefCast(expr);
         break;
       }
       case ExpressionId.BrOn: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visitLabel(_BinaryenBrOnGetName(expr));
+        this.visit(_BinaryenBrOnGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitBrOn(expr);
         break;
       }
       case ExpressionId.StructNew: {
-        this.stack.push(expr);
-        assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        let numOperands = _BinaryenStructNewGetNumOperands(expr);
+        if (numOperands) {
+          this.stack.push(expr);
+          for (let i: Index = 0; i < numOperands; ++i) {
+            this.visit(_BinaryenStructNewGetOperandAt(expr, i));
+          }
+          assert(this.stack.pop() == expr);
+        }
         this.visitStructNew(expr);
         break;
       }
       case ExpressionId.StructGet: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStructGetGetRef(expr));
+        this.visitIndex(_BinaryenStructGetGetIndex(expr));
         assert(this.stack.pop() == expr);
         this.visitStructGet(expr);
         break;
       }
       case ExpressionId.StructSet: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStructSetGetRef(expr));
+        this.visitIndex(_BinaryenStructSetGetIndex(expr));
+        this.visit(_BinaryenStructSetGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitStructSet(expr);
         break;
       }
       case ExpressionId.ArrayNew: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArrayNewGetSize(expr));
+        let init = _BinaryenArrayNewGetInit(expr);
+        if (init) this.visit(init);
         assert(this.stack.pop() == expr);
         this.visitArrayNew(expr);
         break;
       }
       case ExpressionId.ArrayInit: {
-        this.stack.push(expr);
-        assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        let numValues = _BinaryenArrayInitGetNumValues(expr);
+        if (numValues) {
+          this.stack.push(expr);
+          for (let i: Index = 0; i < numValues; ++i) {
+            this.visit(_BinaryenArrayInitGetValueAt(expr, i));
+          }
+          assert(this.stack.pop() == expr);
+        }
         this.visitArrayInit(expr);
         break;
       }
       case ExpressionId.ArrayGet: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArrayGetGetRef(expr));
+        this.visit(_BinaryenArrayGetGetIndex(expr));
         assert(this.stack.pop() == expr);
         this.visitArrayGet(expr);
         break;
       }
       case ExpressionId.ArraySet: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArraySetGetRef(expr));
+        this.visit(_BinaryenArraySetGetIndex(expr));
+        this.visit(_BinaryenArraySetGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitArraySet(expr);
         break;
       }
       case ExpressionId.ArrayLen: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArrayLenGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitArrayLen(expr);
         break;
       }
       case ExpressionId.ArrayCopy: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArrayCopyGetDestRef(expr));
+        this.visit(_BinaryenArrayCopyGetDestIndex(expr));
+        this.visit(_BinaryenArrayCopyGetSrcRef(expr));
+        this.visit(_BinaryenArrayCopyGetSrcIndex(expr));
+        this.visit(_BinaryenArrayCopyGetLength(expr));
         assert(this.stack.pop() == expr);
         this.visitArrayCopy(expr);
         break;
@@ -1049,91 +1133,108 @@ export abstract class Visitor {
       }
       case ExpressionId.StringNew: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringNewGetPtr(expr));
+        let length = _BinaryenStringNewGetLength(expr); // LM only
+        if (length) this.visit(length);
+        let start = _BinaryenStringNewGetStart(expr); // GC only
+        if (start) this.visit(start);
+        let end = _BinaryenStringNewGetEnd(expr); // GC only
+        if (end) this.visit(end);
         assert(this.stack.pop() == expr);
         this.visitStringNew(expr);
         break;
       }
       case ExpressionId.StringConst: {
         this.stack.push(expr);
-        assert(false); // TODO
         assert(this.stack.pop() == expr);
         this.visitStringConst(expr);
         break;
       }
       case ExpressionId.StringMeasure: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringMeasureGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitStringMeasure(expr);
         break;
       }
       case ExpressionId.StringEncode: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringEncodeGetRef(expr));
+        this.visit(_BinaryenStringEncodeGetPtr(expr));
+        let start = _BinaryenStringEncodeGetStart(expr); // GC only
+        if (start) this.visit(start);
         assert(this.stack.pop() == expr);
         this.visitStringEncode(expr);
         break;
       }
       case ExpressionId.StringConcat: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringConcatGetLeft(expr));
+        this.visit(_BinaryenStringConcatGetRight(expr));
         assert(this.stack.pop() == expr);
         this.visitStringConcat(expr);
         break;
       }
       case ExpressionId.StringEq: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringEqGetLeft(expr));
+        this.visit(_BinaryenStringEqGetRight(expr));
         assert(this.stack.pop() == expr);
         this.visitStringEq(expr);
         break;
       }
       case ExpressionId.StringAs: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringAsGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitStringAs(expr);
         break;
       }
       case ExpressionId.StringWTF8Advance: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringWTF8AdvanceGetRef(expr));
+        this.visit(_BinaryenStringWTF8AdvanceGetPos(expr));
+        this.visit(_BinaryenStringWTF8AdvanceGetBytes(expr));
         assert(this.stack.pop() == expr);
         this.visitStringWTF8Advance(expr);
         break;
       }
       case ExpressionId.StringWTF16Get: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringWTF16GetGetRef(expr));
+        this.visit(_BinaryenStringWTF16GetGetPos(expr));
         assert(this.stack.pop() == expr);
         this.visitStringWTF16Get(expr);
         break;
       }
       case ExpressionId.StringIterNext: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringIterNextGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitStringIterNext(expr);
         break;
       }
       case ExpressionId.StringIterMove: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringIterMoveGetRef(expr));
+        this.visit(_BinaryenStringIterMoveGetNum(expr));
         assert(this.stack.pop() == expr);
         this.visitStringIterMove(expr);
         break;
       }
       case ExpressionId.StringSliceWTF: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringSliceWTFGetRef(expr));
+        this.visit(_BinaryenStringSliceWTFGetStart(expr));
+        this.visit(_BinaryenStringSliceWTFGetEnd(expr));
         assert(this.stack.pop() == expr);
         this.visitStringSliceWTF(expr);
         break;
       }
       case ExpressionId.StringSliceIter: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStringSliceIterGetRef(expr));
+        this.visit(_BinaryenStringSliceIterGetNum(expr));
         assert(this.stack.pop() == expr);
         this.visitStringSliceIter(expr);
         break;
