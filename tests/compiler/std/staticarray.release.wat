@@ -4060,12 +4060,8 @@
       i32.add
       f64.load $0
       local.tee $3
-      f64.const nan:0x8000000000000
-      f64.eq
-      local.get $3
       local.get $3
       f64.ne
-      i32.or
       br_if $__inlined_func$~lib/staticarray/StaticArray<f64>#includes
       drop
       local.get $1
@@ -4126,12 +4122,8 @@
       i32.add
       f32.load $0
       local.tee $4
-      f32.const nan:0x400000
-      f32.eq
-      local.get $4
       local.get $4
       f32.ne
-      i32.or
       br_if $__inlined_func$~lib/staticarray/StaticArray<f32>#includes
       drop
       local.get $1
@@ -4390,10 +4382,6 @@
     i32.shr_u
     local.tee $1
     i32.eqz
-    local.get $1
-    i32.const -3
-    i32.le_s
-    i32.or
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#indexOf38
     local.get $1
     i32.const 3

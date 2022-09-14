@@ -2303,7 +2303,7 @@ export class Module {
     var cArr3 = allocPtrArray(offs);
     var cArr4 = allocU32Array(sizs);
     binaryen._BinaryenSetMemory(
-      this.ref, initial, maximum, cStr1, cArr1, cArr2, cArr3, cArr4, k, shared, cStr2
+      this.ref, initial, maximum, cStr1, cArr1, cArr2, cArr3, cArr4, k, shared, false, cStr2
     );
     binaryen._free(cArr4);
     binaryen._free(cArr3);

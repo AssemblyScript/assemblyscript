@@ -10412,51 +10412,26 @@
   local.get $1
   i32.const 65535
   i32.and
-  local.tee $2
-  i32.const 100000
+  local.set $2
+  local.get $2
+  i32.const 100
   i32.lt_u
   if (result i32)
    local.get $2
-   i32.const 100
-   i32.lt_u
-   if (result i32)
-    local.get $2
-    i32.const 10
-    i32.ge_u
-    i32.const 1
-    i32.add
-   else
-    local.get $2
-    i32.const 10000
-    i32.ge_u
-    i32.const 3
-    i32.add
-    local.get $2
-    i32.const 1000
-    i32.ge_u
-    i32.add
-   end
+   i32.const 10
+   i32.ge_u
+   i32.const 1
+   i32.add
   else
    local.get $2
-   i32.const 10000000
-   i32.lt_u
-   if (result i32)
-    local.get $2
-    i32.const 1000000
-    i32.ge_u
-    i32.const 6
-    i32.add
-   else
-    local.get $2
-    i32.const 1000000000
-    i32.ge_u
-    i32.const 8
-    i32.add
-    local.get $2
-    i32.const 100000000
-    i32.ge_u
-    i32.add
-   end
+   i32.const 10000
+   i32.ge_u
+   i32.const 3
+   i32.add
+   local.get $2
+   i32.const 1000
+   i32.ge_u
+   i32.add
   end
   local.set $1
   local.get $0
@@ -11292,52 +11267,17 @@
   local.get $1
   i32.const 255
   i32.and
-  local.tee $2
-  i32.const 100000
-  i32.lt_u
-  if (result i32)
-   local.get $2
-   i32.const 100
-   i32.lt_u
-   if (result i32)
-    local.get $2
-    i32.const 10
-    i32.ge_u
-    i32.const 1
-    i32.add
-   else
-    local.get $2
-    i32.const 10000
-    i32.ge_u
-    i32.const 3
-    i32.add
-    local.get $2
-    i32.const 1000
-    i32.ge_u
-    i32.add
-   end
-  else
-   local.get $2
-   i32.const 10000000
-   i32.lt_u
-   if (result i32)
-    local.get $2
-    i32.const 1000000
-    i32.ge_u
-    i32.const 6
-    i32.add
-   else
-    local.get $2
-    i32.const 1000000000
-    i32.ge_u
-    i32.const 8
-    i32.add
-    local.get $2
-    i32.const 100000000
-    i32.ge_u
-    i32.add
-   end
-  end
+  local.set $2
+  i32.const 3
+  local.get $2
+  i32.const 10
+  i32.ge_u
+  i32.const 1
+  i32.add
+  local.get $2
+  i32.const 100
+  i32.ge_u
+  select
   local.set $1
   local.get $0
   local.get $2
@@ -17715,12 +17655,8 @@
       i32.add
       f32.load $0
       local.tee $7
-      f32.const nan:0x400000
-      f32.eq
-      local.get $7
       local.get $7
       f32.ne
-      i32.or
       br_if $__inlined_func$~lib/array/Array<f32>#includes
       drop
       local.get $0
@@ -17780,12 +17716,8 @@
       i32.add
       f64.load $0
       local.tee $6
-      f64.const nan:0x8000000000000
-      f64.eq
-      local.get $6
       local.get $6
       f64.ne
-      i32.or
       br_if $__inlined_func$~lib/array/Array<f64>#includes
       drop
       local.get $0

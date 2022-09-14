@@ -3038,52 +3038,16 @@
     br $__inlined_func$~lib/util/number/utoa32
    end
    global.get $~lib/memory/__stack_pointer
+   i32.const 3
    local.get $1
-   i32.const 100000
-   i32.lt_u
-   if (result i32)
-    local.get $1
-    i32.const 100
-    i32.lt_u
-    if (result i32)
-     local.get $1
-     i32.const 10
-     i32.ge_u
-     i32.const 1
-     i32.add
-    else
-     local.get $1
-     i32.const 10000
-     i32.ge_u
-     i32.const 3
-     i32.add
-     local.get $1
-     i32.const 1000
-     i32.ge_u
-     i32.add
-    end
-   else
-    local.get $1
-    i32.const 10000000
-    i32.lt_u
-    if (result i32)
-     local.get $1
-     i32.const 1000000
-     i32.ge_u
-     i32.const 6
-     i32.add
-    else
-     local.get $1
-     i32.const 1000000000
-     i32.ge_u
-     i32.const 8
-     i32.add
-     local.get $1
-     i32.const 100000000
-     i32.ge_u
-     i32.add
-    end
-   end
+   i32.const 10
+   i32.ge_u
+   i32.const 1
+   i32.add
+   local.get $1
+   i32.const 100
+   i32.ge_u
+   select
    local.tee $2
    i32.const 1
    i32.shl
