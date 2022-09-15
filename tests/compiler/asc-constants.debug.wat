@@ -18,7 +18,6 @@
  (global $~lib/native/ASC_FEATURE_MULTI_VALUE i32 (i32.const 0))
  (global $~lib/native/ASC_FEATURE_GC i32 (i32.const 0))
  (global $~lib/native/ASC_FEATURE_MEMORY64 i32 (i32.const 0))
- (global $~lib/native/ASC_FEATURE_FUNCTION_REFERENCES i32 (i32.const 0))
  (global $~lib/native/ASC_FEATURE_RELAXED_SIMD i32 (i32.const 0))
  (global $~lib/native/ASC_FEATURE_EXTENDED_CONST i32 (i32.const 0))
  (global $~lib/native/ASC_FEATURE_STRINGREF i32 (i32.const 0))
@@ -50,8 +49,6 @@
   i32.const 1
   drop
   i32.const 1
-  drop
-  i32.const 0
   drop
   i32.const 0
   drop

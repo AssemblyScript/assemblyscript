@@ -472,7 +472,6 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.MULTI_VALUE)) featureFlags |= FeatureFlags.MultiValue;
     if (options.hasFeature(Feature.GC)) featureFlags |= FeatureFlags.GC;
     if (options.hasFeature(Feature.MEMORY64)) featureFlags |= FeatureFlags.Memory64;
-    if (options.hasFeature(Feature.FUNCTION_REFERENCES)) featureFlags |= FeatureFlags.FunctionReferences;
     if (options.hasFeature(Feature.RELAXED_SIMD)) featureFlags |= FeatureFlags.RelaxedSIMD;
     if (options.hasFeature(Feature.EXTENDED_CONST)) featureFlags |= FeatureFlags.ExtendedConst;
     if (options.hasFeature(Feature.STRINGREF)) featureFlags |= FeatureFlags.Stringref;

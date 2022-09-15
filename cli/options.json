@@ -212,7 +212,6 @@
       " tail-calls          Tail call operations.",
       " multi-value         Multi value types.",
       " memory64            Memory64 operations.",
-      " function-references Function reference types.",
       " relaxed-simd        Relaxed SIMD operations.",
       " extended-const      Extended const expressions."
     ],

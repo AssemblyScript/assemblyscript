@@ -148,7 +148,7 @@ export const enum FeatureFlags {
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
-  FunctionReferences = 4096 /* TODO_BinaryenFeatureTypedFunctionReferences */,
+  // TODO? GCNNLocals
   RelaxedSIMD = 8192 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 16384 /* _BinaryenFeatureExtendedConst */,
   Stringref = 32768 /* _BinaryenFeatureStrings */,

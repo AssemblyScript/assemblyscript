@@ -100,8 +100,6 @@ declare const ASC_FEATURE_MULTI_VALUE: bool;
 declare const ASC_FEATURE_GC: bool;
 /** Whether the memory64 feature is enabled. */
 declare const ASC_FEATURE_MEMORY64: bool;
-/** Whether the function references feature is enabled. */
-declare const ASC_FEATURE_FUNCTION_REFERENCES: bool;
 /** Whether the relaxed SIMD feature is enabled. */
 declare const ASC_FEATURE_RELAXED_SIMD: bool;
 /** Whether the extended const expression feature is enabled. */

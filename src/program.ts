@@ -1071,8 +1071,6 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.GC) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_MEMORY64, Type.bool,
       i64_new(options.hasFeature(Feature.MEMORY64) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonNames.ASC_FEATURE_FUNCTION_REFERENCES, Type.bool,
-      i64_new(options.hasFeature(Feature.FUNCTION_REFERENCES) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_RELAXED_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.RELAXED_SIMD) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_EXTENDED_CONST, Type.bool,
