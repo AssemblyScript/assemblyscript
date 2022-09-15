@@ -809,6 +809,24 @@ export const {
   _ExpressionRunnerSetGlobalValue,
   _ExpressionRunnerRunAndDispose,
 
+  _TypeBuilderCreate,
+  _TypeBuilderGrow,
+  _TypeBuilderGetSize,
+  _TypeBuilderSetBasicHeapType,
+  _TypeBuilderSetSignatureType,
+  _TypeBuilderSetStructType,
+  _TypeBuilderSetArrayType,
+  _TypeBuilderIsBasic,
+  _TypeBuilderGetBasic,
+  _TypeBuilderGetTempHeapType,
+  _TypeBuilderGetTempTupleType,
+  _TypeBuilderGetTempRefType,
+  _TypeBuilderSetSubType,
+  _TypeBuilderCreateRecGroup,
+  _TypeBuilderBuildAndDispose,
+  _BinaryenModuleSetTypeName,
+  _BinaryenModuleSetFieldName,
+
   _BinaryenGetOptimizeLevel,
   _BinaryenSetOptimizeLevel,
   _BinaryenGetShrinkLevel,
@@ -832,6 +850,8 @@ export const {
   _BinaryenSetOneCallerInlineMaxSize,
   _BinaryenGetAllowInliningFunctionsWithLoops,
   _BinaryenSetAllowInliningFunctionsWithLoops,
+  _BinaryenGetTypeSystem,
+  _BinaryenSetTypeSystem,
 
   // Helpers
 
