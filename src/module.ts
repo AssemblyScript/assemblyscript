@@ -112,6 +112,17 @@ export namespace TypeBuilderErrorReason {
   export const ForwardSupertypeReference: TypeBuilderErrorReason = 2 /* _TypeBuilderErrorReasonForwardSupertypeReference */;
   /** Indicates that a child of a type is an invalid forward reference. */
   export const ForwardChildReference: TypeBuilderErrorReason = 3 /* _TypeBuilderErrorReasonForwardChildReference */;
+  /** Converts a type builder error reason to a string. */
+  export function toString(reason: TypeBuilderErrorReason): string {
+    switch (reason) {
+      case SelfSupertype: return "SelfSupertype";
+      case InvalidSupertype: return "InvalidSupertype";
+      case ForwardSupertypeReference: return "ForwardSupertypeReference";
+      case ForwardChildReference: return "ForwardChildReference";
+    }
+    assert(false);
+    return "";
+  }
 }
 
 /** Type system constants. */
@@ -137,11 +148,11 @@ export const enum FeatureFlags {
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
-  FunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
-  RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
-  ExtendedConst = 32768 /* _BinaryenFeatureExtendedConst */,
-  Stringref = 65536 /* _BinaryenFeatureStrings */,
-  All = 253951 /* _BinaryenFeatureAll */
+  FunctionReferences = 4096 /* TODO_BinaryenFeatureTypedFunctionReferences */,
+  RelaxedSIMD = 8192 /* _BinaryenFeatureRelaxedSIMD */,
+  ExtendedConst = 16384 /* _BinaryenFeatureExtendedConst */,
+  Stringref = 32768 /* _BinaryenFeatureStrings */,
+  All = 126975 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
