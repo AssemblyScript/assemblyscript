@@ -7153,8 +7153,8 @@
   i64.const 4607182418800017408
   i64.or
   f64.reinterpret_i64
-  f64.const 1
-  f64.sub
+  f64.const -1
+  f64.add
  )
  (func $std/array/assertStableSortedForComplexObjects~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0

@@ -231,8 +231,8 @@
   f32.add
   global.set $binary/f
   global.get $binary/f
-  f32.const 1
-  f32.sub
+  f32.const -1
+  f32.add
   global.set $binary/f
   global.get $binary/f
   local.tee $0
@@ -247,8 +247,8 @@
   f32.add
   global.set $binary/f
   global.get $binary/f
-  f32.const 1
-  f32.sub
+  f32.const -1
+  f32.add
   global.set $binary/f
   global.get $binary/f
   local.tee $0
@@ -263,8 +263,8 @@
   f64.add
   global.set $binary/F
   global.get $binary/F
-  f64.const 1
-  f64.sub
+  f64.const -1
+  f64.add
   global.set $binary/F
   global.get $binary/F
   local.tee $1
@@ -279,8 +279,8 @@
   f64.add
   global.set $binary/F
   global.get $binary/F
-  f64.const 1
-  f64.sub
+  f64.const -1
+  f64.add
   global.set $binary/F
   global.get $binary/F
   local.tee $1

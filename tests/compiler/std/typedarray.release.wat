@@ -39157,8 +39157,6 @@
      local.get $0
      local.get $8
      i32.add
-     f32.const 0
-     f32.const 255
      local.get $9
      local.get $0
      i32.const 2
@@ -39166,7 +39164,9 @@
      i32.add
      f32.load $0
      local.tee $1
+     f32.const 255
      f32.min
+     f32.const 0
      f32.max
      i32.trunc_sat_f32_u
      i32.const 0
@@ -39242,8 +39242,6 @@
      local.get $0
      local.get $4
      i32.add
-     f64.const 0
-     f64.const 255
      local.get $8
      local.get $0
      i32.const 3
@@ -39251,7 +39249,9 @@
      i32.add
      f64.load $0
      local.tee $2
+     f64.const 255
      f64.min
+     f64.const 0
      f64.max
      i32.trunc_sat_f64_u
      i32.const 0
@@ -60380,8 +60380,6 @@
                                         local.get $2
                                         local.get $9
                                         i32.add
-                                        f32.const 0
-                                        f32.const 255
                                         local.get $1
                                         local.get $2
                                         i32.const 2
@@ -60389,7 +60387,9 @@
                                         i32.add
                                         f32.load $0
                                         local.tee $5
+                                        f32.const 255
                                         f32.min
+                                        f32.const 0
                                         f32.max
                                         i32.trunc_sat_f32_u
                                         i32.const 0
