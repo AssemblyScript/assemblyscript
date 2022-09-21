@@ -152,6 +152,7 @@ export const enum FeatureFlags {
   RelaxedSIMD = 8192 /* _BinaryenFeatureRelaxedSIMD */,
   ExtendedConst = 16384 /* _BinaryenFeatureExtendedConst */,
   Stringref = 32768 /* _BinaryenFeatureStrings */,
+  MultiMemory = 65536 /* _BinaryenFeatureMultiMemories */,
   All = 126975 /* _BinaryenFeatureAll */
 }
 
