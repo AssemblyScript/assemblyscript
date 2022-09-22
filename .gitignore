@@ -9,3 +9,4 @@ raw/
 .idea
 cli/index.generated.js
 src/diagnosticMessages.generated.ts
+coverage/
