@@ -126,7 +126,7 @@ $> npm install c8
 $> npm run coverage
 ```
 
-Code coverage runs the tests with [c8](https://github.com/bcoe/c8) using the JS variant of the compiler. It is expected that Wasm-only branches show as untaken. Make sure to enable all (relevant) [features](#features).
+Code coverage runs the tests with [c8](https://github.com/bcoe/c8) using the JS variant of the compiler. It is expected that Wasm-only branches show as untaken. Make sure to enable all (relevant) [features](#features). A convenient HTML report is generated to `coverage/`.
 
 Other
 -----
