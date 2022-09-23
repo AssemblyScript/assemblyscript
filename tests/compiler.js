@@ -78,7 +78,7 @@ if (args.help) {
   process.exit(0);
 }
 
-const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
+const features = process.env.NODE_V8_COVERAGE != null ? ["*"] : process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
 const featuresConfig = require("./features.json");
 const basedir = path.join(dirname, "compiler");
 
@@ -501,7 +501,7 @@ function evaluateResult(failedTests, skippedTests) {
 }
 
 // Run tests in parallel if requested
-if (args.parallel && coreCount > 2) {
+if (args.parallel && coreCount > 2 && process.env.NODE_V8_COVERAGE == null) {
   if (cluster.isWorker) {
     process.on("message", msg => {
       if (msg.cmd != "run") throw Error("invalid command: " + JSON.stringify(msg));
