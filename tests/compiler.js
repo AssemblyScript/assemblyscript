@@ -17,6 +17,7 @@ import asc from "../dist/asc.js";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 const startTime = Date.now();
+const isCoverage = process.env.NODE_V8_COVERAGE != null;
 
 const config = {
   "create": {
@@ -78,7 +79,7 @@ if (args.help) {
   process.exit(0);
 }
 
-const features = process.env.NODE_V8_COVERAGE != null ? ["*"] : process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
+const features = isCoverage ? ["*"] : process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
 const featuresConfig = require("./features.json");
 const basedir = path.join(dirname, "compiler");
 
@@ -501,7 +502,7 @@ function evaluateResult(failedTests, skippedTests) {
 }
 
 // Run tests in parallel if requested
-if (args.parallel && coreCount > 2 && process.env.NODE_V8_COVERAGE == null) {
+if (args.parallel && coreCount > 2 && !isCoverage) {
   if (cluster.isWorker) {
     process.on("message", msg => {
       if (msg.cmd != "run") throw Error("invalid command: " + JSON.stringify(msg));
