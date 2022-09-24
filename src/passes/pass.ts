@@ -178,7 +178,112 @@ import {
   _BinaryenI31NewGetValue,
   _BinaryenI31GetGetI31,
   _BinaryenI31NewSetValue,
-  _BinaryenI31GetSetI31
+  _BinaryenI31GetSetI31,
+  _BinaryenCallRefGetNumOperands,
+  _BinaryenCallRefGetOperandAt,
+  _BinaryenCallRefGetTarget,
+  _BinaryenRefTestGetRef,
+  _BinaryenRefCastGetRef,
+  _BinaryenBrOnGetName,
+  _BinaryenBrOnGetRef,
+  _BinaryenStructNewGetNumOperands,
+  _BinaryenStructNewGetOperandAt,
+  _BinaryenStructGetGetRef,
+  _BinaryenStructSetGetRef,
+  _BinaryenStructSetGetValue,
+  _BinaryenStructSetGetIndex,
+  _BinaryenStructGetGetIndex,
+  _BinaryenArrayNewGetSize,
+  _BinaryenArrayNewGetInit,
+  _BinaryenArrayInitGetNumValues,
+  _BinaryenArrayInitGetValueAt,
+  _BinaryenArrayGetGetRef,
+  _BinaryenArrayGetGetIndex,
+  _BinaryenArraySetGetRef,
+  _BinaryenArraySetGetIndex,
+  _BinaryenArraySetGetValue,
+  _BinaryenArrayLenGetRef,
+  _BinaryenArrayCopyGetDestRef,
+  _BinaryenArrayCopyGetDestIndex,
+  _BinaryenArrayCopyGetSrcRef,
+  _BinaryenArrayCopyGetSrcIndex,
+  _BinaryenArrayCopyGetLength,
+  _BinaryenStringNewGetPtr,
+  _BinaryenStringNewGetLength,
+  _BinaryenStringNewGetStart,
+  _BinaryenStringNewGetEnd,
+  _BinaryenStringMeasureGetRef,
+  _BinaryenStringEncodeGetPtr,
+  _BinaryenStringEncodeGetRef,
+  _BinaryenStringEncodeGetStart,
+  _BinaryenStringConcatGetLeft,
+  _BinaryenStringConcatGetRight,
+  _BinaryenStringEqGetLeft,
+  _BinaryenStringEqGetRight,
+  _BinaryenStringAsGetRef,
+  _BinaryenStringWTF8AdvanceGetRef,
+  _BinaryenStringWTF8AdvanceGetPos,
+  _BinaryenStringWTF8AdvanceGetBytes,
+  _BinaryenStringWTF16GetGetRef,
+  _BinaryenStringWTF16GetGetPos,
+  _BinaryenStringIterNextGetRef,
+  _BinaryenStringIterMoveGetRef,
+  _BinaryenStringIterMoveGetNum,
+  _BinaryenStringSliceWTFGetRef,
+  _BinaryenStringSliceWTFGetStart,
+  _BinaryenStringSliceWTFGetEnd,
+  _BinaryenStringSliceIterGetRef,
+  _BinaryenStringSliceIterGetNum,
+  _BinaryenCallRefSetOperandAt,
+  _BinaryenCallRefSetTarget,
+  _BinaryenRefTestSetRef,
+  _BinaryenRefCastSetRef,
+  _BinaryenBrOnSetRef,
+  _BinaryenStructNewSetOperandAt,
+  _BinaryenStructGetSetRef,
+  _BinaryenStructSetSetRef,
+  _BinaryenStructSetSetValue,
+  _BinaryenArrayNewSetSize,
+  _BinaryenArrayNewSetInit,
+  _BinaryenArrayGetSetRef,
+  _BinaryenArrayGetSetIndex,
+  _BinaryenArraySetSetRef,
+  _BinaryenArraySetSetIndex,
+  _BinaryenArraySetSetValue,
+  _BinaryenArrayLenSetRef,
+  _BinaryenArrayCopySetDestRef,
+  _BinaryenArrayCopySetDestIndex,
+  _BinaryenArrayCopySetSrcRef,
+  _BinaryenArrayCopySetSrcIndex,
+  _BinaryenArrayCopySetLength,
+  _BinaryenRefAsSetValue,
+  _BinaryenStringNewSetPtr,
+  _BinaryenStringNewSetLength,
+  _BinaryenStringNewSetStart,
+  _BinaryenStringNewSetEnd,
+  _BinaryenStringMeasureSetRef,
+  _BinaryenStringEncodeSetRef,
+  _BinaryenStringEncodeSetPtr,
+  _BinaryenStringEncodeSetStart,
+  _BinaryenStringConcatSetLeft,
+  _BinaryenStringConcatSetRight,
+  _BinaryenStringEqSetLeft,
+  _BinaryenStringEqSetRight,
+  _BinaryenStringAsSetRef,
+  _BinaryenStringWTF8AdvanceSetRef,
+  _BinaryenStringWTF8AdvanceSetPos,
+  _BinaryenStringWTF8AdvanceSetBytes,
+  _BinaryenStringWTF16GetSetRef,
+  _BinaryenStringWTF16GetSetPos,
+  _BinaryenStringIterNextSetRef,
+  _BinaryenStringIterMoveSetRef,
+  _BinaryenStringIterMoveSetNum,
+  _BinaryenStringSliceWTFSetRef,
+  _BinaryenStringSliceWTFSetStart,
+  _BinaryenStringSliceWTFSetEnd,
+  _BinaryenStringSliceIterSetRef,
+  _BinaryenStringSliceIterSetNum,
+  _BinaryenArrayInitSetValueAt
 } from "../glue/binaryen";
 
 /** Base class of custom Binaryen visitors. */
@@ -447,6 +552,10 @@ export abstract class Visitor {
     // unimp
   }
 
+  visitArrayInit(expr: ExpressionRef): void {
+    // unimp
+  }
+
   visitArrayGet(expr: ExpressionRef): void {
     // unimp
   }
@@ -459,7 +568,63 @@ export abstract class Visitor {
     // unimp
   }
 
+  visitArrayCopy(expr: ExpressionRef): void {
+    // unimp
+  }
+
   visitRefAs(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringNew(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringConst(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringMeasure(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringEncode(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringConcat(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringEq(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringAs(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringWTF8Advance(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringWTF16Get(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringIterNext(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringIterMove(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringSliceWTF(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStringSliceIter(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -891,79 +1056,122 @@ export abstract class Visitor {
       }
       case ExpressionId.CallRef: {
         this.stack.push(expr);
-        assert(false); // TODO
+        let numOperands = _BinaryenCallRefGetNumOperands(expr);
+        if (numOperands) {
+          for (let i: Index = 0; i < numOperands; ++i) {
+            this.visit(_BinaryenCallRefGetOperandAt(expr, i));
+          }
+        }
+        this.visit(_BinaryenCallRefGetTarget(expr));
         assert(this.stack.pop() == expr);
         this.visitCallRef(expr);
         break;
       }
       case ExpressionId.RefTest: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenRefTestGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitRefTest(expr);
         break;
       }
       case ExpressionId.RefCast: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenRefCastGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitRefCast(expr);
         break;
       }
       case ExpressionId.BrOn: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visitLabel(_BinaryenBrOnGetName(expr));
+        this.visit(_BinaryenBrOnGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitBrOn(expr);
         break;
       }
       case ExpressionId.StructNew: {
-        this.stack.push(expr);
-        assert(false); // TODO
-        assert(this.stack.pop() == expr);
+        let numOperands = _BinaryenStructNewGetNumOperands(expr);
+        if (numOperands) {
+          this.stack.push(expr);
+          for (let i: Index = 0; i < numOperands; ++i) {
+            this.visit(_BinaryenStructNewGetOperandAt(expr, i));
+          }
+          assert(this.stack.pop() == expr);
+        }
         this.visitStructNew(expr);
         break;
       }
       case ExpressionId.StructGet: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStructGetGetRef(expr));
+        this.visitIndex(_BinaryenStructGetGetIndex(expr));
         assert(this.stack.pop() == expr);
         this.visitStructGet(expr);
         break;
       }
       case ExpressionId.StructSet: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenStructSetGetRef(expr));
+        this.visitIndex(_BinaryenStructSetGetIndex(expr));
+        this.visit(_BinaryenStructSetGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitStructSet(expr);
         break;
       }
       case ExpressionId.ArrayNew: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArrayNewGetSize(expr));
+        let init = _BinaryenArrayNewGetInit(expr);
+        if (init) this.visit(init);
         assert(this.stack.pop() == expr);
         this.visitArrayNew(expr);
         break;
       }
+      case ExpressionId.ArrayInit: {
+        let numValues = _BinaryenArrayInitGetNumValues(expr);
+        if (numValues) {
+          this.stack.push(expr);
+          for (let i: Index = 0; i < numValues; ++i) {
+            this.visit(_BinaryenArrayInitGetValueAt(expr, i));
+          }
+          assert(this.stack.pop() == expr);
+        }
+        this.visitArrayInit(expr);
+        break;
+      }
       case ExpressionId.ArrayGet: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArrayGetGetRef(expr));
+        this.visit(_BinaryenArrayGetGetIndex(expr));
         assert(this.stack.pop() == expr);
         this.visitArrayGet(expr);
         break;
       }
       case ExpressionId.ArraySet: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArraySetGetRef(expr));
+        this.visit(_BinaryenArraySetGetIndex(expr));
+        this.visit(_BinaryenArraySetGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitArraySet(expr);
         break;
       }
       case ExpressionId.ArrayLen: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenArrayLenGetRef(expr));
         assert(this.stack.pop() == expr);
         this.visitArrayLen(expr);
+        break;
+      }
+      case ExpressionId.ArrayCopy: {
+        this.stack.push(expr);
+        this.visit(_BinaryenArrayCopyGetDestRef(expr));
+        this.visit(_BinaryenArrayCopyGetDestIndex(expr));
+        this.visit(_BinaryenArrayCopyGetSrcRef(expr));
+        this.visit(_BinaryenArrayCopyGetSrcIndex(expr));
+        this.visit(_BinaryenArrayCopyGetLength(expr));
+        assert(this.stack.pop() == expr);
+        this.visitArrayCopy(expr);
         break;
       }
       case ExpressionId.RefAs: {
@@ -971,6 +1179,114 @@ export abstract class Visitor {
         this.visit(_BinaryenRefAsGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitRefAs(expr);
+        break;
+      }
+      case ExpressionId.StringNew: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringNewGetPtr(expr));
+        let length = _BinaryenStringNewGetLength(expr); // LM only
+        if (length) this.visit(length);
+        let start = _BinaryenStringNewGetStart(expr); // GC only
+        if (start) this.visit(start);
+        let end = _BinaryenStringNewGetEnd(expr); // GC only
+        if (end) this.visit(end);
+        assert(this.stack.pop() == expr);
+        this.visitStringNew(expr);
+        break;
+      }
+      case ExpressionId.StringConst: {
+        this.stack.push(expr);
+        assert(this.stack.pop() == expr);
+        this.visitStringConst(expr);
+        break;
+      }
+      case ExpressionId.StringMeasure: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringMeasureGetRef(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringMeasure(expr);
+        break;
+      }
+      case ExpressionId.StringEncode: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringEncodeGetRef(expr));
+        this.visit(_BinaryenStringEncodeGetPtr(expr));
+        let start = _BinaryenStringEncodeGetStart(expr); // GC only
+        if (start) this.visit(start);
+        assert(this.stack.pop() == expr);
+        this.visitStringEncode(expr);
+        break;
+      }
+      case ExpressionId.StringConcat: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringConcatGetLeft(expr));
+        this.visit(_BinaryenStringConcatGetRight(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringConcat(expr);
+        break;
+      }
+      case ExpressionId.StringEq: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringEqGetLeft(expr));
+        this.visit(_BinaryenStringEqGetRight(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringEq(expr);
+        break;
+      }
+      case ExpressionId.StringAs: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringAsGetRef(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringAs(expr);
+        break;
+      }
+      case ExpressionId.StringWTF8Advance: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringWTF8AdvanceGetRef(expr));
+        this.visit(_BinaryenStringWTF8AdvanceGetPos(expr));
+        this.visit(_BinaryenStringWTF8AdvanceGetBytes(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringWTF8Advance(expr);
+        break;
+      }
+      case ExpressionId.StringWTF16Get: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringWTF16GetGetRef(expr));
+        this.visit(_BinaryenStringWTF16GetGetPos(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringWTF16Get(expr);
+        break;
+      }
+      case ExpressionId.StringIterNext: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringIterNextGetRef(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringIterNext(expr);
+        break;
+      }
+      case ExpressionId.StringIterMove: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringIterMoveGetRef(expr));
+        this.visit(_BinaryenStringIterMoveGetNum(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringIterMove(expr);
+        break;
+      }
+      case ExpressionId.StringSliceWTF: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringSliceWTFGetRef(expr));
+        this.visit(_BinaryenStringSliceWTFGetStart(expr));
+        this.visit(_BinaryenStringSliceWTFGetEnd(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringSliceWTF(expr);
+        break;
+      }
+      case ExpressionId.StringSliceIter: {
+        this.stack.push(expr);
+        this.visit(_BinaryenStringSliceIterGetRef(expr));
+        this.visit(_BinaryenStringSliceIterGetNum(expr));
+        assert(this.stack.pop() == expr);
+        this.visitStringSliceIter(expr);
         break;
       }
       default: throw new Error("unexpected expression kind");
@@ -1585,51 +1901,343 @@ export function replaceChild(
       break;
     }
     case ExpressionId.CallRef: {
-      assert(false); // TODO
+      let numOperands = _BinaryenCallRefGetNumOperands(parent);
+      for (let i: Index = 0; i < numOperands; ++i) {
+        let operand = _BinaryenCallRefGetOperandAt(parent, i);
+        if (operand == search) {
+          _BinaryenCallRefSetOperandAt(parent, i, replacement);
+          return operand;
+        }
+      }
+      let target = _BinaryenCallRefGetTarget(parent);
+      if (target == search) {
+        _BinaryenCallRefSetTarget(parent, replacement);
+        return target;
+      }
       break;
     }
     case ExpressionId.RefTest: {
-      assert(false); // TODO
+      let ref = _BinaryenRefTestGetRef(parent);
+      if (ref == search) {
+        _BinaryenRefTestSetRef(parent, replacement);
+        return ref;
+      }
       break;
     }
     case ExpressionId.RefCast: {
-      assert(false); // TODO
+      let ref = _BinaryenRefCastGetRef(parent);
+      if (ref == search) {
+        _BinaryenRefCastSetRef(parent, replacement);
+        return ref;
+      }
       break;
     }
     case ExpressionId.BrOn: {
-      assert(false); // TODO
+      let ref = _BinaryenBrOnGetRef(parent);
+      if (ref == search) {
+        _BinaryenBrOnSetRef(parent, replacement);
+        return ref;
+      }
       break;
     }
     case ExpressionId.StructNew: {
-      assert(false); // TODO
+      let numOperands = _BinaryenStructNewGetNumOperands(parent);
+      for (let i: Index = 0; i < numOperands; ++i) {
+        let operand = _BinaryenStructNewGetOperandAt(parent, i);
+        if (operand == search) {
+          _BinaryenStructNewSetOperandAt(parent, i, replacement);
+          return operand;
+        }
+      }
       break;
     }
     case ExpressionId.StructGet: {
-      assert(false); // TODO
+      let ref = _BinaryenStructGetGetRef(parent);
+      if (ref == search) {
+        _BinaryenStructGetSetRef(parent, replacement);
+        return ref;
+      }
       break;
     }
     case ExpressionId.StructSet: {
-      assert(false); // TODO
+      let ref = _BinaryenStructSetGetRef(parent);
+      if (ref == search) {
+        _BinaryenStructSetSetRef(parent, replacement);
+        return ref;
+      }
+      let value = _BinaryenStructSetGetValue(parent);
+      if (value == search) {
+        _BinaryenStructSetSetValue(parent, replacement);
+        return value;
+      }
       break;
     }
     case ExpressionId.ArrayNew: {
-      assert(false); // TODO
+      let size = _BinaryenArrayNewGetSize(parent);
+      if (size == search) {
+        _BinaryenArrayNewSetSize(parent, replacement);
+        return size;
+      }
+      let init = _BinaryenArrayNewGetInit(parent);
+      if (init == search) {
+        _BinaryenArrayNewSetInit(parent, replacement);
+        return init;
+      }
+      break;
+    }
+    case ExpressionId.ArrayInit: {
+      let numValues = _BinaryenArrayInitGetNumValues(parent);
+      for (let i: Index = 0; i < numValues; ++i) {
+        let value = _BinaryenArrayInitGetValueAt(parent, i);
+        if (value == search) {
+          _BinaryenArrayInitSetValueAt(parent, i, replacement);
+          return value;
+        }
+      }
       break;
     }
     case ExpressionId.ArrayGet: {
-      assert(false); // TODO
+      let ref = _BinaryenArrayGetGetRef(parent);
+      if (ref == search) {
+        _BinaryenArrayGetSetRef(parent, replacement);
+        return ref;
+      }
+      let index = _BinaryenArrayGetGetIndex(parent);
+      if (index == search) {
+        _BinaryenArrayGetSetIndex(parent, replacement);
+        return index;
+      }
       break;
     }
     case ExpressionId.ArraySet: {
-      assert(false); // TODO
+      let ref = _BinaryenArraySetGetRef(parent);
+      if (ref == search) {
+        _BinaryenArraySetSetRef(parent, replacement);
+        return ref;
+      }
+      let index = _BinaryenArraySetGetIndex(parent);
+      if (index == search) {
+        _BinaryenArraySetSetIndex(parent, replacement);
+        return index;
+      }
+      let value = _BinaryenArraySetGetValue(parent);
+      if (value == search) {
+        _BinaryenArraySetSetValue(parent, replacement);
+        return value;
+      }
       break;
     }
     case ExpressionId.ArrayLen: {
-      assert(false); // TODO
+      let ref = _BinaryenArrayLenGetRef(parent);
+      if (ref == search) {
+        _BinaryenArrayLenSetRef(parent, replacement);
+        return ref;
+      }
+      break;
+    }
+    case ExpressionId.ArrayCopy: {
+      let destRef = _BinaryenArrayCopyGetDestRef(parent);
+      if (destRef == search) {
+        _BinaryenArrayCopySetDestRef(parent, replacement);
+        return destRef;
+      }
+      let destIndex = _BinaryenArrayCopyGetDestIndex(parent);
+      if (destIndex == search) {
+        _BinaryenArrayCopySetDestIndex(parent, replacement);
+        return destIndex;
+      }
+      let srcRef = _BinaryenArrayCopyGetSrcRef(parent);
+      if (srcRef == search) {
+        _BinaryenArrayCopySetSrcRef(parent, replacement);
+        return srcRef;
+      }
+      let srcIndex = _BinaryenArrayCopyGetSrcIndex(parent);
+      if (srcIndex == search) {
+        _BinaryenArrayCopySetSrcIndex(parent, replacement);
+        return srcIndex;
+      }
+      let length = _BinaryenArrayCopyGetLength(parent);
+      if (length == search) {
+        _BinaryenArrayCopySetLength(parent, replacement);
+        return length;
+      }
       break;
     }
     case ExpressionId.RefAs: {
-      assert(false); // TODO
+      let value = _BinaryenRefAsGetValue(parent);
+      if (value == search) {
+        _BinaryenRefAsSetValue(parent, replacement);
+        return value;
+      }
+      break;
+    }
+    case ExpressionId.StringNew: {
+      let ptr = _BinaryenStringNewGetPtr(parent);
+      if (ptr == search) {
+        _BinaryenStringNewSetPtr(parent, replacement);
+        return ptr;
+      }
+      let length = _BinaryenStringNewGetLength(parent);
+      if (length == search) {
+        _BinaryenStringNewSetLength(parent, replacement);
+        return length;
+      }
+      let start = _BinaryenStringNewGetStart(parent);
+      if (start == search) {
+        _BinaryenStringNewSetStart(parent, replacement);
+        return start;
+      }
+      let end = _BinaryenStringNewGetEnd(parent);
+      if (end == search) {
+        _BinaryenStringNewSetEnd(parent, replacement);
+        return end;
+      }
+      break;
+    }
+    case ExpressionId.StringConst: {
+      break;
+    }
+    case ExpressionId.StringMeasure: {
+      let ref = _BinaryenStringMeasureGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringMeasureSetRef(parent, replacement);
+        return ref;
+      }
+      break;
+    }
+    case ExpressionId.StringEncode: {
+      let ref = _BinaryenStringEncodeGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringEncodeSetRef(parent, replacement);
+        return ref;
+      }
+      let ptr = _BinaryenStringEncodeGetPtr(parent);
+      if (ptr == search) {
+        _BinaryenStringEncodeSetPtr(parent, replacement);
+        return ptr;
+      }
+      let start = _BinaryenStringEncodeGetStart(parent);
+      if (start == search) {
+        _BinaryenStringEncodeSetStart(parent, replacement);
+        return start;
+      }
+      break;
+    }
+    case ExpressionId.StringConcat: {
+      let left = _BinaryenStringConcatGetLeft(parent);
+      if (left == search) {
+        _BinaryenStringConcatSetLeft(parent, replacement);
+        return left;
+      }
+      let right = _BinaryenStringConcatGetRight(parent);
+      if (right == search) {
+        _BinaryenStringConcatSetRight(parent, replacement);
+        return right;
+      }
+      break;
+    }
+    case ExpressionId.StringEq: {
+      let left = _BinaryenStringEqGetLeft(parent);
+      if (left == search) {
+        _BinaryenStringEqSetLeft(parent, replacement);
+        return left;
+      }
+      let right = _BinaryenStringEqGetRight(parent);
+      if (right == search) {
+        _BinaryenStringEqSetRight(parent, replacement);
+        return right;
+      }
+      break;
+    }
+    case ExpressionId.StringAs: {
+      let ref = _BinaryenStringAsGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringAsSetRef(parent, replacement);
+        return ref;
+      }
+      break;
+    }
+    case ExpressionId.StringWTF8Advance: {
+      let ref = _BinaryenStringWTF8AdvanceGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringWTF8AdvanceSetRef(parent, replacement);
+        return ref;
+      }
+      let pos = _BinaryenStringWTF8AdvanceGetPos(parent);
+      if (pos == search) {
+        _BinaryenStringWTF8AdvanceSetPos(parent, replacement);
+        return pos;
+      }
+      let bytes = _BinaryenStringWTF8AdvanceGetBytes(parent);
+      if (bytes == search) {
+        _BinaryenStringWTF8AdvanceSetBytes(parent, replacement);
+        return bytes;
+      }
+      break;
+    }
+    case ExpressionId.StringWTF16Get: {
+      let ref = _BinaryenStringWTF16GetGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringWTF16GetSetRef(parent, replacement);
+        return ref;
+      }
+      let pos = _BinaryenStringWTF16GetGetPos(parent);
+      if (pos == search) {
+        _BinaryenStringWTF16GetSetPos(parent, replacement);
+        return pos;
+      }
+      break;
+    }
+    case ExpressionId.StringIterNext: {
+      let ref = _BinaryenStringIterNextGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringIterNextSetRef(parent, replacement);
+        return ref;
+      }
+      break;
+    }
+    case ExpressionId.StringIterMove: {
+      let ref = _BinaryenStringIterMoveGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringIterMoveSetRef(parent, replacement);
+        return ref;
+      }
+      let num = _BinaryenStringIterMoveGetNum(parent);
+      if (num == search) {
+        _BinaryenStringIterMoveSetNum(parent, replacement);
+        return num;
+      }
+      break;
+    }
+    case ExpressionId.StringSliceWTF: {
+      let ref = _BinaryenStringSliceWTFGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringSliceWTFSetRef(parent, replacement);
+        return ref;
+      }
+      let start = _BinaryenStringSliceWTFGetStart(parent);
+      if (start == search) {
+        _BinaryenStringSliceWTFSetStart(parent, replacement);
+        return start;
+      }
+      let end = _BinaryenStringSliceWTFGetEnd(parent);
+      if (end == search) {
+        _BinaryenStringSliceWTFSetEnd(parent, replacement);
+        return end;
+      }
+      break;
+    }
+    case ExpressionId.StringSliceIter: {
+      let ref = _BinaryenStringSliceIterGetRef(parent);
+      if (ref == search) {
+        _BinaryenStringSliceIterSetRef(parent, replacement);
+        return ref;
+      }
+      let num = _BinaryenStringSliceIterGetNum(parent);
+      if (num == search) {
+        _BinaryenStringSliceIterSetNum(parent, replacement);
+        return num;
+      }
       break;
     }
     default: throw new Error("unexpected expression id");

@@ -25,7 +25,7 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "binaryen": "109.0.0-nightly.20220831",
+    "binaryen": "110.0.0-nightly.20220924",
     "long": "^5.2.0"
   },
   "devDependencies": {
@@ -70,6 +70,7 @@
     "lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "build": "node scripts/build",
     "watch": "node scripts/build --watch",
+    "coverage": "npx c8 -- npm test",
     "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:browser && npm run test:asconfig && npm run test:transform",
     "test:parser": "node --enable-source-maps tests/parser",
     "test:compiler": "node --enable-source-maps --no-warnings tests/compiler",

@@ -3492,6 +3492,10 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.Dataref:
+      case TypeKind.I31REF:
+      case TypeKind.STRINGREF:
+      case TypeKind.STRINGVIEW_WTF8:
+      case TypeKind.STRINGVIEW_WTF16:
       case TypeKind.I31ref: return module.if(module.ref_is(RefIsOp.Null, arg0), abort);
 
     }
@@ -3574,7 +3578,11 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.Dataref:
-      case TypeKind.I31ref: {
+      case TypeKind.I31REF:
+      case TypeKind.STRINGREF:
+      case TypeKind.STRINGVIEW_WTF8:
+      case TypeKind.STRINGVIEW_WTF16:
+      case TypeKind.STRINGVIEW_ITER: {
         let temp = flow.getTempLocal(type);
         let ret = module.if(
           module.ref_is(RefIsOp.Null,
