@@ -1015,6 +1015,10 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeType(CommonNames.eqref, Type.eqref);
     this.registerNativeType(CommonNames.i31ref, Type.i31ref);
     this.registerNativeType(CommonNames.dataref, Type.dataref);
+    this.registerNativeType(CommonNames.stringref, Type.stringref);
+    this.registerNativeType(CommonNames.stringview_wtf8, Type.stringview_wtf8);
+    this.registerNativeType(CommonNames.stringview_wtf16, Type.stringview_wtf16);
+    this.registerNativeType(CommonNames.stringview_iter, Type.stringview_iter);
 
     // register compiler hints
     this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
@@ -1067,12 +1071,12 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.GC) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_MEMORY64, Type.bool,
       i64_new(options.hasFeature(Feature.MEMORY64) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonNames.ASC_FEATURE_FUNCTION_REFERENCES, Type.bool,
-      i64_new(options.hasFeature(Feature.FUNCTION_REFERENCES) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_RELAXED_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.RELAXED_SIMD) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_EXTENDED_CONST, Type.bool,
-      i64_new(options.hasFeature(Feature.EXTENDED_CONST)? 1 : 0, 0));
+      i64_new(options.hasFeature(Feature.EXTENDED_CONST) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_STRINGREF, Type.bool,
+      i64_new(options.hasFeature(Feature.STRINGREF) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();

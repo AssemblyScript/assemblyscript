@@ -99,16 +99,16 @@
   f32.add
   global.set $unary/f
   global.get $unary/f
-  f32.const 1
-  f32.sub
+  f32.const -1
+  f32.add
   global.set $unary/f
   global.get $unary/f
   f32.const 1
   f32.add
   global.set $unary/f
   global.get $unary/f
-  f32.const 1
-  f32.sub
+  f32.const -1
+  f32.add
   global.set $unary/f
   f32.const 1.25
   global.set $unary/f
@@ -139,16 +139,16 @@
   f64.add
   global.set $unary/F
   global.get $unary/F
-  f64.const 1
-  f64.sub
+  f64.const -1
+  f64.add
   global.set $unary/F
   global.get $unary/F
   f64.const 1
   f64.add
   global.set $unary/F
   global.get $unary/F
-  f64.const 1
-  f64.sub
+  f64.const -1
+  f64.add
   global.set $unary/F
   f64.const 1.25
   global.set $unary/F
