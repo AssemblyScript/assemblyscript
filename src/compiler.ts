@@ -474,7 +474,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.Memory64)) featureFlags |= FeatureFlags.Memory64;
     if (options.hasFeature(Feature.RelaxedSimd)) featureFlags |= FeatureFlags.RelaxedSimd;
     if (options.hasFeature(Feature.ExtendedConst)) featureFlags |= FeatureFlags.ExtendedConst;
-    if (options.hasFeature(Feature.STRINGREF)) featureFlags |= FeatureFlags.Stringref;
+    if (options.hasFeature(Feature.Stringref)) featureFlags |= FeatureFlags.Stringref;
     module.setFeatures(featureFlags);
 
     // set up the main start function
@@ -4875,10 +4875,10 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.Eqref:
       case TypeKind.I31ref:
       case TypeKind.Dataref: return module.ref_eq(leftExpr, rightExpr);
-      case TypeKind.STRINGREF: return module.string_eq(leftExpr, rightExpr);
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER:
+      case TypeKind.Stringref: return module.string_eq(leftExpr, rightExpr);
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter:
       case TypeKind.Funcref:
       case TypeKind.Externref:
       case TypeKind.Anyref: {
@@ -4928,14 +4928,14 @@ export class Compiler extends DiagnosticEmitter {
           module.ref_eq(leftExpr, rightExpr)
         );
       }
-      case TypeKind.STRINGREF: {
+      case TypeKind.Stringref: {
         return module.unary(UnaryOp.EqzI32,
           module.string_eq(leftExpr, rightExpr)
         );
       }
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter:
       case TypeKind.Funcref:
       case TypeKind.Externref:
       case TypeKind.Anyref: {
@@ -9856,12 +9856,12 @@ export class Compiler extends DiagnosticEmitter {
         return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
             && this.checkFeatureEnabled(Feature.GC, reportNode);
       }
-      case TypeKind.STRINGREF:
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER: {
-        return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
-            && this.checkFeatureEnabled(Feature.STRINGREF, reportNode);
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: {
+        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
+            && this.checkFeatureEnabled(Feature.Stringref, reportNode);
       }
     }
     let classReference = type.getClass();
@@ -9968,11 +9968,11 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.Externref:
       case TypeKind.Anyref:
       case TypeKind.Eqref:
-      case TypeKind.DATAREF: 
-      case TypeKind.STRINGREF:
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER: return module.ref_null(type.toRef());
+      case TypeKind.Dataref:
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: return module.ref_null(type.toRef());
       case TypeKind.I31ref: return module.i31_new(module.i32(0));
     }
   }
@@ -10121,11 +10121,11 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.I31ref:
-      case TypeKind.DATAREF:
-      case TypeKind.STRINGREF:
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER: {
+      case TypeKind.Dataref:
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: {
         // Needs to be true (i.e. not zero) when the ref is _not_ null,
         // which means `ref.is_null` returns false (i.e. zero).
         return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));

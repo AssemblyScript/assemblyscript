@@ -29,11 +29,11 @@ export const enum Feature {
   /** Memory64. */
   Memory64 = 1 << 11, // see: https://github.com/WebAssembly/memory64
   /** Relaxed SIMD. */
-  RELAXED_SIMD = 1 << 12, // see: https://github.com/WebAssembly/relaxed-simd
+  RelaxedSimd = 1 << 12, // see: https://github.com/WebAssembly/relaxed-simd
   /** Extended const expressions. */
-  EXTENDED_CONST = 1 << 13, // see: https://github.com/WebAssembly/extended-const
+  ExtendedConst = 1 << 13, // see: https://github.com/WebAssembly/extended-const
   /** Reference typed strings. */
-  STRINGREF = 1 << 14, // see: https://github.com/WebAssembly/stringref
+  Stringref = 1 << 14, // see: https://github.com/WebAssembly/stringref
 }
 
 /** Gets the name of the specified feature one would specify on the command line. */
@@ -51,9 +51,9 @@ export function featureToString(feature: Feature): string {
     case Feature.MultiValue: return "multi-value";
     case Feature.GC: return "gc";
     case Feature.Memory64: return "memory64";
-    case Feature.RELAXED_SIMD: return "relaxed-simd";
-    case Feature.EXTENDED_CONST: return "extended-const";
-    case Feature.STRINGREF: return "stringref";
+    case Feature.RelaxedSimd: return "relaxed-simd";
+    case Feature.ExtendedConst: return "extended-const";
+    case Feature.Stringref: return "stringref";
   }
   assert(false);
   return "";

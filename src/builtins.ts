@@ -3492,12 +3492,11 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.Dataref:
-      case TypeKind.I31REF:
-      case TypeKind.STRINGREF:
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.I31ref: return module.if(module.ref_is(RefIsOp.Null, arg0), abort);
-
+      case TypeKind.I31ref:
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: return module.if(module.ref_is(RefIsOp.Null, arg0), abort);
     }
   } else {
     compiler.currentType = type.nonNullableType;
@@ -3578,11 +3577,11 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.Dataref:
-      case TypeKind.I31REF:
-      case TypeKind.STRINGREF:
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER: {
+      case TypeKind.I31ref:
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: {
         let temp = flow.getTempLocal(type);
         let ret = module.if(
           module.ref_is(RefIsOp.Null,

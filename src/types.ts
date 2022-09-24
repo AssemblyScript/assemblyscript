@@ -70,15 +70,15 @@ export const enum TypeKind {
   /** 31-bit integer reference. */
   I31ref,
   /** Data reference. */
-  DATAREF,
+  Dataref,
   /** String reference. */
-  STRINGREF,
+  Stringref,
   /** WTF8 string view. */
-  STRINGVIEW_WTF8,
+  StringviewWTF8,
   /** WTF16 string view. */
-  STRINGVIEW_WTF16,
+  StringviewWTF16,
   /** String iterator. */
-  STRINGVIEW_ITER,
+  StringviewIter,
 
   // other
 
@@ -548,10 +548,10 @@ export class Type {
       case TypeKind.Eqref: return "eqref";
       case TypeKind.I31ref: return "i31ref";
       case TypeKind.Dataref: return "dataref";
-      case TypeKind.STRINGREF: return "stringref";
-      case TypeKind.STRINGVIEW_WTF8: return "stringview_wtf8";
-      case TypeKind.STRINGVIEW_WTF16: return "stringview_wtf16";
-      case TypeKind.STRINGVIEW_ITER: return "stringview_iter";
+      case TypeKind.Stringref: return "stringref";
+      case TypeKind.StringviewWTF8: return "stringview_wtf8";
+      case TypeKind.StringviewWTF16: return "stringview_wtf16";
+      case TypeKind.StringviewIter: return "stringview_iter";
       default: assert(false);
       case TypeKind.Void: return "void";
     }
@@ -584,10 +584,10 @@ export class Type {
       case TypeKind.Eqref: return TypeRef.Eqref;
       case TypeKind.I31ref: return TypeRef.I31ref;
       case TypeKind.Dataref: return TypeRef.Dataref;
-      case TypeKind.STRINGREF: return TypeRef.Stringref;
-      case TypeKind.STRINGVIEW_WTF8: return TypeRef.StringviewWTF8;
-      case TypeKind.STRINGVIEW_WTF16: return TypeRef.StringviewWTF16;
-      case TypeKind.STRINGVIEW_ITER: return TypeRef.StringviewIter;
+      case TypeKind.Stringref: return TypeRef.Stringref;
+      case TypeKind.StringviewWTF8: return TypeRef.StringviewWTF8;
+      case TypeKind.StringviewWTF16: return TypeRef.StringviewWTF16;
+      case TypeKind.StringviewIter: return TypeRef.StringviewIter;
       case TypeKind.Void: return TypeRef.None;
     }
   }
@@ -762,31 +762,31 @@ export class Type {
   );
 
   /** String reference. */
-  static readonly stringref: Type = new Type(TypeKind.STRINGREF,
-    TypeFlags.EXTERNAL   |
-    TypeFlags.NULLABLE   |
-    TypeFlags.REFERENCE, 0
+  static readonly stringref: Type = new Type(TypeKind.Stringref,
+    TypeFlags.External   |
+    TypeFlags.Nullable   |
+    TypeFlags.Reference, 0
   );
 
   /** WTF8 string view. */
-  static readonly stringview_wtf8: Type = new Type(TypeKind.STRINGVIEW_WTF8,
-    TypeFlags.EXTERNAL   |
-    TypeFlags.NULLABLE   |
-    TypeFlags.REFERENCE, 0
+  static readonly stringview_wtf8: Type = new Type(TypeKind.StringviewWTF8,
+    TypeFlags.External   |
+    TypeFlags.Nullable   |
+    TypeFlags.Reference, 0
   );
 
   /** WTF16 string view. */
-  static readonly stringview_wtf16: Type = new Type(TypeKind.STRINGVIEW_WTF16,
-    TypeFlags.EXTERNAL   |
-    TypeFlags.NULLABLE   |
-    TypeFlags.REFERENCE, 0
+  static readonly stringview_wtf16: Type = new Type(TypeKind.StringviewWTF16,
+    TypeFlags.External   |
+    TypeFlags.Nullable   |
+    TypeFlags.Reference, 0
   );
 
   /** String iterator. */
-  static readonly stringview_iter: Type = new Type(TypeKind.STRINGVIEW_ITER,
-    TypeFlags.EXTERNAL   |
-    TypeFlags.NULLABLE   |
-    TypeFlags.REFERENCE, 0
+  static readonly stringview_iter: Type = new Type(TypeKind.StringviewIter,
+    TypeFlags.External   |
+    TypeFlags.Nullable   |
+    TypeFlags.Reference, 0
   );
 
   /** No return type. */

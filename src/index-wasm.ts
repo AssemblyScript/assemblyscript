@@ -192,9 +192,9 @@ export const FEATURE_MEMORY64 = Feature.Memory64;
 /** Relaxed SIMD. */
 export const FEATURE_RELAXED_SIMD = Feature.RelaxedSimd;
 /** Extended const expressions. */
-export const FEATURE_EXTENDED_CONST = Feature.EXTENDED_CONST;
+export const FEATURE_EXTENDED_CONST = Feature.ExtendedConst;
 /** String references. */
-export const FEATURE_STRINGREF = Feature.STRINGREF;
+export const FEATURE_STRINGREF = Feature.Stringref;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {
