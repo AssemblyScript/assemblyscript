@@ -40014,8 +40014,9 @@
   f64.const 0
   f64.const 1
   call $~lib/math/NativeMath.pow
-  f64.const 0
-  f64.ne
+  i64.reinterpret_f64
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -40027,8 +40028,9 @@
   f64.const -0
   f64.const 1
   call $~lib/math/NativeMath.pow
-  f64.const -0
-  f64.ne
+  i64.reinterpret_f64
+  i64.const -9223372036854775808
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -40158,8 +40160,9 @@
   f64.const inf
   f64.const -1
   call $~lib/math/NativeMath.pow
-  f64.const 0
-  f64.ne
+  i64.reinterpret_f64
+  i64.const 0
+  i64.ne
   if
    i32.const 0
    i32.const 1056
@@ -40171,8 +40174,9 @@
   f64.const -inf
   f64.const -1
   call $~lib/math/NativeMath.pow
-  f64.const -0
-  f64.ne
+  i64.reinterpret_f64
+  i64.const -9223372036854775808
+  i64.ne
   if
    i32.const 0
    i32.const 1056
