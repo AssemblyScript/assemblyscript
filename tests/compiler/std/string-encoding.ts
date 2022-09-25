@@ -1,8 +1,4 @@
 var str = "𐐷hi𤭢";
-var ÀÀ: string = "ÀÀ"; // two bytes utf8 character
-var 变量: string = "变量"; // three bytes utf8 character
-assert(ÀÀ == "ÀÀ");
-assert(变量 == "变量");
 // utf8  : f0 90 90 b7 68 69 f0 a4 ad a2 [00]
 // utf16 : d801_dc37 0068 0069 d852_df62
 
@@ -152,11 +148,11 @@ function testUTF8DecodeUnsafe(): void {
 }
 testUTF8DecodeUnsafe();
 
-function testExtendedUnicode(): void {
-  let a:string = "\u{00c8}\u{00c8}";
+function testUnicodeEscape(): void {
+  let a = "\u{00c8}\u{00c8}";
   assert(a == "ÈÈ");
 }
-testExtendedUnicode();
+testUnicodeEscape();
 
 function testLarge(str: string): void {
   var buf8 = String.UTF8.encode(str);
@@ -501,5 +497,19 @@ Turkish (tr)
   Pijamalı hasta, yağız şoföre çabucak güvendi.
   (=Patient with pajamas, trusted swarthy driver quickly)
 `);
+
+// Identifiers
+
+var ÀÀ: string = "ÀÀ"; // two bytes utf8
+assert(ÀÀ == "ÀÀ");
+// utf8 : c3_80 c3_80
+
+var 变量: string = "变量"; // three bytes utf8
+assert(变量 == "变量");
+// utf8 : e5_8f_98 e9_87_8f
+
+// var 𠜎𠜱: string = "𠜎𠜱"; // four bytes utf8
+// assert(𠜎𠜱 == "𠜎𠜱");
+// utf8 : f0_a0_9c_8e f0_a0_9c_b1
 
 __collect();
