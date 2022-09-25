@@ -819,7 +819,7 @@ export class Program extends DiagnosticEmitter {
       const instancesByName = this.instancesByName;
       if (instancesByName.has(modifiedFunctionName)) {
         const element = assert(instancesByName.get(modifiedFunctionName));
-        if (element.kind == ElementKind.FUNCTION) {
+        if (element.kind == ElementKind.Function) {
           return <Function>element;
         }
       }
@@ -1376,7 +1376,7 @@ export class Program extends DiagnosticEmitter {
         for (let j = 0, k = members.length; j < k; j++) {
           let member = members[j];
           let declaration = member.declaration;
-          if (declaration.is(CommonFlags.OVERRIDE)) {
+          if (declaration.is(CommonFlags.Override)) {
             let basePrototype = prototype.basePrototype;
             let hasOverride = false;
             while (basePrototype) {
