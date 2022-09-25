@@ -10,6 +10,7 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -30,10 +31,10 @@
  (global $class-overloading-cast/v3 (mut i32) (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $class-overloading-cast/c (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 592))
- (global $~lib/memory/__data_end i32 (i32.const 676))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17060))
- (global $~lib/memory/__heap_base i32 (i32.const 17060))
+ (global $~lib/rt/__rtti_base i32 (i32.const 624))
+ (global $~lib/memory/__data_end i32 (i32.const 732))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17116))
+ (global $~lib/memory/__heap_base i32 (i32.const 17116))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -48,7 +49,8 @@
  (data (i32.const 444) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00B\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 476) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\002\00\00\00c\00l\00a\00s\00s\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00-\00c\00a\00s\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 556) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 592) "\n\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\t\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 588) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00D\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 624) "\0d\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\0b\00\00\00 \00\00\00\0c\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -2292,6 +2294,9 @@
  (func $class-overloading-cast/A<~lib/string/String>#foo (param $this i32) (param $a i32) (result i32)
   i32.const 432
  )
+ (func $class-overloading-cast/D#bar (param $this i32) (param $a f32) (result i32)
+  i32.const 608
+ )
  (func $class-overloading-cast/B<i32,f64>#foo (param $this i32) (param $a i32) (result i32)
   i32.const 464
  )
@@ -2417,29 +2422,38 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $class-overloading-cast/A<~lib/string/String>
-    block $class-overloading-cast/C
-     block $class-overloading-cast/A<f64>
-      block $class-overloading-cast/B<f64,~lib/string/String>
-       block $class-overloading-cast/B<i32,~lib/string/String>
-        block $class-overloading-cast/A<i32>
-         block $class-overloading-cast/B<i32,f64>
-          block $~lib/arraybuffer/ArrayBufferView
-           block $~lib/string/String
-            block $~lib/arraybuffer/ArrayBuffer
+   block $class-overloading-cast/A<f32>
+    block $class-overloading-cast/B<f32,f64>
+     block $class-overloading-cast/D
+      block $class-overloading-cast/A<~lib/string/String>
+       block $class-overloading-cast/C
+        block $class-overloading-cast/A<f64>
+         block $class-overloading-cast/B<f64,~lib/string/String>
+          block $class-overloading-cast/B<i32,~lib/string/String>
+           block $class-overloading-cast/A<i32>
+            block $class-overloading-cast/B<i32,f64>
+             block $~lib/arraybuffer/ArrayBufferView
+              block $~lib/string/String
+               block $~lib/arraybuffer/ArrayBuffer
+                local.get $0
+                i32.const 8
+                i32.sub
+                i32.load $0
+                br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class-overloading-cast/B<i32,f64> $class-overloading-cast/A<i32> $class-overloading-cast/B<i32,~lib/string/String> $class-overloading-cast/B<f64,~lib/string/String> $class-overloading-cast/A<f64> $class-overloading-cast/C $class-overloading-cast/A<~lib/string/String> $class-overloading-cast/D $class-overloading-cast/B<f32,f64> $class-overloading-cast/A<f32> $invalid
+               end
+               return
+              end
+              return
+             end
              local.get $0
-             i32.const 8
-             i32.sub
-             i32.load $0
-             br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class-overloading-cast/B<i32,f64> $class-overloading-cast/A<i32> $class-overloading-cast/B<i32,~lib/string/String> $class-overloading-cast/B<f64,~lib/string/String> $class-overloading-cast/A<f64> $class-overloading-cast/C $class-overloading-cast/A<~lib/string/String> $invalid
+             local.get $1
+             call $~lib/arraybuffer/ArrayBufferView~visit
+             return
             end
             return
            end
            return
           end
-          local.get $0
-          local.get $1
-          call $~lib/arraybuffer/ArrayBufferView~visit
           return
          end
          return
@@ -2472,8 +2486,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17088
    i32.const 17136
+   i32.const 17184
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2543,7 +2557,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 17
+   i32.const 26
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2572,7 +2586,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 18
+   i32.const 27
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2601,7 +2615,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 19
+   i32.const 28
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2638,7 +2652,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 23
+   i32.const 32
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2672,7 +2686,37 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 24
+   i32.const 33
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $class-overloading-cast/D#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0 offset=8
+  local.get $0
+  f32.const 2.5
+  call $class-overloading-cast/D#bar
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  i32.const 608
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0 offset=4
+  local.get $0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 496
+   i32.const 35
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -2891,6 +2935,100 @@
   local.tee $this
   i32.store $0
   local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading-cast/A<f32>#constructor (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 12
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store $0
+  end
+  local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading-cast/B<f32,f64>#constructor (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 11
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $class-overloading-cast/A<f32>#constructor
+  local.tee $0
+  i32.store $0
+  local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $class-overloading-cast/D#constructor (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 10
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $class-overloading-cast/B<f32,f64>#constructor
+  local.tee $0
+  i32.store $0
+  local.get $0
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
