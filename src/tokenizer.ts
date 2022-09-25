@@ -32,8 +32,10 @@ import {
   isDecimal,
   isOctal,
   isHexBase,
+  isHexOrDecimal,
   isHighSurrogate,
-  isLowSurrogate
+  isLowSurrogate,
+  parseHexFloat
 } from "./util";
 
 /** Named token types. */
@@ -1259,18 +1261,34 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var pos = this.pos;
     var end = this.end;
-    if (pos + 1 < end && text.charCodeAt(pos) == CharCode._0) {
-      switch (text.charCodeAt(pos + 2) | 32) {
-        case CharCode.x:
+    var hex = false;
+    if (pos + 2 < end && text.charCodeAt(pos) == CharCode._0) {
+      switch (text.charCodeAt(pos + 1) | 32) {
+        case CharCode.x: {
+          // Don't early return for CharCode.x
+          // It possible a hexadecimal float.
+          hex = true;
+          pos += 2;
+          break;
+        }
         case CharCode.b:
         case CharCode.o: return true;
+        case CharCode.DOT: return false;
       }
     }
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || (c | 32) == CharCode.e) return false;
-      if (c != CharCode._ && (c < CharCode._0 || c > CharCode._9)) break;
+      if (c == CharCode.DOT) return false;
       // does not validate separator placement (this is done in readXYInteger)
+      if (c != CharCode._) {
+        if (hex) {
+          if ((c | 32) == CharCode.p) return false;
+          if (!isHexOrDecimal(c)) break;
+        } else {
+          if ((c | 32) == CharCode.e) return false;
+          if (!isDecimal(c)) break;
+        }
+      }
       pos++;
     }
     return true;
@@ -1389,7 +1407,7 @@ export class Tokenizer extends DiagnosticEmitter {
     while (pos < end) {
       let c = text.charCodeAt(pos);
       if (isDecimal(c)) {
-        // value = value * 10 + c - CharCode._0;
+        // value * 10 + c - CharCode._0
         nextValue = i64_add(
           i64_mul(value, i64_10),
           i64_new(c - CharCode._0)
@@ -1563,16 +1581,12 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readFloat(): f64 {
-    // var text = this.source.text;
-    // if (text.charCodeAt(this.pos) == CharCode._0 && this.pos + 2 < this.end) {
-    //   switch (text.charCodeAt(this.pos + 1)) {
-    //     case CharCode.X:
-    //     case CharCode.x: {
-    //       this.pos += 2;
-    //       return this.readHexFloat();
-    //     }
-    //   }
-    // }
+    var text = this.source.text;
+    if (text.charCodeAt(this.pos) == CharCode._0 && this.pos + 2 < this.end) {
+      if ((text.charCodeAt(this.pos + 1) | 32) == CharCode.x) {
+        return this.readHexFloat();
+      }
+    }
     return this.readDecimalFloat();
   }
 
@@ -1580,10 +1594,10 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var end = this.end;
     var start = this.pos;
-    var sepCount = this.readDecimalFloatPartial(false);
+    var sepCount = this.readFloatPartial(false, false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      sepCount += this.readDecimalFloatPartial();
+      sepCount += this.readFloatPartial(true, false);
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1595,7 +1609,7 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        sepCount += this.readDecimalFloatPartial();
+        sepCount += this.readFloatPartial(true, false);
       }
     }
     let result = text.substring(start, this.pos);
@@ -1604,7 +1618,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   /** Reads past one section of a decimal float literal. Returns the number of separators encountered. */
-  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): u32 {
+  private readFloatPartial(allowLeadingZeroSep: bool, isHexadecimal: bool): u32 {
     var text = this.source.text;
     var pos = this.pos;
     var start = pos;
@@ -1614,7 +1628,6 @@ export class Tokenizer extends DiagnosticEmitter {
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
-
       if (c == CharCode._) {
         if (sepEnd == pos) {
           this.error(
@@ -1631,8 +1644,12 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
         ++sepCount;
-      } else if (!isDecimal(c)) {
-        break;
+      } else {
+        if (isHexadecimal) {
+          if (!isHexOrDecimal(c)) break;
+        } else {
+          if (!isDecimal(c)) break;
+        }
       }
       ++pos;
     }
@@ -1649,7 +1666,33 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readHexFloat(): f64 {
-    throw new Error("not implemented"); // TBD
+    var text = this.source.text;
+    var pos = this.pos;
+    var start = pos;
+    var end = this.end;
+
+    this.pos += 2; // skip 0x
+    var sepCount = this.readFloatPartial(false, true);
+    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
+      ++this.pos;
+      sepCount += this.readFloatPartial(true, true);
+    }
+    if (this.pos < end) {
+      let c = text.charCodeAt(this.pos);
+      if ((c | 32) == CharCode.p) {
+        if (
+          ++this.pos < end &&
+          (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
+          isHexOrDecimal(text.charCodeAt(this.pos + 1))
+        ) {
+          ++this.pos;
+        }
+        sepCount += this.readFloatPartial(true, false);
+      }
+    }
+    let result = text.substring(start, this.pos);
+    if (sepCount) result = result.replaceAll("_", "");
+    return parseHexFloat(result);
   }
 
   readHexadecimalEscape(remain: i32 = 2, startIfTaggedTemplate: i32 = -1): string {
