@@ -1,0 +1,24 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2365: Operator '<' cannot be applied to types 'binary-error/A | null' and 'i8'.",
+    "TS2365: Operator '>' cannot be applied to types 'binary-error/A | null' and 'i8'.",
+    "TS2365: Operator '<=' cannot be applied to types 'binary-error/A | null' and 'i8'.",
+    "TS2365: Operator '>=' cannot be applied to types 'binary-error/A | null' and 'i8'.",
+    "TS2365: Operator '==' cannot be applied to types 'binary-error/A | null' and 'i8'.",
+    "TS2365: Operator '!=' cannot be applied to types 'binary-error/A | null' and 'i8'.",
+    "TS2365: Operator '+' cannot be applied to types 'i8' and '() => void'.",
+    "TS2365: Operator '-' cannot be applied to types 'i8' and '() => void'.",
+    "TS2365: Operator '*' cannot be applied to types 'i8' and '() => void'.",
+    "TS2365: Operator '**' cannot be applied to types 'i8' and '() => void'.",
+    "TS2365: Operator '/' cannot be applied to types 'i8' and '() => void'.",
+    "TS2365: Operator '%' cannot be applied to types 'i8' and '() => void'.",
+    "TS2469: The '>>' operator cannot be applied to type '() => void'.",
+    "TS2469: The '<<' operator cannot be applied to type '() => void'.",
+    "TS2469: The '>>>' operator cannot be applied to type '() => void'.",
+    "TS2469: The '&' operator cannot be applied to type '() => void'.",
+    "TS2469: The '|' operator cannot be applied to type '() => void'.",
+    "TS2469: The '^' operator cannot be applied to type '() => void'."
+  ]
+}
