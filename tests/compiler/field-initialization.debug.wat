@@ -3637,7 +3637,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $field-initialization/Value_Init#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Value_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3647,20 +3647,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 3
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 1
   call $field-initialization/Value_Init#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3668,7 +3668,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Value#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Value#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3678,20 +3678,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 4
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/Value#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3699,8 +3699,8 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (param $this i32) (param $length i32) (result i32)
+  (local $buffer i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3710,7 +3710,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $1
+  local.get $length
   i32.const 1073741820
   i32.gt_u
   if
@@ -3722,16 +3722,16 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $length
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $2
+  local.tee $buffer
   i32.store $0
   i32.const 2
   global.get $~lib/shared/runtime/Runtime.Incremental
   i32.ne
   drop
-  local.get $2
+  local.get $buffer
   local.set $3
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3739,7 +3739,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
- (func $field-initialization/Ref_Init#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Ref_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3749,22 +3749,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 5
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#constructor
   call $field-initialization/Ref_Init#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3772,7 +3772,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Nullable_Init#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Nullable_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3782,22 +3782,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 6
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#constructor
   call $field-initialization/Nullable_Init#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3805,7 +3805,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Nullable#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Nullable#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3815,20 +3815,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 7
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/Nullable#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3836,7 +3836,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Value_Ctor#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Value_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3846,20 +3846,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 8
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/Value_Ctor#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3867,7 +3867,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Value_Init_Ctor#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Value_Init_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3877,20 +3877,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 9
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 1
   call $field-initialization/Value_Init_Ctor#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3898,7 +3898,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Value_Ctor_Init#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Value_Ctor_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3908,23 +3908,23 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 10
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/Value_Ctor_Init#set:a
-  local.get $0
+  local.get $this
   i32.const 1
   call $field-initialization/Value_Ctor_Init#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3932,7 +3932,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Ref_Init_Ctor#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Ref_Init_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3942,22 +3942,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 11
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#constructor
   call $field-initialization/Ref_Init_Ctor#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3965,7 +3965,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Ref_Ctor_Init#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Ref_Ctor_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3975,25 +3975,25 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 12
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/Ref_Ctor_Init#set:a
-  local.get $0
+  local.get $this
   i32.const 0
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#constructor
   call $field-initialization/Ref_Ctor_Init#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4001,7 +4001,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Ref_Ctor_Param#constructor (param $0 i32) (param $1 i32) (result i32)
+ (func $field-initialization/Ref_Ctor_Param#constructor (param $this i32) (param $a i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4011,20 +4011,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 13
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $a
   call $field-initialization/Ref_Ctor_Param#set:a
-  local.get $0
+  local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4032,7 +4032,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
- (func $field-initialization/Nullable_Ctor#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Nullable_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4042,20 +4042,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 14
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/Nullable_Ctor#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4063,7 +4063,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Nullable_Init_Ctor#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Nullable_Init_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4073,22 +4073,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 15
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#constructor
   call $field-initialization/Nullable_Init_Ctor#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4096,7 +4096,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Nullable_Ctor_Init#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Nullable_Ctor_Init#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4106,25 +4106,25 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 16
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/Nullable_Ctor_Init#set:a
-  local.get $0
+  local.get $this
   i32.const 0
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#constructor
   call $field-initialization/Nullable_Ctor_Init#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4132,7 +4132,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Inherit_Base#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Inherit_Base#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4142,22 +4142,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 18
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   i32.const 0
   call $~lib/arraybuffer/ArrayBuffer#constructor
   call $field-initialization/Inherit_Base#set:a
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4165,7 +4165,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Inherit#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Inherit#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4175,22 +4175,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 17
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $field-initialization/Inherit_Base#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4198,7 +4198,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Inherit_Ctor#constructor (param $0 i32) (result i32)
+ (func $field-initialization/Inherit_Ctor#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4208,22 +4208,22 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 19
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $field-initialization/Inherit_Base#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4231,7 +4231,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/SomeObject#constructor (param $0 i32) (result i32)
+ (func $field-initialization/SomeObject#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4241,23 +4241,23 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.const 20
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/SomeObject#set:a
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/SomeObject#set:b
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4265,7 +4265,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/SomeOtherObject#constructor (param $0 i32) (result i32)
+ (func $field-initialization/SomeOtherObject#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4275,25 +4275,25 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 12
    i32.const 21
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $this
   call $field-initialization/SomeObject#constructor
-  local.tee $0
+  local.tee $this
   i32.store $0
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/SomeOtherObject#set:c
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4301,7 +4301,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $field-initialization/Flow_Balanced#constructor (param $0 i32) (param $1 i32) (result i32)
+ (func $field-initialization/Flow_Balanced#constructor (param $this i32) (param $cond i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4311,34 +4311,34 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 22
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $field-initialization/Flow_Balanced#set:a
-  local.get $1
+  local.get $cond
   if
-   local.get $0
+   local.get $this
    i32.const 0
    i32.const 0
    call $~lib/arraybuffer/ArrayBuffer#constructor
    call $field-initialization/Flow_Balanced#set:a
   else
-   local.get $0
+   local.get $this
    i32.const 0
    i32.const 0
    call $~lib/arraybuffer/ArrayBuffer#constructor
    call $field-initialization/Flow_Balanced#set:a
   end
-  local.get $0
+  local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4

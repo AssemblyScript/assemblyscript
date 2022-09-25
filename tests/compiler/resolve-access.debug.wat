@@ -2977,10 +2977,10 @@
    unreachable
   end
  )
- (func $~lib/rt/__newArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
+ (func $~lib/rt/__newArray (param $length i32) (param $alignLog2 i32) (param $id i32) (param $data i32) (result i32)
+  (local $bufferSize i32)
+  (local $buffer i32)
+  (local $array i32)
   (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2990,38 +2990,38 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
-  local.get $1
+  local.get $length
+  local.get $alignLog2
   i32.shl
-  local.set $4
+  local.set $bufferSize
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $bufferSize
   i32.const 0
-  local.get $3
+  local.get $data
   call $~lib/rt/__newBuffer
-  local.tee $5
+  local.tee $buffer
   i32.store $0
   i32.const 16
-  local.get $2
+  local.get $id
   call $~lib/rt/itcms/__new
-  local.set $6
-  local.get $6
-  local.get $5
+  local.set $array
+  local.get $array
+  local.get $buffer
   i32.store $0
-  local.get $6
-  local.get $5
+  local.get $array
+  local.get $buffer
   i32.const 0
   call $~lib/rt/itcms/__link
-  local.get $6
-  local.get $5
+  local.get $array
+  local.get $buffer
   i32.store $0 offset=4
-  local.get $6
-  local.get $4
+  local.get $array
+  local.get $bufferSize
   i32.store $0 offset=8
-  local.get $6
-  local.get $0
+  local.get $array
+  local.get $length
   i32.store $0 offset=12
-  local.get $6
+  local.get $array
   local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3029,14 +3029,14 @@
   global.set $~lib/memory/__stack_pointer
   local.get $7
  )
- (func $~lib/util/number/utoa64 (param $0 i64) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i64)
+ (func $~lib/util/number/utoa64 (param $value i64) (param $radix i32) (result i32)
+  (local $out i32)
+  (local $var$3 i32)
+  (local $var$4 i32)
+  (local $var$5 i32)
+  (local $var$6 i32)
+  (local $var$7 i32)
+  (local $var$8 i64)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3046,13 +3046,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $1
+  local.get $radix
   i32.const 2
   i32.lt_s
   if (result i32)
    i32.const 1
   else
-   local.get $1
+   local.get $radix
    i32.const 36
    i32.gt_s
   end
@@ -3064,7 +3064,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $value
   i64.const 0
   i64.ne
   i32.eqz
@@ -3078,77 +3078,77 @@
    local.get $9
    return
   end
-  local.get $1
+  local.get $radix
   i32.const 10
   i32.eq
   if
-   local.get $0
+   local.get $value
    global.get $~lib/builtins/u32.MAX_VALUE
    i64.extend_i32_u
    i64.le_u
    if
-    local.get $0
+    local.get $value
     i32.wrap_i64
-    local.set $3
-    local.get $3
+    local.set $var$3
+    local.get $var$3
     call $~lib/util/number/decimalCount32
-    local.set $4
+    local.set $var$4
     global.get $~lib/memory/__stack_pointer
-    local.get $4
+    local.get $var$4
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/itcms/__new
-    local.tee $2
+    local.tee $out
     i32.store $0
-    local.get $2
-    local.set $7
-    local.get $3
-    local.set $6
-    local.get $4
-    local.set $5
+    local.get $out
+    local.set $var$7
+    local.get $var$3
+    local.set $var$6
+    local.get $var$4
+    local.set $var$5
     i32.const 0
     i32.const 1
     i32.ge_s
     drop
-    local.get $7
-    local.get $6
-    local.get $5
+    local.get $var$7
+    local.get $var$6
+    local.get $var$5
     call $~lib/util/number/utoa32_dec_lut
    else
-    local.get $0
+    local.get $value
     call $~lib/util/number/decimalCount64High
-    local.set $4
+    local.set $var$4
     global.get $~lib/memory/__stack_pointer
-    local.get $4
+    local.get $var$4
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/itcms/__new
-    local.tee $2
+    local.tee $out
     i32.store $0
-    local.get $2
-    local.set $6
-    local.get $0
-    local.set $8
-    local.get $4
-    local.set $5
+    local.get $out
+    local.set $var$6
+    local.get $value
+    local.set $var$8
+    local.get $var$4
+    local.set $var$5
     i32.const 0
     i32.const 1
     i32.ge_s
     drop
-    local.get $6
-    local.get $8
-    local.get $5
+    local.get $var$6
+    local.get $var$8
+    local.get $var$5
     call $~lib/util/number/utoa64_dec_lut
    end
   else
-   local.get $1
+   local.get $radix
    i32.const 16
    i32.eq
    if
     i32.const 63
-    local.get $0
+    local.get $value
     i64.clz
     i32.wrap_i64
     i32.sub
@@ -3156,50 +3156,50 @@
     i32.shr_s
     i32.const 1
     i32.add
-    local.set $4
+    local.set $var$4
     global.get $~lib/memory/__stack_pointer
-    local.get $4
+    local.get $var$4
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/itcms/__new
-    local.tee $2
+    local.tee $out
     i32.store $0
-    local.get $2
-    local.set $3
-    local.get $0
-    local.set $8
-    local.get $4
-    local.set $7
+    local.get $out
+    local.set $var$3
+    local.get $value
+    local.set $var$8
+    local.get $var$4
+    local.set $var$7
     i32.const 0
     i32.const 1
     i32.ge_s
     drop
-    local.get $3
-    local.get $8
-    local.get $7
+    local.get $var$3
+    local.get $var$8
+    local.get $var$7
     call $~lib/util/number/utoa_hex_lut
    else
-    local.get $0
-    local.get $1
+    local.get $value
+    local.get $radix
     call $~lib/util/number/ulog_base
-    local.set $4
+    local.set $var$4
     global.get $~lib/memory/__stack_pointer
-    local.get $4
+    local.get $var$4
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/itcms/__new
-    local.tee $2
+    local.tee $out
     i32.store $0
-    local.get $2
-    local.get $0
-    local.get $4
-    local.get $1
+    local.get $out
+    local.get $value
+    local.get $var$4
+    local.get $radix
     call $~lib/util/number/utoa64_any_core
    end
   end
-  local.get $2
+  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3208,8 +3208,8 @@
   local.get $9
  )
  (func $resolve-access/arrayAccess (result i32)
-  (local $0 i32)
-  (local $1 i32)
+  (local $var$0 i32)
+  (local $var$1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3225,9 +3225,9 @@
   i32.const 3
   i32.const 32
   call $~lib/rt/__newArray
-  local.tee $1
+  local.tee $var$1
   i32.store $0
-  local.get $1
+  local.get $var$1
   i32.const 0
   call $~lib/array/Array<u64>#__get
   i32.const 10
@@ -3239,7 +3239,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
- (func $resolve-access/Container#constructor (param $0 i32) (result i32)
+ (func $resolve-access/Container#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3249,20 +3249,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.const 5
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i64.const 0
   call $resolve-access/Container#set:foo
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3271,7 +3271,7 @@
   local.get $1
  )
  (func $resolve-access/fieldAccess (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3284,12 +3284,12 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $resolve-access/Container#constructor
-  local.tee $0
+  local.tee $var$0
   i32.store $0
-  local.get $0
+  local.get $var$0
   i64.const 1
   call $resolve-access/Container#set:foo
-  local.get $0
+  local.get $var$0
   i64.load $0
   i32.const 10
   call $~lib/number/U64#toString
@@ -3300,12 +3300,12 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/util/number/utoa32 (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
+ (func $~lib/util/number/utoa32 (param $value i32) (param $radix i32) (result i32)
+  (local $out i32)
+  (local $var$3 i32)
+  (local $var$4 i32)
+  (local $var$5 i32)
+  (local $var$6 i32)
   (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3315,13 +3315,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $1
+  local.get $radix
   i32.const 2
   i32.lt_s
   if (result i32)
    i32.const 1
   else
-   local.get $1
+   local.get $radix
    i32.const 36
    i32.gt_s
   end
@@ -3333,7 +3333,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $value
   i32.eqz
   if
    i32.const 704
@@ -3345,95 +3345,95 @@
    local.get $7
    return
   end
-  local.get $1
+  local.get $radix
   i32.const 10
   i32.eq
   if
-   local.get $0
+   local.get $value
    call $~lib/util/number/decimalCount32
-   local.set $3
+   local.set $var$3
    global.get $~lib/memory/__stack_pointer
-   local.get $3
+   local.get $var$3
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/itcms/__new
-   local.tee $2
+   local.tee $out
    i32.store $0
-   local.get $2
-   local.set $6
-   local.get $0
-   local.set $5
-   local.get $3
-   local.set $4
+   local.get $out
+   local.set $var$6
+   local.get $value
+   local.set $var$5
+   local.get $var$3
+   local.set $var$4
    i32.const 0
    i32.const 1
    i32.ge_s
    drop
-   local.get $6
-   local.get $5
-   local.get $4
+   local.get $var$6
+   local.get $var$5
+   local.get $var$4
    call $~lib/util/number/utoa32_dec_lut
   else
-   local.get $1
+   local.get $radix
    i32.const 16
    i32.eq
    if
     i32.const 31
-    local.get $0
+    local.get $value
     i32.clz
     i32.sub
     i32.const 2
     i32.shr_s
     i32.const 1
     i32.add
-    local.set $3
+    local.set $var$3
     global.get $~lib/memory/__stack_pointer
-    local.get $3
+    local.get $var$3
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/itcms/__new
-    local.tee $2
+    local.tee $out
     i32.store $0
-    local.get $2
-    local.set $6
-    local.get $0
-    local.set $5
-    local.get $3
-    local.set $4
+    local.get $out
+    local.set $var$6
+    local.get $value
+    local.set $var$5
+    local.get $var$3
+    local.set $var$4
     i32.const 0
     i32.const 1
     i32.ge_s
     drop
-    local.get $6
-    local.get $5
+    local.get $var$6
+    local.get $var$5
     i64.extend_i32_u
-    local.get $4
+    local.get $var$4
     call $~lib/util/number/utoa_hex_lut
    else
-    local.get $0
+    local.get $value
     i64.extend_i32_u
-    local.get $1
+    local.get $radix
     call $~lib/util/number/ulog_base
-    local.set $3
+    local.set $var$3
     global.get $~lib/memory/__stack_pointer
-    local.get $3
+    local.get $var$3
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/itcms/__new
-    local.tee $2
+    local.tee $out
     i32.store $0
-    local.get $2
-    local.get $0
+    local.get $out
+    local.get $value
     i64.extend_i32_u
-    local.get $3
-    local.get $1
+    local.get $var$3
+    local.get $radix
     call $~lib/util/number/utoa64_any_core
    end
   end
-  local.get $2
+  local.get $out
   local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3442,7 +3442,7 @@
   local.get $7
  )
  (func $resolve-access/propertyAccess (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3455,12 +3455,12 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $resolve-access/Container#constructor
-  local.tee $0
+  local.tee $var$0
   i32.store $0
-  local.get $0
+  local.get $var$0
   i64.const 1
   call $resolve-access/Container#set:foo
-  local.get $0
+  local.get $var$0
   call $resolve-access/Container#toU32
   i32.const 10
   call $~lib/number/U32#toString

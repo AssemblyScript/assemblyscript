@@ -117,7 +117,8 @@ import {
 import {
   Module,
   FunctionRef,
-  MemorySegment
+  MemorySegment,
+  getFunctionName
 } from "./module";
 
 import {
@@ -810,6 +811,20 @@ export class Program extends DiagnosticEmitter {
     // BLOCK | OBJECT+align | data...
     // └     = TOTAL      ┘ ^ 16b alignment
     return this.blockOverhead + this.objectOverhead;
+  }
+
+  searchFunctionByRef(ref: FunctionRef): Function | null {
+    const modifiedFunctionName = getFunctionName(ref);
+    if (modifiedFunctionName) {
+      const instancesByName = this.instancesByName;
+      if (instancesByName.has(modifiedFunctionName)) {
+        const element = assert(instancesByName.get(modifiedFunctionName));
+        if (element.kind == ElementKind.FUNCTION) {
+          return <Function>element;
+        }
+      }
+    }
+    return null;
   }
 
   /** Computes the next properly aligned offset of a memory manager block, given the current bump offset. */
@@ -3763,6 +3778,10 @@ export class Function extends TypedElement {
     this.breakStack = breakStack = null;
     this.breakLabel = null;
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
+    this.addDebugInfo(module, ref);
+  }
+
+  addDebugInfo(module: Module, ref: FunctionRef): void {
     if (this.program.options.sourceMap) {
       let debugLocations = this.debugLocations;
       for (let i = 0, k = debugLocations.length; i < k; ++i) {
