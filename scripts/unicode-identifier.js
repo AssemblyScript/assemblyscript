@@ -19,17 +19,14 @@ for (let i = 0; i < MAX_UNICODE_CODEPOINT; i++) {
   }
 }
 
-function tablify(arr) {
-  let sb = ["/*\n| from  ...  to | from  ...  to | from  ...  to | from  ...  to |*/\n  "];
+function tablify(cps) {
+  let sb = ["/*\n| from  ...  to | from  ...  to | from  ...  to | from  ...  to |*/"];
   let i = 0;
-  while (i < arr.length) {
-    let s = arr[i].toString().padStart(6);
-    if (i && !(i % 8)) sb.push("\n  ");
-    sb.push(`${s}, `);
-    ++i;
+  while (i < cps.length) {
+    if (!(i % 8)) sb.push("\n  ");
+    sb.push(`${cps[i++].toString().padStart(6)}, `);
   }
-  sb.push("\n");
-  return sb.join("");
+  return sb.join("") + "\n";
 }
 
 console.log(`const unicodeIdentifierStart: u32[] = [${tablify(starts)}];`);
