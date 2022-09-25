@@ -132,7 +132,7 @@ import {
   ExternalKind,
   ExportRef,
   expandType,
-  isConstZero
+  isConstZero,
 } from "../module";
 
 import {
@@ -477,7 +477,11 @@ export class ShadowStackPass extends Pass {
     let moduleRef = this.module.ref;
     _BinaryenRemoveFunction(moduleRef, name);
     let cArr = allocPtrArray(vars);
-    _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
+    let newFuncRef = _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
+    if (this.options.sourceMap || this.options.debugInfo) {
+      let func = this.compiler.program.searchFunctionByRef(newFuncRef);
+      if (func) func.addDebugInfo(this.module, newFuncRef);
+    }
     _free(cArr);
   }
 
