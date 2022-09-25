@@ -18,4 +18,5 @@
  */
 export * from "./index-js";
 import * as assemblyscript from "./index-js";
+// eslint-disable-next-line import/no-default-export
 export default assemblyscript;

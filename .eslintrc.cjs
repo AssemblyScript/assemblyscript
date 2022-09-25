@@ -5,6 +5,7 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   plugins: [
     "@typescript-eslint",
+    "eslint-plugin-import"
   ],
   extends: [
     "eslint:recommended",
@@ -129,6 +130,9 @@ module.exports = {
         "**/*.ts"
       ],
       rules: {
+        // Disable default imports
+        "import/no-default-export": "error",
+
         // Enforcing to remove function parameters on stubs makes code less
         // maintainable, so we instead allow unused function parameters.
         "@typescript-eslint/no-unused-vars": [
@@ -210,6 +214,9 @@ module.exports = {
         "std/**/*.d.ts"
       ],
       rules: {
+        // Enable default imports
+        "import/no-default-export": "off",
+
         // Often required to achieve compatibility with TypeScript
         "@typescript-eslint/no-explicit-any": "off",
 
@@ -243,6 +250,9 @@ module.exports = {
         "./lib/loader/tests/assembly/**/*.ts"
       ],
       rules: {
+        // Enable default imports
+        "import/no-default-export": "off",
+
         // Tests typically include unusual code patterns on purpose. This is
         // very likely not an extensive list, but covers what's there so far.
         "no-empty": "off",
