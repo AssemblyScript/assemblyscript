@@ -3932,7 +3932,7 @@ export class Field extends VariableLikeElement {
   get internalSetterSignature(): Signature {
     var cached = this._internalSetterSignature;
     if (!cached) {
-      this._internalGetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
+      this._internalSetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
     }
     return cached;
   }
