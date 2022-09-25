@@ -96,7 +96,7 @@
  (data (i32.const 2828) "L")
  (data (i32.const 2840) "\01\00\00\002\00\00\00%\00F\002\00%\00A\00E\00%\00B\000\00%\008\001\00-\00%\00F\002\00%\00A\004\00%\008\000\00%\008\002")
  (data (i32.const 2908) "\1c")
- (data (i32.const 2920) "\01\00\00\00\n\00\00\00\n\00\t\00\0b\00\0c\00\0d")
+ (data (i32.const 2920) "\01\00\00\00\n\00\00\00\n\00\t\00\0b\00\0c\00\r")
  (data (i32.const 2940) "<")
  (data (i32.const 2952) "\01\00\00\00\1e\00\00\00%\000\00A\00%\000\009\00%\000\00B\00%\000\00C\00%\000\00D")
  (data (i32.const 3004) ",")
@@ -241,11 +241,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -505,11 +505,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz

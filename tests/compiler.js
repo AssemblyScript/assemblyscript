@@ -492,8 +492,9 @@ function evaluateResult(failedTests, skippedTests) {
   }
 }
 
-// Run tests in parallel if requested
-if (args.parallel && coreCount > 2) {
+// Run tests in parallel if requested (except with coverage)
+const isCoverage = process.env.NODE_V8_COVERAGE != null;
+if (!isCoverage && args.parallel && coreCount > 2) {
   if (cluster.isWorker) {
     process.on("message", msg => {
       if (msg.cmd != "run") throw Error("invalid command: " + JSON.stringify(msg));

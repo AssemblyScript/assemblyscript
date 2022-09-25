@@ -71,6 +71,14 @@ export const enum TypeKind {
   I31REF,
   /** Data reference. */
   DATAREF,
+  /** String reference. */
+  STRINGREF,
+  /** WTF8 string view. */
+  STRINGVIEW_WTF8,
+  /** WTF16 string view. */
+  STRINGVIEW_WTF16,
+  /** String iterator. */
+  STRINGVIEW_ITER,
 
   // other
 
@@ -540,6 +548,10 @@ export class Type {
       case TypeKind.EQREF: return "eqref";
       case TypeKind.I31REF: return "i31ref";
       case TypeKind.DATAREF: return "dataref";
+      case TypeKind.STRINGREF: return "stringref";
+      case TypeKind.STRINGVIEW_WTF8: return "stringview_wtf8";
+      case TypeKind.STRINGVIEW_WTF16: return "stringview_wtf16";
+      case TypeKind.STRINGVIEW_ITER: return "stringview_iter";
       default: assert(false);
       case TypeKind.VOID: return "void";
     }
@@ -572,6 +584,10 @@ export class Type {
       case TypeKind.EQREF: return TypeRef.Eqref;
       case TypeKind.I31REF: return TypeRef.I31ref;
       case TypeKind.DATAREF: return TypeRef.Dataref;
+      case TypeKind.STRINGREF: return TypeRef.Stringref;
+      case TypeKind.STRINGVIEW_WTF8: return TypeRef.StringviewWTF8;
+      case TypeKind.STRINGVIEW_WTF16: return TypeRef.StringviewWTF16;
+      case TypeKind.STRINGVIEW_ITER: return TypeRef.StringviewIter;
       case TypeKind.VOID: return TypeRef.None;
     }
   }
@@ -740,6 +756,34 @@ export class Type {
 
   /** Data reference. */
   static readonly dataref: Type = new Type(TypeKind.DATAREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** String reference. */
+  static readonly stringref: Type = new Type(TypeKind.STRINGREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** WTF8 string view. */
+  static readonly stringview_wtf8: Type = new Type(TypeKind.STRINGVIEW_WTF8,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** WTF16 string view. */
+  static readonly stringview_wtf16: Type = new Type(TypeKind.STRINGVIEW_WTF16,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** String iterator. */
+  static readonly stringview_iter: Type = new Type(TypeKind.STRINGVIEW_ITER,
     TypeFlags.EXTERNAL   |
     TypeFlags.NULLABLE   |
     TypeFlags.REFERENCE, 0

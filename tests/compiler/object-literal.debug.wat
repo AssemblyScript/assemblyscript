@@ -2964,7 +2964,7 @@
    unreachable
   end
  )
- (func $object-literal/testManaged (param $0 i32)
+ (func $object-literal/testManaged (param $managed i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -2974,7 +2974,7 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $0
+  local.get $managed
   i32.load $0
   i32.const 123
   i32.eq
@@ -2987,7 +2987,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $managed
   i32.load $0 offset=4
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3015,7 +3015,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $object-literal/testUnmanaged (param $0 i32)
+ (func $object-literal/testUnmanaged (param $unmanaged i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -3025,7 +3025,7 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $0
+  local.get $unmanaged
   i32.load $0
   i32.const 123
   i32.eq
@@ -3038,7 +3038,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $unmanaged
   i32.load $0 offset=4
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3061,14 +3061,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $unmanaged
   call $~lib/rt/tlsf/__free
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $object-literal/testMixedOmitted (param $0 i32)
+ (func $object-literal/testMixedOmitted (param $omitted i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -3078,7 +3078,7 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $0
+  local.get $omitted
   i32.load $0
   i32.const 0
   i32.eq
@@ -3091,7 +3091,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $omitted
   i32.load $0 offset=4
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3114,7 +3114,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $omitted
   f64.load $0 offset=8
   f64.const 0
   f64.eq
@@ -3132,7 +3132,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $object-literal/testOmittedFoo (param $0 i32)
+ (func $object-literal/testOmittedFoo (param $foo i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -3142,7 +3142,7 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $0
+  local.get $foo
   i32.load $0
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3165,7 +3165,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=4
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3188,7 +3188,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=8
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3206,7 +3206,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=12
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3224,7 +3224,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=16
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3242,7 +3242,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=20
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3260,7 +3260,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=24
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3278,7 +3278,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=28
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3296,7 +3296,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=32
   i32.const 0
   i32.eq
@@ -3309,7 +3309,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $foo
   i32.load $0 offset=36
   i32.const -1
   i32.eq
@@ -3512,7 +3512,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $object-literal/Managed#constructor (param $0 i32) (result i32)
+ (func $object-literal/Managed#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3522,23 +3522,23 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.const 3
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/Managed#set:bar
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/Managed#set:baz
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3546,16 +3546,16 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
+ (func $~lib/string/String#substring (param $this i32) (param $start i32) (param $end i32) (result i32)
+  (local $len i32)
+  (local $var$4 i32)
+  (local $var$5 i32)
+  (local $finalStart i32)
+  (local $finalEnd i32)
+  (local $fromPos i32)
+  (local $toPos i32)
+  (local $size i32)
+  (local $out i32)
   (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3565,68 +3565,68 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $1
-  local.tee $4
+  local.set $len
+  local.get $start
+  local.tee $var$4
   i32.const 0
-  local.tee $5
-  local.get $4
-  local.get $5
+  local.tee $var$5
+  local.get $var$4
+  local.get $var$5
   i32.gt_s
   select
-  local.tee $5
-  local.get $3
-  local.tee $4
-  local.get $5
-  local.get $4
+  local.tee $var$5
+  local.get $len
+  local.tee $var$4
+  local.get $var$5
+  local.get $var$4
   i32.lt_s
   select
-  local.set $6
-  local.get $2
-  local.tee $4
+  local.set $finalStart
+  local.get $end
+  local.tee $var$4
   i32.const 0
-  local.tee $5
-  local.get $4
-  local.get $5
+  local.tee $var$5
+  local.get $var$4
+  local.get $var$5
   i32.gt_s
   select
-  local.tee $5
-  local.get $3
-  local.tee $4
-  local.get $5
-  local.get $4
+  local.tee $var$5
+  local.get $len
+  local.tee $var$4
+  local.get $var$5
+  local.get $var$4
   i32.lt_s
   select
-  local.set $7
-  local.get $6
-  local.tee $4
-  local.get $7
-  local.tee $5
-  local.get $4
-  local.get $5
+  local.set $finalEnd
+  local.get $finalStart
+  local.tee $var$4
+  local.get $finalEnd
+  local.tee $var$5
+  local.get $var$4
+  local.get $var$5
   i32.lt_s
   select
   i32.const 1
   i32.shl
-  local.set $8
-  local.get $6
-  local.tee $5
-  local.get $7
-  local.tee $4
-  local.get $5
-  local.get $4
+  local.set $fromPos
+  local.get $finalStart
+  local.tee $var$5
+  local.get $finalEnd
+  local.tee $var$4
+  local.get $var$5
+  local.get $var$4
   i32.gt_s
   select
   i32.const 1
   i32.shl
-  local.set $9
-  local.get $9
-  local.get $8
+  local.set $toPos
+  local.get $toPos
+  local.get $fromPos
   i32.sub
-  local.set $10
-  local.get $10
+  local.set $size
+  local.get $size
   i32.eqz
   if
    i32.const 544
@@ -3638,11 +3638,11 @@
    local.get $12
    return
   end
-  local.get $8
+  local.get $fromPos
   i32.eqz
   if (result i32)
-   local.get $9
-   local.get $3
+   local.get $toPos
+   local.get $len
    i32.const 1
    i32.shl
    i32.eq
@@ -3650,7 +3650,7 @@
    i32.const 0
   end
   if
-   local.get $0
+   local.get $this
    local.set $12
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -3660,18 +3660,18 @@
    return
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $10
+  local.get $size
   i32.const 1
   call $~lib/rt/itcms/__new
-  local.tee $11
+  local.tee $out
   i32.store $0
-  local.get $11
-  local.get $0
-  local.get $8
+  local.get $out
+  local.get $this
+  local.get $fromPos
   i32.add
-  local.get $10
+  local.get $size
   memory.copy $0 $0
-  local.get $11
+  local.get $out
   local.set $12
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3679,7 +3679,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $12
  )
- (func $object-literal/OmittedTypes#constructor (param $0 i32) (result i32)
+ (func $object-literal/OmittedTypes#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3689,59 +3689,59 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 65
    i32.const 4
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:int32
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:uint32
-  local.get $0
+  local.get $this
   i64.const 0
   call $object-literal/OmittedTypes#set:int64
-  local.get $0
+  local.get $this
   i64.const 0
   call $object-literal/OmittedTypes#set:uint64
-  local.get $0
+  local.get $this
   f32.const 0
   call $object-literal/OmittedTypes#set:float32
-  local.get $0
+  local.get $this
   f64.const 0
   call $object-literal/OmittedTypes#set:float64
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:int8
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:uint8
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:int16
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:uint16
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:intsize
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:uintsize
-  local.get $0
+  local.get $this
   f64.const 0
   call $object-literal/OmittedTypes#set:alias
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedTypes#set:isTrue
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3749,7 +3749,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $object-literal/MixedOmitted#constructor (param $0 i32) (result i32)
+ (func $object-literal/MixedOmitted#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3759,26 +3759,26 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 16
    i32.const 5
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/MixedOmitted#set:simpleType
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/MixedOmitted#set:complexType
-  local.get $0
+  local.get $this
   f64.const 0
   call $object-literal/MixedOmitted#set:anotherSimpleType
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3786,7 +3786,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $object-literal/OmittedFoo#constructor (param $0 i32) (result i32)
+ (func $object-literal/OmittedFoo#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3796,47 +3796,47 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 40
    i32.const 6
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 640
   call $object-literal/OmittedFoo#set:bar
-  local.get $0
+  local.get $this
   i32.const 672
   call $object-literal/OmittedFoo#set:baz
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedFoo#set:quux
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedFoo#set:quuz
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedFoo#set:corge
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedFoo#set:grault
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedFoo#set:garply
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedFoo#set:waldo
-  local.get $0
+  local.get $this
   i32.const 0
   call $object-literal/OmittedFoo#set:fred
-  local.get $0
+  local.get $this
   i32.const -1
   call $object-literal/OmittedFoo#set:qux
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
