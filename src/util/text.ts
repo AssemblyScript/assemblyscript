@@ -260,7 +260,7 @@ export function isIdentifierStart(cp: i32): bool {
   return isAlpha(cp)
       || cp == CharCode._
       || cp == CharCode.DOLLAR
-      || cp >= 170 && cp <= unicodeIdentifierStart[unicodeIdentifierStart.length - 1]
+      || cp >= unicodeIdentifierStartMin && cp <= unicodeIdentifierStartMax
          && lookupInUnicodeMap(cp, unicodeIdentifierStart);
 }
 
@@ -269,7 +269,7 @@ export function isIdentifierPart(cp: i32): bool {
   return isAlphaOrDecimal(cp)
       || cp == CharCode._
       || cp == CharCode.DOLLAR
-      || cp >= 170 && cp <= unicodeIdentifierPart[unicodeIdentifierPart.length - 1]
+      || cp >= unicodeIdentifierPartMin && cp <= unicodeIdentifierPartMax
          && lookupInUnicodeMap(cp, unicodeIdentifierPart);
 }
 
@@ -454,6 +454,8 @@ const unicodeIdentifierStart: i32[] = [/*
   173824, 177976, 177984, 178205, 178208, 183969, 183984, 191456,
   194560, 195101, 196608, 201546,
 ];
+const unicodeIdentifierStartMin = 170;
+const unicodeIdentifierStartMax = 201546;
 
 /** Unicode 14.0 ID_Continue/Other_ID_Continue + ID_Start/Other_ID_Start ranges*/
 const unicodeIdentifierPart: i32[] = [/*
@@ -576,7 +578,7 @@ const unicodeIdentifierPart: i32[] = [/*
   67456 , 67461 , 67463 , 67504 , 67506 , 67514 , 67584 , 67589 ,
   67592 , 67592 , 67594 , 67637 , 67639 , 67640 , 67644 , 67644 ,
   67647 , 67669 , 67680 , 67702 , 67712 , 67742 , 67808 , 67826 ,
-  67828 , 67829 , 67840 , 67861 , 67872 , 67897 , 67968 , 68023 , 
+  67828 , 67829 , 67840 , 67861 , 67872 , 67897 , 67968 , 68023 ,
   68030 , 68031 , 68096 , 68099 , 68101 , 68102 , 68108 , 68115 ,
   68117 , 68119 , 68121 , 68149 , 68152 , 68154 , 68159 , 68159 ,
   68192 , 68220 , 68224 , 68252 , 68288 , 68295 , 68297 , 68326 ,
@@ -647,6 +649,8 @@ const unicodeIdentifierPart: i32[] = [/*
   131072, 173791, 173824, 177976, 177984, 178205, 178208, 183969,
   183984, 191456, 194560, 195101, 196608, 201546, 917760, 917999,
 ];
+const unicodeIdentifierPartMin = 170;
+const unicodeIdentifierPartMax = 917999;
 
 function lookupInUnicodeMap(code: i32, map: i32[]): bool {
   var lo = 0;

@@ -33,6 +33,10 @@ function tablify(cps) {
 }
 
 console.log(`/** Unicode ${process.versions.unicode} ID_Start/Other_ID_Start ranges */`);
-console.log(`const unicodeIdentifierStart: i32[] = [${tablify(starts)}];\n`);
+console.log(`const unicodeIdentifierStart: i32[] = [${tablify(starts)}];`);
+console.log(`const unicodeIdentifierStartMin = ${starts[0]};`);
+console.log(`const unicodeIdentifierStartMax = ${starts[starts.length - 1]};\n`);
 console.log(`/** Unicode ${process.versions.unicode} ID_Continue/Other_ID_Continue + ID_Start/Other_ID_Start ranges*/`);
 console.log(`const unicodeIdentifierPart: i32[] = [${tablify(parts)}];`);
+console.log(`const unicodeIdentifierPartMin = ${parts[0]};`);
+console.log(`const unicodeIdentifierPartMax = ${parts[parts.length - 1]};\n`);
