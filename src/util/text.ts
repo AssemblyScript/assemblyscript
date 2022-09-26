@@ -255,8 +255,7 @@ export function isIdentifierStart(c: i32): bool {
   return isAlpha(c)
       || c == CharCode._
       || c == CharCode.DOLLAR
-      || c >= 170 && c <= 65500
-         && lookupInUnicodeMap(c, unicodeIdentifierStart);
+      || lookupInUnicodeMap(c, unicodeIdentifierStart);
 }
 
 /** Tests if the specified character code is a valid part of an identifier. */
@@ -264,8 +263,7 @@ export function isIdentifierPart(c: i32): bool {
   return isAlphaOrDecimal(c)
       || c == CharCode._
       || c == CharCode.DOLLAR
-      || c >= 170 && c <= 65500
-         && lookupInUnicodeMap(c, unicodeIdentifierPart);
+      || lookupInUnicodeMap(c, unicodeIdentifierPart);
 }
 
 /** Tests if the specified string is a valid identifer. */
