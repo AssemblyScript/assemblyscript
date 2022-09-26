@@ -33,7 +33,8 @@ import {
   isOctal,
   isHexBase,
   isHighSurrogate,
-  isLowSurrogate
+  combineSurrogates,
+  numCodeUnits
 } from "./util";
 
 /** Named token types. */
@@ -913,11 +914,15 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.AT;
         }
         default: {
+          // Unicode-aware from here on
+          if (isHighSurrogate(c) && pos + 1 < end) {
+            c = combineSurrogates(c, text.charCodeAt(pos + 1));
+          }
           if (isIdentifierStart(c)) {
             let posBefore = pos;
             while (
-              ++pos < end &&
-              isIdentifierPart(c = text.charCodeAt(pos))
+              (pos += numCodeUnits(c)) < end &&
+              isIdentifierPart(c = <i32>text.codePointAt(pos))
             ) { /* nop */ }
             if (identifierHandling != IdentifierHandling.ALWAYS) {
               let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
@@ -935,14 +940,11 @@ export class Tokenizer extends DiagnosticEmitter {
             this.pos = posBefore;
             return Token.IDENTIFIER;
           } else if (isWhiteSpace(c)) {
-            ++pos;
+            ++pos; // assume no supplementary whitespaces
             break;
           }
-          let start = pos++;
-          if (
-            isHighSurrogate(c) && pos < end &&
-            isLowSurrogate(text.charCodeAt(pos))
-          ) ++pos;
+          let start = pos;
+          pos += numCodeUnits(c);
           this.error(
             DiagnosticCode.Invalid_character,
             this.range(start, pos)
@@ -1055,9 +1057,11 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var pos = this.pos;
     var start = pos;
+    var c = <i32>text.codePointAt(pos);
+    assert(isIdentifierStart(c));
     while (
-      ++pos < end &&
-      isIdentifierPart(text.charCodeAt(pos))
+      (pos += numCodeUnits(c)) < end &&
+      isIdentifierPart(c = <i32>text.codePointAt(pos))
     );
     this.pos = pos;
     return text.substring(start, pos);

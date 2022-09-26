@@ -267,7 +267,7 @@ function formatDiagnosticContext(range: Range): string {
   var lineSpace = " ".repeat(lineNumber.length);
   // Find preceeding line break
   while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) start--;
-  // Skip leading whitespace
+  // Skip leading whitespace (assume no supplementary whitespaces)
   while (start < len && isWhiteSpace(text.charCodeAt(start))) start++;
   // Find next line break
   while (end < len && !isLineBreak(text.charCodeAt(end))) end++;
