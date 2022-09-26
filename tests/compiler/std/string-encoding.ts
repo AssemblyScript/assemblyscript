@@ -499,10 +499,4 @@ Other
   𠜎𠜱 / f0_a0_9c_8e f0_a0_9c_b1
 `);
 
-function testUnicodeEscape(): void {
-  let a = "\u{00c0}\u{00c8}";
-  assert(a == "ÀÈ");
-}
-testUnicodeEscape();
-
 __collect();
