@@ -284,7 +284,7 @@ export function isIdentifier(str: string): bool {
 }
 
 /** Unicode 14.0 ID_Start/Other_ID_Start ranges */
-const unicodeIdentifierStart: u32[] = [/*
+const unicodeIdentifierStart: i32[] = [/*
 | from  ...  to | from  ...  to | from  ...  to | from  ...  to |*/
   170   , 170   , 181   , 181   , 186   , 186   , 192   , 214   ,
   216   , 246   , 248   , 705   , 710   , 721   , 736   , 740   ,
@@ -451,7 +451,7 @@ const unicodeIdentifierStart: u32[] = [/*
 ];
 
 /** Unicode 14.0 ID_Continue/Other_ID_Continue + ID_Start/Other_ID_Start ranges*/
-const unicodeIdentifierPart: u32[] = [/*
+const unicodeIdentifierPart: i32[] = [/*
 | from  ...  to | from  ...  to | from  ...  to | from  ...  to |*/
   170   , 170   , 181   , 181   , 183   , 183   , 186   , 186   ,
   192   , 214   , 216   , 246   , 248   , 705   , 710   , 721   ,
@@ -643,11 +643,11 @@ const unicodeIdentifierPart: u32[] = [/*
   183984, 191456, 194560, 195101, 196608, 201546, 917760, 917999,
 ];
 
-function lookupInUnicodeMap(code: u32, map: u32[]): bool {
+function lookupInUnicodeMap(code: i32, map: i32[]): bool {
   var lo = 0;
   var hi = map.length;
-  var mid: u32;
-  var midVal: u32;
+  var mid: i32;
+  var midVal: i32;
 
   while (lo + 1 < hi) {
     mid = lo + ((hi - lo) >>> 1);
