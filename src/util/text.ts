@@ -646,13 +646,10 @@ const unicodeIdentifierPart: i32[] = [/*
 function lookupInUnicodeMap(code: i32, map: i32[]): bool {
   var lo = 0;
   var hi = map.length;
-  var mid: i32;
-  var midVal: i32;
-
   while (lo + 1 < hi) {
-    mid = lo + ((hi - lo) >>> 1);
+    let mid = lo + ((hi - lo) >>> 1);
     mid -= (mid & 1);
-    midVal = map[mid];
+    let midVal = map[mid];
     if (midVal <= code && code <= map[mid + 1]) {
       return true;
     }
