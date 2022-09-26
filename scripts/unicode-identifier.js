@@ -8,13 +8,13 @@ let partsActive = false;
 let startsActive = false;
 const starts = [];
 
-for (let i = 0; i <= MAX_UNICODE_CODEPOINT; i++) {
-  if (isStart(String.fromCodePoint(i)) !== startsActive) {
-    starts.push(i - +startsActive);
+for (let cp = 0; cp <= MAX_UNICODE_CODEPOINT; cp++) {
+  if (isStart(String.fromCodePoint(cp)) !== startsActive) {
+    starts.push(cp - +startsActive);
     startsActive = !startsActive;
   }
-  if (isPart(String.fromCodePoint(i)) !== partsActive) {
-    parts.push(i - +partsActive);
+  if (isPart(String.fromCodePoint(cp)) !== partsActive) {
+    parts.push(cp - +partsActive);
     partsActive = !partsActive;
   }
 }
