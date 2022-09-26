@@ -31,10 +31,7 @@ import {
   isIdentifierPart,
   isDecimal,
   isOctal,
-  isHexBase,
-  isHighSurrogate,
-  isLowSurrogate,
-  combineSurrogates
+  isHexBase
 } from "./util";
 
 /** Named token types. */
