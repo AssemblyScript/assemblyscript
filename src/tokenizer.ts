@@ -32,6 +32,8 @@ import {
   isDecimal,
   isOctal,
   isHexBase,
+  isHighSurrogate,
+  combineSurrogates,
   numCodeUnits
 } from "./util";
 
@@ -519,7 +521,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var pos = this.pos;
     while (pos < end) {
       this.tokenPos = pos;
-      let c = <i32>text.codePointAt(pos);
+      let c = text.charCodeAt(pos);
       switch (c) {
         case CharCode.CARRIAGERETURN: {
           if (!(
@@ -912,7 +914,10 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.AT;
         }
         default: {
-          // Unicode-aware from here on. Is a pair of two code units if `c > 0xffff`.
+          // Unicode-aware from here on
+          if (isHighSurrogate(c) && pos + 1 < end) {
+            c = combineSurrogates(c, text.charCodeAt(pos + 1));
+          }
           if (isIdentifierStart(c)) {
             let posBefore = pos;
             while (
@@ -935,7 +940,7 @@ export class Tokenizer extends DiagnosticEmitter {
             this.pos = posBefore;
             return Token.IDENTIFIER;
           } else if (isWhiteSpace(c)) {
-            pos += numCodeUnits(c);
+            ++pos; // assume no supplementary whitespaces
             break;
           }
           let start = pos;

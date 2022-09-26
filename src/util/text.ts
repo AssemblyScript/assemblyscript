@@ -155,6 +155,9 @@ export function isLineBreak(c: i32): bool {
 
 /** Tests if the specified character code is some sort of white space. */
 export function isWhiteSpace(c: i32): bool {
+  // NOTE: Calling code assumes that there are no supplementary whitespaces.
+  // If Unicode ever adds one, uses of this function must be updated to
+  // conditionally advance by two code units, i.e. using `numCodeUnits`.
   switch (c) {
     case CharCode.SPACE:
     case CharCode.TAB:
