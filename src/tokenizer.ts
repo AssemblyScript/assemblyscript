@@ -31,7 +31,8 @@ import {
   isIdentifierPart,
   isDecimal,
   isOctal,
-  isHexBase
+  isHexBase,
+  numCodeUnits
 } from "./util";
 
 /** Named token types. */
@@ -915,7 +916,7 @@ export class Tokenizer extends DiagnosticEmitter {
           if (isIdentifierStart(c)) {
             let posBefore = pos;
             while (
-              (pos += 1 + i32(c > 0xffff)) < end &&
+              (pos += numCodeUnits(c)) < end &&
               isIdentifierPart(c = <i32>text.codePointAt(pos))
             ) { /* nop */ }
             if (identifierHandling != IdentifierHandling.ALWAYS) {
@@ -934,11 +935,11 @@ export class Tokenizer extends DiagnosticEmitter {
             this.pos = posBefore;
             return Token.IDENTIFIER;
           } else if (isWhiteSpace(c)) {
-            pos += 1 + i32(c > 0xffff);
+            pos += numCodeUnits(c);
             break;
           }
           let start = pos;
-          pos += 1 + i32(c > 0xffff);
+          pos += numCodeUnits(c);
           this.error(
             DiagnosticCode.Invalid_character,
             this.range(start, pos)
@@ -1054,7 +1055,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var c = <i32>text.codePointAt(pos);
     assert(isIdentifierStart(c));
     while (
-      (pos += 1 + i32(c > 0xffff)) < end &&
+      (pos += numCodeUnits(c)) < end &&
       isIdentifierPart(c = <i32>text.codePointAt(pos))
     );
     this.pos = pos;

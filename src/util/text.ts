@@ -219,6 +219,11 @@ export function combineSurrogates(hi: i32, lo: i32): i32 {
   return 0x10000 + ((hi & 0x3FF) << 10) | (lo & 0x3FF);
 }
 
+/** Gets the number of UTF-16 code units of the specified code point. */
+export function numCodeUnits(cp: i32): i32 {
+  return 1 + i32(cp > 0xffff);
+}
+
 export function isAlpha(c: i32): bool {
   let c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
   return c0 >= CharCode.a && c0 <= CharCode.z;
@@ -274,11 +279,11 @@ export function isIdentifier(str: string): bool {
   if (!len) return false;
   var cp = <i32>str.codePointAt(0);
   if (!isIdentifierStart(cp)) return false;
-  var i = 1 + i32(cp > 0xffff);
+  var i = numCodeUnits(cp);
   while (i < len) {
     cp = <i32>str.codePointAt(i);
     if (!isIdentifierPart(cp)) return false;
-    i += 1 + i32(cp > 0xffff);
+    i += numCodeUnits(cp);
   }
   return true;
 }
