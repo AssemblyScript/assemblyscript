@@ -926,14 +926,22 @@ export class Signature {
   }
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
-  isAssignableTo(target: Signature, ignoreInheritLineCheck: bool = false): bool {
-
-    if (!ignoreInheritLineCheck) {
-      // check `this` type
-      var thisThisType = this.thisType;
-      var targetThisType = target.thisType;
+  isAssignableTo(target: Signature, checkCompatibleOverride: bool = false): bool {
+    var thisThisType = this.thisType;
+    var targetThisType = target.thisType;
+    if (!checkCompatibleOverride) {
+      // check exact `this` type
       if (thisThisType) {
         if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) {
+          return false;
+        }
+      } else if (targetThisType) {
+        return false;
+      }
+    } else {
+      // check kind of `this` type
+      if (thisThisType) {
+        if (!targetThisType || thisThisType.kind != targetThisType.kind || thisThisType.isReference != targetThisType.isReference) {
           return false;
         }
       } else if (targetThisType) {

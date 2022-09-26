@@ -3003,33 +3003,6 @@ export abstract class DeclaredElement extends Element {
     return this.declaration.decorators;
   }
 
-  /** Determine if two properties are compatibal during override by their getter and setter signature . */
-  private _isCampatibalOverrideProperty(selfProperty: Property|null, baseProperty: Property|null, ignoreInheritLineCheck: bool = false): bool {
-    if (!selfProperty || !baseProperty) {
-      return false;
-    } else {
-      let selfGetter = selfProperty.getterInstance;
-      let baseGetter = baseProperty.getterInstance;
-      if (selfGetter) {
-        if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
-          return false;
-        }
-      } else if (baseGetter) {
-        return false;
-      }
-      let selfSetter = selfProperty.setterInstance;
-      let baseSetter = baseProperty.setterInstance;
-      if (selfSetter) {
-        if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
-          return false;
-        }
-      } else if (baseSetter) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   /** Checks if this element is a compatible override of the specified. */
   isCompatibleOverride(base: DeclaredElement): bool {
     var self: DeclaredElement = this; // TS
@@ -3050,35 +3023,58 @@ export abstract class DeclaredElement extends Element {
         }
         case ElementKind.PROPERTY_PROTOTYPE: {
           let selfProperty = this.program.resolver.resolveProperty(<PropertyPrototype>self);
+          if (!selfProperty) return false;
           let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
-          return this._isCampatibalOverrideProperty(selfProperty, baseProperty, true);
+          if (!baseProperty) return false;
+          self = selfProperty;
+          base = baseProperty;
+          // fall-through
         }
         case ElementKind.PROPERTY: {
           let selfProperty = <Property>self;
           let baseProperty = <Property>base;
-          return self._isCampatibalOverrideProperty(selfProperty, baseProperty);
+          let selfGetter = selfProperty.getterInstance;
+          let baseGetter = baseProperty.getterInstance;
+          if (selfGetter) {
+            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
+              return false;
+            }
+          } else if (baseGetter) {
+            return false;
+          }
+          let selfSetter = selfProperty.setterInstance;
+          let baseSetter = baseProperty.setterInstance;
+          if (selfSetter) {
+            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
+              return false;
+            }
+          } else if (baseSetter) {
+            return false;
+          }
+          return true;
         }
       }
     }
-    if (self.kind == ElementKind.FIELD && base.kind == ElementKind.PROPERTY_PROTOTYPE) {
-      // class A implement I, class B extends A implement I
-      let selfField = <Field>self;
-      let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
-      if (!selfField.internalGetterSignature || !selfField.internalSetterSignature || !baseProperty) {
-        return false;
-      }
-      let baseGetterInsance = baseProperty.getterInstance;
-      let baseSetterInsance = baseProperty.setterInstance;
-      if (baseGetterInsance && baseSetterInsance) {
-        if (!selfField.internalGetterSignature.isAssignableTo(baseGetterInsance.signature)
-          || !selfField.internalSetterSignature.isAssignableTo(baseSetterInsance.signature)) {
-          return false;
-        }
-      } else {
-        return false;
-      }
-      return true;
-    }
+    // TODO: field and property cannot override each other, have different codegen
+    // if (self.kind == ElementKind.FIELD && base.kind == ElementKind.PROPERTY_PROTOTYPE) {
+    //   // class A implement I, class B extends A implement I
+    //   let selfField = <Field>self;
+    //   let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
+    //   if (!selfField.internalGetterSignature || !selfField.internalSetterSignature || !baseProperty) {
+    //     return false;
+    //   }
+    //   let baseGetterInsance = baseProperty.getterInstance;
+    //   let baseSetterInsance = baseProperty.setterInstance;
+    //   if (baseGetterInsance && baseSetterInsance) {
+    //     if (!selfField.internalGetterSignature.isAssignableTo(baseGetterInsance.signature)
+    //       || !selfField.internalSetterSignature.isAssignableTo(baseSetterInsance.signature)) {
+    //       return false;
+    //     }
+    //   } else {
+    //     return false;
+    //   }
+    //   return true;
+    // }
     return false;
   }
 }
