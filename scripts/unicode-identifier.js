@@ -8,7 +8,7 @@ let partsActive = false;
 let startsActive = false;
 const starts = [];
 
-for (let i = 0; i < MAX_UNICODE_CODEPOINT; i++) {
+for (let i = 0; i <= MAX_UNICODE_CODEPOINT; i++) {
   if (isStart(String.fromCodePoint(i)) !== startsActive) {
     starts.push(i - +startsActive);
     startsActive = !startsActive;
@@ -18,6 +18,8 @@ for (let i = 0; i < MAX_UNICODE_CODEPOINT; i++) {
     partsActive = !partsActive;
   }
 }
+if (startsActive) starts.push(MAX_UNICODE_CODEPOINT);
+if (partsActive) parts.push(MAX_UNICODE_CODEPOINT);
 
 function tablify(cps) {
   let sb = ["/*\n| from  ...  to | from  ...  to | from  ...  to | from  ...  to |*/"];
