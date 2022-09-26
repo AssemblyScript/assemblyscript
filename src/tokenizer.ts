@@ -33,7 +33,8 @@ import {
   isOctal,
   isHexBase,
   isHighSurrogate,
-  isLowSurrogate
+  isLowSurrogate,
+  combineSurrogates
 } from "./util";
 
 /** Named token types. */
@@ -520,7 +521,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var pos = this.pos;
     while (pos < end) {
       this.tokenPos = pos;
-      let c = text.charCodeAt(pos);
+      let c = <i32>text.codePointAt(pos);
       switch (c) {
         case CharCode.CARRIAGERETURN: {
           if (!(
@@ -913,11 +914,12 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.AT;
         }
         default: {
+          // Unicode-aware from here on. Is a pair of two code units if `c > 0xffff`.
           if (isIdentifierStart(c)) {
             let posBefore = pos;
             while (
-              ++pos < end &&
-              isIdentifierPart(c = text.charCodeAt(pos))
+              (pos += 1 + i32(c > 0xffff)) < end &&
+              isIdentifierPart(c = <i32>text.codePointAt(pos))
             ) { /* nop */ }
             if (identifierHandling != IdentifierHandling.ALWAYS) {
               let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
@@ -935,14 +937,11 @@ export class Tokenizer extends DiagnosticEmitter {
             this.pos = posBefore;
             return Token.IDENTIFIER;
           } else if (isWhiteSpace(c)) {
-            ++pos;
+            pos += 1 + i32(c > 0xffff);
             break;
           }
-          let start = pos++;
-          if (
-            isHighSurrogate(c) && pos < end &&
-            isLowSurrogate(text.charCodeAt(pos))
-          ) ++pos;
+          let start = pos;
+          pos += 1 + i32(c > 0xffff);
           this.error(
             DiagnosticCode.Invalid_character,
             this.range(start, pos)
@@ -1055,9 +1054,11 @@ export class Tokenizer extends DiagnosticEmitter {
     var end = this.end;
     var pos = this.pos;
     var start = pos;
+    var c = <i32>text.codePointAt(pos);
+    assert(isIdentifierStart(c));
     while (
-      ++pos < end &&
-      isIdentifierPart(text.charCodeAt(pos))
+      (pos += 1 + i32(c > 0xffff)) < end &&
+      isIdentifierPart(c = <i32>text.codePointAt(pos))
     );
     this.pos = pos;
     return text.substring(start, pos);

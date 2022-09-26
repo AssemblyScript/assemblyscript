@@ -26,7 +26,7 @@ function tablify(cps) {
   let i = 0;
   while (i < cps.length) {
     if (!(i % 8)) sb.push("\n  ");
-    sb.push(`${cps[i++].toString().padStart(6)}, `);
+    sb.push(`${cps[i++].toString().padEnd(6)}, `);
   }
   return sb.join("") + "\n";
 }
