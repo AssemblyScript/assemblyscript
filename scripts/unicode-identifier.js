@@ -8,7 +8,8 @@ let partsActive = false;
 let startsActive = false;
 const starts = [];
 
-for (let cp = 0; cp <= MAX_UNICODE_CODEPOINT; cp++) {
+// Skip 0-9 (48..57), A-Z (65..90), a-z (97..122) - checked otherwise
+for (let cp = 123; cp <= MAX_UNICODE_CODEPOINT; cp++) {
   if (isStart(String.fromCodePoint(cp)) !== startsActive) {
     starts.push(cp - +startsActive);
     startsActive = !startsActive;
