@@ -811,6 +811,13 @@ export function getString(): string {
   return str;
 }
 
+// Unicode escapes
+
+assert("\u{c0}\u{c8}" == "ÀÈ");
+assert("\u{00c0}\u{00c8}" == "ÀÈ");
+assert("\u{53D8}\u{91CF}" == "变量");
+assert("\u{2070E}\u{20731}" == "𠜎𠜱");
+
 // Unleak globals
 
 str = changetype<string>(0);
