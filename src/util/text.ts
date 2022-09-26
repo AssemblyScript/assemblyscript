@@ -250,22 +250,22 @@ export function isAlphaOrDecimal(c: i32): bool {
   return isAlpha(c) || isDecimal(c);
 }
 
-/** Tests if the specified character code is a valid start of an identifier. */
-export function isIdentifierStart(c: i32): bool {
-  return isAlpha(c)
-      || c == CharCode._
-      || c == CharCode.DOLLAR
-      || c >= 170 && c <= unicodeIdentifierStart[unicodeIdentifierStart.length - 1]
-         && lookupInUnicodeMap(c, unicodeIdentifierStart);
+/** Tests if the specified code point is a valid start of an identifier. */
+export function isIdentifierStart(cp: i32): bool {
+  return isAlpha(cp)
+      || cp == CharCode._
+      || cp == CharCode.DOLLAR
+      || cp >= 170 && cp <= unicodeIdentifierStart[unicodeIdentifierStart.length - 1]
+         && lookupInUnicodeMap(cp, unicodeIdentifierStart);
 }
 
-/** Tests if the specified character code is a valid part of an identifier. */
-export function isIdentifierPart(c: i32): bool {
-  return isAlphaOrDecimal(c)
-      || c == CharCode._
-      || c == CharCode.DOLLAR
-      || c >= 170 && c <= unicodeIdentifierPart[unicodeIdentifierPart.length - 1]
-         && lookupInUnicodeMap(c, unicodeIdentifierPart);
+/** Tests if the specified code point is a valid part of an identifier. */
+export function isIdentifierPart(cp: i32): bool {
+  return isAlphaOrDecimal(cp)
+      || cp == CharCode._
+      || cp == CharCode.DOLLAR
+      || cp >= 170 && cp <= unicodeIdentifierPart[unicodeIdentifierPart.length - 1]
+         && lookupInUnicodeMap(cp, unicodeIdentifierPart);
 }
 
 /** Tests if the specified string is a valid identifer. */
