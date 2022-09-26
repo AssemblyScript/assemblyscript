@@ -31,5 +31,7 @@ function tablify(cps) {
   return sb.join("") + "\n";
 }
 
-console.log(`const unicodeIdentifierStart: u32[] = [${tablify(starts)}];`);
+console.log(`/** Unicode ${process.versions.unicode} ID_Start/Other_ID_Start ranges */`);
+console.log(`const unicodeIdentifierStart: u32[] = [${tablify(starts)}];\n`);
+console.log(`/** Unicode ${process.versions.unicode} ID_Continue/Other_ID_Continue + ID_Start/Other_ID_Start ranges*/`);
 console.log(`const unicodeIdentifierPart: u32[] = [${tablify(parts)}];`);
