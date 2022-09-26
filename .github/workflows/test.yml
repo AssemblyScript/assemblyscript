@@ -62,12 +62,8 @@ jobs:
       run: npm run bootstrap:${{ matrix.target }}
     - name: Test
       run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target }}-bootstrap.js
-    - name: Compile release
-      if: matrix.target == 'debug'
-      run: node bin/asc --config src/asconfig.json --target release-bootstrap --wasm ./build/assemblyscript.debug-bootstrap.js
-    - name: Compile debug
-      if: matrix.target == 'release'
-      run: node bin/asc --config src/asconfig.json --target debug-bootstrap --wasm ./build/assemblyscript.release-bootstrap.js
+    - name: Compile ${{ matrix.target == 'debug' && 'release' || 'debug' }} with bootstrapped ${{ matrix.target }}
+      run: node bin/asc --config src/asconfig.json --target ${{ matrix.target == 'debug' && 'release' || 'debug' }}-bootstrap --wasm ./build/assemblyscript.${{ matrix.target }}-bootstrap.js
   features:
     name: "Features"
     runs-on: ubuntu-latest
