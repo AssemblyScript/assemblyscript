@@ -72,7 +72,7 @@
  (data (i32.const 3544) "\01\00\00\00\02\00\00\00.")
  (data (i32.const 3564) "\1c")
  (data (i32.const 3576) "\01\00\00\00\02\00\00\00Z")
- (data (i32.const 3596) "L\00\00\00\03\00\00\00\00\00\00\00\04\00\00\008\00\00\00\00\00\00\00P\06\00\00\00\00\00\00P\06\00\00\00\00\00\00\a0\0d\00\00\00\00\00\00\c0\0d\00\00\00\00\00\00\c0\0d\00\00\00\00\00\00\e0\0d\00\00\00\00\00\00\00\0e")
+ (data (i32.const 3596) "L\00\00\00\03\00\00\00\00\00\00\00\04\00\00\008\00\00\00\00\00\00\00P\06\00\00\00\00\00\00P\06\00\00\00\00\00\00\a0\r\00\00\00\00\00\00\c0\r\00\00\00\00\00\00\c0\r\00\00\00\00\00\00\e0\r\00\00\00\00\00\00\00\0e")
  (data (i32.const 3676) "L")
  (data (i32.const 3688) "\01\00\00\000\00\00\000\000\000\000\00-\000\001\00-\000\001\00T\000\000\00:\000\000\00:\000\000\00.\000\000\000\00Z")
  (data (i32.const 3756) "L")
@@ -144,7 +144,7 @@
  (data (i32.const 5320) "\01\00\00\00\1e\00\00\00S\00u\00n\00 \00F\00e\00b\00 \000\002\00 \002\000\002\000")
  (data (i32.const 5372) "<")
  (data (i32.const 5384) "\01\00\00\00 \00\00\00T\00h\00u\00 \00J\00u\00l\00 \000\001\00 \00-\000\000\000\001")
- (data (i32.const 5436) ",\00\00\00\03\00\00\00\00\00\00\00\04\00\00\00\14\00\00\00\00\00\00\00\c0\0d\00\00\00\00\00\00\c0\0d")
+ (data (i32.const 5436) ",\00\00\00\03\00\00\00\00\00\00\00\04\00\00\00\14\00\00\00\00\00\00\00\c0\r\00\00\00\00\00\00\c0\r")
  (data (i32.const 5484) ",")
  (data (i32.const 5496) "\01\00\00\00\10\00\00\000\000\00:\000\000\00:\000\000")
  (data (i32.const 5532) ",")
@@ -194,7 +194,7 @@
  (data (i32.const 6316) "\1c")
  (data (i32.const 6328) "\01\00\00\00\08\00\00\00 \00G\00M\00T")
  (data (i32.const 6348) "L\00\00\00\03\00\00\00\00\00\00\00\04\00\00\000")
- (data (i32.const 6388) "p\14\00\00\00\00\00\00\c0\0d\00\00\00\00\00\00\c0\0d\00\00\00\00\00\00\c0\18")
+ (data (i32.const 6388) "p\14\00\00\00\00\00\00\c0\r\00\00\00\00\00\00\c0\r\00\00\00\00\00\00\c0\18")
  (data (i32.const 6428) "L")
  (data (i32.const 6440) "\01\00\00\00:\00\00\00W\00e\00d\00,\00 \000\001\00 \00J\00a\00n\00 \000\000\002\000\00 \000\000\00:\000\000\00:\000\000\00 \00G\00M\00T")
  (data (i32.const 6508) "L")
@@ -639,11 +639,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -903,11 +903,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -2635,21 +2635,21 @@
     unreachable
    end
    block $__inlined_func$~lib/rt/itcms/__renew
+    i32.const 1073741820
     local.get $3
     i32.const 1
     i32.shl
     local.tee $3
-    i32.const 1073741820
     local.get $3
     i32.const 1073741820
-    i32.lt_u
+    i32.ge_u
     select
     local.tee $3
-    local.get $2
     i32.const 8
     local.get $2
+    local.get $2
     i32.const 8
-    i32.gt_u
+    i32.le_u
     select
     i32.const 2
     i32.shl
@@ -3159,20 +3159,16 @@
    block $__inlined_func$~lib/string/String#padStart
     i32.const 1868
     i32.load $0
-    i32.const 1
-    i32.shr_u
-    i32.const 1
-    i32.shl
+    i32.const -2
+    i32.and
     local.tee $2
     i32.eqz
     local.get $0
     i32.const 20
     i32.sub
     i32.load $0 offset=16
-    i32.const 1
-    i32.shr_u
-    i32.const 1
-    i32.shl
+    i32.const -2
+    i32.and
     local.tee $4
     local.get $1
     i32.const 1
@@ -3339,19 +3335,15 @@
      i32.const 20
      i32.sub
      i32.load $0 offset=16
-     i32.const 1
-     i32.shr_u
-     i32.const 1
-     i32.shl
+     i32.const -2
+     i32.and
      local.tee $4
      local.get $2
      i32.const 20
      i32.sub
      i32.load $0 offset=16
-     i32.const 1
-     i32.shr_u
-     i32.const 1
-     i32.shl
+     i32.const -2
+     i32.and
      local.tee $5
      i32.add
      local.tee $6
@@ -4287,11 +4279,11 @@
       i32.eqz
       br_if $folding-inner0
       global.get $~lib/memory/__stack_pointer
-      local.get $4
       i32.const 2147483647
       local.get $4
+      local.get $4
       i32.const 2147483647
-      i32.ne
+      i32.eq
       select
       local.tee $3
       call $~lib/rt/__newArray
@@ -8273,10 +8265,8 @@
    i32.const 20
    i32.sub
    i32.load $0 offset=16
-   i32.const 1
-   i32.shr_u
-   i32.const 1
-   i32.shl
+   i32.const -2
+   i32.and
    memory.copy $0 $0
   end
   global.get $~lib/memory/__stack_pointer

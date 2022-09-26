@@ -2216,7 +2216,7 @@
    unreachable
   end
  )
- (func $getter-call/C#constructor (param $0 i32) (result i32)
+ (func $getter-call/C#constructor (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2226,17 +2226,17 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 3
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2245,7 +2245,7 @@
   local.get $1
  )
  (func $getter-call/test (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2258,11 +2258,11 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $getter-call/C#constructor
-  local.tee $0
+  local.tee $var$0
   i32.store $0
   i32.const 0
   global.set $~argumentsLength
-  local.get $0
+  local.get $var$0
   call $getter-call/C#get:x
   i32.load $0
   call_indirect $0 (type $none_=>_i32)

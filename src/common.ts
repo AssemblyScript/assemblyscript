@@ -132,6 +132,10 @@ export namespace CommonNames {
   export const eqref = "eqref";
   export const i31ref = "i31ref";
   export const dataref = "dataref";
+  export const stringref = "stringref";
+  export const stringview_wtf8 = "stringview_wtf8";
+  export const stringview_wtf16 = "stringview_wtf16";
+  export const stringview_iter = "stringview_iter";
   export const i8x16 = "i8x16";
   export const u8x16 = "u8x16";
   export const i16x8 = "i16x8";
@@ -181,9 +185,9 @@ export namespace CommonNames {
   export const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";
   export const ASC_FEATURE_GC = "ASC_FEATURE_GC";
   export const ASC_FEATURE_MEMORY64 = "ASC_FEATURE_MEMORY64";
-  export const ASC_FEATURE_FUNCTION_REFERENCES = "ASC_FEATURE_FUNCTION_REFERENCES";
   export const ASC_FEATURE_RELAXED_SIMD = "ASC_FEATURE_RELAXED_SIMD";
   export const ASC_FEATURE_EXTENDED_CONST = "ASC_FEATURE_EXTENDED_CONST";
+  export const ASC_FEATURE_STRINGREF = "ASC_FEATURE_STRINGREF";
   export const ASC_VERSION_MAJOR = "ASC_VERSION_MAJOR";
   export const ASC_VERSION_MINOR = "ASC_VERSION_MINOR";
   export const ASC_VERSION_PATCH = "ASC_VERSION_PATCH";
