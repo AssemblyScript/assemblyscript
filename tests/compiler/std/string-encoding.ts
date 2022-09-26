@@ -148,13 +148,7 @@ function testUTF8DecodeUnsafe(): void {
 }
 testUTF8DecodeUnsafe();
 
-function testUnicodeEscape(): void {
-  let a = "\u{00c8}\u{00c8}";
-  assert(a == "ÈÈ");
-}
-testUnicodeEscape();
-
-function testLarge(str: string): void {
+function testRoundtrip(str: string): void {
   var buf8 = String.UTF8.encode(str);
   assert(String.UTF8.decode(buf8) == str);
   var buf16 = String.UTF16.encode(str);
@@ -162,7 +156,7 @@ function testLarge(str: string): void {
 }
 
 // https://www.w3.org/2001/06/utf-8-test/UTF-8-demo.html
-testLarge(`Mathematics and Sciences:
+testRoundtrip(`Mathematics and Sciences:
 
 ∮ E⋅da = Q,  n → ∞, ∑ f(i) = ∏ g(i), ∀x∈ℝ: ⌈x⌉ = −⌊−x⌋, α ∧ ¬β = ¬(¬α ∨ β),
 
@@ -355,7 +349,7 @@ Box drawing alignment tests:                                          █
 `);
 
 // https://www.cl.cam.ac.uk/~mgk25/ucs/examples/quickbrown.txt
-testLarge(`Sentences that contain all letters commonly used in a language
+testRoundtrip(`Sentences that contain all letters commonly used in a language
 --------------------------------------------------------------
 
 Markus Kuhn <http://www.cl.cam.ac.uk/~mgk25/> -- 2012-04-11
@@ -496,20 +490,19 @@ Turkish (tr)
 
   Pijamalı hasta, yağız şoföre çabucak güvendi.
   (=Patient with pajamas, trusted swarthy driver quickly)
+
+Other
+-----
+
+  ÀÈ / c3_80 c3_88
+  变量 / e5_8f_98 e9_87_8f
+  𠜎𠜱 / f0_a0_9c_8e f0_a0_9c_b1
 `);
 
-// Identifiers
-
-var ÀÀ: string = "ÀÀ"; // two bytes utf8
-assert(ÀÀ == "ÀÀ");
-// utf8 : c3_80 c3_80
-
-var 变量: string = "变量"; // three bytes utf8
-assert(变量 == "变量");
-// utf8 : e5_8f_98 e9_87_8f
-
-// var 𠜎𠜱: string = "𠜎𠜱"; // four bytes utf8
-// assert(𠜎𠜱 == "𠜎𠜱");
-// utf8 : f0_a0_9c_8e f0_a0_9c_b1
+function testUnicodeEscape(): void {
+  let a = "\u{00c0}\u{00c8}";
+  assert(a == "ÀÈ");
+}
+testUnicodeEscape();
 
 __collect();
