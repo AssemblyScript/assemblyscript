@@ -30,43 +30,21 @@ class D implements I, J {
 let d = new D();
 assert(d.foo() == 3);
 
-interface M {
-  a: i32;
-}
-
-interface N {
-  a: i32;
-}
-
-class E implements M, N {
-  a: i32 = 4;
+class E extends D implements I {
 }
 
 let e = new E();
-assert(e.a == 4);
+assert(e.foo() == 3);
 
-class F extends E implements M {
-}
-
-let f = new F();
-assert(f.a = 4);
-
-class G extends E implements M {
-  a: i32 = 5;
-}
-
-let g = new G();
-assert(g.a = 5);
-
-class H extends D implements I {
-}
-
-let h = new H();
-assert(h.foo() == 3);
-
-class K extends D implements I {
+class F extends D implements I {
   foo(): i32 { return 4; }
 }
 
-let k = new K();
-assert(k.foo() == 4);
+let f = new F();
+assert(f.foo() == 4);
+
+let g:D = new F();
+assert(g.foo() == 4);
+
+let h:I = new F();
+assert(h.foo() == 4);
