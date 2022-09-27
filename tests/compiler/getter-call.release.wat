@@ -1360,12 +1360,12 @@
   i32.const 1456
   i32.load $0
   call_indirect $0 (type $none_=>_i32)
-  local.set $0
+  drop
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
+  i32.const 42
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)
