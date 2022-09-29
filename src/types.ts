@@ -6,7 +6,8 @@
 import {
   Class,
   Program,
-  DecoratorFlags
+  DecoratorFlags,
+  ElementKind
 } from "./program";
 
 import {
@@ -469,6 +470,26 @@ export class Type {
       } else if (this.isVectorValue) {
         if (target.isVectorValue) {
           return this.size == target.size;
+        }
+      }
+    }
+    return false;
+  }
+
+  /** Tests if a value of this class is compatible to the target class / interface in the multi extends / implements situation. */
+  isInheritCompatibleTo(target: Type | null): bool {
+    if (target) {
+      if (this.isInternalReference && target.isInternalReference && this.isManaged && target.isManaged) {
+        let thisClass = this.getClass();
+        let targetClass = target.getClass();
+        if (thisClass && targetClass) {
+          // extends ThisClass implements TargetInterface
+          // implements ThisInterface, TargetInterface
+          if (thisClass.kind == ElementKind.CLASS || thisClass.kind == ElementKind.INTERFACE) {
+            if (targetClass.kind == ElementKind.INTERFACE) {
+              return true;
+            }
+          }
         }
       }
     }
@@ -941,7 +962,7 @@ export class Signature {
     } else {
       // check kind of `this` type
       if (thisThisType) {
-        if (!targetThisType || thisThisType.kind != targetThisType.kind || thisThisType.isReference != targetThisType.isReference) {
+        if (!thisThisType.isInheritCompatibleTo(targetThisType)) {
           return false;
         }
       } else if (targetThisType) {
