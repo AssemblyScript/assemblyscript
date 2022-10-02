@@ -2218,7 +2218,7 @@
    unreachable
   end
  )
- (func $std/new/AClass#constructor (param $0 i32) (param $1 f32) (result i32)
+ (func $std/new/AClass#constructor (param $this i32) (param $value f32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2228,32 +2228,32 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.const 3
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
+  local.get $this
   i32.const 1
   call $std/new/AClass#set:aField
-  local.get $0
+  local.get $this
   f32.const 2
   call $std/new/AClass#set:anotherField
-  local.get $0
-  local.get $0
+  local.get $this
+  local.get $this
   i32.load $0
   i32.const 1
   i32.add
   call $std/new/AClass#set:aField
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $value
   call $std/new/AClass#set:anotherField
-  local.get $0
+  local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4

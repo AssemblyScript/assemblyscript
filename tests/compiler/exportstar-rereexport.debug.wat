@@ -2448,7 +2448,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $exports/Car#constructor (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor (param $this i32) (param $doors i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2458,23 +2458,23 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 3
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $doors
   call $exports/Car#set:doors
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $doors
   call $exports/Car#set:doors
-  local.get $0
+  local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4

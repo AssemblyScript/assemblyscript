@@ -48,7 +48,7 @@
  (data (i32.const 1452) "\1c")
  (data (i32.const 1464) "\03\00\00\00\08\00\00\00\0c")
  (data (i32.const 1484) "\1c")
- (data (i32.const 1496) "\07\00\00\00\08\00\00\00\0d")
+ (data (i32.const 1496) "\07\00\00\00\08\00\00\00\r")
  (data (i32.const 1516) "\1c")
  (data (i32.const 1528) "\03\00\00\00\08\00\00\00\0e")
  (data (i32.const 1548) "\1c")
@@ -319,11 +319,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -583,11 +583,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz

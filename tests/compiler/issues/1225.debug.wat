@@ -2309,7 +2309,7 @@
    unreachable
   end
  )
- (func $issues/1225/X#constructor (param $0 i32) (param $1 i32) (result i32)
+ (func $issues/1225/X#constructor (param $this i32) (param $x i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2319,33 +2319,33 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 12
    i32.const 3
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $x
   call $issues/1225/X#set:x
-  local.get $0
+  local.get $this
   i32.const 0
   call $issues/1225/X#set:normal
-  local.get $0
+  local.get $this
   i32.const 0
   call $issues/1225/X#set:viaThis
-  local.get $0
-  local.get $0
+  local.get $this
+  local.get $this
   i32.load $0 offset=8
   call $issues/1225/X#set:viaThis
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $x
   call $issues/1225/X#set:normal
-  local.get $0
+  local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4

@@ -130,27 +130,27 @@
  (data (i32.const 3260) "\1c")
  (data (i32.const 3272) "\0c\00\00\00\08\00\00\00\02")
  (data (i32.const 3292) "\1c")
- (data (i32.const 3304) "\0d\00\00\00\08\00\00\00\03")
+ (data (i32.const 3304) "\r\00\00\00\08\00\00\00\03")
  (data (i32.const 3324) "\1c")
  (data (i32.const 3336) "\0e\00\00\00\08\00\00\00\04")
  (data (i32.const 3356) "\1c")
  (data (i32.const 3368) "\0e\00\00\00\08\00\00\00\05")
  (data (i32.const 3388) "\1c")
- (data (i32.const 3400) "\0d\00\00\00\08\00\00\00\06")
+ (data (i32.const 3400) "\r\00\00\00\08\00\00\00\06")
  (data (i32.const 3420) "\1c")
- (data (i32.const 3432) "\0d\00\00\00\08\00\00\00\07")
+ (data (i32.const 3432) "\r\00\00\00\08\00\00\00\07")
  (data (i32.const 3452) "\1c")
- (data (i32.const 3464) "\0d\00\00\00\08\00\00\00\08")
+ (data (i32.const 3464) "\r\00\00\00\08\00\00\00\08")
  (data (i32.const 3484) "\1c")
- (data (i32.const 3496) "\0d\00\00\00\08\00\00\00\t")
+ (data (i32.const 3496) "\r\00\00\00\08\00\00\00\t")
  (data (i32.const 3516) "\1c")
- (data (i32.const 3528) "\0d\00\00\00\08\00\00\00\n")
+ (data (i32.const 3528) "\r\00\00\00\08\00\00\00\n")
  (data (i32.const 3548) "\1c")
- (data (i32.const 3560) "\0d\00\00\00\08\00\00\00\0b")
+ (data (i32.const 3560) "\r\00\00\00\08\00\00\00\0b")
  (data (i32.const 3580) "\1c")
- (data (i32.const 3592) "\0d\00\00\00\08\00\00\00\0c")
+ (data (i32.const 3592) "\r\00\00\00\08\00\00\00\0c")
  (data (i32.const 3612) "\1c")
- (data (i32.const 3624) "\0d\00\00\00\08\00\00\00\0d")
+ (data (i32.const 3624) "\r\00\00\00\08\00\00\00\r")
  (data (i32.const 3644) ",")
  (data (i32.const 3656) "\03\00\00\00\10\00\00\00\00\00\00\00\03\00\00\00\02\00\00\00\01")
  (data (i32.const 3692) "\1c")
@@ -445,11 +445,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -709,11 +709,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -2633,11 +2633,11 @@
   if
    local.get $0
    i32.const 0
-   local.get $9
    i32.const 31
    local.get $9
+   local.get $9
    i32.const 31
-   i32.lt_s
+   i32.ge_s
    select
    local.tee $7
    local.get $1
@@ -4060,12 +4060,8 @@
       i32.add
       f64.load $0
       local.tee $3
-      f64.const nan:0x8000000000000
-      f64.eq
-      local.get $3
       local.get $3
       f64.ne
-      i32.or
       br_if $__inlined_func$~lib/staticarray/StaticArray<f64>#includes
       drop
       local.get $1
@@ -4126,12 +4122,8 @@
       i32.add
       f32.load $0
       local.tee $4
-      f32.const nan:0x400000
-      f32.eq
-      local.get $4
       local.get $4
       f32.ne
-      i32.or
       br_if $__inlined_func$~lib/staticarray/StaticArray<f32>#includes
       drop
       local.get $1
@@ -4390,10 +4382,6 @@
     i32.shr_u
     local.tee $1
     i32.eqz
-    local.get $1
-    i32.const -3
-    i32.le_s
-    i32.or
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#indexOf38
     local.get $1
     i32.const 3
@@ -4595,13 +4583,13 @@
     local.tee $0
     i32.eqz
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf7
+    i32.const 3
     local.get $0
     i32.const 1
     i32.sub
-    i32.const 3
     local.get $0
     i32.const 3
-    i32.le_u
+    i32.gt_u
     select
     local.set $1
     loop $while-continue|044
@@ -4651,13 +4639,13 @@
     local.tee $0
     i32.eqz
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf45
+    i32.const 2
     local.get $0
     i32.const 1
     i32.sub
-    i32.const 2
     local.get $0
     i32.const 2
-    i32.le_u
+    i32.gt_u
     select
     local.set $1
     loop $while-continue|048
@@ -5520,21 +5508,21 @@
         unreachable
        end
        block $__inlined_func$~lib/rt/itcms/__renew
+        i32.const 1073741820
         local.get $0
         i32.const 1
         i32.shl
         local.tee $0
-        i32.const 1073741820
         local.get $0
         i32.const 1073741820
-        i32.lt_u
+        i32.ge_u
         select
         local.tee $0
-        local.get $11
         i32.const 8
         local.get $11
+        local.get $11
         i32.const 8
-        i32.gt_u
+        i32.le_u
         select
         i32.const 2
         i32.shl
@@ -7107,10 +7095,8 @@
    i32.const 20
    i32.sub
    i32.load $0 offset=16
-   i32.const 1
-   i32.shr_u
-   i32.const 1
-   i32.shl
+   i32.const -2
+   i32.and
    memory.copy $0 $0
   end
   global.get $~lib/memory/__stack_pointer

@@ -266,11 +266,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -530,11 +530,11 @@
    i32.shr_u
   else
    i32.const 31
-   local.get $2
    i32.const 1073741820
    local.get $2
+   local.get $2
    i32.const 1073741820
-   i32.lt_u
+   i32.ge_u
    select
    local.tee $2
    i32.clz
@@ -1915,7 +1915,6 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store $0
-   i32.const 0
    i32.const 5
    i32.const 1052
    i32.load $0
@@ -1927,19 +1926,20 @@
    i32.gt_u
    select
    local.tee $1
+   i32.const 0
    local.get $1
    i32.const 0
-   i32.gt_s
+   i32.le_s
    select
    i32.const 1
    i32.shl
    local.set $3
    block $__inlined_func$~lib/string/String#substring
-    i32.const 0
-    local.get $1
     local.get $1
     i32.const 0
-    i32.lt_s
+    local.get $1
+    i32.const 0
+    i32.ge_s
     select
     i32.const 1
     i32.shl

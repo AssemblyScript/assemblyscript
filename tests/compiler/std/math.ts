@@ -2695,8 +2695,8 @@ assert(NativeMath.pow(+Infinity, 0.0) == 1.0);
 assert(NativeMath.pow(-Infinity, 0.0) == 1.0);
 assert(NativeMath.pow(NaN, 0.0) == 1.0);
 
-assert(NativeMath.pow(+0.0,+1.0) == +0.0);
-assert(NativeMath.pow(-0.0,+1.0) == -0.0);
+assert(Object.is(NativeMath.pow(+0.0,+1.0), +0.0));
+assert(Object.is(NativeMath.pow(-0.0,+1.0), -0.0));
 assert(NativeMath.pow(-1.0, 1.0) == -1.0);
 assert(NativeMath.pow(+Infinity, 1.0) == +Infinity);
 assert(NativeMath.pow(-Infinity, 1.0) == -Infinity);
@@ -2707,8 +2707,8 @@ assert(NativeMath.pow(-0.0,-1.0) == -Infinity);
 assert(NativeMath.pow(-1.0,-1.0) == -1.0);
 assert(NativeMath.pow( 0.5,-1.0) == +2.0);
 assert(NativeMath.pow( 1.0,-1.0) == +1.0);
-assert(NativeMath.pow(+Infinity,-1.0) == +0.0);
-assert(NativeMath.pow(-Infinity,-1.0) == -0.0);
+assert(Object.is(NativeMath.pow(+Infinity,-1.0), +0.0));
+assert(Object.is(NativeMath.pow(-Infinity,-1.0), -0.0));
 assert(isNaN(NativeMath.pow(NaN,-1.0)));
 
 assert(NativeMath.pow(+0.0, 2.0) == +0.0);

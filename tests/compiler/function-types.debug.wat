@@ -259,7 +259,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $function-types/makeAndAdd<i32>@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd<i32>@varargs (param $a i32) (param $b i32) (param $adder i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -281,12 +281,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    call $function-types/makeAdder<i32>
-   local.tee $2
+   local.tee $adder
    i32.store $0
   end
-  local.get $0
-  local.get $1
-  local.get $2
+  local.get $a
+  local.get $b
+  local.get $adder
   call $function-types/makeAndAdd<i32>
   local.set $3
   global.get $~lib/memory/__stack_pointer

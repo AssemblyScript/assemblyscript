@@ -15,7 +15,7 @@ var src = fs.readFileSync(srcfile, "utf8")
       if (val.startsWith("binaryen.")) {
         return $0;
       }
-      var match = val.match(/\b(_(?:Binaryen|Relooper|ExpressionRunner)\w+)\b/);
+      var match = val.match(/\b(_(?:Binaryen|Relooper|ExpressionRunner|TypeBuilder)\w+)\b/);
       if (match) {
         let fn = match[1];
         if (typeof binaryen[fn] !== "function") throw Error("API mismatch on '" + fn + "': Is Binaryen up to date?");

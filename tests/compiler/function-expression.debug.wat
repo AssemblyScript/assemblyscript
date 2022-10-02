@@ -48,7 +48,7 @@
  (data (i32.const 364) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 396) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\0b\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 428) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 460) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 460) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\r\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 492) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\0f\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 556) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -2603,8 +2603,8 @@
   end
  )
  (func $function-expression/testField
-  (local $0 i32)
-  (local $1 i32)
+  (local $fieldInst i32)
+  (local $var$1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -2626,21 +2626,21 @@
   i32.store $0
   local.get $2
   call $function-expression/FieldClass#constructor
-  local.tee $0
+  local.tee $fieldInst
   i32.store $0 offset=4
   i32.const 1
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   global.set $~argumentsLength
-  local.get $0
+  local.get $fieldInst
   i32.load $0
   i32.load $0
   call_indirect $0 (type $none_=>_i32)
-  local.tee $1
+  local.tee $var$1
   i32.store $0 offset=8
   i32.const 1
   global.set $~argumentsLength
-  local.get $1
+  local.get $var$1
   i32.load $0
   call_indirect $0 (type $i32_=>_i32)
   i32.const 25
@@ -2872,7 +2872,7 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $function-expression/testGlobal~anonymous|0 (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2884,9 +2884,9 @@
   i32.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 448
-  local.tee $0
+  local.tee $var$0
   i32.store $0
-  local.get $0
+  local.get $var$0
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2895,7 +2895,7 @@
   local.get $1
  )
  (func $function-expression/testLocal~anonymous|0 (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2907,9 +2907,9 @@
   i32.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 512
-  local.tee $0
+  local.tee $var$0
   i32.store $0
-  local.get $0
+  local.get $var$0
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2917,7 +2917,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $function-expression/FieldClass#constructor (param $0 i32) (param $1 i32) (result i32)
+ (func $function-expression/FieldClass#constructor (param $this i32) (param $fieldFunc i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2927,20 +2927,20 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $0
+  local.get $this
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.const 8
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $this
    i32.store $0
   end
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $fieldFunc
   call $function-expression/FieldClass#set:fieldFunc
-  local.get $0
+  local.get $this
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2949,7 +2949,7 @@
   local.get $2
  )
  (func $function-expression/testField~anonymous|0 (result i32)
-  (local $0 i32)
+  (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2961,9 +2961,9 @@
   i32.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 976
-  local.tee $0
+  local.tee $var$0
   i32.store $0
-  local.get $0
+  local.get $var$0
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4

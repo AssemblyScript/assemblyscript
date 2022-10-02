@@ -28,13 +28,6 @@ export namespace process {
     process_binding.exit(code);
   }
 
-  // @ts-ignore: decorator
-  @lazy export const stdin = changetype<ReadableStream>(0);
-  // @ts-ignore: decorator
-  @lazy export const stdout = changetype<WritableStream>(1);
-  // @ts-ignore: decorator
-  @lazy export const stderr = changetype<WritableStream>(2);
-
   export function time(): i64 {
     return Date_binding.now();
   }
