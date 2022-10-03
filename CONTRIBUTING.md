@@ -6,7 +6,7 @@ The following is a set of guidelines for contributing to AssemblyScript and its 
 Code of Conduct
 ---------------
 
-This project and everyone participating in it is governed by the [AssemblyScript Code of Conduct](https://github.com/AssemblyScript/.github/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+This project and everyone participating in it is governed by the [AssemblyScript Code of Conduct](https://github.com/AssemblyScript/.github/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
 Filing Issues
 -------------
