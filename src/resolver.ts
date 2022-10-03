@@ -3429,6 +3429,19 @@ export class Resolver extends DiagnosticEmitter {
 
     // Fully resolve operator overloads (don't have type parameters on their own)
     var overloadPrototypes = prototype.overloadPrototypes;
+
+    // check duplicate overload prototypes
+    // TODO: for (let overloadPrototype of overloadPrototypes.values()) {
+    for (let _values = Map_values(overloadPrototypes), i = 0, k = _values.length; i < k - 1; ++i) {
+      let overloadPrototype = unchecked(_values[i]);
+      let duplicateIndex = _values.indexOf(overloadPrototype, i + 1);
+      if (duplicateIndex != -1) {
+        if (reportMode == ReportMode.REPORT) {
+          console.log("\n>>> FOUND Duplicate\n", overloadPrototype.internalName + "\n");
+        }
+      }
+    }
+
     // TODO: for (let [overloadKind, overloadPrototype] of overloadPrototypes) {
     for (let _keys = Map_keys(overloadPrototypes), i = 0, k = _keys.length; i < k; ++i) {
       let overloadKind = unchecked(_keys[i]);
@@ -3698,13 +3711,14 @@ export class Resolver extends DiagnosticEmitter {
         }
         case OperatorKind.INDEXED_SET:
         case OperatorKind.UNCHECKED_INDEXED_SET: {
-          // verify 'void' return type for indexed set operators
-          if (returnType != Type.void) {
+          // verify 'void' or 'this' return type for indexed set operators
+          if (returnType != Type.void && returnType != instance.type) {
             this.errorRelated(
-              DiagnosticCode.Only_0_accepted_for_return_type_of_1_operators,
+              DiagnosticCode.Only_0_or_1_accepted_for_return_type_of_2_operators,
               overloadPrototype.functionTypeNode.returnType.range,
               arg.range,
               CommonNames.void_,
+              CommonNames.this_,
               "indexed set"
             );
           }

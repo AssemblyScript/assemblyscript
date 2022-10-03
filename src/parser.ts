@@ -781,7 +781,13 @@ export class Parser extends DiagnosticEmitter {
               }
             }
             if (isSignature) {
-              let param = Node.createParameter(kind, name, Node.createOmittedType(tn.range(tn.pos)), null, tn.range(paramStart, tn.pos));
+              let param = Node.createParameter(
+                kind,
+                name,
+                Node.createOmittedType(tn.range(tn.pos)),
+                null,
+                tn.range(paramStart, tn.pos)
+              );
               if (!parameters) parameters = [ param ];
               else parameters.push(param);
               this.error(

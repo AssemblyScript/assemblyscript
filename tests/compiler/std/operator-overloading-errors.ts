@@ -40,6 +40,11 @@ class B {
   // Error: mismatched LHS type of argument with instance type
   @operator.postfix("++") static postInc(a: i32): B { return new B; }
   @operator.binary("+") static add(a: i32, b: i32): i32 { return a + b; }
+
+  // Error: several unary overload operators for same method
+  @operator.postfix("--")
+  @operator.prefix("--")
+  preDec(): B { return new B; }
 }
 
 var b = new B;

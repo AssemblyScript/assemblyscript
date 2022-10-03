@@ -107,7 +107,7 @@ export class Map<K,V> {
   }
 
   @operator("[]=")
-  set(key: K, value: V): void {
+  set(key: K, value: V): this {
     var hashCode = HASH<K>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (entry) {
@@ -142,6 +142,7 @@ export class Map<K,V> {
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
     }
+    return this;
   }
 
   delete(key: K): bool {
