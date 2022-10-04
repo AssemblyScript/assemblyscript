@@ -66,10 +66,10 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 25296))
- (global $~lib/memory/__data_end i32 (i32.const 25340))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 41724))
- (global $~lib/memory/__heap_base i32 (i32.const 41724))
+ (global $~lib/rt/__rtti_base i32 (i32.const 25392))
+ (global $~lib/memory/__data_end i32 (i32.const 25436))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 41820))
+ (global $~lib/memory/__heap_base i32 (i32.const 41820))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 76) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00\00\00")
@@ -539,7 +539,10 @@
  (data (i32.const 25180) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00W\00o\00r\00l\00d\00\00\00")
  (data (i32.const 25212) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00H\00e\00l\00l\00o\00 \00W\00o\00r\00l\00d\00\00\00\00\00\00\00")
  (data (i32.const 25260) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00b\00a\00r\00\00\00\00\00\00\00")
- (data (i32.const 25296) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00\02A\00\00\00\00\00\00")
+ (data (i32.const 25292) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00\c0\00\c8\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 25324) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00\d8S\cf\91\00\00\00\00\00\00\00\00")
+ (data (i32.const 25356) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00A\d8\0e\dfA\d81\df\00\00\00\00")
+ (data (i32.const 25392) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00\02A\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "getString" (func $std/string/getString))
@@ -8102,8 +8105,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 41744
-   i32.const 41792
+   i32.const 41840
+   i32.const 41888
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -24234,6 +24237,94 @@
    i32.const 0
    i32.const 96
    i32.const 805
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 25312
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  i32.const 25312
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0 offset=4
+  local.get $4
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 816
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 25312
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  i32.const 25312
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0 offset=4
+  local.get $4
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 817
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 25344
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  i32.const 25344
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0 offset=4
+  local.get $4
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 818
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 25376
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  i32.const 25376
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0 offset=4
+  local.get $4
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 819
    i32.const 1
    call $~lib/builtins/abort
    unreachable

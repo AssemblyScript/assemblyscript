@@ -62,6 +62,7 @@ function test_funcs(): void {
   assert(func_ii(43) == 3);
   assert(func_ii_opt() == 0);
   assert(func_ii_opt(1) == 1);
+  assert(func_ii_opt(func_ii_opt(1)) == 1);
   assert(func_ii_loc(2) == 3);
   assert(func_ii_loc(3) == 4);
   func_iv(0);
