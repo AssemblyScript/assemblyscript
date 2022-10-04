@@ -3437,7 +3437,10 @@ export class Resolver extends DiagnosticEmitter {
       let duplicateIndex = _values.indexOf(overloadPrototype, i + 1);
       if (duplicateIndex != -1) {
         if (reportMode == ReportMode.REPORT) {
-          console.log("\n>>> FOUND Duplicate\n", overloadPrototype.internalName + "\n");
+          this.error(
+            DiagnosticCode.Duplicate_decorator,
+            overloadPrototype.declaration.range
+          );
         }
       }
     }
