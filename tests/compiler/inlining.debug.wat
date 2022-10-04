@@ -153,6 +153,14 @@
   i32.const 1
   i32.eq
   drop
+  i32.const 1
+  local.set $var$2
+  local.get $var$2
+  local.set $var$2
+  local.get $var$2
+  i32.const 1
+  i32.eq
+  drop
   i32.const 2
   local.set $var$2
   local.get $var$2
@@ -203,7 +211,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 68
+   i32.const 69
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -235,7 +243,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 71
+   i32.const 72
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2416,7 +2424,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 95
+   i32.const 96
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2429,7 +2437,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 96
+   i32.const 97
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2442,7 +2450,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 97
+   i32.const 98
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2455,7 +2463,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 98
+   i32.const 99
    i32.const 3
    call $~lib/builtins/abort
    unreachable
