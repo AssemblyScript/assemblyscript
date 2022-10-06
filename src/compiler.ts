@@ -7224,6 +7224,7 @@ export class Compiler extends DiagnosticEmitter {
               DiagnosticCode._0_modifier_cannot_be_used_here,
               indexedGet.identifierNode.range, CommonNames.static_
             );
+            this.currentType = indexedGet.signature.returnType;
             return module.unreachable();
           }
 
@@ -7235,6 +7236,7 @@ export class Compiler extends DiagnosticEmitter {
               "1",
               numParams.toString()
             );
+            this.currentType = indexedGet.signature.returnType;
             return this.module.unreachable();
           }
 
