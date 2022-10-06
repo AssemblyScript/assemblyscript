@@ -5546,6 +5546,7 @@ export class Compiler extends DiagnosticEmitter {
         expectedNumParams.toString(),
         numParams.toString()
       );
+      this.currentType = operatorInstance.signature.returnType;
       return this.module.unreachable();
     }
     return this.makeCallDirect(operatorInstance, [ valueExpr ], reportNode, false);
@@ -5573,6 +5574,7 @@ export class Compiler extends DiagnosticEmitter {
           "1",
           numParams.toString()
         );
+        this.currentType = operatorInstance.signature.returnType;
         return this.module.unreachable();
       }
       leftExpr = this.convertExpression(leftExpr, leftType, assert(signature.thisType), false, left);
@@ -5586,6 +5588,7 @@ export class Compiler extends DiagnosticEmitter {
           "2",
           numParams.toString()
         );
+        this.currentType = operatorInstance.signature.returnType;
         return this.module.unreachable();
       }
       leftExpr = this.convertExpression(leftExpr, leftType, parameterTypes[0], false, left);
@@ -5678,6 +5681,7 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode._0_modifier_cannot_be_used_here,
             indexedSet.identifierNode.range, CommonNames.static_
           );
+          this.currentType = indexedSet.signature.returnType;
           return this.module.unreachable();
         }
         let parameterTypes = indexedSet.signature.parameterTypes;
@@ -5690,6 +5694,7 @@ export class Compiler extends DiagnosticEmitter {
             "2",
             numParams.toString()
           );
+          this.currentType = indexedSet.signature.returnType;
           return this.module.unreachable();
         }
 
@@ -10028,7 +10033,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
-      case TypeKind.DATAREF: 
+      case TypeKind.DATAREF:
       case TypeKind.STRINGREF:
       case TypeKind.STRINGVIEW_WTF8:
       case TypeKind.STRINGVIEW_WTF16:

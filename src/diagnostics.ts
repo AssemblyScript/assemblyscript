@@ -67,7 +67,15 @@ export class Range {
     );
   }
 
-  extendBy(delta: i32): Range {
+  expandStart(delta: i32): Range {
+    let start = this.start + delta;
+    let end = start > this.end ? start : this.end;
+    let range = new Range(start, end);
+    range.source = this.source;
+    return range;
+  }
+
+  expandEnd(delta: i32): Range {
     let range = new Range(this.start, this.end + delta);
     range.source = this.source;
     return range;

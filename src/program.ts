@@ -3007,7 +3007,7 @@ export abstract class DeclaredElement extends Element {
       let numParams = parameters.length;
       return numParams
         ? Range.join(parameters[0].range, parameters[numParams - 1].range)
-        : signatureNode.range.atStart.extendBy(2);
+        : signatureNode.range.atStart.expandEnd(2);
     }
     return declaration.name.range;
   }
