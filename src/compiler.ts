@@ -6109,6 +6109,38 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
+
+      case ElementKind.IndexSignature: {
+        const functionExpr = expression.expression;
+        const type = this.resolver.getTypeOfElement(target);
+        assert(functionExpr.kind == NodeKind.ElementAccess);
+
+        if (!type) {
+          this.error(
+            DiagnosticCode.Expression_cannot_be_represented_by_a_type,
+            functionExpr.range
+          );
+          return module.unreachable();
+        }
+
+        if (!type.signatureReference) {
+          this.error(
+            DiagnosticCode.Type_0_has_no_call_signatures,
+            functionExpr.range,
+            type.toString()
+          );
+          return module.unreachable();
+        }
+
+        signature = type.signatureReference;
+        functionArg = this.compileElementAccessExpression(
+          <ElementAccessExpression>functionExpr,
+          contextualType,
+          Constraints.ConvImplicit
+        );
+        break;
+      }
+
       case ElementKind.Class: {
         let classInstance = <Class>target;
         let typeArguments = classInstance.getTypeArgumentsTo(this.program.functionPrototype);
