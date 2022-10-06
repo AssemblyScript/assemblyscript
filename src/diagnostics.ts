@@ -68,7 +68,7 @@ export class Range {
   }
 
   expandStart(delta: i32): Range {
-    let start = this.start + delta;
+    let start = this.start - delta;
     let end = this.end;
     if (start < 0) start = 0;
     if (start > end) end = start;
