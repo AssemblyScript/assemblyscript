@@ -904,10 +904,6 @@ export class NamedTypeNode extends TypeNode {
     var typeArguments = this.typeArguments;
     return typeArguments != null && typeArguments.length > 0;
   }
-  /** Checks if this type node contains specific identifier name. */
-  contains(name: string): bool {
-    return this.name.identifier.text == name;
-  }
 }
 
 /** Represents a function type. */

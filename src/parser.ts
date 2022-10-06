@@ -3531,7 +3531,7 @@ export class Parser extends DiagnosticEmitter {
             if (res != -1) return res;
           }
         }
-        if ((<NamedTypeNode>type).contains(identifierName)) {
+        if ((<NamedTypeNode>type).name.identifier.text == identifierName) {
           return depth;
         }
         break;
