@@ -778,10 +778,8 @@ export abstract class Node {
 
   /** Tests if this node is a literal of a string kind. */
   get isStringLiteral(): bool {
-    if (this.kind == NodeKind.LITERAL) {
-      return (<LiteralExpression>changetype<Node>(this)).literalKind == LiteralKind.STRING;
-    }
-    return false;
+    return this.kind == NodeKind.LITERAL
+        && (<LiteralExpression>changetype<Node>(this)).literalKind == LiteralKind.STRING;
   }
 
   /** Tests whether this node is guaranteed to compile to a constant value. */
