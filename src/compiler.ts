@@ -6495,15 +6495,16 @@ export class Compiler extends DiagnosticEmitter {
           reportNode.range, instance.internalName
         );
       } else {
-        inlineStack.push(instance);
         let parameterTypes = signature.parameterTypes;
         assert(numArguments <= parameterTypes.length);
-        // compile argument expressions
+        // compile argument expressions *before* pushing to the inline stack
+        // otherwise, the arguments may not be inlined, e.g. `abc(abc(123))`
         let args = new Array<ExpressionRef>(numArguments);
         for (let i = 0; i < numArguments; ++i) {
           args[i] = this.compileExpression(argumentExpressions[i], parameterTypes[i], Constraints.CONV_IMPLICIT);
         }
         // make the inlined call
+        inlineStack.push(instance);
         let expr = this.makeCallInline(instance, args, thisArg, (constraints & Constraints.WILL_DROP) != 0);
         inlineStack.pop();
         return expr;

@@ -1,11 +1,11 @@
 (module
  (type $none_=>_none (func))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -19,7 +19,12 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $class-implements/a (mut i32) (i32.const 0))
  (global $class-implements/c (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17948))
+ (global $class-implements/d (mut i32) (i32.const 0))
+ (global $class-implements/e (mut i32) (i32.const 0))
+ (global $class-implements/f (mut i32) (i32.const 0))
+ (global $class-implements/g (mut i32) (i32.const 0))
+ (global $class-implements/h (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17980))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
@@ -33,8 +38,8 @@
  (data (i32.const 1384) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1436) "<")
  (data (i32.const 1448) "\01\00\00\00&\00\00\00c\00l\00a\00s\00s\00-\00i\00m\00p\00l\00e\00m\00e\00n\00t\00s\00.\00t\00s")
- (data (i32.const 1504) "\07\00\00\00 \00\00\00\00\00\00\00 ")
- (data (i32.const 1532) " \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\06\00\00\00 ")
+ (data (i32.const 1504) "\0b\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1532) " \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\07\00\00\00 \00\00\00\07")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -47,6 +52,36 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $class-implements/c
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+  global.get $class-implements/d
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+  global.get $class-implements/e
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+  global.get $class-implements/f
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+  global.get $class-implements/g
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+  global.get $class-implements/h
   local.tee $0
   if
    local.get $0
@@ -625,10 +660,10 @@
   if
    unreachable
   end
-  i32.const 17952
+  i32.const 17984
   i32.const 0
   i32.store $0
-  i32.const 19520
+  i32.const 19552
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -639,7 +674,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 17952
+    i32.const 17984
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -657,7 +692,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 17952
+      i32.const 17984
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -675,13 +710,13 @@
     br $for-loop|0
    end
   end
-  i32.const 17952
-  i32.const 19524
+  i32.const 17984
+  i32.const 19556
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 17952
+  i32.const 17984
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (result i32)
@@ -766,7 +801,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 17948
+      i32.const 17980
       i32.lt_u
       if
        local.get $0
@@ -866,7 +901,7 @@
      unreachable
     end
     local.get $0
-    i32.const 17948
+    i32.const 17980
     i32.lt_u
     if
      local.get $0
@@ -889,7 +924,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 17948
+     i32.const 17980
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1243,29 +1278,41 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
-   block $class-implements/B
-    block $class-implements/C
-     block $class-implements/I
-      block $class-implements/A
-       block $~lib/arraybuffer/ArrayBufferView
-        block $~lib/string/String
-         block $~lib/arraybuffer/ArrayBuffer
-          local.get $0
-          i32.const 8
-          i32.sub
-          i32.load $0
-          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class-implements/A $class-implements/I $class-implements/C $class-implements/B $invalid
+   block $class-implements/F
+    block $class-implements/E
+     block $class-implements/J
+      block $class-implements/D
+       block $class-implements/B
+        block $class-implements/C
+         block $class-implements/I
+          block $class-implements/A
+           block $~lib/arraybuffer/ArrayBufferView
+            block $~lib/string/String
+             block $~lib/arraybuffer/ArrayBuffer
+              local.get $0
+              i32.const 8
+              i32.sub
+              i32.load $0
+              br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $class-implements/A $class-implements/I $class-implements/C $class-implements/B $class-implements/D $class-implements/J $class-implements/E $class-implements/F $invalid
+             end
+             return
+            end
+            return
+           end
+           local.get $0
+           i32.load $0
+           local.tee $0
+           if
+            local.get $0
+            call $byn-split-outlined-A$~lib/rt/itcms/__visit
+           end
+           return
+          end
+          return
          end
          return
         end
         return
-       end
-       local.get $0
-       i32.load $0
-       local.tee $0
-       if
-        local.get $0
-        call $byn-split-outlined-A$~lib/rt/itcms/__visit
        end
        return
       end
@@ -1288,7 +1335,7 @@
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1564
+   i32.const 1596
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1298,7 +1345,7 @@
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 17948
+   i32.const 17980
    i32.sub
    i32.const 1
    i32.shr_u
@@ -1332,7 +1379,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1564
+   i32.const 1596
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1358,7 +1405,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1564
+   i32.const 1596
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1376,7 +1423,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1564
+   i32.const 1596
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1407,18 +1454,254 @@
    global.get $~lib/memory/__stack_pointer
    global.get $class-implements/c
    i32.store $0
+   i32.const 0
+   call $class-implements/D#constructor
+   global.set $class-implements/d
+   block $__inlined_func$class-implements/D#foo@virtual (result i32)
+    global.get $~lib/memory/__stack_pointer
+    global.get $class-implements/d
+    local.tee $0
+    i32.store $0
+    i32.const 4
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load $0
+    i32.const 10
+    i32.eq
+    br_if $__inlined_func$class-implements/D#foo@virtual
+    drop
+    i32.const 3
+   end
+   i32.const 3
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1456
+    i32.const 31
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1596
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   local.get $0
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   call $class-implements/D#constructor
+   local.tee $0
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
+   global.set $class-implements/e
+   block $__inlined_func$class-implements/D#foo@virtual9 (result i32)
+    global.get $~lib/memory/__stack_pointer
+    global.get $class-implements/e
+    local.tee $0
+    i32.store $0
+    i32.const 4
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load $0
+    i32.const 10
+    i32.eq
+    br_if $__inlined_func$class-implements/D#foo@virtual9
+    drop
+    i32.const 3
+   end
+   i32.const 3
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1456
+    i32.const 37
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   call $class-implements/F#constructor
+   global.set $class-implements/f
+   global.get $~lib/memory/__stack_pointer
+   global.get $class-implements/f
+   i32.store $0
+   call $class-implements/F#constructor
+   global.set $class-implements/g
+   block $__inlined_func$class-implements/D#foo@virtual15 (result i32)
+    global.get $~lib/memory/__stack_pointer
+    global.get $class-implements/g
+    local.tee $0
+    i32.store $0
+    i32.const 4
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load $0
+    i32.const 10
+    i32.eq
+    br_if $__inlined_func$class-implements/D#foo@virtual15
+    drop
+    i32.const 3
+   end
+   i32.const 4
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1456
+    i32.const 47
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   call $class-implements/F#constructor
+   global.set $class-implements/h
+   global.get $~lib/memory/__stack_pointer
+   global.get $class-implements/h
+   local.tee $0
+   i32.store $0
+   block $__inlined_func$class-implements/I#foo@virtual
+    block $default20
+     block $case3
+      block $case2
+       block $case1
+        block $case021
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load $0
+         i32.const 3
+         i32.sub
+         br_table $case021 $default20 $case1 $default20 $case2 $default20 $case2 $case3 $default20
+        end
+        i32.const 1
+        local.set $0
+        br $__inlined_func$class-implements/I#foo@virtual
+       end
+       i32.const 2
+       local.set $0
+       br $__inlined_func$class-implements/I#foo@virtual
+      end
+      i32.const 3
+      local.set $0
+      br $__inlined_func$class-implements/I#foo@virtual
+     end
+     i32.const 4
+     local.set $0
+     br $__inlined_func$class-implements/I#foo@virtual
+    end
+    unreachable
+   end
+   local.get $0
+   i32.const 4
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1456
+    i32.const 50
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 17968
-  i32.const 18016
+  i32.const 18000
+  i32.const 18048
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
   unreachable
+ )
+ (func $class-implements/D#constructor (param $0 i32) (result i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1596
+  i32.lt_s
+  if
+   i32.const 18000
+   i32.const 18048
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
+ )
+ (func $class-implements/F#constructor (result i32)
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1596
+  i32.lt_s
+  if
+   i32.const 18000
+   i32.const 18048
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $0
+  i32.const 0
+  i32.store $0
+  local.get $0
+  i32.const 10
+  call $~lib/rt/itcms/__new
+  local.tee $0
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $class-implements/D#constructor
+  local.tee $0
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)
@@ -1465,7 +1748,7 @@
      i32.load $0 offset=8
      i32.eqz
      local.get $1
-     i32.const 17948
+     i32.const 17980
      i32.lt_u
      i32.and
      i32.eqz
