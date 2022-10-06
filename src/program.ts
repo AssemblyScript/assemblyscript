@@ -3007,19 +3007,21 @@ export abstract class DeclaredElement extends Element {
   isCompatibleOverride(base: DeclaredElement): bool {
     var self: DeclaredElement = this; // TS
     var kind = self.kind;
+    var checkCompatibleOverride = false;
     if (kind == base.kind) {
       switch (kind) {
-        case ElementKind.FUNCTION: {
-          return (<Function>self).signature.isAssignableTo((<Function>base).signature);
-        }
         case ElementKind.FUNCTION_PROTOTYPE : {
           let selfFunction = this.program.resolver.resolveFunction(<FunctionPrototype>self, null);
+          if (!selfFunction) return false;
           let baseFunction = this.program.resolver.resolveFunction(<FunctionPrototype>base, null);
-          if (selfFunction && baseFunction) {
-            return selfFunction.signature.isAssignableTo(baseFunction.signature, true);
-          } else {
-            return false;
-          }
+          if (!baseFunction) return false;
+          self = selfFunction;
+          base = baseFunction;
+          checkCompatibleOverride = true;
+          // fall-through
+        }
+        case ElementKind.FUNCTION: {
+          return (<Function>self).signature.isAssignableTo((<Function>base).signature, checkCompatibleOverride);
         }
         case ElementKind.PROPERTY_PROTOTYPE: {
           let selfProperty = this.program.resolver.resolveProperty(<PropertyPrototype>self);
@@ -4330,6 +4332,11 @@ export class Class extends TypedElement {
       this.lookupOverload(OperatorKind.INDEXED_GET) != null ||
       this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) != null
     );
+  }
+
+  /** Tests if this is an interface. */
+  get isInterface(): bool {
+    return this.kind == ElementKind.INTERFACE;
   }
 
   /** Constructs a new class. */

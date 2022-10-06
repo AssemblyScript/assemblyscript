@@ -6,8 +6,7 @@
 import {
   Class,
   Program,
-  DecoratorFlags,
-  ElementKind
+  DecoratorFlags
 } from "./program";
 
 import {
@@ -476,26 +475,6 @@ export class Type {
     return false;
   }
 
-  /** Tests if a value of this class is compatible to the target class / interface in the multi extends / implements situation. */
-  isInheritCompatibleTo(target: Type | null): bool {
-    if (target) {
-      if (this.isInternalReference && target.isInternalReference && this.isManaged && target.isManaged) {
-        let thisClass = this.getClass();
-        let targetClass = target.getClass();
-        if (thisClass && targetClass) {
-          // extends ThisClass implements TargetInterface
-          // implements ThisInterface, TargetInterface
-          if (thisClass.kind == ElementKind.CLASS || thisClass.kind == ElementKind.INTERFACE) {
-            if (targetClass.kind == ElementKind.INTERFACE) {
-              return true;
-            }
-          }
-        }
-      }
-    }
-    return false;
-  }
-
   /** Tests if a value of this type is assignable to the target type excl. implicit conversion. */
   isStrictlyAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
     if (this.isReference) return this.isAssignableTo(target);
@@ -521,6 +500,27 @@ export class Type {
       );
     }
     return this.kind == target.kind;
+  }
+
+  /** Tests if this type can extend or implement the given type. */
+  canExtendOrImplement(base: Type): bool {
+    // Both must be class types
+    var thisClass = this.getClass();
+    var baseClass = base.getClass();
+    if (!thisClass || !baseClass) return false;
+    // Both types must be either managed or unmanaged
+    if (this.isManaged != base.isManaged) return false;
+    // Both types must be either internal or external references
+    if (this.isInternalReference) {
+      if (!base.isInternalReference) return false;
+    } else if (this.isExternalReference) {
+      if (!base.isExternalReference) return false;
+    } else {
+      return false;
+    }
+    // Interfaces can only extend interfaces
+    if (thisClass.isInterface && !baseClass.isInterface) return false;
+    return true;
   }
 
   /** Determines the common denominator type of two types, if there is any. */
@@ -962,7 +962,7 @@ export class Signature {
     } else {
       // check kind of `this` type
       if (thisThisType) {
-        if (!thisThisType.isInheritCompatibleTo(targetThisType)) {
+        if (!targetThisType || !thisThisType.canExtendOrImplement(targetThisType)) {
           return false;
         }
       } else if (targetThisType) {
