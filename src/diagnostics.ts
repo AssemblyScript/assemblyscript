@@ -69,14 +69,19 @@ export class Range {
 
   expandStart(delta: i32): Range {
     let start = this.start + delta;
-    let end = start > this.end ? start : this.end;
+    let end = this.end;
+    if (start < 0) start = 0;
+    if (start > end) end = start;
     let range = new Range(start, end);
     range.source = this.source;
     return range;
   }
 
   expandEnd(delta: i32): Range {
-    let range = new Range(this.start, this.end + delta);
+    let start = this.start;
+    let end = this.end + delta;
+    if (start > end) start = end;
+    let range = new Range(start, end);
     range.source = this.source;
     return range;
   }
