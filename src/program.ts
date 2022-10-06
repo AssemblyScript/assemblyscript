@@ -3007,10 +3007,30 @@ export abstract class DeclaredElement extends Element {
   isCompatibleOverride(base: DeclaredElement): bool {
     var self: DeclaredElement = this; // TS
     var kind = self.kind;
+    var checkCompatibleOverride = false;
     if (kind == base.kind) {
       switch (kind) {
+        case ElementKind.FUNCTION_PROTOTYPE : {
+          let selfFunction = this.program.resolver.resolveFunction(<FunctionPrototype>self, null);
+          if (!selfFunction) return false;
+          let baseFunction = this.program.resolver.resolveFunction(<FunctionPrototype>base, null);
+          if (!baseFunction) return false;
+          self = selfFunction;
+          base = baseFunction;
+          checkCompatibleOverride = true;
+          // fall-through
+        }
         case ElementKind.FUNCTION: {
-          return (<Function>self).signature.isAssignableTo((<Function>base).signature);
+          return (<Function>self).signature.isAssignableTo((<Function>base).signature, checkCompatibleOverride);
+        }
+        case ElementKind.PROPERTY_PROTOTYPE: {
+          let selfProperty = this.program.resolver.resolveProperty(<PropertyPrototype>self);
+          if (!selfProperty) return false;
+          let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
+          if (!baseProperty) return false;
+          self = selfProperty;
+          base = baseProperty;
+          // fall-through
         }
         case ElementKind.PROPERTY: {
           let selfProperty = <Property>self;
@@ -3018,7 +3038,7 @@ export abstract class DeclaredElement extends Element {
           let selfGetter = selfProperty.getterInstance;
           let baseGetter = baseProperty.getterInstance;
           if (selfGetter) {
-            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature)) {
+            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
               return false;
             }
           } else if (baseGetter) {
@@ -3027,7 +3047,7 @@ export abstract class DeclaredElement extends Element {
           let selfSetter = selfProperty.setterInstance;
           let baseSetter = baseProperty.setterInstance;
           if (selfSetter) {
-            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature)) {
+            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
               return false;
             }
           } else if (baseSetter) {
@@ -3035,6 +3055,10 @@ export abstract class DeclaredElement extends Element {
           }
           return true;
         }
+        // TODO: Implement properties overriding fields and vice-versa. Challenge is that anything overridable requires
+        // a virtual stub, but fields aren't functions. Either all (such) fields should become property-like, with a
+        // getter and a setter that can participate as a virtual stub, or it's allowed one-way, with fields integrated
+        // into what can be a virtual stub as get=load and set=store, then not necessarily with own accessor functions.
       }
     }
     return false;
@@ -4292,6 +4316,11 @@ export class Class extends TypedElement {
       this.lookupOverload(OperatorKind.INDEXED_GET) != null ||
       this.lookupOverload(OperatorKind.UNCHECKED_INDEXED_GET) != null
     );
+  }
+
+  /** Tests if this is an interface. */
+  get isInterface(): bool {
+    return this.kind == ElementKind.INTERFACE;
   }
 
   /** Constructs a new class. */
