@@ -3055,28 +3055,12 @@ export abstract class DeclaredElement extends Element {
           }
           return true;
         }
+        // TODO: Implement properties overriding fields and vice-versa. Challenge is that anything overridable requires
+        // a virtual stub, but fields aren't functions. Either all (such) fields should become property-like, with a
+        // getter and a setter that can participate as a virtual stub, or it's allowed one-way, with fields integrated
+        // into what can be a virtual stub as get=load and set=store, then not necessarily with own accessor functions.
       }
     }
-    // TODO: field and property cannot override each other, have different codegen
-    // if (self.kind == ElementKind.FIELD && base.kind == ElementKind.PROPERTY_PROTOTYPE) {
-    //   // class A implement I, class B extends A implement I
-    //   let selfField = <Field>self;
-    //   let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
-    //   if (!selfField.internalGetterSignature || !selfField.internalSetterSignature || !baseProperty) {
-    //     return false;
-    //   }
-    //   let baseGetterInsance = baseProperty.getterInstance;
-    //   let baseSetterInsance = baseProperty.setterInstance;
-    //   if (baseGetterInsance && baseSetterInsance) {
-    //     if (!selfField.internalGetterSignature.isAssignableTo(baseGetterInsance.signature)
-    //       || !selfField.internalSetterSignature.isAssignableTo(baseSetterInsance.signature)) {
-    //       return false;
-    //     }
-    //   } else {
-    //     return false;
-    //   }
-    //   return true;
-    // }
     return false;
   }
 }
