@@ -1,5 +1,7 @@
 // can use anyref as a parameter or return type
 
+/*
+
 export declare function external(a: externref): externref;
 export declare function somethingReal(): externref;
 export declare function somethingNull(): externref;
@@ -30,24 +32,24 @@ if (somethingNull()) {
 }
 
 // Explicit null checks (don’t work yet)
-/*
-if(somethingReal() != null) {
-  // nop
-} else {
-  assert(false);
-}
-if(somethingReal() == null) {
-  assert(false);
-}
-if(somethingNull() == null) {
-  // nop
-} else {
-  assert(false);
-}
-if(somethingNull() != null) {
-  assert(false);
-}
-*/
+
+// if(somethingReal() != null) {
+//   // nop
+// } else {
+//   assert(false);
+// }
+// if(somethingReal() == null) {
+//   assert(false);
+// }
+// if(somethingNull() == null) {
+//   // nop
+// } else {
+//   assert(false);
+// }
+// if(somethingNull() != null) {
+//   assert(false);
+// }
+
 
 // can represent and recognize 'null'
 
@@ -96,3 +98,5 @@ export const b: funcref = null;
 // non-null assertions
 export const nonNullFunc = otherFuncGlobal!;
 export const nonNullReal = somethingReal()!;
+
+*/

@@ -2726,7 +2726,7 @@
    global.get $class-overloading/b2
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A2#foo@virtual (result i32)
+   block $__inlined_func$class-overloading/A2#foo@virtual
     local.get $0
     i32.const 8
     i32.sub
@@ -2816,23 +2816,12 @@
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
-     i32.const 3
      br $__inlined_func$class-overloading/A2#foo@virtual
     end
     i32.const 1744
     i32.const 1552
     i32.const 198
     i32.const 5
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 3
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1552
-    i32.const 209
-    i32.const 1
     call $~lib/builtins/abort
     unreachable
    end

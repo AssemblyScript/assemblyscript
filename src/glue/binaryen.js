@@ -35,6 +35,10 @@ export const {
   _BinaryenHeapTypeStringviewWTF16,
   _BinaryenHeapTypeStringviewIter,
 
+  _BinaryenTypeNullref,
+  _BinaryenTypeNullExternref,
+  _BinaryenTypeNullFuncref,
+
   _BinaryenModuleCreate,
   _BinaryenModuleDispose,
 
