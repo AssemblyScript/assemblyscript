@@ -21,4 +21,11 @@ function testLet(): (value: i32) => i32 {
 }
 testLet();
 
+function testFuncParam($local0: (x: i32) => void): () => void {
+  return () => {
+    $local0(123); // closure 4
+  };
+}
+testFuncParam((x: i32) => {});
+
 ERROR("EOF");
