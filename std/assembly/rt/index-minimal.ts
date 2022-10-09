@@ -1,2 +1,2 @@
-import "rt/tlsf";
+import "rt/lm";
 import "rt/tcms";
