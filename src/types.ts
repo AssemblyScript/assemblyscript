@@ -502,6 +502,27 @@ export class Type {
     return this.kind == target.kind;
   }
 
+  /** Tests if this type can extend or implement the given type. */
+  canExtendOrImplement(base: Type): bool {
+    // Both must be class types
+    var thisClass = this.getClass();
+    var baseClass = base.getClass();
+    if (!thisClass || !baseClass) return false;
+    // Both types must be either managed or unmanaged
+    if (this.isManaged != base.isManaged) return false;
+    // Both types must be either internal or external references
+    if (this.isInternalReference) {
+      if (!base.isInternalReference) return false;
+    } else if (this.isExternalReference) {
+      if (!base.isExternalReference) return false;
+    } else {
+      return false;
+    }
+    // Interfaces can only extend interfaces
+    if (thisClass.isInterface && !baseClass.isInterface) return false;
+    return true;
+  }
+
   /** Determines the common denominator type of two types, if there is any. */
   static commonDenominator(left: Type, right: Type, signednessIsImportant: bool): Type | null {
     if (right.isAssignableTo(left, signednessIsImportant)) return left;
@@ -926,17 +947,27 @@ export class Signature {
   }
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
-  isAssignableTo(target: Signature): bool {
-
-    // check `this` type
+  isAssignableTo(target: Signature, checkCompatibleOverride: bool = false): bool {
     var thisThisType = this.thisType;
     var targetThisType = target.thisType;
-    if (thisThisType) {
-      if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) {
+    if (!checkCompatibleOverride) {
+      // check exact `this` type
+      if (thisThisType) {
+        if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) {
+          return false;
+        }
+      } else if (targetThisType) {
         return false;
       }
-    } else if (targetThisType) {
-      return false;
+    } else {
+      // check kind of `this` type
+      if (thisThisType) {
+        if (!targetThisType || !thisThisType.canExtendOrImplement(targetThisType)) {
+          return false;
+        }
+      } else if (targetThisType) {
+        return false;
+      }
     }
 
     // check rest parameter
