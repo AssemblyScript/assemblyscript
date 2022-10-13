@@ -11,8 +11,11 @@ import {
 
 import {
   TypeRef,
-  createType
+  createType,
+  HeapTypeRef
 } from "./module";
+
+import * as binaryen from "./glue/binaryen";
 
 /** Indicates the kind of a type. */
 export const enum TypeKind {
@@ -583,7 +586,7 @@ export class Type {
   /** Converts this type to its respective type reference. */
   toRef(): TypeRef {
     switch (this.kind) {
-      default: assert(false);
+      default: assert(false); // TODO: Concrete struct, array and signature types
       case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
@@ -598,17 +601,36 @@ export class Type {
       case TypeKind.F32:  return TypeRef.F32;
       case TypeKind.F64:  return TypeRef.F64;
       case TypeKind.V128: return TypeRef.V128;
-      // TODO: nullable/non-nullable refs have different type refs
-      case TypeKind.FUNCREF: return TypeRef.Funcref;
-      case TypeKind.EXTERNREF: return TypeRef.Externref;
-      case TypeKind.ANYREF: return TypeRef.Anyref;
-      case TypeKind.EQREF: return TypeRef.Eqref;
-      case TypeKind.I31REF: return TypeRef.I31ref;
-      case TypeKind.DATAREF: return TypeRef.Dataref;
-      case TypeKind.STRINGREF: return TypeRef.Stringref;
-      case TypeKind.STRINGVIEW_WTF8: return TypeRef.StringviewWTF8;
-      case TypeKind.STRINGVIEW_WTF16: return TypeRef.StringviewWTF16;
-      case TypeKind.STRINGVIEW_ITER: return TypeRef.StringviewIter;
+      case TypeKind.FUNCREF: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.EXTERNREF: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Ext, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.ANYREF: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.EQREF: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.I31REF: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.DATAREF: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.STRINGREF: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.STRINGVIEW_WTF8: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF8, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.STRINGVIEW_WTF16: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF16, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.STRINGVIEW_ITER: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewIter, this.is(TypeFlags.NULLABLE));
+      }
       case TypeKind.VOID: return TypeRef.None;
     }
   }
