@@ -9965,8 +9965,14 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.STRINGREF:
       case TypeKind.STRINGVIEW_WTF8:
       case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER: return module.ref_null(type.toRef());
-      case TypeKind.I31REF: return module.i31_new(module.i32(0));
+      case TypeKind.STRINGVIEW_ITER: {
+        // TODO: what if not nullable?
+        return module.ref_null(type.toRef());
+      }
+      case TypeKind.I31REF: {
+        if (type.is(TypeFlags.NULLABLE)) return module.ref_null(type.toRef());
+        return module.i31_new(module.i32(0));
+      }
     }
   }
 
