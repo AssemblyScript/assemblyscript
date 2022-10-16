@@ -12,7 +12,8 @@ import {
 import {
   TypeRef,
   createType,
-  HeapTypeRef
+  HeapTypeRef,
+  ensureType
 } from "./module";
 
 import * as binaryen from "./glue/binaryen";
@@ -139,6 +140,8 @@ export class Type {
   private _nonNullableType: Type | null = null;
   /** Respective nullable type, if non-nullable. */
   private _nullableType: Type | null = null;
+  /** Cached Binaryen type reference. */
+  ref: TypeRef = 0;
 
   /** Constructs a new resolved type. */
   constructor(kind: TypeKind, flags: TypeFlags, size: u32) {
@@ -586,7 +589,6 @@ export class Type {
   /** Converts this type to its respective type reference. */
   toRef(): TypeRef {
     switch (this.kind) {
-      default: assert(false); // TODO: Concrete struct, array and signature types
       case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
@@ -633,6 +635,9 @@ export class Type {
       }
       case TypeKind.VOID: return TypeRef.None;
     }
+    // TODO: not used yet
+    assert(false);
+    return ensureType(this);
   }
 
   // Types
