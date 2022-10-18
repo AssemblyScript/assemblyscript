@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_=>_none (func_subtype (param i32) func))
  (global $scoped/aGlobal (mut i32) (i32.const 1))
  (global $scoped/aConstant i32 (i32.const 3))
  (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
@@ -12,14 +12,14 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $scoped/fn (param $c i32)
+ (func $scoped/fn (type $i32_=>_none) (param $c i32)
   (local $var$1 i32)
   i32.const 0
   local.set $var$1
   local.get $c
   local.set $var$1
  )
- (func $start:scoped
+ (func $start:scoped (type $none_=>_none)
   (local $anotherStartFunctionLocal i32)
   (local $var$1 i32)
   (local $var$2 i32)
@@ -67,7 +67,7 @@
   i32.const 42
   call $scoped/fn
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:scoped
  )
 )

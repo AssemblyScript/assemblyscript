@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (global $exports-lazy/lazyGlobalUsed i32 (i32.const 64))
  (global $exports-lazy/lazyGlobalUnused i32 (i32.const 144))
  (global $~lib/memory/__data_end i32 (i32.const 172))
@@ -16,20 +16,20 @@
  (export "lazyGlobalUsed" (global $exports-lazy/lazyGlobalUsed))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:exports-lazy
+ (func $start:exports-lazy (type $none_=>_none)
   (local $var$0 i32)
   (local $var$1 i32)
   global.get $exports-lazy/lazyGlobalUsed
   drop
   call $exports-lazy/lazyFuncUsed
  )
- (func $exports-lazy/lazyFuncUsed
+ (func $exports-lazy/lazyFuncUsed (type $none_=>_none)
   nop
  )
- (func $exports-lazy/lazyFuncUnused
+ (func $exports-lazy/lazyFuncUnused (type $none_=>_none)
   nop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:exports-lazy
  )
 )

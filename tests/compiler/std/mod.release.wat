@@ -1,9 +1,9 @@
 (module
- (type $none_=>_none (func))
- (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $f64_f64_f64_=>_i32 (func (param f64 f64 f64) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f32_f32_f32_=>_i32 (func (param f32 f32 f32) (result i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $f64_f64_=>_f64 (func_subtype (param f64 f64) (result f64) func))
+ (type $f64_f64_f64_=>_i32 (func_subtype (param f64 f64 f64) (result i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $f32_f32_f32_=>_i32 (func_subtype (param f32 f32 f32) (result i32) func))
  (import "mod" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -12,7 +12,7 @@
  (export "mod" (func $std/mod/mod))
  (export "memory" (memory $0))
  (start $~start)
- (func $std/mod/test_fmod (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/mod/test_fmod (type $f64_f64_f64_=>_i32) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (local $3 i64)
   (local $4 f64)
   (local $5 i64)
@@ -270,7 +270,7 @@
    i32.const 0
   end
  )
- (func $std/mod/test_fmodf (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/mod/test_fmodf (type $f32_f32_f32_=>_i32) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -493,7 +493,7 @@
    f32.eq
   end
  )
- (func $start:std/mod
+ (func $start:std/mod (type $none_=>_none)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2250,7 +2250,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:std/mod
  )
 )

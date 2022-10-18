@@ -1,8 +1,8 @@
 (module
- (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "console.assert" (func $~lib/bindings/dom/console.assert (param i32 i32)))
  (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
  (import "env" "console.debug" (func $~lib/bindings/dom/console.debug (param i32)))
@@ -35,49 +35,49 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/console/console.assert<bool> (param $condition i32) (param $message i32)
+ (func $~lib/console/console.assert<bool> (type $i32_i32_=>_none) (param $condition i32) (param $message i32)
   local.get $condition
   i32.eqz
   i32.eqz
   local.get $message
   call $~lib/bindings/dom/console.assert
  )
- (func $~lib/console/console.log (param $message i32)
+ (func $~lib/console/console.log (type $i32_=>_none) (param $message i32)
   local.get $message
   call $~lib/bindings/dom/console.log
  )
- (func $~lib/console/console.debug (param $message i32)
+ (func $~lib/console/console.debug (type $i32_=>_none) (param $message i32)
   local.get $message
   call $~lib/bindings/dom/console.debug
  )
- (func $~lib/console/console.info (param $message i32)
+ (func $~lib/console/console.info (type $i32_=>_none) (param $message i32)
   local.get $message
   call $~lib/bindings/dom/console.info
  )
- (func $~lib/console/console.warn (param $message i32)
+ (func $~lib/console/console.warn (type $i32_=>_none) (param $message i32)
   local.get $message
   call $~lib/bindings/dom/console.warn
  )
- (func $~lib/console/console.error (param $message i32)
+ (func $~lib/console/console.error (type $i32_=>_none) (param $message i32)
   local.get $message
   call $~lib/bindings/dom/console.error
  )
- (func $~lib/console/console.time (param $label i32)
+ (func $~lib/console/console.time (type $i32_=>_none) (param $label i32)
   local.get $label
   call $~lib/bindings/dom/console.time
  )
- (func $~lib/console/console.timeLog (param $label i32)
+ (func $~lib/console/console.timeLog (type $i32_=>_none) (param $label i32)
   local.get $label
   call $~lib/bindings/dom/console.timeLog
  )
- (func $~lib/console/console.timeEnd (param $label i32)
+ (func $~lib/console/console.timeEnd (type $i32_=>_none) (param $label i32)
   local.get $label
   call $~lib/bindings/dom/console.timeEnd
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:std/console
  )
- (func $~stack_check
+ (func $~stack_check (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -90,7 +90,7 @@
    unreachable
   end
  )
- (func $start:std/console
+ (func $start:std/console (type $none_=>_none)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8

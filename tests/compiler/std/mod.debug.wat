@@ -1,12 +1,12 @@
 (module
- (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $none_=>_none (func))
- (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
- (type $f64_f64_f64_=>_i32 (func (param f64 f64 f64) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
- (type $f32_f32_f32_=>_i32 (func (param f32 f32 f32) (result i32)))
+ (type $f64_f64_=>_f64 (func_subtype (param f64 f64) (result f64) func))
+ (type $none_=>_none (func_subtype func))
+ (type $f64_f64_=>_i32 (func_subtype (param f64 f64) (result i32) func))
+ (type $f64_f64_f64_=>_i32 (func_subtype (param f64 f64 f64) (result i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $f32_f32_=>_f32 (func_subtype (param f32 f32) (result f32) func))
+ (type $f32_f32_=>_i32 (func_subtype (param f32 f32) (result i32) func))
+ (type $f32_f32_f32_=>_i32 (func_subtype (param f32 f32 f32) (result i32) func))
  (import "mod" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/mod/js i32 (i32.const 1))
@@ -20,7 +20,7 @@
  (export "mod" (func $std/mod/mod))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/math/NativeMath.mod (param $x f64) (param $y f64) (result f64)
+ (func $~lib/math/NativeMath.mod (type $f64_f64_=>_f64) (param $x f64) (param $y f64) (result f64)
   (local $ux i64)
   (local $uy i64)
   (local $ex i64)
@@ -277,7 +277,7 @@
   i64.or
   f64.reinterpret_i64
  )
- (func $std/mod/check<f64> (param $actual f64) (param $expected f64) (result i32)
+ (func $std/mod/check<f64> (type $f64_f64_=>_i32) (param $actual f64) (param $expected f64) (result i32)
   local.get $expected
   local.get $expected
   f64.ne
@@ -305,7 +305,7 @@
   local.get $expected
   f64.eq
  )
- (func $std/mod/test_fmod (param $left f64) (param $right f64) (param $expected f64) (result i32)
+ (func $std/mod/test_fmod (type $f64_f64_f64_=>_i32) (param $left f64) (param $right f64) (param $expected f64) (result i32)
   local.get $left
   local.get $right
   call $~lib/math/NativeMath.mod
@@ -321,7 +321,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.mod (param $x f32) (param $y f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (type $f32_f32_=>_f32) (param $x f32) (param $y f32) (result f32)
   (local $ux i32)
   (local $uy i32)
   (local $ex i32)
@@ -572,7 +572,7 @@
   i32.or
   f32.reinterpret_i32
  )
- (func $std/mod/check<f32> (param $actual f32) (param $expected f32) (result i32)
+ (func $std/mod/check<f32> (type $f32_f32_=>_i32) (param $actual f32) (param $expected f32) (result i32)
   local.get $expected
   local.get $expected
   f32.ne
@@ -600,14 +600,14 @@
   local.get $expected
   f32.eq
  )
- (func $std/mod/test_fmodf (param $left f32) (param $right f32) (param $expected f32) (result i32)
+ (func $std/mod/test_fmodf (type $f32_f32_f32_=>_i32) (param $left f32) (param $right f32) (param $expected f32) (result i32)
   local.get $left
   local.get $right
   call $~lib/math/NativeMathf.mod
   local.get $expected
   call $std/mod/check<f32>
  )
- (func $start:std/mod
+ (func $start:std/mod (type $none_=>_none)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2392,7 +2392,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:std/mod
  )
 )

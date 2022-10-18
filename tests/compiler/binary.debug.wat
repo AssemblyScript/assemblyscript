@@ -1,8 +1,8 @@
 (module
- (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $f64_f64_=>_f64 (func_subtype (param f64 f64) (result f64) func))
+ (type $f32_f32_=>_f32 (func_subtype (param f32 f32) (result f32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -22,7 +22,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/math/ipow32 (param $x i32) (param $e i32) (result i32)
+ (func $~lib/math/ipow32 (type $i32_i32_=>_i32) (param $x i32) (param $e i32) (result i32)
   (local $out i32)
   (local $var$3 i32)
   (local $var$4 i32)
@@ -241,7 +241,7 @@
   end
   local.get $out
  )
- (func $~lib/math/NativeMath.pow (param $x f64) (param $y f64) (result f64)
+ (func $~lib/math/NativeMath.pow (type $f64_f64_=>_f64) (param $x f64) (param $y f64) (result f64)
   (local $var$2 f64)
   (local $var$3 f64)
   (local $var$4 i32)
@@ -1219,7 +1219,7 @@
   end
   return
  )
- (func $~lib/math/NativeMathf.mod (param $x f32) (param $y f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (type $f32_f32_=>_f32) (param $x f32) (param $y f32) (result f32)
   (local $ux i32)
   (local $uy i32)
   (local $ex i32)
@@ -1470,7 +1470,7 @@
   i32.or
   f32.reinterpret_i32
  )
- (func $~lib/math/NativeMathf.pow (param $x f32) (param $y f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (type $f32_f32_=>_f32) (param $x f32) (param $y f32) (result f32)
   (local $var$2 f32)
   (local $var$3 f32)
   (local $var$4 i32)
@@ -2085,7 +2085,7 @@
   end
   return
  )
- (func $~lib/math/NativeMath.mod (param $x f64) (param $y f64) (result f64)
+ (func $~lib/math/NativeMath.mod (type $f64_f64_=>_f64) (param $x f64) (param $y f64) (result f64)
   (local $ux i64)
   (local $uy i64)
   (local $ex i64)
@@ -2342,7 +2342,7 @@
   i64.or
   f64.reinterpret_i64
  )
- (func $start:binary
+ (func $start:binary (type $none_=>_none)
   global.get $binary/i
   i32.const 1
   i32.lt_s
@@ -2947,7 +2947,7 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:binary
  )
 )

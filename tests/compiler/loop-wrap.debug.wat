@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_=>_none (func_subtype (param i32) func))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
@@ -11,7 +11,7 @@
  (export "testFirstWrapped" (func $loop-wrap/testFirstWrapped))
  (export "testSubsequentWrapped" (func $loop-wrap/testSubsequentWrapped))
  (export "memory" (memory $0))
- (func $loop-wrap/testAlwaysWrapped
+ (func $loop-wrap/testAlwaysWrapped (type $none_=>_none)
   (local $i i32)
   i32.const 0
   local.set $i
@@ -33,7 +33,7 @@
    end
   end
  )
- (func $loop-wrap/testFirstWrapped
+ (func $loop-wrap/testFirstWrapped (type $none_=>_none)
   (local $i i32)
   i32.const 0
   local.set $i
@@ -57,7 +57,7 @@
    end
   end
  )
- (func $loop-wrap/testSubsequentWrapped (param $a i32)
+ (func $loop-wrap/testSubsequentWrapped (type $i32_=>_none) (param $a i32)
   (local $i i32)
   local.get $a
   local.set $i

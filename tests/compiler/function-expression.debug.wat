@@ -1,14 +1,14 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
+ (type $i64_=>_i64 (func_subtype (param i64) (result i64) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $function-expression/f1 (mut i32) (i32.const 32))
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -69,24 +69,24 @@
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:function-expression~anonymous|0 (param $a i32) (result i32)
+ (func $start:function-expression~anonymous|0 (type $i32_=>_i32) (param $a i32) (result i32)
   local.get $a
  )
- (func $start:function-expression~anonymous|1 (param $a i32) (result i32)
+ (func $start:function-expression~anonymous|1 (type $i32_=>_i32) (param $a i32) (result i32)
   local.get $a
  )
- (func $start:function-expression~someName|2
+ (func $start:function-expression~someName|2 (type $none_=>_none)
   nop
  )
- (func $start:function-expression~anonymous|3 (result i32)
+ (func $start:function-expression~anonymous|3 (type $none_=>_i32) (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|4 (param $a i32) (param $b i32) (result i32)
+ (func $start:function-expression~anonymous|4 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.add
  )
- (func $function-expression/testOmitted (param $fn i32) (result i32)
+ (func $function-expression/testOmitted (type $i32_=>_i32) (param $fn i32) (result i32)
   i32.const 1
   i32.const 2
   i32.const 2
@@ -95,36 +95,36 @@
   i32.load $0
   call_indirect $0 (type $i32_i32_=>_i32)
  )
- (func $start:function-expression~anonymous|5 (param $a i32) (param $$1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (type $i32_i32_=>_i32) (param $a i32) (param $$1 i32) (result i32)
   local.get $a
  )
- (func $start:function-expression~anonymous|6 (param $$0 i32) (param $$1 i32) (result i32)
+ (func $start:function-expression~anonymous|6 (type $i32_i32_=>_i32) (param $$0 i32) (param $$1 i32) (result i32)
   i32.const 42
  )
- (func $function-expression/testOmittedReturn1~anonymous|0 (param $a i32) (param $b i32) (result i32)
+ (func $function-expression/testOmittedReturn1~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.add
  )
- (func $function-expression/testOmittedReturn1 (result i32)
+ (func $function-expression/testOmittedReturn1 (type $none_=>_i32) (result i32)
   i32.const 320
  )
- (func $function-expression/testOmittedReturn2~anonymous|0 (param $a i32) (param $$1 i32) (result i32)
+ (func $function-expression/testOmittedReturn2~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $$1 i32) (result i32)
   local.get $a
  )
- (func $function-expression/testOmittedReturn2 (result i32)
+ (func $function-expression/testOmittedReturn2 (type $none_=>_i32) (result i32)
   i32.const 352
  )
- (func $function-expression/testOmittedReturn3~anonymous|0 (param $$0 i32) (param $$1 i32) (result i32)
+ (func $function-expression/testOmittedReturn3~anonymous|0 (type $i32_i32_=>_i32) (param $$0 i32) (param $$1 i32) (result i32)
   i32.const 42
  )
- (func $function-expression/testOmittedReturn3 (result i32)
+ (func $function-expression/testOmittedReturn3 (type $none_=>_i32) (result i32)
   i32.const 384
  )
- (func $function-expression/testNullable~anonymous|0 (result i32)
+ (func $function-expression/testNullable~anonymous|0 (type $none_=>_i32) (result i32)
   i32.const 1
  )
- (func $function-expression/testNullable (param $b i32) (result i32)
+ (func $function-expression/testNullable (type $i32_=>_i32) (param $b i32) (result i32)
   local.get $b
   if
    i32.const 416
@@ -135,12 +135,12 @@
   end
   unreachable
  )
- (func $function-expression/testGlobal~anonymous|0~anonymous|0 (param $x i32) (result i32)
+ (func $function-expression/testGlobal~anonymous|0~anonymous|0 (type $i32_=>_i32) (param $x i32) (result i32)
   i32.const 24
   local.get $x
   i32.add
  )
- (func $function-expression/testGlobal
+ (func $function-expression/testGlobal (type $none_=>_none)
   (local $var$0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -182,12 +182,12 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $function-expression/testLocal~anonymous|0~anonymous|0 (param $x i32) (result i32)
+ (func $function-expression/testLocal~anonymous|0~anonymous|0 (type $i32_=>_i32) (param $x i32) (result i32)
   i32.const 24
   local.get $x
   i32.add
  )
- (func $function-expression/testLocal
+ (func $function-expression/testLocal (type $none_=>_none)
   (local $localFunc i32)
   (local $var$1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -232,17 +232,17 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
+ (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (param $0 i32) (param $1 i32)
+ (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=8
  )
- (func $~lib/rt/itcms/initLazy (param $space i32) (result i32)
+ (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
   local.get $space
   local.get $space
   call $~lib/rt/itcms/Object#set:nextWithColor
@@ -251,7 +251,7 @@
   call $~lib/rt/itcms/Object#set:prev
   local.get $space
  )
- (func $~lib/rt/itcms/Object#get:next (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:next (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
   i32.const 3
@@ -259,13 +259,13 @@
   i32.xor
   i32.and
  )
- (func $~lib/rt/itcms/Object#get:color (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:color (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
   i32.const 3
   i32.and
  )
- (func $~lib/rt/itcms/visitRoots (param $cookie i32)
+ (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
   (local $var$3 i32)
@@ -310,7 +310,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#set:color (param $this i32) (param $color i32)
+ (func $~lib/rt/itcms/Object#set:color (type $i32_i32_=>_none) (param $this i32) (param $color i32)
   local.get $this
   local.get $this
   i32.load $0 offset=4
@@ -322,7 +322,7 @@
   i32.or
   call $~lib/rt/itcms/Object#set:nextWithColor
  )
- (func $~lib/rt/itcms/Object#set:next (param $this i32) (param $obj i32)
+ (func $~lib/rt/itcms/Object#set:next (type $i32_i32_=>_none) (param $this i32) (param $obj i32)
   local.get $this
   local.get $obj
   local.get $this
@@ -332,7 +332,7 @@
   i32.or
   call $~lib/rt/itcms/Object#set:nextWithColor
  )
- (func $~lib/rt/itcms/Object#unlink (param $this i32)
+ (func $~lib/rt/itcms/Object#unlink (type $i32_=>_none) (param $this i32)
   (local $next i32)
   (local $prev i32)
   local.get $this
@@ -388,7 +388,7 @@
   local.get $next
   call $~lib/rt/itcms/Object#set:next
  )
- (func $~lib/rt/__typeinfo (param $id i32) (result i32)
+ (func $~lib/rt/__typeinfo (type $i32_=>_i32) (param $id i32) (result i32)
   (local $ptr i32)
   global.get $~lib/rt/__rtti_base
   local.set $ptr
@@ -413,7 +413,7 @@
   i32.add
   i32.load $0
  )
- (func $~lib/rt/itcms/Object#get:isPointerfree (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:isPointerfree (type $i32_=>_i32) (param $this i32) (result i32)
   (local $rtId i32)
   local.get $this
   i32.load $0 offset=12
@@ -432,7 +432,7 @@
    i32.ne
   end
  )
- (func $~lib/rt/itcms/Object#linkTo (param $this i32) (param $list i32) (param $withColor i32)
+ (func $~lib/rt/itcms/Object#linkTo (type $i32_i32_i32_=>_none) (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
   local.get $list
   i32.load $0 offset=8
@@ -452,7 +452,7 @@
   local.get $this
   call $~lib/rt/itcms/Object#set:prev
  )
- (func $~lib/rt/itcms/Object#makeGray (param $this i32)
+ (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $this i32)
   (local $var$1 i32)
   local.get $this
   global.get $~lib/rt/itcms/iter
@@ -488,7 +488,7 @@
   end
   call $~lib/rt/itcms/Object#linkTo
  )
- (func $~lib/rt/itcms/__visit (param $ptr i32) (param $cookie i32)
+ (func $~lib/rt/itcms/__visit (type $i32_i32_=>_none) (param $ptr i32) (param $cookie i32)
   (local $obj i32)
   local.get $ptr
   i32.eqz
@@ -514,7 +514,7 @@
    global.set $~lib/rt/itcms/visitCount
   end
  )
- (func $~lib/rt/itcms/visitStack (param $cookie i32)
+ (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
   (local $var$2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -538,7 +538,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#get:size (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 4
   local.get $this
   i32.load $0
@@ -548,27 +548,27 @@
   i32.and
   i32.add
  )
- (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/removeBlock (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   (local $blockInfo i32)
   (local $size i32)
   (local $fl i32)
@@ -786,7 +786,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   (local $blockInfo i32)
   (local $var$3 i32)
   (local $right i32)
@@ -1120,7 +1120,7 @@
   local.get $var$10
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $end i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_i32) (param $root i32) (param $start i32) (param $end i32) (result i32)
   (local $var$3 i32)
   (local $tail i32)
   (local $tailInfo i32)
@@ -1280,7 +1280,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/initialize
+ (func $~lib/rt/tlsf/initialize (type $none_=>_none)
   (local $rootOffset i32)
   (local $pagesBefore i32)
   (local $pagesNeeded i32)
@@ -1426,7 +1426,7 @@
   local.get $root
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/tlsf/checkUsedBlock (param $ptr i32) (result i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (type $i32_=>_i32) (param $ptr i32) (result i32)
   (local $block i32)
   local.get $ptr
   i32.const 4
@@ -1463,7 +1463,7 @@
   end
   local.get $block
  )
- (func $~lib/rt/tlsf/freeBlock (param $root i32) (param $block i32)
+ (func $~lib/rt/tlsf/freeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   i32.const 0
   drop
   local.get $block
@@ -1476,7 +1476,7 @@
   local.get $block
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/__free (param $ptr i32)
+ (func $~lib/rt/tlsf/__free (type $i32_=>_none) (param $ptr i32)
   local.get $ptr
   global.get $~lib/memory/__heap_base
   i32.lt_u
@@ -1493,7 +1493,7 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/itcms/free (param $obj i32)
+ (func $~lib/rt/itcms/free (type $i32_=>_none) (param $obj i32)
   local.get $obj
   global.get $~lib/memory/__heap_base
   i32.lt_u
@@ -1518,7 +1518,7 @@
    call $~lib/rt/tlsf/__free
   end
  )
- (func $~lib/rt/itcms/step (result i32)
+ (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
   (local $obj i32)
   (local $var$1 i32)
   (local $var$2 i32)
@@ -1700,7 +1700,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/itcms/interrupt
+ (func $~lib/rt/itcms/interrupt (type $none_=>_none)
   (local $budget i32)
   i32.const 0
   drop
@@ -1758,7 +1758,7 @@
   i32.const 0
   drop
  )
- (func $~lib/rt/tlsf/computeSize (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/computeSize (type $i32_=>_i32) (param $size i32) (result i32)
   local.get $size
   i32.const 12
   i32.le_u
@@ -1778,7 +1778,7 @@
    i32.sub
   end
  )
- (func $~lib/rt/tlsf/prepareSize (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (type $i32_=>_i32) (param $size i32) (result i32)
   local.get $size
   i32.const 1073741820
   i32.gt_u
@@ -1793,7 +1793,7 @@
   local.get $size
   call $~lib/rt/tlsf/computeSize
  )
- (func $~lib/rt/tlsf/searchBlock (param $root i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
   (local $fl i32)
   (local $sl i32)
   (local $var$4 i32)
@@ -1980,7 +1980,7 @@
   end
   local.get $head
  )
- (func $~lib/rt/tlsf/growMemory (param $root i32) (param $size i32)
+ (func $~lib/rt/tlsf/growMemory (type $i32_i32_=>_none) (param $root i32) (param $size i32)
   (local $pagesBefore i32)
   (local $var$3 i32)
   (local $pagesNeeded i32)
@@ -2066,7 +2066,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (param $root i32) (param $block i32) (param $size i32)
+ (func $~lib/rt/tlsf/prepareBlock (type $i32_i32_i32_=>_none) (param $root i32) (param $block i32) (param $size i32)
   (local $blockInfo i32)
   (local $remaining i32)
   (local $var$5 i32)
@@ -2167,7 +2167,7 @@
    call $~lib/rt/common/BLOCK#set:mmInfo
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (param $root i32) (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
   (local $payloadSize i32)
   (local $block i32)
   local.get $size
@@ -2230,7 +2230,7 @@
   drop
   local.get $block
  )
- (func $~lib/rt/tlsf/__alloc (param $size i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -2242,17 +2242,17 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/itcms/Object#set:rtId (param $0 i32) (param $1 i32)
+ (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (param $0 i32) (param $1 i32)
+ (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=16
  )
- (func $~lib/rt/itcms/__new (param $size i32) (param $id i32) (result i32)
+ (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
   (local $obj i32)
   (local $ptr i32)
   local.get $size
@@ -2304,7 +2304,7 @@
   memory.fill $0
   local.get $ptr
  )
- (func $~lib/rt/itcms/__link (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
+ (func $~lib/rt/itcms/__link (type $i32_i32_i32_=>_none) (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
   (local $child i32)
   (local $var$4 i32)
   (local $var$5 i32)
@@ -2372,7 +2372,7 @@
    end
   end
  )
- (func $function-expression/FieldClass#set:fieldFunc (param $0 i32) (param $1 i32)
+ (func $function-expression/FieldClass#set:fieldFunc (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0
@@ -2381,18 +2381,18 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $function-expression/testField~anonymous|0~anonymous|0 (param $x i32) (result i32)
+ (func $function-expression/testField~anonymous|0~anonymous|0 (type $i32_=>_i32) (param $x i32) (result i32)
   i32.const 24
   local.get $x
   i32.add
  )
- (func $function-expression/semanticallyAnonymous~fnDecl (param $val i32) (result i32)
+ (func $function-expression/semanticallyAnonymous~fnDecl (type $i32_=>_i32) (param $val i32) (result i32)
   local.get $val
  )
- (func $function-expression/semanticallyAnonymous~fnDecl|0 (param $val i64) (result i64)
+ (func $function-expression/semanticallyAnonymous~fnDecl|0 (type $i64_=>_i64) (param $val i64) (result i64)
   local.get $val
  )
- (func $function-expression/semanticallyAnonymous
+ (func $function-expression/semanticallyAnonymous (type $none_=>_none)
   (local $fnDecl i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2425,7 +2425,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/rt/__visit_globals (param $0 i32)
+ (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   i32.const 768
   local.get $0
@@ -2434,7 +2434,7 @@
   local.get $0
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBufferView~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load $0
@@ -2445,62 +2445,62 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/function/Function<%28i32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+ (func $~lib/function/Function<%28i32%29=>i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   local.get $this
   i32.load $0 offset=4
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%29=>i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/function/Function<%28i32%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28%29=>void>#__visit (param $this i32) (param $cookie i32)
+ (func $~lib/function/Function<%28%29=>void>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   local.get $this
   i32.load $0 offset=4
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28%29=>void>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28%29=>void>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/function/Function<%28%29=>void>#__visit
  )
- (func $~lib/function/Function<%28%29=>i32>#__visit (param $this i32) (param $cookie i32)
+ (func $~lib/function/Function<%28%29=>i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   local.get $this
   i32.load $0 offset=4
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28%29=>i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/function/Function<%28%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   local.get $this
   i32.load $0 offset=4
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit
  )
- (func $~lib/function/Function<%28%29=>%28i32%29=>i32>#__visit (param $this i32) (param $cookie i32)
+ (func $~lib/function/Function<%28%29=>%28i32%29=>i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   local.get $this
   i32.load $0 offset=4
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28%29=>%28i32%29=>i32>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28%29=>%28i32%29=>i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/function/Function<%28%29=>%28i32%29=>i32>#__visit
  )
- (func $function-expression/FieldClass~visit (param $0 i32) (param $1 i32)
+ (func $function-expression/FieldClass~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load $0
@@ -2511,18 +2511,18 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/function/Function<%28i64%29=>i64>#__visit (param $this i32) (param $cookie i32)
+ (func $~lib/function/Function<%28i64%29=>i64>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   local.get $this
   i32.load $0 offset=4
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
- (func $~lib/function/Function<%28i64%29=>i64>~visit (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i64%29=>i64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   call $~lib/function/Function<%28i64%29=>i64>#__visit
  )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   block $invalid
    block $~lib/function/Function<%28i64%29=>i64>
     block $function-expression/FieldClass
@@ -2586,10 +2586,10 @@
   end
   unreachable
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:function-expression
  )
- (func $~stack_check
+ (func $~stack_check (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -2602,7 +2602,7 @@
    unreachable
   end
  )
- (func $function-expression/testField
+ (func $function-expression/testField (type $none_=>_none)
   (local $fieldInst i32)
   (local $var$1 i32)
   (local $2 i32)
@@ -2659,7 +2659,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $start:function-expression
+ (func $start:function-expression (type $none_=>_none)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2871,7 +2871,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $function-expression/testGlobal~anonymous|0 (result i32)
+ (func $function-expression/testGlobal~anonymous|0 (type $none_=>_i32) (result i32)
   (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2894,7 +2894,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $function-expression/testLocal~anonymous|0 (result i32)
+ (func $function-expression/testLocal~anonymous|0 (type $none_=>_i32) (result i32)
   (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2917,7 +2917,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $function-expression/FieldClass#constructor (param $this i32) (param $fieldFunc i32) (result i32)
+ (func $function-expression/FieldClass#constructor (type $i32_i32_=>_i32) (param $this i32) (param $fieldFunc i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2948,7 +2948,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
- (func $function-expression/testField~anonymous|0 (result i32)
+ (func $function-expression/testField~anonymous|0 (type $none_=>_i32) (result i32)
   (local $var$0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer

@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "mutable-globals" "external" (global $mutable-globals/external (mut i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $mutable-globals/internal (mut i32) (i32.const 124))
@@ -16,7 +16,7 @@
  (export "internal" (global $mutable-globals/internal))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $start:mutable-globals
+ (func $start:mutable-globals (type $none_=>_none)
   global.get $mutable-globals/external
   i32.const 123
   i32.eq
@@ -74,7 +74,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   global.get $~started
   if
    return

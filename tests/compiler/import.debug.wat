@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
@@ -12,28 +12,28 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $export/add (param $a i32) (param $b i32) (result i32)
+ (func $export/add (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.add
  )
- (func $export/sub (param $a i32) (param $b i32) (result i32)
+ (func $export/sub (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.sub
  )
- (func $export/mul (param $a i32) (param $b i32) (result i32)
+ (func $export/mul (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.mul
  )
- (func $export/ns.two
+ (func $export/ns.two (type $none_=>_none)
   nop
  )
- (func $export-default/theDefault
+ (func $export-default/theDefault (type $none_=>_none)
   nop
  )
- (func $start:import
+ (func $start:import (type $none_=>_none)
   global.get $export/a
   global.get $export/b
   call $export/add
@@ -63,7 +63,7 @@
   call $export/ns.two
   call $export-default/theDefault
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:import
  )
 )

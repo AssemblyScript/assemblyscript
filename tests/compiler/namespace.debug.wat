@@ -1,6 +1,6 @@
 (module
- (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
+ (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $none_=>_none (func_subtype func))
  (global $namespace/Outer.outerVar (mut i32) (i32.const 1))
  (global $namespace/Outer.Inner.aVar (mut i32) (i32.const 0))
  (global $namespace/Outer.Inner.anotherVar (mut i32) (i32.const 0))
@@ -15,13 +15,13 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $namespace/Outer.Inner.aFunc (result i32)
+ (func $namespace/Outer.Inner.aFunc (type $none_=>_i32) (result i32)
   global.get $namespace/Outer.Inner.aVar
  )
- (func $namespace/Joined.anotherFunc (result i32)
+ (func $namespace/Joined.anotherFunc (type $none_=>_i32) (result i32)
   i32.const 3
  )
- (func $start:namespace
+ (func $start:namespace (type $none_=>_none)
   global.get $namespace/Outer.Inner.aVar
   global.set $namespace/Outer.Inner.anotherVar
   global.get $namespace/Outer.outerVar
@@ -37,7 +37,7 @@
   call $namespace/Joined.anotherFunc
   drop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:namespace
  )
 )

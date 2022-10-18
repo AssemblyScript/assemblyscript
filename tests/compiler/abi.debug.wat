@@ -1,7 +1,7 @@
 (module
- (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
@@ -17,10 +17,10 @@
  (export "exportedInternal" (func $abi/exportedInternal))
  (export "memory" (memory $0))
  (start $~start)
- (func $abi/internal (result i32)
+ (func $abi/internal (type $none_=>_i32) (result i32)
   i32.const 128
  )
- (func $start:abi
+ (func $start:abi (type $none_=>_none)
   (local $var$0 i32)
   (local $var$1 i32)
   call $abi/internal
@@ -169,18 +169,18 @@
    unreachable
   end
  )
- (func $abi/exported (result i32)
+ (func $abi/exported (type $none_=>_i32) (result i32)
   i32.const 128
   i32.extend8_s
  )
- (func $abi/exportedExported (result i32)
+ (func $abi/exportedExported (type $none_=>_i32) (result i32)
   call $abi/exported
  )
- (func $abi/exportedInternal (result i32)
+ (func $abi/exportedInternal (type $none_=>_i32) (result i32)
   call $abi/internal
   i32.extend8_s
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:abi
  )
 )

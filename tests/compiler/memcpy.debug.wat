@@ -1,7 +1,7 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memcpy/base i32 (i32.const 8))
  (global $memcpy/dest (mut i32) (i32.const 0))
@@ -15,7 +15,7 @@
  (export "memcpy" (func $memcpy/memcpy))
  (export "memory" (memory $0))
  (start $~start)
- (func $memcpy/memcpy (param $dest i32) (param $src i32) (param $n i32) (result i32)
+ (func $memcpy/memcpy (type $i32_i32_i32_=>_i32) (param $dest i32) (param $src i32) (param $n i32) (result i32)
   (local $ret i32)
   (local $w i32)
   (local $x i32)
@@ -1044,7 +1044,7 @@
   end
   local.get $ret
  )
- (func $start:memcpy
+ (func $start:memcpy (type $none_=>_none)
   global.get $memcpy/base
   i64.const 1229782938247303441
   i64.store $0
@@ -1264,7 +1264,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:memcpy
  )
 )

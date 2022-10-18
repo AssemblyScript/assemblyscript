@@ -1280,6 +1280,7 @@ export class Module {
   ) {
     assert(sizeType == TypeRef.I32 || sizeType == TypeRef.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
+    binaryen._BinaryenSetTypeSystem(TypeSystem.Nominal);
   }
 
   private lit: usize;
@@ -3636,7 +3637,7 @@ export function ensureType(type: Type): TypeRef {
     // @ts-ignore: Wasm only
     assert(sizeof<usize>() == 4); // ABI code below assumes 32-bit pointers
   }
-  binaryen._BinaryenSetTypeSystem(TypeSystem.Nominal);
+  assert(binaryen._BinaryenGetTypeSystem() == TypeSystem.Nominal);
   var builder = binaryen._TypeBuilderCreate(0);
   var seen = new Map<Type,HeapTypeRef>();
   prepareType(builder, seen, type); // drop temp return

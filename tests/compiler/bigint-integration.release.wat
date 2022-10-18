@@ -1,7 +1,7 @@
 (module
- (type $none_=>_i64 (func (result i64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
+ (type $none_=>_i64 (func_subtype (result i64) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_none (func_subtype func))
  (import "bigint-integration" "externalValue" (global $bigint-integration/externalValue i64))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "bigint-integration" "getExternalValue" (func $bigint-integration/getExternalValue (result i64)))
@@ -14,10 +14,10 @@
  (export "getInternalValue" (func $bigint-integration/getInternalValue))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $bigint-integration/getInternalValue (result i64)
+ (func $bigint-integration/getInternalValue (type $none_=>_i64) (result i64)
   i64.const 9007199254740991
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   global.get $~started
   if
    return

@@ -54,7 +54,8 @@ import {
   ExpressionRunnerFlags,
   isConstZero,
   isConstNegZero,
-  isConstExpressionNaN
+  isConstExpressionNaN,
+  ensureType
 } from "./module";
 
 import {
@@ -7603,8 +7604,11 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         if (contextualType.isExternalReference) {
+          // TODO: Concrete function types currently map to first class functions implemented in
+          // linear memory (on top of `usize`), leaving only generic `funcref` for use here. In the
+          // future, once functions become Wasm GC objects, the actual signature type can be used.
           this.currentType = Type.funcref;
-          return module.ref_func(functionInstance.internalName, TypeRef.Funcref); // TODO
+          return module.ref_func(functionInstance.internalName, ensureType(functionInstance.type));
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
         this.currentType = functionInstance.signature.type;

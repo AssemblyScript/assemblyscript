@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 60))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
@@ -14,7 +14,7 @@
  (export "testI8" (func $many-locals/testI8))
  (export "memory" (memory $0))
  (start $~start)
- (func $many-locals/testI32 (param $a i32) (result i32)
+ (func $many-locals/testI32 (type $i32_=>_i32) (param $a i32) (result i32)
   (local $a00 i32)
   (local $a01 i32)
   (local $a02 i32)
@@ -401,7 +401,7 @@
   local.set $a7F
   local.get $a7F
  )
- (func $many-locals/testI8 (param $a i32) (result i32)
+ (func $many-locals/testI8 (type $i32_=>_i32) (param $a i32) (result i32)
   (local $a00 i32)
   (local $a01 i32)
   (local $a02 i32)
@@ -789,7 +789,7 @@
   local.get $a7F
   i32.extend8_s
  )
- (func $start:many-locals
+ (func $start:many-locals (type $none_=>_none)
   i32.const 42
   call $many-locals/testI32
   i32.const 42
@@ -817,7 +817,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:many-locals
  )
 )
