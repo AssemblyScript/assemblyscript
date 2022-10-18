@@ -1381,6 +1381,22 @@ export class Module {
   }
 
   ref_null(type: TypeRef): ExpressionRef {
+    switch (binaryen._BinaryenTypeGetHeapType(type)) {
+      case HeapTypeRef.Extern:
+      case HeapTypeRef.Noextern: {
+        type = TypeRef.Noexternref;
+        break;
+      }
+      case HeapTypeRef.Func:
+      case HeapTypeRef.Nofunc: {
+        type = TypeRef.Nofuncref;
+        break;
+      }
+      default: {
+        type = TypeRef.Noneref;
+        break;
+      }
+    }
     return binaryen._BinaryenRefNull(this.ref, type);
   }
 
