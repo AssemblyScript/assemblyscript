@@ -607,7 +607,7 @@ export class Type {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, this.is(TypeFlags.NULLABLE));
       }
       case TypeKind.EXTERNREF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Ext, this.is(TypeFlags.NULLABLE));
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Extern, this.is(TypeFlags.NULLABLE));
       }
       case TypeKind.ANYREF: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, this.is(TypeFlags.NULLABLE));

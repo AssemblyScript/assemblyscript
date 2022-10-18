@@ -23,6 +23,9 @@ export const {
   _BinaryenTypeStringviewWTF8,
   _BinaryenTypeStringviewWTF16,
   _BinaryenTypeStringviewIter,
+  _BinaryenTypeNullref,
+  _BinaryenTypeNullExternref,
+  _BinaryenTypeNullFuncref,
 
   _BinaryenHeapTypeFunc,
   _BinaryenHeapTypeExt,

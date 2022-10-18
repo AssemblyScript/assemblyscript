@@ -81,6 +81,10 @@ export namespace TypeRef {
   export const StringviewWTF8 = binaryen._BinaryenTypeStringviewWTF8();
   export const StringviewWTF16 = binaryen._BinaryenTypeStringviewWTF16();
   export const StringviewIter = binaryen._BinaryenTypeStringviewIter();
+  // bottom types
+  export const Noneref = binaryen._BinaryenTypeNullref();
+  export const Nofuncref = binaryen._BinaryenTypeNullFuncref();
+  export const Noexternref = binaryen._BinaryenTypeNullExternref();
 
   export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
@@ -88,18 +92,36 @@ export namespace TypeRef {
 /** Reference to a Binaryen heap type. */
 export type HeapTypeRef = binaryen.HeapTypeRef;
 export namespace HeapTypeRef {
+
+  //        any       extern      func
+  //         |           |          |
+  //     __ eq __     noextern    (...)
+  //    /    |   \                  |
+  // i31  struct  array           nofunc
+  //  |      |      |
+  // none  (...)  (...)
+  //         |      |
+  //        none   none
+  //
+  // where (...) represents the concrete subtypes
+
   // reference & GC heap types
-  export const Ext: HeapTypeRef = binaryen._BinaryenHeapTypeExt();
+  export const Extern: HeapTypeRef = binaryen._BinaryenHeapTypeExt();
   export const Func: HeapTypeRef = binaryen._BinaryenHeapTypeFunc();
   export const Any: HeapTypeRef = binaryen._BinaryenHeapTypeAny();
   export const Eq: HeapTypeRef = binaryen._BinaryenHeapTypeEq();
   export const I31: HeapTypeRef = binaryen._BinaryenHeapTypeI31();
-  export const Data: HeapTypeRef = binaryen._BinaryenHeapTypeData();
+  export const Data: HeapTypeRef = binaryen._BinaryenHeapTypeData(); // TODO: struct
+  // export const Array: HeapTypeRef = binaryen._BinaryenHeapTypeArray(); // TODO
   // string heap types
   export const String: HeapTypeRef = binaryen._BinaryenHeapTypeString();
   export const StringviewWTF8: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewWTF8();
   export const StringviewWTF16: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewWTF16();
   export const StringviewIter: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewIter();
+  // bottom heap types
+  export const None: HeapTypeRef = 10; /* TODO_BinaryenHeapTypeNone */
+  export const Noextern: HeapTypeRef = 11; /* TODO_BinaryenHeapTypeNoext */
+  export const Nofunc: HeapTypeRef = 12; /* TODO_BinaryenHeapTypeNofunc */
 }
 
 /** Packed array element respectively struct field types. */
@@ -3699,7 +3721,7 @@ function tryEnsureBasicType(type: Type): TypeRef {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, type.is(TypeFlags.NULLABLE));
     }
     case TypeKind.EXTERNREF: {
-      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Ext, type.is(TypeFlags.NULLABLE));
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Extern, type.is(TypeFlags.NULLABLE));
     }
     case TypeKind.ANYREF: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, type.is(TypeFlags.NULLABLE));
