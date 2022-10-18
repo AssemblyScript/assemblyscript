@@ -1381,22 +1381,14 @@ export class Module {
   }
 
   ref_null(type: TypeRef): ExpressionRef {
-    switch (binaryen._BinaryenTypeGetHeapType(type)) {
-      case HeapTypeRef.Extern:
-      case HeapTypeRef.Noextern: {
-        type = TypeRef.Noexternref;
-        break;
-      }
-      case HeapTypeRef.Func:
-      case HeapTypeRef.Nofunc: {
-        type = TypeRef.Nofuncref;
-        break;
-      }
-      default: {
-        type = TypeRef.Noneref;
-        break;
-      }
-    }
+    // TODO: Provide the desired bottom type directly? Currently, Binaryen does
+    // this under the hood, but this API could change to take a heap type.
+    // type = binaryen._BinaryenTypeFromHeapType(
+    //   binaryen._BinaryenHeapTypeGetBottom(
+    //     binaryen._BinaryenTypeGetHeapType(type)
+    //   ),
+    //   true
+    // );
     return binaryen._BinaryenRefNull(this.ref, type);
   }
 
