@@ -639,7 +639,7 @@ export async function main(argv, options) {
     if (runtimeText == null) {
       runtimePath = runtimeName;
       runtimeText = await readFile(runtimePath + extension, baseDir);
-      if (runtimeText == null) return prepareResult(Error(`Runtime '${runtimeName}' not found.`));
+      if (runtimeText == null) return prepareResult(Error(`Runtime '${path.resolve(baseDir, runtimePath + extension)}' is not found.`));
     } else {
       runtimePath = `~lib/${runtimePath}`;
     }
