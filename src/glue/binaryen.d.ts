@@ -56,6 +56,7 @@ export declare function _BinaryenTypeAnyref(): TypeRef;
 export declare function _BinaryenTypeEqref(): TypeRef;
 export declare function _BinaryenTypeI31ref(): TypeRef;
 export declare function _BinaryenTypeDataref(): TypeRef;
+export declare function _BinaryenTypeArrayref(): TypeRef;
 export declare function _BinaryenTypeStringref(): TypeRef;
 export declare function _BinaryenTypeStringviewWTF8(): TypeRef;
 export declare function _BinaryenTypeStringviewWTF16(): TypeRef;
@@ -70,10 +71,17 @@ export declare function _BinaryenHeapTypeAny(): HeapTypeRef;
 export declare function _BinaryenHeapTypeEq(): HeapTypeRef;
 export declare function _BinaryenHeapTypeI31(): HeapTypeRef;
 export declare function _BinaryenHeapTypeData(): HeapTypeRef;
+export declare function _BinaryenHeapTypeArray(): HeapTypeRef;
 export declare function _BinaryenHeapTypeString(): HeapTypeRef;
 export declare function _BinaryenHeapTypeStringviewWTF8(): HeapTypeRef;
 export declare function _BinaryenHeapTypeStringviewWTF16(): HeapTypeRef;
 export declare function _BinaryenHeapTypeStringviewIter(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNone(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNoext(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNofunc(): HeapTypeRef;
+
+export declare function _BinaryenHeapTypeIsBottom(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeGetBottom(heapType: HeapTypeRef): HeapTypeRef;
 
 export declare function _BinaryenModuleCreate(): ModuleRef;
 export declare function _BinaryenModuleDispose(module: ModuleRef): void;

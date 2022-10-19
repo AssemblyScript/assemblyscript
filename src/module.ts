@@ -63,30 +63,28 @@ export namespace TypeRef {
   // special types
   export const None: TypeRef = 0 /* _BinaryenTypeNone */;
   export const Unreachable: TypeRef = 1 /* _BinaryenTypeUnreachable */;
+  export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
   // value types
   export const I32: TypeRef = 2 /* _BinaryenTypeInt32 */;
   export const I64: TypeRef = 3 /* _BinaryenTypeInt64 */;
   export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
-  // nullable reference & GC types
+  // reference/gc types
   export const Funcref = binaryen._BinaryenTypeFuncref();
   export const Externref = binaryen._BinaryenTypeExternref();
   export const Anyref = binaryen._BinaryenTypeAnyref();
   export const Eqref = binaryen._BinaryenTypeEqref();
   export const I31ref = binaryen._BinaryenTypeI31ref();
   export const Dataref = binaryen._BinaryenTypeDataref();
-  // nullable string reference types
+  export const Arrayref = binaryen._BinaryenTypeArrayref();
   export const Stringref = binaryen._BinaryenTypeStringref();
   export const StringviewWTF8 = binaryen._BinaryenTypeStringviewWTF8();
   export const StringviewWTF16 = binaryen._BinaryenTypeStringviewWTF16();
   export const StringviewIter = binaryen._BinaryenTypeStringviewIter();
-  // bottom types
   export const Noneref = binaryen._BinaryenTypeNullref();
   export const Nofuncref = binaryen._BinaryenTypeNullFuncref();
   export const Noexternref = binaryen._BinaryenTypeNullExternref();
-
-  export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
 /** Reference to a Binaryen heap type. */
@@ -105,23 +103,28 @@ export namespace HeapTypeRef {
   //
   // where (...) represents the concrete subtypes
 
-  // reference & GC heap types
-  export const Extern: HeapTypeRef = binaryen._BinaryenHeapTypeExt();
-  export const Func: HeapTypeRef = binaryen._BinaryenHeapTypeFunc();
-  export const Any: HeapTypeRef = binaryen._BinaryenHeapTypeAny();
-  export const Eq: HeapTypeRef = binaryen._BinaryenHeapTypeEq();
-  export const I31: HeapTypeRef = binaryen._BinaryenHeapTypeI31();
-  export const Data: HeapTypeRef = binaryen._BinaryenHeapTypeData(); // TODO: struct
-  // export const Array: HeapTypeRef = binaryen._BinaryenHeapTypeArray(); // TODO
-  // string heap types
-  export const String: HeapTypeRef = binaryen._BinaryenHeapTypeString();
-  export const StringviewWTF8: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewWTF8();
-  export const StringviewWTF16: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewWTF16();
-  export const StringviewIter: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewIter();
-  // bottom heap types
-  export const None: HeapTypeRef = 10; /* TODO_BinaryenHeapTypeNone */
-  export const Noextern: HeapTypeRef = 11; /* TODO_BinaryenHeapTypeNoext */
-  export const Nofunc: HeapTypeRef = 12; /* TODO_BinaryenHeapTypeNofunc */
+  export const Extern: HeapTypeRef = 0 /* _BinaryenHeapTypeExt */;
+  export const Func: HeapTypeRef = 1 /* _BinaryenHeapTypeFunc */;
+  export const Any: HeapTypeRef = 2 /* _BinaryenHeapTypeAny */;
+  export const Eq: HeapTypeRef = 3 /* _BinaryenHeapTypeEq */;
+  export const I31: HeapTypeRef = 4 /* _BinaryenHeapTypeI31 */;
+  export const Data: HeapTypeRef = 5 /* _BinaryenHeapTypeData */;
+  export const Array: HeapTypeRef = 6 /* _BinaryenHeapTypeArray */;
+  export const String: HeapTypeRef = 7 /* _BinaryenHeapTypeString */;
+  export const StringviewWTF8: HeapTypeRef = 8 /* _BinaryenHeapTypeStringviewWTF8 */;
+  export const StringviewWTF16: HeapTypeRef = 9 /* _BinaryenHeapTypeStringviewWTF16 */;
+  export const StringviewIter: HeapTypeRef = 10 /* _BinaryenHeapTypeStringviewIter */;
+  export const None: HeapTypeRef = 11 /* _BinaryenHeapTypeNone */;
+  export const Noextern: HeapTypeRef = 12 /* _BinaryenHeapTypeNoext */;
+  export const Nofunc: HeapTypeRef = 13 /* _BinaryenHeapTypeNofunc */;
+
+  export function isBottom(ht: HeapTypeRef): bool {
+    return binaryen._BinaryenHeapTypeIsBottom(ht);
+  }
+
+  export function getBottom(ht: HeapTypeRef): HeapTypeRef {
+    return binaryen._BinaryenHeapTypeGetBottom(ht);
+  }
 }
 
 /** Packed array element respectively struct field types. */
