@@ -90,13 +90,13 @@ export namespace TypeRef {
 export type HeapTypeRef = binaryen.HeapTypeRef;
 export namespace HeapTypeRef {
 
-  //        any       extern      func
-  //         |           |          |
-  //     __ eq __     noextern    (...)
-  //    /    |   \                  |
-  // i31  struct  array           nofunc
-  //  |      |      |
-  // none  (...)  (...)
+  //        any                  extern      func
+  //         |                      |          |
+  //     __ eq __          ?     noextern    (...)
+  //    /    |   \         |                   |
+  // i31  struct  array  string              nofunc
+  //  |      |      |      |
+  // none  (...)  (...)    ?
   //         |      |
   //        none   none
   //
