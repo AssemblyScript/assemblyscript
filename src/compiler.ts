@@ -6106,6 +6106,15 @@ export class Compiler extends DiagnosticEmitter {
         let local = <Local>target;
         signature = local.type.signatureReference;
         if (signature) {
+          if (local.parent != flow.parentFunction) {
+            // TODO: closures
+            this.error(
+              DiagnosticCode.Not_implemented_0,
+              expression.range,
+              "Closures"
+            );
+            return module.unreachable();
+          }
           if (local.is(CommonFlags.INLINED)) {
             let inlinedValue = local.constantIntegerValue;
             if (this.options.isWasm64) {
