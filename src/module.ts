@@ -3745,6 +3745,9 @@ function tryEnsureBasicType(type: Type): TypeRef {
     case TypeKind.DATAREF: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, type.is(TypeFlags.NULLABLE));
     }
+    case TypeKind.ARRAYREF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Array, type.is(TypeFlags.NULLABLE));
+    }
     case TypeKind.STRINGREF: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, type.is(TypeFlags.NULLABLE));
     }

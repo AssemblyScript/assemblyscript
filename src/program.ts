@@ -1030,6 +1030,7 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeType(CommonNames.eqref, Type.eqref);
     this.registerNativeType(CommonNames.i31ref, Type.i31ref);
     this.registerNativeType(CommonNames.dataref, Type.dataref);
+    this.registerNativeType(CommonNames.arrayref, Type.arrayref);
     this.registerNativeType(CommonNames.stringref, Type.stringref);
     this.registerNativeType(CommonNames.stringview_wtf8, Type.stringview_wtf8);
     this.registerNativeType(CommonNames.stringview_wtf16, Type.stringview_wtf16);
@@ -1303,6 +1304,7 @@ export class Program extends DiagnosticEmitter {
         this.registerWrapperClass(Type.eqref, CommonNames.Eqref);
         this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
         this.registerWrapperClass(Type.dataref, CommonNames.Dataref);
+        this.registerWrapperClass(Type.arrayref, CommonNames.Arrayref);
       }
     }
 
@@ -3818,6 +3820,7 @@ export class Function extends TypedElement {
   tempEqrefs: Local[] | null = null;
   tempI31refs: Local[] | null = null;
   tempDatarefs: Local[] | null = null;
+  tempArrayrefs: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;

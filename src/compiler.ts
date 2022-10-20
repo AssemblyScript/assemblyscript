@@ -4870,7 +4870,8 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.EQREF:
       case TypeKind.I31REF:
-      case TypeKind.DATAREF: return module.ref_eq(leftExpr, rightExpr);
+      case TypeKind.DATAREF:
+      case TypeKind.ARRAYREF: return module.ref_eq(leftExpr, rightExpr);
       case TypeKind.STRINGREF: return module.string_eq(leftExpr, rightExpr);
       case TypeKind.STRINGVIEW_WTF8:
       case TypeKind.STRINGVIEW_WTF16:
@@ -4919,7 +4920,8 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.EQREF:
       case TypeKind.I31REF:
-      case TypeKind.DATAREF: {
+      case TypeKind.DATAREF:
+      case TypeKind.ARRAYREF: {
         return module.unary(UnaryOp.EqzI32,
           module.ref_eq(leftExpr, rightExpr)
         );
@@ -9858,7 +9860,8 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
       case TypeKind.I31REF:
-      case TypeKind.DATAREF: {
+      case TypeKind.DATAREF:
+      case TypeKind.ARRAYREF: {
         return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
             && this.checkFeatureEnabled(Feature.GC, reportNode);
       }
@@ -9974,7 +9977,8 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
-      case TypeKind.DATAREF: 
+      case TypeKind.DATAREF:
+      case TypeKind.ARRAYREF:
       case TypeKind.STRINGREF:
       case TypeKind.STRINGVIEW_WTF8:
       case TypeKind.STRINGVIEW_WTF16:
