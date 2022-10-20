@@ -63,7 +63,6 @@ export namespace TypeRef {
   // special types
   export const None: TypeRef = 0 /* _BinaryenTypeNone */;
   export const Unreachable: TypeRef = 1 /* _BinaryenTypeUnreachable */;
-  export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
   // value types
   export const I32: TypeRef = 2 /* _BinaryenTypeInt32 */;
   export const I64: TypeRef = 3 /* _BinaryenTypeInt64 */;
@@ -1501,9 +1500,9 @@ export class Module {
     index: i32,
     value: ExpressionRef,
     isManaged: bool,
-    type: TypeRef = TypeRef.Auto,
+    type: TypeRef = -1,
   ): ExpressionRef {
-    if (type == TypeRef.Auto) type = binaryen._BinaryenExpressionGetType(value);
+    if (type == -1) type = binaryen._BinaryenExpressionGetType(value);
     if (isManaged && this.useShadowStack) {
       value = this.tostack(value);
     }
