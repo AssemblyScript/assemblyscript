@@ -564,8 +564,6 @@ export class Flow {
       if (scope && scope.has(name)) return assert(scope.get(name));
       current = current.parent;
     } while (current);
-    var localsByName = this.parentFunction.localsByName;
-    if (localsByName.has(name)) return assert(localsByName.get(name));
     return null;
   }
 

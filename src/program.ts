@@ -3651,8 +3651,6 @@ export class Function extends TypedElement {
   prototype: FunctionPrototype;
   /** Function signature. */
   signature: Signature;
-  /** Map of locals by name. */
-  localsByName: Map<string,Local> = new Map();
   /** Array of locals by index. */
   localsByIndex: Local[] = [];
   /** List of additional non-parameter locals. */
@@ -3711,6 +3709,7 @@ export class Function extends TypedElement {
     this.original = this;
     var program = prototype.program;
     this.type = signature.type;
+    this.flow = Flow.createParent(this);
     if (!prototype.is(CommonFlags.AMBIENT)) {
       let localIndex = 0;
       let thisType = signature.thisType;
@@ -3721,7 +3720,9 @@ export class Function extends TypedElement {
           thisType,
           this
         );
-        this.localsByName.set(CommonNames.this_, local);
+        let scopedLocals = this.flow.scopedLocals;
+        if (!scopedLocals) this.flow.scopedLocals = scopedLocals = new Map();
+        scopedLocals.set(CommonNames.this_, local);
         this.localsByIndex[local.index] = local;
       }
       let parameterTypes = signature.parameterTypes;
@@ -3734,11 +3735,12 @@ export class Function extends TypedElement {
           parameterType,
           this
         );
-        this.localsByName.set(parameterName, local);
+        let scopedLocals = this.flow.scopedLocals;
+        if (!scopedLocals) this.flow.scopedLocals = scopedLocals = new Map();
+        scopedLocals.set(parameterName, local);
         this.localsByIndex[local.index] = local;
       }
     }
-    this.flow = Flow.createParent(this);
     registerConcreteElement(program, this);
   }
 
@@ -3789,8 +3791,10 @@ export class Function extends TypedElement {
       declaration
     );
     if (name) {
-      if (this.localsByName.has(name)) throw new Error("duplicate local name");
-      this.localsByName.set(name, local);
+      let scopedLocals = this.flow.scopedLocals;
+      if (!scopedLocals) this.flow.scopedLocals = scopedLocals = new Map();
+      if (scopedLocals.has(name)) throw new Error("duplicate local name");
+      scopedLocals.set(name, local);
     }
     this.localsByIndex[local.index] = local;
     this.additionalLocals.push(type);
@@ -3800,8 +3804,10 @@ export class Function extends TypedElement {
   /* @override */
   lookup(name: string, isType: bool = false): Element | null {
     if (!isType) {
-      let locals = this.localsByName;
-      if (locals.has(name)) return assert(locals.get(name));
+      let scopedLocals = this.flow.scopedLocals;
+      if (scopedLocals && scopedLocals.has(name)) {
+        return assert(scopedLocals.get(name));
+      }
     }
     return super.lookup(name, isType);
   }
