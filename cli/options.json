@@ -190,7 +190,7 @@
     "description": [
       "Overrides the stack size. Only relevant for incremental GC",
       "or when using a custom runtime that requires stack space.",
-      "Defaults to 0 without and to 65536 with incremental GC."
+      "Defaults to 0 without and to 32768 with incremental GC."
     ],
     "default": 0,
     "type": "i"
