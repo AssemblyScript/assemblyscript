@@ -8,6 +8,7 @@
     "TS2325: Property 'protPriv' is private in type 'duplicate-field-errors/B' but not in type 'duplicate-field-errors/A'.",
     "TS2325: Property 'pubPriv' is private in type 'duplicate-field-errors/B' but not in type 'duplicate-field-errors/A'.",
     "TS2444: Property 'pubProt' is protected in type 'duplicate-field-errors/B' but public in type 'duplicate-field-errors/A'.",
-    "TS2300: Duplicate identifier 'method'."
+    "TS2300: Duplicate identifier 'method'.",
+    "Property 'sibling' in type 'duplicate-field-errors/Cat' is not assignable to the same property in base type 'duplicate-field-errors/Animal'."
   ]
 }

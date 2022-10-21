@@ -3,6 +3,8 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $features/gc/a anyref (ref.null any))
+ (global $features/gc/b i31ref (ref.null i31))
+ (global $features/gc/c dataref (ref.null data))
  (global $~lib/memory/__data_end i32 (i32.const 60))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
  (global $~lib/memory/__heap_base i32 (i32.const 16444))
@@ -12,10 +14,12 @@
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "a" (global $features/gc/a))
+ (export "b" (global $features/gc/b))
+ (export "c" (global $features/gc/c))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $features/gc/test_i31
-  (local $ref (ref i31))
+  (local $ref i31ref)
   (local $val i32)
   (local $uval i32)
   i32.const 123

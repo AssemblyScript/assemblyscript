@@ -10,5 +10,5 @@ test_i31();
 // constant globals
 
 export const a: anyref = null;
-// export const b: i31ref = null; // TODO: not yet nullable in Binaryen
-// export const c: dataref = null; // TODO: not yet nullable in Binaryen
+export const b: i31ref = null;
+export const c: dataref = null;

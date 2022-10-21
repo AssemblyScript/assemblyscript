@@ -3331,8 +3331,15 @@ export class Resolver extends DiagnosticEmitter {
                 }
               }
 
-              // assignability
-              if (!fieldType.isStrictlyAssignableTo(existingField.type)) {
+              // assignability (to guarantee soundness, field types must be invariant)
+              // see also Wasm GC, where mutable fields are invariant for this reason
+              //
+              //  class Animal { sibling: Animal; }
+              //  class Cat extends Animal { sibling: Cat; } // covariance
+              //  class Dog extends Animal { sibling: Dog; } // is unsound
+              //  (<Animal>new Cat()).sibling = new Dog();   // → Cat with Dog sibling
+              //
+              if (fieldType != existingField.type) {
                 this.errorRelated(
                   DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,
