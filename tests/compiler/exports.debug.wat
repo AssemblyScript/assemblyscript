@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $i32_=>_none (func_subtype (param i32) func))
  (global $exports/Animal.CAT i32 (i32.const 0))
  (global $exports/Animal.DOG i32 (i32.const 1))
  (global $exports/animals.Animal.CAT i32 (i32.const 0))
@@ -25,17 +25,17 @@
  (export "renamed_mul" (func $export/mul))
  (export "memory" (memory $0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
- (func $exports/add (param $a i32) (param $b i32) (result i32)
+ (func $exports/add (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.add
  )
- (func $exports/subOpt (param $a i32) (param $b i32) (result i32)
+ (func $exports/subOpt (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.sub
  )
- (func $exports/subOpt@varargs (param $a i32) (param $b i32) (result i32)
+ (func $exports/subOpt@varargs (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -53,12 +53,12 @@
   local.get $b
   call $exports/subOpt
  )
- (func $export/mul (param $a i32) (param $b i32) (result i32)
+ (func $export/mul (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.mul
  )
- (func $~setArgumentsLength (param $0 i32)
+ (func $~setArgumentsLength (type $i32_=>_none) (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )

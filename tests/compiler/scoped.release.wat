@@ -1,9 +1,9 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (memory $0 0)
  (export "memory" (memory $0))
  (start $~start)
- (func $~start
+ (func $~start (type $none_=>_none)
   (local $0 i32)
   loop $for-loop|0
    local.get $0

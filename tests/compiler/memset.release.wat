@@ -1,7 +1,7 @@
 (module
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_none (func_subtype func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memset/dest (mut i32) (i32.const 0))
  (memory $0 1)
@@ -9,7 +9,7 @@
  (data (i32.const 1048) "\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
- (func $memset/memset (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $memset/memset (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i64)
   (local $4 i32)
   block $folding-inner0
@@ -208,7 +208,7 @@
    end
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   i32.const 17468
   global.set $memset/dest
   i32.const 17468

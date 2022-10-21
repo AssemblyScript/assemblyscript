@@ -1,9 +1,9 @@
 (module
- (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_none (func_subtype (param i32) func))
  (memory $0 0)
  (export "testInherit" (func $continue/testInherit))
  (export "memory" (memory $0))
- (func $continue/testInherit (param $0 i32)
+ (func $continue/testInherit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   loop $for-loop|0
    local.get $1

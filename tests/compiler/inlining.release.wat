@@ -1,12 +1,12 @@
 (module
- (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -41,13 +41,13 @@
  (export "test" (func $inlining/test))
  (export "memory" (memory $0))
  (start $~start)
- (func $inlining/test (result i32)
+ (func $inlining/test (type $none_=>_i32) (result i32)
   i32.const 3
  )
- (func $inlining/func_fe~anonymous|0 (param $0 i32) (result i32)
+ (func $inlining/func_fe~anonymous|0 (type $i32_=>_i32) (param $0 i32) (result i32)
   i32.const 2
  )
- (func $~lib/rt/itcms/visitRoots
+ (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   i32.const 1328
@@ -92,7 +92,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -245,7 +245,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -491,7 +491,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -603,7 +603,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize
+ (func $~lib/rt/tlsf/initialize (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   memory.size $0
@@ -682,7 +682,7 @@
   i32.const 17968
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/itcms/step (result i32)
+ (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -949,7 +949,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -1075,7 +1075,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/__new (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1381,7 +1381,7 @@
   memory.fill $0
   local.get $1
  )
- (func $~lib/rt/__visit_members (param $0 i32)
+ (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
   block $invalid
    block $inlining/Baz
     block $inlining/Bar
@@ -1426,7 +1426,7 @@
   end
   unreachable
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1604,7 +1604,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)

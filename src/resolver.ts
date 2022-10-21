@@ -3345,6 +3345,7 @@ export class Resolver extends DiagnosticEmitter {
                   fieldPrototype.identifierNode.range, existingField.identifierNode.range,
                   fieldPrototype.name, instance.internalName, baseClass.internalName
                 );
+                fieldType = existingField.type; // recover (typebuilder would otherwise error)
               }
             }
             let fieldInstance = new Field(fieldPrototype, instance, fieldType);

@@ -1,8 +1,8 @@
 (module
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "console.assert" (func $~lib/bindings/dom/console.assert (param i32 i32)))
  (import "env" "console.log" (func $~lib/bindings/dom/console.log (param i32)))
  (import "env" "console.debug" (func $~lib/bindings/dom/console.debug (param i32)))
@@ -45,7 +45,7 @@
  (data (i32.const 1592) "\01\00\00\00\08\00\00\001\002\003\004")
  (export "memory" (memory $0))
  (start $~start)
- (func $~start
+ (func $~start (type $none_=>_none)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8

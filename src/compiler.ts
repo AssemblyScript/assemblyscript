@@ -54,7 +54,8 @@ import {
   ExpressionRunnerFlags,
   isConstZero,
   isConstNegZero,
-  isConstExpressionNaN
+  isConstExpressionNaN,
+  ensureType
 } from "./module";
 
 import {
@@ -4874,7 +4875,8 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.Eqref:
       case TypeKind.I31ref:
-      case TypeKind.Dataref: return module.ref_eq(leftExpr, rightExpr);
+      case TypeKind.Dataref:
+      case TypeKind.Arrayref: return module.ref_eq(leftExpr, rightExpr);
       case TypeKind.Stringref: return module.string_eq(leftExpr, rightExpr);
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
@@ -4923,7 +4925,8 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.Eqref:
       case TypeKind.I31ref:
-      case TypeKind.Dataref: {
+      case TypeKind.Dataref:
+      case TypeKind.Arrayref: {
         return module.unary(UnaryOp.EqzI32,
           module.ref_eq(leftExpr, rightExpr)
         );
@@ -7618,8 +7621,11 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         if (contextualType.isExternalReference) {
+          // TODO: Concrete function types currently map to first class functions implemented in
+          // linear memory (on top of `usize`), leaving only generic `funcref` for use here. In the
+          // future, once functions become Wasm GC objects, the actual signature type can be used.
           this.currentType = Type.funcref;
-          return module.ref_func(functionInstance.internalName, TypeRef.Funcref); // TODO
+          return module.ref_func(functionInstance.internalName, ensureType(functionInstance.type));
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
         this.currentType = functionInstance.signature.type;
@@ -9862,7 +9868,8 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.I31ref:
-      case TypeKind.Dataref: {
+      case TypeKind.Dataref:
+      case TypeKind.Arrayref: {
         return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
             && this.checkFeatureEnabled(Feature.GC, reportNode);
       }
@@ -9979,6 +9986,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.Dataref:
+      case TypeKind.Arrayref:
       case TypeKind.Stringref:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
