@@ -390,24 +390,9 @@ export class Flow {
     }
     assert(index < this.parentFunction.localsByIndex.length);
     let scopedAlias = new Local(name, index, type, this.parentFunction);
-    // not flagged as SCOPED as it must not be free'd when the flow is finalized
+    scopedAlias.set(CommonFlags.SCOPED);
     scopedLocals.set(name, scopedAlias);
     return scopedAlias;
-  }
-
-  /** Tests if this flow has any scoped locals that must be free'd. */
-  get hasScopedLocals(): bool {
-    let scopedLocals = this.scopedLocals;
-    if (scopedLocals) {
-      // TODO: for (let local of scopedLocals.values()) {
-      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
-        let local = unchecked(_values[i]);
-        if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   /** Frees a single scoped local by its name. */

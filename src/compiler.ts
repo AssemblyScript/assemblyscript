@@ -2385,7 +2385,6 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Finalize
-    assert(!flow.hasScopedLocals);
     outerFlow.inherit(flow);
     outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
@@ -3156,7 +3155,6 @@ export class Compiler extends DiagnosticEmitter {
       stmts.push(
         module.drop(condExpr)
       );
-      assert(!flow.hasScopedLocals);
       outerFlow.popBreakLabel();
       this.currentFlow = outerFlow;
       return module.flatten(stmts);
@@ -3232,7 +3230,6 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = flow;
 
     // Finalize
-    assert(!flow.hasScopedLocals);
     outerFlow.inherit(flow);
     outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
