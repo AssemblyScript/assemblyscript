@@ -1,8 +1,8 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f64_=>_i32 (func (param f64) (result i32)))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $f64_=>_i32 (func_subtype (param f64) (result i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $instanceof/a (mut i32) (i32.const 0))
  (global $instanceof/b (mut i32) (i32.const 0))
@@ -20,31 +20,31 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $instanceof/isI32<i32> (param $v i32) (result i32)
+ (func $instanceof/isI32<i32> (type $i32_=>_i32) (param $v i32) (result i32)
   i32.const 1
   drop
   i32.const 1
   return
  )
- (func $instanceof/isI32<f64> (param $v f64) (result i32)
+ (func $instanceof/isI32<f64> (type $f64_=>_i32) (param $v f64) (result i32)
   i32.const 0
   drop
   i32.const 0
   return
  )
- (func $instanceof/isI32<u32> (param $v i32) (result i32)
+ (func $instanceof/isI32<u32> (type $i32_=>_i32) (param $v i32) (result i32)
   i32.const 0
   drop
   i32.const 0
   return
  )
- (func $instanceof/isI32<u16> (param $v i32) (result i32)
+ (func $instanceof/isI32<u16> (type $i32_=>_i32) (param $v i32) (result i32)
   i32.const 0
   drop
   i32.const 0
   return
  )
- (func $start:instanceof
+ (func $start:instanceof (type $none_=>_none)
   i32.const 1
   drop
   i32.const 1
@@ -222,7 +222,7 @@
   i32.const 1
   drop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:instanceof
  )
 )

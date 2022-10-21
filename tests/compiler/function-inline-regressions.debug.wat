@@ -1,9 +1,9 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
  (global $function-inline-regressions/struct i32 (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
@@ -14,13 +14,13 @@
  (export "baz" (func $function-inline-regressions/baz))
  (export "foo" (func $function-inline-regressions/foo))
  (export "memory" (memory $0))
- (func $function-inline-regressions/baz (param $v i32)
+ (func $function-inline-regressions/baz (type $i32_=>_none) (param $v i32)
   local.get $v
   if
    unreachable
   end
  )
- (func $function-inline-regressions/loadX (param $a i32) (param $b i32) (result i32)
+ (func $function-inline-regressions/loadX (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   i32.const 2
   local.get $a
   i32.mul
@@ -28,26 +28,26 @@
   i32.add
   i32.load $0
  )
- (func $function-inline-regressions/loadZ (result i32)
+ (func $function-inline-regressions/loadZ (type $none_=>_i32) (result i32)
   i32.const 16
   i32.load $0
  )
- (func $function-inline-regressions/Struct#set:v0 (param $0 i32) (param $1 i32)
+ (func $function-inline-regressions/Struct#set:v0 (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0
  )
- (func $function-inline-regressions/Struct#set:v1 (param $0 i32) (param $1 i32)
+ (func $function-inline-regressions/Struct#set:v1 (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=4
  )
- (func $function-inline-regressions/Struct#set:v2 (param $0 i32) (param $1 i32)
+ (func $function-inline-regressions/Struct#set:v2 (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=8
  )
- (func $function-inline-regressions/foo (param $v0 i32) (param $v1 i32) (param $v2 i32) (result i32)
+ (func $function-inline-regressions/foo (type $i32_i32_i32_=>_i32) (param $v0 i32) (param $v1 i32) (param $v2 i32) (result i32)
   (local $x i32)
   (local $y i32)
   (local $z i32)

@@ -1,8 +1,8 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17452))
  (memory $0 1)
@@ -14,13 +14,13 @@
  (export "memory" (memory $0))
  (export "testVoidReturnFunction" (func $export:return/testVoidReturnFunction))
  (start $~start)
- (func $start:return~anonymous|0
+ (func $start:return~anonymous|0 (type $none_=>_none)
   nop
  )
- (func $return/testVoidReturn (param $0 i32)
+ (func $return/testVoidReturn (type $i32_=>_none) (param $0 i32)
   nop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -52,7 +52,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:return/testVoidReturnFunction (param $0 i32) (param $1 i32)
+ (func $export:return/testVoidReturnFunction (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub

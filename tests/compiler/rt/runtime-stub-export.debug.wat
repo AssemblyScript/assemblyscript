@@ -1,10 +1,10 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -23,7 +23,7 @@
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (param $newOffset i32)
+ (func $~lib/rt/stub/maybeGrowMemory (type $i32_=>_none) (param $newOffset i32)
   (local $pagesBefore i32)
   (local $maxOffset i32)
   (local $pagesNeeded i32)
@@ -84,12 +84,12 @@
   local.get $newOffset
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0
  )
- (func $~lib/rt/stub/__alloc (param $size i32) (result i32)
+ (func $~lib/rt/stub/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
   (local $block i32)
   (local $ptr i32)
   (local $size_0 i32)
@@ -134,27 +134,27 @@
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $ptr
  )
- (func $~lib/rt/common/OBJECT#set:gcInfo (param $0 i32) (param $1 i32)
+ (func $~lib/rt/common/OBJECT#set:gcInfo (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=4
  )
- (func $~lib/rt/common/OBJECT#set:gcInfo2 (param $0 i32) (param $1 i32)
+ (func $~lib/rt/common/OBJECT#set:gcInfo2 (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=8
  )
- (func $~lib/rt/common/OBJECT#set:rtId (param $0 i32) (param $1 i32)
+ (func $~lib/rt/common/OBJECT#set:rtId (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=12
  )
- (func $~lib/rt/common/OBJECT#set:rtSize (param $0 i32) (param $1 i32)
+ (func $~lib/rt/common/OBJECT#set:rtSize (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store $0 offset=16
  )
- (func $~lib/rt/stub/__new (param $size i32) (param $id i32) (result i32)
+ (func $~lib/rt/stub/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
   (local $ptr i32)
   (local $object i32)
   local.get $size
@@ -193,16 +193,16 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/stub/__pin (param $ptr i32) (result i32)
+ (func $~lib/rt/stub/__pin (type $i32_=>_i32) (param $ptr i32) (result i32)
   local.get $ptr
  )
- (func $~lib/rt/stub/__unpin (param $ptr i32)
+ (func $~lib/rt/stub/__unpin (type $i32_=>_none) (param $ptr i32)
   nop
  )
- (func $~lib/rt/stub/__collect
+ (func $~lib/rt/stub/__collect (type $none_=>_none)
   nop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add

@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $bool/i (mut i32) (i32.const 2))
  (global $bool/I (mut i64) (i64.const 2))
@@ -50,7 +50,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:bool
+ (func $start:bool (type $none_=>_none)
   global.get $bool/i
   i32.const 0
   i32.ne
@@ -760,7 +760,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:bool
  )
 )

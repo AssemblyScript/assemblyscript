@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $inlining-blocklocals/b (mut i32) (i32.const 2))
  (global $inlining-blocklocals/theCall_a (mut i32) (i32.const 0))
@@ -15,7 +15,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $inlining-blocklocals/test
+ (func $inlining-blocklocals/test (type $none_=>_none)
   (local $a i32)
   (local $var$1 i32)
   (local $var$2 i32)
@@ -98,10 +98,10 @@
    unreachable
   end
  )
- (func $start:inlining-blocklocals
+ (func $start:inlining-blocklocals (type $none_=>_none)
   call $inlining-blocklocals/test
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:inlining-blocklocals
  )
 )

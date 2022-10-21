@@ -1,13 +1,13 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
- (type $i32_f32_i32_i32_=>_i32 (func (param i32 f32 i32 i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $f32_=>_f32 (func (param f32) (result f32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_f32_i32_i32_=>_i32 (func_subtype (param i32 f32 i32 i32) (result i32) func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
+ (type $f32_=>_f32 (func_subtype (param f32) (result f32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -52,7 +52,7 @@
  (export "test5" (func $export:infer-generic/test2))
  (export "inferAssert" (func $export:infer-generic/inferAssert))
  (start $~start)
- (func $start:infer-generic~anonymous|0 (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:infer-generic~anonymous|0 (type $i32_f32_i32_i32_=>_i32) (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
   local.get $1
   f32.const 0
   f32.ne
@@ -60,7 +60,7 @@
   local.get $0
   select
  )
- (func $~lib/rt/itcms/visitRoots
+ (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   i32.const 1152
@@ -107,7 +107,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -260,7 +260,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -506,7 +506,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -618,7 +618,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize
+ (func $~lib/rt/tlsf/initialize (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   memory.size $0
@@ -697,7 +697,7 @@
   i32.const 18080
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/itcms/step (result i32)
+ (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -964,7 +964,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1021,7 +1021,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/__new (result i32)
+ (func $~lib/rt/itcms/__new (type $none_=>_i32) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1253,10 +1253,10 @@
   i32.store $0 align=1
   local.get $0
  )
- (func $infer-generic/test1 (param $0 f32) (result f32)
+ (func $infer-generic/test1 (type $f32_=>_f32) (param $0 f32) (result f32)
   local.get $0
  )
- (func $~lib/rt/__visit_members (param $0 i32)
+ (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
   block $folding-inner1
    block $folding-inner0
     block $invalid
@@ -1294,7 +1294,7 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1435,7 +1435,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $export:infer-generic/test2 (param $0 i32) (result i32)
+ (func $export:infer-generic/test2 (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1462,7 +1462,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
- (func $export:infer-generic/inferAssert (param $0 i32)
+ (func $export:infer-generic/inferAssert (type $i32_=>_none) (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -1499,7 +1499,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)

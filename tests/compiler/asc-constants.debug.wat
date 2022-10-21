@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (global $~lib/native/ASC_TARGET i32 (i32.const 1))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/native/ASC_NO_ASSERT i32 (i32.const 0))
@@ -29,7 +29,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:asc-constants
+ (func $start:asc-constants (type $none_=>_none)
   i32.const 1
   drop
   i32.const 2
@@ -79,7 +79,7 @@
   i32.const 1
   drop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:asc-constants
  )
 )

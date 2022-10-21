@@ -56,10 +56,14 @@ export declare function _BinaryenTypeAnyref(): TypeRef;
 export declare function _BinaryenTypeEqref(): TypeRef;
 export declare function _BinaryenTypeI31ref(): TypeRef;
 export declare function _BinaryenTypeDataref(): TypeRef;
+export declare function _BinaryenTypeArrayref(): TypeRef;
 export declare function _BinaryenTypeStringref(): TypeRef;
 export declare function _BinaryenTypeStringviewWTF8(): TypeRef;
 export declare function _BinaryenTypeStringviewWTF16(): TypeRef;
 export declare function _BinaryenTypeStringviewIter(): TypeRef;
+export declare function _BinaryenTypeNullref(): TypeRef;
+export declare function _BinaryenTypeNullExternref(): TypeRef;
+export declare function _BinaryenTypeNullFuncref(): TypeRef;
 
 export declare function _BinaryenHeapTypeFunc(): HeapTypeRef;
 export declare function _BinaryenHeapTypeExt(): HeapTypeRef;
@@ -67,10 +71,17 @@ export declare function _BinaryenHeapTypeAny(): HeapTypeRef;
 export declare function _BinaryenHeapTypeEq(): HeapTypeRef;
 export declare function _BinaryenHeapTypeI31(): HeapTypeRef;
 export declare function _BinaryenHeapTypeData(): HeapTypeRef;
+export declare function _BinaryenHeapTypeArray(): HeapTypeRef;
 export declare function _BinaryenHeapTypeString(): HeapTypeRef;
 export declare function _BinaryenHeapTypeStringviewWTF8(): HeapTypeRef;
 export declare function _BinaryenHeapTypeStringviewWTF16(): HeapTypeRef;
 export declare function _BinaryenHeapTypeStringviewIter(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNone(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNoext(): HeapTypeRef;
+export declare function _BinaryenHeapTypeNofunc(): HeapTypeRef;
+
+export declare function _BinaryenHeapTypeIsBottom(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeGetBottom(heapType: HeapTypeRef): HeapTypeRef;
 
 export declare function _BinaryenModuleCreate(): ModuleRef;
 export declare function _BinaryenModuleDispose(module: ModuleRef): void;
@@ -594,7 +605,7 @@ export declare function _BinaryenStructSetSetValue(expr: ExpressionRef, valueExp
 export declare function _BinaryenArrayNew(module: ModuleRef, type: HeapTypeRef, size: ExpressionRef, init: ExpressionRef): ExpressionRef;
 export declare function _BinaryenArrayNewGetInit(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenArrayNewSetInit(expr: ExpressionRef, initExpr: ExpressionRef): void;
-export declare function _BinaryenArrayNewGetSize(expr: ExpressionRef): ExpressionRef; 
+export declare function _BinaryenArrayNewGetSize(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenArrayNewSetSize(expr: ExpressionRef, sizeExpr: ExpressionRef): void;
 
 export declare function _BinaryenArrayInit(module: ModuleRef, type: HeapTypeRef, values: ArrayRef<ExpressionRef>, numValues: Index): ExpressionRef;
@@ -605,7 +616,7 @@ export declare function _BinaryenArrayInitAppendValue(expr: ExpressionRef, value
 export declare function _BinaryenArrayInitInsertValueAt(expr: ExpressionRef, index: Index, valueExpr: ExpressionRef): void;
 export declare function _BinaryenArrayInitRemoveValueAt(expr: ExpressionRef, index: Index): ExpressionRef;
 
-export declare function _BinaryenArrayGet(module: ModuleRef, ref: ExpressionRef, index: ExpressionRef, signed: bool): ExpressionRef;
+export declare function _BinaryenArrayGet(module: ModuleRef, ref: ExpressionRef, index: ExpressionRef, type: TypeRef, signed: bool): ExpressionRef;
 export declare function _BinaryenArrayGetGetRef(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenArrayGetSetRef(expr: ExpressionRef, refExpr: ExpressionRef): void;
 export declare function _BinaryenArrayGetGetIndex(expr: ExpressionRef): ExpressionRef;

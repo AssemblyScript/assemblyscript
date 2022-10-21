@@ -1,11 +1,11 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_none (func))
- (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $f64_f64_=>_i32 (func_subtype (param f64 f64) (result i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $f32_f32_=>_i32 (func_subtype (param f32 f32) (result i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32 i32 i32) (result i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -24,7 +24,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/object/Object.is<f64> (param $x f64) (param $y f64) (result i32)
+ (func $~lib/object/Object.is<f64> (type $f64_f64_=>_i32) (param $x f64) (param $y f64) (result i32)
   i32.const 1
   drop
   i32.const 8
@@ -46,7 +46,7 @@
   i32.or
   return
  )
- (func $~lib/object/Object.is<f32> (param $x f32) (param $y f32) (result i32)
+ (func $~lib/object/Object.is<f32> (type $f32_f32_=>_i32) (param $x f32) (param $y f32) (result i32)
   i32.const 1
   drop
   i32.const 4
@@ -68,14 +68,14 @@
   i32.or
   return
  )
- (func $~lib/object/Object.is<i32> (param $x i32) (param $y i32) (result i32)
+ (func $~lib/object/Object.is<i32> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
   local.get $x
   local.get $y
   i32.eq
  )
- (func $~lib/object/Object.is<bool> (param $x i32) (param $y i32) (result i32)
+ (func $~lib/object/Object.is<bool> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
   local.get $x
@@ -86,7 +86,7 @@
   i32.ne
   i32.eq
  )
- (func $~lib/string/String#get:length (param $this i32) (result i32)
+ (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
@@ -94,7 +94,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
+ (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $var$7 i32)
@@ -200,7 +200,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
+ (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
   local.get $left
   local.get $right
@@ -242,24 +242,24 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/object/Object.is<~lib/string/String> (param $x i32) (param $y i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
   local.get $x
   local.get $y
   call $~lib/string/String.__eq
  )
- (func $~lib/object/Object.is<~lib/string/String|null> (param $x i32) (param $y i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String|null> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
   i32.const 0
   drop
   local.get $x
   local.get $y
   call $~lib/string/String.__eq
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:std/object
  )
- (func $~stack_check
+ (func $~stack_check (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -272,7 +272,7 @@
    unreachable
   end
  )
- (func $start:std/object
+ (func $start:std/object (type $none_=>_none)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8

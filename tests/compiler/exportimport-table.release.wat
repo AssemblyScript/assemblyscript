@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (import "env" "table" (table $0 2 funcref))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
@@ -7,7 +7,7 @@
  (elem $0 (i32.const 1) $start:exportimport-table~anonymous|0)
  (export "memory" (memory $0))
  (export "table" (table $0))
- (func $start:exportimport-table~anonymous|0
+ (func $start:exportimport-table~anonymous|0 (type $none_=>_none)
   nop
  )
 )

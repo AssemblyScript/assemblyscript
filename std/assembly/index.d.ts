@@ -47,6 +47,8 @@ declare type eqref = object | null;
 declare type i31ref = object | null;
 /** Data reference. */
 declare type dataref = object | null;
+/** Array reference. */
+declare type arrayref = object | null;
 /** String reference. */
 declare type stringref = object | null;
 /** WTF-8 string view. */

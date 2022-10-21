@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
@@ -10,7 +10,7 @@
  (export "testWhile" (func $unify-local-flags/testWhile))
  (export "testDo" (func $unify-local-flags/testDo))
  (export "memory" (memory $0))
- (func $unify-local-flags/testFor
+ (func $unify-local-flags/testFor (type $none_=>_none)
   (local $x i32)
   (local $i i32)
   (local $var$2 i32)
@@ -35,7 +35,7 @@
    end
   end
  )
- (func $unify-local-flags/testWhile
+ (func $unify-local-flags/testWhile (type $none_=>_none)
   (local $x i32)
   (local $i i32)
   (local $var$2 i32)
@@ -62,7 +62,7 @@
    end
   end
  )
- (func $unify-local-flags/testDo
+ (func $unify-local-flags/testDo (type $none_=>_none)
   (local $x i32)
   (local $i i32)
   i32.const 0

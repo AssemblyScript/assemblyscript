@@ -1,18 +1,18 @@
 (module
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
- (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
- (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
- (type $i32_f32_i32_=>_none (func (param i32 f32 i32)))
- (type $i32_f64_i32_=>_none (func (param i32 f64 i32)))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
+ (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_i32_=>_i64 (func_subtype (param i32 i32) (result i64) func))
+ (type $i32_i64_i32_=>_none (func_subtype (param i32 i64 i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $none_=>_i32 (func_subtype (result i32) func))
+ (type $i32_i32_i32_=>_f32 (func_subtype (param i32 i32 i32) (result f32) func))
+ (type $i32_i32_=>_f64 (func_subtype (param i32 i32) (result f64) func))
+ (type $i32_f32_i32_=>_none (func_subtype (param i32 f32 i32) func))
+ (type $i32_f64_i32_=>_none (func_subtype (param i32 f64 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -50,7 +50,7 @@
  (data (i32.const 1772) "A\00\00\00\02")
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/itcms/visitRoots
+ (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   i32.const 1360
@@ -97,7 +97,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
+ (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -229,7 +229,7 @@
   local.get $0
   i32.store $0 offset=8
  )
- (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -382,7 +382,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -628,7 +628,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -740,7 +740,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize
+ (func $~lib/rt/tlsf/initialize (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   memory.size $0
@@ -819,7 +819,7 @@
   i32.const 18176
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/itcms/step (result i32)
+ (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1086,7 +1086,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -1212,7 +1212,7 @@
    end
   end
  )
- (func $~lib/rt/itcms/__new (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1518,7 +1518,7 @@
   memory.fill $0
   local.get $1
  )
- (func $~lib/typedarray/Uint8Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#__set (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load $0 offset=8
@@ -1538,7 +1538,7 @@
   local.get $2
   i32.store8 $0
  )
- (func $~lib/dataview/DataView#getFloat32 (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $~lib/dataview/DataView#getFloat32 (type $i32_i32_i32_=>_f32) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1584,7 +1584,7 @@
    f32.reinterpret_i32
   end
  )
- (func $~lib/dataview/DataView#getFloat64 (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/dataview/DataView#getFloat64 (type $i32_i32_=>_f64) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i64)
   local.get $0
   i32.load $0 offset=8
@@ -1634,7 +1634,7 @@
    f64.reinterpret_i64
   end
  )
- (func $~lib/dataview/DataView#getInt8 (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt8 (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load $0 offset=8
@@ -1653,7 +1653,7 @@
   i32.add
   i32.load8_s $0
  )
- (func $~lib/dataview/DataView#getInt16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt16 (type $i32_i32_i32_=>_i32) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1694,7 +1694,7 @@
    i32.or
   end
  )
- (func $~lib/dataview/DataView#getInt32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt32 (type $i32_i32_i32_=>_i32) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1736,7 +1736,7 @@
    i32.or
   end
  )
- (func $~lib/dataview/DataView#getInt64 (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/dataview/DataView#getInt64 (type $i32_i32_=>_i64) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   local.get $0
   i32.load $0 offset=8
@@ -1784,7 +1784,7 @@
    i64.rotr
   end
  )
- (func $~lib/dataview/DataView#getUint8 (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint8 (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load $0 offset=8
@@ -1803,7 +1803,7 @@
   i32.add
   i32.load8_u $0
  )
- (func $~lib/dataview/DataView#getUint16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint16 (type $i32_i32_i32_=>_i32) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1838,7 +1838,7 @@
   local.get $2
   select
  )
- (func $~lib/dataview/DataView#getUint32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint32 (type $i32_i32_i32_=>_i32) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1880,7 +1880,7 @@
    i32.or
   end
  )
- (func $~lib/dataview/DataView#getUint64 (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/dataview/DataView#getUint64 (type $i32_i32_=>_i64) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   local.get $0
   i32.load $0 offset=8
@@ -1928,7 +1928,7 @@
    i64.rotr
   end
  )
- (func $~lib/dataview/DataView#setFloat32 (param $0 i32) (param $1 f32) (param $2 i32)
+ (func $~lib/dataview/DataView#setFloat32 (type $i32_f32_i32_=>_none) (param $0 i32) (param $1 f32) (param $2 i32)
   local.get $0
   i32.load $0 offset=8
   i32.const 4
@@ -1966,7 +1966,7 @@
    i32.store $0
   end
  )
- (func $~lib/dataview/DataView#setFloat64 (param $0 i32) (param $1 f64) (param $2 i32)
+ (func $~lib/dataview/DataView#setFloat64 (type $i32_f64_i32_=>_none) (param $0 i32) (param $1 f64) (param $2 i32)
   (local $3 i64)
   local.get $0
   i32.load $0 offset=8
@@ -2018,7 +2018,7 @@
    i64.store $0
   end
  )
- (func $~lib/dataview/DataView#setInt16 (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt16 (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load $0 offset=8
   i32.const 2
@@ -2050,7 +2050,7 @@
   end
   i32.store16 $0
  )
- (func $~lib/dataview/DataView#setInt32 (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt32 (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load $0 offset=8
   i32.const 4
@@ -2083,7 +2083,7 @@
   end
   i32.store $0
  )
- (func $~lib/dataview/DataView#setInt64 (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt64 (type $i32_i64_i32_=>_none) (param $0 i32) (param $1 i64) (param $2 i32)
   local.get $0
   i32.load $0 offset=8
   i32.const 8
@@ -2129,7 +2129,7 @@
   end
   i64.store $0
  )
- (func $~lib/dataview/DataView#setUint16 (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint16 (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load $0 offset=8
   i32.const 2
@@ -2161,7 +2161,7 @@
   end
   i32.store16 $0
  )
- (func $~lib/dataview/DataView#setUint32 (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint32 (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load $0 offset=8
   i32.const 4
@@ -2194,7 +2194,7 @@
   end
   i32.store $0
  )
- (func $~lib/dataview/DataView#setUint64 (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint64 (type $i32_i64_i32_=>_none) (param $0 i32) (param $1 i64) (param $2 i32)
   local.get $0
   i32.load $0 offset=8
   i32.const 8
@@ -2240,7 +2240,7 @@
   end
   i64.store $0
  )
- (func $~lib/rt/__visit_members (param $0 i32)
+ (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
   block $folding-inner0
    block $invalid
     block $~lib/string/String
@@ -2265,10 +2265,10 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:std/dataview
  )
- (func $start:std/dataview
+ (func $start:std/dataview (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4043,7 +4043,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/dataview/DataView#constructor (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (type $i32_i32_i32_=>_i32) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -4122,7 +4122,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $3
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
   global.get $~lib/rt/itcms/white
   local.get $0
   i32.const 20
@@ -4141,7 +4141,7 @@
    global.set $~lib/rt/itcms/visitCount
   end
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__link (param $0 i32) (param $1 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__link (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   i32.eqz
   if

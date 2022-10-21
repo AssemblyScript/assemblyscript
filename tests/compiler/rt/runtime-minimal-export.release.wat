@@ -1,11 +1,11 @@
 (module
- (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
@@ -33,7 +33,7 @@
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -186,7 +186,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -432,7 +432,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -544,7 +544,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize
+ (func $~lib/rt/tlsf/initialize (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   memory.size $0
@@ -623,7 +623,7 @@
   i32.const 1488
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -749,7 +749,7 @@
    end
   end
  )
- (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tcms/__new (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1005,7 +1005,7 @@
   i32.const 20
   i32.add
  )
- (func $~lib/rt/tcms/Object#unlink (param $0 i32)
+ (func $~lib/rt/tcms/Object#unlink (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load $0 offset=4
@@ -1056,7 +1056,7 @@
   i32.or
   i32.store $0 offset=4
  )
- (func $~lib/rt/tcms/__pin (param $0 i32) (result i32)
+ (func $~lib/rt/tcms/__pin (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1107,7 +1107,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tcms/__unpin (param $0 i32)
+ (func $~lib/rt/tcms/__unpin (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1158,7 +1158,7 @@
   local.get $1
   i32.store $0 offset=8
  )
- (func $~lib/rt/tcms/__collect
+ (func $~lib/rt/tcms/__collect (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1368,7 +1368,7 @@
   local.get $3
   global.set $~lib/rt/tcms/white
  )
- (func $~lib/rt/__visit_members (param $0 i32)
+ (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
   block $invalid
    block $~lib/arraybuffer/ArrayBufferView
     block $~lib/string/String
@@ -1394,7 +1394,7 @@
   end
   unreachable
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   i32.const 1236
   i32.const 1232
   i32.store $0
@@ -1420,7 +1420,7 @@
   i32.const 1424
   global.set $~lib/rt/tcms/toSpace
  )
- (func $byn-split-outlined-A$~lib/rt/tcms/__visit (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/tcms/__visit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tcms/white
