@@ -6120,7 +6120,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             return module.unreachable();
           }
-          if (local.is(CommonFlags.INLINED)) {
+          if (local.is(CommonFlags.Inlined)) {
             let inlinedValue = local.constantIntegerValue;
             if (this.options.isWasm64) {
               functionArg = module.i64(i64_low(inlinedValue), i64_high(inlinedValue));
@@ -9982,12 +9982,12 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.Stringref:
       case TypeKind.StringviewWTF8:
       case TypeKind.StringviewWTF16:
-      case TypeKind.STRINGVIEW_ITER: {
+      case TypeKind.StringviewIter: {
         // TODO: what if not nullable?
         return module.ref_null(type.toRef());
       }
-      case TypeKind.I31REF: {
-        if (type.is(TypeFlags.NULLABLE)) return module.ref_null(type.toRef());
+      case TypeKind.I31ref: {
+        if (type.is(TypeFlags.Nullable)) return module.ref_null(type.toRef());
         return module.i31_new(module.i32(0));
       }
     }

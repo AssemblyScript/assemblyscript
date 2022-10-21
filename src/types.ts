@@ -601,37 +601,37 @@ export class Type {
       case TypeKind.F32:  return TypeRef.F32;
       case TypeKind.F64:  return TypeRef.F64;
       case TypeKind.V128: return TypeRef.V128;
-      case TypeKind.FUNCREF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, this.is(TypeFlags.NULLABLE));
+      case TypeKind.Funcref: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.EXTERNREF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Ext, this.is(TypeFlags.NULLABLE));
+      case TypeKind.Externref: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Ext, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.ANYREF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, this.is(TypeFlags.NULLABLE));
+      case TypeKind.Anyref: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.EQREF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, this.is(TypeFlags.NULLABLE));
+      case TypeKind.Eqref: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.I31REF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, this.is(TypeFlags.NULLABLE));
+      case TypeKind.I31ref: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.DATAREF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, this.is(TypeFlags.NULLABLE));
+      case TypeKind.Dataref: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.STRINGREF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, this.is(TypeFlags.NULLABLE));
+      case TypeKind.Stringref: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.STRINGVIEW_WTF8: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF8, this.is(TypeFlags.NULLABLE));
+      case TypeKind.StringviewWTF8: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF8, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.STRINGVIEW_WTF16: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF16, this.is(TypeFlags.NULLABLE));
+      case TypeKind.StringviewWTF16: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF16, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.STRINGVIEW_ITER: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewIter, this.is(TypeFlags.NULLABLE));
+      case TypeKind.StringviewIter: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewIter, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.VOID: return TypeRef.None;
+      case TypeKind.Void: return TypeRef.None;
     }
   }
 
