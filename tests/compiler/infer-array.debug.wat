@@ -28,9 +28,9 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1088))
  (global $~lib/memory/__data_end i32 (i32.const 1188))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66724))
- (global $~lib/memory/__heap_base i32 (i32.const 66724))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33956))
+ (global $~lib/memory/__heap_base i32 (i32.const 33956))
+ (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -3346,8 +3346,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 66752
-   i32.const 66800
+   i32.const 33984
+   i32.const 34032
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

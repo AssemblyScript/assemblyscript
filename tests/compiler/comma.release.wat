@@ -4,7 +4,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
- (memory $0 2)
+ (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\10\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
  (export "memory" (memory $0))

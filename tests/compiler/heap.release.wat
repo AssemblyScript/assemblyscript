@@ -8,7 +8,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $heap/ptr (mut i32) (i32.const 0))
- (memory $0 2)
+ (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1100) "<")
@@ -531,10 +531,10 @@
   (local $1 i32)
   memory.size $0
   local.tee $1
-  i32.const 2
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if (result i32)
-   i32.const 2
+   i32.const 1
    local.get $1
    i32.sub
    memory.grow $0
@@ -546,10 +546,10 @@
   if
    unreachable
   end
-  i32.const 66704
+  i32.const 33936
   i32.const 0
   i32.store $0
-  i32.const 68272
+  i32.const 35504
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -560,7 +560,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 66704
+    i32.const 33936
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -578,7 +578,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 66704
+      i32.const 33936
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -596,13 +596,13 @@
     br $for-loop|0
    end
   end
-  i32.const 66704
-  i32.const 68276
+  i32.const 33936
+  i32.const 35508
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 66704
+  i32.const 33936
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (type $i32_=>_i32) (param $0 i32) (result i32)
@@ -982,7 +982,7 @@
   i32.and
   memory.copy $0 $0
   local.get $1
-  i32.const 66700
+  i32.const 33932
   i32.ge_u
   if
    local.get $1
@@ -1024,7 +1024,7 @@
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  i32.const 66700
+  i32.const 33932
   i32.lt_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1110,7 +1110,7 @@
   global.set $heap/ptr
   global.get $heap/ptr
   local.tee $0
-  i32.const 66700
+  i32.const 33932
   i32.ge_u
   if
    global.get $~lib/rt/tlsf/ROOT

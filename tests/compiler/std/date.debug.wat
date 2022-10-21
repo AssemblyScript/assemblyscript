@@ -43,10 +43,10 @@
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/rt/__rtti_base i32 (i32.const 6768))
  (global $~lib/memory/__data_end i32 (i32.const 6828))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 72364))
- (global $~lib/memory/__heap_base i32 (i32.const 72364))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 39596))
+ (global $~lib/memory/__heap_base i32 (i32.const 39596))
  (global $~started (mut i32) (i32.const 0))
- (memory $0 2)
+ (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00D\00a\00t\00e\00\00\00\00\00")
  (data (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00d\00a\00t\00e\00.\00t\00s\00\00\00\00\00")
  (data (i32.const 108) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s\00\00\00\00\00\00\00")
@@ -4583,8 +4583,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 72384
-   i32.const 72432
+   i32.const 39616
+   i32.const 39664
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

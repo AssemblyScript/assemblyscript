@@ -12,9 +12,9 @@
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $NonNullable/z (mut i32) (i32.const 224))
  (global $~lib/memory/__data_end i32 (i32.const 300))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 65836))
- (global $~lib/memory/__heap_base i32 (i32.const 65836))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33068))
+ (global $~lib/memory/__heap_base i32 (i32.const 33068))
+ (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00u\003\002\00\00\00\00\00\00\00")
  (data (i32.const 44) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00N\00o\00n\00N\00u\00l\00l\00a\00b\00l\00e\00.\00t\00s\00")
  (data (i32.const 92) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00S\00t\00r\00i\00n\00g\00")
@@ -221,8 +221,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 65856
-   i32.const 65904
+   i32.const 33088
+   i32.const 33136
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

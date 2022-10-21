@@ -10,9 +10,9 @@
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 380))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 65916))
- (global $~lib/memory/__heap_base i32 (i32.const 65916))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33148))
+ (global $~lib/memory/__heap_base i32 (i32.const 33148))
+ (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00a\00s\00s\00e\00r\00t\00-\00n\00o\00n\00n\00u\00l\00l\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
@@ -84,8 +84,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 65936
-   i32.const 65984
+   i32.const 33168
+   i32.const 33216
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

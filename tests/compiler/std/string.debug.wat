@@ -68,9 +68,9 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 25392))
  (global $~lib/memory/__data_end i32 (i32.const 25436))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 90972))
- (global $~lib/memory/__heap_base i32 (i32.const 90972))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 58204))
+ (global $~lib/memory/__heap_base i32 (i32.const 58204))
+ (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 76) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00\00\00")
  (data (i32.const 124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\df\00\00\00\00\00\00\00\00\00\00\00")
@@ -8286,8 +8286,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 90992
-   i32.const 91040
+   i32.const 58224
+   i32.const 58272
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

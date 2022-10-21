@@ -13,8 +13,8 @@
  (import "env" "console.timeLog" (func $~lib/bindings/dom/console.timeLog (param i32)))
  (import "env" "console.timeEnd" (func $~lib/bindings/dom/console.timeEnd (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 67148))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34380))
+ (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\0c\00\00\00w\00h\00o\00o\00p\00s")
  (data (i32.const 1068) "\1c")
@@ -55,8 +55,8 @@
   i32.const 1612
   i32.lt_s
   if
-   i32.const 67168
-   i32.const 67216
+   i32.const 34400
+   i32.const 34448
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

@@ -9,8 +9,8 @@
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 67564))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34796))
+ (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01")
  (data (i32.const 1068) "\1c")
@@ -211,8 +211,8 @@
   i32.const 2028
   i32.lt_s
   if
-   i32.const 67584
-   i32.const 67632
+   i32.const 34816
+   i32.const 34864
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

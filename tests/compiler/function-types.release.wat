@@ -7,8 +7,8 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66764))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33996))
+ (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\03\00\00\00\08\00\00\00\01")
  (data (i32.const 1068) "<")
@@ -238,8 +238,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 66784
-  i32.const 66832
+  i32.const 34016
+  i32.const 34064
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort

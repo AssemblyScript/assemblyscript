@@ -4,7 +4,7 @@
  (type $none_=>_none (func_subtype func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memmove/dest (mut i32) (i32.const 0))
- (memory $0 2)
+ (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s")
  (export "memory" (memory $0))

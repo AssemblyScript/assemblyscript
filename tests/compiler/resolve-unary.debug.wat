@@ -34,9 +34,9 @@
  (global $resolve-unary/bar (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 2816))
  (global $~lib/memory/__data_end i32 (i32.const 2868))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 68404))
- (global $~lib/memory/__heap_base i32 (i32.const 68404))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 35636))
+ (global $~lib/memory/__heap_base i32 (i32.const 35636))
+ (memory $0 1)
  (data (i32.const 12) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006\00\00\00\00\00\00\00\00\00")
  (data (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 204) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\000\00\00\00\00\00\00\00\00\00\00\00")
@@ -2921,8 +2921,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 68432
-   i32.const 68480
+   i32.const 35664
+   i32.const 35712
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

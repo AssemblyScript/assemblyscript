@@ -3,8 +3,8 @@
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66940))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34172))
+ (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
  (data (i32.const 1100) "<")
@@ -39,8 +39,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 66960
-   i32.const 67008
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -82,8 +82,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 66960
-   i32.const 67008
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -117,8 +117,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 66960
-   i32.const 67008
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -199,8 +199,8 @@
    local.get $0
    return
   end
-  i32.const 66960
-  i32.const 67008
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -299,8 +299,8 @@
    local.get $0
    return
   end
-  i32.const 66960
-  i32.const 67008
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -359,8 +359,8 @@
    local.get $0
    return
   end
-  i32.const 66960
-  i32.const 67008
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -430,8 +430,8 @@
     local.get $0
     return
    end
-   i32.const 66960
-   i32.const 67008
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -508,8 +508,8 @@
     local.get $0
     return
    end
-   i32.const 66960
-   i32.const 67008
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -531,8 +531,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 66960
-   i32.const 67008
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -593,8 +593,8 @@
    drop
    unreachable
   end
-  i32.const 66960
-  i32.const 67008
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -632,8 +632,8 @@
    drop
    unreachable
   end
-  i32.const 66960
-  i32.const 67008
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -648,8 +648,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 66960
-   i32.const 67008
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -698,8 +698,8 @@
    drop
    unreachable
   end
-  i32.const 66960
-  i32.const 67008
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort

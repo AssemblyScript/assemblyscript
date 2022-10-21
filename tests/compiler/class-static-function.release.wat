@@ -3,8 +3,8 @@
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (type $none_=>_none (func_subtype func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66684))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33916))
+ (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\03\00\00\00\08\00\00\00\01")
  (data (i32.const 1068) "L")
@@ -26,8 +26,8 @@
   i32.const 1148
   i32.lt_s
   if
-   i32.const 66704
-   i32.const 66752
+   i32.const 33936
+   i32.const 33984
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

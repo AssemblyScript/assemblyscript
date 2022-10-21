@@ -10,9 +10,9 @@
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 44))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 65580))
- (global $~lib/memory/__heap_base i32 (i32.const 65580))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32812))
+ (global $~lib/memory/__heap_base i32 (i32.const 32812))
+ (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
@@ -270,8 +270,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 65600
-   i32.const 65648
+   i32.const 32832
+   i32.const 32880
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

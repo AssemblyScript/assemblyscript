@@ -29,9 +29,9 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 21760))
  (global $~lib/memory/__data_end i32 (i32.const 21788))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 87324))
- (global $~lib/memory/__heap_base i32 (i32.const 87324))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 54556))
+ (global $~lib/memory/__heap_base i32 (i32.const 54556))
+ (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\01\d87\dch\00i\00R\d8b\df")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00,\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00e\00n\00c\00o\00d\00i\00n\00g\00.\00t\00s\00")
  (data (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -2914,8 +2914,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 87344
-   i32.const 87392
+   i32.const 54576
+   i32.const 54624
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

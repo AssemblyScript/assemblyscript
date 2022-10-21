@@ -14,9 +14,9 @@
  (import "env" "console.timeEnd" (func $~lib/bindings/dom/console.timeEnd (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 588))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66124))
- (global $~lib/memory/__heap_base i32 (i32.const 66124))
- (memory $0 2)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33356))
+ (global $~lib/memory/__heap_base i32 (i32.const 33356))
+ (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00w\00h\00o\00o\00p\00s\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00p\00h\00e\00w\00\00\00\00\00")
  (data (i32.const 76) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00h\00e\00l\00l\00o\00 \00l\00o\00g\00\00\00\00\00\00\00\00\00\00\00")
@@ -82,8 +82,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 66144
-   i32.const 66192
+   i32.const 33376
+   i32.const 33424
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
