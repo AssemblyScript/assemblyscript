@@ -197,7 +197,7 @@ export class Flow {
 
   /** Creates the parent flow of the specified function. */
   static createParent(parentFunction: Function): Flow {
-    var flow = new Flow(parentFunction);
+    let flow = new Flow(parentFunction);
     if (parentFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }
@@ -206,7 +206,7 @@ export class Flow {
 
   /** Creates an inline flow within `parentFunction`. */
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
-    var flow = new Flow(parentFunction);
+    let flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -250,7 +250,7 @@ export class Flow {
 
   /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
   get actualFunction(): Function {
-    var inlineFunction = this.inlineFunction;
+    let inlineFunction = this.inlineFunction;
     if (inlineFunction) return inlineFunction;
     return this.parentFunction;
   }
@@ -296,7 +296,7 @@ export class Flow {
 
   /** Forks this flow to a child flow. */
   fork(resetBreakContext: bool = false): Flow {
-    var branch = new Flow(this.parentFunction);
+    let branch = new Flow(this.parentFunction);
     branch.parent = this;
     branch.outer = this.outer;
     if (resetBreakContext) {
@@ -330,16 +330,16 @@ export class Flow {
 
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
-    var scopedLocals = this.scopedLocals;
+    let scopedLocals = this.scopedLocals;
     if (scopedLocals && scopedLocals.has(name)) return assert(scopedLocals.get(name));
     return null;
   }
 
   /** Adds a new scoped local of the specified name. */
   addScopedLocal(name: string, type: Type, except: BitSet | null = null): Local {
-    var scopedLocal = this.getTempLocal(type, except);
+    let scopedLocal = this.getTempLocal(type, except);
     scopedLocal.setTemporaryName(name);
-    var scopedLocals = this.scopedLocals;
+    let scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else assert(!scopedLocals.has(name));
     scopedLocal.set(CommonFlags.SCOPED);
@@ -349,8 +349,8 @@ export class Flow {
 
   /** Adds a new scoped dummy local of the specified name. */
   addScopedDummyLocal(name: string, type: Type, declarationNode: Node): Local {
-    var scopedDummy = new Local(name, -1, type, this.parentFunction);
-    var scopedLocals = this.scopedLocals;
+    let scopedDummy = new Local(name, -1, type, this.parentFunction);
+    let scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else if (scopedLocals.has(name)) {
       this.parentFunction.program.error(
@@ -365,7 +365,7 @@ export class Flow {
 
   /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
   addScopedAlias(name: string, type: Type, index: i32, reportNode: Node | null = null): Local {
-    var scopedLocals = this.scopedLocals;
+    let scopedLocals = this.scopedLocals;
     if (!scopedLocals) {
       this.scopedLocals = scopedLocals = new Map();
     } else if (scopedLocals.has(name)) {
@@ -388,7 +388,7 @@ export class Flow {
       return existingLocal;
     }
     assert(index < this.parentFunction.localsByIndex.length);
-    var scopedAlias = new Local(name, index, type, this.parentFunction);
+    let scopedAlias = new Local(name, index, type, this.parentFunction);
     // not flagged as SCOPED as it must not be free'd when the flow is finalized
     scopedLocals.set(name, scopedAlias);
     return scopedAlias;
@@ -396,7 +396,7 @@ export class Flow {
 
   /** Tests if this flow has any scoped locals that must be free'd. */
   get hasScopedLocals(): bool {
-    var scopedLocals = this.scopedLocals;
+    let scopedLocals = this.scopedLocals;
     if (scopedLocals) {
       // TODO: for (let local of scopedLocals.values()) {
       for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
@@ -411,7 +411,7 @@ export class Flow {
 
   /** Frees a single scoped local by its name. */
   freeScopedDummyLocal(name: string): void {
-    var scopedLocals = assert(this.scopedLocals);
+    let scopedLocals = assert(this.scopedLocals);
     assert(scopedLocals.has(name));
     let local = assert(scopedLocals.get(name));
     assert(local.index == -1);
@@ -420,7 +420,7 @@ export class Flow {
 
   /** Looks up the local of the specified name in the current scope. */
   lookupLocal(name: string): Local | null {
-    var current: Flow | null = this;
+    let current: Flow | null = this;
     do {
       let scope = current.scopedLocals;
       if (scope && scope.has(name)) return assert(scope.get(name));
@@ -431,7 +431,7 @@ export class Flow {
 
   /** Looks up the element with the specified name relative to the scope of this flow. */
   lookup(name: string): Element | null {
-    var element = this.lookupLocal(name);
+    let element = this.lookupLocal(name);
     if (element) return element;
     return this.actualFunction.lookup(name);
   }
@@ -439,42 +439,42 @@ export class Flow {
   /** Tests if the local at the specified index has the specified flag or flags. */
   isLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
-    var localFlags = this.localFlags;
+    let localFlags = this.localFlags;
     return index < localFlags.length && (unchecked(localFlags[index]) & flag) == flag;
   }
 
   /** Tests if the local at the specified index has any of the specified flags. */
   isAnyLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
-    var localFlags = this.localFlags;
+    let localFlags = this.localFlags;
     return index < localFlags.length && (unchecked(localFlags[index]) & flag) != 0;
   }
 
   /** Sets the specified flag or flags on the local at the specified index. */
   setLocalFlag(index: i32, flag: LocalFlags): void {
     if (index < 0) return;
-    var localFlags = this.localFlags;
-    var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
+    let localFlags = this.localFlags;
+    let flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
     localFlags[index] = flags | flag;
   }
 
   /** Unsets the specified flag or flags on the local at the specified index. */
   unsetLocalFlag(index: i32, flag: LocalFlags): void {
     if (index < 0) return;
-    var localFlags = this.localFlags;
-    var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
+    let localFlags = this.localFlags;
+    let flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
     localFlags[index] = flags & ~flag;
   }
 
   /** Initializes `this` field flags. */
   initThisFieldFlags(): void {
-    var actualFunction = this.actualFunction;
+    let actualFunction = this.actualFunction;
     assert(actualFunction.is(CommonFlags.CONSTRUCTOR));
-    var actualParent = actualFunction.parent;
+    let actualParent = actualFunction.parent;
     assert(actualParent.kind == ElementKind.CLASS);
-    var actualClass = <Class>actualParent;
+    let actualClass = <Class>actualParent;
     this.thisFieldFlags = new Map();
-    var members = actualClass.members;
+    let members = actualClass.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
@@ -499,7 +499,7 @@ export class Flow {
 
   /** Tests if the specified `this` field has the specified flag or flags. */
   isThisFieldFlag(field: Field, flag: FieldFlags): bool {
-    var fieldFlags = this.thisFieldFlags;
+    let fieldFlags = this.thisFieldFlags;
     if (fieldFlags != null && fieldFlags.has(field)) {
       return (changetype<FieldFlags>(fieldFlags.get(field)) & flag) == flag;
     }
@@ -508,7 +508,7 @@ export class Flow {
 
   /** Sets the specified flag or flags on the given `this` field. */
   setThisFieldFlag(field: Field, flag: FieldFlags): void {
-    var fieldFlags = this.thisFieldFlags;
+    let fieldFlags = this.thisFieldFlags;
     if (fieldFlags) {
       assert(this.actualFunction.is(CommonFlags.CONSTRUCTOR));
       if (fieldFlags.has(field)) {
@@ -524,21 +524,21 @@ export class Flow {
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
   pushBreakLabel(): string {
-    var parentFunction = this.parentFunction;
-    var id = parentFunction.nextBreakId++;
-    var stack = parentFunction.breakStack;
+    let parentFunction = this.parentFunction;
+    let id = parentFunction.nextBreakId++;
+    let stack = parentFunction.breakStack;
     if (!stack) parentFunction.breakStack = [ id ];
     else stack.push(id);
-    var label = id.toString();
+    let label = id.toString();
     parentFunction.breakLabel = label;
     return label;
   }
 
   /** Pops the most recent break label from the stack. */
   popBreakLabel(): void {
-    var parentFunction = this.parentFunction;
-    var stack = assert(parentFunction.breakStack);
-    var length = assert(stack.length);
+    let parentFunction = this.parentFunction;
+    let stack = assert(parentFunction.breakStack);
+    let length = assert(stack.length);
     stack.pop();
     if (length > 1) {
       parentFunction.breakLabel = stack[length - 2].toString();
@@ -552,7 +552,7 @@ export class Flow {
   inherit(other: Flow): void {
     assert(other.parentFunction == this.parentFunction);
     assert(other.parent == this); // currently the case, but might change
-    var otherFlags = other.flags;
+    let otherFlags = other.flags;
 
     // respective inner flags are irrelevant if contexts differ
     if (this.breakLabel != other.breakLabel) {
@@ -583,9 +583,9 @@ export class Flow {
     // but an allocation, which doesn't terminate, can become conditional. Not
     // all flags have a corresponding conditional flag that's tracked.
 
-    var thisFlags = this.flags;
-    var otherFlags = other.flags;
-    var newFlags = FlowFlags.NONE;
+    let thisFlags = this.flags;
+    let otherFlags = other.flags;
+    let newFlags = FlowFlags.NONE;
 
     if (thisFlags & FlowFlags.RETURNS) { // nothing can change that
       newFlags |= FlowFlags.RETURNS;
@@ -654,11 +654,11 @@ export class Flow {
     this.flags = newFlags | (thisFlags & (FlowFlags.UNCHECKED_CONTEXT | FlowFlags.CTORPARAM_CONTEXT));
 
     // local flags
-    var thisLocalFlags = this.localFlags;
-    var numThisLocalFlags = thisLocalFlags.length;
-    var otherLocalFlags = other.localFlags;
-    var numOtherLocalFlags = otherLocalFlags.length;
-    var maxLocalFlags = max(numThisLocalFlags, numOtherLocalFlags);
+    let thisLocalFlags = this.localFlags;
+    let numThisLocalFlags = thisLocalFlags.length;
+    let otherLocalFlags = other.localFlags;
+    let numOtherLocalFlags = otherLocalFlags.length;
+    let maxLocalFlags = max(numThisLocalFlags, numOtherLocalFlags);
     for (let i = 0; i < maxLocalFlags; ++i) {
       let thisFlags = i < numThisLocalFlags ? thisLocalFlags[i] : 0;
       let otherFlags = i < numOtherLocalFlags ? otherLocalFlags[i] : 0;
@@ -681,9 +681,9 @@ export class Flow {
     // This differs from the previous method in that no flags are guaranteed
     // to happen unless it is the case in both flows.
 
-    var leftFlags = left.flags;
-    var rightFlags = right.flags;
-    var newFlags = FlowFlags.NONE;
+    let leftFlags = left.flags;
+    let rightFlags = right.flags;
+    let newFlags = FlowFlags.NONE;
 
     if (leftFlags & FlowFlags.RETURNS) {
       if (rightFlags & FlowFlags.RETURNS) {
@@ -766,7 +766,7 @@ export class Flow {
     this.flags = newFlags | (this.flags & (FlowFlags.UNCHECKED_CONTEXT | FlowFlags.CTORPARAM_CONTEXT));
 
     // local flags
-    var thisLocalFlags = this.localFlags;
+    let thisLocalFlags = this.localFlags;
     if (leftFlags & FlowFlags.TERMINATES) {
       if (!(rightFlags & FlowFlags.TERMINATES)) {
         let rightLocalFlags = right.localFlags;
@@ -798,7 +798,7 @@ export class Flow {
     }
 
     // field flags (currently only INITIALIZED, so can simplify)
-    var leftFieldFlags = left.thisFieldFlags;
+    let leftFieldFlags = left.thisFieldFlags;
     if (leftFieldFlags) {
       let newFieldFlags = new Map<Field,FieldFlags>();
       let rightFieldFlags = assert(right.thisFieldFlags);
@@ -825,13 +825,13 @@ export class Flow {
     /** Number of locals before the compilation attempt. */
     numLocalsBefore: i32
   ): bool {
-    var numThisLocalFlags = this.localFlags.length;
-    var numOtherLocalFlags = other.localFlags.length;
-    var parentFunction = this.parentFunction;
+    let numThisLocalFlags = this.localFlags.length;
+    let numOtherLocalFlags = other.localFlags.length;
+    let parentFunction = this.parentFunction;
     assert(parentFunction == other.parentFunction);
-    var localsByIndex = parentFunction.localsByIndex;
+    let localsByIndex = parentFunction.localsByIndex;
     assert(localsByIndex == other.parentFunction.localsByIndex);
-    var needsRecompile = false;
+    let needsRecompile = false;
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       let local = localsByIndex[i];
       let type = local.type;
@@ -1092,7 +1092,7 @@ export class Flow {
     // types other than i8, u8, i16, u16 and bool do not overflow
     if (!type.isShortIntegerValue) return false;
 
-    var operand: ExpressionRef;
+    let operand: ExpressionRef;
     switch (getExpressionId(expr)) {
 
       // overflows if the local isn't wrapped or the conversion does
@@ -1343,13 +1343,13 @@ export class Flow {
   }
 
   toString(): string {
-    var levels = 0;
-    var parent = this.parent;
+    let levels = 0;
+    let parent = this.parent;
     while (parent) {
       parent = parent.parent;
       ++levels;
     }
-    var sb = new Array<string>();
+    let sb = new Array<string>();
     if (this.is(FlowFlags.RETURNS)) sb.push("RETURNS");
     if (this.is(FlowFlags.RETURNS_WRAPPED)) sb.push("RETURNS_WRAPPED");
     if (this.is(FlowFlags.RETURNS_NONNULL)) sb.push("RETURNS_NONNULL");

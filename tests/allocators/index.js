@@ -23,10 +23,10 @@ async function test(file) {
 
   function getString(ptr) {
     if (!ptr) return "null";
-    var U32 = new Uint32Array(exports.memory.buffer);
-    var U16 = new Uint16Array(exports.memory.buffer);
-    var length = U32[(ptr - 4) >>> 2] >>> 1;
-    var offset = ptr >>> 1;
+    let U32 = new Uint32Array(exports.memory.buffer);
+    let U16 = new Uint16Array(exports.memory.buffer);
+    let length = U32[(ptr - 4) >>> 2] >>> 1;
+    let offset = ptr >>> 1;
     return String.fromCharCode.apply(String, U16.subarray(offset, offset + length));
   }
 
@@ -36,7 +36,7 @@ async function test(file) {
   console.log();
 
   const alloc = exports["__alloc"];
-  var overflow = false;
+  let overflow = false;
   try {
     alloc(COMMON_MAX + 1, 0); // unreachable
     overflow = true;

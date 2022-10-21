@@ -141,7 +141,7 @@ export class DiagnosticMessage {
     arg1: string | null = null,
     arg2: string | null = null
   ): DiagnosticMessage {
-    var message = diagnosticCodeToString(code);
+    let message = diagnosticCodeToString(code);
     if (arg0 != null) message = message.replace("{0}", arg0);
     if (arg1 != null) message = message.replace("{1}", arg1);
     if (arg2 != null) message = message.replace("{2}", arg2);
@@ -151,15 +151,15 @@ export class DiagnosticMessage {
   /** Tests if this message equals the specified. */
   equals(other: DiagnosticMessage): bool {
     if (this.code != other.code) return false;
-    var thisRange = this.range;
-    var otherRange = other.range;
+    let thisRange = this.range;
+    let otherRange = other.range;
     if (thisRange) {
       if (!otherRange || !thisRange.equals(otherRange)) return false;
     } else if (otherRange) {
       return false;
     }
-    var thisRelatedRange = this.relatedRange;
-    var otherRelatedRange = other.relatedRange;
+    let thisRelatedRange = this.relatedRange;
+    let otherRelatedRange = other.relatedRange;
     if (thisRelatedRange) {
       if (!otherRelatedRange || !thisRelatedRange.equals(otherRelatedRange)) return false;
     } else if (otherRelatedRange) {
@@ -182,10 +182,10 @@ export class DiagnosticMessage {
 
   /** Converts this message to a string. */
   toString(): string {
-    var category = diagnosticCategoryToString(this.category);
-    var range = this.range;
-    var code = this.code;
-    var message = this.message;
+    let category = diagnosticCategoryToString(this.category);
+    let range = this.range;
+    let code = this.code;
+    let message = this.message;
     if (range) {
       let source = range.source;
       let path = source.normalizedPath;
@@ -204,10 +204,10 @@ export function formatDiagnosticMessage(
   useColors: bool = false,
   showContext: bool = false
 ): string {
-  var wasColorsEnabled = setColorsEnabled(useColors);
+  let wasColorsEnabled = setColorsEnabled(useColors);
 
   // general information
-  var sb: string[] = [];
+  let sb: string[] = [];
   if (isColorsEnabled()) sb.push(diagnosticCategoryToColor(message.category));
   sb.push(diagnosticCategoryToString(message.category));
   if (isColorsEnabled()) sb.push(COLOR_RESET);
@@ -217,7 +217,7 @@ export function formatDiagnosticMessage(
   sb.push(message.message);
 
   // include range information if available
-  var range = message.range;
+  let range = message.range;
   if (range) {
     let source = range.source;
 
@@ -258,20 +258,20 @@ export function formatDiagnosticMessage(
 
 /** Formats the diagnostic context for the specified range, optionally with terminal colors. */
 function formatDiagnosticContext(range: Range): string {
-  var source = range.source;
-  var text = source.text;
-  var len = text.length;
-  var start = range.start;
-  var end = start;
-  var lineNumber = source.lineAt(start).toString();
-  var lineSpace = " ".repeat(lineNumber.length);
+  let source = range.source;
+  let text = source.text;
+  let len = text.length;
+  let start = range.start;
+  let end = start;
+  let lineNumber = source.lineAt(start).toString();
+  let lineSpace = " ".repeat(lineNumber.length);
   // Find preceeding line break
   while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) start--;
   // Skip leading whitespace (assume no supplementary whitespaces)
   while (start < len && isWhiteSpace(text.charCodeAt(start))) start++;
   // Find next line break
   while (end < len && !isLineBreak(text.charCodeAt(end))) end++;
-  var sb: string[] = [
+  let sb: string[] = [
     lineSpace,
     "  :\n ",
     lineNumber,
@@ -338,7 +338,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
+    let message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
     if (range) message = message.withRange(range);
     if (relatedRange) message.relatedRange = relatedRange;
     // It is possible that the same diagnostic is emitted twice, for example

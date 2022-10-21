@@ -27,16 +27,16 @@ export function COMPARATOR<T>(): Comparator<T> {
   } else if (isFloat<T>()) {
     if (sizeof<T>() == 4) {
       return (a, b) => {
-        var ia = reinterpret<i32>(f32(a));
-        var ib = reinterpret<i32>(f32(b));
+        let ia = reinterpret<i32>(f32(a));
+        let ib = reinterpret<i32>(f32(b));
         ia ^= ia >> 31 >>> 1;
         ib ^= ib >> 31 >>> 1;
         return i32(ia > ib) - i32(ia < ib);
       };
     } else {
       return (a, b) => {
-        var ia = reinterpret<i64>(f64(a));
-        var ib = reinterpret<i64>(f64(b));
+        let ia = reinterpret<i64>(f64(a));
+        let ib = reinterpret<i64>(f64(b));
         ia ^= ia >> 63 >>> 1;
         ib ^= ib >> 63 >>> 1;
         return i32(ia > ib) - i32(ia < ib);
@@ -49,8 +49,8 @@ export function COMPARATOR<T>(): Comparator<T> {
         changetype<usize>(a) == 0 ||
         changetype<usize>(b) == 0
       ) return 0;
-      var alen = changetype<string>(a).length;
-      var blen = changetype<string>(b).length;
+      let alen = changetype<string>(a).length;
+      let blen = changetype<string>(b).length;
       if (!(alen | blen)) return 0;
       if (!alen) return -1;
       if (!blen) return  1;
@@ -104,27 +104,27 @@ export function SORT<T>(
     return;
   }
 
-  var lgPlus2         = log2u(len) + 2;
-  var lgPlus2Size     = lgPlus2 << alignof<u32>();
-  var leftRunStartBuf = __alloc(lgPlus2Size << 1);
-  var leftRunEndBuf   = leftRunStartBuf + lgPlus2Size;
+  let lgPlus2         = log2u(len) + 2;
+  let lgPlus2Size     = lgPlus2 << alignof<u32>();
+  let leftRunStartBuf = __alloc(lgPlus2Size << 1);
+  let leftRunEndBuf   = leftRunStartBuf + lgPlus2Size;
 
   for (let i: u32 = 0; i < lgPlus2; ++i) {
     store<u32>(leftRunStartBuf + (<usize>i << alignof<u32>()), EMPTY);
   }
 
-  var buffer = __alloc(len << alignof<T>());
+  let buffer = __alloc(len << alignof<T>());
 
-  var hi   = len - 1;
-  var endA = extendRunRight<T>(ptr, 0, hi, comparator);
-  var lenA = endA + 1;
+  let hi   = len - 1;
+  let endA = extendRunRight<T>(ptr, 0, hi, comparator);
+  let lenA = endA + 1;
 
   if (lenA < MIN_RUN_LENGTH) {
     endA = min(hi, MIN_RUN_LENGTH - 1);
     insertionSort<T>(ptr, 0, endA, lenA, comparator);
   }
 
-  var top: u32 = 0, startA = 0;
+  let top: u32 = 0, startA = 0;
   while (endA < hi) {
     let startB = endA + 1;
     let endB = extendRunRight<T>(ptr, startB, hi, comparator);
@@ -229,12 +229,12 @@ function insertionSort<T>(
 }
 
 function nodePower(left: u32, right: u32, startA: u32, startB: u32, endB: u32): u32 {
-  var n: u64 = right - left + 1;
-  var s = startB - (left << 1);
-  var l = startA + s;
-  var r = endB   + s + 1;
-  var a = (<u64>l << 30) / n;
-  var b = (<u64>r << 30) / n;
+  let n: u64 = right - left + 1;
+  let s = startB - (left << 1);
+  let l = startA + s;
+  let r = endB   + s + 1;
+  let a = (<u64>l << 30) / n;
+  let b = (<u64>r << 30) / n;
   return clz(<u32>(a ^ b));
 }
 
@@ -245,7 +245,7 @@ function extendRunRight<T>(
   comparator: Comparator<T>
 ): i32 {
   if (i == right) return i;
-  var j = i;
+  let j = i;
   if (comparator(
     load<T>(ptr + (<usize>  j << alignof<T>())),
     load<T>(ptr + (<usize>++j << alignof<T>()))
@@ -286,7 +286,7 @@ function mergeRuns<T>(
   comparator: Comparator<T>
 ): void {
   --m;
-  var i: i32, j: i32, t = r + m;
+  let i: i32, j: i32, t = r + m;
   for (i = m + 1; i > l; --i) {
     store<T>(
       buffer + (<usize>(i - 1) << alignof<T>()),

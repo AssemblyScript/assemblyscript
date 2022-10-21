@@ -70,9 +70,9 @@ if (typeof process !== "undefined") {
     process.exit(1);
   }
 
-  var output = parse(process.argv[2]);
-  var double = output.toPrecision(18); // 17
-  var single = output.toPrecision(10); // 9
+  let output = parse(process.argv[2]);
+  let double = output.toPrecision(18); // 17
+  let single = output.toPrecision(10); // 9
 
   console.log("<f64>" + double);
   console.log("<f32>" + single);

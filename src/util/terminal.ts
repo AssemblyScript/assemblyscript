@@ -23,7 +23,7 @@ export const COLOR_WHITE = "\u001b[97m";
 export const COLOR_RESET = "\u001b[0m";
 
 /** Whether terminal colors are enabled or not. */
-var colorsEnabled = true;
+let colorsEnabled = true;
 
 /** Checks whether terminal colors are enabled or not. */
 export function isColorsEnabled(): bool {
@@ -32,7 +32,7 @@ export function isColorsEnabled(): bool {
 
 /** Sets whether terminal colors are enabled or not. */
 export function setColorsEnabled(isEnabled: bool): bool {
-  var wasEnabled = isEnabled;
+  let wasEnabled = isEnabled;
   colorsEnabled = isEnabled;
   return wasEnabled;
 }

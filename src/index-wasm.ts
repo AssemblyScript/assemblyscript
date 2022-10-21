@@ -114,14 +114,14 @@ export function setTableBase(options: Options, tableBase: u32): void {
 
 /** Adds a 'globalAliases' value. */
 export function addGlobalAlias(options: Options, alias: string, name: string): void {
-  var globalAliases = options.globalAliases;
+  let globalAliases = options.globalAliases;
   if (!globalAliases) options.globalAliases = globalAliases = new Map();
   globalAliases.set(alias, name);
 }
 
 /** Removes a 'globalAliases' value. */
 export function removeGlobalAlias(options: Options, alias: string): void {
-  var globalAliases = options.globalAliases;
+  let globalAliases = options.globalAliases;
   if (globalAliases) globalAliases.delete(alias);
 }
 

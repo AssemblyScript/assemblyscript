@@ -50,7 +50,7 @@ export abstract class ExportsWalker {
 
   /** Visits all exported elements of a file. */
   visitFile(file: File): void {
-    var exports = file.exports;
+    let exports = file.exports;
     if (exports) {
       // TODO: for (let [memberName, member] of exports) {
       for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
@@ -59,7 +59,7 @@ export abstract class ExportsWalker {
         this.visitElement(memberName, member);
       }
     }
-    var exportsStar = file.exportsStar;
+    let exportsStar = file.exportsStar;
     if (exportsStar) {
       for (let i = 0, k = exportsStar.length; i < k; ++i) {
         let exportStar = unchecked(exportsStar[i]);
@@ -71,7 +71,7 @@ export abstract class ExportsWalker {
   /** Visits an element.*/
   visitElement(name: string, element: Element): void {
     if (element.is(CommonFlags.PRIVATE) && !this.includePrivate) return;
-    var seen = this.seen;
+    let seen = this.seen;
     if (!element.is(CommonFlags.INSTANCE) && seen.has(element)) {
       this.visitAlias(name, element, assert(seen.get(element)));
       return;
@@ -124,7 +124,7 @@ export abstract class ExportsWalker {
   }
 
   private visitFunctionInstances(name: string, element: FunctionPrototype): void {
-    var instances = element.instances;
+    let instances = element.instances;
     if (instances) {
       // TODO: for (let instance of instances.values()) {
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
@@ -135,7 +135,7 @@ export abstract class ExportsWalker {
   }
 
   private visitClassInstances(name: string, element: ClassPrototype): void {
-    var instances = element.instances;
+    let instances = element.instances;
     if (instances) {
       // TODO: for (let instance of instances.values()) {
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
@@ -159,7 +159,7 @@ export abstract class ExportsWalker {
 
 /** Tests if a namespace-like element has at least one compiled member. */
 export function hasCompiledMember(element: Element): bool {
-  var members = element.members;
+  let members = element.members;
   if (members) {
     // TODO: for (let member of members.values()) {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {

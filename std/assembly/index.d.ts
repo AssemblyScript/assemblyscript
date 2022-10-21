@@ -179,7 +179,7 @@ declare const Infinity: f32 | f64;
 /** Data end offset. */
 declare const __data_end: usize;
 /** Stack pointer offset. */
-declare var __stack_pointer: usize;
+declare let __stack_pointer: usize;
 /** Heap base offset. */
 declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
@@ -591,7 +591,7 @@ declare namespace i64 {
   }
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
-declare var isize: typeof i32 | typeof i64;
+declare let isize: typeof i32 | typeof i64;
 /** Converts any other numeric value to an 8-bit unsigned integer. */
 declare function u8(value: any): u8;
 declare namespace u8 {
@@ -633,7 +633,7 @@ declare namespace u64 {
   export function parse(value: string, radix?: i32): u64;
 }
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) unsigned integer. */
-declare var usize: typeof u32 | typeof u64;
+declare let usize: typeof u32 | typeof u64;
 /** Converts any other numeric value to a 1-bit unsigned integer. */
 declare function bool(value: any): bool;
 declare namespace bool {
@@ -2216,7 +2216,7 @@ declare namespace process {
   /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
   export function exit(code?: i32): void;
   /** `exit()`’s default value. Defaults to `0`. */
-  export var exitCode: i32;
+  export let exitCode: i32;
   /** Stream connected to `stdin` (fd `0`). */
   export const stdin: ReadableStream;
   /** Stream connected to `stdout` (fd `1`). */

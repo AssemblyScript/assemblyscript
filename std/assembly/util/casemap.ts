@@ -434,7 +434,7 @@ export const SPECIALS_UPPER: StaticArray<u16> = [
 // @ts-ignore: decorator
 @inline
 export function bsearch(key: u32, ptr: usize, max: i32): i32 {
-  var min = 0;
+  let min = 0;
   while (min <= max) {
     let mid = (min + max) >>> 3 << 2;
     let cmp = load<u16>(ptr + (mid << alignof<u16>())) - key;
@@ -448,32 +448,32 @@ export function bsearch(key: u32, ptr: usize, max: i32): i32 {
 // See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/towctrans.c
 export function casemap(c: u32, dir: i32): i32 {
   // if (c >= 0x20000) return c;
-  var c0 = c as i32;
-  var b = c >> 8;
+  let c0 = c as i32;
+  let b = c >> 8;
   c &= 255;
 
-  var x = c / 3;
-  var y = c % 3;
+  let x = c / 3;
+  let y = c % 3;
 
   /* lookup entry in two-level base-6 table */
   // v = tab[(tab[b] as i32) * 86 + x] as u32;
-  var v = <usize>load<u8>(TAB + <usize>load<u8>(TAB + b) * 86 + x);
+  let v = <usize>load<u8>(TAB + <usize>load<u8>(TAB + b) * 86 + x);
   // v = (v * mt[y] >> 11) % 6;
   v = (v * load<i32>(MT + (y << alignof<i32>())) >> 11) % 6;
   /* use the bit vector out of the tables as an index into
    * a block-specific set of rules and decode the rule into
    * a type and a case-mapping delta. */
   // r = rules[(ruleBases[b] as u32) + v];
-  var r = load<i32>(RULES + ((<usize>load<u8>(RULE_BASES + b) + v) << alignof<i32>()));
-  var rt: u32 = r & 255;
-  var rd: i32 = r >> 8;
+  let r = load<i32>(RULES + ((<usize>load<u8>(RULE_BASES + b) + v) << alignof<i32>()));
+  let rt: u32 = r & 255;
+  let rd: i32 = r >> 8;
   /* rules 0/1 are simple lower/upper case with a delta.
    * apply according to desired mapping direction. */
   if (rt < 2) return c0 + (rd & -(rt ^ dir));
   /* binary search. endpoints of the binary search for
    * this block are stored in the rule delta field. */
-  var xn: u32 = rd & 0xff;
-  var xb: u32 = rd >>> 8;
+  let xn: u32 = rd & 0xff;
+  let xb: u32 = rd >>> 8;
   while (xn) {
     let h = xn >> 1;
     // let t = exceptions[(xb + h) * 2 + 0] as u32;

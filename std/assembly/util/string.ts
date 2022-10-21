@@ -566,9 +566,9 @@ export function isCaseIgnorable(c: u32): bool {
 @inline
 export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
   const lookaheadLimit = 30; // max lookahead limit
-  var found = false;
-  var pos = index;
-  var minPos = max(0, pos - lookaheadLimit);
+  let found = false;
+  let pos = index;
+  let minPos = max(0, pos - lookaheadLimit);
   while (pos > minPos) {
     let c = codePointBefore(buffer, pos);
     if (!isCaseIgnorable(c)) {
@@ -582,7 +582,7 @@ export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
   }
   if (!found) return false;
   pos = index + 1;
-  var maxPos = min(pos + lookaheadLimit, len);
+  let maxPos = min(pos + lookaheadLimit, len);
   while (pos < maxPos) {
     let c = <u32>load<u16>(buffer + (pos << 1));
     if (u32((c & 0xFC00) == 0xD800) & u32(pos + 1 != len)) {
@@ -603,7 +603,7 @@ export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
 @inline
 function codePointBefore(buffer: usize, index: isize): i32 {
   if (index <= 0) return -1;
-  var c = <u32>load<u16>(buffer + (index - 1 << 1));
+  let c = <u32>load<u16>(buffer + (index - 1 << 1));
   if (u32((c & 0xFC00) == 0xDC00) & u32(index - 2 >= 0)) {
     let c1 = <u32>load<u16>(buffer + (index - 2 << 1));
     if ((c1 & 0xFC00) == 0xD800) {
@@ -619,8 +619,8 @@ function stagedBinaryLookup(table: usize, c: u32): bool {
 }
 
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
-  var ptr1 = changetype<usize>(str1) + (index1 << 1);
-  var ptr2 = changetype<usize>(str2) + (index2 << 1);
+  let ptr1 = changetype<usize>(str1) + (index1 << 1);
+  let ptr2 = changetype<usize>(str2) + (index2 << 1);
   if (ASC_SHRINK_LEVEL < 2) {
     if (len >= 4 && !((ptr1 & 7) | (ptr2 & 7))) {
       do {
@@ -663,7 +663,7 @@ export function toUpper8(c: u32): u32 {
 
 /** Parses a string to an integer (usually), using the specified radix. */
 export function strtol<T>(str: string, radix: i32 = 0): T {
-  var len = str.length;
+  let len = str.length;
   if (!len) {
     if (isFloat<T>()) {
       // @ts-ignore: cast
@@ -674,8 +674,8 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     }
   }
 
-  var ptr = changetype<usize>(str) /* + HEAD -> offset */;
-  var code = <u32>load<u16>(ptr);
+  let ptr = changetype<usize>(str) /* + HEAD -> offset */;
+  let code = <u32>load<u16>(ptr);
 
   // trim white spaces
   while (isSpace(code)) {
@@ -684,7 +684,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   }
   // determine sign
   // @ts-ignore
-  var sign: T = 1;
+  let sign: T = 1;
   if (code == CharCode.MINUS || code == CharCode.PLUS) {
     if (!--len) {
       if (isFloat<T>()) {
@@ -749,8 +749,8 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
 
   // calculate value
   // @ts-ignore: type
-  var num: T = 0;
-  var initial = len - 1;
+  let num: T = 0;
+  let initial = len - 1;
   while (len--) {
     code = <u32>load<u16>(ptr);
     if (code - CharCode._0 < 10) {
@@ -781,13 +781,13 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
 }
 
 export function strtod(str: string): f64 {
-  var len = str.length;
+  let len = str.length;
   if (!len) return NaN;
 
-  var ptr  = changetype<usize>(str);
-  var code = <u32>load<u16>(ptr);
+  let ptr  = changetype<usize>(str);
+  let code = <u32>load<u16>(ptr);
 
-  var sign = 1.0;
+  let sign = 1.0;
   // skip white spaces
   while (len && isSpace(code)) {
     code = <u32>load<u16>(ptr += 2);
@@ -819,7 +819,7 @@ export function strtod(str: string): f64 {
   if (code != CharCode.DOT && <u32>(code - CharCode._0) >= 10) {
     return NaN;
   }
-  var savedPtr = ptr;
+  let savedPtr = ptr;
   // skip zeros
   while (code == CharCode._0) {
     code = <u32>load<u16>(ptr += 2);
@@ -827,10 +827,10 @@ export function strtod(str: string): f64 {
   }
   if (len <= 0) return 0.0 * sign;
   const capacity = 19; // int(64 * 0.3010)
-  var pointed = false;
-  var consumed = 0;
-  var position = 0;
-  var x: u64 = 0;
+  let pointed = false;
+  let consumed = 0;
+  let position = 0;
+  let x: u64 = 0;
   if (code == CharCode.DOT) {
     let noDigits = !(savedPtr - ptr);
     ptr += 2; --len;
@@ -856,8 +856,8 @@ export function strtod(str: string): f64 {
 }
 
 export function strtob(str: string): bool {
-  var size: usize = str.length << 1;
-  var offset: usize = 0;
+  let size: usize = str.length << 1;
+  let offset: usize = 0;
   if (size > 8) {
     // try trim end whitespaces first
     while (size && isSpace(load<u16>(changetype<usize>(str) + size - 2))) size -= 2;
@@ -873,16 +873,16 @@ export function strtob(str: string): bool {
 }
 
 export function joinBooleanArray(dataStart: usize, length: i32, separator: string): string {
-  var lastIndex = length - 1;
+  let lastIndex = length - 1;
   if (lastIndex < 0) return "";
   if (!lastIndex) return select("true", "false", load<bool>(dataStart));
 
-  var sepLen = separator.length;
-  var valueLen = 5; // max possible length of element len("false")
-  var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__new(estLen << 1, idof<string>()));
-  var offset = 0;
-  var value: bool;
+  let sepLen = separator.length;
+  let valueLen = 5; // max possible length of element len("false")
+  let estLen = (valueLen + sepLen) * lastIndex + valueLen;
+  let result = changetype<string>(__new(estLen << 1, idof<string>()));
+  let offset = 0;
+  let value: bool;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<bool>(dataStart + i);
     valueLen = 4 + i32(!value);
@@ -915,7 +915,7 @@ export function joinBooleanArray(dataStart: usize, length: i32, separator: strin
 }
 
 export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: string): string {
-  var lastIndex = length - 1;
+  let lastIndex = length - 1;
   if (lastIndex < 0) return "";
   if (!lastIndex) {
     let value = load<T>(dataStart);
@@ -938,12 +938,12 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
     }
   }
 
-  var sepLen = separator.length;
+  let sepLen = separator.length;
   const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
-  var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__new(estLen << 1, idof<string>()));
-  var offset = 0;
-  var value: T;
+  let estLen = (valueLen + sepLen) * lastIndex + valueLen;
+  let result = changetype<string>(__new(estLen << 1, idof<string>()));
+  let offset = 0;
+  let value: T;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
     // @ts-ignore: type
@@ -965,7 +965,7 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
 }
 
 export function joinFloatArray<T>(dataStart: usize, length: i32, separator: string): string {
-  var lastIndex = length - 1;
+  let lastIndex = length - 1;
   if (lastIndex < 0) return "";
   if (!lastIndex) {
     return changetype<string>(dtoa(
@@ -975,11 +975,11 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
   }
 
   const valueLen = MAX_DOUBLE_LENGTH;
-  var sepLen = separator.length;
-  var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__new(estLen << 1, idof<string>()));
-  var offset = 0;
-  var value: T;
+  let sepLen = separator.length;
+  let estLen = (valueLen + sepLen) * lastIndex + valueLen;
+  let result = changetype<string>(__new(estLen << 1, idof<string>()));
+  let offset = 0;
+  let value: T;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
     // @ts-ignore: type
@@ -1001,21 +1001,21 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
 }
 
 export function joinStringArray(dataStart: usize, length: i32, separator: string): string {
-  var lastIndex = length - 1;
+  let lastIndex = length - 1;
   if (lastIndex < 0) return "";
   if (!lastIndex) {
     // @ts-ignore: type
     return load<string>(dataStart) || "";
   }
-  var estLen = 0;
-  var value: string;
+  let estLen = 0;
+  let value: string;
   for (let i = 0; i < length; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
     if (changetype<usize>(value) != 0) estLen += value.length;
   }
-  var offset = 0;
-  var sepLen = separator.length;
-  var result = changetype<string>(__new((estLen + sepLen * lastIndex) << 1, idof<string>()));
+  let offset = 0;
+  let sepLen = separator.length;
+  let result = changetype<string>(__new((estLen + sepLen * lastIndex) << 1, idof<string>()));
   for (let i = 0; i < lastIndex; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
     if (changetype<usize>(value) != 0) {
@@ -1048,16 +1048,16 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
 }
 
 export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: string): string {
-  var lastIndex = length - 1;
+  let lastIndex = length - 1;
   if (lastIndex < 0) return "";
-  var value: T;
+  let value: T;
   if (!lastIndex) {
     value = load<T>(dataStart);
     // @ts-ignore: type
     return value != null ? value.toString() : "";
   }
-  var result = "";
-  var sepLen = separator.length;
+  let result = "";
+  let sepLen = separator.length;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
     // @ts-ignore: type
@@ -1079,7 +1079,7 @@ function scientific(significand: u64, exp: i32): f64 {
   // Use fast path for string-to-double conversion if possible
   // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion
   // Simple integer
-  var significandf = <f64>significand;
+  let significandf = <f64>significand;
   if (!exp) return significandf;
   if (exp > 22 && exp <= 22 + 15) {
     significandf *= pow10(exp - 22);
@@ -1103,7 +1103,7 @@ function scaledown(significand: u64, exp: i32): f64 {
   const denom: u64 = 6103515625; // 1e14 * 0x1p-14
   const scale = reinterpret<f64>(0x3F06849B86A12B9B); // 1e-14 * 0x1p32
 
-  var shift = clz(significand);
+  let shift = clz(significand);
   significand <<= shift;
   shift = exp - shift;
 
@@ -1114,10 +1114,10 @@ function scaledown(significand: u64, exp: i32): f64 {
     significand = (q << s) + <u64>nearest(scale * <f64>(r << (s - 18)));
     shift -= s;
   }
-  var b = <u64>ipow32(5, -exp);
-  var q = significand / b;
-  var r = significand % b;
-  var s = clz(q);
+  let b = <u64>ipow32(5, -exp);
+  let q = significand / b;
+  let r = significand % b;
+  let s = clz(q);
   significand = (q << s) + <u64>(reinterpret<f64>(reinterpret<u64>(<f64>r) + (s << 52)) / <f64>b);
   shift -= s;
 
@@ -1130,7 +1130,7 @@ function scaledown(significand: u64, exp: i32): f64 {
 @inline
 function scaleup(significand: u64, exp: i32): f64 {
   const coeff: u32 = 1220703125; // 1e13 * 0x1p-13;
-  var shift = ctz(significand);
+  let shift = ctz(significand);
   significand >>= shift;
   shift += exp;
 
@@ -1148,8 +1148,8 @@ function scaleup(significand: u64, exp: i32): f64 {
 // @ts-ignore: decorator
 @inline
 function parseExp(ptr: usize, len: i32): i32 {
-  var sign = 1, magnitude = 0;
-  var code = <u32>load<u16>(ptr);
+  let sign = 1, magnitude = 0;
+  let code = <u32>load<u16>(ptr);
   // check code is 'e' or 'E'
   if ((code | 32) != CharCode.e) return 0;
 
@@ -1178,18 +1178,18 @@ function parseExp(ptr: usize, len: i32): i32 {
 }
 
 // @ts-ignore: decorator
-@lazy var __fixmulShift: u64 = 0;
+@lazy let __fixmulShift: u64 = 0;
 
 // Adopted from metallic lib:
 // https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
 // @ts-ignore: decorator
 @inline
 function fixmul(a: u64, b: u32): u64 {
-  var low  = (a & 0xFFFFFFFF) * b;
-  var high = (a >> 32) * b + (low >> 32);
-  var overflow = <u32>(high >> 32);
-  var space = clz(overflow);
-  var revspace: u64 = 32 - space;
+  let low  = (a & 0xFFFFFFFF) * b;
+  let high = (a >> 32) * b + (low >> 32);
+  let overflow = <u32>(high >> 32);
+  let space = clz(overflow);
+  let revspace: u64 = 32 - space;
   __fixmulShift += revspace;
   return (high << space | (low & 0xFFFFFFFF) >> revspace) + (low << space >> 31 & 1);
 }

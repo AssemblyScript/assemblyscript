@@ -58,8 +58,8 @@ export class BitSet {
   }
 
   get size(): i32 {
-    var count = 0;
-    var words = this.words;
+    let count = 0;
+    let words = this.words;
     for (let i = 0, len = words.length; i < len; i++) {
       let word = unchecked(words[i]);
       if (word) count += popcnt(word);
@@ -68,8 +68,8 @@ export class BitSet {
   }
 
   add(index: i32): this {
-    var idx = index >>> 5;
-    var words = this.words;
+    let idx = index >>> 5;
+    let words = this.words;
     if (idx >= words.length) { // resize
       this.words = new Uint32Array(idx + 16);
       this.words.set(words);
@@ -80,15 +80,15 @@ export class BitSet {
   }
 
   delete(index: i32): void {
-    var idx = index >>> 5;
-    var words = this.words;
+    let idx = index >>> 5;
+    let words = this.words;
     if (idx >= words.length) return;
     unchecked(words[idx] &= ~(1 << index));
   }
 
   has(index: i32): bool {
-    var idx = index >>> 5;
-    var words = this.words;
+    let idx = index >>> 5;
+    let words = this.words;
     if (idx >= words.length) return false;
     return (unchecked(words[index >>> 5]) & (1 << index)) !== 0;
   }
@@ -98,7 +98,7 @@ export class BitSet {
   }
 
   toArray(): i32[] {
-    var res = new Array<i32>(this.size);
+    let res = new Array<i32>(this.size);
     for (let i = 0, p = 0, len = this.words.length; i < len; ++i) {
       let word = unchecked(this.words[i]);
       while (word) {

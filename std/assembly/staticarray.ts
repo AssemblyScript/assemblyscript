@@ -20,9 +20,9 @@ export class StaticArray<T> {
   // arrays exclusively, without having to convert to Array<T> first.
 
   static fromArray<T>(source: Array<T>): StaticArray<T> {
-    var length = source.length;
-    var outSize = <usize>length << alignof<T>();
-    var out = changetype<StaticArray<T>>(__new(outSize, idof<StaticArray<T>>()));
+    let length = source.length;
+    let outSize = <usize>length << alignof<T>();
+    let out = changetype<StaticArray<T>>(__new(outSize, idof<StaticArray<T>>()));
     if (isManaged<T>()) {
       let sourcePtr = source.dataStart;
       for (let i = 0; i < length; ++i) {
@@ -49,8 +49,8 @@ export class StaticArray<T> {
 
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    var outSize = <usize>length << alignof<T>();
-    var out = changetype<StaticArray<T>>(__new(outSize, idof<StaticArray<T>>()));
+    let outSize = <usize>length << alignof<T>();
+    let out = changetype<StaticArray<T>>(__new(outSize, idof<StaticArray<T>>()));
     if (ASC_RUNTIME != Runtime.Incremental) {
       memory.fill(changetype<usize>(out), 0, outSize);
     }
@@ -62,10 +62,10 @@ export class StaticArray<T> {
   }
 
   at(index: i32): T {
-    var len = this.length;
+    let len = this.length;
     index += select(0, len, index >= 0);
     if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
-    var value = load<T>(changetype<usize>(this) + (<usize>index << alignof<T>()));
+    let value = load<T>(changetype<usize>(this) + (<usize>index << alignof<T>()));
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
@@ -76,7 +76,7 @@ export class StaticArray<T> {
 
   @operator("[]") private __get(index: i32): T {
     if (<u32>index >= <u32>this.length) throw new RangeError(E_INDEXOUTOFRANGE);
-    var value = load<T>(changetype<usize>(this) + (<usize>index << alignof<T>()));
+    let value = load<T>(changetype<usize>(this) + (<usize>index << alignof<T>()));
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
@@ -112,15 +112,15 @@ export class StaticArray<T> {
   }
 
   copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): StaticArray<T> {
-    var ptr = changetype<usize>(this);
-    var len = this.length;
+    let ptr = changetype<usize>(this);
+    let len = this.length;
 
     end = min<i32>(end, len);
 
-    var to    = target < 0 ? max(len + target, 0) : min(target, len);
-    var from  = start < 0 ? max(len + start, 0) : min(start, len);
-    var last  = end < 0 ? max(len + end, 0) : min(end, len);
-    var count = min(last - from, len - to);
+    let to    = target < 0 ? max(len + target, 0) : min(target, len);
+    let from  = start < 0 ? max(len + start, 0) : min(start, len);
+    let last  = end < 0 ? max(len + end, 0) : min(end, len);
+    let count = min(last - from, len - to);
 
     memory.copy( // is memmove
       ptr + (<usize>to << alignof<T>()),
@@ -148,7 +148,7 @@ export class StaticArray<T> {
   }
 
   indexOf(value: T, fromIndex: i32 = 0): i32 {
-    var length = this.length;
+    let length = this.length;
     if (length == 0 || fromIndex >= length) return -1;
     if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
     while (fromIndex < length) {
@@ -159,7 +159,7 @@ export class StaticArray<T> {
   }
 
   lastIndexOf(value: T, fromIndex: i32 = this.length): i32 {
-    var length = this.length;
+    let length = this.length;
     if (length == 0) return -1;
     if (fromIndex < 0) fromIndex = length + fromIndex;
     else if (fromIndex >= length) fromIndex = length - 1;
@@ -233,13 +233,13 @@ export class StaticArray<T> {
   }
 
   slice<U extends ArrayLike<T> = Array<T>>(start: i32 = 0, end: i32 = i32.MAX_VALUE): U {
-    var length = this.length;
+    let length = this.length;
     start = start < 0 ? max(start + length, 0) : min(start, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end,   length);
     length = max(end - start, 0);
 
-    var sourceStart = changetype<usize>(this) + (<usize>start << alignof<T>());
-    var size = <usize>length << alignof<T>();
+    let sourceStart = changetype<usize>(this) + (<usize>start << alignof<T>());
+    let size = <usize>length << alignof<T>();
     let out!: U;
 
     if (out instanceof Array<T>) {
@@ -299,9 +299,9 @@ export class StaticArray<T> {
   }
 
   map<U>(fn: (value: T, index: i32, array: StaticArray<T>) => U): Array<U> {
-    var len = this.length;
-    var out = changetype<Array<U>>(__newArray(len, alignof<U>(), idof<Array<U>>()));
-    var outStart = out.dataStart;
+    let len = this.length;
+    let out = changetype<Array<U>>(__newArray(len, alignof<U>(), idof<Array<U>>()));
+    let outStart = out.dataStart;
     for (let i = 0; i < len; ++i) {
       let result = fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
       store<U>(outStart + (<usize>i << alignof<U>()), result);
@@ -313,7 +313,7 @@ export class StaticArray<T> {
   }
 
   filter(fn: (value: T, index: i32, array: StaticArray<T>) => bool): Array<T> {
-    var result = changetype<Array<T>>(__newArray(0, alignof<T>(), idof<Array<T>>()));
+    let result = changetype<Array<T>>(__newArray(0, alignof<T>(), idof<Array<T>>()));
     for (let i = 0, len = this.length; i < len; ++i) {
       let value = load<T>(changetype<usize>(this) + (<usize>i << alignof<T>()));
       if (fn(value, i, this)) result.push(value);
@@ -325,7 +325,7 @@ export class StaticArray<T> {
     fn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U,
     initialValue: U
   ): U {
-    var acc = initialValue;
+    let acc = initialValue;
     for (let i = 0, len = this.length; i < len; ++i) {
       acc = fn(acc, load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
     }
@@ -336,7 +336,7 @@ export class StaticArray<T> {
     fn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U,
     initialValue: U
   ): U {
-    var acc = initialValue;
+    let acc = initialValue;
     for (let i = this.length - 1; i >= 0; --i) {
       acc = fn(acc, load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
     }

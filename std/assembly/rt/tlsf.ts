@@ -137,7 +137,7 @@ import { E_ALLOCATION_TOO_LARGE } from "../util/error";
 @inline const ROOT_SIZE: usize = HL_END + sizeof<usize>();
 
 // @ts-ignore: decorator
-@lazy export var ROOT: Root;
+@lazy export let ROOT: Root;
 
 /** Gets the second level map of the specified first level. */
 // @ts-ignore: decorator
@@ -199,11 +199,11 @@ import { E_ALLOCATION_TOO_LARGE } from "../util/error";
 /** Inserts a previously used block back into the free list. */
 function insertBlock(root: Root, block: Block): void {
   if (DEBUG) assert(block); // cannot be null
-  var blockInfo = block.mmInfo;
+  let blockInfo = block.mmInfo;
   if (DEBUG) assert(blockInfo & FREE); // must be free
 
-  var right = GETRIGHT(block);
-  var rightInfo = right.mmInfo;
+  let right = GETRIGHT(block);
+  let rightInfo = right.mmInfo;
 
   // merge with right block if also free
   if (rightInfo & FREE) {
@@ -229,7 +229,7 @@ function insertBlock(root: Root, block: Block): void {
   // reference to right is no longer used now, hence rightInfo is not synced
 
   // we now know the size of the block
-  var size = blockInfo & ~TAGS_MASK;
+  let size = blockInfo & ~TAGS_MASK;
   if (DEBUG) assert(size >= BLOCK_MINSIZE); // must be a valid size
   if (DEBUG) assert(changetype<usize>(block) + BLOCK_OVERHEAD + size == changetype<usize>(right)); // must match
 
@@ -237,7 +237,7 @@ function insertBlock(root: Root, block: Block): void {
   store<Block>(changetype<usize>(right) - sizeof<usize>(), block);
 
   // mapping_insert
-  var fl: usize, sl: u32;
+  let fl: usize, sl: u32;
   if (size < SB_SIZE) {
     fl = 0;
     sl = <u32>(size >> AL_BITS);
@@ -251,7 +251,7 @@ function insertBlock(root: Root, block: Block): void {
   if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
 
   // perform insertion
-  var head = GETHEAD(root, fl, sl);
+  let head = GETHEAD(root, fl, sl);
   block.prev = null;
   block.next = head;
   if (head) head.prev = block;
@@ -264,13 +264,13 @@ function insertBlock(root: Root, block: Block): void {
 
 /** Removes a free block from internal lists. */
 function removeBlock(root: Root, block: Block): void {
-  var blockInfo = block.mmInfo;
+  let blockInfo = block.mmInfo;
   if (DEBUG) assert(blockInfo & FREE); // must be free
-  var size = blockInfo & ~TAGS_MASK;
+  let size = blockInfo & ~TAGS_MASK;
   if (DEBUG) assert(size >= BLOCK_MINSIZE); // must be valid
 
   // mapping_insert
-  var fl: usize, sl: u32;
+  let fl: usize, sl: u32;
   if (size < SB_SIZE) {
     fl = 0;
     sl = <u32>(size >> AL_BITS);
@@ -284,8 +284,8 @@ function removeBlock(root: Root, block: Block): void {
   if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
 
   // link previous and next free block
-  var prev = block.prev;
-  var next = block.next;
+  let prev = block.prev;
+  let next = block.next;
   if (prev) prev.next = next;
   if (next) next.prev = prev;
 
@@ -312,7 +312,7 @@ function searchBlock(root: Root, size: usize): Block | null {
   // size was already asserted by caller
 
   // mapping_search
-  var fl: usize, sl: u32;
+  let fl: usize, sl: u32;
   if (size < SB_SIZE) {
     fl = 0;
     sl = <u32>(size >> AL_BITS);
@@ -330,8 +330,8 @@ function searchBlock(root: Root, size: usize): Block | null {
   if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
 
   // search second level
-  var slMap = GETSL(root, fl) & (~0 << sl);
-  var head: Block | null = null;
+  let slMap = GETSL(root, fl) & (~0 << sl);
+  let head: Block | null = null;
   if (!slMap) {
     // search next larger first level
     let flMap = root.flMap & (~0 << (fl + 1));
@@ -353,11 +353,11 @@ function searchBlock(root: Root, size: usize): Block | null {
 function prepareBlock(root: Root, block: Block, size: usize): void {
   // size was already asserted by caller
 
-  var blockInfo = block.mmInfo;
+  let blockInfo = block.mmInfo;
   if (DEBUG) assert(!((size + BLOCK_OVERHEAD) & AL_MASK)); // size must be aligned so the new block is
 
   // split if the block can hold another MINSIZE block incl. overhead
-  var remaining = (blockInfo & ~TAGS_MASK) - size;
+  let remaining = (blockInfo & ~TAGS_MASK) - size;
   if (remaining >= BLOCK_OVERHEAD + BLOCK_MINSIZE) {
     block.mmInfo = size | (blockInfo & LEFTFREE); // also discards FREE
 
@@ -378,8 +378,8 @@ function addMemory(root: Root, start: usize, end: usize): bool {
   start = ((start + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
   end &= ~AL_MASK;
 
-  var tail = GETTAIL(root);
-  var tailInfo: usize = 0;
+  let tail = GETTAIL(root);
+  let tailInfo: usize = 0;
   if (tail) { // more memory
     if (DEBUG) assert(start >= changetype<usize>(tail) + BLOCK_OVERHEAD);
 
@@ -398,14 +398,14 @@ function addMemory(root: Root, start: usize, end: usize): bool {
   }
 
   // check if size is large enough for a free block and the tail block
-  var size = end - start;
+  let size = end - start;
   if (size < BLOCK_OVERHEAD + BLOCK_MINSIZE + BLOCK_OVERHEAD) {
     return false;
   }
 
   // left size is total minus its own and the zero-length tail's header
-  var leftSize = size - 2 * BLOCK_OVERHEAD;
-  var left = changetype<Block>(start);
+  let leftSize = size - 2 * BLOCK_OVERHEAD;
+  let left = changetype<Block>(start);
   left.mmInfo = leftSize | FREE | (tailInfo & LEFTFREE);
   left.prev = null;
   left.next = null;
@@ -434,14 +434,14 @@ function growMemory(root: Root, size: usize): void {
   }
   // and additional BLOCK_OVERHEAD must be taken into account. If we are going
   // to merge with the tail block, that's one time, otherwise it's two times.
-  var pagesBefore = memory.size();
+  let pagesBefore = memory.size();
   size += BLOCK_OVERHEAD << usize((<usize>pagesBefore << 16) - BLOCK_OVERHEAD != changetype<usize>(GETTAIL(root)));
-  var pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
-  var pagesWanted = max(pagesBefore, pagesNeeded); // double memory
+  let pagesNeeded = <i32>(((size + 0xffff) & ~0xffff) >>> 16);
+  let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
   if (memory.grow(pagesWanted) < 0) {
     if (memory.grow(pagesNeeded) < 0) unreachable();
   }
-  var pagesAfter = memory.size();
+  let pagesAfter = memory.size();
   addMemory(root, <usize>pagesBefore << 16, <usize>pagesAfter << 16);
 }
 
@@ -462,11 +462,11 @@ function prepareSize(size: usize): usize {
 /** Initializes the root structure. */
 function initialize(): void {
   if (isDefined(ASC_RTRACE)) oninit(__heap_base);
-  var rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
-  var pagesBefore = memory.size();
-  var pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
+  let rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
+  let pagesBefore = memory.size();
+  let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
   if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
-  var root = changetype<Root>(rootOffset);
+  let root = changetype<Root>(rootOffset);
   root.flMap = 0;
   SETTAIL(root, changetype<Block>(0));
   for (let fl: usize = 0; fl < FL_BITS; ++fl) {
@@ -475,7 +475,7 @@ function initialize(): void {
       SETHEAD(root, fl, sl, null);
     }
   }
-  var memStart = rootOffset + ROOT_SIZE;
+  let memStart = rootOffset + ROOT_SIZE;
   if (ASC_LOW_MEMORY_LIMIT) {
     const memEnd = <usize>ASC_LOW_MEMORY_LIMIT & ~AL_MASK;
     if (memStart <= memEnd) addMemory(root, memStart, memEnd);
@@ -488,8 +488,8 @@ function initialize(): void {
 
 /** Allocates a block of the specified size. */
 export function allocateBlock(root: Root, size: usize): Block {
-  var payloadSize = prepareSize(size);
-  var block = searchBlock(root, payloadSize);
+  let payloadSize = prepareSize(size);
+  let block = searchBlock(root, payloadSize);
   if (!block) {
     growMemory(root, payloadSize);
     block = changetype<Block>(searchBlock(root, payloadSize));
@@ -504,9 +504,9 @@ export function allocateBlock(root: Root, size: usize): Block {
 
 /** Reallocates a block to the specified size. */
 export function reallocateBlock(root: Root, block: Block, size: usize): Block {
-  var payloadSize = prepareSize(size);
-  var blockInfo = block.mmInfo;
-  var blockSize = blockInfo & ~TAGS_MASK;
+  let payloadSize = prepareSize(size);
+  let blockInfo = block.mmInfo;
+  let blockSize = blockInfo & ~TAGS_MASK;
 
   // possibly split and update runtime size if it still fits
   if (payloadSize <= blockSize) {
@@ -518,8 +518,8 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   }
 
   // merge with right free block if merger is large enough
-  var right = GETRIGHT(block);
-  var rightInfo = right.mmInfo;
+  let right = GETRIGHT(block);
+  let rightInfo = right.mmInfo;
   if (rightInfo & FREE) {
     let mergeSize = blockSize + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK);
     if (mergeSize >= payloadSize) {
@@ -537,7 +537,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
 
 /** Moves a block to a new one of the specified size. */
 function moveBlock(root: Root, block: Block, newSize: usize): Block {
-  var newBlock = allocateBlock(root, newSize);
+  let newBlock = allocateBlock(root, newSize);
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, block.mmInfo & ~TAGS_MASK);
   if (changetype<usize>(block) >= __heap_base) {
     if (isDefined(ASC_RTRACE)) onmove(block, newBlock);
@@ -555,7 +555,7 @@ export function freeBlock(root: Root, block: Block): void {
 
 /** Checks that a used block is valid to be freed or reallocated. */
 function checkUsedBlock(ptr: usize): Block {
-  var block = changetype<Block>(ptr - BLOCK_OVERHEAD);
+  let block = changetype<Block>(ptr - BLOCK_OVERHEAD);
   assert(
     ptr != 0 && !(ptr & AL_MASK) &&  // must exist and be aligned
     !(block.mmInfo & FREE)           // must be used

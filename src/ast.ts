@@ -894,7 +894,7 @@ export class NamedTypeNode extends TypeNode {
 
   /** Checks if this type node has type arguments. */
   get hasTypeArguments(): bool {
-    var typeArguments = this.typeArguments;
+    let typeArguments = this.typeArguments;
     return typeArguments != null && typeArguments.length > 0;
   }
 }
@@ -1224,8 +1224,8 @@ export class CallExpression extends Expression {
 
   /** Gets the type arguments range for reporting. */
   get typeArgumentsRange(): Range {
-    var typeArguments = this.typeArguments;
-    var numTypeArguments: i32;
+    let typeArguments = this.typeArguments;
+    let numTypeArguments: i32;
     if (typeArguments) {
       if (numTypeArguments = typeArguments.length) {
         return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
@@ -1236,8 +1236,8 @@ export class CallExpression extends Expression {
 
   /** Gets the arguments range for reporting. */
   get argumentsRange(): Range {
-    var args = this.args;
-    var numArguments = args.length;
+    let args = this.args;
+    let numArguments = args.length;
     if (numArguments) {
       return Range.join(args[0].range, args[numArguments - 1].range);
     }
@@ -1357,8 +1357,8 @@ export class NewExpression extends Expression {
 
   /** Gets the type arguments range for reporting. */
   get typeArgumentsRange(): Range {
-    var typeArguments = this.typeArguments;
-    var numTypeArguments: i32;
+    let typeArguments = this.typeArguments;
+    let numTypeArguments: i32;
     if (typeArguments && (numTypeArguments = typeArguments.length) > 0) {
       return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
     }
@@ -1367,8 +1367,8 @@ export class NewExpression extends Expression {
 
   /** Gets the arguments range for reporting. */
   get argumentsRange(): Range {
-    var args = this.args;
-    var numArguments = args.length;
+    let args = this.args;
+    let numArguments = args.length;
     if (numArguments) {
       return Range.join(args[0].range, args[numArguments - 1].range);
     }
@@ -1627,9 +1627,9 @@ export class Source extends Node {
     public text: string
   ) {
     super(NodeKind.SOURCE, new Range(0, text.length));
-    var internalPath = mangleInternalPath(normalizedPath);
+    let internalPath = mangleInternalPath(normalizedPath);
     this.internalPath = internalPath;
-    var pos = internalPath.lastIndexOf(PATH_DELIMITER);
+    let pos = internalPath.lastIndexOf(PATH_DELIMITER);
     this.simplePath = pos >= 0 ? internalPath.substring(pos + 1) : internalPath;
     this.range.source = this;
   }
@@ -1652,7 +1652,7 @@ export class Source extends Node {
 
   /** Checks if this source is part of the (standard) library. */
   get isLibrary(): bool {
-    var kind = this.sourceKind;
+    let kind = this.sourceKind;
     return kind == SourceKind.LIBRARY || kind == SourceKind.LIBRARY_ENTRY;
   }
 
@@ -1665,7 +1665,7 @@ export class Source extends Node {
   /** Determines the line number at the specified position. Starts at `1`. */
   lineAt(pos: i32): i32 {
     assert(pos >= 0 && pos < 0x7fffffff);
-    var lineCache = this.lineCache;
+    let lineCache = this.lineCache;
     if (!lineCache) {
       this.lineCache = lineCache = [0];
       let text = this.text;
@@ -1676,8 +1676,8 @@ export class Source extends Node {
       }
       lineCache.push(0x7fffffff);
     }
-    var l = 0;
-    var r = lineCache.length - 1;
+    let l = 0;
+    let r = lineCache.length - 1;
     while (l < r) {
       let m = l + ((r - l) >> 1);
       let s = unchecked(lineCache[m]);
@@ -1813,7 +1813,7 @@ export class ClassDeclaration extends DeclarationStatement {
   indexSignature: IndexSignatureNode | null = null;
 
   get isGeneric(): bool {
-    var typeParameters = this.typeParameters;
+    let typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
   }
 }
@@ -2059,7 +2059,7 @@ export class FunctionDeclaration extends DeclarationStatement {
 
   /** Gets if this function is generic. */
   get isGeneric(): bool {
-    var typeParameters = this.typeParameters;
+    let typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
   }
 
@@ -2121,7 +2121,7 @@ export class ImportStatement extends Statement {
     range: Range
   ) {
     super(NodeKind.IMPORT, range);
-    var normalizedPath = normalizePath(path.value);
+    let normalizedPath = normalizePath(path.value);
     if (path.value.startsWith(".")) { // relative in project
       normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
     } else { // absolute in library

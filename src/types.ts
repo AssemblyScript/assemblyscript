@@ -339,7 +339,7 @@ export class Type {
 
   /** Tests if this is a class type explicitly annotated as unmanaged. */
   get isUnmanaged(): bool {
-    var classReference = this.classReference;
+    let classReference = this.classReference;
     return classReference != null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
   }
 
@@ -383,7 +383,7 @@ export class Type {
 
   /** Computes the truncating mask in the target type. */
   computeSmallIntegerMask(targetType: Type): i32 {
-    var size = this.size;
+    let size = this.size;
     if (!this.is(TypeFlags.UNSIGNED)) size -= 1;
     return ~0 >>> (targetType.size - size);
   }
@@ -396,7 +396,7 @@ export class Type {
   /** Composes the respective nullable type of this type. */
   asNullable(): Type {
     assert(this.isInternalReference);
-    var nullableType = this._nullableType;
+    let nullableType = this._nullableType;
     if (!nullableType) {
       assert(!this.isNullableReference);
       this._nullableType = nullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
@@ -434,10 +434,10 @@ export class Type {
 
   /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */
   isAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
-    var currentClass: Class | null;
-    var targetClass: Class | null;
-    var currentFunction: Signature | null;
-    var targetFunction: Signature | null;
+    let currentClass: Class | null;
+    let targetClass: Class | null;
+    let currentFunction: Signature | null;
+    let targetFunction: Signature | null;
     if (this.isReference) {
       if (target.isReference) {
         if (!this.isNullableReference || target.isNullableReference) {
@@ -517,8 +517,8 @@ export class Type {
   /** Tests if this type can extend or implement the given type. */
   canExtendOrImplement(base: Type): bool {
     // Both must be class types
-    var thisClass = this.getClass();
-    var baseClass = base.getClass();
+    let thisClass = this.getClass();
+    let baseClass = base.getClass();
     if (!thisClass || !baseClass) return false;
     // Both types must be either managed or unmanaged
     if (this.isManaged != base.isManaged) return false;
@@ -863,8 +863,8 @@ export class Type {
 
 /** Converts an array of types to an array of type references. */
 export function typesToRefs(types: Type[]): TypeRef[] {
-  var numTypes = types.length;
-  var ret = new Array<TypeRef>(numTypes);
+  let numTypes = types.length;
+  let ret = new Array<TypeRef>(numTypes);
   for (let i = 0; i < numTypes; ++i) {
     unchecked(ret[i] = types[i].toRef());
   }
@@ -873,9 +873,9 @@ export function typesToRefs(types: Type[]): TypeRef[] {
 
 /** Converts an array of types to its combined string representation. */
 export function typesToString(types: Type[]): string {
-  var numTypes = types.length;
+  let numTypes = types.length;
   if (!numTypes) return "";
-  var sb = new Array<string>(numTypes);
+  let sb = new Array<string>(numTypes);
   for (let i = 0; i < numTypes; ++i) {
     unchecked(sb[i] = types[i].toString(true));
   }
@@ -914,8 +914,8 @@ export class Signature {
     this.thisType = thisType;
     this.program = program;
     this.hasRest = false;
-    var usizeType = program.options.usizeType;
-    var type = new Type(
+    let usizeType = program.options.usizeType;
+    let type = new Type(
       usizeType.kind,
       usizeType.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE,
       usizeType.size
@@ -923,8 +923,8 @@ export class Signature {
     this.type = type;
     type.signatureReference = this;
 
-    var signatureTypes = program.uniqueSignatures;
-    var length = signatureTypes.length;
+    let signatureTypes = program.uniqueSignatures;
+    let length = signatureTypes.length;
     for (let i = 0; i < length; i++) {
       let compare = unchecked(signatureTypes[i]);
       if (this.equals(compare)) {
@@ -937,9 +937,9 @@ export class Signature {
   }
 
   get paramRefs(): TypeRef {
-    var thisType = this.thisType;
-    var parameterTypes = this.parameterTypes;
-    var numParameterTypes = parameterTypes.length;
+    let thisType = this.thisType;
+    let parameterTypes = this.parameterTypes;
+    let numParameterTypes = parameterTypes.length;
     if (!numParameterTypes) {
       return thisType ? thisType.toRef() : TypeRef.None;
     }
@@ -962,8 +962,8 @@ export class Signature {
   equals(other: Signature): bool {
 
     // check `this` type
-    var thisThisType = this.thisType;
-    var otherThisType = other.thisType;
+    let thisThisType = this.thisType;
+    let otherThisType = other.thisType;
     if (thisThisType) {
       if (!otherThisType || !thisThisType.equals(otherThisType)) return false;
     } else if (otherThisType) {
@@ -977,9 +977,9 @@ export class Signature {
     if (!this.returnType.equals(other.returnType)) return false;
 
     // check parameter types
-    var thisParameterTypes = this.parameterTypes;
-    var otherParameterTypes = other.parameterTypes;
-    var numParameters = thisParameterTypes.length;
+    let thisParameterTypes = this.parameterTypes;
+    let otherParameterTypes = other.parameterTypes;
+    let numParameters = thisParameterTypes.length;
     if (numParameters != otherParameterTypes.length) return false;
 
     for (let i = 0; i < numParameters; ++i) {
@@ -992,8 +992,8 @@ export class Signature {
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
   isAssignableTo(target: Signature, checkCompatibleOverride: bool = false): bool {
-    var thisThisType = this.thisType;
-    var targetThisType = target.thisType;
+    let thisThisType = this.thisType;
+    let targetThisType = target.thisType;
     if (!checkCompatibleOverride) {
       // check exact `this` type
       if (thisThisType) {
@@ -1018,15 +1018,15 @@ export class Signature {
     if (this.hasRest != target.hasRest) return false; // TODO
 
     // check return type
-    var thisReturnType = this.returnType;
-    var targetReturnType = target.returnType;
+    let thisReturnType = this.returnType;
+    let targetReturnType = target.returnType;
     if (!(thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType))) {
       return false;
     }
     // check parameter types
-    var thisParameterTypes = this.parameterTypes;
-    var targetParameterTypes = target.parameterTypes;
-    var numParameters = thisParameterTypes.length;
+    let thisParameterTypes = this.parameterTypes;
+    let targetParameterTypes = target.parameterTypes;
+    let numParameters = thisParameterTypes.length;
     if (numParameters != targetParameterTypes.length) return false; // TODO
 
     for (let i = 0; i < numParameters; ++i) {
@@ -1039,11 +1039,11 @@ export class Signature {
 
   /** Tests if this signature has at least one managed operand. */
   get hasManagedOperands(): bool {
-    var thisType = this.thisType;
+    let thisType = this.thisType;
     if (thisType && thisType.isManaged) {
       return true;
     }
-    var parameterTypes = this.parameterTypes;
+    let parameterTypes = this.parameterTypes;
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
       if (unchecked(parameterTypes[i]).isManaged) return true;
     }
@@ -1052,14 +1052,14 @@ export class Signature {
 
   /** Gets the indices of all managed operands. */
   getManagedOperandIndices(): i32[] {
-    var indices = new Array<i32>();
-    var index = 0;
-    var thisType = this.thisType;
+    let indices = new Array<i32>();
+    let index = 0;
+    let thisType = this.thisType;
     if (thisType) {
       if (thisType.isManaged) indices.push(index);
       ++index;
     }
-    var parameterTypes = this.parameterTypes;
+    let parameterTypes = this.parameterTypes;
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
       if (unchecked(parameterTypes[i]).isManaged) {
         indices.push(index);
@@ -1071,11 +1071,11 @@ export class Signature {
 
   /** Tests if this signature has at least one v128 operand. */
   get hasVectorValueOperands(): bool {
-    var thisType = this.thisType;
+    let thisType = this.thisType;
     if (thisType && thisType.isVectorValue) {
       return true;
     }
-    var parameterTypes = this.parameterTypes;
+    let parameterTypes = this.parameterTypes;
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
       if (unchecked(parameterTypes[i]).isVectorValue) return true;
     }
@@ -1084,14 +1084,14 @@ export class Signature {
 
   /** Gets the indices of all v128 operands. */
   getVectorValueOperandIndices(): i32[] {
-    var indices = new Array<i32>();
-    var index = 0;
-    var thisType = this.thisType;
+    let indices = new Array<i32>();
+    let index = 0;
+    let thisType = this.thisType;
     if (thisType) {
       if (thisType.isVectorValue) indices.push(index);
       ++index;
     }
-    var parameterTypes = this.parameterTypes;
+    let parameterTypes = this.parameterTypes;
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
       if (unchecked(parameterTypes[i]).isVectorValue) {
         indices.push(index);
@@ -1103,18 +1103,18 @@ export class Signature {
 
   /** Converts this signature to a string. */
   toString(validWat: bool = false): string {
-    var sb = new Array<string>();
+    let sb = new Array<string>();
     sb.push(validWat ? "%28" : "(");
-    var index = 0;
-    var thisType = this.thisType;
+    let index = 0;
+    let thisType = this.thisType;
     if (thisType) {
       sb.push(validWat ? "this:" : "this: ");
       assert(!thisType.signatureReference);
       sb.push(thisType.toString(validWat));
       index = 1;
     }
-    var parameters = this.parameterTypes;
-    var numParameters = parameters.length;
+    let parameters = this.parameterTypes;
+    let numParameters = parameters.length;
     if (numParameters) {
       let optionalStart = this.requiredParameters;
       let restIndex = this.hasRest ? numParameters - 1 : -1;
@@ -1132,9 +1132,9 @@ export class Signature {
 
   /** Creates a clone of this signature that is safe to modify. */
   clone(): Signature {
-    var parameterTypes = this.parameterTypes;
-    var numParameterTypes = parameterTypes.length;
-    var cloneParameterTypes = new Array<Type>(numParameterTypes);
+    let parameterTypes = this.parameterTypes;
+    let numParameterTypes = parameterTypes.length;
+    let cloneParameterTypes = new Array<Type>(numParameterTypes);
     for (let i = 0; i < numParameterTypes; ++i) {
       unchecked(cloneParameterTypes[i] = parameterTypes[i]);
     }

@@ -278,11 +278,11 @@ export function isIdentifierPart(cp: i32): bool {
 
 /** Tests if the specified string is a valid identifer. */
 export function isIdentifier(str: string): bool {
-  var len = str.length;
+  let len = str.length;
   if (!len) return false;
-  var cp = <i32>str.codePointAt(0);
+  let cp = <i32>str.codePointAt(0);
   if (!isIdentifierStart(cp)) return false;
-  var i = numCodeUnits(cp);
+  let i = numCodeUnits(cp);
   while (i < len) {
     cp = <i32>str.codePointAt(i);
     if (!isIdentifierPart(cp)) return false;
@@ -656,8 +656,8 @@ const unicodeIdentifierPartMin = 170;
 const unicodeIdentifierPartMax = 917999;
 
 function lookupInUnicodeMap(code: i32, map: i32[]): bool {
-  var lo = 0;
-  var hi = map.length;
+  let lo = 0;
+  let hi = map.length;
   while (lo + 1 < hi) {
     let mid = lo + ((hi - lo) >>> 1);
     mid -= (mid & 1);
@@ -708,9 +708,9 @@ export function indent(sb: string[], level: i32): void {
 
 /** Escapes a string using the specified kind of quote. */
 export function escapeString(str: string, quote: CharCode): string {
-  var sb = new Array<string>();
-  var off = 0;
-  var i = 0;
+  let sb = new Array<string>();
+  let off = 0;
+  let i = 0;
   for (let k = str.length; i < k;) {
     switch (str.charCodeAt(i)) {
       case CharCode.NULL: {

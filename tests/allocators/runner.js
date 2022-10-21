@@ -8,9 +8,9 @@ export default function runner(exports, runs, allocs) {
 
   function randomAlloc(maxSize) {
     if (!maxSize) maxSize = 8192;
-    var size = ((Math.random() * maxSize) >>> 0) + 1;
+    let size = ((Math.random() * maxSize) >>> 0) + 1;
     size = (size + 3) & ~3;
-    var ptr = alloc(size, 0);
+    let ptr = alloc(size, 0);
     if (!ptr) throw Error();
     if ((ptr & 15) != 0) throw Error("invalid alignment: " + (ptr & 15) + " on " + ptr);
     if (ptrs.indexOf(ptr) >= 0) throw Error("duplicate pointer");
@@ -20,7 +20,7 @@ export default function runner(exports, runs, allocs) {
   }
 
   function preciseFree(ptr) {
-    var idx = ptrs.indexOf(ptr);
+    let idx = ptrs.indexOf(ptr);
     if (idx < 0) throw Error("unknown pointer");
     ptr = ptrs[idx];
     ptrs.splice(idx, 1);
@@ -29,26 +29,26 @@ export default function runner(exports, runs, allocs) {
   }
 
   function randomFree() {
-    var idx = (Math.random() * ptrs.length) >>> 0;
-    var ptr = ptrs[idx];
+    let idx = (Math.random() * ptrs.length) >>> 0;
+    let ptr = ptrs[idx];
     if (typeof ptr !== "number") throw Error();
     ptrs.splice(idx, 1);
     free(ptr);
   }
 
   // remember the smallest possible memory address
-  var base = alloc(64, 0);
+  let base = alloc(64, 0);
   console.log("base: " + base);
   try {
     reset();
   } catch (e) {
     free(base);
   }
-  var currentMem = exports.memory.buffer.byteLength;
+  let currentMem = exports.memory.buffer.byteLength;
   console.log("mem initial: " + currentMem);
 
   function testMemChanged() {
-    var actualMem = exports.memory.buffer.byteLength;
+    let actualMem = exports.memory.buffer.byteLength;
     if (actualMem > currentMem) {
       console.log("mem changed: " + currentMem + " -> " + actualMem);
       currentMem = actualMem;
@@ -56,10 +56,10 @@ export default function runner(exports, runs, allocs) {
   }
 
   try {
-    for (var j = 0; j < runs; ++j) {
+    for (let j = 0; j < runs; ++j) {
       console.log("run " + (j + 1) + " (" + allocs + " allocations) ...");
-      for (var i = 0; i < allocs; ++i) {
-        var ptr = randomAlloc();
+      for (let i = 0; i < allocs; ++i) {
+        let ptr = randomAlloc();
         testMemChanged();
 
         // immediately free every 4th
@@ -98,16 +98,16 @@ export default function runner(exports, runs, allocs) {
 /* function mem(memory, offset, count) {
   if (!offset) offset = 0;
   if (!count) count = 1024;
-  var mem = new Uint8Array(memory.buffer, offset);
-  // var stackTop = new Uint32Array(memory.buffer, 4, 1)[0];
-  var hex = [];
-  for (var i = 0; i < count; ++i) {
-    var o = (offset + i).toString(16);
+  let mem = new Uint8Array(memory.buffer, offset);
+  // let stackTop = new Uint32Array(memory.buffer, 4, 1)[0];
+  let hex = [];
+  for (let i = 0; i < count; ++i) {
+    let o = (offset + i).toString(16);
     while (o.length < 4) o = "0" + o;
     if ((i & 15) === 0) {
       hex.push("\n" + o + ":");
     }
-    var h = mem[i].toString(16);
+    let h = mem[i].toString(16);
     if (h.length < 2) h = "0" + h;
     hex.push(h);
   }

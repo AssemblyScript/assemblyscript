@@ -39,14 +39,14 @@ class FindUsedLocalsVisitor extends Visitor {
   }
 }
 
-var singleton: FindUsedLocalsVisitor | null = null;
+let singleton: FindUsedLocalsVisitor | null = null;
 
 /** Finds the indexes of all locals used in the specified expression. */
 export function findUsedLocals(
   expr: ExpressionRef,
   used: BitSet = new BitSet()
 ): BitSet {
-  var visitor = singleton;
+  let visitor = singleton;
   if (!visitor) singleton = visitor = new FindUsedLocalsVisitor(used);
   else visitor.used = used;
   visitor.visit(expr);
