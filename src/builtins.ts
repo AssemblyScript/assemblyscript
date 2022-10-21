@@ -3492,7 +3492,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.Dataref:
-      case TypeKind.ARRAYREF:
+      case TypeKind.Arrayref:
       case TypeKind.I31ref:
       case TypeKind.Stringref:
       case TypeKind.StringviewWTF8:
@@ -3578,7 +3578,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Anyref:
       case TypeKind.Eqref:
       case TypeKind.Dataref:
-      case TypeKind.ARRAYREF:
+      case TypeKind.Arrayref:
       case TypeKind.I31ref:
       case TypeKind.Stringref:
       case TypeKind.StringviewWTF8:
