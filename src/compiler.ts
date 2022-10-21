@@ -2378,10 +2378,8 @@ export class Compiler extends DiagnosticEmitter {
         // Detect if local flags are incompatible before and after looping, and
         // if so recompile by unifying local flags between iterations. Note that
         // this may be necessary multiple times where locals depend on each other.
-        if (Flow.hasIncompatibleLocalStates(outerFlow, flow)) {
+        if (outerFlow.resetIfNeedsRecompile(flow, numLocalsBefore)) {
           outerFlow.popBreakLabel();
-          outerFlow.unifyLocalFlags(flow);
-          outerFlow.actualFunction.localsByIndex.length = numLocalsBefore;
           this.currentFlow = outerFlow;
           return this.doCompileDoStatement(statement);
         }
@@ -2558,11 +2556,8 @@ export class Compiler extends DiagnosticEmitter {
       // Detect if local flags are incompatible before and after looping, and if
       // so recompile by unifying local flags between iterations. Note that this
       // may be necessary multiple times where locals depend on each other.
-      if (Flow.hasIncompatibleLocalStates(outerFlow, flow)) {
-        assert(!bodyFlow.hasScopedLocals);
+      if (outerFlow.resetIfNeedsRecompile(flow, numLocalsBefore)) {
         outerFlow.popBreakLabel();
-        outerFlow.unifyLocalFlags(flow);
-        outerFlow.actualFunction.localsByIndex.length = numLocalsBefore;
         this.currentFlow = outerFlow;
         return this.doCompileForStatement(statement);
       }
@@ -3225,10 +3220,8 @@ export class Compiler extends DiagnosticEmitter {
       // if so recompile by unifying local flags between iterations. Note that
       // this may be necessary multiple times where locals depend on each other.
       // Here: Only relevant if flow does not always break.
-      if (!breaks && Flow.hasIncompatibleLocalStates(outerFlow, flow)) {
+      if (!breaks && outerFlow.resetIfNeedsRecompile(flow, numLocalsBefore)) {
         outerFlow.popBreakLabel();
-        outerFlow.unifyLocalFlags(flow);
-        outerFlow.actualFunction.localsByIndex.length = numLocalsBefore;
         this.currentFlow = outerFlow;
         return this.doCompileWhileStatement(statement);
       }

@@ -818,43 +818,41 @@ export class Flow {
     }
   }
 
-  /** Tests if the specified flows have differing local states. */
-  static hasIncompatibleLocalStates(before: Flow, after: Flow): bool {
-    var numThisLocalFlags = before.localFlags.length;
-    var numOtherLocalFlags = after.localFlags.length;
-    var parentFunction = before.parentFunction;
-    assert(parentFunction == after.parentFunction);
+  /** Tests if recompilation is needed due to incompatible local flags between loops, and resets if necessary. */
+  resetIfNeedsRecompile(
+    /** Resulting flow of the current compilation attempt. */
+    other: Flow,
+    /** Number of locals before the compilation attempt. */
+    numLocalsBefore: i32
+  ): bool {
+    var numThisLocalFlags = this.localFlags.length;
+    var numOtherLocalFlags = other.localFlags.length;
+    var parentFunction = this.parentFunction;
+    assert(parentFunction == other.parentFunction);
     var localsByIndex = parentFunction.localsByIndex;
-    assert(localsByIndex == after.parentFunction.localsByIndex);
+    assert(localsByIndex == other.parentFunction.localsByIndex);
+    var needsRecompile = false;
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       let local = localsByIndex[i];
       let type = local.type;
       if (type.isShortIntegerValue) {
-        if (before.isLocalFlag(i, LocalFlags.WRAPPED) && !after.isLocalFlag(i, LocalFlags.WRAPPED)) {
-          return true;
+        if (this.isLocalFlag(i, LocalFlags.WRAPPED) && !other.isLocalFlag(i, LocalFlags.WRAPPED)) {
+          this.unsetLocalFlag(i, LocalFlags.WRAPPED); // assume not wrapped
+          needsRecompile = true;
         }
       }
       if (type.isNullableReference) {
-        if (before.isLocalFlag(i, LocalFlags.NONNULL) && !after.isLocalFlag(i, LocalFlags.NONNULL)) {
-          return true;
+        if (this.isLocalFlag(i, LocalFlags.NONNULL) && !other.isLocalFlag(i, LocalFlags.NONNULL)) {
+          this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
+          needsRecompile = true;
         }
       }
     }
-    return false;
-  }
-
-  /** Unifies local flags between this and the other flow. */
-  unifyLocalFlags(other: Flow): void {
-    var numThisLocalFlags = this.localFlags.length;
-    var numOtherLocalFlags = other.localFlags.length;
-    for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
-      if (this.isLocalFlag(i, LocalFlags.WRAPPED) != other.isLocalFlag(i, LocalFlags.WRAPPED)) {
-        this.unsetLocalFlag(i, LocalFlags.WRAPPED); // assume not wrapped
-      }
-      if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
-        this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
-      }
+    if (needsRecompile) {
+      // Reset function locals to state before the compilation attempt
+      this.actualFunction.localsByIndex.length = numLocalsBefore;
     }
+    return needsRecompile;
   }
 
   /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
