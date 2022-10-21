@@ -46,15 +46,15 @@
  (func $while/testSimple (type $none_=>_none)
   (local $i i32)
   (local $j i32)
-  (local $var$2 i32)
+  (local $2 i32)
   i32.const 10
   local.set $i
   i32.const 0
   local.set $j
   loop $while-continue|0
    local.get $i
-   local.set $var$2
-   local.get $var$2
+   local.set $2
+   local.get $2
    if
     local.get $i
     i32.const 1
@@ -98,8 +98,8 @@
   (local $i i32)
   (local $j i32)
   (local $k i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
+  (local $3 i32)
+  (local $4 i32)
   i32.const 10
   local.set $i
   i32.const 0
@@ -108,8 +108,8 @@
   local.set $k
   loop $while-continue|0
    local.get $i
-   local.set $var$3
-   local.get $var$3
+   local.set $3
+   local.get $3
    if
     local.get $i
     i32.const 1
@@ -121,8 +121,8 @@
     local.set $j
     loop $while-continue|1
      local.get $i
-     local.set $var$4
-     local.get $var$4
+     local.set $4
+     local.get $4
      if
       local.get $i
       i32.const 1
@@ -204,19 +204,19 @@
  (func $while/testEmpty (type $none_=>_none)
   (local $i i32)
   (local $j i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $2 i32)
+  (local $3 i32)
   i32.const 1
   local.set $i
   i32.const 0
   local.set $j
   loop $while-continue|0
    local.get $i
-   local.tee $var$2
+   local.tee $2
    i32.const 1
    i32.sub
    local.set $i
-   local.get $var$2
+   local.get $2
    if (result i32)
     local.get $j
     i32.const 1
@@ -225,8 +225,8 @@
    else
     i32.const 0
    end
-   local.set $var$3
-   local.get $var$3
+   local.set $3
+   local.get $3
    if
     nop
     br $while-continue|0
@@ -261,14 +261,14 @@
  )
  (func $while/testAlwaysTrue (type $none_=>_none)
   (local $i i32)
-  (local $var$1 i32)
+  (local $1 i32)
   i32.const 0
   local.set $i
   block $while-break|0
    loop $while-continue|0
     i32.const 1
-    local.set $var$1
-    local.get $var$1
+    local.set $1
+    local.get $1
     if
      local.get $i
      i32.const 1
@@ -300,13 +300,13 @@
  )
  (func $while/testAlwaysTrueNeverBreaks (type $none_=>_i32) (result i32)
   (local $i i32)
-  (local $var$1 i32)
+  (local $1 i32)
   i32.const 0
   local.set $i
   loop $while-continue|0
    i32.const 1
-   local.set $var$1
-   local.get $var$1
+   local.set $1
+   local.get $1
    if
     local.get $i
     i32.const 1
@@ -346,7 +346,7 @@
  )
  (func $while/testAlwaysBreaks (type $none_=>_none)
   (local $i i32)
-  (local $var$1 i32)
+  (local $1 i32)
   i32.const 0
   local.set $i
   block $while-break|0
@@ -355,8 +355,8 @@
     i32.const 1
     i32.add
     local.tee $i
-    local.set $var$1
-    local.get $var$1
+    local.set $1
+    local.get $1
     if
      br $while-break|0
     end
@@ -379,7 +379,7 @@
  )
  (func $while/testAlwaysReturns (type $none_=>_none)
   (local $i i32)
-  (local $var$1 i32)
+  (local $1 i32)
   i32.const 0
   local.set $i
   loop $while-continue|0
@@ -387,8 +387,8 @@
    i32.const 1
    i32.add
    local.tee $i
-   local.set $var$1
-   local.get $var$1
+   local.set $1
+   local.get $1
    if
     i32.const 1
     global.set $while/ran
@@ -408,13 +408,13 @@
  )
  (func $while/testContinue (type $none_=>_none)
   (local $i i32)
-  (local $var$1 i32)
+  (local $1 i32)
   i32.const 10
   local.set $i
   loop $while-continue|0
    local.get $i
-   local.set $var$1
-   local.get $var$1
+   local.set $1
+   local.get $1
    if
     local.get $i
     i32.const 1
@@ -441,21 +441,21 @@
  (func $while/testNestedContinue (type $none_=>_none)
   (local $i i32)
   (local $j i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $2 i32)
+  (local $3 i32)
   i32.const 10
   local.set $i
   i32.const 10
   local.set $j
   loop $while-continue|0
    local.get $i
-   local.set $var$2
-   local.get $var$2
+   local.set $2
+   local.get $2
    if
     loop $while-continue|1
      local.get $j
-     local.set $var$3
-     local.get $var$3
+     local.set $3
+     local.get $3
      if
       local.get $j
       i32.const 1
@@ -534,7 +534,7 @@
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $var$3 i32)
+  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -546,8 +546,8 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $var$3
-   local.get $var$3
+   local.set $3
+   local.get $3
    if
     i32.const 1
     drop
@@ -719,14 +719,14 @@
   call $~lib/rt/itcms/Object#set:prev
  )
  (func $~lib/rt/itcms/Object#makeGray (type $i32_=>_none) (param $this i32)
-  (local $var$1 i32)
+  (local $1 i32)
   local.get $this
   global.get $~lib/rt/itcms/iter
   i32.eq
   if
    local.get $this
    i32.load $0 offset=8
-   local.tee $var$1
+   local.tee $1
    i32.eqz
    if (result i32)
     i32.const 0
@@ -736,7 +736,7 @@
     call $~lib/builtins/abort
     unreachable
    else
-    local.get $var$1
+    local.get $1
    end
    global.set $~lib/rt/itcms/iter
   end
@@ -782,15 +782,15 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $var$2 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $var$2
-   local.get $var$2
+   local.set $2
+   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -839,24 +839,24 @@
   (local $size i32)
   (local $fl i32)
   (local $sl i32)
-  (local $var$6 i32)
-  (local $var$7 i32)
+  (local $6 i32)
+  (local $7 i32)
   (local $boundedSize i32)
   (local $prev i32)
   (local $next i32)
-  (local $sl_0 i32)
-  (local $fl_0 i32)
-  (local $root_0 i32)
+  (local $root|11 i32)
+  (local $fl|12 i32)
+  (local $sl|13 i32)
+  (local $root|14 i32)
+  (local $fl|15 i32)
+  (local $sl|16 i32)
   (local $head i32)
-  (local $sl_1 i32)
-  (local $fl_1 i32)
-  (local $root_1 i32)
-  (local $fl_2 i32)
-  (local $root_2 i32)
+  (local $root|18 i32)
+  (local $fl|19 i32)
   (local $slMap i32)
-  (local $slMap_0 i32)
-  (local $fl_3 i32)
-  (local $root_3 i32)
+  (local $root|21 i32)
+  (local $fl|22 i32)
+  (local $slMap|23 i32)
   local.get $block
   i32.load $0
   local.set $blockInfo
@@ -906,11 +906,11 @@
    local.set $sl
   else
    local.get $size
-   local.tee $var$6
+   local.tee $6
    i32.const 1073741820
-   local.tee $var$7
-   local.get $var$6
-   local.get $var$7
+   local.tee $7
+   local.get $6
+   local.get $7
    i32.lt_u
    select
    local.set $boundedSize
@@ -977,16 +977,16 @@
   end
   local.get $block
   local.get $root
-  local.set $root_0
+  local.set $root|11
   local.get $fl
-  local.set $fl_0
+  local.set $fl|12
   local.get $sl
-  local.set $sl_0
-  local.get $root_0
-  local.get $fl_0
+  local.set $sl|13
+  local.get $root|11
+  local.get $fl|12
   i32.const 4
   i32.shl
-  local.get $sl_0
+  local.get $sl|13
   i32.add
   i32.const 2
   i32.shl
@@ -995,18 +995,18 @@
   i32.eq
   if
    local.get $root
-   local.set $root_1
+   local.set $root|14
    local.get $fl
-   local.set $fl_1
+   local.set $fl|15
    local.get $sl
-   local.set $sl_1
+   local.set $sl|16
    local.get $next
    local.set $head
-   local.get $root_1
-   local.get $fl_1
+   local.get $root|14
+   local.get $fl|15
    i32.const 4
    i32.shl
-   local.get $sl_1
+   local.get $sl|16
    i32.add
    i32.const 2
    i32.shl
@@ -1017,20 +1017,20 @@
    i32.eqz
    if
     local.get $root
-    local.set $root_2
+    local.set $root|18
     local.get $fl
-    local.set $fl_2
-    local.get $root_2
-    local.get $fl_2
+    local.set $fl|19
+    local.get $root|18
+    local.get $fl|19
     i32.const 2
     i32.shl
     i32.add
     i32.load $0 offset=4
     local.set $slMap
     local.get $root
-    local.set $root_3
+    local.set $root|21
     local.get $fl
-    local.set $fl_3
+    local.set $fl|22
     local.get $slMap
     i32.const 1
     local.get $sl
@@ -1039,13 +1039,13 @@
     i32.xor
     i32.and
     local.tee $slMap
-    local.set $slMap_0
-    local.get $root_3
-    local.get $fl_3
+    local.set $slMap|23
+    local.get $root|21
+    local.get $fl|22
     i32.const 2
     i32.shl
     i32.add
-    local.get $slMap_0
+    local.get $slMap|23
     i32.store $0 offset=4
     local.get $slMap
     i32.eqz
@@ -1066,32 +1066,32 @@
  )
  (func $~lib/rt/tlsf/insertBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   (local $blockInfo i32)
-  (local $block_0 i32)
+  (local $block|3 i32)
   (local $right i32)
   (local $rightInfo i32)
-  (local $block_1 i32)
-  (local $block_2 i32)
+  (local $block|6 i32)
+  (local $block|7 i32)
   (local $left i32)
   (local $leftInfo i32)
   (local $size i32)
   (local $fl i32)
   (local $sl i32)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $13 i32)
+  (local $14 i32)
   (local $boundedSize i32)
-  (local $sl_0 i32)
-  (local $fl_0 i32)
-  (local $root_0 i32)
+  (local $root|16 i32)
+  (local $fl|17 i32)
+  (local $sl|18 i32)
   (local $head i32)
-  (local $head_0 i32)
-  (local $sl_1 i32)
-  (local $fl_1 i32)
-  (local $root_1 i32)
-  (local $fl_2 i32)
-  (local $root_2 i32)
+  (local $root|20 i32)
+  (local $fl|21 i32)
+  (local $sl|22 i32)
+  (local $head|23 i32)
+  (local $root|24 i32)
+  (local $fl|25 i32)
+  (local $root|26 i32)
+  (local $fl|27 i32)
   (local $slMap i32)
-  (local $fl_3 i32)
-  (local $root_3 i32)
   i32.const 1
   drop
   local.get $block
@@ -1122,11 +1122,11 @@
    unreachable
   end
   local.get $block
-  local.set $block_0
-  local.get $block_0
+  local.set $block|3
+  local.get $block|3
   i32.const 4
   i32.add
-  local.get $block_0
+  local.get $block|3
   i32.load $0
   i32.const 3
   i32.const -1
@@ -1157,11 +1157,11 @@
    local.tee $blockInfo
    call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $block
-   local.set $block_1
-   local.get $block_1
+   local.set $block|6
+   local.get $block|6
    i32.const 4
    i32.add
-   local.get $block_1
+   local.get $block|6
    i32.load $0
    i32.const 3
    i32.const -1
@@ -1178,8 +1178,8 @@
   i32.and
   if
    local.get $block
-   local.set $block_2
-   local.get $block_2
+   local.set $block|7
+   local.get $block|7
    i32.const 4
    i32.sub
    i32.load $0
@@ -1279,11 +1279,11 @@
    local.set $sl
   else
    local.get $size
-   local.tee $var$13
+   local.tee $13
    i32.const 1073741820
-   local.tee $var$14
-   local.get $var$13
-   local.get $var$14
+   local.tee $14
+   local.get $13
+   local.get $14
    i32.lt_u
    select
    local.set $boundedSize
@@ -1331,16 +1331,16 @@
    unreachable
   end
   local.get $root
-  local.set $root_0
+  local.set $root|16
   local.get $fl
-  local.set $fl_0
+  local.set $fl|17
   local.get $sl
-  local.set $sl_0
-  local.get $root_0
-  local.get $fl_0
+  local.set $sl|18
+  local.get $root|16
+  local.get $fl|17
   i32.const 4
   i32.shl
-  local.get $sl_0
+  local.get $sl|18
   i32.add
   i32.const 2
   i32.shl
@@ -1360,23 +1360,23 @@
    call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $root
-  local.set $root_1
+  local.set $root|20
   local.get $fl
-  local.set $fl_1
+  local.set $fl|21
   local.get $sl
-  local.set $sl_1
+  local.set $sl|22
   local.get $block
-  local.set $head_0
-  local.get $root_1
-  local.get $fl_1
+  local.set $head|23
+  local.get $root|20
+  local.get $fl|21
   i32.const 4
   i32.shl
-  local.get $sl_1
+  local.get $sl|22
   i32.add
   i32.const 2
   i32.shl
   i32.add
-  local.get $head_0
+  local.get $head|23
   i32.store $0 offset=96
   local.get $root
   local.get $root
@@ -1387,15 +1387,15 @@
   i32.or
   call $~lib/rt/tlsf/Root#set:flMap
   local.get $root
-  local.set $root_3
+  local.set $root|26
   local.get $fl
-  local.set $fl_3
+  local.set $fl|27
   local.get $root
-  local.set $root_2
+  local.set $root|24
   local.get $fl
-  local.set $fl_2
-  local.get $root_2
-  local.get $fl_2
+  local.set $fl|25
+  local.get $root|24
+  local.get $fl|25
   i32.const 2
   i32.shl
   i32.add
@@ -1405,8 +1405,8 @@
   i32.shl
   i32.or
   local.set $slMap
-  local.get $root_3
-  local.get $fl_3
+  local.get $root|26
+  local.get $fl|27
   i32.const 2
   i32.shl
   i32.add
@@ -1414,14 +1414,14 @@
   i32.store $0 offset=4
  )
  (func $~lib/rt/tlsf/addMemory (type $i32_i32_i32_=>_i32) (param $root i32) (param $start i32) (param $end i32) (result i32)
-  (local $root_0 i32)
+  (local $root|3 i32)
   (local $tail i32)
   (local $tailInfo i32)
   (local $size i32)
   (local $leftSize i32)
   (local $left i32)
-  (local $tail_0 i32)
-  (local $root_1 i32)
+  (local $root|9 i32)
+  (local $tail|10 i32)
   i32.const 1
   drop
   local.get $start
@@ -1455,8 +1455,8 @@
   i32.and
   local.set $end
   local.get $root
-  local.set $root_0
-  local.get $root_0
+  local.set $root|3
+  local.get $root|3
   i32.load $0 offset=1568
   local.set $tail
   i32.const 0
@@ -1563,11 +1563,11 @@
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $root
-  local.set $root_1
+  local.set $root|9
   local.get $tail
-  local.set $tail_0
-  local.get $root_1
-  local.get $tail_0
+  local.set $tail|10
+  local.get $root|9
+  local.get $tail|10
   i32.store $0 offset=1568
   local.get $root
   local.get $left
@@ -1579,19 +1579,19 @@
   (local $pagesBefore i32)
   (local $pagesNeeded i32)
   (local $root i32)
+  (local $root|4 i32)
   (local $tail i32)
-  (local $root_0 i32)
   (local $fl i32)
-  (local $var$7 i32)
+  (local $7 i32)
+  (local $root|8 i32)
+  (local $fl|9 i32)
   (local $slMap i32)
-  (local $fl_0 i32)
-  (local $root_1 i32)
   (local $sl i32)
-  (local $var$12 i32)
+  (local $12 i32)
+  (local $root|13 i32)
+  (local $fl|14 i32)
+  (local $sl|15 i32)
   (local $head i32)
-  (local $sl_0 i32)
-  (local $fl_1 i32)
-  (local $root_2 i32)
   (local $memStart i32)
   i32.const 0
   drop
@@ -1639,10 +1639,10 @@
   i32.const 0
   call $~lib/rt/tlsf/Root#set:flMap
   local.get $root
-  local.set $root_0
+  local.set $root|4
   i32.const 0
   local.set $tail
-  local.get $root_0
+  local.get $root|4
   local.get $tail
   i32.store $0 offset=1568
   i32.const 0
@@ -1651,17 +1651,17 @@
    local.get $fl
    i32.const 23
    i32.lt_u
-   local.set $var$7
-   local.get $var$7
+   local.set $7
+   local.get $7
    if
     local.get $root
-    local.set $root_1
+    local.set $root|8
     local.get $fl
-    local.set $fl_0
+    local.set $fl|9
     i32.const 0
     local.set $slMap
-    local.get $root_1
-    local.get $fl_0
+    local.get $root|8
+    local.get $fl|9
     i32.const 2
     i32.shl
     i32.add
@@ -1673,22 +1673,22 @@
      local.get $sl
      i32.const 16
      i32.lt_u
-     local.set $var$12
-     local.get $var$12
+     local.set $12
+     local.get $12
      if
       local.get $root
-      local.set $root_2
+      local.set $root|13
       local.get $fl
-      local.set $fl_1
+      local.set $fl|14
       local.get $sl
-      local.set $sl_0
+      local.set $sl|15
       i32.const 0
       local.set $head
-      local.get $root_2
-      local.get $fl_1
+      local.get $root|13
+      local.get $fl|14
       i32.const 4
       i32.shl
-      local.get $sl_0
+      local.get $sl|15
       i32.add
       i32.const 2
       i32.shl
@@ -1819,26 +1819,26 @@
  )
  (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
   (local $obj i32)
-  (local $var$1 i32)
+  (local $1 i32)
   (local $black i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
+  (local $3 i32)
+  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
     block $case1|0
      block $case0|0
       global.get $~lib/rt/itcms/state
-      local.set $var$1
-      local.get $var$1
+      local.set $1
+      local.get $1
       i32.const 0
       i32.eq
       br_if $case0|0
-      local.get $var$1
+      local.get $1
       i32.const 1
       i32.eq
       br_if $case1|0
-      local.get $var$1
+      local.get $1
       i32.const 2
       i32.eq
       br_if $case2|0
@@ -1867,8 +1867,8 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $var$3
-     local.get $var$3
+     local.set $3
+     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1918,8 +1918,8 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $var$4
-      local.get $var$4
+      local.set $4
+      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -2099,19 +2099,19 @@
   (local $fl i32)
   (local $sl i32)
   (local $requestSize i32)
-  (local $fl_0 i32)
-  (local $root_0 i32)
+  (local $root|5 i32)
+  (local $fl|6 i32)
   (local $slMap i32)
   (local $head i32)
   (local $flMap i32)
-  (local $fl_1 i32)
-  (local $root_1 i32)
-  (local $sl_0 i32)
-  (local $fl_2 i32)
-  (local $root_2 i32)
-  (local $sl_1 i32)
-  (local $fl_3 i32)
-  (local $root_3 i32)
+  (local $root|10 i32)
+  (local $fl|11 i32)
+  (local $root|12 i32)
+  (local $fl|13 i32)
+  (local $sl|14 i32)
+  (local $root|15 i32)
+  (local $fl|16 i32)
+  (local $sl|17 i32)
   local.get $size
   i32.const 256
   i32.lt_u
@@ -2185,11 +2185,11 @@
    unreachable
   end
   local.get $root
-  local.set $root_0
+  local.set $root|5
   local.get $fl
-  local.set $fl_0
-  local.get $root_0
-  local.get $fl_0
+  local.set $fl|6
+  local.get $root|5
+  local.get $fl|6
   i32.const 2
   i32.shl
   i32.add
@@ -2227,11 +2227,11 @@
     i32.ctz
     local.set $fl
     local.get $root
-    local.set $root_1
+    local.set $root|10
     local.get $fl
-    local.set $fl_1
-    local.get $root_1
-    local.get $fl_1
+    local.set $fl|11
+    local.get $root|10
+    local.get $fl|11
     i32.const 2
     i32.shl
     i32.add
@@ -2250,17 +2250,17 @@
      unreachable
     end
     local.get $root
-    local.set $root_2
+    local.set $root|12
     local.get $fl
-    local.set $fl_2
+    local.set $fl|13
     local.get $slMap
     i32.ctz
-    local.set $sl_0
-    local.get $root_2
-    local.get $fl_2
+    local.set $sl|14
+    local.get $root|12
+    local.get $fl|13
     i32.const 4
     i32.shl
-    local.get $sl_0
+    local.get $sl|14
     i32.add
     i32.const 2
     i32.shl
@@ -2270,17 +2270,17 @@
    end
   else
    local.get $root
-   local.set $root_3
+   local.set $root|15
    local.get $fl
-   local.set $fl_3
+   local.set $fl|16
    local.get $slMap
    i32.ctz
-   local.set $sl_1
-   local.get $root_3
-   local.get $fl_3
+   local.set $sl|17
+   local.get $root|15
+   local.get $fl|16
    i32.const 4
    i32.shl
-   local.get $sl_1
+   local.get $sl|17
    i32.add
    i32.const 2
    i32.shl
@@ -2292,10 +2292,10 @@
  )
  (func $~lib/rt/tlsf/growMemory (type $i32_i32_=>_none) (param $root i32) (param $size i32)
   (local $pagesBefore i32)
-  (local $root_0 i32)
+  (local $root|3 i32)
   (local $pagesNeeded i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
+  (local $5 i32)
+  (local $6 i32)
   (local $pagesWanted i32)
   (local $pagesAfter i32)
   i32.const 0
@@ -2326,8 +2326,8 @@
   i32.const 4
   i32.sub
   local.get $root
-  local.set $root_0
-  local.get $root_0
+  local.set $root|3
+  local.get $root|3
   i32.load $0 offset=1568
   i32.ne
   i32.shl
@@ -2344,11 +2344,11 @@
   i32.shr_u
   local.set $pagesNeeded
   local.get $pagesBefore
-  local.tee $var$5
+  local.tee $5
   local.get $pagesNeeded
-  local.tee $var$6
-  local.get $var$5
-  local.get $var$6
+  local.tee $6
+  local.get $5
+  local.get $6
   i32.gt_s
   select
   local.set $pagesWanted
@@ -2381,8 +2381,8 @@
   (local $blockInfo i32)
   (local $remaining i32)
   (local $spare i32)
-  (local $block_0 i32)
-  (local $block_1 i32)
+  (local $block|6 i32)
+  (local $block|7 i32)
   local.get $block
   i32.load $0
   local.set $blockInfo
@@ -2449,11 +2449,11 @@
    i32.and
    call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $block
-   local.set $block_1
-   local.get $block_1
+   local.set $block|7
+   local.get $block|7
    i32.const 4
    i32.add
-   local.get $block_1
+   local.get $block|7
    i32.load $0
    i32.const 3
    i32.const -1
@@ -2461,11 +2461,11 @@
    i32.and
    i32.add
    local.get $block
-   local.set $block_0
-   local.get $block_0
+   local.set $block|6
+   local.get $block|6
    i32.const 4
    i32.add
-   local.get $block_0
+   local.get $block|6
    i32.load $0
    i32.const 3
    i32.const -1
@@ -2620,7 +2620,7 @@
  (func $while/testRef (type $none_=>_none)
   (local $i i32)
   (local $ref i32)
-  (local $var$2 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2638,8 +2638,8 @@
   i32.store $0
   loop $while-continue|0
    local.get $ref
-   local.set $var$2
-   local.get $var$2
+   local.set $2
+   local.get $2
    if
     local.get $i
     i32.const 1
@@ -2697,7 +2697,7 @@
  (func $while/testRefAutorelease (type $none_=>_none)
   (local $i i32)
   (local $ref i32)
-  (local $var$2 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2716,8 +2716,8 @@
   block $while-break|0
    loop $while-continue|0
     call $while/getRef
-    local.set $var$2
-    local.get $var$2
+    local.set $2
+    local.get $2
     if
      local.get $i
      i32.const 1
@@ -2766,14 +2766,14 @@
  )
  (func $while/testIfImplicitContinueThen (type $none_=>_none)
   (local $i i32)
-  (local $var$1 i32)
+  (local $1 i32)
   i32.const 0
   local.set $i
   block $while-break|0
    loop $while-continue|0
     i32.const 1
-    local.set $var$1
-    local.get $var$1
+    local.set $1
+    local.get $1
     if
      local.get $i
      i32.const 1
@@ -2796,14 +2796,14 @@
  )
  (func $while/testIfImplicitContinueElse (type $none_=>_none)
   (local $i i32)
-  (local $var$1 i32)
+  (local $1 i32)
   i32.const 0
   local.set $i
   block $while-break|0
    loop $while-continue|0
     i32.const 1
-    local.set $var$1
-    local.get $var$1
+    local.set $1
+    local.get $1
     if
      local.get $i
      i32.const 1
@@ -2857,8 +2857,8 @@
   global.set $while/ran
  )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
-  (local $var$0 i32)
-  (local $var$1 i32)
+  (local $0 i32)
+  (local $1 i32)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -2869,8 +2869,8 @@
     global.get $~lib/rt/itcms/state
     i32.const 0
     i32.ne
-    local.set $var$0
-    local.get $var$0
+    local.set $0
+    local.get $0
     if
      call $~lib/rt/itcms/step
      drop
@@ -2884,8 +2884,8 @@
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.ne
-   local.set $var$1
-   local.get $var$1
+   local.set $1
+   local.get $1
    if
     call $~lib/rt/itcms/step
     drop

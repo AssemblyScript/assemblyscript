@@ -35,7 +35,7 @@
   i32.shr_u
  )
  (func $~lib/util/hash/HASH<~lib/string/String|null> (type $i32_=>_i32) (param $key i32) (result i32)
-  (local $key_0 i32)
+  (local $key|1 i32)
   (local $h i32)
   (local $len i32)
   (local $pos i32)
@@ -44,38 +44,38 @@
   (local $s3 i32)
   (local $s4 i32)
   (local $end i32)
-  (local $var$10 i32)
-  (local $key_1 i32)
-  (local $h_0 i32)
-  (local $key_2 i32)
-  (local $h_1 i32)
-  (local $key_3 i32)
-  (local $h_2 i32)
-  (local $key_4 i32)
-  (local $h_3 i32)
-  (local $end_0 i32)
-  (local $var$20 i32)
-  (local $var$21 i32)
+  (local $10 i32)
+  (local $h|11 i32)
+  (local $key|12 i32)
+  (local $h|13 i32)
+  (local $key|14 i32)
+  (local $h|15 i32)
+  (local $key|16 i32)
+  (local $h|17 i32)
+  (local $key|18 i32)
+  (local $end|19 i32)
+  (local $20 i32)
+  (local $21 i32)
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.0 (result i32)
    local.get $key
-   local.set $key_0
-   local.get $key_0
+   local.set $key|1
+   local.get $key|1
    i32.const 0
    i32.eq
    if
     i32.const 0
     br $~lib/util/hash/hashStr|inlined.0
    end
-   local.get $key_0
+   local.get $key|1
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
    local.set $h
    local.get $h
    local.set $len
-   local.get $key_0
+   local.get $key|1
    local.set $pos
    local.get $len
    i32.const 16
@@ -107,16 +107,16 @@
      local.get $pos
      local.get $end
      i32.le_u
-     local.set $var$10
-     local.get $var$10
+     local.set $10
+     local.get $10
      if
       local.get $s1
-      local.set $h_0
+      local.set $h|11
       local.get $pos
       i32.load $0
-      local.set $key_1
-      local.get $h_0
-      local.get $key_1
+      local.set $key|12
+      local.get $h|11
+      local.get $key|12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -126,12 +126,12 @@
       i32.mul
       local.set $s1
       local.get $s2
-      local.set $h_1
+      local.set $h|13
       local.get $pos
       i32.load $0 offset=4
-      local.set $key_2
-      local.get $h_1
-      local.get $key_2
+      local.set $key|14
+      local.get $h|13
+      local.get $key|14
       i32.const -2048144777
       i32.mul
       i32.add
@@ -141,12 +141,12 @@
       i32.mul
       local.set $s2
       local.get $s3
-      local.set $h_2
+      local.set $h|15
       local.get $pos
       i32.load $0 offset=8
-      local.set $key_3
-      local.get $h_2
-      local.get $key_3
+      local.set $key|16
+      local.get $h|15
+      local.get $key|16
       i32.const -2048144777
       i32.mul
       i32.add
@@ -156,12 +156,12 @@
       i32.mul
       local.set $s3
       local.get $s4
-      local.set $h_3
+      local.set $h|17
       local.get $pos
       i32.load $0 offset=12
-      local.set $key_4
-      local.get $h_3
-      local.get $key_4
+      local.set $key|18
+      local.get $h|17
+      local.get $key|18
       i32.const -2048144777
       i32.mul
       i32.add
@@ -203,18 +203,18 @@
     i32.add
     local.set $h
    end
-   local.get $key_0
+   local.get $key|1
    local.get $len
    i32.add
    i32.const 4
    i32.sub
-   local.set $end_0
+   local.set $end|19
    loop $while-continue|1
     local.get $pos
-    local.get $end_0
+    local.get $end|19
     i32.le_u
-    local.set $var$20
-    local.get $var$20
+    local.set $20
+    local.get $20
     if
      local.get $h
      local.get $pos
@@ -236,16 +236,16 @@
      br $while-continue|1
     end
    end
-   local.get $key_0
+   local.get $key|1
    local.get $len
    i32.add
-   local.set $end_0
+   local.set $end|19
    loop $while-continue|2
     local.get $pos
-    local.get $end_0
+    local.get $end|19
     i32.lt_u
-    local.set $var$21
-    local.get $var$21
+    local.set $21
+    local.get $21
     if
      local.get $h
      local.get $pos
@@ -301,7 +301,7 @@
   i32.const 1
  )
  (func $~lib/util/hash/HASH<~lib/string/String> (type $i32_=>_i32) (param $key i32) (result i32)
-  (local $key_0 i32)
+  (local $key|1 i32)
   (local $h i32)
   (local $len i32)
   (local $pos i32)
@@ -310,38 +310,38 @@
   (local $s3 i32)
   (local $s4 i32)
   (local $end i32)
-  (local $var$10 i32)
-  (local $key_1 i32)
-  (local $h_0 i32)
-  (local $key_2 i32)
-  (local $h_1 i32)
-  (local $key_3 i32)
-  (local $h_2 i32)
-  (local $key_4 i32)
-  (local $h_3 i32)
-  (local $end_0 i32)
-  (local $var$20 i32)
-  (local $var$21 i32)
+  (local $10 i32)
+  (local $h|11 i32)
+  (local $key|12 i32)
+  (local $h|13 i32)
+  (local $key|14 i32)
+  (local $h|15 i32)
+  (local $key|16 i32)
+  (local $h|17 i32)
+  (local $key|18 i32)
+  (local $end|19 i32)
+  (local $20 i32)
+  (local $21 i32)
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.1 (result i32)
    local.get $key
-   local.set $key_0
-   local.get $key_0
+   local.set $key|1
+   local.get $key|1
    i32.const 0
    i32.eq
    if
     i32.const 0
     br $~lib/util/hash/hashStr|inlined.1
    end
-   local.get $key_0
+   local.get $key|1
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
    local.set $h
    local.get $h
    local.set $len
-   local.get $key_0
+   local.get $key|1
    local.set $pos
    local.get $len
    i32.const 16
@@ -373,16 +373,16 @@
      local.get $pos
      local.get $end
      i32.le_u
-     local.set $var$10
-     local.get $var$10
+     local.set $10
+     local.get $10
      if
       local.get $s1
-      local.set $h_0
+      local.set $h|11
       local.get $pos
       i32.load $0
-      local.set $key_1
-      local.get $h_0
-      local.get $key_1
+      local.set $key|12
+      local.get $h|11
+      local.get $key|12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -392,12 +392,12 @@
       i32.mul
       local.set $s1
       local.get $s2
-      local.set $h_1
+      local.set $h|13
       local.get $pos
       i32.load $0 offset=4
-      local.set $key_2
-      local.get $h_1
-      local.get $key_2
+      local.set $key|14
+      local.get $h|13
+      local.get $key|14
       i32.const -2048144777
       i32.mul
       i32.add
@@ -407,12 +407,12 @@
       i32.mul
       local.set $s2
       local.get $s3
-      local.set $h_2
+      local.set $h|15
       local.get $pos
       i32.load $0 offset=8
-      local.set $key_3
-      local.get $h_2
-      local.get $key_3
+      local.set $key|16
+      local.get $h|15
+      local.get $key|16
       i32.const -2048144777
       i32.mul
       i32.add
@@ -422,12 +422,12 @@
       i32.mul
       local.set $s3
       local.get $s4
-      local.set $h_3
+      local.set $h|17
       local.get $pos
       i32.load $0 offset=12
-      local.set $key_4
-      local.get $h_3
-      local.get $key_4
+      local.set $key|18
+      local.get $h|17
+      local.get $key|18
       i32.const -2048144777
       i32.mul
       i32.add
@@ -469,18 +469,18 @@
     i32.add
     local.set $h
    end
-   local.get $key_0
+   local.get $key|1
    local.get $len
    i32.add
    i32.const 4
    i32.sub
-   local.set $end_0
+   local.set $end|19
    loop $while-continue|1
     local.get $pos
-    local.get $end_0
+    local.get $end|19
     i32.le_u
-    local.set $var$20
-    local.get $var$20
+    local.set $20
+    local.get $20
     if
      local.get $h
      local.get $pos
@@ -502,16 +502,16 @@
      br $while-continue|1
     end
    end
-   local.get $key_0
+   local.get $key|1
    local.get $len
    i32.add
-   local.set $end_0
+   local.set $end|19
    loop $while-continue|2
     local.get $pos
-    local.get $end_0
+    local.get $end|19
     i32.lt_u
-    local.set $var$21
-    local.get $var$21
+    local.set $21
+    local.get $21
     if
      local.get $h
      local.get $pos
@@ -564,7 +564,7 @@
   return
  )
  (func $~lib/util/hash/HASH<f32> (type $f32_=>_i32) (param $key f32) (result i32)
-  (local $key_0 i32)
+  (local $key|1 i32)
   (local $len i32)
   (local $h i32)
   i32.const 0
@@ -579,7 +579,7 @@
   drop
   local.get $key
   i32.reinterpret_f32
-  local.set $key_0
+  local.set $key|1
   i32.const 4
   local.set $len
   i32.const 0
@@ -589,7 +589,7 @@
   i32.add
   local.set $h
   local.get $h
-  local.get $key_0
+  local.get $key|1
   i32.const -1028477379
   i32.mul
   i32.add
@@ -630,7 +630,7 @@
   return
  )
  (func $~lib/util/hash/HASH<f64> (type $f64_=>_i32) (param $key f64) (result i32)
-  (local $key_0 i64)
+  (local $key|1 i64)
   (local $h i32)
   i32.const 0
   drop
@@ -648,7 +648,7 @@
   drop
   local.get $key
   i64.reinterpret_f64
-  local.set $key_0
+  local.set $key|1
   i32.const 0
   i32.const 374761393
   i32.add
@@ -656,7 +656,7 @@
   i32.add
   local.set $h
   local.get $h
-  local.get $key_0
+  local.get $key|1
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -669,7 +669,7 @@
   i32.mul
   local.set $h
   local.get $h
-  local.get $key_0
+  local.get $key|1
   i64.const 32
   i64.shr_u
   i32.wrap_i64

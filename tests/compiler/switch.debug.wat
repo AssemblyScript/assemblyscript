@@ -13,27 +13,27 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $switch/doSwitch (type $i32_=>_i32) (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $case4|0
    block $case3|0
     block $case2|0
      block $case1|0
       block $case0|0
        local.get $n
-       local.set $var$1
-       local.get $var$1
+       local.set $1
+       local.get $1
        i32.const 1
        i32.eq
        br_if $case0|0
-       local.get $var$1
+       local.get $1
        i32.const 0
        i32.eq
        br_if $case1|0
-       local.get $var$1
+       local.get $1
        i32.const 2
        i32.eq
        br_if $case3|0
-       local.get $var$1
+       local.get $1
        i32.const 3
        i32.eq
        br_if $case4|0
@@ -51,22 +51,22 @@
   return
  )
  (func $switch/doSwitchDefaultOmitted (type $i32_=>_i32) (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $break|0
    block $case2|0
     block $case1|0
      block $case0|0
       local.get $n
-      local.set $var$1
-      local.get $var$1
+      local.set $1
+      local.get $1
       i32.const 1
       i32.eq
       br_if $case0|0
-      local.get $var$1
+      local.get $1
       i32.const 2
       i32.eq
       br_if $case1|0
-      local.get $var$1
+      local.get $1
       i32.const 3
       i32.eq
       br_if $case2|0
@@ -82,13 +82,13 @@
   i32.const 0
  )
  (func $switch/doSwitchBreakCase (type $i32_=>_i32) (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $break|0
    block $case1|0
     block $case0|0
      local.get $n
-     local.set $var$1
-     local.get $var$1
+     local.set $1
+     local.get $1
      i32.const 1
      i32.eq
      br_if $case0|0
@@ -102,13 +102,13 @@
   i32.const 1
  )
  (func $switch/doSwitchBreakDefault (type $i32_=>_i32) (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $break|0
    block $case1|0
     block $case0|0
      local.get $n
-     local.set $var$1
-     local.get $var$1
+     local.set $1
+     local.get $1
      i32.const 1
      i32.eq
      br_if $case0|0
@@ -122,12 +122,12 @@
   i32.const 2
  )
  (func $switch/doSwitchFallThroughCase (type $i32_=>_i32) (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $case1|0
    block $case0|0
     local.get $n
-    local.set $var$1
-    local.get $var$1
+    local.set $1
+    local.get $1
     i32.const 1
     i32.eq
     br_if $case1|0
@@ -139,12 +139,12 @@
   i32.const 1
  )
  (func $switch/doSwitchFallThroughDefault (type $i32_=>_i32) (param $n i32) (result i32)
-  (local $var$1 i32)
+  (local $1 i32)
   block $case1|0
    block $case0|0
     local.get $n
-    local.set $var$1
-    local.get $var$1
+    local.set $1
+    local.get $1
     i32.const 1
     i32.eq
     br_if $case0|0

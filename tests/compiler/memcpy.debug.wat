@@ -19,90 +19,90 @@
   (local $ret i32)
   (local $w i32)
   (local $x i32)
-  (local $var$6 i32)
-  (local $var$7 i32)
-  (local $var$8 i32)
-  (local $var$9 i32)
-  (local $var$10 i32)
-  (local $var$11 i32)
-  (local $var$12 i32)
-  (local $var$13 i32)
-  (local $var$14 i32)
-  (local $var$15 i32)
-  (local $var$16 i32)
-  (local $var$17 i32)
-  (local $var$18 i32)
-  (local $var$19 i32)
-  (local $var$20 i32)
-  (local $var$21 i32)
-  (local $var$22 i32)
-  (local $var$23 i32)
-  (local $var$24 i32)
-  (local $var$25 i32)
-  (local $var$26 i32)
-  (local $var$27 i32)
-  (local $var$28 i32)
-  (local $var$29 i32)
-  (local $var$30 i32)
-  (local $var$31 i32)
-  (local $var$32 i32)
-  (local $var$33 i32)
-  (local $var$34 i32)
-  (local $var$35 i32)
-  (local $var$36 i32)
-  (local $var$37 i32)
-  (local $var$38 i32)
-  (local $var$39 i32)
-  (local $var$40 i32)
-  (local $var$41 i32)
-  (local $var$42 i32)
-  (local $var$43 i32)
-  (local $var$44 i32)
-  (local $var$45 i32)
-  (local $var$46 i32)
-  (local $var$47 i32)
-  (local $var$48 i32)
-  (local $var$49 i32)
-  (local $var$50 i32)
-  (local $var$51 i32)
-  (local $var$52 i32)
-  (local $var$53 i32)
-  (local $var$54 i32)
-  (local $var$55 i32)
-  (local $var$56 i32)
-  (local $var$57 i32)
-  (local $var$58 i32)
-  (local $var$59 i32)
-  (local $var$60 i32)
-  (local $var$61 i32)
-  (local $var$62 i32)
-  (local $var$63 i32)
-  (local $var$64 i32)
-  (local $var$65 i32)
-  (local $var$66 i32)
-  (local $var$67 i32)
-  (local $var$68 i32)
-  (local $var$69 i32)
-  (local $var$70 i32)
-  (local $var$71 i32)
-  (local $var$72 i32)
-  (local $var$73 i32)
-  (local $var$74 i32)
-  (local $var$75 i32)
-  (local $var$76 i32)
-  (local $var$77 i32)
-  (local $var$78 i32)
-  (local $var$79 i32)
-  (local $var$80 i32)
-  (local $var$81 i32)
-  (local $var$82 i32)
-  (local $var$83 i32)
-  (local $var$84 i32)
-  (local $var$85 i32)
-  (local $var$86 i32)
-  (local $var$87 i32)
-  (local $var$88 i32)
-  (local $var$89 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
+  (local $22 i32)
+  (local $23 i32)
+  (local $24 i32)
+  (local $25 i32)
+  (local $26 i32)
+  (local $27 i32)
+  (local $28 i32)
+  (local $29 i32)
+  (local $30 i32)
+  (local $31 i32)
+  (local $32 i32)
+  (local $33 i32)
+  (local $34 i32)
+  (local $35 i32)
+  (local $36 i32)
+  (local $37 i32)
+  (local $38 i32)
+  (local $39 i32)
+  (local $40 i32)
+  (local $41 i32)
+  (local $42 i32)
+  (local $43 i32)
+  (local $44 i32)
+  (local $45 i32)
+  (local $46 i32)
+  (local $47 i32)
+  (local $48 i32)
+  (local $49 i32)
+  (local $50 i32)
+  (local $51 i32)
+  (local $52 i32)
+  (local $53 i32)
+  (local $54 i32)
+  (local $55 i32)
+  (local $56 i32)
+  (local $57 i32)
+  (local $58 i32)
+  (local $59 i32)
+  (local $60 i32)
+  (local $61 i32)
+  (local $62 i32)
+  (local $63 i32)
+  (local $64 i32)
+  (local $65 i32)
+  (local $66 i32)
+  (local $67 i32)
+  (local $68 i32)
+  (local $69 i32)
+  (local $70 i32)
+  (local $71 i32)
+  (local $72 i32)
+  (local $73 i32)
+  (local $74 i32)
+  (local $75 i32)
+  (local $76 i32)
+  (local $77 i32)
+  (local $78 i32)
+  (local $79 i32)
+  (local $80 i32)
+  (local $81 i32)
+  (local $82 i32)
+  (local $83 i32)
+  (local $84 i32)
+  (local $85 i32)
+  (local $86 i32)
+  (local $87 i32)
+  (local $88 i32)
+  (local $89 i32)
   local.get $dest
   local.set $ret
   loop $while-continue|0
@@ -114,21 +114,21 @@
    else
     i32.const 0
    end
-   local.set $var$6
-   local.get $var$6
+   local.set $6
+   local.get $6
    if
     local.get $dest
-    local.tee $var$7
+    local.tee $7
     i32.const 1
     i32.add
     local.set $dest
-    local.get $var$7
+    local.get $7
     local.get $src
-    local.tee $var$8
+    local.tee $8
     i32.const 1
     i32.add
     local.set $src
-    local.get $var$8
+    local.get $8
     i32.load8_u $0
     i32.store8 $0
     local.get $n
@@ -148,8 +148,8 @@
     local.get $n
     i32.const 16
     i32.ge_u
-    local.set $var$9
-    local.get $var$9
+    local.set $9
+    local.get $9
     if
      local.get $dest
      local.get $src
@@ -258,17 +258,17 @@
    i32.and
    if
     local.get $dest
-    local.tee $var$10
+    local.tee $10
     i32.const 1
     i32.add
     local.set $dest
-    local.get $var$10
+    local.get $10
     local.get $src
-    local.tee $var$11
+    local.tee $11
     i32.const 1
     i32.add
     local.set $src
-    local.get $var$11
+    local.get $11
     i32.load8_u $0
     i32.store8 $0
    end
@@ -286,16 +286,16 @@
        local.get $dest
        i32.const 4
        i32.rem_u
-       local.set $var$12
-       local.get $var$12
+       local.set $12
+       local.get $12
        i32.const 1
        i32.eq
        br_if $case0|2
-       local.get $var$12
+       local.get $12
        i32.const 2
        i32.eq
        br_if $case1|2
-       local.get $var$12
+       local.get $12
        i32.const 3
        i32.eq
        br_if $case2|2
@@ -305,45 +305,45 @@
       i32.load $0
       local.set $w
       local.get $dest
-      local.tee $var$13
+      local.tee $13
       i32.const 1
       i32.add
       local.set $dest
-      local.get $var$13
+      local.get $13
       local.get $src
-      local.tee $var$14
+      local.tee $14
       i32.const 1
       i32.add
       local.set $src
-      local.get $var$14
+      local.get $14
       i32.load8_u $0
       i32.store8 $0
       local.get $dest
-      local.tee $var$15
+      local.tee $15
       i32.const 1
       i32.add
       local.set $dest
-      local.get $var$15
+      local.get $15
       local.get $src
-      local.tee $var$16
+      local.tee $16
       i32.const 1
       i32.add
       local.set $src
-      local.get $var$16
+      local.get $16
       i32.load8_u $0
       i32.store8 $0
       local.get $dest
-      local.tee $var$17
+      local.tee $17
       i32.const 1
       i32.add
       local.set $dest
-      local.get $var$17
+      local.get $17
       local.get $src
-      local.tee $var$18
+      local.tee $18
       i32.const 1
       i32.add
       local.set $src
-      local.get $var$18
+      local.get $18
       i32.load8_u $0
       i32.store8 $0
       local.get $n
@@ -354,8 +354,8 @@
        local.get $n
        i32.const 17
        i32.ge_u
-       local.set $var$19
-       local.get $var$19
+       local.set $19
+       local.get $19
        if
         local.get $src
         i32.const 1
@@ -440,31 +440,31 @@
      i32.load $0
      local.set $w
      local.get $dest
-     local.tee $var$20
+     local.tee $20
      i32.const 1
      i32.add
      local.set $dest
-     local.get $var$20
+     local.get $20
      local.get $src
-     local.tee $var$21
+     local.tee $21
      i32.const 1
      i32.add
      local.set $src
-     local.get $var$21
+     local.get $21
      i32.load8_u $0
      i32.store8 $0
      local.get $dest
-     local.tee $var$22
+     local.tee $22
      i32.const 1
      i32.add
      local.set $dest
-     local.get $var$22
+     local.get $22
      local.get $src
-     local.tee $var$23
+     local.tee $23
      i32.const 1
      i32.add
      local.set $src
-     local.get $var$23
+     local.get $23
      i32.load8_u $0
      i32.store8 $0
      local.get $n
@@ -475,8 +475,8 @@
       local.get $n
       i32.const 18
       i32.ge_u
-      local.set $var$24
-      local.get $var$24
+      local.set $24
+      local.get $24
       if
        local.get $src
        i32.const 2
@@ -561,17 +561,17 @@
     i32.load $0
     local.set $w
     local.get $dest
-    local.tee $var$25
+    local.tee $25
     i32.const 1
     i32.add
     local.set $dest
-    local.get $var$25
+    local.get $25
     local.get $src
-    local.tee $var$26
+    local.tee $26
     i32.const 1
     i32.add
     local.set $src
-    local.get $var$26
+    local.get $26
     i32.load8_u $0
     i32.store8 $0
     local.get $n
@@ -582,8 +582,8 @@
      local.get $n
      i32.const 19
      i32.ge_u
-     local.set $var$27
-     local.get $var$27
+     local.set $27
+     local.get $27
      if
       local.get $src
       i32.const 3
@@ -670,227 +670,227 @@
   i32.and
   if
    local.get $dest
-   local.tee $var$28
+   local.tee $28
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$28
+   local.get $28
    local.get $src
-   local.tee $var$29
+   local.tee $29
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$29
+   local.get $29
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$30
+   local.tee $30
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$30
+   local.get $30
    local.get $src
-   local.tee $var$31
+   local.tee $31
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$31
+   local.get $31
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$32
+   local.tee $32
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$32
+   local.get $32
    local.get $src
-   local.tee $var$33
+   local.tee $33
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$33
+   local.get $33
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$34
+   local.tee $34
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$34
+   local.get $34
    local.get $src
-   local.tee $var$35
+   local.tee $35
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$35
+   local.get $35
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$36
+   local.tee $36
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$36
+   local.get $36
    local.get $src
-   local.tee $var$37
+   local.tee $37
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$37
+   local.get $37
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$38
+   local.tee $38
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$38
+   local.get $38
    local.get $src
-   local.tee $var$39
+   local.tee $39
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$39
+   local.get $39
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$40
+   local.tee $40
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$40
+   local.get $40
    local.get $src
-   local.tee $var$41
+   local.tee $41
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$41
+   local.get $41
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$42
+   local.tee $42
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$42
+   local.get $42
    local.get $src
-   local.tee $var$43
+   local.tee $43
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$43
+   local.get $43
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$44
+   local.tee $44
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$44
+   local.get $44
    local.get $src
-   local.tee $var$45
+   local.tee $45
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$45
+   local.get $45
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$46
+   local.tee $46
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$46
+   local.get $46
    local.get $src
-   local.tee $var$47
+   local.tee $47
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$47
+   local.get $47
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$48
+   local.tee $48
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$48
+   local.get $48
    local.get $src
-   local.tee $var$49
+   local.tee $49
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$49
+   local.get $49
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$50
+   local.tee $50
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$50
+   local.get $50
    local.get $src
-   local.tee $var$51
+   local.tee $51
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$51
+   local.get $51
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$52
+   local.tee $52
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$52
+   local.get $52
    local.get $src
-   local.tee $var$53
+   local.tee $53
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$53
+   local.get $53
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$54
+   local.tee $54
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$54
+   local.get $54
    local.get $src
-   local.tee $var$55
+   local.tee $55
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$55
+   local.get $55
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$56
+   local.tee $56
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$56
+   local.get $56
    local.get $src
-   local.tee $var$57
+   local.tee $57
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$57
+   local.get $57
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$58
+   local.tee $58
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$58
+   local.get $58
    local.get $src
-   local.tee $var$59
+   local.tee $59
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$59
+   local.get $59
    i32.load8_u $0
    i32.store8 $0
   end
@@ -899,115 +899,115 @@
   i32.and
   if
    local.get $dest
-   local.tee $var$60
+   local.tee $60
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$60
+   local.get $60
    local.get $src
-   local.tee $var$61
+   local.tee $61
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$61
+   local.get $61
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$62
+   local.tee $62
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$62
+   local.get $62
    local.get $src
-   local.tee $var$63
+   local.tee $63
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$63
+   local.get $63
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$64
+   local.tee $64
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$64
+   local.get $64
    local.get $src
-   local.tee $var$65
+   local.tee $65
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$65
+   local.get $65
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$66
+   local.tee $66
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$66
+   local.get $66
    local.get $src
-   local.tee $var$67
+   local.tee $67
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$67
+   local.get $67
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$68
+   local.tee $68
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$68
+   local.get $68
    local.get $src
-   local.tee $var$69
+   local.tee $69
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$69
+   local.get $69
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$70
+   local.tee $70
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$70
+   local.get $70
    local.get $src
-   local.tee $var$71
+   local.tee $71
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$71
+   local.get $71
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$72
+   local.tee $72
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$72
+   local.get $72
    local.get $src
-   local.tee $var$73
+   local.tee $73
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$73
+   local.get $73
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$74
+   local.tee $74
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$74
+   local.get $74
    local.get $src
-   local.tee $var$75
+   local.tee $75
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$75
+   local.get $75
    i32.load8_u $0
    i32.store8 $0
   end
@@ -1016,59 +1016,59 @@
   i32.and
   if
    local.get $dest
-   local.tee $var$76
+   local.tee $76
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$76
+   local.get $76
    local.get $src
-   local.tee $var$77
+   local.tee $77
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$77
+   local.get $77
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$78
+   local.tee $78
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$78
+   local.get $78
    local.get $src
-   local.tee $var$79
+   local.tee $79
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$79
+   local.get $79
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$80
+   local.tee $80
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$80
+   local.get $80
    local.get $src
-   local.tee $var$81
+   local.tee $81
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$81
+   local.get $81
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$82
+   local.tee $82
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$82
+   local.get $82
    local.get $src
-   local.tee $var$83
+   local.tee $83
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$83
+   local.get $83
    i32.load8_u $0
    i32.store8 $0
   end
@@ -1077,31 +1077,31 @@
   i32.and
   if
    local.get $dest
-   local.tee $var$84
+   local.tee $84
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$84
+   local.get $84
    local.get $src
-   local.tee $var$85
+   local.tee $85
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$85
+   local.get $85
    i32.load8_u $0
    i32.store8 $0
    local.get $dest
-   local.tee $var$86
+   local.tee $86
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$86
+   local.get $86
    local.get $src
-   local.tee $var$87
+   local.tee $87
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$87
+   local.get $87
    i32.load8_u $0
    i32.store8 $0
   end
@@ -1110,17 +1110,17 @@
   i32.and
   if
    local.get $dest
-   local.tee $var$88
+   local.tee $88
    i32.const 1
    i32.add
    local.set $dest
-   local.get $var$88
+   local.get $88
    local.get $src
-   local.tee $var$89
+   local.tee $89
    i32.const 1
    i32.add
    local.set $src
-   local.get $var$89
+   local.get $89
    i32.load8_u $0
    i32.store8 $0
   end

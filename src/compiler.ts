@@ -99,8 +99,7 @@ import {
   Flow,
   LocalFlags,
   FieldFlags,
-  ConditionKind,
-  findUsedLocals
+  ConditionKind
 } from "./flow";
 
 import {
@@ -6467,39 +6466,31 @@ export class Compiler extends DiagnosticEmitter {
     let previousFlow = this.currentFlow;
     let flow = Flow.createInline(previousFlow.parentFunction, instance);
     let body = [];
-    let usedLocals = new BitSet();
 
-    // Prepare compiled arguments right to left, keeping track of used locals.
-    for (let i = numArguments - 1; i >= 0; --i) {
-      // This is necessary because a later expression must not set an earlier argument local, which
-      // is also just a temporary, when being executed. Take for example `t1=1, t2=(t1 = 2)`, where
-      // the right expression would reassign the foregoing argument local. So, we iterate from right
-      // to left, remembering what's used later, and don't use these for earlier arguments, making
-      // the example above essentially `t2=1, t1=(t1 = 2)`.
-      let paramExpr = operands![i];
-      let paramType = parameterTypes[i];
-      let argumentLocal = flow.addScopedLocal(instance.getParameterName(i), paramType, usedLocals);
-      findUsedLocals(paramExpr, usedLocals);
-      // inlining is aware of wrap/nonnull states:
-      if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
-      if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
-      body.unshift(
-        module.local_set(argumentLocal.index, paramExpr, paramType.isManaged)
-      );
-    }
     if (thisArg) {
       let parent = assert(instance.parent);
       assert(parent.kind == ElementKind.CLASS);
       let classInstance = <Class>parent;
       let thisType = assert(instance.signature.thisType);
-      let thisLocal = flow.addScopedLocal(CommonNames.this_, thisType, usedLocals);
-      body.unshift(
+      let thisLocal = flow.addScopedLocal(CommonNames.this_, thisType);
+      body.push(
         module.local_set(thisLocal.index, thisArg, thisType.isManaged)
       );
       let base = classInstance.base;
       if (base) flow.addScopedAlias(CommonNames.super_, base.type, thisLocal.index);
     } else {
       assert(!instance.signature.thisType);
+    }
+    for (let i = 0; i < numArguments; ++i) {
+      let paramExpr = operands![i];
+      let paramType = parameterTypes[i];
+      let argumentLocal = flow.addScopedLocal(instance.getParameterName(i), paramType);
+      // inlining is aware of wrap/nonnull states:
+      if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
+      if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
+      body.push(
+        module.local_set(argumentLocal.index, paramExpr, paramType.isManaged)
+      );
     }
 
     // Compile omitted arguments with final argument locals blocked. Doesn't need to take care of
@@ -7078,7 +7069,7 @@ export class Compiler extends DiagnosticEmitter {
     let sizeTypeRef = this.options.sizeTypeRef;
     if (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
-      let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionArg));
+      let temp = flow.getTempLocal(this.options.usizeType);
       functionArg = module.block(null, [
         module.local_set(temp.index, functionArg, true), // Function
         module.global_set(argumentsLength, module.i32(numArguments)),

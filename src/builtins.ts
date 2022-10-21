@@ -88,7 +88,6 @@ import {
 } from "./program";
 
 import {
-  findUsedLocals,
   FlowFlags,
   LocalFlags
 } from "./flow";
@@ -1452,7 +1451,7 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: {
         // (value << (shift & mask)) | (value >>> ((0 - shift) & mask))
         let flow = compiler.currentFlow;
-        let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
+        let temp1 = flow.getTempLocal(type);
         flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
         let temp2 = flow.getTempLocal(type);
         flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
@@ -1524,7 +1523,7 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: {
         // (value >>> (shift & mask)) | (value << ((0 - shift) & mask))
         let flow = compiler.currentFlow;
-        let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
+        let temp1 = flow.getTempLocal(type);
         flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
         let temp2 = flow.getTempLocal(type);
         flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
@@ -1721,7 +1720,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
     if (op as i32 != -1) {
       let flow = compiler.currentFlow;
       let typeRef = type.toRef();
-      let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
+      let temp1 = flow.getTempLocal(type);
       flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
       let temp2 = flow.getTempLocal(type);
       flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
@@ -1789,7 +1788,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
     if (op as i32 != -1) {
       let flow = compiler.currentFlow;
       let typeRef = type.toRef();
-      let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
+      let temp1 = flow.getTempLocal(type);
       flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
       let temp2 = flow.getTempLocal(type);
       flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);

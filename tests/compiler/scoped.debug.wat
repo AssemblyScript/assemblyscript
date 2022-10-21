@@ -22,19 +22,19 @@
  )
  (func $start:scoped (type $none_=>_none)
   (local $anotherStartFunctionLocal i32)
-  (local $var$1 i32)
+  (local $1 i32)
   (local $aGlobal i32)
-  (local $var$3 i32)
+  (local $3 i32)
   (local $aConstant i64)
-  (local $aConstant_0 f32)
+  (local $aConstant|5 f32)
   i32.const 0
   local.set $anotherStartFunctionLocal
   loop $for-loop|0
    local.get $anotherStartFunctionLocal
    i32.const 1
    i32.lt_s
-   local.set $var$1
-   local.get $var$1
+   local.set $1
+   local.get $1
    if
     nop
     local.get $anotherStartFunctionLocal
@@ -50,8 +50,8 @@
    local.get $aGlobal
    i32.const 1
    i32.lt_s
-   local.set $var$3
-   local.get $var$3
+   local.set $3
+   local.get $3
    if
     local.get $aGlobal
     drop
@@ -65,7 +65,7 @@
   i64.const 5
   local.set $aConstant
   f32.const 10
-  local.set $aConstant_0
+  local.set $aConstant|5
   i32.const 42
   call $scoped/fn
  )

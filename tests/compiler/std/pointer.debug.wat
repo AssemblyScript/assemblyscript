@@ -29,64 +29,64 @@
   i32.store $0 offset=4
  )
  (func $start:std/pointer (type $none_=>_none)
-  (local $offset i32)
   (local $this i32)
-  (local $offset_0 i32)
-  (local $this_0 i32)
-  (local $this_1 i32)
-  (local $this_2 i32)
-  (local $this_3 i32)
-  (local $this_4 i32)
-  (local $this_5 i32)
-  (local $this_6 i32)
+  (local $offset i32)
+  (local $this|2 i32)
+  (local $offset|3 i32)
+  (local $this|4 i32)
+  (local $this|5 i32)
+  (local $this|6 i32)
+  (local $this|7 i32)
+  (local $this|8 i32)
+  (local $this|9 i32)
+  (local $this|10 i32)
   (local $other i32)
-  (local $this_7 i32)
-  (local $this_8 i32)
-  (local $other_0 i32)
-  (local $this_9 i32)
-  (local $this_10 i32)
-  (local $this_11 i32)
-  (local $this_12 i32)
-  (local $this_13 i32)
-  (local $this_14 i32)
-  (local $this_15 i32)
-  (local $this_16 i32)
-  (local $this_17 i32)
-  (local $this_18 i32)
-  (local $this_19 i32)
-  (local $this_20 i32)
+  (local $this|12 i32)
+  (local $this|13 i32)
+  (local $other|14 i32)
+  (local $this|15 i32)
+  (local $this|16 i32)
+  (local $this|17 i32)
+  (local $this|18 i32)
+  (local $this|19 i32)
+  (local $this|20 i32)
+  (local $this|21 i32)
+  (local $this|22 i32)
+  (local $this|23 i32)
+  (local $this|24 i32)
+  (local $this|25 i32)
+  (local $this|26 i32)
   (local $value i32)
-  (local $this_21 i32)
-  (local $this_22 i32)
-  (local $this_23 i32)
-  (local $this_24 i32)
-  (local $this_25 i32)
-  (local $offset_1 i32)
-  (local $this_26 i32)
-  (local $value_0 f32)
+  (local $this|28 i32)
+  (local $this|29 i32)
+  (local $this|30 i32)
+  (local $this|31 i32)
+  (local $this|32 i32)
+  (local $offset|33 i32)
+  (local $this|34 i32)
   (local $index i32)
-  (local $this_27 i32)
-  (local $value_1 f32)
-  (local $index_0 i32)
-  (local $this_28 i32)
-  (local $index_1 i32)
-  (local $this_29 i32)
-  (local $index_2 i32)
-  (local $this_30 i32)
-  (local $index_3 i32)
-  (local $this_31 i32)
-  (local $index_4 i32)
-  (local $this_32 i32)
-  (local $value_2 f32)
-  (local $index_5 i32)
-  (local $this_33 i32)
-  (local $index_6 i32)
-  (local $this_34 i32)
-  (local $index_7 i32)
-  (local $this_35 i32)
-  (local $value_3 f32)
-  (local $this_36 i32)
-  (local $this_37 i32)
+  (local $value|36 f32)
+  (local $this|37 i32)
+  (local $index|38 i32)
+  (local $value|39 f32)
+  (local $this|40 i32)
+  (local $index|41 i32)
+  (local $this|42 i32)
+  (local $index|43 i32)
+  (local $this|44 i32)
+  (local $index|45 i32)
+  (local $this|46 i32)
+  (local $index|47 i32)
+  (local $this|48 i32)
+  (local $index|49 i32)
+  (local $value|50 f32)
+  (local $this|51 i32)
+  (local $index|52 i32)
+  (local $this|53 i32)
+  (local $index|54 i32)
+  (local $this|55 i32)
+  (local $value|56 f32)
+  (local $this|57 i32)
   i32.const 0
   local.set $this
   i32.const 8
@@ -94,14 +94,14 @@
   local.get $offset
   global.set $std/pointer/one
   i32.const 0
-  local.set $this_0
+  local.set $this|2
   i32.const 24
-  local.set $offset_0
-  local.get $offset_0
+  local.set $offset|3
+  local.get $offset|3
   global.set $std/pointer/two
   global.get $std/pointer/one
-  local.set $this_1
-  local.get $this_1
+  local.set $this|4
+  local.get $this|4
   i32.const 8
   i32.eq
   i32.eqz
@@ -114,8 +114,8 @@
    unreachable
   end
   global.get $std/pointer/two
-  local.set $this_2
-  local.get $this_2
+  local.set $this|5
+  local.get $this|5
   i32.const 24
   i32.eq
   i32.eqz
@@ -129,30 +129,30 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0 (result i32)
    global.get $std/pointer/one
-   local.set $this_3
+   local.set $this|6
    i32.const 1
    drop
-   local.get $this_3
+   local.get $this|6
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0
   end
   i32.const 1
   call $std/pointer/Entry#set:key
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1 (result i32)
    global.get $std/pointer/one
-   local.set $this_4
+   local.set $this|7
    i32.const 1
    drop
-   local.get $this_4
+   local.get $this|7
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1
   end
   i32.const 2
   call $std/pointer/Entry#set:val
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.2 (result i32)
    global.get $std/pointer/one
-   local.set $this_5
+   local.set $this|8
    i32.const 1
    drop
-   local.get $this_5
+   local.get $this|8
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.2
   end
   i32.load $0
@@ -169,10 +169,10 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3 (result i32)
    global.get $std/pointer/one
-   local.set $this_6
+   local.set $this|9
    i32.const 1
    drop
-   local.get $this_6
+   local.get $this|9
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3
   end
   i32.load $0 offset=4
@@ -188,16 +188,16 @@
    unreachable
   end
   global.get $std/pointer/one
-  local.set $this_7
+  local.set $this|10
   global.get $std/pointer/two
   local.set $other
-  local.get $this_7
+  local.get $this|10
   local.get $other
   i32.add
   global.set $std/pointer/add
   global.get $std/pointer/add
-  local.set $this_8
-  local.get $this_8
+  local.set $this|12
+  local.get $this|12
   i32.const 32
   i32.eq
   i32.eqz
@@ -210,16 +210,16 @@
    unreachable
   end
   global.get $std/pointer/two
-  local.set $this_9
+  local.set $this|13
   global.get $std/pointer/one
-  local.set $other_0
-  local.get $this_9
-  local.get $other_0
+  local.set $other|14
+  local.get $this|13
+  local.get $other|14
   i32.sub
   global.set $std/pointer/sub
   global.get $std/pointer/sub
-  local.set $this_10
-  local.get $this_10
+  local.set $this|15
+  local.get $this|15
   i32.const 16
   i32.eq
   i32.eqz
@@ -232,8 +232,8 @@
    unreachable
   end
   global.get $std/pointer/one
-  local.set $this_11
-  local.get $this_11
+  local.set $this|16
+  local.get $this|16
   i32.const 8
   i32.eq
   i32.eqz
@@ -246,8 +246,8 @@
    unreachable
   end
   global.get $std/pointer/one
-  local.set $this_12
-  local.get $this_12
+  local.set $this|17
+  local.get $this|17
   i32.const 8
   i32.add
   global.set $std/pointer/one
@@ -266,8 +266,8 @@
    unreachable
   end
   global.get $std/pointer/one
-  local.set $this_13
-  local.get $this_13
+  local.set $this|18
+  local.get $this|18
   i32.const 16
   i32.eq
   i32.eqz
@@ -280,8 +280,8 @@
    unreachable
   end
   global.get $std/pointer/two
-  local.set $this_14
-  local.get $this_14
+  local.set $this|19
+  local.get $this|19
   i32.const 24
   i32.eq
   i32.eqz
@@ -294,20 +294,20 @@
    unreachable
   end
   global.get $std/pointer/two
-  local.set $this_15
-  local.get $this_15
+  local.set $this|20
+  local.get $this|20
   i32.const 8
   i32.sub
   global.set $std/pointer/two
   global.get $std/pointer/two
-  local.set $this_16
-  local.get $this_16
+  local.set $this|21
+  local.get $this|21
   i32.const 8
   i32.sub
   global.set $std/pointer/two
   global.get $std/pointer/two
-  local.set $this_17
-  local.get $this_17
+  local.set $this|22
+  local.get $this|22
   i32.const 8
   i32.eq
   i32.eqz
@@ -321,10 +321,10 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4 (result i32)
    global.get $std/pointer/two
-   local.set $this_18
+   local.set $this|23
    i32.const 1
    drop
-   local.get $this_18
+   local.get $this|23
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4
   end
   i32.load $0
@@ -341,10 +341,10 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5 (result i32)
    global.get $std/pointer/two
-   local.set $this_19
+   local.set $this|24
    i32.const 1
    drop
-   local.get $this_19
+   local.get $this|24
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5
   end
   i32.load $0 offset=4
@@ -360,13 +360,13 @@
    unreachable
   end
   global.get $std/pointer/one
-  local.set $this_21
+  local.set $this|26
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6 (result i32)
    global.get $std/pointer/two
-   local.set $this_20
+   local.set $this|25
    i32.const 1
    drop
-   local.get $this_20
+   local.get $this|25
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6
   end
   local.set $value
@@ -378,22 +378,22 @@
   i32.const 0
   i32.eq
   if
-   local.get $this_21
+   local.get $this|26
    i32.const 0
    i32.const 8
    memory.fill $0
   else
-   local.get $this_21
+   local.get $this|26
    local.get $value
    i32.const 8
    memory.copy $0 $0
   end
   global.get $std/pointer/one
-  local.set $this_22
-  local.get $this_22
+  local.set $this|28
+  local.get $this|28
   global.get $std/pointer/two
-  local.set $this_23
-  local.get $this_23
+  local.set $this|29
+  local.get $this|29
   i32.ne
   i32.eqz
   if
@@ -406,10 +406,10 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7 (result i32)
    global.get $std/pointer/one
-   local.set $this_24
+   local.set $this|30
    i32.const 1
    drop
-   local.get $this_24
+   local.get $this|30
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7
   end
   i32.load $0
@@ -426,10 +426,10 @@
   end
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8 (result i32)
    global.get $std/pointer/one
-   local.set $this_25
+   local.set $this|31
    i32.const 1
    drop
-   local.get $this_25
+   local.get $this|31
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8
   end
   i32.load $0 offset=4
@@ -445,43 +445,43 @@
    unreachable
   end
   i32.const 0
-  local.set $this_26
+  local.set $this|32
   i32.const 0
-  local.set $offset_1
-  local.get $offset_1
+  local.set $offset|33
+  local.get $offset|33
   global.set $std/pointer/buf
   global.get $std/pointer/buf
-  local.set $this_27
+  local.set $this|34
   i32.const 0
   local.set $index
   f32.const 1.100000023841858
-  local.set $value_0
-  local.get $this_27
+  local.set $value|36
+  local.get $this|34
   local.get $index
   i32.const 4
   i32.mul
   i32.add
-  local.get $value_0
+  local.get $value|36
   f32.store $0
   global.get $std/pointer/buf
-  local.set $this_28
+  local.set $this|37
   i32.const 1
-  local.set $index_0
+  local.set $index|38
   f32.const 1.2000000476837158
-  local.set $value_1
-  local.get $this_28
-  local.get $index_0
+  local.set $value|39
+  local.get $this|37
+  local.get $index|38
   i32.const 4
   i32.mul
   i32.add
-  local.get $value_1
+  local.get $value|39
   f32.store $0
   global.get $std/pointer/buf
-  local.set $this_29
+  local.set $this|40
   i32.const 0
-  local.set $index_1
-  local.get $this_29
-  local.get $index_1
+  local.set $index|41
+  local.get $this|40
+  local.get $index|41
   i32.const 4
   i32.mul
   i32.add
@@ -498,11 +498,11 @@
    unreachable
   end
   global.get $std/pointer/buf
-  local.set $this_30
+  local.set $this|42
   i32.const 1
-  local.set $index_2
-  local.get $this_30
-  local.get $index_2
+  local.set $index|43
+  local.get $this|42
+  local.get $index|43
   i32.const 4
   i32.mul
   i32.add
@@ -519,11 +519,11 @@
    unreachable
   end
   global.get $std/pointer/buf
-  local.set $this_31
+  local.set $this|44
   i32.const 0
-  local.set $index_3
-  local.get $this_31
-  local.get $index_3
+  local.set $index|45
+  local.get $this|44
+  local.get $index|45
   i32.const 4
   i32.mul
   i32.add
@@ -540,11 +540,11 @@
    unreachable
   end
   global.get $std/pointer/buf
-  local.set $this_32
+  local.set $this|46
   i32.const 1
-  local.set $index_4
-  local.get $this_32
-  local.get $index_4
+  local.set $index|47
+  local.get $this|46
+  local.get $index|47
   i32.const 4
   i32.mul
   i32.add
@@ -587,24 +587,24 @@
    unreachable
   end
   global.get $std/pointer/buf
-  local.set $this_33
+  local.set $this|48
   i32.const 2
-  local.set $index_5
+  local.set $index|49
   f32.const 1.2999999523162842
-  local.set $value_2
-  local.get $this_33
-  local.get $index_5
+  local.set $value|50
+  local.get $this|48
+  local.get $index|49
   i32.const 4
   i32.mul
   i32.add
-  local.get $value_2
+  local.get $value|50
   f32.store $0
   global.get $std/pointer/buf
-  local.set $this_34
+  local.set $this|51
   i32.const 2
-  local.set $index_6
-  local.get $this_34
-  local.get $index_6
+  local.set $index|52
+  local.get $this|51
+  local.get $index|52
   i32.const 4
   i32.mul
   i32.add
@@ -621,11 +621,11 @@
    unreachable
   end
   global.get $std/pointer/buf
-  local.set $this_35
+  local.set $this|53
   i32.const 2
-  local.set $index_7
-  local.get $this_35
-  local.get $index_7
+  local.set $index|54
+  local.get $this|53
+  local.get $index|54
   i32.const 4
   i32.mul
   i32.add
@@ -655,20 +655,20 @@
    unreachable
   end
   global.get $std/pointer/buf
-  local.set $this_36
+  local.set $this|55
   f32.const 1.399999976158142
-  local.set $value_3
+  local.set $value|56
   i32.const 0
   drop
-  local.get $this_36
-  local.get $value_3
+  local.get $this|55
+  local.get $value|56
   f32.store $0
   block $std/pointer/Pointer<f32>#get:value|inlined.0 (result f32)
    global.get $std/pointer/buf
-   local.set $this_37
+   local.set $this|57
    i32.const 0
    drop
-   local.get $this_37
+   local.get $this|57
    f32.load $0
    br $std/pointer/Pointer<f32>#get:value|inlined.0
   end

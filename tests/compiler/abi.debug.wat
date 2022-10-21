@@ -22,10 +22,10 @@
  )
  (func $start:abi (type $none_=>_none)
   (local $x i32)
-  (local $x_0 i32)
-  (local $x_1 i32)
+  (local $x|1 i32)
+  (local $x|2 i32)
   (local $b i32)
-  (local $x_2 i32)
+  (local $x|4 i32)
   call $abi/internal
   drop
   i32.const 0
@@ -46,22 +46,22 @@
    unreachable
   end
   i32.const 256
-  local.set $x_0
+  local.set $x|1
   global.get $abi/condition
   if
-   local.get $x_0
+   local.get $x|1
    i32.extend8_s
    i32.const 2
    i32.div_s
-   local.set $x_0
+   local.set $x|1
   else
-   local.get $x_0
+   local.get $x|1
    i32.extend8_s
    i32.const 2
    i32.div_s
-   local.set $x_0
+   local.set $x|1
   end
-  local.get $x_0
+  local.get $x|1
   i32.extend8_s
   i32.eqz
   i32.eqz
@@ -74,23 +74,23 @@
    unreachable
   end
   i32.const 256
-  local.set $x_1
+  local.set $x|2
   global.get $abi/condition
   if
-   local.get $x_1
+   local.get $x|2
    i32.extend8_s
    i32.const 24
    i32.const 7
    i32.and
    i32.shr_s
-   local.set $x_1
+   local.set $x|2
   else
-   local.get $x_1
+   local.get $x|2
    i32.const 127
    i32.and
-   local.set $x_1
+   local.set $x|2
   end
-  local.get $x_1
+  local.get $x|2
   i32.eqz
   i32.eqz
   if
@@ -147,8 +147,8 @@
   end
   i32.const 2
   i32.ctz
-  local.set $x_2
-  local.get $x_2
+  local.set $x|4
+  local.get $x|4
   i32.eqz
   if
    i32.const 0
@@ -160,8 +160,8 @@
   end
   i32.const 1
   i32.clz
-  local.set $x_2
-  local.get $x_2
+  local.set $x|4
+  local.get $x|4
   i32.eqz
   if
    i32.const 0

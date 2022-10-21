@@ -116,8 +116,8 @@
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
-  (local $var$7 i32)
-  (local $var$8 i32)
+  (local $7 i32)
+  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -183,13 +183,13 @@
   end
   loop $while-continue|1
    local.get $len
-   local.tee $var$7
+   local.tee $7
    i32.const 1
    i32.sub
    local.set $len
-   local.get $var$7
-   local.set $var$8
-   local.get $var$8
+   local.get $7
+   local.set $8
+   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -293,78 +293,78 @@
   nop
  )
  (func $builtins/max3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $a
-  local.tee $var$5
+  local.tee $5
   local.get $b
-  local.tee $var$3
+  local.tee $3
   local.get $c
-  local.tee $var$4
-  local.get $var$3
-  local.get $var$4
+  local.tee $4
+  local.get $3
+  local.get $4
   i32.gt_s
   select
-  local.tee $var$6
-  local.get $var$5
-  local.get $var$6
+  local.tee $6
+  local.get $5
+  local.get $6
   i32.gt_s
   select
  )
  (func $builtins/min3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $a
-  local.tee $var$5
+  local.tee $5
   local.get $b
-  local.tee $var$3
+  local.tee $3
   local.get $c
-  local.tee $var$4
-  local.get $var$3
-  local.get $var$4
+  local.tee $4
+  local.get $3
+  local.get $4
   i32.lt_s
   select
-  local.tee $var$6
-  local.get $var$5
-  local.get $var$6
+  local.tee $6
+  local.get $5
+  local.get $6
   i32.lt_s
   select
  )
  (func $builtins/rotl3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $a
   i32.extend8_s
-  local.tee $var$5
+  local.tee $5
   local.get $b
   i32.extend8_s
-  local.tee $var$3
+  local.tee $3
   local.get $c
-  local.tee $var$4
+  local.tee $4
   i32.const 7
   i32.and
   i32.shl
-  local.get $var$3
+  local.get $3
   i32.const 0
-  local.get $var$4
+  local.get $4
   i32.sub
   i32.const 7
   i32.and
   i32.shr_u
   i32.or
-  local.tee $var$6
+  local.tee $6
   i32.const 7
   i32.and
   i32.shl
-  local.get $var$5
+  local.get $5
   i32.const 0
-  local.get $var$6
+  local.get $6
   i32.sub
   i32.const 7
   i32.and
@@ -373,36 +373,36 @@
   i32.extend8_s
  )
  (func $builtins/rotr3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $a
   i32.extend8_s
-  local.tee $var$5
+  local.tee $5
   local.get $b
   i32.extend8_s
-  local.tee $var$3
+  local.tee $3
   local.get $c
-  local.tee $var$4
+  local.tee $4
   i32.const 7
   i32.and
   i32.shr_u
-  local.get $var$3
+  local.get $3
   i32.const 0
-  local.get $var$4
+  local.get $4
   i32.sub
   i32.const 7
   i32.and
   i32.shl
   i32.or
-  local.tee $var$6
+  local.tee $6
   i32.const 7
   i32.and
   i32.shr_u
-  local.get $var$5
+  local.get $5
   i32.const 0
-  local.get $var$6
+  local.get $6
   i32.sub
   i32.const 7
   i32.and

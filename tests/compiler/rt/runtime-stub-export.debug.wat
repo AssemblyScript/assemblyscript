@@ -27,8 +27,8 @@
   (local $pagesBefore i32)
   (local $maxOffset i32)
   (local $pagesNeeded i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $4 i32)
+  (local $5 i32)
   (local $pagesWanted i32)
   memory.size $0
   local.set $pagesBefore
@@ -59,11 +59,11 @@
    i32.shr_u
    local.set $pagesNeeded
    local.get $pagesBefore
-   local.tee $var$4
+   local.tee $4
    local.get $pagesNeeded
-   local.tee $var$5
-   local.get $var$4
-   local.get $var$5
+   local.tee $5
+   local.get $4
+   local.get $5
    i32.gt_s
    select
    local.set $pagesWanted
@@ -92,7 +92,7 @@
  (func $~lib/rt/stub/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
   (local $block i32)
   (local $ptr i32)
-  (local $size_0 i32)
+  (local $size|3 i32)
   (local $payloadSize i32)
   local.get $size
   i32.const 1073741820
@@ -112,8 +112,8 @@
   i32.add
   local.set $ptr
   local.get $size
-  local.set $size_0
-  local.get $size_0
+  local.set $size|3
+  local.get $size|3
   i32.const 4
   i32.add
   i32.const 15

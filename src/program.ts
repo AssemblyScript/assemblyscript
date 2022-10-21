@@ -3529,19 +3529,6 @@ export class Local extends VariableLikeElement {
     assert(type != Type.void);
     this.setType(type);
   }
-
-  /** Sets the temporary name of this local. */
-  setTemporaryName(name: string): void {
-    this.name = name;
-    this.internalName = mangleInternalName(name, this.parent, false);
-  }
-
-  /** Resets the temporary name of this local. */
-  resetTemporaryName(): void {
-    let name = this.originalName;
-    this.name = name;
-    this.internalName = mangleInternalName(name, this.parent, false);
-  }
 }
 
 /** A yet unresolved function prototype. */
@@ -3796,7 +3783,7 @@ export class Function extends TypedElement {
     // if it has a name, check previously as this method will throw otherwise
     let localsByIndex = this.localsByIndex;
     let localIndex = localsByIndex.length;
-    let localName = name != null ? name : `var$${localIndex}`;
+    let localName = name != null ? name : localIndex.toString();
     if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
     let local = new Local(localName, localIndex, type, this, declaration);
     if (name) {
@@ -3857,11 +3844,7 @@ export class Function extends TypedElement {
       for (let i = 0, k = localsByIndex.length; i < k; i++) {
         let localName = localsByIndex[i].name;
         if (localNameMap.has(localName)) {
-          let repeat = 0;
-          while (localNameMap.has(`${localName}_${repeat}`)) {
-            repeat++;
-          }
-          localName = `${localName}_${repeat}`;
+          localName = `${localName}|${i}`;
         }
         localNameMap.add(localName);
         module.setLocalName(ref, i, localName);

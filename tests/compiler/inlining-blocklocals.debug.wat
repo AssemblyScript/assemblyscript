@@ -17,33 +17,33 @@
  (start $~start)
  (func $inlining-blocklocals/test (type $none_=>_none)
   (local $a i32)
-  (local $var$1 i32)
-  (local $var$2 i32)
-  (local $c i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $a|3 i32)
   (local $b i32)
-  (local $a_0 i32)
+  (local $c i32)
   i32.const 1
   local.set $a
   local.get $a
-  local.tee $var$1
+  local.tee $1
   i32.const 1
   i32.add
   local.set $a
-  local.get $var$1
-  local.set $a_0
+  local.get $1
+  local.set $a|3
   global.get $inlining-blocklocals/b
-  local.tee $var$2
+  local.tee $2
   i32.const 1
   i32.add
   global.set $inlining-blocklocals/b
-  local.get $var$2
+  local.get $2
   local.set $b
   local.get $a
   i32.const 1
   i32.add
   local.tee $a
   local.set $c
-  local.get $a_0
+  local.get $a|3
   global.set $inlining-blocklocals/theCall_a
   local.get $b
   global.set $inlining-blocklocals/theCall_b

@@ -28,7 +28,8 @@ import {
   ElementKind,
   Field,
   Class,
-  TypedElement
+  TypedElement,
+  mangleInternalName
 } from "./program";
 
 import {
@@ -324,7 +325,7 @@ export class Flow {
   }
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, except: BitSet | null = null): Local {
+  getTempLocal(type: Type): Local {
     return this.parentFunction.addLocal(type);
   }
 
@@ -336,9 +337,10 @@ export class Flow {
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(name: string, type: Type, except: BitSet | null = null): Local {
-    let scopedLocal = this.getTempLocal(type, except);
-    scopedLocal.setTemporaryName(name);
+  addScopedLocal(name: string, type: Type): Local {
+    let scopedLocal = this.getTempLocal(type);
+    scopedLocal.name = name;
+    scopedLocal.internalName = mangleInternalName(name, scopedLocal.parent, false);
     let scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else assert(!scopedLocals.has(name));
@@ -1377,5 +1379,3 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
     fromType.isSignedIntegerValue != toType.isSignedIntegerValue   // signedness mismatch
   );
 }
-
-export { findUsedLocals } from "./passes/findusedlocals";
