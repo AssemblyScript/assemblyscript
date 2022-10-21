@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $none_=>_i32 (func_subtype (result i32) func))
  (global $void/u8Val1 (mut i32) (i32.const 1))
  (global $void/u8Val2 (mut i32) (i32.const 255))
  (global $~lib/memory/__data_end i32 (i32.const 8))
@@ -11,10 +11,10 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $void/anInt (result i32)
+ (func $void/anInt (type $none_=>_i32) (result i32)
   i32.const 2
  )
- (func $start:void
+ (func $start:void (type $none_=>_none)
   i32.const 1
   drop
   call $void/anInt
@@ -24,7 +24,7 @@
   i32.add
   drop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:void
  )
 )

@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
@@ -11,7 +11,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:rt/ids
+ (func $start:rt/ids (type $none_=>_none)
   i32.const 0
   i32.const 0
   i32.eq
@@ -25,7 +25,7 @@
   i32.eq
   drop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:rt/ids
  )
 )

@@ -17,6 +17,15 @@ import {
   SURROGATE_HIGH,
   SURROGATE_LOW
 } from "./util";
+import {
+  Type,
+  TypeFlags,
+  TypeKind
+} from "./types";
+import {
+  ElementKind,
+  Field
+} from "./program";
 import * as binaryen from "./glue/binaryen";
 
 /** A Binaryen-compatible index. */
@@ -60,37 +69,61 @@ export namespace TypeRef {
   export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
   export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
   export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
-  // nullable reference & GC types
+  // reference/gc types
   export const Funcref = binaryen._BinaryenTypeFuncref();
   export const Externref = binaryen._BinaryenTypeExternref();
   export const Anyref = binaryen._BinaryenTypeAnyref();
   export const Eqref = binaryen._BinaryenTypeEqref();
   export const I31ref = binaryen._BinaryenTypeI31ref();
   export const Dataref = binaryen._BinaryenTypeDataref();
-  // nullable string reference types
+  export const Arrayref = binaryen._BinaryenTypeArrayref();
   export const Stringref = binaryen._BinaryenTypeStringref();
   export const StringviewWTF8 = binaryen._BinaryenTypeStringviewWTF8();
   export const StringviewWTF16 = binaryen._BinaryenTypeStringviewWTF16();
   export const StringviewIter = binaryen._BinaryenTypeStringviewIter();
-
-  export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
+  export const Noneref = binaryen._BinaryenTypeNullref();
+  export const Nofuncref = binaryen._BinaryenTypeNullFuncref();
+  export const Noexternref = binaryen._BinaryenTypeNullExternref();
 }
 
 /** Reference to a Binaryen heap type. */
 export type HeapTypeRef = binaryen.HeapTypeRef;
 export namespace HeapTypeRef {
-  // reference & GC heap types
-  export const Ext: HeapTypeRef = binaryen._BinaryenHeapTypeExt();
-  export const Func: HeapTypeRef = binaryen._BinaryenHeapTypeFunc();
-  export const Any: HeapTypeRef = binaryen._BinaryenHeapTypeAny();
-  export const Eq: HeapTypeRef = binaryen._BinaryenHeapTypeEq();
-  export const I31: HeapTypeRef = binaryen._BinaryenHeapTypeI31();
-  export const Data: HeapTypeRef = binaryen._BinaryenHeapTypeData();
-  // string heap types
-  export const String: HeapTypeRef = binaryen._BinaryenHeapTypeString();
-  export const StringviewWTF8: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewWTF8();
-  export const StringviewWTF16: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewWTF16();
-  export const StringviewIter: HeapTypeRef = binaryen._BinaryenHeapTypeStringviewIter();
+
+  //        any                  extern      func
+  //         |                      |          |
+  //     __ eq __          ?     noextern    (...)
+  //    /    |   \         |                   |
+  // i31  struct  array  string              nofunc
+  //  |      |      |      |
+  // none  (...)  (...)    ?
+  //         |      |
+  //        none   none
+  //
+  // where (...) represents the concrete subtypes
+
+  export const Extern: HeapTypeRef = 0 /* _BinaryenHeapTypeExt */;
+  export const Func: HeapTypeRef = 1 /* _BinaryenHeapTypeFunc */;
+  export const Any: HeapTypeRef = 2 /* _BinaryenHeapTypeAny */;
+  export const Eq: HeapTypeRef = 3 /* _BinaryenHeapTypeEq */;
+  export const I31: HeapTypeRef = 4 /* _BinaryenHeapTypeI31 */;
+  export const Data: HeapTypeRef = 5 /* _BinaryenHeapTypeData */;
+  export const Array: HeapTypeRef = 6 /* _BinaryenHeapTypeArray */;
+  export const String: HeapTypeRef = 7 /* _BinaryenHeapTypeString */;
+  export const StringviewWTF8: HeapTypeRef = 8 /* _BinaryenHeapTypeStringviewWTF8 */;
+  export const StringviewWTF16: HeapTypeRef = 9 /* _BinaryenHeapTypeStringviewWTF16 */;
+  export const StringviewIter: HeapTypeRef = 10 /* _BinaryenHeapTypeStringviewIter */;
+  export const None: HeapTypeRef = 11 /* _BinaryenHeapTypeNone */;
+  export const Noextern: HeapTypeRef = 12 /* _BinaryenHeapTypeNoext */;
+  export const Nofunc: HeapTypeRef = 13 /* _BinaryenHeapTypeNofunc */;
+
+  export function isBottom(ht: HeapTypeRef): bool {
+    return binaryen._BinaryenHeapTypeIsBottom(ht);
+  }
+
+  export function getBottom(ht: HeapTypeRef): HeapTypeRef {
+    return binaryen._BinaryenHeapTypeGetBottom(ht);
+  }
 }
 
 /** Packed array element respectively struct field types. */
@@ -1271,6 +1304,7 @@ export class Module {
   ) {
     assert(sizeType == TypeRef.I32 || sizeType == TypeRef.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
+    binaryen._BinaryenSetTypeSystem(TypeSystem.Nominal);
   }
 
   private lit: usize;
@@ -1349,6 +1383,14 @@ export class Module {
   }
 
   ref_null(type: TypeRef): ExpressionRef {
+    // TODO: Provide the desired bottom type directly? Currently, Binaryen does
+    // this under the hood, but this API could change to take a heap type.
+    // type = binaryen._BinaryenTypeFromHeapType(
+    //   binaryen._BinaryenHeapTypeGetBottom(
+    //     binaryen._BinaryenTypeGetHeapType(type)
+    //   ),
+    //   true
+    // );
     return binaryen._BinaryenRefNull(this.ref, type);
   }
 
@@ -1458,9 +1500,9 @@ export class Module {
     index: i32,
     value: ExpressionRef,
     isManaged: bool,
-    type: TypeRef = TypeRef.Auto,
+    type: TypeRef = -1,
   ): ExpressionRef {
-    if (type == TypeRef.Auto) type = binaryen._BinaryenExpressionGetType(value);
+    if (type == -1) type = binaryen._BinaryenExpressionGetType(value);
     if (isManaged && this.useShadowStack) {
       value = this.tostack(value);
     }
@@ -3596,4 +3638,308 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
     }
   }
   return true;
+}
+
+// TypeBuilder
+
+const DEBUG_TYPEBUILDER = false;
+
+/** Ensures that the given potentially complex type has a corresponding GC type. */
+export function ensureType(type: Type): TypeRef {
+  // Obtain basic type if applicable
+  if (type == Type.void) return TypeRef.None;
+  var typeRef = tryEnsureBasicType(type);
+  if (typeRef) return typeRef;
+
+  // From here on we are dealing with heap types independent of nullability.
+  // Nullability is applied again when returning the final type.
+  var originalType = type;
+  type = type.nonNullableType;
+
+  // Obtain cached type if already built. Guaranteed to be not a temp type.
+  if (typeRef = type.ref) {
+    return binaryen._BinaryenTypeFromHeapType(
+      binaryen._BinaryenTypeGetHeapType(typeRef),
+      originalType.is(TypeFlags.NULLABLE) // apply nullability
+    );
+  }
+
+  // Otherwise use a type builder
+  if (ASC_TARGET) {
+    // @ts-ignore: Wasm only
+    assert(sizeof<usize>() == 4); // ABI code below assumes 32-bit pointers
+  }
+  assert(binaryen._BinaryenGetTypeSystem() == TypeSystem.Nominal);
+  var builder = binaryen._TypeBuilderCreate(0);
+  var seen = new Map<Type,HeapTypeRef>();
+  prepareType(builder, seen, type); // drop temp return
+  var size = binaryen._TypeBuilderGetSize(builder);
+  var out = binaryen._malloc(max(4 * size, 8)); // either each heap type or index + reason
+  if (!binaryen._TypeBuilderBuildAndDispose(builder, out, out, out + 4)) {
+    let errorIndex = binaryen.__i32_load(out);
+    let errorReason = binaryen.__i32_load(out + 4);
+    binaryen._free(out);
+    throw new Error(`type builder error at index ${errorIndex}: ${TypeBuilderErrorReason.toString(errorReason)}`);
+  }
+
+  // Assign all the built types to their respective non-nullable type
+  for (let _keys = Map_keys(seen), i = 0, k = _keys.length; i < k; ++i) {
+    let seenType = _keys[i];
+    assert(!seenType.is(TypeFlags.NULLABLE)); // non-nullable only
+    let heapType = <HeapTypeRef>binaryen.__i32_load(out + 4 * i);
+    let fullType = binaryen._BinaryenTypeFromHeapType(heapType, false);
+    assert(!seenType.ref);
+    seenType.ref = fullType;
+    if (DEBUG_TYPEBUILDER) {
+      console.log(` set ${seenType.toString()}`);
+    }
+  }
+  binaryen._free(out);
+
+  // Initial type should now exist in its non-nullable variant
+  if (DEBUG_TYPEBUILDER) {
+    console.log(` finalize ${type.toString()}`);
+  }
+  typeRef = assert(type.ref);
+  return binaryen._BinaryenTypeFromHeapType(
+    binaryen._BinaryenTypeGetHeapType(typeRef),
+    originalType.is(TypeFlags.NULLABLE) // apply nullability
+  );
+}
+
+/** Obtains the basic type of the given type, if any. */
+function tryEnsureBasicType(type: Type): TypeRef {
+  switch (type.kind) {
+    case TypeKind.BOOL:
+    case TypeKind.I8:
+    case TypeKind.U8:
+    case TypeKind.I16:
+    case TypeKind.U16:
+    case TypeKind.I32:
+    case TypeKind.U32: return TypeRef.I32;
+    case TypeKind.I64:
+    case TypeKind.U64: return TypeRef.I64;
+    case TypeKind.ISIZE:
+    case TypeKind.USIZE: {
+      if (type.isInternalReference) break; // non-basic
+      return type.size == 64 ? TypeRef.I64 : TypeRef.I32;
+    }
+    case TypeKind.F32: return TypeRef.F32;
+    case TypeKind.F64: return TypeRef.F64;
+    case TypeKind.V128: return TypeRef.V128;
+    case TypeKind.FUNCREF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.EXTERNREF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Extern, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.ANYREF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.EQREF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.I31REF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.DATAREF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.ARRAYREF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Array, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.STRINGREF: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.STRINGVIEW_WTF8: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF8, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.STRINGVIEW_WTF16: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewWTF16, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.STRINGVIEW_ITER: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.StringviewIter, type.is(TypeFlags.NULLABLE));
+    }
+    case TypeKind.VOID: assert(false); // invalid here
+  }
+  return 0; // non-basic
+}
+
+/** Determines the packed GC type of the given type, if applicable. */
+function determinePackedType(type: Type): PackedType {
+  switch (type.kind) {
+    case TypeKind.BOOL:
+    case TypeKind.I8:
+    case TypeKind.U8: return PackedType.I8;
+    case TypeKind.I16:
+    case TypeKind.U16: return PackedType.I16;
+  }
+  return PackedType.NotPacked;
+}
+
+/** Recursively prepares the given GC type, potentially returning a temporary type. */
+function prepareType(builder: binaryen.TypeBuilderRef, seen: Map<Type,HeapTypeRef>, type: Type): TypeRef {
+  // Obtain basic type if applicable
+  if (type == Type.void) return TypeRef.None;
+  var typeRef = tryEnsureBasicType(type);
+  if (typeRef) return typeRef;
+
+  assert(!type.is(TypeFlags.NULLABLE)); // operating on non-nullable types only
+
+  // Reuse existing type
+  if (typeRef = type.ref) return typeRef;
+
+  // Reuse seen temporary type if it exists
+  if (seen.has(type)) {
+    if (DEBUG_TYPEBUILDER) {
+      console.log(` prepare ${type.toString()} (seen)`);
+    }
+    return changetype<HeapTypeRef>(seen.get(type));
+  }
+
+  if (DEBUG_TYPEBUILDER) {
+    console.log(`prepare ${type.toString()}`);
+  }
+
+  // Otherwise construct a new class type. Note that arrays are not supported, as these would
+  // have to involve a Wasm-level `array`, either wrapped in `Array` or `Uint8Array` etc., or
+  // directly representing an `ArrayBuffer` or `StaticArray`. TBD.
+  var classReference = type.getClass();
+  if (classReference) {
+    // Make sure the base type has been built prior, at a lower index
+    let base = classReference.base;
+    let baseRef: HeapTypeRef = 0;
+    if (base) baseRef = prepareType(builder, seen, base.type); // might be temporary, is non-nullable
+
+    // Block this index with a temporary type and cache
+    let index = binaryen._TypeBuilderGetSize(builder);
+    binaryen._TypeBuilderGrow(builder, 1);
+    if (DEBUG_TYPEBUILDER) {
+      console.log(` block [${index}]: ${type.toString()}`);
+    }
+    let heapTypeRef = binaryen._TypeBuilderGetTempHeapType(builder, index);
+    typeRef = binaryen._TypeBuilderGetTempRefType(builder, heapTypeRef, false);
+    seen.set(type, typeRef);
+
+    // Populate the struct type (TODO: names)
+    let fieldTypes = new Array<TypeRef>();
+    let packedTypes = new Array<PackedType>();
+    let fieldMutables = new Array<u32>();
+    let members = classReference.members;
+    if (members) {
+      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+        let member = _values[i];
+        if (member.kind != ElementKind.FIELD) continue;
+        let field = <Field>member;
+        let fieldType = field.type;
+        if (DEBUG_TYPEBUILDER) {
+          console.log(`  field ${fieldType.toString()}`);
+        }
+        if (fieldType.is(TypeFlags.NULLABLE)) {
+          fieldTypes.push(
+            binaryen._TypeBuilderGetTempRefType(
+              builder,
+              binaryen._BinaryenTypeGetHeapType(
+                prepareType(builder, seen, fieldType.nonNullableType)
+              ),
+              true
+            )
+          );
+        } else {
+          fieldTypes.push(prepareType(builder, seen, fieldType));
+        }
+        packedTypes.push(determinePackedType(fieldType));
+        fieldMutables.push(1);
+      }
+    }
+    let cArrFT = allocPtrArray(fieldTypes);
+    let cArrPT = allocU32Array(packedTypes);
+    let cArrFM = allocU32Array(fieldMutables);
+    if (DEBUG_TYPEBUILDER) {
+      console.log(` concretize [${index}]: ${type.toString()}`);
+    }
+    binaryen._TypeBuilderSetStructType(builder, index, cArrFT, cArrPT, cArrFM, fieldTypes.length);
+    if (base) {
+      if (DEBUG_TYPEBUILDER) {
+        console.log(` set super [${index}]: ${type.toString()} <: ${base.type.toString()} ${baseRef == base.type.ref ? " (known)" : ""}`);
+      }
+      binaryen._TypeBuilderSetSubType(builder, index, binaryen._BinaryenTypeGetHeapType(baseRef));
+    }
+    binaryen._free(cArrFM);
+    binaryen._free(cArrPT);
+    binaryen._free(cArrFT);
+    return typeRef;
+  }
+
+  // Respectively a new signature type
+  var signatureReference = type.getSignature();
+  if (signatureReference) {
+
+    // Block this index with a temporary type and cache
+    let index = binaryen._TypeBuilderGetSize(builder);
+    binaryen._TypeBuilderGrow(builder, 1);
+    let tempTypeRef = binaryen._TypeBuilderGetTempRefType(
+      builder,
+      binaryen._TypeBuilderGetTempHeapType(builder, index),
+      false
+    );
+    seen.set(type, tempTypeRef);
+
+    let paramTypes = new Array<TypeRef>();
+    let resultTypes = new Array<TypeRef>();
+    let parameterTypes = signatureReference.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      let paramType = parameterTypes[i];
+      if (paramType.is(TypeFlags.NULLABLE)) {
+        paramTypes.push(
+          binaryen._TypeBuilderGetTempRefType(
+            builder,
+            binaryen._BinaryenTypeGetHeapType(
+              prepareType(builder, seen, paramType.nonNullableType)
+            ),
+            true
+          )
+        );
+      } else {
+        paramTypes.push(prepareType(builder, seen, paramType));
+      }
+    }
+    let returnType = signatureReference.returnType;
+    resultTypes.push(
+      returnType == Type.void
+        ? TypeRef.None
+        : returnType.is(TypeFlags.NULLABLE)
+          ? binaryen._TypeBuilderGetTempRefType(
+              builder,
+              binaryen._BinaryenTypeGetHeapType(
+                prepareType(builder, seen, returnType.nonNullableType)
+              ),
+              true
+            )
+          : prepareType(builder, seen, returnType)
+    );
+    let tempParamType: TypeRef;
+    if (paramTypes.length > 1) {
+      let cArrPT = allocPtrArray(paramTypes);
+      tempParamType = binaryen._TypeBuilderGetTempTupleType(builder, cArrPT, paramTypes.length);
+      binaryen._free(cArrPT);
+    } else {
+      tempParamType = paramTypes.length ? paramTypes[0] : TypeRef.None;
+    }
+    let tempResultType: TypeRef;
+    if (resultTypes.length > 1) {
+      let cArrRT = allocPtrArray(resultTypes);
+      tempResultType = binaryen._TypeBuilderGetTempTupleType(builder, cArrRT, resultTypes.length);
+      binaryen._free(cArrRT);
+    } else {
+      tempResultType = resultTypes[0];
+    }
+    if (DEBUG_TYPEBUILDER) {
+      console.log(` concretize [${index}]: ${type.toString()}`);
+    }
+    binaryen._TypeBuilderSetSignatureType(builder, index, tempParamType, tempResultType);
+    return tempTypeRef;
+  }
+
+  throw new Error(`unexpected complex type: ${type.toString()}`);
 }

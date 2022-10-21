@@ -339,6 +339,7 @@ export class Flow {
       case <u32>TypeRef.Eqref: { temps = parentFunction.tempEqrefs; break; }
       case <u32>TypeRef.I31ref: { temps = parentFunction.tempI31refs; break; }
       case <u32>TypeRef.Dataref: { temps = parentFunction.tempDatarefs; break; }
+      case <u32>TypeRef.Arrayref: { temps = parentFunction.tempArrayrefs; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -444,6 +445,12 @@ export class Flow {
         let tempDatarefs = parentFunction.tempDatarefs;
         if (tempDatarefs) temps = tempDatarefs;
         else parentFunction.tempDatarefs = temps = [];
+        break;
+      }
+      case <u32>TypeRef.Arrayref: {
+        let tempArrayrefs = parentFunction.tempArrayrefs;
+        if (tempArrayrefs) temps = tempArrayrefs;
+        else parentFunction.tempArrayrefs = temps = [];
         break;
       }
       default: throw new Error("concrete type expected");

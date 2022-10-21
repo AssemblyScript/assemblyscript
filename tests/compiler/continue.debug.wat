@@ -1,5 +1,5 @@
 (module
- (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_none (func_subtype (param i32) func))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
@@ -8,7 +8,7 @@
  (elem $0 (i32.const 1))
  (export "testInherit" (func $continue/testInherit))
  (export "memory" (memory $0))
- (func $continue/testInherit (param $b i32)
+ (func $continue/testInherit (type $i32_=>_none) (param $b i32)
   (local $var$1 i32)
   (local $var$2 i32)
   i32.const 0

@@ -1,11 +1,11 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32 i32 i32) (result i32) func))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func_subtype (param i32 i32 f64 f64 f64 f64 f64) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (global $builtins/b (mut i32) (i32.const 0))
@@ -93,19 +93,19 @@
  (export "test" (func $builtins/test))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:builtins~anonymous|0 (param $a i32) (param $b i32) (result i32)
+ (func $start:builtins~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.add
  )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index (param $this i32) (result i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (param $this i32) (result i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 32
  )
- (func $~lib/string/String#get:length (param $this i32) (result i32)
+ (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
@@ -113,7 +113,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
+ (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $var$7 i32)
@@ -218,7 +218,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (param $left i32) (param $right i32) (result i32)
+ (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
   local.get $left
   local.get $right
@@ -260,13 +260,13 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length (param $this i32) (result i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 2
  )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString (param $this i32) (result i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 176
  )
- (func $~lib/atomics/Atomics.isLockFree (param $size i32) (result i32)
+ (func $~lib/atomics/Atomics.isLockFree (type $i32_=>_i32) (param $size i32) (result i32)
   local.get $size
   i32.const 1
   i32.eq
@@ -285,13 +285,13 @@
    i32.eq
   end
  )
- (func $start:builtins~anonymous|1
+ (func $start:builtins~anonymous|1 (type $none_=>_none)
   nop
  )
- (func $start:builtins~anonymous|2 (param $a i32) (param $b i32) (param $c i32) (param $d i32)
+ (func $start:builtins~anonymous|2 (type $i32_i32_i32_i32_=>_none) (param $a i32) (param $b i32) (param $c i32) (param $d i32)
   nop
  )
- (func $builtins/max3 (param $a i32) (param $b i32) (param $c i32) (result i32)
+ (func $builtins/max3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
   (local $var$3 i32)
   (local $var$4 i32)
   (local $var$5 i32)
@@ -311,7 +311,7 @@
   i32.gt_s
   select
  )
- (func $builtins/min3 (param $a i32) (param $b i32) (param $c i32) (result i32)
+ (func $builtins/min3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
   (local $var$3 i32)
   (local $var$4 i32)
   (local $var$5 i32)
@@ -331,7 +331,7 @@
   i32.lt_s
   select
  )
- (func $builtins/rotl3 (param $a i32) (param $b i32) (param $c i32) (result i32)
+ (func $builtins/rotl3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
   (local $var$3 i32)
   (local $var$4 i32)
   (local $var$5 i32)
@@ -368,7 +368,7 @@
   i32.or
   i32.extend8_s
  )
- (func $builtins/rotr3 (param $a i32) (param $b i32) (param $c i32) (result i32)
+ (func $builtins/rotr3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
   (local $var$3 i32)
   (local $var$4 i32)
   (local $var$5 i32)
@@ -405,13 +405,13 @@
   i32.or
   i32.extend8_s
  )
- (func $builtins/test
+ (func $builtins/test (type $none_=>_none)
   nop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:builtins
  )
- (func $~stack_check
+ (func $~stack_check (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
@@ -424,7 +424,7 @@
    unreachable
   end
  )
- (func $start:builtins
+ (func $start:builtins (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)

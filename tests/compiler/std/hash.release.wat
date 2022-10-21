@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17788))
  (memory $0 1)
@@ -27,7 +27,7 @@
  (data (i32.const 1368) "\01\00\00\00\12\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i")
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/util/hash/HASH<~lib/string/String|null> (param $0 i32)
+ (func $~lib/util/hash/HASH<~lib/string/String|null> (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -197,7 +197,7 @@
    end
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub

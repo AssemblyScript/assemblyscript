@@ -1,7 +1,7 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17408))
  (memory $0 0)
@@ -24,7 +24,7 @@
  (export "testLogicalOrMulti" (func $export:possibly-null/testLogicalAndMulti))
  (export "testAssign" (func $export:possibly-null/testLogicalAndMulti))
  (export "testNeverNull" (func $export:possibly-null/testTrue))
- (func $export:possibly-null/testTrue (param $0 i32)
+ (func $export:possibly-null/testTrue (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -50,7 +50,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testWhile (param $0 i32)
+ (func $export:possibly-null/testWhile (type $i32_=>_none) (param $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -82,7 +82,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testWhile2 (param $0 i32) (param $1 i32)
+ (func $export:possibly-null/testWhile2 (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -119,7 +119,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testWhile3 (param $0 i32) (param $1 i32)
+ (func $export:possibly-null/testWhile3 (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -159,7 +159,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $export:possibly-null/testLogicalAndMulti (param $0 i32) (param $1 i32)
+ (func $export:possibly-null/testLogicalAndMulti (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8

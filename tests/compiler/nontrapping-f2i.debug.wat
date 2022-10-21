@@ -1,5 +1,5 @@
 (module
- (type $none_=>_none (func))
+ (type $none_=>_none (func_subtype func))
  (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
@@ -21,7 +21,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
- (func $start:nontrapping-f2i
+ (func $start:nontrapping-f2i (type $none_=>_none)
   global.get $~lib/builtins/f32.MAX_VALUE
   i32.trunc_sat_f32_s
   global.get $~lib/builtins/i32.MAX_VALUE
@@ -151,7 +151,7 @@
   i64.eq
   drop
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   global.get $~started
   if
    return

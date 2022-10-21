@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memory/ptr (mut i32) (i32.const 1088))
  (memory $0 1)
@@ -16,7 +16,7 @@
  (data (i32.const 1216) "\01")
  (export "memory" (memory $0))
  (start $~start)
- (func $start:memory
+ (func $start:memory (type $none_=>_none)
   (local $0 i32)
   i32.const 1024
   i32.const 1024
@@ -267,7 +267,7 @@
   i32.const 1215
   global.set $memory/ptr
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:memory
  )
 )

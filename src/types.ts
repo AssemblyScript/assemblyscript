@@ -4,6 +4,10 @@
  */
 
 import {
+  CommonNames
+} from "./common";
+
+import {
   Class,
   Program,
   DecoratorFlags
@@ -12,7 +16,8 @@ import {
 import {
   TypeRef,
   createType,
-  HeapTypeRef
+  HeapTypeRef,
+  ensureType
 } from "./module";
 
 import * as binaryen from "./glue/binaryen";
@@ -74,6 +79,8 @@ export const enum TypeKind {
   I31REF,
   /** Data reference. */
   DATAREF,
+  /** Array reference. */
+  ARRAYREF,
   /** String reference. */
   STRINGREF,
   /** WTF8 string view. */
@@ -139,6 +146,8 @@ export class Type {
   private _nonNullableType: Type | null = null;
   /** Respective nullable type, if non-nullable. */
   private _nullableType: Type | null = null;
+  /** Cached Binaryen type reference. */
+  ref: TypeRef = 0;
 
   /** Constructs a new resolved type. */
   constructor(kind: TypeKind, flags: TypeFlags, size: u32) {
@@ -552,32 +561,33 @@ export class Type {
       }
     }
     switch (this.kind) {
-      case TypeKind.BOOL: return "bool";
-      case TypeKind.I8: return "i8";
-      case TypeKind.I16: return "i16";
-      case TypeKind.I32: return "i32";
-      case TypeKind.I64: return "i64";
-      case TypeKind.ISIZE: return "isize";
-      case TypeKind.U8: return "u8";
-      case TypeKind.U16: return "u16";
-      case TypeKind.U32: return "u32";
-      case TypeKind.U64: return "u64";
-      case TypeKind.USIZE: return "usize";
-      case TypeKind.F32: return "f32";
-      case TypeKind.F64: return "f64";
-      case TypeKind.V128: return "v128";
-      case TypeKind.FUNCREF: return "funcref";
-      case TypeKind.EXTERNREF: return "externref";
-      case TypeKind.ANYREF: return "anyref";
-      case TypeKind.EQREF: return "eqref";
-      case TypeKind.I31REF: return "i31ref";
-      case TypeKind.DATAREF: return "dataref";
-      case TypeKind.STRINGREF: return "stringref";
-      case TypeKind.STRINGVIEW_WTF8: return "stringview_wtf8";
-      case TypeKind.STRINGVIEW_WTF16: return "stringview_wtf16";
-      case TypeKind.STRINGVIEW_ITER: return "stringview_iter";
+      case TypeKind.BOOL: return CommonNames.bool;
+      case TypeKind.I8: return CommonNames.i8;
+      case TypeKind.I16: return CommonNames.i16;
+      case TypeKind.I32: return CommonNames.i32;
+      case TypeKind.I64: return CommonNames.i64;
+      case TypeKind.ISIZE: return CommonNames.isize;
+      case TypeKind.U8: return CommonNames.u8;
+      case TypeKind.U16: return CommonNames.u16;
+      case TypeKind.U32: return CommonNames.u32;
+      case TypeKind.U64: return CommonNames.u64;
+      case TypeKind.USIZE: return CommonNames.usize;
+      case TypeKind.F32: return CommonNames.f32;
+      case TypeKind.F64: return CommonNames.f64;
+      case TypeKind.V128: return CommonNames.v128;
+      case TypeKind.FUNCREF: return CommonNames.funcref;
+      case TypeKind.EXTERNREF: return CommonNames.externref;
+      case TypeKind.ANYREF: return CommonNames.anyref;
+      case TypeKind.EQREF: return CommonNames.eqref;
+      case TypeKind.I31REF: return CommonNames.i31ref;
+      case TypeKind.DATAREF: return CommonNames.dataref;
+      case TypeKind.ARRAYREF: return CommonNames.arrayref;
+      case TypeKind.STRINGREF: return CommonNames.stringref;
+      case TypeKind.STRINGVIEW_WTF8: return CommonNames.stringview_wtf8;
+      case TypeKind.STRINGVIEW_WTF16: return CommonNames.stringview_wtf16;
+      case TypeKind.STRINGVIEW_ITER: return CommonNames.stringview_iter;
       default: assert(false);
-      case TypeKind.VOID: return "void";
+      case TypeKind.VOID: return CommonNames.void_;
     }
   }
 
@@ -586,7 +596,6 @@ export class Type {
   /** Converts this type to its respective type reference. */
   toRef(): TypeRef {
     switch (this.kind) {
-      default: assert(false); // TODO: Concrete struct, array and signature types
       case TypeKind.BOOL:
       case TypeKind.I8:
       case TypeKind.I16:
@@ -605,7 +614,7 @@ export class Type {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Func, this.is(TypeFlags.NULLABLE));
       }
       case TypeKind.EXTERNREF: {
-        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Ext, this.is(TypeFlags.NULLABLE));
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Extern, this.is(TypeFlags.NULLABLE));
       }
       case TypeKind.ANYREF: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Any, this.is(TypeFlags.NULLABLE));
@@ -618,6 +627,9 @@ export class Type {
       }
       case TypeKind.DATAREF: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, this.is(TypeFlags.NULLABLE));
+      }
+      case TypeKind.ARRAYREF: {
+        return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Array, this.is(TypeFlags.NULLABLE));
       }
       case TypeKind.STRINGREF: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, this.is(TypeFlags.NULLABLE));
@@ -633,6 +645,9 @@ export class Type {
       }
       case TypeKind.VOID: return TypeRef.None;
     }
+    // TODO: not used yet
+    assert(false);
+    return ensureType(this);
   }
 
   // Types
@@ -799,6 +814,13 @@ export class Type {
 
   /** Data reference. */
   static readonly dataref: Type = new Type(TypeKind.DATAREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** Array reference. */
+  static readonly arrayref: Type = new Type(TypeKind.ARRAYREF,
     TypeFlags.EXTERNAL   |
     TypeFlags.NULLABLE   |
     TypeFlags.REFERENCE, 0

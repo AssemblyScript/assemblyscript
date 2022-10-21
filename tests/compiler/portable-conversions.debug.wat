@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $portable-conversions/i (mut i32) (i32.const 1))
  (global $portable-conversions/I (mut i64) (i64.const 1))
@@ -15,7 +15,7 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:portable-conversions
+ (func $start:portable-conversions (type $none_=>_none)
   global.get $portable-conversions/i
   i32.extend8_s
   i32.eqz
@@ -623,7 +623,7 @@
    unreachable
   end
  )
- (func $~start
+ (func $~start (type $none_=>_none)
   call $start:portable-conversions
  )
 )
