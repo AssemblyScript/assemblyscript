@@ -1518,7 +1518,7 @@ export class ASTBuilder {
     let numDeclarations = assert(declarations.length);
     let firstDeclaration = declarations[0];
     this.serializeExternalModifiers(firstDeclaration);
-    sb.push(firstDeclaration.is(CommonFlags.CONST) ? "const " : firstDeclaration.is(CommonFlags.LET) ? "let " : "let ");
+    sb.push(firstDeclaration.is(CommonFlags.CONST) ? "const " : firstDeclaration.is(CommonFlags.LET) ? "let " : "var ");
     this.visitVariableDeclaration(node.declarations[0]);
     for (let i = 1; i < numDeclarations; ++i) {
       sb.push(", ");
