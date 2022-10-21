@@ -3653,8 +3653,6 @@ export class Function extends TypedElement {
   signature: Signature;
   /** Array of locals by index. */
   localsByIndex: Local[] = [];
-  /** List of additional non-parameter locals. */
-  additionalLocals: Type[] = [];
   /** Concrete type arguments. */
   typeArguments: Type[] | null;
   /** Contextual type arguments. */
@@ -3744,6 +3742,21 @@ export class Function extends TypedElement {
     registerConcreteElement(program, this);
   }
 
+  /** Gets the types of additional locals that are not parameters. */
+  getNonParameterLocalTypes(): Type[] {
+    var localsByIndex = this.localsByIndex;
+    var signature = this.signature;
+    var numTotal = localsByIndex.length;
+    var numFixed = signature.parameterTypes.length;
+    if (signature.thisType) ++numFixed;
+    var numAdditional = numTotal - numFixed;
+    var types = new Array<Type>(numAdditional);
+    for (let i = 0; i < numAdditional; ++i) {
+      types[i] = localsByIndex[numFixed + i].type;
+    }
+    return types;
+  }
+
   /** Gets the name of the parameter at the specified index. */
   getParameterName(index: i32): string {
     var parameters = (<FunctionDeclaration>this.declaration).signature.parameters;
@@ -3779,25 +3792,19 @@ export class Function extends TypedElement {
   /** Adds a local of the specified type, with an optional name. */
   addLocal(type: Type, name: string | null = null, declaration: VariableDeclaration | null = null): Local {
     // if it has a name, check previously as this method will throw otherwise
-    var localIndex = this.signature.parameterTypes.length + this.additionalLocals.length;
-    if (this.is(CommonFlags.INSTANCE)) ++localIndex;
+    var localsByIndex = this.localsByIndex;
+    var localIndex = localsByIndex.length;
     var localName = name != null ? name : `var$${localIndex}`;
     if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
-    var local = new Local(
-      localName,
-      localIndex,
-      type,
-      this,
-      declaration
-    );
+    var local = new Local(localName, localIndex, type, this, declaration);
     if (name) {
-      let scopedLocals = this.flow.scopedLocals;
-      if (!scopedLocals) this.flow.scopedLocals = scopedLocals = new Map();
+      let defaultFlow = this.flow;
+      let scopedLocals = defaultFlow.scopedLocals;
+      if (!scopedLocals) defaultFlow.scopedLocals = scopedLocals = new Map();
       if (scopedLocals.has(name)) throw new Error("duplicate local name");
       scopedLocals.set(name, local);
     }
-    this.localsByIndex[local.index] = local;
-    this.additionalLocals.push(type);
+    localsByIndex[localIndex] = local;
     return local;
   }
 

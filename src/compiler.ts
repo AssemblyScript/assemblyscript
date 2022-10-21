@@ -686,7 +686,7 @@ export class Compiler extends DiagnosticEmitter {
         startFunctionInstance.internalName,
         signature.paramRefs,
         signature.resultRefs,
-        typesToRefs(startFunctionInstance.additionalLocals),
+        typesToRefs(startFunctionInstance.getNonParameterLocalTypes()),
         module.flatten(startFunctionBody)
       );
       startFunctionInstance.finalize(module, funcRef);
@@ -1527,7 +1527,7 @@ export class Compiler extends DiagnosticEmitter {
         instance.internalName,
         signature.paramRefs,
         signature.resultRefs,
-        typesToRefs(instance.additionalLocals),
+        typesToRefs(instance.getNonParameterLocalTypes()),
         module.flatten(stmts, instance.signature.returnType.toRef())
       );
 
@@ -6712,7 +6712,7 @@ export class Compiler extends DiagnosticEmitter {
       stub.internalName,
       stub.signature.paramRefs,
       stub.signature.resultRefs,
-      typesToRefs(stub.additionalLocals),
+      typesToRefs(stub.getNonParameterLocalTypes()),
       module.flatten(stmts, returnType.toRef())
     );
     stub.set(CommonFlags.COMPILED);
