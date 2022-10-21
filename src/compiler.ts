@@ -189,7 +189,6 @@ import {
 } from "./types";
 
 import {
-  BitSet,
   writeI8,
   writeI16,
   writeI32,

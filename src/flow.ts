@@ -85,7 +85,6 @@ import {
 } from "./ast";
 
 import {
-  BitSet,
   cloneMap
 } from "./util";
 
