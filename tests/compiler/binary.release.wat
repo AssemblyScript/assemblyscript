@@ -4,7 +4,7 @@
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1029) "\a0\f6?")
  (data (i32.const 1041) "\c8\b9\f2\82,\d6\bf\80V7($\b4\fa<\00\00\00\00\00\80\f6?")
  (data (i32.const 1073) "\08X\bf\bd\d1\d5\bf \f7\e0\d8\08\a5\1c\bd\00\00\00\00\00`\f6?")

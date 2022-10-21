@@ -2,7 +2,7 @@
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17408))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66560))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "test" (func $export:class-extends/test))
@@ -16,8 +16,8 @@
   i32.const 1024
   i32.lt_s
   if
-   i32.const 17440
-   i32.const 17488
+   i32.const 66592
+   i32.const 66640
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

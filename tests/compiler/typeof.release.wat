@@ -19,9 +19,9 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18220))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 67372))
  (global $~started (mut i32) (i32.const 0))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\0c\00\00\00n\00u\00m\00b\00e\00r")
  (data (i32.const 1068) ",")
@@ -740,10 +740,10 @@
   (local $1 i32)
   memory.size $0
   local.tee $1
-  i32.const 0
-  i32.le_s
+  i32.const 2
+  i32.lt_s
   if (result i32)
-   i32.const 1
+   i32.const 2
    local.get $1
    i32.sub
    memory.grow $0
@@ -755,10 +755,10 @@
   if
    unreachable
   end
-  i32.const 18224
+  i32.const 67376
   i32.const 0
   i32.store $0
-  i32.const 19792
+  i32.const 68944
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -769,7 +769,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 18224
+    i32.const 67376
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -787,7 +787,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 18224
+      i32.const 67376
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -805,13 +805,13 @@
     br $for-loop|0
    end
   end
-  i32.const 18224
-  i32.const 19796
+  i32.const 67376
+  i32.const 68948
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 18224
+  i32.const 67376
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
@@ -896,7 +896,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 18220
+      i32.const 67372
       i32.lt_u
       if
        local.get $0
@@ -996,7 +996,7 @@
      unreachable
     end
     local.get $0
-    i32.const 18220
+    i32.const 67372
     i32.lt_u
     if
      local.get $0
@@ -1019,7 +1019,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 18220
+     i32.const 67372
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1568,7 +1568,7 @@
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 18220
+   i32.const 67372
    i32.sub
    i32.const 1
    i32.shr_u
@@ -1944,8 +1944,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 18240
-  i32.const 18288
+  i32.const 67392
+  i32.const 67440
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -1996,7 +1996,7 @@
      i32.load $0 offset=8
      i32.eqz
      local.get $1
-     i32.const 18220
+     i32.const 67372
      i32.lt_u
      i32.and
      i32.eqz

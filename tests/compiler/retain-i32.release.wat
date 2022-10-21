@@ -1,6 +1,6 @@
 (module
  (type $none_=>_none (func_subtype func))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s")
  (export "memory" (memory $0))

@@ -4,9 +4,9 @@
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17804))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66956))
  (global $~started (mut i32) (i32.const 0))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\1a\00\00\00z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t")
  (data (i32.const 1084) ",")
@@ -41,8 +41,8 @@
   i32.const 1420
   i32.lt_s
   if
-   i32.const 17824
-   i32.const 17872
+   i32.const 66976
+   i32.const 67024
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

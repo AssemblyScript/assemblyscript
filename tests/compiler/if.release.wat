@@ -2,7 +2,7 @@
  (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\n\00\00\00i\00f\00.\00t\00s")
  (data (i32.const 1068) "\1c")

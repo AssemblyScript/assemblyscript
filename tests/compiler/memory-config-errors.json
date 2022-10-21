@@ -4,7 +4,7 @@
     "--maximumMemory 1"
   ],
   "stderr": [
-    "AS105: Module requires at least '3' pages of initial memory.",
-    "AS106: Module requires at least '3' pages of maximum memory."
+    "AS105: Module requires at least '4' pages of initial memory.",
+    "AS106: Module requires at least '4' pages of maximum memory."
   ]
 }

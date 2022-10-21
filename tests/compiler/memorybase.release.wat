@@ -1,4 +1,4 @@
 (module
- (memory $0 1)
+ (memory $0 2)
  (export "memory" (memory $0))
 )

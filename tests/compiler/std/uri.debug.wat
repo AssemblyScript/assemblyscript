@@ -30,9 +30,9 @@
  (global $~lib/util/uri/URI_RESERVED i32 (i32.const 2572))
  (global $~lib/rt/__rtti_base i32 (i32.const 3312))
  (global $~lib/memory/__data_end i32 (i32.const 3340))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19724))
- (global $~lib/memory/__heap_base i32 (i32.const 19724))
- (memory $0 1)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 68876))
+ (global $~lib/memory/__heap_base i32 (i32.const 68876))
+ (memory $0 2)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "\00\01\01\01\01\01\00\00\00\00\01\01\00\00\01\00\00\00\00\00\00\00\00\00\00\01\01\01\01\01\01\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\01\01\01\01\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\01\01\01\00")
  (data (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -3433,8 +3433,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 19744
-   i32.const 19792
+   i32.const 68896
+   i32.const 68944
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

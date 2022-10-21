@@ -6,7 +6,7 @@
  (type $f32_f32_f32_=>_i32 (func_subtype (param f32 f32 f32) (result i32) func))
  (import "mod" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
  (export "mod" (func $std/mod/mod))

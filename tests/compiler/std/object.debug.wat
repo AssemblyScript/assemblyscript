@@ -12,9 +12,9 @@
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 188))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16572))
- (global $~lib/memory/__heap_base i32 (i32.const 16572))
- (memory $0 1)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 65724))
+ (global $~lib/memory/__heap_base i32 (i32.const 65724))
+ (memory $0 2)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00.\00t\00s\00\00\00")
  (data (i32.const 60) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 92) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00b\00\00\00\00\00\00\00\00\00\00\00")
@@ -264,8 +264,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16592
-   i32.const 16640
+   i32.const 65744
+   i32.const 65792
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

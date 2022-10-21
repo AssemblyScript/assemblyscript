@@ -26,8 +26,8 @@
  (global $std/staticarray/arr4 (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $std/staticarray/maxVal (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 20244))
- (memory $0 1)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 69396))
+ (memory $0 2)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03")
  (data (i32.const 1068) "<")
@@ -306,7 +306,7 @@
     i32.load $0 offset=8
     i32.eqz
     local.get $0
-    i32.const 20244
+    i32.const 69396
     i32.lt_u
     i32.and
     i32.eqz
@@ -919,10 +919,10 @@
   (local $1 i32)
   memory.size $0
   local.tee $1
-  i32.const 0
-  i32.le_s
+  i32.const 2
+  i32.lt_s
   if (result i32)
-   i32.const 1
+   i32.const 2
    local.get $1
    i32.sub
    memory.grow $0
@@ -934,10 +934,10 @@
   if
    unreachable
   end
-  i32.const 20256
+  i32.const 69408
   i32.const 0
   i32.store $0
-  i32.const 21824
+  i32.const 70976
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -948,7 +948,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 20256
+    i32.const 69408
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -966,7 +966,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 20256
+      i32.const 69408
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -984,20 +984,20 @@
     br $for-loop|0
    end
   end
-  i32.const 20256
-  i32.const 21828
+  i32.const 69408
+  i32.const 70980
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 20256
+  i32.const 69408
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/__free (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 20244
+  i32.const 69396
   i32.lt_u
   if
    return
@@ -1127,7 +1127,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 20244
+      i32.const 69396
       i32.lt_u
       if
        local.get $0
@@ -1227,7 +1227,7 @@
      unreachable
     end
     local.get $0
-    i32.const 20244
+    i32.const 69396
     i32.lt_u
     if
      local.get $0
@@ -1866,8 +1866,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3101,7 +3101,7 @@
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 20244
+   i32.const 69396
    i32.sub
    i32.const 1
    i32.shr_u
@@ -6308,7 +6308,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 20244
+   i32.const 69396
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/rt/itcms/state
    i32.const 0
@@ -6349,8 +6349,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 20272
-  i32.const 20320
+  i32.const 69424
+  i32.const 69472
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -6366,8 +6366,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6401,8 +6401,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6468,8 +6468,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6512,8 +6512,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6588,8 +6588,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6714,8 +6714,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6780,8 +6780,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -6917,8 +6917,8 @@
   i32.const 3860
   i32.lt_s
   if
-   i32.const 20272
-   i32.const 20320
+   i32.const 69424
+   i32.const 69472
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

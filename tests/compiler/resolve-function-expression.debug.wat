@@ -31,9 +31,9 @@
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 2400))
  (global $~lib/memory/__data_end i32 (i32.const 2436))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18820))
- (global $~lib/memory/__heap_base i32 (i32.const 18820))
- (memory $0 1)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 67972))
+ (global $~lib/memory/__heap_base i32 (i32.const 67972))
+ (memory $0 2)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
  (data (i32.const 124) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
@@ -2844,8 +2844,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 18848
-   i32.const 18896
+   i32.const 68000
+   i32.const 68048
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

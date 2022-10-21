@@ -32,9 +32,9 @@
  (global $function-call/foo (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 736))
  (global $~lib/memory/__data_end i32 (i32.const 812))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17196))
- (global $~lib/memory/__heap_base i32 (i32.const 17196))
- (memory $0 1)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66348))
+ (global $~lib/memory/__heap_base i32 (i32.const 66348))
+ (memory $0 2)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 76) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
@@ -2351,8 +2351,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17216
-   i32.const 17264
+   i32.const 66368
+   i32.const 66416
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

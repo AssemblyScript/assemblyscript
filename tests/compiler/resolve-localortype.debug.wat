@@ -4,8 +4,8 @@
  (type $none_=>_none (func_subtype func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 8))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
- (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 65544))
+ (global $~lib/memory/__heap_base i32 (i32.const 65544))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
@@ -23,8 +23,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16416
-   i32.const 16464
+   i32.const 65568
+   i32.const 65616
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

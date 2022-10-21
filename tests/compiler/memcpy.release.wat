@@ -4,7 +4,7 @@
  (type $none_=>_none (func_subtype func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memcpy/dest (mut i32) (i32.const 0))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\12\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s")
  (export "memcpy" (func $memcpy/memcpy))

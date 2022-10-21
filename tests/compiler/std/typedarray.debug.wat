@@ -100,9 +100,9 @@
  (global $std/typedarray/setSource7 (mut i32) (i32.const 10240))
  (global $~lib/rt/__rtti_base i32 (i32.const 14976))
  (global $~lib/memory/__data_end i32 (i32.const 15604))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 31988))
- (global $~lib/memory/__heap_base i32 (i32.const 31988))
- (memory $0 1)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 81140))
+ (global $~lib/memory/__heap_base i32 (i32.const 81140))
+ (memory $0 2)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 60) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 124) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -40914,8 +40914,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 32016
-   i32.const 32064
+   i32.const 81168
+   i32.const 81216
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

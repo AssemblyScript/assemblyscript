@@ -34,9 +34,9 @@
  (global $std/array-literal/dynamicArrayRefWithCtor (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 768))
  (global $~lib/memory/__data_end i32 (i32.const 844))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17228))
- (global $~lib/memory/__heap_base i32 (i32.const 17228))
- (memory $0 1)
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 66380))
+ (global $~lib/memory/__heap_base i32 (i32.const 66380))
+ (memory $0 2)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\00\01\02\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) ",\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\10\00\00\00 \00\00\00 \00\00\00\03\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 92) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00\00\00\00\00")
@@ -2694,8 +2694,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17248
-   i32.const 17296
+   i32.const 66400
+   i32.const 66448
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

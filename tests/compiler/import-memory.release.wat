@@ -1,7 +1,7 @@
 (module
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (type $none_=>_none (func_subtype func))
- (import "env" "memory" (memory $0 1))
+ (import "env" "memory" (memory $0 2))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (data (i32.const 1036) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00i\00m\00p\00o\00r\00t\00-\00m\00e\00m\00o\00r\00y\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (export "memory" (memory $0))
