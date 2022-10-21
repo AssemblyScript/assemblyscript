@@ -13,18 +13,20 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $scoped/fn (param $c i32)
-  (local $var$1 i32)
+  (local $a i32)
+  (local $b i32)
   i32.const 0
-  local.set $var$1
+  local.set $a
   local.get $c
-  local.set $var$1
+  local.set $b
  )
  (func $start:scoped
   (local $anotherStartFunctionLocal i32)
   (local $var$1 i32)
-  (local $var$2 i32)
-  (local $var$3 i64)
-  (local $var$4 f32)
+  (local $aGlobal i32)
+  (local $var$3 i32)
+  (local $aConstant i64)
+  (local $aConstant_0 f32)
   i32.const 0
   local.set $anotherStartFunctionLocal
   loop $for-loop|0
@@ -43,27 +45,27 @@
    end
   end
   i32.const 0
-  local.set $var$1
+  local.set $aGlobal
   loop $for-loop|1
-   local.get $var$1
+   local.get $aGlobal
    i32.const 1
    i32.lt_s
-   local.set $var$2
-   local.get $var$2
+   local.set $var$3
+   local.get $var$3
    if
-    local.get $var$1
+    local.get $aGlobal
     drop
-    local.get $var$1
+    local.get $aGlobal
     i32.const 1
     i32.add
-    local.set $var$1
+    local.set $aGlobal
     br $for-loop|1
    end
   end
   i64.const 5
-  local.set $var$3
+  local.set $aConstant
   f32.const 10
-  local.set $var$4
+  local.set $aConstant_0
   i32.const 42
   call $scoped/fn
  )

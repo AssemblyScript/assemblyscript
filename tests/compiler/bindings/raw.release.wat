@@ -1807,15 +1807,15 @@
    local.get $1
    i32.const 1
    i32.add
-   local.tee $3
+   local.tee $5
    local.get $0
    i32.load $0 offset=8
-   local.tee $4
+   local.tee $3
    i32.const 2
    i32.shr_u
    i32.gt_u
    if
-    local.get $3
+    local.get $5
     i32.const 268435455
     i32.gt_u
     if
@@ -1828,18 +1828,18 @@
     end
     block $__inlined_func$~lib/rt/itcms/__renew
      i32.const 1073741820
-     local.get $4
+     local.get $3
      i32.const 1
      i32.shl
-     local.tee $4
-     local.get $4
+     local.tee $3
+     local.get $3
      i32.const 1073741820
      i32.ge_u
      select
      local.tee $4
      i32.const 8
-     local.get $3
-     local.get $3
+     local.get $5
+     local.get $5
      i32.const 8
      i32.le_u
      select
@@ -1850,13 +1850,13 @@
      local.get $4
      i32.lt_u
      select
-     local.tee $5
+     local.tee $6
      local.get $0
      i32.load $0
-     local.tee $4
+     local.tee $3
      i32.const 20
      i32.sub
-     local.tee $6
+     local.tee $5
      i32.load $0
      i32.const -4
      i32.and
@@ -1864,26 +1864,26 @@
      i32.sub
      i32.le_u
      if
-      local.get $6
       local.get $5
+      local.get $6
       i32.store $0 offset=16
-      local.get $4
-      local.set $3
+      local.get $3
+      local.set $4
       br $__inlined_func$~lib/rt/itcms/__renew
      end
-     local.get $5
      local.get $6
+     local.get $5
      i32.load $0 offset=12
      call $~lib/rt/itcms/__new
-     local.tee $3
-     local.get $4
-     local.get $5
+     local.tee $4
+     local.get $3
      local.get $6
+     local.get $5
      i32.load $0 offset=16
-     local.tee $6
+     local.tee $5
      local.get $5
      local.get $6
-     i32.lt_u
+     i32.gt_u
      select
      memory.copy $0 $0
     end
@@ -1892,20 +1892,20 @@
     i32.ne
     if
      local.get $0
-     local.get $3
+     local.get $4
      i32.store $0
      local.get $0
-     local.get $3
+     local.get $4
      i32.store $0 offset=4
-     local.get $3
+     local.get $4
      if
       local.get $0
-      local.get $3
+      local.get $4
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
     end
     local.get $0
-    local.get $5
+    local.get $6
     i32.store $0 offset=8
    end
    local.get $0

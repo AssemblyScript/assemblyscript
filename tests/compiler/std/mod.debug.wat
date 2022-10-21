@@ -27,7 +27,7 @@
   (local $ey i64)
   (local $sx i64)
   (local $uy1 i64)
-  (local $var$8 f64)
+  (local $m f64)
   (local $ux1 i64)
   (local $var$10 i32)
   (local $shift i64)
@@ -91,9 +91,9 @@
    local.get $x
    local.get $y
    f64.mul
-   local.set $var$8
-   local.get $var$8
-   local.get $var$8
+   local.set $m
+   local.get $m
+   local.get $m
    f64.div
    return
   end
@@ -328,7 +328,7 @@
   (local $ey i32)
   (local $sm i32)
   (local $uy1 i32)
-  (local $var$8 f32)
+  (local $m f32)
   (local $ux1 i32)
   (local $var$10 i32)
   (local $shift i32)
@@ -392,9 +392,9 @@
    local.get $x
    local.get $y
    f32.mul
-   local.set $var$8
-   local.get $var$8
-   local.get $var$8
+   local.set $m
+   local.get $m
+   local.get $m
    f32.div
    return
   end

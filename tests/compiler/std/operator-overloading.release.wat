@@ -2083,7 +2083,7 @@
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
+  i32.const 48
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
@@ -2093,7 +2093,7 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
-   i32.const 24
+   i32.const 48
    memory.fill $0
    memory.size $0
    i32.const 16
@@ -3330,7 +3330,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/incdec
    local.tee $0
-   i32.store $0 offset=8
+   i32.store $0 offset=12
    local.get $0
    i32.load $0
    i32.const 1
@@ -3394,7 +3394,7 @@
    i32.store $0
    local.get $0
    local.get $1
-   i32.store $0 offset=8
+   i32.store $0 offset=16
    local.get $1
    i32.load $0
    i32.const 1
@@ -3412,11 +3412,11 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/ais1
    local.tee $0
-   i32.store $0 offset=12
+   i32.store $0 offset=20
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/ais2
    local.tee $1
-   i32.store $0 offset=8
+   i32.store $0 offset=24
    local.get $0
    i32.load $0
    local.get $1
@@ -3457,7 +3457,7 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/aii1
    local.tee $0
-   i32.store $0 offset=8
+   i32.store $0 offset=28
    local.get $0
    i32.load $0
    i32.const 1
@@ -3475,11 +3475,11 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/aii1
    local.tee $0
-   i32.store $0 offset=8
+   i32.store $0 offset=32
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/aii2
    local.tee $1
-   i32.store $0 offset=12
+   i32.store $0 offset=36
    local.get $0
    i32.load $0
    local.get $1
@@ -3640,10 +3640,10 @@
    i32.store $0 offset=4
    local.get $0
    local.get $1
-   i32.store $0 offset=16
+   i32.store $0 offset=40
    local.get $0
    i32.const 1536
-   i32.store $0 offset=20
+   i32.store $0 offset=44
    local.get $1
    i32.const 1536
    local.get $1
@@ -3662,10 +3662,10 @@
    global.get $~lib/memory/__stack_pointer
    global.get $std/operator-overloading/tea
    local.tee $1
-   i32.store $0 offset=16
+   i32.store $0 offset=40
    global.get $~lib/memory/__stack_pointer
    i32.const 1568
-   i32.store $0 offset=20
+   i32.store $0 offset=44
    local.get $0
    i32.const 1568
    local.get $1
@@ -3714,7 +3714,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 24
+   i32.const 48
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

@@ -14,9 +14,13 @@
  (start $~start)
  (func $start:unary
   (local $var$0 i32)
-  (local $var$1 i64)
-  (local $var$2 f32)
-  (local $var$3 f64)
+  (local $var$1 i32)
+  (local $var$2 i64)
+  (local $var$3 i64)
+  (local $var$4 f32)
+  (local $var$5 f32)
+  (local $var$6 f64)
+  (local $var$7 f64)
   i32.const 1
   drop
   i32.const -1
@@ -115,11 +119,11 @@
   local.get $var$0
   global.set $unary/i
   global.get $unary/i
-  local.tee $var$0
+  local.tee $var$1
   i32.const 1
   i32.sub
   global.set $unary/i
-  local.get $var$0
+  local.get $var$1
   global.set $unary/i
   global.get $unary/I
   drop
@@ -195,18 +199,18 @@
   global.get $unary/I
   global.set $unary/I
   global.get $unary/I
-  local.tee $var$1
+  local.tee $var$2
   i64.const 1
   i64.add
   global.set $unary/I
-  local.get $var$1
+  local.get $var$2
   global.set $unary/I
   global.get $unary/I
-  local.tee $var$1
+  local.tee $var$3
   i64.const 1
   i64.sub
   global.set $unary/I
-  local.get $var$1
+  local.get $var$3
   global.set $unary/I
   global.get $unary/f
   drop
@@ -281,18 +285,18 @@
   global.get $unary/f
   global.set $unary/f
   global.get $unary/f
-  local.tee $var$2
+  local.tee $var$4
   f32.const 1
   f32.add
   global.set $unary/f
-  local.get $var$2
+  local.get $var$4
   global.set $unary/f
   global.get $unary/f
-  local.tee $var$2
+  local.tee $var$5
   f32.const 1
   f32.sub
   global.set $unary/f
-  local.get $var$2
+  local.get $var$5
   global.set $unary/f
   global.get $unary/F
   drop
@@ -369,18 +373,18 @@
   global.get $unary/F
   global.set $unary/F
   global.get $unary/F
-  local.tee $var$3
+  local.tee $var$6
   f64.const 1
   f64.add
   global.set $unary/F
-  local.get $var$3
+  local.get $var$6
   global.set $unary/F
   global.get $unary/F
-  local.tee $var$3
+  local.tee $var$7
   f64.const 1
   f64.sub
   global.set $unary/F
-  local.get $var$3
+  local.get $var$7
   global.set $unary/F
  )
  (func $~start

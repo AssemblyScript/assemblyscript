@@ -1193,7 +1193,6 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
         if (type.kind == TypeKind.I16) {
           res = compiler.ensureSmallIntegerWrap(res, Type.i16);
         }
-        flow.freeTempLocal(temp);
         return res;
       }
       case TypeKind.I32:
@@ -1227,7 +1226,6 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
               module.i32(8)
             ),
           );
-          flow.freeTempLocal(temp);
           return res;
         }
         // fall-through
@@ -1306,10 +1304,6 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
           res,
           module.i64(32)
         );
-
-        flow.freeTempLocal(temp2);
-        flow.freeTempLocal(temp1);
-
         return res;
       }
     }
@@ -1487,8 +1481,6 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
             )
           )
         );
-        flow.freeTempLocal(temp2);
-        flow.freeTempLocal(temp1);
 
         return ret;
       }
@@ -1561,8 +1553,6 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
             )
           )
         );
-        flow.freeTempLocal(temp2);
-        flow.freeTempLocal(temp1);
 
         return ret;
       }
@@ -1627,8 +1617,6 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
           ),
           module.local_get(temp2.index, TypeRef.I32)
         );
-        flow.freeTempLocal(temp2);
-        flow.freeTempLocal(temp1);
         return ret;
       }
       case TypeKind.ISIZE: {
@@ -1653,8 +1641,6 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
           ),
           module.local_get(temp2.index, options.sizeTypeRef)
         );
-        flow.freeTempLocal(temp2);
-        flow.freeTempLocal(temp1);
         return ret;
       }
       case TypeKind.I64: {
@@ -1677,8 +1663,6 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
           ),
           module.local_get(temp2.index, TypeRef.I64)
         );
-        flow.freeTempLocal(temp2);
-        flow.freeTempLocal(temp1);
         return ret;
       }
       case TypeKind.F32: return module.unary(UnaryOp.AbsF32, arg0);
@@ -1750,8 +1734,6 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
         ),
         typeRef
       );
-      flow.freeTempLocal(temp2);
-      flow.freeTempLocal(temp1);
       return ret;
     }
   }
@@ -1820,8 +1802,6 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
         ),
         typeRef
       );
-      flow.freeTempLocal(temp2);
-      flow.freeTempLocal(temp1);
       return ret;
     }
   }
@@ -2155,7 +2135,6 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
           module.local_tee(temp.index, arg0, false), // f32
           module.local_get(temp.index, TypeRef.F32)
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
       case TypeKind.F64: {
@@ -2171,7 +2150,6 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
           module.local_tee(temp.index, arg0, false), // f64
           module.local_get(temp.index, TypeRef.F64)
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
     }
@@ -2237,7 +2215,6 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
           ),
           module.f32(0)
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
       case TypeKind.F64: {
@@ -2259,7 +2236,6 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
           ),
           module.f64(0)
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
     }
@@ -3517,7 +3493,6 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
           module.local_get(temp.index, TypeRef.I32),
           abort
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
       case TypeKind.I64:
@@ -3530,7 +3505,6 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
           abort,
           module.local_get(temp.index, TypeRef.I64)
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
       case TypeKind.ISIZE:
@@ -3544,7 +3518,6 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
           abort,
           module.local_get(temp.index, compiler.options.sizeTypeRef)
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
       case TypeKind.F32: {
@@ -3557,7 +3530,6 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
           abort,
           module.local_get(temp.index, TypeRef.F32)
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
       case TypeKind.F64: {
@@ -3570,7 +3542,6 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
           abort,
           module.local_get(temp.index, TypeRef.F64)
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
       case TypeKind.FUNCREF:
@@ -3591,7 +3562,6 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
           abort,
           module.local_get(temp.index, type.toRef())
         );
-        flow.freeTempLocal(temp);
         return ret;
       }
     }

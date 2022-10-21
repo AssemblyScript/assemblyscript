@@ -1700,7 +1700,7 @@
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 44
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -1716,11 +1716,9 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $0
-  i64.const 0
-  i64.store $0
-  local.get $0
   i32.const 0
-  i32.store $0 offset=8
+  i32.const 44
+  memory.fill $0
   local.get $0
   i32.const 1088
   i32.store $0
@@ -1996,11 +1994,11 @@
   i32.const 4
   call $~lib/rt/__newArray
   local.tee $0
-  i32.store $0 offset=8
+  i32.store $0 offset=12
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.load $0 offset=4
-  i32.store $0 offset=4
+  i32.store $0 offset=16
   local.get $0
   i32.load $0 offset=4
   global.get $std/array-literal/i
@@ -2095,11 +2093,11 @@
   i32.const 6
   call $~lib/rt/__newArray
   local.tee $0
-  i32.store $0 offset=4
+  i32.store $0 offset=20
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.load $0 offset=4
-  i32.store $0 offset=8
+  i32.store $0 offset=24
   local.get $0
   i32.const 0
   call $std/array-literal/Ref#constructor
@@ -2136,11 +2134,11 @@
   i32.const 8
   call $~lib/rt/__newArray
   local.tee $0
-  i32.store $0 offset=8
+  i32.store $0 offset=28
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.load $0 offset=4
-  i32.store $0 offset=4
+  i32.store $0 offset=32
   local.get $0
   i32.const 0
   call $std/array-literal/RefWithCtor#constructor
@@ -2187,11 +2185,11 @@
   i32.const 6
   call $~lib/rt/__newArray
   local.tee $0
-  i32.store $0 offset=4
+  i32.store $0 offset=36
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.load $0 offset=4
-  i32.store $0 offset=8
+  i32.store $0 offset=40
   local.get $0
   i32.const 0
   call $std/array-literal/Ref#constructor
@@ -2235,7 +2233,7 @@
   i32.add
   global.set $~lib/rt/itcms/threshold
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 44
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

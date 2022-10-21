@@ -48,23 +48,23 @@
   i32.store $0 offset=8
  )
  (func $function-inline-regressions/foo (param $v0 i32) (param $v1 i32) (param $v2 i32) (result i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $x i32)
+  (local $y i32)
+  (local $z i32)
   local.get $v0
   i32.const 0
   call $function-inline-regressions/loadX
-  local.set $var$3
+  local.set $x
   local.get $v0
   i32.const 1
   call $function-inline-regressions/loadX
-  local.set $var$4
+  local.set $y
   call $function-inline-regressions/loadZ
-  local.set $var$5
-  local.get $var$5
-  local.get $var$3
+  local.set $z
+  local.get $z
+  local.get $x
   i32.add
-  local.get $var$4
+  local.get $y
   i32.add
   call $function-inline-regressions/baz
   global.get $function-inline-regressions/struct
@@ -76,6 +76,6 @@
   global.get $function-inline-regressions/struct
   local.get $v2
   call $function-inline-regressions/Struct#set:v2
-  local.get $var$5
+  local.get $z
  )
 )

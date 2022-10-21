@@ -998,16 +998,15 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   i32.const 10
-  local.set $3
+  local.set $0
   loop $while-continue|0
-   local.get $3
+   local.get $0
    if
-    local.get $3
+    local.get $0
     i32.const 1
     i32.sub
-    local.set $3
+    local.set $0
     local.get $1
     i32.const 1
     i32.add
@@ -1015,7 +1014,7 @@
     br $while-continue|0
    end
   end
-  local.get $3
+  local.get $0
   if
    i32.const 0
    i32.const 1056
@@ -1036,27 +1035,27 @@
    unreachable
   end
   i32.const 10
-  local.set $3
+  local.set $0
   i32.const 0
   local.set $1
   loop $while-continue|01
-   local.get $3
+   local.get $0
    if
-    local.get $3
+    local.get $0
     i32.const 1
     i32.sub
-    local.set $3
+    local.set $0
     local.get $2
     i32.const 1
     i32.add
     local.set $2
     loop $while-continue|1
-     local.get $3
+     local.get $0
      if
-      local.get $3
+      local.get $0
       i32.const 1
       i32.sub
-      local.set $3
+      local.set $0
       local.get $1
       i32.const 1
       i32.add
@@ -1064,7 +1063,7 @@
       br $while-continue|1
      end
     end
-    local.get $3
+    local.get $0
     if
      i32.const 0
      i32.const 1056
@@ -1087,7 +1086,7 @@
     br $while-continue|01
    end
   end
-  local.get $3
+  local.get $0
   if
    i32.const 0
    i32.const 1056
@@ -1119,16 +1118,16 @@
    unreachable
   end
   i32.const 1
-  local.set $1
+  local.set $0
   i32.const 0
   local.set $2
   loop $while-continue|03
-   local.get $1
-   local.tee $0
+   local.get $0
+   local.tee $1
    i32.const 1
    i32.sub
-   local.set $1
-   local.get $0
+   local.set $0
+   local.get $1
    if (result i32)
     local.get $2
     i32.const 1
@@ -1139,7 +1138,7 @@
    end
    br_if $while-continue|03
   end
-  local.get $1
+  local.get $0
   i32.const -1
   i32.ne
   if
@@ -1162,17 +1161,17 @@
    unreachable
   end
   i32.const 0
-  local.set $3
+  local.set $0
   loop $while-continue|05
-   local.get $3
+   local.get $0
    i32.const 1
    i32.add
-   local.tee $3
+   local.tee $0
    i32.const 10
    i32.ne
    br_if $while-continue|05
   end
-  local.get $3
+  local.get $0
   i32.const 10
   i32.ne
   if
@@ -1184,17 +1183,17 @@
    unreachable
   end
   i32.const 0
-  local.set $3
+  local.set $0
   loop $while-continue|07
-   local.get $3
+   local.get $0
    i32.const 1
    i32.add
-   local.tee $3
+   local.tee $0
    i32.const 10
    i32.ne
    br_if $while-continue|07
   end
-  local.get $3
+  local.get $0
   i32.const 10
   i32.ne
   if
@@ -1206,18 +1205,18 @@
    unreachable
   end
   i32.const 10
-  local.set $3
+  local.set $0
   loop $while-continue|013
-   local.get $3
+   local.get $0
    if
-    local.get $3
+    local.get $0
     i32.const 1
     i32.sub
-    local.set $3
+    local.set $0
     br $while-continue|013
    end
   end
-  local.get $3
+  local.get $0
   if
    i32.const 0
    i32.const 1056
@@ -1227,11 +1226,11 @@
    unreachable
   end
   i32.const 10
-  local.set $3
+  local.set $0
   i32.const 10
   local.set $1
   loop $while-continue|015
-   local.get $3
+   local.get $0
    if
     loop $while-continue|117
      local.get $1
@@ -1243,14 +1242,14 @@
       br $while-continue|117
      end
     end
-    local.get $3
+    local.get $0
     i32.const 1
     i32.sub
-    local.set $3
+    local.set $0
     br $while-continue|015
    end
   end
-  local.get $3
+  local.get $0
   if
    i32.const 0
    i32.const 1056
@@ -1317,10 +1316,10 @@
    local.set $1
    local.get $0
    call $while/Ref#constructor
-   local.tee $3
+   local.tee $0
    i32.store $0
    loop $while-continue|08
-    local.get $3
+    local.get $0
     if
      local.get $1
      i32.const 1
@@ -1330,11 +1329,11 @@
      i32.eq
      if
       i32.const 0
-      local.set $3
+      local.set $0
      else
       global.get $~lib/memory/__stack_pointer
       call $while/Ref#constructor
-      local.tee $3
+      local.tee $0
       i32.store $0
      end
      br $while-continue|08
@@ -1351,7 +1350,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $3
+   local.get $0
    if
     i32.const 0
     i32.const 1056
@@ -1373,12 +1372,12 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $1
    i32.const 0
    i32.store $0
    i32.const 0
-   local.set $3
-   local.get $0
+   local.set $0
+   local.get $1
    call $while/Ref#constructor
    local.tee $1
    i32.store $0
@@ -1386,10 +1385,10 @@
     call $while/Ref#constructor
     if
      block $while-break|011
-      local.get $3
+      local.get $0
       i32.const 1
       i32.add
-      local.tee $3
+      local.tee $0
       i32.const 10
       i32.eq
       if
@@ -1401,7 +1400,7 @@
      end
     end
    end
-   local.get $3
+   local.get $0
    i32.const 10
    i32.ne
    if
@@ -1426,39 +1425,39 @@
    i32.add
    global.set $~lib/memory/__stack_pointer
    i32.const 0
-   local.set $3
+   local.set $0
    loop $while-continue|019
-    local.get $3
+    local.get $0
     i32.const 1
     i32.add
-    local.tee $3
+    local.tee $0
     i32.const 0
     i32.le_s
     br_if $while-continue|019
    end
    i32.const 0
-   local.set $3
+   local.set $0
    loop $while-continue|021
-    local.get $3
+    local.get $0
     i32.const 1
     i32.add
-    local.tee $3
+    local.tee $0
     i32.const 0
     i32.le_s
     br_if $while-continue|021
    end
    i32.const 0
-   local.set $3
+   local.set $0
    loop $do-loop|0
-    local.get $3
+    local.get $0
     i32.const 1
     i32.add
-    local.tee $3
+    local.tee $0
     i32.const 3
     i32.lt_s
     br_if $do-loop|0
    end
-   local.get $3
+   local.get $0
    i32.const 3
    i32.ne
    if

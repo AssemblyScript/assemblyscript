@@ -407,10 +407,22 @@
   (local $sl i32)
   (local $var$6 i32)
   (local $var$7 i32)
+  (local $boundedSize i32)
   (local $prev i32)
   (local $next i32)
-  (local $var$10 i32)
-  (local $var$11 i32)
+  (local $sl_0 i32)
+  (local $fl_0 i32)
+  (local $root_0 i32)
+  (local $head i32)
+  (local $sl_1 i32)
+  (local $fl_1 i32)
+  (local $root_1 i32)
+  (local $fl_2 i32)
+  (local $root_2 i32)
+  (local $slMap i32)
+  (local $slMap_0 i32)
+  (local $fl_3 i32)
+  (local $root_3 i32)
   local.get $block
   i32.load $0
   local.set $blockInfo
@@ -467,13 +479,13 @@
    local.get $var$7
    i32.lt_u
    select
-   local.set $var$6
+   local.set $boundedSize
    i32.const 31
-   local.get $var$6
+   local.get $boundedSize
    i32.clz
    i32.sub
    local.set $fl
-   local.get $var$6
+   local.get $boundedSize
    local.get $fl
    i32.const 4
    i32.sub
@@ -531,16 +543,16 @@
   end
   local.get $block
   local.get $root
-  local.set $var$10
+  local.set $root_0
   local.get $fl
-  local.set $var$6
+  local.set $fl_0
   local.get $sl
-  local.set $var$7
-  local.get $var$10
-  local.get $var$6
+  local.set $sl_0
+  local.get $root_0
+  local.get $fl_0
   i32.const 4
   i32.shl
-  local.get $var$7
+  local.get $sl_0
   i32.add
   i32.const 2
   i32.shl
@@ -549,59 +561,59 @@
   i32.eq
   if
    local.get $root
-   local.set $var$11
+   local.set $root_1
    local.get $fl
-   local.set $var$10
+   local.set $fl_1
    local.get $sl
-   local.set $var$6
+   local.set $sl_1
    local.get $next
-   local.set $var$7
-   local.get $var$11
-   local.get $var$10
+   local.set $head
+   local.get $root_1
+   local.get $fl_1
    i32.const 4
    i32.shl
-   local.get $var$6
+   local.get $sl_1
    i32.add
    i32.const 2
    i32.shl
    i32.add
-   local.get $var$7
+   local.get $head
    i32.store $0 offset=96
    local.get $next
    i32.eqz
    if
     local.get $root
-    local.set $var$6
+    local.set $root_2
     local.get $fl
-    local.set $var$7
-    local.get $var$6
-    local.get $var$7
+    local.set $fl_2
+    local.get $root_2
+    local.get $fl_2
     i32.const 2
     i32.shl
     i32.add
     i32.load $0 offset=4
-    local.set $var$6
+    local.set $slMap
     local.get $root
-    local.set $var$7
+    local.set $root_3
     local.get $fl
-    local.set $var$11
-    local.get $var$6
+    local.set $fl_3
+    local.get $slMap
     i32.const 1
     local.get $sl
     i32.shl
     i32.const -1
     i32.xor
     i32.and
-    local.tee $var$6
-    local.set $var$10
-    local.get $var$7
-    local.get $var$11
+    local.tee $slMap
+    local.set $slMap_0
+    local.get $root_3
+    local.get $fl_3
     i32.const 2
     i32.shl
     i32.add
-    local.get $var$10
+    local.get $slMap_0
     i32.store $0 offset=4
-    local.get $var$6
+    local.get $slMap
     i32.eqz
     if
      local.get $root
@@ -620,17 +632,32 @@
  )
  (func $~lib/rt/tlsf/insertBlock (param $root i32) (param $block i32)
   (local $blockInfo i32)
-  (local $var$3 i32)
+  (local $block_0 i32)
   (local $right i32)
   (local $rightInfo i32)
-  (local $var$6 i32)
+  (local $block_1 i32)
+  (local $block_2 i32)
+  (local $left i32)
+  (local $leftInfo i32)
   (local $size i32)
   (local $fl i32)
   (local $sl i32)
-  (local $var$10 i32)
-  (local $head i32)
-  (local $var$12 i32)
   (local $var$13 i32)
+  (local $var$14 i32)
+  (local $boundedSize i32)
+  (local $sl_0 i32)
+  (local $fl_0 i32)
+  (local $root_0 i32)
+  (local $head i32)
+  (local $head_0 i32)
+  (local $sl_1 i32)
+  (local $fl_1 i32)
+  (local $root_1 i32)
+  (local $fl_2 i32)
+  (local $root_2 i32)
+  (local $slMap i32)
+  (local $fl_3 i32)
+  (local $root_3 i32)
   i32.const 1
   drop
   local.get $block
@@ -661,11 +688,11 @@
    unreachable
   end
   local.get $block
-  local.set $var$3
-  local.get $var$3
+  local.set $block_0
+  local.get $block_0
   i32.const 4
   i32.add
-  local.get $var$3
+  local.get $block_0
   i32.load $0
   i32.const 3
   i32.const -1
@@ -696,11 +723,11 @@
    local.tee $blockInfo
    call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $block
-   local.set $var$3
-   local.get $var$3
+   local.set $block_1
+   local.get $block_1
    i32.const 4
    i32.add
-   local.get $var$3
+   local.get $block_1
    i32.load $0
    i32.const 3
    i32.const -1
@@ -717,18 +744,18 @@
   i32.and
   if
    local.get $block
-   local.set $var$3
-   local.get $var$3
+   local.set $block_2
+   local.get $block_2
    i32.const 4
    i32.sub
    i32.load $0
-   local.set $var$3
-   local.get $var$3
+   local.set $left
+   local.get $left
    i32.load $0
-   local.set $var$6
+   local.set $leftInfo
    i32.const 1
    drop
-   local.get $var$6
+   local.get $leftInfo
    i32.const 1
    i32.and
    i32.eqz
@@ -741,12 +768,12 @@
     unreachable
    end
    local.get $root
-   local.get $var$3
+   local.get $left
    call $~lib/rt/tlsf/removeBlock
-   local.get $var$3
+   local.get $left
    local.set $block
    local.get $block
-   local.get $var$6
+   local.get $leftInfo
    i32.const 4
    i32.add
    local.get $blockInfo
@@ -818,20 +845,20 @@
    local.set $sl
   else
    local.get $size
-   local.tee $var$3
+   local.tee $var$13
    i32.const 1073741820
-   local.tee $var$6
-   local.get $var$3
-   local.get $var$6
+   local.tee $var$14
+   local.get $var$13
+   local.get $var$14
    i32.lt_u
    select
-   local.set $var$3
+   local.set $boundedSize
    i32.const 31
-   local.get $var$3
+   local.get $boundedSize
    i32.clz
    i32.sub
    local.set $fl
-   local.get $var$3
+   local.get $boundedSize
    local.get $fl
    i32.const 4
    i32.sub
@@ -870,16 +897,16 @@
    unreachable
   end
   local.get $root
-  local.set $var$10
+  local.set $root_0
   local.get $fl
-  local.set $var$3
+  local.set $fl_0
   local.get $sl
-  local.set $var$6
-  local.get $var$10
-  local.get $var$3
+  local.set $sl_0
+  local.get $root_0
+  local.get $fl_0
   i32.const 4
   i32.shl
-  local.get $var$6
+  local.get $sl_0
   i32.add
   i32.const 2
   i32.shl
@@ -899,23 +926,23 @@
    call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $root
-  local.set $var$12
+  local.set $root_1
   local.get $fl
-  local.set $var$10
+  local.set $fl_1
   local.get $sl
-  local.set $var$3
+  local.set $sl_1
   local.get $block
-  local.set $var$6
-  local.get $var$12
-  local.get $var$10
+  local.set $head_0
+  local.get $root_1
+  local.get $fl_1
   i32.const 4
   i32.shl
-  local.get $var$3
+  local.get $sl_1
   i32.add
   i32.const 2
   i32.shl
   i32.add
-  local.get $var$6
+  local.get $head_0
   i32.store $0 offset=96
   local.get $root
   local.get $root
@@ -926,15 +953,15 @@
   i32.or
   call $~lib/rt/tlsf/Root#set:flMap
   local.get $root
-  local.set $var$13
+  local.set $root_3
   local.get $fl
-  local.set $var$12
+  local.set $fl_3
   local.get $root
-  local.set $var$3
+  local.set $root_2
   local.get $fl
-  local.set $var$6
-  local.get $var$3
-  local.get $var$6
+  local.set $fl_2
+  local.get $root_2
+  local.get $fl_2
   i32.const 2
   i32.shl
   i32.add
@@ -943,23 +970,24 @@
   local.get $sl
   i32.shl
   i32.or
-  local.set $var$10
-  local.get $var$13
-  local.get $var$12
+  local.set $slMap
+  local.get $root_3
+  local.get $fl_3
   i32.const 2
   i32.shl
   i32.add
-  local.get $var$10
+  local.get $slMap
   i32.store $0 offset=4
  )
  (func $~lib/rt/tlsf/addMemory (param $root i32) (param $start i32) (param $end i32) (result i32)
-  (local $var$3 i32)
+  (local $root_0 i32)
   (local $tail i32)
   (local $tailInfo i32)
   (local $size i32)
   (local $leftSize i32)
   (local $left i32)
-  (local $var$9 i32)
+  (local $tail_0 i32)
+  (local $root_1 i32)
   i32.const 1
   drop
   local.get $start
@@ -993,8 +1021,8 @@
   i32.and
   local.set $end
   local.get $root
-  local.set $var$3
-  local.get $var$3
+  local.set $root_0
+  local.get $root_0
   i32.load $0 offset=1568
   local.set $tail
   i32.const 0
@@ -1101,11 +1129,11 @@
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $root
-  local.set $var$9
+  local.set $root_1
   local.get $tail
-  local.set $var$3
-  local.get $var$9
-  local.get $var$3
+  local.set $tail_0
+  local.get $root_1
+  local.get $tail_0
   i32.store $0 offset=1568
   local.get $root
   local.get $left
@@ -1117,14 +1145,19 @@
   (local $pagesBefore i32)
   (local $pagesNeeded i32)
   (local $root i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
+  (local $tail i32)
+  (local $root_0 i32)
+  (local $fl i32)
   (local $var$7 i32)
-  (local $var$8 i32)
-  (local $var$9 i32)
-  (local $var$10 i32)
-  (local $var$11 i32)
+  (local $slMap i32)
+  (local $fl_0 i32)
+  (local $root_1 i32)
+  (local $sl i32)
+  (local $var$12 i32)
+  (local $head i32)
+  (local $sl_0 i32)
+  (local $fl_1 i32)
+  (local $root_2 i32)
   (local $memStart i32)
   i32.const 0
   drop
@@ -1172,73 +1205,73 @@
   i32.const 0
   call $~lib/rt/tlsf/Root#set:flMap
   local.get $root
-  local.set $var$5
+  local.set $root_0
   i32.const 0
-  local.set $var$4
-  local.get $var$5
-  local.get $var$4
+  local.set $tail
+  local.get $root_0
+  local.get $tail
   i32.store $0 offset=1568
   i32.const 0
-  local.set $var$5
+  local.set $fl
   loop $for-loop|0
-   local.get $var$5
+   local.get $fl
    i32.const 23
    i32.lt_u
-   local.set $var$4
-   local.get $var$4
+   local.set $var$7
+   local.get $var$7
    if
     local.get $root
-    local.set $var$8
-    local.get $var$5
-    local.set $var$7
+    local.set $root_1
+    local.get $fl
+    local.set $fl_0
     i32.const 0
-    local.set $var$6
-    local.get $var$8
-    local.get $var$7
+    local.set $slMap
+    local.get $root_1
+    local.get $fl_0
     i32.const 2
     i32.shl
     i32.add
-    local.get $var$6
+    local.get $slMap
     i32.store $0 offset=4
     i32.const 0
-    local.set $var$8
+    local.set $sl
     loop $for-loop|1
-     local.get $var$8
+     local.get $sl
      i32.const 16
      i32.lt_u
-     local.set $var$7
-     local.get $var$7
+     local.set $var$12
+     local.get $var$12
      if
       local.get $root
-      local.set $var$11
-      local.get $var$5
-      local.set $var$10
-      local.get $var$8
-      local.set $var$9
+      local.set $root_2
+      local.get $fl
+      local.set $fl_1
+      local.get $sl
+      local.set $sl_0
       i32.const 0
-      local.set $var$6
-      local.get $var$11
-      local.get $var$10
+      local.set $head
+      local.get $root_2
+      local.get $fl_1
       i32.const 4
       i32.shl
-      local.get $var$9
+      local.get $sl_0
       i32.add
       i32.const 2
       i32.shl
       i32.add
-      local.get $var$6
+      local.get $head
       i32.store $0 offset=96
-      local.get $var$8
+      local.get $sl
       i32.const 1
       i32.add
-      local.set $var$8
+      local.set $sl
       br $for-loop|1
      end
     end
-    local.get $var$5
+    local.get $fl
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $fl
     br $for-loop|0
    end
   end
@@ -1353,7 +1386,10 @@
  (func $~lib/rt/itcms/step (result i32)
   (local $obj i32)
   (local $var$1 i32)
-  (local $var$2 i32)
+  (local $black i32)
+  (local $var$3 i32)
+  (local $var$4 i32)
+  (local $from i32)
   block $break|0
    block $case2|0
     block $case1|0
@@ -1389,7 +1425,7 @@
     end
     global.get $~lib/rt/itcms/white
     i32.eqz
-    local.set $var$1
+    local.set $black
     global.get $~lib/rt/itcms/iter
     call $~lib/rt/itcms/Object#get:next
     local.set $obj
@@ -1397,18 +1433,18 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $var$2
-     local.get $var$2
+     local.set $var$3
+     local.get $var$3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
       local.get $obj
       call $~lib/rt/itcms/Object#get:color
-      local.get $var$1
+      local.get $black
       i32.ne
       if
        local.get $obj
-       local.get $var$1
+       local.get $black
        call $~lib/rt/itcms/Object#set:color
        i32.const 0
        global.set $~lib/rt/itcms/visitCount
@@ -1448,16 +1484,16 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $var$2
-      local.get $var$2
+      local.set $var$4
+      local.get $var$4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
-       local.get $var$1
+       local.get $black
        i32.ne
        if
         local.get $obj
-        local.get $var$1
+        local.get $black
         call $~lib/rt/itcms/Object#set:color
         local.get $obj
         i32.const 20
@@ -1472,14 +1508,14 @@
       end
      end
      global.get $~lib/rt/itcms/fromSpace
-     local.set $var$2
+     local.set $from
      global.get $~lib/rt/itcms/toSpace
      global.set $~lib/rt/itcms/fromSpace
-     local.get $var$2
+     local.get $from
      global.set $~lib/rt/itcms/toSpace
-     local.get $var$1
+     local.get $black
      global.set $~lib/rt/itcms/white
-     local.get $var$2
+     local.get $from
      call $~lib/rt/itcms/Object#get:next
      global.set $~lib/rt/itcms/iter
      i32.const 2
@@ -1628,12 +1664,20 @@
  (func $~lib/rt/tlsf/searchBlock (param $root i32) (param $size i32) (result i32)
   (local $fl i32)
   (local $sl i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $requestSize i32)
+  (local $fl_0 i32)
+  (local $root_0 i32)
   (local $slMap i32)
   (local $head i32)
-  (local $var$8 i32)
-  (local $var$9 i32)
+  (local $flMap i32)
+  (local $fl_1 i32)
+  (local $root_1 i32)
+  (local $sl_0 i32)
+  (local $fl_2 i32)
+  (local $root_2 i32)
+  (local $sl_1 i32)
+  (local $fl_3 i32)
+  (local $root_3 i32)
   local.get $size
   i32.const 256
   i32.lt_u
@@ -1662,13 +1706,13 @@
    else
     local.get $size
    end
-   local.set $var$4
+   local.set $requestSize
    i32.const 31
-   local.get $var$4
+   local.get $requestSize
    i32.clz
    i32.sub
    local.set $fl
-   local.get $var$4
+   local.get $requestSize
    local.get $fl
    i32.const 4
    i32.sub
@@ -1707,11 +1751,11 @@
    unreachable
   end
   local.get $root
-  local.set $var$5
+  local.set $root_0
   local.get $fl
-  local.set $var$4
-  local.get $var$5
-  local.get $var$4
+  local.set $fl_0
+  local.get $root_0
+  local.get $fl_0
   i32.const 2
   i32.shl
   i32.add
@@ -1738,22 +1782,22 @@
    i32.add
    i32.shl
    i32.and
-   local.set $var$5
-   local.get $var$5
+   local.set $flMap
+   local.get $flMap
    i32.eqz
    if
     i32.const 0
     local.set $head
    else
-    local.get $var$5
+    local.get $flMap
     i32.ctz
     local.set $fl
     local.get $root
-    local.set $var$8
+    local.set $root_1
     local.get $fl
-    local.set $var$4
-    local.get $var$8
-    local.get $var$4
+    local.set $fl_1
+    local.get $root_1
+    local.get $fl_1
     i32.const 2
     i32.shl
     i32.add
@@ -1772,17 +1816,17 @@
      unreachable
     end
     local.get $root
-    local.set $var$9
+    local.set $root_2
     local.get $fl
-    local.set $var$8
+    local.set $fl_2
     local.get $slMap
     i32.ctz
-    local.set $var$4
-    local.get $var$9
-    local.get $var$8
+    local.set $sl_0
+    local.get $root_2
+    local.get $fl_2
     i32.const 4
     i32.shl
-    local.get $var$4
+    local.get $sl_0
     i32.add
     i32.const 2
     i32.shl
@@ -1792,17 +1836,17 @@
    end
   else
    local.get $root
-   local.set $var$9
+   local.set $root_3
    local.get $fl
-   local.set $var$8
+   local.set $fl_3
    local.get $slMap
    i32.ctz
-   local.set $var$4
-   local.get $var$9
-   local.get $var$8
+   local.set $sl_1
+   local.get $root_3
+   local.get $fl_3
    i32.const 4
    i32.shl
-   local.get $var$4
+   local.get $sl_1
    i32.add
    i32.const 2
    i32.shl
@@ -1814,9 +1858,10 @@
  )
  (func $~lib/rt/tlsf/growMemory (param $root i32) (param $size i32)
   (local $pagesBefore i32)
-  (local $var$3 i32)
+  (local $root_0 i32)
   (local $pagesNeeded i32)
   (local $var$5 i32)
+  (local $var$6 i32)
   (local $pagesWanted i32)
   (local $pagesAfter i32)
   i32.const 0
@@ -1847,8 +1892,8 @@
   i32.const 4
   i32.sub
   local.get $root
-  local.set $var$3
-  local.get $var$3
+  local.set $root_0
+  local.get $root_0
   i32.load $0 offset=1568
   i32.ne
   i32.shl
@@ -1865,11 +1910,11 @@
   i32.shr_u
   local.set $pagesNeeded
   local.get $pagesBefore
-  local.tee $var$3
-  local.get $pagesNeeded
   local.tee $var$5
-  local.get $var$3
+  local.get $pagesNeeded
+  local.tee $var$6
   local.get $var$5
+  local.get $var$6
   i32.gt_s
   select
   local.set $pagesWanted
@@ -1901,7 +1946,9 @@
  (func $~lib/rt/tlsf/prepareBlock (param $root i32) (param $block i32) (param $size i32)
   (local $blockInfo i32)
   (local $remaining i32)
-  (local $var$5 i32)
+  (local $spare i32)
+  (local $block_0 i32)
+  (local $block_1 i32)
   local.get $block
   i32.load $0
   local.set $blockInfo
@@ -1948,8 +1995,8 @@
    i32.add
    local.get $size
    i32.add
-   local.set $var$5
-   local.get $var$5
+   local.set $spare
+   local.get $spare
    local.get $remaining
    i32.const 4
    i32.sub
@@ -1957,7 +2004,7 @@
    i32.or
    call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $root
-   local.get $var$5
+   local.get $spare
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $block
@@ -1968,11 +2015,11 @@
    i32.and
    call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $block
-   local.set $var$5
-   local.get $var$5
+   local.set $block_1
+   local.get $block_1
    i32.const 4
    i32.add
-   local.get $var$5
+   local.get $block_1
    i32.load $0
    i32.const 3
    i32.const -1
@@ -1980,11 +2027,11 @@
    i32.and
    i32.add
    local.get $block
-   local.set $var$5
-   local.get $var$5
+   local.set $block_0
+   local.get $block_0
    i32.const 4
    i32.add
-   local.get $var$5
+   local.get $block_0
    i32.load $0
    i32.const 3
    i32.const -1
@@ -2138,8 +2185,8 @@
  )
  (func $~lib/rt/itcms/__link (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
   (local $child i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $parent i32)
+  (local $parentColor i32)
   local.get $childPtr
   i32.eqz
   if
@@ -2169,25 +2216,25 @@
    local.get $parentPtr
    i32.const 20
    i32.sub
-   local.set $var$4
-   local.get $var$4
+   local.set $parent
+   local.get $parent
    call $~lib/rt/itcms/Object#get:color
-   local.set $var$5
-   local.get $var$5
+   local.set $parentColor
+   local.get $parentColor
    global.get $~lib/rt/itcms/white
    i32.eqz
    i32.eq
    if
     local.get $expectMultiple
     if
-     local.get $var$4
+     local.get $parent
      call $~lib/rt/itcms/Object#makeGray
     else
      local.get $child
      call $~lib/rt/itcms/Object#makeGray
     end
    else
-    local.get $var$5
+    local.get $parentColor
     i32.const 3
     i32.eq
     if (result i32)
@@ -2243,9 +2290,9 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<i8> (param $key i32) (result i32)
-  (local $var$1 i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $len i32)
+  (local $key_0 i32)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -2258,54 +2305,54 @@
   drop
   local.get $key
   i32.extend8_s
-  local.set $var$2
+  local.set $key_0
   i32.const 1
-  local.set $var$1
+  local.set $len
   i32.const 0
   i32.const 374761393
   i32.add
-  local.get $var$1
+  local.get $len
   i32.add
-  local.set $var$3
-  local.get $var$3
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<i8>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
@@ -2388,10 +2435,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 i32)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -2454,29 +2501,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      i32.load8_s $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<i8>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<i8>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<i8>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -2516,6 +2563,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<i8>
   local.set $hashCode
@@ -2590,12 +2638,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<i8>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -2688,10 +2736,15 @@
  )
  (func $~lib/array/ensureCapacity (param $array i32) (param $newSize i32) (param $alignLog2 i32) (param $canGrow i32)
   (local $oldCapacity i32)
-  (local $var$5 i32)
+  (local $oldData i32)
   (local $var$6 i32)
   (local $var$7 i32)
-  (local $var$8 i32)
+  (local $newCapacity i32)
+  (local $var$9 i32)
+  (local $var$10 i32)
+  (local $var$11 i32)
+  (local $var$12 i32)
+  (local $newData i32)
   local.get $array
   i32.load $0 offset=8
   local.set $oldCapacity
@@ -2716,7 +2769,7 @@
    end
    local.get $array
    i32.load $0
-   local.set $var$5
+   local.set $oldData
    local.get $newSize
    local.tee $var$6
    i32.const 8
@@ -2727,53 +2780,53 @@
    select
    local.get $alignLog2
    i32.shl
-   local.set $var$6
+   local.set $newCapacity
    local.get $canGrow
    if
     local.get $oldCapacity
     i32.const 1
     i32.shl
-    local.tee $var$7
+    local.tee $var$9
     i32.const 1073741820
-    local.tee $var$8
-    local.get $var$7
-    local.get $var$8
+    local.tee $var$10
+    local.get $var$9
+    local.get $var$10
     i32.lt_u
     select
-    local.tee $var$8
-    local.get $var$6
-    local.tee $var$7
-    local.get $var$8
-    local.get $var$7
+    local.tee $var$11
+    local.get $newCapacity
+    local.tee $var$12
+    local.get $var$11
+    local.get $var$12
     i32.gt_u
     select
-    local.set $var$6
+    local.set $newCapacity
    end
-   local.get $var$5
-   local.get $var$6
+   local.get $oldData
+   local.get $newCapacity
    call $~lib/rt/itcms/__renew
-   local.set $var$8
+   local.set $newData
    i32.const 2
    global.get $~lib/shared/runtime/Runtime.Incremental
    i32.ne
    drop
-   local.get $var$8
-   local.get $var$5
+   local.get $newData
+   local.get $oldData
    i32.ne
    if
     local.get $array
-    local.get $var$8
+    local.get $newData
     i32.store $0
     local.get $array
-    local.get $var$8
+    local.get $newData
     i32.store $0 offset=4
     local.get $array
-    local.get $var$8
+    local.get $newData
     i32.const 0
     call $~lib/rt/itcms/__link
    end
    local.get $array
-   local.get $var$6
+   local.get $newCapacity
    i32.store $0 offset=8
   end
  )
@@ -2916,14 +2969,18 @@
  )
  (func $std/set/testNumeric<i8>
   (local $set i32)
-  (local $vals i32)
+  (local $k i32)
   (local $var$2 i32)
-  (local $var$3 i32)
+  (local $k_0 i32)
+  (local $var$4 i32)
+  (local $vals i32)
   (local $valSet i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
-  (local $var$7 i32)
+  (local $index i32)
   (local $var$8 i32)
+  (local $k_1 i32)
+  (local $var$10 i32)
+  (local $k_2 i32)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -2941,17 +2998,16 @@
   local.tee $set
   i32.store $0
   i32.const 0
-  local.set $vals
-  loop $for-loop|1
-   local.get $vals
-   i32.extend8_s
+  local.set $k
+  loop $for-loop|0
+   local.get $k
    i32.const 100
    i32.lt_s
-   local.set $var$3
-   local.get $var$3
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -2964,11 +3020,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i8>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -2979,11 +3035,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k
     i32.const 1
     i32.add
-    local.set $vals
-    br $for-loop|1
+    local.set $k
+    br $for-loop|0
    end
   end
   local.get $set
@@ -3000,17 +3056,16 @@
    unreachable
   end
   i32.const 50
-  local.set $vals
-  loop $for-loop|3
-   local.get $vals
-   i32.extend8_s
+  local.set $k_0
+  loop $for-loop|1
+   local.get $k_0
    i32.const 100
    i32.lt_s
-   local.set $valSet
-   local.get $valSet
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -3022,11 +3077,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i8>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -3037,11 +3092,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k_0
     i32.const 1
     i32.add
-    local.set $vals
-    br $for-loop|3
+    local.set $k_0
+    br $for-loop|1
    end
   end
   local.get $set
@@ -3068,18 +3123,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$5
-  loop $for-loop|4
-   local.get $var$5
+  local.set $index
+  loop $for-loop|2
+   local.get $index
    local.get $vals
    call $~lib/array/Array<i8>#get:length
    i32.lt_s
-   local.set $var$6
-   local.get $var$6
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$5
+    local.get $index
     call $~lib/array/Array<i8>#__get
     call $~lib/set/Set<i8>#has
     i32.eqz
@@ -3093,15 +3148,15 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$5
+    local.get $index
     call $~lib/array/Array<i8>#__get
     call $~lib/set/Set<i8>#add
     drop
-    local.get $var$5
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|4
+    local.set $index
+    br $for-loop|2
    end
   end
   local.get $valSet
@@ -3119,17 +3174,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$5
-  loop $for-loop|6
-   local.get $var$5
-   i32.extend8_s
+  local.set $k_1
+  loop $for-loop|3
+   local.get $k_1
    i32.const 50
    i32.lt_s
-   local.set $var$7
-   local.get $var$7
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -3141,11 +3195,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<i8>#delete
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -3157,11 +3211,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$5
+    local.get $k_1
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|6
+    local.set $k_1
+    br $for-loop|3
    end
   end
   local.get $set
@@ -3178,17 +3232,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$5
-  loop $for-loop|8
-   local.get $var$5
-   i32.extend8_s
+  local.set $k_2
+  loop $for-loop|4
+   local.get $k_2
    i32.const 50
    i32.lt_s
-   local.set $var$8
-   local.get $var$8
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -3201,11 +3254,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i8>#add
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -3217,11 +3270,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i8>#delete
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -3233,11 +3286,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$5
+    local.get $k_2
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|8
+    local.set $k_2
+    br $for-loop|4
    end
   end
   local.get $set
@@ -3312,9 +3365,9 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<u8> (param $key i32) (result i32)
-  (local $var$1 i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $len i32)
+  (local $key_0 i32)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -3328,54 +3381,54 @@
   local.get $key
   i32.const 255
   i32.and
-  local.set $var$2
+  local.set $key_0
   i32.const 1
-  local.set $var$1
+  local.set $len
   i32.const 0
   i32.const 374761393
   i32.add
-  local.get $var$1
+  local.get $len
   i32.add
-  local.set $var$3
-  local.get $var$3
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<u8>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
@@ -3459,10 +3512,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 i32)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -3525,29 +3578,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      i32.load8_u $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<u8>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<u8>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<u8>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -3587,6 +3640,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<u8>
   local.set $hashCode
@@ -3661,12 +3715,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<u8>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -3851,14 +3905,18 @@
  )
  (func $std/set/testNumeric<u8>
   (local $set i32)
-  (local $vals i32)
+  (local $k i32)
   (local $var$2 i32)
-  (local $var$3 i32)
+  (local $k_0 i32)
+  (local $var$4 i32)
+  (local $vals i32)
   (local $valSet i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
-  (local $var$7 i32)
+  (local $index i32)
   (local $var$8 i32)
+  (local $k_1 i32)
+  (local $var$10 i32)
+  (local $k_2 i32)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -3876,18 +3934,16 @@
   local.tee $set
   i32.store $0
   i32.const 0
-  local.set $vals
-  loop $for-loop|1
-   local.get $vals
-   i32.const 255
-   i32.and
+  local.set $k
+  loop $for-loop|0
+   local.get $k
    i32.const 100
    i32.lt_u
-   local.set $var$3
-   local.get $var$3
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -3900,11 +3956,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u8>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -3915,11 +3971,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k
     i32.const 1
     i32.add
-    local.set $vals
-    br $for-loop|1
+    local.set $k
+    br $for-loop|0
    end
   end
   local.get $set
@@ -3936,18 +3992,16 @@
    unreachable
   end
   i32.const 50
-  local.set $vals
-  loop $for-loop|3
-   local.get $vals
-   i32.const 255
-   i32.and
+  local.set $k_0
+  loop $for-loop|1
+   local.get $k_0
    i32.const 100
    i32.lt_u
-   local.set $valSet
-   local.get $valSet
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -3959,11 +4013,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u8>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -3974,11 +4028,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k_0
     i32.const 1
     i32.add
-    local.set $vals
-    br $for-loop|3
+    local.set $k_0
+    br $for-loop|1
    end
   end
   local.get $set
@@ -4005,18 +4059,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$5
-  loop $for-loop|4
-   local.get $var$5
+  local.set $index
+  loop $for-loop|2
+   local.get $index
    local.get $vals
    call $~lib/array/Array<u8>#get:length
    i32.lt_s
-   local.set $var$6
-   local.get $var$6
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$5
+    local.get $index
     call $~lib/array/Array<u8>#__get
     call $~lib/set/Set<u8>#has
     i32.eqz
@@ -4030,15 +4084,15 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$5
+    local.get $index
     call $~lib/array/Array<u8>#__get
     call $~lib/set/Set<u8>#add
     drop
-    local.get $var$5
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|4
+    local.set $index
+    br $for-loop|2
    end
   end
   local.get $valSet
@@ -4056,18 +4110,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$5
-  loop $for-loop|6
-   local.get $var$5
-   i32.const 255
-   i32.and
+  local.set $k_1
+  loop $for-loop|3
+   local.get $k_1
    i32.const 50
    i32.lt_u
-   local.set $var$7
-   local.get $var$7
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -4079,11 +4131,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<u8>#delete
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -4095,11 +4147,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$5
+    local.get $k_1
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|6
+    local.set $k_1
+    br $for-loop|3
    end
   end
   local.get $set
@@ -4116,18 +4168,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$5
-  loop $for-loop|8
-   local.get $var$5
-   i32.const 255
-   i32.and
+  local.set $k_2
+  loop $for-loop|4
+   local.get $k_2
    i32.const 50
    i32.lt_u
-   local.set $var$8
-   local.get $var$8
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -4140,11 +4190,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u8>#add
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -4156,11 +4206,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u8>#delete
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -4172,11 +4222,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$5
+    local.get $k_2
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|8
+    local.set $k_2
+    br $for-loop|4
    end
   end
   local.get $set
@@ -4251,9 +4301,9 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<i16> (param $key i32) (result i32)
-  (local $var$1 i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $len i32)
+  (local $key_0 i32)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -4266,54 +4316,54 @@
   drop
   local.get $key
   i32.extend16_s
-  local.set $var$2
+  local.set $key_0
   i32.const 2
-  local.set $var$1
+  local.set $len
   i32.const 0
   i32.const 374761393
   i32.add
-  local.get $var$1
+  local.get $len
   i32.add
-  local.set $var$3
-  local.get $var$3
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<i16>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
@@ -4396,10 +4446,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 i32)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -4462,29 +4512,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      i32.load16_s $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<i16>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<i16>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<i16>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -4524,6 +4574,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<i16>
   local.set $hashCode
@@ -4598,12 +4649,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<i16>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -4788,14 +4839,18 @@
  )
  (func $std/set/testNumeric<i16>
   (local $set i32)
-  (local $vals i32)
+  (local $k i32)
   (local $var$2 i32)
-  (local $var$3 i32)
+  (local $k_0 i32)
+  (local $var$4 i32)
+  (local $vals i32)
   (local $valSet i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
-  (local $var$7 i32)
+  (local $index i32)
   (local $var$8 i32)
+  (local $k_1 i32)
+  (local $var$10 i32)
+  (local $k_2 i32)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -4813,17 +4868,16 @@
   local.tee $set
   i32.store $0
   i32.const 0
-  local.set $vals
-  loop $for-loop|1
-   local.get $vals
-   i32.extend16_s
+  local.set $k
+  loop $for-loop|0
+   local.get $k
    i32.const 100
    i32.lt_s
-   local.set $var$3
-   local.get $var$3
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -4836,11 +4890,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i16>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -4851,11 +4905,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k
     i32.const 1
     i32.add
-    local.set $vals
-    br $for-loop|1
+    local.set $k
+    br $for-loop|0
    end
   end
   local.get $set
@@ -4872,17 +4926,16 @@
    unreachable
   end
   i32.const 50
-  local.set $vals
-  loop $for-loop|3
-   local.get $vals
-   i32.extend16_s
+  local.set $k_0
+  loop $for-loop|1
+   local.get $k_0
    i32.const 100
    i32.lt_s
-   local.set $valSet
-   local.get $valSet
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -4894,11 +4947,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i16>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -4909,11 +4962,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k_0
     i32.const 1
     i32.add
-    local.set $vals
-    br $for-loop|3
+    local.set $k_0
+    br $for-loop|1
    end
   end
   local.get $set
@@ -4940,18 +4993,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$5
-  loop $for-loop|4
-   local.get $var$5
+  local.set $index
+  loop $for-loop|2
+   local.get $index
    local.get $vals
    call $~lib/array/Array<i16>#get:length
    i32.lt_s
-   local.set $var$6
-   local.get $var$6
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$5
+    local.get $index
     call $~lib/array/Array<i16>#__get
     call $~lib/set/Set<i16>#has
     i32.eqz
@@ -4965,15 +5018,15 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$5
+    local.get $index
     call $~lib/array/Array<i16>#__get
     call $~lib/set/Set<i16>#add
     drop
-    local.get $var$5
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|4
+    local.set $index
+    br $for-loop|2
    end
   end
   local.get $valSet
@@ -4991,17 +5044,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$5
-  loop $for-loop|6
-   local.get $var$5
-   i32.extend16_s
+  local.set $k_1
+  loop $for-loop|3
+   local.get $k_1
    i32.const 50
    i32.lt_s
-   local.set $var$7
-   local.get $var$7
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -5013,11 +5065,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<i16>#delete
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -5029,11 +5081,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$5
+    local.get $k_1
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|6
+    local.set $k_1
+    br $for-loop|3
    end
   end
   local.get $set
@@ -5050,17 +5102,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$5
-  loop $for-loop|8
-   local.get $var$5
-   i32.extend16_s
+  local.set $k_2
+  loop $for-loop|4
+   local.get $k_2
    i32.const 50
    i32.lt_s
-   local.set $var$8
-   local.get $var$8
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -5073,11 +5124,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i16>#add
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -5089,11 +5140,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i16>#delete
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -5105,11 +5156,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$5
+    local.get $k_2
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|8
+    local.set $k_2
+    br $for-loop|4
    end
   end
   local.get $set
@@ -5184,9 +5235,9 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<u16> (param $key i32) (result i32)
-  (local $var$1 i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $len i32)
+  (local $key_0 i32)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -5200,54 +5251,54 @@
   local.get $key
   i32.const 65535
   i32.and
-  local.set $var$2
+  local.set $key_0
   i32.const 2
-  local.set $var$1
+  local.set $len
   i32.const 0
   i32.const 374761393
   i32.add
-  local.get $var$1
+  local.get $len
   i32.add
-  local.set $var$3
-  local.get $var$3
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<u16>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
@@ -5331,10 +5382,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 i32)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -5397,29 +5448,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      i32.load16_u $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<u16>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<u16>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<u16>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -5459,6 +5510,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<u16>
   local.set $hashCode
@@ -5533,12 +5585,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<u16>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -5723,14 +5775,18 @@
  )
  (func $std/set/testNumeric<u16>
   (local $set i32)
-  (local $vals i32)
+  (local $k i32)
   (local $var$2 i32)
-  (local $var$3 i32)
+  (local $k_0 i32)
+  (local $var$4 i32)
+  (local $vals i32)
   (local $valSet i32)
-  (local $var$5 i32)
-  (local $var$6 i32)
-  (local $var$7 i32)
+  (local $index i32)
   (local $var$8 i32)
+  (local $k_1 i32)
+  (local $var$10 i32)
+  (local $k_2 i32)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -5748,18 +5804,16 @@
   local.tee $set
   i32.store $0
   i32.const 0
-  local.set $vals
-  loop $for-loop|1
-   local.get $vals
-   i32.const 65535
-   i32.and
+  local.set $k
+  loop $for-loop|0
+   local.get $k
    i32.const 100
    i32.lt_u
-   local.set $var$3
-   local.get $var$3
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -5772,11 +5826,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u16>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -5787,11 +5841,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k
     i32.const 1
     i32.add
-    local.set $vals
-    br $for-loop|1
+    local.set $k
+    br $for-loop|0
    end
   end
   local.get $set
@@ -5808,18 +5862,16 @@
    unreachable
   end
   i32.const 50
-  local.set $vals
-  loop $for-loop|3
-   local.get $vals
-   i32.const 65535
-   i32.and
+  local.set $k_0
+  loop $for-loop|1
+   local.get $k_0
    i32.const 100
    i32.lt_u
-   local.set $valSet
-   local.get $valSet
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -5831,11 +5883,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u16>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -5846,11 +5898,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k_0
     i32.const 1
     i32.add
-    local.set $vals
-    br $for-loop|3
+    local.set $k_0
+    br $for-loop|1
    end
   end
   local.get $set
@@ -5877,18 +5929,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$5
-  loop $for-loop|4
-   local.get $var$5
+  local.set $index
+  loop $for-loop|2
+   local.get $index
    local.get $vals
    call $~lib/array/Array<u16>#get:length
    i32.lt_s
-   local.set $var$6
-   local.get $var$6
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$5
+    local.get $index
     call $~lib/array/Array<u16>#__get
     call $~lib/set/Set<u16>#has
     i32.eqz
@@ -5902,15 +5954,15 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$5
+    local.get $index
     call $~lib/array/Array<u16>#__get
     call $~lib/set/Set<u16>#add
     drop
-    local.get $var$5
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|4
+    local.set $index
+    br $for-loop|2
    end
   end
   local.get $valSet
@@ -5928,18 +5980,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$5
-  loop $for-loop|6
-   local.get $var$5
-   i32.const 65535
-   i32.and
+  local.set $k_1
+  loop $for-loop|3
+   local.get $k_1
    i32.const 50
    i32.lt_u
-   local.set $var$7
-   local.get $var$7
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -5951,11 +6001,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<u16>#delete
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_1
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -5967,11 +6017,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$5
+    local.get $k_1
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|6
+    local.set $k_1
+    br $for-loop|3
    end
   end
   local.get $set
@@ -5988,18 +6038,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$5
-  loop $for-loop|8
-   local.get $var$5
-   i32.const 65535
-   i32.and
+  local.set $k_2
+  loop $for-loop|4
+   local.get $k_2
    i32.const 50
    i32.lt_u
-   local.set $var$8
-   local.get $var$8
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -6012,11 +6060,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u16>#add
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -6028,11 +6076,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u16>#delete
     drop
     local.get $set
-    local.get $var$5
+    local.get $k_2
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -6044,11 +6092,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$5
+    local.get $k_2
     i32.const 1
     i32.add
-    local.set $var$5
-    br $for-loop|8
+    local.set $k_2
+    br $for-loop|4
    end
   end
   local.get $set
@@ -6123,9 +6171,9 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<i32> (param $key i32) (result i32)
-  (local $var$1 i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $len i32)
+  (local $key_0 i32)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -6137,54 +6185,54 @@
   i32.le_u
   drop
   local.get $key
-  local.set $var$2
+  local.set $key_0
   i32.const 4
-  local.set $var$1
+  local.set $len
   i32.const 0
   i32.const 374761393
   i32.add
-  local.get $var$1
+  local.get $len
   i32.add
-  local.set $var$3
-  local.get $var$3
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<i32>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
@@ -6266,10 +6314,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 i32)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -6332,29 +6380,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      i32.load $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<i32>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<i32>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<i32>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -6394,6 +6442,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<i32>
   local.set $hashCode
@@ -6468,12 +6517,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<i32>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -6658,10 +6707,18 @@
  )
  (func $std/set/testNumeric<i32>
   (local $set i32)
+  (local $k i32)
+  (local $var$2 i32)
+  (local $k_0 i32)
+  (local $var$4 i32)
   (local $vals i32)
   (local $valSet i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
+  (local $index i32)
+  (local $var$8 i32)
+  (local $k_1 i32)
+  (local $var$10 i32)
+  (local $k_2 i32)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -6679,16 +6736,16 @@
   local.tee $set
   i32.store $0
   i32.const 0
-  local.set $vals
+  local.set $k
   loop $for-loop|0
-   local.get $vals
+   local.get $k
    i32.const 100
    i32.lt_s
-   local.set $valSet
-   local.get $valSet
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -6701,11 +6758,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i32>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -6716,10 +6773,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k
     i32.const 1
     i32.add
-    local.set $vals
+    local.set $k
     br $for-loop|0
    end
   end
@@ -6737,16 +6794,16 @@
    unreachable
   end
   i32.const 50
-  local.set $vals
+  local.set $k_0
   loop $for-loop|1
-   local.get $vals
+   local.get $k_0
    i32.const 100
    i32.lt_s
-   local.set $valSet
-   local.get $valSet
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -6758,11 +6815,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i32>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -6773,10 +6830,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k_0
     i32.const 1
     i32.add
-    local.set $vals
+    local.set $k_0
     br $for-loop|1
    end
   end
@@ -6804,18 +6861,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$3
+  local.set $index
   loop $for-loop|2
-   local.get $var$3
+   local.get $index
    local.get $vals
    call $~lib/array/Array<i32>#get:length
    i32.lt_s
-   local.set $var$4
-   local.get $var$4
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$3
+    local.get $index
     call $~lib/array/Array<i32>#__get
     call $~lib/set/Set<i32>#has
     i32.eqz
@@ -6829,14 +6886,14 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$3
+    local.get $index
     call $~lib/array/Array<i32>#__get
     call $~lib/set/Set<i32>#add
     drop
-    local.get $var$3
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$3
+    local.set $index
     br $for-loop|2
    end
   end
@@ -6855,16 +6912,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$3
+  local.set $k_1
   loop $for-loop|3
-   local.get $var$3
+   local.get $k_1
    i32.const 50
    i32.lt_s
-   local.set $var$4
-   local.get $var$4
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$3
+    local.get $k_1
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -6876,11 +6933,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$3
+    local.get $k_1
     call $~lib/set/Set<i32>#delete
     drop
     local.get $set
-    local.get $var$3
+    local.get $k_1
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -6892,10 +6949,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$3
+    local.get $k_1
     i32.const 1
     i32.add
-    local.set $var$3
+    local.set $k_1
     br $for-loop|3
    end
   end
@@ -6913,16 +6970,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$3
+  local.set $k_2
   loop $for-loop|4
-   local.get $var$3
+   local.get $k_2
    i32.const 50
    i32.lt_s
-   local.set $var$4
-   local.get $var$4
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -6935,11 +6992,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<i32>#add
     drop
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -6951,11 +7008,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<i32>#delete
     drop
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -6967,10 +7024,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$3
+    local.get $k_2
     i32.const 1
     i32.add
-    local.set $var$3
+    local.set $k_2
     br $for-loop|4
    end
   end
@@ -7046,9 +7103,9 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<u32> (param $key i32) (result i32)
-  (local $var$1 i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $len i32)
+  (local $key_0 i32)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -7060,54 +7117,54 @@
   i32.le_u
   drop
   local.get $key
-  local.set $var$2
+  local.set $key_0
   i32.const 4
-  local.set $var$1
+  local.set $len
   i32.const 0
   i32.const 374761393
   i32.add
-  local.get $var$1
+  local.get $len
   i32.add
-  local.set $var$3
-  local.get $var$3
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<u32>#find (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
@@ -7189,10 +7246,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 i32)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -7255,29 +7312,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      i32.load $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<u32>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<u32>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<u32>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -7317,6 +7374,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<u32>
   local.set $hashCode
@@ -7391,12 +7449,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<u32>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -7581,10 +7639,18 @@
  )
  (func $std/set/testNumeric<u32>
   (local $set i32)
+  (local $k i32)
+  (local $var$2 i32)
+  (local $k_0 i32)
+  (local $var$4 i32)
   (local $vals i32)
   (local $valSet i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
+  (local $index i32)
+  (local $var$8 i32)
+  (local $k_1 i32)
+  (local $var$10 i32)
+  (local $k_2 i32)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -7602,16 +7668,16 @@
   local.tee $set
   i32.store $0
   i32.const 0
-  local.set $vals
+  local.set $k
   loop $for-loop|0
-   local.get $vals
+   local.get $k
    i32.const 100
    i32.lt_u
-   local.set $valSet
-   local.get $valSet
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -7624,11 +7690,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u32>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -7639,10 +7705,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k
     i32.const 1
     i32.add
-    local.set $vals
+    local.set $k
     br $for-loop|0
    end
   end
@@ -7660,16 +7726,16 @@
    unreachable
   end
   i32.const 50
-  local.set $vals
+  local.set $k_0
   loop $for-loop|1
-   local.get $vals
+   local.get $k_0
    i32.const 100
    i32.lt_u
-   local.set $valSet
-   local.get $valSet
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -7681,11 +7747,11 @@
      unreachable
     end
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u32>#add
     drop
     local.get $set
-    local.get $vals
+    local.get $k_0
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -7696,10 +7762,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $vals
+    local.get $k_0
     i32.const 1
     i32.add
-    local.set $vals
+    local.set $k_0
     br $for-loop|1
    end
   end
@@ -7727,18 +7793,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$3
+  local.set $index
   loop $for-loop|2
-   local.get $var$3
+   local.get $index
    local.get $vals
    call $~lib/array/Array<u32>#get:length
    i32.lt_s
-   local.set $var$4
-   local.get $var$4
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$3
+    local.get $index
     call $~lib/array/Array<u32>#__get
     call $~lib/set/Set<u32>#has
     i32.eqz
@@ -7752,14 +7818,14 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$3
+    local.get $index
     call $~lib/array/Array<u32>#__get
     call $~lib/set/Set<u32>#add
     drop
-    local.get $var$3
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$3
+    local.set $index
     br $for-loop|2
    end
   end
@@ -7778,16 +7844,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$3
+  local.set $k_1
   loop $for-loop|3
-   local.get $var$3
+   local.get $k_1
    i32.const 50
    i32.lt_u
-   local.set $var$4
-   local.get $var$4
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$3
+    local.get $k_1
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -7799,11 +7865,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$3
+    local.get $k_1
     call $~lib/set/Set<u32>#delete
     drop
     local.get $set
-    local.get $var$3
+    local.get $k_1
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -7815,10 +7881,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$3
+    local.get $k_1
     i32.const 1
     i32.add
-    local.set $var$3
+    local.set $k_1
     br $for-loop|3
    end
   end
@@ -7836,16 +7902,16 @@
    unreachable
   end
   i32.const 0
-  local.set $var$3
+  local.set $k_2
   loop $for-loop|4
-   local.get $var$3
+   local.get $k_2
    i32.const 50
    i32.lt_u
-   local.set $var$4
-   local.get $var$4
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -7858,11 +7924,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<u32>#add
     drop
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -7874,11 +7940,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<u32>#delete
     drop
     local.get $set
-    local.get $var$3
+    local.get $k_2
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -7890,10 +7956,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$3
+    local.get $k_2
     i32.const 1
     i32.add
-    local.set $var$3
+    local.set $k_2
     br $for-loop|4
    end
   end
@@ -7969,8 +8035,8 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<i64> (param $key i64) (result i32)
-  (local $var$1 i64)
-  (local $var$2 i32)
+  (local $key_0 i64)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -7986,68 +8052,68 @@
   i32.eq
   drop
   local.get $key
-  local.set $var$1
+  local.set $key_0
   i32.const 0
   i32.const 374761393
   i32.add
   i32.const 8
   i32.add
-  local.set $var$2
-  local.get $var$2
-  local.get $var$1
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$1
+  local.set $h
+  local.get $h
+  local.get $key_0
   i64.const 32
   i64.shr_u
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<i64>#find (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
@@ -8129,10 +8195,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 i64)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i64)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -8195,29 +8261,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      i64.load $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<i64>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<i64>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<i64>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -8257,6 +8323,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<i64>
   local.set $hashCode
@@ -8331,12 +8398,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<i64>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -8521,11 +8588,18 @@
  )
  (func $std/set/testNumeric<i64>
   (local $set i32)
-  (local $var$1 i64)
+  (local $k i64)
+  (local $var$2 i32)
+  (local $k_0 i64)
+  (local $var$4 i32)
   (local $vals i32)
   (local $valSet i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $index i32)
+  (local $var$8 i32)
+  (local $k_1 i64)
+  (local $var$10 i32)
+  (local $k_2 i64)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -8543,16 +8617,16 @@
   local.tee $set
   i32.store $0
   i64.const 0
-  local.set $var$1
+  local.set $k
   loop $for-loop|0
-   local.get $var$1
+   local.get $k
    i64.const 100
    i64.lt_s
-   local.set $vals
-   local.get $vals
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -8565,11 +8639,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<i64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8580,10 +8654,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k
     i64.const 1
     i64.add
-    local.set $var$1
+    local.set $k
     br $for-loop|0
    end
   end
@@ -8601,16 +8675,16 @@
    unreachable
   end
   i64.const 50
-  local.set $var$1
+  local.set $k_0
   loop $for-loop|1
-   local.get $var$1
+   local.get $k_0
    i64.const 100
    i64.lt_s
-   local.set $vals
-   local.get $vals
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8622,11 +8696,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<i64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8637,10 +8711,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_0
     i64.const 1
     i64.add
-    local.set $var$1
+    local.set $k_0
     br $for-loop|1
    end
   end
@@ -8668,18 +8742,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$4
+  local.set $index
   loop $for-loop|2
-   local.get $var$4
+   local.get $index
    local.get $vals
    call $~lib/array/Array<i64>#get:length
    i32.lt_s
-   local.set $var$5
-   local.get $var$5
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$4
+    local.get $index
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#has
     i32.eqz
@@ -8693,14 +8767,14 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$4
+    local.get $index
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#add
     drop
-    local.get $var$4
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$4
+    local.set $index
     br $for-loop|2
    end
   end
@@ -8719,16 +8793,16 @@
    unreachable
   end
   i64.const 0
-  local.set $var$1
+  local.set $k_1
   loop $for-loop|3
-   local.get $var$1
+   local.get $k_1
    i64.const 50
    i64.lt_s
-   local.set $var$4
-   local.get $var$4
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8740,11 +8814,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<i64>#delete
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -8756,10 +8830,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_1
     i64.const 1
     i64.add
-    local.set $var$1
+    local.set $k_1
     br $for-loop|3
    end
   end
@@ -8777,16 +8851,16 @@
    unreachable
   end
   i64.const 0
-  local.set $var$1
+  local.set $k_2
   loop $for-loop|4
-   local.get $var$1
+   local.get $k_2
    i64.const 50
    i64.lt_s
-   local.set $var$4
-   local.get $var$4
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -8799,11 +8873,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<i64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8815,11 +8889,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<i64>#delete
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -8831,10 +8905,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_2
     i64.const 1
     i64.add
-    local.set $var$1
+    local.set $k_2
     br $for-loop|4
    end
   end
@@ -8910,8 +8984,8 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<u64> (param $key i64) (result i32)
-  (local $var$1 i64)
-  (local $var$2 i32)
+  (local $key_0 i64)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -8927,68 +9001,68 @@
   i32.eq
   drop
   local.get $key
-  local.set $var$1
+  local.set $key_0
   i32.const 0
   i32.const 374761393
   i32.add
   i32.const 8
   i32.add
-  local.set $var$2
-  local.get $var$2
-  local.get $var$1
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$1
+  local.set $h
+  local.get $h
+  local.get $key_0
   i64.const 32
   i64.shr_u
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<u64>#find (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
@@ -9070,10 +9144,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 i64)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i64)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -9136,29 +9210,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      i64.load $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<u64>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<u64>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<u64>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -9198,6 +9272,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<u64>
   local.set $hashCode
@@ -9272,12 +9347,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<u64>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -9462,11 +9537,18 @@
  )
  (func $std/set/testNumeric<u64>
   (local $set i32)
-  (local $var$1 i64)
+  (local $k i64)
+  (local $var$2 i32)
+  (local $k_0 i64)
+  (local $var$4 i32)
   (local $vals i32)
   (local $valSet i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $index i32)
+  (local $var$8 i32)
+  (local $k_1 i64)
+  (local $var$10 i32)
+  (local $k_2 i64)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -9484,16 +9566,16 @@
   local.tee $set
   i32.store $0
   i64.const 0
-  local.set $var$1
+  local.set $k
   loop $for-loop|0
-   local.get $var$1
+   local.get $k
    i64.const 100
    i64.lt_u
-   local.set $vals
-   local.get $vals
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -9506,11 +9588,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<u64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9521,10 +9603,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k
     i64.const 1
     i64.add
-    local.set $var$1
+    local.set $k
     br $for-loop|0
    end
   end
@@ -9542,16 +9624,16 @@
    unreachable
   end
   i64.const 50
-  local.set $var$1
+  local.set $k_0
   loop $for-loop|1
-   local.get $var$1
+   local.get $k_0
    i64.const 100
    i64.lt_u
-   local.set $vals
-   local.get $vals
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9563,11 +9645,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<u64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9578,10 +9660,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_0
     i64.const 1
     i64.add
-    local.set $var$1
+    local.set $k_0
     br $for-loop|1
    end
   end
@@ -9609,18 +9691,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$4
+  local.set $index
   loop $for-loop|2
-   local.get $var$4
+   local.get $index
    local.get $vals
    call $~lib/array/Array<u64>#get:length
    i32.lt_s
-   local.set $var$5
-   local.get $var$5
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$4
+    local.get $index
     call $~lib/array/Array<u64>#__get
     call $~lib/set/Set<u64>#has
     i32.eqz
@@ -9634,14 +9716,14 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$4
+    local.get $index
     call $~lib/array/Array<u64>#__get
     call $~lib/set/Set<u64>#add
     drop
-    local.get $var$4
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$4
+    local.set $index
     br $for-loop|2
    end
   end
@@ -9660,16 +9742,16 @@
    unreachable
   end
   i64.const 0
-  local.set $var$1
+  local.set $k_1
   loop $for-loop|3
-   local.get $var$1
+   local.get $k_1
    i64.const 50
    i64.lt_u
-   local.set $var$4
-   local.get $var$4
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9681,11 +9763,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<u64>#delete
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -9697,10 +9779,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_1
     i64.const 1
     i64.add
-    local.set $var$1
+    local.set $k_1
     br $for-loop|3
    end
   end
@@ -9718,16 +9800,16 @@
    unreachable
   end
   i64.const 0
-  local.set $var$1
+  local.set $k_2
   loop $for-loop|4
-   local.get $var$1
+   local.get $k_2
    i64.const 50
    i64.lt_u
-   local.set $var$4
-   local.get $var$4
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -9740,11 +9822,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<u64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9756,11 +9838,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<u64>#delete
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -9772,10 +9854,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_2
     i64.const 1
     i64.add
-    local.set $var$1
+    local.set $k_2
     br $for-loop|4
    end
   end
@@ -9851,9 +9933,9 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<f32> (param $key f32) (result i32)
-  (local $var$1 i32)
-  (local $var$2 i32)
-  (local $var$3 i32)
+  (local $key_0 i32)
+  (local $len i32)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -9866,54 +9948,54 @@
   drop
   local.get $key
   i32.reinterpret_f32
-  local.set $var$1
+  local.set $key_0
   i32.const 4
-  local.set $var$2
+  local.set $len
   i32.const 0
   i32.const 374761393
   i32.add
-  local.get $var$2
+  local.get $len
   i32.add
-  local.set $var$3
-  local.get $var$3
-  local.get $var$1
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$3
-  local.get $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$3
-  local.get $var$3
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<f32>#find (param $this i32) (param $key f32) (param $hashCode i32) (result i32)
@@ -9995,10 +10077,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 f32)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey f32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -10061,29 +10143,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      f32.load $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<f32>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<f32>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<f32>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -10123,6 +10205,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<f32>
   local.set $hashCode
@@ -10197,12 +10280,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<f32>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -10387,11 +10470,18 @@
  )
  (func $std/set/testNumeric<f32>
   (local $set i32)
-  (local $var$1 f32)
+  (local $k f32)
+  (local $var$2 i32)
+  (local $k_0 f32)
+  (local $var$4 i32)
   (local $vals i32)
   (local $valSet i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $index i32)
+  (local $var$8 i32)
+  (local $k_1 f32)
+  (local $var$10 i32)
+  (local $k_2 f32)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -10409,16 +10499,16 @@
   local.tee $set
   i32.store $0
   f32.const 0
-  local.set $var$1
+  local.set $k
   loop $for-loop|0
-   local.get $var$1
+   local.get $k
    f32.const 100
    f32.lt
-   local.set $vals
-   local.get $vals
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -10431,11 +10521,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<f32>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10446,10 +10536,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k
     f32.const 1
     f32.add
-    local.set $var$1
+    local.set $k
     br $for-loop|0
    end
   end
@@ -10467,16 +10557,16 @@
    unreachable
   end
   f32.const 50
-  local.set $var$1
+  local.set $k_0
   loop $for-loop|1
-   local.get $var$1
+   local.get $k_0
    f32.const 100
    f32.lt
-   local.set $vals
-   local.get $vals
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10488,11 +10578,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<f32>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10503,10 +10593,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_0
     f32.const 1
     f32.add
-    local.set $var$1
+    local.set $k_0
     br $for-loop|1
    end
   end
@@ -10534,18 +10624,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$4
+  local.set $index
   loop $for-loop|2
-   local.get $var$4
+   local.get $index
    local.get $vals
    call $~lib/array/Array<f32>#get:length
    i32.lt_s
-   local.set $var$5
-   local.get $var$5
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$4
+    local.get $index
     call $~lib/array/Array<f32>#__get
     call $~lib/set/Set<f32>#has
     i32.eqz
@@ -10559,14 +10649,14 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$4
+    local.get $index
     call $~lib/array/Array<f32>#__get
     call $~lib/set/Set<f32>#add
     drop
-    local.get $var$4
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$4
+    local.set $index
     br $for-loop|2
    end
   end
@@ -10585,16 +10675,16 @@
    unreachable
   end
   f32.const 0
-  local.set $var$1
+  local.set $k_1
   loop $for-loop|3
-   local.get $var$1
+   local.get $k_1
    f32.const 50
    f32.lt
-   local.set $var$4
-   local.get $var$4
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10606,11 +10696,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<f32>#delete
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -10622,10 +10712,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_1
     f32.const 1
     f32.add
-    local.set $var$1
+    local.set $k_1
     br $for-loop|3
    end
   end
@@ -10643,16 +10733,16 @@
    unreachable
   end
   f32.const 0
-  local.set $var$1
+  local.set $k_2
   loop $for-loop|4
-   local.get $var$1
+   local.get $k_2
    f32.const 50
    f32.lt
-   local.set $var$4
-   local.get $var$4
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -10665,11 +10755,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f32>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10681,11 +10771,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f32>#delete
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -10697,10 +10787,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_2
     f32.const 1
     f32.add
-    local.set $var$1
+    local.set $k_2
     br $for-loop|4
    end
   end
@@ -10776,8 +10866,8 @@
   i32.store $0 offset=20
  )
  (func $~lib/util/hash/HASH<f64> (param $key f64) (result i32)
-  (local $var$1 i64)
-  (local $var$2 i32)
+  (local $key_0 i64)
+  (local $h i32)
   i32.const 0
   drop
   i32.const 0
@@ -10794,68 +10884,68 @@
   drop
   local.get $key
   i64.reinterpret_f64
-  local.set $var$1
+  local.set $key_0
   i32.const 0
   i32.const 374761393
   i32.add
   i32.const 8
   i32.add
-  local.set $var$2
-  local.get $var$2
-  local.get $var$1
+  local.set $h
+  local.get $h
+  local.get $key_0
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$1
+  local.set $h
+  local.get $h
+  local.get $key_0
   i64.const 32
   i64.shr_u
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
   i32.add
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const 17
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 15
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const -2048144777
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 13
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   i32.const -1028477379
   i32.mul
-  local.set $var$2
-  local.get $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
+  local.get $h
   i32.const 16
   i32.shr_u
   i32.xor
-  local.set $var$2
-  local.get $var$2
+  local.set $h
+  local.get $h
   return
  )
  (func $~lib/set/Set<f64>#find (param $this i32) (param $key f64) (param $hashCode i32) (result i32)
@@ -10937,10 +11027,10 @@
   (local $newPtr i32)
   (local $var$9 i32)
   (local $oldEntry i32)
-  (local $var$11 i32)
-  (local $var$12 f64)
-  (local $var$13 i32)
-  (local $var$14 i32)
+  (local $newEntry i32)
+  (local $oldEntryKey f64)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -11003,29 +11093,29 @@
     i32.eqz
     if
      local.get $newPtr
-     local.set $var$11
+     local.set $newEntry
      local.get $oldEntry
      f64.load $0
-     local.set $var$12
-     local.get $var$11
-     local.get $var$12
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
      call $~lib/set/SetEntry<f64>#set:key
-     local.get $var$12
+     local.get $oldEntryKey
      call $~lib/util/hash/HASH<f64>
      local.get $newBucketsMask
      i32.and
-     local.set $var$13
+     local.set $newBucketIndex
      local.get $newBuckets
-     local.get $var$13
+     local.get $newBucketIndex
      i32.const 4
      i32.mul
      i32.add
-     local.set $var$14
-     local.get $var$11
-     local.get $var$14
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
      i32.load $0
      call $~lib/set/SetEntry<f64>#set:taggedNext
-     local.get $var$14
+     local.get $newBucketPtrBase
      local.get $newPtr
      i32.store $0
      local.get $newPtr
@@ -11065,6 +11155,7 @@
   (local $hashCode i32)
   (local $entry i32)
   (local $var$4 i32)
+  (local $bucketPtrBase i32)
   local.get $key
   call $~lib/util/hash/HASH<f64>
   local.set $hashCode
@@ -11139,12 +11230,12 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $var$4
+   local.set $bucketPtrBase
    local.get $entry
-   local.get $var$4
+   local.get $bucketPtrBase
    i32.load $0
    call $~lib/set/SetEntry<f64>#set:taggedNext
-   local.get $var$4
+   local.get $bucketPtrBase
    local.get $entry
    i32.store $0
   end
@@ -11329,11 +11420,18 @@
  )
  (func $std/set/testNumeric<f64>
   (local $set i32)
-  (local $var$1 f64)
+  (local $k f64)
+  (local $var$2 i32)
+  (local $k_0 f64)
+  (local $var$4 i32)
   (local $vals i32)
   (local $valSet i32)
-  (local $var$4 i32)
-  (local $var$5 i32)
+  (local $index i32)
+  (local $var$8 i32)
+  (local $k_1 f64)
+  (local $var$10 i32)
+  (local $k_2 f64)
+  (local $var$12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -11351,16 +11449,16 @@
   local.tee $set
   i32.store $0
   f64.const 0
-  local.set $var$1
+  local.set $k
   loop $for-loop|0
-   local.get $var$1
+   local.get $k
    f64.const 100
    f64.lt
-   local.set $vals
-   local.get $vals
+   local.set $var$2
+   local.get $var$2
    if
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -11373,11 +11471,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<f64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11388,10 +11486,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k
     f64.const 1
     f64.add
-    local.set $var$1
+    local.set $k
     br $for-loop|0
    end
   end
@@ -11409,16 +11507,16 @@
    unreachable
   end
   f64.const 50
-  local.set $var$1
+  local.set $k_0
   loop $for-loop|1
-   local.get $var$1
+   local.get $k_0
    f64.const 100
    f64.lt
-   local.set $vals
-   local.get $vals
+   local.set $var$4
+   local.get $var$4
    if
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11430,11 +11528,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<f64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_0
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11445,10 +11543,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_0
     f64.const 1
     f64.add
-    local.set $var$1
+    local.set $k_0
     br $for-loop|1
    end
   end
@@ -11476,18 +11574,18 @@
   local.tee $valSet
   i32.store $0 offset=8
   i32.const 0
-  local.set $var$4
+  local.set $index
   loop $for-loop|2
-   local.get $var$4
+   local.get $index
    local.get $vals
    call $~lib/array/Array<f64>#get:length
    i32.lt_s
-   local.set $var$5
-   local.get $var$5
+   local.set $var$8
+   local.get $var$8
    if
     local.get $set
     local.get $vals
-    local.get $var$4
+    local.get $index
     call $~lib/array/Array<f64>#__get
     call $~lib/set/Set<f64>#has
     i32.eqz
@@ -11501,14 +11599,14 @@
     end
     local.get $valSet
     local.get $vals
-    local.get $var$4
+    local.get $index
     call $~lib/array/Array<f64>#__get
     call $~lib/set/Set<f64>#add
     drop
-    local.get $var$4
+    local.get $index
     i32.const 1
     i32.add
-    local.set $var$4
+    local.set $index
     br $for-loop|2
    end
   end
@@ -11527,16 +11625,16 @@
    unreachable
   end
   f64.const 0
-  local.set $var$1
+  local.set $k_1
   loop $for-loop|3
-   local.get $var$1
+   local.get $k_1
    f64.const 50
    f64.lt
-   local.set $var$4
-   local.get $var$4
+   local.set $var$10
+   local.get $var$10
    if
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11548,11 +11646,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<f64>#delete
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_1
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -11564,10 +11662,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_1
     f64.const 1
     f64.add
-    local.set $var$1
+    local.set $k_1
     br $for-loop|3
    end
   end
@@ -11585,16 +11683,16 @@
    unreachable
   end
   f64.const 0
-  local.set $var$1
+  local.set $k_2
   loop $for-loop|4
-   local.get $var$1
+   local.get $k_2
    f64.const 50
    f64.lt
-   local.set $var$4
-   local.get $var$4
+   local.set $var$12
+   local.get $var$12
    if
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -11607,11 +11705,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f64>#add
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11623,11 +11721,11 @@
      unreachable
     end
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f64>#delete
     drop
     local.get $set
-    local.get $var$1
+    local.get $k_2
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -11639,10 +11737,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $var$1
+    local.get $k_2
     f64.const 1
     f64.add
-    local.set $var$1
+    local.set $k_2
     br $for-loop|4
    end
   end
@@ -11681,6 +11779,7 @@
  )
  (func $~lib/rt/itcms/__collect
   (local $var$0 i32)
+  (local $var$1 i32)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -11706,8 +11805,8 @@
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.ne
-   local.set $var$0
-   local.get $var$0
+   local.set $var$1
+   local.get $var$1
    if
     call $~lib/rt/itcms/step
     drop
@@ -12462,9 +12561,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -12490,21 +12589,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 8
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=4
     i32.const 1
     i32.and
@@ -12517,14 +12616,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      i32.load8_s $0
      call $~lib/array/Array<i8>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -12690,9 +12789,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -12718,21 +12817,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 8
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=4
     i32.const 1
     i32.and
@@ -12745,14 +12844,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      i32.load8_u $0
      call $~lib/array/Array<u8>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -12918,9 +13017,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -12946,21 +13045,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 8
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=4
     i32.const 1
     i32.and
@@ -12973,14 +13072,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      i32.load16_s $0
      call $~lib/array/Array<i16>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -13146,9 +13245,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -13174,21 +13273,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 8
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=4
     i32.const 1
     i32.and
@@ -13201,14 +13300,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      i32.load16_u $0
      call $~lib/array/Array<u16>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -13374,9 +13473,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -13402,21 +13501,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 8
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=4
     i32.const 1
     i32.and
@@ -13429,14 +13528,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      i32.load $0
      call $~lib/array/Array<i32>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -13602,9 +13701,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -13630,21 +13729,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 8
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=4
     i32.const 1
     i32.and
@@ -13657,14 +13756,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      i32.load $0
      call $~lib/array/Array<u32>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -13830,9 +13929,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -13858,21 +13957,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 16
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=8
     i32.const 1
     i32.and
@@ -13885,14 +13984,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      i64.load $0
      call $~lib/array/Array<i64>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -14058,9 +14157,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -14086,21 +14185,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 16
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=8
     i32.const 1
     i32.and
@@ -14113,14 +14212,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      i64.load $0
      call $~lib/array/Array<u64>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -14286,9 +14385,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -14314,21 +14413,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 8
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=4
     i32.const 1
     i32.and
@@ -14341,14 +14440,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      f32.load $0
      call $~lib/array/Array<f32>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end
@@ -14514,9 +14613,9 @@
   (local $size i32)
   (local $values i32)
   (local $length i32)
-  (local $var$5 i32)
+  (local $i i32)
   (local $var$6 i32)
-  (local $var$7 i32)
+  (local $entry i32)
   (local $var$8 i32)
   (local $9 i32)
   global.get $~lib/memory/__stack_pointer
@@ -14542,21 +14641,21 @@
   i32.const 0
   local.set $length
   i32.const 0
-  local.set $var$5
+  local.set $i
   loop $for-loop|0
-   local.get $var$5
+   local.get $i
    local.get $size
    i32.lt_s
    local.set $var$6
    local.get $var$6
    if
     local.get $start
-    local.get $var$5
+    local.get $i
     i32.const 16
     i32.mul
     i32.add
-    local.set $var$7
-    local.get $var$7
+    local.set $entry
+    local.get $entry
     i32.load $0 offset=8
     i32.const 1
     i32.and
@@ -14569,14 +14668,14 @@
      i32.add
      local.set $length
      local.get $var$8
-     local.get $var$7
+     local.get $entry
      f64.load $0
      call $~lib/array/Array<f64>#__uset
     end
-    local.get $var$5
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$5
+    local.set $i
     br $for-loop|0
    end
   end

@@ -19,7 +19,9 @@
   (local $a i32)
   (local $var$1 i32)
   (local $var$2 i32)
-  (local $var$3 i32)
+  (local $c i32)
+  (local $b i32)
+  (local $a_0 i32)
   i32.const 1
   local.set $a
   local.get $a
@@ -28,24 +30,24 @@
   i32.add
   local.set $a
   local.get $var$1
-  local.set $var$3
+  local.set $a_0
   global.get $inlining-blocklocals/b
-  local.tee $var$1
+  local.tee $var$2
   i32.const 1
   i32.add
   global.set $inlining-blocklocals/b
-  local.get $var$1
-  local.set $var$2
+  local.get $var$2
+  local.set $b
   local.get $a
   i32.const 1
   i32.add
   local.tee $a
-  local.set $var$1
-  local.get $var$3
+  local.set $c
+  local.get $a_0
   global.set $inlining-blocklocals/theCall_a
-  local.get $var$2
+  local.get $b
   global.set $inlining-blocklocals/theCall_b
-  local.get $var$1
+  local.get $c
   global.set $inlining-blocklocals/theCall_c
   global.get $inlining-blocklocals/theCall_a
   i32.const 1

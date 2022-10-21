@@ -98,6 +98,7 @@
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $var$7 i32)
+  (local $var$8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -168,8 +169,8 @@
    i32.sub
    local.set $len
    local.get $var$7
-   local.set $var$7
-   local.get $var$7
+   local.set $var$8
+   local.get $var$8
    if
     local.get $ptr1
     i32.load16_u $0

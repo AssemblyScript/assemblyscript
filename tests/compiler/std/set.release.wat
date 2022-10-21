@@ -2132,9 +2132,8 @@
    call $~lib/set/Set<i8>#constructor
    local.tee $2
    i32.store $0
-   loop $for-loop|1
+   loop $for-loop|0
     local.get $0
-    i32.extend8_s
     i32.const 100
     i32.lt_s
     if
@@ -2302,7 +2301,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|1
+     br $for-loop|0
     end
    end
    local.get $2
@@ -2319,9 +2318,8 @@
    end
    i32.const 50
    local.set $0
-   loop $for-loop|3
+   loop $for-loop|1
     local.get $0
-    i32.extend8_s
     i32.const 100
     i32.lt_s
     if
@@ -2490,7 +2488,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|3
+     br $for-loop|1
     end
    end
    local.get $2
@@ -2604,7 +2602,7 @@
    i32.store $0
    i32.const 0
    local.set $0
-   loop $for-loop|0
+   loop $for-loop|02
     local.get $3
     local.get $6
     i32.lt_s
@@ -2636,7 +2634,7 @@
      i32.const 1
      i32.add
      local.set $3
-     br $for-loop|0
+     br $for-loop|02
     end
    end
    local.get $7
@@ -2659,7 +2657,7 @@
    i32.store $0 offset=8
    i32.const 0
    local.set $0
-   loop $for-loop|4
+   loop $for-loop|2
     local.get $0
     local.get $7
     i32.load $0 offset=12
@@ -2757,7 +2755,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|4
+     br $for-loop|2
     end
    end
    local.get $3
@@ -2775,9 +2773,8 @@
    end
    i32.const 0
    local.set $0
-   loop $for-loop|6
+   loop $for-loop|3
     local.get $0
-    i32.extend8_s
     i32.const 50
     i32.lt_s
     if
@@ -2945,7 +2942,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|6
+     br $for-loop|3
     end
    end
    local.get $2
@@ -2962,9 +2959,8 @@
    end
    i32.const 0
    local.set $0
-   loop $for-loop|8
+   loop $for-loop|4
     local.get $0
-    i32.extend8_s
     i32.const 50
     i32.lt_s
     if
@@ -3213,7 +3209,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|8
+     br $for-loop|4
     end
    end
    local.get $2
@@ -3740,10 +3736,8 @@
    call $~lib/set/Set<u8>#constructor
    local.tee $2
    i32.store $0
-   loop $for-loop|1
+   loop $for-loop|0
     local.get $0
-    i32.const 255
-    i32.and
     i32.const 100
     i32.lt_u
     if
@@ -3913,7 +3907,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|1
+     br $for-loop|0
     end
    end
    local.get $2
@@ -3930,10 +3924,8 @@
    end
    i32.const 50
    local.set $0
-   loop $for-loop|3
+   loop $for-loop|1
     local.get $0
-    i32.const 255
-    i32.and
     i32.const 100
     i32.lt_u
     if
@@ -4104,7 +4096,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|3
+     br $for-loop|1
     end
    end
    local.get $2
@@ -4218,7 +4210,7 @@
    i32.store $0
    i32.const 0
    local.set $0
-   loop $for-loop|0
+   loop $for-loop|02
     local.get $3
     local.get $6
     i32.lt_s
@@ -4250,7 +4242,7 @@
      i32.const 1
      i32.add
      local.set $3
-     br $for-loop|0
+     br $for-loop|02
     end
    end
    local.get $7
@@ -4273,7 +4265,7 @@
    i32.store $0 offset=8
    i32.const 0
    local.set $0
-   loop $for-loop|4
+   loop $for-loop|2
     local.get $0
     local.get $7
     i32.load $0 offset=12
@@ -4372,7 +4364,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|4
+     br $for-loop|2
     end
    end
    local.get $3
@@ -4390,10 +4382,8 @@
    end
    i32.const 0
    local.set $0
-   loop $for-loop|6
+   loop $for-loop|3
     local.get $0
-    i32.const 255
-    i32.and
     i32.const 50
     i32.lt_u
     if
@@ -4563,7 +4553,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|6
+     br $for-loop|3
     end
    end
    local.get $2
@@ -4580,10 +4570,8 @@
    end
    i32.const 0
    local.set $0
-   loop $for-loop|8
+   loop $for-loop|4
     local.get $0
-    i32.const 255
-    i32.and
     i32.const 50
     i32.lt_u
     if
@@ -4835,7 +4823,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|8
+     br $for-loop|4
     end
    end
    local.get $2
@@ -5363,9 +5351,8 @@
    call $~lib/set/Set<i16>#constructor
    local.tee $2
    i32.store $0
-   loop $for-loop|1
+   loop $for-loop|0
     local.get $0
-    i32.extend16_s
     i32.const 100
     i32.lt_s
     if
@@ -5533,7 +5520,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|1
+     br $for-loop|0
     end
    end
    local.get $2
@@ -5550,9 +5537,8 @@
    end
    i32.const 50
    local.set $0
-   loop $for-loop|3
+   loop $for-loop|1
     local.get $0
-    i32.extend16_s
     i32.const 100
     i32.lt_s
     if
@@ -5721,7 +5707,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|3
+     br $for-loop|1
     end
    end
    local.get $2
@@ -5837,7 +5823,7 @@
    i32.store $0
    i32.const 0
    local.set $0
-   loop $for-loop|0
+   loop $for-loop|02
     local.get $3
     local.get $6
     i32.lt_s
@@ -5871,7 +5857,7 @@
      i32.const 1
      i32.add
      local.set $3
-     br $for-loop|0
+     br $for-loop|02
     end
    end
    local.get $7
@@ -5894,7 +5880,7 @@
    i32.store $0 offset=8
    i32.const 0
    local.set $0
-   loop $for-loop|4
+   loop $for-loop|2
     local.get $0
     local.get $7
     i32.load $0 offset=12
@@ -5992,7 +5978,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|4
+     br $for-loop|2
     end
    end
    local.get $3
@@ -6010,9 +5996,8 @@
    end
    i32.const 0
    local.set $0
-   loop $for-loop|6
+   loop $for-loop|3
     local.get $0
-    i32.extend16_s
     i32.const 50
     i32.lt_s
     if
@@ -6180,7 +6165,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|6
+     br $for-loop|3
     end
    end
    local.get $2
@@ -6197,9 +6182,8 @@
    end
    i32.const 0
    local.set $0
-   loop $for-loop|8
+   loop $for-loop|4
     local.get $0
-    i32.extend16_s
     i32.const 50
     i32.lt_s
     if
@@ -6448,7 +6432,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|8
+     br $for-loop|4
     end
    end
    local.get $2
@@ -6977,10 +6961,8 @@
    call $~lib/set/Set<u16>#constructor
    local.tee $2
    i32.store $0
-   loop $for-loop|1
+   loop $for-loop|0
     local.get $0
-    i32.const 65535
-    i32.and
     i32.const 100
     i32.lt_u
     if
@@ -7150,7 +7132,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|1
+     br $for-loop|0
     end
    end
    local.get $2
@@ -7167,10 +7149,8 @@
    end
    i32.const 50
    local.set $0
-   loop $for-loop|3
+   loop $for-loop|1
     local.get $0
-    i32.const 65535
-    i32.and
     i32.const 100
     i32.lt_u
     if
@@ -7341,7 +7321,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|3
+     br $for-loop|1
     end
    end
    local.get $2
@@ -7457,7 +7437,7 @@
    i32.store $0
    i32.const 0
    local.set $0
-   loop $for-loop|0
+   loop $for-loop|02
     local.get $3
     local.get $6
     i32.lt_s
@@ -7491,7 +7471,7 @@
      i32.const 1
      i32.add
      local.set $3
-     br $for-loop|0
+     br $for-loop|02
     end
    end
    local.get $7
@@ -7514,7 +7494,7 @@
    i32.store $0 offset=8
    i32.const 0
    local.set $0
-   loop $for-loop|4
+   loop $for-loop|2
     local.get $0
     local.get $7
     i32.load $0 offset=12
@@ -7613,7 +7593,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|4
+     br $for-loop|2
     end
    end
    local.get $3
@@ -7631,10 +7611,8 @@
    end
    i32.const 0
    local.set $0
-   loop $for-loop|6
+   loop $for-loop|3
     local.get $0
-    i32.const 65535
-    i32.and
     i32.const 50
     i32.lt_u
     if
@@ -7804,7 +7782,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|6
+     br $for-loop|3
     end
    end
    local.get $2
@@ -7821,10 +7799,8 @@
    end
    i32.const 0
    local.set $0
-   loop $for-loop|8
+   loop $for-loop|4
     local.get $0
-    i32.const 65535
-    i32.and
     i32.const 50
     i32.lt_u
     if
@@ -8076,7 +8052,7 @@
      i32.const 1
      i32.add
      local.set $0
-     br $for-loop|8
+     br $for-loop|4
     end
    end
    local.get $2

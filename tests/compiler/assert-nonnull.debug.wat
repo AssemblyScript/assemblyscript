@@ -131,15 +131,20 @@
  )
  (func $assert-nonnull/testAll (param $foo i32) (result i32)
   (local $var$1 i32)
-  (local $2 i32)
+  (local $var$2 i32)
+  (local $var$3 i32)
+  (local $4 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   local.get $foo
@@ -154,18 +159,18 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
   i32.store $0
-  local.get $2
+  local.get $4
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo|null>#__get
-  local.tee $var$1
+  local.tee $var$2
   i32.store $0 offset=4
-  local.get $var$1
+  local.get $var$2
   if (result i32)
-   local.get $var$1
+   local.get $var$2
   else
    i32.const 32
    i32.const 96
@@ -175,11 +180,11 @@
    unreachable
   end
   i32.load $0
-  local.tee $var$1
-  i32.store $0 offset=4
-  local.get $var$1
+  local.tee $var$3
+  i32.store $0 offset=8
+  local.get $var$3
   if (result i32)
-   local.get $var$1
+   local.get $var$3
   else
    i32.const 32
    i32.const 96
@@ -188,24 +193,29 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
  )
  (func $assert-nonnull/testAll2 (param $foo i32) (result i32)
   (local $var$1 i32)
-  (local $2 i32)
+  (local $var$2 i32)
+  (local $var$3 i32)
+  (local $4 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   local.get $foo
@@ -220,18 +230,18 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
   i32.store $0
-  local.get $2
+  local.get $4
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo|null>#__get
-  local.tee $var$1
+  local.tee $var$2
   i32.store $0 offset=4
-  local.get $var$1
+  local.get $var$2
   if (result i32)
-   local.get $var$1
+   local.get $var$2
   else
    i32.const 32
    i32.const 96
@@ -241,11 +251,11 @@
    unreachable
   end
   i32.load $0
-  local.tee $var$1
-  i32.store $0 offset=4
-  local.get $var$1
+  local.tee $var$3
+  i32.store $0 offset=8
+  local.get $var$3
   if (result i32)
-   local.get $var$1
+   local.get $var$3
   else
    i32.const 32
    i32.const 96
@@ -254,12 +264,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
  )
  (func $assert-nonnull/testProp (param $foo i32) (result i32)
   (local $var$1 i32)

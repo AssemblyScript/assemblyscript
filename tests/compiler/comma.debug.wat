@@ -16,6 +16,7 @@
  (func $start:comma
   (local $var$0 i32)
   (local $c i32)
+  (local $var$2 i32)
   global.get $comma/a
   local.tee $var$0
   i32.const 1
@@ -151,8 +152,8 @@
    local.get $c
    global.get $comma/a
    i32.lt_s
-   local.set $var$0
-   local.get $var$0
+   local.set $var$2
+   local.get $var$2
    if
     nop
     global.get $comma/a

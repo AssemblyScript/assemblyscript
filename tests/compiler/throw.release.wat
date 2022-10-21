@@ -642,19 +642,19 @@
     return
    end
    global.get $~lib/rt/itcms/iter
-   local.tee $1
+   local.tee $0
    global.get $~lib/rt/itcms/toSpace
    i32.ne
    if
-    local.get $1
+    local.get $0
     i32.load $0 offset=4
-    local.tee $3
+    local.tee $2
     i32.const -4
     i32.and
     global.set $~lib/rt/itcms/iter
     global.get $~lib/rt/itcms/white
     i32.eqz
-    local.get $3
+    local.get $2
     i32.const 3
     i32.and
     i32.ne
@@ -666,19 +666,19 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $0
     i32.const 18140
     i32.lt_u
     if
-     local.get $1
+     local.get $0
      i32.const 0
      i32.store $0 offset=4
-     local.get $1
+     local.get $0
      i32.const 0
      i32.store $0 offset=8
     else
      global.get $~lib/rt/itcms/total
-     local.get $1
+     local.get $0
      i32.load $0
      i32.const -4
      i32.and
@@ -686,10 +686,10 @@
      i32.add
      i32.sub
      global.set $~lib/rt/itcms/total
-     local.get $1
+     local.get $0
      i32.const 4
      i32.add
-     local.tee $3
+     local.tee $2
      i32.const 18140
      i32.ge_u
      if
@@ -697,12 +697,12 @@
       i32.eqz
       if
        memory.size $0
-       local.tee $1
+       local.tee $0
        i32.const 0
        i32.le_s
        if (result i32)
         i32.const 1
-        local.get $1
+        local.get $0
         i32.sub
         memory.grow $0
         i32.const 0
@@ -720,11 +720,11 @@
        i32.const 0
        i32.store $0
        loop $for-loop|0
-        local.get $0
+        local.get $1
         i32.const 23
         i32.lt_u
         if
-         local.get $0
+         local.get $1
          i32.const 2
          i32.shl
          i32.const 18144
@@ -732,16 +732,16 @@
          i32.const 0
          i32.store $0 offset=4
          i32.const 0
-         local.set $1
+         local.set $0
          loop $for-loop|1
-          local.get $1
+          local.get $0
           i32.const 16
           i32.lt_u
           if
-           local.get $0
+           local.get $1
            i32.const 4
            i32.shl
-           local.get $1
+           local.get $0
            i32.add
            i32.const 2
            i32.shl
@@ -749,24 +749,24 @@
            i32.add
            i32.const 0
            i32.store $0 offset=96
-           local.get $1
+           local.get $0
            i32.const 1
            i32.add
-           local.set $1
+           local.set $0
            br $for-loop|1
           end
          end
-         local.get $0
+         local.get $1
          i32.const 1
          i32.add
-         local.set $0
+         local.set $1
          br $for-loop|0
         end
        end
        memory.size $0
        i32.const 16
        i32.shl
-       local.tee $0
+       local.tee $3
        i32.const 19716
        i32.lt_u
        if
@@ -777,9 +777,8 @@
         call $~lib/builtins/abort
         unreachable
        end
-       local.get $0
-       i32.const -16
-       i32.and
+       i32.const 19724
+       local.set $1
        i32.const 19712
        i32.load $0
        local.tee $0
@@ -801,53 +800,57 @@
         i32.const 19708
         i32.eq
         if (result i32)
+         i32.const 19708
+         local.set $1
          local.get $0
          i32.load $0
-         local.set $2
-         i32.const 19708
         else
-         i32.const 19724
+         i32.const 0
         end
        else
-        i32.const 19724
+        i32.const 0
        end
-       local.tee $0
+       local.set $0
+       local.get $3
+       i32.const -16
+       i32.and
+       local.get $1
        i32.sub
-       local.tee $1
+       local.tee $3
        i32.const 20
        i32.ge_u
        if
+        local.get $1
         local.get $0
-        local.get $2
         i32.const 2
         i32.and
-        local.get $1
+        local.get $3
         i32.const 8
         i32.sub
-        local.tee $1
+        local.tee $0
         i32.const 1
         i32.or
         i32.or
         i32.store $0
-        local.get $0
+        local.get $1
         i32.const 0
         i32.store $0 offset=4
-        local.get $0
+        local.get $1
         i32.const 0
         i32.store $0 offset=8
-        local.get $0
+        local.get $1
         i32.const 4
         i32.add
-        local.get $1
+        local.get $0
         i32.add
-        local.tee $1
+        local.tee $0
         i32.const 2
         i32.store $0
         i32.const 19712
-        local.get $1
+        local.get $0
         i32.store $0
         i32.const 18144
-        local.get $0
+        local.get $1
         call $~lib/rt/tlsf/insertBlock
        end
        i32.const 18144
@@ -855,15 +858,15 @@
       end
       global.get $~lib/rt/tlsf/ROOT
       local.set $0
-      local.get $3
+      local.get $2
       i32.const 4
       i32.sub
       local.set $1
-      local.get $3
+      local.get $2
       i32.const 15
       i32.and
       i32.const 1
-      local.get $3
+      local.get $2
       select
       if (result i32)
        i32.const 1
@@ -993,7 +996,7 @@
     i32.add
     global.set $~lib/memory/__stack_pointer
     global.get $~lib/memory/__stack_pointer
-    i32.const 16
+    i32.const 20
     i32.sub
     global.set $~lib/memory/__stack_pointer
     global.get $~lib/memory/__stack_pointer
@@ -1002,11 +1005,9 @@
     br_if $folding-inner0
     global.get $~lib/memory/__stack_pointer
     local.tee $1
-    i64.const 0
-    i64.store $0
-    local.get $1
-    i64.const 0
-    i64.store $0 offset=8
+    i32.const 0
+    i32.const 20
+    memory.fill $0
     local.get $1
     i32.const 1056
     i32.store $0
@@ -1037,16 +1038,16 @@
       end
       global.get $~lib/memory/__stack_pointer
       i32.const 1296
-      i32.store $0 offset=8
+      i32.store $0 offset=12
       br $while-continue|0
      end
     end
     global.get $~lib/memory/__stack_pointer
     local.tee $0
     i32.const 1328
-    i32.store $0 offset=12
+    i32.store $0 offset=16
     local.get $0
-    i32.const 16
+    i32.const 20
     i32.add
     global.set $~lib/memory/__stack_pointer
     i32.const 1348

@@ -1273,7 +1273,7 @@
  (func $start:rt/instanceof
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 72
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -1289,7 +1289,8 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.const 72
+  memory.fill $0
   memory.size $0
   i32.const 16
   i32.shl
@@ -1379,7 +1380,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/animal
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=4
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof0 (result i32)
@@ -1425,7 +1426,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/cat
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=8
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof3 (result i32)
@@ -1472,7 +1473,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/cat
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=12
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof6 (result i32)
@@ -1518,7 +1519,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/blackcat
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=16
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof9 (result i32)
@@ -1565,7 +1566,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/blackcat
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=20
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof12 (result i32)
@@ -1630,7 +1631,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/nullableAnimal
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=24
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof15 (result i32)
@@ -1676,7 +1677,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/nullableAnimal
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=28
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof18 (result i32)
@@ -1732,7 +1733,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/nullableCat
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=32
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof21 (result i32)
@@ -1779,7 +1780,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/nullableCat
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=36
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof24 (result i32)
@@ -1835,7 +1836,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/nullableBlackcat
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=40
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof27 (result i32)
@@ -1882,7 +1883,7 @@
   global.get $~lib/memory/__stack_pointer
   global.get $rt/instanceof/nullableBlackcat
   local.tee $0
-  i32.store $0
+  i32.store $0 offset=44
   local.get $0
   if (result i32)
    block $__inlined_func$~lib/rt/__instanceof30 (result i32)
@@ -1929,24 +1930,24 @@
   global.get $~lib/memory/__stack_pointer
   local.tee $0
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=48
   local.get $0
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=52
   local.get $0
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=56
   local.get $0
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=60
   local.get $0
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=64
   local.get $0
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=68
   local.get $0
-  i32.const 4
+  i32.const 72
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

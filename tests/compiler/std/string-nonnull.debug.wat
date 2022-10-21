@@ -30,6 +30,7 @@
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $var$7 i32)
+  (local $var$8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -100,8 +101,8 @@
    i32.sub
    local.set $len
    local.get $var$7
-   local.set $var$7
-   local.get $var$7
+   local.set $var$8
+   local.get $var$8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -192,7 +193,7 @@
   end
  )
  (func $start:std/string-nonnull
-  (local $var$0 i32)
+  (local $s i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -203,56 +204,56 @@
   i32.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 32
-  local.tee $var$0
+  local.tee $s
   i32.store $0
-  local.get $var$0
+  local.get $s
   i32.const 0
   call $~lib/string/String.__ne
   if
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   i32.const 0
   call $~lib/string/String.__ne
   if
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   if
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   i32.const 0
   call $~lib/string/String.__eq
   if
    nop
   else
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   i32.const 0
   call $~lib/string/String.__eq
   if
    nop
   else
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   call $~lib/string/String.__not
   if
    nop
   else
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end

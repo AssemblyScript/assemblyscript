@@ -64,6 +64,7 @@
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $var$7 i32)
+  (local $var$8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -134,8 +135,8 @@
    i32.sub
    local.set $len
    local.get $var$7
-   local.set $var$7
-   local.get $var$7
+   local.set $var$8
+   local.get $var$8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -169,6 +170,8 @@
   (local $len i32)
   (local $var$4 i32)
   (local $var$5 i32)
+  (local $var$6 i32)
+  (local $var$7 i32)
   (local $searchStart i32)
   (local $searchLength i32)
   local.get $this
@@ -182,11 +185,11 @@
   local.get $var$5
   i32.gt_s
   select
-  local.tee $var$5
+  local.tee $var$6
   local.get $len
-  local.tee $var$4
-  local.get $var$5
-  local.get $var$4
+  local.tee $var$7
+  local.get $var$6
+  local.get $var$7
   i32.lt_s
   select
   local.set $searchStart

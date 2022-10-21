@@ -3819,19 +3819,6 @@ export class Function extends TypedElement {
     return super.lookup(name, isType);
   }
 
-  // used by flows to keep track of temporary locals
-  tempI32s: Local[] | null = null;
-  tempI64s: Local[] | null = null;
-  tempF32s: Local[] | null = null;
-  tempF64s: Local[] | null = null;
-  tempV128s: Local[] | null = null;
-  tempFuncrefs: Local[] | null = null;
-  tempExternrefs: Local[] | null = null;
-  tempAnyrefs: Local[] | null = null;
-  tempEqrefs: Local[] | null = null;
-  tempI31refs: Local[] | null = null;
-  tempDatarefs: Local[] | null = null;
-
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;
   breakStack: i32[] | null = null;
@@ -3844,7 +3831,6 @@ export class Function extends TypedElement {
     assert(!breakStack || !breakStack.length); // internal error
     this.breakStack = breakStack = null;
     this.breakLabel = null;
-    this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
     this.addDebugInfo(module, ref);
   }
 

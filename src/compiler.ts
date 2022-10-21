@@ -2217,7 +2217,6 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = innerFlow;
 
     var stmts = this.compileStatements(statements);
-    innerFlow.freeScopedLocals();
     outerFlow.inherit(innerFlow);
     this.currentFlow = outerFlow;
     return this.module.flatten(stmts);
@@ -2245,7 +2244,6 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
-    flow.freeScopedLocals();
     flow.set(FlowFlags.BREAKS);
     return module.br(breakLabel);
   }
@@ -2274,7 +2272,6 @@ export class Compiler extends DiagnosticEmitter {
       return module.unreachable();
     }
     flow.set(FlowFlags.CONTINUES | FlowFlags.TERMINATES);
-    flow.freeScopedLocals();
     return module.br(continueLabel);
   }
 
@@ -2282,17 +2279,16 @@ export class Compiler extends DiagnosticEmitter {
     /** Statement to compile. */
     statement: DoStatement
   ): ExpressionRef {
-    return this.doCompileDoStatement(statement, null);
+    return this.doCompileDoStatement(statement);
   }
 
   private doCompileDoStatement(
     /** Statement to compile. */
-    statement: DoStatement,
-    /** If recompiling, the flow with differing local flags that triggered it. */
-    flowAfter: Flow | null
+    statement: DoStatement
   ): ExpressionRef {
     var module = this.module;
     var outerFlow = this.currentFlow;
+    var numLocalsBefore = outerFlow.actualFunction.localsByIndex.length;
 
     // (block $break                          └►┐ flow
     //  (loop $loop                             ├◄───────────┐ recompile?
@@ -2309,8 +2305,6 @@ export class Compiler extends DiagnosticEmitter {
 
     var label = outerFlow.pushBreakLabel();
     var flow = outerFlow.fork(/* resetBreakContext */ true);
-    if (flowAfter) flow.unifyLocalFlags(flowAfter);
-    var flowBefore = flow.fork();
     this.currentFlow = flow;
 
     var breakLabel = `do-break|${label}`;
@@ -2383,10 +2377,12 @@ export class Compiler extends DiagnosticEmitter {
         // Detect if local flags are incompatible before and after looping, and
         // if so recompile by unifying local flags between iterations. Note that
         // this may be necessary multiple times where locals depend on each other.
-        if (Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
+        if (Flow.hasIncompatibleLocalStates(outerFlow, flow)) {
           outerFlow.popBreakLabel();
+          outerFlow.unifyLocalFlags(flow);
+          outerFlow.actualFunction.localsByIndex.length = numLocalsBefore;
           this.currentFlow = outerFlow;
-          return this.doCompileDoStatement(statement, flow);
+          return this.doCompileDoStatement(statement);
         }
       }
     }
@@ -2423,17 +2419,16 @@ export class Compiler extends DiagnosticEmitter {
     /** Statement to compile. */
     statement: ForStatement
   ): ExpressionRef {
-    return this.doCompileForStatement(statement, null);
+    return this.doCompileForStatement(statement);
   }
 
   private doCompileForStatement(
     /** Statement to compile. */
-    statement: ForStatement,
-    /** If recompiling, the flow with differing local flags that triggered it. */
-    flowAfter: Flow | null
+    statement: ForStatement
   ): ExpressionRef {
     var module = this.module;
     var outerFlow = this.currentFlow;
+    var numLocalsBefore = outerFlow.actualFunction.localsByIndex.length;
 
     // (initializer)                  └►┐ flow
     // (block $break                    │
@@ -2475,9 +2470,6 @@ export class Compiler extends DiagnosticEmitter {
       stmts.push(this.compileStatement(initializer));
     }
 
-    if (flowAfter) flow.unifyLocalFlags(flowAfter);
-    var flowBefore = flow.fork();
-
     // Precompute the condition
     var condFlow = flow.fork();
     this.currentFlow = condFlow;
@@ -2497,9 +2489,7 @@ export class Compiler extends DiagnosticEmitter {
         stmts.push(
           module.drop(condExpr)
         );
-        condFlow.freeScopedLocals();
         flow.inherit(condFlow);
-        flow.freeScopedLocals();
         outerFlow.inherit(flow);
         outerFlow.popBreakLabel();
         this.currentFlow = outerFlow;
@@ -2518,7 +2508,6 @@ export class Compiler extends DiagnosticEmitter {
     loopStmts.push(
       module.local_set(tcond.index, condExpr, false) // bool
     );
-    condFlow.freeScopedLocals();
 
     flow.inherit(condFlow); // always executes
     this.currentFlow = flow;
@@ -2541,7 +2530,6 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (condKind == ConditionKind.TRUE) flow.inherit(bodyFlow);
     else flow.inheritBranch(bodyFlow);
-    bodyFlow.freeScopedLocals();
 
     var ifStmts = new Array<ExpressionRef>();
     ifStmts.push(
@@ -2558,7 +2546,6 @@ export class Compiler extends DiagnosticEmitter {
         ifStmts.push(
           this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP)
         );
-        incrFlow.freeScopedLocals();
         flow.inherit(incrFlow); // mostly local flags, also covers late termination by throwing
         this.currentFlow = flow;
       }
@@ -2570,12 +2557,13 @@ export class Compiler extends DiagnosticEmitter {
       // Detect if local flags are incompatible before and after looping, and if
       // so recompile by unifying local flags between iterations. Note that this
       // may be necessary multiple times where locals depend on each other.
-      if (Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
+      if (Flow.hasIncompatibleLocalStates(outerFlow, flow)) {
         assert(!bodyFlow.hasScopedLocals);
-        flow.freeScopedLocals();
         outerFlow.popBreakLabel();
+        outerFlow.unifyLocalFlags(flow);
+        outerFlow.actualFunction.localsByIndex.length = numLocalsBefore;
         this.currentFlow = outerFlow;
-        return this.doCompileForStatement(statement, flow);
+        return this.doCompileForStatement(statement);
       }
     }
     loopStmts.push(
@@ -2591,11 +2579,9 @@ export class Compiler extends DiagnosticEmitter {
         )
       ])
     );
-    flow.freeTempLocal(tcond);
     this.currentFlow = flow;
 
     // Finalize
-    flow.freeScopedLocals();
     outerFlow.inherit(flow);
     outerFlow.popBreakLabel();
     if (outerFlow.is(FlowFlags.TERMINATES)) {
@@ -2680,7 +2666,6 @@ export class Compiler extends DiagnosticEmitter {
     if (thenTerminates) {
       thenStmts.push(module.unreachable());
     }
-    thenFlow.freeScopedLocals();
     this.currentFlow = flow;
 
     // Compile ifFalse assuming the condition turned out false, if present
@@ -2698,7 +2683,6 @@ export class Compiler extends DiagnosticEmitter {
       if (elseTerminates) {
         elseStmts.push(module.unreachable());
       }
-      elseFlow.freeScopedLocals();
       this.currentFlow = flow;
       flow.inheritMutual(thenFlow, elseFlow);
       return module.if(condExpr,
@@ -2746,7 +2730,6 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = returnType;
       return module.unreachable();
     }
-    flow.freeScopedLocals();
 
     // Remember that this flow returns
     flow.set(FlowFlags.RETURNS | FlowFlags.TERMINATES);
@@ -2827,8 +2810,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    outerFlow.freeTempLocal(tempLocal);
-
     // otherwise br to default respectively out of the switch if there is no default case
     breaks[breakIndex] = module.br(defaultIndex >= 0
       ? `case${defaultIndex}|${context}`
@@ -2878,7 +2859,6 @@ export class Compiler extends DiagnosticEmitter {
         FlowFlags.BREAKS |
         FlowFlags.CONDITIONALLY_BREAKS
       );
-      innerFlow.freeScopedLocals();
       this.currentFlow = outerFlow;
       currentBlock = module.block(nextLabel, stmts, TypeRef.None); // must be a labeled block
     }
@@ -2910,7 +2890,6 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       this.makeAbort(message, statement)
     );
-    flow.freeScopedLocals();
     return this.module.flatten(stmts);
   }
 
@@ -3134,17 +3113,16 @@ export class Compiler extends DiagnosticEmitter {
     /** Statement to compile. */
     statement: WhileStatement
   ): ExpressionRef {
-    return this.doCompileWhileStatement(statement, null);
+    return this.doCompileWhileStatement(statement);
   }
 
   private doCompileWhileStatement(
     /** Statement to compile. */
-    statement: WhileStatement,
-    /** If recompiling, the flow with differing local flags that triggered it. */
-    flowAfter: Flow | null
+    statement: WhileStatement
   ): ExpressionRef {
     var module = this.module;
     var outerFlow = this.currentFlow;
+    var numLocalsBefore = outerFlow.actualFunction.localsByIndex.length;
 
     // (block $break                  └►┐ flow
     //  (loop $continue                 ├◄───────────┐ recompile?
@@ -3162,8 +3140,6 @@ export class Compiler extends DiagnosticEmitter {
     var label = outerFlow.pushBreakLabel();
     var stmts = new Array<ExpressionRef>();
     var flow = outerFlow.fork(/* resetBreakContext */ true);
-    if (flowAfter) flow.unifyLocalFlags(flowAfter);
-    var flowBefore = flow.fork();
     this.currentFlow = flow;
 
     var breakLabel = `while-break|${label}`;
@@ -3199,7 +3175,6 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       module.local_set(tcond.index, condExpr, false) // bool
     );
-    condFlow.freeScopedLocals();
 
     flow.inherit(condFlow); // always executes
     this.currentFlow = flow;
@@ -3249,11 +3224,12 @@ export class Compiler extends DiagnosticEmitter {
       // if so recompile by unifying local flags between iterations. Note that
       // this may be necessary multiple times where locals depend on each other.
       // Here: Only relevant if flow does not always break.
-      if (!breaks && Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
-        flow.freeTempLocal(tcond);
+      if (!breaks && Flow.hasIncompatibleLocalStates(outerFlow, flow)) {
         outerFlow.popBreakLabel();
+        outerFlow.unifyLocalFlags(flow);
+        outerFlow.actualFunction.localsByIndex.length = numLocalsBefore;
         this.currentFlow = outerFlow;
-        return this.doCompileWhileStatement(statement, flow);
+        return this.doCompileWhileStatement(statement);
       }
     }
     stmts.push(
@@ -3261,7 +3237,6 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(bodyStmts)
       )
     );
-    flow.freeTempLocal(tcond);
     this.currentFlow = flow;
 
     // Finalize
@@ -4585,7 +4560,6 @@ export class Compiler extends DiagnosticEmitter {
           } else {
             rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
             rightType = this.currentType;
-            rightFlow.freeScopedLocals();
             rightExpr = this.makeIsTrueish(rightExpr, rightType, right);
 
             // simplify if lhs is always true
@@ -4601,7 +4575,6 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
-          rightFlow.freeScopedLocals();
           this.currentFlow = flow;
 
           // simplify if copying left is trivial
@@ -4622,7 +4595,6 @@ export class Compiler extends DiagnosticEmitter {
               rightExpr,
               module.local_get(tempLocal.index, leftType.toRef())
             );
-            flow.freeTempLocal(tempLocal);
           }
           this.currentType = leftType;
         }
@@ -4649,7 +4621,6 @@ export class Compiler extends DiagnosticEmitter {
           } else {
             rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
             rightType = this.currentType;
-            rightFlow.freeScopedLocals();
             rightExpr = this.makeIsTrueish(rightExpr, rightType, right);
 
             // simplify if lhs is always false
@@ -4665,7 +4636,6 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
-          rightFlow.freeScopedLocals();
           this.currentFlow = flow;
 
           // simplify if copying left is trivial
@@ -4686,7 +4656,6 @@ export class Compiler extends DiagnosticEmitter {
               module.local_get(temp.index, leftType.toRef()),
               rightExpr
             );
-            flow.freeTempLocal(temp);
           }
           this.currentType = leftType;
         }
@@ -5795,7 +5764,6 @@ export class Compiler extends DiagnosticEmitter {
               module.local_get(tempThis.index, returnTypeRef)
             ], valueExpression)
           ], returnTypeRef);
-          flow.freeTempLocal(tempThis);
           return ret;
         } else {
           if (!tee) return this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression);
@@ -5866,8 +5834,6 @@ export class Compiler extends DiagnosticEmitter {
               module.local_get(tempElement.index, tempElement.type.toRef())
             ], valueExpression)
           ], returnType.toRef());
-          flow.freeTempLocal(tempElement);
-          flow.freeTempLocal(tempTarget);
           return ret;
         } else {
           return this.makeCallDirect(setterInstance, [
@@ -5986,7 +5952,6 @@ export class Compiler extends DiagnosticEmitter {
         module.call(field.internalSetterName, [ module.local_tee(tempThis.index, thisExpr, thisType.isManaged), valueExpr ], TypeRef.None),
         module.call(field.internalGetterName, [ module.local_get(tempThis.index, thisType.toRef()) ], fieldTypeRef)
       ], fieldTypeRef);
-      flow.freeTempLocal(tempThis);
       this.currentType = fieldType;
       return expr;
     } else {
@@ -6571,7 +6536,6 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Free any new scoped locals and reset to the original flow
-    flow.freeScopedLocals();
     var returnType = flow.returnType;
     this.currentFlow = previousFlow;
 
@@ -6705,7 +6669,6 @@ export class Compiler extends DiagnosticEmitter {
       // assume this will always succeed (can just use name as the reportNode)
       this.makeCallDirect(original, forwardedOperands, original.declaration.name)
     );
-    flow.freeScopedLocals();
     this.currentFlow = previousFlow;
 
     var funcRef = module.addFunction(
@@ -7125,7 +7088,6 @@ export class Compiler extends DiagnosticEmitter {
         module.global_set(argumentsLength, module.i32(numArguments)),
         module.local_get(temp.index, sizeTypeRef)
       ], sizeTypeRef);
-      flow.freeTempLocal(temp);
     } else { // simplify
       functionArg = module.block(null, [
         module.global_set(argumentsLength, module.i32(numArguments)),
@@ -7718,7 +7680,6 @@ export class Compiler extends DiagnosticEmitter {
               module.i32(expectedType.classReference!.id)
             ], expression)
           );
-          flow.freeTempLocal(temp);
           if (this.options.pedantic) {
             this.pedantic(
               DiagnosticCode.Expression_compiles_to_a_dynamic_check_at_runtime,
@@ -7764,7 +7725,6 @@ export class Compiler extends DiagnosticEmitter {
               module.i32(expectedType.classReference!.id)
             ], expression)
           );
-          flow.freeTempLocal(temp);
           return ret;
         } else {
           this.error(
@@ -8017,7 +7977,6 @@ export class Compiler extends DiagnosticEmitter {
           module.i32(expressionPositions[i]),
           module.local_get(temps[i].index, stringType.toRef())
         ], expression);
-        flow.freeTempLocal(temps[i]);
       }
       stmts[2 * numExpressions] = this.makeCallDirect(joinInstance, [
         module.usize(offset),
@@ -8162,9 +8121,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // if the array is static, make a static arraybuffer segment
     if (isStatic) {
-      flow.freeTempLocal(tempThis);
-      flow.freeTempLocal(tempDataStart);
-
       let totalOverhead = program.totalOverhead;
       let bufferSegment = this.addStaticBuffer(elementType, values);
       let bufferAddress = i64_add(bufferSegment.offset, i64_new(totalOverhead));
@@ -8188,8 +8144,6 @@ export class Compiler extends DiagnosticEmitter {
     // otherwise compile an explicit instantiation with indexed sets
     var indexedSet = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
     if (!indexedSet) {
-      flow.freeTempLocal(tempThis);
-      flow.freeTempLocal(tempDataStart);
       this.error(
         DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
         expression.range, arrayInstance.internalName
@@ -8234,8 +8188,6 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       module.local_get(tempThis.index, arrayTypeRef)
     );
-    flow.freeTempLocal(tempThis);
-    flow.freeTempLocal(tempDataStart);
     if (length) this.compileFunction(indexedSet);
     this.currentType = arrayType;
     return module.flatten(stmts, arrayTypeRef);
@@ -8317,8 +8269,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // if the array is static, make a static arraybuffer segment
     if (isStatic) {
-      flow.freeTempLocal(tempThis);
-
       let bufferSegment = this.addStaticBuffer(elementType, values, arrayInstance.id);
       let bufferAddress = i64_add(bufferSegment.offset, i64_new(program.totalOverhead));
 
@@ -8350,7 +8300,6 @@ export class Compiler extends DiagnosticEmitter {
     // otherwise compile an explicit instantiation with indexed sets
     var indexedSet = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
     if (!indexedSet) {
-      flow.freeTempLocal(tempThis);
       this.error(
         DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
         expression.range, arrayInstance.internalName
@@ -8387,7 +8336,6 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       module.local_get(tempThis.index, arrayTypeRef)
     );
-    flow.freeTempLocal(tempThis);
     if (length) this.compileFunction(indexedSet);
     this.currentType = arrayType;
     return module.flatten(stmts, arrayTypeRef);
@@ -8580,7 +8528,6 @@ export class Compiler extends DiagnosticEmitter {
       module.local_get(tempLocal.index, classTypeRef)
     );
 
-    if (!isManaged) flow.freeTempLocal(tempLocal);
     this.currentType = classType.nonNullableType;
     return module.flatten(exprs, classTypeRef);
   }
@@ -8746,7 +8693,6 @@ export class Compiler extends DiagnosticEmitter {
       stmts.push(
         module.local_get(0, sizeTypeRef)
       );
-      flow.freeScopedLocals();
       this.currentFlow = previousFlow;
 
       // make the function
@@ -9060,9 +9006,6 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = commonType;
     }
 
-    ifThenFlow.freeScopedLocals();
-    ifElseFlow.freeScopedLocals();
-
     this.currentFlow = outerFlow;
     outerFlow.inheritMutual(ifThenFlow, ifElseFlow);
 
@@ -9109,7 +9052,6 @@ export class Compiler extends DiagnosticEmitter {
             let isInstance = overload.is(CommonFlags.INSTANCE);
             if (tempLocal && !isInstance) { // revert: static overload simply returns
               getValue = getLocalSetValue(getValue);
-              flow.freeTempLocal(tempLocal);
               tempLocal = null;
             }
             expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
@@ -9122,7 +9064,6 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
             expression.range, "++", this.currentType.toString()
           );
-          if (tempLocal) flow.freeTempLocal(tempLocal);
           return module.unreachable();
         }
 
@@ -9195,7 +9136,6 @@ export class Compiler extends DiagnosticEmitter {
             let isInstance = overload.is(CommonFlags.INSTANCE);
             if (tempLocal && !isInstance) { // revert: static overload simply returns
               getValue = getLocalSetValue(getValue);
-              flow.freeTempLocal(tempLocal);
               tempLocal = null;
             }
             expr = this.compileUnaryOverload(overload, expression.operand, getValue, expression);
@@ -9208,7 +9148,6 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
             expression.range, "--", this.currentType.toString()
           );
-          if (tempLocal) flow.freeTempLocal(tempLocal);
           return module.unreachable();
         }
 
@@ -9280,7 +9219,6 @@ export class Compiler extends DiagnosticEmitter {
     var resolver = this.resolver;
     var target = resolver.lookupExpression(expression.operand, flow); // reports
     if (!target) {
-      if (tempLocal) flow.freeTempLocal(tempLocal);
       return module.unreachable();
     }
 
@@ -9309,7 +9247,6 @@ export class Compiler extends DiagnosticEmitter {
     );
 
     this.currentType = tempLocal.type;
-    flow.freeTempLocal(tempLocal);
     var typeRef = tempLocal.type.toRef();
 
     return module.block(null, [
@@ -10414,7 +10351,6 @@ export class Compiler extends DiagnosticEmitter {
         staticAbortCallExpr
       );
     }
-    flow.freeTempLocal(temp);
     this.currentType = type.nonNullableType;
     return expr;
   }
@@ -10467,7 +10403,6 @@ export class Compiler extends DiagnosticEmitter {
         module.usize(0)
       );
     }
-    flow.freeTempLocal(temp);
     this.currentType = toType;
     return expr;
   }

@@ -18,6 +18,14 @@
   (local $ret i32)
   (local $var$4 i32)
   (local $var$5 i32)
+  (local $var$6 i32)
+  (local $var$7 i32)
+  (local $var$8 i32)
+  (local $var$9 i32)
+  (local $var$10 i32)
+  (local $var$11 i32)
+  (local $var$12 i32)
+  (local $var$13 i32)
   local.get $dest
   local.set $ret
   local.get $dest
@@ -63,11 +71,11 @@
       local.set $dest
       local.get $var$5
       local.get $src
-      local.tee $var$5
+      local.tee $var$6
       i32.const 1
       i32.add
       local.set $src
-      local.get $var$5
+      local.get $var$6
       i32.load8_u $0
       i32.store8 $0
       br $while-continue|0
@@ -77,8 +85,8 @@
      local.get $n
      i32.const 8
      i32.ge_u
-     local.set $var$4
-     local.get $var$4
+     local.set $var$7
+     local.get $var$7
      if
       local.get $dest
       local.get $src
@@ -102,21 +110,21 @@
    end
    loop $while-continue|2
     local.get $n
-    local.set $var$4
-    local.get $var$4
+    local.set $var$8
+    local.get $var$8
     if
      local.get $dest
-     local.tee $var$5
+     local.tee $var$9
      i32.const 1
      i32.add
      local.set $dest
-     local.get $var$5
+     local.get $var$9
      local.get $src
-     local.tee $var$5
+     local.tee $var$10
      i32.const 1
      i32.add
      local.set $src
-     local.get $var$5
+     local.get $var$10
      i32.load8_u $0
      i32.store8 $0
      local.get $n
@@ -141,8 +149,8 @@
      i32.add
      i32.const 8
      i32.rem_u
-     local.set $var$4
-     local.get $var$4
+     local.set $var$11
+     local.get $var$11
      if
       local.get $n
       i32.eqz
@@ -168,8 +176,8 @@
      local.get $n
      i32.const 8
      i32.ge_u
-     local.set $var$4
-     local.get $var$4
+     local.set $var$12
+     local.get $var$12
      if
       local.get $n
       i32.const 8
@@ -189,8 +197,8 @@
    end
    loop $while-continue|5
     local.get $n
-    local.set $var$4
-    local.get $var$4
+    local.set $var$13
+    local.get $var$13
     if
      local.get $dest
      local.get $n

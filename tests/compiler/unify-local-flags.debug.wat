@@ -12,30 +12,26 @@
  (export "memory" (memory $0))
  (func $unify-local-flags/testFor
   (local $x i32)
-  (local $var$1 i32)
+  (local $i i32)
   (local $var$2 i32)
-  (local $var$3 i32)
-  (local $var$4 i32)
   i32.const 0
   local.set $x
   i32.const 0
-  local.set $var$1
-  loop $for-loop|2
-   local.get $var$1
-   i32.const 255
-   i32.and
+  local.set $i
+  loop $for-loop|0
+   local.get $i
    i32.const 255
    i32.lt_u
-   local.set $var$4
-   local.get $var$4
+   local.set $var$2
+   local.get $var$2
    if
-    local.get $var$1
+    local.get $i
     local.set $x
-    local.get $var$1
+    local.get $i
     i32.const 1
     i32.add
-    local.set $var$1
-    br $for-loop|2
+    local.set $i
+    br $for-loop|0
    end
   end
  )
