@@ -838,7 +838,9 @@ export class Flow {
     }
     if (needsRecompile) {
       // Reset function locals to state before the compilation attempt
-      this.actualFunction.localsByIndex.length = numLocalsBefore;
+      let actualLocalsByIndex = this.actualFunction.localsByIndex;
+      assert(actualLocalsByIndex.length >= numLocalsBefore);
+      actualLocalsByIndex.length = numLocalsBefore;
       if (this.localFlags.length > numLocalsBefore) {
         this.localFlags.length = numLocalsBefore;
       }
