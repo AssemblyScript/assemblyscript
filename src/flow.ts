@@ -22,6 +22,7 @@ import {
 } from "./types";
 
 import {
+  Program,
   Local,
   Function,
   Element,
@@ -255,6 +256,11 @@ export class Flow {
     return this.parentFunction;
   }
 
+  /** Gets the program this flow belongs to. */
+  get program(): Program {
+    return this.parentFunction.program;
+  }
+
   /** Gets the current return type. */
   get returnType(): Type {
     return this.actualFunction.signature.returnType;
@@ -356,7 +362,7 @@ export class Flow {
     let scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else if (scopedLocals.has(name)) {
-      this.parentFunction.program.error(
+      this.program.error(
         DiagnosticCode.Cannot_redeclare_block_scoped_variable_0,
         declarationNode.range, name
       );
@@ -375,14 +381,14 @@ export class Flow {
       let existingLocal = assert(scopedLocals.get(name));
       if (reportNode) {
         if (!existingLocal.declaration.range.source.isNative) {
-          this.parentFunction.program.errorRelated(
+          this.program.errorRelated(
             DiagnosticCode.Duplicate_identifier_0,
             reportNode.range,
             existingLocal.declaration.name.range,
             name
           );
         } else {
-          this.parentFunction.program.error(
+          this.program.error(
             DiagnosticCode.Duplicate_identifier_0,
             reportNode.range, name
           );
@@ -1104,7 +1110,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
+        let global = assert(this.program.elementsByName.get(assert(getGlobalGetName(expr))));
         assert(global.kind == ElementKind.GLOBAL || global.kind == ElementKind.ENUMVALUE);
         return canConversionOverflow((<TypedElement>global).type, type);
       }
@@ -1315,7 +1321,7 @@ export class Flow {
 
       // overflows if the call does not return a wrapped value or the conversion does
       case ExpressionId.Call: {
-        let program = this.parentFunction.program;
+        let program = this.program;
         let instancesByName = program.instancesByName;
         let instanceName = assert(getCallTarget(expr));
         if (instancesByName.has(instanceName)) {
