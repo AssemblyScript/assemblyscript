@@ -196,19 +196,18 @@ export const enum ConditionKind {
 /** A control flow evaluator. */
 export class Flow {
 
-  /** Creates the parent flow of the specified function. */
-  static createParent(parentFunction: Function): Flow {
-    let flow = new Flow(parentFunction);
-    if (parentFunction.is(CommonFlags.CONSTRUCTOR)) {
+  /** Creates the default flow of the specified function. */
+  static createDefault(targetFunction: Function): Flow {
+    let flow = new Flow(targetFunction);
+    if (targetFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }
     return flow;
   }
 
-  /** Creates an inline flow within `parentFunction`. */
-  static createInline(parentFunction: Function, inlineFunction: Function): Flow {
-    let flow = new Flow(parentFunction);
-    flow.inlineFunction = inlineFunction;
+  /** Creates an inline flow, compiling `inlineFunction` into `targetFunction`. */
+  static createInline(targetFunction: Function, inlineFunction: Function): Flow {
+    let flow = new Flow(targetFunction, inlineFunction);
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
@@ -217,10 +216,13 @@ export class Flow {
   }
 
   private constructor(
-    /** Function this flow belongs to. */
-    public parentFunction: Function
+    /** Target function this flow generates code into. */
+    public targetFunction: Function,
+    /** Inline function this flow generates code from, if any. */
+    public inlineFunction: Function | null = null
   ) {
-    /* nop */
+    // Setup is performed above so inline ids and field flags are not reset
+    // when forking flows, which also uses the constructor.
   }
 
   /** Parent flow. */
@@ -239,8 +241,6 @@ export class Flow {
   localFlags: LocalFlags[] = [];
   /** Field flags on `this`. Constructors only. */
   thisFieldFlags: Map<Field,FieldFlags> | null = null;
-  /** Function being inlined, when inlining. */
-  inlineFunction: Function | null = null;
   /** The label we break to when encountering a return statement, when inlining. */
   inlineReturnLabel: string | null = null;
 
@@ -253,12 +253,12 @@ export class Flow {
   get actualFunction(): Function {
     let inlineFunction = this.inlineFunction;
     if (inlineFunction) return inlineFunction;
-    return this.parentFunction;
+    return this.targetFunction;
   }
 
   /** Gets the program this flow belongs to. */
   get program(): Program {
-    return this.parentFunction.program;
+    return this.targetFunction.program;
   }
 
   /** Gets the current return type. */
@@ -302,7 +302,7 @@ export class Flow {
 
   /** Forks this flow to a child flow. */
   fork(resetBreakContext: bool = false): Flow {
-    let branch = new Flow(this.parentFunction);
+    let branch = new Flow(this.targetFunction, this.inlineFunction);
     branch.parent = this;
     branch.outer = this.outer;
     if (resetBreakContext) {
@@ -324,14 +324,13 @@ export class Flow {
     } else {
       assert(!this.thisFieldFlags);
     }
-    branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
     return branch;
   }
 
   /** Gets a free temporary local of the specified type. */
   getTempLocal(type: Type): Local {
-    let local = this.parentFunction.addLocal(type);
+    let local = this.targetFunction.addLocal(type);
     this.unsetLocalFlag(local.index, ~0);
     return local;
   }
@@ -358,7 +357,7 @@ export class Flow {
 
   /** Adds a new scoped dummy local of the specified name. */
   addScopedDummyLocal(name: string, type: Type, declarationNode: Node): Local {
-    let scopedDummy = new Local(name, -1, type, this.parentFunction);
+    let scopedDummy = new Local(name, -1, type, this.targetFunction);
     let scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else if (scopedLocals.has(name)) {
@@ -396,8 +395,8 @@ export class Flow {
       }
       return existingLocal;
     }
-    assert(index < this.parentFunction.localsByIndex.length);
-    let scopedAlias = new Local(name, index, type, this.parentFunction);
+    assert(index < this.targetFunction.localsByIndex.length);
+    let scopedAlias = new Local(name, index, type, this.targetFunction);
     scopedAlias.set(CommonFlags.SCOPED);
     scopedLocals.set(name, scopedAlias);
     return scopedAlias;
@@ -518,33 +517,33 @@ export class Flow {
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
   pushBreakLabel(): string {
-    let parentFunction = this.parentFunction;
-    let id = parentFunction.nextBreakId++;
-    let stack = parentFunction.breakStack;
-    if (!stack) parentFunction.breakStack = [ id ];
+    let targetFunction = this.targetFunction;
+    let id = targetFunction.nextBreakId++;
+    let stack = targetFunction.breakStack;
+    if (!stack) targetFunction.breakStack = [ id ];
     else stack.push(id);
     let label = id.toString();
-    parentFunction.breakLabel = label;
+    targetFunction.breakLabel = label;
     return label;
   }
 
   /** Pops the most recent break label from the stack. */
   popBreakLabel(): void {
-    let parentFunction = this.parentFunction;
-    let stack = assert(parentFunction.breakStack);
+    let targetFunction = this.targetFunction;
+    let stack = assert(targetFunction.breakStack);
     let length = assert(stack.length);
     stack.pop();
     if (length > 1) {
-      parentFunction.breakLabel = stack[length - 2].toString();
+      targetFunction.breakLabel = stack[length - 2].toString();
     } else {
-      parentFunction.breakLabel = null;
-      parentFunction.breakStack = null;
+      targetFunction.breakLabel = null;
+      targetFunction.breakStack = null;
     }
   }
 
   /** Inherits flags of another flow into this one, i.e. a finished inner block. */
   inherit(other: Flow): void {
-    assert(other.parentFunction == this.parentFunction);
+    assert(other.targetFunction == this.targetFunction);
     assert(other.parent == this); // currently the case, but might change
     let otherFlags = other.flags;
 
@@ -566,7 +565,7 @@ export class Flow {
 
   /** Inherits flags of a conditional branch joining again with this one, i.e. then without else. */
   inheritBranch(other: Flow, conditionKind: ConditionKind = ConditionKind.UNKNOWN): void {
-    assert(other.parentFunction == this.parentFunction);
+    assert(other.targetFunction == this.targetFunction);
     switch (conditionKind) {
       case ConditionKind.TRUE: this.inherit(other); // always executes
       case ConditionKind.FALSE: return;             // never executes
@@ -670,8 +669,8 @@ export class Flow {
 
   /** Inherits mutual flags of two alternate branches becoming this one, i.e. then with else. */
   inheritMutual(left: Flow, right: Flow): void {
-    assert(left.parentFunction == right.parentFunction);
-    assert(left.parentFunction == this.parentFunction);
+    assert(left.targetFunction == right.targetFunction);
+    assert(left.targetFunction == this.targetFunction);
     // This differs from the previous method in that no flags are guaranteed
     // to happen unless it is the case in both flows.
 
@@ -821,10 +820,10 @@ export class Flow {
   ): bool {
     let numThisLocalFlags = this.localFlags.length;
     let numOtherLocalFlags = other.localFlags.length;
-    let parentFunction = this.parentFunction;
-    assert(parentFunction == other.parentFunction);
-    let localsByIndex = parentFunction.localsByIndex;
-    assert(localsByIndex == other.parentFunction.localsByIndex);
+    let targetFunction = this.targetFunction;
+    assert(targetFunction == other.targetFunction);
+    let localsByIndex = targetFunction.localsByIndex;
+    assert(localsByIndex == other.targetFunction.localsByIndex);
     let needsRecompile = false;
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       let local = localsByIndex[i];
@@ -862,11 +861,11 @@ export class Flow {
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
-        let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalSetIndex(expr)];
         return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
       }
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalGetIndex(expr)];
         return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
       }
     }
@@ -893,7 +892,7 @@ export class Flow {
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
-        let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalSetIndex(expr)];
         if (!iff || iff.isLocalFlag(local.index, LocalFlags.NONNULL)) {
           this.setLocalFlag(local.index, LocalFlags.NONNULL);
         }
@@ -901,7 +900,7 @@ export class Flow {
         break;
       }
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalGetIndex(expr)];
         if (!iff || iff.isLocalFlag(local.index, LocalFlags.NONNULL)) {
           this.setLocalFlag(local.index, LocalFlags.NONNULL);
         }
@@ -1095,7 +1094,7 @@ export class Flow {
 
       // overflows if the local isn't wrapped or the conversion does
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalGetIndex(expr)];
         return !this.isLocalFlag(local.index, LocalFlags.WRAPPED, true)
             || canConversionOverflow(local.type, type);
       }

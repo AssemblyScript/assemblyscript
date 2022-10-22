@@ -496,7 +496,7 @@ export class Compiler extends DiagnosticEmitter {
     this.program.initialize();
 
     // obtain the main start function
-    let startFunctionInstance = this.currentFlow.parentFunction;
+    let startFunctionInstance = this.currentFlow.targetFunction;
     assert(startFunctionInstance.internalName == BuiltinNames.start);
     let startFunctionBody = this.currentBody;
     assert(startFunctionBody.length == 0);
@@ -2287,7 +2287,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let outerFlow = this.currentFlow;
-    let numLocalsBefore = outerFlow.parentFunction.localsByIndex.length;
+    let numLocalsBefore = outerFlow.targetFunction.localsByIndex.length;
 
     // (block $break                          └►┐ flow
     //  (loop $loop                             ├◄───────────┐ recompile?
@@ -2424,7 +2424,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let outerFlow = this.currentFlow;
-    let numLocalsBefore = outerFlow.parentFunction.localsByIndex.length;
+    let numLocalsBefore = outerFlow.targetFunction.localsByIndex.length;
 
     // (initializer)                  └►┐ flow
     // (block $break                    │
@@ -2977,7 +2977,7 @@ export class Compiler extends DiagnosticEmitter {
             let local: Local | null = null;
             switch (<u32>getExpressionType(initExpr)) {
               case <u32>TypeRef.I32: {
-                local = new Local(name, -1, type, flow.parentFunction);
+                local = new Local(name, -1, type, flow.targetFunction);
                 local.setConstantIntegerValue(
                   i64_new(
                     getConstValueI32(initExpr),
@@ -2988,7 +2988,7 @@ export class Compiler extends DiagnosticEmitter {
                 break;
               }
               case <u32>TypeRef.I64: {
-                local = new Local(name, -1, type, flow.parentFunction);
+                local = new Local(name, -1, type, flow.targetFunction);
                 local.setConstantIntegerValue(
                   i64_new(
                     getConstValueI64Low(initExpr),
@@ -2999,12 +2999,12 @@ export class Compiler extends DiagnosticEmitter {
                 break;
               }
               case <u32>TypeRef.F32: {
-                local = new Local(name, -1, type, flow.parentFunction);
+                local = new Local(name, -1, type, flow.targetFunction);
                 local.setConstantFloatValue(<f64>getConstValueF32(initExpr), type);
                 break;
               }
               case <u32>TypeRef.F64: {
-                local = new Local(name, -1, type, flow.parentFunction);
+                local = new Local(name, -1, type, flow.targetFunction);
                 local.setConstantFloatValue(getConstValueF64(initExpr), type);
                 break;
               }
@@ -3073,7 +3073,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             continue;
           }
-          local = flow.parentFunction.addLocal(type, name, declaration);
+          local = flow.targetFunction.addLocal(type, name, declaration);
           flow.unsetLocalFlag(local.index, ~0);
           if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         }
@@ -3116,7 +3116,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let outerFlow = this.currentFlow;
-    let numLocalsBefore = outerFlow.parentFunction.localsByIndex.length;
+    let numLocalsBefore = outerFlow.targetFunction.localsByIndex.length;
 
     // (block $break                  └►┐ flow
     //  (loop $continue                 ├◄───────────┐ recompile?
@@ -6063,7 +6063,7 @@ export class Compiler extends DiagnosticEmitter {
         let local = <Local>target;
         signature = local.type.signatureReference;
         if (signature) {
-          if (local.parent != flow.parentFunction) {
+          if (local.parent != flow.targetFunction) {
             // TODO: closures
             this.error(
               DiagnosticCode.Not_implemented_0,
@@ -6461,7 +6461,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Create a new inline flow and use it to compile the function as a block
     let previousFlow = this.currentFlow;
-    let flow = Flow.createInline(previousFlow.parentFunction, instance);
+    let flow = Flow.createInline(previousFlow.targetFunction, instance);
     let body = [];
 
     if (thisArg) {
@@ -7481,7 +7481,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.currentType = localType;
 
-        if (target.parent != flow.parentFunction) {
+        if (target.parent != flow.targetFunction) {
           // TODO: closures
           this.error(
             DiagnosticCode.Not_implemented_0,
@@ -9749,11 +9749,11 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Adds the debug location of the specified expression at the specified range to the source map. */
   addDebugLocation(expr: ExpressionRef, range: Range): void {
-    let parentFunction = this.currentFlow.parentFunction;
+    let targetFunction = this.currentFlow.targetFunction;
     let source = range.source;
     if (source.debugInfoIndex < 0) source.debugInfoIndex = this.module.addDebugInfoFile(source.normalizedPath);
     range.debugInfoRef = expr;
-    parentFunction.debugLocations.push(range);
+    targetFunction.debugLocations.push(range);
   }
 
   /** Checks whether a particular feature is enabled. */

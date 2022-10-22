@@ -3696,7 +3696,7 @@ export class Function extends TypedElement {
     this.original = this;
     let program = prototype.program;
     this.type = signature.type;
-    this.flow = Flow.createParent(this);
+    this.flow = Flow.createDefault(this);
     if (!prototype.is(CommonFlags.AMBIENT)) {
       let localIndex = 0;
       let thisType = signature.thisType;
