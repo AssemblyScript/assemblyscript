@@ -325,7 +325,9 @@ export class Flow {
 
   /** Gets a free temporary local of the specified type. */
   getTempLocal(type: Type): Local {
-    return this.parentFunction.addLocal(type);
+    let local = this.parentFunction.addLocal(type);
+    this.unsetLocalFlag(local.index, ~0);
+    return local;
   }
 
   /** Gets the scoped local of the specified name. */
@@ -837,6 +839,9 @@ export class Flow {
     if (needsRecompile) {
       // Reset function locals to state before the compilation attempt
       this.actualFunction.localsByIndex.length = numLocalsBefore;
+      if (this.localFlags.length > numLocalsBefore) {
+        this.localFlags.length = numLocalsBefore;
+      }
     }
     return needsRecompile;
   }

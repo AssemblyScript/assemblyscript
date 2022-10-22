@@ -3074,6 +3074,7 @@ export class Compiler extends DiagnosticEmitter {
             continue;
           }
           local = flow.parentFunction.addLocal(type, name, declaration);
+          flow.unsetLocalFlag(local.index, ~0);
           if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         }
         if (initExpr) {
