@@ -2707,12 +2707,12 @@ export class Compiler extends DiagnosticEmitter {
     let valueExpression = statement.value;
     if (valueExpression) {
       let constraints = Constraints.CONV_IMPLICIT;
-      if (flow.actualFunction.is(CommonFlags.MODULE_EXPORT)) constraints |= Constraints.MUST_WRAP;
+      if (flow.sourceFunction.is(CommonFlags.MODULE_EXPORT)) constraints |= Constraints.MUST_WRAP;
 
       expr = this.compileExpression(valueExpression, returnType, constraints);
       if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
       if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.RETURNS_NONNULL);
-      if (flow.actualFunction.is(CommonFlags.CONSTRUCTOR) && valueExpression.kind != NodeKind.THIS) {
+      if (flow.sourceFunction.is(CommonFlags.CONSTRUCTOR) && valueExpression.kind != NodeKind.THIS) {
         flow.set(FlowFlags.MAY_RETURN_NONTHIS);
       }
     } else if (returnType != Type.void) {
@@ -2922,7 +2922,7 @@ export class Compiler extends DiagnosticEmitter {
       if (typeNode) {
         type = resolver.resolveType( // reports
           typeNode,
-          flow.actualFunction,
+          flow.sourceFunction,
           cloneMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
@@ -3719,7 +3719,7 @@ export class Compiler extends DiagnosticEmitter {
         let flow = this.currentFlow;
         let toType = this.resolver.resolveType( // reports
           assert(expression.toType),
-          flow.actualFunction,
+          flow.sourceFunction,
           cloneMap(flow.contextualTypeArguments)
         );
         if (!toType) return this.module.unreachable();
@@ -5691,7 +5691,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FIELD: {
         let fieldInstance = <Field>target;
         let initializerNode = fieldInstance.initializerNode;
-        let isConstructor = flow.actualFunction.is(CommonFlags.CONSTRUCTOR);
+        let isConstructor = flow.sourceFunction.is(CommonFlags.CONSTRUCTOR);
 
         // Cannot assign to readonly fields except in constructors if there's no initializer
         if (fieldInstance.is(CommonFlags.READONLY)) {
@@ -5970,8 +5970,8 @@ export class Compiler extends DiagnosticEmitter {
     // handle call to super
     if (expression.expression.kind == NodeKind.SUPER) {
       let flow = this.currentFlow;
-      let actualFunction = flow.actualFunction;
-      if (!actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+      let sourceFunction = flow.sourceFunction;
+      if (!sourceFunction.is(CommonFlags.CONSTRUCTOR)) {
         this.error(
           DiagnosticCode.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors,
           expression.range
@@ -5979,7 +5979,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.unreachable();
       }
 
-      let parent = assert(actualFunction.parent);
+      let parent = assert(sourceFunction.parent);
       assert(parent.kind == ElementKind.CLASS);
       let classInstance = <Class>parent;
       let baseClassInstance = classInstance.base;
@@ -6259,7 +6259,7 @@ export class Compiler extends DiagnosticEmitter {
       typeArguments = this.resolver.resolveTypeArguments(
         assert(typeParameterNodes),
         typeArgumentNodes,
-        this.currentFlow.actualFunction.parent,
+        this.currentFlow.sourceFunction.parent,
         cloneMap(this.currentFlow.contextualTypeArguments), // don't update
         expression
       );
@@ -6396,9 +6396,9 @@ export class Compiler extends DiagnosticEmitter {
     if (instance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
 
     // handle call on `this` in constructors
-    let actualFunction = this.currentFlow.actualFunction;
-    if (actualFunction.is(CommonFlags.CONSTRUCTOR) && reportNode.isAccessOnThis) {
-      let parent = actualFunction.parent;
+    let sourceFunction = this.currentFlow.sourceFunction;
+    if (sourceFunction.is(CommonFlags.CONSTRUCTOR) && reportNode.isAccessOnThis) {
+      let parent = sourceFunction.parent;
       assert(parent.kind == ElementKind.CLASS);
       this.checkFieldInitialization(<Class>parent, reportNode);
     }
@@ -7152,14 +7152,14 @@ export class Compiler extends DiagnosticEmitter {
     let declaration = expression.declaration.clone(); // generic contexts can have multiple
     assert(!declaration.typeParameters); // function expression cannot be generic
     let flow = this.currentFlow;
-    let actualFunction = flow.actualFunction;
+    let sourceFunction = flow.sourceFunction;
     let isNamed = declaration.name.text.length > 0;
     let isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
     let prototype = new FunctionPrototype(
       isSemanticallyAnonymous
-        ? `${isNamed ? declaration.name.text : "anonymous"}|${actualFunction.nextAnonymousId++}`
+        ? `${isNamed ? declaration.name.text : "anonymous"}|${sourceFunction.nextAnonymousId++}`
         : declaration.name.text,
-      actualFunction,
+      sourceFunction,
       declaration,
       DecoratorFlags.NONE
     );
@@ -7192,7 +7192,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!isTypeOmitted(parameterNode.type)) {
           let resolvedType = this.resolver.resolveType(
             parameterNode.type,
-            actualFunction.parent,
+            sourceFunction.parent,
             contextualTypeArguments
           );
           if (!resolvedType) return module.unreachable();
@@ -7212,7 +7212,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!isTypeOmitted(signatureNode.returnType)) {
         let resolvedType = this.resolver.resolveType(
           signatureNode.returnType,
-          actualFunction.parent,
+          sourceFunction.parent,
           contextualTypeArguments
         );
         if (!resolvedType) return module.unreachable();
@@ -7242,7 +7242,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         let resolvedType = this.resolver.resolveType(
           thisTypeNode,
-          actualFunction.parent,
+          sourceFunction.parent,
           contextualTypeArguments
         );
         if (!resolvedType) return module.unreachable();
@@ -7331,7 +7331,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let flow = this.currentFlow;
-    let actualFunction = flow.actualFunction;
+    let sourceFunction = flow.sourceFunction;
 
     // check special keywords first
     switch (expression.kind) {
@@ -7368,7 +7368,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.i32(0);
       }
       case NodeKind.THIS: {
-        let thisType = actualFunction.signature.thisType;
+        let thisType = sourceFunction.signature.thisType;
         if (!thisType) {
           this.error(
             DiagnosticCode._this_cannot_be_referenced_in_current_location,
@@ -7377,7 +7377,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = this.options.usizeType;
           return module.unreachable();
         }
-        if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+        if (sourceFunction.is(CommonFlags.CONSTRUCTOR)) {
           if (flow.is(FlowFlags.CTORPARAM_CONTEXT)) {
             this.error(
               DiagnosticCode._this_cannot_be_referenced_in_constructor_arguments,
@@ -7385,7 +7385,7 @@ export class Compiler extends DiagnosticEmitter {
             );
           }
           if (!(constraints & Constraints.IS_THIS)) {
-            let parent = actualFunction.parent;
+            let parent = sourceFunction.parent;
             assert(parent.kind == ElementKind.CLASS);
             this.checkFieldInitialization(<Class>parent, expression);
           }
@@ -7396,7 +7396,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.local_get(thisLocal.index, thisType.toRef());
       }
       case NodeKind.SUPER: {
-        if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+        if (sourceFunction.is(CommonFlags.CONSTRUCTOR)) {
           if (flow.is(FlowFlags.CTORPARAM_CONTEXT)) {
             this.error(
               DiagnosticCode._super_cannot_be_referenced_in_constructor_arguments,
@@ -7421,8 +7421,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
         }
-        if (actualFunction.is(CommonFlags.INSTANCE)) {
-          let parent = assert(actualFunction.parent);
+        if (sourceFunction.is(CommonFlags.INSTANCE)) {
+          let parent = assert(sourceFunction.parent);
           assert(parent.kind == ElementKind.CLASS);
           let classInstance = <Class>parent;
           let baseClassInstance = classInstance.base;
@@ -7445,7 +7445,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise resolve
     let currentParent = this.currentParent;
-    if (!currentParent) currentParent = actualFunction;
+    if (!currentParent) currentParent = sourceFunction;
     let target = this.resolver.lookupIdentifierExpression( // reports
       expression,
       flow,
@@ -7590,7 +7590,7 @@ export class Compiler extends DiagnosticEmitter {
     if (isType.kind == NodeKind.NAMEDTYPE) {
       let namedType = <NamedTypeNode>isType;
       if (!(namedType.isNullable || namedType.hasTypeArguments)) {
-        let element = this.resolver.resolveTypeName(namedType.name, flow.actualFunction, ReportMode.SWALLOW);
+        let element = this.resolver.resolveTypeName(namedType.name, flow.sourceFunction, ReportMode.SWALLOW);
         if (element && element.kind == ElementKind.CLASS_PROTOTYPE) {
           let prototype = <ClassPrototype>element;
           if (prototype.is(CommonFlags.GENERIC)) {
@@ -7603,7 +7603,7 @@ export class Compiler extends DiagnosticEmitter {
     // Fall back to `instanceof TYPE`
     let expectedType = this.resolver.resolveType(
       expression.isType,
-      flow.actualFunction,
+      flow.sourceFunction,
       cloneMap(flow.contextualTypeArguments)
     );
     if (!expectedType) {
@@ -8528,7 +8528,7 @@ export class Compiler extends DiagnosticEmitter {
     let flow = this.currentFlow;
 
     // obtain the class being instantiated
-    let target = this.resolver.resolveTypeName(expression.typeName, flow.actualFunction);
+    let target = this.resolver.resolveTypeName(expression.typeName, flow.sourceFunction);
     if (!target) return module.unreachable();
     if (target.kind != ElementKind.CLASS_PROTOTYPE) {
       this.error(
@@ -8564,7 +8564,7 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClassInclTypeArguments(
         classPrototype,
         typeArguments,
-        flow.actualFunction.parent, // relative to caller
+        flow.sourceFunction.parent, // relative to caller
         cloneMap(flow.contextualTypeArguments),
         expression
       );
@@ -8851,7 +8851,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         let thisType = this.currentType;
         if (
-          flow.actualFunction.is(CommonFlags.CONSTRUCTOR) &&
+          flow.sourceFunction.is(CommonFlags.CONSTRUCTOR) &&
           thisExpression.kind == NodeKind.THIS &&
           !flow.isThisFieldFlag(fieldInstance, FieldFlags.INITIALIZED) &&
           !fieldInstance.is(CommonFlags.DEFINITELY_ASSIGNED)

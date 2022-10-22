@@ -196,7 +196,7 @@ export const enum ConditionKind {
 /** A control flow evaluator. */
 export class Flow {
 
-  /** Creates the default flow of the specified function. */
+  /** Creates the default top-level flow of the specified function. */
   static createDefault(targetFunction: Function): Flow {
     let flow = new Flow(targetFunction);
     if (targetFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -207,6 +207,8 @@ export class Flow {
 
   /** Creates an inline flow, compiling `inlineFunction` into `targetFunction`. */
   static createInline(targetFunction: Function, inlineFunction: Function): Flow {
+    // Note that `targetFunction` and `inlineFunction` can be the same function
+    // when it is inlined into itself.
     let flow = new Flow(targetFunction, inlineFunction);
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -249,8 +251,12 @@ export class Flow {
     return this.inlineFunction != null;
   }
 
-  /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
-  get actualFunction(): Function {
+  /** Gets the source function being compiled. Differs from target when inlining. */
+  get sourceFunction(): Function {
+    // Obtaining the source function is useful when resolving elements relative
+    // to their source location. Note that the source function does not necessarily
+    // materialize in the binary, as it might be inlined. Code, locals, etc. must
+    // always be added to / maintained in the materializing target function instead.
     let inlineFunction = this.inlineFunction;
     if (inlineFunction) return inlineFunction;
     return this.targetFunction;
@@ -263,12 +269,12 @@ export class Flow {
 
   /** Gets the current return type. */
   get returnType(): Type {
-    return this.actualFunction.signature.returnType;
+    return this.sourceFunction.signature.returnType;
   }
 
   /** Gets the current contextual type arguments. */
   get contextualTypeArguments(): Map<string,Type> | null {
-    return this.actualFunction.contextualTypeArguments;
+    return this.sourceFunction.contextualTypeArguments;
   }
 
   /** Tests if this flow has the specified flag or flags. */
@@ -318,7 +324,7 @@ export class Flow {
       branch.breakLabel = this.breakLabel;
     }
     branch.localFlags = this.localFlags.slice();
-    if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+    if (this.sourceFunction.is(CommonFlags.CONSTRUCTOR)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
       branch.thisFieldFlags = cloneMap(thisFieldFlags);
     } else {
@@ -426,7 +432,7 @@ export class Flow {
   lookup(name: string): Element | null {
     let element = this.lookupLocal(name);
     if (element) return element;
-    return this.actualFunction.lookup(name);
+    return this.sourceFunction.lookup(name);
   }
 
   /** Tests if the local at the specified index has the specified flag or flags. */
@@ -461,13 +467,13 @@ export class Flow {
 
   /** Initializes `this` field flags. */
   initThisFieldFlags(): void {
-    let actualFunction = this.actualFunction;
-    assert(actualFunction.is(CommonFlags.CONSTRUCTOR));
-    let actualParent = actualFunction.parent;
-    assert(actualParent.kind == ElementKind.CLASS);
-    let actualClass = <Class>actualParent;
+    let sourceFunction = this.sourceFunction;
+    assert(sourceFunction.is(CommonFlags.CONSTRUCTOR));
+    let parent = sourceFunction.parent;
+    assert(parent.kind == ElementKind.CLASS);
+    let classInstance = <Class>parent;
     this.thisFieldFlags = new Map();
-    let members = actualClass.members;
+    let members = classInstance.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
@@ -475,7 +481,7 @@ export class Flow {
           let field = <Field>member;
           if (
             // guaranteed by super
-            field.parent != actualClass ||
+            field.parent != classInstance ||
             // has field initializer
             field.initializerNode ||
             // is initialized as a ctor parameter
@@ -503,7 +509,7 @@ export class Flow {
   setThisFieldFlag(field: Field, flag: FieldFlags): void {
     let fieldFlags = this.thisFieldFlags;
     if (fieldFlags) {
-      assert(this.actualFunction.is(CommonFlags.CONSTRUCTOR));
+      assert(this.sourceFunction.is(CommonFlags.CONSTRUCTOR));
       if (fieldFlags.has(field)) {
         let flags = changetype<FieldFlags>(fieldFlags.get(field));
         fieldFlags.set(field, flags | flag);
@@ -511,7 +517,7 @@ export class Flow {
         fieldFlags.set(field, flag);
       }
     } else {
-      assert(!this.actualFunction.is(CommonFlags.CONSTRUCTOR));
+      assert(!this.sourceFunction.is(CommonFlags.CONSTRUCTOR));
     }
   }
 
@@ -1362,7 +1368,7 @@ export class Flow {
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESSES_THIS");
     if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
-    return `Flow(${this.actualFunction})[${levels}] ${sb.join(" ")}`;
+    return `Flow(${this.sourceFunction})[${levels}] ${sb.join(" ")}`;
   }
 }
 
