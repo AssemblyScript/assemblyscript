@@ -21745,19 +21745,17 @@
   (local $digit i32)
   (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
-  (local $d|31 i64)
-  (local $32 i32)
-  (local $buffer|33 i32)
-  (local $len|34 i32)
-  (local $delta|35 i64)
-  (local $rest|36 i64)
-  (local $ten_kappa|37 i64)
-  (local $wp_w|38 i64)
-  (local $lastp|39 i32)
-  (local $digit|40 i32)
-  (local $41 i32)
-  (local $42 i32)
+  (local $d|30 i64)
+  (local $31 i32)
+  (local $buffer|32 i32)
+  (local $len|33 i32)
+  (local $delta|34 i64)
+  (local $rest|35 i64)
+  (local $ten_kappa|36 i64)
+  (local $wp_w|37 i64)
+  (local $lastp|38 i32)
+  (local $digit|39 i32)
+  (local $40 i32)
   i32.const 0
   local.get $mp_exp
   i32.sub
@@ -22060,8 +22058,8 @@
       else
        i32.const 0
       end
-      local.set $29
-      local.get $29
+      local.set $28
+      local.get $28
       if
        local.get $digit
        i32.const 1
@@ -22085,8 +22083,8 @@
   end
   loop $while-continue|4
    i32.const 1
-   local.set $30
-   local.get $30
+   local.set $29
+   local.get $29
    if
     local.get $p2
     i64.const 10
@@ -22100,8 +22098,8 @@
     local.get $one_exp
     i64.extend_i32_s
     i64.shr_u
-    local.set $d|31
-    local.get $d|31
+    local.set $d|30
+    local.get $d|30
     local.get $len
     i64.extend_i32_s
     i64.or
@@ -22110,16 +22108,16 @@
     if
      local.get $buffer
      local.get $len
-     local.tee $32
+     local.tee $31
      i32.const 1
      i32.add
      local.set $len
-     local.get $32
+     local.get $31
      i32.const 1
      i32.shl
      i32.add
      i32.const 48
-     local.get $d|31
+     local.get $d|30
      i32.wrap_i64
      i32.const 65535
      i32.and
@@ -22154,79 +22152,79 @@
      i64.mul
      local.set $wp_w_frc
      local.get $buffer
-     local.set $buffer|33
+     local.set $buffer|32
      local.get $len
-     local.set $len|34
+     local.set $len|33
      local.get $delta
-     local.set $delta|35
+     local.set $delta|34
      local.get $p2
-     local.set $rest|36
+     local.set $rest|35
      local.get $one_frc
-     local.set $ten_kappa|37
+     local.set $ten_kappa|36
      local.get $wp_w_frc
-     local.set $wp_w|38
-     local.get $buffer|33
-     local.get $len|34
+     local.set $wp_w|37
+     local.get $buffer|32
+     local.get $len|33
      i32.const 1
      i32.sub
      i32.const 1
      i32.shl
      i32.add
-     local.set $lastp|39
-     local.get $lastp|39
+     local.set $lastp|38
+     local.get $lastp|38
      i32.load16_u $0
-     local.set $digit|40
+     local.set $digit|39
      loop $while-continue|6
-      local.get $rest|36
-      local.get $wp_w|38
+      local.get $rest|35
+      local.get $wp_w|37
       i64.lt_u
       if (result i32)
-       local.get $delta|35
-       local.get $rest|36
+       local.get $delta|34
+       local.get $rest|35
        i64.sub
-       local.get $ten_kappa|37
+       local.get $ten_kappa|36
        i64.ge_u
       else
        i32.const 0
       end
       if (result i32)
-       local.get $rest|36
-       local.get $ten_kappa|37
+       local.get $rest|35
+       local.get $ten_kappa|36
        i64.add
-       local.get $wp_w|38
+       local.get $wp_w|37
        i64.lt_u
        if (result i32)
         i32.const 1
        else
-        local.get $wp_w|38
-        local.get $rest|36
+        local.get $wp_w|37
+        local.get $rest|35
         i64.sub
-        local.get $rest|36
-        local.get $ten_kappa|37
+        local.get $rest|35
+        local.get $ten_kappa|36
         i64.add
-        local.get $wp_w|38
+        local.get $wp_w|37
         i64.sub
         i64.gt_u
        end
       else
        i32.const 0
       end
-      local.set $42
-      local.get $42
+      local.set $40
+      local.get $40
       if
-       local.get $digit|40
+       local.get $digit|39
        i32.const 1
        i32.sub
-       local.set $digit|40
-       local.get $rest|36
-       local.get $ten_kappa|37
+       local.set $digit|39
+       local.get $rest|35
+       local.get $ten_kappa|36
        i64.add
-       local.set $rest|36
+       local.set $rest|35
        br $while-continue|6
       end
      end
-     local.get $lastp|39
-     local.get $digit|40
+     local.get $lastp|38
+     local.get $digit|39
      i32.store16 $0
      local.get $len
      return

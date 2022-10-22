@@ -496,7 +496,7 @@ export class Compiler extends DiagnosticEmitter {
     this.program.initialize();
 
     // obtain the main start function
-    let startFunctionInstance = this.currentFlow.actualFunction;
+    let startFunctionInstance = this.currentFlow.parentFunction;
     assert(startFunctionInstance.internalName == BuiltinNames.start);
     let startFunctionBody = this.currentBody;
     assert(startFunctionBody.length == 0);
@@ -2287,7 +2287,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let outerFlow = this.currentFlow;
-    let numLocalsBefore = outerFlow.actualFunction.localsByIndex.length;
+    let numLocalsBefore = outerFlow.parentFunction.localsByIndex.length;
 
     // (block $break                          └►┐ flow
     //  (loop $loop                             ├◄───────────┐ recompile?
@@ -2424,7 +2424,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let outerFlow = this.currentFlow;
-    let numLocalsBefore = outerFlow.actualFunction.localsByIndex.length;
+    let numLocalsBefore = outerFlow.parentFunction.localsByIndex.length;
 
     // (initializer)                  └►┐ flow
     // (block $break                    │
@@ -3116,7 +3116,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let module = this.module;
     let outerFlow = this.currentFlow;
-    let numLocalsBefore = outerFlow.actualFunction.localsByIndex.length;
+    let numLocalsBefore = outerFlow.parentFunction.localsByIndex.length;
 
     // (block $break                  └►┐ flow
     //  (loop $continue                 ├◄───────────┐ recompile?
