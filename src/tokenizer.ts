@@ -115,26 +115,26 @@ export const enum Token {
   OpenBracket,
   CloseBracket,
   Dot,
-  DotDotDot,
+  Dot_Dot_Dot,
   Semicolon,
   Comma,
   LessThan,
   GreaterThan,
   LessThan_Equals,
   GreaterThan_Equals,
-  EqualsEquals,
-  ExclamationEquals,
-  EqualsEqualsEquals,
-  ExclamationEqualsEquals,
-  EqualsGreaterThan,
+  Equals_Equals,
+  Exclamation_Equals,
+  Equals_Equals_Equals,
+  Exclamation_Equals_Equals,
+  Equals_GreaterThan,
   Plus,
   Minus,
-  AsteriskAsterisk,
+  Asterisk_Asterisk,
   Asterisk,
   Slash,
   Percent,
-  PlusPlus,
-  MinusMinus,
+  Plus_Plus,
+  Minus_Minus,
   LessThan_LessThan,
   GreaterThan_GreaterThan,
   GreaterThan_GreaterThan_GreaterThan,
@@ -143,7 +143,7 @@ export const enum Token {
   Caret,
   Exclamation,
   Tilde,
-  AmpersandAmpersand,
+  Ampersand_Ampersand,
   BarBar,
   Question,
   Colon,
@@ -151,7 +151,7 @@ export const enum Token {
   PlusEquals,
   MinusEquals,
   AsteriskEquals,
-  AsteriskAsteriskEquals,
+  Asterisk_Asterisk_Equals,
   SlashEquals,
   PercentEquals,
   LessThan_LessThan_Equals,
@@ -398,24 +398,24 @@ export function operatorTokenToString(token: Token): string {
     case Token.TypeOf: return "typeof";
     case Token.Void: return "void";
     case Token.Yield: return "yield";
-    case Token.DotDotDot: return "...";
+    case Token.Dot_Dot_Dot: return "...";
     case Token.Comma: return ",";
     case Token.LessThan: return "<";
     case Token.GreaterThan: return ">";
     case Token.LessThan_Equals: return "<=";
     case Token.GreaterThan_Equals: return ">=";
-    case Token.EqualsEquals: return "==";
-    case Token.ExclamationEquals: return "!=";
-    case Token.EqualsEqualsEquals: return "===";
-    case Token.ExclamationEqualsEquals: return "!==";
+    case Token.Equals_Equals: return "==";
+    case Token.Exclamation_Equals: return "!=";
+    case Token.Equals_Equals_Equals: return "===";
+    case Token.Exclamation_Equals_Equals: return "!==";
     case Token.Plus: return "+";
     case Token.Minus: return "-";
-    case Token.AsteriskAsterisk: return "**";
+    case Token.Asterisk_Asterisk: return "**";
     case Token.Asterisk: return "*";
     case Token.Slash: return "/";
     case Token.Percent: return "%";
-    case Token.PlusPlus: return "++";
-    case Token.MinusMinus: return "--";
+    case Token.Plus_Plus: return "++";
+    case Token.Minus_Minus: return "--";
     case Token.LessThan_LessThan: return "<<";
     case Token.GreaterThan_GreaterThan: return ">>";
     case Token.GreaterThan_GreaterThan_GreaterThan: return ">>>";
@@ -424,13 +424,13 @@ export function operatorTokenToString(token: Token): string {
     case Token.Caret: return "^";
     case Token.Exclamation: return "!";
     case Token.Tilde: return "~";
-    case Token.AmpersandAmpersand: return "&&";
+    case Token.Ampersand_Ampersand: return "&&";
     case Token.BarBar: return "||";
     case Token.Equals: return "=";
     case Token.PlusEquals: return "+=";
     case Token.MinusEquals: return "-=";
     case Token.AsteriskEquals: return "*=";
-    case Token.AsteriskAsteriskEquals: return "**=";
+    case Token.Asterisk_Asterisk_Equals: return "**=";
     case Token.SlashEquals: return "/=";
     case Token.PercentEquals: return "%=";
     case Token.LessThan_LessThan_Equals: return "<<=";
@@ -550,10 +550,10 @@ export class Tokenizer extends DiagnosticEmitter {
               text.charCodeAt(pos) == CharCode.Equals
             ) {
               this.pos = pos + 1;
-              return Token.ExclamationEqualsEquals;
+              return Token.Exclamation_Equals_Equals;
             }
             this.pos = pos;
-            return Token.ExclamationEquals;
+            return Token.Exclamation_Equals;
           }
           this.pos = pos;
           return Token.Exclamation;
@@ -585,7 +585,7 @@ export class Tokenizer extends DiagnosticEmitter {
             let chr = text.charCodeAt(pos);
             if (chr == CharCode.Ampersand) {
               this.pos = pos + 1;
-              return Token.AmpersandAmpersand;
+              return Token.Ampersand_Ampersand;
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
@@ -618,10 +618,10 @@ export class Tokenizer extends DiagnosticEmitter {
                 text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
-                return Token.AsteriskAsteriskEquals;
+                return Token.Asterisk_Asterisk_Equals;
               }
               this.pos = pos;
-              return Token.AsteriskAsterisk;
+              return Token.Asterisk_Asterisk;
             }
           }
           this.pos = pos;
@@ -633,7 +633,7 @@ export class Tokenizer extends DiagnosticEmitter {
             let chr = text.charCodeAt(pos);
             if (chr == CharCode.Plus) {
               this.pos = pos + 1;
-              return Token.PlusPlus;
+              return Token.Plus_Plus;
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
@@ -653,7 +653,7 @@ export class Tokenizer extends DiagnosticEmitter {
             let chr = text.charCodeAt(pos);
             if (chr == CharCode.Minus) {
               this.pos = pos + 1;
-              return Token.MinusMinus;
+              return Token.Minus_Minus;
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
@@ -677,7 +677,7 @@ export class Tokenizer extends DiagnosticEmitter {
               text.charCodeAt(pos + 1) == CharCode.Dot
             ) {
               this.pos = pos + 2;
-              return Token.DotDotDot;
+              return Token.Dot_Dot_Dot;
             }
           }
           this.pos = pos;
@@ -808,14 +808,14 @@ export class Tokenizer extends DiagnosticEmitter {
                 text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
-                return Token.EqualsEqualsEquals;
+                return Token.Equals_Equals_Equals;
               }
               this.pos = pos;
-              return Token.EqualsEquals;
+              return Token.Equals_Equals;
             }
             if (chr == CharCode.GreaterThan) {
               this.pos = pos + 1;
-              return Token.EqualsGreaterThan;
+              return Token.Equals_GreaterThan;
             }
           }
           this.pos = pos;

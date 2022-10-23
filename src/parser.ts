@@ -719,7 +719,7 @@ export class Parser extends DiagnosticEmitter {
       do {
         let paramStart = -1;
         let kind = ParameterKind.Default;
-        if (tn.skip(Token.DotDotDot)) {
+        if (tn.skip(Token.Dot_Dot_Dot)) {
           paramStart = tn.tokenPos;
           isSignature = true;
           tn.discard(state);
@@ -823,7 +823,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     let returnType: TypeNode | null;
-    if (tn.skip(Token.EqualsGreaterThan)) {
+    if (tn.skip(Token.Equals_GreaterThan)) {
       if (!isSignature) {
         isSignature = true;
         tn.discard(state);
@@ -1342,7 +1342,7 @@ export class Parser extends DiagnosticEmitter {
         }
       }
     }
-    if (tn.skip(Token.DotDotDot)) {
+    if (tn.skip(Token.Dot_Dot_Dot)) {
       if (accessFlags) {
         this.error(
           DiagnosticCode.A_parameter_property_cannot_be_declared_using_a_rest_parameter,
@@ -1609,7 +1609,7 @@ export class Parser extends DiagnosticEmitter {
     }
 
     if (arrowKind) {
-      if (!tn.skip(Token.EqualsGreaterThan)) {
+      if (!tn.skip(Token.Equals_GreaterThan)) {
         this.error(
           DiagnosticCode._0_expected,
           tn.range(tn.pos), "=>"
@@ -3676,7 +3676,7 @@ export class Parser extends DiagnosticEmitter {
     switch (token) {
 
       // TODO: SpreadExpression, YieldExpression
-      case Token.DotDotDot:
+      case Token.Dot_Dot_Dot:
       case Token.Yield: // fallthrough to unsupported UnaryPrefixExpression
 
       // UnaryPrefixExpression
@@ -3691,8 +3691,8 @@ export class Parser extends DiagnosticEmitter {
         if (!operand) return null;
         return Node.createUnaryPrefixExpression(token, operand, tn.range(startPos, tn.pos));
       }
-      case Token.PlusPlus:
-      case Token.MinusMinus: {
+      case Token.Plus_Plus:
+      case Token.Minus_Minus: {
         let operand = this.parseExpression(tn, Precedence.UnaryPrefix);
         if (!operand) return null;
         switch (operand.kind) {
@@ -3765,7 +3765,7 @@ export class Parser extends DiagnosticEmitter {
           switch (tn.next(IdentifierHandling.Prefer)) {
 
             // function expression
-            case Token.DotDotDot: {
+            case Token.Dot_Dot_Dot: {
               tn.reset(state);
               return this.parseFunctionExpression(tn);
             }
@@ -3778,7 +3778,7 @@ export class Parser extends DiagnosticEmitter {
                 case Token.CloseParen: {
                   if (
                     !tn.skip(Token.Colon) &&
-                    !tn.skip(Token.EqualsGreaterThan)
+                    !tn.skip(Token.Equals_GreaterThan)
                   ) {
                     again = false;
                     break;
@@ -3938,7 +3938,7 @@ export class Parser extends DiagnosticEmitter {
         if (tn.skip(Token.TemplateLiteral)) {
           return this.parseTemplateLiteral(tn, identifier);
         }
-        if (tn.peek(true) == Token.EqualsGreaterThan && !tn.nextTokenOnNewLine) {
+        if (tn.peek(true) == Token.Equals_GreaterThan && !tn.nextTokenOnNewLine) {
           return this.parseFunctionExpressionCommon(
             tn,
             Node.createEmptyIdentifierExpression(tn.range(startPos)),
@@ -4170,8 +4170,8 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // UnaryPostfixExpression
-        case Token.PlusPlus:
-        case Token.MinusMinus: {
+        case Token.Plus_Plus:
+        case Token.Minus_Minus: {
           if (
             expr.kind != NodeKind.Identifier &&
             expr.kind != NodeKind.ElementAccess &&
@@ -4259,7 +4259,7 @@ export class Parser extends DiagnosticEmitter {
         case Token.Equals:
         case Token.PlusEquals:
         case Token.MinusEquals:
-        case Token.AsteriskAsteriskEquals:
+        case Token.Asterisk_Asterisk_Equals:
         case Token.AsteriskEquals:
         case Token.SlashEquals:
         case Token.PercentEquals:
@@ -4269,7 +4269,7 @@ export class Parser extends DiagnosticEmitter {
         case Token.AmpersandEquals:
         case Token.CaretEquals:
         case Token.BarEquals:
-        case Token.AsteriskAsterisk: {
+        case Token.Asterisk_Asterisk: {
           let next = this.parseExpression(tn, nextPrecedence);
           if (!next) return null;
           expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
@@ -4280,10 +4280,10 @@ export class Parser extends DiagnosticEmitter {
         case Token.GreaterThan:
         case Token.LessThan_Equals:
         case Token.GreaterThan_Equals:
-        case Token.EqualsEquals:
-        case Token.EqualsEqualsEquals:
-        case Token.ExclamationEqualsEquals:
-        case Token.ExclamationEquals:
+        case Token.Equals_Equals:
+        case Token.Equals_Equals_Equals:
+        case Token.Exclamation_Equals_Equals:
+        case Token.Exclamation_Equals:
         case Token.Plus:
         case Token.Minus:
         case Token.Asterisk:
@@ -4295,7 +4295,7 @@ export class Parser extends DiagnosticEmitter {
         case Token.Ampersand:
         case Token.Bar:
         case Token.Caret:
-        case Token.AmpersandAmpersand:
+        case Token.Ampersand_Ampersand:
         case Token.BarBar: {
           let next = this.parseExpression(tn, nextPrecedence + 1);
           if (!next) return null;
@@ -4522,7 +4522,7 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.Equals:
     case Token.PlusEquals:
     case Token.MinusEquals:
-    case Token.AsteriskAsteriskEquals:
+    case Token.Asterisk_Asterisk_Equals:
     case Token.AsteriskEquals:
     case Token.SlashEquals:
     case Token.PercentEquals:
@@ -4534,14 +4534,14 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.BarEquals: return Precedence.Assignment;
     case Token.Question: return Precedence.Conditional;
     case Token.BarBar: return Precedence.LogicalOr;
-    case Token.AmpersandAmpersand: return Precedence.LogicalAnd;
+    case Token.Ampersand_Ampersand: return Precedence.LogicalAnd;
     case Token.Bar: return Precedence.BitwiseOr;
     case Token.Caret: return Precedence.BitwiseXor;
     case Token.Ampersand: return Precedence.BitwiseAnd;
-    case Token.EqualsEquals:
-    case Token.ExclamationEquals:
-    case Token.EqualsEqualsEquals:
-    case Token.ExclamationEqualsEquals: return Precedence.Equality;
+    case Token.Equals_Equals:
+    case Token.Exclamation_Equals:
+    case Token.Equals_Equals_Equals:
+    case Token.Exclamation_Equals_Equals: return Precedence.Equality;
     case Token.As:
     case Token.In:
     case Token.InstanceOf:
@@ -4557,9 +4557,9 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.Asterisk:
     case Token.Slash:
     case Token.Percent: return Precedence.Multiplicative;
-    case Token.AsteriskAsterisk: return Precedence.Exponentiated;
-    case Token.PlusPlus:
-    case Token.MinusMinus: return Precedence.UnaryPostfix;
+    case Token.Asterisk_Asterisk: return Precedence.Exponentiated;
+    case Token.Plus_Plus:
+    case Token.Minus_Minus: return Precedence.UnaryPostfix;
     case Token.Dot:
     case Token.OpenBracket:
     case Token.Exclamation: return Precedence.MemberAccess;

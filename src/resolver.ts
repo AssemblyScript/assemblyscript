@@ -1824,8 +1824,8 @@ export class Resolver extends DiagnosticEmitter {
         // fall-through
       }
       case Token.Plus:
-      case Token.PlusPlus:
-      case Token.MinusMinus: {
+      case Token.Plus_Plus:
+      case Token.Minus_Minus: {
         let type = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
         let classReference = type.getClassOrWrapper(this.program);
@@ -1873,7 +1873,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         return type.intType;
       }
-      case Token.DotDotDot: {
+      case Token.Dot_Dot_Dot: {
         if (reportMode == ReportMode.Report) {
           this.error(
             DiagnosticCode.Not_implemented_0,
@@ -1928,8 +1928,8 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     let operator = node.operator;
     switch (operator) {
-      case Token.PlusPlus:
-      case Token.MinusMinus: {
+      case Token.Plus_Plus:
+      case Token.Minus_Minus: {
         let type = this.resolveExpression(node.operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
         let classReference = type.getClassOrWrapper(this.program);
@@ -2000,7 +2000,7 @@ export class Resolver extends DiagnosticEmitter {
       case Token.PlusEquals:
       case Token.MinusEquals:
       case Token.AsteriskEquals:
-      case Token.AsteriskAsteriskEquals:
+      case Token.Asterisk_Asterisk_Equals:
       case Token.SlashEquals:
       case Token.PercentEquals:
       case Token.LessThan_LessThan_Equals:
@@ -2039,8 +2039,8 @@ export class Resolver extends DiagnosticEmitter {
 
       // equality: result is Bool, preferring overloads, incl. references
 
-      case Token.EqualsEquals:
-      case Token.ExclamationEquals: {
+      case Token.Equals_Equals:
+      case Token.Exclamation_Equals: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -2053,8 +2053,8 @@ export class Resolver extends DiagnosticEmitter {
 
       // identity: result is Bool, not supporting overloads
 
-      case Token.EqualsEqualsEquals:
-      case Token.ExclamationEqualsEquals: {
+      case Token.Equals_Equals_Equals:
+      case Token.Exclamation_Equals_Equals: {
         return Type.bool;
       }
 
@@ -2065,7 +2065,7 @@ export class Resolver extends DiagnosticEmitter {
       case Token.Asterisk:
       case Token.Slash:
       case Token.Percent: // mod has special logic, but also behaves like this
-      case Token.AsteriskAsterisk: {
+      case Token.Asterisk_Asterisk: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -2139,7 +2139,7 @@ export class Resolver extends DiagnosticEmitter {
 
       // logical: result is LHS (RHS is converted to LHS), not supporting overloads
 
-      case Token.AmpersandAmpersand:
+      case Token.Ampersand_Ampersand:
       case Token.BarBar: {
         return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
       }

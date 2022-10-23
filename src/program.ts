@@ -372,8 +372,8 @@ export namespace OperatorKind {
       case Token.SlashEquals: return OperatorKind.Div;
       case Token.Percent:
       case Token.PercentEquals: return OperatorKind.Rem;
-      case Token.AsteriskAsterisk:
-      case Token.AsteriskAsteriskEquals: return OperatorKind.Pow;
+      case Token.Asterisk_Asterisk:
+      case Token.Asterisk_Asterisk_Equals: return OperatorKind.Pow;
       case Token.Ampersand:
       case Token.AmpersandEquals: return OperatorKind.BitwiseAnd;
       case Token.Bar:
@@ -386,8 +386,8 @@ export namespace OperatorKind {
       case Token.GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShr;
       case Token.GreaterThan_GreaterThan_GreaterThan:
       case Token.GreaterThan_GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShrU;
-      case Token.EqualsEquals: return OperatorKind.Eq;
-      case Token.ExclamationEquals: return OperatorKind.Ne;
+      case Token.Equals_Equals: return OperatorKind.Eq;
+      case Token.Exclamation_Equals: return OperatorKind.Ne;
       case Token.GreaterThan: return OperatorKind.Gt;
       case Token.GreaterThan_Equals: return OperatorKind.Ge;
       case Token.LessThan: return OperatorKind.Lt;
@@ -403,8 +403,8 @@ export namespace OperatorKind {
       case Token.Minus: return OperatorKind.Minus;
       case Token.Exclamation: return OperatorKind.Not;
       case Token.Tilde: return OperatorKind.BitwiseNot;
-      case Token.PlusPlus: return OperatorKind.PrefixInc;
-      case Token.MinusMinus: return OperatorKind.PrefixDec;
+      case Token.Plus_Plus: return OperatorKind.PrefixInc;
+      case Token.Minus_Minus: return OperatorKind.PrefixDec;
     }
     return OperatorKind.Invalid;
   }
@@ -412,8 +412,8 @@ export namespace OperatorKind {
   /** Converts a unary postfix operator token to the respective operator kind. */
   export function fromUnaryPostfixToken(token: Token): OperatorKind {
     switch (token) {
-      case Token.PlusPlus: return OperatorKind.PostfixInc;
-      case Token.MinusMinus: return OperatorKind.PostfixDec;
+      case Token.Plus_Plus: return OperatorKind.PostfixInc;
+      case Token.Minus_Minus: return OperatorKind.PostfixDec;
     }
     return OperatorKind.Invalid;
   }

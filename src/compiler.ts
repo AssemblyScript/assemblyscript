@@ -3937,8 +3937,8 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
 
-      case Token.EqualsEqualsEquals:
-      case Token.EqualsEquals: {
+      case Token.Equals_Equals_Equals:
+      case Token.Equals_Equals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -3989,8 +3989,8 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.ExclamationEqualsEquals:
-      case Token.ExclamationEquals: {
+      case Token.Exclamation_Equals_Equals:
+      case Token.Exclamation_Equals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4178,8 +4178,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeMul(leftExpr, rightExpr, commonType);
         break;
       }
-      case Token.AsteriskAsteriskEquals: compound = true;
-      case Token.AsteriskAsterisk: {
+      case Token.Asterisk_Asterisk_Equals: compound = true;
+      case Token.Asterisk_Asterisk: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4533,7 +4533,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // logical (no overloading)
 
-      case Token.AmpersandAmpersand: { // left && right -> (t = left) ? right : t
+      case Token.Ampersand_Ampersand: { // left && right -> (t = left) ? right : t
         let flow = this.currentFlow;
         let inheritedConstraints = constraints & Constraints.MustWrap;
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
@@ -9037,7 +9037,7 @@ export class Compiler extends DiagnosticEmitter {
     let expr: ExpressionRef;
 
     switch (expression.operator) {
-      case Token.PlusPlus: {
+      case Token.Plus_Plus: {
 
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
@@ -9121,7 +9121,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.MinusMinus: {
+      case Token.Minus_Minus: {
 
         // check operator overload
         let classReference = this.currentType.getClassOrWrapper(this.program);
@@ -9357,7 +9357,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.PlusPlus: {
+      case Token.Plus_Plus: {
         compound = true;
         expr = this.compileExpression(
           expression.operand,
@@ -9426,7 +9426,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case Token.MinusMinus: {
+      case Token.Minus_Minus: {
         compound = true;
         expr = this.compileExpression(
           expression.operand,
@@ -9579,7 +9579,7 @@ export class Compiler extends DiagnosticEmitter {
       case Token.TypeOf: {
         return this.compileTypeof(expression, contextualType, constraints);
       }
-      case Token.DotDotDot: {
+      case Token.Dot_Dot_Dot: {
         this.error(
           DiagnosticCode.Not_implemented_0,
           expression.range, "Spread operator"
