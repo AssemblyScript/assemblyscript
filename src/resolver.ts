@@ -2003,9 +2003,9 @@ export class Resolver extends DiagnosticEmitter {
       case Token.AsteriskAsteriskEquals:
       case Token.SlashEquals:
       case Token.PercentEquals:
-      case Token.LessThanLessThanEquals:
-      case Token.GreaterThanGreaterThanEquals:
-      case Token.GreaterThanGreaterThanGreaterThanEquals:
+      case Token.LessThan_LessThan_Equals:
+      case Token.GreaterThan_GreaterThan_Equals:
+      case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
       case Token.AmpersandEquals:
       case Token.BarEquals:
       case Token.CaretEquals: {
@@ -2016,8 +2016,8 @@ export class Resolver extends DiagnosticEmitter {
 
       case Token.LessThan:
       case Token.GreaterThan:
-      case Token.LessThanEquals:
-      case Token.GreaterThanEquals: {
+      case Token.LessThan_Equals:
+      case Token.GreaterThan_Equals: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
@@ -2089,9 +2089,9 @@ export class Resolver extends DiagnosticEmitter {
 
       // shift: result is LHS (RHS is converted to LHS), preferring overloads
 
-      case Token.LessThanLessThan:
-      case Token.GreaterThanGreaterThan:
-      case Token.GreaterThanGreaterThanGreaterThan: {
+      case Token.LessThan_LessThan:
+      case Token.GreaterThan_GreaterThan:
+      case Token.GreaterThan_GreaterThan_GreaterThan: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);

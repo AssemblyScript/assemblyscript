@@ -4140,7 +4140,7 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // InstanceOfExpression
-        case Token.Instanceof: {
+        case Token.InstanceOf: {
           let isType = this.parseType(tn); // reports
           if (!isType) return null;
           expr = Node.createInstanceOfExpression(
@@ -4263,9 +4263,9 @@ export class Parser extends DiagnosticEmitter {
         case Token.AsteriskEquals:
         case Token.SlashEquals:
         case Token.PercentEquals:
-        case Token.LessThanLessThanEquals:
-        case Token.GreaterThanGreaterThanEquals:
-        case Token.GreaterThanGreaterThanGreaterThanEquals:
+        case Token.LessThan_LessThan_Equals:
+        case Token.GreaterThan_GreaterThan_Equals:
+        case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
         case Token.AmpersandEquals:
         case Token.CaretEquals:
         case Token.BarEquals:
@@ -4278,8 +4278,8 @@ export class Parser extends DiagnosticEmitter {
         // BinaryExpression
         case Token.LessThan:
         case Token.GreaterThan:
-        case Token.LessThanEquals:
-        case Token.GreaterThanEquals:
+        case Token.LessThan_Equals:
+        case Token.GreaterThan_Equals:
         case Token.EqualsEquals:
         case Token.EqualsEqualsEquals:
         case Token.ExclamationEqualsEquals:
@@ -4289,9 +4289,9 @@ export class Parser extends DiagnosticEmitter {
         case Token.Asterisk:
         case Token.Slash:
         case Token.Percent:
-        case Token.LessThanLessThan:
-        case Token.GreaterThanGreaterThan:
-        case Token.GreaterThanGreaterThanGreaterThan:
+        case Token.LessThan_LessThan:
+        case Token.GreaterThan_GreaterThan:
+        case Token.GreaterThan_GreaterThan_GreaterThan:
         case Token.Ampersand:
         case Token.Bar:
         case Token.Caret:
@@ -4526,9 +4526,9 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.AsteriskEquals:
     case Token.SlashEquals:
     case Token.PercentEquals:
-    case Token.LessThanLessThanEquals:
-    case Token.GreaterThanGreaterThanEquals:
-    case Token.GreaterThanGreaterThanGreaterThanEquals:
+    case Token.LessThan_LessThan_Equals:
+    case Token.GreaterThan_GreaterThan_Equals:
+    case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
     case Token.AmpersandEquals:
     case Token.CaretEquals:
     case Token.BarEquals: return Precedence.Assignment;
@@ -4544,14 +4544,14 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.ExclamationEqualsEquals: return Precedence.Equality;
     case Token.As:
     case Token.In:
-    case Token.Instanceof:
+    case Token.InstanceOf:
     case Token.LessThan:
     case Token.GreaterThan:
-    case Token.LessThanEquals:
-    case Token.GreaterThanEquals: return Precedence.Relational;
-    case Token.LessThanLessThan:
-    case Token.GreaterThanGreaterThan:
-    case Token.GreaterThanGreaterThanGreaterThan: return Precedence.Shift;
+    case Token.LessThan_Equals:
+    case Token.GreaterThan_Equals: return Precedence.Relational;
+    case Token.LessThan_LessThan:
+    case Token.GreaterThan_GreaterThan:
+    case Token.GreaterThan_GreaterThan_GreaterThan: return Precedence.Shift;
     case Token.Plus:
     case Token.Minus: return Precedence.Additive;
     case Token.Asterisk:

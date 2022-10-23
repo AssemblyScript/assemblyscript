@@ -3866,7 +3866,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.LessThanEquals: {
+      case Token.LessThan_Equals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -3901,7 +3901,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = Type.bool;
         break;
       }
-      case Token.GreaterThanEquals: {
+      case Token.GreaterThan_Equals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4313,8 +4313,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeRem(leftExpr, rightExpr, commonType, expression);
         break;
       }
-      case Token.LessThanLessThanEquals: compound = true;
-      case Token.LessThanLessThan: {
+      case Token.LessThan_LessThan_Equals: compound = true;
+      case Token.LessThan_LessThan: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
@@ -4340,8 +4340,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeShl(leftExpr, rightExpr, rightType);
         break;
       }
-      case Token.GreaterThanGreaterThanEquals: compound = true;
-      case Token.GreaterThanGreaterThan: {
+      case Token.GreaterThan_GreaterThan_Equals: compound = true;
+      case Token.GreaterThan_GreaterThan: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 
@@ -4368,8 +4368,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeShr(leftExpr, rightExpr, rightType);
         break;
       }
-      case Token.GreaterThanGreaterThanGreaterThanEquals: compound = true;
-      case Token.GreaterThanGreaterThanGreaterThan: {
+      case Token.GreaterThan_GreaterThan_GreaterThan_Equals: compound = true;
+      case Token.GreaterThan_GreaterThan_GreaterThan: {
         leftExpr = this.compileExpression(left, contextualType.intType);
         leftType = this.currentType;
 

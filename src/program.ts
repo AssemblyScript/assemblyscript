@@ -380,18 +380,18 @@ export namespace OperatorKind {
       case Token.BarEquals: return OperatorKind.BitwiseOr;
       case Token.Caret:
       case Token.CaretEquals: return OperatorKind.BitwiseXor;
-      case Token.LessThanLessThan:
-      case Token.LessThanLessThanEquals: return OperatorKind.BitwiseShl;
-      case Token.GreaterThanGreaterThan:
-      case Token.GreaterThanGreaterThanEquals: return OperatorKind.BitwiseShr;
-      case Token.GreaterThanGreaterThanGreaterThan:
-      case Token.GreaterThanGreaterThanGreaterThanEquals: return OperatorKind.BitwiseShrU;
+      case Token.LessThan_LessThan:
+      case Token.LessThan_LessThan_Equals: return OperatorKind.BitwiseShl;
+      case Token.GreaterThan_GreaterThan:
+      case Token.GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShr;
+      case Token.GreaterThan_GreaterThan_GreaterThan:
+      case Token.GreaterThan_GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShrU;
       case Token.EqualsEquals: return OperatorKind.Eq;
       case Token.ExclamationEquals: return OperatorKind.Ne;
       case Token.GreaterThan: return OperatorKind.Gt;
-      case Token.GreaterThanEquals: return OperatorKind.Ge;
+      case Token.GreaterThan_Equals: return OperatorKind.Ge;
       case Token.LessThan: return OperatorKind.Lt;
-      case Token.LessThanEquals: return OperatorKind.Le;
+      case Token.LessThan_Equals: return OperatorKind.Le;
     }
     return OperatorKind.Invalid;
   }

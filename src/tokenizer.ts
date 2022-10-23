@@ -73,7 +73,7 @@ export const enum Token {
   Implements,   // ES2017 non-lexical
   Import,       // ES2017
   In,           // ES2017
-  Instanceof,   // ES2017
+  InstanceOf,   // ES2017
   Interface,    // ES2017 non-lexical
   Is,
   KeyOf,
@@ -120,8 +120,8 @@ export const enum Token {
   Comma,
   LessThan,
   GreaterThan,
-  LessThanEquals,
-  GreaterThanEquals,
+  LessThan_Equals,
+  GreaterThan_Equals,
   EqualsEquals,
   ExclamationEquals,
   EqualsEqualsEquals,
@@ -135,9 +135,9 @@ export const enum Token {
   Percent,
   PlusPlus,
   MinusMinus,
-  LessThanLessThan,
-  GreaterThanGreaterThan,
-  GreaterThanGreaterThanGreaterThan,
+  LessThan_LessThan,
+  GreaterThan_GreaterThan,
+  GreaterThan_GreaterThan_GreaterThan,
   Ampersand,
   Bar,
   Caret,
@@ -154,9 +154,9 @@ export const enum Token {
   AsteriskAsteriskEquals,
   SlashEquals,
   PercentEquals,
-  LessThanLessThanEquals,
-  GreaterThanGreaterThanEquals,
-  GreaterThanGreaterThanGreaterThanEquals,
+  LessThan_LessThan_Equals,
+  GreaterThan_GreaterThan_Equals,
+  GreaterThan_GreaterThan_GreaterThan_Equals,
   AmpersandEquals,
   BarEquals,
   CaretEquals,
@@ -265,7 +265,7 @@ export function tokenFromKeyword(text: string): Token {
           break;
         }
         case CharCode.t: {
-          if (text == "instanceof") return Token.Instanceof;
+          if (text == "instanceof") return Token.InstanceOf;
           break;
         }
         case CharCode.e: {
@@ -363,7 +363,7 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.From:
     case Token.For:
     case Token.Get:
-    case Token.Instanceof:
+    case Token.InstanceOf:
     case Token.Is:
     case Token.KeyOf:
     case Token.Module:
@@ -393,7 +393,7 @@ export function operatorTokenToString(token: Token): string {
   switch (token) {
     case Token.Delete: return "delete";
     case Token.In: return "in";
-    case Token.Instanceof: return "instanceof";
+    case Token.InstanceOf: return "instanceof";
     case Token.New: return "new";
     case Token.TypeOf: return "typeof";
     case Token.Void: return "void";
@@ -402,8 +402,8 @@ export function operatorTokenToString(token: Token): string {
     case Token.Comma: return ",";
     case Token.LessThan: return "<";
     case Token.GreaterThan: return ">";
-    case Token.LessThanEquals: return "<=";
-    case Token.GreaterThanEquals: return ">=";
+    case Token.LessThan_Equals: return "<=";
+    case Token.GreaterThan_Equals: return ">=";
     case Token.EqualsEquals: return "==";
     case Token.ExclamationEquals: return "!=";
     case Token.EqualsEqualsEquals: return "===";
@@ -416,9 +416,9 @@ export function operatorTokenToString(token: Token): string {
     case Token.Percent: return "%";
     case Token.PlusPlus: return "++";
     case Token.MinusMinus: return "--";
-    case Token.LessThanLessThan: return "<<";
-    case Token.GreaterThanGreaterThan: return ">>";
-    case Token.GreaterThanGreaterThanGreaterThan: return ">>>";
+    case Token.LessThan_LessThan: return "<<";
+    case Token.GreaterThan_GreaterThan: return ">>";
+    case Token.GreaterThan_GreaterThan_GreaterThan: return ">>>";
     case Token.Ampersand: return "&";
     case Token.Bar: return "|";
     case Token.Caret: return "^";
@@ -433,9 +433,9 @@ export function operatorTokenToString(token: Token): string {
     case Token.AsteriskAsteriskEquals: return "**=";
     case Token.SlashEquals: return "/=";
     case Token.PercentEquals: return "%=";
-    case Token.LessThanLessThanEquals: return "<<=";
-    case Token.GreaterThanGreaterThanEquals: return ">>=";
-    case Token.GreaterThanGreaterThanGreaterThanEquals: return ">>>=";
+    case Token.LessThan_LessThan_Equals: return "<<=";
+    case Token.GreaterThan_GreaterThan_Equals: return ">>=";
+    case Token.GreaterThan_GreaterThan_GreaterThan_Equals: return ">>>=";
     case Token.AmpersandEquals: return "&=";
     case Token.BarEquals: return "|=";
     case Token.CaretEquals: return "^=";
@@ -783,14 +783,14 @@ export class Tokenizer extends DiagnosticEmitter {
                 text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
-                return Token.LessThanLessThanEquals;
+                return Token.LessThan_LessThan_Equals;
               }
               this.pos = pos;
-              return Token.LessThanLessThan;
+              return Token.LessThan_LessThan;
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.LessThanEquals;
+              return Token.LessThan_Equals;
             }
           }
           this.pos = pos;
@@ -836,22 +836,22 @@ export class Tokenizer extends DiagnosticEmitter {
                     text.charCodeAt(pos) == CharCode.Equals
                   ) {
                     this.pos = pos + 1;
-                    return Token.GreaterThanGreaterThanGreaterThanEquals;
+                    return Token.GreaterThan_GreaterThan_GreaterThan_Equals;
                   }
                   this.pos = pos;
-                  return Token.GreaterThanGreaterThanGreaterThan;
+                  return Token.GreaterThan_GreaterThan_GreaterThan;
                 }
                 if (chr == CharCode.Equals) {
                   this.pos = pos + 1;
-                  return Token.GreaterThanGreaterThanEquals;
+                  return Token.GreaterThan_GreaterThan_Equals;
                 }
               }
               this.pos = pos;
-              return Token.GreaterThanGreaterThan;
+              return Token.GreaterThan_GreaterThan;
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.GreaterThanEquals;
+              return Token.GreaterThan_Equals;
             }
           }
           this.pos = pos;
