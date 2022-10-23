@@ -4140,7 +4140,7 @@ export class Parser extends DiagnosticEmitter {
           break;
         }
         // InstanceOfExpression
-        case Token.InstanceOf: {
+        case Token.Instanceof: {
           let isType = this.parseType(tn); // reports
           if (!isType) return null;
           expr = Node.createInstanceOfExpression(
@@ -4544,7 +4544,7 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.ExclamationEqualsEquals: return Precedence.Equality;
     case Token.As:
     case Token.In:
-    case Token.InstanceOf:
+    case Token.Instanceof:
     case Token.LessThan:
     case Token.GreaterThan:
     case Token.LessThanEquals:

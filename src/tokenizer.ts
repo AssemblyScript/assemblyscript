@@ -73,7 +73,7 @@ export const enum Token {
   Implements,   // ES2017 non-lexical
   Import,       // ES2017
   In,           // ES2017
-  InstanceOf,   // ES2017
+  Instanceof,   // ES2017
   Interface,    // ES2017 non-lexical
   Is,
   KeyOf,
@@ -265,7 +265,7 @@ export function tokenFromKeyword(text: string): Token {
           break;
         }
         case CharCode.t: {
-          if (text == "instanceof") return Token.InstanceOf;
+          if (text == "instanceof") return Token.Instanceof;
           break;
         }
         case CharCode.e: {
@@ -363,7 +363,7 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.From:
     case Token.For:
     case Token.Get:
-    case Token.InstanceOf:
+    case Token.Instanceof:
     case Token.Is:
     case Token.KeyOf:
     case Token.Module:
@@ -393,7 +393,7 @@ export function operatorTokenToString(token: Token): string {
   switch (token) {
     case Token.Delete: return "delete";
     case Token.In: return "in";
-    case Token.InstanceOf: return "instanceof";
+    case Token.Instanceof: return "instanceof";
     case Token.New: return "new";
     case Token.TypeOf: return "typeof";
     case Token.Void: return "void";

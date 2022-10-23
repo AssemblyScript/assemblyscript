@@ -463,7 +463,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.MutableGlobals)) featureFlags |= FeatureFlags.MutableGlobals;
     if (options.hasFeature(Feature.NontrappingF2I)) featureFlags |= FeatureFlags.TruncSat;
     if (options.hasFeature(Feature.BulkMemory)) featureFlags |= FeatureFlags.BulkMemory;
-    if (options.hasFeature(Feature.Simd)) featureFlags |= FeatureFlags.Simd;
+    if (options.hasFeature(Feature.Simd)) featureFlags |= FeatureFlags.SIMD;
     if (options.hasFeature(Feature.Threads)) featureFlags |= FeatureFlags.Atomics;
     if (options.hasFeature(Feature.ExceptionHandling)) featureFlags |= FeatureFlags.ExceptionHandling;
     if (options.hasFeature(Feature.TailCalls)) featureFlags |= FeatureFlags.TailCall;
@@ -471,7 +471,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.MultiValue)) featureFlags |= FeatureFlags.MultiValue;
     if (options.hasFeature(Feature.GC)) featureFlags |= FeatureFlags.GC;
     if (options.hasFeature(Feature.Memory64)) featureFlags |= FeatureFlags.Memory64;
-    if (options.hasFeature(Feature.RelaxedSimd)) featureFlags |= FeatureFlags.RelaxedSimd;
+    if (options.hasFeature(Feature.RelaxedSimd)) featureFlags |= FeatureFlags.RelaxedSIMD;
     if (options.hasFeature(Feature.ExtendedConst)) featureFlags |= FeatureFlags.ExtendedConst;
     if (options.hasFeature(Feature.Stringref)) featureFlags |= FeatureFlags.Stringref;
     module.setFeatures(featureFlags);
