@@ -1997,18 +1997,18 @@ export class Resolver extends DiagnosticEmitter {
       // assignment: result is the target's type
 
       case Token.Equals:
-      case Token.PlusEquals:
-      case Token.MinusEquals:
-      case Token.AsteriskEquals:
+      case Token.Plus_Equals:
+      case Token.Minus_Equals:
+      case Token.Asterisk_Equals:
       case Token.Asterisk_Asterisk_Equals:
-      case Token.SlashEquals:
-      case Token.PercentEquals:
+      case Token.Slash_Equals:
+      case Token.Percent_Equals:
       case Token.LessThan_LessThan_Equals:
       case Token.GreaterThan_GreaterThan_Equals:
       case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
-      case Token.AmpersandEquals:
-      case Token.BarEquals:
-      case Token.CaretEquals: {
+      case Token.Ampersand_Equals:
+      case Token.Bar_Equals:
+      case Token.Caret_Equals: {
         return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
       }
 
@@ -2140,7 +2140,7 @@ export class Resolver extends DiagnosticEmitter {
       // logical: result is LHS (RHS is converted to LHS), not supporting overloads
 
       case Token.Ampersand_Ampersand:
-      case Token.BarBar: {
+      case Token.Bar_Bar: {
         return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
       }
     }

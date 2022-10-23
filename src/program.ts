@@ -363,23 +363,23 @@ export namespace OperatorKind {
   export function fromBinaryToken(token: Token): OperatorKind {
     switch (token) {
       case Token.Plus:
-      case Token.PlusEquals: return OperatorKind.Add;
+      case Token.Plus_Equals: return OperatorKind.Add;
       case Token.Minus:
-      case Token.MinusEquals: return OperatorKind.Sub;
+      case Token.Minus_Equals: return OperatorKind.Sub;
       case Token.Asterisk:
-      case Token.AsteriskEquals: return OperatorKind.Mul;
+      case Token.Asterisk_Equals: return OperatorKind.Mul;
       case Token.Slash:
-      case Token.SlashEquals: return OperatorKind.Div;
+      case Token.Slash_Equals: return OperatorKind.Div;
       case Token.Percent:
-      case Token.PercentEquals: return OperatorKind.Rem;
+      case Token.Percent_Equals: return OperatorKind.Rem;
       case Token.Asterisk_Asterisk:
       case Token.Asterisk_Asterisk_Equals: return OperatorKind.Pow;
       case Token.Ampersand:
-      case Token.AmpersandEquals: return OperatorKind.BitwiseAnd;
+      case Token.Ampersand_Equals: return OperatorKind.BitwiseAnd;
       case Token.Bar:
-      case Token.BarEquals: return OperatorKind.BitwiseOr;
+      case Token.Bar_Equals: return OperatorKind.BitwiseOr;
       case Token.Caret:
-      case Token.CaretEquals: return OperatorKind.BitwiseXor;
+      case Token.Caret_Equals: return OperatorKind.BitwiseXor;
       case Token.LessThan_LessThan:
       case Token.LessThan_LessThan_Equals: return OperatorKind.BitwiseShl;
       case Token.GreaterThan_GreaterThan:

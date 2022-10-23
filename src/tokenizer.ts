@@ -144,22 +144,22 @@ export const enum Token {
   Exclamation,
   Tilde,
   Ampersand_Ampersand,
-  BarBar,
+  Bar_Bar,
   Question,
   Colon,
   Equals,
-  PlusEquals,
-  MinusEquals,
-  AsteriskEquals,
+  Plus_Equals,
+  Minus_Equals,
+  Asterisk_Equals,
   Asterisk_Asterisk_Equals,
-  SlashEquals,
-  PercentEquals,
+  Slash_Equals,
+  Percent_Equals,
   LessThan_LessThan_Equals,
   GreaterThan_GreaterThan_Equals,
   GreaterThan_GreaterThan_GreaterThan_Equals,
-  AmpersandEquals,
-  BarEquals,
-  CaretEquals,
+  Ampersand_Equals,
+  Bar_Equals,
+  Caret_Equals,
   At,
 
   // literals
@@ -425,20 +425,20 @@ export function operatorTokenToString(token: Token): string {
     case Token.Exclamation: return "!";
     case Token.Tilde: return "~";
     case Token.Ampersand_Ampersand: return "&&";
-    case Token.BarBar: return "||";
+    case Token.Bar_Bar: return "||";
     case Token.Equals: return "=";
-    case Token.PlusEquals: return "+=";
-    case Token.MinusEquals: return "-=";
-    case Token.AsteriskEquals: return "*=";
+    case Token.Plus_Equals: return "+=";
+    case Token.Minus_Equals: return "-=";
+    case Token.Asterisk_Equals: return "*=";
     case Token.Asterisk_Asterisk_Equals: return "**=";
-    case Token.SlashEquals: return "/=";
-    case Token.PercentEquals: return "%=";
+    case Token.Slash_Equals: return "/=";
+    case Token.Percent_Equals: return "%=";
     case Token.LessThan_LessThan_Equals: return "<<=";
     case Token.GreaterThan_GreaterThan_Equals: return ">>=";
     case Token.GreaterThan_GreaterThan_GreaterThan_Equals: return ">>>=";
-    case Token.AmpersandEquals: return "&=";
-    case Token.BarEquals: return "|=";
-    case Token.CaretEquals: return "^=";
+    case Token.Ampersand_Equals: return "&=";
+    case Token.Bar_Equals: return "|=";
+    case Token.Caret_Equals: return "^=";
     default: {
       assert(false);
       return "";
@@ -574,7 +574,7 @@ export class Tokenizer extends DiagnosticEmitter {
             text.charCodeAt(pos) == CharCode.Equals
           ) {
             this.pos = pos + 1;
-            return Token.PercentEquals;
+            return Token.Percent_Equals;
           }
           this.pos = pos;
           return Token.Percent;
@@ -589,7 +589,7 @@ export class Tokenizer extends DiagnosticEmitter {
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.AmpersandEquals;
+              return Token.Ampersand_Equals;
             }
           }
           this.pos = pos;
@@ -609,7 +609,7 @@ export class Tokenizer extends DiagnosticEmitter {
             let chr = text.charCodeAt(pos);
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.AsteriskEquals;
+              return Token.Asterisk_Equals;
             }
             if (chr == CharCode.Asterisk) {
               ++pos;
@@ -637,7 +637,7 @@ export class Tokenizer extends DiagnosticEmitter {
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.PlusEquals;
+              return Token.Plus_Equals;
             }
           }
           this.pos = pos;
@@ -657,7 +657,7 @@ export class Tokenizer extends DiagnosticEmitter {
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.MinusEquals;
+              return Token.Minus_Equals;
             }
           }
           this.pos = pos;
@@ -742,7 +742,7 @@ export class Tokenizer extends DiagnosticEmitter {
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.SlashEquals;
+              return Token.Slash_Equals;
             }
           }
           this.pos = pos;
@@ -876,7 +876,7 @@ export class Tokenizer extends DiagnosticEmitter {
             text.charCodeAt(pos) == CharCode.Equals
           ) {
             this.pos = pos + 1;
-            return Token.CaretEquals;
+            return Token.Caret_Equals;
           }
           this.pos = pos;
           return Token.Caret;
@@ -891,11 +891,11 @@ export class Tokenizer extends DiagnosticEmitter {
             let chr = text.charCodeAt(pos);
             if (chr == CharCode.Bar) {
               this.pos = pos + 1;
-              return Token.BarBar;
+              return Token.Bar_Bar;
             }
             if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.BarEquals;
+              return Token.Bar_Equals;
             }
           }
           this.pos = pos;

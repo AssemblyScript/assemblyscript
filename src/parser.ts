@@ -4257,18 +4257,18 @@ export class Parser extends DiagnosticEmitter {
         }
         // BinaryExpression (right associative)
         case Token.Equals:
-        case Token.PlusEquals:
-        case Token.MinusEquals:
+        case Token.Plus_Equals:
+        case Token.Minus_Equals:
         case Token.Asterisk_Asterisk_Equals:
-        case Token.AsteriskEquals:
-        case Token.SlashEquals:
-        case Token.PercentEquals:
+        case Token.Asterisk_Equals:
+        case Token.Slash_Equals:
+        case Token.Percent_Equals:
         case Token.LessThan_LessThan_Equals:
         case Token.GreaterThan_GreaterThan_Equals:
         case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
-        case Token.AmpersandEquals:
-        case Token.CaretEquals:
-        case Token.BarEquals:
+        case Token.Ampersand_Equals:
+        case Token.Caret_Equals:
+        case Token.Bar_Equals:
         case Token.Asterisk_Asterisk: {
           let next = this.parseExpression(tn, nextPrecedence);
           if (!next) return null;
@@ -4296,7 +4296,7 @@ export class Parser extends DiagnosticEmitter {
         case Token.Bar:
         case Token.Caret:
         case Token.Ampersand_Ampersand:
-        case Token.BarBar: {
+        case Token.Bar_Bar: {
           let next = this.parseExpression(tn, nextPrecedence + 1);
           if (!next) return null;
           expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
@@ -4520,20 +4520,20 @@ function determinePrecedence(kind: Token): Precedence {
   switch (kind) {
     case Token.Comma: return Precedence.Comma;
     case Token.Equals:
-    case Token.PlusEquals:
-    case Token.MinusEquals:
+    case Token.Plus_Equals:
+    case Token.Minus_Equals:
     case Token.Asterisk_Asterisk_Equals:
-    case Token.AsteriskEquals:
-    case Token.SlashEquals:
-    case Token.PercentEquals:
+    case Token.Asterisk_Equals:
+    case Token.Slash_Equals:
+    case Token.Percent_Equals:
     case Token.LessThan_LessThan_Equals:
     case Token.GreaterThan_GreaterThan_Equals:
     case Token.GreaterThan_GreaterThan_GreaterThan_Equals:
-    case Token.AmpersandEquals:
-    case Token.CaretEquals:
-    case Token.BarEquals: return Precedence.Assignment;
+    case Token.Ampersand_Equals:
+    case Token.Caret_Equals:
+    case Token.Bar_Equals: return Precedence.Assignment;
     case Token.Question: return Precedence.Conditional;
-    case Token.BarBar: return Precedence.LogicalOr;
+    case Token.Bar_Bar: return Precedence.LogicalOr;
     case Token.Ampersand_Ampersand: return Precedence.LogicalAnd;
     case Token.Bar: return Precedence.BitwiseOr;
     case Token.Caret: return Precedence.BitwiseXor;
