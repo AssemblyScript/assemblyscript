@@ -993,7 +993,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.skip(Token.Identifier, identifierHandling);
   }
 
-  skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): bool {
+  skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.Default): bool {
     let posBefore = this.pos;
     let tokenBefore = this.token;
     let tokenPosBefore = this.tokenPos;
