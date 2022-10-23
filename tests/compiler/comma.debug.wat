@@ -5,8 +5,8 @@
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00c\00o\00m\00m\00a\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
@@ -14,14 +14,15 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $start:comma (type $none_=>_none)
-  (local $var$0 i32)
+  (local $0 i32)
   (local $c i32)
+  (local $2 i32)
   global.get $comma/a
-  local.tee $var$0
+  local.tee $0
   i32.const 1
   i32.add
   global.set $comma/a
-  local.get $var$0
+  local.get $0
   global.set $comma/b
   global.get $comma/a
   drop
@@ -151,8 +152,8 @@
    local.get $c
    global.get $comma/a
    i32.lt_s
-   local.set $var$0
-   local.get $var$0
+   local.set $2
+   local.get $2
    if
     nop
     global.get $comma/a

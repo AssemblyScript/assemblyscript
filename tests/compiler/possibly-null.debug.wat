@@ -6,8 +6,8 @@
  (type $none_=>_none (func_subtype func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 8))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
- (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
+ (global $~lib/memory/__heap_base i32 (i32.const 32776))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
@@ -120,11 +120,11 @@
   drop
  )
  (func $possibly-null/testWhile (type $i32_=>_none) (param $a i32)
-  (local $var$1 i32)
+  (local $1 i32)
   loop $while-continue|0
    local.get $a
-   local.set $var$1
-   local.get $var$1
+   local.set $1
+   local.get $1
    if
     i32.const 0
     drop
@@ -138,11 +138,11 @@
   end
  )
  (func $possibly-null/testWhile2 (type $i32_i32_=>_none) (param $a i32) (param $b i32)
-  (local $var$2 i32)
+  (local $2 i32)
   loop $while-continue|0
    local.get $a
-   local.set $var$2
-   local.get $var$2
+   local.set $2
+   local.get $2
    if
     i32.const 0
     drop
@@ -156,11 +156,11 @@
   end
  )
  (func $possibly-null/testWhile3 (type $i32_i32_=>_none) (param $a i32) (param $b i32)
-  (local $var$2 i32)
+  (local $2 i32)
   loop $while-continue|0
    local.get $a
-   local.set $var$2
-   local.get $var$2
+   local.set $2
+   local.get $2
    if
     i32.const 0
     drop
@@ -263,8 +263,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16416
-   i32.const 16464
+   i32.const 32800
+   i32.const 32848
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

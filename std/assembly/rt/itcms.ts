@@ -17,7 +17,7 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 // * flipped between cycles
 
 // @ts-ignore: decorator
-@lazy var white = 0;
+@lazy let white = 0;
 // @ts-ignore: decorator
 @inline const gray = 2;
 // @ts-ignore: decorator
@@ -27,7 +27,7 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 
 /** Size in memory of all objects currently managed by the GC. */
 // @ts-ignore: decorator
-@lazy var total: usize = 0;
+@lazy let total: usize = 0;
 
 /** Currently transitioning from SWEEP to MARK state. */
 // @ts-ignore: decorator
@@ -40,16 +40,16 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 @inline const STATE_SWEEP = 2;
 /** Current collector state. */
 // @ts-ignore: decorator
-@lazy var state = STATE_IDLE;
+@lazy let state = STATE_IDLE;
 
 // @ts-ignore: decorator
-@lazy var fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
-@lazy var toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
-@lazy var pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
-@lazy var iter: Object; // null
+@lazy let iter: Object; // null
 
 function initLazy(space: Object): Object {
   space.nextWithColor = changetype<usize>(space);
@@ -116,18 +116,18 @@ function initLazy(space: Object): Object {
 
   /** Tests if this object is pointerfree. */
   get isPointerfree(): bool {
-    var rtId = this.rtId;
+    let rtId = this.rtId;
     return rtId <= idof<string>() || (__typeinfo(rtId) & TypeinfoFlags.POINTERFREE) != 0;
   }
 
   /** Unlinks this object from its list. */
   unlink(): void {
-    var next = this.next;
+    let next = this.next;
     if (next == null) {
       if (DEBUG) assert(this.prev == null && changetype<usize>(this) < __heap_base);
       return; // static data not yet linked
     }
-    var prev = this.prev;
+    let prev = this.prev;
     if (DEBUG) assert(prev);
     next.prev = prev;
     prev.next = next;
@@ -153,8 +153,8 @@ function initLazy(space: Object): Object {
 /** Visits all objects considered to be program roots. */
 function visitRoots(cookie: u32): void {
   __visit_globals(cookie);
-  var pn = pinSpace;
-  var iter = pn.next;
+  let pn = pinSpace;
+  let iter = pn.next;
   while (iter != pn) {
     if (DEBUG) assert(iter.color == transparent);
     __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, cookie);
@@ -164,7 +164,7 @@ function visitRoots(cookie: u32): void {
 
 /** Visits all objects on the stack. */
 function visitStack(cookie: u32): void {
-  var ptr = __stack_pointer;
+  let ptr = __stack_pointer;
   while (ptr < __heap_base) {
     __visit(load<usize>(ptr), cookie);
     ptr += sizeof<usize>();
@@ -177,7 +177,7 @@ function step(): usize {
   // using the compiler compiling itself. 2048 budget pro run by default.
   const MARKCOST = isDefined(ASC_GC_MARKCOST) ? ASC_GC_MARKCOST : 1;
   const SWEEPCOST = isDefined(ASC_GC_SWEEPCOST) ? ASC_GC_SWEEPCOST : 10;
-  var obj: Object;
+  let obj: Object;
   switch (state) {
     case STATE_IDLE: {
       state = STATE_MARK;
@@ -259,12 +259,12 @@ function free(obj: Object): void {
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   if (total >= threshold) interrupt();
-  var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
+  let obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
   obj.rtSize = <u32>size;
   obj.linkTo(fromSpace, white); // inits next/prev
   total += obj.size;
-  var ptr = changetype<usize>(obj) + TOTAL_OVERHEAD;
+  let ptr = changetype<usize>(obj) + TOTAL_OVERHEAD;
   // may be visited before being fully initialized, so must fill
   memory.fill(ptr, 0, size);
   return ptr;
@@ -273,7 +273,7 @@ export function __new(size: usize, id: i32): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
-  var oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
+  let oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
   // Update object size if its block is large enough
   if (size <= (oldObj.mmInfo & ~3) - OBJECT_OVERHEAD) {
     oldObj.rtSize = <u32>size;
@@ -281,7 +281,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
   }
   // If not the same object anymore, we have to move it move it due to the
   // shadow stack potentially still referencing the old object
-  var newPtr = __new(size, oldObj.rtId);
+  let newPtr = __new(size, oldObj.rtId);
   memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
   return newPtr;
 }
@@ -292,7 +292,7 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
   // Write barrier is unnecessary if non-incremental
   if (!childPtr) return;
   if (DEBUG) assert(parentPtr);
-  var child = changetype<Object>(childPtr - TOTAL_OVERHEAD);
+  let child = changetype<Object>(childPtr - TOTAL_OVERHEAD);
   if (child.color == white) {
     let parent = changetype<Object>(parentPtr - TOTAL_OVERHEAD);
     let parentColor = parent.color;
@@ -314,7 +314,7 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
 }
 
 // @ts-ignore: decorator
-@lazy var visitCount = 0;
+@lazy let visitCount = 0;
 
 // @ts-ignore: decorator
 @global @unsafe
@@ -346,7 +346,7 @@ export function __pin(ptr: usize): usize {
 @global @unsafe
 export function __unpin(ptr: usize): void {
   if (!ptr) return;
-  var obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
+  let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
   if (obj.color != transparent) {
     throw new Error(E_NOT_PINNED);
   }
@@ -391,13 +391,13 @@ export function __collect(): void {
 
 /** Threshold of memory used by objects to exceed before interrupting again. */
 // @ts-ignore: decorator
-@lazy var threshold: usize = ((<usize>memory.size() << 16) - __heap_base) >> 1;
+@lazy let threshold: usize = ((<usize>memory.size() << 16) - __heap_base) >> 1;
 
 /** Performs a reasonable amount of incremental GC steps. */
 function interrupt(): void {
   if (PROFILE) oninterrupt(total);
   if (TRACE) trace("GC (auto) at", 1, total);
-  var budget: isize = GRANULARITY * STEPFACTOR / 100;
+  let budget: isize = GRANULARITY * STEPFACTOR / 100;
   do {
     budget -= step();
     if (state == STATE_IDLE) {

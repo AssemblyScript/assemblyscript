@@ -114,14 +114,14 @@ export function setTableBase(options: Options, tableBase: u32): void {
 
 /** Adds a 'globalAliases' value. */
 export function addGlobalAlias(options: Options, alias: string, name: string): void {
-  var globalAliases = options.globalAliases;
+  let globalAliases = options.globalAliases;
   if (!globalAliases) options.globalAliases = globalAliases = new Map();
   globalAliases.set(alias, name);
 }
 
 /** Removes a 'globalAliases' value. */
 export function removeGlobalAlias(options: Options, alias: string): void {
-  var globalAliases = options.globalAliases;
+  let globalAliases = options.globalAliases;
   if (globalAliases) globalAliases.delete(alias);
 }
 
@@ -146,7 +146,7 @@ export function setExportRuntime(options: Options, exportRuntime: bool): void {
 }
 
 /** Default stack size. */
-export const DEFAULT_STACK_SIZE = 16384;
+export const DEFAULT_STACK_SIZE = 32768;
 
 /** Sets the `stackSize` option. */
 export function setStackSize(options: Options, stackSize: i32): void {

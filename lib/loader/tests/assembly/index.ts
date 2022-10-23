@@ -40,13 +40,13 @@ export class Car {
 }
 
 export function sum(arr: Int32Array): i32 {
-  var v = 0;
+  let v = 0;
   for (let i = 0, k = arr.length; i < k; ++i) v += arr[i];
   return v;
 }
 
 export function sumStatic(arr: StaticArray<i32>): i32 {
-  var v = 0;
+  let v = 0;
   for (let i = 0, k = arr.length; i < k; ++i) v += arr[i];
   return v;
 }

@@ -133,8 +133,8 @@ export class JSBuilder extends ExportsWalker {
   }
 
   visitGlobal(name: string, element: Global): void {
-    var sb = this.sb;
-    var type = element.type;
+    let sb = this.sb;
+    let type = element.type;
     this.exports.push(name);
     if (!isPlainValue(type, Mode.EXPORT)) {
       indent(sb, this.indentLevel);
@@ -177,7 +177,7 @@ export class JSBuilder extends ExportsWalker {
   }
 
   visitEnum(name: string, element: Enum): void {
-    var sb = this.sb;
+    let sb = this.sb;
     this.exports.push(name);
     indent(sb, this.indentLevel);
     sb.push(name);
@@ -186,7 +186,7 @@ export class JSBuilder extends ExportsWalker {
     sb.push("// ");
     sb.push(element.internalName);
     sb.push("\n");
-    var members = element.members;
+    let members = element.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let value = _values[i];
@@ -215,8 +215,8 @@ export class JSBuilder extends ExportsWalker {
   }
 
   makeGlobalImport(moduleName: string, name: string, element: Global): void {
-    var sb = this.sb;
-    var type = element.type;
+    let sb = this.sb;
+    let type = element.type;
     indent(sb, this.indentLevel);
     if (isIdentifier(name)) {
       sb.push(name);
@@ -261,8 +261,8 @@ export class JSBuilder extends ExportsWalker {
   }
 
   makeFunctionImport(moduleName: string, name: string, element: Function, code: string | null = null): void {
-    var sb = this.sb;
-    var signature = element.signature;
+    let sb = this.sb;
+    let signature = element.signature;
     indent(sb, this.indentLevel);
     if (isIdentifier(name)) {
       sb.push(name);
@@ -352,8 +352,8 @@ export class JSBuilder extends ExportsWalker {
 
   visitFunction(name: string, element: Function): void {
     if (element.is(CommonFlags.PRIVATE)) return;
-    var sb = this.sb;
-    var signature = element.signature;
+    let sb = this.sb;
+    let signature = element.signature;
     this.exports.push(name);
     if (!isPlainFunction(signature, Mode.EXPORT)) {
       indent(sb, this.indentLevel);
@@ -456,7 +456,7 @@ export class JSBuilder extends ExportsWalker {
 
   visitAlias(name: string, element: Element, originalName: string): void {
     // not implemented
-    // var sb = this.sb;
+    // let sb = this.sb;
     // sb.push("export const ");
     // sb.push(name);
     // sb.push(" = ");
@@ -488,11 +488,11 @@ export class JSBuilder extends ExportsWalker {
   }
 
   build(): string {
-    var exports = this.exports;
-    var moduleImports = this.program.moduleImports;
-    var program = this.program;
-    var options = program.options;
-    var sb = this.sb;
+    let exports = this.exports;
+    let moduleImports = this.program.moduleImports;
+    let program = this.program;
+    let options = program.options;
+    let sb = this.sb;
 
     sb.push(""); // placeholder
     indent(sb, this.indentLevel++);
@@ -574,8 +574,8 @@ export class JSBuilder extends ExportsWalker {
       sb.length = sbLengthBefore - 2; // incl. indent
     }
 
-    var mappings = this.importMappings;
-    var map = new Array<string>();
+    let mappings = this.importMappings;
+    let map = new Array<string>();
     for (let _keys = Map_keys(mappings), i = 0, k = _keys.length; i < k; ++i) {
       let moduleName = _keys[i];
       if (moduleName == "env") {
@@ -634,7 +634,7 @@ export class JSBuilder extends ExportsWalker {
     }
 
     // Add external JS code fragments
-    var deferredCode = this.deferredCode;
+    let deferredCode = this.deferredCode;
     if (deferredCode.length) {
       for (let i = 0, k = deferredCode.length; i < k; ++i) {
         sb.push(deferredCode[i]);
@@ -855,7 +855,7 @@ export class JSBuilder extends ExportsWalker {
 `);
     }
 
-    var exportStart = options.exportStart;
+    let exportStart = options.exportStart;
     if (exportStart) {
       sb.push(`  exports.${exportStart}();\n`);
     }
@@ -933,7 +933,7 @@ export class JSBuilder extends ExportsWalker {
 
   ensureModuleId(moduleName: string): i32 {
     if (moduleName == "env") return -1;
-    var importMap = this.importMappings;
+    let importMap = this.importMappings;
     let moduleId = importMap.has(moduleName)
       ? i32(importMap.get(moduleName))
       : importMap.size;
@@ -1221,7 +1221,7 @@ export class JSBuilder extends ExportsWalker {
 
   makeLiftRecord(clazz: Class): string {
     assert(isPlainObject(clazz));
-    var sb = new Array<string>();
+    let sb = new Array<string>();
     indent(sb, this.indentLevel);
     sb.push("function __liftRecord");
     sb.push(clazz.id.toString());
@@ -1236,7 +1236,7 @@ export class JSBuilder extends ExportsWalker {
     sb.push("if (!pointer) return null;\n");
     indent(sb, this.indentLevel++);
     sb.push("return {\n");
-    var members = clazz.members;
+    let members = clazz.members;
     if (members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
@@ -1259,7 +1259,7 @@ export class JSBuilder extends ExportsWalker {
 
   makeLowerRecord(clazz: Class): string {
     assert(isPlainObject(clazz));
-    var sb = new Array<string>();
+    let sb = new Array<string>();
     indent(sb, this.indentLevel);
     sb.push("function __lowerRecord");
     sb.push(clazz.id.toString());
@@ -1278,7 +1278,7 @@ export class JSBuilder extends ExportsWalker {
     sb.push(", ");
     sb.push(clazz.id.toString());
     sb.push("));\n");
-    var members = clazz.members;
+    let members = clazz.members;
     if (members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
@@ -1324,8 +1324,8 @@ function isPlainValue(type: Type, kind: Mode): bool {
 }
 
 function isPlainFunction(signature: Signature, mode: Mode): bool {
-  var parameterTypes = signature.parameterTypes;
-  var inverseMode = mode == Mode.IMPORT ? Mode.EXPORT : Mode.IMPORT;
+  let parameterTypes = signature.parameterTypes;
+  let inverseMode = mode == Mode.IMPORT ? Mode.EXPORT : Mode.IMPORT;
   if (!isPlainValue(signature.returnType, mode)) return false;
   for (let i = 0, k = parameterTypes.length; i < k; ++i) {
     if (!isPlainValue(parameterTypes[i], inverseMode)) return false;
@@ -1336,7 +1336,7 @@ function isPlainFunction(signature: Signature, mode: Mode): bool {
 function isPlainObject(clazz: Class): bool {
   // A plain object does not inherit and does not have a constructor or private properties
   if (clazz.base) return false;
-  var members = clazz.members;
+  let members = clazz.members;
   if (members) {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
       let member = _values[i];
@@ -1351,9 +1351,9 @@ function isPlainObject(clazz: Class): bool {
 }
 
 function indentText(text: string, indentLevel: i32, sb: string[], butFirst: bool = false): void {
-  var lineStart = 0;
-  var length = text.length;
-  var pos = 0;
+  let lineStart = 0;
+  let length = text.length;
+  let pos = 0;
   while (pos < length) {
     if (text.charCodeAt(pos) == CharCode.LINEFEED) {
       if (butFirst) butFirst = false;

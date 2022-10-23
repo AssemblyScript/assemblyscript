@@ -11,8 +11,8 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 204))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16588))
- (global $~lib/memory/__heap_base i32 (i32.const 16588))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32972))
+ (global $~lib/memory/__heap_base i32 (i32.const 32972))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00")
@@ -87,8 +87,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16608
-   i32.const 16656
+   i32.const 32992
+   i32.const 33040
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

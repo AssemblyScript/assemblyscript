@@ -41,8 +41,8 @@ import { CharCode } from "./string";
 export function encode(src: usize, len: usize, table: usize): usize {
   if (!len) return src;
 
-  var i: usize = 0, offset: usize = 0, outSize = len << 1;
-  var dst = __new(outSize, idof<String>());
+  let i: usize = 0, offset: usize = 0, outSize = len << 1;
+  let dst = __new(outSize, idof<String>());
 
   while (i < len) {
     let org = i;
@@ -137,8 +137,8 @@ export function encode(src: usize, len: usize, table: usize): usize {
 export function decode(src: usize, len: usize, component: bool): usize {
   if (!len) return src;
 
-  var i: usize = 0, offset: usize = 0, ch: u32 = 0;
-  var dst = __new(len << 1, idof<String>());
+  let i: usize = 0, offset: usize = 0, ch: u32 = 0;
+  let dst = __new(len << 1, idof<String>());
 
   while (i < len) {
     let org = i;

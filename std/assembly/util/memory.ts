@@ -1,5 +1,5 @@
 export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memcpy.c
-  var w: u32, x: u32;
+  let w: u32, x: u32;
 
   // copy 1 byte each until src is aligned to 4 bytes
   while (n && (src & 3)) {

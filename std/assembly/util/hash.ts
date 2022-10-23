@@ -33,7 +33,7 @@ export function HASH<T>(key: T): u32 {
 // @ts-ignore: decorator
 @inline
 function hash32(key: u32, len: u32 = 4): u32 {
-  var h: u32 = XXH32_SEED + XXH32_P5 + len;
+  let h: u32 = XXH32_SEED + XXH32_P5 + len;
   h += key * XXH32_P3;
   h  = rotl(h, 17) * XXH32_P4;
   h ^= h >> 15;
@@ -47,7 +47,7 @@ function hash32(key: u32, len: u32 = 4): u32 {
 // @ts-ignore: decorator
 @inline
 function hash64(key: u64): u32 {
-  var h: u32 = XXH32_SEED + XXH32_P5 + 8;
+  let h: u32 = XXH32_SEED + XXH32_P5 + 8;
   h += <u32>key * XXH32_P3;
   h  = rotl(h, 17) * XXH32_P4;
   h += <u32>(key >> 32) * XXH32_P3;
@@ -71,9 +71,9 @@ function mix(h: u32, key: u32): u32 {
 function hashStr(key: string): u32 {
   if (changetype<usize>(key) == 0) return XXH32_SEED;
 
-  var h: u32 = key.length << 1;
-  var len: usize = h;
-  var pos = changetype<usize>(key);
+  let h: u32 = key.length << 1;
+  let len: usize = h;
+  let pos = changetype<usize>(key);
 
   if (len >= 16) {
     let s1 = XXH32_SEED + XXH32_P1 + XXH32_P2;
@@ -94,7 +94,7 @@ function hashStr(key: string): u32 {
     h += XXH32_SEED + XXH32_P5;
   }
 
-  var end = changetype<usize>(key) + len - 4;
+  let end = changetype<usize>(key) + len - 4;
   while (pos <= end) {
     h += load<u32>(pos) * XXH32_P3;
     h = rotl(h, 17) * XXH32_P4;

@@ -17,7 +17,7 @@ export abstract class ArrayBufferView {
 
   protected constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
-    var buffer = changetype<ArrayBuffer>(__new(length = length << alignLog2, idof<ArrayBuffer>()));
+    let buffer = changetype<ArrayBuffer>(__new(length = length << alignLog2, idof<ArrayBuffer>()));
     if (ASC_RUNTIME != Runtime.Incremental) {
       memory.fill(changetype<usize>(buffer), 0, <usize>length);
     }
@@ -50,7 +50,7 @@ export abstract class ArrayBufferView {
 
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE) throw new RangeError(E_INVALIDLENGTH);
-    var buffer = changetype<ArrayBuffer>(__new(<usize>length, idof<ArrayBuffer>()));
+    let buffer = changetype<ArrayBuffer>(__new(<usize>length, idof<ArrayBuffer>()));
     if (ASC_RUNTIME != Runtime.Incremental) {
       memory.fill(changetype<usize>(buffer), 0, <usize>length);
     }
@@ -62,11 +62,11 @@ export abstract class ArrayBufferView {
   }
 
   slice(begin: i32 = 0, end: i32 = BLOCK_MAXSIZE): ArrayBuffer {
-    var length = this.byteLength;
+    let length = this.byteLength;
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
     end   = end   < 0 ? max(length + end  , 0) : min(end  , length);
-    var outSize = <usize>max(end - begin, 0);
-    var out = changetype<ArrayBuffer>(__new(outSize, idof<ArrayBuffer>()));
+    let outSize = <usize>max(end - begin, 0);
+    let out = changetype<ArrayBuffer>(__new(outSize, idof<ArrayBuffer>()));
     memory.copy(changetype<usize>(out), changetype<usize>(this) + <usize>begin, outSize);
     return out;
   }

@@ -14,8 +14,8 @@
  (global $infer-type/inferi (mut i32) (i32.const -2147483648))
  (global $infer-type/inferu (mut i32) (i32.const 2147483647))
  (global $~lib/memory/__data_end i32 (i32.const 8))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
- (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
+ (global $~lib/memory/__heap_base i32 (i32.const 32776))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
@@ -56,7 +56,7 @@
  (func $start:infer-type (type $none_=>_none)
   (local $a i32)
   (local $b i32)
-  (local $var$2 i32)
+  (local $2 i32)
   global.get $infer-type/i
   drop
   global.get $infer-type/I
@@ -88,8 +88,8 @@
    local.get $a
    local.get $b
    i32.lt_s
-   local.set $var$2
-   local.get $var$2
+   local.set $2
+   local.get $2
    if
     local.get $a
     i32.const 1

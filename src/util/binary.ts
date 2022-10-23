@@ -49,8 +49,8 @@ export function writeI32AsI64(value: i32, buffer: Uint8Array, offset: i32, unsig
 
 /** Reads a 64-bit integer from the specified buffer. */
 export function readI64(buffer: Uint8Array, offset: i32): i64 {
-  var lo = readI32(buffer, offset);
-  var hi = readI32(buffer, offset + 4);
+  let lo = readI32(buffer, offset);
+  let hi = readI32(buffer, offset + 4);
   return i64_new(lo, hi);
 }
 
@@ -83,7 +83,7 @@ export function readF64(buffer: Uint8Array, offset: i32): f64 {
 
 /** Writes a 64-bit float to the specified buffer. */
 export function writeF64(value: f64, buffer: Uint8Array, offset: i32): void {
-  var valueI64 = f64_as_i64(value);
+  let valueI64 = f64_as_i64(value);
   writeI32(i64_low(valueI64), buffer, offset);
   writeI32(i64_high(valueI64), buffer, offset + 4);
 }

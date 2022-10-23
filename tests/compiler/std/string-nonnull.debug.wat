@@ -10,8 +10,8 @@
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 44))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16428))
- (global $~lib/memory/__heap_base i32 (i32.const 16428))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32812))
+ (global $~lib/memory/__heap_base i32 (i32.const 32812))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
@@ -29,7 +29,8 @@
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
-  (local $var$7 i32)
+  (local $7 i32)
+  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -95,13 +96,13 @@
   end
   loop $while-continue|1
    local.get $len
-   local.tee $var$7
+   local.tee $7
    i32.const 1
    i32.sub
    local.set $len
-   local.get $var$7
-   local.set $var$7
-   local.get $var$7
+   local.get $7
+   local.set $8
+   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -192,7 +193,7 @@
   end
  )
  (func $start:std/string-nonnull (type $none_=>_none)
-  (local $var$0 i32)
+  (local $s i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -203,56 +204,56 @@
   i32.store $0
   global.get $~lib/memory/__stack_pointer
   i32.const 32
-  local.tee $var$0
+  local.tee $s
   i32.store $0
-  local.get $var$0
+  local.get $s
   i32.const 0
   call $~lib/string/String.__ne
   if
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   i32.const 0
   call $~lib/string/String.__ne
   if
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   if
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   i32.const 0
   call $~lib/string/String.__eq
   if
    nop
   else
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   i32.const 0
   call $~lib/string/String.__eq
   if
    nop
   else
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
-  local.get $var$0
+  local.get $s
   call $~lib/string/String.__not
   if
    nop
   else
-   local.get $var$0
+   local.get $s
    call $~lib/string/String#get:length
    drop
   end
@@ -269,8 +270,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16448
-   i32.const 16496
+   i32.const 32832
+   i32.const 32880
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

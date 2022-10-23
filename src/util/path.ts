@@ -18,8 +18,8 @@ const separator = CharCode.SLASH;
  * Expects a posix-compatible relative path (not Windows compatible).
  */
 export function normalizePath(path: string): string {
-  var pos = 0;
-  var len = path.length;
+  let pos = 0;
+  let len = path.length;
 
   // trim leading './'
   while (pos + 1 < len &&
@@ -35,7 +35,7 @@ export function normalizePath(path: string): string {
     pos = 0;
   }
 
-  var atEnd: bool;
+  let atEnd: bool;
   while (pos + 1 < len) {
     atEnd = false;
 
@@ -112,7 +112,7 @@ export function resolvePath(normalizedPath: string, origin: string): string {
 
 /** Obtains the directory portion of a normalized path. */
 export function dirname(normalizedPath: string): string {
-  var pos = normalizedPath.length;
+  let pos = normalizedPath.length;
   if (pos <= 1) {
     if (pos == 0) return ".";
     if (normalizedPath.charCodeAt(0) == separator) {

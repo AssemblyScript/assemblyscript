@@ -16,8 +16,8 @@
  (global $retain-i32/ui (mut i32) (i32.const 0))
  (global $retain-i32/ri (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00\00\00")
  (table $0 1 1 funcref)
@@ -310,7 +310,7 @@
  )
  (func $start:retain-i32 (type $none_=>_none)
   (local $i i32)
-  (local $var$1 i32)
+  (local $1 i32)
   i32.const 0
   global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
@@ -386,8 +386,8 @@
    local.get $i
    global.get $~lib/builtins/u8.MAX_VALUE
    i32.le_s
-   local.set $var$1
-   local.get $var$1
+   local.set $1
+   local.get $1
    if
     i32.const 0
     local.get $i

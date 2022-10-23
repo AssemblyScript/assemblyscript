@@ -50,9 +50,9 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitGlobal(name: string, element: Global): void {
-    var sb = this.sb;
-    var type = element.type;
-    var tsType = this.toTypeScriptType(type, Mode.EXPORT);
+    let sb = this.sb;
+    let type = element.type;
+    let tsType = this.toTypeScriptType(type, Mode.EXPORT);
     indent(sb, this.indentLevel);
     sb.push("/** ");
     sb.push(element.internalName);
@@ -84,7 +84,7 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitEnum(name: string, element: Enum): void {
-    var sb = this.sb;
+    let sb = this.sb;
     indent(sb, this.indentLevel);
     sb.push("/** ");
     sb.push(element.internalName);
@@ -95,7 +95,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("enum ");
     sb.push(name);
     sb.push(" {\n");
-    var members = element.members;
+    let members = element.members;
     if (members) {
       // TODO: for (let [memberName, member] of members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
@@ -114,16 +114,16 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitFunction(name: string, element: Function): void {
-    var sb = this.sb;
-    var signature = element.signature;
+    let sb = this.sb;
+    let signature = element.signature;
     indent(sb, this.indentLevel);
     sb.push("/**\n");
     indent(sb, this.indentLevel);
     sb.push(" * ");
     sb.push(element.internalName);
     sb.push("\n");
-    var parameterTypes = signature.parameterTypes;
-    var numParameters = parameterTypes.length;
+    let parameterTypes = signature.parameterTypes;
+    let numParameters = parameterTypes.length;
     for (let i = 0; i < numParameters; ++i) {
       indent(sb, this.indentLevel);
       sb.push(" * @param ");
@@ -132,7 +132,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(parameterTypes[i].toString());
       sb.push("`\n");
     }
-    var returnType = signature.returnType;
+    let returnType = signature.returnType;
     if (returnType != Type.void) {
       indent(sb, this.indentLevel);
       sb.push(" * @returns `");
@@ -147,7 +147,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("function ");
     sb.push(name);
     sb.push("(");
-    var requiredParameters = signature.requiredParameters;
+    let requiredParameters = signature.requiredParameters;
     for (let i = 0; i < numParameters; ++i) {
       if (i) sb.push(", ");
       sb.push(element.getParameterName(i));
@@ -181,7 +181,7 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   build(): string {
-    var sb = this.sb;
+    let sb = this.sb;
     if (!this.esm) {
       sb.push("declare namespace __AdaptedExports {\n");
       ++this.indentLevel;
@@ -203,7 +203,7 @@ export class TSDBuilder extends ExportsWalker {
       --this.indentLevel;
       sb.push("}\n");
     }
-    var deferredTypes = this.deferredTypings;
+    let deferredTypes = this.deferredTypings;
     for (let i = 0, k = deferredTypes.length; i < k; ++i) {
       sb.push(deferredTypes[i]);
     }
@@ -231,7 +231,7 @@ export class TSDBuilder extends ExportsWalker {
   isPlainObject(clazz: Class): bool {
     // A plain object does not inherit and does not have a constructor or private properties
     if (clazz.base) return false;
-    var members = clazz.members;
+    let members = clazz.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
@@ -336,8 +336,8 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   makeRecordType(clazz: Class, mode: Mode): string {
-    var sb = new Array<string>();
-    var members = clazz.members;
+    let sb = new Array<string>();
+    let members = clazz.members;
     sb.push("/** ");
     sb.push(clazz.internalName);
     sb.push(" */\ndeclare interface __Record");
@@ -373,14 +373,14 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   makeInternrefType(clazz: Class): string {
-    var sb = new Array<string>();
+    let sb = new Array<string>();
     sb.push("/** ");
     sb.push(clazz.internalName);
     sb.push(" */\n");
     sb.push("declare class __Internref");
     sb.push(clazz.id.toString());
     sb.push(" extends Number {\n");
-    var base: Class | null = clazz;
+    let base: Class | null = clazz;
     do {
       sb.push("  private __nominal");
       sb.push(base.id.toString());

@@ -134,10 +134,10 @@ const diagnosticsPlugin = {
       out.push("/** Enum of available diagnostic codes. */\n");
       out.push("export enum DiagnosticCode {\n");
 
-      var first = true;
+      let first = true;
       const messages = JSON.parse(fs.readFileSync(path.join(dirname, "..", "src", "diagnosticMessages.json")));
       Object.keys(messages).forEach(text => {
-        var key = makeKey(text);
+        let key = makeKey(text);
         if (first)
           first = false;
         else {
@@ -233,7 +233,7 @@ const cliBuild = esbuild.build({
 
 // Optionally build definitions (takes a while)
 
-var buildingDefinitions = false;
+let buildingDefinitions = false;
 
 function buildDefinitions() {
   const startTime = Date.now();

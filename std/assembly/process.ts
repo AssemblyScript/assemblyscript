@@ -22,7 +22,7 @@ export namespace process {
   @lazy export const env = lazyEnv();
 
   // @ts-ignore: decorator
-  @lazy export var exitCode = 0;
+  @lazy export let exitCode = 0;
 
   export function exit(code: i32 = exitCode): void {
     process_binding.exit(code);

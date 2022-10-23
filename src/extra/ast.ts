@@ -109,7 +109,7 @@ export class ASTBuilder {
 
   /** Rebuilds the textual source from the specified AST, as far as possible. */
   static build(node: Node): string {
-    var builder = new ASTBuilder();
+    let builder = new ASTBuilder();
     builder.visitNode(node);
     return builder.finish();
   }
@@ -369,7 +369,7 @@ export class ASTBuilder {
   }
 
   visitSource(source: Source): void {
-    var statements = source.statements;
+    let statements = source.statements;
     for (let i = 0, k = statements.length; i < k; ++i) {
       this.visitNodeAndTerminate(statements[i]);
     }
@@ -393,8 +393,8 @@ export class ASTBuilder {
 
   visitTypeName(node: TypeName): void {
     this.visitIdentifierExpression(node.identifier);
-    var sb = this.sb;
-    var current = node.next;
+    let sb = this.sb;
+    let current = node.next;
     while (current) {
       sb.push(".");
       this.visitIdentifierExpression(current.identifier);
@@ -404,7 +404,7 @@ export class ASTBuilder {
 
   visitNamedTypeNode(node: NamedTypeNode): void {
     this.visitTypeName(node.name);
-    var typeArguments = node.typeArguments;
+    let typeArguments = node.typeArguments;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
       let sb = this.sb;
@@ -422,16 +422,16 @@ export class ASTBuilder {
   }
 
   visitFunctionTypeNode(node: FunctionTypeNode): void {
-    var isNullable = node.isNullable;
-    var sb = this.sb;
+    let isNullable = node.isNullable;
+    let sb = this.sb;
     sb.push(isNullable ? "((" : "(");
-    var explicitThisType = node.explicitThisType;
+    let explicitThisType = node.explicitThisType;
     if (explicitThisType) {
       sb.push("this: ");
       this.visitTypeNode(explicitThisType);
     }
-    var parameters = node.parameters;
-    var numParameters = parameters.length;
+    let parameters = node.parameters;
+    let numParameters = parameters.length;
     if (numParameters) {
       if (explicitThisType) sb.push(", ");
       this.serializeParameter(parameters[0]);
@@ -440,7 +440,7 @@ export class ASTBuilder {
         this.serializeParameter(parameters[i]);
       }
     }
-    var returnType = node.returnType;
+    let returnType = node.returnType;
     if (returnType) {
       sb.push(") => ");
       this.visitTypeNode(returnType);
@@ -452,12 +452,12 @@ export class ASTBuilder {
 
   visitTypeParameter(node: TypeParameterNode): void {
     this.visitIdentifierExpression(node.name);
-    var extendsType = node.extendsType;
+    let extendsType = node.extendsType;
     if (extendsType) {
       this.sb.push(" extends ");
       this.visitTypeNode(extendsType);
     }
-    var defaultType = node.defaultType;
+    let defaultType = node.defaultType;
     if (defaultType) {
       this.sb.push("=");
       this.visitTypeNode(defaultType);
@@ -472,10 +472,10 @@ export class ASTBuilder {
   }
 
   visitArrayLiteralExpression(node: ArrayLiteralExpression): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("[");
-    var elements = node.elementExpressions;
-    var numElements = elements.length;
+    let elements = node.elementExpressions;
+    let numElements = elements.length;
     if (numElements) {
       let element = elements[0];
       if (element) this.visitNode(element);
@@ -489,10 +489,10 @@ export class ASTBuilder {
   }
 
   visitObjectLiteralExpression(node: ObjectLiteralExpression): void {
-    var sb = this.sb;
-    var names = node.names;
-    var values = node.values;
-    var numElements = names.length;
+    let sb = this.sb;
+    let names = node.names;
+    let values = node.values;
+    let numElements = names.length;
     assert(numElements == values.length);
     if (numElements) {
       sb.push("{\n");
@@ -522,7 +522,7 @@ export class ASTBuilder {
   }
 
   visitAssertionExpression(node: AssertionExpression): void {
-    var sb = this.sb;
+    let sb = this.sb;
     switch (node.assertionKind) {
       case AssertionKind.PREFIX: {
         sb.push("<");
@@ -552,7 +552,7 @@ export class ASTBuilder {
   }
 
   visitBinaryExpression(node: BinaryExpression): void {
-    var sb = this.sb;
+    let sb = this.sb;
     this.visitNode(node.left);
     sb.push(" ");
     sb.push(operatorTokenToString(node.operator));
@@ -566,7 +566,7 @@ export class ASTBuilder {
   }
 
   private visitArguments(typeArguments: TypeNode[] | null, args: Expression[]): void {
-    var sb = this.sb;
+    let sb = this.sb;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
       if (numTypeArguments) {
@@ -581,7 +581,7 @@ export class ASTBuilder {
     } else {
       sb.push("(");
     }
-    var numArgs = args.length;
+    let numArgs = args.length;
     if (numArgs) {
       this.visitNode(args[0]);
       for (let i = 1; i < numArgs; ++i) {
@@ -593,15 +593,15 @@ export class ASTBuilder {
   }
 
   visitClassExpression(node: ClassExpression): void {
-    var declaration = node.declaration;
+    let declaration = node.declaration;
     this.visitClassDeclaration(declaration);
   }
 
   visitCommaExpression(node: CommaExpression): void {
-    var expressions = node.expressions;
-    var numExpressions = assert(expressions.length);
+    let expressions = node.expressions;
+    let numExpressions = assert(expressions.length);
     this.visitNode(expressions[0]);
-    var sb = this.sb;
+    let sb = this.sb;
     for (let i = 1; i < numExpressions; ++i) {
       sb.push(",");
       this.visitNode(expressions[i]);
@@ -609,7 +609,7 @@ export class ASTBuilder {
   }
 
   visitElementAccessExpression(node: ElementAccessExpression): void {
-    var sb = this.sb;
+    let sb = this.sb;
     this.visitNode(node.expression);
     sb.push("[");
     this.visitNode(node.elementExpression);
@@ -617,7 +617,7 @@ export class ASTBuilder {
   }
 
   visitFunctionExpression(node: FunctionExpression): void {
-    var declaration = node.declaration;
+    let declaration = node.declaration;
     if (!declaration.arrowKind) {
       if (declaration.name.text.length) {
         this.sb.push("function ");
@@ -678,13 +678,13 @@ export class ASTBuilder {
   }
 
   visitIntegerLiteralExpression(node: IntegerLiteralExpression): void {
-    var range = node.range;
-    var hasExplicitSign = range.source.text.startsWith("-", range.start);
+    let range = node.range;
+    let hasExplicitSign = range.source.text.startsWith("-", range.start);
     this.sb.push(i64_to_string(node.value, !hasExplicitSign));
   }
 
   visitStringLiteral(str: string): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("\"");
     sb.push(escapeString(str, CharCode.DOUBLEQUOTE));
     sb.push("\"");
@@ -695,10 +695,10 @@ export class ASTBuilder {
   }
 
   visitTemplateLiteralExpression(node: TemplateLiteralExpression): void {
-    var sb = this.sb;
-    var tag = node.tag;
-    var parts = node.parts;
-    var expressions = node.expressions;
+    let sb = this.sb;
+    let tag = node.tag;
+    let parts = node.parts;
+    let expressions = node.expressions;
     if (tag) this.visitNode(tag);
     sb.push("`");
     sb.push(escapeString(parts[0], CharCode.BACKTICK));
@@ -713,7 +713,7 @@ export class ASTBuilder {
   }
 
   visitRegexpLiteralExpression(node: RegexpLiteralExpression): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("/");
     sb.push(node.pattern);
     sb.push("/");
@@ -727,7 +727,7 @@ export class ASTBuilder {
   }
 
   visitParenthesizedExpression(node: ParenthesizedExpression): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("(");
     this.visitNode(node.expression);
     sb.push(")");
@@ -740,7 +740,7 @@ export class ASTBuilder {
   }
 
   visitTernaryExpression(node: TernaryExpression): void {
-    var sb = this.sb;
+    let sb = this.sb;
     this.visitNode(node.condition);
     sb.push(" ? ");
     this.visitNode(node.ifThen);
@@ -776,7 +776,7 @@ export class ASTBuilder {
 
   visitNodeAndTerminate(node: Node): void {
     this.visitNode(node);
-    var sb = this.sb;
+    let sb = this.sb;
     if (
       !sb.length ||                     // leading EmptyStatement
       node.kind == NodeKind.VARIABLE || // potentially assigns a FunctionExpression
@@ -798,9 +798,9 @@ export class ASTBuilder {
   }
 
   visitBlockStatement(node: BlockStatement): void {
-    var sb = this.sb;
-    var statements = node.statements;
-    var numStatements = statements.length;
+    let sb = this.sb;
+    let statements = node.statements;
+    let numStatements = statements.length;
     if (numStatements) {
       sb.push("{\n");
       let indentLevel = ++this.indentLevel;
@@ -816,7 +816,7 @@ export class ASTBuilder {
   }
 
   visitBreakStatement(node: BreakStatement): void {
-    var label = node.label;
+    let label = node.label;
     if (label) {
       this.sb.push("break ");
       this.visitIdentifierExpression(label);
@@ -826,7 +826,7 @@ export class ASTBuilder {
   }
 
   visitContinueStatement(node: ContinueStatement): void {
-    var label = node.label;
+    let label = node.label;
     if (label) {
       this.sb.push("continue ");
       this.visitIdentifierExpression(label);
@@ -836,13 +836,13 @@ export class ASTBuilder {
   }
 
   visitClassDeclaration(node: ClassDeclaration, isDefault: bool = false): void {
-    var decorators = node.decorators;
+    let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         this.serializeDecorator(decorators[i]);
       }
     }
-    var sb = this.sb;
+    let sb = this.sb;
     if (isDefault) {
       sb.push("export default ");
     } else {
@@ -855,7 +855,7 @@ export class ASTBuilder {
     } else {
       sb.push("class");
     }
-    var typeParameters = node.typeParameters;
+    let typeParameters = node.typeParameters;
     if (typeParameters != null && typeParameters.length > 0) {
       sb.push("<");
       this.visitTypeParameter(typeParameters[0]);
@@ -865,12 +865,12 @@ export class ASTBuilder {
       }
       sb.push(">");
     }
-    var extendsType = node.extendsType;
+    let extendsType = node.extendsType;
     if (extendsType) {
       sb.push(" extends ");
       this.visitTypeNode(extendsType);
     }
-    var implementsTypes = node.implementsTypes;
+    let implementsTypes = node.implementsTypes;
     if (implementsTypes) {
       let numImplementsTypes = implementsTypes.length;
       if (numImplementsTypes) {
@@ -882,9 +882,9 @@ export class ASTBuilder {
         }
       }
     }
-    var indexSignature = node.indexSignature;
-    var members = node.members;
-    var numMembers = members.length;
+    let indexSignature = node.indexSignature;
+    let members = node.members;
+    let numMembers = members.length;
     if (indexSignature || numMembers) {
       sb.push(" {\n");
       let indentLevel = ++this.indentLevel;
@@ -907,7 +907,7 @@ export class ASTBuilder {
   }
 
   visitDoStatement(node: DoStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("do ");
     this.visitNode(node.statement);
     if (node.statement.kind == NodeKind.BLOCK) {
@@ -926,7 +926,7 @@ export class ASTBuilder {
   }
 
   visitEnumDeclaration(node: EnumDeclaration, isDefault: bool = false): void {
-    var sb = this.sb;
+    let sb = this.sb;
     if (isDefault) {
       sb.push("export default ");
     } else {
@@ -935,8 +935,8 @@ export class ASTBuilder {
     if (node.is(CommonFlags.CONST)) sb.push("const ");
     sb.push("enum ");
     this.visitIdentifierExpression(node.name);
-    var values = node.values;
-    var numValues = values.length;
+    let values = node.values;
+    let numValues = values.length;
     if (numValues) {
       sb.push(" {\n");
       let indentLevel = ++this.indentLevel;
@@ -957,7 +957,7 @@ export class ASTBuilder {
 
   visitEnumValueDeclaration(node: EnumValueDeclaration): void {
     this.visitIdentifierExpression(node.name);
-    var initializer = node.initializer;
+    let initializer = node.initializer;
     if (initializer) {
       this.sb.push(" = ");
       this.visitNode(initializer);
@@ -965,7 +965,7 @@ export class ASTBuilder {
   }
 
   visitExportImportStatement(node: ExportImportStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("export import ");
     this.visitIdentifierExpression(node.externalName);
     sb.push(" = ");
@@ -981,11 +981,11 @@ export class ASTBuilder {
   }
 
   visitExportStatement(node: ExportStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     if (node.isDeclare) {
       sb.push("declare ");
     }
-    var members = node.members;
+    let members = node.members;
     if (members == null) {
       sb.push("export *");
     } else if (members.length > 0) {
@@ -1004,7 +1004,7 @@ export class ASTBuilder {
     } else {
       sb.push("export {}");
     }
-    var path = node.path;
+    let path = node.path;
     if (path) {
       sb.push(" from ");
       this.visitStringLiteralExpression(path);
@@ -1013,7 +1013,7 @@ export class ASTBuilder {
   }
 
   visitExportDefaultStatement(node: ExportDefaultStatement): void {
-    var declaration = node.declaration;
+    let declaration = node.declaration;
     switch (declaration.kind) {
       case NodeKind.ENUMDECLARATION: {
         this.visitEnumDeclaration(<EnumDeclaration>declaration, true);
@@ -1044,7 +1044,7 @@ export class ASTBuilder {
   }
 
   visitFieldDeclaration(node: FieldDeclaration): void {
-    var decorators = node.decorators;
+    let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         this.serializeDecorator(decorators[i]);
@@ -1052,16 +1052,16 @@ export class ASTBuilder {
     }
     this.serializeAccessModifiers(node);
     this.visitIdentifierExpression(node.name);
-    var sb = this.sb;
+    let sb = this.sb;
     if (node.flags & CommonFlags.DEFINITELY_ASSIGNED) {
       sb.push("!");
     }
-    var type = node.type;
+    let type = node.type;
     if (type) {
       sb.push(": ");
       this.visitTypeNode(type);
     }
-    var initializer = node.initializer;
+    let initializer = node.initializer;
     if (initializer) {
       sb.push(" = ");
       this.visitNode(initializer);
@@ -1069,20 +1069,20 @@ export class ASTBuilder {
   }
 
   visitForStatement(node: ForStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("for (");
-    var initializer = node.initializer;
+    let initializer = node.initializer;
     if (initializer) {
       this.visitNode(initializer);
     }
-    var condition = node.condition;
+    let condition = node.condition;
     if (condition) {
       sb.push("; ");
       this.visitNode(condition);
     } else {
       sb.push(";");
     }
-    var incrementor = node.incrementor;
+    let incrementor = node.incrementor;
     if (incrementor) {
       sb.push("; ");
       this.visitNode(incrementor);
@@ -1094,7 +1094,7 @@ export class ASTBuilder {
   }
 
   visitForOfStatement(node: ForOfStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("for (");
     this.visitNode(node.variable);
     sb.push(" of ");
@@ -1104,8 +1104,8 @@ export class ASTBuilder {
   }
 
   visitFunctionDeclaration(node: FunctionDeclaration, isDefault: bool = false): void {
-    var sb = this.sb;
-    var decorators = node.decorators;
+    let sb = this.sb;
+    let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         this.serializeDecorator(decorators[i]);
@@ -1126,10 +1126,10 @@ export class ASTBuilder {
   }
 
   visitFunctionCommon(node: FunctionDeclaration): void {
-    var sb = this.sb;
+    let sb = this.sb;
     this.visitIdentifierExpression(node.name);
-    var signature = node.signature;
-    var typeParameters = node.typeParameters;
+    let signature = node.signature;
+    let typeParameters = node.typeParameters;
     if (typeParameters) {
       let numTypeParameters = typeParameters.length;
       if (numTypeParameters) {
@@ -1165,8 +1165,8 @@ export class ASTBuilder {
         }
       }
     }
-    var body = node.body;
-    var returnType = signature.returnType;
+    let body = node.body;
+    let returnType = signature.returnType;
     if (node.arrowKind) {
       if (body) {
         if (node.arrowKind == ArrowKind.ARROW_SINGLE) {
@@ -1204,16 +1204,16 @@ export class ASTBuilder {
   }
 
   visitIfStatement(node: IfStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("if (");
     this.visitNode(node.condition);
     sb.push(") ");
-    var ifTrue = node.ifTrue;
+    let ifTrue = node.ifTrue;
     this.visitNode(ifTrue);
     if (ifTrue.kind != NodeKind.BLOCK) {
       sb.push(";\n");
     }
-    var ifFalse = node.ifFalse;
+    let ifFalse = node.ifFalse;
     if (ifFalse) {
       if (ifTrue.kind == NodeKind.BLOCK) {
         sb.push(" else ");
@@ -1225,8 +1225,8 @@ export class ASTBuilder {
   }
 
   visitImportDeclaration(node: ImportDeclaration): void {
-    var externalName = node.foreignName;
-    var name = node.name;
+    let externalName = node.foreignName;
+    let name = node.name;
     this.visitIdentifierExpression(externalName);
     if (externalName.text != name.text) {
       this.sb.push(" as ");
@@ -1235,10 +1235,10 @@ export class ASTBuilder {
   }
 
   visitImportStatement(node: ImportStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("import ");
-    var declarations = node.declarations;
-    var namespaceName = node.namespaceName;
+    let declarations = node.declarations;
+    let namespaceName = node.namespaceName;
     if (declarations) {
       let numDeclarations = declarations.length;
       if (numDeclarations) {
@@ -1265,7 +1265,7 @@ export class ASTBuilder {
   }
 
   visitIndexSignature(node: IndexSignatureNode): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("[key: ");
     this.visitTypeNode(node.keyType);
     sb.push("]: ");
@@ -1273,13 +1273,13 @@ export class ASTBuilder {
   }
 
   visitInterfaceDeclaration(node: InterfaceDeclaration, isDefault: bool = false): void {
-    var decorators = node.decorators;
+    let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         this.serializeDecorator(decorators[i]);
       }
     }
-    var sb = this.sb;
+    let sb = this.sb;
     if (isDefault) {
       sb.push("export default ");
     } else {
@@ -1287,7 +1287,7 @@ export class ASTBuilder {
     }
     sb.push("interface ");
     this.visitIdentifierExpression(node.name);
-    var typeParameters = node.typeParameters;
+    let typeParameters = node.typeParameters;
     if (typeParameters != null && typeParameters.length > 0) {
       sb.push("<");
       this.visitTypeParameter(typeParameters[0]);
@@ -1297,15 +1297,15 @@ export class ASTBuilder {
       }
       sb.push(">");
     }
-    var extendsType = node.extendsType;
+    let extendsType = node.extendsType;
     if (extendsType) {
       sb.push(" extends ");
       this.visitTypeNode(extendsType);
     }
     // must not have implementsTypes
     sb.push(" {\n");
-    var indentLevel = ++this.indentLevel;
-    var members = node.members;
+    let indentLevel = ++this.indentLevel;
+    let members = node.members;
     for (let i = 0, k = members.length; i < k; ++i) {
       indent(sb, indentLevel);
       this.visitNodeAndTerminate(members[i]);
@@ -1315,7 +1315,7 @@ export class ASTBuilder {
   }
 
   visitMethodDeclaration(node: MethodDeclaration): void {
-    var decorators = node.decorators;
+    let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         this.serializeDecorator(decorators[i]);
@@ -1331,13 +1331,13 @@ export class ASTBuilder {
   }
 
   visitNamespaceDeclaration(node: NamespaceDeclaration, isDefault: bool = false): void {
-    var decorators = node.decorators;
+    let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         this.serializeDecorator(decorators[i]);
       }
     }
-    var sb = this.sb;
+    let sb = this.sb;
     if (isDefault) {
       sb.push("export default ");
     } else {
@@ -1345,8 +1345,8 @@ export class ASTBuilder {
     }
     sb.push("namespace ");
     this.visitIdentifierExpression(node.name);
-    var members = node.members;
-    var numMembers = members.length;
+    let members = node.members;
+    let numMembers = members.length;
     if (numMembers) {
       sb.push(" {\n");
       let indentLevel = ++this.indentLevel;
@@ -1362,7 +1362,7 @@ export class ASTBuilder {
   }
 
   visitReturnStatement(node: ReturnStatement): void {
-    var value = node.value;
+    let value = node.value;
     if (value) {
       this.sb.push("return ");
       this.visitNode(value);
@@ -1372,8 +1372,8 @@ export class ASTBuilder {
   }
 
   visitSwitchCase(node: SwitchCase): void {
-    var sb = this.sb;
-    var label = node.label;
+    let sb = this.sb;
+    let label = node.label;
     if (label) {
       sb.push("case ");
       this.visitNode(label);
@@ -1381,8 +1381,8 @@ export class ASTBuilder {
     } else {
       sb.push("default:\n");
     }
-    var statements = node.statements;
-    var numStatements = statements.length;
+    let statements = node.statements;
+    let numStatements = statements.length;
     if (numStatements) {
       let indentLevel = ++this.indentLevel;
       indent(sb, indentLevel);
@@ -1396,12 +1396,12 @@ export class ASTBuilder {
   }
 
   visitSwitchStatement(node: SwitchStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("switch (");
     this.visitNode(node.condition);
     sb.push(") {\n");
-    var indentLevel = ++this.indentLevel;
-    var cases = node.cases;
+    let indentLevel = ++this.indentLevel;
+    let cases = node.cases;
     for (let i = 0, k = cases.length; i < k; ++i) {
       indent(sb, indentLevel);
       this.visitSwitchCase(cases[i]);
@@ -1417,15 +1417,15 @@ export class ASTBuilder {
   }
 
   visitTryStatement(node: TryStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("try {\n");
-    var indentLevel = ++this.indentLevel;
-    var statements = node.statements;
+    let indentLevel = ++this.indentLevel;
+    let statements = node.statements;
     for (let i = 0, k = statements.length; i < k; ++i) {
       indent(sb, indentLevel);
       this.visitNodeAndTerminate(statements[i]);
     }
-    var catchVariable = node.catchVariable;
+    let catchVariable = node.catchVariable;
     if (catchVariable) {
       indent(sb, indentLevel - 1);
       sb.push("} catch (");
@@ -1439,7 +1439,7 @@ export class ASTBuilder {
         }
       }
     }
-    var finallyStatements = node.finallyStatements;
+    let finallyStatements = node.finallyStatements;
     if (finallyStatements) {
       indent(sb, indentLevel - 1);
       sb.push("} finally {\n");
@@ -1453,17 +1453,17 @@ export class ASTBuilder {
   }
 
   visitTypeDeclaration(node: TypeDeclaration): void {
-    var decorators = node.decorators;
+    let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         this.serializeDecorator(decorators[i]);
       }
     }
-    var sb = this.sb;
+    let sb = this.sb;
     this.serializeExternalModifiers(node);
     sb.push("type ");
     this.visitIdentifierExpression(node.name);
-    var typeParameters = node.typeParameters;
+    let typeParameters = node.typeParameters;
     if (typeParameters) {
       let numTypeParameters = typeParameters.length;
       if (numTypeParameters) {
@@ -1479,7 +1479,7 @@ export class ASTBuilder {
   }
 
   visitModuleDeclaration(node: ModuleDeclaration): void {
-    var sb = this.sb;
+    let sb = this.sb;
     if (node.flags & CommonFlags.DECLARE) {
       sb.push("declare ");
     }
@@ -1490,8 +1490,8 @@ export class ASTBuilder {
 
   visitVariableDeclaration(node: VariableDeclaration): void {
     this.visitIdentifierExpression(node.name);
-    var type = node.type;
-    var sb = this.sb;
+    let type = node.type;
+    let sb = this.sb;
     if (node.flags & CommonFlags.DEFINITELY_ASSIGNED) {
       sb.push("!");
     }
@@ -1499,7 +1499,7 @@ export class ASTBuilder {
       sb.push(": ");
       this.visitTypeNode(type);
     }
-    var initializer = node.initializer;
+    let initializer = node.initializer;
     if (initializer) {
       sb.push(" = ");
       this.visitNode(initializer);
@@ -1507,16 +1507,16 @@ export class ASTBuilder {
   }
 
   visitVariableStatement(node: VariableStatement): void {
-    var decorators = node.decorators;
+    let decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
         this.serializeDecorator(decorators[i]);
       }
     }
-    var sb = this.sb;
-    var declarations = node.declarations;
-    var numDeclarations = assert(declarations.length);
-    var firstDeclaration = declarations[0];
+    let sb = this.sb;
+    let declarations = node.declarations;
+    let numDeclarations = assert(declarations.length);
+    let firstDeclaration = declarations[0];
     this.serializeExternalModifiers(firstDeclaration);
     sb.push(firstDeclaration.is(CommonFlags.CONST) ? "const " : firstDeclaration.is(CommonFlags.LET) ? "let " : "var ");
     this.visitVariableDeclaration(node.declarations[0]);
@@ -1527,10 +1527,10 @@ export class ASTBuilder {
   }
 
   visitWhileStatement(node: WhileStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("while (");
     this.visitNode(node.condition);
-    var statement = node.statement;
+    let statement = node.statement;
     if (statement.kind == NodeKind.EMPTY) {
       sb.push(")");
     } else {
@@ -1542,10 +1542,10 @@ export class ASTBuilder {
   // other
 
   serializeDecorator(node: DecoratorNode): void {
-    var sb = this.sb;
+    let sb = this.sb;
     sb.push("@");
     this.visitNode(node.name);
-    var args = node.args;
+    let args = node.args;
     if (args) {
       sb.push("(");
       let numArgs = args.length;
@@ -1564,9 +1564,9 @@ export class ASTBuilder {
   }
 
   serializeParameter(node: ParameterNode): void {
-    var sb = this.sb;
-    var kind = node.parameterKind;
-    var implicitFieldDeclaration = node.implicitFieldDeclaration;
+    let sb = this.sb;
+    let kind = node.parameterKind;
+    let implicitFieldDeclaration = node.implicitFieldDeclaration;
     if (implicitFieldDeclaration) {
       this.serializeAccessModifiers(implicitFieldDeclaration);
     }
@@ -1574,8 +1574,8 @@ export class ASTBuilder {
       sb.push("...");
     }
     this.visitIdentifierExpression(node.name);
-    var type = node.type;
-    var initializer = node.initializer;
+    let type = node.type;
+    let initializer = node.initializer;
     if (type) {
       if (kind == ParameterKind.OPTIONAL && !initializer) sb.push("?");
       if (!isTypeOmitted(type)) {
@@ -1590,7 +1590,7 @@ export class ASTBuilder {
   }
 
   serializeExternalModifiers(node: DeclarationStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     if (node.is(CommonFlags.EXPORT)) {
       sb.push("export ");
     } else if (node.is(CommonFlags.IMPORT)) {
@@ -1601,7 +1601,7 @@ export class ASTBuilder {
   }
 
   serializeAccessModifiers(node: DeclarationStatement): void {
-    var sb = this.sb;
+    let sb = this.sb;
     if (node.is(CommonFlags.DECLARE)) {
       sb.push("declare ");
     }
@@ -1623,7 +1623,7 @@ export class ASTBuilder {
   }
 
   finish(): string {
-    var ret = this.sb.join("");
+    let ret = this.sb.join("");
     this.sb = [];
     return ret;
   }

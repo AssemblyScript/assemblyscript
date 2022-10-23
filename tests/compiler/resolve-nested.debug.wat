@@ -18,8 +18,8 @@
  (global $resolve-nested/b (mut i32) (i32.const 0))
  (global $resolve-nested/c (mut i32) (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 8))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
- (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32776))
+ (global $~lib/memory/__heap_base i32 (i32.const 32776))
  (memory $0 0)
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
@@ -33,8 +33,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16416
-   i32.const 16464
+   i32.const 32800
+   i32.const 32848
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
