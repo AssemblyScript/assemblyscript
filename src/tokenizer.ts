@@ -123,7 +123,7 @@ export const enum Token {
   LessThan_Equals,
   GreaterThan_Equals,
   Equals_Equals,
-  Exclamation_Equals,
+  ExclamationEquals,
   Equals_Equals_Equals,
   Exclamation_Equals_Equals,
   Equals_GreaterThan,
@@ -405,7 +405,7 @@ export function operatorTokenToString(token: Token): string {
     case Token.LessThan_Equals: return "<=";
     case Token.GreaterThan_Equals: return ">=";
     case Token.Equals_Equals: return "==";
-    case Token.Exclamation_Equals: return "!=";
+    case Token.ExclamationEquals: return "!=";
     case Token.Equals_Equals_Equals: return "===";
     case Token.Exclamation_Equals_Equals: return "!==";
     case Token.Plus: return "+";
@@ -553,7 +553,7 @@ export class Tokenizer extends DiagnosticEmitter {
               return Token.Exclamation_Equals_Equals;
             }
             this.pos = pos;
-            return Token.Exclamation_Equals;
+            return Token.ExclamationEquals;
           }
           this.pos = pos;
           return Token.Exclamation;

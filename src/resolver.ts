@@ -2040,7 +2040,7 @@ export class Resolver extends DiagnosticEmitter {
       // equality: result is Bool, preferring overloads, incl. references
 
       case Token.Equals_Equals:
-      case Token.Exclamation_Equals: {
+      case Token.ExclamationEquals: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);

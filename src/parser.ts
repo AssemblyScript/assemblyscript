@@ -4283,7 +4283,7 @@ export class Parser extends DiagnosticEmitter {
         case Token.Equals_Equals:
         case Token.Equals_Equals_Equals:
         case Token.Exclamation_Equals_Equals:
-        case Token.Exclamation_Equals:
+        case Token.ExclamationEquals:
         case Token.Plus:
         case Token.Minus:
         case Token.Asterisk:
@@ -4539,7 +4539,7 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.Caret: return Precedence.BitwiseXor;
     case Token.Ampersand: return Precedence.BitwiseAnd;
     case Token.Equals_Equals:
-    case Token.Exclamation_Equals:
+    case Token.ExclamationEquals:
     case Token.Equals_Equals_Equals:
     case Token.Exclamation_Equals_Equals: return Precedence.Equality;
     case Token.As:
