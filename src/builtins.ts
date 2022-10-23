@@ -924,7 +924,7 @@ function builtin_isDefined(ctx: BuiltinContext): ExpressionRef {
     ctx.operands[0],
     compiler.currentFlow,
     Type.auto,
-    ReportMode.SWALLOW
+    ReportMode.Swallow
   );
   return module.i32(element ? 1 : 0);
 }
@@ -969,7 +969,7 @@ function builtin_isVoid(ctx: BuiltinContext): ExpressionRef {
   let type = checkConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return reifyConstantType(ctx, module.i32(type.kind == TypeKind.VOID ? 1 : 0));
+  return reifyConstantType(ctx, module.i32(type.kind == TypeKind.Void ? 1 : 0));
 }
 builtins.set(BuiltinNames.isVoid, builtin_isVoid);
 
@@ -1067,7 +1067,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
   }
   if (operands.length) {
     let firstOperand = operands[0];
-    if (!firstOperand.isLiteralKind(LiteralKind.STRING)) {
+    if (!firstOperand.isLiteralKind(LiteralKind.String)) {
       compiler.error(
         DiagnosticCode.String_literal_expected,
         operands[0].range
@@ -1078,7 +1078,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     let classMembers = classReference.members;
     if (classMembers && classMembers.has(fieldName)) {
       let member = assert(classMembers.get(fieldName));
-      if (member.kind == ElementKind.FIELD) {
+      if (member.kind == ElementKind.Field) {
         return contextualUsize(compiler, i64_new((<Field>member).memoryOffset), contextualType);
       }
     }
@@ -1129,7 +1129,7 @@ function builtin_idof(ctx: BuiltinContext): ExpressionRef {
     return reifyConstantType(ctx, module.i32(signatureReference.id));
   }
   let classReference = type.getClassOrWrapper(compiler.program);
-  if (classReference && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+  if (classReference && !classReference.hasDecorator(DecoratorFlags.Unmanaged)) {
     return reifyConstantType(ctx, module.i32(classReference.id));
   }
   compiler.error(
@@ -1154,18 +1154,18 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         ctx.operands[0],
         typeArguments[0].toUnsigned(),
-        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        Constraints.ConvImplicit | Constraints.MustWrap
       )
     : compiler.compileExpression(
         ctx.operands[0],
         Type.u32,
-        Constraints.MUST_WRAP
+        Constraints.MustWrap
       );
 
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.I8:
       case TypeKind.U8: return arg0;
       case TypeKind.I16:
@@ -1173,7 +1173,7 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
         // <T>(x << 8 | x >> 8)
         let flow = compiler.currentFlow;
         let temp = flow.getTempLocal(type);
-        flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+        flow.setLocalFlag(temp.index, LocalFlags.Wrapped);
 
         let res = module.binary(
           BinaryOp.OrI32,
@@ -1196,13 +1196,13 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
       }
       case TypeKind.I32:
       case TypeKind.U32:
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         if (type.size == 32) {
           // rotl(x & 0xFF00FF00, 8) | rotr(x & 0x00FF00FF, 8)
           let flow = compiler.currentFlow;
           let temp = flow.getTempLocal(type);
-          flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+          flow.setLocalFlag(temp.index, LocalFlags.Wrapped);
 
           let res = module.binary(
             BinaryOp.OrI32,
@@ -1243,9 +1243,9 @@ function builtin_bswap(ctx: BuiltinContext): ExpressionRef {
 
         let flow = compiler.currentFlow;
         let temp1 = flow.getTempLocal(type);
-        flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+        flow.setLocalFlag(temp1.index, LocalFlags.Wrapped);
         let temp2 = flow.getTempLocal(type);
-        flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+        flow.setLocalFlag(temp2.index, LocalFlags.Wrapped);
 
         // t = ((x >>> 8) & 0x00FF00FF00FF00FF) | ((x & 0x00FF00FF00FF00FF) << 8)
         let expr = module.local_tee(
@@ -1327,20 +1327,20 @@ function builtin_clz(ctx: BuiltinContext): ExpressionRef {
   ) return module.unreachable();
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(ctx.operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(ctx.operands[0], Type.i32, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(ctx.operands[0], typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(ctx.operands[0], Type.i32, Constraints.MustWrap);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.BOOL: // not wrapped
+      case TypeKind.Bool: // not wrapped
       case TypeKind.I8:
       case TypeKind.U8:
       case TypeKind.I16:
       case TypeKind.U16:
       case TypeKind.I32:
       case TypeKind.U32: return module.unary(UnaryOp.ClzI32, arg0);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.unary(UnaryOp.ClzSize, arg0);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.unary(UnaryOp.ClzSize, arg0);
       case TypeKind.I64:
       case TypeKind.U64: return module.unary(UnaryOp.ClzI64, arg0);
     }
@@ -1364,20 +1364,20 @@ function builtin_ctz(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(operands[0], Type.i32, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(operands[0], Type.i32, Constraints.MustWrap);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.BOOL: // not wrapped
+      case TypeKind.Bool: // not wrapped
       case TypeKind.I8:
       case TypeKind.U8:
       case TypeKind.I16:
       case TypeKind.U16:
       case TypeKind.I32:
       case TypeKind.U32: return module.unary(UnaryOp.CtzI32, arg0);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.unary(UnaryOp.CtzSize, arg0);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.unary(UnaryOp.CtzSize, arg0);
       case TypeKind.I64:
       case TypeKind.U64: return module.unary(UnaryOp.CtzI64, arg0);
     }
@@ -1401,12 +1401,12 @@ function builtin_popcnt(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(operands[0], Type.i32, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(operands[0], Type.i32, Constraints.MustWrap);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (compiler.currentType.kind) {
-      case TypeKind.BOOL: return arg0;
+      case TypeKind.Bool: return arg0;
       case TypeKind.I8: // not wrapped
       case TypeKind.U8:
       case TypeKind.I16:
@@ -1415,8 +1415,8 @@ function builtin_popcnt(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.unary(UnaryOp.PopcntI32, arg0);
       case TypeKind.I64:
       case TypeKind.U64: return module.unary(UnaryOp.PopcntI64, arg0);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.unary(UnaryOp.PopcntSize, arg0);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.unary(UnaryOp.PopcntSize, arg0);
     }
   }
   compiler.error(
@@ -1438,13 +1438,13 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(operands[0], Type.i32, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(operands[0], Type.i32, Constraints.MustWrap);
   let type = compiler.currentType;
   if (type.isValue) {
-    let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
+    let arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit);
     switch (type.kind) {
-      case TypeKind.BOOL: return arg0;
+      case TypeKind.Bool: return arg0;
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
@@ -1452,9 +1452,9 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
         // (value << (shift & mask)) | (value >>> ((0 - shift) & mask))
         let flow = compiler.currentFlow;
         let temp1 = flow.getTempLocal(type);
-        flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+        flow.setLocalFlag(temp1.index, LocalFlags.Wrapped);
         let temp2 = flow.getTempLocal(type);
-        flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+        flow.setLocalFlag(temp2.index, LocalFlags.Wrapped);
 
         let ret = module.binary(BinaryOp.OrI32,
           module.binary(
@@ -1487,8 +1487,8 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.RotlI32, arg0, arg1);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.RotlI64, arg0, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.binary(BinaryOp.RotlSize, arg0, arg1);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.binary(BinaryOp.RotlSize, arg0, arg1);
     }
   }
   compiler.error(
@@ -1510,13 +1510,13 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(operands[0], Type.i32, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(operands[0], Type.i32, Constraints.MustWrap);
   let type = compiler.currentType;
   if (type.isValue) {
-    let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
+    let arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit);
     switch (type.kind) {
-      case TypeKind.BOOL: return arg0;
+      case TypeKind.Bool: return arg0;
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
@@ -1524,9 +1524,9 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
         // (value >>> (shift & mask)) | (value << ((0 - shift) & mask))
         let flow = compiler.currentFlow;
         let temp1 = flow.getTempLocal(type);
-        flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+        flow.setLocalFlag(temp1.index, LocalFlags.Wrapped);
         let temp2 = flow.getTempLocal(type);
-        flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+        flow.setLocalFlag(temp2.index, LocalFlags.Wrapped);
 
         let ret = module.binary(BinaryOp.OrI32,
           module.binary(
@@ -1559,8 +1559,8 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.RotrI32, arg0, arg1);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.RotrI64, arg0, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.binary(BinaryOp.RotrSize, arg0, arg1);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.binary(BinaryOp.RotrSize, arg0, arg1);
     }
   }
   compiler.error(
@@ -1582,17 +1582,17 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.MustWrap);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE: return arg0;
+      case TypeKind.Usize: return arg0;
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32: {
@@ -1618,7 +1618,7 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
         );
         return ret;
       }
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         let options = compiler.options;
         let flow = compiler.currentFlow;
 
@@ -1688,32 +1688,32 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
   let typeArguments = ctx.typeArguments;
   let left = operands[0];
   let arg0 = typeArguments
-    ? compiler.compileExpression(left, typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(left, typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.MustWrap);
   let type = compiler.currentType;
   if (type.isValue) {
     let arg1: ExpressionRef;
     if (!typeArguments && left.isNumericLiteral) { // prefer right type
-      arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
+      arg1 = compiler.compileExpression(operands[1], type, Constraints.MustWrap);
       if (compiler.currentType != type) {
-        arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+        arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.ConvImplicit | Constraints.MustWrap);
       }
     } else {
-      arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+      arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit | Constraints.MustWrap);
     }
     let op: BinaryOp = -1;
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:   { op = BinaryOp.GtI32; break; }
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:   { op = BinaryOp.GtU32; break; }
       case TypeKind.I64:   { op = BinaryOp.GtI64; break; }
       case TypeKind.U64:   { op = BinaryOp.GtU64; break; }
-      case TypeKind.ISIZE: { op = BinaryOp.GtISize; break; }
-      case TypeKind.USIZE: { op = BinaryOp.GtUSize; break; }
+      case TypeKind.Isize: { op = BinaryOp.GtISize; break; }
+      case TypeKind.Usize: { op = BinaryOp.GtUSize; break; }
       case TypeKind.F32: return module.binary(BinaryOp.MaxF32, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.MaxF64, arg0, arg1);
     }
@@ -1721,9 +1721,9 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
       let flow = compiler.currentFlow;
       let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+      flow.setLocalFlag(temp1.index, LocalFlags.Wrapped);
       let temp2 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+      flow.setLocalFlag(temp2.index, LocalFlags.Wrapped);
       let ret = module.select(
         module.local_tee(temp1.index, arg0, false), // numeric
         module.local_tee(temp2.index, arg1, false), // numeric
@@ -1756,32 +1756,32 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
   let typeArguments = ctx.typeArguments;
   let left = operands[0];
   let arg0 = typeArguments
-    ? compiler.compileExpression(left, typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(left, typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.MustWrap);
   let type = compiler.currentType;
   if (type.isValue) {
     let arg1: ExpressionRef;
     if (!typeArguments && left.isNumericLiteral) { // prefer right type
-      arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
+      arg1 = compiler.compileExpression(operands[1], type, Constraints.MustWrap);
       if (compiler.currentType != type) {
-        arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+        arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.ConvImplicit | Constraints.MustWrap);
       }
     } else {
-      arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+      arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit | Constraints.MustWrap);
     }
     let op: BinaryOp = -1;
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:   { op = BinaryOp.LtI32; break; }
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:   { op = BinaryOp.LtU32; break; }
       case TypeKind.I64:   { op = BinaryOp.LtI64; break; }
       case TypeKind.U64:   { op = BinaryOp.LtU64; break; }
-      case TypeKind.ISIZE: { op = BinaryOp.LtISize; break; }
-      case TypeKind.USIZE: { op = BinaryOp.LtUSize; break; }
+      case TypeKind.Isize: { op = BinaryOp.LtISize; break; }
+      case TypeKind.Usize: { op = BinaryOp.LtUSize; break; }
       case TypeKind.F32: return module.binary(BinaryOp.MinF32, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.MinF64, arg0, arg1);
     }
@@ -1789,9 +1789,9 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
       let flow = compiler.currentFlow;
       let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+      flow.setLocalFlag(temp1.index, LocalFlags.Wrapped);
       let temp2 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+      flow.setLocalFlag(temp2.index, LocalFlags.Wrapped);
       let ret = module.select(
         module.local_tee(temp1.index, arg0, false), // numeric
         module.local_tee(temp2.index, arg1, false), // numeric
@@ -1823,22 +1823,22 @@ function builtin_ceil(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.None);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
-      case TypeKind.ISIZE:
+      case TypeKind.Isize:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE: return arg0; // considered rounded
+      case TypeKind.Usize: return arg0; // considered rounded
       case TypeKind.F32: return module.unary(UnaryOp.CeilF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.CeilF64, arg0);
     }
@@ -1862,22 +1862,22 @@ function builtin_floor(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.None);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
-      case TypeKind.ISIZE:
+      case TypeKind.Isize:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE: return arg0; // considered rounded
+      case TypeKind.Usize: return arg0; // considered rounded
       case TypeKind.F32: return module.unary(UnaryOp.FloorF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.FloorF64, arg0);
     }
@@ -1901,11 +1901,11 @@ function builtin_copysign(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-    : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
+    : compiler.compileExpression(operands[0], Type.f64, Constraints.None);
   let type = compiler.currentType;
   if (type.isValue) {
-    let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
+    let arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit);
     switch (type.kind) {
       // TODO: does an integer version make sense?
       case TypeKind.F32: return module.binary(BinaryOp.CopysignF32, arg0, arg1);
@@ -1931,22 +1931,22 @@ function builtin_nearest(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.None);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
-      case TypeKind.ISIZE:
+      case TypeKind.Isize:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE: return arg0;
+      case TypeKind.Usize: return arg0;
       case TypeKind.F32: return module.unary(UnaryOp.NearestF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.NearestF64, arg0);
     }
@@ -1974,22 +1974,22 @@ function builtin_reinterpret(ctx: BuiltinContext): ExpressionRef {
     switch (type.kind) {
       case TypeKind.I32:
       case TypeKind.U32: {
-        let arg0 = compiler.compileExpression(operands[0], Type.f32, Constraints.CONV_IMPLICIT);
+        let arg0 = compiler.compileExpression(operands[0], Type.f32, Constraints.ConvImplicit);
         compiler.currentType = type;
         return module.unary(UnaryOp.ReinterpretF32ToI32, arg0);
       }
       case TypeKind.I64:
       case TypeKind.U64: {
-        let arg0 = compiler.compileExpression(operands[0], Type.f64, Constraints.CONV_IMPLICIT);
+        let arg0 = compiler.compileExpression(operands[0], Type.f64, Constraints.ConvImplicit);
         compiler.currentType = type;
         return module.unary(UnaryOp.ReinterpretF64ToI64, arg0);
       }
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         let isWasm64 = compiler.options.isWasm64;
         let arg0 = compiler.compileExpression(operands[0],
           isWasm64 ? Type.f64 : Type.f32,
-          Constraints.CONV_IMPLICIT
+          Constraints.ConvImplicit
         );
         compiler.currentType = type;
         return module.unary(
@@ -2000,12 +2000,12 @@ function builtin_reinterpret(ctx: BuiltinContext): ExpressionRef {
         );
       }
       case TypeKind.F32: {
-        let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
+        let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.ConvImplicit);
         compiler.currentType = Type.f32;
         return module.unary(UnaryOp.ReinterpretI32ToF32, arg0);
       }
       case TypeKind.F64: {
-        let arg0 = compiler.compileExpression(operands[0], Type.i64, Constraints.CONV_IMPLICIT);
+        let arg0 = compiler.compileExpression(operands[0], Type.i64, Constraints.ConvImplicit);
         compiler.currentType = Type.f64;
         return module.unary(UnaryOp.ReinterpretI64ToF64, arg0);
       }
@@ -2030,8 +2030,8 @@ function builtin_sqrt(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-    : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
+    : compiler.compileExpression(operands[0], Type.f64, Constraints.None);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
@@ -2059,22 +2059,22 @@ function builtin_trunc(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.None);
   let type = compiler.currentType;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
-      case TypeKind.ISIZE:
+      case TypeKind.Isize:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE: return arg0; // considered truncated
+      case TypeKind.Usize: return arg0; // considered truncated
       case TypeKind.F32: return module.unary(UnaryOp.TruncF32, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.TruncF64, arg0);
     }
@@ -2101,7 +2101,7 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
   compiler.currentType = Type.bool;
@@ -2112,12 +2112,12 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
-      case TypeKind.ISIZE:
+      case TypeKind.Isize:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         return module.maybeDropCondition(arg0, module.i32(0));
       }
       // (t = arg0) != t
@@ -2175,7 +2175,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
   compiler.currentType = Type.bool;
@@ -2186,12 +2186,12 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
-      case TypeKind.ISIZE:
+      case TypeKind.Isize:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         return module.maybeDropCondition(arg0, module.i32(1));
       }
       // (t = arg0) - t == 0
@@ -2278,7 +2278,7 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
 
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let numOperands = operands.length;
   let immOffset = 0;
   let immAlign = type.byteSize;
@@ -2322,18 +2322,18 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
   let typeArguments = ctx.typeArguments;
   let contextualType = ctx.contextualType;
   let type = typeArguments![0];
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let arg1 = ctx.contextIsExact
     ? compiler.compileExpression(operands[1],
         contextualType,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(
         operands[1],
         type,
         type.isIntegerValue
-          ? Constraints.NONE // no need to convert to small int (but now might result in a float)
-          : Constraints.CONV_IMPLICIT
+          ? Constraints.None // no need to convert to small int (but now might result in a float)
+          : Constraints.ConvImplicit
       );
   let inType = compiler.currentType;
   if (!inType.isMemory) {
@@ -2390,7 +2390,7 @@ function builtin_rem(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
@@ -2406,14 +2406,14 @@ function builtin_rem(ctx: BuiltinContext): ExpressionRef {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT
+          Constraints.ConvImplicit
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       );
     }
     if (type.isIntegerValue) {
@@ -2444,7 +2444,7 @@ function builtin_add(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
@@ -2460,14 +2460,14 @@ function builtin_add(ctx: BuiltinContext): ExpressionRef {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT
+          Constraints.ConvImplicit
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       );
     }
     if (type.isNumericValue) {
@@ -2498,7 +2498,7 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
@@ -2514,14 +2514,14 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT
+          Constraints.ConvImplicit
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       );
     }
     if (type.isNumericValue) {
@@ -2552,7 +2552,7 @@ function builtin_mul(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
@@ -2568,14 +2568,14 @@ function builtin_mul(ctx: BuiltinContext): ExpressionRef {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT
+          Constraints.ConvImplicit
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       );
     }
     if (type.isNumericValue) {
@@ -2606,7 +2606,7 @@ function builtin_div(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
@@ -2622,14 +2622,14 @@ function builtin_div(ctx: BuiltinContext): ExpressionRef {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT
+          Constraints.ConvImplicit
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       );
     }
     if (type.isNumericValue) {
@@ -2660,7 +2660,7 @@ function builtin_eq(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
@@ -2676,14 +2676,14 @@ function builtin_eq(ctx: BuiltinContext): ExpressionRef {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT
+          Constraints.ConvImplicit
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       );
     }
     if (type.isNumericValue) {
@@ -2715,7 +2715,7 @@ function builtin_ne(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
@@ -2731,14 +2731,14 @@ function builtin_ne(ctx: BuiltinContext): ExpressionRef {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT
+          Constraints.ConvImplicit
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       );
     }
     if (type.isNumericValue) {
@@ -2763,7 +2763,7 @@ function builtin_atomic_load(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.THREADS) |
+    checkFeatureEnabled(ctx, Feature.Threads) |
     checkTypeRequired(ctx, true) |
     checkArgsOptional(ctx, 1, 2)
   ) return module.unreachable();
@@ -2784,7 +2784,7 @@ function builtin_atomic_load(ctx: BuiltinContext): ExpressionRef {
     compiler.currentType = outType;
     return module.unreachable();
   }
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let immOffset = operands.length == 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
   if (immOffset < 0) {
     compiler.currentType = outType;
@@ -2805,7 +2805,7 @@ function builtin_atomic_store(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.THREADS) |
+    checkFeatureEnabled(ctx, Feature.Threads) |
     checkTypeRequired(ctx) |
     checkArgsOptional(ctx, 2, 3)
   ) return module.unreachable();
@@ -2821,19 +2821,19 @@ function builtin_atomic_store(ctx: BuiltinContext): ExpressionRef {
     compiler.currentType = Type.void;
     return module.unreachable();
   }
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let arg1 = ctx.contextIsExact
     ? compiler.compileExpression(
         operands[1],
         contextualType,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(
         operands[1],
         type,
         type.isIntegerValue
-          ? Constraints.NONE // no need to convert to small int (but now might result in a float)
-          : Constraints.CONV_IMPLICIT
+          ? Constraints.None // no need to convert to small int (but now might result in a float)
+          : Constraints.ConvImplicit
       );
   let inType = compiler.currentType;
   if (
@@ -2862,7 +2862,7 @@ function builtin_atomic_binary(ctx: BuiltinContext, op: AtomicRMWOp, opName: str
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.THREADS) |
+    checkFeatureEnabled(ctx, Feature.Threads) |
     checkTypeRequired(ctx, true) |
     checkArgsOptional(ctx, 2, 3)
   ) return module.unreachable();
@@ -2879,19 +2879,19 @@ function builtin_atomic_binary(ctx: BuiltinContext, op: AtomicRMWOp, opName: str
   }
   let arg0 = compiler.compileExpression(operands[0],
     compiler.options.usizeType,
-    Constraints.CONV_IMPLICIT
+    Constraints.ConvImplicit
   );
   let arg1 = ctx.contextIsExact
     ? compiler.compileExpression(operands[1],
         contextualType,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(
         operands[1],
         type,
         type.isIntegerValue
-          ? Constraints.NONE // no need to convert to small int (but now might result in a float)
-          : Constraints.CONV_IMPLICIT
+          ? Constraints.None // no need to convert to small int (but now might result in a float)
+          : Constraints.ConvImplicit
       );
   let inType = compiler.currentType;
   if (
@@ -2955,7 +2955,7 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.THREADS) |
+    checkFeatureEnabled(ctx, Feature.Threads) |
     checkTypeRequired(ctx, true) |
     checkArgsOptional(ctx, 3, 4)
   ) return module.unreachable();
@@ -2972,24 +2972,24 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
   }
   let arg0 = compiler.compileExpression(operands[0],
     compiler.options.usizeType,
-    Constraints.CONV_IMPLICIT
+    Constraints.ConvImplicit
   );
   let arg1 = ctx.contextIsExact
     ? compiler.compileExpression(operands[1],
         contextualType,
-        Constraints.CONV_IMPLICIT
+        Constraints.ConvImplicit
       )
     : compiler.compileExpression(
         operands[1],
         type,
         type.isIntegerValue
-          ? Constraints.NONE // no need to convert to small int (but now might result in a float)
-          : Constraints.CONV_IMPLICIT
+          ? Constraints.None // no need to convert to small int (but now might result in a float)
+          : Constraints.ConvImplicit
       );
   let inType = compiler.currentType;
   let arg2 = compiler.compileExpression(operands[2],
     inType,
-    Constraints.CONV_IMPLICIT
+    Constraints.ConvImplicit
   );
   if (
     type.isIntegerValue &&
@@ -3018,7 +3018,7 @@ function builtin_atomic_wait(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.THREADS) |
+    checkFeatureEnabled(ctx, Feature.Threads) |
     checkTypeRequired(ctx) |
     checkArgsOptional(ctx, 2, 3)
   ) {
@@ -3028,19 +3028,19 @@ function builtin_atomic_wait(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let type = typeArguments![0];
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit);
   let arg2 = operands.length == 3
-    ? compiler.compileExpression(operands[2], Type.i64, Constraints.CONV_IMPLICIT)
+    ? compiler.compileExpression(operands[2], Type.i64, Constraints.ConvImplicit)
     : module.i64(-1, -1); // Infinite timeout
   compiler.currentType = Type.i32;
   switch (type.kind) {
     case TypeKind.I32:
     case TypeKind.I64:
-    case TypeKind.ISIZE:
+    case TypeKind.Isize:
     case TypeKind.U32:
     case TypeKind.U64:
-    case TypeKind.USIZE: return module.atomic_wait(arg0, arg1, arg2, type.toRef());
+    case TypeKind.Usize: return module.atomic_wait(arg0, arg1, arg2, type.toRef());
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -3055,7 +3055,7 @@ function builtin_atomic_notify(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.THREADS) |
+    checkFeatureEnabled(ctx, Feature.Threads) |
     checkTypeAbsent(ctx) |
     checkArgsOptional(ctx, 1, 2)
   ) {
@@ -3063,9 +3063,9 @@ function builtin_atomic_notify(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let arg1 = operands.length == 2
-    ? compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT)
+    ? compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit)
     : module.i32(-1); // Inifinity count of waiters
   compiler.currentType = Type.i32;
   return module.atomic_notify(arg0, arg1);
@@ -3078,7 +3078,7 @@ function builtin_atomic_fence(ctx: BuiltinContext): ExpressionRef {
   let module = compiler.module;
   compiler.currentType = Type.void;
   if (
-    checkFeatureEnabled(ctx, Feature.THREADS) |
+    checkFeatureEnabled(ctx, Feature.Threads) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 0)
   ) return module.unreachable();
@@ -3099,17 +3099,17 @@ function builtin_select(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit)
     : compiler.compileExpression(operands[0], Type.auto);
   let type = compiler.currentType;
-  if (!type.isAny(TypeFlags.VALUE | TypeFlags.REFERENCE)) {
+  if (!type.isAny(TypeFlags.Value | TypeFlags.Reference)) {
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, "select", type.toString()
     );
     return module.unreachable();
   }
-  let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
+  let arg1 = compiler.compileExpression(operands[1], type, Constraints.ConvImplicit);
   let arg2 = compiler.makeIsTrueish(
     compiler.compileExpression(operands[2], Type.bool),
     compiler.currentType, // ^
@@ -3152,7 +3152,7 @@ function builtin_memory_grow(ctx: BuiltinContext): ExpressionRef {
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
-  return module.memory_grow(compiler.compileExpression(ctx.operands[0], Type.i32, Constraints.CONV_IMPLICIT));
+  return module.memory_grow(compiler.compileExpression(ctx.operands[0], Type.i32, Constraints.ConvImplicit));
 }
 builtins.set(BuiltinNames.memory_grow, builtin_memory_grow);
 
@@ -3166,7 +3166,7 @@ function builtin_memory_copy(ctx: BuiltinContext): ExpressionRef {
     checkArgsRequired(ctx, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
+  if (!compiler.options.hasFeature(Feature.BulkMemory)) {
     // use stdlib alternative if not supported
     let instance = compiler.resolver.resolveFunction(ctx.prototype, null); // reports
     compiler.currentType = Type.void;
@@ -3174,9 +3174,9 @@ function builtin_memory_copy(ctx: BuiltinContext): ExpressionRef {
     return compiler.compileCallDirect(instance, operands, ctx.reportNode);
   }
   let usizeType = compiler.options.usizeType;
-  let arg0 = compiler.compileExpression(operands[0], usizeType, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], usizeType, Constraints.CONV_IMPLICIT);
-  let arg2 = compiler.compileExpression(operands[2], usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], usizeType, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], usizeType, Constraints.ConvImplicit);
   compiler.currentType = Type.void;
   return module.memory_copy(arg0, arg1, arg2);
 }
@@ -3192,7 +3192,7 @@ function builtin_memory_fill(ctx: BuiltinContext): ExpressionRef {
     checkArgsRequired(ctx, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
-  if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
+  if (!compiler.options.hasFeature(Feature.BulkMemory)) {
     // use stdlib alternative if not supported
     let instance = compiler.resolver.resolveFunction(ctx.prototype, null); // reports
     compiler.currentType = Type.void;
@@ -3200,9 +3200,9 @@ function builtin_memory_fill(ctx: BuiltinContext): ExpressionRef {
     return compiler.compileCallDirect(instance, operands, ctx.reportNode);
   }
   let usizeType = compiler.options.usizeType;
-  let arg0 = compiler.compileExpression(operands[0], usizeType, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.u8, Constraints.CONV_IMPLICIT);
-  let arg2 = compiler.compileExpression(operands[2], usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.u8, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], usizeType, Constraints.ConvImplicit);
   compiler.currentType = Type.void;
   return module.memory_fill(arg0, arg1, arg2);
 }
@@ -3234,7 +3234,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
       return module.unreachable();
     }
     let valuesOperand = operands[0];
-    if (valuesOperand.kind != NodeKind.LITERAL || (<LiteralExpression>valuesOperand).literalKind != LiteralKind.ARRAY) {
+    if (valuesOperand.kind != NodeKind.Literal || (<LiteralExpression>valuesOperand).literalKind != LiteralKind.Array) {
       compiler.error(
         DiagnosticCode.Array_literal_expected,
         operands[0].range
@@ -3248,8 +3248,8 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     let isStatic = true;
     for (let i = 0; i < numElements; ++i) {
       let elementExpression = expressions[i];
-      if (elementExpression.kind != NodeKind.OMITTED) {
-        let expr = compiler.compileExpression(elementExpression, elementType, Constraints.CONV_IMPLICIT);
+      if (elementExpression.kind != NodeKind.Omitted) {
+        let expr = compiler.compileExpression(elementExpression, elementType, Constraints.ConvImplicit);
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
         if (precomp) {
           expr = precomp;
@@ -3281,7 +3281,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     assert(compiler.writeStaticBuffer(buf, 0, elementType, exprs) == buf.byteLength);
     offset = compiler.addAlignedMemorySegment(buf, align).offset;
   } else { // data(size[, align])
-    let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
+    let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.ConvImplicit);
     let precomp = module.runExpression(arg0, ExpressionRunnerFlags.PreserveSideeffects);
     if (!precomp) {
       compiler.error(
@@ -3331,7 +3331,7 @@ function builtin_i31_new(ctx: BuiltinContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.ConvImplicit);
   compiler.currentType = Type.i31ref;
   return module.i31_new(arg0);
 }
@@ -3345,8 +3345,8 @@ function builtin_i31_get(ctx: BuiltinContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.i31ref, Constraints.CONV_IMPLICIT);
-  if (ctx.contextualType.is(TypeFlags.UNSIGNED)) {
+  let arg0 = compiler.compileExpression(operands[0], Type.i31ref, Constraints.ConvImplicit);
+  if (ctx.contextualType.is(TypeFlags.Unsigned)) {
     compiler.currentType = Type.u32;
     return module.i31_get(arg0, false);
   } else {
@@ -3401,8 +3401,8 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let contextualType = ctx.contextualType;
   let arg0 = typeArguments
-    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-    : compiler.compileExpression(operands[0], Type.bool, Constraints.MUST_WRAP);
+    ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit | Constraints.MustWrap)
+    : compiler.compileExpression(operands[0], Type.bool, Constraints.MustWrap);
   let type = compiler.currentType;
   compiler.currentType = type.nonNullableType;
 
@@ -3448,7 +3448,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
   if (contextualType == Type.void) { // simplify if dropped anyway
     compiler.currentType = Type.void;
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
@@ -3457,29 +3457,28 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.if(module.unary(UnaryOp.EqzI32, arg0), abort);
       case TypeKind.I64:
       case TypeKind.U64: return module.if(module.unary(UnaryOp.EqzI64, arg0), abort);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.if(module.unary(UnaryOp.EqzSize, arg0), abort);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.if(module.unary(UnaryOp.EqzSize, arg0), abort);
       // TODO: also check for NaN in float assertions, as in `Boolean(NaN) -> false`?
       case TypeKind.F32: return module.if(module.binary(BinaryOp.EqF32, arg0, module.f32(0)), abort);
       case TypeKind.F64: return module.if(module.binary(BinaryOp.EqF64, arg0, module.f64(0)), abort);
-      case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
-      case TypeKind.ANYREF:
-      case TypeKind.EQREF:
-      case TypeKind.DATAREF:
-      case TypeKind.ARRAYREF:
-      case TypeKind.I31REF:
-      case TypeKind.STRINGREF:
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER: return module.if(module.ref_is(RefIsOp.Null, arg0), abort);
-
+      case TypeKind.Funcref:
+      case TypeKind.Externref:
+      case TypeKind.Anyref:
+      case TypeKind.Eqref:
+      case TypeKind.Dataref:
+      case TypeKind.Arrayref:
+      case TypeKind.I31ref:
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: return module.if(module.ref_is(RefIsOp.Null, arg0), abort);
     }
   } else {
     compiler.currentType = type.nonNullableType;
     let flow = compiler.currentFlow;
     switch (compiler.currentType.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.Bool:
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
@@ -3487,7 +3486,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16:
       case TypeKind.U32: {
         let temp = flow.getTempLocal(type);
-        flow.setLocalFlag(temp.index, LocalFlags.WRAPPED); // arg0 is wrapped
+        flow.setLocalFlag(temp.index, LocalFlags.Wrapped); // arg0 is wrapped
         let ret = module.if(
           module.local_tee(temp.index, arg0, false), // numeric
           module.local_get(temp.index, TypeRef.I32),
@@ -3507,8 +3506,8 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         );
         return ret;
       }
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         let temp = flow.getTempLocal(compiler.options.usizeType);
         let ret = module.if(
           module.unary(
@@ -3544,17 +3543,17 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         );
         return ret;
       }
-      case TypeKind.FUNCREF:
-      case TypeKind.EXTERNREF:
-      case TypeKind.ANYREF:
-      case TypeKind.EQREF:
-      case TypeKind.DATAREF:
-      case TypeKind.ARRAYREF:
-      case TypeKind.I31REF:
-      case TypeKind.STRINGREF:
-      case TypeKind.STRINGVIEW_WTF8:
-      case TypeKind.STRINGVIEW_WTF16:
-      case TypeKind.STRINGVIEW_ITER: {
+      case TypeKind.Funcref:
+      case TypeKind.Externref:
+      case TypeKind.Anyref:
+      case TypeKind.Eqref:
+      case TypeKind.Dataref:
+      case TypeKind.Arrayref:
+      case TypeKind.I31ref:
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: {
         let temp = flow.getTempLocal(type);
         let ret = module.if(
           module.ref_is(RefIsOp.Null,
@@ -3585,11 +3584,11 @@ function builtin_unchecked(ctx: BuiltinContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let flow = compiler.currentFlow;
-  let alreadyUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
-  flow.set(FlowFlags.UNCHECKED_CONTEXT);
+  let alreadyUnchecked = flow.is(FlowFlags.UncheckedContext);
+  flow.set(FlowFlags.UncheckedContext);
   // eliminate unnecessary tees by preferring contextualType(=void)
   let expr = compiler.compileExpression(ctx.operands[0], ctx.contextualType);
-  if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
+  if (!alreadyUnchecked) flow.unset(FlowFlags.UncheckedContext);
   return expr;
 }
 builtins.set(BuiltinNames.unchecked, builtin_unchecked);
@@ -3611,7 +3610,7 @@ function builtin_call_indirect(ctx: BuiltinContext): ExpressionRef {
   } else {
     returnType = ctx.contextualType;
   }
-  let indexArg = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
+  let indexArg = compiler.compileExpression(operands[0], Type.u32, Constraints.ConvImplicit);
   let numOperands = operands.length - 1;
   let operandExprs = new Array<ExpressionRef>(numOperands);
   let paramTypeRefs = new Array<TypeRef>(numOperands);
@@ -3645,7 +3644,7 @@ function builtin_instantiate(ctx: BuiltinContext): ExpressionRef {
   compiler.currentType = classInstance.type;
   let ctor = compiler.ensureConstructor(classInstance, ctx.reportNode);
   compiler.checkFieldInitialization(classInstance, ctx.reportNode);
-  return compiler.compileInstantiate(ctor, operands, Constraints.NONE, ctx.reportNode);
+  return compiler.compileInstantiate(ctor, operands, Constraints.None, ctx.reportNode);
 }
 builtins.set(BuiltinNames.instantiate, builtin_instantiate);
 
@@ -3666,26 +3665,26 @@ function builtin_diagnostic(ctx: BuiltinContext, category: DiagnosticCategory): 
       ? operands[0].range.toString()
       : reportNode.range.toString()
   );
-  return category == DiagnosticCategory.ERROR
+  return category == DiagnosticCategory.Error
     ? module.unreachable()
     : module.nop();
 }
 
 // ERROR(message?)
 function builtin_error(ctx: BuiltinContext): ExpressionRef {
-  return builtin_diagnostic(ctx, DiagnosticCategory.ERROR);
+  return builtin_diagnostic(ctx, DiagnosticCategory.Error);
 }
 builtins.set(BuiltinNames.ERROR, builtin_error);
 
 // WARNING(message?)
 function builtin_warning(ctx: BuiltinContext): ExpressionRef {
-  return builtin_diagnostic(ctx, DiagnosticCategory.WARNING);
+  return builtin_diagnostic(ctx, DiagnosticCategory.Warning);
 }
 builtins.set(BuiltinNames.WARNING, builtin_warning);
 
 // INFO(message?)
 function builtin_info(ctx: BuiltinContext): ExpressionRef {
-  return builtin_diagnostic(ctx, DiagnosticCategory.INFO);
+  return builtin_diagnostic(ctx, DiagnosticCategory.Info);
 }
 builtins.set(BuiltinNames.INFO, builtin_info);
 
@@ -3695,7 +3694,7 @@ builtins.set(BuiltinNames.INFO, builtin_info);
 function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let parent = ctx.prototype.parent;
-  assert(parent.kind == ElementKind.CLASS);
+  assert(parent.kind == ElementKind.Class);
   let classInstance = <Class>parent;
   assert(classInstance.prototype == compiler.program.functionPrototype);
   let typeArguments = assert(classInstance.typeArguments);
@@ -3710,13 +3709,13 @@ function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
     compiler.currentType = returnType;
     return compiler.module.unreachable();
   }
-  let functionArg = compiler.compileExpression(assert(ctx.thisOperand), ftype, Constraints.CONV_IMPLICIT);
+  let functionArg = compiler.compileExpression(assert(ctx.thisOperand), ftype, Constraints.ConvImplicit);
   let thisOperand = assert(ctx.operands.shift());
   let thisType = signature.thisType;
   let thisArg: usize = 0;
   if (thisType) {
-    thisArg = compiler.compileExpression(thisOperand, thisType, Constraints.CONV_IMPLICIT);
-  } else if (thisOperand.kind != NodeKind.NULL) {
+    thisArg = compiler.compileExpression(thisOperand, thisType, Constraints.ConvImplicit);
+  } else if (thisOperand.kind != NodeKind.Null) {
     compiler.error(
       DiagnosticCode._this_cannot_be_referenced_in_current_location,
       thisOperand.range
@@ -3751,7 +3750,7 @@ function builtin_conversion(ctx: BuiltinContext, toType: Type): ExpressionRef {
     compiler.currentType = toType;
     return compiler.module.unreachable();
   }
-  return compiler.compileExpression(ctx.operands[0], toType, Constraints.CONV_EXPLICIT);
+  return compiler.compileExpression(ctx.operands[0], toType, Constraints.ConvExplicit);
 }
 
 // i8(*) -> i8
@@ -3845,7 +3844,7 @@ function builtin_i8x16(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 16)
   ) {
@@ -3858,7 +3857,7 @@ function builtin_i8x16(ctx: BuiltinContext): ExpressionRef {
   let numVars = 0;
 
   for (let i = 0; i < 16; ++i) {
-    let expr = compiler.compileExpression(operands[i], Type.i8, Constraints.CONV_IMPLICIT);
+    let expr = compiler.compileExpression(operands[i], Type.i8, Constraints.ConvImplicit);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeI8(getConstValueI32(precomp), bytes, i);
@@ -3895,7 +3894,7 @@ function builtin_i16x8(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 8)
   ) {
@@ -3908,7 +3907,7 @@ function builtin_i16x8(ctx: BuiltinContext): ExpressionRef {
   let numVars = 0;
 
   for (let i = 0; i < 8; ++i) {
-    let expr = compiler.compileExpression(operands[i], Type.i16, Constraints.CONV_IMPLICIT);
+    let expr = compiler.compileExpression(operands[i], Type.i16, Constraints.ConvImplicit);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeI16(getConstValueI32(precomp), bytes, i << 1);
@@ -3945,7 +3944,7 @@ function builtin_i32x4(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 4)
   ) {
@@ -3958,7 +3957,7 @@ function builtin_i32x4(ctx: BuiltinContext): ExpressionRef {
   let numVars = 0;
 
   for (let i = 0; i < 4; ++i) {
-    let expr = compiler.compileExpression(operands[i], Type.i32, Constraints.CONV_IMPLICIT);
+    let expr = compiler.compileExpression(operands[i], Type.i32, Constraints.ConvImplicit);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeI32(getConstValueI32(precomp), bytes, i << 2);
@@ -3995,7 +3994,7 @@ function builtin_i64x2(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -4008,7 +4007,7 @@ function builtin_i64x2(ctx: BuiltinContext): ExpressionRef {
   let numVars = 0;
 
   for (let i = 0; i < 2; ++i) {
-    let expr = compiler.compileExpression(operands[i], Type.i64, Constraints.CONV_IMPLICIT);
+    let expr = compiler.compileExpression(operands[i], Type.i64, Constraints.ConvImplicit);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       let off = i << 3;
@@ -4047,7 +4046,7 @@ function builtin_f32x4(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 4)
   ) {
@@ -4060,7 +4059,7 @@ function builtin_f32x4(ctx: BuiltinContext): ExpressionRef {
   let numVars = 0;
 
   for (let i = 0; i < 4; ++i) {
-    let expr = compiler.compileExpression(operands[i], Type.f32, Constraints.CONV_IMPLICIT);
+    let expr = compiler.compileExpression(operands[i], Type.f32, Constraints.ConvImplicit);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeF32(getConstValueF32(precomp), bytes, i << 2);
@@ -4097,7 +4096,7 @@ function builtin_f64x2(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -4110,7 +4109,7 @@ function builtin_f64x2(ctx: BuiltinContext): ExpressionRef {
   let numVars = 0;
 
   for (let i = 0; i < 2; ++i) {
-    let expr = compiler.compileExpression(operands[i], Type.f64, Constraints.CONV_IMPLICIT);
+    let expr = compiler.compileExpression(operands[i], Type.f64, Constraints.ConvImplicit);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       writeF64(getConstValueF64(precomp), bytes, i << 3);
@@ -4147,7 +4146,7 @@ function builtin_v128_splat(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -4157,7 +4156,7 @@ function builtin_v128_splat(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], type, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], type, Constraints.ConvImplicit);
   compiler.currentType = Type.v128;
   if (type.isValue) {
     switch (type.kind) {
@@ -4169,8 +4168,8 @@ function builtin_v128_splat(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.unary(UnaryOp.SplatI32x4, arg0);
       case TypeKind.I64:
       case TypeKind.U64: return module.unary(UnaryOp.SplatI64x2, arg0);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.unary(
           compiler.options.isWasm64
             ? UnaryOp.SplatI64x2
@@ -4195,15 +4194,15 @@ function builtin_v128_extract_lane(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx, true) |
     checkArgsRequired(ctx, 2)
   ) return module.unreachable();
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.u8, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.u8, Constraints.ConvImplicit);
   compiler.currentType = type;
   let idx = 0;
   let precomp = module.runExpression(arg1, ExpressionRunnerFlags.PreserveSideeffects);
@@ -4233,8 +4232,8 @@ function builtin_v128_extract_lane(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.simd_extract(SIMDExtractOp.ExtractLaneI32x4, arg0, <u8>idx);
       case TypeKind.I64:
       case TypeKind.U64: return module.simd_extract(SIMDExtractOp.ExtractLaneI64x2, arg0, <u8>idx);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.simd_extract(
           compiler.options.isWasm64
             ? SIMDExtractOp.ExtractLaneI64x2
@@ -4259,7 +4258,7 @@ function builtin_v128_replace_lane(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 3)
   ) {
@@ -4269,9 +4268,9 @@ function builtin_v128_replace_lane(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.u8, Constraints.CONV_IMPLICIT);
-  let arg2 = compiler.compileExpression(operands[2], type, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.u8, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], type, Constraints.ConvImplicit);
   compiler.currentType = Type.v128;
   let idx = 0;
   let precomp = module.runExpression(arg1, ExpressionRunnerFlags.PreserveSideeffects);
@@ -4301,8 +4300,8 @@ function builtin_v128_replace_lane(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI32x4, arg0, <u8>idx, arg2);
       case TypeKind.I64:
       case TypeKind.U64: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI64x2, arg0, <u8>idx, arg2);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.simd_replace(
           compiler.options.isWasm64
             ? SIMDReplaceOp.ReplaceLaneI64x2
@@ -4327,7 +4326,7 @@ function builtin_v128_shuffle(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx)
   ) {
     compiler.currentType = Type.v128;
@@ -4346,26 +4345,26 @@ function builtin_v128_shuffle(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = Type.v128;
       return module.unreachable();
     }
-    let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-    let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+    let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+    let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.I32:
       case TypeKind.I64:
-      case TypeKind.ISIZE:
+      case TypeKind.Isize:
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE:
+      case TypeKind.Usize:
       case TypeKind.F32:
       case TypeKind.F64: {
         let mask = new Uint8Array(16);
         let maxIdx = (laneCount << 1) - 1;
         for (let i = 0; i < laneCount; ++i) {
           let operand = operands[2 + i];
-          let argN = compiler.compileExpression(operand, Type.u8, Constraints.CONV_IMPLICIT);
+          let argN = compiler.compileExpression(operand, Type.u8, Constraints.ConvImplicit);
           let precomp = module.runExpression(argN, ExpressionRunnerFlags.PreserveSideeffects);
           let idx = 0;
           if (precomp) {
@@ -4439,7 +4438,7 @@ function builtin_v128_swizzle(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -4447,8 +4446,8 @@ function builtin_v128_swizzle(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   return module.binary(BinaryOp.SwizzleI8x16, arg0, arg1);
 }
 builtins.set(BuiltinNames.v128_swizzle, builtin_v128_swizzle);
@@ -4458,14 +4457,14 @@ function builtin_v128_load_splat(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx, true) |
     checkArgsOptional(ctx, 1, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let numOperands = operands.length;
   let immOffset = 0;
   let immAlign = type.byteSize;
@@ -4499,8 +4498,8 @@ function builtin_v128_load_splat(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.F32: {
         return module.simd_load(SIMDLoadOp.Load32Splat, arg0, immOffset, immAlign);
       }
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         if (!compiler.options.isWasm64) {
           return module.simd_load(SIMDLoadOp.Load32Splat, arg0, immOffset, immAlign);
         }
@@ -4526,14 +4525,14 @@ function builtin_v128_load_ext(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx, true) |
     checkArgsOptional(ctx, 1, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let numOperands = operands.length;
   let immOffset = 0;
   let immAlign = type.byteSize;
@@ -4558,12 +4557,12 @@ function builtin_v128_load_ext(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U8: return module.simd_load(SIMDLoadOp.Load8x8U, arg0, immOffset, immAlign);
       case TypeKind.I16: return module.simd_load(SIMDLoadOp.Load16x4S, arg0, immOffset, immAlign);
       case TypeKind.U16: return module.simd_load(SIMDLoadOp.Load16x4U, arg0, immOffset, immAlign);
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.simd_load(SIMDLoadOp.Load32x2S, arg0, immOffset, immAlign);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -4583,14 +4582,14 @@ function builtin_v128_load_zero(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx, true) |
     checkArgsOptional(ctx, 1, 3)
   ) return module.unreachable();
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
   let numOperands = operands.length;
   let immOffset = 0;
   let immAlign = type.byteSize;
@@ -4617,8 +4616,8 @@ function builtin_v128_load_zero(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I64:
       case TypeKind.U64:
       case TypeKind.F64: return module.simd_load(SIMDLoadOp.Load64Zero, arg0, immOffset, immAlign);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.simd_load(
           compiler.options.isWasm64
             ? SIMDLoadOp.Load64Zero
@@ -4643,16 +4642,16 @@ function builtin_v128_load_lane(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx, true) |
     checkArgsOptional(ctx, 3, 5)
   ) return module.unreachable();
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg2 = compiler.compileExpression(operands[2], Type.u8, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.u8, Constraints.ConvImplicit);
   let idx = 0;
   let precomp = module.runExpression(arg2, ExpressionRunnerFlags.PreserveSideeffects);
   if (precomp) {
@@ -4701,8 +4700,8 @@ function builtin_v128_load_lane(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I64:
       case TypeKind.U64:
       case TypeKind.F64: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load64Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.simd_loadstorelane(
           compiler.options.isWasm64
             ? SIMDLoadStoreLaneOp.Load64Lane
@@ -4729,16 +4728,16 @@ function builtin_v128_store_lane(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx, true) |
     checkArgsOptional(ctx, 3, 5)
   ) return module.unreachable();
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg2 = compiler.compileExpression(operands[2], Type.u8, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.u8, Constraints.ConvImplicit);
   let idx = 0;
   let precomp = module.runExpression(arg2, ExpressionRunnerFlags.PreserveSideeffects);
   if (precomp) {
@@ -4787,8 +4786,8 @@ function builtin_v128_store_lane(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I64:
       case TypeKind.U64:
       case TypeKind.F64: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store64Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.simd_loadstorelane(
           compiler.options.isWasm64
             ? SIMDLoadStoreLaneOp.Store64Lane
@@ -4815,7 +4814,7 @@ function builtin_v128_add(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -4825,8 +4824,8 @@ function builtin_v128_add(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
@@ -4837,8 +4836,8 @@ function builtin_v128_add(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.AddI32x4, arg0, arg1);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.AddI64x2, arg0, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.binary(
           compiler.options.isWasm64
             ? BinaryOp.AddI64x2
@@ -4863,7 +4862,7 @@ function builtin_v128_sub(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -4873,8 +4872,8 @@ function builtin_v128_sub(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
@@ -4885,8 +4884,8 @@ function builtin_v128_sub(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.SubI32x4, arg0, arg1);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.SubI64x2, arg0, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.binary(
           compiler.options.isWasm64
             ? BinaryOp.SubI64x2
@@ -4911,7 +4910,7 @@ function builtin_v128_mul(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -4921,8 +4920,8 @@ function builtin_v128_mul(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I16:
@@ -4931,8 +4930,8 @@ function builtin_v128_mul(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.MulI32x4, arg0, arg1);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.MulI64x2, arg0, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.MulI64x2 : BinaryOp.MulI32x4, arg0, arg1);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.binary(compiler.options.isWasm64 ? BinaryOp.MulI64x2 : BinaryOp.MulI32x4, arg0, arg1);
       case TypeKind.F32: return module.binary(BinaryOp.MulF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.MulF64x2, arg0, arg1);
     }
@@ -4950,7 +4949,7 @@ function builtin_v128_div(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -4960,8 +4959,8 @@ function builtin_v128_div(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.binary(BinaryOp.DivF32x4, arg0, arg1);
@@ -4981,7 +4980,7 @@ function builtin_v128_add_sat(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -4991,8 +4990,8 @@ function builtin_v128_add_sat(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.AddSatI8x16, arg0, arg1);
@@ -5014,7 +5013,7 @@ function builtin_v128_sub_sat(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5024,8 +5023,8 @@ function builtin_v128_sub_sat(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.SubSatI8x16, arg0, arg1);
@@ -5047,7 +5046,7 @@ function builtin_v128_min(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5057,20 +5056,20 @@ function builtin_v128_min(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.MinI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.MinU8x16, arg0, arg1);
       case TypeKind.I16: return module.binary(BinaryOp.MinI16x8, arg0, arg1);
       case TypeKind.U16: return module.binary(BinaryOp.MinU16x8, arg0, arg1);
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.binary(BinaryOp.MinI32x4, arg0, arg1);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -5092,7 +5091,7 @@ function builtin_v128_max(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5102,20 +5101,20 @@ function builtin_v128_max(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.MaxI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.MaxU8x16, arg0, arg1);
       case TypeKind.I16: return module.binary(BinaryOp.MaxI16x8, arg0, arg1);
       case TypeKind.U16: return module.binary(BinaryOp.MaxU16x8, arg0, arg1);
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.binary(BinaryOp.MaxI32x4, arg0, arg1);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -5137,7 +5136,7 @@ function builtin_v128_pmin(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5147,8 +5146,8 @@ function builtin_v128_pmin(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.binary(BinaryOp.PminF32x4, arg0, arg1);
@@ -5168,7 +5167,7 @@ function builtin_v128_pmax(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5178,8 +5177,8 @@ function builtin_v128_pmax(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.binary(BinaryOp.PmaxF32x4, arg0, arg1);
@@ -5199,7 +5198,7 @@ function builtin_v128_dot(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5209,8 +5208,8 @@ function builtin_v128_dot(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I16: return module.binary(BinaryOp.DotI16x8, arg0, arg1);
@@ -5229,7 +5228,7 @@ function builtin_v128_avgr(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5239,8 +5238,8 @@ function builtin_v128_avgr(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.U8:  return module.binary(BinaryOp.AvgrU8x16, arg0, arg1);
@@ -5260,7 +5259,7 @@ function builtin_v128_eq(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5270,8 +5269,8 @@ function builtin_v128_eq(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
@@ -5282,8 +5281,8 @@ function builtin_v128_eq(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.EqI32x4, arg0, arg1);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.EqI64x2, arg0, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.EqI64x2 : BinaryOp.EqI32x4, arg0, arg1);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.binary(compiler.options.isWasm64 ? BinaryOp.EqI64x2 : BinaryOp.EqI32x4, arg0, arg1);
       case TypeKind.F32: return module.binary(BinaryOp.EqF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.EqF64x2, arg0, arg1);
     }
@@ -5301,7 +5300,7 @@ function builtin_v128_ne(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5311,8 +5310,8 @@ function builtin_v128_ne(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
@@ -5323,8 +5322,8 @@ function builtin_v128_ne(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.NeI32x4, arg0, arg1);
       case TypeKind.I64:
       case TypeKind.U64: return module.binary(BinaryOp.NeI64x2, arg0, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.NeI64x2 : BinaryOp.NeI32x4, arg0, arg1);
+      case TypeKind.Isize:
+      case TypeKind.Usize: return module.binary(compiler.options.isWasm64 ? BinaryOp.NeI64x2 : BinaryOp.NeI32x4, arg0, arg1);
       case TypeKind.F32: return module.binary(BinaryOp.NeF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.NeF64x2, arg0, arg1);
     }
@@ -5342,7 +5341,7 @@ function builtin_v128_lt(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5352,8 +5351,8 @@ function builtin_v128_lt(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.LtI8x16, arg0, arg1);
@@ -5364,8 +5363,8 @@ function builtin_v128_lt(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.LtU32x4, arg0, arg1);
       case TypeKind.I64: return module.binary(BinaryOp.LtI64x2, arg0, arg1);
       // no LtU64x2
-      case TypeKind.ISIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.LtI64x2 : BinaryOp.LtI32x4, arg0, arg1);
-      case TypeKind.USIZE: {
+      case TypeKind.Isize: return module.binary(compiler.options.isWasm64 ? BinaryOp.LtI64x2 : BinaryOp.LtI32x4, arg0, arg1);
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         return module.binary(BinaryOp.LtU32x4, arg0, arg1);
       }
@@ -5386,7 +5385,7 @@ function builtin_v128_le(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5396,8 +5395,8 @@ function builtin_v128_le(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.LeI8x16, arg0, arg1);
@@ -5408,8 +5407,8 @@ function builtin_v128_le(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.LeU32x4, arg0, arg1);
       case TypeKind.I64: return module.binary(BinaryOp.LeI64x2, arg0, arg1);
       // no LeU64x2
-      case TypeKind.ISIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.LeI64x2 : BinaryOp.LeI32x4, arg0, arg1);
-      case TypeKind.USIZE: {
+      case TypeKind.Isize: return module.binary(compiler.options.isWasm64 ? BinaryOp.LeI64x2 : BinaryOp.LeI32x4, arg0, arg1);
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         return module.binary(BinaryOp.LeU32x4, arg0, arg1);
       }
@@ -5430,7 +5429,7 @@ function builtin_v128_gt(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5440,8 +5439,8 @@ function builtin_v128_gt(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.GtI8x16, arg0, arg1);
@@ -5452,8 +5451,8 @@ function builtin_v128_gt(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.GtU32x4, arg0, arg1);
       case TypeKind.I64: return module.binary(BinaryOp.GtI64x2, arg0, arg1);
       // no GtU64x2
-      case TypeKind.ISIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.GtI64x2 : BinaryOp.GtI32x4, arg0, arg1);
-      case TypeKind.USIZE: {
+      case TypeKind.Isize: return module.binary(compiler.options.isWasm64 ? BinaryOp.GtI64x2 : BinaryOp.GtI32x4, arg0, arg1);
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         return module.binary(BinaryOp.GtU32x4, arg0, arg1);
       }
@@ -5474,7 +5473,7 @@ function builtin_v128_ge(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5484,8 +5483,8 @@ function builtin_v128_ge(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.GeI8x16, arg0, arg1);
@@ -5496,8 +5495,8 @@ function builtin_v128_ge(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.binary(BinaryOp.GeU32x4, arg0, arg1);
       case TypeKind.I64: return module.binary(BinaryOp.GeI64x2, arg0, arg1);
       // no GeU64x2
-      case TypeKind.ISIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.GeI64x2 : BinaryOp.GeI32x4, arg0, arg1);
-      case TypeKind.USIZE: {
+      case TypeKind.Isize: return module.binary(compiler.options.isWasm64 ? BinaryOp.GeI64x2 : BinaryOp.GeI32x4, arg0, arg1);
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         return module.binary(BinaryOp.GeU32x4, arg0, arg1);
       }
@@ -5518,7 +5517,7 @@ function builtin_v128_narrow(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -5528,8 +5527,8 @@ function builtin_v128_narrow(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I16: return module.binary(BinaryOp.NarrowI16x8ToI8x16, arg0, arg1);
@@ -5551,7 +5550,7 @@ function builtin_v128_neg(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5561,7 +5560,7 @@ function builtin_v128_neg(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
@@ -5572,8 +5571,8 @@ function builtin_v128_neg(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.unary(UnaryOp.NegI32x4, arg0);
       case TypeKind.I64:
       case TypeKind.U64: return module.unary(UnaryOp.NegI64x2, arg0);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.unary(
           compiler.options.isWasm64
             ? UnaryOp.NegI64x2
@@ -5598,7 +5597,7 @@ function builtin_v128_abs(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5608,19 +5607,19 @@ function builtin_v128_abs(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.unary(UnaryOp.AbsI8x16, arg0);
       case TypeKind.I16: return module.unary(UnaryOp.AbsI16x8, arg0);
       case TypeKind.I32: return module.unary(UnaryOp.AbsI32x4, arg0);
       case TypeKind.I64: return module.unary(UnaryOp.AbsI64x2, arg0);
-      case TypeKind.ISIZE: return module.unary(compiler.options.isWasm64 ? UnaryOp.AbsI64x2 : UnaryOp.AbsI32x4, arg0);
+      case TypeKind.Isize: return module.unary(compiler.options.isWasm64 ? UnaryOp.AbsI64x2 : UnaryOp.AbsI32x4, arg0);
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
       case TypeKind.U64:
-      case TypeKind.USIZE: return arg0;
+      case TypeKind.Usize: return arg0;
       case TypeKind.F32: return module.unary(UnaryOp.AbsF32x4, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.AbsF64x2, arg0);
     }
@@ -5638,7 +5637,7 @@ function builtin_v128_sqrt(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5648,7 +5647,7 @@ function builtin_v128_sqrt(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.SqrtF32x4, arg0);
@@ -5668,7 +5667,7 @@ function builtin_v128_ceil(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5678,7 +5677,7 @@ function builtin_v128_ceil(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.CeilF32x4, arg0);
@@ -5698,7 +5697,7 @@ function builtin_v128_floor(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5708,7 +5707,7 @@ function builtin_v128_floor(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.FloorF32x4, arg0);
@@ -5728,7 +5727,7 @@ function builtin_v128_trunc(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5738,7 +5737,7 @@ function builtin_v128_trunc(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.TruncF32x4, arg0);
@@ -5758,7 +5757,7 @@ function builtin_v128_nearest(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5768,7 +5767,7 @@ function builtin_v128_nearest(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.NearestF32x4, arg0);
@@ -5788,7 +5787,7 @@ function builtin_v128_convert(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5798,15 +5797,15 @@ function builtin_v128_convert(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.unary(UnaryOp.ConvertI32x4ToF32x4, arg0);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -5826,7 +5825,7 @@ function builtin_v128_convert_low(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5836,15 +5835,15 @@ function builtin_v128_convert_low(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.unary(UnaryOp.ConvertLowI32x4ToF64x2, arg0);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -5864,7 +5863,7 @@ function builtin_v128_trunc_sat(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5874,15 +5873,15 @@ function builtin_v128_trunc_sat(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.unary(UnaryOp.TruncSatF32x4ToI32x4, arg0);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -5902,7 +5901,7 @@ function builtin_v128_trunc_sat_zero(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5912,15 +5911,15 @@ function builtin_v128_trunc_sat_zero(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.unary(UnaryOp.TruncSatF64x2ToI32x4Zero, arg0);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -5940,7 +5939,7 @@ function builtin_v128_extend_low(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5950,19 +5949,19 @@ function builtin_v128_extend_low(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.unary(UnaryOp.ExtendLowI8x16ToI16x8, arg0);
       case TypeKind.U8: return module.unary(UnaryOp.ExtendLowU8x16ToU16x8, arg0);
       case TypeKind.I16: return module.unary(UnaryOp.ExtendLowI16x8ToI32x4, arg0);
       case TypeKind.U16: return module.unary(UnaryOp.ExtendLowU16x8ToU32x4, arg0);
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.unary(UnaryOp.ExtendLowI32x4ToI64x2, arg0);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -5982,7 +5981,7 @@ function builtin_v128_extend_high(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -5992,19 +5991,19 @@ function builtin_v128_extend_high(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.unary(UnaryOp.ExtendHighI8x16ToI16x8, arg0);
       case TypeKind.U8: return module.unary(UnaryOp.ExtendHighU8x16ToU16x8, arg0);
       case TypeKind.I16: return module.unary(UnaryOp.ExtendHighI16x8ToI32x4, arg0);
       case TypeKind.U16: return module.unary(UnaryOp.ExtendHighU16x8ToU32x4, arg0);
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
       case TypeKind.I32: return module.unary(UnaryOp.ExtendHighI32x4ToI64x2, arg0);
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
@@ -6024,7 +6023,7 @@ function builtin_v128_shl(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -6033,8 +6032,8 @@ function builtin_v128_shl(ctx: BuiltinContext): ExpressionRef {
   }
   let operands = ctx.operands;
   let type = ctx.typeArguments![0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   compiler.currentType = Type.v128;
   if (type.isValue) {
     switch (type.kind) {
@@ -6046,8 +6045,8 @@ function builtin_v128_shl(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.simd_shift(SIMDShiftOp.ShlI32x4, arg0, arg1);
       case TypeKind.I64:
       case TypeKind.U64: return module.simd_shift(SIMDShiftOp.ShlI64x2, arg0, arg1);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.simd_shift(
           compiler.options.isWasm64
             ? SIMDShiftOp.ShlI64x2
@@ -6070,7 +6069,7 @@ function builtin_v128_shr(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -6079,8 +6078,8 @@ function builtin_v128_shr(ctx: BuiltinContext): ExpressionRef {
   }
   let operands = ctx.operands;
   let type = ctx.typeArguments![0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.ConvImplicit);
   compiler.currentType = Type.v128;
   if (type.isValue) {
     switch (type.kind) {
@@ -6092,7 +6091,7 @@ function builtin_v128_shr(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.simd_shift(SIMDShiftOp.ShrU32x4, arg0, arg1);
       case TypeKind.I64: return module.simd_shift(SIMDShiftOp.ShrI64x2, arg0, arg1);
       case TypeKind.U64: return module.simd_shift(SIMDShiftOp.ShrU64x2, arg0, arg1);
-      case TypeKind.ISIZE: {
+      case TypeKind.Isize: {
         return module.simd_shift(
           compiler.options.isWasm64
             ? SIMDShiftOp.ShrI64x2
@@ -6100,7 +6099,7 @@ function builtin_v128_shr(ctx: BuiltinContext): ExpressionRef {
           arg0, arg1
         );
       }
-      case TypeKind.USIZE: {
+      case TypeKind.Usize: {
         return module.simd_shift(
           compiler.options.isWasm64
             ? SIMDShiftOp.ShrU64x2
@@ -6122,7 +6121,7 @@ function builtin_v128_bitwise_binary(ctx: BuiltinContext, op: BinaryOp): Express
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -6130,8 +6129,8 @@ function builtin_v128_bitwise_binary(ctx: BuiltinContext, op: BinaryOp): Express
     return module.unreachable();
   }
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   return module.binary(op, arg0, arg1);
 }
 
@@ -6163,7 +6162,7 @@ function builtin_v128_bitwise_unary(ctx: BuiltinContext, op: UnaryOp): Expressio
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -6171,7 +6170,7 @@ function builtin_v128_bitwise_unary(ctx: BuiltinContext, op: UnaryOp): Expressio
     return module.unreachable();
   }
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   return module.unary(op, arg0);
 }
 
@@ -6185,7 +6184,7 @@ function builtin_v128_bitwise_ternary(ctx: BuiltinContext, op: SIMDTernaryOp): E
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 3)
   ) {
@@ -6193,9 +6192,9 @@ function builtin_v128_bitwise_ternary(ctx: BuiltinContext, op: SIMDTernaryOp): E
     return module.unreachable();
   }
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
+  let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.ConvImplicit);
   return module.simd_ternary(op, arg0, arg1, arg2);
 }
 
@@ -6210,7 +6209,7 @@ function builtin_v128_any_true(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -6218,7 +6217,7 @@ function builtin_v128_any_true(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   compiler.currentType = Type.bool;
   return module.unary(UnaryOp.AnyTrueV128, arg0);
 }
@@ -6229,7 +6228,7 @@ function builtin_v128_all_true(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -6238,7 +6237,7 @@ function builtin_v128_all_true(ctx: BuiltinContext): ExpressionRef {
   }
   let operands = ctx.operands;
   let type = ctx.typeArguments![0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   compiler.currentType = Type.bool;
   if (type.isValue) {
     switch (type.kind) {
@@ -6250,8 +6249,8 @@ function builtin_v128_all_true(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.unary(UnaryOp.AllTrueI32x4, arg0);
       case TypeKind.I64:
       case TypeKind.U64: return module.unary(UnaryOp.AllTrueI64x2, arg0);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.unary(
           compiler.options.isWasm64
             ? UnaryOp.AllTrueI64x2
@@ -6274,7 +6273,7 @@ function builtin_v128_bitmask(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -6283,7 +6282,7 @@ function builtin_v128_bitmask(ctx: BuiltinContext): ExpressionRef {
   }
   let operands = ctx.operands;
   let type = ctx.typeArguments![0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   compiler.currentType = Type.i32;
   if (type.isValue) {
     switch (type.kind) {
@@ -6295,8 +6294,8 @@ function builtin_v128_bitmask(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: return module.unary(UnaryOp.BitmaskI32x4, arg0);
       case TypeKind.I64:
       case TypeKind.U64: return module.unary(UnaryOp.BitmaskI64x2, arg0);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
+      case TypeKind.Isize:
+      case TypeKind.Usize: {
         return module.unary(
           compiler.options.isWasm64
             ? UnaryOp.BitmaskI64x2
@@ -6319,7 +6318,7 @@ function builtin_v128_popcnt(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -6328,7 +6327,7 @@ function builtin_v128_popcnt(ctx: BuiltinContext): ExpressionRef {
   }
   let operands = ctx.operands;
   let type = ctx.typeArguments![0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   compiler.currentType = Type.v128;
   if (type.isValue) {
     switch (type.kind) {
@@ -6349,7 +6348,7 @@ function builtin_v128_extadd_pairwise(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -6358,7 +6357,7 @@ function builtin_v128_extadd_pairwise(ctx: BuiltinContext): ExpressionRef {
   }
   let operands = ctx.operands;
   let type = ctx.typeArguments![0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   compiler.currentType = Type.v128;
   if (type.isValue) {
     switch (type.kind) {
@@ -6381,7 +6380,7 @@ function builtin_v128_demote_zero(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeOptional(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -6391,7 +6390,7 @@ function builtin_v128_demote_zero(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let type = typeArguments ? typeArguments[0] : Type.f64;
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   compiler.currentType = Type.v128;
   if (type.isValue) {
     switch (type.kind) {
@@ -6411,7 +6410,7 @@ function builtin_v128_promote_low(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeOptional(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
@@ -6421,7 +6420,7 @@ function builtin_v128_promote_low(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments;
   let type = typeArguments ? typeArguments[0] : Type.f32;
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
   compiler.currentType = Type.v128;
   if (type.isValue) {
     switch (type.kind) {
@@ -6441,7 +6440,7 @@ function builtin_v128_q15mulr_sat(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -6451,8 +6450,8 @@ function builtin_v128_q15mulr_sat(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I16: return module.binary(BinaryOp.Q15mulrSatI16x8, arg0, arg1);
@@ -6471,7 +6470,7 @@ function builtin_v128_extmul_low(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -6481,8 +6480,8 @@ function builtin_v128_extmul_low(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.ExtmulLowI16x8, arg0, arg1);
@@ -6506,7 +6505,7 @@ function builtin_v128_extmul_high(ctx: BuiltinContext): ExpressionRef {
   let compiler = ctx.compiler;
   let module = compiler.module;
   if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkFeatureEnabled(ctx, Feature.Simd) |
     checkTypeRequired(ctx) |
     checkArgsRequired(ctx, 2)
   ) {
@@ -6516,8 +6515,8 @@ function builtin_v128_extmul_high(ctx: BuiltinContext): ExpressionRef {
   let operands = ctx.operands;
   let typeArguments = ctx.typeArguments!;
   let type = typeArguments[0];
-  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.ConvImplicit);
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.ExtmulHighI16x8, arg0, arg1);
@@ -6550,7 +6549,7 @@ function builtin_visit_globals(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], Type.u32, Constraints.ConvImplicit);
   compiler.runtimeFeatures |= RuntimeFeatures.visitGlobals;
   compiler.currentType = Type.void;
   return module.call(BuiltinNames.visit_globals, [ arg0 ], TypeRef.None);
@@ -6569,8 +6568,8 @@ function builtin_visit_members(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   let operands = ctx.operands;
-  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
-  let arg1 = compiler.compileExpression(operands[1], Type.u32, Constraints.CONV_IMPLICIT);
+  let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.ConvImplicit);
+  let arg1 = compiler.compileExpression(operands[1], Type.u32, Constraints.ConvImplicit);
   compiler.runtimeFeatures |= RuntimeFeatures.visitMembers;
   compiler.currentType = Type.void;
   return module.call(BuiltinNames.visit_members, [ arg0, arg1 ], TypeRef.None);
@@ -10150,16 +10149,16 @@ export function compileVisitGlobals(compiler: Compiler): void {
   // TODO: for (let element of compiler.program.elementsByName.values()) {
   for (let _values = Map_values(compiler.program.elementsByName), i = 0, k = _values.length; i < k; ++i) {
     let element = unchecked(_values[i]);
-    if (element.kind != ElementKind.GLOBAL) continue;
+    if (element.kind != ElementKind.Global) continue;
     let global = <Global>element;
     let globalType = global.type;
     let classReference = globalType.getClass();
     if (
       classReference &&
-      !classReference.hasDecorator(DecoratorFlags.UNMANAGED) &&
-      global.is(CommonFlags.COMPILED)
+      !classReference.hasDecorator(DecoratorFlags.Unmanaged) &&
+      global.is(CommonFlags.Compiled)
     ) {
-      if (global.is(CommonFlags.INLINED)) {
+      if (global.is(CommonFlags.Inlined)) {
         let value = global.constantIntegerValue;
         if (i64_low(value) || i64_high(value)) {
           exprs.push(
@@ -10227,7 +10226,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   if (instance.isDeclaredInLibrary) {
     let visitPrototype = instance.getMember("__visit");
     if (visitPrototype) {
-      assert(visitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      assert(visitPrototype.kind == ElementKind.FunctionPrototype);
       let visitInstance = program.resolver.resolveFunction(<FunctionPrototype>visitPrototype, null);
       if (!visitInstance || !compiler.compileFunction(visitInstance)) {
         body.push(
@@ -10262,7 +10261,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
       // TODO: for (let member of members.values()) {
       for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
         let member = unchecked(_values[j]);
-        if (member.kind == ElementKind.FIELD) {
+        if (member.kind == ElementKind.Field) {
           if ((<Field>member).parent == instance) {
             let fieldType = (<Field>member).type;
             if (fieldType.isManaged) {
@@ -10388,10 +10387,10 @@ export function compileVisitMembers(compiler: Compiler): void {
 
 function typeToRuntimeFlags(type: Type): TypeinfoFlags {
   let flags = TypeinfoFlags.VALUE_ALIGN_0 * (1 << type.alignLog2);
-  if (type.is(TypeFlags.SIGNED)) flags |= TypeinfoFlags.VALUE_SIGNED;
-  if (type.is(TypeFlags.FLOAT)) flags |= TypeinfoFlags.VALUE_FLOAT;
-  if (type.is(TypeFlags.NULLABLE)) flags |= TypeinfoFlags.VALUE_NULLABLE;
-  if (type.isManaged) flags |= TypeinfoFlags.VALUE_MANAGED;
+  if (type.is(TypeFlags.Signed))   flags |= TypeinfoFlags.VALUE_SIGNED;
+  if (type.is(TypeFlags.Float))    flags |= TypeinfoFlags.VALUE_FLOAT;
+  if (type.is(TypeFlags.Nullable)) flags |= TypeinfoFlags.VALUE_NULLABLE;
+  if (type.isManaged)              flags |= TypeinfoFlags.VALUE_MANAGED;
   return flags / TypeinfoFlags.VALUE_ALIGN_0;
 }
 
@@ -10436,7 +10435,7 @@ export function compileRTTI(compiler: Compiler): void {
       let typeArguments = assert(instance.getTypeArgumentsTo(mapPrototype));
       assert(typeArguments.length == 2);
       flags |= TypeinfoFlags.MAP;
-      flags |= TypeinfoFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
+      flags |= TypeinfoFlags.KEY_ALIGN_0   * typeToRuntimeFlags(typeArguments[0]);
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1]);
     } else if (instance.extends(staticArrayPrototype)) {
       let valueType = instance.getArrayValueType();
@@ -10548,7 +10547,7 @@ function checkConstantType(ctx: BuiltinContext): Type | null {
         );
         return null;
       }
-      checkConstantType_expr = compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT);
+      checkConstantType_expr = compiler.compileExpression(operands[0], typeArguments[0], Constraints.ConvImplicit);
     } else {
       checkConstantType_expr = compiler.compileExpression(operands[0], Type.auto);
     }
@@ -10584,7 +10583,7 @@ function evaluateImmediateOffset(expression: Expression, compiler: Compiler): i3
   let module = compiler.module;
   let value: i32;
   if (compiler.options.isWasm64) {
-    let expr = compiler.compileExpression(expression, Type.usize64, Constraints.CONV_IMPLICIT);
+    let expr = compiler.compileExpression(expression, Type.usize64, Constraints.ConvImplicit);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       assert(getConstValueI64High(precomp) == 0); // TODO
@@ -10597,7 +10596,7 @@ function evaluateImmediateOffset(expression: Expression, compiler: Compiler): i3
       value = -1;
     }
   } else {
-    let expr = compiler.compileExpression(expression, Type.usize32, Constraints.CONV_IMPLICIT);
+    let expr = compiler.compileExpression(expression, Type.usize32, Constraints.ConvImplicit);
     let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
     if (precomp) {
       value = getConstValueI32(precomp);

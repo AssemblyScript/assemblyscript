@@ -273,7 +273,7 @@ export class ShadowStackPass extends Pass {
   makeStackFill(frameSize: i32, stmts: ExpressionRef[]): void {
     assert(frameSize > 0);
     let module = this.module;
-    if (this.options.hasFeature(Feature.BULK_MEMORY) && frameSize > 16) {
+    if (this.options.hasFeature(Feature.BulkMemory) && frameSize > 16) {
       stmts.push(
         module.memory_fill(
           module.global_get(BuiltinNames.stack_pointer, this.ptrType),

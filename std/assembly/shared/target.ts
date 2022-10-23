@@ -3,9 +3,9 @@
 /** Compilation target. */
 export enum Target {
   /** Portable. */
-  JS = 0,
+  Js = 0,
   /** WebAssembly with 32-bit pointers. */
-  WASM32 = 1,
+  Wasm32 = 1,
   /** WebAssembly with 64-bit pointers. Experimental and not supported by any runtime yet. */
-  WASM64 = 2,
+  Wasm64 = 2,
 }

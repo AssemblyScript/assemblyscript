@@ -6,31 +6,31 @@
 /** An enum of named character codes. */
 export const enum CharCode {
 
-  NULL = 0,
-  LINEFEED = 0x0A,
-  CARRIAGERETURN = 0x0D,
-  LINESEPARATOR = 0x2028,
-  PARAGRAPHSEPARATOR = 0x2029,
-  NEXTLINE = 0x0085,
+  Null = 0,
+  LineFeed = 0x0A,
+  CarriageReturn = 0x0D,
+  LineSeparator = 0x2028,
+  ParagraphSeparator = 0x2029,
+  NextLine = 0x0085,
 
-  SPACE = 0x20,
-  NONBREAKINGSPACE = 0xA0,
-  ENQUAD = 0x2000,
-  EMQUAD = 0x2001,
-  ENSPACE = 0x2002,
-  EMSPACE = 0x2003,
-  THREEPEREMSPACE = 0x2004,
-  FOURPEREMSPACE = 0x2005,
-  SIXPEREMSPACE = 0x2006,
-  FIGURESPACE = 0x2007,
-  PUNCTUATIONSPACE = 0x2008,
-  THINSPACE = 0x2009,
-  HAIRSPACE = 0x200A,
-  ZEROWIDTHSPACE = 0x200B,
-  NARROWNOBREAKSPACE = 0x202F,
-  IDEOGRAPHICSPACE = 0x3000,
-  MATHEMATICALSPACE = 0x205F,
-  OGHAM = 0x1680,
+  Space = 0x20,
+  NonBreakingSpace = 0xA0,
+  EnQuad = 0x2000,
+  EmQuad = 0x2001,
+  EnSpace = 0x2002,
+  EmSpace = 0x2003,
+  ThreePerEmSpace = 0x2004,
+  FourPerEmSpace = 0x2005,
+  SixPerEmSpace = 0x2006,
+  FigureSpace = 0x2007,
+  PunctuationSpace = 0x2008,
+  ThinSpace = 0x2009,
+  HairSpace = 0x200A,
+  ZeroWidthSpace = 0x200B,
+  NarrowNoBreakSpace = 0x202F,
+  IdeographicSpace = 0x3000,
+  MathematicalSpace = 0x205F,
+  Ogham = 0x1680,
 
   _ = 0x5F,
 
@@ -99,52 +99,52 @@ export const enum CharCode {
   Y = 0x59,
   Z = 0x5a,
 
-  AMPERSAND = 0x26,
-  ASTERISK = 0x2A,
-  AT = 0x40,
-  BACKSLASH = 0x5C,
-  BACKTICK = 0x60,
-  BAR = 0x7C,
-  CARET = 0x5E,
-  CLOSEBRACE = 0x7D,
-  CLOSEBRACKET = 0x5D,
-  CLOSEPAREN = 0x29,
-  COLON = 0x3A,
-  COMMA = 0x2C,
-  DOLLAR = 0x24,
-  DOT = 0x2E,
-  DOUBLEQUOTE = 0x22,
-  EQUALS = 0x3D,
-  EXCLAMATION = 0x21,
-  GREATERTHAN = 0x3E,
-  HASH = 0x23,
-  LESSTHAN = 0x3C,
-  MINUS = 0x2D,
-  OPENBRACE = 0x7B,
-  OPENBRACKET = 0x5B,
-  OPENPAREN = 0x28,
-  PERCENT = 0x25,
-  PLUS = 0x2B,
-  QUESTION = 0x3F,
-  SEMICOLON = 0x3B,
-  SINGLEQUOTE = 0x27,
-  SLASH = 0x2F,
-  TILDE = 0x7E,
+  Ampersand = 0x26,
+  Asterisk = 0x2A,
+  At = 0x40,
+  Backslash = 0x5C,
+  Backtick = 0x60,
+  Bar = 0x7C,
+  Caret = 0x5E,
+  CloseBrace = 0x7D,
+  CloseBracket = 0x5D,
+  CloseParen = 0x29,
+  Colon = 0x3A,
+  Comma = 0x2C,
+  Dollar = 0x24,
+  Dot = 0x2E,
+  DoubleQuote = 0x22,
+  Equals = 0x3D,
+  Exclamation = 0x21,
+  GreaterThan = 0x3E,
+  Hash = 0x23,
+  LessThan = 0x3C,
+  Minus = 0x2D,
+  OpenBrace = 0x7B,
+  OpenBracket = 0x5B,
+  OpenParen = 0x28,
+  Percent = 0x25,
+  Plus = 0x2B,
+  Question = 0x3F,
+  Semicolon = 0x3B,
+  SingleQuote = 0x27,
+  Slash = 0x2F,
+  Tilde = 0x7E,
 
-  BACKSPACE = 0x08,
-  FORMFEED = 0x0C,
-  BYTEORDERMARK = 0xFEFF,
-  TAB = 0x09,
-  VERTICALTAB = 0x0B
+  Backspace = 0x08,
+  FormFeed = 0x0C,
+  ByteOrderMark = 0xFEFF,
+  Tab = 0x09,
+  VerticalTab = 0x0B
 }
 
 /** Tests if the specified character code is some sort of line break. */
 export function isLineBreak(c: i32): bool {
   switch (c) {
-    case CharCode.LINEFEED:
-    case CharCode.CARRIAGERETURN:
-    case CharCode.LINESEPARATOR:
-    case CharCode.PARAGRAPHSEPARATOR: {
+    case CharCode.LineFeed:
+    case CharCode.CarriageReturn:
+    case CharCode.LineSeparator:
+    case CharCode.ParagraphSeparator: {
       return true;
     }
     default: {
@@ -159,21 +159,21 @@ export function isWhiteSpace(c: i32): bool {
   // If Unicode ever adds one, uses of this function must be updated to
   // conditionally advance by two code units, i.e. using `numCodeUnits`.
   switch (c) {
-    case CharCode.SPACE:
-    case CharCode.TAB:
-    case CharCode.VERTICALTAB:
-    case CharCode.FORMFEED:
-    case CharCode.NONBREAKINGSPACE:
-    case CharCode.NEXTLINE:
-    case CharCode.OGHAM:
-    case CharCode.NARROWNOBREAKSPACE:
-    case CharCode.MATHEMATICALSPACE:
-    case CharCode.IDEOGRAPHICSPACE:
-    case CharCode.BYTEORDERMARK: {
+    case CharCode.Space:
+    case CharCode.Tab:
+    case CharCode.VerticalTab:
+    case CharCode.FormFeed:
+    case CharCode.NonBreakingSpace:
+    case CharCode.NextLine:
+    case CharCode.Ogham:
+    case CharCode.NarrowNoBreakSpace:
+    case CharCode.MathematicalSpace:
+    case CharCode.IdeographicSpace:
+    case CharCode.ByteOrderMark: {
       return true;
     }
     default: {
-      return c >= CharCode.ENQUAD && c <= CharCode.ZEROWIDTHSPACE;
+      return c >= CharCode.EnQuad && c <= CharCode.ZeroWidthSpace;
     }
   }
 }
@@ -262,7 +262,7 @@ export function isAlphaOrDecimal(c: i32): bool {
 export function isIdentifierStart(cp: i32): bool {
   return isAlpha(cp)
       || cp == CharCode._
-      || cp == CharCode.DOLLAR
+      || cp == CharCode.Dollar
       || cp >= unicodeIdentifierStartMin && cp <= unicodeIdentifierStartMax
          && lookupInUnicodeMap(cp, unicodeIdentifierStart);
 }
@@ -271,7 +271,7 @@ export function isIdentifierStart(cp: i32): bool {
 export function isIdentifierPart(cp: i32): bool {
   return isAlphaOrDecimal(cp)
       || cp == CharCode._
-      || cp == CharCode.DOLLAR
+      || cp == CharCode.Dollar
       || cp >= unicodeIdentifierPartMin && cp <= unicodeIdentifierPartMax
          && lookupInUnicodeMap(cp, unicodeIdentifierPart);
 }
@@ -713,50 +713,50 @@ export function escapeString(str: string, quote: CharCode): string {
   let i = 0;
   for (let k = str.length; i < k;) {
     switch (str.charCodeAt(i)) {
-      case CharCode.NULL: {
+      case CharCode.Null: {
         if (i > off) sb.push(str.substring(off, off = i + 1));
         sb.push("\\0");
         off = ++i;
         break;
       }
-      case CharCode.BACKSPACE: {
+      case CharCode.Backspace: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\b");
         break;
       }
-      case CharCode.TAB: {
+      case CharCode.Tab: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\t");
         break;
       }
-      case CharCode.LINEFEED: {
+      case CharCode.LineFeed: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\n");
         break;
       }
-      case CharCode.VERTICALTAB: {
+      case CharCode.VerticalTab: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\v");
         break;
       }
-      case CharCode.FORMFEED: {
+      case CharCode.FormFeed: {
         if (i > off) sb.push(str.substring(off, i));
         off = ++i;
         sb.push("\\f");
         break;
       }
-      case CharCode.CARRIAGERETURN: {
+      case CharCode.CarriageReturn: {
         if (i > off) sb.push(str.substring(off, i));
         sb.push("\\r");
         off = ++i;
         break;
       }
-      case CharCode.DOUBLEQUOTE: {
-        if (quote == CharCode.DOUBLEQUOTE) {
+      case CharCode.DoubleQuote: {
+        if (quote == CharCode.DoubleQuote) {
           if (i > off) sb.push(str.substring(off, i));
           sb.push("\\\"");
           off = ++i;
@@ -765,8 +765,8 @@ export function escapeString(str: string, quote: CharCode): string {
         }
         break;
       }
-      case CharCode.SINGLEQUOTE: {
-        if (quote == CharCode.SINGLEQUOTE) {
+      case CharCode.SingleQuote: {
+        if (quote == CharCode.SingleQuote) {
           if (i > off) sb.push(str.substring(off, i));
           sb.push("\\'");
           off = ++i;
@@ -775,14 +775,14 @@ export function escapeString(str: string, quote: CharCode): string {
         }
         break;
       }
-      case CharCode.BACKSLASH: {
+      case CharCode.Backslash: {
         if (i > off) sb.push(str.substring(off, i));
         sb.push("\\\\");
         off = ++i;
         break;
       }
-      case CharCode.BACKTICK: {
-        if (quote == CharCode.BACKTICK) {
+      case CharCode.Backtick: {
+        if (quote == CharCode.Backtick) {
           if (i > off) sb.push(str.substring(off, i));
           sb.push("\\`");
           off = ++i;

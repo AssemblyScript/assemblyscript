@@ -43,143 +43,143 @@ export const enum Token {
   // keywords
   // discarded: ANY, BOOLEAN, NEVER, NUMBER, STRING, SYMBOL, UNDEFINED, LESSTHAN_SLASH
 
-  ABSTRACT,
-  AS,
-  ASYNC,
-  AWAIT,        // ES2017
-  BREAK,        // ES2017
-  CASE,         // ES2017
-  CATCH,        // ES2017
-  CLASS,        // ES2017
-  CONST,        // ES2017
-  CONTINUE,     // ES2017
-  CONSTRUCTOR,
-  DEBUGGER,     // ES2017
-  DECLARE,
-  DEFAULT,      // ES2017
-  DELETE,       // ES2017
-  DO,           // ES2017
-  ELSE,         // ES2017
-  ENUM,         // ES2017 future
-  EXPORT,       // ES2017
-  EXTENDS,      // ES2017
-  FALSE,        // ES
-  FINALLY,      // ES2017
-  FOR,          // ES2017
-  FROM,         // AS possible identifier
-  FUNCTION,     // ES2017
-  GET,
-  IF,           // ES2017
-  IMPLEMENTS,   // ES2017 non-lexical
-  IMPORT,       // ES2017
-  IN,           // ES2017
-  INSTANCEOF,   // ES2017
-  INTERFACE,    // ES2017 non-lexical
-  IS,
-  KEYOF,
-  LET,          // ES2017 non-lexical
-  MODULE,       // AS possible identifier
-  NAMESPACE,    // AS possible identifier
-  NEW,          // ES2017
-  NULL,         // ES
-  OF,
-  OVERRIDE,
-  PACKAGE,      // ES2017 non-lexical
-  PRIVATE,      // ES2017 non-lexical
-  PROTECTED,    // ES2017 non-lexical
-  PUBLIC,       // ES2017 non-lexical
-  READONLY,
-  RETURN,       // ES2017
-  SET,
-  STATIC,       // ES2017 non-lexical
-  SUPER,        // ES2017
-  SWITCH,       // ES2017
-  THIS,         // ES2017
-  THROW,        // ES2017
-  TRUE,         // ES
-  TRY,          // ES2017
-  TYPE,         // AS possible identifier
-  TYPEOF,       // ES2017
-  VAR,          // ES2017
-  VOID,         // ES2017
-  WHILE,        // ES2017
-  WITH,         // ES2017
-  YIELD,        // ES2017
+  Abstract,
+  As,
+  Async,
+  Await,        // ES2017
+  Break,        // ES2017
+  Case,         // ES2017
+  Catch,        // ES2017
+  Class,        // ES2017
+  Const,        // ES2017
+  Continue,     // ES2017
+  Constructor,
+  Debugger,     // ES2017
+  Declare,
+  Default,      // ES2017
+  Delete,       // ES2017
+  Do,           // ES2017
+  Else,         // ES2017
+  Enum,         // ES2017 future
+  Export,       // ES2017
+  Extends,      // ES2017
+  False,        // ES
+  Finally,      // ES2017
+  For,          // ES2017
+  From,         // AS possible identifier
+  Function,     // ES2017
+  Get,
+  If,           // ES2017
+  Implements,   // ES2017 non-lexical
+  Import,       // ES2017
+  In,           // ES2017
+  InstanceOf,   // ES2017
+  Interface,    // ES2017 non-lexical
+  Is,
+  KeyOf,
+  Let,          // ES2017 non-lexical
+  Module,       // AS possible identifier
+  Namespace,    // AS possible identifier
+  New,          // ES2017
+  Null,         // ES
+  Of,
+  Override,
+  Package,      // ES2017 non-lexical
+  Private,      // ES2017 non-lexical
+  Protected,    // ES2017 non-lexical
+  Public,       // ES2017 non-lexical
+  Readonly,
+  Return,       // ES2017
+  Set,
+  Static,       // ES2017 non-lexical
+  Super,        // ES2017
+  Switch,       // ES2017
+  This,         // ES2017
+  Throw,        // ES2017
+  True,         // ES
+  Try,          // ES2017
+  Type,         // AS possible identifier
+  TypeOf,       // ES2017
+  Var,          // ES2017
+  Void,         // ES2017
+  While,        // ES2017
+  With,         // ES2017
+  Yield,        // ES2017
 
   // punctuation
 
-  OPENBRACE,
-  CLOSEBRACE,
-  OPENPAREN,
-  CLOSEPAREN,
-  OPENBRACKET,
-  CLOSEBRACKET,
-  DOT,
-  DOT_DOT_DOT,
-  SEMICOLON,
-  COMMA,
-  LESSTHAN,
-  GREATERTHAN,
-  LESSTHAN_EQUALS,
-  GREATERTHAN_EQUALS,
-  EQUALS_EQUALS,
-  EXCLAMATION_EQUALS,
-  EQUALS_EQUALS_EQUALS,
-  EXCLAMATION_EQUALS_EQUALS,
-  EQUALS_GREATERTHAN,
-  PLUS,
-  MINUS,
-  ASTERISK_ASTERISK,
-  ASTERISK,
-  SLASH,
-  PERCENT,
-  PLUS_PLUS,
-  MINUS_MINUS,
-  LESSTHAN_LESSTHAN,
-  GREATERTHAN_GREATERTHAN,
-  GREATERTHAN_GREATERTHAN_GREATERTHAN,
-  AMPERSAND,
-  BAR,
-  CARET,
-  EXCLAMATION,
-  TILDE,
-  AMPERSAND_AMPERSAND,
-  BAR_BAR,
-  QUESTION,
-  COLON,
-  EQUALS,
-  PLUS_EQUALS,
-  MINUS_EQUALS,
-  ASTERISK_EQUALS,
-  ASTERISK_ASTERISK_EQUALS,
-  SLASH_EQUALS,
-  PERCENT_EQUALS,
-  LESSTHAN_LESSTHAN_EQUALS,
-  GREATERTHAN_GREATERTHAN_EQUALS,
-  GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS,
-  AMPERSAND_EQUALS,
-  BAR_EQUALS,
-  CARET_EQUALS,
-  AT,
+  OpenBrace,
+  CloseBrace,
+  OpenParen,
+  CloseParen,
+  OpenBracket,
+  CloseBracket,
+  Dot,
+  Dot_Dot_Dot,
+  Semicolon,
+  Comma,
+  LessThan,
+  GreaterThan,
+  LessThan_Equals,
+  GreaterThan_Equals,
+  Equals_Equals,
+  Exclamation_Equals,
+  Equals_Equals_Equals,
+  Exclamation_Equals_Equals,
+  Equals_GreaterThan,
+  Plus,
+  Minus,
+  Asterisk_Asterisk,
+  Asterisk,
+  Slash,
+  Percent,
+  Plus_Plus,
+  Minus_Minus,
+  LessThan_LessThan,
+  GreaterThan_GreaterThan,
+  GreaterThan_GreaterThan_GreaterThan,
+  Ampersand,
+  Bar,
+  Caret,
+  Exclamation,
+  Tilde,
+  Ampersand_Ampersand,
+  Bar_Bar,
+  Question,
+  Colon,
+  Equals,
+  Plus_Equals,
+  Minus_Equals,
+  Asterisk_Equals,
+  Asterisk_Asterisk_Equals,
+  Slash_Equals,
+  Percent_Equals,
+  LessThan_LessThan_Equals,
+  GreaterThan_GreaterThan_Equals,
+  GreaterThan_GreaterThan_GreaterThan_Equals,
+  Ampersand_Equals,
+  Bar_Equals,
+  Caret_Equals,
+  At,
 
   // literals
 
-  IDENTIFIER,
-  STRINGLITERAL,
-  INTEGERLITERAL,
-  FLOATLITERAL,
-  TEMPLATELITERAL,
+  Identifier,
+  StringLiteral,
+  IntegerLiteral,
+  FloatLiteral,
+  TemplateLiteral,
 
   // meta
 
-  INVALID,
-  ENDOFFILE
+  Invalid,
+  EndOfFile
 }
 
 export const enum IdentifierHandling {
-  DEFAULT,
-  PREFER,
-  ALWAYS
+  Default,
+  Prefer,
+  Always
 }
 
 export function tokenFromKeyword(text: string): Token {
@@ -188,191 +188,191 @@ export function tokenFromKeyword(text: string): Token {
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
       if (len == 5) {
-        if (text == "async") return Token.ASYNC;
-        if (text == "await") return Token.AWAIT;
+        if (text == "async") return Token.Async;
+        if (text == "await") return Token.Await;
         break;
       }
-      if (text == "as") return Token.AS;
-      if (text == "abstract") return Token.ABSTRACT;
+      if (text == "as") return Token.As;
+      if (text == "abstract") return Token.Abstract;
       break;
     }
     case CharCode.b: {
-      if (text == "break") return Token.BREAK;
+      if (text == "break") return Token.Break;
       break;
     }
     case CharCode.c: {
       if (len == 5) {
-        if (text == "const") return Token.CONST;
-        if (text == "class") return Token.CLASS;
-        if (text == "catch") return Token.CATCH;
+        if (text == "const") return Token.Const;
+        if (text == "class") return Token.Class;
+        if (text == "catch") return Token.Catch;
         break;
       }
-      if (text == "case") return Token.CASE;
-      if (text == "continue") return Token.CONTINUE;
-      if (text == "constructor") return Token.CONSTRUCTOR;
+      if (text == "case") return Token.Case;
+      if (text == "continue") return Token.Continue;
+      if (text == "constructor") return Token.Constructor;
       break;
     }
     case CharCode.d: {
       if (len == 7) {
-        if (text == "default") return Token.DEFAULT;
-        if (text == "declare") return Token.DECLARE;
+        if (text == "default") return Token.Default;
+        if (text == "declare") return Token.Declare;
         break;
       }
-      if (text == "do") return Token.DO;
-      if (text == "delete") return Token.DELETE;
-      if (text == "debugger") return Token.DEBUGGER;
+      if (text == "do") return Token.Do;
+      if (text == "delete") return Token.Delete;
+      if (text == "debugger") return Token.Debugger;
       break;
     }
     case CharCode.e: {
       if (len == 4) {
-        if (text == "else") return Token.ELSE;
-        if (text == "enum") return Token.ENUM;
+        if (text == "else") return Token.Else;
+        if (text == "enum") return Token.Enum;
         break;
       }
-      if (text == "export") return Token.EXPORT;
-      if (text == "extends") return Token.EXTENDS;
+      if (text == "export") return Token.Export;
+      if (text == "extends") return Token.Extends;
       break;
     }
     case CharCode.f: {
       if (len <= 5) {
-        if (text == "false") return Token.FALSE;
-        if (text == "for") return Token.FOR;
-        if (text == "from") return Token.FROM;
+        if (text == "false") return Token.False;
+        if (text == "for") return Token.For;
+        if (text == "from") return Token.From;
         break;
       }
-      if (text == "function") return Token.FUNCTION;
-      if (text == "finally") return Token.FINALLY;
+      if (text == "function") return Token.Function;
+      if (text == "finally") return Token.Finally;
       break;
     }
     case CharCode.g: {
-      if (text == "get") return Token.GET;
+      if (text == "get") return Token.Get;
       break;
     }
     case CharCode.i: {
       if (len == 2) {
-        if (text == "if") return Token.IF;
-        if (text == "in") return Token.IN;
-        if (text == "is") return Token.IS;
+        if (text == "if") return Token.If;
+        if (text == "in") return Token.In;
+        if (text == "is") return Token.Is;
         break;
       }
       switch (text.charCodeAt(3)) {
         case CharCode.l: {
-          if (text == "implements") return Token.IMPLEMENTS;
+          if (text == "implements") return Token.Implements;
           break;
         }
         case CharCode.o: {
-          if (text == "import") return Token.IMPORT;
+          if (text == "import") return Token.Import;
           break;
         }
         case CharCode.t: {
-          if (text == "instanceof") return Token.INSTANCEOF;
+          if (text == "instanceof") return Token.InstanceOf;
           break;
         }
         case CharCode.e: {
-          if (text == "interface") return Token.INTERFACE;
+          if (text == "interface") return Token.Interface;
           break;
         }
       }
       break;
     }
     case CharCode.k: {
-      if (text == "keyof") return Token.KEYOF;
+      if (text == "keyof") return Token.KeyOf;
       break;
     }
     case CharCode.l: {
-      if (text == "let") return Token.LET;
+      if (text == "let") return Token.Let;
       break;
     }
     case CharCode.m: {
-      if (text == "module") return Token.MODULE;
+      if (text == "module") return Token.Module;
       break;
     }
     case CharCode.n: {
-      if (text == "new") return Token.NEW;
-      if (text == "null") return Token.NULL;
-      if (text == "namespace") return Token.NAMESPACE;
+      if (text == "new") return Token.New;
+      if (text == "null") return Token.Null;
+      if (text == "namespace") return Token.Namespace;
       break;
     }
     case CharCode.o: {
-      if (text == "of") return Token.OF;
-      if (text == "override") return Token.OVERRIDE;
+      if (text == "of") return Token.Of;
+      if (text == "override") return Token.Override;
       break;
     }
     case CharCode.p: {
       if (len == 7) {
-        if (text == "private") return Token.PRIVATE;
-        if (text == "package") return Token.PACKAGE;
+        if (text == "private") return Token.Private;
+        if (text == "package") return Token.Package;
         break;
       }
-      if (text == "public") return Token.PUBLIC;
-      if (text == "protected") return Token.PROTECTED;
+      if (text == "public") return Token.Public;
+      if (text == "protected") return Token.Protected;
       break;
     }
     case CharCode.r: {
-      if (text == "return") return Token.RETURN;
-      if (text == "readonly") return Token.READONLY;
+      if (text == "return") return Token.Return;
+      if (text == "readonly") return Token.Readonly;
       break;
     }
     case CharCode.s: {
       if (len == 6) {
-        if (text == "switch") return Token.SWITCH;
-        if (text == "static") return Token.STATIC;
+        if (text == "switch") return Token.Switch;
+        if (text == "static") return Token.Static;
         break;
       }
-      if (text == "set") return Token.SET;
-      if (text == "super") return Token.SUPER;
+      if (text == "set") return Token.Set;
+      if (text == "super") return Token.Super;
       break;
     }
     case CharCode.t: {
       if (len == 4) {
-        if (text == "true") return Token.TRUE;
-        if (text == "this") return Token.THIS;
-        if (text == "type") return Token.TYPE;
+        if (text == "true") return Token.True;
+        if (text == "this") return Token.This;
+        if (text == "type") return Token.Type;
         break;
       }
-      if (text == "try") return Token.TRY;
-      if (text == "throw") return Token.THROW;
-      if (text == "typeof") return Token.TYPEOF;
+      if (text == "try") return Token.Try;
+      if (text == "throw") return Token.Throw;
+      if (text == "typeof") return Token.TypeOf;
       break;
     }
     case CharCode.v: {
-      if (text == "var") return Token.VAR;
-      if (text == "void") return Token.VOID;
+      if (text == "var") return Token.Var;
+      if (text == "void") return Token.Void;
       break;
     }
     case CharCode.w: {
-      if (text == "while") return Token.WHILE;
-      if (text == "with") return Token.WITH;
+      if (text == "while") return Token.While;
+      if (text == "with") return Token.With;
       break;
     }
     case CharCode.y: {
-      if (text == "yield") return Token.YIELD;
+      if (text == "yield") return Token.Yield;
       break;
     }
   }
-  return Token.INVALID;
+  return Token.Invalid;
 }
 
 export function tokenIsAlsoIdentifier(token: Token): bool {
   switch (token) {
-    case Token.ABSTRACT:
-    case Token.AS:
-    case Token.CONSTRUCTOR:
-    case Token.DECLARE:
-    case Token.DELETE:
-    case Token.FROM:
-    case Token.FOR:
-    case Token.GET:
-    case Token.INSTANCEOF:
-    case Token.IS:
-    case Token.KEYOF:
-    case Token.MODULE:
-    case Token.NAMESPACE:
-    case Token.NULL:
-    case Token.READONLY:
-    case Token.SET:
-    case Token.TYPE:
-    case Token.VOID: return true;
+    case Token.Abstract:
+    case Token.As:
+    case Token.Constructor:
+    case Token.Declare:
+    case Token.Delete:
+    case Token.From:
+    case Token.For:
+    case Token.Get:
+    case Token.InstanceOf:
+    case Token.Is:
+    case Token.KeyOf:
+    case Token.Module:
+    case Token.Namespace:
+    case Token.Null:
+    case Token.Readonly:
+    case Token.Set:
+    case Token.Type:
+    case Token.Void: return true;
     default: return false;
   }
 }
@@ -391,54 +391,54 @@ export function isIllegalVariableIdentifier(name: string): bool {
 
 export function operatorTokenToString(token: Token): string {
   switch (token) {
-    case Token.DELETE: return "delete";
-    case Token.IN: return "in";
-    case Token.INSTANCEOF: return "instanceof";
-    case Token.NEW: return "new";
-    case Token.TYPEOF: return "typeof";
-    case Token.VOID: return "void";
-    case Token.YIELD: return "yield";
-    case Token.DOT_DOT_DOT: return "...";
-    case Token.COMMA: return ",";
-    case Token.LESSTHAN: return "<";
-    case Token.GREATERTHAN: return ">";
-    case Token.LESSTHAN_EQUALS: return "<=";
-    case Token.GREATERTHAN_EQUALS: return ">=";
-    case Token.EQUALS_EQUALS: return "==";
-    case Token.EXCLAMATION_EQUALS: return "!=";
-    case Token.EQUALS_EQUALS_EQUALS: return "===";
-    case Token.EXCLAMATION_EQUALS_EQUALS: return "!==";
-    case Token.PLUS: return "+";
-    case Token.MINUS: return "-";
-    case Token.ASTERISK_ASTERISK: return "**";
-    case Token.ASTERISK: return "*";
-    case Token.SLASH: return "/";
-    case Token.PERCENT: return "%";
-    case Token.PLUS_PLUS: return "++";
-    case Token.MINUS_MINUS: return "--";
-    case Token.LESSTHAN_LESSTHAN: return "<<";
-    case Token.GREATERTHAN_GREATERTHAN: return ">>";
-    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: return ">>>";
-    case Token.AMPERSAND: return "&";
-    case Token.BAR: return "|";
-    case Token.CARET: return "^";
-    case Token.EXCLAMATION: return "!";
-    case Token.TILDE: return "~";
-    case Token.AMPERSAND_AMPERSAND: return "&&";
-    case Token.BAR_BAR: return "||";
-    case Token.EQUALS: return "=";
-    case Token.PLUS_EQUALS: return "+=";
-    case Token.MINUS_EQUALS: return "-=";
-    case Token.ASTERISK_EQUALS: return "*=";
-    case Token.ASTERISK_ASTERISK_EQUALS: return "**=";
-    case Token.SLASH_EQUALS: return "/=";
-    case Token.PERCENT_EQUALS: return "%=";
-    case Token.LESSTHAN_LESSTHAN_EQUALS: return "<<=";
-    case Token.GREATERTHAN_GREATERTHAN_EQUALS: return ">>=";
-    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: return ">>>=";
-    case Token.AMPERSAND_EQUALS: return "&=";
-    case Token.BAR_EQUALS: return "|=";
-    case Token.CARET_EQUALS: return "^=";
+    case Token.Delete: return "delete";
+    case Token.In: return "in";
+    case Token.InstanceOf: return "instanceof";
+    case Token.New: return "new";
+    case Token.TypeOf: return "typeof";
+    case Token.Void: return "void";
+    case Token.Yield: return "yield";
+    case Token.Dot_Dot_Dot: return "...";
+    case Token.Comma: return ",";
+    case Token.LessThan: return "<";
+    case Token.GreaterThan: return ">";
+    case Token.LessThan_Equals: return "<=";
+    case Token.GreaterThan_Equals: return ">=";
+    case Token.Equals_Equals: return "==";
+    case Token.Exclamation_Equals: return "!=";
+    case Token.Equals_Equals_Equals: return "===";
+    case Token.Exclamation_Equals_Equals: return "!==";
+    case Token.Plus: return "+";
+    case Token.Minus: return "-";
+    case Token.Asterisk_Asterisk: return "**";
+    case Token.Asterisk: return "*";
+    case Token.Slash: return "/";
+    case Token.Percent: return "%";
+    case Token.Plus_Plus: return "++";
+    case Token.Minus_Minus: return "--";
+    case Token.LessThan_LessThan: return "<<";
+    case Token.GreaterThan_GreaterThan: return ">>";
+    case Token.GreaterThan_GreaterThan_GreaterThan: return ">>>";
+    case Token.Ampersand: return "&";
+    case Token.Bar: return "|";
+    case Token.Caret: return "^";
+    case Token.Exclamation: return "!";
+    case Token.Tilde: return "~";
+    case Token.Ampersand_Ampersand: return "&&";
+    case Token.Bar_Bar: return "||";
+    case Token.Equals: return "=";
+    case Token.Plus_Equals: return "+=";
+    case Token.Minus_Equals: return "-=";
+    case Token.Asterisk_Equals: return "*=";
+    case Token.Asterisk_Asterisk_Equals: return "**=";
+    case Token.Slash_Equals: return "/=";
+    case Token.Percent_Equals: return "%=";
+    case Token.LessThan_LessThan_Equals: return "<<=";
+    case Token.GreaterThan_GreaterThan_Equals: return ">>=";
+    case Token.GreaterThan_GreaterThan_GreaterThan_Equals: return ">>>=";
+    case Token.Ampersand_Equals: return "&=";
+    case Token.Bar_Equals: return "|=";
+    case Token.Caret_Equals: return "^=";
     default: {
       assert(false);
       return "";
@@ -479,7 +479,7 @@ export class Tokenizer extends DiagnosticEmitter {
     // skip bom
     if (
       pos < end &&
-      text.charCodeAt(pos) == CharCode.BYTEORDERMARK
+      text.charCodeAt(pos) == CharCode.ByteOrderMark
     ) {
       ++pos;
     }
@@ -487,13 +487,13 @@ export class Tokenizer extends DiagnosticEmitter {
     // skip shebang
     if (
       pos + 1 < end &&
-      text.charCodeAt(pos) == CharCode.HASH &&
-      text.charCodeAt(pos + 1) == CharCode.EXCLAMATION
+      text.charCodeAt(pos) == CharCode.Hash &&
+      text.charCodeAt(pos + 1) == CharCode.Exclamation
     ) {
       pos += 2;
       while (
         pos < end &&
-        text.charCodeAt(pos) != CharCode.LINEFEED
+        text.charCodeAt(pos) != CharCode.LineFeed
       ) {
         ++pos;
       }
@@ -503,17 +503,17 @@ export class Tokenizer extends DiagnosticEmitter {
     this.end = end;
   }
 
-  next(identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): Token {
+  next(identifierHandling: IdentifierHandling = IdentifierHandling.Default): Token {
     this.nextToken = -1;
     let token: Token;
     do token = this.unsafeNext(identifierHandling);
-    while (token == Token.INVALID);
+    while (token == Token.Invalid);
     this.token = token;
     return token;
   }
 
   private unsafeNext(
-    identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT,
+    identifierHandling: IdentifierHandling = IdentifierHandling.Default,
     maxTokenLength: i32 = i32.MAX_VALUE
   ): Token {
     let text = this.source.text;
@@ -523,182 +523,182 @@ export class Tokenizer extends DiagnosticEmitter {
       this.tokenPos = pos;
       let c = text.charCodeAt(pos);
       switch (c) {
-        case CharCode.CARRIAGERETURN: {
+        case CharCode.CarriageReturn: {
           if (!(
             ++pos < end &&
-            text.charCodeAt(pos) == CharCode.LINEFEED
+            text.charCodeAt(pos) == CharCode.LineFeed
           )) break;
           // otherwise fall-through
         }
-        case CharCode.LINEFEED:
-        case CharCode.TAB:
-        case CharCode.VERTICALTAB:
-        case CharCode.FORMFEED:
-        case CharCode.SPACE: {
+        case CharCode.LineFeed:
+        case CharCode.Tab:
+        case CharCode.VerticalTab:
+        case CharCode.FormFeed:
+        case CharCode.Space: {
           ++pos;
           break;
         }
-        case CharCode.EXCLAMATION: {
+        case CharCode.Exclamation: {
           ++pos;
           if (
             maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
+            text.charCodeAt(pos) == CharCode.Equals
           ) {
             ++pos;
             if (
               maxTokenLength > 2 && pos < end &&
-              text.charCodeAt(pos) == CharCode.EQUALS
+              text.charCodeAt(pos) == CharCode.Equals
             ) {
               this.pos = pos + 1;
-              return Token.EXCLAMATION_EQUALS_EQUALS;
+              return Token.Exclamation_Equals_Equals;
             }
             this.pos = pos;
-            return Token.EXCLAMATION_EQUALS;
+            return Token.Exclamation_Equals;
           }
           this.pos = pos;
-          return Token.EXCLAMATION;
+          return Token.Exclamation;
         }
-        case CharCode.DOUBLEQUOTE:
-        case CharCode.SINGLEQUOTE: {
+        case CharCode.DoubleQuote:
+        case CharCode.SingleQuote: {
           this.pos = pos;
-          return Token.STRINGLITERAL;
+          return Token.StringLiteral;
         }
-        case CharCode.BACKTICK: {
+        case CharCode.Backtick: {
           this.pos = pos;
-          return Token.TEMPLATELITERAL;
+          return Token.TemplateLiteral;
         }
-        case CharCode.PERCENT: {
+        case CharCode.Percent: {
           ++pos;
           if (
             maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
+            text.charCodeAt(pos) == CharCode.Equals
           ) {
             this.pos = pos + 1;
-            return Token.PERCENT_EQUALS;
+            return Token.Percent_Equals;
           }
           this.pos = pos;
-          return Token.PERCENT;
+          return Token.Percent;
         }
-        case CharCode.AMPERSAND: {
+        case CharCode.Ampersand: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.AMPERSAND) {
+            if (chr == CharCode.Ampersand) {
               this.pos = pos + 1;
-              return Token.AMPERSAND_AMPERSAND;
+              return Token.Ampersand_Ampersand;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.AMPERSAND_EQUALS;
+              return Token.Ampersand_Equals;
             }
           }
           this.pos = pos;
-          return Token.AMPERSAND;
+          return Token.Ampersand;
         }
-        case CharCode.OPENPAREN: {
+        case CharCode.OpenParen: {
           this.pos = pos + 1;
-          return Token.OPENPAREN;
+          return Token.OpenParen;
         }
-        case CharCode.CLOSEPAREN: {
+        case CharCode.CloseParen: {
           this.pos = pos + 1;
-          return Token.CLOSEPAREN;
+          return Token.CloseParen;
         }
-        case CharCode.ASTERISK: {
+        case CharCode.Asterisk: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.ASTERISK_EQUALS;
+              return Token.Asterisk_Equals;
             }
-            if (chr == CharCode.ASTERISK) {
+            if (chr == CharCode.Asterisk) {
               ++pos;
               if (
                 maxTokenLength > 2 && pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
+                text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
-                return Token.ASTERISK_ASTERISK_EQUALS;
+                return Token.Asterisk_Asterisk_Equals;
               }
               this.pos = pos;
-              return Token.ASTERISK_ASTERISK;
+              return Token.Asterisk_Asterisk;
             }
           }
           this.pos = pos;
-          return Token.ASTERISK;
+          return Token.Asterisk;
         }
-        case CharCode.PLUS: {
+        case CharCode.Plus: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.PLUS) {
+            if (chr == CharCode.Plus) {
               this.pos = pos + 1;
-              return Token.PLUS_PLUS;
+              return Token.Plus_Plus;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.PLUS_EQUALS;
+              return Token.Plus_Equals;
             }
           }
           this.pos = pos;
-          return Token.PLUS;
+          return Token.Plus;
         }
-        case CharCode.COMMA: {
+        case CharCode.Comma: {
           this.pos = pos + 1;
-          return Token.COMMA;
+          return Token.Comma;
         }
-        case CharCode.MINUS: {
+        case CharCode.Minus: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.MINUS) {
+            if (chr == CharCode.Minus) {
               this.pos = pos + 1;
-              return Token.MINUS_MINUS;
+              return Token.Minus_Minus;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.MINUS_EQUALS;
+              return Token.Minus_Equals;
             }
           }
           this.pos = pos;
-          return Token.MINUS;
+          return Token.Minus;
         }
-        case CharCode.DOT: {
+        case CharCode.Dot: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
             if (isDecimal(chr)) {
               this.pos = pos - 1;
-              return Token.FLOATLITERAL; // expects a call to readFloat
+              return Token.FloatLiteral; // expects a call to readFloat
             }
             if (
               maxTokenLength > 2 && pos + 1 < end &&
-              chr == CharCode.DOT &&
-              text.charCodeAt(pos + 1) == CharCode.DOT
+              chr == CharCode.Dot &&
+              text.charCodeAt(pos + 1) == CharCode.Dot
             ) {
               this.pos = pos + 2;
-              return Token.DOT_DOT_DOT;
+              return Token.Dot_Dot_Dot;
             }
           }
           this.pos = pos;
-          return Token.DOT;
+          return Token.Dot;
         }
-        case CharCode.SLASH: {
+        case CharCode.Slash: {
           let commentStartPos = pos;
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.SLASH) { // single-line
-              let commentKind = CommentKind.LINE;
+            if (chr == CharCode.Slash) { // single-line
+              let commentKind = CommentKind.Line;
               if (
                 pos + 1 < end &&
-                text.charCodeAt(pos + 1) == CharCode.SLASH
+                text.charCodeAt(pos + 1) == CharCode.Slash
               ) {
                 ++pos;
-                commentKind = CommentKind.TRIPLE;
+                commentKind = CommentKind.Triple;
               }
               while (++pos < end) {
-                if (text.charCodeAt(pos) == CharCode.LINEFEED) {
+                if (text.charCodeAt(pos) == CharCode.LineFeed) {
                   ++pos;
                   break;
                 }
@@ -712,14 +712,14 @@ export class Tokenizer extends DiagnosticEmitter {
               }
               break;
             }
-            if (chr == CharCode.ASTERISK) { // multi-line
+            if (chr == CharCode.Asterisk) { // multi-line
               let closed = false;
               while (++pos < end) {
                 c = text.charCodeAt(pos);
                 if (
-                  c == CharCode.ASTERISK &&
+                  c == CharCode.Asterisk &&
                   pos + 1 < end &&
-                  text.charCodeAt(pos + 1) == CharCode.SLASH
+                  text.charCodeAt(pos + 1) == CharCode.Slash
                 ) {
                   pos += 2;
                   closed = true;
@@ -733,20 +733,20 @@ export class Tokenizer extends DiagnosticEmitter {
                 );
               } else if (this.onComment) {
                 this.onComment(
-                  CommentKind.BLOCK,
+                  CommentKind.Block,
                   text.substring(commentStartPos, pos),
                   this.range(commentStartPos, pos)
                 );
               }
               break;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.SLASH_EQUALS;
+              return Token.Slash_Equals;
             }
           }
           this.pos = pos;
-          return Token.SLASH;
+          return Token.Slash;
         }
         case CharCode._0:
         case CharCode._1:
@@ -760,158 +760,158 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode._9: {
           this.pos = pos;
           return this.testInteger()
-            ? Token.INTEGERLITERAL // expects a call to readInteger
-            : Token.FLOATLITERAL;  // expects a call to readFloat
+            ? Token.IntegerLiteral // expects a call to readInteger
+            : Token.FloatLiteral;  // expects a call to readFloat
         }
-        case CharCode.COLON: {
+        case CharCode.Colon: {
           this.pos = pos + 1;
-          return Token.COLON;
+          return Token.Colon;
         }
-        case CharCode.SEMICOLON: {
+        case CharCode.Semicolon: {
           this.pos = pos + 1;
-          return Token.SEMICOLON;
+          return Token.Semicolon;
         }
-        case CharCode.LESSTHAN: {
+        case CharCode.LessThan: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.LESSTHAN) {
+            if (chr == CharCode.LessThan) {
               ++pos;
               if (
                 maxTokenLength > 2 &&
                 pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
+                text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
-                return Token.LESSTHAN_LESSTHAN_EQUALS;
+                return Token.LessThan_LessThan_Equals;
               }
               this.pos = pos;
-              return Token.LESSTHAN_LESSTHAN;
+              return Token.LessThan_LessThan;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.LESSTHAN_EQUALS;
+              return Token.LessThan_Equals;
             }
           }
           this.pos = pos;
-          return Token.LESSTHAN;
+          return Token.LessThan;
         }
-        case CharCode.EQUALS: {
+        case CharCode.Equals: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               ++pos;
               if (
                 maxTokenLength > 2 &&
                 pos < end &&
-                text.charCodeAt(pos) == CharCode.EQUALS
+                text.charCodeAt(pos) == CharCode.Equals
               ) {
                 this.pos = pos + 1;
-                return Token.EQUALS_EQUALS_EQUALS;
+                return Token.Equals_Equals_Equals;
               }
               this.pos = pos;
-              return Token.EQUALS_EQUALS;
+              return Token.Equals_Equals;
             }
-            if (chr == CharCode.GREATERTHAN) {
+            if (chr == CharCode.GreaterThan) {
               this.pos = pos + 1;
-              return Token.EQUALS_GREATERTHAN;
+              return Token.Equals_GreaterThan;
             }
           }
           this.pos = pos;
-          return Token.EQUALS;
+          return Token.Equals;
         }
-        case CharCode.GREATERTHAN: {
+        case CharCode.GreaterThan: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.GREATERTHAN) {
+            if (chr == CharCode.GreaterThan) {
               ++pos;
               if (maxTokenLength > 2 && pos < end) {
                 chr = text.charCodeAt(pos);
-                if (chr == CharCode.GREATERTHAN) {
+                if (chr == CharCode.GreaterThan) {
                   ++pos;
                   if (
                     maxTokenLength > 3 && pos < end &&
-                    text.charCodeAt(pos) == CharCode.EQUALS
+                    text.charCodeAt(pos) == CharCode.Equals
                   ) {
                     this.pos = pos + 1;
-                    return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS;
+                    return Token.GreaterThan_GreaterThan_GreaterThan_Equals;
                   }
                   this.pos = pos;
-                  return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN;
+                  return Token.GreaterThan_GreaterThan_GreaterThan;
                 }
-                if (chr == CharCode.EQUALS) {
+                if (chr == CharCode.Equals) {
                   this.pos = pos + 1;
-                  return Token.GREATERTHAN_GREATERTHAN_EQUALS;
+                  return Token.GreaterThan_GreaterThan_Equals;
                 }
               }
               this.pos = pos;
-              return Token.GREATERTHAN_GREATERTHAN;
+              return Token.GreaterThan_GreaterThan;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.GREATERTHAN_EQUALS;
+              return Token.GreaterThan_Equals;
             }
           }
           this.pos = pos;
-          return Token.GREATERTHAN;
+          return Token.GreaterThan;
         }
-        case CharCode.QUESTION: {
+        case CharCode.Question: {
           this.pos = pos + 1;
-          return Token.QUESTION;
+          return Token.Question;
         }
-        case CharCode.OPENBRACKET: {
+        case CharCode.OpenBracket: {
           this.pos = pos + 1;
-          return Token.OPENBRACKET;
+          return Token.OpenBracket;
         }
-        case CharCode.CLOSEBRACKET: {
+        case CharCode.CloseBracket: {
           this.pos = pos + 1;
-          return Token.CLOSEBRACKET;
+          return Token.CloseBracket;
         }
-        case CharCode.CARET: {
+        case CharCode.Caret: {
           ++pos;
           if (
             maxTokenLength > 1 && pos < end &&
-            text.charCodeAt(pos) == CharCode.EQUALS
+            text.charCodeAt(pos) == CharCode.Equals
           ) {
             this.pos = pos + 1;
-            return Token.CARET_EQUALS;
+            return Token.Caret_Equals;
           }
           this.pos = pos;
-          return Token.CARET;
+          return Token.Caret;
         }
-        case CharCode.OPENBRACE: {
+        case CharCode.OpenBrace: {
           this.pos = pos + 1;
-          return Token.OPENBRACE;
+          return Token.OpenBrace;
         }
-        case CharCode.BAR: {
+        case CharCode.Bar: {
           ++pos;
           if (maxTokenLength > 1 && pos < end) {
             let chr = text.charCodeAt(pos);
-            if (chr == CharCode.BAR) {
+            if (chr == CharCode.Bar) {
               this.pos = pos + 1;
-              return Token.BAR_BAR;
+              return Token.Bar_Bar;
             }
-            if (chr == CharCode.EQUALS) {
+            if (chr == CharCode.Equals) {
               this.pos = pos + 1;
-              return Token.BAR_EQUALS;
+              return Token.Bar_Equals;
             }
           }
           this.pos = pos;
-          return Token.BAR;
+          return Token.Bar;
         }
-        case CharCode.CLOSEBRACE: {
+        case CharCode.CloseBrace: {
           this.pos = pos + 1;
-          return Token.CLOSEBRACE;
+          return Token.CloseBrace;
         }
-        case CharCode.TILDE: {
+        case CharCode.Tilde: {
           this.pos = pos + 1;
-          return Token.TILDE;
+          return Token.Tilde;
         }
-        case CharCode.AT: {
+        case CharCode.At: {
           this.pos = pos + 1;
-          return Token.AT;
+          return Token.At;
         }
         default: {
           // Unicode-aware from here on
@@ -924,12 +924,12 @@ export class Tokenizer extends DiagnosticEmitter {
               (pos += numCodeUnits(c)) < end &&
               isIdentifierPart(c = <i32>text.codePointAt(pos))
             ) { /* nop */ }
-            if (identifierHandling != IdentifierHandling.ALWAYS) {
+            if (identifierHandling != IdentifierHandling.Always) {
               let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
               if (
-                maybeKeywordToken != Token.INVALID &&
+                maybeKeywordToken != Token.Invalid &&
                 !(
-                  identifierHandling == IdentifierHandling.PREFER &&
+                  identifierHandling == IdentifierHandling.Prefer &&
                   tokenIsAlsoIdentifier(maybeKeywordToken)
                 )
               ) {
@@ -938,7 +938,7 @@ export class Tokenizer extends DiagnosticEmitter {
               }
             }
             this.pos = posBefore;
-            return Token.IDENTIFIER;
+            return Token.Identifier;
           } else if (isWhiteSpace(c)) {
             ++pos; // assume no supplementary whitespaces
             break;
@@ -950,17 +950,17 @@ export class Tokenizer extends DiagnosticEmitter {
             this.range(start, pos)
           );
           this.pos = pos;
-          return Token.INVALID;
+          return Token.Invalid;
         }
       }
     }
     this.pos = pos;
-    return Token.ENDOFFILE;
+    return Token.EndOfFile;
   }
 
   peek(
     checkOnNewLine: bool = false,
-    identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT,
+    identifierHandling: IdentifierHandling = IdentifierHandling.Default,
     maxCompoundLength: i32 = i32.MAX_VALUE
   ): Token {
     let text = this.source.text;
@@ -970,7 +970,7 @@ export class Tokenizer extends DiagnosticEmitter {
       let tokenPosBefore = this.tokenPos;
       let nextToken: Token;
       do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
-      while (nextToken == Token.INVALID);
+      while (nextToken == Token.Invalid);
       this.nextToken = nextToken;
       this.nextTokenPos = this.tokenPos;
       if (checkOnNewLine) {
@@ -989,21 +989,21 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.nextToken;
   }
 
-  skipIdentifier(identifierHandling: IdentifierHandling = IdentifierHandling.PREFER): bool {
-    return this.skip(Token.IDENTIFIER, identifierHandling);
+  skipIdentifier(identifierHandling: IdentifierHandling = IdentifierHandling.Prefer): bool {
+    return this.skip(Token.Identifier, identifierHandling);
   }
 
-  skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): bool {
+  skip(token: Token, identifierHandling: IdentifierHandling = IdentifierHandling.Default): bool {
     let posBefore = this.pos;
     let tokenBefore = this.token;
     let tokenPosBefore = this.tokenPos;
     let maxCompoundLength = i32.MAX_VALUE;
-    if (token == Token.GREATERTHAN) {  // where parsing type arguments
+    if (token == Token.GreaterThan) {  // where parsing type arguments
       maxCompoundLength = 1;
     }
     let nextToken: Token;
     do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
-    while (nextToken == Token.INVALID);
+    while (nextToken == Token.Invalid);
     if (nextToken == token) {
       this.token = token;
       this.nextToken = -1;
@@ -1096,7 +1096,7 @@ export class Tokenizer extends DiagnosticEmitter {
         result += text.substring(start, pos++);
         break;
       }
-      if (c == CharCode.BACKSLASH) {
+      if (c == CharCode.Backslash) {
         result += text.substring(start, pos);
         this.pos = pos; // save
         result += this.readEscapeSequence(isTaggedTemplate);
@@ -1104,8 +1104,8 @@ export class Tokenizer extends DiagnosticEmitter {
         start = pos;
         continue;
       }
-      if (quote == CharCode.BACKTICK) {
-        if (c == CharCode.DOLLAR && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OPENBRACE) {
+      if (quote == CharCode.Backtick) {
+        if (c == CharCode.Dollar && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OpenBrace) {
           result += text.substring(start, pos);
           this.readStringEnd = pos;
           this.pos = pos + 2;
@@ -1156,12 +1156,12 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.v: return "\v";
       case CharCode.f: return "\f";
       case CharCode.r: return "\r";
-      case CharCode.SINGLEQUOTE: return "'";
-      case CharCode.DOUBLEQUOTE: return "\"";
+      case CharCode.SingleQuote: return "'";
+      case CharCode.DoubleQuote: return "\"";
       case CharCode.u: {
         if (
           this.pos < end &&
-          text.charCodeAt(this.pos) == CharCode.OPENBRACE
+          text.charCodeAt(this.pos) == CharCode.OpenBrace
         ) {
           ++this.pos;
           return this.readExtendedUnicodeEscape(isTaggedTemplate ? start : -1); // \u{DDDDDDDD}
@@ -1171,18 +1171,18 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.x: {
         return this.readHexadecimalEscape(2, isTaggedTemplate ? start : - 1); // \xDD
       }
-      case CharCode.CARRIAGERETURN: {
+      case CharCode.CarriageReturn: {
         if (
           this.pos < end &&
-          text.charCodeAt(this.pos) == CharCode.LINEFEED
+          text.charCodeAt(this.pos) == CharCode.LineFeed
         ) {
           ++this.pos;
         }
         // fall through
       }
-      case CharCode.LINEFEED:
-      case CharCode.LINESEPARATOR:
-      case CharCode.PARAGRAPHSEPARATOR: return "";
+      case CharCode.LineFeed:
+      case CharCode.LineSeparator:
+      case CharCode.ParagraphSeparator: return "";
       default: return String.fromCodePoint(c);
     }
   }
@@ -1200,13 +1200,13 @@ export class Tokenizer extends DiagnosticEmitter {
         );
         break;
       }
-      if (text.charCodeAt(this.pos) == CharCode.BACKSLASH) {
+      if (text.charCodeAt(this.pos) == CharCode.Backslash) {
         ++this.pos;
         escaped = true;
         continue;
       }
       let c = text.charCodeAt(this.pos);
-      if (!escaped && c == CharCode.SLASH) break;
+      if (!escaped && c == CharCode.Slash) break;
       if (isLineBreak(c)) {
         this.error(
           DiagnosticCode.Unterminated_regular_expression_literal,
@@ -1272,7 +1272,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || (c | 32) == CharCode.e) return false;
+      if (c == CharCode.Dot || (c | 32) == CharCode.e) return false;
       if (c != CharCode._ && (c < CharCode._0 || c > CharCode._9)) break;
       // does not validate separator placement (this is done in readXYInteger)
       pos++;
@@ -1585,7 +1585,7 @@ export class Tokenizer extends DiagnosticEmitter {
     let end = this.end;
     let start = this.pos;
     let sepCount = this.readDecimalFloatPartial(false);
-    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
+    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.Dot) {
       ++this.pos;
       sepCount += this.readDecimalFloatPartial();
     }
@@ -1594,7 +1594,7 @@ export class Tokenizer extends DiagnosticEmitter {
       if ((c | 32) == CharCode.e) {
         if (
           ++this.pos < end &&
-          (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
+          (c = text.charCodeAt(this.pos)) == CharCode.Minus || c == CharCode.Plus &&
           isDecimal(text.charCodeAt(this.pos + 1))
         ) {
           ++this.pos;
@@ -1737,7 +1737,7 @@ export class Tokenizer extends DiagnosticEmitter {
         );
       }
       invalid = true;
-    } else if (text.charCodeAt(this.pos) == CharCode.CLOSEBRACE) {
+    } else if (text.charCodeAt(this.pos) == CharCode.CloseBrace) {
       ++this.pos;
     } else {
       if (startIfTaggedTemplate == -1) {

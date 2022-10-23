@@ -70,7 +70,7 @@ export class TSDBuilder extends ExportsWalker {
     indent(sb, this.indentLevel);
     sb.push("get value(): ");
     sb.push(tsType);
-    if (!element.is(CommonFlags.CONST)) {
+    if (!element.is(CommonFlags.Const)) {
       sb.push(";\n");
       indent(sb, this.indentLevel);
       sb.push("set value(value: ");
@@ -101,7 +101,7 @@ export class TSDBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.ENUMVALUE) continue;
+        if (member.kind != ElementKind.EnumValue) continue;
         indent(sb, this.indentLevel);
         sb.push("/** @type `i32` */\n");
         indent(sb, this.indentLevel);
@@ -218,7 +218,7 @@ export class TSDBuilder extends ExportsWalker {
           sb.push(moduleName);
         } else {
           sb.push("\"");
-          sb.push(escapeString(moduleName, CharCode.DOUBLEQUOTE));
+          sb.push(escapeString(moduleName, CharCode.DoubleQuote));
           sb.push("\"");
         }
         sb.push(": unknown,\n");
@@ -235,8 +235,8 @@ export class TSDBuilder extends ExportsWalker {
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
-        if (member.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED)) return false;
-        if (member.is(CommonFlags.CONSTRUCTOR)) {
+        if (member.isAny(CommonFlags.Private | CommonFlags.Protected)) return false;
+        if (member.is(CommonFlags.Constructor)) {
           // a generated constructor is ok
           if (member.declaration.range != this.program.nativeRange) return false;
         }
@@ -314,7 +314,7 @@ export class TSDBuilder extends ExportsWalker {
           }
         }
       }
-      if (type.is(TypeFlags.NULLABLE)) {
+      if (type.is(TypeFlags.Nullable)) {
         sb.push(" | null");
       }
       return sb.join("");
@@ -347,7 +347,7 @@ export class TSDBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.FIELD) continue;
+        if (member.kind != ElementKind.Field) continue;
         let field = <Field>member;
         sb.push("  /** @type `");
         sb.push(field.type.toString());
@@ -367,7 +367,7 @@ export class TSDBuilder extends ExportsWalker {
 
   fieldAcceptsUndefined(type: Type): bool {
     if (type.isInternalReference) {
-      return type.is(TypeFlags.NULLABLE);
+      return type.is(TypeFlags.Nullable);
     }
     return true;
   }

@@ -33,13 +33,13 @@ export {
 /** Indicates the category of a {@link DiagnosticMessage}. */
 export const enum DiagnosticCategory {
   /** Overly pedantic message. */
-  PEDANTIC,
+  Pedantic,
   /** Informatory message. */
-  INFO,
+  Info,
   /** Warning message. */
-  WARNING,
+  Warning,
   /** Error message. */
-  ERROR
+  Error
 }
 
 export class Range {
@@ -87,10 +87,10 @@ export class Range {
 /** Returns the string representation of the specified diagnostic category. */
 export function diagnosticCategoryToString(category: DiagnosticCategory): string {
   switch (category) {
-    case DiagnosticCategory.PEDANTIC: return "PEDANTIC";
-    case DiagnosticCategory.INFO: return "INFO";
-    case DiagnosticCategory.WARNING: return "WARNING";
-    case DiagnosticCategory.ERROR: return "ERROR";
+    case DiagnosticCategory.Pedantic: return "PEDANTIC";
+    case DiagnosticCategory.Info: return "INFO";
+    case DiagnosticCategory.Warning: return "WARNING";
+    case DiagnosticCategory.Error: return "ERROR";
     default: {
       assert(false);
       return "";
@@ -101,10 +101,10 @@ export function diagnosticCategoryToString(category: DiagnosticCategory): string
 /** Returns the ANSI escape sequence for the specified category. */
 export function diagnosticCategoryToColor(category: DiagnosticCategory): string {
   switch (category) {
-    case DiagnosticCategory.PEDANTIC: return COLOR_MAGENTA;
-    case DiagnosticCategory.INFO: return COLOR_CYAN;
-    case DiagnosticCategory.WARNING: return COLOR_YELLOW;
-    case DiagnosticCategory.ERROR: return COLOR_RED;
+    case DiagnosticCategory.Pedantic: return COLOR_MAGENTA;
+    case DiagnosticCategory.Info: return COLOR_CYAN;
+    case DiagnosticCategory.Warning: return COLOR_YELLOW;
+    case DiagnosticCategory.Error: return COLOR_RED;
     default: {
       assert(false);
       return "";
@@ -282,7 +282,7 @@ function formatDiagnosticContext(range: Range): string {
     " │ "
   ];
   while (start < range.start) {
-    if (text.charCodeAt(start) == CharCode.TAB) {
+    if (text.charCodeAt(start) == CharCode.Tab) {
       sb.push("  ");
       start += 2;
     } else {
@@ -296,7 +296,7 @@ function formatDiagnosticContext(range: Range): string {
   } else {
     while (start++ < range.end) {
       let cc = text.charCodeAt(start);
-      if (cc == CharCode.TAB) {
+      if (cc == CharCode.Tab) {
         sb.push("~~");
       } else if (isLineBreak(cc)) {
         sb.push(start == range.start + 1 ? "^" : "~");
@@ -377,7 +377,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.PEDANTIC, range, null, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Pedantic, range, null, arg0, arg1, arg2);
   }
 
   /** Emits an overly pedantic diagnostic message with a related range. */
@@ -389,7 +389,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.PEDANTIC, range, relatedRange, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Pedantic, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits an informatory diagnostic message. */
@@ -400,7 +400,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, null, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Info, range, null, arg0, arg1, arg2);
   }
 
   /** Emits an informatory diagnostic message with a related range. */
@@ -412,7 +412,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, relatedRange, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Info, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits a warning diagnostic message. */
@@ -423,7 +423,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, null, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Warning, range, null, arg0, arg1, arg2);
   }
 
   /** Emits a warning diagnostic message with a related range. */
@@ -435,7 +435,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, relatedRange, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Warning, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits an error diagnostic message. */
@@ -446,7 +446,7 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, null, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Error, range, null, arg0, arg1, arg2);
   }
 
   /** Emits an error diagnostic message with a related range. */
@@ -458,6 +458,6 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, relatedRange, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.Error, range, relatedRange, arg0, arg1, arg2);
   }
 }
