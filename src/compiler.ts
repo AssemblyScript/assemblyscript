@@ -3990,7 +3990,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.Exclamation_Equals_Equals:
-      case Token.ExclamationEquals: {
+      case Token.Exclamation_Equals: {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 

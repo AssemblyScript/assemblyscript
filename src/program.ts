@@ -387,7 +387,7 @@ export namespace OperatorKind {
       case Token.GreaterThan_GreaterThan_GreaterThan:
       case Token.GreaterThan_GreaterThan_GreaterThan_Equals: return OperatorKind.BitwiseShrU;
       case Token.Equals_Equals: return OperatorKind.Eq;
-      case Token.ExclamationEquals: return OperatorKind.Ne;
+      case Token.Exclamation_Equals: return OperatorKind.Ne;
       case Token.GreaterThan: return OperatorKind.Gt;
       case Token.GreaterThan_Equals: return OperatorKind.Ge;
       case Token.LessThan: return OperatorKind.Lt;
