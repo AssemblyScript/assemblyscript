@@ -22,7 +22,7 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 21028))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 37412))
  (memory $0 1)
  (data (i32.const 1036) "|")
  (data (i32.const 1048) "\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006")
@@ -655,10 +655,10 @@
   if
    unreachable
   end
-  i32.const 21040
+  i32.const 37424
   i32.const 0
   i32.store $0
-  i32.const 22608
+  i32.const 38992
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -669,7 +669,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 21040
+    i32.const 37424
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -687,7 +687,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 21040
+      i32.const 37424
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -705,13 +705,13 @@
     br $for-loop|0
    end
   end
-  i32.const 21040
-  i32.const 22612
+  i32.const 37424
+  i32.const 38996
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 21040
+  i32.const 37424
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
@@ -796,7 +796,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 21028
+      i32.const 37412
       i32.lt_u
       if
        local.get $0
@@ -896,7 +896,7 @@
      unreachable
     end
     local.get $0
-    i32.const 21028
+    i32.const 37412
     i32.lt_u
     if
      local.get $0
@@ -919,7 +919,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 21028
+     i32.const 37412
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1637,8 +1637,8 @@
  (func $~lib/util/number/genDigits (type $i64_i64_i32_i64_=>_i32) (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i64) (result i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i64)
-  (local $7 i32)
+  (local $6 i32)
+  (local $7 i64)
   (local $8 i64)
   (local $9 i32)
   (local $10 i64)
@@ -1661,7 +1661,7 @@
   local.tee $11
   local.get $1
   i64.and
-  local.set $6
+  local.set $7
   local.get $1
   local.get $0
   i64.shr_u
@@ -1712,9 +1712,9 @@
     i32.add
    end
   end
-  local.set $7
+  local.set $6
   loop $while-continue|0
-   local.get $7
+   local.get $6
    i32.const 0
    i32.gt_s
    if
@@ -1730,7 +1730,7 @@
              block $case2|1
               block $case1|1
                block $case0|1
-                local.get $7
+                local.get $6
                 i32.const 1
                 i32.sub
                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case0|1 $case10|1
@@ -1854,26 +1854,26 @@
      i32.add
      local.set $4
     end
-    local.get $7
+    local.get $6
     i32.const 1
     i32.sub
-    local.set $7
+    local.set $6
     local.get $3
     local.get $5
     i64.extend_i32_u
     local.get $9
     i64.extend_i32_s
     i64.shl
-    local.get $6
+    local.get $7
     i64.add
     local.tee $0
     i64.ge_u
     if
      global.get $~lib/util/number/_K
-     local.get $7
+     local.get $6
      i32.add
      global.set $~lib/util/number/_K
-     local.get $7
+     local.get $6
      i32.const 2
      i32.shl
      i32.const 4400
@@ -1906,12 +1906,12 @@
        local.get $0
        local.get $1
        i64.add
-       local.tee $6
+       local.tee $7
        i64.gt_u
        local.get $8
        local.get $0
        i64.sub
-       local.get $6
+       local.get $7
        local.get $8
        i64.sub
        i64.gt_u
@@ -1945,7 +1945,7 @@
    i64.const 10
    i64.mul
    local.set $3
-   local.get $6
+   local.get $7
    i64.const 10
    i64.mul
    local.tee $0
@@ -1976,27 +1976,25 @@
     i32.add
     local.set $4
    end
-   local.get $7
+   local.get $6
    i32.const 1
    i32.sub
-   local.set $7
+   local.set $6
    local.get $0
    local.get $11
    i64.and
-   local.tee $6
+   local.tee $7
    local.get $3
    i64.ge_u
    br_if $while-continue|4
   end
   global.get $~lib/util/number/_K
-  local.get $7
+  local.get $6
   i32.add
   global.set $~lib/util/number/_K
-  local.get $6
-  local.set $0
   local.get $8
   i32.const 0
-  local.get $7
+  local.get $6
   i32.sub
   i32.const 2
   i32.shl
@@ -2004,7 +2002,7 @@
   i32.add
   i64.load32_u $0
   i64.mul
-  local.set $1
+  local.set $0
   local.get $4
   i32.const 1
   i32.shl
@@ -2015,27 +2013,27 @@
   local.set $2
   loop $while-continue|6
    local.get $0
-   local.get $1
-   i64.lt_u
+   local.get $7
+   i64.gt_u
    local.get $3
-   local.get $0
+   local.get $7
    i64.sub
    local.get $10
    i64.ge_u
    i32.and
    if (result i32)
-    local.get $1
     local.get $0
+    local.get $7
     i64.sub
-    local.get $0
+    local.get $7
     local.get $10
     i64.add
-    local.tee $6
-    local.get $1
+    local.tee $1
+    local.get $0
     i64.sub
     i64.gt_u
+    local.get $0
     local.get $1
-    local.get $6
     i64.gt_u
     i32.or
    else
@@ -2046,10 +2044,10 @@
     i32.const 1
     i32.sub
     local.set $2
-    local.get $0
+    local.get $7
     local.get $10
     i64.add
-    local.set $0
+    local.set $7
     br $while-continue|6
    end
   end
@@ -2451,7 +2449,7 @@
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 21028
+   i32.const 37412
    i32.sub
    i32.const 1
    i32.shr_u
@@ -2720,8 +2718,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 21056
-  i32.const 21104
+  i32.const 37440
+  i32.const 37488
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -2772,7 +2770,7 @@
      i32.load $0 offset=8
      i32.eqz
      local.get $1
-     i32.const 21028
+     i32.const 37412
      i32.lt_u
      i32.and
      i32.eqz

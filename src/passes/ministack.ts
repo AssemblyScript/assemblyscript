@@ -69,30 +69,30 @@ export class MiniStack extends Pass {
   /** Instruments a function export to also maintain stack depth. */
   instrumentFunctionExport(ref: ExportRef): void {
     assert(_BinaryenExportGetKind(ref) == ExternalKind.Function);
-    var module = this.module;
-    var internalNameRef = _BinaryenExportGetValue(ref);
-    var externalNameRef = _BinaryenExportGetName(ref);
-    var functionRef = _BinaryenGetFunction(module.ref, internalNameRef);
-    var originalName = module.readStringCached(_BinaryenFunctionGetName(functionRef))!;
+    let module = this.module;
+    let internalNameRef = _BinaryenExportGetValue(ref);
+    let externalNameRef = _BinaryenExportGetName(ref);
+    let functionRef = _BinaryenGetFunction(module.ref, internalNameRef);
+    let originalName = module.readStringCached(_BinaryenFunctionGetName(functionRef))!;
 
-    var wrapperName = "export:" + originalName;
+    let wrapperName = "export:" + originalName;
     if (!module.hasFunction(wrapperName)) {
-      var params = _BinaryenFunctionGetParams(functionRef);
-      var results = _BinaryenFunctionGetResults(functionRef);
+      let params = _BinaryenFunctionGetParams(functionRef);
+      let results = _BinaryenFunctionGetResults(functionRef);
       let numLocals = _BinaryenFunctionGetNumLocals(functionRef);
-      var vars = new Array<TypeRef>();
+      let vars = new Array<TypeRef>();
 
       // Prepare a call to the original function
-      var paramTypes = expandType(params);
-      var numParams = paramTypes.length;
-      var operands = new Array<ExpressionRef>(numParams);
+      let paramTypes = expandType(params);
+      let numParams = paramTypes.length;
+      let operands = new Array<ExpressionRef>(numParams);
       for (let i = 0; i < numParams; ++i) {
         operands[i] = module.local_get(i, paramTypes[i]);
       }
-      var call = module.call(originalName, operands, results);
+      let call = module.call(originalName, operands, results);
 
       // Create a wrapper function also maintaining stack depth
-      var stmts = new Array<ExpressionRef>();
+      let stmts = new Array<ExpressionRef>();
       if (numLocals) {
         stmts.push(
           module.global_set(STACK_DEPTH,
@@ -156,9 +156,9 @@ export class MiniStack extends Pass {
 
   /** Runs the pass. Returns `true` if the mini stack has been added. */
   run(): bool {
-    var module = this.module;
-    var moduleRef = module.ref;
-    var numExports = _BinaryenGetNumExports(moduleRef);
+    let module = this.module;
+    let moduleRef = module.ref;
+    let numExports = _BinaryenGetNumExports(moduleRef);
     if (numExports) {
       let functionExportRefs = new Array<ExportRef>();
       // We are going to modify the list of exports, so do this in two steps

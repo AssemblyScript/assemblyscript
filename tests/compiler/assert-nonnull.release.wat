@@ -3,7 +3,7 @@
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17788))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34172))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
@@ -39,8 +39,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 17808
-   i32.const 17856
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -82,8 +82,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 17808
-   i32.const 17856
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -117,8 +117,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 17808
-   i32.const 17856
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -199,8 +199,8 @@
    local.get $0
    return
   end
-  i32.const 17808
-  i32.const 17856
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -299,8 +299,8 @@
    local.get $0
    return
   end
-  i32.const 17808
-  i32.const 17856
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -359,8 +359,8 @@
    local.get $0
    return
   end
-  i32.const 17808
-  i32.const 17856
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -383,7 +383,7 @@
     local.get $0
     i32.store $0
     local.get $1
-    i32.const 8
+    i32.const 12
     i32.sub
     global.set $~lib/memory/__stack_pointer
     global.get $~lib/memory/__stack_pointer
@@ -394,6 +394,9 @@
     local.tee $1
     i64.const 0
     i64.store $0
+    local.get $1
+    i32.const 0
+    i32.store $0 offset=8
     local.get $0
     i32.eqz
     br_if $folding-inner1
@@ -412,12 +415,12 @@
     local.get $0
     i32.load $0
     local.tee $0
-    i32.store $0 offset=4
+    i32.store $0 offset=8
     local.get $0
     i32.eqz
     br_if $folding-inner1
     global.get $~lib/memory/__stack_pointer
-    i32.const 8
+    i32.const 12
     i32.add
     global.set $~lib/memory/__stack_pointer
     global.get $~lib/memory/__stack_pointer
@@ -427,8 +430,8 @@
     local.get $0
     return
    end
-   i32.const 17808
-   i32.const 17856
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -458,7 +461,7 @@
     local.get $0
     i32.store $0
     local.get $1
-    i32.const 8
+    i32.const 12
     i32.sub
     global.set $~lib/memory/__stack_pointer
     global.get $~lib/memory/__stack_pointer
@@ -469,6 +472,9 @@
     local.tee $1
     i64.const 0
     i64.store $0
+    local.get $1
+    i32.const 0
+    i32.store $0 offset=8
     local.get $0
     i32.eqz
     br_if $folding-inner1
@@ -487,12 +493,12 @@
     local.get $0
     i32.load $0
     local.tee $0
-    i32.store $0 offset=4
+    i32.store $0 offset=8
     local.get $0
     i32.eqz
     br_if $folding-inner1
     global.get $~lib/memory/__stack_pointer
-    i32.const 8
+    i32.const 12
     i32.add
     global.set $~lib/memory/__stack_pointer
     global.get $~lib/memory/__stack_pointer
@@ -502,8 +508,8 @@
     local.get $0
     return
    end
-   i32.const 17808
-   i32.const 17856
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -525,8 +531,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 17808
-   i32.const 17856
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -587,8 +593,8 @@
    drop
    unreachable
   end
-  i32.const 17808
-  i32.const 17856
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -626,8 +632,8 @@
    drop
    unreachable
   end
-  i32.const 17808
-  i32.const 17856
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -642,8 +648,8 @@
   i32.const 1404
   i32.lt_s
   if
-   i32.const 17808
-   i32.const 17856
+   i32.const 34192
+   i32.const 34240
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -692,8 +698,8 @@
    drop
    unreachable
   end
-  i32.const 17808
-  i32.const 17856
+  i32.const 34192
+  i32.const 34240
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort

@@ -1,6 +1,6 @@
 /** @module std/portable *//***/
 
-var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
+let globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 if (typeof globalScope.ASC_TARGET === "undefined") {
 
   globalScope.ASC_TARGET = 0; // Target.JS
@@ -15,8 +15,8 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   globalScope.ASC_FEATURE_SIMD = false;
   globalScope.ASC_FEATURE_THREADS = false;
 
-  var F64 = new Float64Array(1);
-  var U64 = new Uint32Array(F64.buffer);
+  let F64 = new Float64Array(1);
+  let U64 = new Uint32Array(F64.buffer);
 
   Object.defineProperties(
     globalScope["i8"] = function i8(value) { return value << 24 >> 24; },
@@ -159,8 +159,8 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   };
 
   globalScope["bswap"] = function bswap(value) {
-    var a = value >> 8 & 0x00FF00FF;
-    var b = (value & 0x00FF00FF) << 8;
+    let a = value >> 8 & 0x00FF00FF;
+    let b = (value & 0x00FF00FF) << 8;
     value = a | b;
     a = value >> 16 & 0x0000FFFF;
     b = (value & 0x0000FFFF) << 16;
@@ -250,7 +250,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   if (!String.prototype.replaceAll) {
     Object.defineProperty(String.prototype, "replaceAll", {
       value: function replaceAll(search, replacment) {
-        var res = this.split(search).join(replacment);
+        let res = this.split(search).join(replacment);
         if (!search.length) res = replacment + res + replacment;
         return res;
       },
@@ -263,7 +263,7 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
       if (a != 0) return 0;
       a = 1 / a, b = 1 / b;
     } else {
-      var nanA = a != a, nanB = b != b;
+      let nanA = a != a, nanB = b != b;
       if (nanA | nanB) return nanA - nanB;
       if (a == null) a = String(a);
       if (b == null) b = String(b);

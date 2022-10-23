@@ -58,8 +58,8 @@ globalThis.i64_mul = function i64_mul(left, right) {
 };
 
 globalThis.i64_pow = function i64_pow(left, right) {
-  var rightLo = right.low;
-  var rightHi = right.high;
+  let rightLo = right.low;
+  let rightHi = right.high;
   if (rightHi <= 0) {
     if (rightHi < 0) {
       if (left.eq(globalThis.i64_neg_one)) {
@@ -71,7 +71,7 @@ globalThis.i64_pow = function i64_pow(left, right) {
     if (rightLo == 1) return left;
     if (rightLo == 2) return left.mul(left);
   }
-  var result = Long.ONE;
+  let result = Long.ONE;
   while (rightLo | rightHi) {
     if (rightLo & 1) result = result.mul(left);
     right = right.shru(1);
@@ -164,7 +164,7 @@ globalThis.i64_lt_u = function i64_lt_u(left, right) {
 
 globalThis.i64_align = function i64_align(value, alignment) {
   assert(alignment && (alignment & (alignment - 1)) == 0);
-  var mask = Long.fromInt(alignment - 1);
+  let mask = Long.fromInt(alignment - 1);
   return value.add(mask).and(mask.not());
 };
 

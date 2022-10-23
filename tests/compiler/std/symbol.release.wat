@@ -30,7 +30,7 @@
  (global $std/symbol/key3 (mut i32) (i32.const 0))
  (global $std/symbol/key4 (mut i32) (i32.const 0))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19084))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 35468))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
@@ -217,7 +217,7 @@
     i32.load $0 offset=8
     i32.eqz
     local.get $0
-    i32.const 19084
+    i32.const 35468
     i32.lt_u
     i32.and
     i32.eqz
@@ -845,10 +845,10 @@
   if
    unreachable
   end
-  i32.const 19088
+  i32.const 35472
   i32.const 0
   i32.store $0
-  i32.const 20656
+  i32.const 37040
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -859,7 +859,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 19088
+    i32.const 35472
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -877,7 +877,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 19088
+      i32.const 35472
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -895,13 +895,13 @@
     br $for-loop|0
    end
   end
-  i32.const 19088
-  i32.const 20660
+  i32.const 35472
+  i32.const 37044
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 19088
+  i32.const 35472
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
@@ -986,7 +986,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 19084
+      i32.const 35468
       i32.lt_u
       if
        local.get $0
@@ -1086,7 +1086,7 @@
      unreachable
     end
     local.get $0
-    i32.const 19084
+    i32.const 35468
     i32.lt_u
     if
      local.get $0
@@ -1109,7 +1109,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 19084
+     i32.const 35468
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -2004,8 +2004,8 @@
   i32.const 2700
   i32.lt_s
   if
-   i32.const 19104
-   i32.const 19152
+   i32.const 35488
+   i32.const 35536
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2214,8 +2214,8 @@
   i32.const 2700
   i32.lt_s
   if
-   i32.const 19104
-   i32.const 19152
+   i32.const 35488
+   i32.const 35536
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3045,8 +3045,8 @@
    local.get $3
    return
   end
-  i32.const 19104
-  i32.const 19152
+  i32.const 35488
+  i32.const 35536
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -3063,8 +3063,8 @@
   i32.const 2700
   i32.lt_s
   if
-   i32.const 19104
-   i32.const 19152
+   i32.const 35488
+   i32.const 35536
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3179,8 +3179,8 @@
   i32.const 2700
   i32.lt_s
   if
-   i32.const 19104
-   i32.const 19152
+   i32.const 35488
+   i32.const 35536
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3410,15 +3410,15 @@
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 16
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 2700
   i32.lt_s
   if
-   i32.const 19104
-   i32.const 19152
+   i32.const 35488
+   i32.const 35536
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3429,8 +3429,8 @@
   i64.const 0
   i64.store $0
   local.get $0
-  i32.const 0
-  i32.store $0 offset=8
+  i64.const 0
+  i64.store $0 offset=8
   local.get $0
   i32.const 1056
   i32.store $0
@@ -3475,7 +3475,7 @@
   memory.size $0
   i32.const 16
   i32.shl
-  i32.const 19084
+  i32.const 35468
   i32.sub
   i32.const 1
   i32.shr_u
@@ -3584,7 +3584,7 @@
   global.get $std/symbol/sym4
   call $~lib/symbol/_Symbol.keyFor
   local.tee $0
-  i32.store $0 offset=4
+  i32.store $0 offset=8
   local.get $0
   i32.eqz
   if
@@ -3604,7 +3604,7 @@
   i32.store $0
   local.get $0
   i32.const 1056
-  i32.store $0 offset=8
+  i32.store $0 offset=12
   local.get $1
   i32.const 1056
   call $~lib/string/String.__eq
@@ -3625,7 +3625,7 @@
   local.get $0
   global.get $std/symbol/key4
   local.tee $0
-  i32.store $0 offset=8
+  i32.store $0 offset=12
   local.get $1
   local.get $0
   call $~lib/string/String.__eq
@@ -3657,7 +3657,7 @@
   i32.store $0
   local.get $1
   i32.const 2432
-  i32.store $0 offset=8
+  i32.store $0 offset=12
   local.get $0
   i32.const 2432
   call $~lib/string/String.__eq
@@ -3679,7 +3679,7 @@
   i32.store $0
   local.get $1
   i32.const 2480
-  i32.store $0 offset=8
+  i32.store $0 offset=12
   local.get $0
   i32.const 2480
   call $~lib/string/String.__eq
@@ -3703,7 +3703,7 @@
   i32.store $0
   local.get $1
   i32.const 2528
-  i32.store $0 offset=8
+  i32.store $0 offset=12
   local.get $0
   i32.const 2528
   call $~lib/string/String.__eq
@@ -3725,7 +3725,7 @@
   i32.store $0
   local.get $1
   i32.const 2592
-  i32.store $0 offset=8
+  i32.store $0 offset=12
   local.get $0
   i32.const 2592
   call $~lib/string/String.__eq
@@ -3739,7 +3739,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 16
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -3752,8 +3752,8 @@
   i32.const 2700
   i32.lt_s
   if
-   i32.const 19104
-   i32.const 19152
+   i32.const 35488
+   i32.const 35536
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

@@ -95,7 +95,7 @@ function i64_pow(left: i64, right: i64): i64 {
   }
   if (right == 1) return left;
   if (right == 2) return left * left;
-  var result: i64 = 1;
+  let result: i64 = 1;
   while (right) {
     if (right & 1) result *= left;
     right >>>= 1;
@@ -227,7 +227,7 @@ function i64_lt_u(left: i64, right: i64): bool {
 // @ts-ignore: decorator
 @global @inline
 function i64_align(value: i64, alignment: i64): i64 {
-  var mask: i64 = alignment - 1;
+  let mask: i64 = alignment - 1;
   assert(alignment && (alignment & mask) == 0);
   return (value + mask) & ~mask;
 }

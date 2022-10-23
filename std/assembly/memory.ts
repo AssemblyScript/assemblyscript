@@ -46,8 +46,8 @@ export namespace memory {
   // @ts-ignore: decorator
   @unsafe
   export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void {
-    var index: usize = 0;
-    var total = srcLength * count;
+    let index: usize = 0;
+    let total = srcLength * count;
     while (index < total) {
       memory.copy(dst + index, src, srcLength);
       index += srcLength;
@@ -73,7 +73,7 @@ export declare const __data_end: usize;
 
 // @ts-ignore: decorator
 @builtin
-export declare var __stack_pointer: usize;
+export declare let __stack_pointer: usize;
 
 // @ts-ignore: decorator
 @builtin

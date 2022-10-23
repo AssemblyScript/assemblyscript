@@ -12,8 +12,8 @@
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $NonNullable/z (mut i32) (i32.const 224))
  (global $~lib/memory/__data_end i32 (i32.const 300))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16684))
- (global $~lib/memory/__heap_base i32 (i32.const 16684))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33068))
+ (global $~lib/memory/__heap_base i32 (i32.const 33068))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00u\003\002\00\00\00\00\00\00\00")
  (data (i32.const 44) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00N\00o\00n\00N\00u\00l\00l\00a\00b\00l\00e\00.\00t\00s\00")
@@ -36,7 +36,8 @@
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
-  (local $var$7 i32)
+  (local $7 i32)
+  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -102,13 +103,13 @@
   end
   loop $while-continue|1
    local.get $len
-   local.tee $var$7
+   local.tee $7
    i32.const 1
    i32.sub
    local.set $len
-   local.get $var$7
-   local.set $var$7
-   local.get $var$7
+   local.get $7
+   local.set $8
+   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -220,8 +221,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16704
-   i32.const 16752
+   i32.const 33088
+   i32.const 33136
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

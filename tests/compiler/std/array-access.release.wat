@@ -3,7 +3,7 @@
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17692))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34076))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
@@ -126,8 +126,8 @@
   i32.const 1308
   i32.lt_s
   if
-   i32.const 17712
-   i32.const 17760
+   i32.const 34096
+   i32.const 34144
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -234,8 +234,8 @@
    local.get $0
    return
   end
-  i32.const 17712
-  i32.const 17760
+  i32.const 34096
+  i32.const 34144
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -292,8 +292,8 @@
    local.get $0
    return
   end
-  i32.const 17712
-  i32.const 17760
+  i32.const 34096
+  i32.const 34144
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -349,8 +349,8 @@
    local.get $0
    return
   end
-  i32.const 17712
-  i32.const 17760
+  i32.const 34096
+  i32.const 34144
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -414,8 +414,8 @@
    local.get $0
    return
   end
-  i32.const 17712
-  i32.const 17760
+  i32.const 34096
+  i32.const 34144
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -482,8 +482,8 @@
    local.get $0
    return
   end
-  i32.const 17712
-  i32.const 17760
+  i32.const 34096
+  i32.const 34144
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort

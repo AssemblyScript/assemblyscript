@@ -22,13 +22,15 @@ import {
 } from "./types";
 
 import {
+  Program,
   Local,
   Function,
   Element,
   ElementKind,
   Field,
   Class,
-  TypedElement
+  TypedElement,
+  mangleInternalName
 } from "./program";
 
 import {
@@ -84,7 +86,6 @@ import {
 } from "./ast";
 
 import {
-  BitSet,
   cloneMap
 } from "./util";
 
@@ -195,19 +196,20 @@ export const enum ConditionKind {
 /** A control flow evaluator. */
 export class Flow {
 
-  /** Creates the parent flow of the specified function. */
-  static createParent(parentFunction: Function): Flow {
-    var flow = new Flow(parentFunction);
-    if (parentFunction.is(CommonFlags.Constructor)) {
+  /** Creates the default top-level flow of the specified function. */
+  static createDefault(targetFunction: Function): Flow {
+    let flow = new Flow(targetFunction);
+    if (targetFunction.is(CommonFlags.Constructor)) {
       flow.initThisFieldFlags();
     }
     return flow;
   }
 
-  /** Creates an inline flow within `parentFunction`. */
-  static createInline(parentFunction: Function, inlineFunction: Function): Flow {
-    var flow = new Flow(parentFunction);
-    flow.inlineFunction = inlineFunction;
+  /** Creates an inline flow, compiling `inlineFunction` into `targetFunction`. */
+  static createInline(targetFunction: Function, inlineFunction: Function): Flow {
+    // Note that `targetFunction` and `inlineFunction` can be the same function
+    // when it is inlined into itself.
+    let flow = new Flow(targetFunction, inlineFunction);
     flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${(inlineFunction.nextInlineId++)}`;
     if (inlineFunction.is(CommonFlags.Constructor)) {
       flow.initThisFieldFlags();
@@ -216,10 +218,13 @@ export class Flow {
   }
 
   private constructor(
-    /** Function this flow belongs to. */
-    public parentFunction: Function
+    /** Target function this flow generates code into. */
+    public targetFunction: Function,
+    /** Inline function this flow generates code from, if any. */
+    public inlineFunction: Function | null = null
   ) {
-    /* nop */
+    // Setup is performed above so inline ids and field flags are not reset
+    // when forking flows, which also uses the constructor.
   }
 
   /** Parent flow. */
@@ -238,8 +243,6 @@ export class Flow {
   localFlags: LocalFlags[] = [];
   /** Field flags on `this`. Constructors only. */
   thisFieldFlags: Map<Field,FieldFlags> | null = null;
-  /** Function being inlined, when inlining. */
-  inlineFunction: Function | null = null;
   /** The label we break to when encountering a return statement, when inlining. */
   inlineReturnLabel: string | null = null;
 
@@ -248,21 +251,30 @@ export class Flow {
     return this.inlineFunction != null;
   }
 
-  /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
-  get actualFunction(): Function {
-    var inlineFunction = this.inlineFunction;
+  /** Gets the source function being compiled. Differs from target when inlining. */
+  get sourceFunction(): Function {
+    // Obtaining the source function is useful when resolving elements relative
+    // to their source location. Note that the source function does not necessarily
+    // materialize in the binary, as it might be inlined. Code, locals, etc. must
+    // always be added to / maintained in the materializing target function instead.
+    let inlineFunction = this.inlineFunction;
     if (inlineFunction) return inlineFunction;
-    return this.parentFunction;
+    return this.targetFunction;
+  }
+
+  /** Gets the program this flow belongs to. */
+  get program(): Program {
+    return this.targetFunction.program;
   }
 
   /** Gets the current return type. */
   get returnType(): Type {
-    return this.actualFunction.signature.returnType;
+    return this.sourceFunction.signature.returnType;
   }
 
   /** Gets the current contextual type arguments. */
   get contextualTypeArguments(): Map<string,Type> | null {
-    return this.actualFunction.contextualTypeArguments;
+    return this.sourceFunction.contextualTypeArguments;
   }
 
   /** Tests if this flow has the specified flag or flags. */
@@ -296,7 +308,7 @@ export class Flow {
 
   /** Forks this flow to a child flow. */
   fork(resetBreakContext: bool = false): Flow {
-    var branch = new Flow(this.parentFunction);
+    let branch = new Flow(this.targetFunction, this.inlineFunction);
     branch.parent = this;
     branch.outer = this.outer;
     if (resetBreakContext) {
@@ -312,164 +324,36 @@ export class Flow {
       branch.breakLabel = this.breakLabel;
     }
     branch.localFlags = this.localFlags.slice();
-    if (this.actualFunction.is(CommonFlags.Constructor)) {
+    if (this.sourceFunction.is(CommonFlags.Constructor)) {
       let thisFieldFlags = assert(this.thisFieldFlags);
       branch.thisFieldFlags = cloneMap(thisFieldFlags);
     } else {
       assert(!this.thisFieldFlags);
     }
-    branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
     return branch;
   }
 
   /** Gets a free temporary local of the specified type. */
-  getTempLocal(type: Type, except: BitSet | null = null): Local {
-    var parentFunction = this.parentFunction;
-    var temps: Local[] | null;
-    switch (<u32>type.toRef()) {
-      case <u32>TypeRef.I32: { temps = parentFunction.tempI32s; break; }
-      case <u32>TypeRef.I64: { temps = parentFunction.tempI64s; break; }
-      case <u32>TypeRef.F32: { temps = parentFunction.tempF32s; break; }
-      case <u32>TypeRef.F64: { temps = parentFunction.tempF64s; break; }
-      case <u32>TypeRef.V128: { temps = parentFunction.tempV128s; break; }
-      case <u32>TypeRef.Funcref: { temps = parentFunction.tempFuncrefs; break; }
-      case <u32>TypeRef.Externref: { temps = parentFunction.tempExternrefs; break; }
-      case <u32>TypeRef.Anyref: { temps = parentFunction.tempAnyrefs; break; }
-      case <u32>TypeRef.Eqref: { temps = parentFunction.tempEqrefs; break; }
-      case <u32>TypeRef.I31ref: { temps = parentFunction.tempI31refs; break; }
-      case <u32>TypeRef.Dataref: { temps = parentFunction.tempDatarefs; break; }
-      case <u32>TypeRef.Arrayref: { temps = parentFunction.tempArrayrefs; break; }
-      default: throw new Error("concrete type expected");
-    }
-    var local: Local;
-    if (except) {
-      if (temps && temps.length > 0) {
-        for (let i = 0, k = temps.length; i < k; ++i) {
-          if (!except.has(temps[i].index)) {
-            local = temps[i];
-            let k = temps.length - 1;
-            while (i < k) unchecked(temps[i] = temps[i++ + 1]);
-            temps.length = k;
-            local.type = type;
-            local.flags = CommonFlags.None;
-            this.unsetLocalFlag(local.index, ~0);
-            return local;
-          }
-        }
-      }
-      local = parentFunction.addLocal(type);
-    } else {
-      if (temps && temps.length > 0) {
-        local = assert(temps.pop());
-        local.type = type;
-        local.flags = CommonFlags.None;
-      } else {
-        local = parentFunction.addLocal(type);
-      }
-    }
+  getTempLocal(type: Type): Local {
+    let local = this.targetFunction.addLocal(type);
     this.unsetLocalFlag(local.index, ~0);
     return local;
   }
 
-  /** Frees the temporary local for reuse. */
-  freeTempLocal(local: Local): void {
-    if (local.is(CommonFlags.Inlined)) return;
-    assert(local.index >= 0);
-    var parentFunction = this.parentFunction;
-    var temps: Local[];
-    assert(local.type != null); // internal error
-    local.resetTemporaryName();
-    switch (<u32>local.type.toRef()) {
-      case <u32>TypeRef.I32: {
-        let tempI32s = parentFunction.tempI32s;
-        if (tempI32s) temps = tempI32s;
-        else parentFunction.tempI32s = temps = [];
-        break;
-      }
-      case <u32>TypeRef.I64: {
-        let tempI64s = parentFunction.tempI64s;
-        if (tempI64s) temps = tempI64s;
-        else parentFunction.tempI64s = temps = [];
-        break;
-      }
-      case <u32>TypeRef.F32: {
-        let tempF32s = parentFunction.tempF32s;
-        if (tempF32s) temps = tempF32s;
-        else parentFunction.tempF32s = temps = [];
-        break;
-      }
-      case <u32>TypeRef.F64: {
-        let tempF64s = parentFunction.tempF64s;
-        if (tempF64s) temps = tempF64s;
-        else parentFunction.tempF64s = temps = [];
-        break;
-      }
-      case <u32>TypeRef.V128: {
-        let tempV128s = parentFunction.tempV128s;
-        if (tempV128s) temps = tempV128s;
-        else parentFunction.tempV128s = temps = [];
-        break;
-      }
-      case <u32>TypeRef.Funcref: {
-        let tempFuncrefs = parentFunction.tempFuncrefs;
-        if (tempFuncrefs) temps = tempFuncrefs;
-        else parentFunction.tempFuncrefs = temps = [];
-        break;
-      }
-      case <u32>TypeRef.Externref: {
-        let tempExternrefs = parentFunction.tempExternrefs;
-        if (tempExternrefs) temps = tempExternrefs;
-        else parentFunction.tempExternrefs = temps = [];
-        break;
-      }
-      case <u32>TypeRef.Anyref: {
-        let tempAnyrefs = parentFunction.tempAnyrefs;
-        if (tempAnyrefs) temps = tempAnyrefs;
-        else parentFunction.tempAnyrefs = temps = [];
-        break;
-      }
-      case <u32>TypeRef.Eqref: {
-        let tempEqrefs = parentFunction.tempEqrefs;
-        if (tempEqrefs) temps = tempEqrefs;
-        else parentFunction.tempEqrefs = temps = [];
-        break;
-      }
-      case <u32>TypeRef.I31ref: {
-        let tempI31refs = parentFunction.tempI31refs;
-        if (tempI31refs) temps = tempI31refs;
-        else parentFunction.tempI31refs = temps = [];
-        break;
-      }
-      case <u32>TypeRef.Dataref: {
-        let tempDatarefs = parentFunction.tempDatarefs;
-        if (tempDatarefs) temps = tempDatarefs;
-        else parentFunction.tempDatarefs = temps = [];
-        break;
-      }
-      case <u32>TypeRef.Arrayref: {
-        let tempArrayrefs = parentFunction.tempArrayrefs;
-        if (tempArrayrefs) temps = tempArrayrefs;
-        else parentFunction.tempArrayrefs = temps = [];
-        break;
-      }
-      default: throw new Error("concrete type expected");
-    }
-    temps.push(local);
-  }
-
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
-    var scopedLocals = this.scopedLocals;
+    let scopedLocals = this.scopedLocals;
     if (scopedLocals && scopedLocals.has(name)) return assert(scopedLocals.get(name));
     return null;
   }
 
   /** Adds a new scoped local of the specified name. */
-  addScopedLocal(name: string, type: Type, except: BitSet | null = null): Local {
-    var scopedLocal = this.getTempLocal(type, except);
-    scopedLocal.setTemporaryName(name);
-    var scopedLocals = this.scopedLocals;
+  addScopedLocal(name: string, type: Type): Local {
+    let scopedLocal = this.getTempLocal(type);
+    scopedLocal.name = name;
+    scopedLocal.internalName = mangleInternalName(name, scopedLocal.parent, false);
+    let scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else assert(!scopedLocals.has(name));
     scopedLocal.set(CommonFlags.Scoped);
@@ -479,11 +363,11 @@ export class Flow {
 
   /** Adds a new scoped dummy local of the specified name. */
   addScopedDummyLocal(name: string, type: Type, declarationNode: Node): Local {
-    var scopedDummy = new Local(name, -1, type, this.parentFunction);
-    var scopedLocals = this.scopedLocals;
+    let scopedDummy = new Local(name, -1, type, this.targetFunction);
+    let scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else if (scopedLocals.has(name)) {
-      this.parentFunction.program.error(
+      this.program.error(
         DiagnosticCode.Cannot_redeclare_block_scoped_variable_0,
         declarationNode.range, name
       );
@@ -495,21 +379,21 @@ export class Flow {
 
   /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
   addScopedAlias(name: string, type: Type, index: i32, reportNode: Node | null = null): Local {
-    var scopedLocals = this.scopedLocals;
+    let scopedLocals = this.scopedLocals;
     if (!scopedLocals) {
       this.scopedLocals = scopedLocals = new Map();
     } else if (scopedLocals.has(name)) {
       let existingLocal = assert(scopedLocals.get(name));
       if (reportNode) {
         if (!existingLocal.declaration.range.source.isNative) {
-          this.parentFunction.program.errorRelated(
+          this.program.errorRelated(
             DiagnosticCode.Duplicate_identifier_0,
             reportNode.range,
             existingLocal.declaration.name.range,
             name
           );
         } else {
-          this.parentFunction.program.error(
+          this.program.error(
             DiagnosticCode.Duplicate_identifier_0,
             reportNode.range, name
           );
@@ -517,111 +401,79 @@ export class Flow {
       }
       return existingLocal;
     }
-    assert(index < this.parentFunction.localsByIndex.length);
-    var scopedAlias = new Local(name, index, type, this.parentFunction);
-    // not flagged as SCOPED as it must not be free'd when the flow is finalized
+    assert(index < this.targetFunction.localsByIndex.length);
+    let scopedAlias = new Local(name, index, type, this.targetFunction);
+    scopedAlias.set(CommonFlags.Scoped);
     scopedLocals.set(name, scopedAlias);
     return scopedAlias;
   }
 
-  /** Tests if this flow has any scoped locals that must be free'd. */
-  get hasScopedLocals(): bool {
-    var scopedLocals = this.scopedLocals;
-    if (scopedLocals) {
-      // TODO: for (let local of scopedLocals.values()) {
-      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
-        let local = unchecked(_values[i]);
-        if (local.is(CommonFlags.Scoped)) { // otherwise an alias
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   /** Frees a single scoped local by its name. */
   freeScopedDummyLocal(name: string): void {
-    var scopedLocals = assert(this.scopedLocals);
+    let scopedLocals = assert(this.scopedLocals);
     assert(scopedLocals.has(name));
     let local = assert(scopedLocals.get(name));
     assert(local.index == -1);
     scopedLocals.delete(name);
   }
 
-  /** Frees this flow's scoped variables and returns its parent flow. */
-  freeScopedLocals(): void {
-    var scopedLocals = this.scopedLocals;
-    if (scopedLocals) {
-      // TODO: for (let local of scopedLocals.values()) {
-      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
-        let local = unchecked(_values[i]);
-        if (local.is(CommonFlags.Scoped)) { // otherwise an alias
-          this.freeTempLocal(local);
-        }
-      }
-      this.scopedLocals = null;
-    }
-  }
-
   /** Looks up the local of the specified name in the current scope. */
   lookupLocal(name: string): Local | null {
-    var current: Flow | null = this;
+    let current: Flow | null = this;
     do {
       let scope = current.scopedLocals;
       if (scope && scope.has(name)) return assert(scope.get(name));
       current = current.parent;
     } while (current);
-    var localsByName = this.parentFunction.localsByName;
-    if (localsByName.has(name)) return assert(localsByName.get(name));
     return null;
   }
 
   /** Looks up the element with the specified name relative to the scope of this flow. */
   lookup(name: string): Element | null {
-    var element = this.lookupLocal(name);
+    let element = this.lookupLocal(name);
     if (element) return element;
-    return this.actualFunction.lookup(name);
+    return this.sourceFunction.lookup(name);
   }
 
   /** Tests if the local at the specified index has the specified flag or flags. */
   isLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
-    var localFlags = this.localFlags;
+    let localFlags = this.localFlags;
     return index < localFlags.length && (unchecked(localFlags[index]) & flag) == flag;
   }
 
   /** Tests if the local at the specified index has any of the specified flags. */
   isAnyLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
-    var localFlags = this.localFlags;
+    let localFlags = this.localFlags;
     return index < localFlags.length && (unchecked(localFlags[index]) & flag) != 0;
   }
 
   /** Sets the specified flag or flags on the local at the specified index. */
   setLocalFlag(index: i32, flag: LocalFlags): void {
     if (index < 0) return;
-    var localFlags = this.localFlags;
-    var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
+    let localFlags = this.localFlags;
+    let flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
     localFlags[index] = flags | flag;
   }
 
   /** Unsets the specified flag or flags on the local at the specified index. */
   unsetLocalFlag(index: i32, flag: LocalFlags): void {
     if (index < 0) return;
-    var localFlags = this.localFlags;
-    var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
+    let localFlags = this.localFlags;
+    let flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
     localFlags[index] = flags & ~flag;
   }
 
   /** Initializes `this` field flags. */
   initThisFieldFlags(): void {
-    var actualFunction = this.actualFunction;
-    assert(actualFunction.is(CommonFlags.Constructor));
-    var actualParent = actualFunction.parent;
-    assert(actualParent.kind == ElementKind.Class);
-    var actualClass = <Class>actualParent;
+    let sourceFunction = this.sourceFunction;
+    assert(sourceFunction.is(CommonFlags.Constructor));
+    let parent = sourceFunction.parent;
+    assert(parent.kind == ElementKind.Class);
+    let classInstance = <Class>parent;
     this.thisFieldFlags = new Map();
-    var members = actualClass.members;
+    let members = classInstance.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
@@ -629,7 +481,7 @@ export class Flow {
           let field = <Field>member;
           if (
             // guaranteed by super
-            field.parent != actualClass ||
+            field.parent != classInstance ||
             // has field initializer
             field.initializerNode ||
             // is initialized as a ctor parameter
@@ -646,7 +498,7 @@ export class Flow {
 
   /** Tests if the specified `this` field has the specified flag or flags. */
   isThisFieldFlag(field: Field, flag: FieldFlags): bool {
-    var fieldFlags = this.thisFieldFlags;
+    let fieldFlags = this.thisFieldFlags;
     if (fieldFlags != null && fieldFlags.has(field)) {
       return (changetype<FieldFlags>(fieldFlags.get(field)) & flag) == flag;
     }
@@ -655,9 +507,9 @@ export class Flow {
 
   /** Sets the specified flag or flags on the given `this` field. */
   setThisFieldFlag(field: Field, flag: FieldFlags): void {
-    var fieldFlags = this.thisFieldFlags;
+    let fieldFlags = this.thisFieldFlags;
     if (fieldFlags) {
-      assert(this.actualFunction.is(CommonFlags.Constructor));
+      assert(this.sourceFunction.is(CommonFlags.Constructor));
       if (fieldFlags.has(field)) {
         let flags = changetype<FieldFlags>(fieldFlags.get(field));
         fieldFlags.set(field, flags | flag);
@@ -665,41 +517,41 @@ export class Flow {
         fieldFlags.set(field, flag);
       }
     } else {
-      assert(!this.actualFunction.is(CommonFlags.Constructor));
+      assert(!this.sourceFunction.is(CommonFlags.Constructor));
     }
   }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
   pushBreakLabel(): string {
-    var parentFunction = this.parentFunction;
-    var id = parentFunction.nextBreakId++;
-    var stack = parentFunction.breakStack;
-    if (!stack) parentFunction.breakStack = [ id ];
+    let targetFunction = this.targetFunction;
+    let id = targetFunction.nextBreakId++;
+    let stack = targetFunction.breakStack;
+    if (!stack) targetFunction.breakStack = [ id ];
     else stack.push(id);
-    var label = id.toString();
-    parentFunction.breakLabel = label;
+    let label = id.toString();
+    targetFunction.breakLabel = label;
     return label;
   }
 
   /** Pops the most recent break label from the stack. */
   popBreakLabel(): void {
-    var parentFunction = this.parentFunction;
-    var stack = assert(parentFunction.breakStack);
-    var length = assert(stack.length);
+    let targetFunction = this.targetFunction;
+    let stack = assert(targetFunction.breakStack);
+    let length = assert(stack.length);
     stack.pop();
     if (length > 1) {
-      parentFunction.breakLabel = stack[length - 2].toString();
+      targetFunction.breakLabel = stack[length - 2].toString();
     } else {
-      parentFunction.breakLabel = null;
-      parentFunction.breakStack = null;
+      targetFunction.breakLabel = null;
+      targetFunction.breakStack = null;
     }
   }
 
   /** Inherits flags of another flow into this one, i.e. a finished inner block. */
   inherit(other: Flow): void {
-    assert(other.parentFunction == this.parentFunction);
+    assert(other.targetFunction == this.targetFunction);
     assert(other.parent == this); // currently the case, but might change
-    var otherFlags = other.flags;
+    let otherFlags = other.flags;
 
     // respective inner flags are irrelevant if contexts differ
     if (this.breakLabel != other.breakLabel) {
@@ -719,7 +571,7 @@ export class Flow {
 
   /** Inherits flags of a conditional branch joining again with this one, i.e. then without else. */
   inheritBranch(other: Flow, conditionKind: ConditionKind = ConditionKind.Unknown): void {
-    assert(other.parentFunction == this.parentFunction);
+    assert(other.targetFunction == this.targetFunction);
     switch (conditionKind) {
       case ConditionKind.True: this.inherit(other); // always executes
       case ConditionKind.False: return;             // never executes
@@ -730,9 +582,9 @@ export class Flow {
     // but an allocation, which doesn't terminate, can become conditional. Not
     // all flags have a corresponding conditional flag that's tracked.
 
-    var thisFlags = this.flags;
-    var otherFlags = other.flags;
-    var newFlags = FlowFlags.None;
+    let thisFlags = this.flags;
+    let otherFlags = other.flags;
+    let newFlags = FlowFlags.None;
 
     if (thisFlags & FlowFlags.Returns) { // nothing can change that
       newFlags |= FlowFlags.Returns;
@@ -801,11 +653,11 @@ export class Flow {
     this.flags = newFlags | (thisFlags & (FlowFlags.UncheckedContext | FlowFlags.CtorParamContext));
 
     // local flags
-    var thisLocalFlags = this.localFlags;
-    var numThisLocalFlags = thisLocalFlags.length;
-    var otherLocalFlags = other.localFlags;
-    var numOtherLocalFlags = otherLocalFlags.length;
-    var maxLocalFlags = max(numThisLocalFlags, numOtherLocalFlags);
+    let thisLocalFlags = this.localFlags;
+    let numThisLocalFlags = thisLocalFlags.length;
+    let otherLocalFlags = other.localFlags;
+    let numOtherLocalFlags = otherLocalFlags.length;
+    let maxLocalFlags = max(numThisLocalFlags, numOtherLocalFlags);
     for (let i = 0; i < maxLocalFlags; ++i) {
       let thisFlags = i < numThisLocalFlags ? thisLocalFlags[i] : 0;
       let otherFlags = i < numOtherLocalFlags ? otherLocalFlags[i] : 0;
@@ -823,14 +675,14 @@ export class Flow {
 
   /** Inherits mutual flags of two alternate branches becoming this one, i.e. then with else. */
   inheritMutual(left: Flow, right: Flow): void {
-    assert(left.parentFunction == right.parentFunction);
-    assert(left.parentFunction == this.parentFunction);
+    assert(left.targetFunction == right.targetFunction);
+    assert(left.targetFunction == this.targetFunction);
     // This differs from the previous method in that no flags are guaranteed
     // to happen unless it is the case in both flows.
 
-    var leftFlags = left.flags;
-    var rightFlags = right.flags;
-    var newFlags = FlowFlags.None;
+    let leftFlags = left.flags;
+    let rightFlags = right.flags;
+    let newFlags = FlowFlags.None;
 
     if (leftFlags & FlowFlags.Returns) {
       if (rightFlags & FlowFlags.Returns) {
@@ -913,7 +765,7 @@ export class Flow {
     this.flags = newFlags | (this.flags & (FlowFlags.UncheckedContext | FlowFlags.CtorParamContext));
 
     // local flags
-    var thisLocalFlags = this.localFlags;
+    let thisLocalFlags = this.localFlags;
     if (leftFlags & FlowFlags.Terminates) {
       if (!(rightFlags & FlowFlags.Terminates)) {
         let rightLocalFlags = right.localFlags;
@@ -945,7 +797,7 @@ export class Flow {
     }
 
     // field flags (currently only INITIALIZED, so can simplify)
-    var leftFieldFlags = left.thisFieldFlags;
+    let leftFieldFlags = left.thisFieldFlags;
     if (leftFieldFlags) {
       let newFieldFlags = new Map<Field,FieldFlags>();
       let rightFieldFlags = assert(right.thisFieldFlags);
@@ -965,43 +817,45 @@ export class Flow {
     }
   }
 
-  /** Tests if the specified flows have differing local states. */
-  static hasIncompatibleLocalStates(before: Flow, after: Flow): bool {
-    var numThisLocalFlags = before.localFlags.length;
-    var numOtherLocalFlags = after.localFlags.length;
-    var parentFunction = before.parentFunction;
-    assert(parentFunction == after.parentFunction);
-    var localsByIndex = parentFunction.localsByIndex;
-    assert(localsByIndex == after.parentFunction.localsByIndex);
+  /** Tests if recompilation is needed due to incompatible local flags between loops, and resets if necessary. */
+  resetIfNeedsRecompile(
+    /** Resulting flow of the current compilation attempt. */
+    other: Flow,
+    /** Number of locals before the compilation attempt. */
+    numLocalsBefore: i32
+  ): bool {
+    let numThisLocalFlags = this.localFlags.length;
+    let numOtherLocalFlags = other.localFlags.length;
+    let targetFunction = this.targetFunction;
+    assert(targetFunction == other.targetFunction);
+    let localsByIndex = targetFunction.localsByIndex;
+    assert(localsByIndex == other.targetFunction.localsByIndex);
+    let needsRecompile = false;
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       let local = localsByIndex[i];
       let type = local.type;
       if (type.isShortIntegerValue) {
-        if (before.isLocalFlag(i, LocalFlags.Wrapped) && !after.isLocalFlag(i, LocalFlags.Wrapped)) {
-          return true;
+        if (this.isLocalFlag(i, LocalFlags.Wrapped) && !other.isLocalFlag(i, LocalFlags.Wrapped)) {
+          this.unsetLocalFlag(i, LocalFlags.Wrapped); // assume not wrapped
+          needsRecompile = true;
         }
       }
       if (type.isNullableReference) {
-        if (before.isLocalFlag(i, LocalFlags.NonNull) && !after.isLocalFlag(i, LocalFlags.NonNull)) {
-          return true;
+        if (this.isLocalFlag(i, LocalFlags.NonNull) && !other.isLocalFlag(i, LocalFlags.NonNull)) {
+          this.unsetLocalFlag(i, LocalFlags.NonNull); // assume possibly null
+          needsRecompile = true;
         }
       }
     }
-    return false;
-  }
-
-  /** Unifies local flags between this and the other flow. */
-  unifyLocalFlags(other: Flow): void {
-    var numThisLocalFlags = this.localFlags.length;
-    var numOtherLocalFlags = other.localFlags.length;
-    for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
-      if (this.isLocalFlag(i, LocalFlags.Wrapped) != other.isLocalFlag(i, LocalFlags.Wrapped)) {
-        this.unsetLocalFlag(i, LocalFlags.Wrapped); // assume not wrapped
-      }
-      if (this.isLocalFlag(i, LocalFlags.NonNull) != other.isLocalFlag(i, LocalFlags.NonNull)) {
-        this.unsetLocalFlag(i, LocalFlags.NonNull); // assume possibly null
+    if (needsRecompile) {
+      // Reset function locals to state before the compilation attempt
+      assert(localsByIndex.length >= numLocalsBefore);
+      localsByIndex.length = numLocalsBefore;
+      if (this.localFlags.length > numLocalsBefore) {
+        this.localFlags.length = numLocalsBefore;
       }
     }
+    return needsRecompile;
   }
 
   /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
@@ -1013,11 +867,11 @@ export class Flow {
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
-        let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalSetIndex(expr)];
         return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NonNull, false);
       }
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalGetIndex(expr)];
         return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NonNull, false);
       }
     }
@@ -1044,7 +898,7 @@ export class Flow {
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
-        let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalSetIndex(expr)];
         if (!iff || iff.isLocalFlag(local.index, LocalFlags.NonNull)) {
           this.setLocalFlag(local.index, LocalFlags.NonNull);
         }
@@ -1052,7 +906,7 @@ export class Flow {
         break;
       }
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalGetIndex(expr)];
         if (!iff || iff.isLocalFlag(local.index, LocalFlags.NonNull)) {
           this.setLocalFlag(local.index, LocalFlags.NonNull);
         }
@@ -1241,12 +1095,12 @@ export class Flow {
     // types other than i8, u8, i16, u16 and bool do not overflow
     if (!type.isShortIntegerValue) return false;
 
-    var operand: ExpressionRef;
+    let operand: ExpressionRef;
     switch (getExpressionId(expr)) {
 
       // overflows if the local isn't wrapped or the conversion does
       case ExpressionId.LocalGet: {
-        let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
+        let local = this.targetFunction.localsByIndex[getLocalGetIndex(expr)];
         return !this.isLocalFlag(local.index, LocalFlags.Wrapped, true)
             || canConversionOverflow(local.type, type);
       }
@@ -1260,7 +1114,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
+        let global = assert(this.program.elementsByName.get(assert(getGlobalGetName(expr))));
         assert(global.kind == ElementKind.Global || global.kind == ElementKind.EnumValue);
         return canConversionOverflow((<TypedElement>global).type, type);
       }
@@ -1471,7 +1325,7 @@ export class Flow {
 
       // overflows if the call does not return a wrapped value or the conversion does
       case ExpressionId.Call: {
-        let program = this.parentFunction.program;
+        let program = this.program;
         let instancesByName = program.instancesByName;
         let instanceName = assert(getCallTarget(expr));
         if (instancesByName.has(instanceName)) {
@@ -1492,13 +1346,13 @@ export class Flow {
   }
 
   toString(): string {
-    var levels = 0;
-    var parent = this.parent;
+    let levels = 0;
+    let parent = this.parent;
     while (parent) {
       parent = parent.parent;
       ++levels;
     }
-    var sb = new Array<string>();
+    let sb = new Array<string>();
     if (this.is(FlowFlags.Returns)) sb.push("RETURNS");
     if (this.is(FlowFlags.ReturnsWrapped)) sb.push("RETURNS_WRAPPED");
     if (this.is(FlowFlags.ReturnsNonNull)) sb.push("RETURNS_NONNULL");
@@ -1514,7 +1368,7 @@ export class Flow {
     if (this.is(FlowFlags.ConditionallyContinues)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.ConditionallyAccessesThis)) sb.push("CONDITIONALLY_ACCESSES_THIS");
     if (this.is(FlowFlags.MayReturnNonThis)) sb.push("MAY_RETURN_NONTHIS");
-    return `Flow(${this.actualFunction})[${levels}] ${sb.join(" ")}`;
+    return `Flow(${this.sourceFunction})[${levels}] ${sb.join(" ")}`;
   }
 }
 
@@ -1526,5 +1380,3 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
     fromType.isSignedIntegerValue != toType.isSignedIntegerValue   // signedness mismatch
   );
 }
-
-export { findUsedLocals } from "./passes/findusedlocals";

@@ -3106,6 +3106,13 @@
      i32.const 2
      i32.and
      select
+     local.tee $0
+     f32.neg
+     local.get $0
+     local.get $2
+     i32.const 1
+     i32.and
+     select
     else
      f32.const 3.1415927410125732
      f32.const 0
@@ -3113,14 +3120,14 @@
      i32.const 2
      i32.and
      select
+     local.tee $0
+     f32.neg
+     local.get $0
+     local.get $2
+     i32.const 1
+     i32.and
+     select
     end
-    local.tee $0
-    f32.neg
-    local.get $0
-    local.get $2
-    i32.const 1
-    i32.and
-    select
     return
    end
    local.get $4
@@ -11953,9 +11960,9 @@
   (local $1 i32)
   (local $2 i64)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 f32)
-  (local $6 i64)
+  (local $4 f32)
+  (local $5 i64)
+  (local $6 i32)
   f64.const 2.718281828459045
   global.get $~lib/bindings/dom/Math.E
   f64.const 0
@@ -43847,20 +43854,20 @@
      call $~lib/math/NativeMath.seedRandom
     end
     global.get $~lib/math/random_state0_64
-    local.set $6
+    local.set $5
     global.get $~lib/math/random_state1_64
     local.tee $2
     global.set $~lib/math/random_state0_64
     local.get $2
-    local.get $6
-    local.get $6
+    local.get $5
+    local.get $5
     i64.const 23
     i64.shl
     i64.xor
-    local.tee $6
+    local.tee $5
     i64.const 17
     i64.shr_u
-    local.get $6
+    local.get $5
     i64.xor
     i64.xor
     local.get $2
@@ -43902,10 +43909,8 @@
   call $~lib/bindings/dom/Math.random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
-  i32.const 0
-  local.set $1
   loop $for-loop|1
-   local.get $1
+   local.get $3
    f64.convert_i32_s
    f64.const 1e6
    f64.lt
@@ -43918,24 +43923,24 @@
      call $~lib/math/NativeMath.seedRandom
     end
     global.get $~lib/math/random_state0_32
-    local.tee $4
+    local.tee $1
     global.get $~lib/math/random_state1_32
     i32.xor
-    local.tee $3
-    local.get $4
+    local.tee $6
+    local.get $1
     i32.const 26
     i32.rotl
     i32.xor
-    local.get $3
+    local.get $6
     i32.const 9
     i32.shl
     i32.xor
     global.set $~lib/math/random_state0_32
-    local.get $3
+    local.get $6
     i32.const 13
     i32.rotl
     global.set $~lib/math/random_state1_32
-    local.get $4
+    local.get $1
     i32.const -1640531525
     i32.mul
     i32.const 5
@@ -43949,10 +43954,10 @@
     f32.reinterpret_i32
     f32.const -1
     f32.add
-    local.tee $5
+    local.tee $4
     f32.const 1
     f32.lt
-    local.get $5
+    local.get $4
     f32.const 0
     f32.ge
     i32.and
@@ -43965,10 +43970,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $3
     i32.const 1
     i32.add
-    local.set $1
+    local.set $3
     br $for-loop|1
    end
   end

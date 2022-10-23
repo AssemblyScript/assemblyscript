@@ -30,7 +30,7 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $simd/vec (mut v128) (v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18012))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34396))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1052) "\10\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\04")
@@ -146,7 +146,7 @@
     i32.load $0 offset=8
     i32.eqz
     local.get $0
-    i32.const 18012
+    i32.const 34396
     i32.lt_u
     i32.and
     i32.eqz
@@ -774,10 +774,10 @@
   if
    unreachable
   end
-  i32.const 18016
+  i32.const 34400
   i32.const 0
   i32.store $0
-  i32.const 19584
+  i32.const 35968
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -788,7 +788,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 18016
+    i32.const 34400
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -806,7 +806,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 18016
+      i32.const 34400
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -824,20 +824,20 @@
     br $for-loop|0
    end
   end
-  i32.const 18016
-  i32.const 19588
+  i32.const 34400
+  i32.const 35972
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 18016
+  i32.const 34400
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/__free (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 18012
+  i32.const 34396
   i32.lt_u
   if
    return
@@ -967,7 +967,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 18012
+      i32.const 34396
       i32.lt_u
       if
        local.get $0
@@ -1067,7 +1067,7 @@
      unreachable
     end
     local.get $0
-    i32.const 18012
+    i32.const 34396
     i32.lt_u
     if
      local.get $0
@@ -1867,7 +1867,7 @@
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 18012
+   i32.const 34396
    i32.sub
    i32.const 1
    i32.shr_u
@@ -2184,8 +2184,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 18032
-  i32.const 18080
+  i32.const 34416
+  i32.const 34464
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort

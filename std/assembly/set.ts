@@ -81,7 +81,7 @@ export class Set<T> {
   }
 
   private find(key: T, hashCode: u32): SetEntry<T> | null {
-    var entry = load<SetEntry<T>>( // unmanaged!
+    let entry = load<SetEntry<T>>( // unmanaged!
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
@@ -98,8 +98,8 @@ export class Set<T> {
   }
 
   add(key: T): this {
-    var hashCode = HASH<T>(key);
-    var entry = this.find(key, hashCode); // unmanaged!
+    let hashCode = HASH<T>(key);
+    let entry = this.find(key, hashCode); // unmanaged!
     if (!entry) {
       // check if rehashing is necessary
       if (this.entriesOffset == this.entriesCapacity) {
@@ -131,12 +131,12 @@ export class Set<T> {
   }
 
   delete(key: T): bool {
-    var entry = this.find(key, HASH<T>(key)); // unmanaged!
+    let entry = this.find(key, HASH<T>(key)); // unmanaged!
     if (!entry) return false;
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate
-    var halfBucketsMask = this.bucketsMask >> 1;
+    let halfBucketsMask = this.bucketsMask >> 1;
     if (
       halfBucketsMask + 1 >= max<u32>(INITIAL_CAPACITY, this.entriesCount) &&
       this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
@@ -145,15 +145,15 @@ export class Set<T> {
   }
 
   private rehash(newBucketsMask: u32): void {
-    var newBucketsCapacity = <i32>(newBucketsMask + 1);
-    var newBuckets = new ArrayBuffer(newBucketsCapacity * <i32>BUCKET_SIZE);
-    var newEntriesCapacity = newBucketsCapacity * FILL_FACTOR_N / FILL_FACTOR_D;
-    var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<T>());
+    let newBucketsCapacity = <i32>(newBucketsMask + 1);
+    let newBuckets = new ArrayBuffer(newBucketsCapacity * <i32>BUCKET_SIZE);
+    let newEntriesCapacity = newBucketsCapacity * FILL_FACTOR_N / FILL_FACTOR_D;
+    let newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<T>());
 
     // copy old entries to new entries
-    var oldPtr = changetype<usize>(this.entries);
-    var oldEnd = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<T>();
-    var newPtr = changetype<usize>(newEntries);
+    let oldPtr = changetype<usize>(this.entries);
+    let oldEnd = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<T>();
+    let newPtr = changetype<usize>(newEntries);
     while (oldPtr != oldEnd) {
       let oldEntry = changetype<SetEntry<T>>(oldPtr); // unmanaged!
       if (!(oldEntry.taggedNext & EMPTY)) {
@@ -178,10 +178,10 @@ export class Set<T> {
 
   values(): T[] {
     // FIXME: this is preliminary, needs iterators/closures
-    var start = changetype<usize>(this.entries);
-    var size = this.entriesOffset;
-    var values = new Array<T>(size);
-    var length = 0;
+    let start = changetype<usize>(this.entries);
+    let size = this.entriesOffset;
+    let values = new Array<T>(size);
+    let length = 0;
     for (let i = 0; i < size; ++i) {
       let entry = changetype<SetEntry<T>>(start + <usize>i * ENTRY_SIZE<T>());
       if (!(entry.taggedNext & EMPTY)) {
@@ -200,7 +200,7 @@ export class Set<T> {
 
   @unsafe private __visit(cookie: u32): void {
     __visit(changetype<usize>(this.buckets), cookie);
-    var entries = changetype<usize>(this.entries);
+    let entries = changetype<usize>(this.entries);
     if (isManaged<T>()) {
       let cur = entries;
       let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<T>();

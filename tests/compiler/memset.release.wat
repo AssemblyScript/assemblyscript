@@ -209,9 +209,9 @@
   end
  )
  (func $~start (type $none_=>_none)
-  i32.const 17468
+  i32.const 33852
   global.set $memset/dest
-  i32.const 17468
+  i32.const 33852
   i32.const 1
   i32.const 16
   call $memset/memset

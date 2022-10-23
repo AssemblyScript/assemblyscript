@@ -11,8 +11,8 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/mod/js i32 (i32.const 1))
  (global $~lib/memory/__data_end i32 (i32.const 60))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
- (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32828))
+ (global $~lib/memory/__heap_base i32 (i32.const 32828))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
@@ -27,9 +27,9 @@
   (local $ey i64)
   (local $sx i64)
   (local $uy1 i64)
-  (local $var$8 f64)
+  (local $m f64)
   (local $ux1 i64)
-  (local $var$10 i32)
+  (local $10 i32)
   (local $shift i64)
   local.get $y
   f64.abs
@@ -91,9 +91,9 @@
    local.get $x
    local.get $y
    f64.mul
-   local.set $var$8
-   local.get $var$8
-   local.get $var$8
+   local.set $m
+   local.get $m
+   local.get $m
    f64.div
    return
   end
@@ -181,8 +181,8 @@
    local.get $ex
    local.get $ey
    i64.gt_s
-   local.set $var$10
-   local.get $var$10
+   local.set $10
+   local.get $10
    if
     local.get $ux
     local.get $uy
@@ -328,9 +328,9 @@
   (local $ey i32)
   (local $sm i32)
   (local $uy1 i32)
-  (local $var$8 f32)
+  (local $m f32)
   (local $ux1 i32)
-  (local $var$10 i32)
+  (local $10 i32)
   (local $shift i32)
   local.get $y
   f32.abs
@@ -392,9 +392,9 @@
    local.get $x
    local.get $y
    f32.mul
-   local.set $var$8
-   local.get $var$8
-   local.get $var$8
+   local.set $m
+   local.get $m
+   local.get $m
    f32.div
    return
   end
@@ -478,8 +478,8 @@
    local.get $ex
    local.get $ey
    i32.gt_s
-   local.set $var$10
-   local.get $var$10
+   local.set $10
+   local.get $10
    if
     local.get $ux
     local.get $uy

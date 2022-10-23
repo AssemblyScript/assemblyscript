@@ -1313,8 +1313,8 @@ export class Module {
   }
 
   static createFrom(buffer: Uint8Array, useShadowStack: bool, sizeType: TypeRef): Module {
-    var cArr = allocU8Array(buffer);
-    var module = new Module(binaryen._BinaryenModuleRead(cArr, buffer.length), useShadowStack, sizeType);
+    let cArr = allocU8Array(buffer);
+    let module = new Module(binaryen._BinaryenModuleRead(cArr, buffer.length), useShadowStack, sizeType);
     binaryen._free(changetype<usize>(cArr));
     return module;
   }
@@ -1322,13 +1322,13 @@ export class Module {
   // constants
 
   i32(value: i32): ExpressionRef {
-    var out = this.lit;
+    let out = this.lit;
     binaryen._BinaryenLiteralInt32(out, value);
     return binaryen._BinaryenConst(this.ref, out);
   }
 
   i64(valueLow: i32, valueHigh: i32 = 0): ExpressionRef {
-    var out = this.lit;
+    let out = this.lit;
     binaryen._BinaryenLiteralInt64(out, valueLow, valueHigh);
     return binaryen._BinaryenConst(this.ref, out);
   }
@@ -1360,20 +1360,20 @@ export class Module {
   }
 
   f32(value: f32): ExpressionRef {
-    var out = this.lit;
+    let out = this.lit;
     binaryen._BinaryenLiteralFloat32(out, value);
     return binaryen._BinaryenConst(this.ref, out);
   }
 
   f64(value: f64): ExpressionRef {
-    var out = this.lit;
+    let out = this.lit;
     binaryen._BinaryenLiteralFloat64(out, value);
     return binaryen._BinaryenConst(this.ref, out);
   }
 
   v128(bytes: Uint8Array): ExpressionRef {
     assert(bytes.length == 16);
-    var out = this.lit;
+    let out = this.lit;
     for (let i = 0; i < 16; ++i) {
       binaryen.__i32_store8(out + i, unchecked(bytes[i]));
     }
@@ -1460,22 +1460,22 @@ export class Module {
   }
 
   memory_size(name: string = CommonNames.DefaultMemory, is64: bool = false): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenMemorySize(this.ref, cStr, is64);
   }
 
   memory_grow(delta: ExpressionRef, name: string = CommonNames.DefaultMemory, is64: bool = false): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenMemoryGrow(this.ref, delta, cStr, is64);
   }
 
   table_size(name: string): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenTableSize(this.ref, cStr);
   }
 
   table_grow(name: string, delta: ExpressionRef, value: ExpressionRef = 0): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenTableGrow(this.ref, cStr, value, delta);
   }
 
@@ -1512,7 +1512,7 @@ export class Module {
     name: string,
     type: TypeRef
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenGlobalGet(this.ref, cStr, type);
   }
 
@@ -1521,7 +1521,7 @@ export class Module {
     index: ExpressionRef,
     type: TypeRef
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenTableGet(this.ref, cStr, index, type);
   }
 
@@ -1534,7 +1534,7 @@ export class Module {
     align: Index = bytes, // naturally aligned by default
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenLoad(this.ref, bytes, signed, offset, align, type, ptr, cStr);
   }
 
@@ -1547,7 +1547,7 @@ export class Module {
     align: Index = bytes, // naturally aligned by default
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenStore(this.ref, bytes, offset, align, ptr, value, type, cStr);
   }
 
@@ -1558,7 +1558,7 @@ export class Module {
     offset: Index = 0,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr, cStr);
   }
 
@@ -1570,7 +1570,7 @@ export class Module {
     offset: Index = 0,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type, cStr);
   }
 
@@ -1583,7 +1583,7 @@ export class Module {
     type: TypeRef,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type, cStr);
   }
 
@@ -1596,7 +1596,7 @@ export class Module {
     type: TypeRef,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type, cStr);
   }
 
@@ -1607,7 +1607,7 @@ export class Module {
     expectedType: TypeRef,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType, cStr);
   }
 
@@ -1616,12 +1616,12 @@ export class Module {
     notifyCount: ExpressionRef,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAtomicNotify(this.ref, ptr, notifyCount, cStr);
   }
 
   atomic_fence(name: string | null = null): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAtomicFence(this.ref, cStr);
   }
 
@@ -1642,7 +1642,7 @@ export class Module {
     name: string,
     value: ExpressionRef
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenGlobalSet(this.ref, cStr, value);
   }
 
@@ -1651,7 +1651,7 @@ export class Module {
     index: ExpressionRef,
     value: ExpressionRef
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenTableSet(this.ref, cStr, index, value);
   }
 
@@ -1660,9 +1660,9 @@ export class Module {
     children: ExpressionRef[],
     type: TypeRef = TypeRef.None
   ): ExpressionRef {
-    var cStr = this.allocStringCached(label);
-    var cArr = allocPtrArray(children);
-    var ret = binaryen._BinaryenBlock(this.ref, cStr, cArr, children.length, type);
+    let cStr = this.allocStringCached(label);
+    let cArr = allocPtrArray(children);
+    let ret = binaryen._BinaryenBlock(this.ref, cStr, cArr, children.length, type);
     binaryen._free(cArr);
     return ret;
   }
@@ -1672,7 +1672,7 @@ export class Module {
     stmts: ExpressionRef[],
     type: TypeRef = TypeRef.None
   ): ExpressionRef {
-    var length = stmts.length;
+    let length = stmts.length;
     if (length == 0) return this.nop(); // usually filtered out again
     if (length == 1) {
       let single = stmts[0];
@@ -1699,7 +1699,7 @@ export class Module {
     condition: ExpressionRef = 0,
     value: ExpressionRef = 0
   ): ExpressionRef {
-    var cStr = this.allocStringCached(label);
+    let cStr = this.allocStringCached(label);
     return binaryen._BinaryenBreak(this.ref, cStr, condition, value);
   }
 
@@ -1713,7 +1713,7 @@ export class Module {
   maybeDrop(
     expression: ExpressionRef
   ): ExpressionRef {
-    var type = binaryen._BinaryenExpressionGetType(expression);
+    let type = binaryen._BinaryenExpressionGetType(expression);
     if (type != TypeRef.None && type != TypeRef.Unreachable) {
       return binaryen._BinaryenDrop(this.ref, expression);
     }
@@ -1738,7 +1738,7 @@ export class Module {
     label: string | null,
     body: ExpressionRef
   ): ExpressionRef {
-    var cStr = this.allocStringCached(label);
+    let cStr = this.allocStringCached(label);
     return binaryen._BinaryenLoop(this.ref, cStr, body);
   }
 
@@ -1775,14 +1775,14 @@ export class Module {
     condition: ExpressionRef,
     value: ExpressionRef = 0
   ): ExpressionRef {
-    var numNames = names.length;
-    var strs = new Array<StringRef>(numNames);
+    let numNames = names.length;
+    let strs = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
       unchecked(strs[i] = this.allocStringCached(names[i]));
     }
-    var cArr = allocPtrArray(strs);
-    var cStr = this.allocStringCached(defaultName);
-    var ret = binaryen._BinaryenSwitch(this.ref, cArr, numNames, cStr, condition, value);
+    let cArr = allocPtrArray(strs);
+    let cStr = this.allocStringCached(defaultName);
+    let ret = binaryen._BinaryenSwitch(this.ref, cArr, numNames, cStr, condition, value);
     binaryen._free(cArr);
     return ret;
   }
@@ -1793,9 +1793,9 @@ export class Module {
     returnType: TypeRef,
     isReturn: bool = false
   ): ExpressionRef {
-    var cStr = this.allocStringCached(target);
-    var cArr = allocPtrArray(operands);
-    var ret = isReturn
+    let cStr = this.allocStringCached(target);
+    let cArr = allocPtrArray(operands);
+    let ret = isReturn
       ? binaryen._BinaryenReturnCall(
           this.ref, cStr, cArr, operands ? operands.length : 0, returnType
         )
@@ -1822,12 +1822,12 @@ export class Module {
     results: TypeRef,
     isReturn: bool = false
   ): ExpressionRef {
-    var cStr = this.allocStringCached(tableName != null
+    let cStr = this.allocStringCached(tableName != null
       ? tableName
       : CommonNames.DefaultTable
     );
-    var cArr = allocPtrArray(operands);
-    var ret = isReturn
+    let cArr = allocPtrArray(operands);
+    let ret = isReturn
       ? binaryen._BinaryenReturnCallIndirect(
           this.ref, cStr, index, cArr, operands ? operands.length : 0, params, results
         )
@@ -1861,8 +1861,8 @@ export class Module {
     destName: string = CommonNames.DefaultMemory,
     sourceName: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr1 = this.allocStringCached(destName);
-    var cStr2 = this.allocStringCached(sourceName);
+    let cStr1 = this.allocStringCached(destName);
+    let cStr2 = this.allocStringCached(sourceName);
     return binaryen._BinaryenMemoryCopy(this.ref, dest, source, size, cStr1, cStr2);
   }
 
@@ -1872,7 +1872,7 @@ export class Module {
     size: ExpressionRef,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenMemoryFill(this.ref, dest, value, size, cStr);
   }
 
@@ -1885,16 +1885,16 @@ export class Module {
     catchBodies: ExpressionRef[],
     delegateTarget: string | null = null
   ): ExpressionRef {
-    var numCatchTags = catchTags.length;
-    var strs = new Array<TagRef>(numCatchTags);
+    let numCatchTags = catchTags.length;
+    let strs = new Array<TagRef>(numCatchTags);
     for (let i = 0; i < numCatchTags; ++i) {
       strs[i] = this.allocStringCached(catchTags[i]);
     }
-    var cArr1 = allocPtrArray(strs);
-    var cArr2 = allocPtrArray(catchBodies);
-    var cStr1 = this.allocStringCached(name);
-    var cStr2 = this.allocStringCached(delegateTarget);
-    var ret = binaryen._BinaryenTry(
+    let cArr1 = allocPtrArray(strs);
+    let cArr2 = allocPtrArray(catchBodies);
+    let cStr1 = this.allocStringCached(name);
+    let cStr2 = this.allocStringCached(delegateTarget);
+    let ret = binaryen._BinaryenTry(
       this.ref, cStr1, body, cArr1, numCatchTags, cArr2, catchBodies.length, cStr2
     );
     binaryen._free(cArr2);
@@ -1906,9 +1906,9 @@ export class Module {
     tagName: string,
     operands: ExpressionRef[]
   ): ExpressionRef {
-    var cStr = this.allocStringCached(tagName);
-    var cArr = allocPtrArray(operands);
-    var ret = binaryen._BinaryenThrow(this.ref, cStr, cArr, operands.length);
+    let cStr = this.allocStringCached(tagName);
+    let cArr = allocPtrArray(operands);
+    let ret = binaryen._BinaryenThrow(this.ref, cStr, cArr, operands.length);
     binaryen._free(cArr);
     return ret;
   }
@@ -1916,7 +1916,7 @@ export class Module {
   rethrow(
     target: string
   ): ExpressionRef {
-    var cStr = this.allocStringCached(target);
+    let cStr = this.allocStringCached(target);
     return binaryen._BinaryenRethrow(this.ref, cStr);
   }
 
@@ -1929,8 +1929,8 @@ export class Module {
   }
 
   tuple_make(operands: ExpressionRef[]): ExpressionRef {
-    var cArr = allocPtrArray(operands);
-    var ret = binaryen._BinaryenTupleMake(this.ref, cArr, operands.length);
+    let cArr = allocPtrArray(operands);
+    let ret = binaryen._BinaryenTupleMake(this.ref, cArr, operands.length);
     binaryen._free(cArr);
     return ret;
   }
@@ -1964,8 +1964,8 @@ export class Module {
     mask: Uint8Array
   ): ExpressionRef {
     assert(mask.length == 16);
-    var cArr = allocU8Array(mask);
-    var ret = binaryen._BinaryenSIMDShuffle(this.ref, vec1, vec2, cArr);
+    let cArr = allocU8Array(mask);
+    let ret = binaryen._BinaryenSIMDShuffle(this.ref, vec1, vec2, cArr);
     binaryen._free(cArr);
     return ret;
   }
@@ -1994,7 +1994,7 @@ export class Module {
     align: u32,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr, cStr);
   }
 
@@ -2007,7 +2007,7 @@ export class Module {
     vec: ExpressionRef,
     name: string = CommonNames.DefaultMemory
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenSIMDLoadStoreLane(this.ref, op, offset, align, index, ptr, vec, cStr);
   }
 
@@ -2051,7 +2051,7 @@ export class Module {
     name: string,
     type: TypeRef
   ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenRefFunc(this.ref, cStr, type);
   }
 
@@ -2076,21 +2076,21 @@ export class Module {
     mutable: bool,
     initializer: ExpressionRef
   ): GlobalRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAddGlobal(this.ref, cStr, type, mutable, initializer);
   }
 
   getGlobal(
     name: string
   ): GlobalRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenGetGlobal(this.ref, cStr);
   }
 
   removeGlobal(
     name: string
   ): void {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     binaryen._BinaryenRemoveGlobal(this.ref, cStr);
   }
 
@@ -2101,21 +2101,21 @@ export class Module {
     params: TypeRef,
     results: TypeRef
   ): TagRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenAddTag(this.ref, cStr, params, results);
   }
 
   getTag(
     name: string
   ): TagRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenGetTag(this.ref, cStr);
   }
 
   removeTag(
     name: string
   ): void {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     binaryen._BinaryenRemoveTag(this.ref, cStr);
   }
 
@@ -2128,9 +2128,9 @@ export class Module {
     varTypes: TypeRef[] | null,
     body: ExpressionRef
   ): FunctionRef {
-    var cStr = this.allocStringCached(name);
-    var cArr = allocPtrArray(varTypes);
-    var ret = binaryen._BinaryenAddFunction(
+    let cStr = this.allocStringCached(name);
+    let cArr = allocPtrArray(varTypes);
+    let ret = binaryen._BinaryenAddFunction(
       this.ref,
       cStr,
       params,
@@ -2150,17 +2150,17 @@ export class Module {
   getFunction(
     name: string
   ): FunctionRef {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenGetFunction(this.ref, cStr);
   }
 
   removeFunction(name: string): void {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     binaryen._BinaryenRemoveFunction(this.ref, cStr);
   }
 
   hasFunction(name: string): bool {
-    var cStr = this.allocStringCached(name);
+    let cStr = this.allocStringCached(name);
     return binaryen._BinaryenGetFunction(this.ref, cStr) != 0;
   }
 
@@ -2172,9 +2172,9 @@ export class Module {
     body: ExpressionRef
   ): FunctionRef {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
-    var tempName = this.allocStringCached("");
-    var cArr = allocPtrArray(paramTypes);
-    var ret = binaryen._BinaryenAddFunction(this.ref,
+    let tempName = this.allocStringCached("");
+    let cArr = allocPtrArray(paramTypes);
+    let ret = binaryen._BinaryenAddFunction(this.ref,
       tempName,
       createType(paramTypes),
       result,
@@ -2187,7 +2187,7 @@ export class Module {
 
   removeTemporaryFunction(): void {
     this.hasTemporaryFunction = !assert(this.hasTemporaryFunction);
-    var tempName = this.allocStringCached("");
+    let tempName = this.allocStringCached("");
     binaryen._BinaryenRemoveFunction(this.ref, tempName);
   }
 
@@ -2201,8 +2201,8 @@ export class Module {
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalName);
     return binaryen._BinaryenAddFunctionExport(this.ref, cStr1, cStr2);
   }
 
@@ -2210,8 +2210,8 @@ export class Module {
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalName);
     return binaryen._BinaryenAddTableExport(this.ref, cStr1, cStr2);
   }
 
@@ -2219,8 +2219,8 @@ export class Module {
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalName);
     return binaryen._BinaryenAddMemoryExport(this.ref, cStr1, cStr2);
   }
 
@@ -2228,8 +2228,8 @@ export class Module {
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalName);
     return binaryen._BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
   }
 
@@ -2237,18 +2237,18 @@ export class Module {
     internalName: string,
     externalName: string
   ): ExportRef {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalName);
     return binaryen._BinaryenAddTagExport(this.ref, cStr1, cStr2);
   }
 
   removeExport(externalName: string): void {
-    var cStr = this.allocStringCached(externalName);
+    let cStr = this.allocStringCached(externalName);
     binaryen._BinaryenRemoveExport(this.ref, cStr);
   }
 
   hasExport(externalName: string): bool {
-    var cStr = this.allocStringCached(externalName);
+    let cStr = this.allocStringCached(externalName);
     return binaryen._BinaryenGetExport(this.ref, cStr) != 0;
   }
 
@@ -2261,9 +2261,9 @@ export class Module {
     params: TypeRef,
     results: TypeRef
   ): void {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalModuleName);
-    var cStr3 = this.allocStringCached(externalBaseName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalModuleName);
+    let cStr3 = this.allocStringCached(externalBaseName);
     binaryen._BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, params, results);
   }
 
@@ -2272,9 +2272,9 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string
   ): void {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalModuleName);
-    var cStr3 = this.allocStringCached(externalBaseName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalModuleName);
+    let cStr3 = this.allocStringCached(externalBaseName);
     binaryen._BinaryenAddTableImport(this.ref, cStr1, cStr2, cStr3);
   }
 
@@ -2284,9 +2284,9 @@ export class Module {
     externalBaseName: string,
     shared: bool = false,
   ): void {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalModuleName);
-    var cStr3 = this.allocStringCached(externalBaseName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalModuleName);
+    let cStr3 = this.allocStringCached(externalBaseName);
     binaryen._BinaryenAddMemoryImport(this.ref, cStr1, cStr2, cStr3, shared);
   }
 
@@ -2297,9 +2297,9 @@ export class Module {
     globalType: TypeRef,
     mutable: bool = false
   ): void {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalModuleName);
-    var cStr3 = this.allocStringCached(externalBaseName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalModuleName);
+    let cStr3 = this.allocStringCached(externalBaseName);
     binaryen._BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType, mutable);
   }
 
@@ -2310,9 +2310,9 @@ export class Module {
     params: TypeRef,
     results: TypeRef
   ): void {
-    var cStr1 = this.allocStringCached(internalName);
-    var cStr2 = this.allocStringCached(externalModuleName);
-    var cStr3 = this.allocStringCached(externalBaseName);
+    let cStr1 = this.allocStringCached(internalName);
+    let cStr2 = this.allocStringCached(externalModuleName);
+    let cStr3 = this.allocStringCached(externalBaseName);
     binaryen._BinaryenAddTagImport(
       this.ref, cStr1, cStr2, cStr3, params, results
     );
@@ -2332,13 +2332,13 @@ export class Module {
     name: string = CommonNames.DefaultMemory,
     shared: bool = false
   ): void {
-    var cStr1 = this.allocStringCached(exportName);
-    var cStr2 = this.allocStringCached(name);
-    var k = segments.length;
-    var segs = new Array<usize>(k);
-    var psvs = new Uint8Array(k);
-    var offs = new Array<ExpressionRef>(k);
-    var sizs = new Array<Index>(k);
+    let cStr1 = this.allocStringCached(exportName);
+    let cStr2 = this.allocStringCached(name);
+    let k = segments.length;
+    let segs = new Array<usize>(k);
+    let psvs = new Uint8Array(k);
+    let offs = new Array<ExpressionRef>(k);
+    let sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
       let segment = unchecked(segments[i]);
       let buffer = segment.buffer;
@@ -2351,10 +2351,10 @@ export class Module {
       );
       unchecked(sizs[i] = buffer.length);
     }
-    var cArr1 = allocPtrArray(segs);
-    var cArr2 = allocU8Array(psvs);
-    var cArr3 = allocPtrArray(offs);
-    var cArr4 = allocU32Array(sizs);
+    let cArr1 = allocPtrArray(segs);
+    let cArr2 = allocU8Array(psvs);
+    let cArr3 = allocPtrArray(offs);
+    let cArr4 = allocU32Array(sizs);
     binaryen._BinaryenSetMemory(
       this.ref, initial, maximum, cStr1, cArr1, cArr2, cArr3, cArr4, k, shared, false, cStr2
     );
@@ -2379,14 +2379,14 @@ export class Module {
     funcs: string[],
     offset: ExpressionRef
   ): void {
-    var cStr = this.allocStringCached(name);
-    var numNames = funcs.length;
-    var names = new Array<StringRef>(numNames);
+    let cStr = this.allocStringCached(name);
+    let numNames = funcs.length;
+    let names = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
       unchecked(names[i] = this.allocStringCached(funcs[i]));
     }
-    var cArr = allocPtrArray(names);
-    var tableRef = binaryen._BinaryenGetTable(this.ref, cStr);
+    let cArr = allocPtrArray(names);
+    let tableRef = binaryen._BinaryenGetTable(this.ref, cStr);
     if (!tableRef) {
       tableRef = binaryen._BinaryenAddTable(this.ref, cStr, initial, maximum, TypeRef.Funcref);
     } else {
@@ -2403,12 +2403,12 @@ export class Module {
     funcs: string[],
     offset: ExpressionRef
   ): void {
-    var numNames = funcs.length;
-    var names = new Array<CString>(numNames);
+    let numNames = funcs.length;
+    let names = new Array<CString>(numNames);
     for (let i = 0; i < numNames; ++i) {
       names[i] = this.allocStringCached(funcs[i]);
     }
-    var cArr = allocPtrArray(names);
+    let cArr = allocPtrArray(names);
     binaryen._BinaryenSetFunctionTable(
       this.ref, initial, maximum, cArr, numNames, offset
     );
@@ -2418,8 +2418,8 @@ export class Module {
   // sections
 
   addCustomSection(name: string, contents: Uint8Array): void {
-    var cStr = this.allocStringCached(name);
-    var cArr = allocU8Array(contents);
+    let cStr = this.allocStringCached(name);
+    let cArr = allocU8Array(contents);
     binaryen._BinaryenAddCustomSection(this.ref, cStr, cArr, contents.length);
     binaryen._free(cArr);
   }
@@ -2475,14 +2475,14 @@ export class Module {
   }
 
   getPassArgument(key: string): string | null {
-    var cStr = this.allocStringCached(key);
-    var ptr = binaryen._BinaryenGetPassArgument(cStr);
+    let cStr = this.allocStringCached(key);
+    let ptr = binaryen._BinaryenGetPassArgument(cStr);
     return ptr ? readString(ptr) : null;
   }
 
   setPassArgument(key: string, value: string | null): void {
-    var cStr1 = this.allocStringCached(key);
-    var cStr2 = this.allocStringCached(value);
+    let cStr1 = this.allocStringCached(key);
+    let cStr2 = this.allocStringCached(value);
     binaryen._BinaryenSetPassArgument(cStr1, cStr2);
   }
 
@@ -2533,12 +2533,12 @@ export class Module {
   }
 
   runPasses(passes: string[], func: FunctionRef = 0): void {
-    var numNames = passes.length;
-    var cStrs = new Array<StringRef>(numNames);
+    let numNames = passes.length;
+    let cStrs = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
       cStrs[i] = allocString(passes[i]);
     }
-    var cArr = allocPtrArray(cStrs);
+    let cArr = allocPtrArray(cStrs);
     if (func) {
       binaryen._BinaryenFunctionRunPasses(func, this.ref, cArr, numNames);
     } else {
@@ -2775,17 +2775,17 @@ export class Module {
     );
 
     // now safely reuse lit buffer for BinaryenModuleAllocateAndWriteResult
-    var resPtr = this.lit;
-    var urlPtr = allocString(sourceMapUrl);
+    let resPtr = this.lit;
+    let urlPtr = allocString(sourceMapUrl);
 
     binaryen._BinaryenModuleAllocateAndWrite(resPtr, this.ref, urlPtr);
 
     // read BinaryenModuleAllocateAndWriteResult struct
-    var binaryPtr = binaryen.__i32_load(resPtr + 0) as usize; // non-nullabe
-    var binaryLen = binaryen.__i32_load(resPtr + 4);
-    var srcMapPtr = binaryen.__i32_load(resPtr + 8) as usize; // nullable
+    let binaryPtr = binaryen.__i32_load(resPtr + 0) as usize; // non-nullabe
+    let binaryLen = binaryen.__i32_load(resPtr + 4);
+    let srcMapPtr = binaryen.__i32_load(resPtr + 8) as usize; // nullable
 
-    var binary = new BinaryModule(
+    let binary = new BinaryModule(
       readBuffer(assert(binaryPtr), binaryLen),
       readString(srcMapPtr)
     );
@@ -2798,10 +2798,10 @@ export class Module {
   }
 
   toText(watFormat: bool = true): string {
-    var textPtr = watFormat
+    let textPtr = watFormat
       ? binaryen._BinaryenModuleAllocateAndWriteStackIR(this.ref, true)
       : binaryen._BinaryenModuleAllocateAndWriteText(this.ref);
-    var text = readString(textPtr);
+    let text = readString(textPtr);
     if (textPtr) binaryen._free(textPtr);
     return text || "";
   }
@@ -2811,9 +2811,9 @@ export class Module {
 
   allocStringCached(str: string | null): usize {
     if (str == null) return 0;
-    var cached = this.cachedStringsToPointers;
+    let cached = this.cachedStringsToPointers;
     if (cached.has(str)) return changetype<usize>(cached.get(str));
-    var ptr = allocString(str);
+    let ptr = allocString(str);
     cached.set(str, ptr);
     return ptr;
   }
@@ -2822,9 +2822,9 @@ export class Module {
     // Binaryen internalizes names, so using this method where it's safe can
     // avoid quite a bit of unnecessary garbage.
     if (ptr == 0) return null;
-    var cached = this.cachedPointersToStrings;
+    let cached = this.cachedPointersToStrings;
     if (cached.has(ptr)) return changetype<string>(cached.get(ptr));
-    var str = readString(ptr);
+    let str = readString(ptr);
     cached.set(ptr, str);
     return str;
   }
@@ -2874,8 +2874,8 @@ export class Module {
     maxDepth: i32 = 50,
     maxLoopIterations: i32 = 1
   ): ExpressionRef {
-    var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
-    var precomp = binaryen._ExpressionRunnerRunAndDispose(runner, expr);
+    let runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
+    let precomp = binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
       if (!this.isConstExpression(precomp)) return 0;
       assert(getExpressionType(precomp) == getExpressionType(expr));
@@ -2913,8 +2913,8 @@ export class Module {
   // source map generation
 
   addDebugInfoFile(name: string): Index {
-    var cStr = allocString(name);
-    var ret = binaryen._BinaryenModuleAddDebugInfoFileName(this.ref, cStr);
+    let cStr = allocString(name);
+    let ret = binaryen._BinaryenModuleAddDebugInfoFileName(this.ref, cStr);
     binaryen._free(cStr);
     return ret;
   }
@@ -2942,17 +2942,17 @@ export function createType(types: TypeRef[] | null): TypeRef {
     case 0: return TypeRef.None;
     case 1: return types[0];
   }
-  var cArr = allocPtrArray(types);
-  var ret = binaryen._BinaryenTypeCreate(cArr, types.length);
+  let cArr = allocPtrArray(types);
+  let ret = binaryen._BinaryenTypeCreate(cArr, types.length);
   binaryen._free(cArr);
   return ret;
 }
 
 export function expandType(type: TypeRef): TypeRef[] {
-  var arity = binaryen._BinaryenTypeArity(type);
-  var cArr = binaryen._malloc(<usize>arity << 2);
+  let arity = binaryen._BinaryenTypeArity(type);
+  let cArr = binaryen._malloc(<usize>arity << 2);
   binaryen._BinaryenTypeExpand(type, cArr);
-  var types = new Array<TypeRef>(arity);
+  let types = new Array<TypeRef>(arity);
   for (let i: u32 = 0; i < arity; ++i) {
     unchecked(types[i] = binaryen.__i32_load(cArr + (<usize>i << 2)));
   }
@@ -3007,7 +3007,7 @@ export function getConstValueV128(expr: ExpressionRef): Uint8Array {
 
 export function isConstZero(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
-  var type = getExpressionType(expr);
+  let type = getExpressionType(expr);
   if (type == TypeRef.I32) return getConstValueI32(expr) == 0;
   if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) == 0;
   if (type == TypeRef.F32) return getConstValueF32(expr) == 0;
@@ -3017,7 +3017,7 @@ export function isConstZero(expr: ExpressionRef): bool {
 
 export function isConstNonZero(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
-  var type = getExpressionType(expr);
+  let type = getExpressionType(expr);
   if (type == TypeRef.I32) return getConstValueI32(expr) != 0;
   if (type == TypeRef.I64) return (getConstValueI64Low(expr) | getConstValueI64High(expr)) != 0;
   if (type == TypeRef.F32) return getConstValueF32(expr) != 0;
@@ -3027,7 +3027,7 @@ export function isConstNonZero(expr: ExpressionRef): bool {
 
 export function isConstNegZero(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
-  var type = getExpressionType(expr);
+  let type = getExpressionType(expr);
   if (type == TypeRef.F32) {
     let d = getConstValueF32(expr);
     return d == 0 && f32_as_i32(d) < 0;
@@ -3041,15 +3041,15 @@ export function isConstNegZero(expr: ExpressionRef): bool {
 
 export function isConstNaN(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
-  var type = getExpressionType(expr);
+  let type = getExpressionType(expr);
   if (type == TypeRef.F32) return isNaN(getConstValueF32(expr));
   if (type == TypeRef.F64) return isNaN(getConstValueF64(expr));
   return false;
 }
 
 export function isConstExpressionNaN(module: Module, expr: ExpressionRef): bool {
-  var id = getExpressionId(expr);
-  var type = getExpressionType(expr);
+  let id = getExpressionId(expr);
+  let type = getExpressionType(expr);
   if (type == TypeRef.F32 || type == TypeRef.F64) {
     if (id == ExpressionId.Const) {
       return isNaN(
@@ -3238,8 +3238,8 @@ export function getFunctionResults(func: FunctionRef): TypeRef {
 }
 
 export function getFunctionVars(func: FunctionRef): TypeRef[] {
-  var count = binaryen._BinaryenFunctionGetNumVars(func);
-  var types = new Array<TypeRef>(count);
+  let count = binaryen._BinaryenFunctionGetNumVars(func);
+  let types = new Array<TypeRef>(count);
   for (let i: Index = 0; i < count; ++i) {
     unchecked(types[i] = binaryen._BinaryenFunctionGetVar(func, i));
   }
@@ -3313,7 +3313,7 @@ export class Relooper {
     indexes: i32[],
     code: ExpressionRef = 0
   ): void {
-    var cArr = allocI32Array(indexes);
+    let cArr = allocI32Array(indexes);
     binaryen._RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
     binaryen._free(cArr);
   }
@@ -3345,8 +3345,8 @@ export class SwitchBuilder {
 
   /** Links a case to the specified branch. */
   addCase(value: i32, code: ExpressionRef[]): void {
-    var cases = this.cases;
-    var index = cases.indexOf(code);
+    let cases = this.cases;
+    let index = cases.indexOf(code);
     if (index < 0) {
       index = cases.length;
       cases.push(code);
@@ -3358,24 +3358,24 @@ export class SwitchBuilder {
   /** Links the default branch. */
   addDefault(code: ExpressionRef[]): void {
     assert(this.defaultIndex == -1);
-    var cases = this.cases;
+    let cases = this.cases;
     this.defaultIndex = cases.length;
     cases.push(code);
   }
 
   /** Renders the switch to a block. */
   render(localIndex: i32, labelPostfix: string = ""): ExpressionRef {
-    var module = this.module;
-    var cases = this.cases;
-    var numCases = cases.length;
+    let module = this.module;
+    let cases = this.cases;
+    let numCases = cases.length;
     if (!numCases) {
       return module.drop(this.condition);
     }
-    var values = this.values;
-    var numValues = values.length;
-    var indexes = this.indexes;
-    var entry = new Array<ExpressionRef>(1 + numValues + 1);
-    var labels = new Array<string>(numCases);
+    let values = this.values;
+    let numValues = values.length;
+    let indexes = this.indexes;
+    let entry = new Array<ExpressionRef>(1 + numValues + 1);
+    let labels = new Array<string>(numCases);
     for (let i = 0; i < numCases; ++i) {
       unchecked(labels[i] = `case${i}${labelPostfix}`);
     }
@@ -3389,20 +3389,20 @@ export class SwitchBuilder {
         )
       ));
     }
-    var defaultIndex = this.defaultIndex;
-    var defaultLabel = `default${labelPostfix}`;
+    let defaultIndex = this.defaultIndex;
+    let defaultLabel = `default${labelPostfix}`;
     entry[1 + numValues] = module.br(
       ~defaultIndex
         ? labels[defaultIndex]
         : defaultLabel
     );
-    var current = module.block(labels[0], entry);
+    let current = module.block(labels[0], entry);
     for (let i = 1; i < numCases; ++i) {
       let block = cases[i - 1];
       block.unshift(current);
       current = module.block(unchecked(labels[i]), block);
     }
-    var lastCase = cases[numCases - 1];
+    let lastCase = cases[numCases - 1];
     lastCase.unshift(current);
     return module.block(
       ~defaultIndex
@@ -3446,8 +3446,8 @@ export function mustPreserveSideEffects(expr: ExpressionRef, module: ModuleRef):
 
 function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
-  var len = u8s.length;
-  var ptr = binaryen._malloc(len);
+  let len = u8s.length;
+  let ptr = binaryen._malloc(len);
   for (let i = 0; i < len; ++i) {
     binaryen.__i32_store8(ptr + i, unchecked(u8s[i]));
   }
@@ -3456,9 +3456,9 @@ function allocU8Array(u8s: Uint8Array | null): usize {
 
 function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
-  var len = i32s.length;
-  var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
+  let len = i32s.length;
+  let ptr = binaryen._malloc(len << 2);
+  let idx = ptr;
   for (let i = 0; i < len; ++i) {
     let val = unchecked(i32s[i]);
     binaryen.__i32_store(idx, val);
@@ -3469,9 +3469,9 @@ function allocI32Array(i32s: i32[] | null): usize {
 
 function allocU32Array(u32s: u32[] | null): usize {
   if (!u32s) return 0;
-  var len = u32s.length;
-  var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
+  let len = u32s.length;
+  let ptr = binaryen._malloc(len << 2);
+  let idx = ptr;
   for (let i = 0; i < len; ++i) {
     let val = unchecked(u32s[i]);
     binaryen.__i32_store(idx, val);
@@ -3484,9 +3484,9 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
   if (!ptrs) return 0;
   // TODO: WASM64
   assert(ASC_TARGET != Target.Wasm64);
-  var len = ptrs.length;
-  var ptr = binaryen._malloc(len << 2);
-  var idx = ptr;
+  let len = ptrs.length;
+  let ptr = binaryen._malloc(len << 2);
+  let idx = ptr;
   for (let i = 0, k = len; i < k; ++i) {
     let val = unchecked(ptrs[i]);
     binaryen.__i32_store(idx, <i32>val);
@@ -3496,7 +3496,7 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
 }
 
 function stringLengthUTF8(str: string): usize {
-  var len = 0;
+  let len = 0;
   for (let i = 0, k = str.length; i < k; ++i) {
     let c1 = str.charCodeAt(i) >>> 0;
     if (c1 <= 0x7F) {
@@ -3518,9 +3518,9 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str == null) return 0;
-  var len = stringLengthUTF8(str);
-  var ptr = binaryen._malloc(len + 1) >>> 0;
-  var idx = ptr;
+  let len = stringLengthUTF8(str);
+  let ptr = binaryen._malloc(len + 1) >>> 0;
+  let idx = ptr;
   if (len == str.length) {
     // fast path when all chars are ascii
     for (let i = 0, k = str.length; i < k; ++i) {
@@ -3557,7 +3557,7 @@ function allocString(str: string | null): usize {
 }
 
 function readBuffer(ptr: usize, len: i32): Uint8Array {
-  var ret = new Uint8Array(len);
+  let ret = new Uint8Array(len);
   for (let i = 0; i < len; ++i) {
     unchecked(ret[i] = binaryen.__i32_load8_u(ptr + <usize>i));
   }
@@ -3566,10 +3566,10 @@ function readBuffer(ptr: usize, len: i32): Uint8Array {
 
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
-  var arr = new Array<i32>();
+  let arr = new Array<i32>();
   // the following is based on Emscripten's UTF8ArrayToString
-  var cp: u32;
-  var u1: u32, u2: u32, u3: u32;
+  let cp: u32;
+  let u1: u32, u2: u32, u3: u32;
   while (cp = binaryen.__i32_load8_u(ptr++)) {
     if (!(cp & 0x80)) {
       arr.push(cp);
@@ -3647,12 +3647,12 @@ const DEBUG_TYPEBUILDER = false;
 export function ensureType(type: Type): TypeRef {
   // Obtain basic type if applicable
   if (type == Type.void) return TypeRef.None;
-  var typeRef = tryEnsureBasicType(type);
+  let typeRef = tryEnsureBasicType(type);
   if (typeRef) return typeRef;
 
   // From here on we are dealing with heap types independent of nullability.
   // Nullability is applied again when returning the final type.
-  var originalType = type;
+  let originalType = type;
   type = type.nonNullableType;
 
   // Obtain cached type if already built. Guaranteed to be not a temp type.
@@ -3669,11 +3669,11 @@ export function ensureType(type: Type): TypeRef {
     assert(sizeof<usize>() == 4); // ABI code below assumes 32-bit pointers
   }
   assert(binaryen._BinaryenGetTypeSystem() == TypeSystem.Nominal);
-  var builder = binaryen._TypeBuilderCreate(0);
-  var seen = new Map<Type,HeapTypeRef>();
+  let builder = binaryen._TypeBuilderCreate(0);
+  let seen = new Map<Type,HeapTypeRef>();
   prepareType(builder, seen, type); // drop temp return
-  var size = binaryen._TypeBuilderGetSize(builder);
-  var out = binaryen._malloc(max(4 * size, 8)); // either each heap type or index + reason
+  let size = binaryen._TypeBuilderGetSize(builder);
+  let out = binaryen._malloc(max(4 * size, 8)); // either each heap type or index + reason
   if (!binaryen._TypeBuilderBuildAndDispose(builder, out, out, out + 4)) {
     let errorIndex = binaryen.__i32_load(out);
     let errorReason = binaryen.__i32_load(out + 4);
@@ -3780,7 +3780,7 @@ function determinePackedType(type: Type): PackedType {
 function prepareType(builder: binaryen.TypeBuilderRef, seen: Map<Type,HeapTypeRef>, type: Type): TypeRef {
   // Obtain basic type if applicable
   if (type == Type.void) return TypeRef.None;
-  var typeRef = tryEnsureBasicType(type);
+  let typeRef = tryEnsureBasicType(type);
   if (typeRef) return typeRef;
 
   assert(!type.is(TypeFlags.Nullable)); // operating on non-nullable types only
@@ -3803,7 +3803,7 @@ function prepareType(builder: binaryen.TypeBuilderRef, seen: Map<Type,HeapTypeRe
   // Otherwise construct a new class type. Note that arrays are not supported, as these would
   // have to involve a Wasm-level `array`, either wrapped in `Array` or `Uint8Array` etc., or
   // directly representing an `ArrayBuffer` or `StaticArray`. TBD.
-  var classReference = type.getClass();
+  let classReference = type.getClass();
   if (classReference) {
     // Make sure the base type has been built prior, at a lower index
     let base = classReference.base;
@@ -3871,7 +3871,7 @@ function prepareType(builder: binaryen.TypeBuilderRef, seen: Map<Type,HeapTypeRe
   }
 
   // Respectively a new signature type
-  var signatureReference = type.getSignature();
+  let signatureReference = type.getSignature();
   if (signatureReference) {
 
     // Block this index with a temporary type and cache

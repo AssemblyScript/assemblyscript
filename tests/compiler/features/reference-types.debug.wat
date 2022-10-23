@@ -17,8 +17,8 @@
  (global $features/reference-types/nonNullFunc (mut funcref) (ref.null nofunc))
  (global $features/reference-types/nonNullReal (mut externref) (ref.null noextern))
  (global $~lib/memory/__data_end i32 (i32.const 156))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16540))
- (global $~lib/memory/__heap_base i32 (i32.const 16540))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32924))
+ (global $~lib/memory/__heap_base i32 (i32.const 32924))
  (memory $0 1)
  (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 92) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -133,8 +133,9 @@
   nop
  )
  (func $start:features/reference-types (type $none_=>_none)
-  (local $var$0 funcref)
-  (local $var$1 externref)
+  (local $funcLocal funcref)
+  (local $1 funcref)
+  (local $2 externref)
   call $features/reference-types/somethingReal
   ref.is_null
   i32.eqz
@@ -308,8 +309,8 @@
    unreachable
   end
   ref.func $features/reference-types/someFunc
-  local.set $var$0
-  local.get $var$0
+  local.set $funcLocal
+  local.get $funcLocal
   ref.is_null
   if
    i32.const 0
@@ -320,7 +321,7 @@
    unreachable
   end
   global.get $features/reference-types/otherFuncGlobal
-  local.tee $var$0
+  local.tee $1
   ref.is_null
   if (result funcref)
    i32.const 112
@@ -330,11 +331,11 @@
    call $~lib/builtins/abort
    unreachable
   else
-   local.get $var$0
+   local.get $1
   end
   global.set $features/reference-types/nonNullFunc
   call $features/reference-types/somethingReal
-  local.tee $var$1
+  local.tee $2
   ref.is_null
   if (result externref)
    i32.const 112
@@ -344,21 +345,21 @@
    call $~lib/builtins/abort
    unreachable
   else
-   local.get $var$1
+   local.get $2
   end
   global.set $features/reference-types/nonNullReal
  )
  (func $features/reference-types/internal (type $externref_=>_externref) (param $a externref) (result externref)
-  (local $var$1 externref)
-  (local $var$2 externref)
+  (local $b externref)
+  (local $c externref)
   (local $d externref)
   local.get $a
   call $features/reference-types/external
-  local.set $var$1
-  local.get $var$1
+  local.set $b
+  local.get $b
   call $features/reference-types/external
-  local.set $var$2
-  local.get $var$2
+  local.set $c
+  local.get $c
   call $features/reference-types/external
   local.set $d
   local.get $d

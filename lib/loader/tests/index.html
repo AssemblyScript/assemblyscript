@@ -5,7 +5,7 @@ function assert(c) {
   if (!c) throw Error("assertion failed");
 }
 (async () => {
-  var module;
+  let module;
 
   module = await exports.instantiate(fetch("./build/debug.wasm"));
   assert(module.memory);
@@ -25,7 +25,7 @@ function assert(c) {
   module = await exports.instantiateStreaming(await fetch("./build/debug.wasm"));
   assert(module.memory);
 
-  var instantiateStreaming = WebAssembly.instantiateStreaming;
+  let instantiateStreaming = WebAssembly.instantiateStreaming;
   delete WebAssembly.instantiateStreaming;
 
   module = await exports.instantiate(fetch("./build/debug.wasm"));

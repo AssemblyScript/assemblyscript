@@ -293,7 +293,7 @@ export abstract class Visitor {
 
   /** Gets the current expression being walked. */
   get currentExpression(): ExpressionRef {
-    var currentExpression = this._currentExpression;
+    let currentExpression = this._currentExpression;
     if (!currentExpression) throw new Error("not walking expressions");
     return currentExpression;
   }
@@ -301,8 +301,8 @@ export abstract class Visitor {
 
   /** Gets the parent expression of the current expression being walked. Returns zero if already the top-most expression. */
   get parentExpressionOrNull(): ExpressionRef {
-    var stack = this.stack;
-    var length = stack.length;
+    let stack = this.stack;
+    let length = stack.length;
     return length ? stack[length - 1] : 0;
   }
 
@@ -1300,7 +1300,7 @@ export abstract class Pass extends Visitor {
 
   /** Gets the current function being walked. */
   get currentFunction(): FunctionRef {
-    var currentFunction = this._currentFunction;
+    let currentFunction = this._currentFunction;
     if (!currentFunction) throw new Error("not walking a function");
     return currentFunction;
   }
@@ -1308,7 +1308,7 @@ export abstract class Pass extends Visitor {
 
   /** Gets the current global being walked. */
   get currentGlobal(): GlobalRef {
-    var currentGlobal = this._currentGlobal;
+    let currentGlobal = this._currentGlobal;
     if (!currentGlobal) throw new Error("not walking a global");
     return currentGlobal;
   }
@@ -1329,7 +1329,7 @@ export abstract class Pass extends Visitor {
 
   /** Walks all functions. */
   walkFunctions(): void {
-    var moduleRef = this.module.ref;
+    let moduleRef = this.module.ref;
     for (let i: Index = 0, k = _BinaryenGetNumFunctions(moduleRef); i < k; ++i) {
       this.walkFunction(_BinaryenGetFunctionByIndex(moduleRef, i));
     }
@@ -1337,7 +1337,7 @@ export abstract class Pass extends Visitor {
 
   /** Walks a specific function. */
   walkFunction(func: FunctionRef): void {
-    var body = _BinaryenFunctionGetBody(func);
+    let body = _BinaryenFunctionGetBody(func);
     if (body) {
       this._currentFunction = func;
       this.visit(body);
@@ -1347,7 +1347,7 @@ export abstract class Pass extends Visitor {
 
   /** Walks all global variables. */
   walkGlobals(): void {
-    var moduleRef = this.module.ref;
+    let moduleRef = this.module.ref;
     for (let i: Index = 0, k = _BinaryenGetNumGlobals(moduleRef); i < k; ++i) {
       this.walkGlobal(_BinaryenGetGlobalByIndex(moduleRef, i));
     }
@@ -1356,7 +1356,7 @@ export abstract class Pass extends Visitor {
   /** Walks a specific global variable. */
   walkGlobal(global: GlobalRef): void {
     this._currentGlobal = global;
-    var init = _BinaryenGlobalGetInitExpr(global);
+    let init = _BinaryenGlobalGetInitExpr(global);
     if (init) this.visit(init);
     this._currentGlobal = 0;
   }
@@ -1365,14 +1365,14 @@ export abstract class Pass extends Visitor {
 
   /** Replaces the current expression with the specified replacement. */
   replaceCurrent(replacement: ExpressionRef): void {
-    var search = this.currentExpression;
-    var func = this.currentFunction;
-    var body = _BinaryenFunctionGetBody(func);
+    let search = this.currentExpression;
+    let func = this.currentFunction;
+    let body = _BinaryenFunctionGetBody(func);
     if (body == search) {
       _BinaryenFunctionSetBody(func, replacement);
     } else {
-      var parent = assert(this.parentExpressionOrNull);
-      var replaced = replaceChild(parent, search, replacement);
+      let parent = assert(this.parentExpressionOrNull);
+      let replaced = replaceChild(parent, search, replacement);
       if (!replaced) throw Error("failed to replace expression");
       _BinaryenExpressionFinalize(parent);
     }

@@ -17,7 +17,7 @@ const config = {
 };
 
 // Present in both should concat
-var merged = optionsUtil.merge(config, { enable: ["a"] }, { enable: ["b"] });
+let merged = optionsUtil.merge(config, { enable: ["a"] }, { enable: ["b"] });
 assert.deepStrictEqual(merged.enable, ["a", "b"]);
 
 merged = optionsUtil.merge(config, { enable: ["a"] }, { enable: ["a", "b"] });
@@ -40,7 +40,7 @@ optionsUtil.addDefaults(config, merged = { other: ["y"] });
 assert.deepStrictEqual(merged.other, ["y"]);
 
 // Complete usage test
-var result = optionsUtil.parse([
+let result = optionsUtil.parse([
   "--enable", "a",
   "--disable", "b",
 ], config, false);

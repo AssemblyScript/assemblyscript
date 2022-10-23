@@ -43,16 +43,16 @@ export class RtraceMemory extends Pass {
   }
 
   checkRT(): bool {
-    var functionName = this.module.readStringCached(_BinaryenFunctionGetName(this.currentFunction))!;
+    let functionName = this.module.readStringCached(_BinaryenFunctionGetName(this.currentFunction))!;
     return functionName.startsWith("~lib/rt/");
   }
 
   /** @override */
   visitStore(store: ExpressionRef): void {
-    var module = this.module;
-    var ptr = _BinaryenStoreGetPtr(store);
-    var offset = _BinaryenStoreGetOffset(store);
-    var bytes = _BinaryenStoreGetBytes(store);
+    let module = this.module;
+    let ptr = _BinaryenStoreGetPtr(store);
+    let offset = _BinaryenStoreGetOffset(store);
+    let bytes = _BinaryenStoreGetBytes(store);
     // onstore(ptr: usize, offset: i32, bytes: i32, isRT: bool) -> ptr
     _BinaryenStoreSetPtr(store,
       module.call("~onstore", [

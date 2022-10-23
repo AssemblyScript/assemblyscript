@@ -183,9 +183,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var nameNode = node.name;
-    var typeArgumentNodes = node.typeArguments;
-    var isSimpleType = !nameNode.next;
+    let nameNode = node.name;
+    let typeArgumentNodes = node.typeArguments;
+    let isSimpleType = !nameNode.next;
 
     // Look up in contextual types if a simple type
     if (isSimpleType) {
@@ -214,11 +214,11 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Look up in context
-    var element = this.resolveTypeName(nameNode, ctxElement, reportMode);
+    let element = this.resolveTypeName(nameNode, ctxElement, reportMode);
     if (!element) return null;
 
     // Use shadow type if present (i.e. namespace sharing a type)
-    var shadowType = element.shadowType;
+    let shadowType = element.shadowType;
     if (shadowType) {
       element = shadowType;
 
@@ -357,8 +357,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var explicitThisType = node.explicitThisType;
-    var thisType: Type | null = null;
+    let explicitThisType = node.explicitThisType;
+    let thisType: Type | null = null;
     if (explicitThisType) {
       thisType = this.resolveType(
         explicitThisType,
@@ -368,11 +368,11 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!thisType) return null;
     }
-    var parameterNodes = node.parameters;
-    var numParameters = parameterNodes.length;
-    var parameterTypes = new Array<Type>(numParameters);
-    var requiredParameters = 0;
-    var hasRest = false;
+    let parameterNodes = node.parameters;
+    let numParameters = parameterNodes.length;
+    let parameterTypes = new Array<Type>(numParameters);
+    let requiredParameters = 0;
+    let hasRest = false;
     for (let i = 0; i < numParameters; ++i) {
       let parameterNode = parameterNodes[i];
       switch (parameterNode.parameterKind) {
@@ -405,8 +405,8 @@ export class Resolver extends DiagnosticEmitter {
       if (!parameterType) return null;
       parameterTypes[i] = parameterType;
     }
-    var returnTypeNode = node.returnType;
-    var returnType: Type | null;
+    let returnTypeNode = node.returnType;
+    let returnType: Type | null;
     if (isTypeOmitted(returnTypeNode)) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -424,7 +424,7 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!returnType) return null;
     }
-    var signature = new Signature(this.program, parameterTypes, returnType, thisType);
+    let signature = new Signature(this.program, parameterTypes, returnType, thisType);
     signature.requiredParameters = requiredParameters;
     signature.hasRest = hasRest;
     return node.isNullable ? signature.type.asNullable() : signature.type;
@@ -442,7 +442,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     switch (typeArgument.kind) {
       case TypeKind.I8:
@@ -477,9 +477,9 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
-    var classReference = typeArgument.classReference;
+    let classReference = typeArgument.classReference;
     if (!classReference) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -489,7 +489,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       return null;
     }
-    var overload = classReference.lookupOverload(OperatorKind.IndexedGet);
+    let overload = classReference.lookupOverload(OperatorKind.IndexedGet);
     if (overload) {
       let parameterTypes = overload.signature.parameterTypes;
       if (overload.is(CommonFlags.Static)) {
@@ -521,9 +521,9 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
-    var classReference = typeArgument.getClassOrWrapper(this.program);
+    let classReference = typeArgument.getClassOrWrapper(this.program);
     if (classReference) {
       let overload = classReference.lookupOverload(OperatorKind.IndexedGet);
       if (overload) return overload.signature.returnType;
@@ -549,9 +549,9 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
-    var signatureReference = typeArgument.getSignature();
+    let signatureReference = typeArgument.getSignature();
     if (signatureReference) return signatureReference.returnType;
     if (reportMode == ReportMode.Report) {
       this.error(
@@ -574,7 +574,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Type | null {
     const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
-    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    let typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     if (!typeArgument.isNullableReference) return typeArgument;
     return typeArgument.nonNullableType;
@@ -589,7 +589,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var element = ctxElement.lookup(node.identifier.text, true);
+    let element = ctxElement.lookup(node.identifier.text, true);
     if (!element) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -599,8 +599,8 @@ export class Resolver extends DiagnosticEmitter {
       }
       return null;
     }
-    var prev = node;
-    var next = node.next;
+    let prev = node;
+    let next = node.next;
     while (next) {
       if (!(element = element.getMember(next.identifier.text))) {
         if (reportMode == ReportMode.Report) {
@@ -639,7 +639,7 @@ export class Resolver extends DiagnosticEmitter {
       if (!typeParameters[i].defaultType) ++minParameterCount;
       ++maxParameterCount;
     }
-    var argumentCount = typeArgumentNodes ? typeArgumentNodes.length : 0;
+    let argumentCount = typeArgumentNodes ? typeArgumentNodes.length : 0;
     if (argumentCount < minParameterCount || argumentCount > maxParameterCount) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -656,8 +656,8 @@ export class Resolver extends DiagnosticEmitter {
       }
       return null;
     }
-    var typeArguments = new Array<Type>(maxParameterCount);
-    var oldCtxTypes = cloneMap(ctxTypes);
+    let typeArguments = new Array<Type>(maxParameterCount);
+    let oldCtxTypes = cloneMap(ctxTypes);
     ctxTypes.clear();
     for (let i = 0; i < maxParameterCount; ++i) {
       let type = i < argumentCount
@@ -688,7 +688,7 @@ export class Resolver extends DiagnosticEmitter {
     ctxFlow: Flow,
     reportMode: ReportMode = ReportMode.Report
   ): Function | null {
-    var typeArguments = node.typeArguments;
+    let typeArguments = node.typeArguments;
 
     // resolve generic call if type arguments have been provided
     if (typeArguments) {
@@ -704,7 +704,7 @@ export class Resolver extends DiagnosticEmitter {
       return this.resolveFunctionInclTypeArguments(
         prototype,
         typeArguments,
-        ctxFlow.actualFunction,
+        ctxFlow.sourceFunction,
         cloneMap(ctxFlow.contextualTypeArguments), // don't inherit
         node,
         reportMode
@@ -908,7 +908,7 @@ export class Resolver extends DiagnosticEmitter {
 
   /** Gets the concrete type of an element. */
   getTypeOfElement(element: Element): Type | null {
-    var kind = element.kind;
+    let kind = element.kind;
     if (kind == ElementKind.Global) {
       if (!this.ensureResolvedLazyGlobal(<Global>element, ReportMode.Swallow)) return null;
     }
@@ -990,7 +990,7 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.True: {
         return this.lookupIdentifierExpression(
           <IdentifierExpression>node,
-          ctxFlow, ctxFlow.actualFunction, reportMode
+          ctxFlow, ctxFlow.sourceFunction, reportMode
         );
       }
       case NodeKind.This: {
@@ -1127,7 +1127,7 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.True: {
         return this.resolveIdentifierExpression(
           <IdentifierExpression>node,
-          ctxFlow, ctxType, ctxFlow.actualFunction, reportMode
+          ctxFlow, ctxType, ctxFlow.sourceFunction, reportMode
         );
       }
       case NodeKind.This: {
@@ -1196,7 +1196,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Flow to search for scoped locals. */
     ctxFlow: Flow,
     /** Element to search. */
-    ctxElement: Element = ctxFlow.actualFunction, // differs for enums and namespaces
+    ctxElement: Element = ctxFlow.sourceFunction, // differs for enums and namespaces
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
@@ -1208,14 +1208,14 @@ export class Resolver extends DiagnosticEmitter {
         return type ? this.getElementOfType(type) : null;
       }
     }
-    var name = node.text;
-    var element: Element | null;
+    let name = node.text;
+    let element: Element | null;
     if (element = ctxFlow.lookup(name)) {
       this.currentThisExpression = null;
       this.currentElementExpression = null;
       return element;
     }
-    var outerFlow = ctxFlow.outer;
+    let outerFlow = ctxFlow.outer;
     if (outerFlow) {
       if (element = outerFlow.lookup(name)) {
         this.currentThisExpression = null;
@@ -1251,7 +1251,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual type. */
     ctxType: Type = Type.auto,
     /** Element to search. */
-    ctxElement: Element = ctxFlow.actualFunction, // differs for enums and namespaces
+    ctxElement: Element = ctxFlow.sourceFunction, // differs for enums and namespaces
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
@@ -1273,14 +1273,14 @@ export class Resolver extends DiagnosticEmitter {
         return this.program.options.usizeType;
       }
     }
-    var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
+    let element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
     if (!element) return null;
     if (element.kind == ElementKind.FunctionPrototype) {
       let instance = this.resolveFunction(<FunctionPrototype>element, null, new Map(), reportMode);
       if (!instance) return null;
       element = instance;
     }
-    var type = this.getTypeOfElement(element);
+    let type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -1295,8 +1295,8 @@ export class Resolver extends DiagnosticEmitter {
   /** Resolves a lazily compiled global, i.e. a static class field or annotated `@lazy`. */
   private ensureResolvedLazyGlobal(global: Global, reportMode: ReportMode = ReportMode.Report): bool {
     if (global.is(CommonFlags.Resolved)) return true;
-    var typeNode = global.typeNode;
-    var type = typeNode
+    let typeNode = global.typeNode;
+    let type = typeNode
       ? this.resolveType(typeNode, global.parent, null, reportMode)
       : this.resolveExpression(
           assert(global.initializerNode),
@@ -1320,10 +1320,10 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var targetNode = node.expression;
-    var target = this.lookupExpression(targetNode, ctxFlow, ctxType, reportMode); // reports
+    let targetNode = node.expression;
+    let target = this.lookupExpression(targetNode, ctxFlow, ctxType, reportMode); // reports
     if (!target) return null;
-    var propertyName = node.property.text;
+    let propertyName = node.property.text;
 
     // Resolve variable-likes to their class type first
     switch (target.kind) {
@@ -1511,9 +1511,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var element = this.lookupPropertyAccessExpression(node, ctxFlow, ctxType, reportMode);
+    let element = this.lookupPropertyAccessExpression(node, ctxFlow, ctxType, reportMode);
     if (!element) return null;
-    var type = this.getTypeOfElement(element);
+    let type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -1536,8 +1536,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var targetExpression = node.expression;
-    var targetType = this.resolveExpression(targetExpression, ctxFlow, ctxType, reportMode);
+    let targetExpression = node.expression;
+    let targetType = this.resolveExpression(targetExpression, ctxFlow, ctxType, reportMode);
     if (!targetType) return null;
     let classReference = targetType.getClassOrWrapper(this.program);
     if (classReference) {
@@ -1571,9 +1571,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var element = this.lookupElementAccessExpression(node, ctxFlow, ctxType, reportMode);
+    let element = this.lookupElementAccessExpression(node, ctxFlow, ctxType, reportMode);
     if (!element) return null;
-    var type = this.getTypeOfElement(element);
+    let type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -1689,7 +1689,7 @@ export class Resolver extends DiagnosticEmitter {
       case AssertionKind.Prefix: {
         let type = this.resolveType(
           assert(node.toType), // must be set if not NONNULL
-          ctxFlow.actualFunction,
+          ctxFlow.sourceFunction,
           ctxFlow.contextualTypeArguments,
           reportMode
         );
@@ -1745,7 +1745,7 @@ export class Resolver extends DiagnosticEmitter {
       case AssertionKind.Prefix: {
         return this.resolveType(
           assert(node.toType),
-          ctxFlow.actualFunction,
+          ctxFlow.sourceFunction,
           ctxFlow.contextualTypeArguments,
           reportMode
         );
@@ -1784,9 +1784,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var type = this.resolveUnaryPrefixExpression(node, ctxFlow, ctxType, reportMode);
+    let type = this.resolveUnaryPrefixExpression(node, ctxFlow, ctxType, reportMode);
     if (!type) return null;
-    var element = this.getElementOfType(type);
+    let element = this.getElementOfType(type);
     if (!element) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -1809,8 +1809,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var operand = node.operand;
-    var operator = node.operator;
+    let operand = node.operand;
+    let operator = node.operator;
     switch (operator) {
       case Token.Minus: {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
@@ -1901,9 +1901,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var type = this.resolveUnaryPostfixExpression(node, ctxFlow, ctxType, reportMode);
+    let type = this.resolveUnaryPostfixExpression(node, ctxFlow, ctxType, reportMode);
     if (!type) return null;
-    var element = this.getElementOfType(type);
+    let element = this.getElementOfType(type);
     if (!element) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -1926,7 +1926,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var operator = node.operator;
+    let operator = node.operator;
     switch (operator) {
       case Token.PlusPlus:
       case Token.MinusMinus: {
@@ -1964,9 +1964,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var type = this.resolveBinaryExpression(node, ctxFlow, ctxType, reportMode);
+    let type = this.resolveBinaryExpression(node, ctxFlow, ctxType, reportMode);
     if (!type) return null;
-    var element = this.getElementOfType(type);
+    let element = this.getElementOfType(type);
     if (element) return element; // otherwise void
     if (reportMode == ReportMode.Report) {
       this.error(
@@ -1988,9 +1988,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var left = node.left;
-    var right = node.right;
-    var operator = node.operator;
+    let left = node.left;
+    let right = node.right;
+    let operator = node.operator;
 
     switch (operator) {
 
@@ -2167,7 +2167,7 @@ export class Resolver extends DiagnosticEmitter {
         return thisLocal;
       }
     }
-    var parent = ctxFlow.actualFunction.parent;
+    let parent = ctxFlow.sourceFunction.parent;
     if (parent) {
       this.currentThisExpression = null;
       this.currentElementExpression = null;
@@ -2193,9 +2193,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var element = this.lookupThisExpression(node, ctxFlow, ctxType, reportMode);
+    let element = this.lookupThisExpression(node, ctxFlow, ctxType, reportMode);
     if (!element) return null;
-    var type = this.getTypeOfElement(element);
+    let type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -2226,7 +2226,7 @@ export class Resolver extends DiagnosticEmitter {
         return superLocal;
       }
     }
-    var parent: Element | null = ctxFlow.actualFunction.parent;
+    let parent: Element | null = ctxFlow.sourceFunction.parent;
     if (parent && parent.kind == ElementKind.Class) {
       let base = (<Class>parent).base;
       if (base) {
@@ -2255,9 +2255,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var element = this.lookupSuperExpression(node, ctxFlow, ctxType, reportMode);
+    let element = this.lookupSuperExpression(node, ctxFlow, ctxType, reportMode);
     if (!element) return null;
-    var type = this.getTypeOfElement(element);
+    let type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -2376,9 +2376,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var element = this.lookupLiteralExpression(node, ctxFlow, ctxType, reportMode);
+    let element = this.lookupLiteralExpression(node, ctxFlow, ctxType, reportMode);
     if (!element) return null;
-    var type = this.getTypeOfElement(element);
+    let type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -2401,9 +2401,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var type = this.resolveCallExpression(node, ctxFlow, ctxType, reportMode);
+    let type = this.resolveCallExpression(node, ctxFlow, ctxType, reportMode);
     if (!type) return null;
-    var element = this.getElementOfType(type);
+    let element = this.getElementOfType(type);
     if (!element) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -2426,8 +2426,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var targetExpression = node.expression;
-    var target = this.lookupExpression( // reports
+    let targetExpression = node.expression;
+    let target = this.lookupExpression( // reports
       targetExpression,
       ctxFlow,
       ctxType,
@@ -2489,7 +2489,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var expressions = node.expressions;
+    let expressions = node.expressions;
     return this.lookupExpression(expressions[assert(expressions.length) - 1], ctxFlow, ctxType, reportMode);
   }
 
@@ -2504,7 +2504,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var expressions = node.expressions;
+    let expressions = node.expressions;
     return this.resolveExpression(expressions[assert(expressions.length) - 1], ctxFlow, ctxType, reportMode);
   }
 
@@ -2547,9 +2547,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var type = this.resolveTernaryExpression(node, ctxFlow, ctxType, reportMode);
+    let type = this.resolveTernaryExpression(node, ctxFlow, ctxType, reportMode);
     if (!type) return null;
-    var element = this.getElementOfType(type);
+    let element = this.getElementOfType(type);
     if (!element) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -2572,11 +2572,11 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var thenType = this.resolveExpression(node.ifThen, ctxFlow, ctxType, reportMode);
+    let thenType = this.resolveExpression(node.ifThen, ctxFlow, ctxType, reportMode);
     if (!thenType) return null;
-    var elseType = this.resolveExpression(node.ifElse, ctxFlow, thenType, reportMode);
+    let elseType = this.resolveExpression(node.ifElse, ctxFlow, thenType, reportMode);
     if (!elseType) return null;
-    var commonType = Type.commonDenominator(thenType, elseType, false);
+    let commonType = Type.commonDenominator(thenType, elseType, false);
     if (!commonType) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -2599,13 +2599,13 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var element = this.resolveTypeName(node.typeName, ctxFlow.actualFunction, reportMode);
+    let element = this.resolveTypeName(node.typeName, ctxFlow.sourceFunction, reportMode);
     if (!element) return null;
     if (element.kind == ElementKind.ClassPrototype) {
       return this.resolveClassInclTypeArguments(
         <ClassPrototype>element,
         node.typeArguments,
-        ctxFlow.actualFunction,
+        ctxFlow.sourceFunction,
         cloneMap(ctxFlow.contextualTypeArguments),
         node,
         reportMode
@@ -2631,9 +2631,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Type | null {
-    var element = this.lookupNewExpression(node, ctxFlow, ctxType, reportMode);
+    let element = this.lookupNewExpression(node, ctxFlow, ctxType, reportMode);
     if (!element) return null;
-    var type = this.getTypeOfElement(element);
+    let type = this.getTypeOfElement(element);
     if (!type) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -2656,9 +2656,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Element | null {
-    var type = this.resolveFunctionExpression(node, ctxFlow, ctxType, reportMode);
+    let type = this.resolveFunctionExpression(node, ctxFlow, ctxType, reportMode);
     if (!type) return null;
-    var element = this.getElementOfType(type);
+    let element = this.getElementOfType(type);
     if (!element) {
       if (reportMode == ReportMode.Report) {
         this.error(
@@ -2684,7 +2684,7 @@ export class Resolver extends DiagnosticEmitter {
     const declaration = node.declaration;
     const signature = declaration.signature;
     const body = declaration.body;
-    let functionType = this.resolveFunctionType(signature, ctxFlow.actualFunction, ctxFlow.contextualTypeArguments, reportMode);
+    let functionType = this.resolveFunctionType(signature, ctxFlow.sourceFunction, ctxFlow.contextualTypeArguments, reportMode);
     if (
       functionType &&
       declaration.arrowKind != ArrowKind.None &&
@@ -2695,7 +2695,7 @@ export class Resolver extends DiagnosticEmitter {
       const expr = (<ExpressionStatement>body).expression;
       let signatureReference = assert(functionType.getSignature());
       // create a temp flow to resolve expression
-      let tempFlow = Flow.createParent(ctxFlow.actualFunction);
+      let tempFlow = Flow.createDefault(ctxFlow.sourceFunction);
       let parameters = signature.parameters;
       // return type of resolveFunctionType should have same parameter length with signature
       assert(signatureReference.parameterTypes.length == parameters.length);
@@ -2725,11 +2725,11 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Function | null {
-    var actualParent = prototype.parent.kind == ElementKind.PropertyPrototype
+    let actualParent = prototype.parent.kind == ElementKind.PropertyPrototype
       ? prototype.parent.parent
       : prototype.parent;
-    var classInstance: Class | null = null; // if an instance method
-    var instanceKey = typeArguments ? typesToString(typeArguments) : "";
+    let classInstance: Class | null = null; // if an instance method
+    let instanceKey = typeArguments ? typesToString(typeArguments) : "";
 
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.Instance)) {
@@ -2759,9 +2759,9 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // override whatever is contextual with actual function type arguments
-    var signatureNode = prototype.functionTypeNode;
-    var typeParameterNodes = prototype.typeParameterNodes;
-    var numFunctionTypeArguments: i32;
+    let signatureNode = prototype.functionTypeNode;
+    let typeParameterNodes = prototype.typeParameterNodes;
+    let numFunctionTypeArguments: i32;
     if (typeArguments && (numFunctionTypeArguments = typeArguments.length) > 0) {
       assert(typeParameterNodes && numFunctionTypeArguments == typeParameterNodes.length);
       for (let i = 0; i < numFunctionTypeArguments; ++i) {
@@ -2775,8 +2775,8 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // resolve `this` type if applicable
-    var thisType: Type | null = null;
-    var explicitThisType = signatureNode.explicitThisType;
+    let thisType: Type | null = null;
+    let explicitThisType = signatureNode.explicitThisType;
     if (explicitThisType) {
       thisType = this.resolveType(
         explicitThisType,
@@ -2792,10 +2792,10 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // resolve parameter types
-    var signatureParameters = signatureNode.parameters;
-    var numSignatureParameters = signatureParameters.length;
-    var parameterTypes = new Array<Type>(numSignatureParameters);
-    var requiredParameters = 0;
+    let signatureParameters = signatureNode.parameters;
+    let numSignatureParameters = signatureParameters.length;
+    let parameterTypes = new Array<Type>(numSignatureParameters);
+    let requiredParameters = 0;
     for (let i = 0; i < numSignatureParameters; ++i) {
       let parameterDeclaration = signatureParameters[i];
       if (parameterDeclaration.parameterKind == ParameterKind.Default) {
@@ -2831,7 +2831,7 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // resolve return type
-    var returnType: Type;
+    let returnType: Type;
     if (prototype.is(CommonFlags.Set)) {
       returnType = Type.void; // not annotated
     } else if (prototype.is(CommonFlags.Constructor)) {
@@ -2857,12 +2857,12 @@ export class Resolver extends DiagnosticEmitter {
       returnType = type;
     }
 
-    var signature = new Signature(this.program, parameterTypes, returnType, thisType);
+    let signature = new Signature(this.program, parameterTypes, returnType, thisType);
     signature.requiredParameters = requiredParameters;
 
-    var nameInclTypeParameters = prototype.name;
+    let nameInclTypeParameters = prototype.name;
     if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;
-    var instance = new Function(
+    let instance = new Function(
       nameInclTypeParameters,
       prototype,
       typeArguments,
@@ -2902,10 +2902,10 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Function | null {
-    var actualParent = prototype.parent.kind == ElementKind.PropertyPrototype
+    let actualParent = prototype.parent.kind == ElementKind.PropertyPrototype
       ? prototype.parent.parent
       : prototype.parent;
-    var resolvedTypeArguments: Type[] | null = null;
+    let resolvedTypeArguments: Type[] | null = null;
 
     // Resolve type arguments if generic
     if (prototype.is(CommonFlags.Generic)) {
@@ -2962,11 +2962,11 @@ export class Resolver extends DiagnosticEmitter {
 
   /** Resolves reachable overloads of the given instance method. */
   resolveOverloads(instance: Function): Function[] | null {
-    var overloadPrototypes = instance.prototype.overloads;
+    let overloadPrototypes = instance.prototype.overloads;
     if (!overloadPrototypes) return null;
 
-    var parentClassInstance = assert(instance.getClassOrInterface());
-    var overloads = new Set<Function>();
+    let parentClassInstance = assert(instance.getClassOrInterface());
+    let overloads = new Set<Function>();
 
     // A method's `overloads` property contains its unbound overload prototypes
     // so we first have to find the concrete classes it became bound to, obtain
@@ -3027,15 +3027,15 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Class | null {
-    var instanceKey = typeArguments ? typesToString(typeArguments) : "";
+    let instanceKey = typeArguments ? typesToString(typeArguments) : "";
 
     // Do not attempt to resolve the same class twice. This can return a class
     // that isn't fully resolved yet, but only on deeper levels of recursion.
-    var instance = prototype.getResolvedInstance(instanceKey);
+    let instance = prototype.getResolvedInstance(instanceKey);
     if (instance) return instance;
 
     // Otherwise create
-    var nameInclTypeParameters = prototype.name;
+    let nameInclTypeParameters = prototype.name;
     if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;
     if (prototype.kind == ElementKind.InterfacePrototype) {
       instance = new Interface(nameInclTypeParameters, <InterfacePrototype>prototype, typeArguments);
@@ -3043,7 +3043,7 @@ export class Resolver extends DiagnosticEmitter {
       instance = new Class(nameInclTypeParameters, prototype, typeArguments);
     }
     prototype.setResolvedInstance(instanceKey, instance);
-    var pendingClasses = this.resolveClassPending;
+    let pendingClasses = this.resolveClassPending;
     pendingClasses.add(instance);
 
     // Insert contextual type arguments for this operation. Internally, this method is always
@@ -3062,10 +3062,10 @@ export class Resolver extends DiagnosticEmitter {
     }
     instance.contextualTypeArguments = ctxTypes;
 
-    var anyPending = false;
+    let anyPending = false;
 
     // Resolve base class if applicable
-    var basePrototype = prototype.basePrototype;
+    let basePrototype = prototype.basePrototype;
     if (basePrototype) {
       let current: ClassPrototype | null = basePrototype;
       do {
@@ -3099,7 +3099,7 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Resolve interfaces if applicable
-    var interfacePrototypes = prototype.interfacePrototypes;
+    let interfacePrototypes = prototype.interfacePrototypes;
     if (interfacePrototypes) {
       for (let i = 0, k = interfacePrototypes.length; i < k; ++i) {
         let interfacePrototype = interfacePrototypes[i];
@@ -3146,14 +3146,14 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode
   ): void {
-    var members = instance.members;
+    let members = instance.members;
     if (!members) instance.members = members = new Map();
 
-    var pendingClasses = this.resolveClassPending;
-    var unimplemented = new Map<string,DeclaredElement>();
+    let pendingClasses = this.resolveClassPending;
+    let unimplemented = new Map<string,DeclaredElement>();
 
     // Alias interface members
-    var interfaces = instance.interfaces;
+    let interfaces = instance.interfaces;
     if (interfaces) {
       for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
         let iface = _values[i];
@@ -3181,8 +3181,8 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Alias base members
-    var memoryOffset: u32 = 0;
-    var base = instance.base;
+    let memoryOffset: u32 = 0;
+    let base = instance.base;
     if (base) {
       assert(!pendingClasses.has(base));
       let baseMembers = base.members;
@@ -3213,9 +3213,9 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Resolve instance members
-    var prototype = instance.prototype;
-    var instanceMemberPrototypes = prototype.instanceMembers;
-    var properties = new Array<Property>();
+    let prototype = instance.prototype;
+    let instanceMemberPrototypes = prototype.instanceMembers;
+    let properties = new Array<Property>();
     if (instanceMemberPrototypes) {
       // TODO: for (let member of instanceMemberPrototypes.values()) {
       for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
@@ -3434,7 +3434,7 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Fully resolve operator overloads (don't have type parameters on their own)
-    var overloadPrototypes = prototype.overloadPrototypes;
+    let overloadPrototypes = prototype.overloadPrototypes;
     // TODO: for (let [overloadKind, overloadPrototype] of overloadPrototypes) {
     for (let _keys = Map_keys(overloadPrototypes), i = 0, k = _keys.length; i < k; ++i) {
       let overloadKind = unchecked(_keys[i]);
@@ -3544,7 +3544,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Class | null {
-    var resolvedTypeArguments: Type[] | null = null;
+    let resolvedTypeArguments: Type[] | null = null;
 
     // Resolve type arguments if generic
     if (prototype.is(CommonFlags.Generic)) {
@@ -3587,10 +3587,10 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Property | null {
-    var instance = prototype.instance;
+    let instance = prototype.instance;
     if (instance) return instance;
     prototype.instance = instance = new Property(prototype, prototype);
-    var getterPrototype = prototype.getterPrototype;
+    let getterPrototype = prototype.getterPrototype;
     if (getterPrototype) {
       let getterInstance = this.resolveFunction(
         getterPrototype,
@@ -3603,7 +3603,7 @@ export class Resolver extends DiagnosticEmitter {
         instance.setType(getterInstance.signature.returnType);
       }
     }
-    var setterPrototype = prototype.setterPrototype;
+    let setterPrototype = prototype.setterPrototype;
     if (setterPrototype) {
       let setterInstance = this.resolveFunction(
         setterPrototype,
@@ -3628,7 +3628,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): TypeNode | null {
-    var typeArgumentNodes = node.typeArguments;
+    let typeArgumentNodes = node.typeArguments;
     let numTypeArguments = 0;
     if (!typeArgumentNodes || (numTypeArguments = typeArgumentNodes.length) != 1) {
       if (reportMode == ReportMode.Report) {

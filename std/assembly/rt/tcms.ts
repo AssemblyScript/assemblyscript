@@ -14,7 +14,7 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 // * flipped between cycles
 
 // @ts-ignore: decorator
-@lazy var white = 0;
+@lazy let white = 0;
 // @ts-ignore: decorator
 @inline const transparent = 3;
 // @ts-ignore: decorator
@@ -22,14 +22,14 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 
 /** Size in memory of all objects currently managed by the GC. */
 // @ts-ignore: decorator
-@lazy var total: usize = 0;
+@lazy let total: usize = 0;
 
 // @ts-ignore: decorator
-@lazy var fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
-@lazy var toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
-@lazy var pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+@lazy let pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 
 function initLazy(space: Object): Object {
   space.nextWithColor = changetype<usize>(space);
@@ -123,7 +123,7 @@ function initLazy(space: Object): Object {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
-  var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
+  let obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
   obj.rtSize = <u32>size;
   obj.linkTo(fromSpace, white);
@@ -134,7 +134,7 @@ export function __new(size: usize, id: i32): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
-  var oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
+  let oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
   if (oldPtr < __heap_base) { // move to heap for simplicity
     let newPtr = __new(size, oldObj.rtId);
     memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
@@ -142,8 +142,8 @@ export function __renew(oldPtr: usize, size: usize): usize {
   }
   if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   total -= oldObj.size;
-  var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
-  var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
+  let newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
+  let newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
   newObj.rtSize = <u32>size;
 
   // Replace with new object
@@ -190,7 +190,7 @@ export function __pin(ptr: usize): usize {
 @global @unsafe
 export function __unpin(ptr: usize): void {
   if (!ptr) return;
-  var obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
+  let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
   if (obj.color != transparent) {
     throw new Error(E_NOT_PINNED);
   }
@@ -207,8 +207,8 @@ export function __collect(): void {
   __visit_globals(VISIT_SCAN);
 
   // Mark direct members of pinned objects (add to toSpace)
-  var pn = pinSpace;
-  var iter = pn.next;
+  let pn = pinSpace;
+  let iter = pn.next;
   while (iter != pn) {
     if (DEBUG) assert(iter.color == transparent);
     __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, VISIT_SCAN);
@@ -216,8 +216,8 @@ export function __collect(): void {
   }
 
   // Mark what's reachable from toSpace
-  var black = i32(!white);
-  var to = toSpace;
+  let black = i32(!white);
+  let to = toSpace;
   iter = to.next;
   while (iter != to) {
     if (DEBUG) assert(iter.color == black);
@@ -226,7 +226,7 @@ export function __collect(): void {
   }
 
   // Sweep what's left in fromSpace
-  var from = fromSpace;
+  let from = fromSpace;
   iter = from.next;
   while (iter != from) {
     if (DEBUG) assert(iter.color == white);
