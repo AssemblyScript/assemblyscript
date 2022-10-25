@@ -496,10 +496,10 @@ export function allocateBlock(root: Root, size: usize): Block {
     if (DEBUG) assert(block); // must be found now
   }
   if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= payloadSize); // must fit
-  removeBlock(root, <Block>block);
-  prepareBlock(root, <Block>block, payloadSize);
+  removeBlock(root, block);
+  prepareBlock(root, block, payloadSize);
   if (isDefined(ASC_RTRACE)) onalloc(block);
-  return <Block>block;
+  return block;
 }
 
 /** Reallocates a block to the specified size. */
