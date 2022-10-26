@@ -44,7 +44,6 @@ import {
   GETTER_PREFIX,
   SETTER_PREFIX,
   INNER_DELIMITER,
-  LIBRARY_PREFIX,
   INDEX_SUFFIX,
   STUB_DELIMITER,
   CommonNames,
@@ -111,7 +110,12 @@ import {
   VariableDeclaration,
   VariableLikeDeclarationStatement,
   VariableStatement,
-  ParameterKind
+  ParameterKind,
+  ParameterNode,
+  ReturnStatement,
+  CallExpression,
+  ThisExpression,
+  TypeName
 } from "./ast";
 
 import {
@@ -430,11 +434,9 @@ export class Program extends DiagnosticEmitter {
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
-    let nativeSource = new Source(SourceKind.LibraryEntry, LIBRARY_PREFIX + "native.ts", "[native code]");
-    this.nativeSource = nativeSource;
     this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
-    let nativeFile = new File(this, nativeSource);
+    let nativeFile = new File(this, Source.native);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
   }
@@ -447,10 +449,6 @@ export class Program extends DiagnosticEmitter {
   sources: Source[] = [];
   /** Diagnostic offset used where successively obtaining the next diagnostic. */
   diagnosticsOffset: i32 = 0;
-  /** Special native code source. */
-  nativeSource: Source;
-  /** Special native code range. */
-  get nativeRange(): Range { return this.nativeSource.range; }
   /** Special native code file. */
   nativeFile!: File;
   /** Next class id. */
@@ -866,7 +864,7 @@ export class Program extends DiagnosticEmitter {
     /** Flags indicating specific traits, e.g. `CONST`. */
     flags: CommonFlags = CommonFlags.None
   ): VariableDeclaration {
-    let range = this.nativeSource.range;
+    let range = Source.native.range;
     return Node.createVariableDeclaration(
       Node.createIdentifierExpression(name, range),
       null, flags, null, null, range
@@ -880,7 +878,7 @@ export class Program extends DiagnosticEmitter {
     /** Flags indicating specific traits, e.g. `GENERIC`. */
     flags: CommonFlags = CommonFlags.None
   ): TypeDeclaration {
-    let range = this.nativeSource.range;
+    let range = Source.native.range;
     let identifier = Node.createIdentifierExpression(name, range);
     return Node.createTypeDeclaration(
       identifier,
@@ -900,7 +898,7 @@ export class Program extends DiagnosticEmitter {
     /** Flags indicating specific traits, e.g. `DECLARE`. */
     flags: CommonFlags = CommonFlags.None
   ): FunctionDeclaration {
-    let range = this.nativeSource.range;
+    let range = Source.native.range;
     let signature = this.nativeDummySignature;
     if (!signature) {
       this.nativeDummySignature = signature = Node.createFunctionType([],
@@ -924,7 +922,7 @@ export class Program extends DiagnosticEmitter {
     /** Flags indicating specific traits, e.g. `EXPORT`. */
     flags: CommonFlags = CommonFlags.None
   ): NamespaceDeclaration {
-    let range = this.nativeSource.range;
+    let range = Source.native.range;
     return Node.createNamespaceDeclaration(
       Node.createIdentifierExpression(name, range),
       null, flags, [], range
@@ -3980,6 +3978,8 @@ export class Field extends VariableLikeElement {
 /** A property comprised of a getter and a setter function. */
 export class PropertyPrototype extends DeclaredElement {
 
+  /** Field declaration, if a field. */
+  fieldDeclaration: FieldDeclaration | null = null;
   /** Getter prototype. */
   getterPrototype: FunctionPrototype | null = null;
   /** Setter prototype. */
@@ -3989,6 +3989,29 @@ export class PropertyPrototype extends DeclaredElement {
 
   /** Clones of this prototype that are bound to specific classes. */
   private boundPrototypes: Map<Class,PropertyPrototype> | null = null;
+
+  /** Creates a property prototype representing a field. */
+  static forField(parent: ClassPrototype, fieldDeclaration: FieldDeclaration): PropertyPrototype {
+    // A field differs from a property in that accessing it is merely a load
+    // from respectively store to a memory address relative to its `this`
+    // pointer, not a function call. However, fields can be overloaded with
+    // properties and vice-versa, creating a situation where they function more
+    // like properties, using virtual stubs in their accessor functions to
+    // determine which overload to call. Hence, fields are represented as
+    // properties, with compiler-generated accessors for cases they are used
+    // like properties. As a result, emitting actual loads and stores becomes an
+    // optimization in non-overloaded cases.
+    let name = fieldDeclaration.name.text;
+    let getterDeclaration = makeFieldGetterDeclaration(fieldDeclaration, parent);
+    let prototype = new PropertyPrototype(name, parent, getterDeclaration);
+    prototype.fieldDeclaration = fieldDeclaration;
+    prototype.getterPrototype = new FunctionPrototype(GETTER_PREFIX + name, parent, getterDeclaration);
+    if (!fieldDeclaration.is(CommonFlags.Readonly)) {
+      let setterDeclaration = makeFieldSetterDeclaration(fieldDeclaration, parent);
+      prototype.setterPrototype = new FunctionPrototype(SETTER_PREFIX + name, parent, setterDeclaration);
+    }
+    return prototype;
+  }
 
   /** Constructs a new property prototype. */
   constructor(
@@ -4010,7 +4033,12 @@ export class PropertyPrototype extends DeclaredElement {
     this.flags &= ~(CommonFlags.Get | CommonFlags.Set);
   }
 
-  /** Tests if this prototype is bound to a class. */
+  /** Tests if this property prototype represents a field. */
+  get isField(): bool {
+    return this.fieldDeclaration != null;
+  }
+
+  /** Tests if this property prototype is bound to a class. */
   get isBound(): bool {
     switch (this.parent.kind) {
       case ElementKind.Class:
@@ -4019,7 +4047,43 @@ export class PropertyPrototype extends DeclaredElement {
     return false;
   }
 
-  /** Creates a clone of this prototype that is bound to a concrete class instead. */
+  /** Gets the associated type node. */
+  get typeNode(): TypeNode | null {
+    let fieldDeclaration = this.fieldDeclaration;
+    if (fieldDeclaration) return fieldDeclaration.type;
+    let getterPrototype = this.getterPrototype;
+    if (getterPrototype) {
+      let getterDeclaration = getterPrototype.declaration;
+      if (getterDeclaration.kind == NodeKind.FunctionDeclaration) {
+        return (<FunctionDeclaration>getterDeclaration).signature.returnType;
+      }
+    }
+    let setterPrototype = this.setterPrototype;
+    if (setterPrototype) {
+      let setterDeclaration = setterPrototype.declaration;
+      if (setterDeclaration.kind == NodeKind.FunctionDeclaration) {
+        let setterParameters = (<FunctionDeclaration>setterDeclaration).signature.parameters;
+        if (setterParameters.length) return setterParameters[0].type;
+      }
+    }
+    return null;
+  }
+
+  /** Gets the associated initializer node. */
+  get initializerNode(): Expression | null {
+    let fieldDeclaration = this.fieldDeclaration;
+    if (fieldDeclaration) return fieldDeclaration.initializer;
+    return null;
+  }
+
+  /** Gets the associated parameter index. Set if declared as a constructor parameter, otherwise `-1`. */
+  get parameterIndex(): i32 {
+    let fieldDeclaration = this.fieldDeclaration;
+    if (fieldDeclaration) return fieldDeclaration.parameterIndex;
+    return -1;
+  }
+
+  /** Creates a clone of this property prototype that is bound to a concrete class. */
   toBound(classInstance: Class): PropertyPrototype {
     assert(this.is(CommonFlags.Instance));
     assert(!this.isBound);
@@ -4056,6 +4120,8 @@ export class Property extends VariableLikeElement {
   getterInstance: Function | null = null;
   /** Setter instance. */
   setterInstance: Function | null = null;
+  /** Field memory offset, if a (layed out) instance field. */
+  memoryOffset: i32 = -1;
 
   /** Constructs a new property prototype. */
   constructor(
@@ -4084,6 +4150,11 @@ export class Property extends VariableLikeElement {
     if (this.is(CommonFlags.Instance)) {
       registerConcreteElement(this.program, this);
     }
+  }
+
+  /** Tests if this property represents a field. */
+  get isField(): bool {
+    return this.prototype.isField;
   }
 }
 
@@ -4860,4 +4931,144 @@ export function getDefaultParameterName(index: i32): string {
     cachedDefaultParameterNames.push(`$${i}`);
   }
   return cachedDefaultParameterNames[index];
+}
+
+/** Makes a field getter declaration. */
+function makeFieldGetterDeclaration(
+  /** The field declaration to make a getter declaration for. */
+  fieldDeclaration: FieldDeclaration,
+  /** The parent class prototype. */
+  classPrototype: ClassPrototype
+): FunctionDeclaration {
+  let range = Source.native.range;
+  let type = fieldDeclaration.type!; // TODO
+  // get name(): Type {
+  //   return load<Type>(changetype<usize>(this), offsetof<ClassType>("name"));
+  // }
+  return new FunctionDeclaration(
+    fieldDeclaration.name,
+    fieldDeclaration.decorators,
+    fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Get,
+    null,
+    new FunctionTypeNode([], type, null, false, range),
+    new ReturnStatement(
+      new CallExpression(
+        new IdentifierExpression("load", false, range),
+        [ type ], [
+          new CallExpression(
+            new IdentifierExpression("changetype", false, range),
+            [
+              new NamedTypeNode(
+                new TypeName(
+                  new IdentifierExpression("usize", false, range),
+                  null, range
+                ),
+                null, false, range
+              )
+            ], [
+              new ThisExpression(range)
+            ],
+            range
+          ),
+          new CallExpression(
+            new IdentifierExpression("offsetof", false, range),
+            [
+              new NamedTypeNode(
+                new TypeName(
+                  new IdentifierExpression(classPrototype.name, false, range),
+                  null, range
+                ),
+                null, false, range
+              )
+            ], [
+              new StringLiteralExpression(fieldDeclaration.name.text, range)
+            ],
+            range
+          )
+        ],
+        range
+      ),
+      range
+    ),
+    ArrowKind.None,
+    range
+  );
+}
+
+/** Makes a field setter declaration. */
+function makeFieldSetterDeclaration(
+  /** The field declaration to make a setter declaration for. */
+  fieldDeclaration: FieldDeclaration,
+  /** The parent class prototype. */
+  classPrototype: ClassPrototype
+): FunctionDeclaration {
+  let range = Source.native.range;
+  let type = fieldDeclaration.type!; // TODO
+  // set name(value: Type) {
+  //   store<Type>(changetype<usize>(this), value, offsetof<ClassType>("fieldname"));
+  // }
+  return new FunctionDeclaration(
+    fieldDeclaration.name,
+    fieldDeclaration.decorators,
+    fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Set,
+    null,
+    new FunctionTypeNode(
+      [
+        new ParameterNode(
+          ParameterKind.Default,
+          new IdentifierExpression("value", false, range),
+          type, null, range
+        )
+      ],
+      new NamedTypeNode(
+        new TypeName(
+          new IdentifierExpression("", false, range),
+          null, range
+        ),
+        null, false, range
+      ),
+      null, false, range
+    ),
+    new CallExpression(
+      new IdentifierExpression("store", false, range),
+      [
+        type
+      ], [
+        new CallExpression(
+          new IdentifierExpression("changetype", false, range),
+          [
+            new NamedTypeNode(
+              new TypeName(
+                new IdentifierExpression("usize", false, range),
+                null, range
+              ),
+              null, false, range
+            )
+          ], [
+            new ThisExpression(range)
+          ],
+          range
+        ),
+        new IdentifierExpression("value", false, range),
+        new CallExpression(
+          new IdentifierExpression("offsetof", false, range),
+          [
+            new NamedTypeNode(
+              new TypeName(
+                new IdentifierExpression(classPrototype.name, false, range),
+                null, range
+              ),
+              null, false, range
+            )
+          ], [
+            new StringLiteralExpression(fieldDeclaration.name.text, range)
+          ],
+          range
+        )
+      ],
+      range
+    ),
+    ArrowKind.None,
+    range
+  );
 }

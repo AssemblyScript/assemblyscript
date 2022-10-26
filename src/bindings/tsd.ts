@@ -1,4 +1,8 @@
 import {
+  Source
+} from "../ast";
+
+import {
   CommonFlags
 } from "../common";
 
@@ -238,7 +242,7 @@ export class TSDBuilder extends ExportsWalker {
         if (member.isAny(CommonFlags.Private | CommonFlags.Protected)) return false;
         if (member.is(CommonFlags.Constructor)) {
           // a generated constructor is ok
-          if (member.declaration.range != this.program.nativeRange) return false;
+          if (member.declaration.range != Source.native.range) return false;
         }
       }
     }

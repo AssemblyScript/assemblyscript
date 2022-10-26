@@ -177,7 +177,8 @@ import {
   NamedTypeNode,
 
   findDecorator,
-  isTypeOmitted
+  isTypeOmitted,
+  Source
 } from "./ast";
 
 import {
@@ -694,7 +695,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!isIdentifier(exportStart) || module.hasExport(exportStart)) {
           this.error(
             DiagnosticCode.Start_function_name_0_is_invalid_or_conflicts_with_another_export,
-            this.program.nativeRange, exportStart
+            Source.native.range, exportStart
           );
         } else {
           module.addFunctionExport(startFunctionInstance.internalName, exportStart);
@@ -8050,7 +8051,7 @@ export class Compiler extends DiagnosticEmitter {
       Node.createCompiledExpression(
         module.usize(i64_add(arraySegment.offset, i64_new(this.program.totalOverhead))),
         arrayInstance.type,
-        this.program.nativeRange
+        Source.native.range
       )
     );
     // TODO: Requires ReadonlyArray to be safe
