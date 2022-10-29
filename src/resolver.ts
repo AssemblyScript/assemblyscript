@@ -30,8 +30,6 @@ import {
   VariableLikeElement,
   Property,
   PropertyPrototype,
-  Field,
-  FieldPrototype,
   Global,
   TypeDefinition,
   TypedElement,
@@ -1329,8 +1327,7 @@ export class Resolver extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.Global: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
       case ElementKind.EnumValue:
-      case ElementKind.Local:
-      case ElementKind.Field: { // someVar.prop
+      case ElementKind.Local: { // someVar.prop
         let variableLikeElement = <VariableLikeElement>target;
         let type = variableLikeElement.type;
         assert(type != Type.void);
@@ -2450,7 +2447,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       case ElementKind.Global:
       case ElementKind.Local:
-      case ElementKind.Field: {
+      case ElementKind.Property: {
         let varType = (<VariableLikeElement>target).type;
         let varElement = this.getElementOfType(varType);
         if (!varElement || varElement.kind != ElementKind.Class) {
@@ -3152,7 +3149,7 @@ export class Resolver extends DiagnosticEmitter {
     let pendingClasses = this.resolveClassPending;
     let unimplemented = new Map<string,DeclaredElement>();
 
-    // Alias interface members
+    // Alias and pre-check implemented interface members
     let interfaces = instance.interfaces;
     if (interfaces) {
       for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
@@ -3162,25 +3159,28 @@ export class Resolver extends DiagnosticEmitter {
         if (ifaceMembers) {
           for (let _keys = Map_keys(ifaceMembers), i = 0, k = _keys.length; i < k; ++i) {
             let memberName = unchecked(_keys[i]);
-            let member = assert(ifaceMembers.get(memberName));
+            let baseMember = assert(ifaceMembers.get(memberName));
             if (members.has(memberName)) {
-              let existing = assert(members.get(memberName));
-              if (!member.isCompatibleOverride(existing)) {
+              let thisMember = assert(members.get(memberName));
+              if (!thisMember.isCompatibleOverride(baseMember)) {
                 this.errorRelated(
                   DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
-                  member.identifierAndSignatureRange, existing.identifierAndSignatureRange
+                  thisMember.identifierAndSignatureRange, baseMember.identifierAndSignatureRange
                 );
                 continue;
               }
+              if (!this.checkOverloadVisibility(memberName, thisMember, instance, baseMember, iface, reportMode)) {
+                continue;
+              }
             }
-            members.set(memberName, member);
-            unimplemented.set(memberName, member);
+            members.set(memberName, baseMember);
+            unimplemented.set(memberName, baseMember);
           }
         }
       }
     }
 
-    // Alias base members
+    // Alias and pre-check implemented / overridden base members
     let memoryOffset: u32 = 0;
     let base = instance.base;
     if (base) {
@@ -3190,20 +3190,23 @@ export class Resolver extends DiagnosticEmitter {
         // TODO: for (let [baseMemberName, baseMember] of baseMembers) {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
           let memberName = unchecked(_keys[i]);
-          let member = assert(baseMembers.get(memberName));
+          let baseMember = assert(baseMembers.get(memberName));
           if (members.has(memberName)) {
-            let existing = assert(members.get(memberName));
-            if (!member.isCompatibleOverride(existing)) {
+            let thisMember = assert(members.get(memberName));
+            if (!thisMember.isCompatibleOverride(baseMember)) {
               this.errorRelated(
                 DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
-                member.identifierAndSignatureRange, existing.identifierAndSignatureRange
+                thisMember.identifierAndSignatureRange, baseMember.identifierAndSignatureRange
               );
               continue;
             }
+            if (!this.checkOverloadVisibility(memberName, thisMember, instance, baseMember, base, reportMode)) {
+              continue;
+            }
           }
-          members.set(memberName, member);
-          if (member.is(CommonFlags.Abstract)) {
-            unimplemented.set(memberName, member);
+          members.set(memberName, baseMember);
+          if (baseMember.is(CommonFlags.Abstract)) {
+            unimplemented.set(memberName, baseMember);
           } else {
             unimplemented.delete(memberName);
           }
@@ -3222,145 +3225,6 @@ export class Resolver extends DiagnosticEmitter {
         let member = unchecked(_values[i]);
         let memberName = member.name;
         switch (member.kind) {
-
-          case ElementKind.FieldPrototype: {
-            let fieldPrototype = <FieldPrototype>member;
-            let fieldTypeNode = fieldPrototype.typeNode;
-            let fieldType: Type | null = null;
-            let existingField: Field | null = null;
-            if (base) {
-              let baseMembers = base.members;
-              if (baseMembers && baseMembers.has(fieldPrototype.name)) {
-                let baseField = assert(baseMembers.get(fieldPrototype.name));
-                if (baseField.kind == ElementKind.Field) {
-                  existingField = <Field>baseField;
-                } else {
-                  this.errorRelated(
-                    DiagnosticCode.Duplicate_identifier_0,
-                    fieldPrototype.identifierNode.range, baseField.identifierNode.range,
-                    fieldPrototype.name
-                  );
-                }
-              }
-            }
-            if (!fieldTypeNode) {
-              if (existingField && !existingField.is(CommonFlags.Private)) {
-                fieldType = existingField.type;
-              }
-              if (!fieldType) {
-                if (reportMode == ReportMode.Report) {
-                  this.error(
-                    DiagnosticCode.Type_expected,
-                    fieldPrototype.identifierNode.range.atEnd
-                  );
-                }
-              }
-            } else {
-              fieldType = this.resolveType(
-                fieldTypeNode,
-                prototype.parent, // relative to class
-                instance.contextualTypeArguments,
-                reportMode
-              );
-              if (fieldType == Type.void) {
-                if (reportMode == ReportMode.Report) {
-                  this.error(
-                    DiagnosticCode.Type_expected,
-                    fieldTypeNode.range
-                  );
-                }
-                break;
-              }
-            }
-            if (!fieldType) break; // did report above
-            if (existingField) {
-              // visibility checks
-              /*
-                          existingField visibility on top
-                +==================+=========+===========+=========+
-                | Visibility Table | Private | Protected | Public  |
-                +==================+=========+===========+=========+
-                | Private          | error   | error     | error   |
-                +------------------+---------+-----------+---------+
-                | Protected        | error   | allowed   | error   |
-                +------------------+---------+-----------+---------+
-                | Public           | error   | allowed   | allowed |
-                +------------------+---------+-----------+---------+
-              */
-
-              let baseClass = <Class>base;
-
-              // handle cases row-by-row
-              if (fieldPrototype.is(CommonFlags.Private)) {
-                if (existingField.is(CommonFlags.Private)) {
-                  this.errorRelated(
-                    DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name
-                  );
-                } else {
-                  this.errorRelated(
-                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, instance.internalName, baseClass.internalName
-                  );
-                }
-              } else if (fieldPrototype.is(CommonFlags.Protected)) {
-                if (existingField.is(CommonFlags.Private)) {
-                  this.errorRelated(
-                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, baseClass.internalName, instance.internalName
-                  );
-                } else if (!existingField.is(CommonFlags.Protected)) {
-                  // may be implicitly public
-                  this.errorRelated(
-                    DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, instance.internalName, baseClass.internalName
-                  );
-                }
-              } else {
-                // fieldPrototype is public here
-                if (existingField.is(CommonFlags.Private)) {
-                  this.errorRelated(
-                    DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-                    fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                    fieldPrototype.name, baseClass.internalName, instance.internalName
-                  );
-                }
-              }
-
-              // assignability (to guarantee soundness, field types must be invariant)
-              // see also Wasm GC, where mutable fields are invariant for this reason
-              //
-              //  class Animal { sibling: Animal; }
-              //  class Cat extends Animal { sibling: Cat; } // covariance
-              //  class Dog extends Animal { sibling: Dog; } // is unsound
-              //  (<Animal>new Cat()).sibling = new Dog();   // → Cat with Dog sibling
-              //
-              if (fieldType != existingField.type) {
-                this.errorRelated(
-                  DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
-                  fieldPrototype.identifierNode.range, existingField.identifierNode.range,
-                  fieldPrototype.name, instance.internalName, baseClass.internalName
-                );
-                fieldType = existingField.type; // recover (typebuilder would otherwise error)
-              }
-            }
-            let fieldInstance = new Field(fieldPrototype, instance, fieldType);
-            assert(isPowerOf2(fieldType.byteSize));
-            if (existingField) {
-              fieldInstance.memoryOffset = existingField.memoryOffset;
-            } else {
-              let mask = fieldType.byteSize - 1;
-              if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
-              fieldInstance.memoryOffset = memoryOffset;
-              memoryOffset += fieldType.byteSize;
-            }
-            instance.add(memberName, fieldInstance); // reports
-            break;
-          }
           case ElementKind.FunctionPrototype: {
             let boundPrototype = (<FunctionPrototype>member).toBound(instance);
             instance.add(boundPrototype.name, boundPrototype); // reports
@@ -3368,7 +3232,20 @@ export class Resolver extends DiagnosticEmitter {
           }
           case ElementKind.PropertyPrototype: {
             let boundPrototype = (<PropertyPrototype>member).toBound(instance);
-            instance.add(boundPrototype.name, boundPrototype); // reports
+            if (boundPrototype.isField) { // resolve fully and lay out
+              let boundInstance = this.resolveProperty(boundPrototype, reportMode);
+              if (boundInstance) {
+                let fieldType = boundInstance.type;
+                assert(isPowerOf2(fieldType.byteSize));
+                let mask = fieldType.byteSize - 1;
+                if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
+                boundInstance.memoryOffset = memoryOffset;
+                memoryOffset += fieldType.byteSize;
+                instance.add(boundInstance.name, boundInstance); // reports
+              }
+            } else {
+              instance.add(boundPrototype.name, boundPrototype); // reports
+            }
             break;
           }
           default: assert(false);
@@ -3527,6 +3404,84 @@ export class Resolver extends DiagnosticEmitter {
       }
       if (dependsOnInstance) this.finishResolveClass(pending, reportMode);
     }
+  }
+
+  /** Checks whether visibility of an overload is valid. */
+  private checkOverloadVisibility(
+    /** Name of the property. */
+    name: string,
+    /** Overloading element. */
+    thisElement: DeclaredElement,
+    /** Overloading class. */
+    thisClass: Class,
+    /** Overloaded element. */
+    baseElement: DeclaredElement,
+    /** Overloaded class. */
+    baseClass: Class,
+    /** Report mode. */
+    reportMode: ReportMode
+  ): bool {
+    if (thisElement.is(CommonFlags.Private)) {
+      if (reportMode == ReportMode.Report) {
+        if (baseElement.is(CommonFlags.Private)) {
+          this.errorRelated(
+            DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
+            thisElement.identifierNode.range, baseElement.identifierNode.range,
+            name
+          );
+        } else {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+            thisElement.identifierNode.range, baseElement.identifierNode.range,
+            name, thisClass.internalName, baseClass.internalName
+          );
+        }
+      }
+      return false;
+    } else if (thisElement.is(CommonFlags.Protected)) {
+      if (baseElement.is(CommonFlags.Private)) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+            thisElement.identifierNode.range, baseElement.identifierNode.range,
+            name, baseClass.internalName, thisClass.internalName
+          );
+        }
+        return false;
+      } else if (baseElement.isPublic) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
+            thisElement.identifierNode.range, baseElement.identifierNode.range,
+            name, thisClass.internalName, baseClass.internalName
+          );
+        }
+        return false;
+      }
+      assert(baseElement.is(CommonFlags.Protected));
+    } else if (thisElement.isPublic) {
+      if (baseElement.is(CommonFlags.Private)) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+            thisElement.identifierNode.range, baseElement.identifierNode.range,
+            name, baseClass.internalName, thisClass.internalName
+          );
+        }
+        return false;
+      } else if (baseElement.is(CommonFlags.Protected)) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
+            thisElement.identifierNode.range, baseElement.identifierNode.range,
+            name, baseClass.internalName, thisClass.internalName
+          );
+        }
+        return false;
+      }
+      assert(baseElement.isPublic);
+    }
+    return true;
   }
 
   /** Resolves a class prototype by first resolving the specified type arguments. */

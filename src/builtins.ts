@@ -80,11 +80,11 @@ import {
 import {
   ElementKind,
   FunctionPrototype,
-  Field,
   Global,
   DecoratorFlags,
   ClassPrototype,
-  Class
+  Class,
+  Property
 } from "./program";
 
 import {
@@ -1078,8 +1078,12 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     let classMembers = classReference.members;
     if (classMembers && classMembers.has(fieldName)) {
       let member = assert(classMembers.get(fieldName));
-      if (member.kind == ElementKind.Field) {
-        return contextualUsize(compiler, i64_new((<Field>member).memoryOffset), contextualType);
+      if (member.kind == ElementKind.Property) {
+        let property = <Property>member;
+        if (property.isField) {
+          assert(property.memoryOffset >= 0);
+          return contextualUsize(compiler, i64_new(property.memoryOffset), contextualType);
+        }
       }
     }
     compiler.error(
@@ -10261,29 +10265,32 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
       // TODO: for (let member of members.values()) {
       for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
         let member = unchecked(_values[j]);
-        if (member.kind == ElementKind.Field) {
-          if ((<Field>member).parent == instance) {
-            let fieldType = (<Field>member).type;
-            if (fieldType.isManaged) {
-              let fieldOffset = (<Field>member).memoryOffset;
-              assert(fieldOffset >= 0);
-              needsTempValue = true;
-              body.push(
-                // if ($2 = value) __visit($2, $1)
-                module.if(
-                  module.local_tee(2,
-                    module.load(sizeTypeSize, false,
-                      module.local_get(0, sizeTypeRef),
-                      sizeTypeRef, fieldOffset
+        if (member.kind == ElementKind.Property) {
+          let property = <Property>member;
+          if (property.isField) {
+            if (property.parent == instance) {
+              let fieldType = property.type;
+              if (fieldType.isManaged) {
+                let fieldOffset = property.memoryOffset;
+                assert(fieldOffset >= 0);
+                needsTempValue = true;
+                body.push(
+                  // if ($2 = value) __visit($2, $1)
+                  module.if(
+                    module.local_tee(2,
+                      module.load(sizeTypeSize, false,
+                        module.local_get(0, sizeTypeRef),
+                        sizeTypeRef, fieldOffset
+                      ),
+                      false // internal
                     ),
-                    false // internal
-                  ),
-                  module.call(visitInstance.internalName, [
-                    module.local_get(2, sizeTypeRef), // value
-                    module.local_get(1, TypeRef.I32)  // cookie
-                  ], TypeRef.None)
-                )
-              );
+                    module.call(visitInstance.internalName, [
+                      module.local_get(2, sizeTypeRef), // value
+                      module.local_get(1, TypeRef.I32)  // cookie
+                    ], TypeRef.None)
+                  )
+                );
+              }
             }
           }
         }

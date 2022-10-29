@@ -1674,7 +1674,6 @@ export class Program extends DiagnosticEmitter {
       }
       case ElementKind.Property:
       case ElementKind.Function:
-      case ElementKind.Field:
       case ElementKind.Class: assert(false); // assumes that there are no instances yet
     }
     let staticMembers = element.members;
@@ -1995,7 +1994,7 @@ export class Program extends DiagnosticEmitter {
       if (!parent.add(name, element)) return;
     } else { // actual instance field
       assert(!declaration.isAny(CommonFlags.Abstract | CommonFlags.Get | CommonFlags.Set));
-      element = new FieldPrototype(
+      element = PropertyPrototype.forField(
         name,
         parent,
         declaration,
@@ -2729,10 +2728,6 @@ export const enum ElementKind {
   InterfacePrototype,
   /** An {@link Interface}. */
   Interface,
-  /** A {@link FieldPrototype}. */
-  FieldPrototype,
-  /** A {@link Field}. */
-  Field,
   /** A {@link PropertyPrototype}.  */
   PropertyPrototype,
   /** A {@link Property}. */
@@ -2933,6 +2928,17 @@ export abstract class Element {
     return (this.flags & vis) == (other.flags & vis);
   }
 
+  /** Checks if the visibility of this element overrides the specified's. */
+  visibilityOverrides(existing: Element): bool {
+    // Private cannot be overridden
+    if (existing.is(CommonFlags.Private)) return false;
+    // Protected is overridden by protected or public
+    if (existing.is(CommonFlags.Protected)) return this.is(CommonFlags.Protected) || this.isPublic;
+    // Public is overridden only by public
+    if (existing.isPublic) return this.isPublic;
+    return false;
+  }
+
   /** Returns a string representation of this element. */
   toString(): string {
     return `${this.internalName}, kind=${this.kind}`;
@@ -3055,10 +3061,6 @@ export abstract class DeclaredElement extends Element {
           }
           return true;
         }
-        // TODO: Implement properties overriding fields and vice-versa. Challenge is that anything overridable requires
-        // a virtual stub, but fields aren't functions. Either all (such) fields should become property-like, with a
-        // getter and a setter that can participate as a virtual stub, or it's allowed one-way, with fields integrated
-        // into what can be a virtual stub as get=load and set=store, then not necessarily with own accessor functions.
       }
     }
     return false;
@@ -3851,130 +3853,6 @@ export class Function extends TypedElement {
   }
 }
 
-/** A yet unresolved instance field prototype. */
-export class FieldPrototype extends DeclaredElement {
-
-  /** Constructs a new field prototype. */
-  constructor(
-    /** Simple name. */
-    name: string,
-    /** Parent class. */
-    parent: ClassPrototype,
-    /** Declaration reference. */
-    declaration: FieldDeclaration,
-    /** Pre-checked flags indicating built-in decorators. */
-    decoratorFlags: DecoratorFlags = DecoratorFlags.None
-  ) {
-    super(
-      ElementKind.FieldPrototype,
-      name,
-      mangleInternalName(name, parent, assert(declaration.is(CommonFlags.Instance))),
-      parent.program,
-      parent,
-      declaration
-    );
-    this.decoratorFlags = decoratorFlags;
-  }
-
-  /** Gets the associated type node. */
-  get typeNode(): TypeNode | null {
-    return (<FieldDeclaration>this.declaration).type;
-  }
-
-  /** Gets the associated initializer node. */
-  get initializerNode(): Expression | null {
-    return (<FieldDeclaration>this.declaration).initializer;
-  }
-
-  /** Gets the associated parameter index. Set if declared as a constructor parameter, otherwise `-1`. */
-  get parameterIndex(): i32 {
-    return (<FieldDeclaration>this.declaration).parameterIndex;
-  }
-}
-
-/** A resolved instance field. */
-export class Field extends VariableLikeElement {
-
-  /** Field prototype reference. */
-  prototype: FieldPrototype;
-  /** Field memory offset, if an instance field. */
-  memoryOffset: i32 = -1;
-  /** Getter function reference, if compiled. */
-  getterRef: FunctionRef = 0;
-  /** Setter function reference, if compiled. */
-  setterRef: FunctionRef = 0;
-
-  /** Constructs a new field. */
-  constructor(
-    /** Respective field prototype. */
-    prototype: FieldPrototype,
-    /** Parent class. */
-    parent: Class,
-    /** Concrete type. */
-    type: Type
-  ) {
-    super(
-      ElementKind.Field,
-      prototype.name,
-      parent,
-      <VariableLikeDeclarationStatement>prototype.declaration
-    );
-    this.prototype = prototype;
-    this.flags = prototype.flags;
-    this.decoratorFlags = prototype.decoratorFlags;
-    assert(type != Type.void);
-    this.setType(type);
-    registerConcreteElement(this.program, this);
-  }
-
-  /** Gets the field's `this` type. */
-  get thisType(): Type {
-    let parent = this.parent;
-    assert(parent.kind == ElementKind.Class);
-    return (<Class>parent).type;
-  }
-
-  /** Gets the internal name of the respective getter function. */
-  get internalGetterName(): string {
-    let cached = this._internalGetterName;
-    if (cached == null) {
-      this._internalGetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${GETTER_PREFIX}${this.name}`;
-    }
-    return cached;
-  }
-  private _internalGetterName: string | null = null;
-
-  /** Gets the internal name of the respective setter function. */
-  get internalSetterName(): string {
-    let cached = this._internalSetterName;
-    if (cached == null) {
-      this._internalSetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${SETTER_PREFIX}${this.name}`;
-    }
-    return cached;
-  }
-  private _internalSetterName: string | null = null;
-
-  /** Gets the signature of the respective getter function. */
-  get internalGetterSignature(): Signature {
-    let cached = this._internalGetterSignature;
-    if (!cached) {
-      this._internalGetterSignature = cached = new Signature(this.program, null, this.type, this.thisType);
-    }
-    return cached;
-  }
-  private _internalGetterSignature: Signature | null = null;
-
-  /** Gets the signature of the respective setter function. */
-  get internalSetterSignature(): Signature {
-    let cached = this._internalSetterSignature;
-    if (!cached) {
-      this._internalSetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
-    }
-    return cached;
-  }
-  private _internalSetterSignature: Signature | null = null;
-}
-
 /** A property comprised of a getter and a setter function. */
 export class PropertyPrototype extends DeclaredElement {
 
@@ -3991,7 +3869,16 @@ export class PropertyPrototype extends DeclaredElement {
   private boundPrototypes: Map<Class,PropertyPrototype> | null = null;
 
   /** Creates a property prototype representing a field. */
-  static forField(parent: ClassPrototype, fieldDeclaration: FieldDeclaration): PropertyPrototype {
+  static forField(
+    /** Simple name. */
+    name: string,
+    /** Parent element. Always a class prototype. */
+    parent: ClassPrototype,
+    /** Declaration of the field. */
+    fieldDeclaration: FieldDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
+    decoratorFlags: DecoratorFlags,
+  ): PropertyPrototype {
     // A field differs from a property in that accessing it is merely a load
     // from respectively store to a memory address relative to its `this`
     // pointer, not a function call. However, fields can be overloaded with
@@ -4001,7 +3888,6 @@ export class PropertyPrototype extends DeclaredElement {
     // properties, with compiler-generated accessors for cases they are used
     // like properties. As a result, emitting actual loads and stores becomes an
     // optimization in non-overloaded cases.
-    let name = fieldDeclaration.name.text;
     let getterDeclaration = makeFieldGetterDeclaration(fieldDeclaration, parent);
     let prototype = new PropertyPrototype(name, parent, getterDeclaration);
     prototype.fieldDeclaration = fieldDeclaration;
@@ -4010,6 +3896,7 @@ export class PropertyPrototype extends DeclaredElement {
       let setterDeclaration = makeFieldSetterDeclaration(fieldDeclaration, parent);
       prototype.setterPrototype = new FunctionPrototype(SETTER_PREFIX + name, parent, setterDeclaration);
     }
+    prototype.decoratorFlags = decoratorFlags;
     return prototype;
   }
 
@@ -4083,6 +3970,13 @@ export class PropertyPrototype extends DeclaredElement {
     return -1;
   }
 
+  /** Gets the respective `this` type. */
+  get thisType(): Type {
+    let parent = this.parent;
+    assert(parent.kind == ElementKind.Class);
+    return (<Class>parent).type;
+  }
+
   /** Creates a clone of this property prototype that is bound to a concrete class. */
   toBound(classInstance: Class): PropertyPrototype {
     assert(this.is(CommonFlags.Instance));
@@ -4098,6 +3992,7 @@ export class PropertyPrototype extends DeclaredElement {
       <MethodDeclaration>firstDeclaration
     );
     bound.flags = this.flags;
+    bound.fieldDeclaration = this.fieldDeclaration;
     let getterPrototype = this.getterPrototype;
     if (getterPrototype) {
       bound.getterPrototype = getterPrototype.toBound(classInstance);
@@ -4362,8 +4257,10 @@ export class Class extends TypedElement {
     let lengthField = this.getMember("length");
     if (!lengthField) return false;
     return (
-      lengthField.kind == ElementKind.Field ||
       (
+        lengthField.kind == ElementKind.Property &&
+        (<Property>lengthField).getterInstance != null
+      ) || (
         lengthField.kind == ElementKind.PropertyPrototype &&
         (<PropertyPrototype>lengthField).getterPrototype != null // TODO: resolve & check type?
       )
@@ -4527,8 +4424,10 @@ export class Class extends TypedElement {
   /** Calculates the memory offset of the specified field. */
   offsetof(fieldName: string): u32 {
     let member = assert(this.getMember(fieldName));
-    assert(member.kind == ElementKind.Field);
-    return (<Field>member).memoryOffset;
+    assert(member.kind == ElementKind.Property);
+    let property = <Property>member;
+    assert(property.isField && property.memoryOffset >= 0);
+    return property.memoryOffset;
   }
 
   /** Creates a buffer suitable to hold a runtime instance of this class. */
@@ -4549,65 +4448,68 @@ export class Class extends TypedElement {
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
     let member = this.getMember(name);
-    if (member && member.kind == ElementKind.Field) {
-      let fieldInstance = <Field>member;
-      let offset = baseOffset + fieldInstance.memoryOffset;
-      let typeKind = fieldInstance.type.kind;
-      switch (typeKind) {
-        case TypeKind.I8:
-        case TypeKind.U8: {
-          assert(!i64_is(value));
-          writeI8(i32(value), buffer, offset);
-          return 1;
-        }
-        case TypeKind.I16:
-        case TypeKind.U16: {
-          assert(!i64_is(value));
-          writeI16(i32(value), buffer, offset);
-          return 2;
-        }
-        case TypeKind.I32:
-        case TypeKind.U32: {
-          assert(!i64_is(value));
-          writeI32(i32(value), buffer, offset);
-          return 4;
-        }
-        case TypeKind.Isize:
-        case TypeKind.Usize: {
-          if (this.program.options.isWasm64) {
+    if (member && member.kind == ElementKind.Property) {
+      let property = <Property>member;
+      if (property.isField) {
+        assert(property.memoryOffset >= 0);
+        let offset = baseOffset + property.memoryOffset;
+        let typeKind = property.type.kind;
+        switch (typeKind) {
+          case TypeKind.I8:
+          case TypeKind.U8: {
+            assert(!i64_is(value));
+            writeI8(i32(value), buffer, offset);
+            return 1;
+          }
+          case TypeKind.I16:
+          case TypeKind.U16: {
+            assert(!i64_is(value));
+            writeI16(i32(value), buffer, offset);
+            return 2;
+          }
+          case TypeKind.I32:
+          case TypeKind.U32: {
+            assert(!i64_is(value));
+            writeI32(i32(value), buffer, offset);
+            return 4;
+          }
+          case TypeKind.Isize:
+          case TypeKind.Usize: {
+            if (this.program.options.isWasm64) {
+              if (i64_is(value)) {
+                writeI64(value, buffer, offset);
+              } else {
+                writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.Usize);
+              }
+              return 8;
+            } else {
+              if (i64_is(value)) {
+                writeI64AsI32(value, buffer, offset, typeKind == TypeKind.Usize);
+              } else {
+                writeI32(i32(value), buffer, offset);
+              }
+              return 4;
+            }
+          }
+          case TypeKind.I64:
+          case TypeKind.U64: {
             if (i64_is(value)) {
               writeI64(value, buffer, offset);
             } else {
-              writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.Usize);
+              writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.U64);
             }
             return 8;
-          } else {
-            if (i64_is(value)) {
-              writeI64AsI32(value, buffer, offset, typeKind == TypeKind.Usize);
-            } else {
-              writeI32(i32(value), buffer, offset);
-            }
+          }
+          case TypeKind.F32: {
+            assert(!i64_is(value));
+            writeF32(f32(value), buffer, offset);
             return 4;
           }
-        }
-        case TypeKind.I64:
-        case TypeKind.U64: {
-          if (i64_is(value)) {
-            writeI64(value, buffer, offset);
-          } else {
-            writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.U64);
+          case TypeKind.F64: {
+            assert(!i64_is(value));
+            writeF64(f64(value), buffer, offset);
+            return 8;
           }
-          return 8;
-        }
-        case TypeKind.F32: {
-          assert(!i64_is(value));
-          writeF32(f32(value), buffer, offset);
-          return 4;
-        }
-        case TypeKind.F64: {
-          assert(!i64_is(value));
-          writeF64(f64(value), buffer, offset);
-          return 8;
         }
       }
     }
@@ -4683,9 +4585,9 @@ export class Class extends TypedElement {
       // Check that there are no managed instance fields
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
-        if (member.kind == ElementKind.Field) {
-          let fieldType = (<Field>member).type;
-          if (fieldType.isManaged) return false;
+        if (member.kind == ElementKind.Property) {
+          let property = <Property>member;
+          if (property.isField && property.type.isManaged) return false;
         }
       }
 
@@ -4945,7 +4847,7 @@ function makeFieldGetterDeclaration(
   // get name(): Type {
   //   return load<Type>(changetype<usize>(this), offsetof<ClassType>("name"));
   // }
-  return new FunctionDeclaration(
+  return new MethodDeclaration(
     fieldDeclaration.name,
     fieldDeclaration.decorators,
     fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Get,
@@ -4990,7 +4892,6 @@ function makeFieldGetterDeclaration(
       ),
       range
     ),
-    ArrowKind.None,
     range
   );
 }
@@ -5007,7 +4908,7 @@ function makeFieldSetterDeclaration(
   // set name(value: Type) {
   //   store<Type>(changetype<usize>(this), value, offsetof<ClassType>("fieldname"));
   // }
-  return new FunctionDeclaration(
+  return new MethodDeclaration(
     fieldDeclaration.name,
     fieldDeclaration.decorators,
     fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Set,
@@ -5068,7 +4969,6 @@ function makeFieldSetterDeclaration(
       ],
       range
     ),
-    ArrowKind.None,
     range
   );
 }

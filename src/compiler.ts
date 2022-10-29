@@ -77,7 +77,6 @@ import {
   ElementKind,
   DeclaredElement,
   Enum,
-  Field,
   FunctionPrototype,
   Function,
   Global,
@@ -5552,8 +5551,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(<Global>target)) return this.module.unreachable(); // reports
         // fall-through
       }
-      case ElementKind.Local:
-      case ElementKind.Field: {
+      case ElementKind.Local: {
         if (this.pendingElements.has(target)) {
           this.error(
             DiagnosticCode.Variable_0_used_before_its_declaration,
@@ -5575,6 +5573,16 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.Property: {
         let propertyInstance = <Property>target;
+        if (propertyInstance.isField) {
+          if (this.pendingElements.has(target)) {
+            this.error(
+              DiagnosticCode.Variable_0_used_before_its_declaration,
+              expression.range,
+              target.internalName
+            );
+            return this.module.unreachable();
+          }
+        }
         let setterInstance = propertyInstance.setterInstance;
         if (!setterInstance) {
           this.error(
@@ -5694,43 +5702,42 @@ export class Compiler extends DiagnosticEmitter {
         }
         return this.makeGlobalAssignment(global, valueExpr, valueType, tee);
       }
-      case ElementKind.Field: {
-        let fieldInstance = <Field>target;
-        let initializerNode = fieldInstance.initializerNode;
-        let isConstructor = flow.sourceFunction.is(CommonFlags.Constructor);
-
-        // Cannot assign to readonly fields except in constructors if there's no initializer
-        if (fieldInstance.is(CommonFlags.Readonly)) {
-          if (!isConstructor || initializerNode) {
-            this.error(
-              DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-              valueExpression.range, fieldInstance.internalName
-            );
-            return module.unreachable();
-          }
-        }
-
-        // Mark initialized fields in constructors
-        thisExpression = assert(thisExpression);
-        if (isConstructor && thisExpression.kind == NodeKind.This) {
-          flow.setThisFieldFlag(fieldInstance, FieldFlags.Initialized);
-        }
-
-        let fieldParent = fieldInstance.parent;
-        assert(fieldParent.kind == ElementKind.Class);
-        return this.makeFieldAssignment(fieldInstance,
-          valueExpr,
-          valueType,
-          this.compileExpression(
-            thisExpression,
-            (<Class>fieldParent).type,
-            Constraints.ConvImplicit | Constraints.IsThis
-          ),
-          tee
-        );
-      }
       case ElementKind.Property: {
         let propertyInstance = <Property>target;
+        if (propertyInstance.isField) {
+          // Cannot assign to readonly fields except in constructors if there's no initializer
+          let isConstructor = flow.sourceFunction.is(CommonFlags.Constructor);
+          if (propertyInstance.is(CommonFlags.Readonly)) {
+            let initializerNode = propertyInstance.initializerNode;
+            if (!isConstructor || initializerNode) {
+              this.error(
+                DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
+                valueExpression.range, propertyInstance.internalName
+              );
+              return module.unreachable();
+            }
+          }
+          // Mark initialized fields in constructors
+          thisExpression = assert(thisExpression);
+          if (isConstructor && thisExpression.kind == NodeKind.This) {
+            flow.setThisFieldFlag(propertyInstance, FieldFlags.Initialized);
+          }
+          // Compile as store if not overloaded
+          if (!propertyInstance.is(CommonFlags.Virtual)) {
+            let fieldParent = propertyInstance.parent;
+            assert(fieldParent.kind == ElementKind.Class);
+            return this.makeFieldAssignment(propertyInstance,
+              valueExpr,
+              valueType,
+              this.compileExpression(
+                thisExpression,
+                (<Class>fieldParent).type,
+                Constraints.ConvImplicit | Constraints.IsThis
+              ),
+              tee
+            );
+          }
+        }
         let setterInstance = propertyInstance.setterInstance;
         if (!setterInstance) {
           this.error(
@@ -5920,7 +5927,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Makes an assignment to a field. */
   private makeFieldAssignment(
     /** The field to assign to. */
-    field: Field,
+    field: Property,
     /** The value to assign. */
     valueExpr: ExpressionRef,
     /** The type of the value to assign. */
@@ -6110,32 +6117,6 @@ export class Compiler extends DiagnosticEmitter {
         );
         return module.unreachable();
       }
-      case ElementKind.Field: {
-        let fieldInstance = <Field>target;
-        let fieldType = fieldInstance.type;
-        signature = fieldType.signatureReference;
-        if (signature) {
-          let fieldParent = fieldInstance.parent;
-          assert(fieldParent.kind == ElementKind.Class);
-          let usizeType = this.options.usizeType;
-          functionArg = module.load(usizeType.byteSize, false,
-            this.compileExpression(
-              assert(thisExpression),
-              (<Class>fieldParent).type,
-              Constraints.ConvImplicit | Constraints.IsThis
-            ),
-            usizeType.toRef(),
-            fieldInstance.memoryOffset
-          );
-          break;
-        }
-        this.error(
-          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-          expression.range, fieldType.toString()
-        );
-        return module.unreachable();
-      }
-
       case ElementKind.PropertyPrototype: {
         let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>target);
         if (!propertyInstance) return module.unreachable();
@@ -6146,6 +6127,31 @@ export class Compiler extends DiagnosticEmitter {
         let propertyInstance = <Property>target;
         let getterInstance = propertyInstance.getterInstance;
         let type = assert(this.resolver.getTypeOfElement(target));
+
+        // Compile as load if not an overloaded field
+        if (propertyInstance.isField) {
+          signature = type.signatureReference;
+          if (signature) {
+            let fieldParent = propertyInstance.parent;
+            assert(fieldParent.kind == ElementKind.Class);
+            let usizeType = this.options.usizeType;
+            functionArg = module.load(usizeType.byteSize, false,
+              this.compileExpression(
+                assert(thisExpression),
+                (<Class>fieldParent).type,
+                Constraints.ConvImplicit | Constraints.IsThis
+              ),
+              usizeType.toRef(),
+              propertyInstance.memoryOffset
+            );
+            break;
+          }
+          this.error(
+            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+            expression.range, type.toString()
+          );
+          return module.unreachable();
+        }
 
         if (!getterInstance) {
           this.error(
@@ -8159,13 +8165,15 @@ export class Compiler extends DiagnosticEmitter {
     );
     // tempData = tempThis.dataStart
     let dataStartMember = assert(arrayInstance.getMember("dataStart"));
-    assert(dataStartMember.kind == ElementKind.Field);
+    assert(dataStartMember.kind == ElementKind.Property);
+    let dataStartProperty = <Property>dataStartMember;
+    assert(dataStartProperty.memoryOffset >= 0);
     stmts.push(
       module.local_set(tempDataStart.index,
         module.load(arrayType.byteSize, false,
           module.local_get(tempThis.index, arrayTypeRef),
           arrayTypeRef,
-          (<Field>dataStartMember).memoryOffset
+          dataStartProperty.memoryOffset
         ),
         true // ArrayBuffer
       )
@@ -8394,22 +8402,26 @@ export class Compiler extends DiagnosticEmitter {
     assert(numNames == values.length);
 
     // Assume all class fields will be omitted, and add them to our omitted list
-    let omittedFields = new Set<Field>();
+    let omittedFields = new Set<Property>();
     if (members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberKey = _keys[i];
         let member = assert(members.get(memberKey));
-        if (member && member.kind == ElementKind.Field) {
-          omittedFields.add(<Field>member); // incl. private/protected
+        if (member && member.kind == ElementKind.Property) {
+          let property = <Property>member;
+          if (property.isField) {
+            omittedFields.add(property); // incl. private/protected
+          }
         }
       }
     }
 
     // Iterate through the members defined in our expression
+    let deferredProperties = new Array<Property>();
     for (let i = 0; i < numNames; ++i) {
       let memberName = names[i].text;
       let member = classReference.getMember(memberName);
-      if (!member || member.kind != ElementKind.Field) {
+      if (!member || member.kind != ElementKind.Property) {
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
           names[i].range, memberName, classType.toString()
@@ -8433,45 +8445,78 @@ export class Compiler extends DiagnosticEmitter {
         hasErrors = true;
         continue;
       }
-      let fieldInstance = <Field>member;
-      let fieldType = fieldInstance.type;
-
-      let expr = this.compileExpression(values[i], fieldType, Constraints.ConvImplicit);
-      exprs.push(
-        module.call(fieldInstance.internalSetterName, [
-          module.local_get(tempLocal.index, classTypeRef),
-          expr
-        ], TypeRef.None)
-      );
-      this.compileFieldSetter(fieldInstance);
+      let propertyInstance = <Property>member;
+      let setterInstance = propertyInstance.setterInstance;
+      if (!setterInstance) { // TODO: allow readonly fields?
+        this.error(
+          DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
+          names[i].range, memberName, classType.toString()
+        );
+        hasErrors = true;
+        continue;
+      }
 
       // This member is no longer omitted, so delete from our omitted fields
-      omittedFields.delete(fieldInstance);
+      omittedFields.delete(propertyInstance);
+
+      // Defer real properties to be set after fields are initialized. In
+      // constructions, whether the field is virtual is irrelevant because
+      // it is guaranteed to be not actually overloaded.
+      if (!propertyInstance.isField) {
+        deferredProperties.push(propertyInstance);
+        continue;
+      }
+
+      let propertyType = propertyInstance.type;
+      assert(propertyInstance.memoryOffset >= 0);
+      exprs.push(
+        module.store(
+          propertyType.byteSize,
+          module.local_get(tempLocal.index, classTypeRef),
+          this.compileExpression(values[i], propertyType, Constraints.ConvImplicit),
+          propertyType.toRef(),
+          propertyInstance.memoryOffset
+        )
+      );
     }
+
+    // Call deferred real property setters after
+    for (let i = 0, k = deferredProperties.length; i < k; ++i) {
+      let propertyInstance = deferredProperties[i];
+      let setterInstance = assert(propertyInstance.setterInstance);
+      exprs.push(
+        this.makeCallDirect(setterInstance, [
+          module.local_get(tempLocal.index, classTypeRef),
+          this.compileExpression(values[i], propertyInstance.type, Constraints.ConvImplicit)
+        ], setterInstance.identifierNode)
+      );
+    }
+
     this.currentType = classType.nonNullableType;
     if (hasErrors) return module.unreachable();
 
     // Check remaining omitted fields
     for (let _values = Set_values(omittedFields), j = 0, l = _values.length; j < l; ++j) {
-      let fieldInstance = _values[j];
-      let fieldType = fieldInstance.type;
+      let propertyInstance = _values[j];
+      assert(propertyInstance.isField);
+      let propertyType = propertyInstance.type;
 
-      if (fieldInstance.initializerNode) {
+      if (propertyInstance.initializerNode) {
         continue; // set by generated ctor
       }
 
-      if (fieldType.isReference) {
-        if (!fieldType.isNullableReference) {
+      if (propertyType.isReference) {
+        if (!propertyType.isNullableReference) {
           this.error(
             DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-            expression.range, fieldInstance.name, "<object>", classType.toString()
+            expression.range, propertyInstance.name, "<object>", classType.toString()
           );
           hasErrors = true;
           continue;
         }
       }
 
-      switch (fieldType.kind) {
+      switch (propertyType.kind) {
         // Number Types (and Number alias types)
         case TypeKind.Bool:
         case TypeKind.I8:
@@ -8487,12 +8532,14 @@ export class Compiler extends DiagnosticEmitter {
         case TypeKind.F32:
         case TypeKind.F64: {
           exprs.push(
-            module.call(fieldInstance.internalSetterName, [
+            module.store(
+              propertyType.byteSize,
               module.local_get(tempLocal.index, classTypeRef),
-              this.makeZero(fieldType)
-            ], TypeRef.None)
+              this.makeZero(propertyType),
+              propertyType.toRef(),
+              propertyInstance.memoryOffset
+            )
           );
-          this.compileFieldSetter(fieldInstance);
           continue;
         }
       }
@@ -8500,7 +8547,7 @@ export class Compiler extends DiagnosticEmitter {
       // Otherwise error
       this.error(
         DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-        expression.range, fieldInstance.name, "<object>", classType.toString()
+        expression.range, propertyInstance.name, "<object>", classType.toString()
       );
       hasErrors = true;
     }
@@ -8726,38 +8773,38 @@ export class Compiler extends DiagnosticEmitter {
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let element = _values[i];
-        if (element.kind == ElementKind.Field && element.parent == classInstance) {
-          let field = <Field>element;
-          if (!field.initializerNode && !flow.isThisFieldFlag(field, FieldFlags.Initialized)) {
-            if (!field.is(CommonFlags.DefinitelyAssigned)) {
-              if (relatedNode) {
-                this.errorRelated(
-                  DiagnosticCode.Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned,
-                  field.declaration.name.range,
-                  relatedNode.range,
-                  field.internalName
-                );
-              } else {
-                this.error(
-                  DiagnosticCode.Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned,
-                  field.declaration.name.range,
-                  field.internalName
-                );
-              }
-            }
-          } else if (field.is(CommonFlags.DefinitelyAssigned)) {
-            if (field.type.isReference) {
-              this.warning( // involves a runtime check
-                DiagnosticCode.Property_0_is_always_assigned_before_being_used,
-                field.identifierNode.range,
-                field.internalName
+        if (element.kind != ElementKind.Property || element.parent != classInstance) continue;
+        let property = <Property>element;
+        if (!property.isField) continue;
+        if (!property.initializerNode && !flow.isThisFieldFlag(property, FieldFlags.Initialized)) {
+          if (!property.is(CommonFlags.DefinitelyAssigned)) {
+            if (relatedNode) {
+              this.errorRelated(
+                DiagnosticCode.Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned,
+                property.declaration.name.range,
+                relatedNode.range,
+                property.internalName
               );
             } else {
-              this.pedantic( // is a nop anyway
-                DiagnosticCode.Unnecessary_definite_assignment,
-                field.identifierNode.range
+              this.error(
+                DiagnosticCode.Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned,
+                property.declaration.name.range,
+                property.internalName
               );
             }
+          }
+        } else if (property.is(CommonFlags.DefinitelyAssigned)) {
+          if (property.type.isReference) {
+            this.warning( // involves a runtime check
+              DiagnosticCode.Property_0_is_always_assigned_before_being_used,
+              property.identifierNode.range,
+              property.internalName
+            );
+          } else {
+            this.pedantic( // is a nop anyway
+              DiagnosticCode.Unnecessary_definite_assignment,
+              property.identifierNode.range
+            );
           }
         }
       }
@@ -8846,58 +8893,6 @@ export class Compiler extends DiagnosticEmitter {
         assert(enumValue.type == Type.i32);
         return module.global_get(enumValue.internalName, TypeRef.I32);
       }
-      case ElementKind.Field: {
-        let fieldInstance = <Field>target;
-        let fieldType = fieldInstance.type;
-        assert(fieldInstance.memoryOffset >= 0);
-        let fieldParent = fieldInstance.parent;
-        assert(fieldParent.kind == ElementKind.Class);
-        thisExpression = assert(thisExpression);
-        let thisExpr = this.compileExpression(
-          thisExpression,
-          (<Class>fieldParent).type,
-          Constraints.ConvImplicit | Constraints.IsThis
-        );
-        let thisType = this.currentType;
-        if (
-          flow.sourceFunction.is(CommonFlags.Constructor) &&
-          thisExpression.kind == NodeKind.This &&
-          !flow.isThisFieldFlag(fieldInstance, FieldFlags.Initialized) &&
-          !fieldInstance.is(CommonFlags.DefinitelyAssigned)
-        ) {
-          this.errorRelated(
-            DiagnosticCode.Property_0_is_used_before_being_assigned,
-            expression.range,
-            fieldInstance.identifierNode.range,
-            fieldInstance.internalName
-          );
-        }
-        if (thisType.isNullableReference) {
-          if (!flow.isNonnull(thisExpr, thisType)) {
-            this.error(
-              DiagnosticCode.Object_is_possibly_null,
-              thisExpression.range
-            );
-          }
-        }
-        if (!fieldInstance.is(CommonFlags.Compiled)) {
-          fieldInstance.set(CommonFlags.Compiled);
-          let typeNode = fieldInstance.typeNode;
-          if (typeNode) this.checkTypeSupported(fieldInstance.type, typeNode);
-        }
-        this.currentType = fieldType;
-        let ret = module.load(
-          fieldType.byteSize,
-          fieldType.isSignedIntegerValue,
-          thisExpr,
-          fieldType.toRef(),
-          fieldInstance.memoryOffset
-        );
-        if (fieldInstance.is(CommonFlags.DefinitelyAssigned) && fieldType.isReference && !fieldType.isNullableReference) {
-          ret = this.makeRuntimeNonNullCheck(ret, fieldType, expression);
-        }
-        return ret;
-      }
       case ElementKind.PropertyPrototype: {
         let propertyPrototype = <PropertyPrototype>target;
         let propertyInstance = this.resolver.resolveProperty(propertyPrototype);
@@ -8907,6 +8902,59 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.Property: {
         let propertyInstance = <Property>target;
+        if (propertyInstance.isField) {
+          let fieldType = propertyInstance.type;
+          assert(propertyInstance.memoryOffset >= 0);
+          let fieldParent = propertyInstance.parent;
+          assert(fieldParent.kind == ElementKind.Class);
+          thisExpression = assert(thisExpression);
+          let thisType = this.currentType;
+          if (
+            flow.sourceFunction.is(CommonFlags.Constructor) &&
+            thisExpression.kind == NodeKind.This &&
+            !flow.isThisFieldFlag(propertyInstance, FieldFlags.Initialized) &&
+            !propertyInstance.is(CommonFlags.DefinitelyAssigned)
+          ) {
+            this.errorRelated(
+              DiagnosticCode.Property_0_is_used_before_being_assigned,
+              expression.range,
+              propertyInstance.identifierNode.range,
+              propertyInstance.internalName
+            );
+          }
+          if (!propertyInstance.is(CommonFlags.Virtual)) {
+            let thisExpr = this.compileExpression(
+              thisExpression,
+              (<Class>fieldParent).type,
+              Constraints.ConvImplicit | Constraints.IsThis
+            );
+            if (thisType.isNullableReference) {
+              if (!flow.isNonnull(thisExpr, thisType)) {
+                this.error(
+                  DiagnosticCode.Object_is_possibly_null,
+                  thisExpression.range
+                );
+              }
+            }
+            if (!propertyInstance.is(CommonFlags.Compiled)) {
+              propertyInstance.set(CommonFlags.Compiled);
+              let typeNode = propertyInstance.typeNode;
+              if (typeNode) this.checkTypeSupported(propertyInstance.type, typeNode);
+            }
+            this.currentType = fieldType;
+            let ret = module.load(
+              fieldType.byteSize,
+              fieldType.isSignedIntegerValue,
+              thisExpr,
+              fieldType.toRef(),
+              propertyInstance.memoryOffset
+            );
+            if (propertyInstance.is(CommonFlags.DefinitelyAssigned) && fieldType.isReference && !fieldType.isNullableReference) {
+              ret = this.makeRuntimeNonNullCheck(ret, fieldType, expression);
+            }
+            return ret;
+          }
+        }
         let getterInstance = propertyInstance.getterInstance;
         if (!getterInstance) return module.unreachable(); // failed earlier
         let thisArg: ExpressionRef = 0;
@@ -10196,42 +10244,45 @@ export class Compiler extends DiagnosticEmitter {
     let isInline = flow.isInline;
     let thisLocalIndex = isInline ? flow.lookupLocal(CommonNames.this_)!.index : 0;
     let sizeTypeRef = this.options.sizeTypeRef;
-    let nonParameterFields: Field[] | null = null;
+    let nonParameterFields: Property[] | null = null;
 
     // TODO: for (let member of members.values()) {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
       let member = unchecked(_values[i]);
+      let property: Property;
       if (
-        member.kind != ElementKind.Field || // not a field
-        member.parent != classInstance      // inherited field
+        member.kind != ElementKind.Property || // not a property
+        member.parent != classInstance      || // inherited field
+        !(property = <Property>member).isField // not a field
       ) continue;
-      let field = <Field>member;
-      assert(!field.isAny(CommonFlags.Const));
-      let fieldPrototype = field.prototype;
+      assert(!property.isAny(CommonFlags.Const));
+      let fieldPrototype = property.prototype;
       let parameterIndex = fieldPrototype.parameterIndex;
 
       // Defer non-parameter fields until parameter fields are initialized
       if (parameterIndex < 0) {
         if (!nonParameterFields) nonParameterFields = new Array();
-        nonParameterFields.push(field);
+        nonParameterFields.push(property);
         continue;
       }
 
       // Initialize constructor parameter field
-      let fieldType = field.type;
+      let fieldType = property.type;
       let fieldTypeRef = fieldType.toRef();
       assert(!fieldPrototype.initializerNode);
-      this.compileFieldSetter(field);
       stmts.push(
-        module.call(field.internalSetterName, [
+        module.store(
+          fieldType.byteSize,
           module.local_get(thisLocalIndex, sizeTypeRef),
           module.local_get(
             isInline
-              ? flow.lookupLocal(field.name)!.index
+              ? flow.lookupLocal(property.name)!.index
               : 1 + parameterIndex, // `this` is local 0
             fieldTypeRef
-          )
-        ], TypeRef.None)
+          ),
+          fieldType.toRef(),
+          property.memoryOffset
+        )
       );
     }
 
@@ -10243,14 +10294,16 @@ export class Compiler extends DiagnosticEmitter {
         let fieldPrototype = field.prototype;
         let initializerNode = fieldPrototype.initializerNode;
         assert(fieldPrototype.parameterIndex < 0);
-        this.compileFieldSetter(field);
         stmts.push(
-          module.call(field.internalSetterName, [
+          module.store(
+            fieldType.byteSize,
             module.local_get(thisLocalIndex, sizeTypeRef),
             initializerNode // use initializer if present, otherwise initialize with zero
               ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit)
-              : this.makeZero(fieldType)
-          ], TypeRef.None)
+              : this.makeZero(fieldType),
+            fieldType.toRef(),
+            field.memoryOffset
+          )
         );
       }
     }
