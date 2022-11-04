@@ -388,12 +388,12 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Program reference. */
   program: Program;
-  /** Resolver reference. */
-  get resolver(): Resolver { return this.program.resolver; }
+  /** Module instance being compiled. */
+  get module(): Module { return this.program.module; }
   /** Provided options. */
   get options(): Options { return this.program.options; }
-  /** Module instance being compiled. */
-  module: Module;
+  /** Resolver reference. */
+  get resolver(): Resolver { return this.program.resolver; }
 
   /** Current control flow. */
   currentFlow: Flow;
@@ -443,9 +443,8 @@ export class Compiler extends DiagnosticEmitter {
   constructor(program: Program) {
     super(program.diagnostics);
     this.program = program;
+    let module = program.module;
     let options = program.options;
-    let module = Module.create(options.stackSize > 0, options.sizeTypeRef);
-    this.module = module;
     if (options.memoryBase) {
       this.memoryOffset = i64_new(options.memoryBase);
       module.setLowMemoryUnused(false);

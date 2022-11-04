@@ -432,6 +432,7 @@ export class Program extends DiagnosticEmitter {
     super(diagnostics);
     let nativeSource = new Source(SourceKind.LibraryEntry, LIBRARY_PREFIX + "native.ts", "[native code]");
     this.nativeSource = nativeSource;
+    this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);
     this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
     let nativeFile = new File(this, nativeSource);
@@ -439,6 +440,8 @@ export class Program extends DiagnosticEmitter {
     this.filesByName.set(nativeFile.internalName, nativeFile);
   }
 
+  /** Module instance. */
+  module: Module;
   /** Parser instance. */
   parser: Parser;
   /** Resolver instance. */
