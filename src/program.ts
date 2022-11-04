@@ -430,6 +430,7 @@ export class Program extends DiagnosticEmitter {
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
+    this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);    
     this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
     let nativeFile = new File(this, Source.native);
@@ -437,6 +438,8 @@ export class Program extends DiagnosticEmitter {
     this.filesByName.set(nativeFile.internalName, nativeFile);
   }
 
+  /** Module instance. */
+  module: Module;
   /** Parser instance. */
   parser!: Parser;
   /** Resolver instance. */
