@@ -3599,7 +3599,7 @@ export class Resolver extends DiagnosticEmitter {
     if (instance) return instance;
     prototype.instance = instance = new Property(
       prototype,
-      prototype.parent // !
+      prototype.parent // same level as prototype
     );
     let getterPrototype = prototype.getterPrototype;
     if (getterPrototype) {

@@ -2236,7 +2236,7 @@ export class Program extends DiagnosticEmitter {
     }
     let element = new FunctionPrototype(
       (isGetter ? GETTER_PREFIX : SETTER_PREFIX) + name,
-      property.parent, // !
+      property.parent, // same level as property
       declaration,
       this.checkDecorators(declaration.decorators,
         DecoratorFlags.Inline | DecoratorFlags.Unsafe
