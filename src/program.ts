@@ -3624,7 +3624,7 @@ export class FunctionPrototype extends DeclaredElement {
     assert(declaration.kind == NodeKind.MethodDeclaration);
     let bound = new FunctionPrototype(
       this.name,
-      classInstance, // !
+      classInstance, // now bound
       <MethodDeclaration>declaration,
       this.decoratorFlags
     );
@@ -4018,7 +4018,7 @@ export class PropertyPrototype extends DeclaredElement {
     assert(firstDeclaration.kind == NodeKind.MethodDeclaration);
     let bound = new PropertyPrototype(
       this.name,
-      classInstance, // !
+      classInstance, // now bound
       <MethodDeclaration>firstDeclaration
     );
     bound.flags = this.flags;
