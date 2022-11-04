@@ -45,6 +45,16 @@ export const {
 
   _BinaryenHeapTypeIsBottom,
   _BinaryenHeapTypeGetBottom,
+  _BinaryenHeapTypeIsSubType,
+  _BinaryenStructTypeGetNumFields,
+  _BinaryenStructTypeGetFieldType,
+  _BinaryenStructTypeGetFieldPackedType,
+  _BinaryenStructTypeIsFieldMutable,
+  _BinaryenArrayTypeGetElementType,
+  _BinaryenArrayTypeGetElementPackedType,
+  _BinaryenArrayTypeIsElementMutable,
+  _BinaryenSignatureTypeGetParams,
+  _BinaryenSignatureTypeGetResults,
 
   _BinaryenModuleCreate,
   _BinaryenModuleDispose,

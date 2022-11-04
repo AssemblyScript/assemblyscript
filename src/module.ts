@@ -124,6 +124,10 @@ export namespace HeapTypeRef {
   export function getBottom(ht: HeapTypeRef): HeapTypeRef {
     return binaryen._BinaryenHeapTypeGetBottom(ht);
   }
+
+  export function isSubtype(ht: HeapTypeRef, superHt: HeapTypeRef): bool {
+    return binaryen._BinaryenHeapTypeIsSubType(ht, superHt);
+  }
 }
 
 /** Packed array element respectively struct field types. */
