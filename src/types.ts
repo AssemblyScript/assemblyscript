@@ -530,8 +530,6 @@ export class Type {
     } else {
       return false;
     }
-    // Interfaces can only extend interfaces
-    if (thisClass.isInterface && !baseClass.isInterface) return false;
     return true;
   }
 

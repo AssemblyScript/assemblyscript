@@ -185,6 +185,7 @@
   "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
   "Constructor of class '{0}' is private and only accessible within the class declaration.": 2673,
   "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,
+  "Cannot extend a class '{0}'. Class constructor is marked as private.": 2675,
   "The 'this' types of each signature are incompatible.": 2685,
   "Namespace '{0}' has no exported member '{1}'.": 2694,
   "Required type parameters may not follow optional type parameters.": 2706,

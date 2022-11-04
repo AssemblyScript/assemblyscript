@@ -1429,7 +1429,7 @@
      i32.load $0
      i32.le_u
      if
-      loop $do-loop|011
+      loop $do-loop|012
        i32.const 1
        local.get $0
        i32.const 6
@@ -1443,7 +1443,7 @@
        i32.add
        i32.load $0 offset=4
        local.tee $0
-       br_if $do-loop|011
+       br_if $do-loop|012
       end
      end
      i32.const 0

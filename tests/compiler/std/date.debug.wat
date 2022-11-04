@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
@@ -12,6 +12,7 @@
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func_subtype (param i32 i32 i32 i32 i32 i32 i32) (result i64) func))
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i64_=>_none (func_subtype (param i32 i64) func))
+ (type $i32_=>_i64 (func_subtype (param i32) (result i64) func))
  (type $i32_i64_=>_i64 (func_subtype (param i32 i64) (result i64) func))
  (type $i32_i32_i32_i64_=>_i64 (func_subtype (param i32 i32 i32 i64) (result i64) func))
  (type $i32_i64_i32_=>_none (func_subtype (param i32 i64 i32) func))
@@ -404,29 +405,29 @@
   global.set $~lib/date/_month
   local.get $year
  )
- (func $~lib/date/Date#set:year (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/date/Date#set:year (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/date/Date#set:month (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/date/Date#set:month (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/date/Date#set:day (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/date/Date#set:day (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
  )
- (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
  )
  (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
@@ -438,9 +439,13 @@
   call $~lib/rt/itcms/Object#set:prev
   local.get $space
  )
- (func $~lib/rt/itcms/Object#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:nextWithColor (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
+ )
+ (func $~lib/rt/itcms/Object#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.const -1
   i32.xor
@@ -448,7 +453,7 @@
  )
  (func $~lib/rt/itcms/Object#get:color (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
  )
@@ -500,7 +505,7 @@
  (func $~lib/rt/itcms/Object#set:color (type $i32_i32_=>_none) (param $this i32) (param $color i32)
   local.get $this
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.const -1
   i32.xor
@@ -509,11 +514,15 @@
   i32.or
   call $~lib/rt/itcms/Object#set:nextWithColor
  )
+ (func $~lib/rt/itcms/Object#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
  (func $~lib/rt/itcms/Object#set:next (type $i32_i32_=>_none) (param $this i32) (param $obj i32)
   local.get $this
   local.get $obj
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
   i32.or
@@ -532,7 +541,7 @@
    i32.const 1
    drop
    local.get $this
-   i32.load $0 offset=8
+   call $~lib/rt/itcms/Object#get:prev
    i32.const 0
    i32.eq
    if (result i32)
@@ -554,7 +563,7 @@
    return
   end
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/rt/itcms/Object#get:prev
   local.set $prev
   i32.const 1
   drop
@@ -574,6 +583,14 @@
   local.get $prev
   local.get $next
   call $~lib/rt/itcms/Object#set:next
+ )
+ (func $~lib/rt/itcms/Object#get:rtId (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/shared/typeinfo/Typeinfo#get:flags (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
  )
  (func $~lib/rt/__typeinfo (type $i32_=>_i32) (param $id i32) (result i32)
   (local $ptr i32)
@@ -598,12 +615,12 @@
   i32.const 8
   i32.mul
   i32.add
-  i32.load $0
+  call $~lib/shared/typeinfo/Typeinfo#get:flags
  )
  (func $~lib/rt/itcms/Object#get:isPointerfree (type $i32_=>_i32) (param $this i32) (result i32)
   (local $rtId i32)
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/rt/itcms/Object#get:rtId
   local.set $rtId
   local.get $rtId
   i32.const 1
@@ -622,7 +639,7 @@
  (func $~lib/rt/itcms/Object#linkTo (type $i32_i32_i32_=>_none) (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
   local.get $list
-  i32.load $0 offset=8
+  call $~lib/rt/itcms/Object#get:prev
   local.set $prev
   local.get $this
   local.get $list
@@ -646,7 +663,7 @@
   i32.eq
   if
    local.get $this
-   i32.load $0 offset=8
+   call $~lib/rt/itcms/Object#get:prev
    local.tee $1
    i32.eqz
    if (result i32)
@@ -725,35 +742,51 @@
    end
   end
  )
+ (func $~lib/rt/common/BLOCK#get:mmInfo (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/rt/itcms/Object#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 4
   local.get $this
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
   i32.and
   i32.add
  )
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
+ )
+ (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/rt/tlsf/Block#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/rt/tlsf/Root#get:flMap (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
  )
  (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   (local $blockInfo i32)
@@ -779,7 +812,7 @@
   (local $fl|22 i32)
   (local $slMap|23 i32)
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -879,10 +912,10 @@
    unreachable
   end
   local.get $block
-  i32.load $0 offset=4
+  call $~lib/rt/tlsf/Block#get:prev
   local.set $prev
   local.get $block
-  i32.load $0 offset=8
+  call $~lib/rt/tlsf/Block#get:next
   local.set $next
   local.get $prev
   if
@@ -973,7 +1006,7 @@
     if
      local.get $root
      local.get $root
-     i32.load $0
+     call $~lib/rt/tlsf/Root#get:flMap
      i32.const 1
      local.get $fl
      i32.shl
@@ -1026,7 +1059,7 @@
    unreachable
   end
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -1048,7 +1081,7 @@
   i32.const 4
   i32.add
   local.get $block|3
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -1056,7 +1089,7 @@
   i32.add
   local.set $right
   local.get $right
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $rightInfo
   local.get $rightInfo
   i32.const 1
@@ -1083,7 +1116,7 @@
    i32.const 4
    i32.add
    local.get $block|6
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
@@ -1091,7 +1124,7 @@
    i32.add
    local.set $right
    local.get $right
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    local.set $rightInfo
   end
   local.get $blockInfo
@@ -1106,7 +1139,7 @@
    i32.load $0
    local.set $left
    local.get $left
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    local.set $leftInfo
    i32.const 1
    drop
@@ -1301,7 +1334,7 @@
   i32.store $0 offset=96
   local.get $root
   local.get $root
-  i32.load $0
+  call $~lib/rt/tlsf/Root#get:flMap
   i32.const 1
   local.get $fl
   i32.shl
@@ -1411,7 +1444,7 @@
     i32.sub
     local.set $start
     local.get $tail
-    i32.load $0
+    call $~lib/rt/common/BLOCK#get:mmInfo
     local.set $tailInfo
    else
     nop
@@ -1665,7 +1698,7 @@
   end
   if (result i32)
    local.get $block
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 1
    i32.and
    i32.eqz
@@ -1688,7 +1721,7 @@
   drop
   local.get $block
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 1
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
@@ -2128,7 +2161,7 @@
   i32.eqz
   if
    local.get $root
-   i32.load $0
+   call $~lib/rt/tlsf/Root#get:flMap
    i32.const 0
    i32.const -1
    i32.xor
@@ -2305,7 +2338,7 @@
   (local $block|6 i32)
   (local $block|7 i32)
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -2375,7 +2408,7 @@
    i32.const 4
    i32.add
    local.get $block|7
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
@@ -2387,13 +2420,13 @@
    i32.const 4
    i32.add
    local.get $block|6
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 2
    i32.const -1
    i32.xor
@@ -2437,7 +2470,7 @@
   i32.const 1
   drop
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -2476,14 +2509,14 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=16
  )
  (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
@@ -2538,10 +2571,14 @@
   memory.fill $0
   local.get $ptr
  )
- (func $~lib/date/Date#set:epochMillis (type $i32_i64_=>_none) (param $0 i32) (param $1 i64)
-  local.get $0
-  local.get $1
+ (func $~lib/date/Date#set:epochMillis (type $i32_i64_=>_none) (param $this i32) (param $value i64)
+  local.get $this
+  local.get $value
   i64.store $0 offset=16
+ )
+ (func $~lib/date/Date#get:epochMillis (type $i32_=>_i64) (param $this i32) (result i64)
+  local.get $this
+  i64.load $0 offset=16
  )
  (func $~lib/date/Date#setTime (type $i32_i64_=>_i64) (param $this i32) (param $time i64) (result i64)
   local.get $time
@@ -2569,12 +2606,24 @@
   call $~lib/date/Date#set:day
   local.get $time
  )
+ (func $~lib/date/Date#get:year (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/date/Date#get:month (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/date/Date#get:day (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
  (func $~lib/date/Date#getUTCHours (type $i32_=>_i32) (param $this i32) (result i32)
   (local $a i64)
   (local $b i64)
   (local $m i64)
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.set $a
   i32.const 86400000
   i64.extend_i32_s
@@ -2602,7 +2651,7 @@
   (local $b i64)
   (local $m i64)
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.set $a
   i32.const 3600000
   i64.extend_i32_s
@@ -2630,7 +2679,7 @@
   (local $b i64)
   (local $m i64)
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.set $a
   i32.const 60000
   i64.extend_i32_s
@@ -2658,7 +2707,7 @@
   (local $b i64)
   (local $m i64)
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.set $a
   i32.const 1000
   i64.extend_i32_s
@@ -2682,7 +2731,7 @@
  (func $~lib/date/Date#setUTCMilliseconds (type $i32_i32_=>_none) (param $this i32) (param $millis i32)
   local.get $this
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.get $millis
   local.get $this
   call $~lib/date/Date#getUTCMilliseconds
@@ -2695,7 +2744,7 @@
  (func $~lib/date/Date#setUTCSeconds (type $i32_i32_=>_none) (param $this i32) (param $seconds i32)
   local.get $this
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.get $seconds
   local.get $this
   call $~lib/date/Date#getUTCSeconds
@@ -2710,7 +2759,7 @@
  (func $~lib/date/Date#setUTCMinutes (type $i32_i32_=>_none) (param $this i32) (param $minutes i32)
   local.get $this
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.get $minutes
   local.get $this
   call $~lib/date/Date#getUTCMinutes
@@ -2725,7 +2774,7 @@
  (func $~lib/date/Date#setUTCHours (type $i32_i32_=>_none) (param $this i32) (param $hours i32)
   local.get $this
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.get $hours
   local.get $this
   call $~lib/date/Date#getUTCHours
@@ -2771,7 +2820,7 @@
  )
  (func $~lib/date/Date#setUTCDate (type $i32_i32_=>_none) (param $this i32) (param $day i32)
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   local.get $day
   i32.eq
   if
@@ -2779,19 +2828,19 @@
   end
   local.get $this
   local.get $this
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $day
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   call $~lib/date/join
   call $~lib/date/Date#setTime
   drop
  )
  (func $~lib/date/Date#setUTCMonth (type $i32_i32_i32_=>_none) (param $this i32) (param $month i32) (param $day i32)
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $month
   i32.const 1
   i32.add
@@ -2801,13 +2850,13 @@
   end
   local.get $this
   local.get $this
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $month
   i32.const 1
   i32.add
   local.get $day
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   call $~lib/date/join
   call $~lib/date/Date#setTime
   drop
@@ -2824,7 +2873,7 @@
     unreachable
    end
    local.get $this
-   i32.load $0 offset=8
+   call $~lib/date/Date#get:day
    local.set $day
   end
   local.get $this
@@ -2834,7 +2883,7 @@
  )
  (func $~lib/date/Date#setUTCFullYear (type $i32_i32_=>_none) (param $this i32) (param $year i32)
   local.get $this
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $year
   i32.eq
   if
@@ -2843,11 +2892,11 @@
   local.get $this
   local.get $year
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   local.get $this
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   call $~lib/date/join
   call $~lib/date/Date#setTime
   drop
@@ -3380,11 +3429,15 @@
   local.get $radix
   call $~lib/util/number/itoa32
  )
+ (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
  (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
  )
@@ -3511,7 +3564,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 2
   i32.shr_u
  )
@@ -3780,9 +3833,13 @@
   end
   i32.const -1
  )
- (func $~lib/array/Array<~lib/string/String>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<~lib/string/String>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
+ )
+ (func $~lib/array/Array<~lib/string/String>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  local.get $this
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
   local.get $index
   i32.const 2
   i32.shl
@@ -3796,6 +3853,22 @@
   i32.const 1
   call $~lib/rt/itcms/__link
  )
+ (func $~lib/array/Array<~lib/string/String>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/rt/itcms/Object#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
  (func $~lib/rt/itcms/__renew (type $i32_i32_=>_i32) (param $oldPtr i32) (param $size i32) (result i32)
   (local $oldObj i32)
   (local $newPtr i32)
@@ -3807,7 +3880,7 @@
   local.set $oldObj
   local.get $size
   local.get $oldObj
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -3824,7 +3897,7 @@
   end
   local.get $size
   local.get $oldObj
-  i32.load $0 offset=12
+  call $~lib/rt/itcms/Object#get:rtId
   call $~lib/rt/itcms/__new
   local.set $newPtr
   local.get $newPtr
@@ -3832,7 +3905,7 @@
   local.get $size
   local.tee $4
   local.get $oldObj
-  i32.load $0 offset=16
+  call $~lib/rt/itcms/Object#get:rtSize
   local.tee $5
   local.get $4
   local.get $5
@@ -3853,7 +3926,7 @@
   (local $12 i32)
   (local $newData i32)
   local.get $array
-  i32.load $0 offset=8
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.set $oldCapacity
   local.get $newSize
   local.get $oldCapacity
@@ -3875,7 +3948,7 @@
     unreachable
    end
    local.get $array
-   i32.load $0
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
    local.set $oldData
    local.get $newSize
    local.tee $6
@@ -3937,16 +4010,16 @@
    i32.store $0 offset=8
   end
  )
- (func $~lib/array/Array<~lib/string/String>#set:length_ (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/array/Array<~lib/string/String>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=12
  )
  (func $~lib/array/Array<~lib/string/String>#push (type $i32_i32_=>_i32) (param $this i32) (param $value i32) (result i32)
   (local $oldLen i32)
   (local $len i32)
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<~lib/string/String>#get:length_
   local.set $oldLen
   local.get $oldLen
   i32.const 1
@@ -3960,7 +4033,7 @@
   i32.const 1
   drop
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
   local.get $oldLen
   i32.const 2
   i32.shl
@@ -3978,7 +4051,7 @@
  )
  (func $~lib/array/Array<~lib/string/String>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<~lib/string/String>#get:length_
  )
  (func $~lib/util/string/isSpace (type $i32_=>_i32) (param $c i32) (result i32)
   (local $1 i32)
@@ -4431,7 +4504,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.add
   local.set $end
   loop $while-continue|0
@@ -4463,6 +4536,10 @@
   local.get $1
   call $~lib/staticarray/StaticArray<~lib/string/String>#__visit
  )
+ (func $~lib/array/Array<~lib/string/String>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/array/Array<~lib/string/String>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   (local $cur i32)
   (local $end i32)
@@ -4471,11 +4548,11 @@
   i32.const 1
   drop
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
   local.set $cur
   local.get $cur
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<~lib/string/String>#get:length_
   i32.const 2
   i32.shl
   i32.add
@@ -4504,7 +4581,7 @@
    end
   end
   local.get $this
-  i32.load $0
+  call $~lib/array/Array<~lib/string/String>#get:buffer
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
@@ -4513,11 +4590,15 @@
   local.get $1
   call $~lib/array/Array<~lib/string/String>#__visit
  )
+ (func $~lib/array/Array<i32>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/array/Array<i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   i32.const 0
   drop
   local.get $this
-  i32.load $0
+  call $~lib/array/Array<i32>#get:buffer
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
@@ -4654,7 +4735,7 @@
   i32.const 36
   memory.fill $0
   local.get $this
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.set $yr
   local.get $yr
   i32.const 0
@@ -4707,14 +4788,14 @@
   i32.store $0 offset=8
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 2
   call $~lib/date/stringify
   local.tee $month
   i32.store $0 offset=12
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 2
   call $~lib/date/stringify
   local.tee $day
@@ -4889,13 +4970,13 @@
   local.tee $months
   i32.store $0 offset=4
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.set $mo
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   local.set $da
   local.get $this
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.set $yr
   local.get $yr
   local.get $mo
@@ -5162,13 +5243,13 @@
   local.tee $months
   i32.store $0 offset=4
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.set $mo
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   local.set $da
   local.get $this
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.set $yr
   local.get $yr
   local.get $mo
@@ -5475,7 +5556,7 @@
    local.tee $result
    i32.store $0 offset=8
    local.get $result
-   i32.load $0 offset=4
+   call $~lib/array/Array<~lib/string/String>#get:dataStart
    local.set $resultStart
    i32.const 0
    local.set $i
@@ -5539,7 +5620,7 @@
     local.tee $result|14
     i32.store $0 offset=16
     local.get $result|14
-    i32.load $0 offset=4
+    call $~lib/array/Array<~lib/string/String>#get:dataStart
     i32.const 2432
     i32.store $0
     local.get $result|14
@@ -6605,7 +6686,7 @@
   local.get $57
   local.set $58
   local.get $58
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.get $56
   i64.eq
   i32.eqz
@@ -6626,7 +6707,7 @@
   local.get $57
   local.set $59
   local.get $59
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   local.get $56
   i64.const 1
   i64.add
@@ -6649,7 +6730,7 @@
   local.get $60
   local.set $61
   local.get $61
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const 189512
   i32.eq
   i32.eqz
@@ -6664,7 +6745,7 @@
   local.get $60
   local.set $62
   local.get $62
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 11
@@ -6681,7 +6762,7 @@
   local.get $60
   local.set $63
   local.get $63
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 14
   i32.eq
   i32.eqz
@@ -6754,7 +6835,7 @@
   local.get $64
   local.set $65
   local.get $65
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const 1973
   i32.eq
   i32.eqz
@@ -6769,7 +6850,7 @@
   local.get $64
   local.set $66
   local.get $66
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 11
@@ -6786,7 +6867,7 @@
   local.get $64
   local.set $67
   local.get $67
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 4
   i32.eq
   i32.eqz
@@ -6907,7 +6988,7 @@
   local.get $68
   local.set $69
   local.get $69
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 399464523963000
   i64.eq
   i32.eqz
@@ -6925,7 +7006,7 @@
   local.get $68
   local.set $70
   local.get $70
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 399464523963999
   i64.eq
   i32.eqz
@@ -6956,7 +7037,7 @@
   local.get $68
   local.set $71
   local.get $71
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 399464523965000
   i64.eq
   i32.eqz
@@ -6987,7 +7068,7 @@
   local.get $68
   local.set $72
   local.get $72
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 399464523963000
   i64.eq
   i32.eqz
@@ -7056,7 +7137,7 @@
   local.get $73
   local.set $74
   local.get $74
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 372027318300986
   i64.eq
   i32.eqz
@@ -7074,7 +7155,7 @@
   local.get $73
   local.set $75
   local.get $75
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 372027318359986
   i64.eq
   i32.eqz
@@ -7143,7 +7224,7 @@
   local.get $76
   local.set $77
   local.get $77
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 372027315631986
   i64.eq
   i32.eqz
@@ -7161,7 +7242,7 @@
   local.get $76
   local.set $78
   local.get $78
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 372027319171986
   i64.eq
   i32.eqz
@@ -7230,7 +7311,7 @@
   local.get $79
   local.set $80
   local.get $80
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 372027257131986
   i64.eq
   i32.eqz
@@ -7248,7 +7329,7 @@
   local.get $79
   local.set $81
   local.get $81
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 372027339931986
   i64.eq
   i32.eqz
@@ -7269,7 +7350,7 @@
   local.get $82
   local.set $83
   local.get $83
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const 1973
   i32.eq
   i32.eqz
@@ -7284,7 +7365,7 @@
   local.get $82
   local.set $84
   local.get $84
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 11
@@ -7304,7 +7385,7 @@
   local.get $82
   local.set $85
   local.get $85
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 12
   i32.eq
   i32.eqz
@@ -7322,7 +7403,7 @@
   local.get $82
   local.set $86
   local.get $86
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 2
   i32.eq
   i32.eqz
@@ -7364,7 +7445,7 @@
   local.get $82
   local.set $87
   local.get $87
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 2
@@ -7393,7 +7474,7 @@
   local.get $82
   local.set $88
   local.get $88
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 1709168591274
   i64.eq
   i32.eqz
@@ -7408,7 +7489,7 @@
   local.get $82
   local.set $89
   local.get $89
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 1
@@ -7425,7 +7506,7 @@
   local.get $82
   local.set $90
   local.get $90
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 29
   i32.eq
   i32.eqz
@@ -7488,7 +7569,7 @@
   local.get $82
   local.set $91
   local.get $91
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 1363748399999
   i64.eq
   i32.eqz
@@ -7506,7 +7587,7 @@
   local.get $82
   local.set $92
   local.get $92
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 1362106799999
   i64.eq
   i32.eqz
@@ -7524,7 +7605,7 @@
   local.get $82
   local.set $93
   local.get $93
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 1362106800000
   i64.eq
   i32.eqz
@@ -7546,7 +7627,7 @@
   local.get $82
   local.set $94
   local.get $94
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 1362110400000
   i64.eq
   i32.eqz
@@ -7570,7 +7651,7 @@
   local.get $82
   local.set $95
   local.get $95
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 1362114000001
   i64.eq
   i32.eqz
@@ -7594,7 +7675,7 @@
   local.get $82
   local.set $96
   local.get $96
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 1362117600001
   i64.eq
   i32.eqz
@@ -7618,7 +7699,7 @@
   local.get $82
   local.set $97
   local.get $97
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const -67301808726
   i64.eq
   i32.eqz
@@ -7642,7 +7723,7 @@
   local.get $82
   local.set $98
   local.get $98
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 314240591274
   i64.eq
   i32.eqz
@@ -7661,11 +7742,11 @@
   local.tee $99
   i32.store $0 offset=32
   local.get $99
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $99
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $99
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   call $~lib/date/dayOfWeek
   i32.const 3
   i32.eq
@@ -7687,11 +7768,11 @@
   local.tee $100
   i32.store $0 offset=36
   local.get $100
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $100
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $100
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   call $~lib/date/dayOfWeek
   i32.const 2
   i32.eq
@@ -7715,11 +7796,11 @@
   local.tee $101
   i32.store $0 offset=40
   local.get $101
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $101
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $101
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   call $~lib/date/dayOfWeek
   i32.const 3
   i32.eq
@@ -7741,11 +7822,11 @@
   local.tee $102
   i32.store $0 offset=44
   local.get $102
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $102
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $102
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   call $~lib/date/dayOfWeek
   i32.const 4
   i32.eq
@@ -7765,11 +7846,11 @@
   local.tee $103
   i32.store $0 offset=48
   local.get $103
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $103
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $103
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   call $~lib/date/dayOfWeek
   i32.const 6
   i32.eq
@@ -7791,11 +7872,11 @@
   local.tee $104
   i32.store $0 offset=52
   local.get $104
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $104
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $104
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   call $~lib/date/dayOfWeek
   i32.const 5
   i32.eq
@@ -7819,11 +7900,11 @@
   local.tee $105
   i32.store $0 offset=56
   local.get $105
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $105
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $105
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   call $~lib/date/dayOfWeek
   i32.const 6
   i32.eq
@@ -7845,11 +7926,11 @@
   local.tee $106
   i32.store $0 offset=60
   local.get $106
-  i32.load $0
+  call $~lib/date/Date#get:year
   local.get $106
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   local.get $106
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   call $~lib/date/dayOfWeek
   i32.const 0
   i32.eq
@@ -7871,7 +7952,7 @@
   local.get $107
   local.set $108
   local.get $108
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 3
@@ -7894,7 +7975,7 @@
   local.get $107
   local.set $109
   local.get $109
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 10
@@ -7917,7 +7998,7 @@
   local.get $107
   local.set $110
   local.get $110
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 2
@@ -7934,7 +8015,7 @@
   local.get $107
   local.set $111
   local.get $111
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 7899941177818720
   i64.eq
   i32.eqz
@@ -7955,7 +8036,7 @@
   local.get $107
   local.set $112
   local.get $112
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 7899936080218720
   i64.eq
   i32.eqz
@@ -7976,7 +8057,7 @@
   local.get $107
   local.set $113
   local.get $113
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 7899964937818720
   i64.eq
   i32.eqz
@@ -7997,7 +8078,7 @@
   local.get $107
   local.set $114
   local.get $114
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 11
@@ -8014,7 +8095,7 @@
   local.get $107
   local.set $115
   local.get $115
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 7899933401818720
   i64.eq
   i32.eqz
@@ -8035,7 +8116,7 @@
   local.get $107
   local.set $116
   local.get $116
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 0
@@ -8052,7 +8133,7 @@
   local.get $107
   local.set $117
   local.get $117
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 7899936080218720
   i64.eq
   i32.eqz
@@ -8073,7 +8154,7 @@
   local.get $118
   local.set $119
   local.get $119
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const 253616
   i32.eq
   i32.eqz
@@ -8091,7 +8172,7 @@
   local.get $118
   local.set $120
   local.get $120
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const 1976
   i32.eq
   i32.eqz
@@ -8109,7 +8190,7 @@
   local.get $118
   local.set $121
   local.get $121
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const 20212
   i32.eq
   i32.eqz
@@ -8127,7 +8208,7 @@
   local.get $118
   local.set $122
   local.get $122
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const 71
   i32.eq
   i32.eqz
@@ -8647,7 +8728,7 @@
   local.get $127
   local.set $128
   local.get $128
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 192067200000
   i64.eq
   i32.eqz
@@ -8672,7 +8753,7 @@
   local.get $127
   local.set $129
   local.get $129
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 192067200000
   i64.eq
   i32.eqz
@@ -8697,7 +8778,7 @@
   local.get $127
   local.set $130
   local.get $130
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 11860387200000
   i64.eq
   i32.eqz
@@ -8722,7 +8803,7 @@
   local.get $127
   local.set $131
   local.get $131
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 192112496000
   i64.eq
   i32.eqz
@@ -8747,7 +8828,7 @@
   local.get $127
   local.set $132
   local.get $132
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 192112496456
   i64.eq
   i32.eqz
@@ -8772,7 +8853,7 @@
   local.get $127
   local.set $133
   local.get $133
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 192112496456
   i64.eq
   i32.eqz
@@ -8797,7 +8878,7 @@
   local.get $127
   local.set $134
   local.get $134
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const -62167219200000
   i64.eq
   i32.eqz
@@ -8822,7 +8903,7 @@
   local.get $127
   local.set $135
   local.get $135
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const -62135596800000
   i64.eq
   i32.eqz
@@ -8847,7 +8928,7 @@
   local.get $127
   local.set $136
   local.get $136
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 189302400000
   i64.eq
   i32.eqz
@@ -8872,7 +8953,7 @@
   local.get $127
   local.set $137
   local.get $137
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 191980800000
   i64.eq
   i32.eqz
@@ -8897,7 +8978,7 @@
   local.get $127
   local.set $138
   local.get $138
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 192067200000
   i64.eq
   i32.eqz
@@ -8922,7 +9003,7 @@
   local.get $127
   local.set $139
   local.get $139
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 192112440000
   i64.eq
   i32.eqz
@@ -8947,7 +9028,7 @@
   local.get $127
   local.set $140
   local.get $140
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 192112496000
   i64.eq
   i32.eqz
@@ -8974,7 +9055,7 @@
   local.get $141
   local.set $143
   local.get $143
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const -8640000000000000
   i64.eq
   i32.eqz
@@ -8989,7 +9070,7 @@
   local.get $142
   local.set $144
   local.get $144
-  i64.load $0 offset=16
+  call $~lib/date/Date#get:epochMillis
   i64.const 8640000000000000
   i64.eq
   i32.eqz
@@ -9004,7 +9085,7 @@
   local.get $141
   local.set $145
   local.get $145
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const -271821
   i32.eq
   i32.eqz
@@ -9019,7 +9100,7 @@
   local.get $142
   local.set $146
   local.get $146
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const 275760
   i32.eq
   i32.eqz
@@ -9034,7 +9115,7 @@
   local.get $141
   local.set $147
   local.get $147
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 3
@@ -9051,7 +9132,7 @@
   local.get $142
   local.set $148
   local.get $148
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 8
@@ -9068,7 +9149,7 @@
   local.get $141
   local.set $149
   local.get $149
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 20
   i32.eq
   i32.eqz
@@ -9083,7 +9164,7 @@
   local.get $142
   local.set $150
   local.get $150
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 13
   i32.eq
   i32.eqz
@@ -9160,7 +9241,7 @@
   local.get $152
   local.set $153
   local.get $153
-  i32.load $0
+  call $~lib/date/Date#get:year
   i32.const -271821
   i32.eq
   i32.eqz
@@ -9175,7 +9256,7 @@
   local.get $152
   local.set $154
   local.get $154
-  i32.load $0 offset=4
+  call $~lib/date/Date#get:month
   i32.const 1
   i32.sub
   i32.const 3
@@ -9192,7 +9273,7 @@
   local.get $152
   local.set $155
   local.get $155
-  i32.load $0 offset=8
+  call $~lib/date/Date#get:day
   i32.const 20
   i32.eq
   i32.eqz
@@ -10146,7 +10227,7 @@
   i32.store $0
   local.get $index
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<~lib/string/String>#get:length_
   i32.ge_u
   if
    i32.const 368
@@ -10158,7 +10239,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
   local.get $index
   i32.const 2
   i32.shl

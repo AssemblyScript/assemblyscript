@@ -1439,7 +1439,7 @@
    local.tee $1
    i64.const 0
    i64.store $0
-   block $__inlined_func$~lib/rt/__instanceof15 (result i32)
+   block $__inlined_func$~lib/rt/__instanceof0 (result i32)
     local.get $0
     i32.eqz
     if
@@ -1462,12 +1462,12 @@
     i32.load $0
     i32.le_u
     if
-     loop $do-loop|017
+     loop $do-loop|03
       i32.const 1
       local.get $1
       i32.const 3
       i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof15
+      br_if $__inlined_func$~lib/rt/__instanceof0
       drop
       local.get $1
       i32.const 3
@@ -1476,7 +1476,7 @@
       i32.add
       i32.load $0 offset=4
       local.tee $1
-      br_if $do-loop|017
+      br_if $do-loop|03
      end
     end
     i32.const 0
@@ -1515,7 +1515,7 @@
    local.tee $2
    i32.const 0
    i32.store $0
-   block $__inlined_func$~lib/rt/__instanceof19 (result i32)
+   block $__inlined_func$~lib/rt/__instanceof6 (result i32)
     local.get $0
     i32.const 20
     i32.sub
@@ -1525,12 +1525,12 @@
     i32.load $0
     i32.le_u
     if
-     loop $do-loop|021
+     loop $do-loop|09
       i32.const 1
       local.get $1
       i32.const 3
       i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof19
+      br_if $__inlined_func$~lib/rt/__instanceof6
       drop
       local.get $1
       i32.const 3
@@ -1539,7 +1539,7 @@
       i32.add
       i32.load $0 offset=4
       local.tee $1
-      br_if $do-loop|021
+      br_if $do-loop|09
      end
     end
     i32.const 0
@@ -1579,7 +1579,7 @@
    i32.store $0
    local.get $0
    if
-    block $__inlined_func$~lib/rt/__instanceof24 (result i32)
+    block $__inlined_func$~lib/rt/__instanceof13 (result i32)
      local.get $0
      i32.const 20
      i32.sub
@@ -1589,12 +1589,12 @@
      i32.load $0
      i32.le_u
      if
-      loop $do-loop|026
+      loop $do-loop|016
        i32.const 1
        local.get $1
        i32.const 3
        i32.eq
-       br_if $__inlined_func$~lib/rt/__instanceof24
+       br_if $__inlined_func$~lib/rt/__instanceof13
        drop
        local.get $1
        i32.const 3
@@ -1603,7 +1603,7 @@
        i32.add
        i32.load $0 offset=4
        local.tee $1
-       br_if $do-loop|026
+       br_if $do-loop|016
       end
      end
      i32.const 0

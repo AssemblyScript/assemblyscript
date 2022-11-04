@@ -23,7 +23,7 @@ import {
   Interface,
   Enum,
   EnumValue,
-  Property
+  PropertyPrototype
 } from "../program";
 
 import {
@@ -1238,9 +1238,9 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.Property) continue;
-        let property = <Property>member;
-        if (!property.isField) continue;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        let property = (<PropertyPrototype>member).instance; // resolved during class finalization
+        if (!property || !property.isField) continue;
         assert(property.memoryOffset >= 0);
         indent(sb, this.indentLevel);
         sb.push(property.name);
@@ -1282,9 +1282,9 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.Property) continue;
-        let property = <Property>member;
-        if (!property.isField) continue;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        let property = (<PropertyPrototype>member).instance; // resolved during class finalization
+        if (!property || !property.isField) continue;
         assert(property.memoryOffset >= 0);
         indent(sb, this.indentLevel);
         this.makeLowerToMemory(property.type, sb, "pointer + " + property.memoryOffset.toString(), "value." + memberName);

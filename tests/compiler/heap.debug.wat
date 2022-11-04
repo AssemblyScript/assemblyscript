@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
+ (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
  (type $none_=>_none (func_subtype func))
@@ -21,25 +21,41 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/BLOCK#get:mmInfo (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
+ )
+ (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/rt/tlsf/Block#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/rt/tlsf/Root#get:flMap (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
  )
  (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   (local $blockInfo i32)
@@ -65,7 +81,7 @@
   (local $fl|22 i32)
   (local $slMap|23 i32)
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -165,10 +181,10 @@
    unreachable
   end
   local.get $block
-  i32.load $0 offset=4
+  call $~lib/rt/tlsf/Block#get:prev
   local.set $prev
   local.get $block
-  i32.load $0 offset=8
+  call $~lib/rt/tlsf/Block#get:next
   local.set $next
   local.get $prev
   if
@@ -259,7 +275,7 @@
     if
      local.get $root
      local.get $root
-     i32.load $0
+     call $~lib/rt/tlsf/Root#get:flMap
      i32.const 1
      local.get $fl
      i32.shl
@@ -312,7 +328,7 @@
    unreachable
   end
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -334,7 +350,7 @@
   i32.const 4
   i32.add
   local.get $block|3
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -342,7 +358,7 @@
   i32.add
   local.set $right
   local.get $right
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $rightInfo
   local.get $rightInfo
   i32.const 1
@@ -369,7 +385,7 @@
    i32.const 4
    i32.add
    local.get $block|6
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
@@ -377,7 +393,7 @@
    i32.add
    local.set $right
    local.get $right
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    local.set $rightInfo
   end
   local.get $blockInfo
@@ -392,7 +408,7 @@
    i32.load $0
    local.set $left
    local.get $left
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    local.set $leftInfo
    i32.const 1
    drop
@@ -587,7 +603,7 @@
   i32.store $0 offset=96
   local.get $root
   local.get $root
-  i32.load $0
+  call $~lib/rt/tlsf/Root#get:flMap
   i32.const 1
   local.get $fl
   i32.shl
@@ -697,7 +713,7 @@
     i32.sub
     local.set $start
     local.get $tail
-    i32.load $0
+    call $~lib/rt/common/BLOCK#get:mmInfo
     local.set $tailInfo
    else
     nop
@@ -1079,7 +1095,7 @@
   i32.eqz
   if
    local.get $root
-   i32.load $0
+   call $~lib/rt/tlsf/Root#get:flMap
    i32.const 0
    i32.const -1
    i32.xor
@@ -1256,7 +1272,7 @@
   (local $block|6 i32)
   (local $block|7 i32)
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -1326,7 +1342,7 @@
    i32.const 4
    i32.add
    local.get $block|7
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
@@ -1338,13 +1354,13 @@
    i32.const 4
    i32.add
    local.get $block|6
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 2
    i32.const -1
    i32.xor
@@ -1388,7 +1404,7 @@
   i32.const 1
   drop
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -1450,7 +1466,7 @@
   end
   if (result i32)
    local.get $block
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 1
    i32.and
    i32.eqz
@@ -1473,7 +1489,7 @@
   drop
   local.get $block
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 1
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
@@ -1494,7 +1510,7 @@
   i32.const 4
   i32.add
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -1524,7 +1540,7 @@
   call $~lib/rt/tlsf/prepareSize
   local.set $payloadSize
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   local.get $blockInfo
   i32.const 3
@@ -1551,7 +1567,7 @@
   i32.const 4
   i32.add
   local.get $block|6
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -1559,7 +1575,7 @@
   i32.add
   local.set $right
   local.get $right
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $rightInfo
   local.get $rightInfo
   i32.const 1

@@ -30,7 +30,8 @@ import {
   Class,
   TypedElement,
   mangleInternalName,
-  Property
+  Property,
+  PropertyPrototype
 } from "./program";
 
 import {
@@ -477,12 +478,13 @@ export class Flow {
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
-        if (member.kind != ElementKind.Property) continue;
-        let property = <Property>member;
-        if (!property.isField) continue;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        // only interested in fields (resolved during class finalization)
+        let property = (<PropertyPrototype>member).instance;
+        if (!property || !property.isField) continue;
         if (
           // guaranteed by super
-          property.parent != classInstance ||
+          property.prototype.parent != classInstance ||
           // has field initializer
           property.initializerNode ||
           // is initialized as a ctor parameter

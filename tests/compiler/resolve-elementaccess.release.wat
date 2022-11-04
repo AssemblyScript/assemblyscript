@@ -2,8 +2,8 @@
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (type $none_=>_none (func_subtype func))
  (type $i32_=>_none (func_subtype (param i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i32_f32_=>_none (func_subtype (param i32 i32 f32) func))
@@ -1573,6 +1573,61 @@
   local.get $0
   memory.fill $0
   local.get $1
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#set:buffer (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store $0
+  local.get $1
+  if
+   local.get $0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1232
+    i32.const 294
+    i32.const 14
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/rt/itcms/white
+   local.get $1
+   i32.const 20
+   i32.sub
+   local.tee $1
+   i32.load $0 offset=4
+   i32.const 3
+   i32.and
+   i32.eq
+   if
+    local.get $0
+    i32.const 20
+    i32.sub
+    i32.load $0 offset=4
+    i32.const 3
+    i32.and
+    local.tee $0
+    global.get $~lib/rt/itcms/white
+    i32.eqz
+    i32.eq
+    if
+     local.get $1
+     call $~lib/rt/itcms/Object#makeGray
+    else
+     global.get $~lib/rt/itcms/state
+     i32.const 1
+     i32.eq
+     local.get $0
+     i32.const 3
+     i32.eq
+     i32.and
+     if
+      local.get $1
+      call $~lib/rt/itcms/Object#makeGray
+     end
+    end
+   end
+  end
  )
  (func $~lib/typedarray/Float32Array#__set (type $i32_i32_f32_=>_none) (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $1
@@ -3531,8 +3586,6 @@
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -3563,7 +3616,7 @@
   end
   local.get $0
   i32.const 0
-  i32.store $0
+  call $~lib/arraybuffer/ArrayBufferView#set:buffer
   local.get $0
   i32.const 0
   i32.store $0 offset=4
@@ -3587,69 +3640,19 @@
   i32.const 2
   local.get $1
   i32.shl
-  local.tee $1
+  local.tee $2
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $3
-  i32.store $0 offset=4
-  local.get $0
-  local.get $3
-  i32.store $0
-  local.get $3
-  if
-   local.get $0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1232
-    i32.const 294
-    i32.const 14
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/rt/itcms/white
-   local.get $3
-   i32.const 20
-   i32.sub
-   local.tee $4
-   i32.load $0 offset=4
-   i32.const 3
-   i32.and
-   i32.eq
-   if
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=4
-    i32.const 3
-    i32.and
-    local.tee $2
-    global.get $~lib/rt/itcms/white
-    i32.eqz
-    i32.eq
-    if
-     local.get $4
-     call $~lib/rt/itcms/Object#makeGray
-    else
-     global.get $~lib/rt/itcms/state
-     i32.const 1
-     i32.eq
-     local.get $2
-     i32.const 3
-     i32.eq
-     i32.and
-     if
-      local.get $4
-      call $~lib/rt/itcms/Object#makeGray
-     end
-    end
-   end
-  end
-  local.get $0
-  local.get $3
+  local.tee $1
   i32.store $0 offset=4
   local.get $0
   local.get $1
+  call $~lib/arraybuffer/ArrayBufferView#set:buffer
+  local.get $0
+  local.get $1
+  i32.store $0 offset=4
+  local.get $0
+  local.get $2
   i32.store $0 offset=8
   global.get $~lib/memory/__stack_pointer
   i32.const 8

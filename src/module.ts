@@ -24,7 +24,7 @@ import {
 } from "./types";
 import {
   ElementKind,
-  Property
+  PropertyPrototype
 } from "./program";
 import * as binaryen from "./glue/binaryen";
 
@@ -3828,9 +3828,10 @@ function prepareType(builder: binaryen.TypeBuilderRef, seen: Map<Type,HeapTypeRe
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
-        if (member.kind != ElementKind.Property) continue;
-        let property = <Property>member;
-        if (!property.isField) continue;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        // only interested in fields (resolved during class finalization)
+        let property = (<PropertyPrototype>member).instance;
+        if (!property || !property.isField) continue;
         let fieldType = property.type;
         if (DEBUG_TYPEBUILDER) {
           console.log(`  field ${fieldType.toString()}`);

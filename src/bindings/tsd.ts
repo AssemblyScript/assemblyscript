@@ -15,7 +15,7 @@ import {
   Enum,
   ElementKind,
   Element,
-  Property
+  PropertyPrototype
 } from "../program";
 
 import {
@@ -347,9 +347,9 @@ export class TSDBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.Property) continue;
-        let property = <Property>member;
-        if (!property.isField) continue;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        let property = (<PropertyPrototype>member).instance; // resolved during class finalization
+        if (!property || !property.isField) continue;
         sb.push("  /** @type `");
         sb.push(property.type.toString());
         sb.push("` */\n  ");

@@ -1,7 +1,7 @@
 (module
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
  (type $none_=>_none (func_subtype func))
  (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
@@ -138,20 +138,24 @@
  (func $bindings/esm/getMaxUnsigned64 (type $none_=>_i64) (result i64)
   global.get $~lib/builtins/u64.MAX_VALUE
  )
+ (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
  (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
  )
- (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
  )
  (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
@@ -163,9 +167,13 @@
   call $~lib/rt/itcms/Object#set:prev
   local.get $space
  )
- (func $~lib/rt/itcms/Object#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:nextWithColor (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
+ )
+ (func $~lib/rt/itcms/Object#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.const -1
   i32.xor
@@ -173,7 +181,7 @@
  )
  (func $~lib/rt/itcms/Object#get:color (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
  )
@@ -225,7 +233,7 @@
  (func $~lib/rt/itcms/Object#set:color (type $i32_i32_=>_none) (param $this i32) (param $color i32)
   local.get $this
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.const -1
   i32.xor
@@ -234,11 +242,15 @@
   i32.or
   call $~lib/rt/itcms/Object#set:nextWithColor
  )
+ (func $~lib/rt/itcms/Object#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
  (func $~lib/rt/itcms/Object#set:next (type $i32_i32_=>_none) (param $this i32) (param $obj i32)
   local.get $this
   local.get $obj
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
   i32.or
@@ -257,7 +269,7 @@
    i32.const 1
    drop
    local.get $this
-   i32.load $0 offset=8
+   call $~lib/rt/itcms/Object#get:prev
    i32.const 0
    i32.eq
    if (result i32)
@@ -279,7 +291,7 @@
    return
   end
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/rt/itcms/Object#get:prev
   local.set $prev
   i32.const 1
   drop
@@ -299,6 +311,14 @@
   local.get $prev
   local.get $next
   call $~lib/rt/itcms/Object#set:next
+ )
+ (func $~lib/rt/itcms/Object#get:rtId (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/shared/typeinfo/Typeinfo#get:flags (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
  )
  (func $~lib/rt/__typeinfo (type $i32_=>_i32) (param $id i32) (result i32)
   (local $ptr i32)
@@ -323,12 +343,12 @@
   i32.const 8
   i32.mul
   i32.add
-  i32.load $0
+  call $~lib/shared/typeinfo/Typeinfo#get:flags
  )
  (func $~lib/rt/itcms/Object#get:isPointerfree (type $i32_=>_i32) (param $this i32) (result i32)
   (local $rtId i32)
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/rt/itcms/Object#get:rtId
   local.set $rtId
   local.get $rtId
   i32.const 1
@@ -347,7 +367,7 @@
  (func $~lib/rt/itcms/Object#linkTo (type $i32_i32_i32_=>_none) (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
   local.get $list
-  i32.load $0 offset=8
+  call $~lib/rt/itcms/Object#get:prev
   local.set $prev
   local.get $this
   local.get $list
@@ -371,7 +391,7 @@
   i32.eq
   if
    local.get $this
-   i32.load $0 offset=8
+   call $~lib/rt/itcms/Object#get:prev
    local.tee $1
    i32.eqz
    if (result i32)
@@ -450,35 +470,51 @@
    end
   end
  )
+ (func $~lib/rt/common/BLOCK#get:mmInfo (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/rt/itcms/Object#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 4
   local.get $this
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
   i32.and
   i32.add
  )
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
+ )
+ (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/rt/tlsf/Block#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/rt/tlsf/Root#get:flMap (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
  )
  (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   (local $blockInfo i32)
@@ -504,7 +540,7 @@
   (local $fl|22 i32)
   (local $slMap|23 i32)
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -604,10 +640,10 @@
    unreachable
   end
   local.get $block
-  i32.load $0 offset=4
+  call $~lib/rt/tlsf/Block#get:prev
   local.set $prev
   local.get $block
-  i32.load $0 offset=8
+  call $~lib/rt/tlsf/Block#get:next
   local.set $next
   local.get $prev
   if
@@ -698,7 +734,7 @@
     if
      local.get $root
      local.get $root
-     i32.load $0
+     call $~lib/rt/tlsf/Root#get:flMap
      i32.const 1
      local.get $fl
      i32.shl
@@ -751,7 +787,7 @@
    unreachable
   end
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -773,7 +809,7 @@
   i32.const 4
   i32.add
   local.get $block|3
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -781,7 +817,7 @@
   i32.add
   local.set $right
   local.get $right
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $rightInfo
   local.get $rightInfo
   i32.const 1
@@ -808,7 +844,7 @@
    i32.const 4
    i32.add
    local.get $block|6
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
@@ -816,7 +852,7 @@
    i32.add
    local.set $right
    local.get $right
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    local.set $rightInfo
   end
   local.get $blockInfo
@@ -831,7 +867,7 @@
    i32.load $0
    local.set $left
    local.get $left
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    local.set $leftInfo
    i32.const 1
    drop
@@ -1026,7 +1062,7 @@
   i32.store $0 offset=96
   local.get $root
   local.get $root
-  i32.load $0
+  call $~lib/rt/tlsf/Root#get:flMap
   i32.const 1
   local.get $fl
   i32.shl
@@ -1136,7 +1172,7 @@
     i32.sub
     local.set $start
     local.get $tail
-    i32.load $0
+    call $~lib/rt/common/BLOCK#get:mmInfo
     local.set $tailInfo
    else
     nop
@@ -1390,7 +1426,7 @@
   end
   if (result i32)
    local.get $block
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 1
    i32.and
    i32.eqz
@@ -1413,7 +1449,7 @@
   drop
   local.get $block
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 1
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
@@ -1853,7 +1889,7 @@
   i32.eqz
   if
    local.get $root
-   i32.load $0
+   call $~lib/rt/tlsf/Root#get:flMap
    i32.const 0
    i32.const -1
    i32.xor
@@ -2030,7 +2066,7 @@
   (local $block|6 i32)
   (local $block|7 i32)
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -2100,7 +2136,7 @@
    i32.const 4
    i32.add
    local.get $block|7
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
@@ -2112,13 +2148,13 @@
    i32.const 4
    i32.add
    local.get $block|6
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 2
    i32.const -1
    i32.xor
@@ -2162,7 +2198,7 @@
   i32.const 1
   drop
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -2201,14 +2237,14 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=16
  )
  (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
@@ -2267,7 +2303,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
  )
@@ -2354,41 +2390,49 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#set:buffer (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/arraybuffer/ArrayBufferView#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $value
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/arraybuffer/ArrayBufferView#set:dataStart (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/arraybuffer/ArrayBufferView#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/arraybuffer/ArrayBufferView#set:byteLength (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/arraybuffer/ArrayBufferView#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
  )
  (func $~lib/typedarray/Int16Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 1
   i32.shr_u
  )
  (func $~lib/typedarray/Float32Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 2
   i32.shr_u
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
  )
  (func $~lib/typedarray/Int16Array#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   local.get $index
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 1
   i32.shr_u
   i32.ge_u
@@ -2401,7 +2445,7 @@
    unreachable
   end
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
   local.get $index
   i32.const 1
   i32.shl
@@ -2411,7 +2455,7 @@
  (func $~lib/typedarray/Uint64Array#__set (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
   local.get $index
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.shr_u
   i32.ge_u
@@ -2424,7 +2468,7 @@
    unreachable
   end
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
   local.get $index
   i32.const 3
   i32.shl
@@ -2435,7 +2479,7 @@
  (func $~lib/typedarray/Float32Array#__get (type $i32_i32_=>_f32) (param $this i32) (param $index i32) (result f32)
   local.get $index
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 2
   i32.shr_u
   i32.ge_u
@@ -2448,7 +2492,7 @@
    unreachable
   end
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
   local.get $index
   i32.const 2
   i32.shl
@@ -2459,7 +2503,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 2
   i32.shr_u
  )
@@ -2523,39 +2567,47 @@
  (func $bindings/esm/staticarrayI64 (type $i32_=>_i32) (param $a i32) (result i32)
   local.get $a
  )
- (func $~lib/array/Array<i32>#set:buffer (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/array/Array<i32>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $value
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/Array<i32>#set:dataStart (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/array/Array<i32>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/array/Array<i32>#set:byteLength (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/array/Array<i32>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
  )
- (func $~lib/array/Array<i32>#set:length_ (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/array/Array<i32>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=12
+ )
+ (func $~lib/array/Array<i32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
  )
  (func $~lib/array/Array<i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<i32>#get:length_
+ )
+ (func $~lib/array/Array<i32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
  )
  (func $~lib/array/Array<i32>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   local.get $index
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<i32>#get:length_
   i32.ge_u
   if
    i32.const 528
@@ -2566,7 +2618,7 @@
    unreachable
   end
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<i32>#get:dataStart
   local.get $index
   i32.const 2
   i32.shl
@@ -2576,6 +2628,14 @@
   i32.const 0
   drop
   local.get $value
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/rt/itcms/Object#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
  )
  (func $~lib/rt/itcms/__renew (type $i32_i32_=>_i32) (param $oldPtr i32) (param $size i32) (result i32)
   (local $oldObj i32)
@@ -2588,7 +2648,7 @@
   local.set $oldObj
   local.get $size
   local.get $oldObj
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -2605,7 +2665,7 @@
   end
   local.get $size
   local.get $oldObj
-  i32.load $0 offset=12
+  call $~lib/rt/itcms/Object#get:rtId
   call $~lib/rt/itcms/__new
   local.set $newPtr
   local.get $newPtr
@@ -2613,7 +2673,7 @@
   local.get $size
   local.tee $4
   local.get $oldObj
-  i32.load $0 offset=16
+  call $~lib/rt/itcms/Object#get:rtSize
   local.tee $5
   local.get $4
   local.get $5
@@ -2634,7 +2694,7 @@
   (local $12 i32)
   (local $newData i32)
   local.get $array
-  i32.load $0 offset=8
+  call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   local.set $oldCapacity
   local.get $newSize
   local.get $oldCapacity
@@ -2656,7 +2716,7 @@
     unreachable
    end
    local.get $array
-   i32.load $0
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
    local.set $oldData
    local.get $newSize
    local.tee $6
@@ -2720,7 +2780,7 @@
  )
  (func $~lib/array/Array<i32>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<i32>#get:dataStart
   local.get $index
   i32.const 2
   i32.shl
@@ -2733,7 +2793,7 @@
  (func $~lib/array/Array<i32>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<i32>#get:length_
   i32.ge_u
   if
    local.get $index
@@ -2765,97 +2825,105 @@
   local.get $value
   call $~lib/array/Array<i32>#__uset
  )
- (func $bindings/esm/PlainObject#set:a (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store8 $0
  )
- (func $bindings/esm/PlainObject#set:b (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:b (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store16 $0 offset=2
  )
- (func $bindings/esm/PlainObject#set:c (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:c (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $bindings/esm/PlainObject#set:d (type $i32_i64_=>_none) (param $0 i32) (param $1 i64)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:d (type $i32_i64_=>_none) (param $this i32) (param $value i64)
+  local.get $this
+  local.get $value
   i64.store $0 offset=8
  )
- (func $bindings/esm/PlainObject#set:e (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:e (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store8 $0 offset=16
  )
- (func $bindings/esm/PlainObject#set:f (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:f (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store16 $0 offset=18
  )
- (func $bindings/esm/PlainObject#set:g (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:g (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=20
  )
- (func $bindings/esm/PlainObject#set:h (type $i32_i64_=>_none) (param $0 i32) (param $1 i64)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:h (type $i32_i64_=>_none) (param $this i32) (param $value i64)
+  local.get $this
+  local.get $value
   i64.store $0 offset=24
  )
- (func $bindings/esm/PlainObject#set:i (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:i (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=32
  )
- (func $bindings/esm/PlainObject#set:j (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:j (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=36
  )
- (func $bindings/esm/PlainObject#set:k (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:k (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store8 $0 offset=40
  )
- (func $bindings/esm/PlainObject#set:l (type $i32_f32_=>_none) (param $0 i32) (param $1 f32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:l (type $i32_f32_=>_none) (param $this i32) (param $value f32)
+  local.get $this
+  local.get $value
   f32.store $0 offset=44
  )
- (func $bindings/esm/PlainObject#set:m (type $i32_f64_=>_none) (param $0 i32) (param $1 f64)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:m (type $i32_f64_=>_none) (param $this i32) (param $value f64)
+  local.get $this
+  local.get $value
   f64.store $0 offset=48
  )
- (func $bindings/esm/PlainObject#set:n (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:n (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=56
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $value
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $bindings/esm/PlainObject#set:o (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:o (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=60
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $value
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $bindings/esm/PlainObject#set:p (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $bindings/esm/PlainObject#set:p (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=64
-  local.get $0
-  local.get $1
+  local.get $this
+  local.get $value
   i32.const 0
   call $~lib/rt/itcms/__link
+ )
+ (func $bindings/esm/PlainObject#get:a (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load8_s $0
+ )
+ (func $bindings/esm/PlainObject#get:b (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load16_s $0 offset=2
  )
  (func $bindings/esm/newInternref (type $none_=>_i32) (result i32)
   i32.const 0
@@ -3029,9 +3097,13 @@
    call $~lib/rt/itcms/__visit
   end
  )
- (func $~lib/function/Function<%28%29=>void>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+ (func $~lib/function/Function<%28%29=>void>#get:_env (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
+ )
+ (func $~lib/function/Function<%28%29=>void>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  local.get $this
+  call $~lib/function/Function<%28%29=>void>#get:_env
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
@@ -3055,11 +3127,15 @@
   local.get $1
   call $~lib/arraybuffer/ArrayBufferView~visit
  )
+ (func $~lib/array/Array<i32>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/array/Array<i32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   i32.const 0
   drop
   local.get $this
-  i32.load $0
+  call $~lib/array/Array<i32>#get:buffer
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
@@ -3100,6 +3176,18 @@
   local.get $1
   call $~lib/arraybuffer/ArrayBufferView~visit
  )
+ (func $~lib/array/Array<~lib/string/String>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/array/Array<~lib/string/String>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/array/Array<~lib/string/String>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/array/Array<~lib/string/String>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   (local $cur i32)
   (local $end i32)
@@ -3108,11 +3196,11 @@
   i32.const 1
   drop
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
   local.set $cur
   local.get $cur
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<~lib/string/String>#get:length_
   i32.const 2
   i32.shl
   i32.add
@@ -3141,7 +3229,7 @@
    end
   end
   local.get $this
-  i32.load $0
+  call $~lib/array/Array<~lib/string/String>#get:buffer
   local.get $cookie
   call $~lib/rt/itcms/__visit
  )
@@ -4091,16 +4179,16 @@
   i32.store $0
   local.get $ref
   local.get $a
-  i32.load8_s $0
+  call $bindings/esm/PlainObject#get:a
   local.get $b
-  i32.load8_s $0
+  call $bindings/esm/PlainObject#get:a
   i32.add
   call $bindings/esm/PlainObject#set:a
   local.get $ref
   local.get $a
-  i32.load16_s $0 offset=2
+  call $bindings/esm/PlainObject#get:b
   local.get $b
-  i32.load16_s $0 offset=2
+  call $bindings/esm/PlainObject#get:b
   i32.add
   call $bindings/esm/PlainObject#set:b
   local.get $ref

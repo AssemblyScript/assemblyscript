@@ -2015,66 +2015,90 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+ (func $~lib/array/Array<infer-array/Ref|null>#__visit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  block $folding-inner2
-   block $folding-inner1
-    block $invalid
-     block $infer-array/Ref
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
+  local.get $0
+  i32.load $0 offset=4
+  local.tee $1
+  local.get $0
+  i32.load $0 offset=12
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $1
+   local.get $3
+   i32.lt_u
+   if
+    local.get $1
+    i32.load $0
+    local.tee $2
+    if
+     local.get $2
+     call $byn-split-outlined-A$~lib/rt/itcms/__visit
+    end
+    local.get $1
+    i32.const 4
+    i32.add
+    local.set $1
+    br $while-continue|0
+   end
+  end
+  local.get $0
+  i32.load $0
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
+ )
+ (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+  block $folding-inner0
+   block $invalid
+    block $~lib/array/Array<~lib/array/Array<i32>>
+     block $~lib/array/Array<~lib/string/String|null>
+      block $~lib/array/Array<infer-array/Ref|null>
+       block $infer-array/Ref
+        block $~lib/arraybuffer/ArrayBufferView
+         block $~lib/string/String
+          block $~lib/arraybuffer/ArrayBuffer
+           local.get $0
+           i32.const 8
+           i32.sub
+           i32.load $0
+           br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $infer-array/Ref $~lib/array/Array<infer-array/Ref|null> $~lib/array/Array<~lib/string/String|null> $folding-inner0 $~lib/array/Array<~lib/array/Array<i32>> $invalid
+          end
+          return
+         end
+         return
+        end
         local.get $0
-        i32.const 8
-        i32.sub
         i32.load $0
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $infer-array/Ref $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner1 $invalid
+        local.tee $0
+        if
+         local.get $0
+         call $byn-split-outlined-A$~lib/rt/itcms/__visit
+        end
+        return
        end
        return
       end
+      local.get $0
+      call $~lib/array/Array<infer-array/Ref|null>#__visit
       return
      end
+     local.get $0
+     call $~lib/array/Array<infer-array/Ref|null>#__visit
      return
     end
-    unreachable
-   end
-   local.get $0
-   i32.load $0 offset=4
-   local.tee $1
-   local.get $0
-   i32.load $0 offset=12
-   i32.const 2
-   i32.shl
-   i32.add
-   local.set $3
-   loop $while-continue|0
-    local.get $1
-    local.get $3
-    i32.lt_u
-    if
-     local.get $1
-     i32.load $0
-     local.tee $2
-     if
-      local.get $2
-      call $byn-split-outlined-A$~lib/rt/itcms/__visit
-     end
-     local.get $1
-     i32.const 4
-     i32.add
-     local.set $1
-     br $while-continue|0
-    end
-   end
-   local.get $0
-   i32.load $0
-   local.tee $0
-   if
     local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+    call $~lib/array/Array<infer-array/Ref|null>#__visit
+    return
    end
-   return
+   unreachable
   end
   local.get $0
   i32.load $0

@@ -1,7 +1,7 @@
 (module
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $none_=>_none (func_subtype func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
@@ -63,20 +63,24 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
  (func $~lib/string/String.UTF16.byteLength (type $i32_=>_i32) (param $str i32) (result i32)
   local.get $str
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
  )
- (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
  )
  (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
@@ -88,9 +92,13 @@
   call $~lib/rt/itcms/Object#set:prev
   local.get $space
  )
- (func $~lib/rt/itcms/Object#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/rt/itcms/Object#get:nextWithColor (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
+ )
+ (func $~lib/rt/itcms/Object#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.const -1
   i32.xor
@@ -98,7 +106,7 @@
  )
  (func $~lib/rt/itcms/Object#get:color (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
  )
@@ -150,7 +158,7 @@
  (func $~lib/rt/itcms/Object#set:color (type $i32_i32_=>_none) (param $this i32) (param $color i32)
   local.get $this
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.const -1
   i32.xor
@@ -159,11 +167,15 @@
   i32.or
   call $~lib/rt/itcms/Object#set:nextWithColor
  )
+ (func $~lib/rt/itcms/Object#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
  (func $~lib/rt/itcms/Object#set:next (type $i32_i32_=>_none) (param $this i32) (param $obj i32)
   local.get $this
   local.get $obj
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
   i32.or
@@ -182,7 +194,7 @@
    i32.const 1
    drop
    local.get $this
-   i32.load $0 offset=8
+   call $~lib/rt/itcms/Object#get:prev
    i32.const 0
    i32.eq
    if (result i32)
@@ -204,7 +216,7 @@
    return
   end
   local.get $this
-  i32.load $0 offset=8
+  call $~lib/rt/itcms/Object#get:prev
   local.set $prev
   i32.const 1
   drop
@@ -224,6 +236,14 @@
   local.get $prev
   local.get $next
   call $~lib/rt/itcms/Object#set:next
+ )
+ (func $~lib/rt/itcms/Object#get:rtId (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/shared/typeinfo/Typeinfo#get:flags (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
  )
  (func $~lib/rt/__typeinfo (type $i32_=>_i32) (param $id i32) (result i32)
   (local $ptr i32)
@@ -248,12 +268,12 @@
   i32.const 8
   i32.mul
   i32.add
-  i32.load $0
+  call $~lib/shared/typeinfo/Typeinfo#get:flags
  )
  (func $~lib/rt/itcms/Object#get:isPointerfree (type $i32_=>_i32) (param $this i32) (result i32)
   (local $rtId i32)
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/rt/itcms/Object#get:rtId
   local.set $rtId
   local.get $rtId
   i32.const 1
@@ -272,7 +292,7 @@
  (func $~lib/rt/itcms/Object#linkTo (type $i32_i32_i32_=>_none) (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
   local.get $list
-  i32.load $0 offset=8
+  call $~lib/rt/itcms/Object#get:prev
   local.set $prev
   local.get $this
   local.get $list
@@ -296,7 +316,7 @@
   i32.eq
   if
    local.get $this
-   i32.load $0 offset=8
+   call $~lib/rt/itcms/Object#get:prev
    local.tee $1
    i32.eqz
    if (result i32)
@@ -375,35 +395,51 @@
    end
   end
  )
+ (func $~lib/rt/common/BLOCK#get:mmInfo (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/rt/itcms/Object#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 4
   local.get $this
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
   i32.and
   i32.add
  )
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=8
+ )
+ (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/rt/tlsf/Block#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/rt/tlsf/Root#get:flMap (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
  )
  (func $~lib/rt/tlsf/removeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   (local $blockInfo i32)
@@ -429,7 +465,7 @@
   (local $fl|22 i32)
   (local $slMap|23 i32)
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -529,10 +565,10 @@
    unreachable
   end
   local.get $block
-  i32.load $0 offset=4
+  call $~lib/rt/tlsf/Block#get:prev
   local.set $prev
   local.get $block
-  i32.load $0 offset=8
+  call $~lib/rt/tlsf/Block#get:next
   local.set $next
   local.get $prev
   if
@@ -623,7 +659,7 @@
     if
      local.get $root
      local.get $root
-     i32.load $0
+     call $~lib/rt/tlsf/Root#get:flMap
      i32.const 1
      local.get $fl
      i32.shl
@@ -676,7 +712,7 @@
    unreachable
   end
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -698,7 +734,7 @@
   i32.const 4
   i32.add
   local.get $block|3
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -706,7 +742,7 @@
   i32.add
   local.set $right
   local.get $right
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $rightInfo
   local.get $rightInfo
   i32.const 1
@@ -733,7 +769,7 @@
    i32.const 4
    i32.add
    local.get $block|6
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
@@ -741,7 +777,7 @@
    i32.add
    local.set $right
    local.get $right
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    local.set $rightInfo
   end
   local.get $blockInfo
@@ -756,7 +792,7 @@
    i32.load $0
    local.set $left
    local.get $left
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    local.set $leftInfo
    i32.const 1
    drop
@@ -951,7 +987,7 @@
   i32.store $0 offset=96
   local.get $root
   local.get $root
-  i32.load $0
+  call $~lib/rt/tlsf/Root#get:flMap
   i32.const 1
   local.get $fl
   i32.shl
@@ -1061,7 +1097,7 @@
     i32.sub
     local.set $start
     local.get $tail
-    i32.load $0
+    call $~lib/rt/common/BLOCK#get:mmInfo
     local.set $tailInfo
    else
     nop
@@ -1315,7 +1351,7 @@
   end
   if (result i32)
    local.get $block
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 1
    i32.and
    i32.eqz
@@ -1338,7 +1374,7 @@
   drop
   local.get $block
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 1
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
@@ -1778,7 +1814,7 @@
   i32.eqz
   if
    local.get $root
-   i32.load $0
+   call $~lib/rt/tlsf/Root#get:flMap
    i32.const 0
    i32.const -1
    i32.xor
@@ -1955,7 +1991,7 @@
   (local $block|6 i32)
   (local $block|7 i32)
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   local.set $blockInfo
   i32.const 1
   drop
@@ -2025,7 +2061,7 @@
    i32.const 4
    i32.add
    local.get $block|7
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
@@ -2037,13 +2073,13 @@
    i32.const 4
    i32.add
    local.get $block|6
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   i32.load $0
+   call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 2
    i32.const -1
    i32.xor
@@ -2087,7 +2123,7 @@
   i32.const 1
   drop
   local.get $block
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -2126,14 +2162,14 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=16
  )
  (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
@@ -2192,7 +2228,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
  )
@@ -2212,7 +2248,7 @@
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
  )
  (func $~lib/string/String.UTF16.decode (type $i32_=>_i32) (param $buf i32) (result i32)
   local.get $buf
@@ -2380,7 +2416,7 @@
   local.get $str
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.add
   local.set $strEnd
   local.get $nullTerminated
@@ -2750,6 +2786,10 @@
   local.get $errorMode
   call $~lib/string/String.UTF8.encode
  )
+ (func $~lib/rt/itcms/Object#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
  (func $~lib/rt/itcms/__renew (type $i32_i32_=>_i32) (param $oldPtr i32) (param $size i32) (result i32)
   (local $oldObj i32)
   (local $newPtr i32)
@@ -2761,7 +2801,7 @@
   local.set $oldObj
   local.get $size
   local.get $oldObj
-  i32.load $0
+  call $~lib/rt/common/BLOCK#get:mmInfo
   i32.const 3
   i32.const -1
   i32.xor
@@ -2778,7 +2818,7 @@
   end
   local.get $size
   local.get $oldObj
-  i32.load $0 offset=12
+  call $~lib/rt/itcms/Object#get:rtId
   call $~lib/rt/itcms/__new
   local.set $newPtr
   local.get $newPtr
@@ -2786,7 +2826,7 @@
   local.get $size
   local.tee $4
   local.get $oldObj
-  i32.load $0 offset=16
+  call $~lib/rt/itcms/Object#get:rtSize
   local.tee $5
   local.get $4
   local.get $5

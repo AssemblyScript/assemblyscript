@@ -1,5 +1,6 @@
 (module
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $none_=>_none (func_subtype func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -18,15 +19,23 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $std/pointer/Entry#set:key (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $std/pointer/Entry#set:key (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0
  )
- (func $std/pointer/Entry#set:val (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
+ (func $std/pointer/Entry#set:val (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
   i32.store $0 offset=4
+ )
+ (func $std/pointer/Entry#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $std/pointer/Entry#get:val (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
  )
  (func $start:std/pointer (type $none_=>_none)
   (local $this i32)
@@ -155,7 +164,7 @@
    local.get $this|8
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.2
   end
-  i32.load $0
+  call $std/pointer/Entry#get:key
   i32.const 1
   i32.eq
   i32.eqz
@@ -175,7 +184,7 @@
    local.get $this|9
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3
   end
-  i32.load $0 offset=4
+  call $std/pointer/Entry#get:val
   i32.const 2
   i32.eq
   i32.eqz
@@ -327,7 +336,7 @@
    local.get $this|23
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4
   end
-  i32.load $0
+  call $std/pointer/Entry#get:key
   i32.const 1
   i32.eq
   i32.eqz
@@ -347,7 +356,7 @@
    local.get $this|24
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5
   end
-  i32.load $0 offset=4
+  call $std/pointer/Entry#get:val
   i32.const 2
   i32.eq
   i32.eqz
@@ -412,7 +421,7 @@
    local.get $this|30
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7
   end
-  i32.load $0
+  call $std/pointer/Entry#get:key
   i32.const 1
   i32.eq
   i32.eqz
@@ -432,7 +441,7 @@
    local.get $this|31
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8
   end
-  i32.load $0 offset=4
+  call $std/pointer/Entry#get:val
   i32.const 2
   i32.eq
   i32.eqz

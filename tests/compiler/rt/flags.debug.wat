@@ -1,8 +1,8 @@
 (module
  (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $none_=>_none (func_subtype func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
@@ -22,6 +22,10 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/shared/typeinfo/Typeinfo#get:flags (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/rt/__typeinfo (type $i32_=>_i32) (param $id i32) (result i32)
   (local $ptr i32)
   global.get $~lib/rt/__rtti_base
@@ -45,7 +49,7 @@
   i32.const 8
   i32.mul
   i32.add
-  i32.load $0
+  call $~lib/shared/typeinfo/Typeinfo#get:flags
  )
  (func $rt/flags/test<~lib/typedarray/Int8Array> (type $i32_=>_none) (param $flags i32)
   i32.const 3

@@ -2,13 +2,14 @@
   "asc_flags": [
   ],
   "stderr": [
+    "TS2385: Overload signatures must all be public, private or protected.", "public privPub: i32;", "private privPub: i32;",
     "TS2442: Types have separate declarations of a private property 'privPriv'.",
     "TS2325: Property 'privProt' is private in type 'duplicate-field-errors/A' but not in type 'duplicate-field-errors/B'.",
     "TS2325: Property 'privPub' is private in type 'duplicate-field-errors/A' but not in type 'duplicate-field-errors/B'.",
     "TS2325: Property 'protPriv' is private in type 'duplicate-field-errors/B' but not in type 'duplicate-field-errors/A'.",
     "TS2325: Property 'pubPriv' is private in type 'duplicate-field-errors/B' but not in type 'duplicate-field-errors/A'.",
     "TS2444: Property 'pubProt' is protected in type 'duplicate-field-errors/B' but public in type 'duplicate-field-errors/A'.",
-    "TS2300: Duplicate identifier 'method'.",
-    "Property 'sibling' in type 'duplicate-field-errors/Cat' is not assignable to the same property in base type 'duplicate-field-errors/Animal'."
+    "TS2394: This overload signature is not compatible with its implementation signature.", "public method: i32;", "method(): void",
+    "TS2394: This overload signature is not compatible with its implementation signature.", "sibling: Cat | null;", "sibling: Animal | null;"
   ]
 }

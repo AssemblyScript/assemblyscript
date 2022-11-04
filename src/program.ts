@@ -24,14 +24,12 @@
 // │ │ │ ├─EnumValue          Enum value
 // │ │ │ ├─Global             File global
 // │ │ │ ├─Local              Function local
-// │ │ │ ├─Field              Class field (instance only)
-// │ │ │ └─Property           Class property
+// │ │ │ └─Property           Class property (incl. instance fields)
 // │ │ ├─IndexSignature       Class index signature
 // │ │ ├─Function             Concrete function instance
 // │ │ └─Class                Concrete class instance
 // │ ├─Namespace              Namespace with static members
 // │ ├─FunctionPrototype      Prototype of concrete function instances
-// │ ├─FieldPrototype         Prototype of concrete field instances
 // │ ├─PropertyPrototype      Prototype of concrete property instances
 // │ └─ClassPrototype         Prototype of concrete classe instances
 // └─File                     File, analogous to Source in the AST
@@ -48,7 +46,8 @@ import {
   STUB_DELIMITER,
   CommonNames,
   Feature,
-  Target
+  Target,
+  featureToString
 } from "./common";
 
 import {
@@ -112,9 +111,6 @@ import {
   VariableStatement,
   ParameterKind,
   ParameterNode,
-  ReturnStatement,
-  CallExpression,
-  ThisExpression,
   TypeName
 } from "./ast";
 
@@ -442,7 +438,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Parser instance. */
-  parser: Parser;
+  parser!: Parser;
   /** Resolver instance. */
   resolver!: Resolver;
   /** Array of sources. */
@@ -1549,6 +1545,11 @@ export class Program extends DiagnosticEmitter {
                     thisProperty.identifierNode.range, baseProperty.identifierNode.range
                   );
                 }
+                if (thisProperty.isField && basePrototype.kind != ElementKind.InterfacePrototype) {
+                  // fields cannot be overridden (only redeclared with same type), except if
+                  // declared in an interface, then making the field behave like a property
+                  continue;
+                }
                 baseProperty.set(CommonFlags.Virtual);
                 let baseGetter = baseProperty.getterPrototype;
                 if (baseGetter) {
@@ -1888,6 +1889,78 @@ export class Program extends DiagnosticEmitter {
       }
     }
     return flags;
+  }
+
+  /** Checks whether a particular feature is enabled. */
+  checkFeatureEnabled(feature: Feature, reportNode: Node): bool {
+    if (!this.options.hasFeature(feature)) {
+      this.error(
+        DiagnosticCode.Feature_0_is_not_enabled,
+        reportNode.range, featureToString(feature)
+      );
+      return false;
+    }
+    return true;
+  }
+
+  /** Checks whether a particular type is supported. */
+  checkTypeSupported(type: Type, reportNode: Node): bool {
+    switch (type.kind) {
+      case TypeKind.V128: return this.checkFeatureEnabled(Feature.Simd, reportNode);
+      case TypeKind.Funcref:
+      case TypeKind.Externref:
+        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode);
+      case TypeKind.Anyref:
+      case TypeKind.Eqref:
+      case TypeKind.I31ref:
+      case TypeKind.Dataref:
+      case TypeKind.Arrayref: {
+        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
+            && this.checkFeatureEnabled(Feature.GC, reportNode);
+      }
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: {
+        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
+            && this.checkFeatureEnabled(Feature.Stringref, reportNode);
+      }
+    }
+    let classReference = type.getClass();
+    if (classReference) {
+      do {
+        let typeArguments = classReference.typeArguments;
+        if (typeArguments) {
+          for (let i = 0, k = typeArguments.length; i < k; ++i) {
+            if (!this.checkTypeSupported(typeArguments[i], reportNode)) {
+              return false;
+            }
+          }
+        }
+        classReference = classReference.base;
+      } while(classReference);
+    } else {
+      let signatureReference = type.getSignature();
+      if (signatureReference) {
+        let thisType = signatureReference.thisType;
+        if (thisType) {
+          if (!this.checkTypeSupported(thisType, reportNode)) {
+            return false;
+          }
+        }
+        let parameterTypes = signatureReference.parameterTypes;
+        for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+          if (!this.checkTypeSupported(parameterTypes[i], reportNode)) {
+            return false;
+          }
+        }
+        let returnType = signatureReference.returnType;
+        if (!this.checkTypeSupported(returnType, reportNode)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   /** Initializes a class declaration. */
@@ -2999,7 +3072,9 @@ export abstract class DeclaredElement extends Element {
     let identifierNode = declaration.name;
     if (declaration.kind == NodeKind.FunctionDeclaration || declaration.kind == NodeKind.MethodDeclaration) {
       let signatureNode = (<FunctionDeclaration>declaration).signature;
-      return Range.join(identifierNode.range, signatureNode.range);
+      if (identifierNode.range.source == signatureNode.range.source) {
+        return Range.join(identifierNode.range, signatureNode.range);
+      }
     }
     return identifierNode.range;
   }
@@ -3007,63 +3082,6 @@ export abstract class DeclaredElement extends Element {
   /** Gets the assiciated decorator nodes. */
   get decoratorNodes(): DecoratorNode[] | null {
     return this.declaration.decorators;
-  }
-
-  /** Checks if this element is a compatible override of the specified. */
-  isCompatibleOverride(base: DeclaredElement): bool {
-    let self: DeclaredElement = this; // TS
-    let kind = self.kind;
-    let checkCompatibleOverride = false;
-    if (kind == base.kind) {
-      switch (kind) {
-        case ElementKind.FunctionPrototype : {
-          let selfFunction = this.program.resolver.resolveFunction(<FunctionPrototype>self, null);
-          if (!selfFunction) return false;
-          let baseFunction = this.program.resolver.resolveFunction(<FunctionPrototype>base, null);
-          if (!baseFunction) return false;
-          self = selfFunction;
-          base = baseFunction;
-          checkCompatibleOverride = true;
-          // fall-through
-        }
-        case ElementKind.Function: {
-          return (<Function>self).signature.isAssignableTo((<Function>base).signature, checkCompatibleOverride);
-        }
-        case ElementKind.PropertyPrototype: {
-          let selfProperty = this.program.resolver.resolveProperty(<PropertyPrototype>self);
-          if (!selfProperty) return false;
-          let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
-          if (!baseProperty) return false;
-          self = selfProperty;
-          base = baseProperty;
-          // fall-through
-        }
-        case ElementKind.Property: {
-          let selfProperty = <Property>self;
-          let baseProperty = <Property>base;
-          let selfGetter = selfProperty.getterInstance;
-          let baseGetter = baseProperty.getterInstance;
-          if (selfGetter) {
-            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
-              return false;
-            }
-          } else if (baseGetter) {
-            return false;
-          }
-          let selfSetter = selfProperty.setterInstance;
-          let baseSetter = baseProperty.setterInstance;
-          if (selfSetter) {
-            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
-              return false;
-            }
-          } else if (baseSetter) {
-            return false;
-          }
-          return true;
-        }
-      }
-    }
-    return false;
   }
 }
 
@@ -3888,15 +3906,47 @@ export class PropertyPrototype extends DeclaredElement {
     // properties, with compiler-generated accessors for cases they are used
     // like properties. As a result, emitting actual loads and stores becomes an
     // optimization in non-overloaded cases.
-    let getterDeclaration = makeFieldGetterDeclaration(fieldDeclaration, parent);
+    let nativeRange = Source.native.range;
+    let typeNode = fieldDeclaration.type;
+    if (!typeNode) typeNode = Node.createOmittedType(fieldDeclaration.name.range.atEnd);
+    let getterDeclaration = new MethodDeclaration(
+      fieldDeclaration.name,
+      fieldDeclaration.decorators,
+      fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Get,
+      null,
+      new FunctionTypeNode([], typeNode, null, false, nativeRange),
+      null,
+      nativeRange
+    );
+    let setterDeclaration = new MethodDeclaration(
+      fieldDeclaration.name,
+      fieldDeclaration.decorators,
+      fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Set,
+      null,
+      new FunctionTypeNode(
+        [
+          new ParameterNode(
+            ParameterKind.Default,
+            new IdentifierExpression("value", false, nativeRange),
+            typeNode, null, nativeRange
+          )
+        ],
+        new NamedTypeNode(
+          new TypeName(
+            new IdentifierExpression("", false, nativeRange),
+            null, nativeRange
+          ),
+          null, false, nativeRange
+        ),
+        null, false, nativeRange
+      ),
+      null, nativeRange
+    );
     let prototype = new PropertyPrototype(name, parent, getterDeclaration);
     prototype.fieldDeclaration = fieldDeclaration;
-    prototype.getterPrototype = new FunctionPrototype(GETTER_PREFIX + name, parent, getterDeclaration);
-    if (!fieldDeclaration.is(CommonFlags.Readonly)) {
-      let setterDeclaration = makeFieldSetterDeclaration(fieldDeclaration, parent);
-      prototype.setterPrototype = new FunctionPrototype(SETTER_PREFIX + name, parent, setterDeclaration);
-    }
     prototype.decoratorFlags = decoratorFlags;
+    prototype.getterPrototype = new FunctionPrototype(GETTER_PREFIX + name, parent, getterDeclaration, decoratorFlags);
+    prototype.setterPrototype = new FunctionPrototype(SETTER_PREFIX + name, parent, setterDeclaration, decoratorFlags);
     return prototype;
   }
 
@@ -4029,15 +4079,15 @@ export class Property extends VariableLikeElement {
       ElementKind.Property,
       prototype.name,
       parent,
-      Node.createVariableDeclaration(
-        prototype.identifierNode,
-        null,
-        prototype.is(CommonFlags.Instance)
-          ? CommonFlags.Instance
-          : CommonFlags.None,
-        null, null,
-        prototype.identifierNode.range
-      )
+      prototype.isField
+        ? <VariableLikeDeclarationStatement>assert(prototype.fieldDeclaration)
+        : Node.createVariableDeclaration(
+            prototype.identifierNode,
+            null,
+            prototype.flags & CommonFlags.Instance,
+            null, null,
+            prototype.identifierNode.range
+          )
     );
     this.prototype = prototype;
     this.flags = prototype.flags;
@@ -4050,6 +4100,16 @@ export class Property extends VariableLikeElement {
   /** Tests if this property represents a field. */
   get isField(): bool {
     return this.prototype.isField;
+  }
+
+  /** Gets the class or interface this property belongs to, if an instance property. */
+  getClassOrInterface(): Class | null {
+    let parent = this.parent;
+    if (parent.kind == ElementKind.PropertyPrototype) parent = parent.parent;
+    if (parent.kind == ElementKind.Class || parent.kind == ElementKind.Interface) {
+      return <Class>parent;
+    }
+    return null;
   }
 }
 
@@ -4293,11 +4353,11 @@ export class Class extends TypedElement {
       prototype.parent,
       prototype.declaration
     );
-    let program = this.program;
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.typeArguments = typeArguments;
+    let program = this.program;
     let usizeType = program.options.usizeType;
     let type = new Type(usizeType.kind, usizeType.flags & ~TypeFlags.Value | TypeFlags.Reference, usizeType.size);
     type.classReference = this;
@@ -4424,10 +4484,14 @@ export class Class extends TypedElement {
   /** Calculates the memory offset of the specified field. */
   offsetof(fieldName: string): u32 {
     let member = assert(this.getMember(fieldName));
-    assert(member.kind == ElementKind.Property);
-    let property = <Property>member;
-    assert(property.isField && property.memoryOffset >= 0);
-    return property.memoryOffset;
+    assert(member.kind == ElementKind.PropertyPrototype);
+    let prototype = <PropertyPrototype>member;
+    let property = prototype.instance;
+    if (property) { // would have failed before
+      assert(property.isField && property.memoryOffset >= 0);
+      return property.memoryOffset;
+    }
+    return 0;
   }
 
   /** Creates a buffer suitable to hold a runtime instance of this class. */
@@ -4448,68 +4512,68 @@ export class Class extends TypedElement {
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
     let member = this.getMember(name);
-    if (member && member.kind == ElementKind.Property) {
-      let property = <Property>member;
-      if (property.isField) {
-        assert(property.memoryOffset >= 0);
-        let offset = baseOffset + property.memoryOffset;
-        let typeKind = property.type.kind;
-        switch (typeKind) {
-          case TypeKind.I8:
-          case TypeKind.U8: {
-            assert(!i64_is(value));
-            writeI8(i32(value), buffer, offset);
-            return 1;
-          }
-          case TypeKind.I16:
-          case TypeKind.U16: {
-            assert(!i64_is(value));
-            writeI16(i32(value), buffer, offset);
-            return 2;
-          }
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            assert(!i64_is(value));
-            writeI32(i32(value), buffer, offset);
-            return 4;
-          }
-          case TypeKind.Isize:
-          case TypeKind.Usize: {
-            if (this.program.options.isWasm64) {
-              if (i64_is(value)) {
-                writeI64(value, buffer, offset);
-              } else {
-                writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.Usize);
-              }
-              return 8;
-            } else {
-              if (i64_is(value)) {
-                writeI64AsI32(value, buffer, offset, typeKind == TypeKind.Usize);
-              } else {
-                writeI32(i32(value), buffer, offset);
-              }
-              return 4;
-            }
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
+    if (member && member.kind == ElementKind.PropertyPrototype) {
+      let prototype = <PropertyPrototype>member;
+      let property = prototype.instance; // resolved during class finalization
+      if (!property) return 0; // failed before
+      assert(property.isField && property.memoryOffset >= 0);
+      let offset = baseOffset + property.memoryOffset;
+      let typeKind = property.type.kind;
+      switch (typeKind) {
+        case TypeKind.I8:
+        case TypeKind.U8: {
+          assert(!i64_is(value));
+          writeI8(i32(value), buffer, offset);
+          return 1;
+        }
+        case TypeKind.I16:
+        case TypeKind.U16: {
+          assert(!i64_is(value));
+          writeI16(i32(value), buffer, offset);
+          return 2;
+        }
+        case TypeKind.I32:
+        case TypeKind.U32: {
+          assert(!i64_is(value));
+          writeI32(i32(value), buffer, offset);
+          return 4;
+        }
+        case TypeKind.Isize:
+        case TypeKind.Usize: {
+          if (this.program.options.isWasm64) {
             if (i64_is(value)) {
               writeI64(value, buffer, offset);
             } else {
-              writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.U64);
+              writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.Usize);
             }
             return 8;
-          }
-          case TypeKind.F32: {
-            assert(!i64_is(value));
-            writeF32(f32(value), buffer, offset);
+          } else {
+            if (i64_is(value)) {
+              writeI64AsI32(value, buffer, offset, typeKind == TypeKind.Usize);
+            } else {
+              writeI32(i32(value), buffer, offset);
+            }
             return 4;
           }
-          case TypeKind.F64: {
-            assert(!i64_is(value));
-            writeF64(f64(value), buffer, offset);
-            return 8;
+        }
+        case TypeKind.I64:
+        case TypeKind.U64: {
+          if (i64_is(value)) {
+            writeI64(value, buffer, offset);
+          } else {
+            writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.U64);
           }
+          return 8;
+        }
+        case TypeKind.F32: {
+          assert(!i64_is(value));
+          writeF32(f32(value), buffer, offset);
+          return 4;
+        }
+        case TypeKind.F64: {
+          assert(!i64_is(value));
+          writeF64(f64(value), buffer, offset);
+          return 8;
         }
       }
     }
@@ -4585,8 +4649,10 @@ export class Class extends TypedElement {
       // Check that there are no managed instance fields
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
-        if (member.kind == ElementKind.Property) {
-          let property = <Property>member;
+        if (member.kind == ElementKind.PropertyPrototype) {
+          let prototype = <PropertyPrototype>member;
+          let property = prototype.instance; // resolved during class finalization
+          if (!property) continue; // failed earlier
           if (property.isField && property.type.isManaged) return false;
         }
       }
@@ -4833,142 +4899,4 @@ export function getDefaultParameterName(index: i32): string {
     cachedDefaultParameterNames.push(`$${i}`);
   }
   return cachedDefaultParameterNames[index];
-}
-
-/** Makes a field getter declaration. */
-function makeFieldGetterDeclaration(
-  /** The field declaration to make a getter declaration for. */
-  fieldDeclaration: FieldDeclaration,
-  /** The parent class prototype. */
-  classPrototype: ClassPrototype
-): FunctionDeclaration {
-  let range = Source.native.range;
-  let type = fieldDeclaration.type!; // TODO
-  // get name(): Type {
-  //   return load<Type>(changetype<usize>(this), offsetof<ClassType>("name"));
-  // }
-  return new MethodDeclaration(
-    fieldDeclaration.name,
-    fieldDeclaration.decorators,
-    fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Get,
-    null,
-    new FunctionTypeNode([], type, null, false, range),
-    new ReturnStatement(
-      new CallExpression(
-        new IdentifierExpression("load", false, range),
-        [ type ], [
-          new CallExpression(
-            new IdentifierExpression("changetype", false, range),
-            [
-              new NamedTypeNode(
-                new TypeName(
-                  new IdentifierExpression("usize", false, range),
-                  null, range
-                ),
-                null, false, range
-              )
-            ], [
-              new ThisExpression(range)
-            ],
-            range
-          ),
-          new CallExpression(
-            new IdentifierExpression("offsetof", false, range),
-            [
-              new NamedTypeNode(
-                new TypeName(
-                  new IdentifierExpression(classPrototype.name, false, range),
-                  null, range
-                ),
-                null, false, range
-              )
-            ], [
-              new StringLiteralExpression(fieldDeclaration.name.text, range)
-            ],
-            range
-          )
-        ],
-        range
-      ),
-      range
-    ),
-    range
-  );
-}
-
-/** Makes a field setter declaration. */
-function makeFieldSetterDeclaration(
-  /** The field declaration to make a setter declaration for. */
-  fieldDeclaration: FieldDeclaration,
-  /** The parent class prototype. */
-  classPrototype: ClassPrototype
-): FunctionDeclaration {
-  let range = Source.native.range;
-  let type = fieldDeclaration.type!; // TODO
-  // set name(value: Type) {
-  //   store<Type>(changetype<usize>(this), value, offsetof<ClassType>("fieldname"));
-  // }
-  return new MethodDeclaration(
-    fieldDeclaration.name,
-    fieldDeclaration.decorators,
-    fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Set,
-    null,
-    new FunctionTypeNode(
-      [
-        new ParameterNode(
-          ParameterKind.Default,
-          new IdentifierExpression("value", false, range),
-          type, null, range
-        )
-      ],
-      new NamedTypeNode(
-        new TypeName(
-          new IdentifierExpression("", false, range),
-          null, range
-        ),
-        null, false, range
-      ),
-      null, false, range
-    ),
-    new CallExpression(
-      new IdentifierExpression("store", false, range),
-      [
-        type
-      ], [
-        new CallExpression(
-          new IdentifierExpression("changetype", false, range),
-          [
-            new NamedTypeNode(
-              new TypeName(
-                new IdentifierExpression("usize", false, range),
-                null, range
-              ),
-              null, false, range
-            )
-          ], [
-            new ThisExpression(range)
-          ],
-          range
-        ),
-        new IdentifierExpression("value", false, range),
-        new CallExpression(
-          new IdentifierExpression("offsetof", false, range),
-          [
-            new NamedTypeNode(
-              new TypeName(
-                new IdentifierExpression(classPrototype.name, false, range),
-                null, range
-              ),
-              null, false, range
-            )
-          ], [
-            new StringLiteralExpression(fieldDeclaration.name.text, range)
-          ],
-          range
-        )
-      ],
-      range
-    ),
-    range
-  );
 }

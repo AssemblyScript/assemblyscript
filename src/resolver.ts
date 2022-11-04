@@ -123,8 +123,8 @@ export class Resolver extends DiagnosticEmitter {
   currentThisExpression: Expression | null = null;
   /** Element expression of the previously resolved element access. */
   currentElementExpression : Expression | null = null;
-  /** Whether a new overload has been discovered. */
-  discoveredOverload: bool = false;
+  /** Whether a new override has been discovered. */
+  discoveredOverride: bool = false;
 
   /** Constructs the resolver for the specified program. */
   constructor(
@@ -2445,6 +2445,12 @@ export class Resolver extends DiagnosticEmitter {
         if (!instance) return null;
         return instance.signature.returnType;
       }
+      case ElementKind.PropertyPrototype: {
+        let propertyInstance = this.resolveProperty(<PropertyPrototype>target, reportMode);
+        if (!propertyInstance) return null;
+        target = propertyInstance;
+        // fall-through
+      }
       case ElementKind.Global:
       case ElementKind.Local:
       case ElementKind.Property: {
@@ -2722,7 +2728,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Function | null {
-    let actualParent = prototype.parent.kind == ElementKind.PropertyPrototype
+    let isAccessor = prototype.parent.kind == ElementKind.PropertyPrototype;
+    let actualParent = isAccessor
       ? prototype.parent.parent
       : prototype.parent;
     let classInstance: Class | null = null; // if an instance method
@@ -2868,17 +2875,54 @@ export class Resolver extends DiagnosticEmitter {
     );
     prototype.setResolvedInstance(instanceKey, instance);
 
-    // remember discovered overloads for virtual stub finalization
+    // check against overridden base member
     if (classInstance) {
       let methodOrPropertyName = instance.declaration.name.text;
       let baseClass = classInstance.base;
-      while (baseClass) {
-        let baseMembers = baseClass.members;
-        if (baseMembers && baseMembers.has(methodOrPropertyName)) {
-          this.discoveredOverload = true;
-          break;
+      if (baseClass) {
+        let baseMember = baseClass.getMember(methodOrPropertyName);
+        if (baseMember) {
+          // note override discovery for virtual stub finalization
+          this.discoveredOverride = true;
+          // verify that this is a compatible override
+          let incompatibleOverride = true;
+          if (instance.isAny(CommonFlags.Get | CommonFlags.Set)) {
+            if (baseMember.kind == ElementKind.PropertyPrototype) {
+              let baseProperty = this.resolveProperty(<PropertyPrototype>baseMember, reportMode);
+              if (baseProperty) {
+                if (instance.is(CommonFlags.Get)) {
+                  let baseGetter = baseProperty.getterInstance;
+                  if (baseGetter && instance.signature.isAssignableTo(baseGetter.signature, true)) {
+                    incompatibleOverride = false;
+                  }
+                } else {
+                  assert(instance.is(CommonFlags.Set));
+                  let baseSetter = baseProperty.setterInstance;
+                  if (baseSetter && instance.signature.isAssignableTo(baseSetter.signature, true)) {
+                    incompatibleOverride = false;
+                  }
+                }
+              }
+            }
+          } else if (instance.is(CommonFlags.Constructor)) {
+            incompatibleOverride = false;
+          } else {
+            if (baseMember.kind == ElementKind.FunctionPrototype) {
+              // Possibly generic. Resolve with same type arguments to obtain the correct one.
+              let basePrototype = <FunctionPrototype>baseMember;
+              let baseFunction = this.resolveFunction(basePrototype, typeArguments, new Map(), ReportMode.Swallow);
+              if (baseFunction && instance.signature.isAssignableTo(baseFunction.signature, true)) {
+                incompatibleOverride = false;
+              }
+            }
+          }
+          if (incompatibleOverride) {
+            this.errorRelated(
+              DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
+              instance.identifierAndSignatureRange, baseMember.identifierAndSignatureRange
+            );
+          }
         }
-        baseClass = baseClass.base;
       }
     }
     return instance;
@@ -2957,57 +3001,59 @@ export class Resolver extends DiagnosticEmitter {
     );
   }
 
-  /** Resolves reachable overloads of the given instance method. */
-  resolveOverloads(instance: Function): Function[] | null {
-    let overloadPrototypes = instance.prototype.overloads;
-    if (!overloadPrototypes) return null;
+  /** Resolves reachable overrides of the given instance method. */
+  resolveOverrides(instance: Function): Function[] | null {
+    let overridePrototypes = instance.prototype.overloads;
+    if (!overridePrototypes) return null;
 
     let parentClassInstance = assert(instance.getClassOrInterface());
-    let overloads = new Set<Function>();
+    let overrides = new Set<Function>();
 
-    // A method's `overloads` property contains its unbound overload prototypes
+    // A method's `overrides` property contains its unbound override prototypes
     // so we first have to find the concrete classes it became bound to, obtain
     // their bound prototypes and make sure these are resolved.
-    for (let _values = Set_values(overloadPrototypes), i = 0, k = _values.length; i < k; ++i) {
-      let unboundOverloadPrototype = _values[i];
-      assert(!unboundOverloadPrototype.isBound);
-      let unboundOverloadParent = unboundOverloadPrototype.parent;
-      let isProperty = unboundOverloadParent.kind == ElementKind.PropertyPrototype;
+    for (let _values = Set_values(overridePrototypes), i = 0, k = _values.length; i < k; ++i) {
+      let unboundOverridePrototype = _values[i];
+      assert(!unboundOverridePrototype.isBound);
+      let unboundOverrideParent = unboundOverridePrototype.parent;
+      let isProperty = unboundOverrideParent.kind == ElementKind.PropertyPrototype;
       let classInstances: Map<string,Class> | null;
       if (isProperty) {
-        let propertyParent = (<PropertyPrototype>unboundOverloadParent).parent;
+        let propertyParent = (<PropertyPrototype>unboundOverrideParent).parent;
         assert(propertyParent.kind == ElementKind.ClassPrototype);
         classInstances = (<ClassPrototype>propertyParent).instances;
       } else {
-        assert(unboundOverloadParent.kind == ElementKind.ClassPrototype);
-        classInstances = (<ClassPrototype>unboundOverloadParent).instances;
+        assert(unboundOverrideParent.kind == ElementKind.ClassPrototype);
+        classInstances = (<ClassPrototype>unboundOverrideParent).instances;
       }
       if (!classInstances) continue;
       for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
         let classInstance = _values[j];
         // Check if the parent class is a subtype of instance's class
         if (!classInstance.isAssignableTo(parentClassInstance)) continue;
-        let overloadInstance: Function | null;
+        let overrideInstance: Function | null = null;
         if (isProperty) {
-          let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
+          let boundProperty = assert(classInstance.getMember(unboundOverrideParent.name));
           assert(boundProperty.kind == ElementKind.PropertyPrototype);
           let boundPropertyInstance = this.resolveProperty(<PropertyPrototype>boundProperty);
           if (!boundPropertyInstance) continue;
           if (instance.is(CommonFlags.Get)) {
-            overloadInstance = boundPropertyInstance.getterInstance;
+            overrideInstance = boundPropertyInstance.getterInstance;
           } else {
             assert(instance.is(CommonFlags.Set));
-            overloadInstance = boundPropertyInstance.setterInstance;
+            overrideInstance = boundPropertyInstance.setterInstance;
           }
         } else {
-          let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
-          assert(boundPrototype.kind == ElementKind.FunctionPrototype);
-          overloadInstance = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+          let boundPrototype = classInstance.getMember(unboundOverridePrototype.name);
+          if (boundPrototype) { // might have errored earlier and wasn't added
+            assert(boundPrototype.kind == ElementKind.FunctionPrototype);
+            overrideInstance = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+          }
         }
-        if (overloadInstance) overloads.add(overloadInstance);
+        if (overrideInstance) overrides.add(overrideInstance);
       }
     }
-    return Set_values(overloads);
+    return Set_values(overrides);
   }
 
   /** Currently resolving classes. */
@@ -3136,6 +3182,102 @@ export class Resolver extends DiagnosticEmitter {
     return instance;
   }
 
+  /** Checks whether an override's visibility is valid. */
+  private checkOverrideVisibility(
+    /** Name to report. */
+    name: string,
+    /** Overriding member. */
+    thisMember: DeclaredElement,
+    /** Overriding class. */
+    thisClass: Class,
+    /** Overridden member. */
+    baseMember: DeclaredElement,
+    /** Overridden class. */
+    baseClass: Class,
+    /** Report mode. */
+    reportMode: ReportMode
+  ): bool {
+    let hasErrors = false;
+    if (thisMember.is(CommonFlags.Constructor)) {
+      assert(baseMember.is(CommonFlags.Constructor));
+      if (baseMember.is(CommonFlags.Private)) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private,
+            thisMember.identifierNode.range, baseMember.identifierNode.range,
+            baseClass.internalName
+          );
+        }
+        hasErrors = true;
+      }
+    } else if (thisMember.is(CommonFlags.Private)) {
+      if (baseMember.is(CommonFlags.Private)) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
+            thisMember.identifierNode.range, baseMember.identifierNode.range,
+            name
+          );
+        }
+        hasErrors = true;
+      } else {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+            thisMember.identifierNode.range, baseMember.identifierNode.range,
+            name, thisClass.internalName, baseClass.internalName
+          );
+        }
+        hasErrors = true;
+      }
+    } else if (thisMember.is(CommonFlags.Protected)) {
+      if (baseMember.is(CommonFlags.Private)) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+            thisMember.identifierNode.range, baseMember.identifierNode.range,
+            name, baseClass.internalName, thisClass.internalName
+          );
+        }
+        hasErrors = true;
+      } else if (baseMember.isPublic) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
+            thisMember.identifierNode.range, baseMember.identifierNode.range,
+            name, thisClass.internalName, baseClass.internalName
+          );
+        }
+        hasErrors = true;
+      } else {
+        assert(baseMember.is(CommonFlags.Protected));
+      }
+    } else if (thisMember.isPublic) {
+      if (baseMember.is(CommonFlags.Private)) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
+            thisMember.identifierNode.range, baseMember.identifierNode.range,
+            name, baseClass.internalName, thisClass.internalName
+          );
+        }
+        hasErrors = true;
+      } else if (baseMember.is(CommonFlags.Protected)) {
+        if (reportMode == ReportMode.Report) {
+          this.errorRelated(
+            DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
+            thisMember.identifierNode.range, baseMember.identifierNode.range,
+            name, baseClass.internalName, thisClass.internalName
+          );
+        }
+        hasErrors = true;
+      } else {
+        assert(baseMember.isPublic);
+      }
+    }
+    return !hasErrors;
+  }
+
   /** Finishes resolving the specified class. */
   private finishResolveClass(
     /** Class to finish resolving. */
@@ -3148,8 +3290,7 @@ export class Resolver extends DiagnosticEmitter {
 
     let pendingClasses = this.resolveClassPending;
     let unimplemented = new Map<string,DeclaredElement>();
-
-    // Alias and pre-check implemented interface members
+    // Alias implemented interface members
     let interfaces = instance.interfaces;
     if (interfaces) {
       for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
@@ -3159,28 +3300,19 @@ export class Resolver extends DiagnosticEmitter {
         if (ifaceMembers) {
           for (let _keys = Map_keys(ifaceMembers), i = 0, k = _keys.length; i < k; ++i) {
             let memberName = unchecked(_keys[i]);
-            let baseMember = assert(ifaceMembers.get(memberName));
-            if (members.has(memberName)) {
-              let thisMember = assert(members.get(memberName));
-              if (!thisMember.isCompatibleOverride(baseMember)) {
-                this.errorRelated(
-                  DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
-                  thisMember.identifierAndSignatureRange, baseMember.identifierAndSignatureRange
-                );
-                continue;
-              }
-              if (!this.checkOverloadVisibility(memberName, thisMember, instance, baseMember, iface, reportMode)) {
-                continue;
-              }
+            let ifaceMember = assert(ifaceMembers.get(memberName));
+            let existingMember = instance.getMember(memberName);
+            if (existingMember && !this.checkOverrideVisibility(memberName, existingMember, instance, ifaceMember, iface, reportMode)) {
+              continue; // keep previous
             }
-            members.set(memberName, baseMember);
-            unimplemented.set(memberName, baseMember);
+            members.set(memberName, ifaceMember);
+            unimplemented.set(memberName, ifaceMember);
           }
         }
       }
     }
 
-    // Alias and pre-check implemented / overridden base members
+    // Alias base members
     let memoryOffset: u32 = 0;
     let base = instance.base;
     if (base) {
@@ -3191,18 +3323,9 @@ export class Resolver extends DiagnosticEmitter {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
           let memberName = unchecked(_keys[i]);
           let baseMember = assert(baseMembers.get(memberName));
-          if (members.has(memberName)) {
-            let thisMember = assert(members.get(memberName));
-            if (!thisMember.isCompatibleOverride(baseMember)) {
-              this.errorRelated(
-                DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
-                thisMember.identifierAndSignatureRange, baseMember.identifierAndSignatureRange
-              );
-              continue;
-            }
-            if (!this.checkOverloadVisibility(memberName, thisMember, instance, baseMember, base, reportMode)) {
-              continue;
-            }
+          let existingMember = instance.getMember(memberName);
+          if (existingMember && !this.checkOverrideVisibility(memberName, existingMember, instance, baseMember, base, reportMode)) {
+            continue; // keep previous
           }
           members.set(memberName, baseMember);
           if (baseMember.is(CommonFlags.Abstract)) {
@@ -3224,6 +3347,10 @@ export class Resolver extends DiagnosticEmitter {
       for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         let memberName = member.name;
+        if (base) {
+          let baseMember = base.getMember(memberName);
+          if (baseMember) this.checkOverrideVisibility(memberName, member, instance, baseMember, base, reportMode);
+        }
         switch (member.kind) {
           case ElementKind.FunctionPrototype: {
             let boundPrototype = (<FunctionPrototype>member).toBound(instance);
@@ -3232,16 +3359,35 @@ export class Resolver extends DiagnosticEmitter {
           }
           case ElementKind.PropertyPrototype: {
             let boundPrototype = (<PropertyPrototype>member).toBound(instance);
-            if (boundPrototype.isField) { // resolve fully and lay out
+            if (boundPrototype.isField) { // resolve and lay out
               let boundInstance = this.resolveProperty(boundPrototype, reportMode);
               if (boundInstance) {
                 let fieldType = boundInstance.type;
                 assert(isPowerOf2(fieldType.byteSize));
-                let mask = fieldType.byteSize - 1;
-                if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
-                boundInstance.memoryOffset = memoryOffset;
-                memoryOffset += fieldType.byteSize;
-                instance.add(boundInstance.name, boundInstance); // reports
+                let needsLayout = true;
+                if (base) {
+                  let existingMember = base.getMember(boundPrototype.name);
+                  if (existingMember && existingMember.kind == ElementKind.PropertyPrototype) {
+                    let existingPrototype = <PropertyPrototype>existingMember;
+                    let existingProperty = this.resolveProperty(existingPrototype, reportMode);
+                    if (existingProperty && existingProperty.isField) {
+                      boundInstance.memoryOffset = existingProperty.memoryOffset;
+                      needsLayout = false;
+                    }
+                  }
+                }
+                if (needsLayout) {
+                  let mask = fieldType.byteSize - 1;
+                  if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
+                  boundInstance.memoryOffset = memoryOffset;
+                  memoryOffset += fieldType.byteSize;
+                }
+                boundPrototype.instance = boundInstance;
+                instance.add(boundPrototype.name, boundPrototype); // reports
+                // field materializes here, so check for supported type early
+                // (other checks are performed once an element is compiled)
+                let typeNode = assert(boundPrototype.fieldDeclaration).type;
+                if (typeNode) this.program.checkTypeSupported(fieldType, typeNode);
               }
             } else {
               instance.add(boundPrototype.name, boundPrototype); // reports
@@ -3404,84 +3550,6 @@ export class Resolver extends DiagnosticEmitter {
       }
       if (dependsOnInstance) this.finishResolveClass(pending, reportMode);
     }
-  }
-
-  /** Checks whether visibility of an overload is valid. */
-  private checkOverloadVisibility(
-    /** Name of the property. */
-    name: string,
-    /** Overloading element. */
-    thisElement: DeclaredElement,
-    /** Overloading class. */
-    thisClass: Class,
-    /** Overloaded element. */
-    baseElement: DeclaredElement,
-    /** Overloaded class. */
-    baseClass: Class,
-    /** Report mode. */
-    reportMode: ReportMode
-  ): bool {
-    if (thisElement.is(CommonFlags.Private)) {
-      if (reportMode == ReportMode.Report) {
-        if (baseElement.is(CommonFlags.Private)) {
-          this.errorRelated(
-            DiagnosticCode.Types_have_separate_declarations_of_a_private_property_0,
-            thisElement.identifierNode.range, baseElement.identifierNode.range,
-            name
-          );
-        } else {
-          this.errorRelated(
-            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-            thisElement.identifierNode.range, baseElement.identifierNode.range,
-            name, thisClass.internalName, baseClass.internalName
-          );
-        }
-      }
-      return false;
-    } else if (thisElement.is(CommonFlags.Protected)) {
-      if (baseElement.is(CommonFlags.Private)) {
-        if (reportMode == ReportMode.Report) {
-          this.errorRelated(
-            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-            thisElement.identifierNode.range, baseElement.identifierNode.range,
-            name, baseClass.internalName, thisClass.internalName
-          );
-        }
-        return false;
-      } else if (baseElement.isPublic) {
-        if (reportMode == ReportMode.Report) {
-          this.errorRelated(
-            DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
-            thisElement.identifierNode.range, baseElement.identifierNode.range,
-            name, thisClass.internalName, baseClass.internalName
-          );
-        }
-        return false;
-      }
-      assert(baseElement.is(CommonFlags.Protected));
-    } else if (thisElement.isPublic) {
-      if (baseElement.is(CommonFlags.Private)) {
-        if (reportMode == ReportMode.Report) {
-          this.errorRelated(
-            DiagnosticCode.Property_0_is_private_in_type_1_but_not_in_type_2,
-            thisElement.identifierNode.range, baseElement.identifierNode.range,
-            name, baseClass.internalName, thisClass.internalName
-          );
-        }
-        return false;
-      } else if (baseElement.is(CommonFlags.Protected)) {
-        if (reportMode == ReportMode.Report) {
-          this.errorRelated(
-            DiagnosticCode.Property_0_is_protected_in_type_1_but_public_in_type_2,
-            thisElement.identifierNode.range, baseElement.identifierNode.range,
-            name, baseClass.internalName, thisClass.internalName
-          );
-        }
-        return false;
-      }
-      assert(baseElement.isPublic);
-    }
-    return true;
   }
 
   /** Resolves a class prototype by first resolving the specified type arguments. */

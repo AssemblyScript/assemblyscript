@@ -47,7 +47,6 @@ import {
   getLocalSetValue,
   getGlobalGetName,
   isGlobalMutable,
-  createType,
   getSideEffects,
   SideEffects,
   SwitchBuilder,
@@ -55,7 +54,8 @@ import {
   isConstZero,
   isConstNegZero,
   isConstExpressionNaN,
-  ensureType
+  ensureType,
+  createType
 } from "./module";
 
 import {
@@ -421,7 +421,7 @@ export class Compiler extends DiagnosticEmitter {
   lazyFunctions: Set<Function> = new Set();
   /** Pending class-specific instanceof helpers. */
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
-  /** Virtually called stubs that may have overloads. */
+  /** Virtually called stubs that may have overrides. */
   virtualStubs: Set<Function> = new Set();
   /** Elements currently undergoing compilation. */
   pendingElements: Set<Element> = new Set();
@@ -577,20 +577,20 @@ export class Compiler extends DiagnosticEmitter {
     }
     let virtualStubsSeen = new Set<Function>();
     do {
-      // virtual stubs and overloads have cross-dependencies on each other, in that compiling
+      // virtual stubs and overrides have cross-dependencies on each other, in that compiling
       // either may discover the respective other. do this in a loop until no more are found.
-      resolver.discoveredOverload = false;
+      resolver.discoveredOverride = false;
       for (let _values = Set_values(virtualStubs), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
-        let overloadInstances = resolver.resolveOverloads(instance);
-        if (overloadInstances) {
-          for (let i = 0, k = overloadInstances.length; i < k; ++i) {
-            this.compileFunction(overloadInstances[i]);
+        let overrideInstances = resolver.resolveOverrides(instance);
+        if (overrideInstances) {
+          for (let i = 0, k = overrideInstances.length; i < k; ++i) {
+            this.compileFunction(overrideInstances[i]);
           }
         }
         virtualStubsSeen.add(instance);
       }
-    } while (virtualStubs.size > virtualStubsSeen.size || resolver.discoveredOverload);
+    } while (virtualStubs.size > virtualStubsSeen.size || resolver.discoveredOverride);
     virtualStubsSeen.clear();
     for (let _values = Set_values(virtualStubs), i = 0, k = _values.length; i < k; ++i) {
       this.finalizeVirtualStub(_values[i]);
@@ -1119,7 +1119,7 @@ export class Compiler extends DiagnosticEmitter {
           return false;
         }
         global.setType(resolvedType);
-        this.checkTypeSupported(global.type, typeNode);
+        this.program.checkTypeSupported(resolvedType, typeNode);
 
       // Otherwise infer type from initializer
       } else if (initializerNode) {
@@ -1446,7 +1446,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // ensure the function hasn't duplicate parameters
+    // ensure the function has no duplicate parameters
     let parameters = instance.prototype.functionTypeNode.parameters;
     let numParameters = parameters.length;
     if (numParameters >= 2) {
@@ -1478,7 +1478,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(declarationNode.kind == NodeKind.FunctionDeclaration || declarationNode.kind == NodeKind.MethodDeclaration);
     this.checkSignatureSupported(instance.signature, (<FunctionDeclaration>declarationNode).signature);
 
-    let funcRef: FunctionRef;
+    let funcRef: FunctionRef = 0;
 
     // concrete function
     if (bodyNode) {
@@ -1569,13 +1569,28 @@ export class Compiler extends DiagnosticEmitter {
         null,
         module.unreachable()
       );
+
     } else {
-      this.error(
-        DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
-        instance.identifierNode.range
-      );
-      funcRef = 0; // TODO?
-      instance.set(CommonFlags.Errored);
+      // built-in field accessor?
+      if (instance.isAny(CommonFlags.Get | CommonFlags.Set)) {
+        let propertyName = instance.declaration.name.text;
+        let propertyParent = assert(instance.parent.getMember(propertyName));
+        assert(propertyParent.kind == ElementKind.PropertyPrototype);
+        let propertyInstance = (<PropertyPrototype>propertyParent).instance;
+        if (propertyInstance && propertyInstance.isField) {
+          funcRef = instance.is(CommonFlags.Get)
+            ? this.makeBuiltinFieldGetter(propertyInstance)
+            : this.makeBuiltinFieldSetter(propertyInstance);
+          assert(instance.is(CommonFlags.Compiled));
+        }
+      }
+      if (!funcRef) {
+        this.error(
+          DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
+          instance.identifierNode.range
+        );
+        instance.set(CommonFlags.Errored);
+      }
     }
 
     if (instance.is(CommonFlags.Ambient) || instance.is(CommonFlags.Export)) {
@@ -1717,51 +1732,49 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
-  /** Compiles an instance field to a getter and a setter. */
-  compileField(instance: Field): bool {
-    this.compileFieldGetter(instance);
-    this.compileFieldSetter(instance);
-    return instance.is(CommonFlags.Compiled);
-  }
-
-  /** Compiles the getter of the specified instance field. */
-  compileFieldGetter(instance: Field): bool {
-    if (instance.getterRef) return true;
+  /** Makes a built-in getter of a property that is a field. */
+  private makeBuiltinFieldGetter(property: Property): FunctionRef {
+    let getterInstance = assert(property.getterInstance);
     let module = this.module;
-    let valueType = instance.type;
+    let valueType = property.type;
     let valueTypeRef = valueType.toRef();
     let thisTypeRef = this.options.sizeTypeRef;
-    // return this.field
-    instance.getterRef = module.addFunction(instance.internalGetterName, thisTypeRef, valueTypeRef, null,
-      module.load(valueType.byteSize, valueType.isSignedIntegerValue,
-        module.local_get(0, thisTypeRef),
-        valueTypeRef, instance.memoryOffset
-      )
+    getterInstance.set(CommonFlags.Compiled);
+    let body = module.load(valueType.byteSize, valueType.isSignedIntegerValue,
+      module.local_get(0, thisTypeRef),
+      valueTypeRef, property.memoryOffset
     );
-    if (instance.setterRef) {
-      instance.set(CommonFlags.Compiled);
-    } else {
-      let typeNode = instance.typeNode;
-      if (typeNode) this.checkTypeSupported(instance.type, typeNode);
+    let flowBefore = this.currentFlow;
+    let flow = getterInstance.flow;
+    this.currentFlow = flow;
+    if (property.is(CommonFlags.DefinitelyAssigned) && valueType.isReference && !valueType.isNullableReference) {
+      body = this.makeRuntimeNonNullCheck(body, valueType, getterInstance.identifierNode);
     }
-    return true;
+    this.currentFlow = flowBefore;
+    return module.addFunction(
+      getterInstance.internalName,
+      thisTypeRef,
+      valueTypeRef,
+      typesToRefs(getterInstance.getNonParameterLocalTypes()),
+      body
+    );
   }
 
-  /** Compiles the setter of the specified instance field. */
-  compileFieldSetter(instance: Field): bool {
-    if (instance.setterRef) return true;
-    let type = instance.type;
-    let thisTypeRef = this.options.sizeTypeRef;
-    let valueTypeRef = type.toRef();
+  /** Makes a built-in setter of a property that is a field. */
+  private makeBuiltinFieldSetter(property: Property): FunctionRef {
+    let setterInstance = assert(property.setterInstance);
     let module = this.module;
+    let valueType = property.type;
+    let thisTypeRef = this.options.sizeTypeRef;
+    let valueTypeRef = valueType.toRef();
     // void(this.field = value)
-    let bodyExpr = module.store(type.byteSize,
+    let bodyExpr = module.store(valueType.byteSize,
       module.local_get(0, thisTypeRef),
       module.local_get(1, valueTypeRef),
-      valueTypeRef, instance.memoryOffset
+      valueTypeRef, property.memoryOffset
     );
-    if (type.isManaged) {
-      let parent = instance.parent;
+    if (valueType.isManaged) {
+      let parent = setterInstance.parent;
       assert(parent.kind == ElementKind.Class);
       if ((<Class>parent).type.isManaged) {
         let linkInstance = this.program.linkInstance;
@@ -1776,20 +1789,14 @@ export class Compiler extends DiagnosticEmitter {
         ], TypeRef.None);
       }
     }
-    instance.setterRef = module.addFunction(
-      instance.internalSetterName,
+    setterInstance.set(CommonFlags.Compiled);
+    return module.addFunction(
+      setterInstance.internalName,
       createType([ thisTypeRef, valueTypeRef ]),
       TypeRef.None,
       null,
       bodyExpr
     );
-    if (instance.getterRef) {
-      instance.set(CommonFlags.Compiled);
-    } else {
-      let typeNode = instance.typeNode;
-      if (typeNode) this.checkTypeSupported(instance.type, typeNode);
-    }
-    return true;
   }
 
   // === Memory ===================================================================================
@@ -2930,7 +2937,7 @@ export class Compiler extends DiagnosticEmitter {
           cloneMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
-        this.checkTypeSupported(type, typeNode);
+        this.program.checkTypeSupported(type, typeNode);
 
         if (initializerNode) {
           let pendingElements = this.pendingElements;
@@ -5702,6 +5709,12 @@ export class Compiler extends DiagnosticEmitter {
         }
         return this.makeGlobalAssignment(global, valueExpr, valueType, tee);
       }
+      case ElementKind.PropertyPrototype: {
+        let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>target);
+        if (!propertyInstance) return module.unreachable();
+        target = propertyInstance;
+        // fall-through
+      }
       case ElementKind.Property: {
         let propertyInstance = <Property>target;
         if (propertyInstance.isField) {
@@ -5721,21 +5734,6 @@ export class Compiler extends DiagnosticEmitter {
           thisExpression = assert(thisExpression);
           if (isConstructor && thisExpression.kind == NodeKind.This) {
             flow.setThisFieldFlag(propertyInstance, FieldFlags.Initialized);
-          }
-          // Compile as store if not overloaded
-          if (!propertyInstance.is(CommonFlags.Virtual)) {
-            let fieldParent = propertyInstance.parent;
-            assert(fieldParent.kind == ElementKind.Class);
-            return this.makeFieldAssignment(propertyInstance,
-              valueExpr,
-              valueType,
-              this.compileExpression(
-                thisExpression,
-                (<Class>fieldParent).type,
-                Constraints.ConvImplicit | Constraints.IsThis
-              ),
-              tee
-            );
           }
         }
         let setterInstance = propertyInstance.setterInstance;
@@ -5924,49 +5922,6 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Makes an assignment to a field. */
-  private makeFieldAssignment(
-    /** The field to assign to. */
-    field: Property,
-    /** The value to assign. */
-    valueExpr: ExpressionRef,
-    /** The type of the value to assign. */
-    valueType: Type,
-    /** The value of `this`. */
-    thisExpr: ExpressionRef,
-    /** Whether to tee the value. */
-    tee: bool
-  ): ExpressionRef {
-    let module = this.module;
-    let flow = this.currentFlow;
-    let fieldType = field.type;
-    let fieldTypeRef = fieldType.toRef();
-    assert(field.parent.kind == ElementKind.Class);
-    let thisType = (<Class>field.parent).type;
-
-    if (!field.is(CommonFlags.Compiled)) {
-      field.set(CommonFlags.Compiled);
-      let typeNode = field.typeNode;
-      if (typeNode) this.checkTypeSupported(field.type, typeNode);
-    }
-
-    if (tee) {
-      this.compileField(field);
-      let tempThis = flow.getTempLocal(thisType);
-      let expr = module.block(null, [
-        module.call(field.internalSetterName, [ module.local_tee(tempThis.index, thisExpr, thisType.isManaged), valueExpr ], TypeRef.None),
-        module.call(field.internalGetterName, [ module.local_get(tempThis.index, thisType.toRef()) ], fieldTypeRef)
-      ], fieldTypeRef);
-      this.currentType = fieldType;
-      return expr;
-    } else {
-      this.compileFieldSetter(field);
-      let expr = module.call(field.internalSetterName, [ thisExpr, valueExpr ], TypeRef.None);
-      this.currentType = Type.void;
-      return expr;
-    }
-  }
-
   /** Compiles a call expression according to the specified context. */
   private compileCallExpression(
     /** Call expression to compile. */
@@ -6127,31 +6082,6 @@ export class Compiler extends DiagnosticEmitter {
         let propertyInstance = <Property>target;
         let getterInstance = propertyInstance.getterInstance;
         let type = assert(this.resolver.getTypeOfElement(target));
-
-        // Compile as load if not an overloaded field
-        if (propertyInstance.isField) {
-          signature = type.signatureReference;
-          if (signature) {
-            let fieldParent = propertyInstance.parent;
-            assert(fieldParent.kind == ElementKind.Class);
-            let usizeType = this.options.usizeType;
-            functionArg = module.load(usizeType.byteSize, false,
-              this.compileExpression(
-                assert(thisExpression),
-                (<Class>fieldParent).type,
-                Constraints.ConvImplicit | Constraints.IsThis
-              ),
-              usizeType.toRef(),
-              propertyInstance.memoryOffset
-            );
-            break;
-          }
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, type.toString()
-          );
-          return module.unreachable();
-        }
 
         if (!getterInstance) {
           this.error(
@@ -6682,7 +6612,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Ensures compilation of the virtual stub for the specified function. */
   ensureVirtualStub(original: Function): Function {
     // A virtual stub is a function redirecting virtual calls to the actual
-    // overload targeted by the call. It utilizes varargs stubs where necessary
+    // override targeted by the call. It utilizes varargs stubs where necessary
     // and as such has the same semantics as one. Here, we only make sure that
     // a placeholder exist, with actual code being generated as a finalization
     // step once module compilation is otherwise complete.
@@ -6731,39 +6661,39 @@ export class Compiler extends DiagnosticEmitter {
         TypeRef.I32
       )
     );
-    let overloadInstances = this.resolver.resolveOverloads(instance);
-    if (overloadInstances) {
-      for (let i = 0, k = overloadInstances.length; i < k; ++i) {
-        let overloadInstance = overloadInstances[i];
-        if (!overloadInstance.is(CommonFlags.Compiled)) continue; // errored
-        let overloadType = overloadInstance.type;
+    let overrideInstances = this.resolver.resolveOverrides(instance);
+    if (overrideInstances) {
+      for (let i = 0, k = overrideInstances.length; i < k; ++i) {
+        let overrideInstance = overrideInstances[i];
+        if (!overrideInstance.is(CommonFlags.Compiled)) continue; // errored
+        let overrideType = overrideInstance.type;
         let originalType = instance.type;
-        if (!overloadType.isAssignableTo(originalType)) {
+        if (!overrideType.isAssignableTo(originalType)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
+            overrideInstance.identifierNode.range, overrideType.toString(), originalType.toString()
           );
           continue;
         }
         // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
-        let overloadSignature = overloadInstance.signature;
-        let overloadParameterTypes = overloadSignature.parameterTypes;
-        let overloadNumParameters = overloadParameterTypes.length;
-        let paramExprs = new Array<ExpressionRef>(1 + overloadNumParameters);
+        let overrideSignature = overrideInstance.signature;
+        let overrideParameterTypes = overrideSignature.parameterTypes;
+        let overrideNumParameters = overrideParameterTypes.length;
+        let paramExprs = new Array<ExpressionRef>(1 + overrideNumParameters);
         paramExprs[0] = module.local_get(0, sizeTypeRef); // this
         for (let n = 1; n <= numParameters; ++n) {
           paramExprs[n] = module.local_get(n, parameterTypes[n - 1].toRef());
         }
         let needsVarargsStub = false;
-        for (let n = numParameters; n < overloadNumParameters; ++n) {
+        for (let n = numParameters; n < overrideNumParameters; ++n) {
           // TODO: inline constant initializers and skip varargs stub
-          paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n]);
+          paramExprs[1 + n] = this.makeZero(overrideParameterTypes[n]);
           needsVarargsStub = true;
         }
         let calledName = needsVarargsStub
-          ? this.ensureVarargsStub(overloadInstance).internalName
-          : overloadInstance.internalName;
-        let returnTypeRef = overloadSignature.returnType.toRef();
+          ? this.ensureVarargsStub(overrideInstance).internalName
+          : overrideInstance.internalName;
+        let returnTypeRef = overrideSignature.returnType.toRef();
         let stmts = new Array<ExpressionRef>();
         if (needsVarargsStub) {
           // Safe to prepend since paramExprs are local.get's
@@ -6783,7 +6713,7 @@ export class Compiler extends DiagnosticEmitter {
             )
           );
         }
-        let classInstance = assert(overloadInstance.getClassOrInterface());
+        let classInstance = assert(overrideInstance.getClassOrInterface());
         builder.addCase(classInstance.id, stmts);
         // Also alias each extendee inheriting this exact overload
         let extendees = classInstance.getAllExtendees(instance.declaration.name.text); // without get:/set:
@@ -6799,7 +6729,8 @@ export class Compiler extends DiagnosticEmitter {
     // invalid id, but can reduce code size significantly since we also don't
     // have to add branches for extendees inheriting the original function.
     let body: ExpressionRef;
-    if (instance.prototype.bodyNode) {
+    let instanceClass = instance.getClassOrInterface();
+    if (!instance.is(CommonFlags.Abstract) && !(instanceClass && instanceClass.kind == ElementKind.Interface)) {
       let paramExprs = new Array<ExpressionRef>(numParameters);
       paramExprs[0] = module.local_get(0, sizeTypeRef); // this
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
@@ -8165,9 +8096,11 @@ export class Compiler extends DiagnosticEmitter {
     );
     // tempData = tempThis.dataStart
     let dataStartMember = assert(arrayInstance.getMember("dataStart"));
-    assert(dataStartMember.kind == ElementKind.Property);
-    let dataStartProperty = <Property>dataStartMember;
-    assert(dataStartProperty.memoryOffset >= 0);
+    assert(dataStartMember.kind == ElementKind.PropertyPrototype);
+    // is a field, so should have been resolved during class finalization
+    let dataStartProperty = (<PropertyPrototype>dataStartMember).instance;
+    if (!dataStartProperty) return module.unreachable();
+    assert(dataStartProperty.isField && dataStartProperty.memoryOffset >= 0);
     stmts.push(
       module.local_set(tempDataStart.index,
         module.load(arrayType.byteSize, false,
@@ -8407,9 +8340,10 @@ export class Compiler extends DiagnosticEmitter {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberKey = _keys[i];
         let member = assert(members.get(memberKey));
-        if (member && member.kind == ElementKind.Property) {
-          let property = <Property>member;
-          if (property.isField) {
+        if (member && member.kind == ElementKind.PropertyPrototype) {
+          // only interested in fields (resolved during class finalization)
+          let property = (<PropertyPrototype>member).instance;
+          if (property && property.isField) {
             omittedFields.add(property); // incl. private/protected
           }
         }
@@ -8421,7 +8355,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0; i < numNames; ++i) {
       let memberName = names[i].text;
       let member = classReference.getMember(memberName);
-      if (!member || member.kind != ElementKind.Property) {
+      if (!member || member.kind != ElementKind.PropertyPrototype) {
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
           names[i].range, memberName, classType.toString()
@@ -8445,9 +8379,10 @@ export class Compiler extends DiagnosticEmitter {
         hasErrors = true;
         continue;
       }
-      let propertyInstance = <Property>member;
+      let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>member);
+      if (!propertyInstance) continue;
       let setterInstance = propertyInstance.setterInstance;
-      if (!setterInstance) { // TODO: allow readonly fields?
+      if (!setterInstance) {
         this.error(
           DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
           names[i].range, memberName, classType.toString()
@@ -8468,16 +8403,14 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       let propertyType = propertyInstance.type;
-      assert(propertyInstance.memoryOffset >= 0);
-      exprs.push(
-        module.store(
-          propertyType.byteSize,
-          module.local_get(tempLocal.index, classTypeRef),
-          this.compileExpression(values[i], propertyType, Constraints.ConvImplicit),
-          propertyType.toRef(),
-          propertyInstance.memoryOffset
-        )
-      );
+      let expr = this.makeCallDirect(setterInstance, [
+        module.local_get(tempLocal.index, classTypeRef),
+        this.compileExpression(values[i], propertyType, Constraints.ConvImplicit),
+      ], setterInstance.identifierNode, true);
+      if (this.currentType != Type.void) { // in case
+        expr = module.drop(expr);
+      }
+      exprs.push(expr);
     }
 
     // Call deferred real property setters after
@@ -8531,6 +8464,7 @@ export class Compiler extends DiagnosticEmitter {
         case TypeKind.Usize:
         case TypeKind.F32:
         case TypeKind.F64: {
+          // Can store zeroes directly (no need to __link)
           exprs.push(
             module.store(
               propertyType.byteSize,
@@ -8773,9 +8707,10 @@ export class Compiler extends DiagnosticEmitter {
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let element = _values[i];
-        if (element.kind != ElementKind.Property || element.parent != classInstance) continue;
-        let property = <Property>element;
-        if (!property.isField) continue;
+        if (element.kind != ElementKind.PropertyPrototype || element.parent != classInstance) continue;
+        // only interested in fields (resolved during class finalization)
+        let property = (<PropertyPrototype>element).instance;
+        if (!property || !property.isField) continue;
         if (!property.initializerNode && !flow.isThisFieldFlag(property, FieldFlags.Initialized)) {
           if (!property.is(CommonFlags.DefinitelyAssigned)) {
             if (relatedNode) {
@@ -8903,15 +8838,9 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.Property: {
         let propertyInstance = <Property>target;
         if (propertyInstance.isField) {
-          let fieldType = propertyInstance.type;
-          assert(propertyInstance.memoryOffset >= 0);
-          let fieldParent = propertyInstance.parent;
-          assert(fieldParent.kind == ElementKind.Class);
-          thisExpression = assert(thisExpression);
-          let thisType = this.currentType;
           if (
             flow.sourceFunction.is(CommonFlags.Constructor) &&
-            thisExpression.kind == NodeKind.This &&
+            assert(thisExpression).kind == NodeKind.This &&
             !flow.isThisFieldFlag(propertyInstance, FieldFlags.Initialized) &&
             !propertyInstance.is(CommonFlags.DefinitelyAssigned)
           ) {
@@ -8921,38 +8850,6 @@ export class Compiler extends DiagnosticEmitter {
               propertyInstance.identifierNode.range,
               propertyInstance.internalName
             );
-          }
-          if (!propertyInstance.is(CommonFlags.Virtual)) {
-            let thisExpr = this.compileExpression(
-              thisExpression,
-              (<Class>fieldParent).type,
-              Constraints.ConvImplicit | Constraints.IsThis
-            );
-            if (thisType.isNullableReference) {
-              if (!flow.isNonnull(thisExpr, thisType)) {
-                this.error(
-                  DiagnosticCode.Object_is_possibly_null,
-                  thisExpression.range
-                );
-              }
-            }
-            if (!propertyInstance.is(CommonFlags.Compiled)) {
-              propertyInstance.set(CommonFlags.Compiled);
-              let typeNode = propertyInstance.typeNode;
-              if (typeNode) this.checkTypeSupported(propertyInstance.type, typeNode);
-            }
-            this.currentType = fieldType;
-            let ret = module.load(
-              fieldType.byteSize,
-              fieldType.isSignedIntegerValue,
-              thisExpr,
-              fieldType.toRef(),
-              propertyInstance.memoryOffset
-            );
-            if (propertyInstance.is(CommonFlags.DefinitelyAssigned) && fieldType.isReference && !fieldType.isNullableReference) {
-              ret = this.makeRuntimeNonNullCheck(ret, fieldType, expression);
-            }
-            return ret;
           }
         }
         let getterInstance = propertyInstance.getterInstance;
@@ -9813,84 +9710,12 @@ export class Compiler extends DiagnosticEmitter {
     targetFunction.debugLocations.push(range);
   }
 
-  /** Checks whether a particular feature is enabled. */
-  checkFeatureEnabled(feature: Feature, reportNode: Node): bool {
-    if (!this.options.hasFeature(feature)) {
-      this.error(
-        DiagnosticCode.Feature_0_is_not_enabled,
-        reportNode.range, featureToString(feature)
-      );
-      return false;
-    }
-    return true;
-  }
-
-  /** Checks whether a particular type is supported. */
-  checkTypeSupported(type: Type, reportNode: Node): bool {
-    switch (type.kind) {
-      case TypeKind.V128: return this.checkFeatureEnabled(Feature.Simd, reportNode);
-      case TypeKind.Funcref:
-      case TypeKind.Externref:
-        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode);
-      case TypeKind.Anyref:
-      case TypeKind.Eqref:
-      case TypeKind.I31ref:
-      case TypeKind.Dataref:
-      case TypeKind.Arrayref: {
-        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
-            && this.checkFeatureEnabled(Feature.GC, reportNode);
-      }
-      case TypeKind.Stringref:
-      case TypeKind.StringviewWTF8:
-      case TypeKind.StringviewWTF16:
-      case TypeKind.StringviewIter: {
-        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
-            && this.checkFeatureEnabled(Feature.Stringref, reportNode);
-      }
-    }
-    let classReference = type.getClass();
-    if (classReference) {
-      do {
-        let typeArguments = classReference.typeArguments;
-        if (typeArguments) {
-          for (let i = 0, k = typeArguments.length; i < k; ++i) {
-            if (!this.checkTypeSupported(typeArguments[i], reportNode)) {
-              return false;
-            }
-          }
-        }
-        classReference = classReference.base;
-      } while(classReference);
-    } else {
-      let signatureReference = type.getSignature();
-      if (signatureReference) {
-        let thisType = signatureReference.thisType;
-        if (thisType) {
-          if (!this.checkTypeSupported(thisType, reportNode)) {
-            return false;
-          }
-        }
-        let parameterTypes = signatureReference.parameterTypes;
-        for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-          if (!this.checkTypeSupported(parameterTypes[i], reportNode)) {
-            return false;
-          }
-        }
-        let returnType = signatureReference.returnType;
-        if (!this.checkTypeSupported(returnType, reportNode)) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
   /** Checks whether a particular function signature is supported. */
   checkSignatureSupported(signature: Signature, reportNode: FunctionTypeNode): bool {
     let supported = true;
     let explicitThisType = reportNode.explicitThisType;
     if (explicitThisType) {
-      if (!this.checkTypeSupported(assert(signature.thisType), explicitThisType)) {
+      if (!this.program.checkTypeSupported(assert(signature.thisType), explicitThisType)) {
         supported = false;
       }
     }
@@ -9900,11 +9725,11 @@ export class Compiler extends DiagnosticEmitter {
       let parameterReportNode: Node;
       if (parameterNodes.length > i) parameterReportNode = parameterNodes[i];
       else parameterReportNode = reportNode;
-      if (!this.checkTypeSupported(parameterTypes[i], parameterReportNode)) {
+      if (!this.program.checkTypeSupported(parameterTypes[i], parameterReportNode)) {
         supported = false;
       }
     }
-    if (!this.checkTypeSupported(signature.returnType, reportNode.returnType)) {
+    if (!this.program.checkTypeSupported(signature.returnType, reportNode.returnType)) {
       supported = false;
     }
     return supported;
@@ -10249,12 +10074,10 @@ export class Compiler extends DiagnosticEmitter {
     // TODO: for (let member of members.values()) {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
       let member = unchecked(_values[i]);
-      let property: Property;
-      if (
-        member.kind != ElementKind.Property || // not a property
-        member.parent != classInstance      || // inherited field
-        !(property = <Property>member).isField // not a field
-      ) continue;
+      if (member.kind != ElementKind.PropertyPrototype) continue;
+      // only interested in fields (resolved during class finalization)
+      let property = (<PropertyPrototype>member).instance;
+      if (!property || !property.isField || property.getClassOrInterface() != classInstance) continue;
       assert(!property.isAny(CommonFlags.Const));
       let fieldPrototype = property.prototype;
       let parameterIndex = fieldPrototype.parameterIndex;
@@ -10270,20 +10093,20 @@ export class Compiler extends DiagnosticEmitter {
       let fieldType = property.type;
       let fieldTypeRef = fieldType.toRef();
       assert(!fieldPrototype.initializerNode);
-      stmts.push(
-        module.store(
-          fieldType.byteSize,
-          module.local_get(thisLocalIndex, sizeTypeRef),
-          module.local_get(
-            isInline
-              ? flow.lookupLocal(property.name)!.index
-              : 1 + parameterIndex, // `this` is local 0
-            fieldTypeRef
-          ),
-          fieldType.toRef(),
-          property.memoryOffset
+      let setterInstance = assert(property.setterInstance);
+      let expr = this.makeCallDirect(setterInstance, [
+        module.local_get(thisLocalIndex, sizeTypeRef),
+        module.local_get(
+          isInline
+            ? flow.lookupLocal(property.name)!.index
+            : 1 + parameterIndex, // `this` is local 0
+          fieldTypeRef
         )
-      );
+      ], setterInstance.identifierNode, true);
+      if (this.currentType != Type.void) { // in case
+        expr = module.drop(expr);
+      }
+      stmts.push(expr);
     }
 
     // Initialize deferred non-parameter fields
@@ -10294,17 +10117,17 @@ export class Compiler extends DiagnosticEmitter {
         let fieldPrototype = field.prototype;
         let initializerNode = fieldPrototype.initializerNode;
         assert(fieldPrototype.parameterIndex < 0);
-        stmts.push(
-          module.store(
-            fieldType.byteSize,
-            module.local_get(thisLocalIndex, sizeTypeRef),
-            initializerNode // use initializer if present, otherwise initialize with zero
-              ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit)
-              : this.makeZero(fieldType),
-            fieldType.toRef(),
-            field.memoryOffset
-          )
-        );
+        let setterInstance = assert(field.setterInstance);
+        let expr = this.makeCallDirect(setterInstance, [
+          module.local_get(thisLocalIndex, sizeTypeRef),
+          initializerNode // use initializer if present, otherwise initialize with zero
+            ? this.compileExpression(initializerNode, fieldType, Constraints.ConvImplicit)
+            : this.makeZero(fieldType)
+        ], field.identifierNode, true);
+        if (this.currentType != Type.void) { // in case
+          expr = module.drop(expr);
+        }
+        stmts.push(expr);
       }
     }
 
