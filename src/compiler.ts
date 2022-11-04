@@ -6708,7 +6708,7 @@ export class Compiler extends DiagnosticEmitter {
             )
           );
         }
-        let classInstance = assert(overrideInstance.getClassOrInterface());
+        let classInstance = assert(overrideInstance.getBoundClassOrInterface());
         builder.addCase(classInstance.id, stmts);
         // Also alias each extendee inheriting this exact overload
         let extendees = classInstance.getAllExtendees(instance.declaration.name.text); // without get:/set:
@@ -6724,7 +6724,7 @@ export class Compiler extends DiagnosticEmitter {
     // invalid id, but can reduce code size significantly since we also don't
     // have to add branches for extendees inheriting the original function.
     let body: ExpressionRef;
-    let instanceClass = instance.getClassOrInterface();
+    let instanceClass = instance.getBoundClassOrInterface();
     if (!instance.is(CommonFlags.Abstract) && !(instanceClass && instanceClass.kind == ElementKind.Interface)) {
       let paramExprs = new Array<ExpressionRef>(numParameters);
       paramExprs[0] = module.local_get(0, sizeTypeRef); // this
@@ -10072,7 +10072,7 @@ export class Compiler extends DiagnosticEmitter {
       if (member.kind != ElementKind.PropertyPrototype) continue;
       // only interested in fields (resolved during class finalization)
       let property = (<PropertyPrototype>member).instance;
-      if (!property || !property.isField || property.getClassOrInterface() != classInstance) continue;
+      if (!property || !property.isField || property.getBoundClassOrInterface() != classInstance) continue;
       assert(!property.isAny(CommonFlags.Const));
       let fieldPrototype = property.prototype;
       let parameterIndex = fieldPrototype.parameterIndex;

@@ -10267,7 +10267,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
         let property = (<PropertyPrototype>member).instance;
         if (!property) continue;
         let fieldType = property.type;
-        if (!property.isField || property.getClassOrInterface() != instance || !fieldType.isManaged) continue;
+        if (!property.isField || property.getBoundClassOrInterface() != instance || !fieldType.isManaged) continue;
         let fieldOffset = property.memoryOffset;
         assert(fieldOffset >= 0);
         needsTempValue = true;

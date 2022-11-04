@@ -2728,17 +2728,12 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Function | null {
-    let isAccessor = prototype.parent.kind == ElementKind.PropertyPrototype;
-    let actualParent = isAccessor
-      ? prototype.parent.parent
-      : prototype.parent;
     let classInstance: Class | null = null; // if an instance method
     let instanceKey = typeArguments ? typesToString(typeArguments) : "";
 
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.Instance)) {
-      assert(actualParent.kind == ElementKind.Class || actualParent.kind == ElementKind.Interface);
-      classInstance = <Class>actualParent;
+      classInstance = assert(prototype.getBoundClassOrInterface());
 
       // check if this exact concrete class and function combination is known already
       let resolvedInstance = prototype.getResolvedInstance(instanceKey);
@@ -2757,7 +2752,7 @@ export class Resolver extends DiagnosticEmitter {
         }
       }
     } else {
-      assert(actualParent.kind != ElementKind.Class); // must not be pre-bound
+      assert(!prototype.isBound);
       let resolvedInstance = prototype.getResolvedInstance(instanceKey);
       if (resolvedInstance) return resolvedInstance;
     }
@@ -2943,9 +2938,6 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.Report
   ): Function | null {
-    let actualParent = prototype.parent.kind == ElementKind.PropertyPrototype
-      ? prototype.parent.parent
-      : prototype.parent;
     let resolvedTypeArguments: Type[] | null = null;
 
     // Resolve type arguments if generic
@@ -2953,8 +2945,7 @@ export class Resolver extends DiagnosticEmitter {
 
       // If this is an instance method, first apply the class's type arguments
       if (prototype.is(CommonFlags.Instance)) {
-        assert(actualParent.kind == ElementKind.Class);
-        let classInstance = <Class>actualParent;
+        let classInstance = assert(prototype.getBoundClassOrInterface());
         let classTypeArguments = classInstance.typeArguments;
         if (classTypeArguments) {
           let typeParameterNodes = assert(classInstance.prototype.typeParameterNodes);
@@ -3006,7 +2997,7 @@ export class Resolver extends DiagnosticEmitter {
     let overridePrototypes = instance.prototype.overloads;
     if (!overridePrototypes) return null;
 
-    let parentClassInstance = assert(instance.getClassOrInterface());
+    let parentClassInstance = assert(instance.getBoundClassOrInterface());
     let overrides = new Set<Function>();
 
     // A method's `overrides` property contains its unbound override prototypes
@@ -3016,26 +3007,20 @@ export class Resolver extends DiagnosticEmitter {
       let unboundOverridePrototype = _values[i];
       assert(!unboundOverridePrototype.isBound);
       let unboundOverrideParent = unboundOverridePrototype.parent;
-      let isProperty = unboundOverrideParent.kind == ElementKind.PropertyPrototype;
       let classInstances: Map<string,Class> | null;
-      if (isProperty) {
-        let propertyParent = (<PropertyPrototype>unboundOverrideParent).parent;
-        assert(propertyParent.kind == ElementKind.ClassPrototype);
-        classInstances = (<ClassPrototype>propertyParent).instances;
-      } else {
-        assert(unboundOverrideParent.kind == ElementKind.ClassPrototype);
-        classInstances = (<ClassPrototype>unboundOverrideParent).instances;
-      }
+      assert(unboundOverrideParent.kind == ElementKind.ClassPrototype);
+      classInstances = (<ClassPrototype>unboundOverrideParent).instances;
       if (!classInstances) continue;
       for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
         let classInstance = _values[j];
         // Check if the parent class is a subtype of instance's class
         if (!classInstance.isAssignableTo(parentClassInstance)) continue;
         let overrideInstance: Function | null = null;
-        if (isProperty) {
-          let boundProperty = assert(classInstance.getMember(unboundOverrideParent.name));
-          assert(boundProperty.kind == ElementKind.PropertyPrototype);
-          let boundPropertyInstance = this.resolveProperty(<PropertyPrototype>boundProperty);
+        if (instance.isAny(CommonFlags.Get | CommonFlags.Set)) {
+          let propertyName = instance.declaration.name.text;
+          let boundPropertyPrototype = assert(classInstance.getMember(propertyName));
+          assert(boundPropertyPrototype.kind == ElementKind.PropertyPrototype);
+          let boundPropertyInstance = this.resolveProperty(<PropertyPrototype>boundPropertyPrototype);
           if (!boundPropertyInstance) continue;
           if (instance.is(CommonFlags.Get)) {
             overrideInstance = boundPropertyInstance.getterInstance;
@@ -3612,7 +3597,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Property | null {
     let instance = prototype.instance;
     if (instance) return instance;
-    prototype.instance = instance = new Property(prototype, prototype);
+    prototype.instance = instance = new Property(prototype, prototype.parent);
     let getterPrototype = prototype.getterPrototype;
     if (getterPrototype) {
       let getterInstance = this.resolveFunction(

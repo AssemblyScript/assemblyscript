@@ -2236,7 +2236,7 @@ export class Program extends DiagnosticEmitter {
     }
     let element = new FunctionPrototype(
       (isGetter ? GETTER_PREFIX : SETTER_PREFIX) + name,
-      property,
+      property.parent, // !
       declaration,
       this.checkDecorators(declaration.decorators,
         DecoratorFlags.Inline | DecoratorFlags.Unsafe
@@ -3001,6 +3001,26 @@ export abstract class Element {
     return (this.flags & vis) == (other.flags & vis);
   }
 
+  /** Tests if this element is bound to a class. */
+  get isBound(): bool {
+    let parent = this.parent;
+    switch (parent.kind) {
+      case ElementKind.Class:
+      case ElementKind.Interface: return true;
+    }
+    return false;
+  }
+
+  /** Gets the class or interface this element is bound to, if any. */
+  getBoundClassOrInterface(): Class | null {
+    let parent = this.parent;
+    switch (parent.kind) {
+      case ElementKind.Class:
+      case ElementKind.Interface: return <Class>parent;
+    }
+    return null;
+  }
+
   /** Returns a string representation of this element. */
   toString(): string {
     return `${this.internalName}, kind=${this.kind}`;
@@ -3593,14 +3613,6 @@ export class FunctionPrototype extends DeclaredElement {
     return (<FunctionDeclaration>this.declaration).arrowKind;
   }
 
-  /** Tests if this prototype is bound to a class. */
-  get isBound(): bool {
-    let parent = this.parent;
-    let parentKind = parent.kind;
-    if (parentKind == ElementKind.PropertyPrototype) parentKind = parent.parent.kind;
-    return parentKind == ElementKind.Class || parentKind == ElementKind.Interface;
-  }
-
   /** Creates a clone of this prototype that is bound to a concrete class instead. */
   toBound(classInstance: Class): FunctionPrototype {
     assert(this.is(CommonFlags.Instance));
@@ -3759,16 +3771,6 @@ export class Function extends TypedElement {
     return parameters.length > index
       ? parameters[index].name.text
       : getDefaultParameterName(index);
-  }
-
-  /** Gets the class or interface this function belongs to, if an instance method. */
-  getClassOrInterface(): Class | null {
-    let parent = this.parent;
-    if (parent.kind == ElementKind.Property) parent = parent.parent;
-    if (parent.kind == ElementKind.Class || parent.kind == ElementKind.Interface) {
-      return <Class>parent;
-    }
-    return null;
   }
 
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
@@ -3962,15 +3964,6 @@ export class PropertyPrototype extends DeclaredElement {
     return this.fieldDeclaration != null;
   }
 
-  /** Tests if this property prototype is bound to a class. */
-  get isBound(): bool {
-    switch (this.parent.kind) {
-      case ElementKind.Class:
-      case ElementKind.Interface: return true;
-    }
-    return false;
-  }
-
   /** Gets the associated type node. */
   get typeNode(): TypeNode | null {
     let fieldDeclaration = this.fieldDeclaration;
@@ -4087,16 +4080,6 @@ export class Property extends VariableLikeElement {
   /** Tests if this property represents a field. */
   get isField(): bool {
     return this.prototype.isField;
-  }
-
-  /** Gets the class or interface this property belongs to, if an instance property. */
-  getClassOrInterface(): Class | null {
-    let parent = this.parent;
-    if (parent.kind == ElementKind.PropertyPrototype) parent = parent.parent;
-    if (parent.kind == ElementKind.Class || parent.kind == ElementKind.Interface) {
-      return <Class>parent;
-    }
-    return null;
   }
 }
 
