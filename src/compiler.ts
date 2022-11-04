@@ -65,8 +65,7 @@ import {
   CommonNames,
   Feature,
   Target,
-  Runtime,
-  featureToString
+  Runtime
 } from "./common";
 
 import {
