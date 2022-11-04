@@ -3001,17 +3001,6 @@ export abstract class Element {
     return (this.flags & vis) == (other.flags & vis);
   }
 
-  /** Checks if the visibility of this element overrides the specified's. */
-  visibilityOverrides(existing: Element): bool {
-    // Private cannot be overridden
-    if (existing.is(CommonFlags.Private)) return false;
-    // Protected is overridden by protected or public
-    if (existing.is(CommonFlags.Protected)) return this.is(CommonFlags.Protected) || this.isPublic;
-    // Public is overridden only by public
-    if (existing.isPublic) return this.isPublic;
-    return false;
-  }
-
   /** Returns a string representation of this element. */
   toString(): string {
     return `${this.internalName}, kind=${this.kind}`;
