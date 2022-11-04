@@ -51,14 +51,14 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $nextWithColor i32)
   local.get $this
-  local.get $value
+  local.get $nextWithColor
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
   local.get $this
-  local.get $value
+  local.get $prev
   i32.store $0 offset=8
  )
  (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
@@ -387,24 +387,24 @@
   i32.and
   i32.add
  )
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
   local.get $this
-  local.get $value
+  local.get $flMap
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $mmInfo i32)
   local.get $this
-  local.get $value
+  local.get $mmInfo
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
   local.get $this
-  local.get $value
+  local.get $prev
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $next i32)
   local.get $this
-  local.get $value
+  local.get $next
   i32.store $0 offset=8
  )
  (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2140,14 +2140,14 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
   local.get $this
-  local.get $value
+  local.get $rtId
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $rtSize i32)
   local.get $this
-  local.get $value
+  local.get $rtSize
   i32.store $0 offset=16
  )
  (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
@@ -2202,14 +2202,14 @@
   memory.fill $0
   local.get $ptr
  )
- (func $extends-baseaggregate/A1#set:padding0 (type $i32_f64_=>_none) (param $this i32) (param $value f64)
+ (func $extends-baseaggregate/A1#set:padding0 (type $i32_f64_=>_none) (param $this i32) (param $padding0 f64)
   local.get $this
-  local.get $value
+  local.get $padding0
   f64.store $0
  )
- (func $extends-baseaggregate/A1#set:padding1 (type $i32_f64_=>_none) (param $this i32) (param $value f64)
+ (func $extends-baseaggregate/A1#set:padding1 (type $i32_f64_=>_none) (param $this i32) (param $padding1 f64)
   local.get $this
-  local.get $value
+  local.get $padding1
   f64.store $0 offset=8
  )
  (func $~lib/rt/itcms/__link (type $i32_i32_i32_=>_none) (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
@@ -2280,12 +2280,12 @@
    end
   end
  )
- (func $extends-baseaggregate/A1#set:c1 (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $extends-baseaggregate/A1#set:c1 (type $i32_i32_=>_none) (param $this i32) (param $c1 i32)
   local.get $this
-  local.get $value
+  local.get $c1
   i32.store $0 offset=16
   local.get $this
-  local.get $value
+  local.get $c1
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2450,9 +2450,9 @@
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<extends-baseaggregate/A2>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/array/Array<extends-baseaggregate/A2>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
   local.get $this
-  local.get $value
+  local.get $length_
   i32.store $0 offset=12
  )
  (func $~lib/array/Array<extends-baseaggregate/A2>#push (type $i32_i32_=>_i32) (param $this i32) (param $value i32) (result i32)

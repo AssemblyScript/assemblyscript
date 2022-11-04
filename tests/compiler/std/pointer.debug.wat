@@ -19,14 +19,14 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $std/pointer/Entry#set:key (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/pointer/Entry#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
   local.get $this
-  local.get $value
+  local.get $key
   i32.store $0
  )
- (func $std/pointer/Entry#set:val (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/pointer/Entry#set:val (type $i32_i32_=>_none) (param $this i32) (param $val i32)
   local.get $this
-  local.get $value
+  local.get $val
   i32.store $0 offset=4
  )
  (func $std/pointer/Entry#get:key (type $i32_=>_i32) (param $this i32) (result i32)

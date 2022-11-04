@@ -52,14 +52,14 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $nextWithColor i32)
   local.get $this
-  local.get $value
+  local.get $nextWithColor
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
   local.get $this
-  local.get $value
+  local.get $prev
   i32.store $0 offset=8
  )
  (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
@@ -388,24 +388,24 @@
   i32.and
   i32.add
  )
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
   local.get $this
-  local.get $value
+  local.get $flMap
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $mmInfo i32)
   local.get $this
-  local.get $value
+  local.get $mmInfo
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
   local.get $this
-  local.get $value
+  local.get $prev
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $next i32)
   local.get $this
-  local.get $value
+  local.get $next
   i32.store $0 offset=8
  )
  (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2141,14 +2141,14 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
   local.get $this
-  local.get $value
+  local.get $rtId
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $rtSize i32)
   local.get $this
-  local.get $value
+  local.get $rtSize
   i32.store $0 offset=16
  )
  (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
@@ -2203,18 +2203,18 @@
   memory.fill $0
   local.get $ptr
  )
- (func $field-initialization/Value_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Value_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
  )
  (func $field-initialization/Value_Init#get:a (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Value#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Value#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
  )
  (func $field-initialization/Value#get:a (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2289,12 +2289,12 @@
    end
   end
  )
- (func $field-initialization/Ref_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Ref_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2302,12 +2302,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Nullable_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Nullable_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2315,12 +2315,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Nullable#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Nullable#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2328,39 +2328,39 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Value_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Value_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
  )
  (func $field-initialization/Value_Ctor#get:a (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Value_Init_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Value_Init_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
  )
  (func $field-initialization/Value_Init_Ctor#get:a (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Value_Ctor_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Value_Ctor_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
  )
  (func $field-initialization/Value_Ctor_Init#get:a (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Ref_Init_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Ref_Init_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2368,12 +2368,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Ref_Ctor_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Ref_Ctor_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2381,12 +2381,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Ref_Ctor_Param#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Ref_Ctor_Param#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2394,12 +2394,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Nullable_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Nullable_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2407,12 +2407,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Nullable_Init_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Nullable_Init_Ctor#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2420,12 +2420,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Nullable_Ctor_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Nullable_Ctor_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2433,12 +2433,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Inherit_Base#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Inherit_Base#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2446,17 +2446,17 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/SomeObject#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/SomeObject#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
  )
- (func $field-initialization/SomeObject#set:b (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/SomeObject#set:b (type $i32_i32_=>_none) (param $this i32) (param $b i32)
   local.get $this
-  local.get $value
+  local.get $b
   i32.store $0 offset=4
   local.get $this
-  local.get $value
+  local.get $b
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2628,12 +2628,12 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $field-initialization/SomeOtherObject#set:c (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/SomeOtherObject#set:c (type $i32_i32_=>_none) (param $this i32) (param $c i32)
   local.get $this
-  local.get $value
+  local.get $c
   i32.store $0 offset=8
   local.get $this
-  local.get $value
+  local.get $c
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2641,12 +2641,12 @@
   local.get $this
   i32.load $0 offset=8
  )
- (func $field-initialization/Flow_Balanced#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Flow_Balanced#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2654,12 +2654,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Ref_Init_InlineCtor#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Ref_Init_InlineCtor#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )
@@ -2667,12 +2667,12 @@
   local.get $this
   i32.load $0
  )
- (func $field-initialization/Ref_InlineCtor_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $field-initialization/Ref_InlineCtor_Init#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $a
   i32.const 0
   call $~lib/rt/itcms/__link
  )

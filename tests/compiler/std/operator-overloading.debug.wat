@@ -114,14 +114,14 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $nextWithColor i32)
   local.get $this
-  local.get $value
+  local.get $nextWithColor
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
   local.get $this
-  local.get $value
+  local.get $prev
   i32.store $0 offset=8
  )
  (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
@@ -450,24 +450,24 @@
   i32.and
   i32.add
  )
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
   local.get $this
-  local.get $value
+  local.get $flMap
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $mmInfo i32)
   local.get $this
-  local.get $value
+  local.get $mmInfo
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
   local.get $this
-  local.get $value
+  local.get $prev
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $next i32)
   local.get $this
-  local.get $value
+  local.get $next
   i32.store $0 offset=8
  )
  (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2203,14 +2203,14 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
   local.get $this
-  local.get $value
+  local.get $rtId
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $rtSize i32)
   local.get $this
-  local.get $value
+  local.get $rtSize
   i32.store $0 offset=16
  )
  (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
@@ -2265,14 +2265,14 @@
   memory.fill $0
   local.get $ptr
  )
- (func $std/operator-overloading/Tester#set:x (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/operator-overloading/Tester#set:x (type $i32_i32_=>_none) (param $this i32) (param $x i32)
   local.get $this
-  local.get $value
+  local.get $x
   i32.store $0
  )
- (func $std/operator-overloading/Tester#set:y (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/operator-overloading/Tester#set:y (type $i32_i32_=>_none) (param $this i32) (param $y i32)
   local.get $this
-  local.get $value
+  local.get $y
   i32.store $0 offset=4
  )
  (func $std/operator-overloading/Tester#get:x (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2859,14 +2859,14 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/TesterInlineStatic#set:x (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/operator-overloading/TesterInlineStatic#set:x (type $i32_i32_=>_none) (param $this i32) (param $x i32)
   local.get $this
-  local.get $value
+  local.get $x
   i32.store $0
  )
- (func $std/operator-overloading/TesterInlineStatic#set:y (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/operator-overloading/TesterInlineStatic#set:y (type $i32_i32_=>_none) (param $this i32) (param $y i32)
   local.get $this
-  local.get $value
+  local.get $y
   i32.store $0 offset=4
  )
  (func $std/operator-overloading/TesterInlineStatic#get:x (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2877,14 +2877,14 @@
   local.get $this
   i32.load $0 offset=4
  )
- (func $std/operator-overloading/TesterInlineInstance#set:x (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/operator-overloading/TesterInlineInstance#set:x (type $i32_i32_=>_none) (param $this i32) (param $x i32)
   local.get $this
-  local.get $value
+  local.get $x
   i32.store $0
  )
- (func $std/operator-overloading/TesterInlineInstance#set:y (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/operator-overloading/TesterInlineInstance#set:y (type $i32_i32_=>_none) (param $this i32) (param $y i32)
   local.get $this
-  local.get $value
+  local.get $y
   i32.store $0 offset=4
  )
  (func $std/operator-overloading/TesterInlineInstance#get:x (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2895,14 +2895,14 @@
   local.get $this
   i32.load $0 offset=4
  )
- (func $std/operator-overloading/TesterElementAccess#set:x (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/operator-overloading/TesterElementAccess#set:x (type $i32_i32_=>_none) (param $this i32) (param $x i32)
   local.get $this
-  local.get $value
+  local.get $x
   i32.store $0
  )
- (func $std/operator-overloading/TesterElementAccess#set:y (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $std/operator-overloading/TesterElementAccess#set:y (type $i32_i32_=>_none) (param $this i32) (param $y i32)
   local.get $this
-  local.get $value
+  local.get $y
   i32.store $0 offset=4
  )
  (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)

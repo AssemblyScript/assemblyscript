@@ -3886,19 +3886,17 @@ export class PropertyPrototype extends DeclaredElement {
     /** Pre-checked flags indicating built-in decorators. */
     decoratorFlags: DecoratorFlags,
   ): PropertyPrototype {
-    // A field differs from a property in that accessing it is merely a load
-    // from respectively store to a memory address relative to its `this`
-    // pointer, not a function call. However, fields can be overloaded with
-    // properties and vice-versa, creating a situation where they function more
-    // like properties, using virtual stubs in their accessor functions to
-    // determine which overload to call. Hence, fields are represented as
-    // properties, with compiler-generated accessors for cases they are used
-    // like properties. As a result, emitting actual loads and stores becomes an
-    // optimization in non-overloaded cases.
+    // A field is a property with an attached memory offset. Unlike normal
+    // properties, accessors for fields are not explicitly declared, so we
+    // declare them implicitly here and compile them as built-ins when used.
+    // As a result, explicit and implicit accessors can override each other,
+    // which is useful when implementing interfaces declaring "fields". Such
+    // fields are satisfied by either a field or a normal property, so the
+    // virtual stub at the interface needs to handle both interchangeably.
     let nativeRange = Source.native.range;
     let typeNode = fieldDeclaration.type;
     if (!typeNode) typeNode = Node.createOmittedType(fieldDeclaration.name.range.atEnd);
-    let getterDeclaration = new MethodDeclaration(
+    let getterDeclaration = new MethodDeclaration( // get name(): type
       fieldDeclaration.name,
       fieldDeclaration.decorators,
       fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Get,
@@ -3907,7 +3905,7 @@ export class PropertyPrototype extends DeclaredElement {
       null,
       nativeRange
     );
-    let setterDeclaration = new MethodDeclaration(
+    let setterDeclaration = new MethodDeclaration( // set name(name: type)
       fieldDeclaration.name,
       fieldDeclaration.decorators,
       fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Set,
@@ -3916,7 +3914,7 @@ export class PropertyPrototype extends DeclaredElement {
         [
           new ParameterNode(
             ParameterKind.Default,
-            new IdentifierExpression("value", false, nativeRange),
+            fieldDeclaration.name,
             typeNode, null, nativeRange
           )
         ],

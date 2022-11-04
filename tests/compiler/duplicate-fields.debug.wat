@@ -44,19 +44,19 @@
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $duplicate-fields/A#set:bar (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/A#set:bar (type $i32_i32_=>_none) (param $this i32) (param $bar i32)
   local.get $this
-  local.get $value
+  local.get $bar
   i32.store $0
  )
- (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $nextWithColor i32)
   local.get $this
-  local.get $value
+  local.get $nextWithColor
   i32.store $0 offset=4
  )
- (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
   local.get $this
-  local.get $value
+  local.get $prev
   i32.store $0 offset=8
  )
  (func $~lib/rt/itcms/initLazy (type $i32_=>_i32) (param $space i32) (result i32)
@@ -385,24 +385,24 @@
   i32.and
   i32.add
  )
- (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
   local.get $this
-  local.get $value
+  local.get $flMap
   i32.store $0
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $mmInfo i32)
   local.get $this
-  local.get $value
+  local.get $mmInfo
   i32.store $0
  )
- (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Block#set:prev (type $i32_i32_=>_none) (param $this i32) (param $prev i32)
   local.get $this
-  local.get $value
+  local.get $prev
   i32.store $0 offset=4
  )
- (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/tlsf/Block#set:next (type $i32_i32_=>_none) (param $this i32) (param $next i32)
   local.get $this
-  local.get $value
+  local.get $next
   i32.store $0 offset=8
  )
  (func $~lib/rt/tlsf/Block#get:prev (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2138,14 +2138,14 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
   local.get $this
-  local.get $value
+  local.get $rtId
   i32.store $0 offset=12
  )
- (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/itcms/Object#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $rtSize i32)
   local.get $this
-  local.get $value
+  local.get $rtSize
   i32.store $0 offset=16
  )
  (func $~lib/rt/itcms/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)
@@ -2200,9 +2200,9 @@
   memory.fill $0
   local.get $ptr
  )
- (func $duplicate-fields/B#set:bar (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/B#set:bar (type $i32_i32_=>_none) (param $this i32) (param $bar i32)
   local.get $this
-  local.get $value
+  local.get $bar
   i32.store $0
  )
  (func $duplicate-fields/B#get:bar (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2277,27 +2277,27 @@
    end
   end
  )
- (func $duplicate-fields/A2#set:bar (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/A2#set:bar (type $i32_i32_=>_none) (param $this i32) (param $bar i32)
   local.get $this
-  local.get $value
+  local.get $bar
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $bar
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $duplicate-fields/B2#set:bar (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/B2#set:bar (type $i32_i32_=>_none) (param $this i32) (param $bar i32)
   local.get $this
-  local.get $value
+  local.get $bar
   i32.store $0
   local.get $this
-  local.get $value
+  local.get $bar
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $duplicate-fields/Foo#set:foo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/Foo#set:foo (type $i32_i32_=>_none) (param $this i32) (param $foo i32)
   local.get $this
-  local.get $value
+  local.get $foo
   i32.store $0
  )
  (func $duplicate-fields/B2#get:bar (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2308,24 +2308,24 @@
   local.get $this
   i32.load $0
  )
- (func $duplicate-fields/A3#set:prot (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/A3#set:prot (type $i32_i32_=>_none) (param $this i32) (param $prot i32)
   local.get $this
-  local.get $value
+  local.get $prot
   i32.store $0
  )
- (func $duplicate-fields/A3#set:pub (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/A3#set:pub (type $i32_i32_=>_none) (param $this i32) (param $pub i32)
   local.get $this
-  local.get $value
+  local.get $pub
   i32.store $0 offset=4
  )
- (func $duplicate-fields/B3#set:prot (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/B3#set:prot (type $i32_i32_=>_none) (param $this i32) (param $prot i32)
   local.get $this
-  local.get $value
+  local.get $prot
   i32.store $0
  )
- (func $duplicate-fields/B3#set:pub (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $duplicate-fields/B3#set:pub (type $i32_i32_=>_none) (param $this i32) (param $pub i32)
   local.get $this
-  local.get $value
+  local.get $pub
   i32.store $0 offset=4
  )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)

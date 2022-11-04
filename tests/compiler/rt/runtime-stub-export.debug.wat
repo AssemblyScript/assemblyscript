@@ -84,9 +84,9 @@
   local.get $newOffset
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/BLOCK#set:mmInfo (type $i32_i32_=>_none) (param $this i32) (param $mmInfo i32)
   local.get $this
-  local.get $value
+  local.get $mmInfo
   i32.store $0
  )
  (func $~lib/rt/stub/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
@@ -134,24 +134,24 @@
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $ptr
  )
- (func $~lib/rt/common/OBJECT#set:gcInfo (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/OBJECT#set:gcInfo (type $i32_i32_=>_none) (param $this i32) (param $gcInfo i32)
   local.get $this
-  local.get $value
+  local.get $gcInfo
   i32.store $0 offset=4
  )
- (func $~lib/rt/common/OBJECT#set:gcInfo2 (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/OBJECT#set:gcInfo2 (type $i32_i32_=>_none) (param $this i32) (param $gcInfo2 i32)
   local.get $this
-  local.get $value
+  local.get $gcInfo2
   i32.store $0 offset=8
  )
- (func $~lib/rt/common/OBJECT#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/OBJECT#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
   local.get $this
-  local.get $value
+  local.get $rtId
   i32.store $0 offset=12
  )
- (func $~lib/rt/common/OBJECT#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/rt/common/OBJECT#set:rtSize (type $i32_i32_=>_none) (param $this i32) (param $rtSize i32)
   local.get $this
-  local.get $value
+  local.get $rtSize
   i32.store $0 offset=16
  )
  (func $~lib/rt/stub/__new (type $i32_i32_=>_i32) (param $size i32) (param $id i32) (result i32)

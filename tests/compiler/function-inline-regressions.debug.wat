@@ -32,19 +32,19 @@
   i32.const 16
   i32.load $0
  )
- (func $function-inline-regressions/Struct#set:v0 (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $function-inline-regressions/Struct#set:v0 (type $i32_i32_=>_none) (param $this i32) (param $v0 i32)
   local.get $this
-  local.get $value
+  local.get $v0
   i32.store $0
  )
- (func $function-inline-regressions/Struct#set:v1 (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $function-inline-regressions/Struct#set:v1 (type $i32_i32_=>_none) (param $this i32) (param $v1 i32)
   local.get $this
-  local.get $value
+  local.get $v1
   i32.store $0 offset=4
  )
- (func $function-inline-regressions/Struct#set:v2 (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $function-inline-regressions/Struct#set:v2 (type $i32_i32_=>_none) (param $this i32) (param $v2 i32)
   local.get $this
-  local.get $value
+  local.get $v2
   i32.store $0 offset=8
  )
  (func $function-inline-regressions/foo (type $i32_i32_i32_=>_i32) (param $v0 i32) (param $v1 i32) (param $v2 i32) (result i32)

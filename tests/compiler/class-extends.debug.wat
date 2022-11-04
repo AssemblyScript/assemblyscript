@@ -21,14 +21,14 @@
   local.get $this
   i32.load16_s $0 offset=4
  )
- (func $class-extends/A#set:a (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $class-extends/A#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
-  local.get $value
+  local.get $a
   i32.store $0
  )
- (func $class-extends/B#set:b (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $class-extends/B#set:b (type $i32_i32_=>_none) (param $this i32) (param $b i32)
   local.get $this
-  local.get $value
+  local.get $b
   i32.store16 $0 offset=4
  )
  (func $class-extends/test (type $i32_=>_none) (param $b i32)
