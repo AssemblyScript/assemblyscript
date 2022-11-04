@@ -1168,17 +1168,17 @@
   call $~lib/rt/tlsf/removeBlock
   local.get $1
   i32.load $0
-  local.tee $4
+  local.tee $3
   i32.const -4
   i32.and
   i32.const 28
   i32.sub
-  local.tee $3
+  local.tee $4
   i32.const 16
   i32.ge_u
   if
    local.get $1
-   local.get $4
+   local.get $3
    i32.const 2
    i32.and
    i32.const 28
@@ -1187,19 +1187,19 @@
    local.get $1
    i32.const 32
    i32.add
-   local.tee $4
-   local.get $3
+   local.tee $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store $0
    local.get $2
-   local.get $4
+   local.get $3
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $1
-   local.get $4
+   local.get $3
    i32.const -2
    i32.and
    i32.store $0
