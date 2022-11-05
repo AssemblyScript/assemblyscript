@@ -82,6 +82,16 @@ export declare function _BinaryenHeapTypeNofunc(): HeapTypeRef;
 
 export declare function _BinaryenHeapTypeIsBottom(heapType: HeapTypeRef): bool;
 export declare function _BinaryenHeapTypeGetBottom(heapType: HeapTypeRef): HeapTypeRef;
+export declare function _BinaryenHeapTypeIsSubType(left: HeapTypeRef, right: HeapTypeRef): bool;
+export declare function _BinaryenStructTypeGetNumFields(heapType: HeapTypeRef): Index;
+export declare function _BinaryenStructTypeGetFieldType(heapType: HeapTypeRef, index: Index): TypeRef;
+export declare function _BinaryenStructTypeGetFieldPackedType(heapType: HeapTypeRef, index: Index): PackedType;
+export declare function _BinaryenStructTypeIsFieldMutable(heapType: HeapTypeRef, index: Index): bool;
+export declare function _BinaryenArrayTypeGetElementType(heapType: HeapTypeRef): TypeRef;
+export declare function _BinaryenArrayTypeGetElementPackedType(heapType: HeapTypeRef): PackedType;
+export declare function _BinaryenArrayTypeIsElementMutable(heapType: HeapTypeRef): bool;
+export declare function _BinaryenSignatureTypeGetParams(heapType: HeapTypeRef): TypeRef;
+export declare function _BinaryenSignatureTypeGetResults(heapType: HeapTypeRef): TypeRef;
 
 export declare function _BinaryenModuleCreate(): ModuleRef;
 export declare function _BinaryenModuleDispose(module: ModuleRef): void;
