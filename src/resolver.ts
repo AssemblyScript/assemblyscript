@@ -3356,6 +3356,15 @@ export class Resolver extends DiagnosticEmitter {
                     let existingPrototype = <PropertyPrototype>existingMember;
                     let existingProperty = this.resolveProperty(existingPrototype, reportMode);
                     if (existingProperty && existingProperty.isField) {
+                      if (existingProperty.type != boundInstance.type) {
+                        // make sure fields are invariant (Binaryen would otherwise error)
+                        this.errorRelated(
+                          DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
+                          boundInstance.identifierNode.range, existingProperty.identifierNode.range,
+                          boundInstance.name, instance.internalName, base.internalName
+                        );
+                        break; // keep existing
+                      }
                       boundInstance.memoryOffset = existingProperty.memoryOffset;
                       needsLayout = false;
                     }
