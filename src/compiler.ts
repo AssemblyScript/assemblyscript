@@ -7682,75 +7682,42 @@ export class Compiler extends DiagnosticEmitter {
     let module = this.module;
     let sizeType = this.options.sizeTypeRef;
     let stmts = new Array<ExpressionRef>();
-    let pending = this.pendingInstanceOf;
     // (block $is_instance
-    //  (br_if $is_instance (i32.eq (i32.load(...) (ID)))
-    //  ...
-    //  (br_if $is_instance (call $~instanceof|X (local.get $0)))
+    //  (local.set $1 (i32.load (...))) ;; class id
+    //  (br_if $is_instance (i32.eq (local.get $1) (ID)))
     //  ...
     //  (return (i32.const 0))
     // )
     // (i32.const 1)
     stmts.push(
-      module.br("is_instance",
-        module.binary(BinaryOp.EqI32,
-          module.load(4, false,
-            module.binary(
-              sizeType == TypeRef.I64
-                ? BinaryOp.SubI64
-                : BinaryOp.SubI32,
-              module.local_get(0, sizeType),
-              module.i32(
-                program.totalOverhead - program.OBJECTInstance.offsetof("rtId")
-              )
-            ),
-            TypeRef.I32
+      module.local_set(1,
+        module.load(4, false,
+          module.binary(
+            sizeType == TypeRef.I64
+              ? BinaryOp.SubI64
+              : BinaryOp.SubI32,
+            module.local_get(0, sizeType),
+            module.i32(
+              program.totalOverhead - program.OBJECTInstance.offsetof("rtId")
+            )
           ),
-          module.i32(instance.id)
-        )
+          TypeRef.I32
+        ), false // managedness is irrelevant here, isn't interrupted
       )
     );
-    let extendees = instance.extendees;
-    if (extendees) {
-      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-        let extendee = _values[i];
-        let extendeeName: string;
-        if (pending.has(extendee)) {
-          extendeeName = assert(pending.get(extendee));
-        } else {
-          extendeeName = this.prepareInstanceOf(extendee);
-          pending.set(extendee, extendeeName);
-          this.finalizeInstanceOf(extendee, extendeeName);
-        }
-        stmts.push(
-          module.br("is_instance",
-            module.call(extendeeName, [
-              module.local_get(0, sizeType)
-            ], TypeRef.I32)
+    let allInstances = new Set<Class>();
+    allInstances.add(instance);
+    instance.getAllExtendeesAndImplementers(allInstances);
+    for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
+      let instance = _values[i];
+      stmts.push(
+        module.br("is_instance",
+          module.binary(BinaryOp.EqI32,
+            module.local_get(1, TypeRef.I32),
+            module.i32(instance.id)
           )
-        );
-      }
-    }
-    let implementers = instance.implementers;
-    if (implementers) {
-      for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
-        let implementer = _values[i];
-        let implementerName: string;
-        if (pending.has(implementer)) {
-          implementerName = assert(pending.get(implementer));
-        } else {
-          implementerName = this.prepareInstanceOf(implementer);
-          pending.set(implementer, implementerName);
-          this.finalizeInstanceOf(implementer, implementerName);
-        }
-        stmts.push(
-          module.br("is_instance",
-            module.call(implementerName, [
-              module.local_get(0, sizeType)
-            ], TypeRef.I32)
-          )
-        );
-      }
+        )
+      );
     }
     stmts.push(
       module.return(
@@ -7839,31 +7806,46 @@ export class Compiler extends DiagnosticEmitter {
     let module = this.module;
     let sizeType = this.options.sizeTypeRef;
     let stmts = new Array<ExpressionRef>();
-    let pending = this.pendingInstanceOf; 
     let instances = prototype.instances;
     // (block $is_instance
-    //  ...
-    //  (br_if $is_instance (call $~instanceof|X (local.get $0)))
+    //  (local.set $1 (i32.load(...)))
+    //  (br_if $is_instance (i32.eq (local.get $1) (ID))
     //  ...
     //  (return (i32.const 0))
     // )
     // (i32.const 1)
     if (instances) {
+      let program = this.program;
+      stmts.push(
+        module.local_set(1,
+          module.load(4, false,
+            module.binary(
+              sizeType == TypeRef.I64
+                ? BinaryOp.SubI64
+                : BinaryOp.SubI32,
+              module.local_get(0, sizeType),
+              module.i32(
+                program.totalOverhead - program.OBJECTInstance.offsetof("rtId")
+              )
+            ),
+            TypeRef.I32
+          ), false // managedness is irrelevant here, isn't interrupted
+        )
+      );
+      let allInstances = new Set<Class>();
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
         let instance = _values[i];
-        let instanceName: string;
-        if (pending.has(instance)) {
-          instanceName = assert(pending.get(instance));
-        } else {
-          instanceName = this.prepareInstanceOf(instance);
-          pending.set(instance, instanceName);
-          this.finalizeInstanceOf(instance, instanceName);
-        }
+        allInstances.add(instance);
+        instance.getAllExtendeesAndImplementers(allInstances);
+      }
+      for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
+        let instance = _values[i];
         stmts.push(
           module.br("is_instance",
-            module.call(instanceName, [
-              module.local_get(0, sizeType)
-            ], TypeRef.I32)
+            module.binary(BinaryOp.EqI32,
+              module.local_get(1, TypeRef.I32),
+              module.i32(instance.id)
+            )
           )
         );
       }
@@ -7879,7 +7861,7 @@ export class Compiler extends DiagnosticEmitter {
       module.i32(1)
     );
     module.removeFunction(name);
-    module.addFunction(name, sizeType, TypeRef.I32, null, module.block(null, stmts, TypeRef.I32));
+    module.addFunction(name, sizeType, TypeRef.I32, [ TypeRef.I32 ], module.block(null, stmts, TypeRef.I32));
   }
 
   private compileLiteralExpression(

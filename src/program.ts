@@ -737,14 +737,6 @@ export class Program extends DiagnosticEmitter {
   }
   private _typeinfoInstance: Function | null = null;
 
-  /** Gets the runtime `__instanceof(ptr: usize, superId: u32): bool` instance. */
-  get instanceofInstance(): Function {
-    let cached = this._instanceofInstance;
-    if (!cached) this._instanceofInstance = cached = this.requireFunction(CommonNames.instanceof_);
-    return cached;
-  }
-  private _instanceofInstance: Function | null = null;
-
   /** Gets the runtime `__newBuffer(size: usize, id: u32, data: usize = 0): usize` instance. */
   get newBufferInstance(): Function {
     let cached = this._newBufferInstance;
@@ -4714,6 +4706,27 @@ export class Class extends TypedElement {
         }
         out.add(extendee);
         extendee.getAllExtendees(exceptIfMember, out);
+      }
+    }
+    return out;
+  }
+
+  /** Gets all extendees and implementers of this class. */
+  getAllExtendeesAndImplementers(out: Set<Class> = new Set()): Set<Class> {
+    let extendees = this.extendees;
+    if (extendees) {
+      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+        let extendee = _values[i];
+        out.add(extendee);
+        extendee.getAllExtendeesAndImplementers(out);
+      }
+    }
+    let implementers = this.implementers;
+    if (implementers) {
+      for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
+        let implementer = _values[i];
+        out.add(implementer);
+        implementer.getAllExtendeesAndImplementers(out);
       }
     }
     return out;

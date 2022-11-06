@@ -257,7 +257,6 @@ export namespace CommonNames {
   export const link = "__link";
   export const collect = "__collect";
   export const typeinfo = "__typeinfo";
-  export const instanceof_ = "__instanceof";
   export const visit = "__visit";
   export const newBuffer = "__newBuffer";
   export const newArray = "__newArray";
