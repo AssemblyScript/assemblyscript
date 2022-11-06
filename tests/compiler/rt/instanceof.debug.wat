@@ -2203,51 +2203,6 @@
   memory.fill $0
   local.get $ptr
  )
- (func $~lib/rt/common/OBJECT#get:rtId (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
- )
- (func $~lib/shared/typeinfo/Typeinfo#get:base (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=4
- )
- (func $~lib/rt/__instanceof (type $i32_i32_=>_i32) (param $ptr i32) (param $classId i32) (result i32)
-  (local $id i32)
-  (local $rttiBase i32)
-  local.get $ptr
-  i32.const 20
-  i32.sub
-  call $~lib/rt/common/OBJECT#get:rtId
-  local.set $id
-  global.get $~lib/rt/__rtti_base
-  local.set $rttiBase
-  local.get $id
-  local.get $rttiBase
-  i32.load $0
-  i32.le_u
-  if
-   loop $do-loop|0
-    local.get $id
-    local.get $classId
-    i32.eq
-    if
-     i32.const 1
-     return
-    end
-    local.get $rttiBase
-    i32.const 4
-    i32.add
-    local.get $id
-    i32.const 8
-    i32.mul
-    i32.add
-    call $~lib/shared/typeinfo/Typeinfo#get:base
-    local.tee $id
-    br_if $do-loop|0
-   end
-  end
-  i32.const 0
- )
  (func $start:rt/instanceof (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
@@ -2314,8 +2269,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   i32.eqz
@@ -2337,8 +2291,7 @@
    i32.const 0
   else
    local.get $1
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   i32.eqz
@@ -2362,8 +2315,7 @@
    i32.const 0
   else
    local.get $2
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   if
@@ -2384,8 +2336,7 @@
    i32.const 0
   else
    local.get $3
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   i32.eqz
@@ -2409,8 +2360,7 @@
    i32.const 0
   else
    local.get $4
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   if
@@ -2431,8 +2381,7 @@
    i32.const 0
   else
    local.get $5
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   if
@@ -2474,8 +2423,7 @@
    i32.const 0
   else
    local.get $6
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   i32.eqz
@@ -2497,8 +2445,7 @@
    i32.const 0
   else
    local.get $7
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   i32.eqz
@@ -2532,8 +2479,7 @@
    i32.const 0
   else
    local.get $8
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   if
@@ -2554,8 +2500,7 @@
    i32.const 0
   else
    local.get $9
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   i32.eqz
@@ -2589,8 +2534,7 @@
    i32.const 0
   else
    local.get $10
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   if
@@ -2611,8 +2555,7 @@
    i32.const 0
   else
    local.get $11
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   if
@@ -2646,8 +2589,7 @@
    i32.const 0
   else
    local.get $12
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   i32.eqz
@@ -2669,8 +2611,7 @@
    i32.const 0
   else
    local.get $13
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   i32.eqz
@@ -2705,8 +2646,7 @@
    i32.const 0
   else
    local.get $14
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   i32.eqz
@@ -2728,8 +2668,7 @@
    i32.const 0
   else
    local.get $15
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   i32.eqz
@@ -2764,8 +2703,7 @@
    i32.const 0
   else
    local.get $16
-   i32.const 4
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/Cat
   end
   i32.eqz
   i32.eqz
@@ -2787,8 +2725,7 @@
    i32.const 0
   else
    local.get $17
-   i32.const 5
-   call $~lib/rt/__instanceof
+   call $~instanceof|rt/instanceof/BlackCat
   end
   i32.eqz
   i32.eqz
@@ -2804,6 +2741,39 @@
   i32.const 72
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $~instanceof|rt/instanceof/Cat (type $i32_=>_i32) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $is_instance
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 4
+   i32.eq
+   br_if $is_instance
+   local.get $0
+   call $~instanceof|rt/instanceof/BlackCat
+   br_if $is_instance
+   i32.const 0
+   return
+  end
+  i32.const 1
+ )
+ (func $~instanceof|rt/instanceof/BlackCat (type $i32_=>_i32) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $is_instance
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 5
+   i32.eq
+   br_if $is_instance
+   i32.const 0
+   return
+  end
+  i32.const 1
  )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)

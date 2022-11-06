@@ -38,7 +38,7 @@
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 476) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 540) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00d\00o\00w\00n\00c\00a\00s\00t\00\00\00\00\00\00\00")
+ (data (i32.const 540) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00i\00n\00v\00a\00l\00i\00d\00 \00d\00o\00w\00n\00c\00a\00s\00t\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 608) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
@@ -2222,51 +2222,6 @@
    call $managed-cast/Animal#tame
   end
  )
- (func $~lib/rt/common/OBJECT#get:rtId (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
- )
- (func $~lib/shared/typeinfo/Typeinfo#get:base (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=4
- )
- (func $~lib/rt/__instanceof (type $i32_i32_=>_i32) (param $ptr i32) (param $classId i32) (result i32)
-  (local $id i32)
-  (local $rttiBase i32)
-  local.get $ptr
-  i32.const 20
-  i32.sub
-  call $~lib/rt/common/OBJECT#get:rtId
-  local.set $id
-  global.get $~lib/rt/__rtti_base
-  local.set $rttiBase
-  local.get $id
-  local.get $rttiBase
-  i32.load $0
-  i32.le_u
-  if
-   loop $do-loop|0
-    local.get $id
-    local.get $classId
-    i32.eq
-    if
-     i32.const 1
-     return
-    end
-    local.get $rttiBase
-    i32.const 4
-    i32.add
-    local.get $id
-    i32.const 8
-    i32.mul
-    i32.add
-    call $~lib/shared/typeinfo/Typeinfo#get:base
-    local.tee $id
-    br_if $do-loop|0
-   end
-  end
-  i32.const 0
- )
  (func $managed-cast/Cat#meow (type $i32_=>_none) (param $this i32)
   nop
  )
@@ -2284,8 +2239,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $animal
   local.tee $1
-  i32.const 3
-  call $~lib/rt/__instanceof
+  call $~instanceof|managed-cast/Cat
   if (result i32)
    local.get $1
   else
@@ -2322,10 +2276,12 @@
   global.get $~lib/memory/__stack_pointer
   local.get $animal
   local.tee $1
+  i32.eqz
   if (result i32)
+   i32.const 0
+  else
    local.get $1
-   i32.const 3
-   call $~lib/rt/__instanceof
+   call $~instanceof|managed-cast/Cat
    if (result i32)
     local.get $1
    else
@@ -2336,8 +2292,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-  else
-   i32.const 0
   end
   local.tee $maybeCat
   i32.store $0
@@ -2402,6 +2356,21 @@
   drop
   i32.const 0
   drop
+ )
+ (func $~instanceof|managed-cast/Cat (type $i32_=>_i32) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $is_instance
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 3
+   i32.eq
+   br_if $is_instance
+   i32.const 0
+   return
+  end
+  i32.const 1
  )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
@@ -2514,8 +2483,7 @@
   i32.store $0
   local.get $animal
   local.tee $1
-  i32.const 3
-  call $~lib/rt/__instanceof
+  call $~instanceof|managed-cast/Cat
   if (result i32)
    local.get $1
   else
@@ -2565,8 +2533,7 @@
   local.tee $2
   i32.store $0 offset=4
   local.get $2
-  i32.const 3
-  call $~lib/rt/__instanceof
+  call $~instanceof|managed-cast/Cat
   if (result i32)
    local.get $2
   else

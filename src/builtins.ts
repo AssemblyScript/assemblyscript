@@ -82,7 +82,6 @@ import {
   FunctionPrototype,
   Global,
   DecoratorFlags,
-  ClassPrototype,
   Class,
   PropertyPrototype
 } from "./program";
@@ -10456,66 +10455,6 @@ export function compileRTTI(compiler: Compiler): void {
   } else {
     module.addGlobal(BuiltinNames.rtti_base, TypeRef.I32, false, module.i32(i64_low(segment.offset)));
   }
-}
-
-/** Compiles a class-specific instanceof helper, checking a ref against all concrete instances. */
-export function compileClassInstanceOf(compiler: Compiler, prototype: ClassPrototype): void {
-  let module = compiler.module;
-  let sizeTypeRef = compiler.options.sizeTypeRef;
-  let instanceofInstance = assert(prototype.program.instanceofInstance);
-  compiler.compileFunction(instanceofInstance);
-
-  let stmts = new Array<ExpressionRef>();
-
-  // if (!ref) return false
-  stmts.push(
-    module.if(
-      module.unary(
-        sizeTypeRef == TypeRef.I64
-          ? UnaryOp.EqzI64
-          : UnaryOp.EqzI32,
-        module.local_get(0, sizeTypeRef)
-      ),
-      module.return(
-        module.i32(0)
-      )
-    )
-  );
-
-  // if (__instanceof(ref, ID[i])) return true
-  let instances = prototype.instances;
-  if (instances && instances.size > 0) {
-    // TODO: for (let instance of instances.values()) {
-    for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
-      let instance = unchecked(_values[i]);
-      stmts.push(
-        module.if(
-          module.call(instanceofInstance.internalName, [
-            module.local_get(0, sizeTypeRef),
-            module.i32(instance.id)
-          ], TypeRef.I32),
-          module.return(
-            module.i32(1)
-          )
-        )
-      );
-    }
-  }
-
-  // return false
-  stmts.push(
-    module.return(
-      module.i32(0)
-    )
-  );
-
-  module.addFunction(
-    `${prototype.internalName}~instanceof`,
-    sizeTypeRef,
-    TypeRef.I32,
-    null,
-    module.flatten(stmts)
-  );
 }
 
 // Helpers

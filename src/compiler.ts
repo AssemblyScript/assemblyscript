@@ -10,8 +10,7 @@ import {
   function_builtins,
   compileVisitGlobals,
   compileVisitMembers,
-  compileRTTI,
-  compileClassInstanceOf
+  compileRTTI
 } from "./builtins";
 
 import {
@@ -418,8 +417,8 @@ export class Compiler extends DiagnosticEmitter {
   inlineStack: Function[] = [];
   /** Lazily compiled functions. */
   lazyFunctions: Set<Function> = new Set();
-  /** Pending class-specific instanceof helpers. */
-  pendingClassInstanceOf: Set<ClassPrototype> = new Set();
+  /** Pending instanceof helpers and their names. */
+  pendingInstanceOf: Map<DeclaredElement, string> = new Map();
   /** Stubs to defer calls to overridden methods. */
   overrideStubs: Set<Function> = new Set();
   /** Elements currently undergoing compilation. */
@@ -554,11 +553,17 @@ export class Compiler extends DiagnosticEmitter {
       }
     } while (lazyFunctions.size);
 
-    // compile pending class-specific instanceof helpers
-    // TODO: for (let prototype of this.pendingClassInstanceOf.values()) {
-    for (let _values = Set_values(this.pendingClassInstanceOf), i = 0, k = _values.length; i < k; ++i) {
-      let prototype = unchecked(_values[i]);
-      compileClassInstanceOf(this, prototype);
+    // compile pending instanceof helpers
+    for (let _keys = Map_keys(this.pendingInstanceOf), i = 0, k = _keys.length; i < k; ++i) {
+      let elem = _keys[i];
+      let name = assert(this.pendingInstanceOf.get(elem));
+      if (elem.kind == ElementKind.Class) {
+        this.finalizeInstanceOf(<Class>elem, name);
+      } else if (elem.kind == ElementKind.ClassPrototype) {
+        this.finalizeAnyInstanceOf(<ClassPrototype>elem, name);
+      } else {
+        assert(false);
+      }
     }
 
     // set up override stubs
@@ -7587,13 +7592,16 @@ export class Compiler extends DiagnosticEmitter {
 
       // downcast - check dynamically
       if (expectedType.isAssignableTo(actualType)) {
-        let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
+          if (this.options.pedantic) {
+            this.pedantic(
+              DiagnosticCode.Expression_compiles_to_a_dynamic_check_at_runtime,
+              expression.range
+            );
+          }
           let temp = flow.getTempLocal(actualType);
           let tempIndex = temp.index;
-          let instanceofInstance = assert(program.instanceofInstance);
-          this.compileFunction(instanceofInstance);
-          let ret = module.if(
+          return module.if(
             module.unary(
               sizeTypeRef == TypeRef.I64
                 ? UnaryOp.EqzI64
@@ -7601,18 +7609,10 @@ export class Compiler extends DiagnosticEmitter {
               module.local_tee(tempIndex, expr, actualType.isManaged),
             ),
             module.i32(0),
-            this.makeCallDirect(instanceofInstance, [
-              module.local_get(tempIndex, sizeTypeRef),
-              module.i32(expectedType.classReference!.id)
-            ], expression)
+            module.call(this.prepareInstanceOf(expectedType.classReference!), [
+              module.local_get(tempIndex, sizeTypeRef)
+            ], TypeRef.I32)
           );
-          if (this.options.pedantic) {
-            this.pedantic(
-              DiagnosticCode.Expression_compiles_to_a_dynamic_check_at_runtime,
-              expression.range
-            );
-          }
-          return ret;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -7630,16 +7630,10 @@ export class Compiler extends DiagnosticEmitter {
 
       // downcast - check dynamically
       } else if (expectedType.isAssignableTo(actualType)) {
-        let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
-          // FIXME: the temp local and the if can be removed here once flows
-          // perform null checking, which would error earlier when checking
-          // uninitialized (thus zero) `let a: A` to be an instance of something.
           let temp = flow.getTempLocal(actualType);
           let tempIndex = temp.index;
-          let instanceofInstance = assert(program.instanceofInstance);
-          this.compileFunction(instanceofInstance);
-          let ret = module.if(
+          return module.if(
             module.unary(
               sizeTypeRef == TypeRef.I64
                 ? UnaryOp.EqzI64
@@ -7647,12 +7641,10 @@ export class Compiler extends DiagnosticEmitter {
               module.local_tee(tempIndex, expr, actualType.isManaged),
             ),
             module.i32(0),
-            this.makeCallDirect(instanceofInstance, [
-              module.local_get(tempIndex, sizeTypeRef),
-              module.i32(expectedType.classReference!.id)
-            ], expression)
+            module.call(this.prepareInstanceOf(expectedType.classReference!), [
+              module.local_get(tempIndex, sizeTypeRef)
+            ], TypeRef.I32)
           );
-          return ret;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -7664,6 +7656,114 @@ export class Compiler extends DiagnosticEmitter {
 
     // false
     return module.maybeDropCondition(expr, module.i32(0));
+  }
+
+  /** Prepares the instanceof helper for the given class or interface instance. */
+  private prepareInstanceOf(instance: Class): string {
+    let name = `~instanceof|${instance.internalName}`;
+    let pending = this.pendingInstanceOf;
+    if (pending.has(instance)) return assert(pending.get(instance));
+    pending.set(instance, name);
+    let module = this.module;
+    module.addFunction(name, this.options.sizeTypeRef, TypeRef.I32, null,
+      module.unreachable()
+    );
+    return name;
+  }
+
+  /** Finalizes the instanceof helper of the given class or interface instance. */
+  private finalizeInstanceOf(
+    /** Class to finalize the helper for. */
+    instance: Class,
+    /** Name of the helper function. */
+    name: string
+  ): void {
+    let program = this.program;
+    let module = this.module;
+    let sizeType = this.options.sizeTypeRef;
+    let stmts = new Array<ExpressionRef>();
+    let pending = this.pendingInstanceOf;
+    // (block $is_instance
+    //  (br_if $is_instance (i32.eq (i32.load(...) (ID)))
+    //  ...
+    //  (br_if $is_instance (call $~instanceof|X (local.get $0)))
+    //  ...
+    //  (return (i32.const 0))
+    // )
+    // (i32.const 1)
+    stmts.push(
+      module.br("is_instance",
+        module.binary(BinaryOp.EqI32,
+          module.load(4, false,
+            module.binary(
+              sizeType == TypeRef.I64
+                ? BinaryOp.SubI64
+                : BinaryOp.SubI32,
+              module.local_get(0, sizeType),
+              module.i32(
+                program.totalOverhead - program.OBJECTInstance.offsetof("rtId")
+              )
+            ),
+            TypeRef.I32
+          ),
+          module.i32(instance.id)
+        )
+      )
+    );
+    let extendees = instance.extendees;
+    if (extendees) {
+      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+        let extendee = _values[i];
+        let extendeeName: string;
+        if (pending.has(extendee)) {
+          extendeeName = assert(pending.get(extendee));
+        } else {
+          extendeeName = this.prepareInstanceOf(extendee);
+          pending.set(extendee, extendeeName);
+          this.finalizeInstanceOf(extendee, extendeeName);
+        }
+        stmts.push(
+          module.br("is_instance",
+            module.call(extendeeName, [
+              module.local_get(0, sizeType)
+            ], TypeRef.I32)
+          )
+        );
+      }
+    }
+    let implementers = instance.implementers;
+    if (implementers) {
+      for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
+        let implementer = _values[i];
+        let implementerName: string;
+        if (pending.has(implementer)) {
+          implementerName = assert(pending.get(implementer));
+        } else {
+          implementerName = this.prepareInstanceOf(implementer);
+          pending.set(implementer, implementerName);
+          this.finalizeInstanceOf(implementer, implementerName);
+        }
+        stmts.push(
+          module.br("is_instance",
+            module.call(implementerName, [
+              module.local_get(0, sizeType)
+            ], TypeRef.I32)
+          )
+        );
+      }
+    }
+    stmts.push(
+      module.return(
+        module.i32(0)
+      )
+    );
+    stmts[0] = module.block("is_instance", stmts, TypeRef.None);
+    stmts.length = 1;
+    stmts.push(
+      module.i32(1)
+    ); 
+    module.removeFunction(name);
+    module.addFunction(name, sizeType, TypeRef.I32, [ TypeRef.I32 ], module.block(null, stmts, TypeRef.I32));
   }
 
   private makeInstanceofClass(expression: InstanceOfExpression, prototype: ClassPrototype): ExpressionRef {
@@ -7698,13 +7798,88 @@ export class Compiler extends DiagnosticEmitter {
 
       // dynamic check against all possible concrete ids
       } else if (prototype.extends(classReference.prototype)) {
-        this.pendingClassInstanceOf.add(prototype);
-        return module.call(`${prototype.internalName}~instanceof`, [ expr ], TypeRef.I32);
+        let flow = this.currentFlow;
+        let temp = flow.getTempLocal(actualType);
+        let tempIndex = temp.index;
+        // !(t = expr) ? 0 : anyinstanceof(t)
+        return module.if(
+          module.unary(
+            sizeTypeRef == TypeRef.I64
+              ? UnaryOp.EqzI64
+              : UnaryOp.EqzI32,
+            module.local_tee(tempIndex, expr, actualType.isManaged),
+          ),
+          module.i32(0),
+          module.call(this.prepareAnyInstanceOf(prototype), [
+            module.local_get(tempIndex, sizeTypeRef)
+          ], TypeRef.I32)
+        );
       }
     }
 
     // false
     return module.maybeDropCondition(expr, module.i32(0));
+  }
+
+  /** Prepares the instanceof helper for the given class or interface prototype. */
+  private prepareAnyInstanceOf(prototype: ClassPrototype): string {
+    let name = `~anyinstanceof|${prototype.internalName}`;
+    let pending = this.pendingInstanceOf;
+    if (pending.has(prototype)) return assert(pending.get(prototype));
+    pending.set(prototype, name);
+    let module = this.module;
+    module.addFunction(name, this.options.sizeTypeRef, TypeRef.I32, null,
+      module.unreachable()
+    );
+    return name;
+  }
+
+  /** Finalizes the instanceof helper of the given class prototype. */
+  private finalizeAnyInstanceOf(prototype: ClassPrototype, name: string): void {
+    let module = this.module;
+    let sizeType = this.options.sizeTypeRef;
+    let stmts = new Array<ExpressionRef>();
+    let pending = this.pendingInstanceOf; 
+    let instances = prototype.instances;
+    // (block $is_instance
+    //  ...
+    //  (br_if $is_instance (call $~instanceof|X (local.get $0)))
+    //  ...
+    //  (return (i32.const 0))
+    // )
+    // (i32.const 1)
+    if (instances) {
+      for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+        let instance = _values[i];
+        let instanceName: string;
+        if (pending.has(instance)) {
+          instanceName = assert(pending.get(instance));
+        } else {
+          instanceName = this.prepareInstanceOf(instance);
+          pending.set(instance, instanceName);
+          this.finalizeInstanceOf(instance, instanceName);
+        }
+        stmts.push(
+          module.br("is_instance",
+            module.call(instanceName, [
+              module.local_get(0, sizeType)
+            ], TypeRef.I32)
+          )
+        );
+      }
+    }
+    stmts.push(
+      module.return(
+        module.i32(0)
+      )
+    );
+    stmts[0] = module.block("is_instance", stmts, TypeRef.None);
+    stmts.length = 1;
+    stmts.push(
+      module.i32(1)
+    );
+    module.removeFunction(name);
+    module.addFunction(name, sizeType, TypeRef.I32, null, module.block(null, stmts, TypeRef.I32));
   }
 
   private compileLiteralExpression(
@@ -10238,37 +10413,38 @@ export class Compiler extends DiagnosticEmitter {
     let flow = this.currentFlow;
     let temp = flow.getTempLocal(type);
     let tempIndex = temp.index;
-    let instanceofInstance = this.program.instanceofInstance;
-    assert(this.compileFunction(instanceofInstance));
 
     let staticAbortCallExpr = this.makeStaticAbort(
-      this.ensureStaticString("unexpected downcast"),
+      this.ensureStaticString("invalid downcast"),
       reportNode
     ); // TODO: throw
 
     if (!toType.isNullableReference || flow.isNonnull(expr, type)) {
       // Simplify if the value cannot be `null`. If toType is non-nullable, a
       // null-check would have been emitted separately so is not necessary here.
+      // instanceof(t = expr) ? t : abort()
       expr = module.if(
-        module.call(instanceofInstance.internalName, [
-          module.local_tee(tempIndex, expr, type.isManaged),
-          module.i32(toType.classReference!.id)
+        module.call(this.prepareInstanceOf(toType.classReference!), [
+          module.local_tee(tempIndex, expr, type.isManaged)
         ], TypeRef.I32),
         module.local_get(tempIndex, type.toRef()),
         staticAbortCallExpr
       );
     } else {
+      // !(t = expr) ? 0 : instanceof(t) ? t : abort()
       expr = module.if(
-        module.local_tee(tempIndex, expr, type.isManaged),
+        module.unary(
+          UnaryOp.EqzI32,
+          module.local_tee(tempIndex, expr, type.isManaged)
+        ),
+        module.usize(0),
         module.if(
-          module.call(instanceofInstance.internalName, [
+          module.call(this.prepareInstanceOf(toType.classReference!), [
             module.local_get(tempIndex, type.toRef()),
-            module.i32(toType.classReference!.id)
           ], TypeRef.I32),
           module.local_get(tempIndex, type.toRef()),
           staticAbortCallExpr
-        ),
-        module.usize(0)
+        )
       );
     }
     this.currentType = toType;

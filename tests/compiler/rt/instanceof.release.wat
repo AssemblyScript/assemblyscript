@@ -1337,34 +1337,26 @@
   i32.store $0
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|0
-      i32.const 1
-      local.get $0
-      i32.const 4
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|0
-     end
+   block $__inlined_func$~instanceof|rt/instanceof/Cat (result i32)
+    block $is_instance
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 4
+     i32.eq
+     br_if $is_instance
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 5
+     i32.eq
+     br_if $is_instance
+     i32.const 0
+     br $__inlined_func$~instanceof|rt/instanceof/Cat
     end
-    i32.const 0
+    i32.const 1
    end
   else
    i32.const 0
@@ -1383,35 +1375,12 @@
   i32.store $0 offset=4
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof6 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|09
-      i32.const 1
-      local.get $0
-      i32.const 5
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof6
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|09
-     end
-    end
-    i32.const 0
-   end
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 5
+   i32.eq
   else
    i32.const 0
   end
@@ -1429,34 +1398,26 @@
   i32.store $0 offset=8
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof11 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|014
-      i32.const 1
-      local.get $0
-      i32.const 4
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof11
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|014
-     end
+   block $__inlined_func$~instanceof|rt/instanceof/Cat8 (result i32)
+    block $is_instance9
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 4
+     i32.eq
+     br_if $is_instance9
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 5
+     i32.eq
+     br_if $is_instance9
+     i32.const 0
+     br $__inlined_func$~instanceof|rt/instanceof/Cat8
     end
-    i32.const 0
+    i32.const 1
    end
   else
    i32.const 0
@@ -1476,35 +1437,12 @@
   i32.store $0 offset=12
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof16 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|019
-      i32.const 1
-      local.get $0
-      i32.const 5
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof16
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|019
-     end
-    end
-    i32.const 0
-   end
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 5
+   i32.eq
   else
    i32.const 0
   end
@@ -1522,34 +1460,26 @@
   i32.store $0 offset=16
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof21 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|024
-      i32.const 1
-      local.get $0
-      i32.const 4
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof21
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|024
-     end
+   block $__inlined_func$~instanceof|rt/instanceof/Cat12 (result i32)
+    block $is_instance13
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 4
+     i32.eq
+     br_if $is_instance13
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 5
+     i32.eq
+     br_if $is_instance13
+     i32.const 0
+     br $__inlined_func$~instanceof|rt/instanceof/Cat12
     end
-    i32.const 0
+    i32.const 1
    end
   else
    i32.const 0
@@ -1569,35 +1499,12 @@
   i32.store $0 offset=20
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof26 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|029
-      i32.const 1
-      local.get $0
-      i32.const 5
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof26
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|029
-     end
-    end
-    i32.const 0
-   end
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 5
+   i32.eq
   else
    i32.const 0
   end
@@ -1634,34 +1541,26 @@
   i32.store $0 offset=24
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof31 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|034
-      i32.const 1
-      local.get $0
-      i32.const 4
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof31
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|034
-     end
+   block $__inlined_func$~instanceof|rt/instanceof/Cat16 (result i32)
+    block $is_instance17
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 4
+     i32.eq
+     br_if $is_instance17
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 5
+     i32.eq
+     br_if $is_instance17
+     i32.const 0
+     br $__inlined_func$~instanceof|rt/instanceof/Cat16
     end
-    i32.const 0
+    i32.const 1
    end
   else
    i32.const 0
@@ -1680,35 +1579,12 @@
   i32.store $0 offset=28
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof36 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|039
-      i32.const 1
-      local.get $0
-      i32.const 5
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof36
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|039
-     end
-    end
-    i32.const 0
-   end
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 5
+   i32.eq
   else
    i32.const 0
   end
@@ -1736,34 +1612,26 @@
   i32.store $0 offset=32
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof41 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|044
-      i32.const 1
-      local.get $0
-      i32.const 4
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof41
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|044
-     end
+   block $__inlined_func$~instanceof|rt/instanceof/Cat20 (result i32)
+    block $is_instance21
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 4
+     i32.eq
+     br_if $is_instance21
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 5
+     i32.eq
+     br_if $is_instance21
+     i32.const 0
+     br $__inlined_func$~instanceof|rt/instanceof/Cat20
     end
-    i32.const 0
+    i32.const 1
    end
   else
    i32.const 0
@@ -1783,35 +1651,12 @@
   i32.store $0 offset=36
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof46 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|049
-      i32.const 1
-      local.get $0
-      i32.const 5
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof46
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|049
-     end
-    end
-    i32.const 0
-   end
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 5
+   i32.eq
   else
    i32.const 0
   end
@@ -1839,34 +1684,26 @@
   i32.store $0 offset=40
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof51 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|054
-      i32.const 1
-      local.get $0
-      i32.const 4
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof51
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|054
-     end
+   block $__inlined_func$~instanceof|rt/instanceof/Cat26 (result i32)
+    block $is_instance27
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 4
+     i32.eq
+     br_if $is_instance27
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load $0
+     i32.const 5
+     i32.eq
+     br_if $is_instance27
+     i32.const 0
+     br $__inlined_func$~instanceof|rt/instanceof/Cat26
     end
-    i32.const 0
+    i32.const 1
    end
   else
    i32.const 0
@@ -1886,35 +1723,12 @@
   i32.store $0 offset=44
   local.get $0
   if (result i32)
-   block $__inlined_func$~lib/rt/__instanceof56 (result i32)
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load $0 offset=12
-    local.tee $0
-    i32.const 1504
-    i32.load $0
-    i32.le_u
-    if
-     loop $do-loop|059
-      i32.const 1
-      local.get $0
-      i32.const 5
-      i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof56
-      drop
-      local.get $0
-      i32.const 3
-      i32.shl
-      i32.const 1508
-      i32.add
-      i32.load $0 offset=4
-      local.tee $0
-      br_if $do-loop|059
-     end
-    end
-    i32.const 0
-   end
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 5
+   i32.eq
   else
    i32.const 0
   end

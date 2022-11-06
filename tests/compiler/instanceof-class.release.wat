@@ -1241,235 +1241,6 @@
   memory.fill $0
   local.get $0
  )
- (func $start:instanceof-class (type $none_=>_none)
-  (local $0 i32)
-  (local $1 i32)
-  memory.size $0
-  i32.const 16
-  i32.shl
-  i32.const 34332
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 1172
-  i32.const 1168
-  i32.store $0
-  i32.const 1176
-  i32.const 1168
-  i32.store $0
-  i32.const 1168
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 1204
-  i32.const 1200
-  i32.store $0
-  i32.const 1208
-  i32.const 1200
-  i32.store $0
-  i32.const 1200
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 1348
-  i32.const 1344
-  i32.store $0
-  i32.const 1352
-  i32.const 1344
-  i32.store $0
-  i32.const 1344
-  global.set $~lib/rt/itcms/fromSpace
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1564
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   i32.const 0
-   i32.store $0
-   local.get $0
-   i32.const 3
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store $0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $1
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1564
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store $0
-   local.get $0
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    call $~lib/rt/itcms/__new
-    local.tee $0
-    i32.store $0
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $1
-   local.get $0
-   i32.store $0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $0
-   global.set $instanceof-class/a
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1564
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   i32.const 0
-   i32.store $0
-   local.get $0
-   i32.const 6
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store $0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $1
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1564
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store $0
-   local.get $0
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 5
-    call $~lib/rt/itcms/__new
-    local.tee $0
-    i32.store $0
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $1
-   local.get $0
-   i32.store $0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $0
-   global.set $instanceof-class/b
-   block $__inlined_func$instanceof-class/Child~instanceof (result i32)
-    i32.const 0
-    global.get $instanceof-class/b
-    local.tee $1
-    i32.eqz
-    br_if $__inlined_func$instanceof-class/Child~instanceof
-    drop
-    i32.const 1
-    block $__inlined_func$~lib/rt/__instanceof (result i32)
-     local.get $1
-     i32.const 20
-     i32.sub
-     i32.load $0 offset=12
-     local.tee $0
-     i32.const 1504
-     i32.load $0
-     i32.le_u
-     if
-      loop $do-loop|0
-       i32.const 1
-       local.get $0
-       i32.const 3
-       i32.eq
-       br_if $__inlined_func$~lib/rt/__instanceof
-       drop
-       local.get $0
-       i32.const 3
-       i32.shl
-       i32.const 1508
-       i32.add
-       i32.load $0 offset=4
-       local.tee $0
-       br_if $do-loop|0
-      end
-     end
-     i32.const 0
-    end
-    br_if $__inlined_func$instanceof-class/Child~instanceof
-    drop
-    i32.const 1
-    block $__inlined_func$~lib/rt/__instanceof9 (result i32)
-     local.get $1
-     i32.const 20
-     i32.sub
-     i32.load $0 offset=12
-     local.tee $0
-     i32.const 1504
-     i32.load $0
-     i32.le_u
-     if
-      loop $do-loop|012
-       i32.const 1
-       local.get $0
-       i32.const 6
-       i32.eq
-       br_if $__inlined_func$~lib/rt/__instanceof9
-       drop
-       local.get $0
-       i32.const 3
-       i32.shl
-       i32.const 1508
-       i32.add
-       i32.load $0 offset=4
-       local.tee $0
-       br_if $do-loop|012
-      end
-     end
-     i32.const 0
-    end
-    br_if $__inlined_func$instanceof-class/Child~instanceof
-    drop
-    i32.const 0
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1456
-    i32.const 17
-    i32.const 1
-    call $~lib/builtins/abort
-    unreachable
-   end
-   return
-  end
-  i32.const 34352
-  i32.const 34400
-  i32.const 1
-  i32.const 1
-  call $~lib/builtins/abort
-  unreachable
- )
  (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
   block $invalid
    block $instanceof-class/Child<f32>
@@ -1509,7 +1280,208 @@
   unreachable
  )
  (func $~start (type $none_=>_none)
-  call $start:instanceof-class
+  (local $0 i32)
+  (local $1 i32)
+  block $__inlined_func$start:instanceof-class
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   block $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1564
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
+    i32.const 0
+    i32.store $0
+    memory.size $0
+    i32.const 16
+    i32.shl
+    i32.const 34332
+    i32.sub
+    i32.const 1
+    i32.shr_u
+    global.set $~lib/rt/itcms/threshold
+    i32.const 1172
+    i32.const 1168
+    i32.store $0
+    i32.const 1176
+    i32.const 1168
+    i32.store $0
+    i32.const 1168
+    global.set $~lib/rt/itcms/pinSpace
+    i32.const 1204
+    i32.const 1200
+    i32.store $0
+    i32.const 1208
+    i32.const 1200
+    i32.store $0
+    i32.const 1200
+    global.set $~lib/rt/itcms/toSpace
+    i32.const 1348
+    i32.const 1344
+    i32.store $0
+    i32.const 1352
+    i32.const 1344
+    i32.store $0
+    i32.const 1344
+    global.set $~lib/rt/itcms/fromSpace
+    local.get $0
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1564
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
+    i32.const 0
+    i32.store $0
+    local.get $0
+    i32.const 3
+    call $~lib/rt/itcms/__new
+    local.tee $0
+    i32.store $0
+    global.get $~lib/memory/__stack_pointer
+    local.tee $1
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1564
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 0
+    i32.store $0
+    local.get $0
+    i32.eqz
+    if
+     global.get $~lib/memory/__stack_pointer
+     i32.const 4
+     call $~lib/rt/itcms/__new
+     local.tee $0
+     i32.store $0
+    end
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $1
+    local.get $0
+    i32.store $0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $0
+    global.set $instanceof-class/a
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1564
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    local.tee $0
+    i32.const 0
+    i32.store $0
+    local.get $0
+    i32.const 6
+    call $~lib/rt/itcms/__new
+    local.tee $0
+    i32.store $0
+    global.get $~lib/memory/__stack_pointer
+    local.tee $1
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1564
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 0
+    i32.store $0
+    local.get $0
+    i32.eqz
+    if
+     global.get $~lib/memory/__stack_pointer
+     i32.const 5
+     call $~lib/rt/itcms/__new
+     local.tee $0
+     i32.store $0
+    end
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $1
+    local.get $0
+    i32.store $0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $0
+    global.set $instanceof-class/b
+    global.get $~lib/memory/__stack_pointer
+    global.get $instanceof-class/b
+    local.tee $0
+    i32.store $0
+    local.get $0
+    if (result i32)
+     block $__inlined_func$~anyinstanceof|instanceof-class/Child (result i32)
+      block $is_instance
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load $0
+       i32.const 3
+       i32.eq
+       br_if $is_instance
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load $0
+       i32.const 6
+       i32.eq
+       br_if $is_instance
+       i32.const 0
+       br $__inlined_func$~anyinstanceof|instanceof-class/Child
+      end
+      i32.const 1
+     end
+    else
+     i32.const 0
+    end
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 1456
+     i32.const 17
+     i32.const 1
+     call $~lib/builtins/abort
+     unreachable
+    end
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    br $__inlined_func$start:instanceof-class
+   end
+   i32.const 34352
+   i32.const 34400
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)

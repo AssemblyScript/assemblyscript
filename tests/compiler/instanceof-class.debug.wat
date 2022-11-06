@@ -2196,6 +2196,15 @@
   local.get $ptr
  )
  (func $start:instanceof-class (type $none_=>_none)
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
   memory.size $0
   i32.const 16
   i32.shl
@@ -2228,8 +2237,18 @@
   global.set $instanceof-class/b
   i32.const 1
   drop
+  global.get $~lib/memory/__stack_pointer
   global.get $instanceof-class/b
-  call $instanceof-class/Child~instanceof
+  local.tee $0
+  i32.store $0
+  local.get $0
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $0
+   call $~anyinstanceof|instanceof-class/Child
+  end
   i32.eqz
   if
    i32.const 0
@@ -2242,75 +2261,53 @@
   i32.const 0
   i32.eqz
   drop
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/rt/common/OBJECT#get:rtId (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
- )
- (func $~lib/shared/typeinfo/Typeinfo#get:base (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=4
- )
- (func $~lib/rt/__instanceof (type $i32_i32_=>_i32) (param $ptr i32) (param $classId i32) (result i32)
-  (local $id i32)
-  (local $rttiBase i32)
-  local.get $ptr
-  i32.const 20
-  i32.sub
-  call $~lib/rt/common/OBJECT#get:rtId
-  local.set $id
-  global.get $~lib/rt/__rtti_base
-  local.set $rttiBase
-  local.get $id
-  local.get $rttiBase
-  i32.load $0
-  i32.le_u
-  if
-   loop $do-loop|0
-    local.get $id
-    local.get $classId
-    i32.eq
-    if
-     i32.const 1
-     return
-    end
-    local.get $rttiBase
-    i32.const 4
-    i32.add
-    local.get $id
-    i32.const 8
-    i32.mul
-    i32.add
-    call $~lib/shared/typeinfo/Typeinfo#get:base
-    local.tee $id
-    br_if $do-loop|0
-   end
-  end
-  i32.const 0
- )
- (func $instanceof-class/Child~instanceof (type $i32_=>_i32) (param $0 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
+ (func $~instanceof|instanceof-class/Child<i32> (type $i32_=>_i32) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $is_instance
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 3
+   i32.eq
+   br_if $is_instance
    i32.const 0
    return
   end
-  local.get $0
-  i32.const 3
-  call $~lib/rt/__instanceof
-  if
-   i32.const 1
+  i32.const 1
+ )
+ (func $~instanceof|instanceof-class/Child<f32> (type $i32_=>_i32) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $is_instance
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   i32.const 6
+   i32.eq
+   br_if $is_instance
+   i32.const 0
    return
   end
-  local.get $0
-  i32.const 6
-  call $~lib/rt/__instanceof
-  if
-   i32.const 1
+  i32.const 1
+ )
+ (func $~anyinstanceof|instanceof-class/Child (type $i32_=>_i32) (param $0 i32) (result i32)
+  block $is_instance
+   local.get $0
+   call $~instanceof|instanceof-class/Child<i32>
+   br_if $is_instance
+   local.get $0
+   call $~instanceof|instanceof-class/Child<f32>
+   br_if $is_instance
+   i32.const 0
    return
   end
-  i32.const 0
-  return
+  i32.const 1
  )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
