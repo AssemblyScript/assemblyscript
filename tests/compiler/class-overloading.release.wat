@@ -1190,17 +1190,17 @@
   call $~lib/rt/tlsf/removeBlock
   local.get $1
   i32.load $0
-  local.tee $4
+  local.tee $3
   i32.const -4
   i32.and
   i32.const 28
   i32.sub
-  local.tee $3
+  local.tee $4
   i32.const 16
   i32.ge_u
   if
    local.get $1
-   local.get $4
+   local.get $3
    i32.const 2
    i32.and
    i32.const 28
@@ -1209,19 +1209,19 @@
    local.get $1
    i32.const 32
    i32.add
-   local.tee $4
-   local.get $3
+   local.tee $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store $0
    local.get $2
-   local.get $4
+   local.get $3
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $1
-   local.get $4
+   local.get $3
    i32.const -2
    i32.and
    i32.store $0
@@ -1404,7 +1404,7 @@
   local.get $3
   i32.eqz
  )
- (func $class-overloading/A#a<i32>@virtual (type $i32_=>_none) (param $0 i32)
+ (func $class-overloading/A#a<i32>@override (type $i32_=>_none) (param $0 i32)
   block $default
    block $case2
     block $case1
@@ -1611,7 +1611,7 @@
    local.tee $0
    i32.store $0
    local.get $0
-   call $class-overloading/A#a<i32>@virtual
+   call $class-overloading/A#a<i32>@override
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/which
    local.tee $0
@@ -1637,7 +1637,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#b@virtual
+   block $__inlined_func$class-overloading/A#b@override
     block $default
      block $case2
       block $case1
@@ -1652,15 +1652,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual
+       br $__inlined_func$class-overloading/A#b@override
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual
+      br $__inlined_func$class-overloading/A#b@override
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual
+     br $__inlined_func$class-overloading/A#b@override
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -1691,7 +1691,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#get:c@virtual
+   block $__inlined_func$class-overloading/A#get:c@override
     block $default6
      block $case27
       block $case18
@@ -1706,15 +1706,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@virtual
+       br $__inlined_func$class-overloading/A#get:c@override
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@virtual
+      br $__inlined_func$class-overloading/A#get:c@override
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@virtual
+     br $__inlined_func$class-overloading/A#get:c@override
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -1745,7 +1745,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#b@virtual10
+   block $__inlined_func$class-overloading/A#b@override10
     block $default11
      block $case212
       block $case113
@@ -1760,15 +1760,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual10
+       br $__inlined_func$class-overloading/A#b@override10
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual10
+      br $__inlined_func$class-overloading/A#b@override10
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual10
+     br $__inlined_func$class-overloading/A#b@override10
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -1932,7 +1932,7 @@
    local.tee $0
    i32.store $0
    local.get $0
-   call $class-overloading/A#a<i32>@virtual
+   call $class-overloading/A#a<i32>@override
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/which
    local.tee $0
@@ -1958,7 +1958,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#b@virtual22
+   block $__inlined_func$class-overloading/A#b@override22
     block $default23
      block $case224
       block $case125
@@ -1973,15 +1973,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual22
+       br $__inlined_func$class-overloading/A#b@override22
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual22
+      br $__inlined_func$class-overloading/A#b@override22
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual22
+     br $__inlined_func$class-overloading/A#b@override22
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2012,7 +2012,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#get:c@virtual31
+   block $__inlined_func$class-overloading/A#get:c@override31
     block $default32
      block $case233
       block $case134
@@ -2027,15 +2027,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@virtual31
+       br $__inlined_func$class-overloading/A#get:c@override31
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@virtual31
+      br $__inlined_func$class-overloading/A#get:c@override31
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@virtual31
+     br $__inlined_func$class-overloading/A#get:c@override31
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2064,7 +2064,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#b@virtual40
+   block $__inlined_func$class-overloading/A#b@override40
     block $default41
      block $case242
       block $case143
@@ -2079,15 +2079,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual40
+       br $__inlined_func$class-overloading/A#b@override40
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual40
+      br $__inlined_func$class-overloading/A#b@override40
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual40
+     br $__inlined_func$class-overloading/A#b@override40
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2122,7 +2122,7 @@
    local.tee $0
    i32.store $0
    local.get $0
-   call $class-overloading/A#a<i32>@virtual
+   call $class-overloading/A#a<i32>@override
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/which
    local.tee $0
@@ -2148,7 +2148,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#b@virtual49
+   block $__inlined_func$class-overloading/A#b@override49
     block $default50
      block $case251
       block $case152
@@ -2163,15 +2163,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual49
+       br $__inlined_func$class-overloading/A#b@override49
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual49
+      br $__inlined_func$class-overloading/A#b@override49
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual49
+     br $__inlined_func$class-overloading/A#b@override49
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2202,7 +2202,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#get:c@virtual58
+   block $__inlined_func$class-overloading/A#get:c@override58
     block $default59
      block $case260
       block $case161
@@ -2217,15 +2217,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@virtual58
+       br $__inlined_func$class-overloading/A#get:c@override58
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@virtual58
+      br $__inlined_func$class-overloading/A#get:c@override58
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@virtual58
+     br $__inlined_func$class-overloading/A#get:c@override58
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2254,7 +2254,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#b@virtual67
+   block $__inlined_func$class-overloading/A#b@override67
     block $default68
      block $case269
       block $case170
@@ -2269,15 +2269,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual67
+       br $__inlined_func$class-overloading/A#b@override67
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual67
+      br $__inlined_func$class-overloading/A#b@override67
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual67
+     br $__inlined_func$class-overloading/A#b@override67
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2337,7 +2337,7 @@
    local.tee $0
    i32.store $0
    local.get $0
-   call $class-overloading/A#a<i32>@virtual
+   call $class-overloading/A#a<i32>@override
    global.get $~lib/memory/__stack_pointer
    global.get $class-overloading/which
    local.tee $0
@@ -2363,7 +2363,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#b@virtual77
+   block $__inlined_func$class-overloading/A#b@override77
     block $default78
      block $case279
       block $case180
@@ -2378,15 +2378,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual77
+       br $__inlined_func$class-overloading/A#b@override77
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual77
+      br $__inlined_func$class-overloading/A#b@override77
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual77
+     br $__inlined_func$class-overloading/A#b@override77
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2417,7 +2417,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#get:c@virtual86
+   block $__inlined_func$class-overloading/A#get:c@override86
     block $default87
      block $case288
       block $case189
@@ -2432,15 +2432,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@virtual86
+       br $__inlined_func$class-overloading/A#get:c@override86
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@virtual86
+      br $__inlined_func$class-overloading/A#get:c@override86
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@virtual86
+     br $__inlined_func$class-overloading/A#get:c@override86
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2471,7 +2471,7 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A#b@virtual95
+   block $__inlined_func$class-overloading/A#b@override95
     block $default96
      block $case297
       block $case198
@@ -2486,15 +2486,15 @@
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual95
+       br $__inlined_func$class-overloading/A#b@override95
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual95
+      br $__inlined_func$class-overloading/A#b@override95
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual95
+     br $__inlined_func$class-overloading/A#b@override95
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2548,7 +2548,7 @@
    global.get $class-overloading/ia
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/IA#foo@virtual
+   block $__inlined_func$class-overloading/IA#foo@override
     block $default105
      block $case1106
       local.get $0
@@ -2567,11 +2567,11 @@
       end
       i32.const 1680
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/IA#foo@virtual
+      br $__inlined_func$class-overloading/IA#foo@override
      end
      i32.const 1712
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/IA#foo@virtual
+     br $__inlined_func$class-overloading/IA#foo@override
     end
     unreachable
    end
@@ -2624,7 +2624,7 @@
    global.get $class-overloading/ic
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/IA#foo@virtual109
+   block $__inlined_func$class-overloading/IA#foo@override109
     block $default110
      block $case1111
       local.get $0
@@ -2643,11 +2643,11 @@
       end
       i32.const 1680
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/IA#foo@virtual109
+      br $__inlined_func$class-overloading/IA#foo@override109
      end
      i32.const 1712
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/IA#foo@virtual109
+     br $__inlined_func$class-overloading/IA#foo@override109
     end
     unreachable
    end
@@ -2726,7 +2726,7 @@
    global.get $class-overloading/b2
    local.tee $0
    i32.store $0
-   block $__inlined_func$class-overloading/A2#foo@virtual
+   block $__inlined_func$class-overloading/A2#foo@override
     local.get $0
     i32.const 8
     i32.sub
@@ -2816,7 +2816,7 @@
      i32.const 4
      i32.add
      global.set $~lib/memory/__stack_pointer
-     br $__inlined_func$class-overloading/A2#foo@virtual
+     br $__inlined_func$class-overloading/A2#foo@override
     end
     i32.const 1744
     i32.const 1552

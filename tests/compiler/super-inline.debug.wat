@@ -2203,7 +2203,7 @@
   local.set $this|1
   i32.const 1
  )
- (func $super-inline/Foo#a@virtual (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $super-inline/Foo#a@override (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
   block $default
    block $case0
@@ -2339,7 +2339,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  call $super-inline/Foo#a@virtual
+  call $super-inline/Foo#a@override
   drop
   i32.const 0
   call $super-inline/Bar#constructor

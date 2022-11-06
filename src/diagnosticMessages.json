@@ -182,6 +182,8 @@
   "Expected {0} type arguments, but got {1}.": 2558,
   "Property '{0}' has no initializer and is not assigned in the constructor before 'this' is used or returned.": 2564,
   "Property '{0}' is used before being assigned.": 2565,
+  "'{0}' is defined as an accessor in class '{1}', but is overridden here in '{2}' as an instance property.": 2610,
+  "'{0}' is defined as a property in class '{1}', but is overridden here in '{2}' as an accessor.": 2611,
   "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
   "Constructor of class '{0}' is private and only accessible within the class declaration.": 2673,
   "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,

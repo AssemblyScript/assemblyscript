@@ -2387,7 +2387,7 @@
  (func $class-overloading-cast/B<f64,~lib/string/String>#foo (type $i32_f64_=>_i32) (param $this i32) (param $a f64) (result i32)
   i32.const 464
  )
- (func $class-overloading-cast/A<i32>#foo@virtual (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $class-overloading-cast/A<i32>#foo@override (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $default
    block $case1
@@ -2421,7 +2421,7 @@
   local.get $1
   call $class-overloading-cast/A<i32>#foo
  )
- (func $class-overloading-cast/A<f64>#foo@virtual (type $i32_f64_=>_i32) (param $0 i32) (param $1 f64) (result i32)
+ (func $class-overloading-cast/A<f64>#foo@override (type $i32_f64_=>_i32) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   block $default
    block $case0
@@ -2445,7 +2445,7 @@
   local.get $1
   call $class-overloading-cast/A<f64>#foo
  )
- (func $class-overloading-cast/A<~lib/string/String>#foo@virtual (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+ (func $class-overloading-cast/A<~lib/string/String>#foo@override (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 8
@@ -2624,7 +2624,7 @@
   i32.store $0 offset=8
   local.get $0
   i32.const 1
-  call $class-overloading-cast/A<i32>#foo@virtual
+  call $class-overloading-cast/A<i32>#foo@override
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2682,7 +2682,7 @@
   i32.store $0 offset=8
   local.get $0
   f64.const 1.1
-  call $class-overloading-cast/A<f64>#foo@virtual
+  call $class-overloading-cast/A<f64>#foo@override
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2719,7 +2719,7 @@
   local.get $0
   i32.store $0 offset=12
   local.get $0
-  call $class-overloading-cast/A<~lib/string/String>#foo@virtual
+  call $class-overloading-cast/A<~lib/string/String>#foo@override
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2753,7 +2753,7 @@
   local.get $0
   i32.store $0 offset=12
   local.get $0
-  call $class-overloading-cast/A<~lib/string/String>#foo@virtual
+  call $class-overloading-cast/A<~lib/string/String>#foo@override
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0

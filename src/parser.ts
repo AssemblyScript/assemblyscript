@@ -1889,8 +1889,8 @@ export class Parser extends DiagnosticEmitter {
     // inherit ambient status
     let flags = parent.flags & CommonFlags.Ambient;
 
-    // implemented methods are virtual
-    if (isInterface) flags |= CommonFlags.Virtual;
+    // interface methods are always overridden if used
+    if (isInterface) flags |= CommonFlags.Overridden;
 
     let declareStart = 0;
     let declareEnd = 0;

@@ -1142,17 +1142,17 @@
   call $~lib/rt/tlsf/removeBlock
   local.get $1
   i32.load $0
-  local.tee $4
+  local.tee $3
   i32.const -4
   i32.and
   i32.const 28
   i32.sub
-  local.tee $3
+  local.tee $4
   i32.const 16
   i32.ge_u
   if
    local.get $1
-   local.get $4
+   local.get $3
    i32.const 2
    i32.and
    i32.const 28
@@ -1161,19 +1161,19 @@
    local.get $1
    i32.const 32
    i32.add
-   local.tee $4
-   local.get $3
+   local.tee $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store $0
    local.get $2
-   local.get $4
+   local.get $3
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $1
-   local.get $4
+   local.get $3
    i32.const -2
    i32.and
    i32.store $0
@@ -1324,14 +1324,14 @@
    global.get $super-inline/foo
    local.tee $0
    i32.store $0
-   block $__inlined_func$super-inline/Foo#a@virtual
+   block $__inlined_func$super-inline/Foo#a@override
     local.get $0
     i32.const 8
     i32.sub
     i32.load $0
     i32.const 4
     i32.eq
-    br_if $__inlined_func$super-inline/Foo#a@virtual
+    br_if $__inlined_func$super-inline/Foo#a@override
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 4

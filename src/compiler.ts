@@ -420,8 +420,8 @@ export class Compiler extends DiagnosticEmitter {
   lazyFunctions: Set<Function> = new Set();
   /** Pending class-specific instanceof helpers. */
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
-  /** Virtually called stubs that may have overrides. */
-  virtualStubs: Set<Function> = new Set();
+  /** Stubs to defer calls to overridden methods. */
+  overrideStubs: Set<Function> = new Set();
   /** Elements currently undergoing compilation. */
   pendingElements: Set<Element> = new Set();
   /** Elements, that are module exports, already processed */
@@ -561,24 +561,24 @@ export class Compiler extends DiagnosticEmitter {
       compileClassInstanceOf(this, prototype);
     }
 
-    // set up virtual stubs
+    // set up override stubs
     let functionTable = this.functionTable;
-    let virtualStubs = this.virtualStubs;
+    let overrideStubs = this.overrideStubs;
     for (let i = 0, k = functionTable.length; i < k; ++i) {
       let instance = functionTable[i];
-      if (instance.is(CommonFlags.Virtual)) {
+      if (instance.is(CommonFlags.Overridden)) {
         assert(instance.is(CommonFlags.Instance));
-        functionTable[i] = this.ensureVirtualStub(instance); // includes varargs stub
+        functionTable[i] = this.ensureOverrideStub(instance); // includes varargs stub
       } else if (instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
         functionTable[i] = this.ensureVarargsStub(instance);
       }
     }
-    let virtualStubsSeen = new Set<Function>();
+    let overrrideStubsSeen = new Set<Function>();
     do {
-      // virtual stubs and overrides have cross-dependencies on each other, in that compiling
+      // override stubs and overrides have cross-dependencies on each other, in that compiling
       // either may discover the respective other. do this in a loop until no more are found.
       resolver.discoveredOverride = false;
-      for (let _values = Set_values(virtualStubs), i = 0, k = _values.length; i < k; ++i) {
+      for (let _values = Set_values(overrideStubs), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
         let overrideInstances = resolver.resolveOverrides(instance);
         if (overrideInstances) {
@@ -586,12 +586,12 @@ export class Compiler extends DiagnosticEmitter {
             this.compileFunction(overrideInstances[i]);
           }
         }
-        virtualStubsSeen.add(instance);
+        overrrideStubsSeen.add(instance);
       }
-    } while (virtualStubs.size > virtualStubsSeen.size || resolver.discoveredOverride);
-    virtualStubsSeen.clear();
-    for (let _values = Set_values(virtualStubs), i = 0, k = _values.length; i < k; ++i) {
-      this.finalizeVirtualStub(_values[i]);
+    } while (overrideStubs.size > overrrideStubsSeen.size || resolver.discoveredOverride);
+    overrrideStubsSeen.clear();
+    for (let _values = Set_values(overrideStubs), i = 0, k = _values.length; i < k; ++i) {
+      this.finalizeOverrideStub(_values[i]);
     }
 
     // finalize runtime features
@@ -3019,7 +3019,7 @@ export class Compiler extends DiagnosticEmitter {
               }
             }
             if (local) {
-              // Add as a virtual local that doesn't actually exist in WebAssembly
+              // Add as a dummy local that doesn't actually exist in WebAssembly
               let scopedLocals = flow.scopedLocals;
               if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
               else if (scopedLocals.has(name)) {
@@ -6340,7 +6340,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Inline if explicitly requested
-    if (instance.hasDecorator(DecoratorFlags.Inline) && (!instance.is(CommonFlags.Virtual) || reportNode.isAccessOnSuper)) {
+    if (instance.hasDecorator(DecoratorFlags.Inline) && (!instance.is(CommonFlags.Overridden) || reportNode.isAccessOnSuper)) {
       assert(!instance.is(CommonFlags.Stub)); // doesn't make sense
       let inlineStack = this.inlineStack;
       if (inlineStack.includes(instance)) {
@@ -6603,17 +6603,17 @@ export class Compiler extends DiagnosticEmitter {
     return stub;
   }
 
-  /** Ensures compilation of the virtual stub for the specified function. */
-  ensureVirtualStub(original: Function): Function {
-    // A virtual stub is a function redirecting virtual calls to the actual
+  /** Ensures compilation of the override stub for the specified function. */
+  ensureOverrideStub(original: Function): Function {
+    // An override stub is a function redirecting virtual calls to the actual
     // override targeted by the call. It utilizes varargs stubs where necessary
     // and as such has the same semantics as one. Here, we only make sure that
     // a placeholder exist, with actual code being generated as a finalization
     // step once module compilation is otherwise complete.
-    let stub = original.virtualStub;
+    let stub = original.overrideStub;
     if (stub) return stub;
-    stub = original.newStub("virtual");
-    original.virtualStub = stub;
+    stub = original.newStub("override");
+    original.overrideStub = stub;
     let module = this.module;
     stub.ref = module.addFunction(
       stub.internalName,
@@ -6622,13 +6622,13 @@ export class Compiler extends DiagnosticEmitter {
       null,
       module.unreachable()
     );
-    this.virtualStubs.add(original);
+    this.overrideStubs.add(original);
     return stub;
   }
 
-  /** Finalizes the virtual stub of the specified function. */
-  private finalizeVirtualStub(instance: Function): void {
-    let stub = this.ensureVirtualStub(instance);
+  /** Finalizes the override stub of the specified function. */
+  private finalizeOverrideStub(instance: Function): void {
+    let stub = this.ensureOverrideStub(instance);
     if (stub.is(CommonFlags.Compiled)) return;
 
     assert(instance.parent.kind == ElementKind.Class || instance.parent.kind == ElementKind.Interface);
@@ -6737,7 +6737,7 @@ export class Compiler extends DiagnosticEmitter {
       body = module.unreachable();
     }
 
-    // Create the virtual stub function
+    // Create the stub function
     let ref = stub.ref;
     if (ref) module.removeFunction(stub.internalName);
     stub.ref = module.addFunction(
@@ -6794,7 +6794,7 @@ export class Compiler extends DiagnosticEmitter {
     immediatelyDropped: bool = false
   ): ExpressionRef {
     if (instance.hasDecorator(DecoratorFlags.Inline)) {
-      if (!instance.is(CommonFlags.Virtual)) {
+      if (!instance.is(CommonFlags.Overridden)) {
         assert(!instance.is(CommonFlags.Stub)); // doesn't make sense
         let inlineStack = this.inlineStack;
         if (inlineStack.includes(instance)) {
@@ -6912,9 +6912,9 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Call the virtual stub with the vtable if the function has overloads
-    if (instance.is(CommonFlags.Virtual) && !reportNode.isAccessOnSuper) {
-      instance = this.ensureVirtualStub(instance);
+    // Call the override stub if the function has overloads
+    if (instance.is(CommonFlags.Overridden) && !reportNode.isAccessOnSuper) {
+      instance = this.ensureOverrideStub(instance);
     }
 
     if (operands) this.operandsTostack(instance.signature, operands);
@@ -8388,9 +8388,7 @@ export class Compiler extends DiagnosticEmitter {
       // This member is no longer omitted, so delete from our omitted fields
       omittedFields.delete(propertyInstance);
 
-      // Defer real properties to be set after fields are initialized. In
-      // constructions, whether the field is virtual is irrelevant because
-      // it is guaranteed to be not actually overloaded.
+      // Defer real properties to be set after fields are initialized
       if (!propertyInstance.isField) {
         deferredProperties.push(propertyInstance);
         continue;

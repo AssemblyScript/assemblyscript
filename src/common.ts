@@ -73,8 +73,8 @@ export const enum CommonFlags {
   Scoped = 1 << 26,
   /** Is a stub. */
   Stub = 1 << 27,
-  /** Is a virtual method. */
-  Virtual = 1 << 28,
+  /** Is an overridden method. */
+  Overridden = 1 << 28,
   /** Is (part of) a closure. */
   Closure = 1 << 29,
 

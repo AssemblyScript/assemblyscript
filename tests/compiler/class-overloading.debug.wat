@@ -2463,12 +2463,12 @@
  )
  (func $class-overloading/A1#bar (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  call $class-overloading/A1#baz@virtual
+  call $class-overloading/A1#baz@override
  )
  (func $class-overloading/B1#baz (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 3
  )
- (func $class-overloading/A#a<i32>@virtual (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $class-overloading/A#a<i32>@override (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
    block $case2
@@ -2520,7 +2520,7 @@
   local.get $1
   call $class-overloading/A#a<i32>
  )
- (func $class-overloading/A#b@virtual (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $class-overloading/A#b@override (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
    block $case2
@@ -2572,7 +2572,7 @@
   local.get $1
   call $class-overloading/A#b
  )
- (func $class-overloading/A#get:c@virtual (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $class-overloading/A#get:c@override (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
   block $default
    block $case2
@@ -2620,7 +2620,7 @@
   local.get $0
   call $class-overloading/A#get:c
  )
- (func $class-overloading/A#set:c@virtual (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+ (func $class-overloading/A#set:c@override (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
    block $case2
@@ -2672,7 +2672,7 @@
   local.get $1
   call $class-overloading/A#set:c
  )
- (func $class-overloading/IA#foo@virtual (type $i32_=>_none) (param $0 i32)
+ (func $class-overloading/IA#foo@override (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   block $default
    block $case1
@@ -2702,7 +2702,7 @@
   end
   unreachable
  )
- (func $class-overloading/A2#foo@virtual (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $class-overloading/A2#foo@override (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
   block $default
    block $case0
@@ -2724,7 +2724,7 @@
   local.get $0
   call $class-overloading/A2#foo
  )
- (func $class-overloading/A1#baz@virtual (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $class-overloading/A1#baz@override (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
   block $default
    block $case0
@@ -2973,7 +2973,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#a<i32>@virtual
+  call $class-overloading/A#a<i32>@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3005,7 +3005,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#b@virtual
+  call $class-overloading/A#b@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3036,7 +3036,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  call $class-overloading/A#get:c@virtual
+  call $class-overloading/A#get:c@override
   drop
   global.get $class-overloading/which
   local.set $0
@@ -3069,7 +3069,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#set:c@virtual
+  call $class-overloading/A#set:c@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3233,7 +3233,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#a<i32>@virtual
+  call $class-overloading/A#a<i32>@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3265,7 +3265,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#b@virtual
+  call $class-overloading/A#b@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3296,7 +3296,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  call $class-overloading/A#get:c@virtual
+  call $class-overloading/A#get:c@override
   drop
   global.get $class-overloading/which
   local.set $0
@@ -3327,7 +3327,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#set:c@virtual
+  call $class-overloading/A#set:c@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3362,7 +3362,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#a<i32>@virtual
+  call $class-overloading/A#a<i32>@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3394,7 +3394,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#b@virtual
+  call $class-overloading/A#b@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3425,7 +3425,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  call $class-overloading/A#get:c@virtual
+  call $class-overloading/A#get:c@override
   drop
   global.get $class-overloading/which
   local.set $0
@@ -3456,7 +3456,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#set:c@virtual
+  call $class-overloading/A#set:c@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3491,7 +3491,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#a<i32>@virtual
+  call $class-overloading/A#a<i32>@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3523,7 +3523,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#b@virtual
+  call $class-overloading/A#b@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3554,7 +3554,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  call $class-overloading/A#get:c@virtual
+  call $class-overloading/A#get:c@override
   drop
   global.get $class-overloading/which
   local.set $0
@@ -3587,7 +3587,7 @@
   i32.store $0
   local.get $0
   i32.const 1
-  call $class-overloading/A#set:c@virtual
+  call $class-overloading/A#set:c@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3621,7 +3621,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  call $class-overloading/IA#foo@virtual
+  call $class-overloading/IA#foo@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3655,7 +3655,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  call $class-overloading/IA#foo@virtual
+  call $class-overloading/IA#foo@override
   global.get $class-overloading/which
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -3687,7 +3687,7 @@
   local.get $0
   i32.store $0
   local.get $0
-  call $class-overloading/A2#foo@virtual
+  call $class-overloading/A2#foo@override
   i32.const 3
   i32.eq
   i32.eqz

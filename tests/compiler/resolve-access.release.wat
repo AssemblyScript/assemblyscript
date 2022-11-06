@@ -1954,10 +1954,10 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $3
    i32.const 0
    i32.store $0
-   local.get $0
+   local.get $3
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -1966,26 +1966,26 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
+   local.tee $0
    i32.const 0
    i32.store $0
    i32.const 8
    i32.const 0
    call $~lib/rt/itcms/__new
-   local.tee $3
+   local.tee $1
    i32.const 1056
    i64.load $0 align=1
    i64.store $0 align=1
+   local.get $0
    local.get $1
-   local.get $3
    i32.store $0
    i32.const 16
    i32.const 3
    call $~lib/rt/itcms/__new
    local.tee $2
-   local.get $3
+   local.get $1
    i32.store $0
-   local.get $3
+   local.get $1
    if
     local.get $2
     i32.eqz
@@ -1998,7 +1998,7 @@
      unreachable
     end
     global.get $~lib/rt/itcms/white
-    local.get $3
+    local.get $1
     i32.const 20
     i32.sub
     local.tee $4
@@ -2013,7 +2013,7 @@
      i32.load $0 offset=4
      i32.const 3
      i32.and
-     local.tee $1
+     local.tee $0
      global.get $~lib/rt/itcms/white
      i32.eqz
      i32.eq
@@ -2024,7 +2024,7 @@
       global.get $~lib/rt/itcms/state
       i32.const 1
       i32.eq
-      local.get $1
+      local.get $0
       i32.const 3
       i32.eq
       i32.and
@@ -2036,7 +2036,7 @@
     end
    end
    local.get $2
-   local.get $3
+   local.get $1
    i32.store $0 offset=4
    local.get $2
    i32.const 8
@@ -2048,7 +2048,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $0
+   local.get $3
    local.get $2
    i32.store $0
    local.get $2

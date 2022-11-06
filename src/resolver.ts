@@ -2877,7 +2877,7 @@ export class Resolver extends DiagnosticEmitter {
       if (baseClass) {
         let baseMember = baseClass.getMember(methodOrPropertyName);
         if (baseMember) {
-          // note override discovery for virtual stub finalization
+          // note override discovery (used by stub finalization)
           this.discoveredOverride = true;
           // verify that this is a compatible override
           let incompatibleOverride = true;
@@ -2994,7 +2994,7 @@ export class Resolver extends DiagnosticEmitter {
 
   /** Resolves reachable overrides of the given instance method. */
   resolveOverrides(instance: Function): Function[] | null {
-    let overridePrototypes = instance.prototype.overloads;
+    let overridePrototypes = instance.prototype.unboundOverrides;
     if (!overridePrototypes) return null;
 
     let parentClassInstance = assert(instance.getBoundClassOrInterface());
@@ -3451,7 +3451,7 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Fully resolve operator overloads (don't have type parameters on their own)
-    let overloadPrototypes = prototype.overloadPrototypes;
+    let overloadPrototypes = prototype.operatorOverloadPrototypes;
     // TODO: for (let [overloadKind, overloadPrototype] of overloadPrototypes) {
     for (let _keys = Map_keys(overloadPrototypes), i = 0, k = _keys.length; i < k; ++i) {
       let overloadKind = unchecked(_keys[i]);
@@ -3479,8 +3479,8 @@ export class Resolver extends DiagnosticEmitter {
         );
       }
       if (!operatorInstance) continue;
-      let overloads = instance.overloads;
-      if (!overloads) instance.overloads = overloads = new Map();
+      let overloads = instance.operatorOverloads;
+      if (!overloads) instance.operatorOverloads = overloads = new Map();
       // inc/dec are special in that an instance overload attempts to re-assign
       // the corresponding value, thus requiring a matching return type, while a
       // static overload works like any other overload.

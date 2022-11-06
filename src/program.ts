@@ -1423,12 +1423,12 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // check for virtual overloads in extended classes and implemented interfaces
+    // process overrides in extended classes and implemented interfaces
     for (let i = 0, k = queuedExtends.length; i < k; ++i) {
       let thisPrototype = queuedExtends[i];
       let basePrototype = thisPrototype.basePrototype;
       if (basePrototype) {
-        this.markVirtuals(thisPrototype, basePrototype);
+        this.processOverrides(thisPrototype, basePrototype);
       }
     }
     for (let i = 0, k = queuedImplements.length; i < k; ++i) {
@@ -1436,11 +1436,11 @@ export class Program extends DiagnosticEmitter {
       let basePrototype = thisPrototype.basePrototype;
       let interfacePrototypes = thisPrototype.interfacePrototypes;
       if (basePrototype) {
-        this.markVirtuals(thisPrototype, basePrototype);
+        this.processOverrides(thisPrototype, basePrototype);
       }
       if (interfacePrototypes) {
         for (let j = 0, l = interfacePrototypes.length; j < l; ++j) {
-          this.markVirtuals(thisPrototype, interfacePrototypes[j]);
+          this.processOverrides(thisPrototype, interfacePrototypes[j]);
         }
       }
     }
@@ -1497,9 +1497,13 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  /** Marks virtual members in a base class overloaded in this class. */
-  private markVirtuals(thisPrototype: ClassPrototype, basePrototype: ClassPrototype): void {
-    // TODO: make this work with interfaaces as well
+  /** Processes overridden members by this class in a base class. */
+  private processOverrides(
+    thisPrototype: ClassPrototype,
+    basePrototype: ClassPrototype,
+  ): void {
+    // Note that we don't know concrete instances of class members, yet. Type
+    // checking of concrete (generic) instances happens upon resolve.
     let thisInstanceMembers = thisPrototype.instanceMembers;
     if (thisInstanceMembers) {
       let thisMembers = Map_values(thisInstanceMembers);
@@ -1508,87 +1512,20 @@ export class Program extends DiagnosticEmitter {
         if (baseInstanceMembers) {
           for (let j = 0, l = thisMembers.length; j < l; ++j) {
             let thisMember = thisMembers[j];
-            if (
-              !thisMember.isAny(CommonFlags.Constructor | CommonFlags.Private) &&
-              baseInstanceMembers.has(thisMember.name)
-            ) {
+            if (baseInstanceMembers.has(thisMember.name)) {
               let baseMember = assert(baseInstanceMembers.get(thisMember.name));
-              if (
-                thisMember.kind == ElementKind.FunctionPrototype &&
-                baseMember.kind == ElementKind.FunctionPrototype
-              ) {
-                let thisMethod = <FunctionPrototype>thisMember;
-                let baseMethod = <FunctionPrototype>baseMember;
-                if (!thisMethod.visibilityEquals(baseMethod)) {
-                  this.errorRelated(
-                    DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
-                    thisMethod.identifierNode.range, baseMethod.identifierNode.range
-                  );
-                }
-                baseMember.set(CommonFlags.Virtual);
-                let overloads = baseMethod.overloads;
-                if (!overloads) baseMethod.overloads = overloads = new Set();
-                overloads.add(<FunctionPrototype>thisMember);
-                let baseMethodInstances = baseMethod.instances;
-                if (baseMethodInstances) {
-                  for (let _values = Map_values(baseMethodInstances), a = 0, b = _values.length; a < b; ++a) {
-                    let baseMethodInstance = _values[a];
-                    baseMethodInstance.set(CommonFlags.Virtual);
-                  }
-                }
-              } else if (
-                thisMember.kind == ElementKind.PropertyPrototype &&
-                baseMember.kind == ElementKind.PropertyPrototype
-              ) {
-                let thisProperty = <PropertyPrototype>thisMember;
-                let baseProperty = <PropertyPrototype>baseMember;
-                if (!thisProperty.visibilityEquals(baseProperty)) {
-                  this.errorRelated(
-                    DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
-                    thisProperty.identifierNode.range, baseProperty.identifierNode.range
-                  );
-                }
-                if (thisProperty.isField && basePrototype.kind != ElementKind.InterfacePrototype) {
-                  // fields cannot be overridden (only redeclared with same type), except if
-                  // declared in an interface, then making the field behave like a property
-                  continue;
-                }
-                baseProperty.set(CommonFlags.Virtual);
-                let baseGetter = baseProperty.getterPrototype;
-                if (baseGetter) {
-                  baseGetter.set(CommonFlags.Virtual);
-                  let thisGetter = thisProperty.getterPrototype;
-                  if (thisGetter) {
-                    let overloads = baseGetter.overloads;
-                    if (!overloads) baseGetter.overloads = overloads = new Set();
-                    overloads.add(thisGetter);
-                  }
-                  let baseGetterInstances = baseGetter.instances;
-                  if (baseGetterInstances) {
-                    for (let _values = Map_values(baseGetterInstances), a = 0, b = _values.length; a < b; ++a) {
-                      let baseGetterInstance = _values[a];
-                      baseGetterInstance.set(CommonFlags.Virtual);
-                    }
-                  }
-                }
-                let baseSetter = baseProperty.setterPrototype;
-                if (baseSetter && thisProperty.setterPrototype) {
-                  baseSetter.set(CommonFlags.Virtual);
-                  let thisSetter = thisProperty.setterPrototype;
-                  if (thisSetter) {
-                    let overloads = baseSetter.overloads;
-                    if (!overloads) baseSetter.overloads = overloads = new Set();
-                    overloads.add(thisSetter);
-                  }
-                  let baseSetterInstances = baseSetter.instances;
-                  if (baseSetterInstances) {
-                    for (let _values = Map_values(baseSetterInstances), a = 0, b = _values.length; a < b; ++a) {
-                      let baseSetterInstance = _values[a];
-                      baseSetterInstance.set(CommonFlags.Virtual);
-                    }
-                  }
-                }
-              }
+              this.doProcessOverride(thisPrototype, thisMember, basePrototype, baseMember);
+            }
+          }
+        }
+        // A class can have a base class and multiple interfaces, but from the
+        // base member alone we only get one. Make sure we don't miss any.
+        let baseInterfacePrototypes = basePrototype.interfacePrototypes;
+        if (baseInterfacePrototypes) {
+          for (let i = 0, k = baseInterfacePrototypes.length; i < k; ++i) {
+            let baseInterfacePrototype = baseInterfacePrototypes[i];
+            if (baseInterfacePrototype != basePrototype) {
+              this.processOverrides(thisPrototype, baseInterfacePrototype);
             }
           }
         }
@@ -1596,6 +1533,118 @@ export class Program extends DiagnosticEmitter {
         if (!nextPrototype) break;
         basePrototype = nextPrototype;
       } while (true);
+    }
+  }
+
+  /** Processes a single overridden member by this class in a base class. */
+  private doProcessOverride(
+    thisClass: ClassPrototype,
+    thisMember: DeclaredElement,
+    baseClass: ClassPrototype,
+    baseMember: DeclaredElement
+  ): void {
+    // Constructors and private members do not override
+    if (thisMember.isAny(CommonFlags.Constructor | CommonFlags.Private)) return;
+    if (
+      thisMember.kind == ElementKind.FunctionPrototype &&
+      baseMember.kind == ElementKind.FunctionPrototype
+    ) {
+      let thisMethod = <FunctionPrototype>thisMember;
+      let baseMethod = <FunctionPrototype>baseMember;
+      if (!thisMethod.visibilityEquals(baseMethod)) {
+        this.errorRelated(
+          DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+          thisMethod.identifierNode.range, baseMethod.identifierNode.range
+        );
+      }
+      baseMember.set(CommonFlags.Overridden);
+      let overrides = baseMethod.unboundOverrides;
+      if (!overrides) baseMethod.unboundOverrides = overrides = new Set();
+      overrides.add(<FunctionPrototype>thisMember);
+      let baseMethodInstances = baseMethod.instances;
+      if (baseMethodInstances) {
+        for (let _values = Map_values(baseMethodInstances), a = 0, b = _values.length; a < b; ++a) {
+          let baseMethodInstance = _values[a];
+          baseMethodInstance.set(CommonFlags.Overridden);
+        }
+      }
+    } else if (
+      thisMember.kind == ElementKind.PropertyPrototype &&
+      baseMember.kind == ElementKind.PropertyPrototype
+    ) {
+      let thisProperty = <PropertyPrototype>thisMember;
+      let baseProperty = <PropertyPrototype>baseMember;
+      if (!thisProperty.visibilityEquals(baseProperty)) {
+        this.errorRelated(
+          DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+          thisProperty.identifierNode.range, baseProperty.identifierNode.range
+        );
+      }
+      if (baseProperty.parent.kind != ElementKind.InterfacePrototype) {
+        // Interface fields/properties can be implemented by either, but other
+        // members must match to retain compatiblity with TS/JS.
+        let thisIsField = thisProperty.isField;
+        if (thisIsField != baseProperty.isField) {
+          if (thisIsField) { // base is property
+            this.errorRelated(
+              DiagnosticCode._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property,
+              thisProperty.identifierNode.range, baseProperty.identifierNode.range,
+              thisProperty.name, baseClass.internalName, thisClass.internalName
+            );
+          } else { // this is property, base is field
+            this.errorRelated(
+              DiagnosticCode._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor,
+              thisProperty.identifierNode.range, baseProperty.identifierNode.range,
+              thisProperty.name, baseClass.internalName, thisClass.internalName
+            );
+          }
+          return;
+        } else if (thisIsField) { // base is also field
+          // Fields don't override other fields and can only be redeclared
+          return;
+        }
+      }
+      baseProperty.set(CommonFlags.Overridden);
+      let baseGetter = baseProperty.getterPrototype;
+      if (baseGetter) {
+        baseGetter.set(CommonFlags.Overridden);
+        let thisGetter = thisProperty.getterPrototype;
+        if (thisGetter) {
+          let overrides = baseGetter.unboundOverrides;
+          if (!overrides) baseGetter.unboundOverrides = overrides = new Set();
+          overrides.add(thisGetter);
+        }
+        let baseGetterInstances = baseGetter.instances;
+        if (baseGetterInstances) {
+          for (let _values = Map_values(baseGetterInstances), a = 0, b = _values.length; a < b; ++a) {
+            let baseGetterInstance = _values[a];
+            baseGetterInstance.set(CommonFlags.Overridden);
+          }
+        }
+      }
+      let baseSetter = baseProperty.setterPrototype;
+      if (baseSetter && thisProperty.setterPrototype) {
+        baseSetter.set(CommonFlags.Overridden);
+        let thisSetter = thisProperty.setterPrototype;
+        if (thisSetter) {
+          let overrides = baseSetter.unboundOverrides;
+          if (!overrides) baseSetter.unboundOverrides = overrides = new Set();
+          overrides.add(thisSetter);
+        }
+        let baseSetterInstances = baseSetter.instances;
+        if (baseSetterInstances) {
+          for (let _values = Map_values(baseSetterInstances), a = 0, b = _values.length; a < b; ++a) {
+            let baseSetterInstance = _values[a];
+            baseSetterInstance.set(CommonFlags.Overridden);
+          }
+        }
+      }
+    } else {
+      this.errorRelated(
+        DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
+        thisMember.identifierNode.range, baseMember.identifierNode.range,
+        thisMember.name, thisClass.internalName, baseClass.internalName
+      );
     }
   }
 
@@ -2144,7 +2193,7 @@ export class Program extends DiagnosticEmitter {
                     firstArg.range, text
                   );
                 } else {
-                  let overloads = classPrototype.overloadPrototypes;
+                  let overloads = classPrototype.operatorOverloadPrototypes;
                   if (overloads.has(kind)) {
                     this.error(
                       DiagnosticCode.Duplicate_function_implementation,
@@ -3539,7 +3588,7 @@ export class Local extends VariableLikeElement {
   constructor(
     /** Simple name. */
     name: string,
-    /** Zero-based index within the enclosing function. `-1` indicates a virtual local. */
+    /** Zero-based index within the enclosing function. `-1` indicates a dummy local. */
     public index: i32,
     /** Resolved type. */
     type: Type,
@@ -3568,8 +3617,8 @@ export class FunctionPrototype extends DeclaredElement {
   operatorKind: OperatorKind = OperatorKind.Invalid;
   /** Already resolved instances. */
   instances: Map<string,Function> | null = null;
-  /** Methods overloading this one, if any. These are unbound. */
-  overloads: Set<FunctionPrototype> | null = null;
+  /** Methods overriding this one, if any. These are unbound. */
+  unboundOverrides: Set<FunctionPrototype> | null = null;
 
   /** Clones of this prototype that are bound to specific classes. */
   private boundPrototypes: Map<Class,FunctionPrototype> | null = null;
@@ -3633,7 +3682,7 @@ export class FunctionPrototype extends DeclaredElement {
     );
     bound.flags = this.flags;
     bound.operatorKind = this.operatorKind;
-    bound.overloads = this.overloads;
+    bound.unboundOverrides = this.unboundOverrides;
     // NOTE: this.instances holds instances per bound class / unbound
     boundPrototypes.set(classInstance, bound);
     return bound;
@@ -3676,8 +3725,8 @@ export class Function extends TypedElement {
   ref: FunctionRef = 0;
   /** Varargs stub for calling with omitted arguments. */
   varargsStub: Function | null = null;
-  /** Virtual stub for calling overloads. */
-  virtualStub: Function | null = null;
+  /** Stub for calling overrides. */
+  overrideStub: Function | null = null;
   /** Runtime memory segment, if created. */
   memorySegment: MemorySegment | null = null;
   /** Original function, if a stub. Otherwise `this`. */
@@ -3776,7 +3825,7 @@ export class Function extends TypedElement {
       : getDefaultParameterName(index);
   }
 
-  /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
+  /** Creates a stub for use with this function, i.e. for varargs or override calls. */
   newStub(postfix: string): Function {
     let stub = new Function(
       this.original.name + STUB_DELIMITER + postfix,
@@ -3897,7 +3946,7 @@ export class PropertyPrototype extends DeclaredElement {
     // As a result, explicit and implicit accessors can override each other,
     // which is useful when implementing interfaces declaring "fields". Such
     // fields are satisfied by either a field or a normal property, so the
-    // virtual stub at the interface needs to handle both interchangeably.
+    // override stub at the interface needs to handle both interchangeably.
     let nativeRange = Source.native.range;
     let typeNode = fieldDeclaration.type;
     if (!typeNode) typeNode = Node.createOmittedType(fieldDeclaration.name.range.atEnd);
@@ -4127,7 +4176,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Constructor prototype. */
   constructorPrototype: FunctionPrototype | null = null;
   /** Operator overload prototypes. */
-  overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
+  operatorOverloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
   /** Classes extending this class. */
@@ -4256,7 +4305,7 @@ export class Class extends TypedElement {
   /** Constructor instance. */
   constructorInstance: Function | null = null;
   /** Operator overloads. */
-  overloads: Map<OperatorKind,Function> | null = null;
+  operatorOverloads: Map<OperatorKind,Function> | null = null;
   /** Index signature, if present. */
   indexSignature: IndexSignature | null = null;
   /** Unique class id. */
@@ -4436,7 +4485,7 @@ export class Class extends TypedElement {
     }
     let instance: Class | null = this;
     do {
-      let overloads = instance.overloads;
+      let overloads = instance.operatorOverloads;
       if (overloads != null && overloads.has(kind)) {
         return assert(overloads.get(kind));
       }

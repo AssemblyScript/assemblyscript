@@ -11610,13 +11610,6 @@
  )
  (func $std/math/test_sincos (type $i64_i64_i64_i64_i64_=>_none) (param $0 i64) (param $1 i64) (param $2 i64) (param $3 i64) (param $4 i64)
   (local $5 f64)
-  (local $6 f64)
-  local.get $3
-  f64.reinterpret_i64
-  local.set $5
-  local.get $4
-  f64.reinterpret_i64
-  local.set $6
   local.get $0
   f64.reinterpret_i64
   call $~lib/math/NativeMath.sincos
@@ -11628,8 +11621,10 @@
   call $std/math/check<f64>
   if
    global.get $~lib/math/NativeMath.sincos_cos
-   local.get $5
-   local.get $6
+   local.get $3
+   f64.reinterpret_i64
+   local.get $4
+   f64.reinterpret_i64
    call $std/math/check<f64>
    drop
   end
