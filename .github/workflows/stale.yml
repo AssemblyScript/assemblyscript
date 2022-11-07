@@ -6,7 +6,7 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/stale@v3
+    - uses: actions/stale@v6
       with:
         stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed in one week if no further activity occurs. Thank you for your contributions!'
         stale-issue-label: 'stale'
