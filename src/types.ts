@@ -75,12 +75,12 @@ export const enum TypeKind {
   Anyref,
   /** Equatable reference. */
   Eqref,
-  /** 31-bit integer reference. */
-  I31ref,
-  /** Data reference. */
-  Dataref,
+  /** Struct reference. */
+  Structref,
   /** Array reference. */
   Arrayref,
+  /** 31-bit integer reference. */
+  I31ref,
   /** String reference. */
   Stringref,
   /** WTF8 string view. */
@@ -579,9 +579,9 @@ export class Type {
       case TypeKind.Externref: return CommonNames.externref;
       case TypeKind.Anyref: return CommonNames.anyref;
       case TypeKind.Eqref: return CommonNames.eqref;
-      case TypeKind.I31ref: return CommonNames.i31ref;
-      case TypeKind.Dataref: return CommonNames.dataref;
+      case TypeKind.Structref: return CommonNames.structref;
       case TypeKind.Arrayref: return CommonNames.arrayref;
+      case TypeKind.I31ref: return CommonNames.i31ref;
       case TypeKind.Stringref: return CommonNames.stringref;
       case TypeKind.StringviewWTF8: return CommonNames.stringview_wtf8;
       case TypeKind.StringviewWTF16: return CommonNames.stringview_wtf16;
@@ -625,7 +625,7 @@ export class Type {
       case TypeKind.I31ref: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, this.is(TypeFlags.Nullable));
       }
-      case TypeKind.Dataref: {
+      case TypeKind.Structref: {
         return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, this.is(TypeFlags.Nullable));
       }
       case TypeKind.Arrayref: {
@@ -805,15 +805,8 @@ export class Type {
     TypeFlags.Reference, 0
   );
 
-  /** 31-bit integer reference. */
-  static readonly i31ref: Type = new Type(TypeKind.I31ref,
-    TypeFlags.External   |
-    TypeFlags.Nullable   |
-    TypeFlags.Reference, 0
-  );
-
-  /** Data reference. */
-  static readonly dataref: Type = new Type(TypeKind.Dataref,
+  /** Struct reference. */
+  static readonly structref: Type = new Type(TypeKind.Structref,
     TypeFlags.External   |
     TypeFlags.Nullable   |
     TypeFlags.Reference, 0
@@ -821,6 +814,13 @@ export class Type {
 
   /** Array reference. */
   static readonly arrayref: Type = new Type(TypeKind.Arrayref,
+    TypeFlags.External   |
+    TypeFlags.Nullable   |
+    TypeFlags.Reference, 0
+  );
+
+  /** 31-bit integer reference. */
+  static readonly i31ref: Type = new Type(TypeKind.I31ref,
     TypeFlags.External   |
     TypeFlags.Nullable   |
     TypeFlags.Reference, 0

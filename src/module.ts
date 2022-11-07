@@ -75,15 +75,15 @@ export namespace TypeRef {
   export const Anyref = binaryen._BinaryenTypeAnyref();
   export const Eqref = binaryen._BinaryenTypeEqref();
   export const I31ref = binaryen._BinaryenTypeI31ref();
-  export const Dataref = binaryen._BinaryenTypeDataref();
+  export const Structref = binaryen._BinaryenTypeDataref(); // TODO: about to become struct
   export const Arrayref = binaryen._BinaryenTypeArrayref();
   export const Stringref = binaryen._BinaryenTypeStringref();
   export const StringviewWTF8 = binaryen._BinaryenTypeStringviewWTF8();
   export const StringviewWTF16 = binaryen._BinaryenTypeStringviewWTF16();
   export const StringviewIter = binaryen._BinaryenTypeStringviewIter();
-  export const Noneref = binaryen._BinaryenTypeNullref();
-  export const Nofuncref = binaryen._BinaryenTypeNullFuncref();
-  export const Noexternref = binaryen._BinaryenTypeNullExternref();
+  export const Nullref = binaryen._BinaryenTypeNullref();
+  export const Nullfuncref = binaryen._BinaryenTypeNullFuncref();
+  export const Nullexternref = binaryen._BinaryenTypeNullExternref();
 }
 
 /** Reference to a Binaryen heap type. */
@@ -3742,14 +3742,14 @@ function tryEnsureBasicType(type: Type): TypeRef {
     case TypeKind.Eqref: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Eq, type.is(TypeFlags.Nullable));
     }
-    case TypeKind.I31ref: {
-      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, type.is(TypeFlags.Nullable));
-    }
-    case TypeKind.Dataref: {
+    case TypeKind.Structref: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Data, type.is(TypeFlags.Nullable));
     }
     case TypeKind.Arrayref: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.Array, type.is(TypeFlags.Nullable));
+    }
+    case TypeKind.I31ref: {
+      return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.I31, type.is(TypeFlags.Nullable));
     }
     case TypeKind.Stringref: {
       return binaryen._BinaryenTypeFromHeapType(HeapTypeRef.String, type.is(TypeFlags.Nullable));

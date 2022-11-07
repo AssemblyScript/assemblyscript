@@ -131,7 +131,7 @@ export namespace CommonNames {
   export const anyref = "anyref";
   export const eqref = "eqref";
   export const i31ref = "i31ref";
-  export const dataref = "dataref";
+  export const structref = "structref";
   export const arrayref = "arrayref";
   export const stringref = "stringref";
   export const stringview_wtf8 = "stringview_wtf8";
@@ -212,7 +212,7 @@ export namespace CommonNames {
   export const Anyref = "Anyref";
   export const Eqref = "Eqref";
   export const I31ref = "I31ref";
-  export const Dataref = "Dataref";
+  export const Structref = "Structref";
   export const Arrayref = "Arrayref";
   export const String = "String";
   export const RegExp = "RegExp";

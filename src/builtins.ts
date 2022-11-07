@@ -3466,7 +3466,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Externref:
       case TypeKind.Anyref:
       case TypeKind.Eqref:
-      case TypeKind.Dataref:
+      case TypeKind.Structref:
       case TypeKind.Arrayref:
       case TypeKind.I31ref:
       case TypeKind.Stringref:
@@ -3547,7 +3547,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.Externref:
       case TypeKind.Anyref:
       case TypeKind.Eqref:
-      case TypeKind.Dataref:
+      case TypeKind.Structref:
       case TypeKind.Arrayref:
       case TypeKind.I31ref:
       case TypeKind.Stringref:

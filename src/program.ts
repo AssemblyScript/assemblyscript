@@ -1032,7 +1032,7 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeType(CommonNames.anyref, Type.anyref);
     this.registerNativeType(CommonNames.eqref, Type.eqref);
     this.registerNativeType(CommonNames.i31ref, Type.i31ref);
-    this.registerNativeType(CommonNames.dataref, Type.dataref);
+    this.registerNativeType(CommonNames.structref, Type.structref);
     this.registerNativeType(CommonNames.arrayref, Type.arrayref);
     this.registerNativeType(CommonNames.stringref, Type.stringref);
     this.registerNativeType(CommonNames.stringview_wtf8, Type.stringview_wtf8);
@@ -1306,7 +1306,7 @@ export class Program extends DiagnosticEmitter {
         this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
         this.registerWrapperClass(Type.eqref, CommonNames.Eqref);
         this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
-        this.registerWrapperClass(Type.dataref, CommonNames.Dataref);
+        this.registerWrapperClass(Type.structref, CommonNames.Structref);
         this.registerWrapperClass(Type.arrayref, CommonNames.Arrayref);
       }
     }
