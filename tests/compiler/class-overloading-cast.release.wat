@@ -1607,7 +1607,7 @@
    local.get $0
    global.set $class-overloading-cast/v3
    global.get $~lib/memory/__stack_pointer
-   block $__inlined_func$class-overloading-cast/A<i32>#foo@virtual (result i32)
+   block $__inlined_func$class-overloading-cast/A<i32>#foo@override (result i32)
     global.get $~lib/memory/__stack_pointer
     global.get $class-overloading-cast/v
     local.tee $0
@@ -1629,10 +1629,10 @@
        br $default
       end
       i32.const 1488
-      br $__inlined_func$class-overloading-cast/A<i32>#foo@virtual
+      br $__inlined_func$class-overloading-cast/A<i32>#foo@override
      end
      i32.const 1488
-     br $__inlined_func$class-overloading-cast/A<i32>#foo@virtual
+     br $__inlined_func$class-overloading-cast/A<i32>#foo@override
     end
     i32.const 1456
    end
@@ -1675,7 +1675,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   block $__inlined_func$class-overloading-cast/A<f64>#foo@virtual (result i32)
+   block $__inlined_func$class-overloading-cast/A<f64>#foo@override (result i32)
     global.get $~lib/memory/__stack_pointer
     local.tee $0
     global.get $class-overloading-cast/v3
@@ -1688,7 +1688,7 @@
     i32.load $0
     i32.const 6
     i32.eq
-    br_if $__inlined_func$class-overloading-cast/A<f64>#foo@virtual
+    br_if $__inlined_func$class-overloading-cast/A<f64>#foo@override
     drop
     i32.const 1456
    end

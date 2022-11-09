@@ -24,7 +24,7 @@ import {
 } from "./types";
 import {
   ElementKind,
-  Field
+  PropertyPrototype
 } from "./program";
 import * as binaryen from "./glue/binaryen";
 
@@ -3697,6 +3697,25 @@ export function ensureType(type: Type): TypeRef {
     if (DEBUG_TYPEBUILDER) {
       console.log(` set ${seenType.toString()}`);
     }
+    let classInstance = seenType.getClass();
+    if (classInstance) {
+      let module = classInstance.program.module;
+      binaryen._BinaryenModuleSetTypeName(module.ref, heapType, module.allocStringCached(classInstance.internalName));
+      let members = classInstance.members;
+      if (members) {
+        let numFieldsInType = binaryen._BinaryenStructTypeGetNumFields(heapType);
+        let numFieldsInClass = 0;
+        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+          let member = _values[i];
+          if (member.kind != ElementKind.PropertyPrototype) continue;
+          // only interested in fields (resolved during class finalization)
+          let property = (<PropertyPrototype>member).instance;
+          if (!property || !property.isField) continue;
+          binaryen._BinaryenModuleSetFieldName(module.ref, heapType, numFieldsInClass++, module.allocStringCached(property.name));
+        }
+        assert(numFieldsInType == numFieldsInClass);
+      }
+    }
   }
   binaryen._free(out);
 
@@ -3833,9 +3852,11 @@ function prepareType(builder: binaryen.TypeBuilderRef, seen: Map<Type,HeapTypeRe
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
-        if (member.kind != ElementKind.Field) continue;
-        let field = <Field>member;
-        let fieldType = field.type;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        // only interested in fields (resolved during class finalization)
+        let property = (<PropertyPrototype>member).instance;
+        if (!property || !property.isField) continue;
+        let fieldType = property.type;
         if (DEBUG_TYPEBUILDER) {
           console.log(`  field ${fieldType.toString()}`);
         }

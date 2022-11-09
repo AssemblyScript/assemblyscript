@@ -26,11 +26,27 @@
  (export "stringArrayMethodCall" (func $export:std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $export:std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $export:std/array-access/stringArrayArrayMethodCall))
+ (func $~lib/array/Array<~lib/array/Array<i32>>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/array/Array<~lib/array/Array<i32>>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/array/Array<i32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/array/Array<i32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
  (func $~lib/array/Array<i32>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
   local.get $index
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<i32>#get:length_
   i32.ge_u
   if
    i32.const 32
@@ -41,7 +57,7 @@
    unreachable
   end
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<i32>#get:dataStart
   local.get $index
   i32.const 2
   i32.shl
@@ -52,11 +68,23 @@
   drop
   local.get $value
  )
+ (func $~lib/array/Array<~lib/string/String>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/array/Array<~lib/string/String>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
  (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
  )
@@ -212,6 +240,14 @@
   local.get $searchLength
   call $~lib/util/string/compareImpl
   i32.eqz
+ )
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
  )
  (func $~stack_check (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
@@ -401,7 +437,7 @@
   i32.store $0
   local.get $index
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<~lib/array/Array<i32>>#get:length_
   i32.ge_u
   if
    i32.const 32
@@ -413,7 +449,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<~lib/array/Array<i32>>#get:dataStart
   local.get $index
   i32.const 2
   i32.shl
@@ -457,7 +493,7 @@
   i32.store $0
   local.get $index
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<~lib/string/String>#get:length_
   i32.ge_u
   if
    i32.const 32
@@ -469,7 +505,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<~lib/string/String>#get:dataStart
   local.get $index
   i32.const 2
   i32.shl
@@ -513,7 +549,7 @@
   i32.store $0
   local.get $index
   local.get $this
-  i32.load $0 offset=12
+  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#get:length_
   i32.ge_u
   if
    i32.const 32
@@ -525,7 +561,7 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $this
-  i32.load $0 offset=4
+  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#get:dataStart
   local.get $index
   i32.const 2
   i32.shl

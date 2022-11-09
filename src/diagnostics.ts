@@ -220,11 +220,17 @@ export function formatDiagnosticMessage(
   let range = message.range;
   if (range) {
     let source = range.source;
+    let relatedRange = message.relatedRange;
+    let minLine = 0;
+    if (relatedRange) {
+      // Justify context indentation when multiple ranges are present
+      minLine = max(source.lineAt(range.start), relatedRange.source.lineAt(relatedRange.start));
+    }
 
     // include context information if requested
     if (showContext) {
       sb.push("\n");
-      sb.push(formatDiagnosticContext(range));
+      sb.push(formatDiagnosticContext(range, minLine));
     } else {
       sb.push("\n in ");
       sb.push(source.normalizedPath);
@@ -235,12 +241,11 @@ export function formatDiagnosticMessage(
     sb.push(source.columnAt().toString());
     sb.push(")");
 
-    let relatedRange = message.relatedRange;
     if (relatedRange) {
       let relatedSource = relatedRange.source;
       if (showContext) {
         sb.push("\n");
-        sb.push(formatDiagnosticContext(relatedRange));
+        sb.push(formatDiagnosticContext(relatedRange, minLine));
       } else {
         sb.push("\n in ");
         sb.push(relatedSource.normalizedPath);
@@ -257,14 +262,17 @@ export function formatDiagnosticMessage(
 }
 
 /** Formats the diagnostic context for the specified range, optionally with terminal colors. */
-function formatDiagnosticContext(range: Range): string {
+function formatDiagnosticContext(range: Range, minLine: i32 = 0): string {
   let source = range.source;
   let text = source.text;
   let len = text.length;
   let start = range.start;
   let end = start;
   let lineNumber = source.lineAt(start).toString();
-  let lineSpace = " ".repeat(lineNumber.length);
+  let lineNumberLength = minLine
+    ? max(minLine.toString().length, lineNumber.length)
+    : lineNumber.length;
+  let lineSpace = " ".repeat(lineNumberLength);
   // Find preceeding line break
   while (start > 0 && !isLineBreak(text.charCodeAt(start - 1))) start--;
   // Skip leading whitespace (assume no supplementary whitespaces)
@@ -274,6 +282,7 @@ function formatDiagnosticContext(range: Range): string {
   let sb: string[] = [
     lineSpace,
     "  :\n ",
+    " ".repeat(lineNumberLength - lineNumber.length),
     lineNumber,
     " │ ",
     text.substring(start, end).replaceAll("\t", "  "),

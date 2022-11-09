@@ -1612,7 +1612,7 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__link
   end
  )
- (func $~lib/array/Array<std/array-literal/Ref>~visit (type $i32_=>_none) (param $0 i32)
+ (func $~lib/array/Array<std/array-literal/Ref>#__visit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1674,13 +1674,13 @@
        return
       end
       local.get $0
-      call $~lib/array/Array<std/array-literal/Ref>~visit
+      call $~lib/array/Array<std/array-literal/Ref>#__visit
       return
      end
      return
     end
     local.get $0
-    call $~lib/array/Array<std/array-literal/Ref>~visit
+    call $~lib/array/Array<std/array-literal/Ref>#__visit
     return
    end
    unreachable

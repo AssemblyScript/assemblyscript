@@ -73,8 +73,8 @@ export const enum CommonFlags {
   Scoped = 1 << 26,
   /** Is a stub. */
   Stub = 1 << 27,
-  /** Is a virtual method. */
-  Virtual = 1 << 28,
+  /** Is an overridden method. */
+  Overridden = 1 << 28,
   /** Is (part of) a closure. */
   Closure = 1 << 29,
 
@@ -257,7 +257,6 @@ export namespace CommonNames {
   export const link = "__link";
   export const collect = "__collect";
   export const typeinfo = "__typeinfo";
-  export const instanceof_ = "__instanceof";
   export const visit = "__visit";
   export const newBuffer = "__newBuffer";
   export const newArray = "__newArray";

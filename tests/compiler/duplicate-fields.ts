@@ -45,15 +45,13 @@ assert(raz.bar.foo == 1);
 // make sure visibility checks allow these
 
 class A3 {
-  protected protProt: i32;
-  protected protPub: i32;
-  public pubPub: i32;
+  protected prot: i32;
+  public pub: i32;
 }
 
 class B3 extends A3 {
-  protected protProt: i32;
-  public protPub: i32;
-  public pubPub: i32;
+  protected prot: i32;
+  public pub: i32;
 }
 
 new B3();

@@ -105,11 +105,15 @@
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 32
  )
+ (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
  (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
-  i32.load $0 offset=16
+  call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
  )
@@ -3209,11 +3213,11 @@
   local.set $48
   i32.const 0
   local.set $49
-  i32.const 24
+  i32.const 46
   local.set $50
-  i32.const 25
+  i32.const 47
   local.set $51
-  i32.const 25
+  i32.const 47
   local.set $52
   i32.const 256
   local.set $63
@@ -3258,7 +3262,7 @@
    unreachable
   end
   local.get $50
-  i32.const 24
+  i32.const 46
   i32.eq
   i32.eqz
   if

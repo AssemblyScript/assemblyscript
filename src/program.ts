@@ -24,14 +24,12 @@
 // │ │ │ ├─EnumValue          Enum value
 // │ │ │ ├─Global             File global
 // │ │ │ ├─Local              Function local
-// │ │ │ ├─Field              Class field (instance only)
-// │ │ │ └─Property           Class property
+// │ │ │ └─Property           Class property (incl. instance fields)
 // │ │ ├─IndexSignature       Class index signature
 // │ │ ├─Function             Concrete function instance
 // │ │ └─Class                Concrete class instance
 // │ ├─Namespace              Namespace with static members
 // │ ├─FunctionPrototype      Prototype of concrete function instances
-// │ ├─FieldPrototype         Prototype of concrete field instances
 // │ ├─PropertyPrototype      Prototype of concrete property instances
 // │ └─ClassPrototype         Prototype of concrete classe instances
 // └─File                     File, analogous to Source in the AST
@@ -44,12 +42,12 @@ import {
   GETTER_PREFIX,
   SETTER_PREFIX,
   INNER_DELIMITER,
-  LIBRARY_PREFIX,
   INDEX_SUFFIX,
   STUB_DELIMITER,
   CommonNames,
   Feature,
-  Target
+  Target,
+  featureToString
 } from "./common";
 
 import {
@@ -111,7 +109,9 @@ import {
   VariableDeclaration,
   VariableLikeDeclarationStatement,
   VariableStatement,
-  ParameterKind
+  ParameterKind,
+  ParameterNode,
+  TypeName
 } from "./ast";
 
 import {
@@ -430,12 +430,10 @@ export class Program extends DiagnosticEmitter {
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
-    let nativeSource = new Source(SourceKind.LibraryEntry, LIBRARY_PREFIX + "native.ts", "[native code]");
-    this.nativeSource = nativeSource;
-    this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);
+    this.module = Module.create(options.stackSize > 0, options.sizeTypeRef);    
     this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
-    let nativeFile = new File(this, nativeSource);
+    let nativeFile = new File(this, Source.native);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
   }
@@ -443,17 +441,13 @@ export class Program extends DiagnosticEmitter {
   /** Module instance. */
   module: Module;
   /** Parser instance. */
-  parser: Parser;
+  parser!: Parser;
   /** Resolver instance. */
   resolver!: Resolver;
   /** Array of sources. */
   sources: Source[] = [];
   /** Diagnostic offset used where successively obtaining the next diagnostic. */
   diagnosticsOffset: i32 = 0;
-  /** Special native code source. */
-  nativeSource: Source;
-  /** Special native code range. */
-  get nativeRange(): Range { return this.nativeSource.range; }
   /** Special native code file. */
   nativeFile!: File;
   /** Next class id. */
@@ -743,14 +737,6 @@ export class Program extends DiagnosticEmitter {
   }
   private _typeinfoInstance: Function | null = null;
 
-  /** Gets the runtime `__instanceof(ptr: usize, superId: u32): bool` instance. */
-  get instanceofInstance(): Function {
-    let cached = this._instanceofInstance;
-    if (!cached) this._instanceofInstance = cached = this.requireFunction(CommonNames.instanceof_);
-    return cached;
-  }
-  private _instanceofInstance: Function | null = null;
-
   /** Gets the runtime `__newBuffer(size: usize, id: u32, data: usize = 0): usize` instance. */
   get newBufferInstance(): Function {
     let cached = this._newBufferInstance;
@@ -869,7 +855,7 @@ export class Program extends DiagnosticEmitter {
     /** Flags indicating specific traits, e.g. `CONST`. */
     flags: CommonFlags = CommonFlags.None
   ): VariableDeclaration {
-    let range = this.nativeSource.range;
+    let range = Source.native.range;
     return Node.createVariableDeclaration(
       Node.createIdentifierExpression(name, range),
       null, flags, null, null, range
@@ -883,7 +869,7 @@ export class Program extends DiagnosticEmitter {
     /** Flags indicating specific traits, e.g. `GENERIC`. */
     flags: CommonFlags = CommonFlags.None
   ): TypeDeclaration {
-    let range = this.nativeSource.range;
+    let range = Source.native.range;
     let identifier = Node.createIdentifierExpression(name, range);
     return Node.createTypeDeclaration(
       identifier,
@@ -903,7 +889,7 @@ export class Program extends DiagnosticEmitter {
     /** Flags indicating specific traits, e.g. `DECLARE`. */
     flags: CommonFlags = CommonFlags.None
   ): FunctionDeclaration {
-    let range = this.nativeSource.range;
+    let range = Source.native.range;
     let signature = this.nativeDummySignature;
     if (!signature) {
       this.nativeDummySignature = signature = Node.createFunctionType([],
@@ -927,7 +913,7 @@ export class Program extends DiagnosticEmitter {
     /** Flags indicating specific traits, e.g. `EXPORT`. */
     flags: CommonFlags = CommonFlags.None
   ): NamespaceDeclaration {
-    let range = this.nativeSource.range;
+    let range = Source.native.range;
     return Node.createNamespaceDeclaration(
       Node.createIdentifierExpression(name, range),
       null, flags, [], range
@@ -1429,12 +1415,12 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // check for virtual overloads in extended classes and implemented interfaces
+    // process overrides in extended classes and implemented interfaces
     for (let i = 0, k = queuedExtends.length; i < k; ++i) {
       let thisPrototype = queuedExtends[i];
       let basePrototype = thisPrototype.basePrototype;
       if (basePrototype) {
-        this.markVirtuals(thisPrototype, basePrototype);
+        this.processOverrides(thisPrototype, basePrototype);
       }
     }
     for (let i = 0, k = queuedImplements.length; i < k; ++i) {
@@ -1442,11 +1428,11 @@ export class Program extends DiagnosticEmitter {
       let basePrototype = thisPrototype.basePrototype;
       let interfacePrototypes = thisPrototype.interfacePrototypes;
       if (basePrototype) {
-        this.markVirtuals(thisPrototype, basePrototype);
+        this.processOverrides(thisPrototype, basePrototype);
       }
       if (interfacePrototypes) {
         for (let j = 0, l = interfacePrototypes.length; j < l; ++j) {
-          this.markVirtuals(thisPrototype, interfacePrototypes[j]);
+          this.processOverrides(thisPrototype, interfacePrototypes[j]);
         }
       }
     }
@@ -1503,9 +1489,13 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
-  /** Marks virtual members in a base class overloaded in this class. */
-  private markVirtuals(thisPrototype: ClassPrototype, basePrototype: ClassPrototype): void {
-    // TODO: make this work with interfaaces as well
+  /** Processes overridden members by this class in a base class. */
+  private processOverrides(
+    thisPrototype: ClassPrototype,
+    basePrototype: ClassPrototype,
+  ): void {
+    // Note that we don't know concrete instances of class members, yet. Type
+    // checking of concrete (generic) instances happens upon resolve.
     let thisInstanceMembers = thisPrototype.instanceMembers;
     if (thisInstanceMembers) {
       let thisMembers = Map_values(thisInstanceMembers);
@@ -1514,82 +1504,20 @@ export class Program extends DiagnosticEmitter {
         if (baseInstanceMembers) {
           for (let j = 0, l = thisMembers.length; j < l; ++j) {
             let thisMember = thisMembers[j];
-            if (
-              !thisMember.isAny(CommonFlags.Constructor | CommonFlags.Private) &&
-              baseInstanceMembers.has(thisMember.name)
-            ) {
+            if (baseInstanceMembers.has(thisMember.name)) {
               let baseMember = assert(baseInstanceMembers.get(thisMember.name));
-              if (
-                thisMember.kind == ElementKind.FunctionPrototype &&
-                baseMember.kind == ElementKind.FunctionPrototype
-              ) {
-                let thisMethod = <FunctionPrototype>thisMember;
-                let baseMethod = <FunctionPrototype>baseMember;
-                if (!thisMethod.visibilityEquals(baseMethod)) {
-                  this.errorRelated(
-                    DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
-                    thisMethod.identifierNode.range, baseMethod.identifierNode.range
-                  );
-                }
-                baseMember.set(CommonFlags.Virtual);
-                let overloads = baseMethod.overloads;
-                if (!overloads) baseMethod.overloads = overloads = new Set();
-                overloads.add(<FunctionPrototype>thisMember);
-                let baseMethodInstances = baseMethod.instances;
-                if (baseMethodInstances) {
-                  for (let _values = Map_values(baseMethodInstances), a = 0, b = _values.length; a < b; ++a) {
-                    let baseMethodInstance = _values[a];
-                    baseMethodInstance.set(CommonFlags.Virtual);
-                  }
-                }
-              } else if (
-                thisMember.kind == ElementKind.PropertyPrototype &&
-                baseMember.kind == ElementKind.PropertyPrototype
-              ) {
-                let thisProperty = <PropertyPrototype>thisMember;
-                let baseProperty = <PropertyPrototype>baseMember;
-                if (!thisProperty.visibilityEquals(baseProperty)) {
-                  this.errorRelated(
-                    DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
-                    thisProperty.identifierNode.range, baseProperty.identifierNode.range
-                  );
-                }
-                baseProperty.set(CommonFlags.Virtual);
-                let baseGetter = baseProperty.getterPrototype;
-                if (baseGetter) {
-                  baseGetter.set(CommonFlags.Virtual);
-                  let thisGetter = thisProperty.getterPrototype;
-                  if (thisGetter) {
-                    let overloads = baseGetter.overloads;
-                    if (!overloads) baseGetter.overloads = overloads = new Set();
-                    overloads.add(thisGetter);
-                  }
-                  let baseGetterInstances = baseGetter.instances;
-                  if (baseGetterInstances) {
-                    for (let _values = Map_values(baseGetterInstances), a = 0, b = _values.length; a < b; ++a) {
-                      let baseGetterInstance = _values[a];
-                      baseGetterInstance.set(CommonFlags.Virtual);
-                    }
-                  }
-                }
-                let baseSetter = baseProperty.setterPrototype;
-                if (baseSetter && thisProperty.setterPrototype) {
-                  baseSetter.set(CommonFlags.Virtual);
-                  let thisSetter = thisProperty.setterPrototype;
-                  if (thisSetter) {
-                    let overloads = baseSetter.overloads;
-                    if (!overloads) baseSetter.overloads = overloads = new Set();
-                    overloads.add(thisSetter);
-                  }
-                  let baseSetterInstances = baseSetter.instances;
-                  if (baseSetterInstances) {
-                    for (let _values = Map_values(baseSetterInstances), a = 0, b = _values.length; a < b; ++a) {
-                      let baseSetterInstance = _values[a];
-                      baseSetterInstance.set(CommonFlags.Virtual);
-                    }
-                  }
-                }
-              }
+              this.doProcessOverride(thisPrototype, thisMember, basePrototype, baseMember);
+            }
+          }
+        }
+        // A class can have a base class and multiple interfaces, but from the
+        // base member alone we only get one. Make sure we don't miss any.
+        let baseInterfacePrototypes = basePrototype.interfacePrototypes;
+        if (baseInterfacePrototypes) {
+          for (let i = 0, k = baseInterfacePrototypes.length; i < k; ++i) {
+            let baseInterfacePrototype = baseInterfacePrototypes[i];
+            if (baseInterfacePrototype != basePrototype) {
+              this.processOverrides(thisPrototype, baseInterfacePrototype);
             }
           }
         }
@@ -1597,6 +1525,118 @@ export class Program extends DiagnosticEmitter {
         if (!nextPrototype) break;
         basePrototype = nextPrototype;
       } while (true);
+    }
+  }
+
+  /** Processes a single overridden member by this class in a base class. */
+  private doProcessOverride(
+    thisClass: ClassPrototype,
+    thisMember: DeclaredElement,
+    baseClass: ClassPrototype,
+    baseMember: DeclaredElement
+  ): void {
+    // Constructors and private members do not override
+    if (thisMember.isAny(CommonFlags.Constructor | CommonFlags.Private)) return;
+    if (
+      thisMember.kind == ElementKind.FunctionPrototype &&
+      baseMember.kind == ElementKind.FunctionPrototype
+    ) {
+      let thisMethod = <FunctionPrototype>thisMember;
+      let baseMethod = <FunctionPrototype>baseMember;
+      if (!thisMethod.visibilityEquals(baseMethod)) {
+        this.errorRelated(
+          DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+          thisMethod.identifierNode.range, baseMethod.identifierNode.range
+        );
+      }
+      baseMember.set(CommonFlags.Overridden);
+      let overrides = baseMethod.unboundOverrides;
+      if (!overrides) baseMethod.unboundOverrides = overrides = new Set();
+      overrides.add(<FunctionPrototype>thisMember);
+      let baseMethodInstances = baseMethod.instances;
+      if (baseMethodInstances) {
+        for (let _values = Map_values(baseMethodInstances), a = 0, b = _values.length; a < b; ++a) {
+          let baseMethodInstance = _values[a];
+          baseMethodInstance.set(CommonFlags.Overridden);
+        }
+      }
+    } else if (
+      thisMember.kind == ElementKind.PropertyPrototype &&
+      baseMember.kind == ElementKind.PropertyPrototype
+    ) {
+      let thisProperty = <PropertyPrototype>thisMember;
+      let baseProperty = <PropertyPrototype>baseMember;
+      if (!thisProperty.visibilityEquals(baseProperty)) {
+        this.errorRelated(
+          DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+          thisProperty.identifierNode.range, baseProperty.identifierNode.range
+        );
+      }
+      if (baseProperty.parent.kind != ElementKind.InterfacePrototype) {
+        // Interface fields/properties can be implemented by either, but other
+        // members must match to retain compatiblity with TS/JS.
+        let thisIsField = thisProperty.isField;
+        if (thisIsField != baseProperty.isField) {
+          if (thisIsField) { // base is property
+            this.errorRelated(
+              DiagnosticCode._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property,
+              thisProperty.identifierNode.range, baseProperty.identifierNode.range,
+              thisProperty.name, baseClass.internalName, thisClass.internalName
+            );
+          } else { // this is property, base is field
+            this.errorRelated(
+              DiagnosticCode._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor,
+              thisProperty.identifierNode.range, baseProperty.identifierNode.range,
+              thisProperty.name, baseClass.internalName, thisClass.internalName
+            );
+          }
+          return;
+        } else if (thisIsField) { // base is also field
+          // Fields don't override other fields and can only be redeclared
+          return;
+        }
+      }
+      baseProperty.set(CommonFlags.Overridden);
+      let baseGetter = baseProperty.getterPrototype;
+      if (baseGetter) {
+        baseGetter.set(CommonFlags.Overridden);
+        let thisGetter = thisProperty.getterPrototype;
+        if (thisGetter) {
+          let overrides = baseGetter.unboundOverrides;
+          if (!overrides) baseGetter.unboundOverrides = overrides = new Set();
+          overrides.add(thisGetter);
+        }
+        let baseGetterInstances = baseGetter.instances;
+        if (baseGetterInstances) {
+          for (let _values = Map_values(baseGetterInstances), a = 0, b = _values.length; a < b; ++a) {
+            let baseGetterInstance = _values[a];
+            baseGetterInstance.set(CommonFlags.Overridden);
+          }
+        }
+      }
+      let baseSetter = baseProperty.setterPrototype;
+      if (baseSetter && thisProperty.setterPrototype) {
+        baseSetter.set(CommonFlags.Overridden);
+        let thisSetter = thisProperty.setterPrototype;
+        if (thisSetter) {
+          let overrides = baseSetter.unboundOverrides;
+          if (!overrides) baseSetter.unboundOverrides = overrides = new Set();
+          overrides.add(thisSetter);
+        }
+        let baseSetterInstances = baseSetter.instances;
+        if (baseSetterInstances) {
+          for (let _values = Map_values(baseSetterInstances), a = 0, b = _values.length; a < b; ++a) {
+            let baseSetterInstance = _values[a];
+            baseSetterInstance.set(CommonFlags.Overridden);
+          }
+        }
+      }
+    } else {
+      this.errorRelated(
+        DiagnosticCode.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
+        thisMember.identifierNode.range, baseMember.identifierNode.range,
+        thisMember.name, thisClass.internalName, baseClass.internalName
+      );
     }
   }
 
@@ -1679,7 +1719,6 @@ export class Program extends DiagnosticEmitter {
       }
       case ElementKind.Property:
       case ElementKind.Function:
-      case ElementKind.Field:
       case ElementKind.Class: assert(false); // assumes that there are no instances yet
     }
     let staticMembers = element.members;
@@ -1896,6 +1935,78 @@ export class Program extends DiagnosticEmitter {
     return flags;
   }
 
+  /** Checks whether a particular feature is enabled. */
+  checkFeatureEnabled(feature: Feature, reportNode: Node): bool {
+    if (!this.options.hasFeature(feature)) {
+      this.error(
+        DiagnosticCode.Feature_0_is_not_enabled,
+        reportNode.range, featureToString(feature)
+      );
+      return false;
+    }
+    return true;
+  }
+
+  /** Checks whether a particular type is supported. */
+  checkTypeSupported(type: Type, reportNode: Node): bool {
+    switch (type.kind) {
+      case TypeKind.V128: return this.checkFeatureEnabled(Feature.Simd, reportNode);
+      case TypeKind.Funcref:
+      case TypeKind.Externref:
+        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode);
+      case TypeKind.Anyref:
+      case TypeKind.Eqref:
+      case TypeKind.I31ref:
+      case TypeKind.Dataref:
+      case TypeKind.Arrayref: {
+        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
+            && this.checkFeatureEnabled(Feature.GC, reportNode);
+      }
+      case TypeKind.Stringref:
+      case TypeKind.StringviewWTF8:
+      case TypeKind.StringviewWTF16:
+      case TypeKind.StringviewIter: {
+        return this.checkFeatureEnabled(Feature.ReferenceTypes, reportNode)
+            && this.checkFeatureEnabled(Feature.Stringref, reportNode);
+      }
+    }
+    let classReference = type.getClass();
+    if (classReference) {
+      do {
+        let typeArguments = classReference.typeArguments;
+        if (typeArguments) {
+          for (let i = 0, k = typeArguments.length; i < k; ++i) {
+            if (!this.checkTypeSupported(typeArguments[i], reportNode)) {
+              return false;
+            }
+          }
+        }
+        classReference = classReference.base;
+      } while(classReference);
+    } else {
+      let signatureReference = type.getSignature();
+      if (signatureReference) {
+        let thisType = signatureReference.thisType;
+        if (thisType) {
+          if (!this.checkTypeSupported(thisType, reportNode)) {
+            return false;
+          }
+        }
+        let parameterTypes = signatureReference.parameterTypes;
+        for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+          if (!this.checkTypeSupported(parameterTypes[i], reportNode)) {
+            return false;
+          }
+        }
+        let returnType = signatureReference.returnType;
+        if (!this.checkTypeSupported(returnType, reportNode)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   /** Initializes a class declaration. */
   private initializeClass(
     /** The declaration to initialize. */
@@ -2000,7 +2111,7 @@ export class Program extends DiagnosticEmitter {
       if (!parent.add(name, element)) return;
     } else { // actual instance field
       assert(!declaration.isAny(CommonFlags.Abstract | CommonFlags.Get | CommonFlags.Set));
-      element = new FieldPrototype(
+      element = PropertyPrototype.forField(
         name,
         parent,
         declaration,
@@ -2074,7 +2185,7 @@ export class Program extends DiagnosticEmitter {
                     firstArg.range, text
                   );
                 } else {
-                  let overloads = classPrototype.overloadPrototypes;
+                  let overloads = classPrototype.operatorOverloadPrototypes;
                   if (overloads.has(kind)) {
                     this.error(
                       DiagnosticCode.Duplicate_function_implementation,
@@ -2169,7 +2280,7 @@ export class Program extends DiagnosticEmitter {
     }
     let element = new FunctionPrototype(
       (isGetter ? GETTER_PREFIX : SETTER_PREFIX) + name,
-      property,
+      property.parent, // same level as property
       declaration,
       this.checkDecorators(declaration.decorators,
         DecoratorFlags.Inline | DecoratorFlags.Unsafe
@@ -2734,10 +2845,6 @@ export const enum ElementKind {
   InterfacePrototype,
   /** An {@link Interface}. */
   Interface,
-  /** A {@link FieldPrototype}. */
-  FieldPrototype,
-  /** A {@link Field}. */
-  Field,
   /** A {@link PropertyPrototype}.  */
   PropertyPrototype,
   /** A {@link Property}. */
@@ -2938,6 +3045,26 @@ export abstract class Element {
     return (this.flags & vis) == (other.flags & vis);
   }
 
+  /** Tests if this element is bound to a class. */
+  get isBound(): bool {
+    let parent = this.parent;
+    switch (parent.kind) {
+      case ElementKind.Class:
+      case ElementKind.Interface: return true;
+    }
+    return false;
+  }
+
+  /** Gets the class or interface this element is bound to, if any. */
+  getBoundClassOrInterface(): Class | null {
+    let parent = this.parent;
+    switch (parent.kind) {
+      case ElementKind.Class:
+      case ElementKind.Interface: return <Class>parent;
+    }
+    return null;
+  }
+
   /** Returns a string representation of this element. */
   toString(): string {
     return `${this.internalName}, kind=${this.kind}`;
@@ -2998,7 +3125,9 @@ export abstract class DeclaredElement extends Element {
     let identifierNode = declaration.name;
     if (declaration.kind == NodeKind.FunctionDeclaration || declaration.kind == NodeKind.MethodDeclaration) {
       let signatureNode = (<FunctionDeclaration>declaration).signature;
-      return Range.join(identifierNode.range, signatureNode.range);
+      if (identifierNode.range.source == signatureNode.range.source) {
+        return Range.join(identifierNode.range, signatureNode.range);
+      }
     }
     return identifierNode.range;
   }
@@ -3006,67 +3135,6 @@ export abstract class DeclaredElement extends Element {
   /** Gets the assiciated decorator nodes. */
   get decoratorNodes(): DecoratorNode[] | null {
     return this.declaration.decorators;
-  }
-
-  /** Checks if this element is a compatible override of the specified. */
-  isCompatibleOverride(base: DeclaredElement): bool {
-    let self: DeclaredElement = this; // TS
-    let kind = self.kind;
-    let checkCompatibleOverride = false;
-    if (kind == base.kind) {
-      switch (kind) {
-        case ElementKind.FunctionPrototype : {
-          let selfFunction = this.program.resolver.resolveFunction(<FunctionPrototype>self, null);
-          if (!selfFunction) return false;
-          let baseFunction = this.program.resolver.resolveFunction(<FunctionPrototype>base, null);
-          if (!baseFunction) return false;
-          self = selfFunction;
-          base = baseFunction;
-          checkCompatibleOverride = true;
-          // fall-through
-        }
-        case ElementKind.Function: {
-          return (<Function>self).signature.isAssignableTo((<Function>base).signature, checkCompatibleOverride);
-        }
-        case ElementKind.PropertyPrototype: {
-          let selfProperty = this.program.resolver.resolveProperty(<PropertyPrototype>self);
-          if (!selfProperty) return false;
-          let baseProperty = this.program.resolver.resolveProperty(<PropertyPrototype>base);
-          if (!baseProperty) return false;
-          self = selfProperty;
-          base = baseProperty;
-          // fall-through
-        }
-        case ElementKind.Property: {
-          let selfProperty = <Property>self;
-          let baseProperty = <Property>base;
-          let selfGetter = selfProperty.getterInstance;
-          let baseGetter = baseProperty.getterInstance;
-          if (selfGetter) {
-            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
-              return false;
-            }
-          } else if (baseGetter) {
-            return false;
-          }
-          let selfSetter = selfProperty.setterInstance;
-          let baseSetter = baseProperty.setterInstance;
-          if (selfSetter) {
-            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
-              return false;
-            }
-          } else if (baseSetter) {
-            return false;
-          }
-          return true;
-        }
-        // TODO: Implement properties overriding fields and vice-versa. Challenge is that anything overridable requires
-        // a virtual stub, but fields aren't functions. Either all (such) fields should become property-like, with a
-        // getter and a setter that can participate as a virtual stub, or it's allowed one-way, with fields integrated
-        // into what can be a virtual stub as get=load and set=store, then not necessarily with own accessor functions.
-      }
-    }
-    return false;
   }
 }
 
@@ -3512,7 +3580,7 @@ export class Local extends VariableLikeElement {
   constructor(
     /** Simple name. */
     name: string,
-    /** Zero-based index within the enclosing function. `-1` indicates a virtual local. */
+    /** Zero-based index within the enclosing function. `-1` indicates a dummy local. */
     public index: i32,
     /** Resolved type. */
     type: Type,
@@ -3541,8 +3609,8 @@ export class FunctionPrototype extends DeclaredElement {
   operatorKind: OperatorKind = OperatorKind.Invalid;
   /** Already resolved instances. */
   instances: Map<string,Function> | null = null;
-  /** Methods overloading this one, if any. These are unbound. */
-  overloads: Set<FunctionPrototype> | null = null;
+  /** Methods overriding this one, if any. These are unbound. */
+  unboundOverrides: Set<FunctionPrototype> | null = null;
 
   /** Clones of this prototype that are bound to specific classes. */
   private boundPrototypes: Map<Class,FunctionPrototype> | null = null;
@@ -3589,14 +3657,6 @@ export class FunctionPrototype extends DeclaredElement {
     return (<FunctionDeclaration>this.declaration).arrowKind;
   }
 
-  /** Tests if this prototype is bound to a class. */
-  get isBound(): bool {
-    let parent = this.parent;
-    let parentKind = parent.kind;
-    if (parentKind == ElementKind.PropertyPrototype) parentKind = parent.parent.kind;
-    return parentKind == ElementKind.Class || parentKind == ElementKind.Interface;
-  }
-
   /** Creates a clone of this prototype that is bound to a concrete class instead. */
   toBound(classInstance: Class): FunctionPrototype {
     assert(this.is(CommonFlags.Instance));
@@ -3608,13 +3668,13 @@ export class FunctionPrototype extends DeclaredElement {
     assert(declaration.kind == NodeKind.MethodDeclaration);
     let bound = new FunctionPrototype(
       this.name,
-      classInstance, // !
+      classInstance, // now bound
       <MethodDeclaration>declaration,
       this.decoratorFlags
     );
     bound.flags = this.flags;
     bound.operatorKind = this.operatorKind;
-    bound.overloads = this.overloads;
+    bound.unboundOverrides = this.unboundOverrides;
     // NOTE: this.instances holds instances per bound class / unbound
     boundPrototypes.set(classInstance, bound);
     return bound;
@@ -3657,8 +3717,8 @@ export class Function extends TypedElement {
   ref: FunctionRef = 0;
   /** Varargs stub for calling with omitted arguments. */
   varargsStub: Function | null = null;
-  /** Virtual stub for calling overloads. */
-  virtualStub: Function | null = null;
+  /** Stub for calling overrides. */
+  overrideStub: Function | null = null;
   /** Runtime memory segment, if created. */
   memorySegment: MemorySegment | null = null;
   /** Original function, if a stub. Otherwise `this`. */
@@ -3757,17 +3817,7 @@ export class Function extends TypedElement {
       : getDefaultParameterName(index);
   }
 
-  /** Gets the class or interface this function belongs to, if an instance method. */
-  getClassOrInterface(): Class | null {
-    let parent = this.parent;
-    if (parent.kind == ElementKind.Property) parent = parent.parent;
-    if (parent.kind == ElementKind.Class || parent.kind == ElementKind.Interface) {
-      return <Class>parent;
-    }
-    return null;
-  }
-
-  /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
+  /** Creates a stub for use with this function, i.e. for varargs or override calls. */
   newStub(postfix: string): Function {
     let stub = new Function(
       this.original.name + STUB_DELIMITER + postfix,
@@ -3856,133 +3906,11 @@ export class Function extends TypedElement {
   }
 }
 
-/** A yet unresolved instance field prototype. */
-export class FieldPrototype extends DeclaredElement {
-
-  /** Constructs a new field prototype. */
-  constructor(
-    /** Simple name. */
-    name: string,
-    /** Parent class. */
-    parent: ClassPrototype,
-    /** Declaration reference. */
-    declaration: FieldDeclaration,
-    /** Pre-checked flags indicating built-in decorators. */
-    decoratorFlags: DecoratorFlags = DecoratorFlags.None
-  ) {
-    super(
-      ElementKind.FieldPrototype,
-      name,
-      mangleInternalName(name, parent, assert(declaration.is(CommonFlags.Instance))),
-      parent.program,
-      parent,
-      declaration
-    );
-    this.decoratorFlags = decoratorFlags;
-  }
-
-  /** Gets the associated type node. */
-  get typeNode(): TypeNode | null {
-    return (<FieldDeclaration>this.declaration).type;
-  }
-
-  /** Gets the associated initializer node. */
-  get initializerNode(): Expression | null {
-    return (<FieldDeclaration>this.declaration).initializer;
-  }
-
-  /** Gets the associated parameter index. Set if declared as a constructor parameter, otherwise `-1`. */
-  get parameterIndex(): i32 {
-    return (<FieldDeclaration>this.declaration).parameterIndex;
-  }
-}
-
-/** A resolved instance field. */
-export class Field extends VariableLikeElement {
-
-  /** Field prototype reference. */
-  prototype: FieldPrototype;
-  /** Field memory offset, if an instance field. */
-  memoryOffset: i32 = -1;
-  /** Getter function reference, if compiled. */
-  getterRef: FunctionRef = 0;
-  /** Setter function reference, if compiled. */
-  setterRef: FunctionRef = 0;
-
-  /** Constructs a new field. */
-  constructor(
-    /** Respective field prototype. */
-    prototype: FieldPrototype,
-    /** Parent class. */
-    parent: Class,
-    /** Concrete type. */
-    type: Type
-  ) {
-    super(
-      ElementKind.Field,
-      prototype.name,
-      parent,
-      <VariableLikeDeclarationStatement>prototype.declaration
-    );
-    this.prototype = prototype;
-    this.flags = prototype.flags;
-    this.decoratorFlags = prototype.decoratorFlags;
-    assert(type != Type.void);
-    this.setType(type);
-    registerConcreteElement(this.program, this);
-  }
-
-  /** Gets the field's `this` type. */
-  get thisType(): Type {
-    let parent = this.parent;
-    assert(parent.kind == ElementKind.Class);
-    return (<Class>parent).type;
-  }
-
-  /** Gets the internal name of the respective getter function. */
-  get internalGetterName(): string {
-    let cached = this._internalGetterName;
-    if (cached == null) {
-      this._internalGetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${GETTER_PREFIX}${this.name}`;
-    }
-    return cached;
-  }
-  private _internalGetterName: string | null = null;
-
-  /** Gets the internal name of the respective setter function. */
-  get internalSetterName(): string {
-    let cached = this._internalSetterName;
-    if (cached == null) {
-      this._internalSetterName = cached = `${this.parent.internalName}${INSTANCE_DELIMITER}${SETTER_PREFIX}${this.name}`;
-    }
-    return cached;
-  }
-  private _internalSetterName: string | null = null;
-
-  /** Gets the signature of the respective getter function. */
-  get internalGetterSignature(): Signature {
-    let cached = this._internalGetterSignature;
-    if (!cached) {
-      this._internalGetterSignature = cached = new Signature(this.program, null, this.type, this.thisType);
-    }
-    return cached;
-  }
-  private _internalGetterSignature: Signature | null = null;
-
-  /** Gets the signature of the respective setter function. */
-  get internalSetterSignature(): Signature {
-    let cached = this._internalSetterSignature;
-    if (!cached) {
-      this._internalSetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
-    }
-    return cached;
-  }
-  private _internalSetterSignature: Signature | null = null;
-}
-
 /** A property comprised of a getter and a setter function. */
 export class PropertyPrototype extends DeclaredElement {
 
+  /** Field declaration, if a field. */
+  fieldDeclaration: FieldDeclaration | null = null;
   /** Getter prototype. */
   getterPrototype: FunctionPrototype | null = null;
   /** Setter prototype. */
@@ -3992,6 +3920,68 @@ export class PropertyPrototype extends DeclaredElement {
 
   /** Clones of this prototype that are bound to specific classes. */
   private boundPrototypes: Map<Class,PropertyPrototype> | null = null;
+
+  /** Creates a property prototype representing a field. */
+  static forField(
+    /** Simple name. */
+    name: string,
+    /** Parent element. Always a class prototype. */
+    parent: ClassPrototype,
+    /** Declaration of the field. */
+    fieldDeclaration: FieldDeclaration,
+    /** Pre-checked flags indicating built-in decorators. */
+    decoratorFlags: DecoratorFlags,
+  ): PropertyPrototype {
+    // A field is a property with an attached memory offset. Unlike normal
+    // properties, accessors for fields are not explicitly declared, so we
+    // declare them implicitly here and compile them as built-ins when used.
+    // As a result, explicit and implicit accessors can override each other,
+    // which is useful when implementing interfaces declaring "fields". Such
+    // fields are satisfied by either a field or a normal property, so the
+    // override stub at the interface needs to handle both interchangeably.
+    let nativeRange = Source.native.range;
+    let typeNode = fieldDeclaration.type;
+    if (!typeNode) typeNode = Node.createOmittedType(fieldDeclaration.name.range.atEnd);
+    let getterDeclaration = new MethodDeclaration( // get name(): type
+      fieldDeclaration.name,
+      fieldDeclaration.decorators,
+      fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Get,
+      null,
+      new FunctionTypeNode([], typeNode, null, false, nativeRange),
+      null,
+      nativeRange
+    );
+    let setterDeclaration = new MethodDeclaration( // set name(name: type)
+      fieldDeclaration.name,
+      fieldDeclaration.decorators,
+      fieldDeclaration.flags | CommonFlags.Instance | CommonFlags.Set,
+      null,
+      new FunctionTypeNode(
+        [
+          new ParameterNode(
+            ParameterKind.Default,
+            fieldDeclaration.name,
+            typeNode, null, nativeRange
+          )
+        ],
+        new NamedTypeNode(
+          new TypeName(
+            new IdentifierExpression("", false, nativeRange),
+            null, nativeRange
+          ),
+          null, false, nativeRange
+        ),
+        null, false, nativeRange
+      ),
+      null, nativeRange
+    );
+    let prototype = new PropertyPrototype(name, parent, getterDeclaration);
+    prototype.fieldDeclaration = fieldDeclaration;
+    prototype.decoratorFlags = decoratorFlags;
+    prototype.getterPrototype = new FunctionPrototype(GETTER_PREFIX + name, parent, getterDeclaration, decoratorFlags);
+    prototype.setterPrototype = new FunctionPrototype(SETTER_PREFIX + name, parent, setterDeclaration, decoratorFlags);
+    return prototype;
+  }
 
   /** Constructs a new property prototype. */
   constructor(
@@ -4013,16 +4003,55 @@ export class PropertyPrototype extends DeclaredElement {
     this.flags &= ~(CommonFlags.Get | CommonFlags.Set);
   }
 
-  /** Tests if this prototype is bound to a class. */
-  get isBound(): bool {
-    switch (this.parent.kind) {
-      case ElementKind.Class:
-      case ElementKind.Interface: return true;
-    }
-    return false;
+  /** Tests if this property prototype represents a field. */
+  get isField(): bool {
+    return this.fieldDeclaration != null;
   }
 
-  /** Creates a clone of this prototype that is bound to a concrete class instead. */
+  /** Gets the associated type node. */
+  get typeNode(): TypeNode | null {
+    let fieldDeclaration = this.fieldDeclaration;
+    if (fieldDeclaration) return fieldDeclaration.type;
+    let getterPrototype = this.getterPrototype;
+    if (getterPrototype) {
+      let getterDeclaration = getterPrototype.declaration;
+      if (getterDeclaration.kind == NodeKind.FunctionDeclaration) {
+        return (<FunctionDeclaration>getterDeclaration).signature.returnType;
+      }
+    }
+    let setterPrototype = this.setterPrototype;
+    if (setterPrototype) {
+      let setterDeclaration = setterPrototype.declaration;
+      if (setterDeclaration.kind == NodeKind.FunctionDeclaration) {
+        let setterParameters = (<FunctionDeclaration>setterDeclaration).signature.parameters;
+        if (setterParameters.length) return setterParameters[0].type;
+      }
+    }
+    return null;
+  }
+
+  /** Gets the associated initializer node. */
+  get initializerNode(): Expression | null {
+    let fieldDeclaration = this.fieldDeclaration;
+    if (fieldDeclaration) return fieldDeclaration.initializer;
+    return null;
+  }
+
+  /** Gets the associated parameter index. Set if declared as a constructor parameter, otherwise `-1`. */
+  get parameterIndex(): i32 {
+    let fieldDeclaration = this.fieldDeclaration;
+    if (fieldDeclaration) return fieldDeclaration.parameterIndex;
+    return -1;
+  }
+
+  /** Gets the respective `this` type. */
+  get thisType(): Type {
+    let parent = this.parent;
+    assert(parent.kind == ElementKind.Class);
+    return (<Class>parent).type;
+  }
+
+  /** Creates a clone of this property prototype that is bound to a concrete class. */
   toBound(classInstance: Class): PropertyPrototype {
     assert(this.is(CommonFlags.Instance));
     assert(!this.isBound);
@@ -4033,10 +4062,11 @@ export class PropertyPrototype extends DeclaredElement {
     assert(firstDeclaration.kind == NodeKind.MethodDeclaration);
     let bound = new PropertyPrototype(
       this.name,
-      classInstance, // !
+      classInstance, // now bound
       <MethodDeclaration>firstDeclaration
     );
     bound.flags = this.flags;
+    bound.fieldDeclaration = this.fieldDeclaration;
     let getterPrototype = this.getterPrototype;
     if (getterPrototype) {
       bound.getterPrototype = getterPrototype.toBound(classInstance);
@@ -4059,6 +4089,8 @@ export class Property extends VariableLikeElement {
   getterInstance: Function | null = null;
   /** Setter instance. */
   setterInstance: Function | null = null;
+  /** Field memory offset, if a (layed out) instance field. */
+  memoryOffset: i32 = -1;
 
   /** Constructs a new property prototype. */
   constructor(
@@ -4071,15 +4103,15 @@ export class Property extends VariableLikeElement {
       ElementKind.Property,
       prototype.name,
       parent,
-      Node.createVariableDeclaration(
-        prototype.identifierNode,
-        null,
-        prototype.is(CommonFlags.Instance)
-          ? CommonFlags.Instance
-          : CommonFlags.None,
-        null, null,
-        prototype.identifierNode.range
-      )
+      prototype.isField
+        ? <VariableLikeDeclarationStatement>assert(prototype.fieldDeclaration)
+        : Node.createVariableDeclaration(
+            prototype.identifierNode,
+            null,
+            prototype.flags & CommonFlags.Instance,
+            null, null,
+            prototype.identifierNode.range
+          )
     );
     this.prototype = prototype;
     this.flags = prototype.flags;
@@ -4087,6 +4119,11 @@ export class Property extends VariableLikeElement {
     if (this.is(CommonFlags.Instance)) {
       registerConcreteElement(this.program, this);
     }
+  }
+
+  /** Tests if this property represents a field. */
+  get isField(): bool {
+    return this.prototype.isField;
   }
 }
 
@@ -4131,7 +4168,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Constructor prototype. */
   constructorPrototype: FunctionPrototype | null = null;
   /** Operator overload prototypes. */
-  overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
+  operatorOverloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
   /** Classes extending this class. */
@@ -4260,7 +4297,7 @@ export class Class extends TypedElement {
   /** Constructor instance. */
   constructorInstance: Function | null = null;
   /** Operator overloads. */
-  overloads: Map<OperatorKind,Function> | null = null;
+  operatorOverloads: Map<OperatorKind,Function> | null = null;
   /** Index signature, if present. */
   indexSignature: IndexSignature | null = null;
   /** Unique class id. */
@@ -4294,8 +4331,10 @@ export class Class extends TypedElement {
     let lengthField = this.getMember("length");
     if (!lengthField) return false;
     return (
-      lengthField.kind == ElementKind.Field ||
       (
+        lengthField.kind == ElementKind.Property &&
+        (<Property>lengthField).getterInstance != null
+      ) || (
         lengthField.kind == ElementKind.PropertyPrototype &&
         (<PropertyPrototype>lengthField).getterPrototype != null // TODO: resolve & check type?
       )
@@ -4328,11 +4367,11 @@ export class Class extends TypedElement {
       prototype.parent,
       prototype.declaration
     );
-    let program = this.program;
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.typeArguments = typeArguments;
+    let program = this.program;
     let usizeType = program.options.usizeType;
     let type = new Type(usizeType.kind, usizeType.flags & ~TypeFlags.Value | TypeFlags.Reference, usizeType.size);
     type.classReference = this;
@@ -4438,7 +4477,7 @@ export class Class extends TypedElement {
     }
     let instance: Class | null = this;
     do {
-      let overloads = instance.overloads;
+      let overloads = instance.operatorOverloads;
       if (overloads != null && overloads.has(kind)) {
         return assert(overloads.get(kind));
       }
@@ -4459,8 +4498,14 @@ export class Class extends TypedElement {
   /** Calculates the memory offset of the specified field. */
   offsetof(fieldName: string): u32 {
     let member = assert(this.getMember(fieldName));
-    assert(member.kind == ElementKind.Field);
-    return (<Field>member).memoryOffset;
+    assert(member.kind == ElementKind.PropertyPrototype);
+    let prototype = <PropertyPrototype>member;
+    let property = prototype.instance;
+    if (property) { // would have failed before
+      assert(property.isField && property.memoryOffset >= 0);
+      return property.memoryOffset;
+    }
+    return 0;
   }
 
   /** Creates a buffer suitable to hold a runtime instance of this class. */
@@ -4481,10 +4526,13 @@ export class Class extends TypedElement {
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
     let member = this.getMember(name);
-    if (member && member.kind == ElementKind.Field) {
-      let fieldInstance = <Field>member;
-      let offset = baseOffset + fieldInstance.memoryOffset;
-      let typeKind = fieldInstance.type.kind;
+    if (member && member.kind == ElementKind.PropertyPrototype) {
+      let prototype = <PropertyPrototype>member;
+      let property = prototype.instance; // resolved during class finalization
+      if (!property) return 0; // failed before
+      assert(property.isField && property.memoryOffset >= 0);
+      let offset = baseOffset + property.memoryOffset;
+      let typeKind = property.type.kind;
       switch (typeKind) {
         case TypeKind.I8:
         case TypeKind.U8: {
@@ -4615,9 +4663,11 @@ export class Class extends TypedElement {
       // Check that there are no managed instance fields
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
-        if (member.kind == ElementKind.Field) {
-          let fieldType = (<Field>member).type;
-          if (fieldType.isManaged) return false;
+        if (member.kind == ElementKind.PropertyPrototype) {
+          let prototype = <PropertyPrototype>member;
+          let property = prototype.instance; // resolved during class finalization
+          if (!property) continue; // failed earlier
+          if (property.isField && property.type.isManaged) return false;
         }
       }
 
@@ -4656,6 +4706,27 @@ export class Class extends TypedElement {
         }
         out.add(extendee);
         extendee.getAllExtendees(exceptIfMember, out);
+      }
+    }
+    return out;
+  }
+
+  /** Gets all extendees and implementers of this class. */
+  getAllExtendeesAndImplementers(out: Set<Class> = new Set()): Set<Class> {
+    let extendees = this.extendees;
+    if (extendees) {
+      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+        let extendee = _values[i];
+        out.add(extendee);
+        extendee.getAllExtendeesAndImplementers(out);
+      }
+    }
+    let implementers = this.implementers;
+    if (implementers) {
+      for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
+        let implementer = _values[i];
+        out.add(implementer);
+        implementer.getAllExtendeesAndImplementers(out);
       }
     }
     return out;

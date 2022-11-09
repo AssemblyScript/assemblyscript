@@ -1324,14 +1324,14 @@
    global.get $super-inline/foo
    local.tee $0
    i32.store $0
-   block $__inlined_func$super-inline/Foo#a@virtual
+   block $__inlined_func$super-inline/Foo#a@override
     local.get $0
     i32.const 8
     i32.sub
     i32.load $0
     i32.const 4
     i32.eq
-    br_if $__inlined_func$super-inline/Foo#a@virtual
+    br_if $__inlined_func$super-inline/Foo#a@override
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 4

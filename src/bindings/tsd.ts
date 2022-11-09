@@ -1,4 +1,8 @@
 import {
+  Source
+} from "../ast";
+
+import {
   CommonFlags
 } from "../common";
 
@@ -10,8 +14,8 @@ import {
   Interface,
   Enum,
   ElementKind,
-  Field,
-  Element
+  Element,
+  PropertyPrototype
 } from "../program";
 
 import {
@@ -168,10 +172,6 @@ export class TSDBuilder extends ExportsWalker {
     // not implemented
   }
 
-  visitField(name: string, element: Field): void {
-    // not implemented
-  }
-
   visitNamespace(name: string, element: Element): void {
     // not implemented
   }
@@ -238,7 +238,7 @@ export class TSDBuilder extends ExportsWalker {
         if (member.isAny(CommonFlags.Private | CommonFlags.Protected)) return false;
         if (member.is(CommonFlags.Constructor)) {
           // a generated constructor is ok
-          if (member.declaration.range != this.program.nativeRange) return false;
+          if (member.declaration.range != Source.native.range) return false;
         }
       }
     }
@@ -347,15 +347,16 @@ export class TSDBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.Field) continue;
-        let field = <Field>member;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        let property = (<PropertyPrototype>member).instance; // resolved during class finalization
+        if (!property || !property.isField) continue;
         sb.push("  /** @type `");
-        sb.push(field.type.toString());
+        sb.push(property.type.toString());
         sb.push("` */\n  ");
-        sb.push(field.name);
+        sb.push(property.name);
         sb.push(": ");
-        sb.push(this.toTypeScriptType(field.type, mode));
-        if (this.fieldAcceptsUndefined(field.type)) {
+        sb.push(this.toTypeScriptType(property.type, mode));
+        if (this.fieldAcceptsUndefined(property.type)) {
           sb.push(" | TOmittable");
         }
         sb.push(";\n");

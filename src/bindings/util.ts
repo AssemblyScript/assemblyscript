@@ -14,7 +14,6 @@ import {
   Enum,
   Class,
   Interface,
-  Field,
   File,
   FunctionPrototype,
   Global,
@@ -95,11 +94,6 @@ export abstract class ExportsWalker {
         this.visitClassInstances(name, <ClassPrototype>element);
         break;
       }
-      case ElementKind.Field: {
-        let fieldInstance = <Field>element;
-        if (fieldInstance.is(CommonFlags.Compiled)) this.visitField(name, fieldInstance);
-        break;
-      }
       case ElementKind.PropertyPrototype: {
         let propertyInstance = (<PropertyPrototype>element).instance;
         if (!propertyInstance) break;
@@ -150,7 +144,6 @@ export abstract class ExportsWalker {
   abstract visitFunction(name: string, element: Function): void;
   abstract visitClass(name: string, element: Class): void;
   abstract visitInterface(name: string, element: Interface): void;
-  abstract visitField(name: string, element: Field): void;
   abstract visitNamespace(name: string, element: Element): void;
   abstract visitAlias(name: string, element: Element, originalName: string): void;
 }

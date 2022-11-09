@@ -27,10 +27,11 @@ import {
   Function,
   Element,
   ElementKind,
-  Field,
   Class,
   TypedElement,
-  mangleInternalName
+  mangleInternalName,
+  Property,
+  PropertyPrototype
 } from "./program";
 
 import {
@@ -242,7 +243,7 @@ export class Flow {
   /** Local flags. */
   localFlags: LocalFlags[] = [];
   /** Field flags on `this`. Constructors only. */
-  thisFieldFlags: Map<Field,FieldFlags> | null = null;
+  thisFieldFlags: Map<Property,FieldFlags> | null = null;
   /** The label we break to when encountering a return statement, when inlining. */
   inlineReturnLabel: string | null = null;
 
@@ -477,27 +478,28 @@ export class Flow {
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = _values[i];
-        if (member.kind == ElementKind.Field) {
-          let field = <Field>member;
-          if (
-            // guaranteed by super
-            field.parent != classInstance ||
-            // has field initializer
-            field.initializerNode ||
-            // is initialized as a ctor parameter
-            field.prototype.parameterIndex != -1 ||
-            // is safe to initialize with zero
-            field.type.isAny(TypeFlags.Value | TypeFlags.Nullable)
-          ) {
-            this.setThisFieldFlag(field, FieldFlags.Initialized);
-          }
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        // only interested in fields (resolved during class finalization)
+        let property = (<PropertyPrototype>member).instance;
+        if (!property || !property.isField) continue;
+        if (
+          // guaranteed by super
+          property.prototype.parent != classInstance ||
+          // has field initializer
+          property.initializerNode ||
+          // is initialized as a ctor parameter
+          property.prototype.parameterIndex != -1 ||
+          // is safe to initialize with zero
+          property.type.isAny(TypeFlags.Value | TypeFlags.Nullable)
+        ) {
+          this.setThisFieldFlag(property, FieldFlags.Initialized);
         }
       }
     }
   }
 
   /** Tests if the specified `this` field has the specified flag or flags. */
-  isThisFieldFlag(field: Field, flag: FieldFlags): bool {
+  isThisFieldFlag(field: Property, flag: FieldFlags): bool {
     let fieldFlags = this.thisFieldFlags;
     if (fieldFlags != null && fieldFlags.has(field)) {
       return (changetype<FieldFlags>(fieldFlags.get(field)) & flag) == flag;
@@ -506,7 +508,7 @@ export class Flow {
   }
 
   /** Sets the specified flag or flags on the given `this` field. */
-  setThisFieldFlag(field: Field, flag: FieldFlags): void {
+  setThisFieldFlag(field: Property, flag: FieldFlags): void {
     let fieldFlags = this.thisFieldFlags;
     if (fieldFlags) {
       assert(this.sourceFunction.is(CommonFlags.Constructor));
@@ -799,7 +801,7 @@ export class Flow {
     // field flags (currently only INITIALIZED, so can simplify)
     let leftFieldFlags = left.thisFieldFlags;
     if (leftFieldFlags) {
-      let newFieldFlags = new Map<Field,FieldFlags>();
+      let newFieldFlags = new Map<Property,FieldFlags>();
       let rightFieldFlags = assert(right.thisFieldFlags);
       for (let _keys = Map_keys(leftFieldFlags), i = 0, k = _keys.length; i < k; ++i) {
         let key = _keys[i];

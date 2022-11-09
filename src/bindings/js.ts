@@ -5,7 +5,8 @@ import {
   LiteralExpression,
   StringLiteralExpression,
   TemplateLiteralExpression,
-  findDecorator
+  findDecorator,
+  Source
 } from "../ast";
 
 import {
@@ -22,7 +23,7 @@ import {
   Interface,
   Enum,
   EnumValue,
-  Field
+  PropertyPrototype
 } from "../program";
 
 import {
@@ -444,10 +445,6 @@ export class JSBuilder extends ExportsWalker {
 
   visitInterface(name: string, element: Interface): void {
     this.visitClass(name, element);
-  }
-
-  visitField(name: string, element: Field): void {
-    // not implemented
   }
 
   visitNamespace(name: string, element: Element): void {
@@ -1241,12 +1238,14 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.Field) continue;
-        let field = <Field>member;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        let property = (<PropertyPrototype>member).instance; // resolved during class finalization
+        if (!property || !property.isField) continue;
+        assert(property.memoryOffset >= 0);
         indent(sb, this.indentLevel);
-        sb.push(field.name);
+        sb.push(property.name);
         sb.push(": ");
-        this.makeLiftFromMemory(field.type, sb, "pointer + " + field.memoryOffset.toString());
+        this.makeLiftFromMemory(property.type, sb, "pointer + " + property.memoryOffset.toString());
         sb.push(",\n");
       }
     }
@@ -1283,10 +1282,12 @@ export class JSBuilder extends ExportsWalker {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = _keys[i];
         let member = assert(members.get(memberName));
-        if (member.kind != ElementKind.Field) continue;
-        let field = <Field>member;
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        let property = (<PropertyPrototype>member).instance; // resolved during class finalization
+        if (!property || !property.isField) continue;
+        assert(property.memoryOffset >= 0);
         indent(sb, this.indentLevel);
-        this.makeLowerToMemory(field.type, sb, "pointer + " + field.memoryOffset.toString(), "value." + memberName);
+        this.makeLowerToMemory(property.type, sb, "pointer + " + property.memoryOffset.toString(), "value." + memberName);
         sb.push(";\n");
       }
     }
@@ -1343,7 +1344,7 @@ function isPlainObject(clazz: Class): bool {
       if (member.isAny(CommonFlags.Private | CommonFlags.Protected)) return false;
       if (member.is(CommonFlags.Constructor)) {
         // a generated constructor is ok
-        if (member.declaration.range != member.program.nativeRange) return false;
+        if (member.declaration.range != Source.native.range) return false;
       }
     }
   }

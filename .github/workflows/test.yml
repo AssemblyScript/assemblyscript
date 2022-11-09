@@ -9,7 +9,7 @@ jobs:
     name: "Check"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - name: "Check that distribution files are unmodified"
       if: github.event_name == 'pull_request'
       run: |
@@ -30,7 +30,7 @@ jobs:
         # TODO: re-enable "windows", see https://github.com/npm/cli/issues/4234
         node_version: ["current", "lts_latest"]
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: ${{ matrix.node_version }}
@@ -50,7 +50,7 @@ jobs:
       matrix:
         target: ["debug", "release"]
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
@@ -115,7 +115,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     steps:
-    - uses: actions/checkout@v1.0.0
+    - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
