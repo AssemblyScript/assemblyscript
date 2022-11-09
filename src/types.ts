@@ -530,8 +530,6 @@ export class Type {
     } else {
       return false;
     }
-    // Interfaces can only extend interfaces
-    if (thisClass.isInterface && !baseClass.isInterface) return false;
     return true;
   }
 
@@ -994,16 +992,7 @@ export class Signature {
   isAssignableTo(target: Signature, checkCompatibleOverride: bool = false): bool {
     let thisThisType = this.thisType;
     let targetThisType = target.thisType;
-    if (!checkCompatibleOverride) {
-      // check exact `this` type
-      if (thisThisType) {
-        if (!targetThisType || !thisThisType.isAssignableTo(targetThisType)) {
-          return false;
-        }
-      } else if (targetThisType) {
-        return false;
-      }
-    } else {
+    if (checkCompatibleOverride) {
       // check kind of `this` type
       if (thisThisType) {
         if (!targetThisType || !thisThisType.canExtendOrImplement(targetThisType)) {
@@ -1012,18 +1001,25 @@ export class Signature {
       } else if (targetThisType) {
         return false;
       }
+    } else {
+      // check `this` type (invariant)
+      if (thisThisType) {
+        if (targetThisType != targetThisType) return false;
+      } else if (targetThisType) {
+        return false;
+      }
     }
 
     // check rest parameter
     if (this.hasRest != target.hasRest) return false; // TODO
 
-    // check return type
+    // check return type (covariant)
     let thisReturnType = this.returnType;
     let targetReturnType = target.returnType;
     if (!(thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType))) {
       return false;
     }
-    // check parameter types
+    // check parameter types (invariant)
     let thisParameterTypes = this.parameterTypes;
     let targetParameterTypes = target.parameterTypes;
     let numParameters = thisParameterTypes.length;
@@ -1032,7 +1028,7 @@ export class Signature {
     for (let i = 0; i < numParameters; ++i) {
       let thisParameterType = unchecked(thisParameterTypes[i]);
       let targetParameterType = unchecked(targetParameterTypes[i]);
-      if (!thisParameterType.isAssignableTo(targetParameterType)) return false;
+      if (thisParameterType != targetParameterType) return false;
     }
     return true;
   }

@@ -990,69 +990,11 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
-  block $invalid
-   block $~lib/arraybuffer/ArrayBufferView
-    block $~lib/string/String
-     block $~lib/arraybuffer/ArrayBuffer
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load $0
-      br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
-     end
-     return
-    end
-    return
-   end
-   local.get $0
-   i32.load $0
-   local.tee $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
-   return
-  end
-  unreachable
- )
- (func $~start (type $none_=>_none)
+ (func $~lib/rt/itcms/__new (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  memory.size $0
-  i32.const 16
-  i32.shl
-  i32.const 34236
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 1172
-  i32.const 1168
-  i32.store $0
-  i32.const 1176
-  i32.const 1168
-  i32.store $0
-  i32.const 1168
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 1204
-  i32.const 1200
-  i32.store $0
-  i32.const 1208
-  i32.const 1200
-  i32.store $0
-  i32.const 1200
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 1348
-  i32.const 1344
-  i32.store $0
-  i32.const 1352
-  i32.const 1344
-  i32.store $0
-  i32.const 1344
-  global.set $~lib/rt/itcms/fromSpace
   global.get $~lib/rt/itcms/total
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
@@ -1104,7 +1046,7 @@
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $2
+  local.tee $1
   call $~lib/rt/tlsf/searchBlock
   local.tee $0
   i32.eqz
@@ -1112,7 +1054,7 @@
    memory.size $0
    local.tee $0
    i32.const 4
-   local.get $2
+   local.get $1
    i32.load $0 offset=1568
    local.get $0
    i32.const 16
@@ -1127,16 +1069,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $1
+   local.tee $2
    local.get $0
-   local.get $1
+   local.get $2
    i32.gt_s
    select
    memory.grow $0
    i32.const 0
    i32.lt_s
    if
-    local.get $1
+    local.get $2
     memory.grow $0
     i32.const 0
     i32.lt_s
@@ -1144,7 +1086,7 @@
      unreachable
     end
    end
-   local.get $2
+   local.get $1
    local.get $0
    i32.const 16
    i32.shl
@@ -1152,7 +1094,7 @@
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   local.get $2
+   local.get $1
    call $~lib/rt/tlsf/searchBlock
    local.tee $0
    i32.eqz
@@ -1179,22 +1121,22 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $1
   local.get $0
   call $~lib/rt/tlsf/removeBlock
   local.get $0
   i32.load $0
-  local.tee $3
+  local.tee $2
   i32.const -4
   i32.and
   i32.const 28
   i32.sub
-  local.tee $1
+  local.tee $3
   i32.const 16
   i32.ge_u
   if
    local.get $0
-   local.get $3
+   local.get $2
    i32.const 2
    i32.and
    i32.const 28
@@ -1203,19 +1145,19 @@
    local.get $0
    i32.const 32
    i32.add
-   local.tee $3
-   local.get $1
+   local.tee $2
+   local.get $3
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store $0
+   local.get $1
    local.get $2
-   local.get $3
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $0
-   local.get $3
+   local.get $2
    i32.const -2
    i32.and
    i32.store $0
@@ -1245,8 +1187,8 @@
   i32.load $0 offset=8
   local.set $2
   local.get $0
-  global.get $~lib/rt/itcms/white
   local.get $1
+  global.get $~lib/rt/itcms/white
   i32.or
   i32.store $0 offset=4
   local.get $0
@@ -1278,6 +1220,67 @@
   i32.const 0
   i32.const 0
   memory.fill $0
+ )
+ (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+  block $invalid
+   block $~lib/arraybuffer/ArrayBufferView
+    block $~lib/string/String
+     block $~lib/arraybuffer/ArrayBuffer
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load $0
+      br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
+     end
+     return
+    end
+    return
+   end
+   local.get $0
+   i32.load $0
+   local.tee $0
+   if
+    local.get $0
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
+   return
+  end
+  unreachable
+ )
+ (func $~start (type $none_=>_none)
+  memory.size $0
+  i32.const 16
+  i32.shl
+  i32.const 34236
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 1172
+  i32.const 1168
+  i32.store $0
+  i32.const 1176
+  i32.const 1168
+  i32.store $0
+  i32.const 1168
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 1204
+  i32.const 1200
+  i32.store $0
+  i32.const 1208
+  i32.const 1200
+  i32.store $0
+  i32.const 1200
+  global.set $~lib/rt/itcms/toSpace
+  i32.const 1348
+  i32.const 1344
+  i32.store $0
+  i32.const 1352
+  i32.const 1344
+  i32.store $0
+  i32.const 1344
+  global.set $~lib/rt/itcms/fromSpace
+  call $~lib/rt/itcms/__new
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)

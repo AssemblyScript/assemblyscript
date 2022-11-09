@@ -1432,45 +1432,116 @@
   memory.fill $0
   local.get $1
  )
- (func $start:constructor (type $none_=>_none)
+ (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+  block $invalid
+   block $constructor/CtorFieldInitOrder
+    block $constructor/CtorConditionallyReturnsThis
+     block $constructor/CtorConditionallyReturns
+      block $constructor/CtorReturns
+       block $constructor/JustFieldNoInit
+        block $constructor/JustFieldInit
+         block $constructor/None
+          block $constructor/EmptyCtorWithFieldAccess
+           block $constructor/EmptyCtorWithFieldNoInit
+            block $constructor/EmptyCtorWithFieldInit
+             block $constructor/EmptyCtor
+              block $~lib/arraybuffer/ArrayBufferView
+               block $~lib/string/String
+                block $~lib/arraybuffer/ArrayBuffer
+                 local.get $0
+                 i32.const 8
+                 i32.sub
+                 i32.load $0
+                 br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/EmptyCtorWithFieldAccess $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorReturns $constructor/CtorConditionallyReturns $constructor/CtorConditionallyReturnsThis $constructor/CtorFieldInitOrder $invalid
+                end
+                return
+               end
+               return
+              end
+              local.get $0
+              i32.load $0
+              local.tee $0
+              if
+               local.get $0
+               call $byn-split-outlined-A$~lib/rt/itcms/__visit
+              end
+              return
+             end
+             return
+            end
+            return
+           end
+           return
+          end
+          return
+         end
+         return
+        end
+        return
+       end
+       return
+      end
+      return
+     end
+     return
+    end
+    return
+   end
+   return
+  end
+  unreachable
+ )
+ (func $~start (type $none_=>_none)
   (local $0 i32)
-  memory.size $0
-  i32.const 16
-  i32.shl
-  i32.const 34372
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 1172
-  i32.const 1168
-  i32.store $0
-  i32.const 1176
-  i32.const 1168
-  i32.store $0
-  i32.const 1168
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 1204
-  i32.const 1200
-  i32.store $0
-  i32.const 1208
-  i32.const 1200
-  i32.store $0
-  i32.const 1200
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 1348
-  i32.const 1344
-  i32.store $0
-  i32.const 1352
-  i32.const 1344
-  i32.store $0
-  i32.const 1344
-  global.set $~lib/rt/itcms/fromSpace
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1604
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store $0
+   memory.size $0
+   i32.const 16
+   i32.shl
+   i32.const 34372
+   i32.sub
+   i32.const 1
+   i32.shr_u
+   global.set $~lib/rt/itcms/threshold
+   i32.const 1172
+   i32.const 1168
+   i32.store $0
+   i32.const 1176
+   i32.const 1168
+   i32.store $0
+   i32.const 1168
+   global.set $~lib/rt/itcms/pinSpace
+   i32.const 1204
+   i32.const 1200
+   i32.store $0
+   i32.const 1208
+   i32.const 1200
+   i32.store $0
+   i32.const 1200
+   global.set $~lib/rt/itcms/toSpace
+   i32.const 1348
+   i32.const 1344
+   i32.store $0
+   i32.const 1352
+   i32.const 1344
+   i32.store $0
+   i32.const 1344
+   global.set $~lib/rt/itcms/fromSpace
+   local.get $0
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1604
    i32.lt_s
@@ -1771,7 +1842,11 @@
    global.set $~lib/memory/__stack_pointer
    local.get $0
    global.set $constructor/ctorFieldInitOrder
+   global.get $~lib/memory/__stack_pointer
    global.get $constructor/ctorFieldInitOrder
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0 offset=4
    i32.const 1
    i32.ne
@@ -1783,7 +1858,11 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    global.get $constructor/ctorFieldInitOrder
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0 offset=8
    i32.const 2
    i32.ne
@@ -1795,7 +1874,11 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    global.get $constructor/ctorFieldInitOrder
+   local.tee $0
+   i32.store $0
+   local.get $0
    i32.load $0
    i32.const 3
    i32.ne
@@ -1807,6 +1890,10 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
    return
   end
   i32.const 34400
@@ -1815,68 +1902,6 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
- )
- (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
-  block $invalid
-   block $constructor/CtorFieldInitOrder
-    block $constructor/CtorConditionallyReturnsThis
-     block $constructor/CtorConditionallyReturns
-      block $constructor/CtorReturns
-       block $constructor/JustFieldNoInit
-        block $constructor/JustFieldInit
-         block $constructor/None
-          block $constructor/EmptyCtorWithFieldAccess
-           block $constructor/EmptyCtorWithFieldNoInit
-            block $constructor/EmptyCtorWithFieldInit
-             block $constructor/EmptyCtor
-              block $~lib/arraybuffer/ArrayBufferView
-               block $~lib/string/String
-                block $~lib/arraybuffer/ArrayBuffer
-                 local.get $0
-                 i32.const 8
-                 i32.sub
-                 i32.load $0
-                 br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $constructor/EmptyCtor $constructor/EmptyCtorWithFieldInit $constructor/EmptyCtorWithFieldNoInit $constructor/EmptyCtorWithFieldAccess $constructor/None $constructor/JustFieldInit $constructor/JustFieldNoInit $constructor/CtorReturns $constructor/CtorConditionallyReturns $constructor/CtorConditionallyReturnsThis $constructor/CtorFieldInitOrder $invalid
-                end
-                return
-               end
-               return
-              end
-              local.get $0
-              i32.load $0
-              local.tee $0
-              if
-               local.get $0
-               call $byn-split-outlined-A$~lib/rt/itcms/__visit
-              end
-              return
-             end
-             return
-            end
-            return
-           end
-           return
-          end
-          return
-         end
-         return
-        end
-        return
-       end
-       return
-      end
-      return
-     end
-     return
-    end
-    return
-   end
-   return
-  end
-  unreachable
- )
- (func $~start (type $none_=>_none)
-  call $start:constructor
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (type $i32_=>_none) (param $0 i32)
   (local $1 i32)

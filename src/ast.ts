@@ -1622,6 +1622,15 @@ export const enum SourceKind {
 
 /** A top-level source node. */
 export class Source extends Node {
+
+  /** Gets the special native source. */
+  static get native(): Source {
+    let source = Source._native;
+    if (!source) Source._native = source = new Source(SourceKind.LibraryEntry, LIBRARY_PREFIX + "native.ts", "[native code]");
+    return source;
+  }
+  private static _native: Source | null = null;
+
   constructor(
     /** Source kind. */
     public sourceKind: SourceKind,

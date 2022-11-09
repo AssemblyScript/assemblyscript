@@ -80,11 +80,10 @@ import {
 import {
   ElementKind,
   FunctionPrototype,
-  Field,
   Global,
   DecoratorFlags,
-  ClassPrototype,
-  Class
+  Class,
+  PropertyPrototype
 } from "./program";
 
 import {
@@ -1075,11 +1074,12 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
       return module.unreachable();
     }
     let fieldName = (<StringLiteralExpression>firstOperand).value;
-    let classMembers = classReference.members;
-    if (classMembers && classMembers.has(fieldName)) {
-      let member = assert(classMembers.get(fieldName));
-      if (member.kind == ElementKind.Field) {
-        return contextualUsize(compiler, i64_new((<Field>member).memoryOffset), contextualType);
+    let fieldMember = classReference.getMember(fieldName);
+    if (fieldMember && fieldMember.kind == ElementKind.PropertyPrototype) {
+      let property = (<PropertyPrototype>fieldMember).instance;
+      if (property && property.isField) {
+        assert(property.memoryOffset >= 0);
+        return contextualUsize(compiler, i64_new(property.memoryOffset), contextualType);
       }
     }
     compiler.error(
@@ -10261,32 +10261,31 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
       // TODO: for (let member of members.values()) {
       for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
         let member = unchecked(_values[j]);
-        if (member.kind == ElementKind.Field) {
-          if ((<Field>member).parent == instance) {
-            let fieldType = (<Field>member).type;
-            if (fieldType.isManaged) {
-              let fieldOffset = (<Field>member).memoryOffset;
-              assert(fieldOffset >= 0);
-              needsTempValue = true;
-              body.push(
-                // if ($2 = value) __visit($2, $1)
-                module.if(
-                  module.local_tee(2,
-                    module.load(sizeTypeSize, false,
-                      module.local_get(0, sizeTypeRef),
-                      sizeTypeRef, fieldOffset
-                    ),
-                    false // internal
-                  ),
-                  module.call(visitInstance.internalName, [
-                    module.local_get(2, sizeTypeRef), // value
-                    module.local_get(1, TypeRef.I32)  // cookie
-                  ], TypeRef.None)
-                )
-              );
-            }
-          }
-        }
+        if (member.kind != ElementKind.PropertyPrototype) continue;
+        // Class should have resolved fields during finalization
+        let property = (<PropertyPrototype>member).instance;
+        if (!property) continue;
+        let fieldType = property.type;
+        if (!property.isField || property.getBoundClassOrInterface() != instance || !fieldType.isManaged) continue;
+        let fieldOffset = property.memoryOffset;
+        assert(fieldOffset >= 0);
+        needsTempValue = true;
+        body.push(
+          // if ($2 = value) __visit($2, $1)
+          module.if(
+            module.local_tee(2,
+              module.load(sizeTypeSize, false,
+                module.local_get(0, sizeTypeRef),
+                sizeTypeRef, fieldOffset
+              ),
+              false // internal
+            ),
+            module.call(visitInstance.internalName, [
+              module.local_get(2, sizeTypeRef), // value
+              module.local_get(1, TypeRef.I32)  // cookie
+            ], TypeRef.None)
+          )
+        );
       }
     }
   }
@@ -10456,66 +10455,6 @@ export function compileRTTI(compiler: Compiler): void {
   } else {
     module.addGlobal(BuiltinNames.rtti_base, TypeRef.I32, false, module.i32(i64_low(segment.offset)));
   }
-}
-
-/** Compiles a class-specific instanceof helper, checking a ref against all concrete instances. */
-export function compileClassInstanceOf(compiler: Compiler, prototype: ClassPrototype): void {
-  let module = compiler.module;
-  let sizeTypeRef = compiler.options.sizeTypeRef;
-  let instanceofInstance = assert(prototype.program.instanceofInstance);
-  compiler.compileFunction(instanceofInstance);
-
-  let stmts = new Array<ExpressionRef>();
-
-  // if (!ref) return false
-  stmts.push(
-    module.if(
-      module.unary(
-        sizeTypeRef == TypeRef.I64
-          ? UnaryOp.EqzI64
-          : UnaryOp.EqzI32,
-        module.local_get(0, sizeTypeRef)
-      ),
-      module.return(
-        module.i32(0)
-      )
-    )
-  );
-
-  // if (__instanceof(ref, ID[i])) return true
-  let instances = prototype.instances;
-  if (instances && instances.size > 0) {
-    // TODO: for (let instance of instances.values()) {
-    for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
-      let instance = unchecked(_values[i]);
-      stmts.push(
-        module.if(
-          module.call(instanceofInstance.internalName, [
-            module.local_get(0, sizeTypeRef),
-            module.i32(instance.id)
-          ], TypeRef.I32),
-          module.return(
-            module.i32(1)
-          )
-        )
-      );
-    }
-  }
-
-  // return false
-  stmts.push(
-    module.return(
-      module.i32(0)
-    )
-  );
-
-  module.addFunction(
-    `${prototype.internalName}~instanceof`,
-    sizeTypeRef,
-    TypeRef.I32,
-    null,
-    module.flatten(stmts)
-  );
 }
 
 // Helpers

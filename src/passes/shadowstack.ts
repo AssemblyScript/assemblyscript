@@ -148,6 +148,10 @@ import {
   BuiltinNames
 } from "../builtins";
 
+import {
+  Source
+} from "../ast";
+
 type LocalIndex = Index;
 type SlotIndex = Index;
 type SlotMap = Map<LocalIndex,SlotIndex>;
@@ -325,7 +329,7 @@ export class ShadowStackPass extends Pass {
           ),
           this.compiler.makeStaticAbort(
             this.compiler.ensureStaticString("stack overflow"),
-            this.compiler.program.nativeSource
+            Source.native
           )
         )
       );

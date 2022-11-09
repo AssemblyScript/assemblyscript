@@ -1621,7 +1621,7 @@
     i32.const 0
     i32.store $0
     local.get $1
-    i32.const 4
+    i32.const 8
     i32.sub
     global.set $~lib/memory/__stack_pointer
     global.get $~lib/memory/__stack_pointer
@@ -1630,8 +1630,8 @@
     br_if $folding-inner0
     global.get $~lib/memory/__stack_pointer
     local.tee $0
-    i32.const 0
-    i32.store $0
+    i64.const 0
+    i64.store $0
     local.get $0
     i32.const 4
     i32.const 3
@@ -1685,6 +1685,9 @@
     i32.const 4
     i32.add
     global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    local.get $2
+    i32.store $0 offset=4
     local.get $0
     local.get $2
     i32.store $0
@@ -1695,7 +1698,7 @@
      call $byn-split-outlined-A$~lib/rt/itcms/__link
     end
     global.get $~lib/memory/__stack_pointer
-    i32.const 4
+    i32.const 8
     i32.add
     global.set $~lib/memory/__stack_pointer
     local.get $1
