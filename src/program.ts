@@ -729,14 +729,6 @@ export class Program extends DiagnosticEmitter {
   }
   private _visitInstance: Function | null = null;
 
-  /** Gets the runtime `__typeinfo(id: u32): RTTIFlags` instance. */
-  get typeinfoInstance(): Function {
-    let cached = this._typeinfoInstance;
-    if (!cached) this._typeinfoInstance = cached = this.requireFunction(CommonNames.typeinfo);
-    return cached;
-  }
-  private _typeinfoInstance: Function | null = null;
-
   /** Gets the runtime `__newBuffer(size: usize, id: u32, data: usize = 0): usize` instance. */
   get newBufferInstance(): Function {
     let cached = this._newBufferInstance;

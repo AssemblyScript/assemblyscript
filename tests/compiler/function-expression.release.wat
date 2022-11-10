@@ -18,7 +18,7 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34956))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34920))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\03\00\00\00\08\00\00\00\01")
@@ -70,7 +70,7 @@
  (data (i32.const 2056) "\03\00\00\00\08\00\00\00\12")
  (data (i32.const 2076) "\1c")
  (data (i32.const 2088) "\03\00\00\00\08\00\00\00\13")
- (data (i32.const 2112) "\t\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 2112) "\t\00\00\00 \00\00\00 ")
  (table $0 20 20 funcref)
  (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|3 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~anonymous|0)
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
@@ -179,7 +179,7 @@
     i32.load $0 offset=8
     i32.eqz
     local.get $0
-    i32.const 34956
+    i32.const 34920
     i32.lt_u
     i32.and
     i32.eqz
@@ -240,7 +240,7 @@
     unreachable
    end
    local.get $1
-   i32.const 3
+   i32.const 2
    i32.shl
    i32.const 2116
    i32.add
@@ -807,10 +807,10 @@
   if
    unreachable
   end
-  i32.const 34960
+  i32.const 34928
   i32.const 0
   i32.store $0
-  i32.const 36528
+  i32.const 36496
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -821,7 +821,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 34960
+    i32.const 34928
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -839,7 +839,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 34960
+      i32.const 34928
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -857,13 +857,13 @@
     br $for-loop|0
    end
   end
-  i32.const 34960
-  i32.const 36532
+  i32.const 34928
+  i32.const 36500
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 34960
+  i32.const 34928
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
@@ -948,7 +948,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 34956
+      i32.const 34920
       i32.lt_u
       if
        local.get $0
@@ -1048,7 +1048,7 @@
      unreachable
     end
     local.get $0
-    i32.const 34956
+    i32.const 34920
     i32.lt_u
     if
      local.get $0
@@ -1071,7 +1071,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 34956
+     i32.const 34920
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1429,11 +1429,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 2188
+  i32.const 2152
   i32.lt_s
   if
-   i32.const 34976
-   i32.const 35024
+   i32.const 34944
+   i32.const 34992
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -1499,7 +1499,7 @@
   global.set $~lib/memory/__stack_pointer
   block $folding-inner1
    global.get $~lib/memory/__stack_pointer
-   i32.const 2188
+   i32.const 2152
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
@@ -1653,7 +1653,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 2188
+   i32.const 2152
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
@@ -1689,7 +1689,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 2188
+   i32.const 2152
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
@@ -1726,7 +1726,7 @@
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 34956
+   i32.const 34920
    i32.sub
    i32.const 1
    i32.shr_u
@@ -1760,7 +1760,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 2188
+   i32.const 2152
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
@@ -1778,7 +1778,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 2188
+   i32.const 2152
    i32.lt_s
    br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
@@ -1875,8 +1875,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 34976
-  i32.const 35024
+  i32.const 34944
+  i32.const 34992
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort
@@ -1889,11 +1889,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 2188
+  i32.const 2152
   i32.lt_s
   if
-   i32.const 34976
-   i32.const 35024
+   i32.const 34944
+   i32.const 34992
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -1919,11 +1919,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 2188
+  i32.const 2152
   i32.lt_s
   if
-   i32.const 34976
-   i32.const 35024
+   i32.const 34944
+   i32.const 34992
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -1949,11 +1949,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 2188
+  i32.const 2152
   i32.lt_s
   if
-   i32.const 34976
-   i32.const 35024
+   i32.const 34944
+   i32.const 34992
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

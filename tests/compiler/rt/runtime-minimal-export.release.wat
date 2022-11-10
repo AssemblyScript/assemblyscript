@@ -25,7 +25,7 @@
  (data (i32.const 1272) "\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d")
  (data (i32.const 1356) "<")
  (data (i32.const 1368) "\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
- (data (i32.const 1456) "\03\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1456) "\03\00\00\00 \00\00\00 ")
  (export "__new" (func $~lib/rt/tcms/__new))
  (export "__pin" (func $~lib/rt/tcms/__pin))
  (export "__unpin" (func $~lib/rt/tcms/__unpin))
@@ -564,10 +564,10 @@
   if
    unreachable
   end
-  i32.const 1488
+  i32.const 1472
   i32.const 0
   i32.store $0
-  i32.const 3056
+  i32.const 3040
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -578,7 +578,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 1488
+    i32.const 1472
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -596,7 +596,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1488
+      i32.const 1472
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -614,13 +614,13 @@
     br $for-loop|0
    end
   end
-  i32.const 1488
-  i32.const 3060
+  i32.const 1472
+  i32.const 3044
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1488
+  i32.const 1472
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
@@ -1018,7 +1018,7 @@
    i32.load $0 offset=8
    i32.eqz
    local.get $0
-   i32.const 1484
+   i32.const 1472
    i32.lt_u
    i32.and
    i32.eqz
@@ -1280,7 +1280,7 @@
     i32.and
     local.set $1
     local.get $0
-    i32.const 1484
+    i32.const 1472
     i32.lt_u
     if
      local.get $0
@@ -1303,7 +1303,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 1484
+     i32.const 1472
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT

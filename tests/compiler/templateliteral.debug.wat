@@ -39,9 +39,9 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 4640))
- (global $~lib/memory/__data_end i32 (i32.const 4692))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 37460))
- (global $~lib/memory/__heap_base i32 (i32.const 37460))
+ (global $~lib/memory/__data_end i32 (i32.const 4668))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 37436))
+ (global $~lib/memory/__heap_base i32 (i32.const 37436))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00")
@@ -101,7 +101,7 @@
  (data (i32.const 4540) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00:\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 4572) "\1c\00\00\00\03\00\00\00\00\00\00\00\03\00\00\00\0c\00\00\00\00\00\00\00\d0\11\00\00\00\00\00\00")
  (data (i32.const 4604) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00a\00:\00b\00:\00c\00\00\00")
- (data (i32.const 4640) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04A\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4640) "\06\00\00\00 \00\00\00 \00\00\00\00\00\00\00\04A\00\00 \00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -458,7 +458,7 @@
   i32.const 4
   i32.add
   local.get $id
-  i32.const 8
+  i32.const 4
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
@@ -4470,8 +4470,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 37488
-   i32.const 37536
+   i32.const 37456
+   i32.const 37504
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

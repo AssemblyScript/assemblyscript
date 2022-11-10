@@ -30,9 +30,9 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1088))
- (global $~lib/memory/__data_end i32 (i32.const 1164))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33932))
- (global $~lib/memory/__heap_base i32 (i32.const 33932))
+ (global $~lib/memory/__data_end i32 (i32.const 1128))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33896))
+ (global $~lib/memory/__heap_base i32 (i32.const 33896))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
@@ -62,7 +62,7 @@
  (data (i32.const 988) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\11\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1020) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1052) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\13\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1088) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1088) "\t\00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 20 20 funcref)
  (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $function-expression/semanticallyAnonymous~fnDecl $function-expression/semanticallyAnonymous~fnDecl|0)
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
@@ -423,7 +423,7 @@
   i32.const 4
   i32.add
   local.get $id
-  i32.const 8
+  i32.const 4
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
@@ -2679,8 +2679,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33952
-   i32.const 34000
+   i32.const 33920
+   i32.const 33968
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

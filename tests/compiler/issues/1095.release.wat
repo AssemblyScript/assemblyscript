@@ -17,7 +17,7 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34388))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34372))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
@@ -35,7 +35,7 @@
  (data (i32.const 1480) "\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
  (data (i32.const 1532) ",")
  (data (i32.const 1544) "\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\000\009\005\00.\00t\00s")
- (data (i32.const 1584) "\04\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1584) "\04\00\00\00 \00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
@@ -118,7 +118,7 @@
     i32.load $0 offset=8
     i32.eqz
     local.get $0
-    i32.const 34388
+    i32.const 34372
     i32.lt_u
     i32.and
     i32.eqz
@@ -179,7 +179,7 @@
     unreachable
    end
    local.get $1
-   i32.const 3
+   i32.const 2
    i32.shl
    i32.const 1588
    i32.add
@@ -746,10 +746,10 @@
   if
    unreachable
   end
-  i32.const 34400
+  i32.const 34384
   i32.const 0
   i32.store $0
-  i32.const 35968
+  i32.const 35952
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -760,7 +760,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 34400
+    i32.const 34384
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -778,7 +778,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 34400
+      i32.const 34384
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -796,13 +796,13 @@
     br $for-loop|0
    end
   end
-  i32.const 34400
-  i32.const 35972
+  i32.const 34384
+  i32.const 35956
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 34400
+  i32.const 34384
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
@@ -887,7 +887,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 34388
+      i32.const 34372
       i32.lt_u
       if
        local.get $0
@@ -987,7 +987,7 @@
      unreachable
     end
     local.get $0
-    i32.const 34388
+    i32.const 34372
     i32.lt_u
     if
      local.get $0
@@ -1010,7 +1010,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 34388
+     i32.const 34372
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1450,7 +1450,7 @@
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1620
+   i32.const 1604
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1460,7 +1460,7 @@
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 34388
+   i32.const 34372
    i32.sub
    i32.const 1
    i32.shr_u
@@ -1494,7 +1494,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1620
+   i32.const 1604
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1523,7 +1523,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1620
+   i32.const 1604
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1561,8 +1561,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 34416
-  i32.const 34464
+  i32.const 34400
+  i32.const 34448
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort

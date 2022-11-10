@@ -34,7 +34,7 @@
  (data (i32.const 1448) "\01\00\00\00*\00\00\00O\00b\00j\00e\00c\00t\00 \00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d")
  (data (i32.const 1500) "<")
  (data (i32.const 1512) "\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
- (data (i32.const 1568) "\03\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1568) "\03\00\00\00 \00\00\00 ")
  (export "__new" (func $~lib/rt/itcms/__new))
  (export "__pin" (func $~lib/rt/itcms/__pin))
  (export "__unpin" (func $~lib/rt/itcms/__unpin))
@@ -104,7 +104,7 @@
    i32.load $0 offset=8
    i32.eqz
    local.get $0
-   i32.const 34364
+   i32.const 34352
    i32.lt_u
    i32.and
    i32.eqz
@@ -190,7 +190,7 @@
     unreachable
    end
    local.get $2
-   i32.const 3
+   i32.const 2
    i32.shl
    i32.const 1572
    i32.add
@@ -757,10 +757,10 @@
   if
    unreachable
   end
-  i32.const 34368
+  i32.const 34352
   i32.const 0
   i32.store $0
-  i32.const 35936
+  i32.const 35920
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -771,7 +771,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 34368
+    i32.const 34352
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -789,7 +789,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 34368
+      i32.const 34352
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -807,13 +807,13 @@
     br $for-loop|0
    end
   end
-  i32.const 34368
-  i32.const 35940
+  i32.const 34352
+  i32.const 35924
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 34368
+  i32.const 34352
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
@@ -894,11 +894,11 @@
     i32.and
     i32.eq
     if
-     i32.const 34364
+     i32.const 34352
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 34364
+      i32.const 34352
       i32.lt_u
       if
        local.get $0
@@ -998,7 +998,7 @@
      unreachable
     end
     local.get $0
-    i32.const 34364
+    i32.const 34352
     i32.lt_u
     if
      local.get $0
@@ -1021,7 +1021,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 34364
+     i32.const 34352
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1690,7 +1690,7 @@
   memory.size $0
   i32.const 16
   i32.shl
-  i32.const 34364
+  i32.const 34352
   i32.sub
   i32.const 1
   i32.shr_u

@@ -25,18 +25,6 @@ export function __typeinfo(id: u32): TypeinfoFlags {
 
 // @ts-ignore: decorator
 @unsafe
-export function __instanceof(ptr: usize, classId: u32): bool { // keyword
-  let id = changetype<OBJECT>(ptr - TOTAL_OVERHEAD).rtId;
-  let rttiBase = __rtti_base;
-  if (id <= load<u32>(rttiBase)) {
-    do if (id == classId) return true;
-    while (id = changetype<Typeinfo>(rttiBase + sizeof<u32>() + id * offsetof<Typeinfo>()).base);
-  }
-  return false;
-}
-
-// @ts-ignore: decorator
-@unsafe
 export function __newBuffer(size: usize, id: u32, data: usize = 0): usize {
   let buffer = __new(size, id);
   if (data) memory.copy(buffer, data, size);
