@@ -28,7 +28,7 @@
  (data (i32.const 1304) "\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 1372) "<")
  (data (i32.const 1384) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1440) "\03\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1440) "\03\00\00\00 \00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots (type $none_=>_none)
@@ -607,10 +607,10 @@
   if
    unreachable
   end
-  i32.const 34240
+  i32.const 34224
   i32.const 0
   i32.store $0
-  i32.const 35808
+  i32.const 35792
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -621,7 +621,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 34240
+    i32.const 34224
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -639,7 +639,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 34240
+      i32.const 34224
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -657,13 +657,13 @@
     br $for-loop|0
    end
   end
-  i32.const 34240
-  i32.const 35812
+  i32.const 34224
+  i32.const 35796
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 34240
+  i32.const 34224
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (type $none_=>_i32) (result i32)
@@ -744,11 +744,11 @@
     i32.and
     i32.eq
     if
-     i32.const 34236
+     i32.const 34224
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 34236
+      i32.const 34224
       i32.lt_u
       if
        local.get $0
@@ -848,7 +848,7 @@
      unreachable
     end
     local.get $0
-    i32.const 34236
+    i32.const 34224
     i32.lt_u
     if
      local.get $0
@@ -871,7 +871,7 @@
      i32.const 4
      i32.add
      local.tee $0
-     i32.const 34236
+     i32.const 34224
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1251,7 +1251,7 @@
   memory.size $0
   i32.const 16
   i32.shl
-  i32.const 34236
+  i32.const 34224
   i32.sub
   i32.const 1
   i32.shr_u
@@ -1327,7 +1327,7 @@
      i32.load $0 offset=8
      i32.eqz
      local.get $1
-     i32.const 34236
+     i32.const 34224
      i32.lt_u
      i32.and
      i32.eqz
@@ -1382,13 +1382,13 @@
     if
      i32.const 1248
      i32.const 1312
-     i32.const 22
+     i32.const 21
      i32.const 28
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    i32.const 3
+    i32.const 2
     i32.shl
     i32.const 1444
     i32.add

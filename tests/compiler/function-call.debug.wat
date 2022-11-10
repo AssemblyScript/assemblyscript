@@ -31,9 +31,9 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $function-call/foo (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 736))
- (global $~lib/memory/__data_end i32 (i32.const 812))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33580))
- (global $~lib/memory/__heap_base i32 (i32.const 33580))
+ (global $~lib/memory/__data_end i32 (i32.const 776))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33544))
+ (global $~lib/memory/__heap_base i32 (i32.const 33544))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
@@ -52,7 +52,7 @@
  (data (i32.const 636) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 668) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 700) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 736) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 736) "\t\00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00")
  (table $0 9 9 funcref)
  (elem $0 (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|1 $start:function-call~anonymous|2 $start:function-call~anonymous|3 $start:function-call~fn2|4 $function-call/Foo#fnVoid $function-call/Foo#fnThis $function-call/Foo#fnRet)
  (export "memory" (memory $0))
@@ -259,7 +259,7 @@
   if
    i32.const 448
    i32.const 512
-   i32.const 22
+   i32.const 21
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -268,7 +268,7 @@
   i32.const 4
   i32.add
   local.get $id
-  i32.const 8
+  i32.const 4
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
@@ -2403,8 +2403,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33600
-   i32.const 33648
+   i32.const 33568
+   i32.const 33616
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

@@ -10399,7 +10399,7 @@ export function compileRTTI(compiler: Compiler): void {
   let module = compiler.module;
   let managedClasses = program.managedClasses;
   let count = managedClasses.size;
-  let size = 4 + 8 * count;
+  let size = 4 + 4 * count; // count | TypeInfo*
   let data = new Uint8Array(size);
   writeI32(count, data, 0);
   let off = 4;
@@ -10443,8 +10443,6 @@ export function compileRTTI(compiler: Compiler): void {
     }
     writeI32(flags, data, off); off += 4;
     instance.rttiFlags = flags;
-    let base = instance.base;
-    writeI32(base ? base.id : 0, data, off); off += 4;
   }
   assert(off == size);
   let usizeType = program.options.usizeType;

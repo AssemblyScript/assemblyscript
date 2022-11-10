@@ -36,9 +36,9 @@
  (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/rt/__rtti_base i32 (i32.const 20032))
- (global $~lib/memory/__data_end i32 (i32.const 20068))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 52836))
- (global $~lib/memory/__heap_base i32 (i32.const 52836))
+ (global $~lib/memory/__data_end i32 (i32.const 20052))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 52820))
+ (global $~lib/memory/__heap_base i32 (i32.const 52820))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -218,7 +218,7 @@
  (data (i32.const 19804) "\\\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 19900) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00 \00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 \00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 19964) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 \00\00\00\00\00\00\00")
- (data (i32.const 20032) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\a4\00\00\00\00\00\00\00")
+ (data (i32.const 20032) "\04\00\00\00 \00\00\00 \00\00\00\00\00\00\00\a4\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -418,7 +418,7 @@
   if
    i32.const 256
    i32.const 320
-   i32.const 22
+   i32.const 21
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -427,7 +427,7 @@
   i32.const 4
   i32.add
   local.get $id
-  i32.const 8
+  i32.const 4
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
@@ -3549,8 +3549,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 52864
-   i32.const 52912
+   i32.const 52848
+   i32.const 52896
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

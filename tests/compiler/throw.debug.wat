@@ -23,9 +23,9 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 704))
- (global $~lib/memory/__data_end i32 (i32.const 732))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33500))
- (global $~lib/memory/__heap_base i32 (i32.const 33500))
+ (global $~lib/memory/__data_end i32 (i32.const 720))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33488))
+ (global $~lib/memory/__heap_base i32 (i32.const 33488))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\001\002\003\00\00\00\00\00\00\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\002\003\004\00\00\00\00\00\00\00")
@@ -43,7 +43,7 @@
  (data (i32.const 560) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 588) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 652) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00d\00o\00T\00h\00r\00o\00w\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 704) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 704) "\03\00\00\00 \00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "doThrow" (func $throw/doThrow))
@@ -341,7 +341,7 @@
   if
    i32.const 464
    i32.const 528
-   i32.const 22
+   i32.const 21
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -350,7 +350,7 @@
   i32.const 4
   i32.add
   local.get $id
-  i32.const 8
+  i32.const 4
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags

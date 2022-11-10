@@ -30,7 +30,7 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $simd/vec (mut v128) (v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34396))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34376))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1052) "\10\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\04")
@@ -48,8 +48,7 @@
  (data (i32.const 1496) "\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 1532) ",")
  (data (i32.const 1544) "\01\00\00\00\0e\00\00\00s\00i\00m\00d\00.\00t\00s")
- (data (i32.const 1584) "\05\00\00\00 \00\00\00\00\00\00\00 ")
- (data (i32.const 1612) "\02\04\00\00\00\00\00\00\02\t")
+ (data (i32.const 1584) "\05\00\00\00 \00\00\00 \00\00\00\00\00\00\00\02\04\00\00\02\t")
  (export "reexport" (func $simd/reexport))
  (export "test_vars_i8x16_partial" (func $simd/test_vars_i8x16_partial))
  (export "test_vars_i8x16_full" (func $simd/test_vars_i8x16_full))
@@ -146,7 +145,7 @@
     i32.load $0 offset=8
     i32.eqz
     local.get $0
-    i32.const 34396
+    i32.const 34376
     i32.lt_u
     i32.and
     i32.eqz
@@ -201,13 +200,13 @@
    if
     i32.const 1296
     i32.const 1360
-    i32.const 22
+    i32.const 21
     i32.const 28
     call $~lib/builtins/abort
     unreachable
    end
    local.get $1
-   i32.const 3
+   i32.const 2
    i32.shl
    i32.const 1588
    i32.add
@@ -774,10 +773,10 @@
   if
    unreachable
   end
-  i32.const 34400
+  i32.const 34384
   i32.const 0
   i32.store $0
-  i32.const 35968
+  i32.const 35952
   i32.const 0
   i32.store $0
   loop $for-loop|0
@@ -788,7 +787,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 34400
+    i32.const 34384
     i32.add
     i32.const 0
     i32.store $0 offset=4
@@ -806,7 +805,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 34400
+      i32.const 34384
       i32.add
       i32.const 0
       i32.store $0 offset=96
@@ -824,20 +823,20 @@
     br $for-loop|0
    end
   end
-  i32.const 34400
-  i32.const 35972
+  i32.const 34384
+  i32.const 35956
   memory.size $0
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 34400
+  i32.const 34384
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/__free (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 34396
+  i32.const 34376
   i32.lt_u
   if
    return
@@ -967,7 +966,7 @@
      local.set $0
      loop $while-continue|0
       local.get $0
-      i32.const 34396
+      i32.const 34376
       i32.lt_u
       if
        local.get $0
@@ -1067,7 +1066,7 @@
      unreachable
     end
     local.get $0
-    i32.const 34396
+    i32.const 34376
     i32.lt_u
     if
      local.get $0
@@ -1857,7 +1856,7 @@
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1628
+   i32.const 1608
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -1867,7 +1866,7 @@
    memory.size $0
    i32.const 16
    i32.shl
-   i32.const 34396
+   i32.const 34376
    i32.sub
    i32.const 1
    i32.shr_u
@@ -1901,7 +1900,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1628
+   i32.const 1608
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -2184,8 +2183,8 @@
    global.set $~lib/memory/__stack_pointer
    return
   end
-  i32.const 34416
-  i32.const 34464
+  i32.const 34400
+  i32.const 34448
   i32.const 1
   i32.const 1
   call $~lib/builtins/abort

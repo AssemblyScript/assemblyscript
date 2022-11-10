@@ -1,6 +1,5 @@
 import { Typeinfo, TypeinfoFlags } from "./shared/typeinfo";
 import { E_INDEXOUTOFRANGE } from "./util/error";
-import { OBJECT, TOTAL_OVERHEAD } from "./rt/common";
 import { ArrayBufferView } from "./arraybuffer";
 
 // @ts-ignore: decorator
@@ -21,18 +20,6 @@ export function __typeinfo(id: u32): TypeinfoFlags {
   let ptr = __rtti_base;
   if (id > load<u32>(ptr)) throw new Error(E_INDEXOUTOFRANGE);
   return changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).flags;
-}
-
-// @ts-ignore: decorator
-@unsafe
-export function __instanceof(ptr: usize, classId: u32): bool { // keyword
-  let id = changetype<OBJECT>(ptr - TOTAL_OVERHEAD).rtId;
-  let rttiBase = __rtti_base;
-  if (id <= load<u32>(rttiBase)) {
-    do if (id == classId) return true;
-    while (id = changetype<Typeinfo>(rttiBase + sizeof<u32>() + id * offsetof<Typeinfo>()).base);
-  }
-  return false;
 }
 
 // @ts-ignore: decorator
