@@ -1,6 +1,5 @@
 import { Typeinfo, TypeinfoFlags } from "./shared/typeinfo";
 import { E_INDEXOUTOFRANGE } from "./util/error";
-import { OBJECT, TOTAL_OVERHEAD } from "./rt/common";
 import { ArrayBufferView } from "./arraybuffer";
 
 // @ts-ignore: decorator
