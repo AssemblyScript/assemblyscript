@@ -299,7 +299,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 22
+   i32.const 21
    i32.const 28
    call $~lib/builtins/abort
    unreachable
