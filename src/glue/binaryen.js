@@ -43,6 +43,10 @@ export const {
   _BinaryenHeapTypeNoext,
   _BinaryenHeapTypeNofunc,
 
+  _BinaryenHeapTypeIsBasic,
+  _BinaryenHeapTypeIsSignature,
+  _BinaryenHeapTypeIsStruct,
+  _BinaryenHeapTypeIsArray,
   _BinaryenHeapTypeIsBottom,
   _BinaryenHeapTypeGetBottom,
   _BinaryenHeapTypeIsSubType,
