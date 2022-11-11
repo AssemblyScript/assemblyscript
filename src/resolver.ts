@@ -2455,25 +2455,18 @@ export class Resolver extends DiagnosticEmitter {
         target = propertyInstance;
         // fall-through
       }
-      case ElementKind.Global:
-      case ElementKind.Local:
-      case ElementKind.Property: {
-        let varType = (<VariableLikeElement>target).type;
-        let varElement = this.getElementOfType(varType);
-        if (!varElement || varElement.kind != ElementKind.Class) {
-          break;
-        }
-        target = varElement;
+      default: {
+        if (!isTypedElement(target.kind)) break;
+        let targetElement = this.getElementOfType((<TypedElement>target).type);
+        if (!targetElement || targetElement.kind != ElementKind.Class) break;
+        target = targetElement;
         // fall-through
       }
       case ElementKind.Class: {
         let typeArguments = (<Class>target).getTypeArgumentsTo(this.program.functionPrototype);
-        if (typeArguments && typeArguments.length > 0) {
-          let ftype = typeArguments[0];
-          let signatureReference = assert(ftype.signatureReference);
-          return signatureReference.returnType;
-        }
-        break;
+        if (!(typeArguments && typeArguments.length)) break;
+        let signature = assert(typeArguments[0].getSignature());
+        return signature.returnType;
       }
     }
     if (reportMode == ReportMode.Report) {

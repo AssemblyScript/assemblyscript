@@ -6025,7 +6025,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // handle indirect call
     let functionArg = this.compileExpression(expression.expression, Type.auto);
-    let signature = this.currentType.signatureReference;
+    let signature = this.currentType.getSignature();
     if (signature) {
       return this.compileCallIndirect(
         signature,
