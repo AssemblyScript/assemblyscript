@@ -2441,9 +2441,13 @@ export class Resolver extends DiagnosticEmitter {
         ) {
           return this.resolveExpression(node.args[0], ctxFlow, ctxType, reportMode);
         }
-        let instance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
-        if (!instance) return null;
-        return instance.signature.returnType;
+        let functionInstance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
+        if (!functionInstance) return null;
+        target = functionInstance;
+        // fall-through
+      }
+      case ElementKind.Function: {
+        return (<Function>target).signature.returnType;
       }
       case ElementKind.PropertyPrototype: {
         let propertyInstance = this.resolveProperty(<PropertyPrototype>target, reportMode);

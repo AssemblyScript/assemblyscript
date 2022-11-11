@@ -5990,11 +5990,8 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return module.unreachable();
     let thisExpression = this.resolver.currentThisExpression;
 
-    let signature: Signature | null;
-    let functionArg: ExpressionRef;
+    // handle direct call
     switch (target.kind) {
-
-      // direct call: concrete function
       case ElementKind.FunctionPrototype: {
         let functionPrototype = <FunctionPrototype>target;
         if (functionPrototype.hasDecorator(DecoratorFlags.Builtin)) {
@@ -6024,128 +6021,35 @@ export class Compiler extends DiagnosticEmitter {
           constraints
         );
       }
+    }
 
-      // indirect call: first-class function (non-generic, can't be inlined)
-      case ElementKind.Local: {
-        let local = <Local>target;
-        signature = local.type.signatureReference;
-        if (signature) {
-          if (local.parent != flow.targetFunction) {
-            // TODO: closures
-            this.error(
-              DiagnosticCode.Not_implemented_0,
-              expression.range,
-              "Closures"
-            );
-            return module.unreachable();
-          }
-          if (local.is(CommonFlags.Inlined)) {
-            let inlinedValue = local.constantIntegerValue;
-            if (this.options.isWasm64) {
-              functionArg = module.i64(i64_low(inlinedValue), i64_high(inlinedValue));
-            } else {
-              assert(!i64_high(inlinedValue));
-              functionArg = module.i32(i64_low(inlinedValue));
-            }
-          } else {
-            functionArg = module.local_get(local.index, this.options.sizeTypeRef);
-          }
-          break;
-        }
-        this.error(
-          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-          expression.range, local.type.toString()
+    // handle indirect call
+    let functionArg = this.compileExpression(expression.expression, Type.auto);
+    let signature = this.currentType.signatureReference;
+    if (signature) {
+      return this.compileCallIndirect(
+        signature,
+        functionArg,
+        expression.args,
+        expression,
+        0,
+        contextualType == Type.void
+      );
+    }
+    this.error(
+      DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+      expression.range, this.currentType.toString()
+    );
+    if (target.kind == ElementKind.PropertyPrototype) {
+      let getterPrototype = (<PropertyPrototype>target).getterPrototype;
+      if (getterPrototype) {
+        this.infoRelated(
+          DiagnosticCode.This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without,
+          expression.range, getterPrototype.identifierNode.range
         );
-        return module.unreachable();
-      }
-      case ElementKind.Global: {
-        let global = <Global>target;
-        signature = global.type.signatureReference;
-        if (signature) {
-          functionArg = module.global_get(global.internalName, global.type.toRef());
-          break;
-        }
-        this.error(
-          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-          expression.range, global.type.toString()
-        );
-        return module.unreachable();
-      }
-      case ElementKind.PropertyPrototype: {
-        let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>target);
-        if (!propertyInstance) return module.unreachable();
-        target = propertyInstance;
-        // fall-through
-      }
-      case ElementKind.Property: {
-        let propertyInstance = <Property>target;
-        let getterInstance = propertyInstance.getterInstance;
-        let type = assert(this.resolver.getTypeOfElement(target));
-
-        if (!getterInstance) {
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, type.toString()
-          );
-          return module.unreachable();
-        }
-
-        let thisArg: ExpressionRef = 0;
-        if (propertyInstance.is(CommonFlags.Instance)) {
-          thisArg = this.compileExpression(
-            assert(thisExpression),
-            assert(getterInstance.signature.thisType),
-            Constraints.ConvImplicit | Constraints.IsThis
-          );
-        }
-        functionArg = this.compileCallDirect(getterInstance, [], expression.expression, thisArg);
-        signature = this.currentType.signatureReference;
-        if (!signature) {
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, this.currentType.toString()
-          );
-          return module.unreachable();
-        }
-        break;
-      }
-      case ElementKind.Class: {
-        let classInstance = <Class>target;
-        let typeArguments = classInstance.getTypeArgumentsTo(this.program.functionPrototype);
-        if (typeArguments && typeArguments.length > 0) {
-          let ftype = typeArguments[0];
-          signature = ftype.getSignature();
-          functionArg = this.compileExpression(expression.expression, ftype, Constraints.ConvImplicit);
-          break;
-        }
-        // fall-through
-      }
-
-      // not supported
-      default: {
-        let type = this.resolver.getTypeOfElement(target);
-        if (type) {
-          this.error(
-            DiagnosticCode.Type_0_has_no_call_signatures,
-            expression.range, type.toString()
-          );
-        } else {
-          this.error(
-            DiagnosticCode.Expression_cannot_be_represented_by_a_type,
-            expression.range
-          );
-        }
-        return module.unreachable();
       }
     }
-    return this.compileCallIndirect(
-      assert(signature), // FIXME: bootstrap can't see this yet
-      functionArg,
-      expression.args,
-      expression,
-      0,
-      contextualType == Type.void
-    );
+    return module.unreachable();
   }
 
   /** Compiles the given arguments like a call expression according to the specified context. */
