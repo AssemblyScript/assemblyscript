@@ -42,9 +42,9 @@
  (global $~lib/symbol/_Symbol.isConcatSpreadable i32 (i32.const 2))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1632))
- (global $~lib/memory/__data_end i32 (i32.const 1676))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34444))
- (global $~lib/memory/__heap_base i32 (i32.const 34444))
+ (global $~lib/memory/__data_end i32 (i32.const 1656))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34424))
+ (global $~lib/memory/__heap_base i32 (i32.const 34424))
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\001\002\003\00\00\00\00\00\00\00")
@@ -80,7 +80,7 @@
  (data (i32.const 1436) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00\00\00\00\00\00\00")
  (data (i32.const 1484) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00\00\00\00\00\00\00")
  (data (i32.const 1548) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1632) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\01\82\00\00\00\00\00\10A\02\00\00\00\00\00")
+ (data (i32.const 1632) "\05\00\00\00 \00\00\00 \00\00\00\00\00\00\00\10\01\82\00\10A\02\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -285,7 +285,7 @@
   if
    i32.const 304
    i32.const 368
-   i32.const 22
+   i32.const 21
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -294,7 +294,7 @@
   i32.const 4
   i32.add
   local.get $id
-  i32.const 8
+  i32.const 4
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
@@ -3499,8 +3499,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 34464
-   i32.const 34512
+   i32.const 34448
+   i32.const 34496
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

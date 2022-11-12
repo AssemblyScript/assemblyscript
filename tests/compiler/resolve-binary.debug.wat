@@ -47,9 +47,9 @@
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
  (global $resolve-binary/baz (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 10192))
- (global $~lib/memory/__data_end i32 (i32.const 10244))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 43012))
- (global $~lib/memory/__heap_base i32 (i32.const 43012))
+ (global $~lib/memory/__data_end i32 (i32.const 10220))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 42988))
+ (global $~lib/memory/__heap_base i32 (i32.const 42988))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00\00\00\00\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00\00\00")
@@ -96,7 +96,7 @@
  (data (i32.const 10092) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00d\00i\00v\00\00\00\00\00\00\00")
  (data (i32.const 10124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00r\00e\00m\00\00\00\00\00\00\00")
  (data (i32.const 10156) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00p\00o\00w\00\00\00\00\00\00\00")
- (data (i32.const 10192) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 10192) "\06\00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -507,7 +507,7 @@
   if
    i32.const 576
    i32.const 640
-   i32.const 22
+   i32.const 21
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -516,7 +516,7 @@
   i32.const 4
   i32.add
   local.get $id
-  i32.const 8
+  i32.const 4
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
@@ -5544,8 +5544,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 43040
-   i32.const 43088
+   i32.const 43008
+   i32.const 43056
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort

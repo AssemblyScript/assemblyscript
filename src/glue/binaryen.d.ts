@@ -80,6 +80,10 @@ export declare function _BinaryenHeapTypeNone(): HeapTypeRef;
 export declare function _BinaryenHeapTypeNoext(): HeapTypeRef;
 export declare function _BinaryenHeapTypeNofunc(): HeapTypeRef;
 
+export declare function _BinaryenHeapTypeIsBasic(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeIsSignature(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeIsStruct(heapType: HeapTypeRef): bool;
+export declare function _BinaryenHeapTypeIsArray(heapType: HeapTypeRef): bool;
 export declare function _BinaryenHeapTypeIsBottom(heapType: HeapTypeRef): bool;
 export declare function _BinaryenHeapTypeGetBottom(heapType: HeapTypeRef): HeapTypeRef;
 export declare function _BinaryenHeapTypeIsSubType(left: HeapTypeRef, right: HeapTypeRef): bool;
