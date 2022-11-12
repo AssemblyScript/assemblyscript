@@ -2441,9 +2441,13 @@ export class Resolver extends DiagnosticEmitter {
         ) {
           return this.resolveExpression(node.args[0], ctxFlow, ctxType, reportMode);
         }
-        let instance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
-        if (!instance) return null;
-        return instance.signature.returnType;
+        let functionInstance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
+        if (!functionInstance) return null;
+        target = functionInstance;
+        // fall-through
+      }
+      case ElementKind.Function: {
+        return (<Function>target).signature.returnType;
       }
       case ElementKind.PropertyPrototype: {
         let propertyInstance = this.resolveProperty(<PropertyPrototype>target, reportMode);
@@ -2451,25 +2455,18 @@ export class Resolver extends DiagnosticEmitter {
         target = propertyInstance;
         // fall-through
       }
-      case ElementKind.Global:
-      case ElementKind.Local:
-      case ElementKind.Property: {
-        let varType = (<VariableLikeElement>target).type;
-        let varElement = this.getElementOfType(varType);
-        if (!varElement || varElement.kind != ElementKind.Class) {
-          break;
-        }
-        target = varElement;
+      default: {
+        if (!isTypedElement(target.kind)) break;
+        let targetElement = this.getElementOfType((<TypedElement>target).type);
+        if (!targetElement || targetElement.kind != ElementKind.Class) break;
+        target = targetElement;
         // fall-through
       }
       case ElementKind.Class: {
         let typeArguments = (<Class>target).getTypeArgumentsTo(this.program.functionPrototype);
-        if (typeArguments && typeArguments.length > 0) {
-          let ftype = typeArguments[0];
-          let signatureReference = assert(ftype.signatureReference);
-          return signatureReference.returnType;
-        }
-        break;
+        if (!(typeArguments && typeArguments.length)) break;
+        let signature = assert(typeArguments[0].getSignature());
+        return signature.returnType;
       }
     }
     if (reportMode == ReportMode.Report) {
