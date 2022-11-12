@@ -125,7 +125,7 @@ declare namespace __AdaptedExports {
    * @param b `bindings/esm/PlainObject`
    * @returns `bindings/esm/PlainObject`
    */
-  export function objectFunction(a: __Internref12, b: __Internref12): __Internref12;
+  export function objectFunction(a: __Record12<undefined>, b: __Record12<undefined>): __Record12<never>;
   /**
    * bindings/esm/newInternref
    * @returns `bindings/esm/NonPlainObject`
@@ -151,9 +151,39 @@ declare namespace __AdaptedExports {
   };
 }
 /** bindings/esm/PlainObject */
-declare class __Internref12 extends Number {
-  private __nominal12: symbol;
-  private __nominal0: symbol;
+declare interface __Record12<TOmittable> {
+  /** @type `i8` */
+  a: number | TOmittable;
+  /** @type `i16` */
+  b: number | TOmittable;
+  /** @type `i32` */
+  c: number | TOmittable;
+  /** @type `i64` */
+  d: bigint | TOmittable;
+  /** @type `u8` */
+  e: number | TOmittable;
+  /** @type `u16` */
+  f: number | TOmittable;
+  /** @type `u32` */
+  g: number | TOmittable;
+  /** @type `u64` */
+  h: bigint | TOmittable;
+  /** @type `isize` */
+  i: number | TOmittable;
+  /** @type `usize` */
+  j: number | TOmittable;
+  /** @type `bool` */
+  k: boolean | TOmittable;
+  /** @type `f32` */
+  l: number | TOmittable;
+  /** @type `f64` */
+  m: number | TOmittable;
+  /** @type `~lib/string/String | null` */
+  n: string | null | TOmittable;
+  /** @type `~lib/typedarray/Uint8Array | null` */
+  o: Uint8Array | null | TOmittable;
+  /** @type `~lib/array/Array<~lib/string/String> | null` */
+  p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
 declare class __Internref15 extends Number {
