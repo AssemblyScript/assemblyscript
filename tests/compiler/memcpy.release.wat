@@ -6,7 +6,7 @@
  (global $memcpy/dest (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\12\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\12\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s")
  (export "memcpy" (func $memcpy/memcpy))
  (export "memory" (memory $0))
  (start $~start)

@@ -94,22 +94,22 @@
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (global $std/operator-overloading/tea (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 560))
- (global $~lib/memory/__data_end i32 (i32.const 592))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33360))
- (global $~lib/memory/__heap_base i32 (i32.const 33360))
+ (global $~lib/memory/__data_end i32 (i32.const 596))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33364))
+ (global $~lib/memory/__heap_base i32 (i32.const 33364))
  (memory $0 1)
- (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 144) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 176) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 204) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 204) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 412) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 492) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00x\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00y\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 560) "\07\00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
+ (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 412) "L\00\00\00\00\00\00\00\00\00\00\00\02\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 492) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00x\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\02\00\00\00y\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 560) "\08\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -179,7 +179,7 @@
     if
      i32.const 0
      i32.const 96
-     i32.const 159
+     i32.const 160
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -249,7 +249,7 @@
    if
     i32.const 0
     i32.const 96
-    i32.const 127
+    i32.const 128
     i32.const 18
     call $~lib/builtins/abort
     unreachable
@@ -266,7 +266,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 131
+   i32.const 132
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -317,7 +317,7 @@
   call $~lib/rt/itcms/Object#get:rtId
   local.set $rtId
   local.get $rtId
-  i32.const 1
+  i32.const 2
   i32.le_u
   if (result i32)
    i32.const 1
@@ -363,7 +363,7 @@
    if (result i32)
     i32.const 0
     i32.const 96
-    i32.const 147
+    i32.const 148
     i32.const 30
     call $~lib/builtins/abort
     unreachable
@@ -1628,7 +1628,7 @@
     if
      i32.const 0
      i32.const 96
-     i32.const 228
+     i32.const 229
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -2222,7 +2222,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 260
+   i32.const 261
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -3505,6 +3505,9 @@
  (func $~lib/arraybuffer/ArrayBufferView~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
   i32.load $0
   local.tee $2
   if
@@ -3512,6 +3515,9 @@
    local.get $1
    call $~lib/rt/itcms/__visit
   end
+ )
+ (func $~lib/object/Object~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  nop
  )
  (func $~lib/rt/__visit_members (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   block $invalid
@@ -3522,11 +3528,14 @@
        block $~lib/arraybuffer/ArrayBufferView
         block $~lib/string/String
          block $~lib/arraybuffer/ArrayBuffer
-          local.get $0
-          i32.const 8
-          i32.sub
-          i32.load $0
-          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $std/operator-overloading/Tester $std/operator-overloading/TesterInlineStatic $std/operator-overloading/TesterInlineInstance $std/operator-overloading/TesterElementAccess $invalid
+          block $~lib/object/Object
+           local.get $0
+           i32.const 8
+           i32.sub
+           i32.load $0
+           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $std/operator-overloading/Tester $std/operator-overloading/TesterInlineStatic $std/operator-overloading/TesterInlineInstance $std/operator-overloading/TesterElementAccess $invalid
+          end
+          return
          end
          return
         end
@@ -5424,7 +5433,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 8
-   i32.const 3
+   i32.const 4
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0
@@ -5458,7 +5467,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 8
-   i32.const 4
+   i32.const 5
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0
@@ -5492,7 +5501,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 8
-   i32.const 5
+   i32.const 6
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0
@@ -5526,7 +5535,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 8
-   i32.const 6
+   i32.const 7
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0

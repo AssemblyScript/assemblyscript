@@ -5,7 +5,7 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33836))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
- (data (i32.const 1048) "\01")
+ (data (i32.const 1048) "\02")
  (export "memory" (memory $0))
  (start $~start)
  (func $~start (type $none_=>_none)

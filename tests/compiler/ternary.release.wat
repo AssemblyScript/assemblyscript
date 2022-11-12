@@ -8,7 +8,7 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33836))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
- (data (i32.const 1048) "\01\00\00\00\02\00\00\00a")
+ (data (i32.const 1048) "\02\00\00\00\02\00\00\00a")
  (table $0 1 1 funcref)
  (export "test" (func $ternary/test))
  (export "testDropWithTypeMismatch" (func $ternary/testDropWithTypeMismatch))

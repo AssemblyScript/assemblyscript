@@ -6,7 +6,7 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32812))
  (global $~lib/memory/__heap_base i32 (i32.const 32812))
  (memory $0 1)
- (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (elem $0 (i32.const 1) $start:exportimport-table~anonymous|0)
  (export "memory" (memory $0))
  (export "table" (table $0))

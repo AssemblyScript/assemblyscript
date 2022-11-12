@@ -640,6 +640,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _regexpInstance: Class | null = null;
 
+  /** Gets the standard `Object` prototype. */
+  get objectPrototype(): ClassPrototype {
+    let cached = this._objectPrototype;
+    if (!cached) this._objectPrototype = cached = <ClassPrototype>this.require(CommonNames.Object, ElementKind.ClassPrototype);
+    return cached;
+  }
+  private _objectPrototype: ClassPrototype | null = null;
+
   /** Gets the standard `Object` instance. */
   get objectInstance(): Class {
     let cached = this._objectInstance;
@@ -1258,9 +1266,10 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
-    assert(this.arrayBufferInstance.id == 0);
-    assert(this.stringInstance.id == 1);
-    assert(this.arrayBufferViewInstance.id == 2);
+    assert(this.objectInstance.id == 0);
+    assert(this.arrayBufferInstance.id == 1);
+    assert(this.stringInstance.id == 2);
+    assert(this.arrayBufferViewInstance.id == 3);
 
     // register classes backing basic types
     this.registerWrapperClass(Type.i8, CommonNames.I8);

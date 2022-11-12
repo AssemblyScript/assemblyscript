@@ -1716,7 +1716,7 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // check that super has been called if this is a derived class
-      if (classInstance.base && !flow.is(FlowFlags.CallsSuper)) {
+      if (classInstance.base && classInstance.base != this.program.objectInstance && !flow.is(FlowFlags.CallsSuper)) {
         this.error(
           DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
           instance.prototype.declaration.range

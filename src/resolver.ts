@@ -36,7 +36,8 @@ import {
   IndexSignature,
   isTypedElement,
   InterfacePrototype,
-  DeclaredElement
+  DeclaredElement,
+  DecoratorFlags
 } from "./program";
 
 import {
@@ -3121,6 +3122,14 @@ export class Resolver extends DiagnosticEmitter {
       // This is guaranteed to never happen at the entry of the recursion, i.e.
       // where `resolveClass` is called from other code.
       if (pendingClasses.has(base)) anyPending = true;
+
+    // Implicitly extend from `Object` if a derived object
+    } else if (
+      prototype.kind !== ElementKind.InterfacePrototype &&
+      !prototype.hasDecorator(DecoratorFlags.Unmanaged) &&
+      prototype != this.program.objectPrototype
+    ) {
+      instance.setBase(this.program.objectInstance);
     }
 
     // Resolve interfaces if applicable
