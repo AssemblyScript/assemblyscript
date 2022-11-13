@@ -36,8 +36,7 @@ import {
   IndexSignature,
   isTypedElement,
   InterfacePrototype,
-  DeclaredElement,
-  DecoratorFlags
+  DeclaredElement
 } from "./program";
 
 import {
@@ -3123,12 +3122,8 @@ export class Resolver extends DiagnosticEmitter {
       // where `resolveClass` is called from other code.
       if (pendingClasses.has(base)) anyPending = true;
 
-    // Implicitly extend from `Object` if a derived object
-    } else if (
-      prototype.kind !== ElementKind.InterfacePrototype &&
-      !prototype.hasDecorator(DecoratorFlags.Unmanaged) &&
-      prototype != this.program.objectPrototype
-    ) {
+    // Implicitly extend `Object` if a derived object
+    } else if (prototype.implicitlyExtendsObject) {
       instance.setBase(this.program.objectInstance);
     }
 
@@ -3307,6 +3302,7 @@ export class Resolver extends DiagnosticEmitter {
     let memoryOffset: u32 = 0;
     let base = instance.base;
     if (base) {
+      let implicitlyExtendsObject = instance.prototype.implicitlyExtendsObject;
       assert(!pendingClasses.has(base));
       let baseMembers = base.members;
       if (baseMembers) {
@@ -3314,6 +3310,7 @@ export class Resolver extends DiagnosticEmitter {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
           let memberName = unchecked(_keys[i]);
           let baseMember = assert(baseMembers.get(memberName));
+          if (implicitlyExtendsObject && baseMember.is(CommonFlags.Static)) continue;
           let existingMember = instance.getMember(memberName);
           if (existingMember && !this.checkOverrideVisibility(memberName, existingMember, instance, baseMember, base, reportMode)) {
             continue; // keep previous

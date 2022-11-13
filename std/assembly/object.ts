@@ -1,4 +1,4 @@
-export class Object {
+export abstract class Object {
   static is<T>(x: T, y: T): bool {
     if (isFloat<T>()) {
       // Float pointing is special we shoulr presere following identities:

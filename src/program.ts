@@ -2053,7 +2053,14 @@ export class Program extends DiagnosticEmitter {
     }
 
     // remember classes that extend another class
-    if (declaration.extendsType) queuedExtends.push(element);
+    if (declaration.extendsType) {
+      queuedExtends.push(element);
+    } else if (
+      !element.hasDecorator(DecoratorFlags.Unmanaged) &&
+      element.internalName != BuiltinNames.Object
+    ) {
+      element.implicitlyExtendsObject = true;
+    }
 
     // initialize members
     let memberDeclarations = declaration.members;
@@ -4174,6 +4181,8 @@ export class ClassPrototype extends DeclaredElement {
   instances: Map<string,Class> | null = null;
   /** Classes extending this class. */
   extendees: Set<ClassPrototype> = new Set();
+  /** Whether this class implicitly extends `Object`. */
+  implicitlyExtendsObject: bool = false;
 
   constructor(
     /** Simple name. */

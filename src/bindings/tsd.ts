@@ -230,8 +230,7 @@ export class TSDBuilder extends ExportsWalker {
 
   isPlainObject(clazz: Class): bool {
     // A plain object does not inherit and does not have a constructor or private properties
-    let base = clazz.base;
-    if (base && base != clazz.program.objectInstance) return false;
+    if (clazz.base && !clazz.prototype.implicitlyExtendsObject) return false;
     let members = clazz.members;
     if (members) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
