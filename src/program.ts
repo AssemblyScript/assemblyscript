@@ -1265,7 +1265,7 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
+    // register foundational classes with fixed ids
     assert(this.objectInstance.id == 0);
     assert(this.arrayBufferInstance.id == 1);
     assert(this.stringInstance.id == 2);
