@@ -9,7 +9,7 @@
  (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) "<")
- (data (i32.const 1048) "\01\00\00\00*\00\00\00b\00i\00g\00i\00n\00t\00-\00i\00n\00t\00e\00g\00r\00a\00t\00i\00o\00n\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00*\00\00\00b\00i\00g\00i\00n\00t\00-\00i\00n\00t\00e\00g\00r\00a\00t\00i\00o\00n\00.\00t\00s")
  (export "internalValue" (global $bigint-integration/internalValue))
  (export "getInternalValue" (func $bigint-integration/getInternalValue))
  (export "memory" (memory $0))

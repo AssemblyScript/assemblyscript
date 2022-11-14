@@ -640,6 +640,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _regexpInstance: Class | null = null;
 
+  /** Gets the standard `Object` prototype. */
+  get objectPrototype(): ClassPrototype {
+    let cached = this._objectPrototype;
+    if (!cached) this._objectPrototype = cached = <ClassPrototype>this.require(CommonNames.Object, ElementKind.ClassPrototype);
+    return cached;
+  }
+  private _objectPrototype: ClassPrototype | null = null;
+
   /** Gets the standard `Object` instance. */
   get objectInstance(): Class {
     let cached = this._objectInstance;
@@ -1257,10 +1265,11 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
-    assert(this.arrayBufferInstance.id == 0);
-    assert(this.stringInstance.id == 1);
-    assert(this.arrayBufferViewInstance.id == 2);
+    // register foundational classes with fixed ids
+    assert(this.objectInstance.id == 0);
+    assert(this.arrayBufferInstance.id == 1);
+    assert(this.stringInstance.id == 2);
+    assert(this.arrayBufferViewInstance.id == 3);
 
     // register classes backing basic types
     this.registerWrapperClass(Type.i8, CommonNames.I8);
@@ -2044,7 +2053,14 @@ export class Program extends DiagnosticEmitter {
     }
 
     // remember classes that extend another class
-    if (declaration.extendsType) queuedExtends.push(element);
+    if (declaration.extendsType) {
+      queuedExtends.push(element);
+    } else if (
+      !element.hasDecorator(DecoratorFlags.Unmanaged) &&
+      element.internalName != BuiltinNames.Object
+    ) {
+      element.implicitlyExtendsObject = true;
+    }
 
     // initialize members
     let memberDeclarations = declaration.members;
@@ -4165,6 +4181,8 @@ export class ClassPrototype extends DeclaredElement {
   instances: Map<string,Class> | null = null;
   /** Classes extending this class. */
   extendees: Set<ClassPrototype> = new Set();
+  /** Whether this class implicitly extends `Object`. */
+  implicitlyExtendsObject: bool = false;
 
   constructor(
     /** Simple name. */

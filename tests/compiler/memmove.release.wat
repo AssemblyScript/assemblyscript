@@ -6,7 +6,7 @@
  (global $memmove/dest (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
  (func $memmove/memmove (type $i32_i32_i32_=>_i32) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)

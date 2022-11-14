@@ -35,30 +35,30 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/rt/__rtti_base i32 (i32.const 928))
- (global $~lib/memory/__data_end i32 (i32.const 960))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33728))
- (global $~lib/memory/__heap_base i32 (i32.const 33728))
+ (global $~lib/memory/__data_end i32 (i32.const 964))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33732))
+ (global $~lib/memory/__heap_base i32 (i32.const 33732))
  (memory $0 1)
- (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02\00\00\00\00\00\00\00")
- (data (i32.const 44) ",\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\10\00\00\00 \00\00\00 \00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 92) ",\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\03\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 140) ",\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\10\00\00\00p\00\00\00p\00\00\00\10\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 188) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\00\00\c0?\00\00 @\00\00\00\00")
- (data (i32.const 220) ",\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\10\00\00\00\d0\00\00\00\d0\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\00\00\f4?\00\00\00\00\00\00\02@\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 316) ",\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\10\00\00\00 \01\00\00 \01\00\00\10\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 364) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00s\00t\00d\00/\00s\00t\00a\00t\00i\00c\00-\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 428) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data (i32.const 492) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 540) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
- (data (i32.const 588) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data (i32.const 652) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00\01\00\00\00\02\00\00\00\00\00\00\00")
+ (data (i32.const 44) ",\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\10\00\00\00 \00\00\00 \00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 92) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00\03\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 140) ",\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\10\00\00\00p\00\00\00p\00\00\00\10\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 188) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00\00\00\c0?\00\00 @\00\00\00\00")
+ (data (i32.const 220) ",\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\10\00\00\00\d0\00\00\00\d0\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00\00\00\00\00\00\00\f4?\00\00\00\00\00\00\02@\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 316) ",\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\10\00\00\00 \01\00\00 \01\00\00\10\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 364) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00s\00t\00d\00/\00s\00t\00a\00t\00i\00c\00-\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 428) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 492) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
+ (data (i32.const 540) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
+ (data (i32.const 588) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 652) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 720) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 752) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 780) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 780) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 832) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 860) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 928) "\07\00\00\00 \00\00\00 \00\00\00\00\00\00\00\02\t\00\00\02\n\00\00\02\19\00\00\02\1a\00\00")
+ (data (i32.const 860) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 928) "\08\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\02\t\00\00\02\n\00\00\02\19\00\00\02\1a\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -187,7 +187,7 @@
     if
      i32.const 0
      i32.const 672
-     i32.const 159
+     i32.const 160
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -257,7 +257,7 @@
    if
     i32.const 0
     i32.const 672
-    i32.const 127
+    i32.const 128
     i32.const 18
     call $~lib/builtins/abort
     unreachable
@@ -274,7 +274,7 @@
   if
    i32.const 0
    i32.const 672
-   i32.const 131
+   i32.const 132
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -321,7 +321,7 @@
   call $~lib/rt/itcms/Object#get:rtId
   local.set $rtId
   local.get $rtId
-  i32.const 1
+  i32.const 2
   i32.le_u
   if (result i32)
    i32.const 1
@@ -367,7 +367,7 @@
    if (result i32)
     i32.const 0
     i32.const 672
-    i32.const 147
+    i32.const 148
     i32.const 30
     call $~lib/builtins/abort
     unreachable
@@ -1628,7 +1628,7 @@
     if
      i32.const 0
      i32.const 672
-     i32.const 228
+     i32.const 229
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -2217,7 +2217,7 @@
   if
    i32.const 608
    i32.const 672
-   i32.const 260
+   i32.const 261
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -2325,7 +2325,7 @@
   if
    i32.const 0
    i32.const 672
-   i32.const 294
+   i32.const 295
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -2838,6 +2838,9 @@
  (func $~lib/arraybuffer/ArrayBufferView~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
   i32.load $0
   local.tee $2
   if
@@ -2845,6 +2848,9 @@
    local.get $1
    call $~lib/rt/itcms/__visit
   end
+ )
+ (func $~lib/object/Object~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  nop
  )
  (func $~lib/array/Array<i32>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2859,6 +2865,9 @@
   call $~lib/rt/itcms/__visit
  )
  (func $~lib/array/Array<i32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
   local.get $0
   local.get $1
   call $~lib/array/Array<i32>#__visit
@@ -2878,6 +2887,9 @@
  (func $~lib/array/Array<i64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
   call $~lib/array/Array<i64>#__visit
  )
  (func $~lib/array/Array<f32>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2893,6 +2905,9 @@
   call $~lib/rt/itcms/__visit
  )
  (func $~lib/array/Array<f32>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
   local.get $0
   local.get $1
   call $~lib/array/Array<f32>#__visit
@@ -2912,6 +2927,9 @@
  (func $~lib/array/Array<f64>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
   call $~lib/array/Array<f64>#__visit
  )
  (func $~lib/rt/__visit_members (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
@@ -2923,11 +2941,14 @@
        block $~lib/arraybuffer/ArrayBufferView
         block $~lib/string/String
          block $~lib/arraybuffer/ArrayBuffer
-          local.get $0
-          i32.const 8
-          i32.sub
-          i32.load $0
-          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $~lib/array/Array<i64> $~lib/array/Array<f32> $~lib/array/Array<f64> $invalid
+          block $~lib/object/Object
+           local.get $0
+           i32.const 8
+           i32.sub
+           i32.load $0
+           br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $~lib/array/Array<i64> $~lib/array/Array<f32> $~lib/array/Array<f64> $invalid
+          end
+          return
          end
          return
         end
