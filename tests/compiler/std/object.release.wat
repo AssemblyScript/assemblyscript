@@ -328,5 +328,29 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1352
+  i32.load $0
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 76
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1384
+  i32.load $0
+  i32.const 5
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 77
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
 )

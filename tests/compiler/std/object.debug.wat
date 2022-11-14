@@ -475,6 +475,8 @@
   (local $explicit i32)
   (local $object i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -1136,6 +1138,42 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $implicit
+  local.tee $4
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $4
+   call $~instanceof|std/object/Implicit
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 76
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $explicit
+  local.tee $5
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $5
+   call $~instanceof|std/object/Explicit
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 77
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~instanceof|std/object/Explicit (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1147,6 +1185,23 @@
    local.set $1
    local.get $1
    i32.const 5
+   i32.eq
+   br_if $is_instance
+   i32.const 0
+   return
+  end
+  i32.const 1
+ )
+ (func $~instanceof|std/object/Implicit (type $i32_=>_i32) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $is_instance
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   local.set $1
+   local.get $1
+   i32.const 4
    i32.eq
    br_if $is_instance
    i32.const 0

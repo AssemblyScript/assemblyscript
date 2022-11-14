@@ -72,4 +72,7 @@ class Explicit extends Object {
 
   let object: Object = explicit;
   assert(object instanceof Explicit); // dynamic check
+
+  assert((<Object>implicit) instanceof Implicit);
+  assert((<Object>explicit) instanceof Explicit);
 }
