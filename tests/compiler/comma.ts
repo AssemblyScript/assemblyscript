@@ -22,3 +22,6 @@ for (var c = 0; c < a; a--, c++);
 assert(c == 1);
 
 1, 2, 3; // tsc doesn't allow this
+
+var d = 0;
+assert([(d++, d)][0] == 1);
