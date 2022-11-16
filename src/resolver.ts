@@ -3351,7 +3351,7 @@ export class Resolver extends DiagnosticEmitter {
               let boundInstance = this.resolveProperty(boundPrototype, reportMode);
               if (boundInstance) {
                 let fieldType = boundInstance.type;
-                assert(isPowerOf2(fieldType.byteSize));
+                if (fieldType == Type.void) break; // failed to resolve earlier
                 let needsLayout = true;
                 if (base) {
                   let existingMember = base.getMember(boundPrototype.name);
@@ -3374,10 +3374,12 @@ export class Resolver extends DiagnosticEmitter {
                   }
                 }
                 if (needsLayout) {
-                  let mask = fieldType.byteSize - 1;
+                  let byteSize = fieldType.byteSize;
+                  assert(isPowerOf2(byteSize));
+                  let mask = byteSize - 1;
                   if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
                   boundInstance.memoryOffset = memoryOffset;
-                  memoryOffset += fieldType.byteSize;
+                  memoryOffset += byteSize;
                 }
                 boundPrototype.instance = boundInstance;
                 instance.add(boundPrototype.name, boundPrototype); // reports
