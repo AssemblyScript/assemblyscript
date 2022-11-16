@@ -220,9 +220,9 @@ export async function instantiate(module, imports = {}) {
     new Uint8Array(memory.buffer)[pointer + 40 >>> 0] = value.k ? 1 : 0;
     new Float32Array(memory.buffer)[pointer + 44 >>> 2] = value.l;
     new Float64Array(memory.buffer)[pointer + 48 >>> 3] = value.m;
-    new Uint32Array(memory.buffer)[pointer + 56 >>> 2] = __lowerString(value.n);
-    new Uint32Array(memory.buffer)[pointer + 60 >>> 2] = __lowerTypedArray(Uint8Array, 13, 0, value.o);
-    new Uint32Array(memory.buffer)[pointer + 64 >>> 2] = __lowerArray((pointer, value) => { new Uint32Array(memory.buffer)[pointer >>> 2] = __lowerString(value) || __notnull(); }, 14, 2, value.p);
+    __store_ref(pointer + 56, __lowerString(value.n));
+    __store_ref(pointer + 60, __lowerTypedArray(Uint8Array, 13, 0, value.o));
+    __store_ref(pointer + 64, __lowerArray((pointer, value) => { __store_ref(pointer, __lowerString(value) || __notnull()); }, 14, 2, value.p));
     exports.__unpin(pointer);
     return pointer;
   }
@@ -381,6 +381,9 @@ export async function instantiate(module, imports = {}) {
   }
   function __notnull() {
     throw TypeError("value must not be null");
+  }
+  function __store_ref(pointer, value) {
+    new Uint32Array(memory.buffer)[pointer >>> 2] = value;
   }
   exports._start();
   return adaptedExports;

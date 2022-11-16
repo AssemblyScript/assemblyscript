@@ -119,6 +119,7 @@ export class JSBuilder extends ExportsWalker {
   private needsRetain: bool = false;
   private needsRelease: bool = false;
   private needsNotNull: bool = false;
+  private needsStoreRef: bool = false;
 
   private deferredLifts: Set<Element> = new Set();
   private deferredLowers: Set<Element> = new Set();
@@ -851,6 +852,12 @@ export class JSBuilder extends ExportsWalker {
   }
 `);
     }
+    if (this.needsStoreRef) {
+      sb.push(`  function __store_ref(pointer, value) {
+    new Uint32Array(memory.buffer)[pointer >>> 2] = value;
+  }
+`);
+    }
 
     let exportStart = options.exportStart;
     if (exportStart) {
@@ -1177,36 +1184,44 @@ export class JSBuilder extends ExportsWalker {
       skipTail = false;
     }
     if (valueType.isInternalReference) {
+      // The RHS is typically another lowering to memory, which may trigger
+      // memory growth. Use a helper closure to delay evaluation of `memory`.
+      this.needsStoreRef = true;
+      sb.push("__store_ref(");
+      sb.push(targetName);
+      sb.push(", ");
+      this.makeLowerToValue(valueName, valueType, sb);
+      sb.push(")");
+      if (!skipTail) sb.push("; }");
+      return;
+    }
+    if (valueType == Type.i8) {
+      sb.push("new Int8Array(memory.buffer)[");
+    } else if (valueType == Type.u8 || valueType == Type.bool) {
+      sb.push("new Uint8Array(memory.buffer)[");
+    } else if (valueType == Type.i16) {
+      sb.push("new Int16Array(memory.buffer)[");
+    } else if (valueType == Type.u16) {
+      sb.push("new Uint16Array(memory.buffer)[");
+    } else if (valueType == Type.i32 || valueType == Type.isize32) {
+      sb.push("new Int32Array(memory.buffer)[");
+    } else if (valueType == Type.u32 || valueType == Type.usize32) {
       sb.push("new Uint32Array(memory.buffer)[");
+    } else if (valueType == Type.i64 || valueType == Type.isize64) {
+      sb.push("new BigInt64Array(memory.buffer)[");
+    } else if (valueType == Type.u64 || valueType == Type.usize64) {
+      sb.push("new BigUint64Array(memory.buffer)[");
+    } else if (valueType == Type.f32) {
+      sb.push("new Float32Array(memory.buffer)[");
+    } else if (valueType == Type.f64) {
+      sb.push("new Float64Array(memory.buffer)[");
     } else {
-      if (valueType == Type.i8) {
-        sb.push("new Int8Array(memory.buffer)[");
-      } else if (valueType == Type.u8 || valueType == Type.bool) {
-        sb.push("new Uint8Array(memory.buffer)[");
-      } else if (valueType == Type.i16) {
-        sb.push("new Int16Array(memory.buffer)[");
-      } else if (valueType == Type.u16) {
-        sb.push("new Uint16Array(memory.buffer)[");
-      } else if (valueType == Type.i32 || valueType == Type.isize32) {
-        sb.push("new Int32Array(memory.buffer)[");
-      } else if (valueType == Type.u32 || valueType == Type.usize32) {
-        sb.push("new Uint32Array(memory.buffer)[");
-      } else if (valueType == Type.i64 || valueType == Type.isize64) {
-        sb.push("new BigInt64Array(memory.buffer)[");
-      } else if (valueType == Type.u64 || valueType == Type.usize64) {
-        sb.push("new BigUint64Array(memory.buffer)[");
-      } else if (valueType == Type.f32) {
-        sb.push("new Float32Array(memory.buffer)[");
-      } else if (valueType == Type.f64) {
-        sb.push("new Float64Array(memory.buffer)[");
+      if (skipTail) {
+        sb.push("(() => { throw Error(\"unsupported type\") })()");
       } else {
-        if (skipTail) {
-          sb.push("(() => { throw Error(\"unsupported type\") })()");
-        } else {
-          sb.push("throw Error(\"unsupported type\"); }");
-        }
-        return;
+        sb.push("throw Error(\"unsupported type\"); }");
       }
+      return;
     }
     sb.push(targetName);
     sb.push(" >>> ");
