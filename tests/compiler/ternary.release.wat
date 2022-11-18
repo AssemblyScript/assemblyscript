@@ -10,6 +10,7 @@
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\02\00\00\00\02\00\00\00a")
  (table $0 1 1 funcref)
+ (elem $0 (i32.const 1))
  (export "test" (func $ternary/test))
  (export "testDropWithTypeMismatch" (func $ternary/testDropWithTypeMismatch))
  (export "memory" (memory $0))

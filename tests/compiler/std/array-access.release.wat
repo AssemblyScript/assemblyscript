@@ -14,6 +14,7 @@
  (data (i32.const 1276) "\1c")
  (data (i32.const 1288) "\02")
  (table $0 1 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $export:std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $export:std/array-access/stringArrayPropertyAccess))
