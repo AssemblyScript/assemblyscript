@@ -48,3 +48,31 @@ assert(Object.is("a", "ab") == false);
 assert(Object.is<string | null>(null, null) == true);
 assert(Object.is<string | null>("", null) == false);
 assert(Object.is<string | null>(null, "") == false);
+
+// Implicit and explicit inheritance
+
+class Implicit {
+  constructor() {
+    // no super()
+  }
+}
+class Explicit extends Object {
+  constructor() {
+    super();
+  }
+}
+{
+  let implicit = new Implicit();
+  assert(implicit instanceof Object);
+  assert(!isDefined(Implicit.is)); // does not inherit static members
+
+  let explicit = new Explicit();
+  assert(explicit instanceof Object);
+  assert(isDefined(Explicit.is)); // does inherit static members
+
+  let object: Object = explicit;
+  assert(object instanceof Explicit); // dynamic check
+
+  assert((<Object>implicit) instanceof Implicit);
+  assert((<Object>explicit) instanceof Explicit);
+}

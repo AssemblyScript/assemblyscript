@@ -199,6 +199,7 @@
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,
   "Multiple consecutive numeric separators are not permitted.": 6189,
+  "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": 6234,
   "'super' must be called before accessing 'this' in the constructor of a derived class.": 17009,
   "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": 17011
 }

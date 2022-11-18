@@ -2441,9 +2441,13 @@ export class Resolver extends DiagnosticEmitter {
         ) {
           return this.resolveExpression(node.args[0], ctxFlow, ctxType, reportMode);
         }
-        let instance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
-        if (!instance) return null;
-        return instance.signature.returnType;
+        let functionInstance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
+        if (!functionInstance) return null;
+        target = functionInstance;
+        // fall-through
+      }
+      case ElementKind.Function: {
+        return (<Function>target).signature.returnType;
       }
       case ElementKind.PropertyPrototype: {
         let propertyInstance = this.resolveProperty(<PropertyPrototype>target, reportMode);
@@ -2451,25 +2455,18 @@ export class Resolver extends DiagnosticEmitter {
         target = propertyInstance;
         // fall-through
       }
-      case ElementKind.Global:
-      case ElementKind.Local:
-      case ElementKind.Property: {
-        let varType = (<VariableLikeElement>target).type;
-        let varElement = this.getElementOfType(varType);
-        if (!varElement || varElement.kind != ElementKind.Class) {
-          break;
-        }
-        target = varElement;
+      default: {
+        if (!isTypedElement(target.kind)) break;
+        let targetElement = this.getElementOfType((<TypedElement>target).type);
+        if (!targetElement || targetElement.kind != ElementKind.Class) break;
+        target = targetElement;
         // fall-through
       }
       case ElementKind.Class: {
         let typeArguments = (<Class>target).getTypeArgumentsTo(this.program.functionPrototype);
-        if (typeArguments && typeArguments.length > 0) {
-          let ftype = typeArguments[0];
-          let signatureReference = assert(ftype.signatureReference);
-          return signatureReference.returnType;
-        }
-        break;
+        if (!(typeArguments && typeArguments.length)) break;
+        let signature = assert(typeArguments[0].getSignature());
+        return signature.returnType;
       }
     }
     if (reportMode == ReportMode.Report) {
@@ -3124,6 +3121,10 @@ export class Resolver extends DiagnosticEmitter {
       // This is guaranteed to never happen at the entry of the recursion, i.e.
       // where `resolveClass` is called from other code.
       if (pendingClasses.has(base)) anyPending = true;
+
+    // Implicitly extend `Object` if a derived object
+    } else if (prototype.implicitlyExtendsObject) {
+      instance.setBase(this.program.objectInstance);
     }
 
     // Resolve interfaces if applicable
@@ -3301,6 +3302,7 @@ export class Resolver extends DiagnosticEmitter {
     let memoryOffset: u32 = 0;
     let base = instance.base;
     if (base) {
+      let implicitlyExtendsObject = instance.prototype.implicitlyExtendsObject;
       assert(!pendingClasses.has(base));
       let baseMembers = base.members;
       if (baseMembers) {
@@ -3308,6 +3310,7 @@ export class Resolver extends DiagnosticEmitter {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
           let memberName = unchecked(_keys[i]);
           let baseMember = assert(baseMembers.get(memberName));
+          if (implicitlyExtendsObject && baseMember.is(CommonFlags.Static)) continue;
           let existingMember = instance.getMember(memberName);
           if (existingMember && !this.checkOverrideVisibility(memberName, existingMember, instance, baseMember, base, reportMode)) {
             continue; // keep previous
@@ -3348,7 +3351,7 @@ export class Resolver extends DiagnosticEmitter {
               let boundInstance = this.resolveProperty(boundPrototype, reportMode);
               if (boundInstance) {
                 let fieldType = boundInstance.type;
-                assert(isPowerOf2(fieldType.byteSize));
+                if (fieldType == Type.void) break; // failed to resolve earlier
                 let needsLayout = true;
                 if (base) {
                   let existingMember = base.getMember(boundPrototype.name);
@@ -3371,10 +3374,12 @@ export class Resolver extends DiagnosticEmitter {
                   }
                 }
                 if (needsLayout) {
-                  let mask = fieldType.byteSize - 1;
+                  let byteSize = fieldType.byteSize;
+                  assert(isPowerOf2(byteSize));
+                  let mask = byteSize - 1;
                   if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
                   boundInstance.memoryOffset = memoryOffset;
-                  memoryOffset += fieldType.byteSize;
+                  memoryOffset += byteSize;
                 }
                 boundPrototype.instance = boundInstance;
                 instance.add(boundPrototype.name, boundPrototype); // reports

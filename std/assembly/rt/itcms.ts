@@ -117,6 +117,7 @@ function initLazy(space: Object): Object {
   /** Tests if this object is pointerfree. */
   get isPointerfree(): bool {
     let rtId = this.rtId;
+    // 0: Object, 1: ArrayBuffer, 2: String
     return rtId <= idof<string>() || (__typeinfo(rtId) & TypeinfoFlags.POINTERFREE) != 0;
   }
 

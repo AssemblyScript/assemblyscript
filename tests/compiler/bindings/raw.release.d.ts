@@ -125,33 +125,33 @@ declare namespace __AdaptedExports {
    * @param b `bindings/esm/PlainObject`
    * @returns `bindings/esm/PlainObject`
    */
-  export function objectFunction(a: __Record11<undefined>, b: __Record11<undefined>): __Record11<never>;
+  export function objectFunction(a: __Record12<undefined>, b: __Record12<undefined>): __Record12<never>;
   /**
    * bindings/esm/newInternref
    * @returns `bindings/esm/NonPlainObject`
    */
-  export function newInternref(): __Internref14;
+  export function newInternref(): __Internref15;
   /**
    * bindings/esm/internrefFunction
    * @param a `bindings/esm/NonPlainObject`
    * @param b `bindings/esm/NonPlainObject`
    * @returns `bindings/esm/NonPlainObject`
    */
-  export function internrefFunction(a: __Internref14, b: __Internref14): __Internref14;
+  export function internrefFunction(a: __Internref15, b: __Internref15): __Internref15;
   /**
    * bindings/esm/functionFunction
    * @param fn `() => void`
    * @returns `() => void`
    */
-  export function functionFunction(fn: __Internref3): __Internref3;
+  export function functionFunction(fn: __Internref4): __Internref4;
   /** bindings/esm/fn */
   export const fn: {
     /** @type `() => void` */
-    get value(): __Internref3
+    get value(): __Internref4
   };
 }
 /** bindings/esm/PlainObject */
-declare interface __Record11<TOmittable> {
+declare interface __Record12<TOmittable> {
   /** @type `i8` */
   a: number | TOmittable;
   /** @type `i16` */
@@ -186,12 +186,14 @@ declare interface __Record11<TOmittable> {
   p: Array<string> | null | TOmittable;
 }
 /** bindings/esm/NonPlainObject */
-declare class __Internref14 extends Number {
-  private __nominal14: symbol;
+declare class __Internref15 extends Number {
+  private __nominal15: symbol;
+  private __nominal0: symbol;
 }
 /** ~lib/function/Function<%28%29=>void> */
-declare class __Internref3 extends Number {
-  private __nominal3: symbol;
+declare class __Internref4 extends Number {
+  private __nominal4: symbol;
+  private __nominal0: symbol;
 }
 /** Instantiates the compiled WebAssembly module with the given imports. */
 export declare function instantiate(module: WebAssembly.Module, imports: {

@@ -9,7 +9,7 @@
  (global $features/gc/globalArray arrayref (ref.null none))
  (memory $0 1)
  (data (i32.const 1036) ",")
- (data (i32.const 1048) "\01\00\00\00\1c\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00g\00c\00.\00t\00s")
+ (data (i32.const 1048) "\02\00\00\00\1c\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00g\00c\00.\00t\00s")
  (export "globalFunc" (global $features/gc/globalFunc))
  (export "globalExtern" (global $features/gc/globalExtern))
  (export "globalAny" (global $features/gc/globalAny))
