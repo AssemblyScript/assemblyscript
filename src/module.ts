@@ -258,6 +258,7 @@ export const enum ExpressionId {
   StructGet = 61 /* _BinaryenStructGetId */,
   StructSet = 62 /* _BinaryenStructSetId */,
   ArrayNew = 63 /* _BinaryenArrayNewId */,
+  ArrayNewSeg = 64 /* TODO_BinaryenArrayNewSegId */,
   ArrayInit = 65 /* _BinaryenArrayInitId */,
   ArrayGet = 66 /* _BinaryenArrayGetId */,
   ArraySet = 67 /* _BinaryenArraySetId */,
