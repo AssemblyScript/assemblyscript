@@ -2826,7 +2826,7 @@ export class Compiler extends DiagnosticEmitter {
     // nest blocks in order
     let currentBlock = module.block(`case0|${context}`, breaks, TypeRef.None);
     let fallThroughFlow: Flow | null = null;
-    let commonBreakingFlow: Flow | null = null;
+    let mutualBreakingFlow: Flow | null = null;
     for (let i = 0; i < numCases; ++i) {
       let case_ = cases[i];
       let statements = case_.statements;
@@ -2860,21 +2860,21 @@ export class Compiler extends DiagnosticEmitter {
       let possiblyBreaks = innerFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
       innerFlow.unset(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks); // clear
       if (possiblyBreaks || (isLast && possiblyFallsThrough)) {
-        if (commonBreakingFlow) commonBreakingFlow.inheritBranch(innerFlow);
-        else commonBreakingFlow = innerFlow;
+        if (mutualBreakingFlow) mutualBreakingFlow.inheritMutual(mutualBreakingFlow, innerFlow);
+        else mutualBreakingFlow = innerFlow;
       }
       this.currentFlow = outerFlow;
       currentBlock = module.block(nextLabel, stmts, TypeRef.None); // must be a labeled block
     }
     outerFlow.popBreakLabel();
 
-    // If the switch has a default, we only get past through a breaking flow
+    // If the switch has a default, we only get past through any breaking flow
     if (defaultIndex >= 0) {
-      if (commonBreakingFlow) outerFlow.inherit(commonBreakingFlow);
+      if (mutualBreakingFlow) outerFlow.inherit(mutualBreakingFlow);
       else outerFlow.set(FlowFlags.Terminates);
     // Otherwise either skipping or any breaking flow can get past
-    } else if (commonBreakingFlow) {
-      outerFlow.inheritBranch(commonBreakingFlow);
+    } else if (mutualBreakingFlow) {
+      outerFlow.inheritBranch(mutualBreakingFlow);
     }
     return currentBlock;
   }
