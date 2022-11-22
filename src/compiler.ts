@@ -2825,15 +2825,16 @@ export class Compiler extends DiagnosticEmitter {
 
     // nest blocks in order
     let currentBlock = module.block(`case0|${context}`, breaks, TypeRef.None);
-    let commonCategorical = FlowFlags.AnyCategorical;
-    let commonConditional = 0;
+    let fallThroughFlow: Flow | null = null;
+    let commonBreakingFlow: Flow | null = null;
     for (let i = 0; i < numCases; ++i) {
       let case_ = cases[i];
       let statements = case_.statements;
       let numStatements = statements.length;
 
-      // Each switch case initiates a new branch
+      // Can get here by matching the case or by fall-through
       let innerFlow = outerFlow.fork();
+      if (fallThroughFlow) innerFlow.inheritBranch(fallThroughFlow);
       this.currentFlow = innerFlow;
       let breakLabel = `break|${context}`;
       innerFlow.breakLabel = breakLabel;
@@ -2843,38 +2844,38 @@ export class Compiler extends DiagnosticEmitter {
       let stmts = new Array<ExpressionRef>(1 + numStatements);
       stmts[0] = currentBlock;
       let count = 1;
-      let terminates = false;
+      let possiblyFallsThrough = true;
       for (let j = 0; j < numStatements; ++j) {
         let stmt = this.compileStatement(statements[j]);
         if (getExpressionId(stmt) != ExpressionId.Nop) {
           stmts[count++] = stmt;
         }
         if (innerFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
-          if (innerFlow.is(FlowFlags.Terminates)) terminates = true;
+          possiblyFallsThrough = false;
           break;
         }
       }
       stmts.length = count;
-      if (terminates || isLast || innerFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks)) {
-        commonCategorical &= innerFlow.flags;
+      fallThroughFlow = possiblyFallsThrough ? innerFlow : null;
+      let possiblyBreaks = innerFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
+      innerFlow.unset(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks); // clear
+      if (possiblyBreaks || (isLast && possiblyFallsThrough)) {
+        if (commonBreakingFlow) commonBreakingFlow.inheritBranch(innerFlow);
+        else commonBreakingFlow = innerFlow;
       }
-
-      commonConditional |= innerFlow.deriveConditionalFlags();
-
-      // Switch back to the parent flow
-      innerFlow.unset(
-        FlowFlags.Breaks |
-        FlowFlags.ConditionallyBreaks
-      );
       this.currentFlow = outerFlow;
       currentBlock = module.block(nextLabel, stmts, TypeRef.None); // must be a labeled block
     }
     outerFlow.popBreakLabel();
 
-    // If the switch has a default (guaranteed to handle any value), propagate common flags
-    if (defaultIndex >= 0) outerFlow.flags |= commonCategorical & ~FlowFlags.Breaks;
-    outerFlow.flags |= commonConditional & ~FlowFlags.ConditionallyBreaks;
-    // TODO: what about local states?
+    // If the switch has a default, we only get past through a breaking flow
+    if (defaultIndex >= 0) {
+      if (commonBreakingFlow) outerFlow.inherit(commonBreakingFlow);
+      else outerFlow.set(FlowFlags.Terminates);
+    // Otherwise either skipping or any breaking flow can get past
+    } else if (commonBreakingFlow) {
+      outerFlow.inheritBranch(commonBreakingFlow);
+    }
     return currentBlock;
   }
 
