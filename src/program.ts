@@ -138,7 +138,8 @@ import {
 } from "./resolver";
 
 import {
-  Flow
+  Flow,
+  LocalFlags
 } from "./flow";
 
 import {
@@ -1983,7 +1984,7 @@ export class Program extends DiagnosticEmitter {
           }
         }
         classReference = classReference.base;
-      } while(classReference);
+      } while (classReference);
     } else {
       let signatureReference = type.getSignature();
       if (signatureReference) {
@@ -3767,7 +3768,8 @@ export class Function extends TypedElement {
     this.original = this;
     let program = prototype.program;
     this.type = signature.type;
-    this.flow = Flow.createDefault(this);
+    let flow = Flow.createDefault(this);
+    this.flow = flow;
     if (!prototype.is(CommonFlags.Ambient)) {
       let localIndex = 0;
       let thisType = signature.thisType;
@@ -3782,6 +3784,7 @@ export class Function extends TypedElement {
         if (!scopedLocals) this.flow.scopedLocals = scopedLocals = new Map();
         scopedLocals.set(CommonNames.this_, local);
         this.localsByIndex[local.index] = local;
+        flow.setLocalFlag(local.index, LocalFlags.Initialized);
       }
       let parameterTypes = signature.parameterTypes;
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
@@ -3797,6 +3800,7 @@ export class Function extends TypedElement {
         if (!scopedLocals) this.flow.scopedLocals = scopedLocals = new Map();
         scopedLocals.set(parameterName, local);
         this.localsByIndex[local.index] = local;
+        flow.setLocalFlag(local.index, LocalFlags.Initialized);
       }
     }
     registerConcreteElement(program, this);

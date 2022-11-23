@@ -246,6 +246,8 @@ export class Flow {
   thisFieldFlags: Map<Property,FieldFlags> | null = null;
   /** The label we break to when encountering a return statement, when inlining. */
   inlineReturnLabel: string | null = null;
+  /** Alternative flows if a compound expression is true-ish. */
+  trueFlows: Map<ExpressionRef,Flow> | null = null;
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
@@ -308,21 +310,31 @@ export class Flow {
   }
 
   /** Forks this flow to a child flow. */
-  fork(resetBreakContext: bool = false): Flow {
+  fork(
+    /** Whether a new break context is established, e.g. by a block. */
+    newBreakContext: bool = false,
+    /** Whether a new continue context is established, e.g. by a loop. */
+    newContinueContext: bool = newBreakContext
+  ): Flow {
     let branch = new Flow(this.targetFunction, this.inlineFunction);
     branch.parent = this;
+    branch.flags = this.flags;
     branch.outer = this.outer;
-    if (resetBreakContext) {
-      branch.flags = this.flags & ~(
+    if (newBreakContext) {
+      branch.flags &= ~(
         FlowFlags.Breaks |
-        FlowFlags.ConditionallyBreaks |
+        FlowFlags.ConditionallyBreaks
+      );
+    } else {
+      branch.breakLabel = this.breakLabel;
+    }
+    if (newContinueContext) {
+      branch.flags &= ~(
         FlowFlags.Continues |
         FlowFlags.ConditionallyContinues
       );
     } else {
-      branch.flags = this.flags;
       branch.continueLabel = this.continueLabel;
-      branch.breakLabel = this.breakLabel;
     }
     branch.localFlags = this.localFlags.slice();
     if (this.sourceFunction.is(CommonFlags.Constructor)) {
@@ -552,7 +564,6 @@ export class Flow {
   /** Inherits flags of another flow into this one, i.e. a finished inner block. */
   inherit(other: Flow): void {
     assert(other.targetFunction == this.targetFunction);
-    assert(other.parent == this); // currently the case, but might change
     let otherFlags = other.flags;
 
     // respective inner flags are irrelevant if contexts differ
@@ -1083,6 +1094,20 @@ export class Flow {
         break;
       }
     }
+  }
+
+  /** Remembers the alternative flow if `expr` is true. */
+  noteTrueFlow(expr: ExpressionRef, trueFlow: Flow): void {
+    let trueFlows = this.trueFlows;
+    if (!trueFlows) this.trueFlows = trueFlows = new Map();
+    trueFlows.set(expr, trueFlow);
+  }
+
+  /** Gets the alternative flow if `expr` is true, if any. */
+  getTrueFlow(expr: ExpressionRef): Flow {
+    let trueFlows = this.trueFlows;
+    if (!trueFlows || !trueFlows.has(expr)) return this;
+    return changetype<Flow>(trueFlows.get(expr));
   }
 
   /**
