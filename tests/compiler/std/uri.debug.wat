@@ -156,7 +156,6 @@
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -168,8 +167,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $3
-   local.get $3
    if
     i32.const 1
     drop
@@ -416,15 +413,12 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -1471,8 +1465,6 @@
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
-  (local $3 i32)
-  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
@@ -1517,8 +1509,6 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $3
-     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1568,8 +1558,6 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $4
-      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -2349,7 +2337,6 @@
   (local $offset i32)
   (local $outSize i32)
   (local $dst i32)
-  (local $7 i32)
   (local $org i32)
   (local $c i32)
   (local $c1 i32)
@@ -2378,8 +2365,6 @@
     local.get $i
     local.get $len
     i32.lt_u
-    local.set $7
-    local.get $7
     if
      local.get $i
      local.set $org
@@ -2711,7 +2696,6 @@
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $7 i32)
-  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -2782,8 +2766,6 @@
    i32.sub
    local.set $len
    local.get $7
-   local.set $8
-   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -2950,17 +2932,14 @@
   (local $offset i32)
   (local $ch i32)
   (local $dst i32)
-  (local $7 i32)
   (local $org i32)
-  (local $9 i32)
   (local $size i32)
-  (local $ch|11 i32)
+  (local $ch|9 i32)
   (local $c0 i32)
   (local $nb i32)
   (local $lo i32)
-  (local $15 i32)
   (local $c1 i32)
-  (local $lo|17 i32)
+  (local $lo|14 i32)
   (local $hi i32)
   local.get $len
   i32.eqz
@@ -2985,8 +2964,6 @@
     local.get $i
     local.get $len
     i32.lt_u
-    local.set $7
-    local.get $7
     if
      local.get $i
      local.set $org
@@ -3007,8 +2984,6 @@
       else
        i32.const 0
       end
-      local.set $9
-      local.get $9
       if
        local.get $i
        i32.const 1
@@ -3094,15 +3069,15 @@
       i32.eqz
       if (result i32)
        local.get $ch
-       local.set $ch|11
-       local.get $ch|11
+       local.set $ch|9
+       local.get $ch|9
        i32.const 35
        i32.sub
        i32.const 30
        i32.lt_u
        if (result i32)
         global.get $~lib/util/uri/URI_RESERVED
-        local.get $ch|11
+        local.get $ch|9
         i32.const 35
         i32.sub
         i32.add
@@ -3171,8 +3146,6 @@
         local.tee $nb
         i32.const 0
         i32.ne
-        local.set $15
-        local.get $15
         if
          local.get $i
          i32.const 2
@@ -3291,7 +3264,7 @@
        i32.shr_u
        i32.const 55296
        i32.or
-       local.set $lo|17
+       local.set $lo|14
        local.get $ch
        i32.const 1023
        i32.and
@@ -3301,7 +3274,7 @@
        local.get $dst
        local.get $offset
        i32.add
-       local.get $lo|17
+       local.get $lo|14
        local.get $hi
        i32.const 16
        i32.shl
@@ -3369,8 +3342,6 @@
   call $~lib/util/uri/decode
  )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
-  (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -3381,8 +3352,6 @@
     global.get $~lib/rt/itcms/state
     i32.const 0
     i32.ne
-    local.set $0
-    local.get $0
     if
      call $~lib/rt/itcms/step
      drop
@@ -3396,8 +3365,6 @@
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.ne
-   local.set $1
-   local.get $1
    if
     call $~lib/rt/itcms/step
     drop

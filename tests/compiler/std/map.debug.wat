@@ -112,7 +112,6 @@
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -124,8 +123,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $3
-   local.get $3
    if
     i32.const 1
     drop
@@ -372,15 +369,12 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -1427,8 +1421,6 @@
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
-  (local $3 i32)
-  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
@@ -1473,8 +1465,6 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $3
-     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1524,8 +1514,6 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $4
-      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -2413,7 +2401,6 @@
  )
  (func $~lib/map/Map<i8,i32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<i8,i32>#get:buckets
@@ -2428,8 +2415,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<i8,i32>#get:taggedNext
@@ -2515,7 +2500,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -2571,8 +2555,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -3081,7 +3063,6 @@
  )
  (func $~lib/map/Map<i8,i8>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<i8,i8>#get:buckets
@@ -3096,8 +3077,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<i8,i8>#get:taggedNext
@@ -3174,7 +3153,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -3230,8 +3208,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -3387,7 +3363,6 @@
  )
  (func $~lib/map/Map<i32,i32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<i32,i32>#get:buckets
@@ -3402,8 +3377,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<i32,i32>#get:taggedNext
@@ -3478,7 +3451,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -3534,8 +3506,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -4290,7 +4260,6 @@
  )
  (func $~lib/map/Map<u8,i32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<u8,i32>#get:buckets
@@ -4305,8 +4274,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<u8,i32>#get:taggedNext
@@ -4394,7 +4361,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -4450,8 +4416,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -4689,7 +4653,6 @@
  )
  (func $~lib/map/Map<u8,u8>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<u8,u8>#get:buckets
@@ -4704,8 +4667,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<u8,u8>#get:taggedNext
@@ -4784,7 +4745,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -4840,8 +4800,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -5591,7 +5549,6 @@
  )
  (func $~lib/map/Map<i16,i32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<i16,i32>#get:buckets
@@ -5606,8 +5563,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<i16,i32>#get:taggedNext
@@ -5693,7 +5648,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -5749,8 +5703,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -5988,7 +5940,6 @@
  )
  (func $~lib/map/Map<i16,i16>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<i16,i16>#get:buckets
@@ -6003,8 +5954,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<i16,i16>#get:taggedNext
@@ -6081,7 +6030,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -6137,8 +6085,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -6889,7 +6835,6 @@
  )
  (func $~lib/map/Map<u16,i32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<u16,i32>#get:buckets
@@ -6904,8 +6849,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<u16,i32>#get:taggedNext
@@ -6993,7 +6936,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -7049,8 +6991,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -7288,7 +7228,6 @@
  )
  (func $~lib/map/Map<u16,u16>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<u16,u16>#get:buckets
@@ -7303,8 +7242,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<u16,u16>#get:taggedNext
@@ -7383,7 +7320,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -7439,8 +7375,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -8774,7 +8708,6 @@
  )
  (func $~lib/map/Map<u32,i32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<u32,i32>#get:buckets
@@ -8789,8 +8722,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<u32,i32>#get:taggedNext
@@ -8874,7 +8805,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -8930,8 +8860,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -9169,7 +9097,6 @@
  )
  (func $~lib/map/Map<u32,u32>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<u32,u32>#get:buckets
@@ -9184,8 +9111,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<u32,u32>#get:taggedNext
@@ -9260,7 +9185,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i32)
@@ -9316,8 +9240,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -10083,7 +10005,6 @@
  )
  (func $~lib/map/Map<i64,i32>#find (type $i32_i64_i32_=>_i32) (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<i64,i32>#get:buckets
@@ -10098,8 +10019,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<i64,i32>#get:taggedNext
@@ -10183,7 +10102,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i64)
@@ -10239,8 +10157,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -10478,7 +10394,6 @@
  )
  (func $~lib/map/Map<i64,i64>#find (type $i32_i64_i32_=>_i32) (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<i64,i64>#get:buckets
@@ -10493,8 +10408,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<i64,i64>#get:taggedNext
@@ -10569,7 +10482,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i64)
@@ -10625,8 +10537,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -11400,7 +11310,6 @@
  )
  (func $~lib/map/Map<u64,i32>#find (type $i32_i64_i32_=>_i32) (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<u64,i32>#get:buckets
@@ -11415,8 +11324,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<u64,i32>#get:taggedNext
@@ -11500,7 +11407,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i64)
@@ -11556,8 +11462,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -11795,7 +11699,6 @@
  )
  (func $~lib/map/Map<u64,u64>#find (type $i32_i64_i32_=>_i32) (param $this i32) (param $key i64) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<u64,u64>#get:buckets
@@ -11810,8 +11713,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<u64,u64>#get:taggedNext
@@ -11886,7 +11787,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey i64)
@@ -11942,8 +11842,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -12701,7 +12599,6 @@
  )
  (func $~lib/map/Map<f32,i32>#find (type $i32_f32_i32_=>_i32) (param $this i32) (param $key f32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<f32,i32>#get:buckets
@@ -12716,8 +12613,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<f32,i32>#get:taggedNext
@@ -12801,7 +12696,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey f32)
@@ -12857,8 +12751,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -13096,7 +12988,6 @@
  )
  (func $~lib/map/Map<f32,f32>#find (type $i32_f32_i32_=>_i32) (param $this i32) (param $key f32) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<f32,f32>#get:buckets
@@ -13111,8 +13002,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<f32,f32>#get:taggedNext
@@ -13187,7 +13076,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey f32)
@@ -13243,8 +13131,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -14019,7 +13905,6 @@
  )
  (func $~lib/map/Map<f64,i32>#find (type $i32_f64_i32_=>_i32) (param $this i32) (param $key f64) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<f64,i32>#get:buckets
@@ -14034,8 +13919,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<f64,i32>#get:taggedNext
@@ -14119,7 +14002,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey f64)
@@ -14175,8 +14057,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -14414,7 +14294,6 @@
  )
  (func $~lib/map/Map<f64,f64>#find (type $i32_f64_i32_=>_i32) (param $this i32) (param $key f64) (param $hashCode i32) (result i32)
   (local $entry i32)
-  (local $4 i32)
   (local $taggedNext i32)
   local.get $this
   call $~lib/map/Map<f64,f64>#get:buckets
@@ -14429,8 +14308,6 @@
   local.set $entry
   loop $while-continue|0
    local.get $entry
-   local.set $4
-   local.get $4
    if
     local.get $entry
     call $~lib/map/MapEntry<f64,f64>#get:taggedNext
@@ -14505,7 +14382,6 @@
   (local $oldPtr i32)
   (local $oldEnd i32)
   (local $newPtr i32)
-  (local $9 i32)
   (local $oldEntry i32)
   (local $newEntry i32)
   (local $oldEntryKey f64)
@@ -14561,8 +14437,6 @@
    local.get $oldPtr
    local.get $oldEnd
    i32.ne
-   local.set $9
-   local.get $9
    if
     local.get $oldPtr
     local.set $oldEntry
@@ -15199,8 +15073,6 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
-  (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -15211,8 +15083,6 @@
     global.get $~lib/rt/itcms/state
     i32.const 0
     i32.ne
-    local.set $0
-    local.get $0
     if
      call $~lib/rt/itcms/step
      drop
@@ -15226,8 +15096,6 @@
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.ne
-   local.set $1
-   local.get $1
    if
     call $~lib/rt/itcms/step
     drop

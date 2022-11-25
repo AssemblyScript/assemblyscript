@@ -46,15 +46,12 @@
  (func $while/testSimple (type $none_=>_none)
   (local $i i32)
   (local $j i32)
-  (local $2 i32)
   i32.const 10
   local.set $i
   i32.const 0
   local.set $j
   loop $while-continue|0
    local.get $i
-   local.set $2
-   local.get $2
    if
     local.get $i
     i32.const 1
@@ -98,8 +95,6 @@
   (local $i i32)
   (local $j i32)
   (local $k i32)
-  (local $3 i32)
-  (local $4 i32)
   i32.const 10
   local.set $i
   i32.const 0
@@ -108,8 +103,6 @@
   local.set $k
   loop $while-continue|0
    local.get $i
-   local.set $3
-   local.get $3
    if
     local.get $i
     i32.const 1
@@ -121,8 +114,6 @@
     local.set $j
     loop $while-continue|1
      local.get $i
-     local.set $4
-     local.get $4
      if
       local.get $i
       i32.const 1
@@ -205,7 +196,6 @@
   (local $i i32)
   (local $j i32)
   (local $2 i32)
-  (local $3 i32)
   i32.const 1
   local.set $i
   i32.const 0
@@ -225,8 +215,6 @@
    else
     i32.const 0
    end
-   local.set $3
-   local.get $3
    if
     nop
     br $while-continue|0
@@ -261,14 +249,11 @@
  )
  (func $while/testAlwaysTrue (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   block $while-break|0
    loop $while-continue|0
     i32.const 1
-    local.set $1
-    local.get $1
     if
      local.get $i
      i32.const 1
@@ -300,13 +285,10 @@
  )
  (func $while/testAlwaysTrueNeverBreaks (type $none_=>_i32) (result i32)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   loop $while-continue|0
    i32.const 1
-   local.set $1
-   local.get $1
    if
     local.get $i
     i32.const 1
@@ -346,7 +328,6 @@
  )
  (func $while/testAlwaysBreaks (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   block $while-break|0
@@ -355,8 +336,6 @@
     i32.const 1
     i32.add
     local.tee $i
-    local.set $1
-    local.get $1
     if
      br $while-break|0
     end
@@ -379,7 +358,6 @@
  )
  (func $while/testAlwaysReturns (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   loop $while-continue|0
@@ -387,8 +365,6 @@
    i32.const 1
    i32.add
    local.tee $i
-   local.set $1
-   local.get $1
    if
     i32.const 1
     global.set $while/ran
@@ -408,13 +384,10 @@
  )
  (func $while/testContinue (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 10
   local.set $i
   loop $while-continue|0
    local.get $i
-   local.set $1
-   local.get $1
    if
     local.get $i
     i32.const 1
@@ -441,21 +414,15 @@
  (func $while/testNestedContinue (type $none_=>_none)
   (local $i i32)
   (local $j i32)
-  (local $2 i32)
-  (local $3 i32)
   i32.const 10
   local.set $i
   i32.const 10
   local.set $j
   loop $while-continue|0
    local.get $i
-   local.set $2
-   local.get $2
    if
     loop $while-continue|1
      local.get $j
-     local.set $3
-     local.get $3
      if
       local.get $j
       i32.const 1
@@ -538,7 +505,6 @@
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -550,8 +516,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $3
-   local.get $3
    if
     i32.const 1
     drop
@@ -798,15 +762,12 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -1853,8 +1814,6 @@
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
-  (local $3 i32)
-  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
@@ -1899,8 +1858,6 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $3
-     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1950,8 +1907,6 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $4
-      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -2652,7 +2607,6 @@
  (func $while/testRef (type $none_=>_none)
   (local $i i32)
   (local $ref i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2668,10 +2622,8 @@
   call $while/Ref#constructor
   local.tee $ref
   i32.store $0
-  loop $while-continue|0
+  loop $while-continue|1
    local.get $ref
-   local.set $2
-   local.get $2
    if
     local.get $i
     i32.const 1
@@ -2689,7 +2641,7 @@
      local.tee $ref
      i32.store $0
     end
-    br $while-continue|0
+    br $while-continue|1
    end
   end
   local.get $i
@@ -2729,7 +2681,6 @@
  (func $while/testRefAutorelease (type $none_=>_none)
   (local $i i32)
   (local $ref i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2748,8 +2699,6 @@
   block $while-break|0
    loop $while-continue|0
     call $while/getRef
-    local.set $2
-    local.get $2
     if
      local.get $i
      i32.const 1
@@ -2798,14 +2747,11 @@
  )
  (func $while/testIfImplicitContinueThen (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   block $while-break|0
    loop $while-continue|0
     i32.const 1
-    local.set $1
-    local.get $1
     if
      local.get $i
      i32.const 1
@@ -2828,14 +2774,11 @@
  )
  (func $while/testIfImplicitContinueElse (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   block $while-break|0
    loop $while-continue|0
     i32.const 1
-    local.set $1
-    local.get $1
     if
      local.get $i
      i32.const 1
@@ -2889,8 +2832,6 @@
   global.set $while/ran
  )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
-  (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -2901,8 +2842,6 @@
     global.get $~lib/rt/itcms/state
     i32.const 0
     i32.ne
-    local.set $0
-    local.get $0
     if
      call $~lib/rt/itcms/step
      drop
@@ -2916,8 +2855,6 @@
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.ne
-   local.set $1
-   local.get $1
    if
     call $~lib/rt/itcms/step
     drop

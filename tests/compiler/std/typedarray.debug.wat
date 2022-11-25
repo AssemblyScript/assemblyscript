@@ -452,7 +452,6 @@
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -464,8 +463,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $3
-   local.get $3
    if
     i32.const 1
     drop
@@ -712,15 +709,12 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -1767,8 +1761,6 @@
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
-  (local $3 i32)
-  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
@@ -1813,8 +1805,6 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $3
-     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1864,8 +1854,6 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $4
-      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -3352,8 +3340,6 @@
   (local $min f64)
   (local $max f64)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -3430,8 +3416,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -3480,8 +3464,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -3535,11 +3517,8 @@
  )
  (func $~lib/util/sort/extendRunRight<f64> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp f64)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -3599,8 +3578,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -3615,8 +3592,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -3683,8 +3658,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -3916,19 +3889,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -4145,8 +4117,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -4169,15 +4139,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -4196,16 +4166,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -4218,7 +4188,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -4232,17 +4202,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -4270,29 +4240,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -4304,10 +4274,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<f64>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -10770,7 +10740,6 @@
   (local $uy1 i32)
   (local $m f32)
   (local $ux1 i32)
-  (local $10 i32)
   (local $shift i32)
   local.get $y
   f32.abs
@@ -10918,8 +10887,6 @@
    local.get $ex
    local.get $ey
    i32.gt_s
-   local.set $10
-   local.get $10
    if
     local.get $ux
     local.get $uy
@@ -11090,7 +11057,6 @@
   (local $uy1 i64)
   (local $m f64)
   (local $ux1 i64)
-  (local $10 i32)
   (local $shift i64)
   local.get $y
   f64.abs
@@ -11242,8 +11208,6 @@
    local.get $ex
    local.get $ey
    i64.gt_s
-   local.set $10
-   local.get $10
    if
     local.get $ux
     local.get $uy
@@ -11928,18 +11892,16 @@
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
+  (local $7 i64)
   (local $8 i64)
-  (local $9 i64)
   (local $temp i64)
+  (local $10 i64)
   (local $11 i64)
-  (local $12 i64)
-  (local $13 i32)
-  (local $front|14 i32)
-  (local $back|15 i32)
-  (local $temp|16 i32)
+  (local $front|12 i32)
+  (local $back|13 i32)
+  (local $temp|14 i32)
   local.get $len
   i32.const 1
   i32.gt_u
@@ -11968,8 +11930,6 @@
     i32.add
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -11983,23 +11943,23 @@
      local.set $back
      local.get $front
      i64.load $0
-     local.tee $8
+     local.tee $7
      i64.const 8
      i64.shr_u
      i64.const 71777214294589695
      i64.and
-     local.get $8
+     local.get $7
      i64.const 71777214294589695
      i64.and
      i64.const 8
      i64.shl
      i64.or
-     local.tee $9
+     local.tee $8
      i64.const 16
      i64.shr_u
      i64.const 281470681808895
      i64.and
-     local.get $9
+     local.get $8
      i64.const 281470681808895
      i64.and
      i64.const 16
@@ -12011,23 +11971,23 @@
      local.get $front
      local.get $back
      i64.load $0
-     local.tee $11
+     local.tee $10
      i64.const 8
      i64.shr_u
      i64.const 71777214294589695
      i64.and
-     local.get $11
+     local.get $10
      i64.const 71777214294589695
      i64.and
      i64.const 8
      i64.shl
      i64.or
-     local.tee $12
+     local.tee $11
      i64.const 16
      i64.shr_u
      i64.const 281470681808895
      i64.and
-     local.get $12
+     local.get $11
      i64.const 281470681808895
      i64.and
      i64.const 16
@@ -12058,15 +12018,13 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $13
-    local.get $13
     if
      local.get $ptr
      local.get $i
      i32.const 0
      i32.shl
      i32.add
-     local.set $front|14
+     local.set $front|12
      local.get $ptr
      local.get $tail
      local.get $i
@@ -12074,16 +12032,16 @@
      i32.const 0
      i32.shl
      i32.add
-     local.set $back|15
-     local.get $front|14
+     local.set $back|13
+     local.get $front|12
      i32.load8_u $0
-     local.set $temp|16
-     local.get $front|14
-     local.get $back|15
+     local.set $temp|14
+     local.get $front|12
+     local.get $back|13
      i32.load8_u $0
      i32.store8 $0
-     local.get $back|15
-     local.get $temp|16
+     local.get $back|13
+     local.get $temp|14
      i32.store8 $0
      local.get $i
      i32.const 1
@@ -12122,14 +12080,12 @@
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp i32)
-  (local $9 i32)
-  (local $front|10 i32)
-  (local $back|11 i32)
-  (local $temp|12 i32)
+  (local $front|8 i32)
+  (local $back|9 i32)
+  (local $temp|10 i32)
   local.get $len
   i32.const 1
   i32.gt_u
@@ -12162,8 +12118,6 @@
     i32.add
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12208,15 +12162,13 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $9
-    local.get $9
     if
      local.get $ptr
      local.get $i
      i32.const 1
      i32.shl
      i32.add
-     local.set $front|10
+     local.set $front|8
      local.get $ptr
      local.get $tail
      local.get $i
@@ -12224,16 +12176,16 @@
      i32.const 1
      i32.shl
      i32.add
-     local.set $back|11
-     local.get $front|10
+     local.set $back|9
+     local.get $front|8
      i32.load16_u $0
-     local.set $temp|12
-     local.get $front|10
-     local.get $back|11
+     local.set $temp|10
+     local.get $front|8
+     local.get $back|9
      i32.load16_u $0
      i32.store16 $0
-     local.get $back|11
-     local.get $temp|12
+     local.get $back|9
+     local.get $temp|10
      i32.store16 $0
      local.get $i
      i32.const 1
@@ -12264,7 +12216,6 @@
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp i32)
@@ -12298,8 +12249,6 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12354,7 +12303,6 @@
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp i64)
@@ -12388,8 +12336,6 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12444,7 +12390,6 @@
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp f32)
@@ -12478,8 +12423,6 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12526,7 +12469,6 @@
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp f64)
@@ -12560,8 +12502,6 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12613,7 +12553,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -12663,8 +12602,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -12696,7 +12633,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -12742,8 +12678,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -13282,7 +13216,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -13332,8 +13265,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -13366,7 +13297,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -13412,8 +13342,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -13954,7 +13882,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -14004,8 +13931,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -14038,7 +13963,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -14084,8 +14008,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -14626,7 +14548,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -14676,8 +14597,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -14709,7 +14628,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -14755,8 +14673,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -15295,7 +15211,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -15345,8 +15260,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -15379,7 +15292,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -15425,8 +15337,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -15967,7 +15877,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -16017,8 +15926,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -16049,7 +15956,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -16095,8 +16001,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -16633,7 +16537,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -16683,8 +16586,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -16715,7 +16616,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -16761,8 +16661,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -17299,7 +17197,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -17349,8 +17246,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -17381,7 +17276,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -17427,8 +17321,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -17966,7 +17858,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -18016,8 +17907,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -18048,7 +17937,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -18094,8 +17982,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -18633,7 +18519,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -18683,8 +18568,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -18715,7 +18598,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -18761,8 +18643,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -19300,7 +19180,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -19350,8 +19229,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -19382,7 +19259,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -19428,8 +19304,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -19967,7 +19841,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   (local $elem f64)
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
@@ -20020,8 +19893,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -20068,7 +19939,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   (local $elem f32)
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
@@ -20121,8 +19991,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -20216,24 +20084,21 @@
   unreachable
  )
  (func $~lib/util/number/utoa32_dec_lut (type $i32_i32_i32_=>_none) (param $buffer i32) (param $num i32) (param $offset i32)
-  (local $3 i32)
   (local $t i32)
   (local $r i32)
   (local $d1 i32)
   (local $d2 i32)
   (local $digits1 i64)
   (local $digits2 i64)
-  (local $t|10 i32)
-  (local $d1|11 i32)
+  (local $t|9 i32)
+  (local $d1|10 i32)
   (local $digits i32)
-  (local $digits|13 i32)
+  (local $digits|12 i32)
   (local $digit i32)
   loop $while-continue|0
    local.get $num
    i32.const 10000
    i32.ge_u
-   local.set $3
-   local.get $3
    if
     local.get $num
     i32.const 10000
@@ -20292,19 +20157,19 @@
    local.get $num
    i32.const 100
    i32.div_u
-   local.set $t|10
+   local.set $t|9
    local.get $num
    i32.const 100
    i32.rem_u
-   local.set $d1|11
-   local.get $t|10
+   local.set $d1|10
+   local.get $t|9
    local.set $num
    local.get $offset
    i32.const 2
    i32.sub
    local.set $offset
    i32.const 6988
-   local.get $d1|11
+   local.get $d1|10
    i32.const 2
    i32.shl
    i32.add
@@ -20332,13 +20197,13 @@
    i32.shl
    i32.add
    i32.load $0
-   local.set $digits|13
+   local.set $digits|12
    local.get $buffer
    local.get $offset
    i32.const 1
    i32.shl
    i32.add
-   local.get $digits|13
+   local.get $digits|12
    i32.store $0
   else
    local.get $offset
@@ -20359,13 +20224,10 @@
   end
  )
  (func $~lib/util/number/utoa_hex_lut (type $i32_i64_i32_=>_none) (param $buffer i32) (param $num i64) (param $offset i32)
-  (local $3 i32)
   loop $while-continue|0
    local.get $offset
    i32.const 2
    i32.ge_u
-   local.set $3
-   local.get $3
    if
     local.get $offset
     i32.const 2
@@ -20413,8 +20275,6 @@
   (local $b64 i64)
   (local $b i64)
   (local $e i32)
-  (local $6 i32)
-  (local $7 i32)
   local.get $base
   local.set $value
   local.get $value
@@ -20447,8 +20307,6 @@
    local.get $num
    local.get $b
    i64.ge_u
-   local.set $6
-   local.get $6
    if
     local.get $num
     local.get $b
@@ -20469,8 +20327,6 @@
    local.get $num
    i64.const 1
    i64.ge_u
-   local.set $7
-   local.get $7
    if
     local.get $num
     local.get $b64
@@ -20732,7 +20588,6 @@
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $7 i32)
-  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -20803,8 +20658,6 @@
    i32.sub
    local.set $len
    local.get $7
-   local.set $8
-   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -21429,7 +21282,6 @@
   unreachable
  )
  (func $~lib/util/number/utoa64_dec_lut (type $i32_i64_i32_=>_none) (param $buffer i32) (param $num i64) (param $offset i32)
-  (local $3 i32)
   (local $t i64)
   (local $r i32)
   (local $b i32)
@@ -21444,8 +21296,6 @@
    local.get $num
    i64.const 100000000
    i64.ge_u
-   local.set $3
-   local.get $3
    if
     local.get $num
     i64.const 100000000
@@ -21798,32 +21648,28 @@
   (local $p2 i64)
   (local $kappa i32)
   (local $len i32)
-  (local $15 i32)
   (local $d i32)
+  (local $16 i32)
   (local $17 i32)
-  (local $18 i32)
   (local $tmp i64)
-  (local $buffer|20 i32)
-  (local $len|21 i32)
-  (local $delta|22 i64)
+  (local $buffer|19 i32)
+  (local $len|20 i32)
+  (local $delta|21 i64)
   (local $rest i64)
   (local $ten_kappa i64)
   (local $wp_w i64)
   (local $lastp i32)
   (local $digit i32)
+  (local $d|27 i64)
   (local $28 i32)
-  (local $29 i32)
-  (local $d|30 i64)
-  (local $31 i32)
-  (local $buffer|32 i32)
-  (local $len|33 i32)
-  (local $delta|34 i64)
-  (local $rest|35 i64)
-  (local $ten_kappa|36 i64)
-  (local $wp_w|37 i64)
-  (local $lastp|38 i32)
-  (local $digit|39 i32)
-  (local $40 i32)
+  (local $buffer|29 i32)
+  (local $len|30 i32)
+  (local $delta|31 i64)
+  (local $rest|32 i64)
+  (local $ten_kappa|33 i64)
+  (local $wp_w|34 i64)
+  (local $lastp|35 i32)
+  (local $digit|36 i32)
   i32.const 0
   local.get $mp_exp
   i32.sub
@@ -21860,8 +21706,6 @@
    local.get $kappa
    i32.const 0
    i32.gt_s
-   local.set $15
-   local.get $15
    if
     block $break|1
      block $case10|1
@@ -21876,44 +21720,44 @@
               block $case1|1
                block $case0|1
                 local.get $kappa
-                local.set $17
-                local.get $17
+                local.set $16
+                local.get $16
                 i32.const 10
                 i32.eq
                 br_if $case0|1
-                local.get $17
+                local.get $16
                 i32.const 9
                 i32.eq
                 br_if $case1|1
-                local.get $17
+                local.get $16
                 i32.const 8
                 i32.eq
                 br_if $case2|1
-                local.get $17
+                local.get $16
                 i32.const 7
                 i32.eq
                 br_if $case3|1
-                local.get $17
+                local.get $16
                 i32.const 6
                 i32.eq
                 br_if $case4|1
-                local.get $17
+                local.get $16
                 i32.const 5
                 i32.eq
                 br_if $case5|1
-                local.get $17
+                local.get $16
                 i32.const 4
                 i32.eq
                 br_if $case6|1
-                local.get $17
+                local.get $16
                 i32.const 3
                 i32.eq
                 br_if $case7|1
-                local.get $17
+                local.get $16
                 i32.const 2
                 i32.eq
                 br_if $case8|1
-                local.get $17
+                local.get $16
                 i32.const 1
                 i32.eq
                 br_if $case9|1
@@ -22025,11 +21869,11 @@
     if
      local.get $buffer
      local.get $len
-     local.tee $18
+     local.tee $17
      i32.const 1
      i32.add
      local.set $len
-     local.get $18
+     local.get $17
      i32.const 1
      i32.shl
      i32.add
@@ -22061,11 +21905,11 @@
      i32.add
      global.set $~lib/util/number/_K
      local.get $buffer
-     local.set $buffer|20
+     local.set $buffer|19
      local.get $len
-     local.set $len|21
+     local.set $len|20
      local.get $delta
-     local.set $delta|22
+     local.set $delta|21
      local.get $tmp
      local.set $rest
      i32.const 9712
@@ -22080,8 +21924,8 @@
      local.set $ten_kappa
      local.get $wp_w_frc
      local.set $wp_w
-     local.get $buffer|20
-     local.get $len|21
+     local.get $buffer|19
+     local.get $len|20
      i32.const 1
      i32.sub
      i32.const 1
@@ -22096,7 +21940,7 @@
       local.get $wp_w
       i64.lt_u
       if (result i32)
-       local.get $delta|22
+       local.get $delta|21
        local.get $rest
        i64.sub
        local.get $ten_kappa
@@ -22126,8 +21970,6 @@
       else
        i32.const 0
       end
-      local.set $28
-      local.get $28
       if
        local.get $digit
        i32.const 1
@@ -22151,8 +21993,6 @@
   end
   loop $while-continue|4
    i32.const 1
-   local.set $29
-   local.get $29
    if
     local.get $p2
     i64.const 10
@@ -22166,8 +22006,8 @@
     local.get $one_exp
     i64.extend_i32_s
     i64.shr_u
-    local.set $d|30
-    local.get $d|30
+    local.set $d|27
+    local.get $d|27
     local.get $len
     i64.extend_i32_s
     i64.or
@@ -22176,16 +22016,16 @@
     if
      local.get $buffer
      local.get $len
-     local.tee $31
+     local.tee $28
      i32.const 1
      i32.add
      local.set $len
-     local.get $31
+     local.get $28
      i32.const 1
      i32.shl
      i32.add
      i32.const 48
-     local.get $d|30
+     local.get $d|27
      i32.wrap_i64
      i32.const 65535
      i32.and
@@ -22220,79 +22060,77 @@
      i64.mul
      local.set $wp_w_frc
      local.get $buffer
-     local.set $buffer|32
+     local.set $buffer|29
      local.get $len
-     local.set $len|33
+     local.set $len|30
      local.get $delta
-     local.set $delta|34
+     local.set $delta|31
      local.get $p2
-     local.set $rest|35
+     local.set $rest|32
      local.get $one_frc
-     local.set $ten_kappa|36
+     local.set $ten_kappa|33
      local.get $wp_w_frc
-     local.set $wp_w|37
-     local.get $buffer|32
-     local.get $len|33
+     local.set $wp_w|34
+     local.get $buffer|29
+     local.get $len|30
      i32.const 1
      i32.sub
      i32.const 1
      i32.shl
      i32.add
-     local.set $lastp|38
-     local.get $lastp|38
+     local.set $lastp|35
+     local.get $lastp|35
      i32.load16_u $0
-     local.set $digit|39
+     local.set $digit|36
      loop $while-continue|6
-      local.get $rest|35
-      local.get $wp_w|37
+      local.get $rest|32
+      local.get $wp_w|34
       i64.lt_u
       if (result i32)
-       local.get $delta|34
-       local.get $rest|35
+       local.get $delta|31
+       local.get $rest|32
        i64.sub
-       local.get $ten_kappa|36
+       local.get $ten_kappa|33
        i64.ge_u
       else
        i32.const 0
       end
       if (result i32)
-       local.get $rest|35
-       local.get $ten_kappa|36
+       local.get $rest|32
+       local.get $ten_kappa|33
        i64.add
-       local.get $wp_w|37
+       local.get $wp_w|34
        i64.lt_u
        if (result i32)
         i32.const 1
        else
-        local.get $wp_w|37
-        local.get $rest|35
+        local.get $wp_w|34
+        local.get $rest|32
         i64.sub
-        local.get $rest|35
-        local.get $ten_kappa|36
+        local.get $rest|32
+        local.get $ten_kappa|33
         i64.add
-        local.get $wp_w|37
+        local.get $wp_w|34
         i64.sub
         i64.gt_u
        end
       else
        i32.const 0
       end
-      local.set $40
-      local.get $40
       if
-       local.get $digit|39
+       local.get $digit|36
        i32.const 1
        i32.sub
-       local.set $digit|39
-       local.get $rest|35
-       local.get $ten_kappa|36
+       local.set $digit|36
+       local.get $rest|32
+       local.get $ten_kappa|33
        i64.add
-       local.set $rest|35
+       local.set $rest|32
        br $while-continue|6
       end
      end
-     local.get $lastp|38
-     local.get $digit|39
+     local.get $lastp|35
+     local.get $digit|36
      i32.store16 $0
      local.get $len
      return
@@ -30999,8 +30837,6 @@
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -31077,8 +30913,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -31127,8 +30961,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -31182,11 +31014,8 @@
  )
  (func $~lib/util/sort/extendRunRight<i8> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -31246,8 +31075,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -31262,8 +31089,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -31330,8 +31155,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -31513,19 +31336,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -31742,8 +31564,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -31766,15 +31586,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -31793,16 +31613,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -31815,7 +31635,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -31829,17 +31649,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -31867,29 +31687,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -31901,10 +31721,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<i8>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -31951,8 +31771,6 @@
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -32029,8 +31847,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -32079,8 +31895,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -32134,11 +31948,8 @@
  )
  (func $~lib/util/sort/extendRunRight<u8> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -32198,8 +32009,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -32214,8 +32023,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -32282,8 +32089,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -32465,19 +32270,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -32694,8 +32498,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -32718,15 +32520,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -32745,16 +32547,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -32767,7 +32569,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -32781,17 +32583,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -32819,29 +32621,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -32853,10 +32655,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<u8>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -32960,8 +32762,6 @@
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -33038,8 +32838,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -33088,8 +32886,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -33143,11 +32939,8 @@
  )
  (func $~lib/util/sort/extendRunRight<i16> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -33207,8 +33000,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -33223,8 +33014,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -33291,8 +33080,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -33474,19 +33261,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -33703,8 +33489,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -33727,15 +33511,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -33754,16 +33538,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -33776,7 +33560,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -33790,17 +33574,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -33828,29 +33612,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -33862,10 +33646,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<i16>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -33912,8 +33696,6 @@
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -33990,8 +33772,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -34040,8 +33820,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -34095,11 +33873,8 @@
  )
  (func $~lib/util/sort/extendRunRight<u16> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -34159,8 +33934,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -34175,8 +33948,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -34243,8 +34014,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -34426,19 +34195,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -34655,8 +34423,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -34679,15 +34445,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -34706,16 +34472,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -34728,7 +34494,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -34742,17 +34508,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -34780,29 +34546,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -34814,10 +34580,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<u16>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -34878,8 +34644,6 @@
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -34956,8 +34720,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -35006,8 +34768,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -35061,11 +34821,8 @@
  )
  (func $~lib/util/sort/extendRunRight<i32> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -35125,8 +34882,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -35141,8 +34896,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -35209,8 +34962,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -35392,19 +35143,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -35621,8 +35371,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -35645,15 +35393,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -35672,16 +35420,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -35694,7 +35442,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -35708,17 +35456,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -35746,29 +35494,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -35780,10 +35528,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<i32>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -35824,8 +35572,6 @@
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -35902,8 +35648,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -35952,8 +35696,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -36007,11 +35749,8 @@
  )
  (func $~lib/util/sort/extendRunRight<u32> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -36071,8 +35810,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -36087,8 +35824,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -36155,8 +35890,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -36338,19 +36071,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -36567,8 +36299,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -36591,15 +36321,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -36618,16 +36348,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -36640,7 +36370,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -36654,17 +36384,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -36692,29 +36422,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -36726,10 +36456,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<u32>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -36774,8 +36504,6 @@
   (local $min i64)
   (local $max i64)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -36852,8 +36580,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -36902,8 +36628,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -36957,11 +36681,8 @@
  )
  (func $~lib/util/sort/extendRunRight<i64> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i64)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -37021,8 +36742,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -37037,8 +36756,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -37105,8 +36822,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -37288,19 +37003,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -37517,8 +37231,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -37541,15 +37253,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -37568,16 +37280,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -37590,7 +37302,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -37604,17 +37316,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -37642,29 +37354,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -37676,10 +37388,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<i64>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -37724,8 +37436,6 @@
   (local $min i64)
   (local $max i64)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -37802,8 +37512,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -37852,8 +37560,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -37907,11 +37613,8 @@
  )
  (func $~lib/util/sort/extendRunRight<u64> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i64)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -37971,8 +37674,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -37987,8 +37688,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -38055,8 +37754,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -38238,19 +37935,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -38467,8 +38163,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -38491,15 +38185,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -38518,16 +38212,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -38540,7 +38234,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -38554,17 +38248,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -38592,29 +38286,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -38626,10 +38320,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<u64>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -38674,8 +38368,6 @@
   (local $min f32)
   (local $max f32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -38752,8 +38444,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -38802,8 +38492,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -38857,11 +38545,8 @@
  )
  (func $~lib/util/sort/extendRunRight<f32> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp f32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -38921,8 +38606,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -38937,8 +38620,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -39005,8 +38686,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -39188,19 +38867,18 @@
   (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
+  (local $28 i32)
   (local $29 i32)
-  (local $30 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|31 i32)
+  (local $32 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|34 i32)
+  (local $35 i32)
+  (local $start|36 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -39417,8 +39095,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -39441,15 +39117,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $28
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
+     local.tee $29
+     local.get $28
      local.get $29
-     local.get $30
      i32.lt_s
      select
      local.set $endB
@@ -39468,16 +39144,16 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|31
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|31
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
+     local.set $32
+     local.get $32
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|31
       i32.const 2
       i32.shl
       i32.add
@@ -39490,7 +39166,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
@@ -39504,17 +39180,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|31
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|31
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|31
       br $for-loop|3
      end
     end
@@ -39542,29 +39218,29 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|34
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|34
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
+   local.set $35
+   local.get $35
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|34
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|36
+    local.get $start|36
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|36
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|34
      i32.const 2
      i32.shl
      i32.add
@@ -39576,10 +39252,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<f32>
     end
-    local.get $i|35
+    local.get $i|34
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|34
     br $for-loop|4
    end
   end
@@ -39649,8 +39325,6 @@
   i32.sub
  )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
-  (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -39661,8 +39335,6 @@
     global.get $~lib/rt/itcms/state
     i32.const 0
     i32.ne
-    local.set $0
-    local.get $0
     if
      call $~lib/rt/itcms/step
      drop
@@ -39676,8 +39348,6 @@
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.ne
-   local.set $1
-   local.get $1
    if
     call $~lib/rt/itcms/step
     drop

@@ -1773,12 +1773,9 @@
  (func $~lib/rt/tcms/__collect (type $none_=>_none)
   (local $pn i32)
   (local $iter i32)
-  (local $2 i32)
   (local $black i32)
   (local $to i32)
-  (local $5 i32)
   (local $from i32)
-  (local $7 i32)
   (local $newNext i32)
   i32.const 0
   drop
@@ -1793,8 +1790,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $2
-   local.get $2
    if
     i32.const 1
     drop
@@ -1834,8 +1829,6 @@
    local.get $iter
    local.get $to
    i32.ne
-   local.set $5
-   local.get $5
    if
     i32.const 1
     drop
@@ -1872,8 +1865,6 @@
    local.get $iter
    local.get $from
    i32.ne
-   local.set $7
-   local.get $7
    if
     i32.const 1
     drop

@@ -2945,14 +2945,14 @@
   i32.sub
   local.set $6
   loop $while-continue|2
-   block $while-break|2
-    local.get $1
-    local.tee $0
-    i32.const 1
-    i32.sub
-    local.set $1
-    local.get $0
-    if
+   local.get $1
+   local.tee $0
+   i32.const 1
+   i32.sub
+   local.set $1
+   local.get $0
+   if
+    block $while-break|2
      local.get $3
      local.get $2
      i32.load16_u $0

@@ -46,14 +46,13 @@ assert(testNullable(false) == null);
 
 // see: https://github.com/AssemblyScript/assemblyscript/issues/1289
 
-var globalFunc: () => (x: i32) => i32;
-function testGlobal(): void {
-  globalFunc = (): (x:i32) => i32 => {
-    let myFunc = (x: i32): i32 => {
-      return 24 + x;
-    };
-    return myFunc;
+var globalFunc: () => (x: i32) => i32 = (): (x:i32) => i32 => {
+  let myFunc = (x: i32): i32 => {
+    return 24 + x;
   };
+  return myFunc;
+};
+function testGlobal(): void {
   assert(globalFunc()(1) == 25);
 }
 testGlobal();

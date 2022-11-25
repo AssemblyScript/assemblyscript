@@ -2,7 +2,7 @@ import { utoa32, itoa32, utoa64, itoa64, dtoa } from "util/number";
 
 // preliminary
 var str: string = "hi, I'm a string";
-var nullStr: string;
+var nullStr: string | null = null;
 
 // exactly once in static memory
 assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));

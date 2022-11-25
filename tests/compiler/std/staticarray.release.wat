@@ -4580,7 +4580,7 @@
     unreachable
    end
    i32.const -1
-   local.set $1
+   local.set $0
    block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf7
     local.get $6
     i32.const 20
@@ -4588,25 +4588,25 @@
     i32.load $0 offset=16
     i32.const 2
     i32.shr_u
-    local.tee $0
+    local.tee $1
     i32.eqz
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf7
     i32.const 3
-    local.get $0
+    local.get $1
     i32.const 1
     i32.sub
-    local.get $0
+    local.get $1
     i32.const 3
     i32.gt_u
     select
-    local.set $1
-    loop $while-continue|011
-     local.get $1
+    local.set $0
+    loop $while-continue|04
+     local.get $0
      i32.const 0
      i32.ge_s
      if
       local.get $6
-      local.get $1
+      local.get $0
       i32.const 2
       i32.shl
       i32.add
@@ -4614,17 +4614,17 @@
       i32.const 2
       i32.eq
       br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf7
-      local.get $1
+      local.get $0
       i32.const 1
       i32.sub
-      local.set $1
-      br $while-continue|011
+      local.set $0
+      br $while-continue|04
      end
     end
     i32.const -1
-    local.set $1
+    local.set $0
    end
-   local.get $1
+   local.get $0
    i32.const 3
    i32.ne
    if
@@ -4636,51 +4636,51 @@
     unreachable
    end
    i32.const -1
-   local.set $1
-   block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf12
+   local.set $0
+   block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf58
     local.get $6
     i32.const 20
     i32.sub
     i32.load $0 offset=16
     i32.const 2
     i32.shr_u
-    local.tee $0
+    local.tee $1
     i32.eqz
-    br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf12
+    br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf58
     i32.const 2
-    local.get $0
+    local.get $1
     i32.const 1
     i32.sub
-    local.get $0
+    local.get $1
     i32.const 2
     i32.gt_u
     select
-    local.set $1
-    loop $while-continue|013
-     local.get $1
+    local.set $0
+    loop $while-continue|01011
+     local.get $0
      i32.const 0
      i32.ge_s
      if
       local.get $6
-      local.get $1
+      local.get $0
       i32.const 2
       i32.shl
       i32.add
       i32.load $0
       i32.const 2
       i32.eq
-      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf12
-      local.get $1
+      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf58
+      local.get $0
       i32.const 1
       i32.sub
-      local.set $1
-      br $while-continue|013
+      local.set $0
+      br $while-continue|01011
      end
     end
     i32.const -1
-    local.set $1
+    local.set $0
    end
-   local.get $1
+   local.get $0
    if
     i32.const 0
     i32.const 1216
@@ -4690,46 +4690,46 @@
     unreachable
    end
    i32.const -1
-   local.set $1
-   block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf14
+   local.set $0
+   block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf11
     local.get $6
     i32.const 20
     i32.sub
     i32.load $0 offset=16
     i32.const 2
     i32.shr_u
-    local.tee $0
+    local.tee $1
     i32.eqz
-    br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf14
-    local.get $0
+    br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf11
+    local.get $1
     i32.const 2
     i32.sub
-    local.set $1
+    local.set $0
     loop $while-continue|015
-     local.get $1
+     local.get $0
      i32.const 0
      i32.ge_s
      if
       local.get $6
-      local.get $1
+      local.get $0
       i32.const 2
       i32.shl
       i32.add
       i32.load $0
       i32.const 2
       i32.eq
-      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf14
-      local.get $1
+      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf11
+      local.get $0
       i32.const 1
       i32.sub
-      local.set $1
+      local.set $0
       br $while-continue|015
      end
     end
     i32.const -1
-    local.set $1
+    local.set $0
    end
-   local.get $1
+   local.get $0
    if
     i32.const 0
     i32.const 1216
@@ -4739,7 +4739,7 @@
     unreachable
    end
    i32.const -1
-   local.set $1
+   local.set $0
    block $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf16
     local.get $6
     i32.const 20
@@ -4747,20 +4747,20 @@
     i32.load $0 offset=16
     i32.const 2
     i32.shr_u
-    local.tee $0
+    local.tee $1
     i32.eqz
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf16
-    local.get $0
+    local.get $1
     i32.const 1
     i32.sub
-    local.set $1
-    loop $while-continue|017
-     local.get $1
+    local.set $0
+    loop $while-continue|020
+     local.get $0
      i32.const 0
      i32.ge_s
      if
       local.get $6
-      local.get $1
+      local.get $0
       i32.const 2
       i32.shl
       i32.add
@@ -4768,17 +4768,17 @@
       i32.const 2
       i32.eq
       br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#lastIndexOf16
-      local.get $1
+      local.get $0
       i32.const 1
       i32.sub
-      local.set $1
-      br $while-continue|017
+      local.set $0
+      br $while-continue|020
      end
     end
     i32.const -1
-    local.set $1
+    local.set $0
    end
-   local.get $1
+   local.get $0
    i32.const 3
    i32.ne
    if
@@ -5010,7 +5010,7 @@
    i32.gt_u
    select
    local.set $1
-   loop $for-loop|04
+   loop $for-loop|025
     local.get $0
     local.get $1
     i32.gt_s
@@ -5026,7 +5026,7 @@
      i32.const 1
      i32.add
      local.set $1
-     br $for-loop|04
+     br $for-loop|025
     end
    end
    local.get $6
@@ -5083,7 +5083,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    loop $while-continue|01023
+    loop $while-continue|031
      local.get $2
      local.get $6
      i32.lt_u
@@ -5114,7 +5114,7 @@
       i32.const 1
       i32.add
       local.set $2
-      br $while-continue|01023
+      br $while-continue|031
      end
     end
    end
@@ -5781,7 +5781,7 @@
     i32.const 2
     i32.shr_u
     local.set $1
-    loop $for-loop|017
+    loop $for-loop|037
      local.get $0
      local.get $1
      i32.lt_s
@@ -5808,7 +5808,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $for-loop|017
+      br $for-loop|037
      end
     end
     i32.const 0
@@ -5822,7 +5822,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   block $__inlined_func$~lib/staticarray/StaticArray<i32>#some19 (result i32)
+   block $__inlined_func$~lib/staticarray/StaticArray<i32>#some39 (result i32)
     global.get $~lib/memory/__stack_pointer
     i32.const 3440
     i32.store $0 offset=24
@@ -5835,7 +5835,7 @@
     i32.const 2
     i32.shr_u
     local.set $1
-    loop $for-loop|023
+    loop $for-loop|043
      local.get $0
      local.get $1
      i32.lt_s
@@ -5856,13 +5856,13 @@
       i32.const 3440
       i32.load $0
       call_indirect $0 (type $i32_i32_i32_=>_i32)
-      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#some19
+      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#some39
       drop
       local.get $0
       i32.const 1
       i32.add
       local.set $0
-      br $for-loop|023
+      br $for-loop|043
      end
     end
     i32.const 0
@@ -5888,7 +5888,7 @@
     i32.const 2
     i32.shr_u
     local.set $1
-    loop $for-loop|029
+    loop $for-loop|049
      local.get $0
      local.get $1
      i32.lt_s
@@ -5916,7 +5916,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $for-loop|029
+      br $for-loop|049
      end
     end
     i32.const 1
@@ -5930,7 +5930,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   block $__inlined_func$~lib/staticarray/StaticArray<i32>#every31 (result i32)
+   block $__inlined_func$~lib/staticarray/StaticArray<i32>#every51 (result i32)
     global.get $~lib/memory/__stack_pointer
     i32.const 3504
     i32.store $0 offset=24
@@ -5943,7 +5943,7 @@
     i32.const 2
     i32.shr_u
     local.set $1
-    loop $for-loop|035
+    loop $for-loop|055
      local.get $0
      local.get $1
      i32.lt_s
@@ -5965,13 +5965,13 @@
       i32.load $0
       call_indirect $0 (type $i32_i32_i32_=>_i32)
       i32.eqz
-      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#every31
+      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#every51
       drop
       local.get $0
       i32.const 1
       i32.add
       local.set $0
-      br $for-loop|035
+      br $for-loop|055
      end
     end
     i32.const 1
@@ -5997,7 +5997,7 @@
    i32.shr_u
    local.set $1
    block $__inlined_func$~lib/staticarray/StaticArray<i32>#findIndex
-    loop $for-loop|041
+    loop $for-loop|062
      local.get $0
      local.get $1
      i32.lt_s
@@ -6022,7 +6022,7 @@
       i32.const 1
       i32.add
       local.set $0
-      br $for-loop|041
+      br $for-loop|062
      end
     end
     i32.const -1
@@ -6051,8 +6051,8 @@
    i32.const 2
    i32.shr_u
    local.set $1
-   block $__inlined_func$~lib/staticarray/StaticArray<i32>#findIndex43
-    loop $for-loop|047
+   block $__inlined_func$~lib/staticarray/StaticArray<i32>#findIndex64
+    loop $for-loop|068
      local.get $0
      local.get $1
      i32.lt_s
@@ -6072,12 +6072,12 @@
       i32.const 3568
       i32.load $0
       call_indirect $0 (type $i32_i32_i32_=>_i32)
-      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#findIndex43
+      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#findIndex64
       local.get $0
       i32.const 1
       i32.add
       local.set $0
-      br $for-loop|047
+      br $for-loop|068
      end
     end
     i32.const -1
@@ -6107,7 +6107,7 @@
    i32.sub
    local.set $1
    block $__inlined_func$~lib/staticarray/StaticArray<i32>#findLastIndex
-    loop $for-loop|053
+    loop $for-loop|073
      local.get $1
      i32.const 0
      i32.ge_s
@@ -6132,7 +6132,7 @@
       i32.const 1
       i32.sub
       local.set $1
-      br $for-loop|053
+      br $for-loop|073
      end
     end
     i32.const -1
@@ -6161,8 +6161,8 @@
    i32.const 1
    i32.sub
    local.set $1
-   block $__inlined_func$~lib/staticarray/StaticArray<i32>#findLastIndex55
-    loop $for-loop|059
+   block $__inlined_func$~lib/staticarray/StaticArray<i32>#findLastIndex75
+    loop $for-loop|079
      local.get $1
      i32.const 0
      i32.ge_s
@@ -6182,12 +6182,12 @@
       i32.const 3632
       i32.load $0
       call_indirect $0 (type $i32_i32_i32_=>_i32)
-      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#findLastIndex55
+      br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#findLastIndex75
       local.get $1
       i32.const 1
       i32.sub
       local.set $1
-      br $for-loop|059
+      br $for-loop|079
      end
     end
     i32.const -1
@@ -6231,11 +6231,11 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store $0
-   block $1of18
-    block $0of19
-     block $outOfRange10
+   block $1of19
+    block $0of110
+     block $outOfRange11
       global.get $~argumentsLength
-      br_table $0of19 $1of18 $outOfRange10
+      br_table $0of110 $1of19 $outOfRange11
      end
      unreachable
     end

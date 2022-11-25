@@ -248,6 +248,8 @@ export class Flow {
   inlineReturnLabel: string | null = null;
   /** Alternative flows if a compound expression is true-ish. */
   trueFlows: Map<ExpressionRef,Flow> | null = null;
+  /** Alternative flows if a compound expression is false-ish. */
+  falseFlows: Map<ExpressionRef,Flow> | null = null;
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
@@ -345,6 +347,52 @@ export class Flow {
     }
     branch.inlineReturnLabel = this.inlineReturnLabel;
     return branch;
+  }
+
+  /** Forks this flow to a child flow where `condExpr` is true-ish. */
+  forkThen(
+    /** Condition that turned out to be true. */
+    condExpr: ExpressionRef,
+    /** Whether a new break context is established, e.g. by a block. */
+    newBreakContext: bool = false,
+    /** Whether a new continue context is established, e.g. by a loop. */
+    newContinueContext: bool = newBreakContext
+  ): Flow {
+    let flow = this.fork(newBreakContext, newContinueContext);
+    let trueFlows = this.trueFlows;
+    if (trueFlows && trueFlows.has(condExpr)) {
+      flow.inherit(changetype<Flow>(trueFlows.get(condExpr)));
+    }
+    flow.inheritNonnullIfTrue(condExpr);
+    return flow;
+  }
+
+  /** Remembers the alternative flow if `condExpr` turns out `true`. */
+  noteThen(condExpr: ExpressionRef, trueFlow: Flow): void {
+    let trueFlows = this.trueFlows;
+    if (!trueFlows) this.trueFlows = trueFlows = new Map();
+    trueFlows.set(condExpr, trueFlow);
+  }
+
+  /** Forks this flow to a child flow where `condExpr` is false-ish. */
+  forkElse(
+    /** Condition that turned out to be false. */
+    condExpr: ExpressionRef
+  ): Flow {
+    let flow = this.fork();
+    let falseFlows = this.falseFlows;
+    if (falseFlows && falseFlows.has(condExpr)) {
+      flow.inherit(changetype<Flow>(falseFlows.get(condExpr)));
+    }
+    flow.inheritNonnullIfFalse(condExpr);
+    return flow;
+  }
+
+  /** Remembers the alternative flow if `condExpr` turns out `false`. */
+  noteElse(condExpr: ExpressionRef, falseFlow: Flow): void {
+    let falseFlows = this.falseFlows;
+    if (!falseFlows) this.falseFlows = falseFlows = new Map();
+    falseFlows.set(condExpr, falseFlow);
   }
 
   /** Gets a free temporary local of the specified type. */
@@ -582,13 +630,10 @@ export class Flow {
     this.thisFieldFlags = other.thisFieldFlags;
   }
 
-  /** Inherits flags of a conditional branch joining again with this one, i.e. then without else. */
-  inheritBranch(other: Flow, conditionKind: ConditionKind = ConditionKind.Unknown): void {
+
+  /** Merges only the effects of a branch, i.e. when not taken. */
+  mergeEffects(other: Flow): void {
     assert(other.targetFunction == this.targetFunction);
-    switch (conditionKind) {
-      case ConditionKind.True: this.inherit(other); // always executes
-      case ConditionKind.False: return;             // never executes
-    }
 
     // Note that flags in `this` flow have already happened. For instance,
     // a return cannot be undone no matter what'd happen in subsequent branches,
@@ -664,8 +709,13 @@ export class Flow {
     }
 
     this.flags = newFlags | (thisFlags & (FlowFlags.UncheckedContext | FlowFlags.CtorParamContext));
+  }
 
-    // local flags
+  /** Merges a branch joining again with this flow, i.e. then without else. */
+  mergeBranch(other: Flow): void {
+    this.mergeEffects(other);
+
+    // Local flags matter if the branch is taken
     let thisLocalFlags = this.localFlags;
     let numThisLocalFlags = thisLocalFlags.length;
     let otherLocalFlags = other.localFlags;
@@ -686,12 +736,12 @@ export class Flow {
     // only be set if it has been observed prior to entering the branch.
   }
 
-  /** Inherits mutual flags of two alternate branches becoming this one, i.e. then with else. */
-  inheritMutual(left: Flow, right: Flow): void {
+  /** Inherits two alternate branches to become this flow, i.e. then with else. */
+  inheritAlternatives(left: Flow, right: Flow): void {
     assert(left.targetFunction == right.targetFunction);
     assert(left.targetFunction == this.targetFunction);
-    // This differs from the previous method in that no flags are guaranteed
-    // to happen unless it is the case in both flows.
+    // Differs from `mergeBranch` in that the alternatives are intersected to
+    // then become this branch.
 
     let leftFlags = left.flags;
     let rightFlags = right.flags;
@@ -892,7 +942,7 @@ export class Flow {
   }
 
   /** Updates local states to reflect that this branch is only taken when `expr` is true-ish. */
-  inheritNonnullIfTrue(
+  private inheritNonnullIfTrue(
     /** Expression being true. */
     expr: ExpressionRef,
     /** If specified, only set the flag if also nonnull in this flow. */
@@ -1006,7 +1056,7 @@ export class Flow {
   }
 
   /** Updates local states to reflect that this branch is only taken when `expr` is false-ish. */
-  inheritNonnullIfFalse(
+  private inheritNonnullIfFalse(
     /** Expression being false. */
     expr: ExpressionRef,
     /** If specified, only set the flag if also nonnull in this flow. */
@@ -1094,20 +1144,6 @@ export class Flow {
         break;
       }
     }
-  }
-
-  /** Remembers the alternative flow if `expr` is true. */
-  noteTrueFlow(expr: ExpressionRef, trueFlow: Flow): void {
-    let trueFlows = this.trueFlows;
-    if (!trueFlows) this.trueFlows = trueFlows = new Map();
-    trueFlows.set(expr, trueFlow);
-  }
-
-  /** Gets the alternative flow if `expr` is true, if any. */
-  getTrueFlow(expr: ExpressionRef): Flow {
-    let trueFlows = this.trueFlows;
-    if (!trueFlows || !trueFlows.has(expr)) return this;
-    return changetype<Flow>(trueFlows.get(expr));
   }
 
   /**

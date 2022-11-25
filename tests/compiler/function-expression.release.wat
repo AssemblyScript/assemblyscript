@@ -72,7 +72,7 @@
  (data (i32.const 2088) "\04\00\00\00\08\00\00\00\13")
  (data (i32.const 2112) "\n\00\00\00 \00\00\00 \00\00\00 ")
  (table $0 20 20 funcref)
- (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|3 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~anonymous|0)
+ (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|3 $start:function-expression~anonymous|7~anonymous|0 $start:function-expression~anonymous|7 $start:function-expression~anonymous|7~anonymous|0 $function-expression/testLocal~anonymous|0 $start:function-expression~anonymous|7~anonymous|0 $function-expression/testField~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~anonymous|0)
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
  (export "memory" (memory $0))
  (start $~start)
@@ -94,7 +94,7 @@
  (func $start:function-expression~anonymous|6 (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $function-expression/testGlobal~anonymous|0~anonymous|0 (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $start:function-expression~anonymous|7~anonymous|0 (type $i32_=>_i32) (param $0 i32) (result i32)
   local.get $0
   i32.const 24
   i32.add
@@ -1678,7 +1678,7 @@
    if
     i32.const 0
     i32.const 1088
-    i32.const 57
+    i32.const 56
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -1717,7 +1717,7 @@
    if
     i32.const 0
     i32.const 1088
-    i32.const 68
+    i32.const 67
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -1862,7 +1862,7 @@
    if
     i32.const 0
     i32.const 1088
-    i32.const 82
+    i32.const 81
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -1885,7 +1885,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $function-expression/testGlobal~anonymous|0 (type $none_=>_i32) (result i32)
+ (func $start:function-expression~anonymous|7 (type $none_=>_i32) (result i32)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4

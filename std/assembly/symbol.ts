@@ -1,10 +1,10 @@
 import { Map } from "./map";
 
 // @ts-ignore: decorator
-@lazy let stringToId: Map<string, usize>;
+@lazy let stringToId: Map<string, usize> = new Map();
 
 // @ts-ignore: decorator
-@lazy let idToString: Map<usize, string>;
+@lazy let idToString: Map<usize, string> = new Map();
 
 // @ts-ignore: decorator
 @lazy let nextId: usize = 12; // Symbol.unscopables + 1
@@ -64,8 +64,7 @@ import { Map } from "./map";
   static readonly unscopables: symbol = changetype<symbol>(11);
 
   static for(key: string): symbol {
-    if (!stringToId) { stringToId = new Map(); idToString = new Map(); }
-    else if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
+    if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
     let id = nextId++;
     if (!id) unreachable(); // out of ids
     stringToId.set(key, id);
@@ -74,7 +73,7 @@ import { Map } from "./map";
   }
 
   static keyFor(sym: symbol): string | null {
-    return idToString != null && idToString.has(changetype<usize>(sym))
+    return idToString.has(changetype<usize>(sym))
       ? idToString.get(changetype<usize>(sym))
       : null;
   }

@@ -38,7 +38,6 @@
  (func $unify-local-flags/testWhile (type $none_=>_none)
   (local $x i32)
   (local $i i32)
-  (local $2 i32)
   i32.const 0
   local.set $x
   i32.const 0
@@ -49,8 +48,6 @@
    i32.and
    i32.const 255
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $i
     local.set $x
@@ -69,7 +66,7 @@
   local.set $x
   i32.const 0
   local.set $i
-  loop $do-loop|1
+  loop $do-loop|2
    local.get $i
    local.set $x
    local.get $i
@@ -80,7 +77,7 @@
    i32.and
    i32.const 255
    i32.lt_u
-   br_if $do-loop|1
+   br_if $do-loop|2
   end
  )
 )

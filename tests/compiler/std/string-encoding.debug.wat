@@ -113,7 +113,6 @@
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -125,8 +124,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $3
-   local.get $3
    if
     i32.const 1
     drop
@@ -373,15 +370,12 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -1428,8 +1422,6 @@
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
-  (local $3 i32)
-  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
@@ -1474,8 +1466,6 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $3
-     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1525,8 +1515,6 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $4
-      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -2260,7 +2248,6 @@
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $7 i32)
-  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -2331,8 +2318,6 @@
    i32.sub
    local.set $len
    local.get $7
-   local.set $8
-   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -2408,7 +2393,6 @@
   (local $strOff i32)
   (local $strEnd i32)
   (local $bufLen i32)
-  (local $5 i32)
   (local $c1 i32)
   local.get $str
   local.set $strOff
@@ -2428,8 +2412,6 @@
     local.get $strOff
     local.get $strEnd
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $strOff
      i32.load16_u $0
@@ -2511,19 +2493,18 @@
  (func $~lib/string/String.UTF8.encodeUnsafe (type $i32_i32_i32_i32_i32_=>_i32) (param $str i32) (param $len i32) (param $buf i32) (param $nullTerminated i32) (param $errorMode i32) (result i32)
   (local $strEnd i32)
   (local $bufOff i32)
-  (local $7 i32)
   (local $c1 i32)
   (local $b0 i32)
   (local $b1 i32)
   (local $c2 i32)
-  (local $b0|12 i32)
-  (local $b1|13 i32)
+  (local $b0|11 i32)
+  (local $b1|12 i32)
   (local $b2 i32)
   (local $b3 i32)
-  (local $b0|16 i32)
-  (local $b1|17 i32)
-  (local $b2|18 i32)
-  (local $19 i32)
+  (local $b0|15 i32)
+  (local $b1|16 i32)
+  (local $b2|17 i32)
+  (local $18 i32)
   local.get $str
   local.get $len
   i32.const 1
@@ -2536,8 +2517,6 @@
    local.get $str
    local.get $strEnd
    i32.lt_u
-   local.set $7
-   local.get $7
    if
     local.get $str
     i32.load16_u $0
@@ -2637,7 +2616,7 @@
          i32.shr_u
          i32.const 240
          i32.or
-         local.set $b0|12
+         local.set $b0|11
          local.get $c1
          i32.const 12
          i32.shr_u
@@ -2645,7 +2624,7 @@
          i32.and
          i32.const 128
          i32.or
-         local.set $b1|13
+         local.set $b1|12
          local.get $c1
          i32.const 6
          i32.shr_u
@@ -2668,11 +2647,11 @@
          i32.const 16
          i32.shl
          i32.or
-         local.get $b1|13
+         local.get $b1|12
          i32.const 8
          i32.shl
          i32.or
-         local.get $b0|12
+         local.get $b0|11
          i32.or
          i32.store $0
          local.get $bufOff
@@ -2710,7 +2689,7 @@
       i32.shr_u
       i32.const 224
       i32.or
-      local.set $b0|16
+      local.set $b0|15
       local.get $c1
       i32.const 6
       i32.shr_u
@@ -2718,22 +2697,22 @@
       i32.and
       i32.const 128
       i32.or
-      local.set $b1|17
+      local.set $b1|16
       local.get $c1
       i32.const 63
       i32.and
       i32.const 128
       i32.or
-      local.set $b2|18
+      local.set $b2|17
       local.get $bufOff
-      local.get $b1|17
+      local.get $b1|16
       i32.const 8
       i32.shl
-      local.get $b0|16
+      local.get $b0|15
       i32.or
       i32.store16 $0
       local.get $bufOff
-      local.get $b2|18
+      local.get $b2|17
       i32.store8 $0 offset=2
       local.get $bufOff
       i32.const 3
@@ -2751,11 +2730,11 @@
   local.get $nullTerminated
   if
    local.get $bufOff
-   local.tee $19
+   local.tee $18
    i32.const 1
    i32.add
    local.set $bufOff
-   local.get $19
+   local.get $18
    i32.const 0
    i32.store8 $0
   end
@@ -2843,8 +2822,6 @@
   call $~lib/string/String.UTF8.decodeUnsafe
  )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
-  (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -2855,8 +2832,6 @@
     global.get $~lib/rt/itcms/state
     i32.const 0
     i32.ne
-    local.set $0
-    local.get $0
     if
      call $~lib/rt/itcms/step
      drop
@@ -2870,8 +2845,6 @@
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.ne
-   local.set $1
-   local.get $1
    if
     call $~lib/rt/itcms/step
     drop
@@ -4824,13 +4797,12 @@
   (local $bufEnd i32)
   (local $str i32)
   (local $strOff i32)
-  (local $7 i32)
   (local $u0 i32)
   (local $u1 i32)
   (local $u2 i32)
   (local $lo i32)
   (local $hi i32)
-  (local $13 i32)
+  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -4872,8 +4844,6 @@
     local.get $bufOff
     local.get $bufEnd
     i32.lt_u
-    local.set $7
-    local.get $7
     if
      local.get $bufOff
      i32.load8_u $0
@@ -5044,11 +5014,11 @@
   local.get $str
   i32.sub
   call $~lib/rt/itcms/__renew
-  local.set $13
+  local.set $12
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $13
+  local.get $12
  )
 )

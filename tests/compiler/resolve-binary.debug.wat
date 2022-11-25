@@ -125,7 +125,6 @@
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $7 i32)
-  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -196,8 +195,6 @@
    i32.sub
    local.set $len
    local.get $7
-   local.set $8
-   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -364,7 +361,6 @@
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -376,8 +372,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $3
-   local.get $3
    if
     i32.const 1
     drop
@@ -624,15 +618,12 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -1679,8 +1670,6 @@
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
-  (local $3 i32)
-  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
@@ -1725,8 +1714,6 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $3
-     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1776,8 +1763,6 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $4
-      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -2476,24 +2461,21 @@
   local.get $ptr
  )
  (func $~lib/util/number/utoa32_dec_lut (type $i32_i32_i32_=>_none) (param $buffer i32) (param $num i32) (param $offset i32)
-  (local $3 i32)
   (local $t i32)
   (local $r i32)
   (local $d1 i32)
   (local $d2 i32)
   (local $digits1 i64)
   (local $digits2 i64)
-  (local $t|10 i32)
-  (local $d1|11 i32)
+  (local $t|9 i32)
+  (local $d1|10 i32)
   (local $digits i32)
-  (local $digits|13 i32)
+  (local $digits|12 i32)
   (local $digit i32)
   loop $while-continue|0
    local.get $num
    i32.const 10000
    i32.ge_u
-   local.set $3
-   local.get $3
    if
     local.get $num
     i32.const 10000
@@ -2552,19 +2534,19 @@
    local.get $num
    i32.const 100
    i32.div_u
-   local.set $t|10
+   local.set $t|9
    local.get $num
    i32.const 100
    i32.rem_u
-   local.set $d1|11
-   local.get $t|10
+   local.set $d1|10
+   local.get $t|9
    local.set $num
    local.get $offset
    i32.const 2
    i32.sub
    local.set $offset
    i32.const 764
-   local.get $d1|11
+   local.get $d1|10
    i32.const 2
    i32.shl
    i32.add
@@ -2592,13 +2574,13 @@
    i32.shl
    i32.add
    i32.load $0
-   local.set $digits|13
+   local.set $digits|12
    local.get $buffer
    local.get $offset
    i32.const 1
    i32.shl
    i32.add
-   local.get $digits|13
+   local.get $digits|12
    i32.store $0
   else
    local.get $offset
@@ -2619,13 +2601,10 @@
   end
  )
  (func $~lib/util/number/utoa_hex_lut (type $i32_i64_i32_=>_none) (param $buffer i32) (param $num i64) (param $offset i32)
-  (local $3 i32)
   loop $while-continue|0
    local.get $offset
    i32.const 2
    i32.ge_u
-   local.set $3
-   local.get $3
    if
     local.get $offset
     i32.const 2
@@ -2673,8 +2652,6 @@
   (local $b64 i64)
   (local $b i64)
   (local $e i32)
-  (local $6 i32)
-  (local $7 i32)
   local.get $base
   local.set $value
   local.get $value
@@ -2707,8 +2684,6 @@
    local.get $num
    local.get $b
    i64.ge_u
-   local.set $6
-   local.get $6
    if
     local.get $num
     local.get $b
@@ -2729,8 +2704,6 @@
    local.get $num
    i64.const 1
    i64.ge_u
-   local.set $7
-   local.get $7
    if
     local.get $num
     local.get $b64
@@ -3870,32 +3843,28 @@
   (local $p2 i64)
   (local $kappa i32)
   (local $len i32)
-  (local $15 i32)
   (local $d i32)
+  (local $16 i32)
   (local $17 i32)
-  (local $18 i32)
   (local $tmp i64)
-  (local $buffer|20 i32)
-  (local $len|21 i32)
-  (local $delta|22 i64)
+  (local $buffer|19 i32)
+  (local $len|20 i32)
+  (local $delta|21 i64)
   (local $rest i64)
   (local $ten_kappa i64)
   (local $wp_w i64)
   (local $lastp i32)
   (local $digit i32)
+  (local $d|27 i64)
   (local $28 i32)
-  (local $29 i32)
-  (local $d|30 i64)
-  (local $31 i32)
-  (local $buffer|32 i32)
-  (local $len|33 i32)
-  (local $delta|34 i64)
-  (local $rest|35 i64)
-  (local $ten_kappa|36 i64)
-  (local $wp_w|37 i64)
-  (local $lastp|38 i32)
-  (local $digit|39 i32)
-  (local $40 i32)
+  (local $buffer|29 i32)
+  (local $len|30 i32)
+  (local $delta|31 i64)
+  (local $rest|32 i64)
+  (local $ten_kappa|33 i64)
+  (local $wp_w|34 i64)
+  (local $lastp|35 i32)
+  (local $digit|36 i32)
   i32.const 0
   local.get $mp_exp
   i32.sub
@@ -3932,8 +3901,6 @@
    local.get $kappa
    i32.const 0
    i32.gt_s
-   local.set $15
-   local.get $15
    if
     block $break|1
      block $case10|1
@@ -3948,44 +3915,44 @@
               block $case1|1
                block $case0|1
                 local.get $kappa
-                local.set $17
-                local.get $17
+                local.set $16
+                local.get $16
                 i32.const 10
                 i32.eq
                 br_if $case0|1
-                local.get $17
+                local.get $16
                 i32.const 9
                 i32.eq
                 br_if $case1|1
-                local.get $17
+                local.get $16
                 i32.const 8
                 i32.eq
                 br_if $case2|1
-                local.get $17
+                local.get $16
                 i32.const 7
                 i32.eq
                 br_if $case3|1
-                local.get $17
+                local.get $16
                 i32.const 6
                 i32.eq
                 br_if $case4|1
-                local.get $17
+                local.get $16
                 i32.const 5
                 i32.eq
                 br_if $case5|1
-                local.get $17
+                local.get $16
                 i32.const 4
                 i32.eq
                 br_if $case6|1
-                local.get $17
+                local.get $16
                 i32.const 3
                 i32.eq
                 br_if $case7|1
-                local.get $17
+                local.get $16
                 i32.const 2
                 i32.eq
                 br_if $case8|1
-                local.get $17
+                local.get $16
                 i32.const 1
                 i32.eq
                 br_if $case9|1
@@ -4097,11 +4064,11 @@
     if
      local.get $buffer
      local.get $len
-     local.tee $18
+     local.tee $17
      i32.const 1
      i32.add
      local.set $len
-     local.get $18
+     local.get $17
      i32.const 1
      i32.shl
      i32.add
@@ -4133,11 +4100,11 @@
      i32.add
      global.set $~lib/util/number/_K
      local.get $buffer
-     local.set $buffer|20
+     local.set $buffer|19
      local.get $len
-     local.set $len|21
+     local.set $len|20
      local.get $delta
-     local.set $delta|22
+     local.set $delta|21
      local.get $tmp
      local.set $rest
      i32.const 9632
@@ -4152,8 +4119,8 @@
      local.set $ten_kappa
      local.get $wp_w_frc
      local.set $wp_w
-     local.get $buffer|20
-     local.get $len|21
+     local.get $buffer|19
+     local.get $len|20
      i32.const 1
      i32.sub
      i32.const 1
@@ -4168,7 +4135,7 @@
       local.get $wp_w
       i64.lt_u
       if (result i32)
-       local.get $delta|22
+       local.get $delta|21
        local.get $rest
        i64.sub
        local.get $ten_kappa
@@ -4198,8 +4165,6 @@
       else
        i32.const 0
       end
-      local.set $28
-      local.get $28
       if
        local.get $digit
        i32.const 1
@@ -4223,8 +4188,6 @@
   end
   loop $while-continue|4
    i32.const 1
-   local.set $29
-   local.get $29
    if
     local.get $p2
     i64.const 10
@@ -4238,8 +4201,8 @@
     local.get $one_exp
     i64.extend_i32_s
     i64.shr_u
-    local.set $d|30
-    local.get $d|30
+    local.set $d|27
+    local.get $d|27
     local.get $len
     i64.extend_i32_s
     i64.or
@@ -4248,16 +4211,16 @@
     if
      local.get $buffer
      local.get $len
-     local.tee $31
+     local.tee $28
      i32.const 1
      i32.add
      local.set $len
-     local.get $31
+     local.get $28
      i32.const 1
      i32.shl
      i32.add
      i32.const 48
-     local.get $d|30
+     local.get $d|27
      i32.wrap_i64
      i32.const 65535
      i32.and
@@ -4292,79 +4255,77 @@
      i64.mul
      local.set $wp_w_frc
      local.get $buffer
-     local.set $buffer|32
+     local.set $buffer|29
      local.get $len
-     local.set $len|33
+     local.set $len|30
      local.get $delta
-     local.set $delta|34
+     local.set $delta|31
      local.get $p2
-     local.set $rest|35
+     local.set $rest|32
      local.get $one_frc
-     local.set $ten_kappa|36
+     local.set $ten_kappa|33
      local.get $wp_w_frc
-     local.set $wp_w|37
-     local.get $buffer|32
-     local.get $len|33
+     local.set $wp_w|34
+     local.get $buffer|29
+     local.get $len|30
      i32.const 1
      i32.sub
      i32.const 1
      i32.shl
      i32.add
-     local.set $lastp|38
-     local.get $lastp|38
+     local.set $lastp|35
+     local.get $lastp|35
      i32.load16_u $0
-     local.set $digit|39
+     local.set $digit|36
      loop $while-continue|6
-      local.get $rest|35
-      local.get $wp_w|37
+      local.get $rest|32
+      local.get $wp_w|34
       i64.lt_u
       if (result i32)
-       local.get $delta|34
-       local.get $rest|35
+       local.get $delta|31
+       local.get $rest|32
        i64.sub
-       local.get $ten_kappa|36
+       local.get $ten_kappa|33
        i64.ge_u
       else
        i32.const 0
       end
       if (result i32)
-       local.get $rest|35
-       local.get $ten_kappa|36
+       local.get $rest|32
+       local.get $ten_kappa|33
        i64.add
-       local.get $wp_w|37
+       local.get $wp_w|34
        i64.lt_u
        if (result i32)
         i32.const 1
        else
-        local.get $wp_w|37
-        local.get $rest|35
+        local.get $wp_w|34
+        local.get $rest|32
         i64.sub
-        local.get $rest|35
-        local.get $ten_kappa|36
+        local.get $rest|32
+        local.get $ten_kappa|33
         i64.add
-        local.get $wp_w|37
+        local.get $wp_w|34
         i64.sub
         i64.gt_u
        end
       else
        i32.const 0
       end
-      local.set $40
-      local.get $40
       if
-       local.get $digit|39
+       local.get $digit|36
        i32.const 1
        i32.sub
-       local.set $digit|39
-       local.get $rest|35
-       local.get $ten_kappa|36
+       local.set $digit|36
+       local.get $rest|32
+       local.get $ten_kappa|33
        i64.add
-       local.set $rest|35
+       local.set $rest|32
        br $while-continue|6
       end
      end
-     local.get $lastp|38
-     local.get $digit|39
+     local.get $lastp|35
+     local.get $digit|36
      i32.store16 $0
      local.get $len
      return
@@ -5178,7 +5139,6 @@
   (local $out i32)
   (local $log i32)
   (local $4 i32)
-  (local $5 i32)
   i32.const 1
   local.set $out
   i32.const 0
@@ -5369,8 +5329,6 @@
   end
   loop $while-continue|1
    local.get $e
-   local.set $5
-   local.get $5
    if
     local.get $e
     i32.const 1

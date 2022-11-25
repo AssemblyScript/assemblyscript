@@ -14,7 +14,7 @@
  (global $function-expression/f2 (mut i32) (i32.const 128))
  (global $function-expression/f3 (mut i32) (i32.const 160))
  (global $function-expression/f4 (mut i32) (i32.const 192))
- (global $function-expression/globalFunc (mut i32) (i32.const 0))
+ (global $function-expression/globalFunc (mut i32) (i32.const 480))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -64,7 +64,7 @@
  (data (i32.const 1052) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\13\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1088) "\n\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 20 20 funcref)
- (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $function-expression/semanticallyAnonymous~fnDecl $function-expression/semanticallyAnonymous~fnDecl|0)
+ (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $start:function-expression~anonymous|7~anonymous|0 $start:function-expression~anonymous|7 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $function-expression/semanticallyAnonymous~fnDecl $function-expression/semanticallyAnonymous~fnDecl|0)
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
  (export "memory" (memory $0))
  (start $~start)
@@ -134,7 +134,7 @@
   end
   unreachable
  )
- (func $function-expression/testGlobal~anonymous|0~anonymous|0 (type $i32_=>_i32) (param $x i32) (result i32)
+ (func $start:function-expression~anonymous|7~anonymous|0 (type $i32_=>_i32) (param $x i32) (result i32)
   i32.const 24
   local.get $x
   i32.add
@@ -149,8 +149,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  i32.const 480
-  global.set $function-expression/globalFunc
   i32.const 1
   global.get $~lib/memory/__stack_pointer
   i32.const 0
@@ -171,7 +169,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 57
+   i32.const 56
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -221,7 +219,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 68
+   i32.const 67
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -271,7 +269,6 @@
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -283,8 +280,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $3
-   local.get $3
    if
     i32.const 1
     drop
@@ -531,15 +526,12 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -1586,8 +1578,6 @@
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
-  (local $3 i32)
-  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
@@ -1632,8 +1622,6 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $3
-     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1683,8 +1671,6 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $4
-      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -2497,7 +2483,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 93
+   i32.const 92
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2761,7 +2747,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 82
+   i32.const 81
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2983,7 +2969,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $function-expression/testGlobal~anonymous|0 (type $none_=>_i32) (result i32)
+ (func $start:function-expression~anonymous|7 (type $none_=>_i32) (result i32)
   (local $myFunc i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer

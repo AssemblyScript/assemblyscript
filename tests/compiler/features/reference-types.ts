@@ -66,7 +66,7 @@ var anyGlobalInit: externref = null;
 assert(!anyGlobalInit);
 
 function testLocal<T>(): void {
-  let local: T;
+  let local: T = null;
   assert(!local);
   local = null;
   assert(!local);

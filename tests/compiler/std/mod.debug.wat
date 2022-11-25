@@ -29,7 +29,6 @@
   (local $uy1 i64)
   (local $m f64)
   (local $ux1 i64)
-  (local $10 i32)
   (local $shift i64)
   local.get $y
   f64.abs
@@ -181,8 +180,6 @@
    local.get $ex
    local.get $ey
    i64.gt_s
-   local.set $10
-   local.get $10
    if
     local.get $ux
     local.get $uy
@@ -330,7 +327,6 @@
   (local $uy1 i32)
   (local $m f32)
   (local $ux1 i32)
-  (local $10 i32)
   (local $shift i32)
   local.get $y
   f32.abs
@@ -478,8 +474,6 @@
    local.get $ex
    local.get $ey
    i32.gt_s
-   local.set $10
-   local.get $10
    if
     local.get $ux
     local.get $uy

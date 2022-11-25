@@ -26,11 +26,8 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $loop-flow/whileReturn (type $none_=>_i32) (result i32)
-  (local $0 i32)
   loop $while-continue|0
    i32.const 1
-   local.set $0
-   local.get $0
    if
     i32.const 1
     return
@@ -39,11 +36,8 @@
   unreachable
  )
  (func $loop-flow/whileAny (type $i32_=>_i32) (param $a i32) (result i32)
-  (local $1 i32)
   loop $while-continue|0
    i32.const 1
-   local.set $1
-   local.get $1
    if
     local.get $a
     i32.const 1
@@ -157,8 +151,7 @@
     unreachable
    end
    i32.const 1
-   drop
-   br $do-loop|0
+   br_if $do-loop|0
   end
   unreachable
  )
@@ -240,11 +233,8 @@
   end
  )
  (func $loop-flow/whileThrow (type $none_=>_i32) (result i32)
-  (local $0 i32)
   loop $while-continue|0
    i32.const 1
-   local.set $0
-   local.get $0
    if
     i32.const 80
     i32.const 32
@@ -257,11 +247,8 @@
   unreachable
  )
  (func $loop-flow/whileContinue (type $none_=>_i32) (result i32)
-  (local $0 i32)
   loop $while-continue|0
    i32.const 1
-   local.set $0
-   local.get $0
    if
     br $while-continue|0
    end

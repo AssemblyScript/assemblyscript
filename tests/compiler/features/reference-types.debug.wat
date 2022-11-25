@@ -38,6 +38,8 @@
  (func $features/reference-types/testLocal<funcref> (type $none_=>_none)
   (local $local funcref)
   (local $localInit funcref)
+  ref.null nofunc
+  local.set $local
   local.get $local
   ref.is_null
   i32.eqz
@@ -85,6 +87,8 @@
  (func $features/reference-types/testLocal<externref> (type $none_=>_none)
   (local $local externref)
   (local $localInit externref)
+  ref.null noextern
+  local.set $local
   local.get $local
   ref.is_null
   i32.eqz
