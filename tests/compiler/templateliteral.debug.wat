@@ -1373,15 +1373,13 @@
   (local $root|4 i32)
   (local $tail i32)
   (local $fl i32)
-  (local $7 i32)
-  (local $root|8 i32)
-  (local $fl|9 i32)
+  (local $root|7 i32)
+  (local $fl|8 i32)
   (local $slMap i32)
   (local $sl i32)
-  (local $12 i32)
-  (local $root|13 i32)
-  (local $fl|14 i32)
-  (local $sl|15 i32)
+  (local $root|11 i32)
+  (local $fl|12 i32)
+  (local $sl|13 i32)
   (local $head i32)
   (local $memStart i32)
   i32.const 0
@@ -1442,17 +1440,15 @@
    local.get $fl
    i32.const 23
    i32.lt_u
-   local.set $7
-   local.get $7
    if
     local.get $root
-    local.set $root|8
+    local.set $root|7
     local.get $fl
-    local.set $fl|9
+    local.set $fl|8
     i32.const 0
     local.set $slMap
-    local.get $root|8
-    local.get $fl|9
+    local.get $root|7
+    local.get $fl|8
     i32.const 2
     i32.shl
     i32.add
@@ -1464,22 +1460,20 @@
      local.get $sl
      i32.const 16
      i32.lt_u
-     local.set $12
-     local.get $12
      if
       local.get $root
-      local.set $root|13
+      local.set $root|11
       local.get $fl
-      local.set $fl|14
+      local.set $fl|12
       local.get $sl
-      local.set $sl|15
+      local.set $sl|13
       i32.const 0
       local.set $head
-      local.get $root|13
-      local.get $fl|14
+      local.get $root|11
+      local.get $fl|12
       i32.const 4
       i32.shl
-      local.get $sl|15
+      local.get $sl|13
       i32.add
       i32.const 2
       i32.shl
@@ -3428,26 +3422,24 @@
  (func $~lib/util/number/prettify (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $length i32) (param $k i32) (result i32)
   (local $kk i32)
   (local $i i32)
-  (local $5 i32)
   (local $ptr i32)
   (local $offset i32)
-  (local $i|8 i32)
-  (local $9 i32)
-  (local $buffer|10 i32)
-  (local $k|11 i32)
+  (local $i|7 i32)
+  (local $buffer|8 i32)
+  (local $k|9 i32)
   (local $sign i32)
   (local $decimals i32)
-  (local $buffer|14 i32)
+  (local $buffer|12 i32)
   (local $num i32)
-  (local $offset|16 i32)
+  (local $offset|14 i32)
   (local $len i32)
-  (local $buffer|18 i32)
-  (local $k|19 i32)
-  (local $sign|20 i32)
-  (local $decimals|21 i32)
-  (local $buffer|22 i32)
-  (local $num|23 i32)
-  (local $offset|24 i32)
+  (local $buffer|16 i32)
+  (local $k|17 i32)
+  (local $sign|18 i32)
+  (local $decimals|19 i32)
+  (local $buffer|20 i32)
+  (local $num|21 i32)
+  (local $offset|22 i32)
   local.get $k
   i32.eqz
   if
@@ -3488,8 +3480,6 @@
     local.get $i
     local.get $kk
     i32.lt_s
-    local.set $5
-    local.get $5
     if
      local.get $buffer
      local.get $i
@@ -3593,25 +3583,23 @@
      i32.or
      i32.store $0
      i32.const 2
-     local.set $i|8
+     local.set $i|7
      loop $for-loop|1
-      local.get $i|8
+      local.get $i|7
       local.get $offset
       i32.lt_s
-      local.set $9
-      local.get $9
       if
        local.get $buffer
-       local.get $i|8
+       local.get $i|7
        i32.const 1
        i32.shl
        i32.add
        i32.const 48
        i32.store16 $0
-       local.get $i|8
+       local.get $i|7
        i32.const 1
        i32.add
-       local.set $i|8
+       local.set $i|7
        br $for-loop|1
       end
      end
@@ -3630,42 +3618,42 @@
       local.get $buffer
       i32.const 4
       i32.add
-      local.set $buffer|10
+      local.set $buffer|8
       local.get $kk
       i32.const 1
       i32.sub
-      local.set $k|11
-      local.get $k|11
+      local.set $k|9
+      local.get $k|9
       i32.const 0
       i32.lt_s
       local.set $sign
       local.get $sign
       if
        i32.const 0
-       local.get $k|11
+       local.get $k|9
        i32.sub
-       local.set $k|11
+       local.set $k|9
       end
-      local.get $k|11
+      local.get $k|9
       call $~lib/util/number/decimalCount32
       i32.const 1
       i32.add
       local.set $decimals
-      local.get $buffer|10
-      local.set $buffer|14
-      local.get $k|11
+      local.get $buffer|8
+      local.set $buffer|12
+      local.get $k|9
       local.set $num
       local.get $decimals
-      local.set $offset|16
+      local.set $offset|14
       i32.const 0
       i32.const 1
       i32.ge_s
       drop
-      local.get $buffer|14
+      local.get $buffer|12
       local.get $num
-      local.get $offset|16
+      local.get $offset|14
       call $~lib/util/number/utoa32_dec_lut
-      local.get $buffer|10
+      local.get $buffer|8
       i32.const 45
       i32.const 43
       local.get $sign
@@ -3706,48 +3694,48 @@
       i32.add
       i32.const 4
       i32.add
-      local.set $buffer|18
+      local.set $buffer|16
       local.get $kk
       i32.const 1
       i32.sub
-      local.set $k|19
-      local.get $k|19
+      local.set $k|17
+      local.get $k|17
       i32.const 0
       i32.lt_s
-      local.set $sign|20
-      local.get $sign|20
+      local.set $sign|18
+      local.get $sign|18
       if
        i32.const 0
-       local.get $k|19
+       local.get $k|17
        i32.sub
-       local.set $k|19
+       local.set $k|17
       end
-      local.get $k|19
+      local.get $k|17
       call $~lib/util/number/decimalCount32
       i32.const 1
       i32.add
-      local.set $decimals|21
-      local.get $buffer|18
-      local.set $buffer|22
-      local.get $k|19
-      local.set $num|23
-      local.get $decimals|21
-      local.set $offset|24
+      local.set $decimals|19
+      local.get $buffer|16
+      local.set $buffer|20
+      local.get $k|17
+      local.set $num|21
+      local.get $decimals|19
+      local.set $offset|22
       i32.const 0
       i32.const 1
       i32.ge_s
       drop
-      local.get $buffer|22
-      local.get $num|23
-      local.get $offset|24
+      local.get $buffer|20
+      local.get $num|21
+      local.get $offset|22
       call $~lib/util/number/utoa32_dec_lut
-      local.get $buffer|18
+      local.get $buffer|16
       i32.const 45
       i32.const 43
-      local.get $sign|20
+      local.get $sign|18
       select
       i32.store16 $0
-      local.get $decimals|21
+      local.get $decimals|19
       i32.add
       local.set $length
       local.get $length
@@ -5517,14 +5505,12 @@
   (local $estLen i32)
   (local $value i32)
   (local $i i32)
-  (local $8 i32)
   (local $offset i32)
   (local $sepLen i32)
   (local $result i32)
-  (local $i|12 i32)
-  (local $13 i32)
+  (local $i|11 i32)
   (local $valueLen i32)
-  (local $15 i32)
+  (local $13 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -5545,12 +5531,12 @@
   i32.lt_s
   if
    i32.const 160
-   local.set $15
+   local.set $13
    global.get $~lib/memory/__stack_pointer
    i32.const 12
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $15
+   local.get $13
    return
   end
   local.get $lastIndex
@@ -5567,12 +5553,12 @@
    else
     i32.const 160
    end
-   local.set $15
+   local.set $13
    global.get $~lib/memory/__stack_pointer
    i32.const 12
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $15
+   local.get $13
    return
   end
   i32.const 0
@@ -5583,8 +5569,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     global.get $~lib/memory/__stack_pointer
     local.get $dataStart
@@ -5630,17 +5614,15 @@
   local.tee $result
   i32.store $0 offset=8
   i32.const 0
-  local.set $i|12
+  local.set $i|11
   loop $for-loop|1
-   local.get $i|12
+   local.get $i|11
    local.get $lastIndex
    i32.lt_s
-   local.set $13
-   local.get $13
    if
     global.get $~lib/memory/__stack_pointer
     local.get $dataStart
-    local.get $i|12
+    local.get $i|11
     i32.const 2
     i32.shl
     i32.add
@@ -5686,10 +5668,10 @@
      i32.add
      local.set $offset
     end
-    local.get $i|12
+    local.get $i|11
     i32.const 1
     i32.add
-    local.set $i|12
+    local.set $i|11
     br $for-loop|1
    end
   end
@@ -5719,12 +5701,12 @@
    memory.copy $0 $0
   end
   local.get $result
-  local.set $15
+  local.set $13
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $13
  )
  (func $~lib/util/number/itoa32 (type $i32_i32_=>_i32) (param $value i32) (param $radix i32) (result i32)
   (local $sign i32)

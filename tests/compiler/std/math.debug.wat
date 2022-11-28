@@ -16600,28 +16600,26 @@
   (local $3 f64)
   (local $4 f64)
   (local $i i32)
-  (local $6 i32)
   (local $r f64)
   (local $value i64)
-  (local $i|9 i32)
-  (local $10 i32)
-  (local $r|11 f32)
+  (local $i|8 i32)
+  (local $r|9 f32)
   (local $x f64)
+  (local $x|11 f64)
+  (local $x|12 f64)
   (local $x|13 f64)
   (local $x|14 f64)
   (local $x|15 f64)
   (local $x|16 f64)
   (local $x|17 f64)
-  (local $x|18 f64)
-  (local $x|19 f64)
+  (local $x|18 f32)
+  (local $x|19 f32)
   (local $x|20 f32)
   (local $x|21 f32)
   (local $x|22 f32)
   (local $x|23 f32)
   (local $x|24 f32)
   (local $x|25 f32)
-  (local $x|26 f32)
-  (local $x|27 f32)
   global.get $~lib/math/NativeMath.E
   global.get $~lib/math/NativeMath.E
   f64.eq
@@ -47551,8 +47549,6 @@
    f64.convert_i32_s
    f64.const 1e6
    f64.lt
-   local.set $6
-   local.get $6
    if
     call $~lib/math/NativeMath.random
     local.set $r
@@ -47588,22 +47584,20 @@
   local.get $value
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
-  local.set $i|9
+  local.set $i|8
   loop $for-loop|1
-   local.get $i|9
+   local.get $i|8
    f64.convert_i32_s
    f64.const 1e6
    f64.lt
-   local.set $10
-   local.get $10
    if
     call $~lib/math/NativeMathf.random
-    local.set $r|11
-    local.get $r|11
+    local.set $r|9
+    local.get $r|9
     f32.const 0
     f32.ge
     if (result i32)
-     local.get $r|11
+     local.get $r|9
      f32.const 1
      f32.lt
     else
@@ -47618,10 +47612,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|9
+    local.get $i|8
     i32.const 1
     i32.add
-    local.set $i|9
+    local.set $i|8
     br $for-loop|1
    end
   end
@@ -48718,6 +48712,32 @@
   i32.eq
   drop
   f64.const -0
+  local.set $x|11
+  local.get $x|11
+  i64.reinterpret_f64
+  i64.const 63
+  i64.shr_u
+  i64.const 0
+  i64.ne
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
+  f64.const 1
+  local.set $x|12
+  local.get $x|12
+  i64.reinterpret_f64
+  i64.const 63
+  i64.shr_u
+  i64.const 0
+  i64.ne
+  i32.const 0
+  i32.ne
+  i32.const 0
+  i32.eq
+  drop
+  f64.const -1
   local.set $x|13
   local.get $x|13
   i64.reinterpret_f64
@@ -48730,7 +48750,7 @@
   i32.const 1
   i32.eq
   drop
-  f64.const 1
+  f64.const nan:0x8000000000000
   local.set $x|14
   local.get $x|14
   i64.reinterpret_f64
@@ -48743,7 +48763,8 @@
   i32.const 0
   i32.eq
   drop
-  f64.const -1
+  f64.const nan:0x8000000000000
+  f64.neg
   local.set $x|15
   local.get $x|15
   i64.reinterpret_f64
@@ -48756,7 +48777,7 @@
   i32.const 1
   i32.eq
   drop
-  f64.const nan:0x8000000000000
+  f64.const inf
   local.set $x|16
   local.get $x|16
   i64.reinterpret_f64
@@ -48769,7 +48790,7 @@
   i32.const 0
   i32.eq
   drop
-  f64.const nan:0x8000000000000
+  f64.const inf
   f64.neg
   local.set $x|17
   local.get $x|17
@@ -48783,34 +48804,29 @@
   i32.const 1
   i32.eq
   drop
-  f64.const inf
+  f32.const 0
   local.set $x|18
   local.get $x|18
-  i64.reinterpret_f64
-  i64.const 63
-  i64.shr_u
-  i64.const 0
-  i64.ne
+  i32.reinterpret_f32
+  i32.const 31
+  i32.shr_u
   i32.const 0
   i32.ne
   i32.const 0
   i32.eq
   drop
-  f64.const inf
-  f64.neg
+  f32.const -0
   local.set $x|19
   local.get $x|19
-  i64.reinterpret_f64
-  i64.const 63
-  i64.shr_u
-  i64.const 0
-  i64.ne
+  i32.reinterpret_f32
+  i32.const 31
+  i32.shr_u
   i32.const 0
   i32.ne
   i32.const 1
   i32.eq
   drop
-  f32.const 0
+  f32.const 1
   local.set $x|20
   local.get $x|20
   i32.reinterpret_f32
@@ -48821,7 +48837,7 @@
   i32.const 0
   i32.eq
   drop
-  f32.const -0
+  f32.const -1
   local.set $x|21
   local.get $x|21
   i32.reinterpret_f32
@@ -48832,7 +48848,7 @@
   i32.const 1
   i32.eq
   drop
-  f32.const 1
+  f32.const nan:0x400000
   local.set $x|22
   local.get $x|22
   i32.reinterpret_f32
@@ -48843,7 +48859,8 @@
   i32.const 0
   i32.eq
   drop
-  f32.const -1
+  f32.const nan:0x400000
+  f32.neg
   local.set $x|23
   local.get $x|23
   i32.reinterpret_f32
@@ -48854,7 +48871,7 @@
   i32.const 1
   i32.eq
   drop
-  f32.const nan:0x400000
+  f32.const inf
   local.set $x|24
   local.get $x|24
   i32.reinterpret_f32
@@ -48865,33 +48882,10 @@
   i32.const 0
   i32.eq
   drop
-  f32.const nan:0x400000
+  f32.const inf
   f32.neg
   local.set $x|25
   local.get $x|25
-  i32.reinterpret_f32
-  i32.const 31
-  i32.shr_u
-  i32.const 0
-  i32.ne
-  i32.const 1
-  i32.eq
-  drop
-  f32.const inf
-  local.set $x|26
-  local.get $x|26
-  i32.reinterpret_f32
-  i32.const 31
-  i32.shr_u
-  i32.const 0
-  i32.ne
-  i32.const 0
-  i32.eq
-  drop
-  f32.const inf
-  f32.neg
-  local.set $x|27
-  local.get $x|27
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u

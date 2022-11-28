@@ -10,15 +10,12 @@
  (export "memory" (memory $0))
  (func $continue/testInherit (type $i32_=>_none) (param $b i32)
   (local $i i32)
-  (local $2 i32)
   i32.const 0
   local.set $i
   loop $for-loop|0
    local.get $i
    i32.const 10
    i32.lt_s
-   local.set $2
-   local.get $2
    if
     block $for-continue|0
      local.get $b

@@ -1265,14 +1265,14 @@
   end
   i32.const 10
   local.set $0
-  loop $do-loop|01
+  loop $do-loop|00
    local.get $0
    local.tee $1
    i32.const 1
    i32.sub
    local.set $0
    local.get $1
-   br_if $do-loop|01
+   br_if $do-loop|00
   end
   local.get $0
   i32.const -1
@@ -1289,7 +1289,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $do-loop|03
+  loop $do-loop|01
    local.get $0
    i32.const 1
    i32.sub
@@ -1330,7 +1330,7 @@
     unreachable
    end
    local.get $0
-   br_if $do-loop|03
+   br_if $do-loop|01
   end
   local.get $0
   if
@@ -1365,14 +1365,14 @@
   end
   i32.const 0
   local.set $0
-  loop $do-loop|05
+  loop $do-loop|02
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $do-loop|05
+   br_if $do-loop|02
   end
   local.get $0
   i32.const 10
@@ -1387,14 +1387,14 @@
   end
   i32.const 0
   local.set $0
-  loop $do-loop|07
+  loop $do-loop|03
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $do-loop|07
+   br_if $do-loop|03
   end
   local.get $0
   i32.const 10
@@ -1409,7 +1409,7 @@
   end
   i32.const 0
   local.set $0
-  loop $do-loop|015
+  loop $do-loop|09
    local.get $0
    i32.const 1
    i32.add
@@ -1419,7 +1419,7 @@
    i32.const 0
    local.get $0
    select
-   br_if $do-loop|015
+   br_if $do-loop|09
   end
   local.get $0
   i32.const 10
@@ -1436,7 +1436,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $do-loop|017
+  loop $do-loop|011
    local.get $0
    i32.const 1
    i32.add
@@ -1444,7 +1444,7 @@
    i32.const 10
    i32.ne
    if
-    loop $do-loop|120
+    loop $do-loop|113
      local.get $1
      i32.const 1
      i32.add
@@ -1454,10 +1454,10 @@
      i32.const 0
      local.get $1
      select
-     br_if $do-loop|120
+     br_if $do-loop|113
     end
     local.get $0
-    br_if $do-loop|017
+    br_if $do-loop|011
    end
   end
   local.get $0

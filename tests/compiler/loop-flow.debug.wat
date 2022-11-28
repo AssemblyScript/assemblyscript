@@ -67,24 +67,16 @@
   unreachable
  )
  (func $loop-flow/forReturn (type $none_=>_i32) (result i32)
-  (local $0 i32)
-  loop $for-loop|0
+  i32.const 1
+  if
    i32.const 1
-   local.set $0
-   local.get $0
-   if
-    i32.const 1
-    return
-   end
+   return
   end
   unreachable
  )
  (func $loop-flow/forAny (type $i32_=>_i32) (param $a i32) (result i32)
-  (local $1 i32)
   loop $for-loop|0
    i32.const 1
-   local.set $1
-   local.get $1
    if
     block $for-continue|0
      local.get $a
@@ -256,28 +248,20 @@
   unreachable
  )
  (func $loop-flow/forThrow (type $none_=>_i32) (result i32)
-  (local $0 i32)
-  loop $for-loop|0
-   i32.const 1
-   local.set $0
-   local.get $0
-   if
-    i32.const 80
-    i32.const 32
-    i32.const 41
-    i32.const 5
-    call $~lib/builtins/abort
-    unreachable
-   end
+  i32.const 1
+  if
+   i32.const 80
+   i32.const 32
+   i32.const 41
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
   end
   unreachable
  )
  (func $loop-flow/forContinue (type $none_=>_i32) (result i32)
-  (local $0 i32)
   loop $for-loop|0
    i32.const 1
-   local.set $0
-   local.get $0
    if
     block $for-continue|0
      br $for-continue|0

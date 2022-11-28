@@ -1261,15 +1261,13 @@
   (local $root|4 i32)
   (local $tail i32)
   (local $fl i32)
-  (local $7 i32)
-  (local $root|8 i32)
-  (local $fl|9 i32)
+  (local $root|7 i32)
+  (local $fl|8 i32)
   (local $slMap i32)
   (local $sl i32)
-  (local $12 i32)
-  (local $root|13 i32)
-  (local $fl|14 i32)
-  (local $sl|15 i32)
+  (local $root|11 i32)
+  (local $fl|12 i32)
+  (local $sl|13 i32)
   (local $head i32)
   (local $memStart i32)
   i32.const 0
@@ -1330,17 +1328,15 @@
    local.get $fl
    i32.const 23
    i32.lt_u
-   local.set $7
-   local.get $7
    if
     local.get $root
-    local.set $root|8
+    local.set $root|7
     local.get $fl
-    local.set $fl|9
+    local.set $fl|8
     i32.const 0
     local.set $slMap
-    local.get $root|8
-    local.get $fl|9
+    local.get $root|7
+    local.get $fl|8
     i32.const 2
     i32.shl
     i32.add
@@ -1352,22 +1348,20 @@
      local.get $sl
      i32.const 16
      i32.lt_u
-     local.set $12
-     local.get $12
      if
       local.get $root
-      local.set $root|13
+      local.set $root|11
       local.get $fl
-      local.set $fl|14
+      local.set $fl|12
       local.get $sl
-      local.set $sl|15
+      local.set $sl|13
       i32.const 0
       local.set $head
-      local.get $root|13
-      local.get $fl|14
+      local.get $root|11
+      local.get $fl|12
       i32.const 4
       i32.shl
-      local.get $sl|15
+      local.get $sl|13
       i32.add
       i32.const 2
       i32.shl
@@ -3706,10 +3700,8 @@
  (func $bindings/esm/typedarrayFunction (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   (local $out i32)
   (local $i i32)
-  (local $4 i32)
-  (local $i|5 i32)
-  (local $6 i32)
-  (local $7 i32)
+  (local $i|4 i32)
+  (local $5 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -3735,8 +3727,6 @@
    local.get $a
    call $~lib/typedarray/Int16Array#get:length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $out
     local.get $i
@@ -3753,39 +3743,37 @@
    end
   end
   i32.const 0
-  local.set $i|5
+  local.set $i|4
   loop $for-loop|1
-   local.get $i|5
+   local.get $i|4
    local.get $b
    call $~lib/typedarray/Float32Array#get:length
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $out
     local.get $a
     call $~lib/typedarray/Int16Array#get:length
-    local.get $i|5
+    local.get $i|4
     i32.add
     local.get $b
-    local.get $i|5
+    local.get $i|4
     call $~lib/typedarray/Float32Array#__get
     i64.trunc_sat_f32_u
     call $~lib/typedarray/Uint64Array#__set
-    local.get $i|5
+    local.get $i|4
     i32.const 1
     i32.add
-    local.set $i|5
+    local.set $i|4
     br $for-loop|1
    end
   end
   local.get $out
-  local.set $7
+  local.set $5
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $5
  )
  (func $~lib/staticarray/StaticArray<i32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $outSize i32)
@@ -3837,10 +3825,8 @@
  (func $bindings/esm/staticarrayFunction (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   (local $c i32)
   (local $i i32)
-  (local $4 i32)
-  (local $i|5 i32)
-  (local $6 i32)
-  (local $7 i32)
+  (local $i|4 i32)
+  (local $5 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -3866,8 +3852,6 @@
    local.get $a
    call $~lib/staticarray/StaticArray<i32>#get:length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $c
     local.get $i
@@ -3883,38 +3867,36 @@
    end
   end
   i32.const 0
-  local.set $i|5
+  local.set $i|4
   loop $for-loop|1
-   local.get $i|5
+   local.get $i|4
    local.get $b
    call $~lib/staticarray/StaticArray<i32>#get:length
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $c
     local.get $a
     call $~lib/staticarray/StaticArray<i32>#get:length
-    local.get $i|5
+    local.get $i|4
     i32.add
     local.get $b
-    local.get $i|5
+    local.get $i|4
     call $~lib/staticarray/StaticArray<i32>#__get
     call $~lib/staticarray/StaticArray<i32>#__set
-    local.get $i|5
+    local.get $i|4
     i32.const 1
     i32.add
-    local.set $i|5
+    local.set $i|4
     br $for-loop|1
    end
   end
   local.get $c
-  local.set $7
+  local.set $5
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $5
  )
  (func $~lib/array/Array<i32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -4009,10 +3991,8 @@
  (func $bindings/esm/arrayFunction (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   (local $c i32)
   (local $i i32)
-  (local $4 i32)
-  (local $i|5 i32)
-  (local $6 i32)
-  (local $7 i32)
+  (local $i|4 i32)
+  (local $5 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -4038,8 +4018,6 @@
    local.get $a
    call $~lib/array/Array<i32>#get:length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $c
     local.get $i
@@ -4055,38 +4033,36 @@
    end
   end
   i32.const 0
-  local.set $i|5
+  local.set $i|4
   loop $for-loop|1
-   local.get $i|5
+   local.get $i|4
    local.get $b
    call $~lib/array/Array<i32>#get:length
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $c
     local.get $a
     call $~lib/array/Array<i32>#get:length
-    local.get $i|5
+    local.get $i|4
     i32.add
     local.get $b
-    local.get $i|5
+    local.get $i|4
     call $~lib/array/Array<i32>#__get
     call $~lib/array/Array<i32>#__set
-    local.get $i|5
+    local.get $i|4
     i32.const 1
     i32.add
-    local.set $i|5
+    local.set $i|4
     br $for-loop|1
    end
   end
   local.get $c
-  local.set $7
+  local.set $5
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $5
  )
  (func $~lib/object/Object#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)

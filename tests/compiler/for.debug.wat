@@ -45,15 +45,12 @@
  (start $~start)
  (func $for/testInitExpression (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   loop $for-loop|0
    local.get $i
    i32.const 10
    i32.lt_s
-   local.set $1
-   local.get $1
    if
     local.get $i
     i32.const 1
@@ -79,15 +76,12 @@
  )
  (func $for/testInitStatement (type $none_=>_none)
   (local $j i32)
-  (local $1 i32)
   i32.const 0
   local.set $j
   loop $for-loop|0
    local.get $j
    i32.const 10
    i32.lt_s
-   local.set $1
-   local.get $1
    if
     local.get $j
     i32.const 1
@@ -113,15 +107,12 @@
  )
  (func $for/testEmpty (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 10
   local.set $i
   loop $for-loop|0
    local.get $i
    i32.const 0
    i32.gt_s
-   local.set $1
-   local.get $1
    if
     nop
     local.get $i
@@ -148,14 +139,11 @@
  )
  (func $for/testConditionOmitted (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   block $for-break0
    loop $for-loop|0
     i32.const 1
-    local.set $1
-    local.get $1
     if
      local.get $i
      i32.const 10
@@ -188,14 +176,11 @@
  )
  (func $for/testAllOmitted (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 10
   local.set $i
   block $for-break0
    loop $for-loop|0
     i32.const 1
-    local.set $1
-    local.get $1
     if
      local.get $i
      i32.const 1
@@ -227,14 +212,11 @@
  )
  (func $for/testAlwaysTrue (type $none_=>_none)
   (local $i i32)
-  (local $1 i32)
   i32.const 0
   local.set $i
   block $for-break0
    loop $for-loop|0
     i32.const 1
-    local.set $1
-    local.get $1
     if
      local.get $i
      i32.const 1
@@ -272,15 +254,12 @@
  )
  (func $for/testAlwaysContinues (type $none_=>_none)
   (local $k i32)
-  (local $1 i32)
   i32.const 0
   local.set $k
   loop $for-loop|0
    local.get $k
    i32.const 10
    i32.lt_s
-   local.set $1
-   local.get $1
    if
     block $for-continue|0
      br $for-continue|0
@@ -309,19 +288,14 @@
  )
  (func $for/testAlwaysBreaks (type $none_=>_none)
   (local $k i32)
-  (local $1 i32)
   i32.const 0
   local.set $k
   block $for-break0
-   loop $for-loop|0
-    local.get $k
-    i32.const 10
-    i32.lt_s
-    local.set $1
-    local.get $1
-    if
-     br $for-break0
-    end
+   local.get $k
+   i32.const 10
+   i32.lt_s
+   if
+    br $for-break0
    end
   end
   local.get $k
@@ -341,20 +315,15 @@
  )
  (func $for/testAlwaysReturns (type $none_=>_none)
   (local $k i32)
-  (local $1 i32)
   i32.const 0
   local.set $k
-  loop $for-loop|0
-   local.get $k
-   i32.const 10
-   i32.lt_s
-   local.set $1
-   local.get $1
-   if
-    i32.const 1
-    global.set $for/ran
-    return
-   end
+  local.get $k
+  i32.const 10
+  i32.lt_s
+  if
+   i32.const 1
+   global.set $for/ran
+   return
   end
   i32.const 0
   i32.eqz
@@ -371,8 +340,6 @@
   (local $i i32)
   (local $j i32)
   (local $k i32)
-  (local $3 i32)
-  (local $4 i32)
   i32.const 0
   local.set $i
   i32.const 0
@@ -383,8 +350,6 @@
    local.get $i
    i32.const 10
    i32.lt_s
-   local.set $3
-   local.get $3
    if
     block $for-continue|0
      local.get $i
@@ -399,8 +364,6 @@
       local.get $j
       i32.const 10
       i32.lt_s
-      local.set $4
-      local.get $4
       if
        block $for-continue|1
         local.get $i
@@ -1578,15 +1541,13 @@
   (local $root|4 i32)
   (local $tail i32)
   (local $fl i32)
-  (local $7 i32)
-  (local $root|8 i32)
-  (local $fl|9 i32)
+  (local $root|7 i32)
+  (local $fl|8 i32)
   (local $slMap i32)
   (local $sl i32)
-  (local $12 i32)
-  (local $root|13 i32)
-  (local $fl|14 i32)
-  (local $sl|15 i32)
+  (local $root|11 i32)
+  (local $fl|12 i32)
+  (local $sl|13 i32)
   (local $head i32)
   (local $memStart i32)
   i32.const 0
@@ -1647,17 +1608,15 @@
    local.get $fl
    i32.const 23
    i32.lt_u
-   local.set $7
-   local.get $7
    if
     local.get $root
-    local.set $root|8
+    local.set $root|7
     local.get $fl
-    local.set $fl|9
+    local.set $fl|8
     i32.const 0
     local.set $slMap
-    local.get $root|8
-    local.get $fl|9
+    local.get $root|7
+    local.get $fl|8
     i32.const 2
     i32.shl
     i32.add
@@ -1669,22 +1628,20 @@
      local.get $sl
      i32.const 16
      i32.lt_u
-     local.set $12
-     local.get $12
      if
       local.get $root
-      local.set $root|13
+      local.set $root|11
       local.get $fl
-      local.set $fl|14
+      local.set $fl|12
       local.get $sl
-      local.set $sl|15
+      local.set $sl|13
       i32.const 0
       local.set $head
-      local.get $root|13
-      local.get $fl|14
+      local.get $root|11
+      local.get $fl|12
       i32.const 4
       i32.shl
-      local.get $sl|15
+      local.get $sl|13
       i32.add
       i32.const 2
       i32.shl
@@ -2610,7 +2567,6 @@
  (func $for/testRef (type $none_=>_none)
   (local $i i32)
   (local $ref i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2626,10 +2582,8 @@
   call $for/Ref#constructor
   local.tee $ref
   i32.store $0
-  loop $for-loop|1
+  loop $for-loop|0
    local.get $ref
-   local.set $2
-   local.get $2
    if
     local.get $i
     i32.const 1
@@ -2647,7 +2601,7 @@
      local.tee $ref
      i32.store $0
     end
-    br $for-loop|1
+    br $for-loop|0
    end
   end
   local.get $i
@@ -2687,7 +2641,6 @@
  (func $for/testRefAutorelease (type $none_=>_none)
   (local $i i32)
   (local $ref i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2710,8 +2663,6 @@
   block $for-break0
    loop $for-loop|0
     call $for/getRef
-    local.set $2
-    local.get $2
     if
      local.get $i
      i32.const 1

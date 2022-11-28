@@ -50,13 +50,11 @@
   i32.const 1
  )
  (func $loop-flow/forAny (type $i32_=>_i32) (param $0 i32) (result i32)
-  loop $for-loop|0 (result i32)
+  loop $for-loop|0
    local.get $0
    i32.const 1
-   i32.eq
-   if (result i32)
-    i32.const 1
-   else
+   i32.ne
+   if
     local.get $0
     i32.const 2
     i32.eq
@@ -71,6 +69,7 @@
     br $for-loop|0
    end
   end
+  i32.const 1
  )
  (func $loop-flow/doAny (type $i32_=>_i32) (param $0 i32) (result i32)
   loop $do-loop|0 (result i32)

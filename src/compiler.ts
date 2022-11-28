@@ -2447,37 +2447,24 @@ export class Compiler extends DiagnosticEmitter {
     let outerFlow = this.currentFlow;
     let numLocalsBefore = outerFlow.targetFunction.localsByIndex.length;
 
-    // (initializer)                  └►┐ flow
-    // (block $break                    │
-    //  (loop $loop                     ├◄───────────┐ recompile?
-    //   (local.set $tcond (condition)) └─┐ condFlow │
-    //                                  ┌─┘          │
-    //   (if (local.get $tcond)       ┌◄┤            │ condition?
-    //    (block $continue            │ │            │
-    //     (body)                     │ └─┐ bodyFlow │
-    //                                │ ┌─┘          │
-    //    )                           ├◄┼►╢          │ breaks or terminates?
-    //    (incrementor)               │ └─┐ incrFlow │
-    //                                │ ┌─┘          │
-    //                                │ └────────────┘
-    //    (br $loop)                  └─┐
-    //   )                              │
-    //  )                               │
-    // )                                │
-    //                                ┌─┘
+    // (initializer)          └►┐ flow
+    // (?block $break           │ (initializer)
+    //  (?loop $loop          ┌◄┤ (condition) shortcut if false ◄┐
+    //   (if (condition)        ├►┐ bodyFlow                     │
+    //    (?block $continue     │ │ (body)                       │
+    //     (body)               │ │ if loops: (incrementor) ─────┘
+    //    )                     │ │           recompile body?
+    //    (incrementor)         ├◄┘
+    //    (br $loop)          ┌◄┘
+    //   )
+    //  )
+    // )
 
-    let label = outerFlow.pushBreakLabel();
-    let stmts = new Array<ExpressionRef>();
+    // Compile initializer if present. The initializer might introduce scoped
+    // locals bound to the for statement, so create a new flow early.
     let flow = outerFlow.fork(/* resetBreakContext */ true);
     this.currentFlow = flow;
-
-    let breakLabel = `for-break${label}`;
-    flow.breakLabel = breakLabel;
-    let continueLabel = `for-continue|${label}`;
-    flow.continueLabel = continueLabel;
-    let loopLabel = `for-loop|${label}`;
-
-    // Compile initializer if present
+    let stmts = new Array<ExpressionRef>();
     let initializer = statement.initializer;
     if (initializer) {
       assert(
@@ -2487,9 +2474,7 @@ export class Compiler extends DiagnosticEmitter {
       stmts.push(this.compileStatement(initializer));
     }
 
-    // Precompute the condition
-    let condFlow = flow.fork();
-    this.currentFlow = condFlow;
+    // Precompute the condition if present, or default to `true`
     let condExpr: ExpressionRef;
     let condExprTrueish: ExpressionRef;
     let condKind: ConditionKind;
@@ -2499,36 +2484,30 @@ export class Compiler extends DiagnosticEmitter {
       condExprTrueish = this.makeIsTrueish(condExpr, this.currentType, condition);
       condKind = this.evaluateCondition(condExprTrueish);
 
-      // Shortcut if condition is always false (body never runs)
+      // Shortcut if condition is always false (body never executes)
       if (condKind == ConditionKind.False) {
         stmts.push(
           module.drop(condExprTrueish)
         );
-        flow.inherit(condFlow);
         outerFlow.inherit(flow);
-        outerFlow.popBreakLabel();
         this.currentFlow = outerFlow;
         return module.flatten(stmts);
       }
     } else {
-      condExpr = condExprTrueish = module.i32(1);
+      condExpr = module.i32(1);
+      condExprTrueish = condExpr;
       condKind = ConditionKind.True;
     }
-
-    // From here on condition is either always true or unknown
-
-    // Store condition result in a temp
-    let tcond = flow.getTempLocal(Type.bool);
-    let loopStmts = new Array<ExpressionRef>();
-    loopStmts.push(
-      module.local_set(tcond.index, condExprTrueish, false) // bool
-    );
-
-    flow.inherit(condFlow); // always executes
-    this.currentFlow = flow;
+    // From here on condition is either true or unknown
 
     // Compile the body assuming the condition turned out true
     let bodyFlow = flow.forkThen(condExpr);
+    let label = bodyFlow.pushBreakLabel();
+    let breakLabel = `for-break${label}`;
+    bodyFlow.breakLabel = breakLabel;
+    let continueLabel = `for-continue|${label}`;
+    bodyFlow.continueLabel = continueLabel;
+    let loopLabel = `for-loop|${label}`;
     this.currentFlow = bodyFlow;
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
@@ -2537,33 +2516,26 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       bodyStmts.push(this.compileStatement(body));
     }
+    bodyFlow.popBreakLabel();
 
-    // Check if body terminates
-    if (bodyFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
-      bodyStmts.push(module.unreachable());
-    }
-    if (condKind == ConditionKind.True) flow.inherit(bodyFlow);
-    else flow.mergeBranch(bodyFlow);
+    let possiblyFallsThrough = !bodyFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
+    let possiblyContinues = bodyFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
+    let possiblyBreaks = bodyFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
 
     let ifStmts = new Array<ExpressionRef>();
     ifStmts.push(
       module.block(continueLabel, bodyStmts)
     );
 
-    // Compile the incrementor if it runs
-    // Can still fall through to here if body continues, hence is already known to terminate
-    if (!bodyFlow.is(FlowFlags.Terminates) || bodyFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues)) {
+    // Compile the incrementor if it may execute
+    let possiblyLoops = possiblyContinues || possiblyFallsThrough;
+    if (possiblyLoops) {
       let incrementor = statement.incrementor;
       if (incrementor) {
-        let incrFlow = flow.fork();
-        this.currentFlow = incrFlow;
         ifStmts.push(
           this.compileExpression(incrementor, Type.void, Constraints.ConvImplicit | Constraints.WillDrop)
         );
-        flow.inherit(incrFlow); // mostly local flags, also covers late termination by throwing
-        this.currentFlow = flow;
       }
-
       ifStmts.push(
         module.br(loopLabel)
       );
@@ -2571,34 +2543,41 @@ export class Compiler extends DiagnosticEmitter {
       // Detect if local flags are incompatible before and after looping, and if
       // so recompile by unifying local flags between iterations. Note that this
       // may be necessary multiple times where locals depend on each other.
-      if (outerFlow.resetIfNeedsRecompile(flow, numLocalsBefore)) {
-        outerFlow.popBreakLabel();
+      if (outerFlow.resetIfNeedsRecompile(bodyFlow.forkThen(condExpr), numLocalsBefore)) {
         this.currentFlow = outerFlow;
         return this.doCompileForStatement(statement);
       }
     }
-    loopStmts.push(
-      module.if(module.local_get(tcond.index, TypeRef.I32),
-        module.flatten(ifStmts)
-      )
-    );
 
-    stmts.push(
-      module.block(breakLabel, [
-        module.loop(loopLabel,
-          module.flatten(loopStmts)
-        )
-      ])
-    );
-    this.currentFlow = flow;
+    // Body executes at least once
+    if (condKind == ConditionKind.True) {
+      flow.inherit(bodyFlow);
+
+    // Otherwise executes conditionally
+    } else {
+      flow.mergeBranch(bodyFlow);
+    }
 
     // Finalize
     outerFlow.inherit(flow);
-    outerFlow.popBreakLabel();
+    this.currentFlow = outerFlow;
+    let expr = module.if(condExprTrueish,
+      module.flatten(ifStmts)
+    );
+    if (possiblyLoops) {
+      expr = module.loop(loopLabel,
+        expr
+      );
+    }
+    if (possiblyBreaks) {
+      expr = module.block(breakLabel, [
+        expr
+      ]);
+    }
+    stmts.push(expr);
     if (outerFlow.is(FlowFlags.Terminates)) {
       stmts.push(module.unreachable());
     }
-    this.currentFlow = outerFlow;
     return module.flatten(stmts);
   }
 
@@ -2703,7 +2682,7 @@ export class Compiler extends DiagnosticEmitter {
       if (thenFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
         // Only getting past if condition was false
         flow.inherit(elseFlow);
-        flow.mergeEffects(thenFlow);
+        flow.mergeSideEffects(thenFlow);
       } else {
         // Otherwise getting past conditionally
         flow.inheritAlternatives(thenFlow, elseFlow);
@@ -2865,7 +2844,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // Otherwise just merge the effects of a non-merging branch
       } else if (!possiblyFallsThrough) {
-        outerFlow.mergeEffects(innerFlow);
+        outerFlow.mergeSideEffects(innerFlow);
       }
 
       this.currentFlow = outerFlow;
@@ -3217,7 +3196,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!possiblyFallsThrough && !possiblyBreaks) {
         // Only getting past if condition was false
         outerFlow.inherit(elseFlow);
-        outerFlow.mergeEffects(thenFlow);
+        outerFlow.mergeSideEffects(thenFlow);
       } else {
         // Otherwise getting past conditionally
         outerFlow.inheritAlternatives(thenFlow, elseFlow);

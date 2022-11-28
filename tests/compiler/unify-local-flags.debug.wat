@@ -13,7 +13,6 @@
  (func $unify-local-flags/testFor (type $none_=>_none)
   (local $x i32)
   (local $i i32)
-  (local $2 i32)
   i32.const 0
   local.set $x
   i32.const 0
@@ -22,8 +21,6 @@
    local.get $i
    i32.const 255
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $i
     local.set $x

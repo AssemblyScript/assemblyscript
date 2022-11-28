@@ -631,14 +631,9 @@ export class Flow {
   }
 
 
-  /** Merges only the effects of a branch, i.e. when not taken. */
-  mergeEffects(other: Flow): void {
+  /** Merges only the side effects of a branch, i.e. when not taken. */
+  mergeSideEffects(other: Flow): void {
     assert(other.targetFunction == this.targetFunction);
-
-    // Note that flags in `this` flow have already happened. For instance,
-    // a return cannot be undone no matter what'd happen in subsequent branches,
-    // but an allocation, which doesn't terminate, can become conditional. Not
-    // all flags have a corresponding conditional flag that's tracked.
 
     let thisFlags = this.flags;
     let otherFlags = other.flags;
@@ -713,9 +708,9 @@ export class Flow {
 
   /** Merges a branch joining again with this flow, i.e. then without else. */
   mergeBranch(other: Flow): void {
-    this.mergeEffects(other);
+    this.mergeSideEffects(other);
 
-    // Local flags matter if the branch is taken
+    // Local flags matter if the branch does not terminate
     let thisLocalFlags = this.localFlags;
     let numThisLocalFlags = thisLocalFlags.length;
     let otherLocalFlags = other.localFlags;

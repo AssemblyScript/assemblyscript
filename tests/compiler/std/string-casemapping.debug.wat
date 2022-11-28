@@ -1345,15 +1345,13 @@
   (local $root|4 i32)
   (local $tail i32)
   (local $fl i32)
-  (local $7 i32)
-  (local $root|8 i32)
-  (local $fl|9 i32)
+  (local $root|7 i32)
+  (local $fl|8 i32)
   (local $slMap i32)
   (local $sl i32)
-  (local $12 i32)
-  (local $root|13 i32)
-  (local $fl|14 i32)
-  (local $sl|15 i32)
+  (local $root|11 i32)
+  (local $fl|12 i32)
+  (local $sl|13 i32)
   (local $head i32)
   (local $memStart i32)
   i32.const 0
@@ -1414,17 +1412,15 @@
    local.get $fl
    i32.const 23
    i32.lt_u
-   local.set $7
-   local.get $7
    if
     local.get $root
-    local.set $root|8
+    local.set $root|7
     local.get $fl
-    local.set $fl|9
+    local.set $fl|8
     i32.const 0
     local.set $slMap
-    local.get $root|8
-    local.get $fl|9
+    local.get $root|7
+    local.get $fl|8
     i32.const 2
     i32.shl
     i32.add
@@ -1436,22 +1432,20 @@
      local.get $sl
      i32.const 16
      i32.lt_u
-     local.set $12
-     local.get $12
      if
       local.get $root
-      local.set $root|13
+      local.set $root|11
       local.get $fl
-      local.set $fl|14
+      local.set $fl|12
       local.get $sl
-      local.set $sl|15
+      local.set $sl|13
       i32.const 0
       local.set $head
-      local.get $root|13
-      local.get $fl|14
+      local.get $root|11
+      local.get $fl|12
       i32.const 4
       i32.shl
-      local.get $sl|15
+      local.get $sl|13
       i32.add
       i32.const 2
       i32.shl
@@ -3540,10 +3534,9 @@
   (local $specialsLen i32)
   (local $j i32)
   (local $i i32)
-  (local $7 i32)
   (local $c i32)
+  (local $c|8 i32)
   (local $c|9 i32)
-  (local $c|10 i32)
   (local $c1 i32)
   (local $c0 i32)
   (local $index i32)
@@ -3558,7 +3551,7 @@
   (local $code i32)
   (local $lo i32)
   (local $hi i32)
-  (local $25 i32)
+  (local $24 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -3574,12 +3567,12 @@
   i32.eqz
   if
    local.get $this
-   local.set $25
+   local.set $24
    global.get $~lib/memory/__stack_pointer
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $25
+   local.get $24
    return
   end
   global.get $~lib/memory/__stack_pointer
@@ -3595,11 +3588,11 @@
   global.get $~lib/util/casemap/SPECIALS_UPPER
   local.set $specialsPtr
   global.get $~lib/util/casemap/SPECIALS_UPPER
-  local.set $25
+  local.set $24
   global.get $~lib/memory/__stack_pointer
-  local.get $25
+  local.get $24
   i32.store $0 offset=4
-  local.get $25
+  local.get $24
   call $~lib/staticarray/StaticArray<u16>#get:length
   local.set $specialsLen
   i32.const 0
@@ -3610,8 +3603,6 @@
    local.get $i
    local.get $len
    i32.lt_u
-   local.set $7
-   local.get $7
    if
     block $for-continue|0
      local.get $this
@@ -3622,8 +3613,8 @@
      i32.load16_u $0
      local.set $c
      local.get $c
-     local.set $c|9
-     local.get $c|9
+     local.set $c|8
+     local.get $c|8
      i32.const 7
      i32.shr_u
      i32.eqz
@@ -3635,13 +3626,13 @@
       i32.add
       block $~lib/util/string/toUpper8|inlined.0 (result i32)
        local.get $c
-       local.set $c|10
+       local.set $c|9
        i32.const 0
        i32.const 0
        i32.gt_s
        drop
        i32.const 1292
-       local.get $c|10
+       local.get $c|9
        i32.add
        i32.load8_u $0
        br $~lib/util/string/toUpper8|inlined.0
@@ -3920,26 +3911,25 @@
   i32.const 1
   i32.shl
   call $~lib/rt/itcms/__renew
-  local.set $25
+  local.set $24
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $25
+  local.get $24
  )
  (func $start:std/string-casemapping (type $none_=>_none)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 i64)
   (local $5 i64)
   (local $6 i64)
   (local $7 i64)
   (local $8 i64)
   (local $9 i64)
-  (local $10 i64)
-  (local $11 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 28
   i32.sub
@@ -3967,23 +3957,23 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   i32.const 32
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 32
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3995,23 +3985,23 @@
    unreachable
   end
   i32.const 32
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 32
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4023,23 +4013,23 @@
    unreachable
   end
   i32.const 10784
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 10832
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4051,23 +4041,23 @@
    unreachable
   end
   i32.const 10880
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 10928
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4079,23 +4069,23 @@
    unreachable
   end
   i32.const 10976
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 11072
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4107,23 +4097,23 @@
    unreachable
   end
   i32.const 11072
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 11168
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4135,23 +4125,23 @@
    unreachable
   end
   i32.const 11264
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 11328
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4163,23 +4153,23 @@
    unreachable
   end
   i32.const 11328
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 11392
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4191,23 +4181,23 @@
    unreachable
   end
   i32.const 11456
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 11552
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4219,23 +4209,23 @@
    unreachable
   end
   i32.const 11552
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 11648
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4247,23 +4237,23 @@
    unreachable
   end
   i32.const 11744
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 11840
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4275,23 +4265,23 @@
    unreachable
   end
   i32.const 11840
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 11936
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4303,23 +4293,23 @@
    unreachable
   end
   i32.const 12032
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 12112
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4331,23 +4321,23 @@
    unreachable
   end
   i32.const 12192
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 12272
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4359,23 +4349,23 @@
    unreachable
   end
   i32.const 12352
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 12416
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4387,23 +4377,23 @@
    unreachable
   end
   i32.const 12480
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 12560
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4415,23 +4405,23 @@
    unreachable
   end
   i32.const 12640
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 12720
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4443,23 +4433,23 @@
    unreachable
   end
   i32.const 12800
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 12864
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4471,23 +4461,23 @@
    unreachable
   end
   i32.const 12928
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 13008
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4499,23 +4489,23 @@
    unreachable
   end
   i32.const 13088
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 13168
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4527,23 +4517,23 @@
    unreachable
   end
   i32.const 13248
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 13408
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4555,23 +4545,23 @@
    unreachable
   end
   i32.const 13248
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 13568
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4583,23 +4573,23 @@
    unreachable
   end
   i32.const 13728
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 13760
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4611,23 +4601,23 @@
    unreachable
   end
   i32.const 13792
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 13824
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4639,23 +4629,23 @@
    unreachable
   end
   i32.const 13856
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14064
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4667,29 +4657,29 @@
    unreachable
   end
   i32.const 13728
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=12
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14272
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4701,29 +4691,29 @@
    unreachable
   end
   i32.const 14304
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=12
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14336
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4735,29 +4725,29 @@
    unreachable
   end
   i32.const 14368
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=12
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14368
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4770,23 +4760,23 @@
   end
   i32.const 65536
   call $~lib/string/String.fromCodePoint
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14624
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4799,23 +4789,23 @@
   end
   i32.const 65536
   call $~lib/string/String.fromCodePoint
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14624
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4827,23 +4817,23 @@
    unreachable
   end
   i32.const 14656
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14688
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4855,23 +4845,23 @@
    unreachable
   end
   i32.const 14720
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14752
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4883,23 +4873,23 @@
    unreachable
   end
   i32.const 14784
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14816
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4911,23 +4901,23 @@
    unreachable
   end
   i32.const 14848
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14880
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4939,23 +4929,23 @@
    unreachable
   end
   i32.const 14912
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 14944
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4967,23 +4957,23 @@
    unreachable
   end
   i32.const 14976
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15008
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4995,23 +4985,23 @@
    unreachable
   end
   i32.const 15040
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15072
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5023,23 +5013,23 @@
    unreachable
   end
   i32.const 15104
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15136
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5051,23 +5041,23 @@
    unreachable
   end
   i32.const 15168
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15200
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5079,23 +5069,23 @@
    unreachable
   end
   i32.const 15232
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15264
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5107,23 +5097,23 @@
    unreachable
   end
   i32.const 15296
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15328
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5135,23 +5125,23 @@
    unreachable
   end
   i32.const 15360
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15392
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5163,23 +5153,23 @@
    unreachable
   end
   i32.const 15424
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15456
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5191,23 +5181,23 @@
    unreachable
   end
   i32.const 15488
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15520
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5219,23 +5209,23 @@
    unreachable
   end
   i32.const 15552
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15584
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5247,23 +5237,23 @@
    unreachable
   end
   i32.const 15616
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15648
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5275,23 +5265,23 @@
    unreachable
   end
   i32.const 15680
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15712
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5303,23 +5293,23 @@
    unreachable
   end
   i32.const 15744
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15776
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5331,23 +5321,23 @@
    unreachable
   end
   i32.const 15808
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15840
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5359,23 +5349,23 @@
    unreachable
   end
   i32.const 15872
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15904
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5387,23 +5377,23 @@
    unreachable
   end
   i32.const 15936
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15968
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5415,23 +5405,23 @@
    unreachable
   end
   i32.const 16000
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16032
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5443,23 +5433,23 @@
    unreachable
   end
   i32.const 16064
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16096
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5471,23 +5461,23 @@
    unreachable
   end
   i32.const 16128
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16160
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5499,23 +5489,23 @@
    unreachable
   end
   i32.const 16192
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16224
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5527,23 +5517,23 @@
    unreachable
   end
   i32.const 16256
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 15328
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5555,23 +5545,23 @@
    unreachable
   end
   i32.const 16288
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16320
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5583,23 +5573,23 @@
    unreachable
   end
   i32.const 16352
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16384
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5611,23 +5601,23 @@
    unreachable
   end
   i32.const 16416
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16448
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5639,23 +5629,23 @@
    unreachable
   end
   i32.const 16480
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16512
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5667,23 +5657,23 @@
    unreachable
   end
   i32.const 16544
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16576
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5695,23 +5685,23 @@
    unreachable
   end
   i32.const 16608
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16640
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5723,23 +5713,23 @@
    unreachable
   end
   i32.const 16672
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16704
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5751,23 +5741,23 @@
    unreachable
   end
   i32.const 16736
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16768
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5779,23 +5769,23 @@
    unreachable
   end
   i32.const 16800
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16832
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5807,23 +5797,23 @@
    unreachable
   end
   i32.const 16864
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16896
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5835,23 +5825,23 @@
    unreachable
   end
   i32.const 16928
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 16960
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5863,23 +5853,23 @@
    unreachable
   end
   i32.const 16992
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toLowerCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17024
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5891,23 +5881,23 @@
    unreachable
   end
   i32.const 17056
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17088
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5919,23 +5909,23 @@
    unreachable
   end
   i32.const 14304
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17120
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5947,23 +5937,23 @@
    unreachable
   end
   i32.const 17152
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17184
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5975,23 +5965,23 @@
    unreachable
   end
   i32.const 17216
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17248
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6003,23 +5993,23 @@
    unreachable
   end
   i32.const 17280
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17312
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6031,23 +6021,23 @@
    unreachable
   end
   i32.const 17344
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17376
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6059,23 +6049,23 @@
    unreachable
   end
   i32.const 17408
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17376
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6087,23 +6077,23 @@
    unreachable
   end
   i32.const 17440
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17472
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6115,23 +6105,23 @@
    unreachable
   end
   i32.const 17504
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17536
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6143,23 +6133,23 @@
    unreachable
   end
   i32.const 17568
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17600
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6171,23 +6161,23 @@
    unreachable
   end
   i32.const 17632
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17664
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6199,23 +6189,23 @@
    unreachable
   end
   i32.const 17696
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17728
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6227,23 +6217,23 @@
    unreachable
   end
   i32.const 17760
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=8
-  local.get $11
+  local.get $10
   call $~lib/string/String#toUpperCase
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0
-  local.get $11
+  local.get $10
   i32.const 17792
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
   i32.store $0 offset=4
-  local.get $11
+  local.get $10
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -6260,24 +6250,57 @@
    local.get $0
    i32.const 1114111
    i32.le_s
-   local.set $1
-   local.get $1
    if
     global.get $~lib/memory/__stack_pointer
     local.get $0
     call $~lib/string/String.fromCodePoint
-    local.tee $2
+    local.tee $1
     i32.store $0 offset=16
     global.get $~lib/memory/__stack_pointer
-    local.get $2
+    local.get $1
     call $~lib/string/String#toLowerCase
-    local.tee $3
+    local.tee $2
     i32.store $0 offset=20
     global.get $~lib/memory/__stack_pointer
-    local.get $2
+    local.get $1
     call $~lib/string/String#toUpperCase
-    local.tee $4
+    local.tee $3
     i32.store $0 offset=24
+    local.get $2
+    i32.const 0
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.set $6
+    local.get $2
+    i32.const 1
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $4
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $6
+     local.get $4
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $6
+    end
+    local.get $2
+    i32.const 2
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $5
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $6
+     local.get $5
+     i64.const 32
+     i64.shl
+     i64.add
+     local.set $6
+    end
     local.get $3
     i32.const 0
     call $~lib/string/String#codePointAt
@@ -6287,12 +6310,12 @@
     i32.const 1
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
-    local.tee $5
+    local.tee $4
     i64.const 0
     i64.ge_s
     if
      local.get $7
-     local.get $5
+     local.get $4
      i64.const 16
      i64.shl
      i64.add
@@ -6302,25 +6325,40 @@
     i32.const 2
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
-    local.tee $6
+    local.tee $5
     i64.const 0
     i64.ge_s
     if
      local.get $7
-     local.get $6
+     local.get $5
      i64.const 32
      i64.shl
      i64.add
      local.set $7
     end
-    local.get $4
+    local.get $0
     i32.const 0
-    call $~lib/string/String#codePointAt
+    call $std/string-casemapping/toLowerCaseFromIndex
     i64.extend_i32_s
     local.set $8
-    local.get $4
+    local.get $0
     i32.const 1
-    call $~lib/string/String#codePointAt
+    call $std/string-casemapping/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.tee $4
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $8
+     local.get $4
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $8
+    end
+    local.get $0
+    i32.const 2
+    call $std/string-casemapping/toLowerCaseFromIndex
     i64.extend_i32_s
     local.tee $5
     i64.const 0
@@ -6328,21 +6366,6 @@
     if
      local.get $8
      local.get $5
-     i64.const 16
-     i64.shl
-     i64.add
-     local.set $8
-    end
-    local.get $4
-    i32.const 2
-    call $~lib/string/String#codePointAt
-    i64.extend_i32_s
-    local.tee $6
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $8
-     local.get $6
      i64.const 32
      i64.shl
      i64.add
@@ -6350,19 +6373,19 @@
     end
     local.get $0
     i32.const 0
-    call $std/string-casemapping/toLowerCaseFromIndex
+    call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
     local.set $9
     local.get $0
     i32.const 1
-    call $std/string-casemapping/toLowerCaseFromIndex
+    call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
-    local.tee $5
+    local.tee $4
     i64.const 0
     i64.ge_s
     if
      local.get $9
-     local.get $5
+     local.get $4
      i64.const 16
      i64.shl
      i64.add
@@ -6370,64 +6393,29 @@
     end
     local.get $0
     i32.const 2
-    call $std/string-casemapping/toLowerCaseFromIndex
-    i64.extend_i32_s
-    local.tee $6
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $9
-     local.get $6
-     i64.const 32
-     i64.shl
-     i64.add
-     local.set $9
-    end
-    local.get $0
-    i32.const 0
-    call $std/string-casemapping/toUpperCaseFromIndex
-    i64.extend_i32_s
-    local.set $10
-    local.get $0
-    i32.const 1
     call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
     local.tee $5
     i64.const 0
     i64.ge_s
     if
-     local.get $10
+     local.get $9
      local.get $5
-     i64.const 16
-     i64.shl
-     i64.add
-     local.set $10
-    end
-    local.get $0
-    i32.const 2
-    call $std/string-casemapping/toUpperCaseFromIndex
-    i64.extend_i32_s
-    local.tee $6
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $10
-     local.get $6
      i64.const 32
      i64.shl
      i64.add
-     local.set $10
+     local.set $9
     end
-    local.get $7
-    local.get $9
+    local.get $6
+    local.get $8
     i64.ne
     if
      i32.const 17824
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0
-     local.get $11
+     local.get $10
      i32.const 1
      local.get $0
      f64.convert_i32_s
@@ -6437,25 +6425,25 @@
      f64.const 0
      call $~lib/builtins/trace
      i32.const 17920
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0 offset=4
-     local.get $11
-     local.get $7
+     local.get $10
+     local.get $6
      i32.const 10
      call $~lib/number/I64#toString
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0 offset=8
-     local.get $11
+     local.get $10
      call $~lib/string/String.__concat
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0
-     local.get $11
+     local.get $10
      i32.const 0
      f64.const 0
      f64.const 0
@@ -6464,25 +6452,25 @@
      f64.const 0
      call $~lib/builtins/trace
      i32.const 19760
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0 offset=4
-     local.get $11
-     local.get $9
+     local.get $10
+     local.get $8
      i32.const 10
      call $~lib/number/I64#toString
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0 offset=8
-     local.get $11
+     local.get $10
      call $~lib/string/String.__concat
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0
-     local.get $11
+     local.get $10
      i32.const 0
      f64.const 0
      f64.const 0
@@ -6491,16 +6479,16 @@
      f64.const 0
      call $~lib/builtins/trace
     end
-    local.get $8
-    local.get $10
+    local.get $7
+    local.get $9
     i64.ne
     if
      i32.const 19824
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0
-     local.get $11
+     local.get $10
      i32.const 1
      local.get $0
      f64.convert_i32_s
@@ -6510,25 +6498,25 @@
      f64.const 0
      call $~lib/builtins/trace
      i32.const 19920
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0 offset=4
-     local.get $11
-     local.get $8
+     local.get $10
+     local.get $7
      i32.const 10
      call $~lib/number/I64#toString
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0 offset=8
-     local.get $11
+     local.get $10
      call $~lib/string/String.__concat
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0
-     local.get $11
+     local.get $10
      i32.const 0
      f64.const 0
      f64.const 0
@@ -6537,25 +6525,25 @@
      f64.const 0
      call $~lib/builtins/trace
      i32.const 19984
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
-     i32.store $0 offset=4
-     local.get $11
      local.get $10
+     i32.store $0 offset=4
+     local.get $10
+     local.get $9
      i32.const 10
      call $~lib/number/I64#toString
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0 offset=8
-     local.get $11
+     local.get $10
      call $~lib/string/String.__concat
-     local.set $11
+     local.set $10
      global.get $~lib/memory/__stack_pointer
-     local.get $11
+     local.get $10
      i32.store $0
-     local.get $11
+     local.get $10
      i32.const 0
      f64.const 0
      f64.const 0
@@ -6581,39 +6569,38 @@
   (local $codes i32)
   (local $j i32)
   (local $i i32)
-  (local $5 i32)
   (local $c i32)
+  (local $c|6 i32)
   (local $c|7 i32)
-  (local $c|8 i32)
   (local $c1 i32)
   (local $c0 i32)
   (local $sigma i32)
   (local $buffer i32)
   (local $index i32)
-  (local $len|14 i32)
+  (local $len|13 i32)
   (local $found i32)
   (local $pos i32)
+  (local $16 i32)
   (local $17 i32)
-  (local $18 i32)
   (local $minPos i32)
-  (local $buffer|20 i32)
-  (local $index|21 i32)
-  (local $c|22 i32)
-  (local $c1|23 i32)
+  (local $buffer|19 i32)
+  (local $index|20 i32)
+  (local $c|21 i32)
+  (local $c1|22 i32)
+  (local $c|23 i32)
   (local $c|24 i32)
   (local $c|25 i32)
-  (local $c|26 i32)
+  (local $26 i32)
   (local $27 i32)
-  (local $28 i32)
   (local $maxPos i32)
-  (local $c|30 i32)
-  (local $c1|31 i32)
+  (local $c|29 i32)
+  (local $c1|30 i32)
+  (local $c|31 i32)
   (local $c|32 i32)
-  (local $c|33 i32)
   (local $code i32)
   (local $lo i32)
   (local $hi i32)
-  (local $37 i32)
+  (local $36 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -6629,12 +6616,12 @@
   i32.eqz
   if
    local.get $this
-   local.set $37
+   local.set $36
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $37
+   local.get $36
    return
   end
   global.get $~lib/memory/__stack_pointer
@@ -6655,8 +6642,6 @@
    local.get $i
    local.get $len
    i32.lt_u
-   local.set $5
-   local.get $5
    if
     block $for-continue|0
      local.get $this
@@ -6667,8 +6652,8 @@
      i32.load16_u $0
      local.set $c
      local.get $c
-     local.set $c|7
-     local.get $c|7
+     local.set $c|6
+     local.get $c|6
      i32.const 7
      i32.shr_u
      i32.eqz
@@ -6680,13 +6665,13 @@
       i32.add
       block $~lib/util/string/toLower8|inlined.0 (result i32)
        local.get $c
-       local.set $c|8
+       local.set $c|7
        i32.const 0
        i32.const 0
        i32.gt_s
        drop
        i32.const 6060
-       local.get $c|8
+       local.get $c|7
        i32.add
        i32.load8_u $0
        br $~lib/util/string/toLower8|inlined.0
@@ -6802,19 +6787,19 @@
           local.get $i
           local.set $index
           local.get $len
-          local.set $len|14
+          local.set $len|13
           i32.const 0
           local.set $found
           local.get $index
           local.set $pos
           i32.const 0
-          local.tee $17
+          local.tee $16
           local.get $pos
           i32.const 30
           i32.sub
-          local.tee $18
+          local.tee $17
+          local.get $16
           local.get $17
-          local.get $18
           i32.gt_s
           select
           local.set $minPos
@@ -6825,58 +6810,58 @@
            if
             block $~lib/util/string/codePointBefore|inlined.0 (result i32)
              local.get $buffer
-             local.set $buffer|20
+             local.set $buffer|19
              local.get $pos
-             local.set $index|21
-             local.get $index|21
+             local.set $index|20
+             local.get $index|20
              i32.const 0
              i32.le_s
              if
               i32.const -1
               br $~lib/util/string/codePointBefore|inlined.0
              end
-             local.get $buffer|20
-             local.get $index|21
+             local.get $buffer|19
+             local.get $index|20
              i32.const 1
              i32.sub
              i32.const 1
              i32.shl
              i32.add
              i32.load16_u $0
-             local.set $c|22
-             local.get $c|22
+             local.set $c|21
+             local.get $c|21
              i32.const 64512
              i32.and
              i32.const 56320
              i32.eq
-             local.get $index|21
+             local.get $index|20
              i32.const 2
              i32.sub
              i32.const 0
              i32.ge_s
              i32.and
              if
-              local.get $buffer|20
-              local.get $index|21
+              local.get $buffer|19
+              local.get $index|20
               i32.const 2
               i32.sub
               i32.const 1
               i32.shl
               i32.add
               i32.load16_u $0
-              local.set $c1|23
-              local.get $c1|23
+              local.set $c1|22
+              local.get $c1|22
               i32.const 64512
               i32.and
               i32.const 55296
               i32.eq
               if
-               local.get $c1|23
+               local.get $c1|22
                i32.const 1023
                i32.and
                i32.const 10
                i32.shl
-               local.get $c|22
+               local.get $c|21
                i32.const 1023
                i32.and
                i32.add
@@ -6885,7 +6870,7 @@
                br $~lib/util/string/codePointBefore|inlined.0
               end
              end
-             local.get $c|22
+             local.get $c|21
              i32.const 63488
              i32.and
              i32.const 55296
@@ -6893,32 +6878,32 @@
              if (result i32)
               i32.const 65533
              else
-              local.get $c|22
+              local.get $c|21
              end
             end
+            local.set $c|23
+            local.get $c|23
             local.set $c|24
             local.get $c|24
-            local.set $c|25
-            local.get $c|25
             i32.const 918000
             i32.lt_u
             if (result i32)
              i32.const 6188
-             local.get $c|25
+             local.get $c|24
              call $~lib/util/string/stagedBinaryLookup
             else
              i32.const 0
             end
             i32.eqz
             if
-             local.get $c|24
-             local.set $c|26
-             local.get $c|26
+             local.get $c|23
+             local.set $c|25
+             local.get $c|25
              i32.const 127370
              i32.lt_u
              if (result i32)
               i32.const 9196
-              local.get $c|26
+              local.get $c|25
               call $~lib/util/string/stagedBinaryLookup
              else
               i32.const 0
@@ -6932,7 +6917,7 @@
              end
             end
             local.get $pos
-            local.get $c|24
+            local.get $c|23
             i32.const 65536
             i32.ge_s
             i32.const 1
@@ -6955,11 +6940,11 @@
           local.get $pos
           i32.const 30
           i32.add
+          local.tee $26
+          local.get $len|13
           local.tee $27
-          local.get $len|14
-          local.tee $28
+          local.get $26
           local.get $27
-          local.get $28
           i32.lt_s
           select
           local.set $maxPos
@@ -6974,8 +6959,8 @@
             i32.shl
             i32.add
             i32.load16_u $0
-            local.set $c|30
-            local.get $c|30
+            local.set $c|29
+            local.get $c|29
             i32.const 64512
             i32.and
             i32.const 55296
@@ -6983,7 +6968,7 @@
             local.get $pos
             i32.const 1
             i32.add
-            local.get $len|14
+            local.get $len|13
             i32.ne
             i32.and
             if
@@ -6993,49 +6978,49 @@
              i32.shl
              i32.add
              i32.load16_u $0 offset=2
-             local.set $c1|31
-             local.get $c1|31
+             local.set $c1|30
+             local.get $c1|30
              i32.const 64512
              i32.and
              i32.const 56320
              i32.eq
              if
-              local.get $c|30
+              local.get $c|29
               i32.const 55296
               i32.sub
               i32.const 10
               i32.shl
-              local.get $c1|31
+              local.get $c1|30
               i32.const 56320
               i32.sub
               i32.add
               i32.const 65536
               i32.add
-              local.set $c|30
+              local.set $c|29
              end
             end
-            local.get $c|30
-            local.set $c|32
-            local.get $c|32
+            local.get $c|29
+            local.set $c|31
+            local.get $c|31
             i32.const 918000
             i32.lt_u
             if (result i32)
              i32.const 6188
-             local.get $c|32
+             local.get $c|31
              call $~lib/util/string/stagedBinaryLookup
             else
              i32.const 0
             end
             i32.eqz
             if
-             local.get $c|30
-             local.set $c|33
-             local.get $c|33
+             local.get $c|29
+             local.set $c|32
+             local.get $c|32
              i32.const 127370
              i32.lt_u
              if (result i32)
               i32.const 9196
-              local.get $c|33
+              local.get $c|32
               call $~lib/util/string/stagedBinaryLookup
              else
               i32.const 0
@@ -7044,7 +7029,7 @@
              br $~lib/util/string/isFinalSigma|inlined.0
             end
             local.get $pos
-            local.get $c|30
+            local.get $c|29
             i32.const 65536
             i32.ge_u
             i32.const 1
@@ -7160,12 +7145,12 @@
   i32.const 1
   i32.shl
   call $~lib/rt/itcms/__renew
-  local.set $37
+  local.set $36
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $37
+  local.get $36
  )
  (func $~lib/string/String.fromCodePoint (type $i32_=>_i32) (param $code i32) (result i32)
   (local $hasSur i32)

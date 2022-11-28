@@ -1177,15 +1177,13 @@
   (local $root|4 i32)
   (local $tail i32)
   (local $fl i32)
-  (local $7 i32)
-  (local $root|8 i32)
-  (local $fl|9 i32)
+  (local $root|7 i32)
+  (local $fl|8 i32)
   (local $slMap i32)
   (local $sl i32)
-  (local $12 i32)
-  (local $root|13 i32)
-  (local $fl|14 i32)
-  (local $sl|15 i32)
+  (local $root|11 i32)
+  (local $fl|12 i32)
+  (local $sl|13 i32)
   (local $head i32)
   (local $memStart i32)
   i32.const 0
@@ -1246,17 +1244,15 @@
    local.get $fl
    i32.const 23
    i32.lt_u
-   local.set $7
-   local.get $7
    if
     local.get $root
-    local.set $root|8
+    local.set $root|7
     local.get $fl
-    local.set $fl|9
+    local.set $fl|8
     i32.const 0
     local.set $slMap
-    local.get $root|8
-    local.get $fl|9
+    local.get $root|7
+    local.get $fl|8
     i32.const 2
     i32.shl
     i32.add
@@ -1268,22 +1264,20 @@
      local.get $sl
      i32.const 16
      i32.lt_u
-     local.set $12
-     local.get $12
      if
       local.get $root
-      local.set $root|13
+      local.set $root|11
       local.get $fl
-      local.set $fl|14
+      local.set $fl|12
       local.get $sl
-      local.set $sl|15
+      local.set $sl|13
       i32.const 0
       local.set $head
-      local.get $root|13
-      local.get $fl|14
+      local.get $root|11
+      local.get $fl|12
       i32.const 4
       i32.shl
-      local.get $sl|15
+      local.get $sl|13
       i32.add
       i32.const 2
       i32.shl
@@ -3010,17 +3004,12 @@
  (func $std/set/testNumeric<i8> (type $none_=>_none)
   (local $set i32)
   (local $k i32)
-  (local $2 i32)
-  (local $k|3 i32)
-  (local $4 i32)
+  (local $k|2 i32)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 i32)
-  (local $10 i32)
-  (local $k|11 i32)
-  (local $12 i32)
+  (local $k|6 i32)
+  (local $k|7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -3043,8 +3032,6 @@
    local.get $k
    i32.const 100
    i32.lt_s
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -3096,16 +3083,14 @@
    unreachable
   end
   i32.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    i32.const 100
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -3117,11 +3102,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i8>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -3132,10 +3117,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     i32.const 1
     i32.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -3169,8 +3154,6 @@
    local.get $vals
    call $~lib/array/Array<i8>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -3214,16 +3197,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    i32.const 50
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -3235,11 +3216,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i8>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -3251,10 +3232,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     i32.const 1
     i32.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -3272,16 +3253,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    i32.const 50
    i32.lt_s
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -3294,11 +3273,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i8>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i8>#has
     i32.eqz
     if
@@ -3310,11 +3289,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i8>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i8>#has
     i32.eqz
     i32.eqz
@@ -3326,10 +3305,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     i32.const 1
     i32.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -3952,17 +3931,12 @@
  (func $std/set/testNumeric<u8> (type $none_=>_none)
   (local $set i32)
   (local $k i32)
-  (local $2 i32)
-  (local $k|3 i32)
-  (local $4 i32)
+  (local $k|2 i32)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 i32)
-  (local $10 i32)
-  (local $k|11 i32)
-  (local $12 i32)
+  (local $k|6 i32)
+  (local $k|7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -3985,8 +3959,6 @@
    local.get $k
    i32.const 100
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -4038,16 +4010,14 @@
    unreachable
   end
   i32.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    i32.const 100
    i32.lt_u
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -4059,11 +4029,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u8>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -4074,10 +4044,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     i32.const 1
     i32.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -4111,8 +4081,6 @@
    local.get $vals
    call $~lib/array/Array<u8>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -4156,16 +4124,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    i32.const 50
    i32.lt_u
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -4177,11 +4143,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u8>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -4193,10 +4159,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     i32.const 1
     i32.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -4214,16 +4180,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    i32.const 50
    i32.lt_u
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -4236,11 +4200,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u8>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u8>#has
     i32.eqz
     if
@@ -4252,11 +4216,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u8>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u8>#has
     i32.eqz
     i32.eqz
@@ -4268,10 +4232,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     i32.const 1
     i32.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -4891,17 +4855,12 @@
  (func $std/set/testNumeric<i16> (type $none_=>_none)
   (local $set i32)
   (local $k i32)
-  (local $2 i32)
-  (local $k|3 i32)
-  (local $4 i32)
+  (local $k|2 i32)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 i32)
-  (local $10 i32)
-  (local $k|11 i32)
-  (local $12 i32)
+  (local $k|6 i32)
+  (local $k|7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -4924,8 +4883,6 @@
    local.get $k
    i32.const 100
    i32.lt_s
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -4977,16 +4934,14 @@
    unreachable
   end
   i32.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    i32.const 100
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -4998,11 +4953,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i16>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -5013,10 +4968,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     i32.const 1
     i32.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -5050,8 +5005,6 @@
    local.get $vals
    call $~lib/array/Array<i16>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -5095,16 +5048,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    i32.const 50
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -5116,11 +5067,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i16>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -5132,10 +5083,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     i32.const 1
     i32.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -5153,16 +5104,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    i32.const 50
    i32.lt_s
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -5175,11 +5124,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i16>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -5191,11 +5140,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i16>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i16>#has
     i32.eqz
     i32.eqz
@@ -5207,10 +5156,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     i32.const 1
     i32.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -5833,17 +5782,12 @@
  (func $std/set/testNumeric<u16> (type $none_=>_none)
   (local $set i32)
   (local $k i32)
-  (local $2 i32)
-  (local $k|3 i32)
-  (local $4 i32)
+  (local $k|2 i32)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 i32)
-  (local $10 i32)
-  (local $k|11 i32)
-  (local $12 i32)
+  (local $k|6 i32)
+  (local $k|7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -5866,8 +5810,6 @@
    local.get $k
    i32.const 100
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -5919,16 +5861,14 @@
    unreachable
   end
   i32.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    i32.const 100
    i32.lt_u
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -5940,11 +5880,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u16>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -5955,10 +5895,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     i32.const 1
     i32.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -5992,8 +5932,6 @@
    local.get $vals
    call $~lib/array/Array<u16>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -6037,16 +5975,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    i32.const 50
    i32.lt_u
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -6058,11 +5994,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u16>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -6074,10 +6010,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     i32.const 1
     i32.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -6095,16 +6031,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    i32.const 50
    i32.lt_u
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -6117,11 +6051,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u16>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u16>#has
     i32.eqz
     if
@@ -6133,11 +6067,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u16>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u16>#has
     i32.eqz
     i32.eqz
@@ -6149,10 +6083,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     i32.const 1
     i32.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -6769,17 +6703,12 @@
  (func $std/set/testNumeric<i32> (type $none_=>_none)
   (local $set i32)
   (local $k i32)
-  (local $2 i32)
-  (local $k|3 i32)
-  (local $4 i32)
+  (local $k|2 i32)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 i32)
-  (local $10 i32)
-  (local $k|11 i32)
-  (local $12 i32)
+  (local $k|6 i32)
+  (local $k|7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -6802,8 +6731,6 @@
    local.get $k
    i32.const 100
    i32.lt_s
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -6855,16 +6782,14 @@
    unreachable
   end
   i32.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    i32.const 100
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -6876,11 +6801,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i32>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -6891,10 +6816,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     i32.const 1
     i32.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -6928,8 +6853,6 @@
    local.get $vals
    call $~lib/array/Array<i32>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -6973,16 +6896,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    i32.const 50
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -6994,11 +6915,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i32>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -7010,10 +6931,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     i32.const 1
     i32.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -7031,16 +6952,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    i32.const 50
    i32.lt_s
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -7053,11 +6972,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i32>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i32>#has
     i32.eqz
     if
@@ -7069,11 +6988,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i32>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i32>#has
     i32.eqz
     i32.eqz
@@ -7085,10 +7004,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     i32.const 1
     i32.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -7705,17 +7624,12 @@
  (func $std/set/testNumeric<u32> (type $none_=>_none)
   (local $set i32)
   (local $k i32)
-  (local $2 i32)
-  (local $k|3 i32)
-  (local $4 i32)
+  (local $k|2 i32)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 i32)
-  (local $10 i32)
-  (local $k|11 i32)
-  (local $12 i32)
+  (local $k|6 i32)
+  (local $k|7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -7738,8 +7652,6 @@
    local.get $k
    i32.const 100
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -7791,16 +7703,14 @@
    unreachable
   end
   i32.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    i32.const 100
    i32.lt_u
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -7812,11 +7722,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u32>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -7827,10 +7737,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     i32.const 1
     i32.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -7864,8 +7774,6 @@
    local.get $vals
    call $~lib/array/Array<u32>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -7909,16 +7817,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    i32.const 50
    i32.lt_u
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -7930,11 +7836,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u32>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -7946,10 +7852,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     i32.const 1
     i32.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -7967,16 +7873,14 @@
    unreachable
   end
   i32.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    i32.const 50
    i32.lt_u
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -7989,11 +7893,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u32>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u32>#has
     i32.eqz
     if
@@ -8005,11 +7909,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u32>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u32>#has
     i32.eqz
     i32.eqz
@@ -8021,10 +7925,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     i32.const 1
     i32.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -8658,17 +8562,12 @@
  (func $std/set/testNumeric<i64> (type $none_=>_none)
   (local $set i32)
   (local $k i64)
-  (local $2 i32)
-  (local $k|3 i64)
-  (local $4 i32)
+  (local $k|2 i64)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 i64)
-  (local $10 i32)
-  (local $k|11 i64)
-  (local $12 i32)
+  (local $k|6 i64)
+  (local $k|7 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -8691,8 +8590,6 @@
    local.get $k
    i64.const 100
    i64.lt_s
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -8744,16 +8641,14 @@
    unreachable
   end
   i64.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    i64.const 100
    i64.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8765,11 +8660,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i64>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8780,10 +8675,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     i64.const 1
     i64.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -8817,8 +8712,6 @@
    local.get $vals
    call $~lib/array/Array<i64>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -8862,16 +8755,14 @@
    unreachable
   end
   i64.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    i64.const 50
    i64.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8883,11 +8774,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i64>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -8899,10 +8790,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     i64.const 1
     i64.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -8920,16 +8811,14 @@
    unreachable
   end
   i64.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    i64.const 50
    i64.lt_s
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -8942,11 +8831,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i64>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i64>#has
     i32.eqz
     if
@@ -8958,11 +8847,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i64>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<i64>#has
     i32.eqz
     i32.eqz
@@ -8974,10 +8863,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     i64.const 1
     i64.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -9611,17 +9500,12 @@
  (func $std/set/testNumeric<u64> (type $none_=>_none)
   (local $set i32)
   (local $k i64)
-  (local $2 i32)
-  (local $k|3 i64)
-  (local $4 i32)
+  (local $k|2 i64)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 i64)
-  (local $10 i32)
-  (local $k|11 i64)
-  (local $12 i32)
+  (local $k|6 i64)
+  (local $k|7 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -9644,8 +9528,6 @@
    local.get $k
    i64.const 100
    i64.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -9697,16 +9579,14 @@
    unreachable
   end
   i64.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    i64.const 100
    i64.lt_u
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9718,11 +9598,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u64>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9733,10 +9613,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     i64.const 1
     i64.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -9770,8 +9650,6 @@
    local.get $vals
    call $~lib/array/Array<u64>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -9815,16 +9693,14 @@
    unreachable
   end
   i64.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    i64.const 50
    i64.lt_u
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9836,11 +9712,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u64>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -9852,10 +9728,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     i64.const 1
     i64.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -9873,16 +9749,14 @@
    unreachable
   end
   i64.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    i64.const 50
    i64.lt_u
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -9895,11 +9769,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u64>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u64>#has
     i32.eqz
     if
@@ -9911,11 +9785,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u64>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<u64>#has
     i32.eqz
     i32.eqz
@@ -9927,10 +9801,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     i64.const 1
     i64.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -10548,17 +10422,12 @@
  (func $std/set/testNumeric<f32> (type $none_=>_none)
   (local $set i32)
   (local $k f32)
-  (local $2 i32)
-  (local $k|3 f32)
-  (local $4 i32)
+  (local $k|2 f32)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 f32)
-  (local $10 i32)
-  (local $k|11 f32)
-  (local $12 i32)
+  (local $k|6 f32)
+  (local $k|7 f32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -10581,8 +10450,6 @@
    local.get $k
    f32.const 100
    f32.lt
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -10634,16 +10501,14 @@
    unreachable
   end
   f32.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    f32.const 100
    f32.lt
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10655,11 +10520,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<f32>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10670,10 +10535,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     f32.const 1
     f32.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -10707,8 +10572,6 @@
    local.get $vals
    call $~lib/array/Array<f32>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -10752,16 +10615,14 @@
    unreachable
   end
   f32.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    f32.const 50
    f32.lt
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10773,11 +10634,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<f32>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -10789,10 +10650,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     f32.const 1
     f32.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -10810,16 +10671,14 @@
    unreachable
   end
   f32.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    f32.const 50
    f32.lt
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -10832,11 +10691,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f32>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f32>#has
     i32.eqz
     if
@@ -10848,11 +10707,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f32>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f32>#has
     i32.eqz
     i32.eqz
@@ -10864,10 +10723,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     f32.const 1
     f32.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -11502,17 +11361,12 @@
  (func $std/set/testNumeric<f64> (type $none_=>_none)
   (local $set i32)
   (local $k f64)
-  (local $2 i32)
-  (local $k|3 f64)
-  (local $4 i32)
+  (local $k|2 f64)
   (local $vals i32)
   (local $valSet i32)
   (local $index i32)
-  (local $8 i32)
-  (local $k|9 f64)
-  (local $10 i32)
-  (local $k|11 f64)
-  (local $12 i32)
+  (local $k|6 f64)
+  (local $k|7 f64)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -11535,8 +11389,6 @@
    local.get $k
    f64.const 100
    f64.lt
-   local.set $2
-   local.get $2
    if
     local.get $set
     local.get $k
@@ -11588,16 +11440,14 @@
    unreachable
   end
   f64.const 50
-  local.set $k|3
+  local.set $k|2
   loop $for-loop|1
-   local.get $k|3
+   local.get $k|2
    f64.const 100
    f64.lt
-   local.set $4
-   local.get $4
    if
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11609,11 +11459,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<f64>#add
     drop
     local.get $set
-    local.get $k|3
+    local.get $k|2
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11624,10 +11474,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|3
+    local.get $k|2
     f64.const 1
     f64.add
-    local.set $k|3
+    local.set $k|2
     br $for-loop|1
    end
   end
@@ -11661,8 +11511,6 @@
    local.get $vals
    call $~lib/array/Array<f64>#get:length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $set
     local.get $vals
@@ -11706,16 +11554,14 @@
    unreachable
   end
   f64.const 0
-  local.set $k|9
+  local.set $k|6
   loop $for-loop|3
-   local.get $k|9
+   local.get $k|6
    f64.const 50
    f64.lt
-   local.set $10
-   local.get $10
    if
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11727,11 +11573,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<f64>#delete
     drop
     local.get $set
-    local.get $k|9
+    local.get $k|6
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -11743,10 +11589,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|9
+    local.get $k|6
     f64.const 1
     f64.add
-    local.set $k|9
+    local.set $k|6
     br $for-loop|3
    end
   end
@@ -11764,16 +11610,14 @@
    unreachable
   end
   f64.const 0
-  local.set $k|11
+  local.set $k|7
   loop $for-loop|4
-   local.get $k|11
+   local.get $k|7
    f64.const 50
    f64.lt
-   local.set $12
-   local.get $12
    if
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -11786,11 +11630,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f64>#add
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f64>#has
     i32.eqz
     if
@@ -11802,11 +11646,11 @@
      unreachable
     end
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f64>#delete
     drop
     local.get $set
-    local.get $k|11
+    local.get $k|7
     call $~lib/set/Set<f64>#has
     i32.eqz
     i32.eqz
@@ -11818,10 +11662,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $k|11
+    local.get $k|7
     f64.const 1
     f64.add
-    local.set $k|11
+    local.set $k|7
     br $for-loop|4
    end
   end
@@ -13880,10 +13724,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -13912,8 +13755,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -13929,11 +13770,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<i8>#get:key
      call $~lib/array/Array<i8>#__uset
@@ -13949,12 +13790,12 @@
   local.get $length
   call $~lib/array/Array<i8>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<u8>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14052,10 +13893,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -14084,8 +13924,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -14101,11 +13939,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<u8>#get:key
      call $~lib/array/Array<u8>#__uset
@@ -14121,12 +13959,12 @@
   local.get $length
   call $~lib/array/Array<u8>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<i16>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14224,10 +14062,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -14256,8 +14093,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -14273,11 +14108,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<i16>#get:key
      call $~lib/array/Array<i16>#__uset
@@ -14293,12 +14128,12 @@
   local.get $length
   call $~lib/array/Array<i16>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<u16>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14396,10 +14231,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -14428,8 +14262,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -14445,11 +14277,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<u16>#get:key
      call $~lib/array/Array<u16>#__uset
@@ -14465,12 +14297,12 @@
   local.get $length
   call $~lib/array/Array<u16>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<i32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14568,10 +14400,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -14600,8 +14431,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -14617,11 +14446,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<i32>#get:key
      call $~lib/array/Array<i32>#__uset
@@ -14637,12 +14466,12 @@
   local.get $length
   call $~lib/array/Array<i32>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<u32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14740,10 +14569,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -14772,8 +14600,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -14789,11 +14615,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<u32>#get:key
      call $~lib/array/Array<u32>#__uset
@@ -14809,12 +14635,12 @@
   local.get $length
   call $~lib/array/Array<u32>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<i64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14912,10 +14738,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -14944,8 +14769,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -14961,11 +14784,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<i64>#get:key
      call $~lib/array/Array<i64>#__uset
@@ -14981,12 +14804,12 @@
   local.get $length
   call $~lib/array/Array<i64>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<u64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -15084,10 +14907,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -15116,8 +14938,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -15133,11 +14953,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<u64>#get:key
      call $~lib/array/Array<u64>#__uset
@@ -15153,12 +14973,12 @@
   local.get $length
   call $~lib/array/Array<u64>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<f32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -15256,10 +15076,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -15288,8 +15107,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -15305,11 +15122,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<f32>#get:key
      call $~lib/array/Array<f32>#__uset
@@ -15325,12 +15142,12 @@
   local.get $length
   call $~lib/array/Array<f32>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
  (func $~lib/array/Array<f64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -15428,10 +15245,9 @@
   (local $values i32)
   (local $length i32)
   (local $i i32)
-  (local $6 i32)
   (local $entry i32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -15460,8 +15276,6 @@
    local.get $i
    local.get $size
    i32.lt_s
-   local.set $6
-   local.get $6
    if
     local.get $start
     local.get $i
@@ -15477,11 +15291,11 @@
     if
      local.get $values
      local.get $length
-     local.tee $8
+     local.tee $7
      i32.const 1
      i32.add
      local.set $length
-     local.get $8
+     local.get $7
      local.get $entry
      call $~lib/set/SetEntry<f64>#get:key
      call $~lib/array/Array<f64>#__uset
@@ -15497,11 +15311,11 @@
   local.get $length
   call $~lib/array/Array<f64>#set:length
   local.get $values
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
  )
 )
