@@ -3,8 +3,8 @@
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32 i32) (result i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
  (type $none_=>_none (func_subtype func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
@@ -35,8 +35,8 @@
  (global $std/staticarray/arr4 (mut i32) (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
- (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/native/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/staticarray/maxVal (mut i32) (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/rt/__rtti_base i32 (i32.const 2704))
@@ -2470,6 +2470,27 @@
   i32.const 2
   i32.shr_u
  )
+ (func $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $start
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $start
+  local.get $end
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
+ )
  (func $~lib/string/String#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.const 20
@@ -3110,6 +3131,30 @@
   call $~lib/util/bytes/FILL<i32>
   local.get $this
  )
+ (func $~lib/staticarray/StaticArray<i32>#fill@varargs (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $value i32) (param $start i32) (param $end i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $start
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $value
+  local.get $start
+  local.get $end
+  call $~lib/staticarray/StaticArray<i32>#fill
+ )
  (func $~lib/util/bytes/REVERSE<i32> (type $i32_i32_=>_none) (param $ptr i32) (param $len i32)
   (local $i i32)
   (local $tail i32)
@@ -3328,6 +3373,26 @@
   i32.shl
   memory.copy $0 $0
   local.get $this
+ )
+ (func $~lib/staticarray/StaticArray<i32>#copyWithin@varargs (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $target i32) (param $start i32) (param $end i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 2
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $target
+  local.get $start
+  local.get $end
+  call $~lib/staticarray/StaticArray<i32>#copyWithin
  )
  (func $start:std/staticarray~anonymous|0 (type $i32_i32_i32_=>_i32) (param $x i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $x
@@ -5972,8 +6037,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $18
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
+  i32.const 0
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs
   local.tee $19
   i32.store $0 offset=36
   local.get $19
@@ -6102,8 +6169,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $18
   i32.const 1
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs
   local.tee $19
   i32.store $0 offset=36
   local.get $19
@@ -6146,8 +6215,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $18
   i32.const 100
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs
   local.tee $19
   i32.store $0 offset=36
   local.get $19
@@ -6166,8 +6237,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $18
   i32.const -1
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/staticarray/StaticArray<~lib/string/String>#slice<~lib/staticarray/StaticArray<~lib/string/String>>@varargs
   local.tee $19
   i32.store $0 offset=36
   local.get $19
@@ -6821,8 +6894,10 @@
   local.get $39
   i32.const 1
   i32.const 1
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray<i32>#fill
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/staticarray/StaticArray<i32>#fill@varargs
   drop
   local.get $39
   i32.const 0
@@ -6914,8 +6989,10 @@
   local.get $43
   i32.const 0
   i32.const 3
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/staticarray/StaticArray<i32>#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/staticarray/StaticArray<i32>#copyWithin@varargs
   drop
   local.get $43
   i32.const 0

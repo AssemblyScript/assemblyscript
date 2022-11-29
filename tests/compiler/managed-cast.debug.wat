@@ -23,10 +23,10 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 608))
- (global $~lib/memory/__data_end i32 (i32.const 636))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33404))
- (global $~lib/memory/__heap_base i32 (i32.const 33404))
+ (global $~lib/rt/__rtti_base i32 (i32.const 672))
+ (global $~lib/memory/__data_end i32 (i32.const 700))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33468))
+ (global $~lib/memory/__heap_base i32 (i32.const 33468))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -36,10 +36,10 @@
  (data (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 476) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 540) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00i\00n\00v\00a\00l\00i\00d\00 \00d\00o\00w\00n\00c\00a\00s\00t\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 608) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00")
+ (data (i32.const 412) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00^\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00\'\00n\00u\00l\00l\00\'\00 \00(\00n\00o\00t\00 \00a\00s\00s\00i\00g\00n\00e\00d\00 \00o\00r\00 \00f\00a\00i\00l\00e\00d\00 \00c\00a\00s\00t\00)\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 540) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 604) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00i\00n\00v\00a\00l\00i\00d\00 \00d\00o\00w\00n\00c\00a\00s\00t\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 672) "\06\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -2225,8 +2225,8 @@
   if (result i32)
    local.get $1
   else
+   i32.const 624
    i32.const 560
-   i32.const 496
    i32.const 41
    i32.const 30
    call $~lib/builtins/abort
@@ -2267,8 +2267,8 @@
    if (result i32)
     local.get $1
    else
+    i32.const 624
     i32.const 560
-    i32.const 496
     i32.const 47
     i32.const 30
     call $~lib/builtins/abort
@@ -2415,8 +2415,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33424
-   i32.const 33472
+   i32.const 33488
+   i32.const 33536
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -2440,7 +2440,7 @@
    local.get $1
   else
    i32.const 432
-   i32.const 496
+   i32.const 560
    i32.const 14
    i32.const 12
    call $~lib/builtins/abort
@@ -2474,8 +2474,8 @@
   if (result i32)
    local.get $1
   else
+   i32.const 624
    i32.const 560
-   i32.const 496
    i32.const 31
    i32.const 9
    call $~lib/builtins/abort
@@ -2511,7 +2511,7 @@
    local.get $1
   else
    i32.const 432
-   i32.const 496
+   i32.const 560
    i32.const 36
    i32.const 9
    call $~lib/builtins/abort
@@ -2524,8 +2524,8 @@
   if (result i32)
    local.get $2
   else
+   i32.const 624
    i32.const 560
-   i32.const 496
    i32.const 36
    i32.const 9
    call $~lib/builtins/abort

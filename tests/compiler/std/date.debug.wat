@@ -2,8 +2,8 @@
  (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
  (type $none_=>_none (func_subtype func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
@@ -3794,6 +3794,25 @@
   end
   i32.const -1
  )
+ (func $~lib/string/String#substring@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $start
+  local.get $end
+  call $~lib/string/String#substring
+ )
  (func $~lib/array/Array<~lib/string/String>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
@@ -4009,6 +4028,27 @@
   local.get $len
   call $~lib/array/Array<~lib/string/String>#set:length_
   local.get $len
+ )
+ (func $~lib/string/String#split@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $separator i32) (param $limit i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $separator
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $limit
+  end
+  local.get $this
+  local.get $separator
+  local.get $limit
+  call $~lib/string/String#split
  )
  (func $~lib/array/Array<~lib/string/String>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -5822,8 +5862,10 @@
    local.get $posT
    i32.const 1
    i32.add
-   global.get $~lib/builtins/i32.MAX_VALUE
-   call $~lib/string/String#substring
+   i32.const 1
+   global.set $~argumentsLength
+   i32.const 0
+   call $~lib/string/String#substring@varargs
    local.tee $timeString
    i32.store $0 offset=8
    global.get $~lib/memory/__stack_pointer
@@ -5834,8 +5876,10 @@
    local.get $17
    i32.store $0
    local.get $17
-   global.get $~lib/builtins/i32.MAX_VALUE
-   call $~lib/string/String#split
+   i32.const 1
+   global.set $~argumentsLength
+   i32.const 0
+   call $~lib/string/String#split@varargs
    local.tee $timeParts
    i32.store $0 offset=12
    local.get $timeParts
@@ -5914,8 +5958,10 @@
      local.get $posDot
      i32.const 1
      i32.add
-     global.get $~lib/builtins/i32.MAX_VALUE
-     call $~lib/string/String#substring
+     i32.const 1
+     global.set $~argumentsLength
+     i32.const 0
+     call $~lib/string/String#substring@varargs
      local.set $17
      global.get $~lib/memory/__stack_pointer
      local.get $17
@@ -5940,8 +5986,10 @@
   local.get $17
   i32.store $0
   local.get $17
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $parts
   i32.store $0 offset=24
   local.get $parts

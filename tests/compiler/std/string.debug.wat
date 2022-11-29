@@ -3179,6 +3179,25 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
+ (func $~lib/string/String#endsWith@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $end i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/string/String.MAX_LENGTH
+   local.set $end
+  end
+  local.get $this
+  local.get $search
+  local.get $end
+  call $~lib/string/String#endsWith
+ )
  (func $~lib/string/String#indexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
   (local $searchLen i32)
   (local $len i32)
@@ -3355,6 +3374,25 @@
    end
   end
   i32.const -1
+ )
+ (func $~lib/string/String#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $search i32) (param $start i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $start
+  end
+  local.get $this
+  local.get $search
+  local.get $start
+  call $~lib/string/String#lastIndexOf
  )
  (func $~lib/string/String#localeCompare (type $i32_i32_=>_i32) (param $this i32) (param $other i32) (result i32)
   (local $alen i32)
@@ -5981,6 +6019,63 @@
   memory.copy $0 $0
   local.get $newPtr
  )
+ (func $~lib/string/String#slice@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $start
+  local.get $end
+  call $~lib/string/String#slice
+ )
+ (func $~lib/string/String#substr@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $length i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $length
+  end
+  local.get $this
+  local.get $start
+  local.get $length
+  call $~lib/string/String#substr
+ )
+ (func $~lib/string/String#substring@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $start
+  local.get $end
+  call $~lib/string/String#substring
+ )
  (func $~lib/array/Array<~lib/string/String>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
@@ -6147,6 +6242,27 @@
   local.get $len
   call $~lib/array/Array<~lib/string/String>#set:length_
   local.get $len
+ )
+ (func $~lib/string/String#split@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $separator i32) (param $limit i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $separator
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $limit
+  end
+  local.get $this
+  local.get $separator
+  local.get $limit
+  call $~lib/string/String#split
  )
  (func $~lib/array/Array<~lib/string/String>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -9330,8 +9446,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/string/String.MAX_LENGTH
-  call $~lib/string/String#endsWith
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#endsWith@varargs
   i32.eqz
   if
    i32.const 0
@@ -10186,8 +10304,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#lastIndexOf
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const 0
   i32.eq
   i32.eqz
@@ -10211,8 +10331,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#lastIndexOf
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const -1
   i32.eq
   i32.eqz
@@ -10236,8 +10358,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#lastIndexOf
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#lastIndexOf@varargs
   global.get $std/string/str
   local.set $55
   global.get $~lib/memory/__stack_pointer
@@ -10267,8 +10391,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#lastIndexOf
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const 2
   i32.eq
   i32.eqz
@@ -10292,8 +10418,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#lastIndexOf
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const -1
   i32.eq
   i32.eqz
@@ -10317,8 +10445,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#lastIndexOf
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const 15
   i32.eq
   i32.eqz
@@ -17748,8 +17878,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#slice@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -17778,8 +17910,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const -1
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#slice@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -17808,8 +17942,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const -5
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#slice@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -17958,8 +18094,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#substr
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#substr@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -17988,8 +18126,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const -1
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#substr
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#substr@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -18018,8 +18158,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const -5
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#substr
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#substr@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -18258,8 +18400,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#substring
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#substring@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -18288,8 +18432,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const -1
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#substring
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#substring@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -18318,8 +18464,10 @@
   i32.store $0 offset=8
   local.get $55
   i32.const -5
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#substring
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#substring@varargs
   local.set $55
   global.get $~lib/memory/__stack_pointer
   local.get $55
@@ -18559,8 +18707,10 @@
   i32.store $0
   local.get $55
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 0
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -18608,8 +18758,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -18638,8 +18790,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -18687,8 +18841,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -18736,8 +18892,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -18823,8 +18981,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -18910,8 +19070,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -19016,8 +19178,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -19122,8 +19286,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54
@@ -19228,8 +19394,10 @@
   local.get $55
   i32.store $0 offset=4
   local.get $55
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/string/String#split
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/string/String#split@varargs
   local.tee $54
   i32.store $0 offset=92
   local.get $54

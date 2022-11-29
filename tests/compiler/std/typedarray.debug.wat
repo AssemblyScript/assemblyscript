@@ -4597,6 +4597,30 @@
   end
   i32.const 1
  )
+ (func $~lib/typedarray/Int8Array#fill@varargs (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $value i32) (param $start i32) (param $end i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $start
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $value
+  local.get $start
+  local.get $end
+  call $~lib/typedarray/Int8Array#fill
+ )
  (func $~lib/util/bytes/FILL<u32> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $len i32) (param $value i32) (param $start i32) (param $end i32)
   (local $5 i32)
   (local $6 i32)
@@ -4804,6 +4828,51 @@
   end
   i32.const 1
  )
+ (func $~lib/typedarray/Int32Array#fill@varargs (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $value i32) (param $start i32) (param $end i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $start
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $value
+  local.get $start
+  local.get $end
+  call $~lib/typedarray/Int32Array#fill
+ )
+ (func $~lib/typedarray/Int32Array#slice@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $begin
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $begin
+  local.get $end
+  call $~lib/typedarray/Int32Array#slice
+ )
  (func $~lib/typedarray/Int32Array#copyWithin (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $target i32) (param $start i32) (param $end i32) (result i32)
   (local $array i32)
   (local $target|5 i32)
@@ -4957,6 +5026,26 @@
   i32.shl
   memory.copy $0 $0
   local.get $array
+ )
+ (func $~lib/typedarray/Int32Array#copyWithin@varargs (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $target i32) (param $start i32) (param $end i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 2
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $target
+  local.get $start
+  local.get $end
+  call $~lib/typedarray/Int32Array#copyWithin
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -59223,8 +59312,10 @@
   local.get $3
   i32.const 0
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int8Array#fill
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int8Array#fill@varargs
   drop
   local.get $3
   i32.const 5
@@ -59277,8 +59368,10 @@
   local.get $3
   i32.const 2
   i32.const -2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int8Array#fill
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int8Array#fill@varargs
   drop
   local.get $3
   i32.const 5
@@ -59338,8 +59431,10 @@
   local.get $14
   i32.const 0
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int8Array#fill
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int8Array#fill@varargs
   drop
   local.get $14
   call $~lib/typedarray/Int8Array#get:length
@@ -59478,8 +59573,10 @@
   local.get $19
   i32.const 0
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#fill
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#fill@varargs
   drop
   local.get $19
   i32.const 5
@@ -59532,8 +59629,10 @@
   local.get $19
   i32.const 2
   i32.const -2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#fill
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#fill@varargs
   drop
   local.get $19
   i32.const 5
@@ -59593,8 +59692,10 @@
   local.get $30
   i32.const 0
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#fill
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#fill@varargs
   drop
   local.get $30
   call $~lib/typedarray/Int32Array#get:length
@@ -59920,15 +60021,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $39
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $40
   i32.store $0 offset=52
   local.get $39
   i32.const 0
   i32.const 3
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -59957,15 +60062,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const 1
   i32.const 3
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -59994,15 +60103,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const 1
   i32.const 2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -60031,15 +60144,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const 2
   i32.const 2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -60068,8 +60185,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -60105,8 +60224,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -60142,8 +60263,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -60179,15 +60302,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const 0
   i32.const -2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -60216,8 +60343,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -60253,8 +60382,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -60290,8 +60421,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -60327,15 +60460,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const -4
   i32.const -3
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -60570,8 +60707,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $65
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 0
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $69
   i32.store $0 offset=76
   local.get $69

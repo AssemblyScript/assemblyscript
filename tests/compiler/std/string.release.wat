@@ -2774,6 +2774,26 @@
   end
   i32.const -1
  )
+ (func $~lib/string/String#lastIndexOf@varargs (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 2147483647
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/string/String#lastIndexOf
+ )
  (func $~lib/string/String#localeCompare (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
@@ -5097,6 +5117,66 @@
   memory.copy $0 $0
   local.get $2
  )
+ (func $~lib/string/String#slice@varargs (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 2147483647
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/string/String#slice
+ )
+ (func $~lib/string/String#substr@varargs (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 2147483647
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/string/String#substr
+ )
+ (func $~lib/string/String#substring@varargs (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 2147483647
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/string/String#substring
+ )
  (func $~lib/array/Array<~lib/string/String>#push (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5195,6 +5275,28 @@
   local.get $0
   local.get $2
   i32.store $0 offset=12
+ )
+ (func $~lib/string/String#split@varargs (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $1
+   end
+   i32.const 2147483647
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/string/String#split
  )
  (func $~lib/util/number/utoa32_dec_lut (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -7570,47 +7672,46 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $__inlined_func$~lib/string/String#endsWith (result i32)
-   global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $std/string/str
-   local.tee $3
-   i32.store $0
-   local.get $0
-   i32.const 2208
-   i32.store $0 offset=4
-   i32.const 0
-   i32.const 536870910
-   local.get $3
-   i32.const 20
-   i32.sub
-   i32.load $0 offset=16
+  global.get $~lib/memory/__stack_pointer
+  local.tee $0
+  global.get $std/string/str
+  local.tee $3
+  i32.store $0
+  local.get $0
+  i32.const 2208
+  i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 536870910
+  local.get $3
+  i32.const 20
+  i32.sub
+  i32.load $0 offset=16
+  i32.const 1
+  i32.shr_u
+  local.tee $0
+  local.get $0
+  i32.const 536870910
+  i32.gt_u
+  select
+  i32.const 2204
+  i32.load $0
+  i32.const 1
+  i32.shr_u
+  local.tee $0
+  i32.sub
+  local.tee $4
+  i32.const 0
+  i32.lt_s
+  if (result i32)
    i32.const 1
-   i32.shr_u
-   local.tee $0
-   local.get $0
-   i32.const 536870910
-   i32.gt_u
-   select
-   i32.const 2204
-   i32.load $0
-   i32.const 1
-   i32.shr_u
-   local.tee $0
-   i32.sub
-   local.tee $4
-   i32.const 0
-   i32.lt_s
-   br_if $__inlined_func$~lib/string/String#endsWith
-   drop
+  else
    local.get $3
    local.get $4
    i32.const 2208
    local.get $0
    call $~lib/util/string/compareImpl
-   i32.eqz
   end
-  i32.eqz
   if
    i32.const 0
    i32.const 1120
@@ -8345,10 +8446,11 @@
   local.get $0
   i32.const 1712
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   i32.const 1712
   i32.const 1712
-  i32.const 2147483647
-  call $~lib/string/String#lastIndexOf
+  call $~lib/string/String#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1120
@@ -8364,10 +8466,11 @@
   local.get $0
   i32.const 2176
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   i32.const 1712
   i32.const 2176
-  i32.const 2147483647
-  call $~lib/string/String#lastIndexOf
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -8386,10 +8489,11 @@
   local.get $0
   i32.const 1712
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $3
   i32.const 1712
-  i32.const 2147483647
-  call $~lib/string/String#lastIndexOf
+  call $~lib/string/String#lastIndexOf@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   global.get $std/string/str
@@ -8419,10 +8523,11 @@
   local.get $0
   i32.const 2624
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $3
   i32.const 2624
-  i32.const 2147483647
-  call $~lib/string/String#lastIndexOf
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const 2
   i32.ne
   if
@@ -8441,10 +8546,11 @@
   local.get $0
   i32.const 2656
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $3
   i32.const 2656
-  i32.const 2147483647
-  call $~lib/string/String#lastIndexOf
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -8463,10 +8569,11 @@
   local.get $0
   i32.const 2720
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $3
   i32.const 2720
-  i32.const 2147483647
-  call $~lib/string/String#lastIndexOf
+  call $~lib/string/String#lastIndexOf@varargs
   i32.const 15
   i32.ne
   if
@@ -14659,10 +14766,11 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 15296
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   i32.const 15296
   i32.const 0
-  i32.const 2147483647
-  call $~lib/string/String#slice
+  call $~lib/string/String#slice@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -14686,10 +14794,11 @@
   global.get $std/string/str
   local.tee $0
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
-  i32.const 2147483647
-  call $~lib/string/String#slice
+  call $~lib/string/String#slice@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -14713,10 +14822,11 @@
   global.get $std/string/str
   local.tee $0
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const -5
-  i32.const 2147483647
-  call $~lib/string/String#slice
+  call $~lib/string/String#slice@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -14848,10 +14958,11 @@
   global.get $std/string/str
   local.tee $0
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
-  i32.const 2147483647
-  call $~lib/string/String#substr
+  call $~lib/string/String#substr@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -14875,10 +14986,11 @@
   global.get $std/string/str
   local.tee $0
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
-  i32.const 2147483647
-  call $~lib/string/String#substr
+  call $~lib/string/String#substr@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -14902,10 +15014,11 @@
   global.get $std/string/str
   local.tee $0
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const -5
-  i32.const 2147483647
-  call $~lib/string/String#substr
+  call $~lib/string/String#substr@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -15118,10 +15231,11 @@
   global.get $std/string/str
   local.tee $0
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
-  i32.const 2147483647
-  call $~lib/string/String#substring
+  call $~lib/string/String#substring@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -15145,10 +15259,11 @@
   global.get $std/string/str
   local.tee $0
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
-  i32.const 2147483647
-  call $~lib/string/String#substring
+  call $~lib/string/String#substring@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -15172,10 +15287,11 @@
   global.get $std/string/str
   local.tee $0
   i32.store $0 offset=8
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const -5
-  i32.const 2147483647
-  call $~lib/string/String#substring
+  call $~lib/string/String#substring@varargs
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -15388,11 +15504,12 @@
   local.tee $0
   i32.const 1712
   i32.store $0
+  i32.const 0
+  global.set $~argumentsLength
   local.get $0
   i32.const 1712
   i32.const 0
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -15433,11 +15550,12 @@
   local.get $0
   i32.const 1712
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 1712
   i32.const 1712
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -15457,11 +15575,12 @@
   local.get $0
   i32.const 2624
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 1712
   i32.const 2624
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -15502,11 +15621,12 @@
   local.get $0
   i32.const 7632
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 15840
   i32.const 7632
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -15547,11 +15667,12 @@
   local.get $0
   i32.const 2624
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 15840
   i32.const 2624
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -15628,11 +15749,12 @@
   local.get $0
   i32.const 15920
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 15872
   i32.const 15920
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -15709,11 +15831,12 @@
   local.get $0
   i32.const 2624
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 15952
   i32.const 2624
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -15808,11 +15931,12 @@
   local.get $0
   i32.const 2624
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 15984
   i32.const 2624
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -15907,11 +16031,12 @@
   local.get $0
   i32.const 2624
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 16016
   i32.const 2624
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0
@@ -16006,11 +16131,12 @@
   local.get $0
   i32.const 1712
   i32.store $0 offset=4
+  i32.const 1
+  global.set $~argumentsLength
   local.get $0
   i32.const 2336
   i32.const 1712
-  i32.const 2147483647
-  call $~lib/string/String#split
+  call $~lib/string/String#split@varargs
   local.tee $0
   i32.store $0 offset=92
   local.get $0

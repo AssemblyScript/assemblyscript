@@ -49,7 +49,7 @@
   "Only variables, functions and enums become WebAssembly module exports.": 235,
   "Literal '{0}' does not fit into 'i64' or 'u64' types.": 236,
   "Index signature accessors in type '{0}' differ in types.": 237,
-  "Initializer expected.": 238,
+  "Initializer or definitive assignment expected.": 238,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,

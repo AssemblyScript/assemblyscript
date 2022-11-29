@@ -1170,9 +1170,10 @@ export class Compiler extends DiagnosticEmitter {
 
     let type = global.type;
 
-    // Enforce an initializer on globals. TypeScript is unsound in this regard
-    // in that it, just as us, doesn't do full program analysis, but simply
-    // assumes that outer variables are initialized:
+    // Enforce either an initializer or a definitive assignment on globals, just
+    // like for class fields. TypeScript is unsound in this regard in that it,
+    // just as us, doesn't do full program analysis, but simply assumes that
+    // outer variables are initialized:
     //
     //   let foo: string;
     //   function bar() {
@@ -1182,9 +1183,12 @@ export class Compiler extends DiagnosticEmitter {
     //
     // We can't let that happen in AOT obviously, except if there is a trivial
     // default value (say `0` or `null`), so limit to non-nullable references:
-    if (type.isReference && !type.is(TypeFlags.Nullable) && !initializerNode) {
+    if (
+      !initializerNode && !global.is(CommonFlags.DefinitelyAssigned) &&
+      type.isReference && !type.isNullableReference
+    ) {
       this.error(
-        DiagnosticCode.Initializer_expected,
+        DiagnosticCode.Initializer_or_definitive_assignment_expected,
         global.identifierNode.range
       );
     }
@@ -5878,7 +5882,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = type;
       return module.block(null, [
         module.global_set(global.internalName, valueExpr),
-        module.global_get(global.internalName, typeRef)
+        module.global_get(global.internalName, typeRef) // known to be assigned now
       ], typeRef);
     } else { // global = value
       this.currentType = Type.void;
@@ -6739,24 +6743,13 @@ export class Compiler extends DiagnosticEmitter {
             continue;
           }
           let resolved = this.resolver.lookupExpression(initializer, instance.flow, parameterTypes[i], ReportMode.Swallow);
-          if (resolved) {
-            if (resolved.kind == ElementKind.Global) {
-              let global = <Global>resolved;
-              if (this.compileGlobal(global)) {
-                if (global.is(CommonFlags.Inlined)) {
-                  operands.push(
-                    this.compileInlineConstant(global, parameterTypes[i], Constraints.ConvImplicit)
-                  );
-                } else {
-                  operands.push(
-                    this.convertExpression(
-                      module.global_get(global.internalName, global.type.toRef()),
-                      global.type, parameterTypes[i], false, initializer
-                    )
-                  );
-                }
-                continue;
-              }
+          if (resolved && resolved.kind == ElementKind.Global) {
+            let global = <Global>resolved;
+            if (this.compileGlobal(global) && global.is(CommonFlags.Inlined)) {
+              operands.push(
+                this.compileInlineConstant(global, parameterTypes[i], Constraints.ConvImplicit)
+              );
+              continue;
             }
           }
         }
@@ -7333,8 +7326,12 @@ export class Compiler extends DiagnosticEmitter {
         if (global.is(CommonFlags.Inlined)) {
           return this.compileInlineConstant(global, contextualType, constraints);
         }
+        let expr = module.global_get(global.internalName, globalType.toRef());
+        if (global.is(CommonFlags.DefinitelyAssigned) && globalType.isReference && !globalType.isNullableReference) {
+          expr = this.makeRuntimeNonNullCheck(expr, globalType, expression);
+        }
         this.currentType = globalType;
-        return module.global_get(global.internalName, globalType.toRef());
+        return expr;
       }
       case ElementKind.EnumValue: { // here: if referenced from within the same enum
         let enumValue = <EnumValue>target;
@@ -8836,8 +8833,12 @@ export class Compiler extends DiagnosticEmitter {
         if (global.is(CommonFlags.Inlined)) {
           return this.compileInlineConstant(global, ctxType, constraints);
         }
+        let expr = module.global_get(global.internalName, globalType.toRef());
+        if (global.is(CommonFlags.DefinitelyAssigned) && globalType.isReference && !globalType.isNullableReference) {
+          expr = this.makeRuntimeNonNullCheck(expr, globalType, expression);
+        }
         this.currentType = globalType;
-        return module.global_get(global.internalName, globalType.toRef());
+        return expr;
       }
       case ElementKind.EnumValue: { // enum value
         let enumValue = <EnumValue>target;
@@ -10226,7 +10227,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.setLocalFlag(tempIndex, LocalFlags.NonNull);
 
     let staticAbortCallExpr = this.makeStaticAbort(
-      this.ensureStaticString("unexpected null"),
+      this.ensureStaticString("Unexpected 'null' (not assigned or failed cast)"),
       reportNode
     ); // TODO: throw
 

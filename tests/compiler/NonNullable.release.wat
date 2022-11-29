@@ -3,7 +3,7 @@
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (type $none_=>_none (func_subtype func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34092))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 34156))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\02\00\00\00\06\00\00\00u\003\002")
@@ -15,8 +15,8 @@
  (data (i32.const 1160) "\02\00\00\002\00\00\00A\00r\00r\00a\00y\00<\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00/\00S\00t\00r\00i\00n\00g\00>")
  (data (i32.const 1228) "\1c")
  (data (i32.const 1240) "\02\00\00\00\02\00\00\00z")
- (data (i32.const 1260) "<")
- (data (i32.const 1272) "\02\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
+ (data (i32.const 1260) "|")
+ (data (i32.const 1272) "\02\00\00\00^\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00\'\00n\00u\00l\00l\00\'\00 \00(\00n\00o\00t\00 \00a\00s\00s\00i\00g\00n\00e\00d\00 \00o\00r\00 \00f\00a\00i\00l\00e\00d\00 \00c\00a\00s\00t\00)")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $0 i32) (param $1 i32) (result i32)
@@ -143,11 +143,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 1324
+  i32.const 1388
   i32.lt_s
   if
-   i32.const 34112
-   i32.const 34160
+   i32.const 34176
+   i32.const 34224
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
