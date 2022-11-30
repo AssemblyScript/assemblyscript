@@ -1170,25 +1170,22 @@ export class Compiler extends DiagnosticEmitter {
 
     let type = global.type;
 
-    // Enforce either an initializer or a definitive assignment on globals, just
-    // like for class fields. TypeScript is unsound in this regard in that it,
-    // just as us, doesn't do full program analysis, but simply assumes that
-    // outer variables are initialized:
+    // Enforce either an initializer, a definitive assignment or a nullable type
+    // to guarantee soundness when globals are accessed. In the absence of an
+    // initializer, a definitive assignment guarantees a runtime check, whereas
+    // a nullable type guarantees that obtaining default `null` is OK. Avoids:
     //
     //   let foo: string;
     //   function bar() {
-    //     foo.length; // no error even though undefined
+    //     foo.length; // no error in TS even though undefined
     //   }
     //   bar();
-    //
-    // We can't let that happen in AOT obviously, except if there is a trivial
-    // default value (say `0` or `null`), so limit to non-nullable references:
     if (
       !initializerNode && !global.is(CommonFlags.DefinitelyAssigned) &&
       type.isReference && !type.isNullableReference
     ) {
       this.error(
-        DiagnosticCode.Initializer_or_definitive_assignment_expected,
+        DiagnosticCode.Initializer_definitive_assignment_or_nullable_type_expected,
         global.identifierNode.range
       );
     }
