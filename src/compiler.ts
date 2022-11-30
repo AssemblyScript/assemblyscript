@@ -6430,8 +6430,8 @@ export class Compiler extends DiagnosticEmitter {
     assert(operandIndex == minOperands);
 
     // create the varargs stub
-    stub = original.newStub("varargs");
-    stub.signature.requiredParameters = maxArguments;
+    stub = original.newStub("varargs", maxArguments);
+
     original.varargsStub = stub;
 
     // compile initializers of omitted arguments in the scope of the stub,
@@ -7102,8 +7102,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-      let signature = new Signature(this.program, parameterTypes, returnType, thisType);
-      signature.requiredParameters = numParameters; // !
+      let signature = new Signature(this.program, parameterTypes, returnType, thisType, numParameters);
       instance = new Function(
         prototype.name,
         prototype,

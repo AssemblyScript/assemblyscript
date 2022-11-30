@@ -735,9 +735,9 @@
   i32.const 5
   f64.const 0
   f64.const 0
-  f64.const 46
-  f64.const 47
-  f64.const 47
+  f64.const 51
+  f64.const 52
+  f64.const 52
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   local.tee $0

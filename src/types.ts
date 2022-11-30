@@ -421,13 +421,20 @@ export class Type {
 
   /** Tests if this type equals the specified. */
   equals(other: Type): bool {
-    if (this.kind != other.kind) return false;
+    if (this.kind != other.kind) {
+      return false;
+    }
     if (this.isReference) {
-      return (
-        this.classReference == other.classReference &&
-        this.signatureReference == other.signatureReference &&
-        this.isNullableReference == other.isNullableReference
-      );
+      if (this.classReference != other.classReference) return false;
+      let selfSignatureReference = this.signatureReference;
+      let otherSignatureReference = other.signatureReference;
+      if (selfSignatureReference && otherSignatureReference) {
+        if (!selfSignatureReference.equals(otherSignatureReference)) return false;
+      } else {
+        if (selfSignatureReference != otherSignatureReference) return false;
+      }
+
+      return this.isNullableReference == other.isNullableReference;
     }
     return true;
   }
@@ -886,14 +893,10 @@ export class Signature {
   id: u32 = 0;
   /** Parameter types, if any, excluding `this`. */
   parameterTypes: Type[];
-  /** Number of required parameters excluding `this`. Other parameters are considered optional. */
-  requiredParameters: i32;
   /** Return type. */
   returnType: Type;
   /** This type, if an instance signature. */
   thisType: Type | null;
-  /** Whether the last parameter is a rest parameter. */
-  hasRest: bool;
   /** Respective function type. */
   type: Type;
   /** The program that created this signature. */
@@ -904,14 +907,16 @@ export class Signature {
     program: Program,
     parameterTypes: Type[] | null = null,
     returnType: Type | null = null,
-    thisType: Type | null = null
+    thisType: Type | null = null,
+    /** Number of required parameters excluding `this`. Other parameters are considered optional. */
+    public readonly requiredParameters: i32 = parameterTypes ? parameterTypes.length : 0,
+    /** Whether the last parameter is a rest parameter. */
+    public readonly hasRest: bool = false,
   ) {
     this.parameterTypes = parameterTypes ? parameterTypes : [];
-    this.requiredParameters = 0;
     this.returnType = returnType ? returnType : Type.void;
     this.thisType = thisType;
     this.program = program;
-    this.hasRest = false;
     let usizeType = program.options.usizeType;
     let type = new Type(
       usizeType.kind,
@@ -922,16 +927,20 @@ export class Signature {
     type.signatureReference = this;
 
     let signatureTypes = program.uniqueSignatures;
-    let length = signatureTypes.length;
-    for (let i = 0; i < length; i++) {
-      let compare = unchecked(signatureTypes[i]);
-      if (this.equals(compare)) {
-        this.id = compare.id;
-        return this;
+    let compareString = this.toString();
+    if (signatureTypes.has(compareString)) {
+      let existing = signatureTypes.get(compareString)!;
+      if (!this.equals(existing)) {
+        trace(compareString);
+        trace(existing.toString());
       }
+      assert(this.equals(existing), "Types don't match");
+      this.id = existing.id;
+      return this;
     }
+
     this.id = program.nextSignatureId++;
-    signatureTypes.push(this);
+    signatureTypes.set(compareString, this);
   }
 
   get paramRefs(): TypeRef {
@@ -965,25 +974,38 @@ export class Signature {
     if (thisThisType) {
       if (!otherThisType || !thisThisType.equals(otherThisType)) return false;
     } else if (otherThisType) {
+      trace("failed on thisThisType");
       return false;
     }
 
     // check rest parameter
-    if (this.hasRest != other.hasRest) return false;
+    if (this.hasRest != other.hasRest) {
+      trace("failed on hasRest");
+      return false;
+    }
 
     // check return type
-    if (!this.returnType.equals(other.returnType)) return false;
+    if (!this.returnType.equals(other.returnType)) {
+      trace("failed on returnType");
+      return false;
+    }
 
     // check parameter types
-    let thisParameterTypes = this.parameterTypes;
+    let selfParameterTypes = this.parameterTypes;
     let otherParameterTypes = other.parameterTypes;
-    let numParameters = thisParameterTypes.length;
-    if (numParameters != otherParameterTypes.length) return false;
+    let numParameters = selfParameterTypes.length;
+    if (numParameters != otherParameterTypes.length) {
+      trace("failed on numParameters");
+      return false;
+    }
 
     for (let i = 0; i < numParameters; ++i) {
-      let thisParameterType = unchecked(thisParameterTypes[i]);
+      let selfParameterType = unchecked(selfParameterTypes[i]);
       let otherParameterType = unchecked(otherParameterTypes[i]);
-      if (!thisParameterType.equals(otherParameterType)) return false;
+      if (!selfParameterType.equals(otherParameterType)) {
+        trace("failed on selfParameterType");
+        return false;
+      }
     }
     return true;
   }
@@ -1105,7 +1127,8 @@ export class Signature {
     let thisType = this.thisType;
     if (thisType) {
       sb.push(validWat ? "this:" : "this: ");
-      assert(!thisType.signatureReference);
+      // sometimes "this" can be a function type
+      // assert(!thisType.signatureReference);
       sb.push(thisType.toString(validWat));
       index = 1;
     }
@@ -1127,7 +1150,7 @@ export class Signature {
   }
 
   /** Creates a clone of this signature that is safe to modify. */
-  clone(): Signature {
+  clone(requieredParameters: i32 = this.requiredParameters, hasRest: bool = this.hasRest): Signature {
     let parameterTypes = this.parameterTypes;
     let numParameterTypes = parameterTypes.length;
     let cloneParameterTypes = new Array<Type>(numParameterTypes);
@@ -1138,7 +1161,9 @@ export class Signature {
       this.program,
       cloneParameterTypes,
       this.returnType,
-      this.thisType
+      this.thisType,
+      requieredParameters,
+      hasRest
     );
   }
 }
