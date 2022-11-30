@@ -583,7 +583,7 @@ export class Flow {
     }
   }
 
-  /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
+  /** Pushes a new label to the stack, for example when entering a loop that one can `break` from. */
   pushBreakLabel(): string {
     let targetFunction = this.targetFunction;
     let id = targetFunction.nextBreakId++;
@@ -595,7 +595,7 @@ export class Flow {
     return label;
   }
 
-  /** Pops the most recent break label from the stack. */
+  /** Pops the most recent label from the stack. */
   popBreakLabel(): void {
     let targetFunction = this.targetFunction;
     let stack = assert(targetFunction.breakStack);

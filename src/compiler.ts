@@ -2466,7 +2466,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile initializer if present. The initializer might introduce scoped
     // locals bound to the for statement, so create a new flow early.
-    let flow = outerFlow.fork(/* resetBreakContext */ true);
+    let flow = outerFlow.fork();
     this.currentFlow = flow;
     let stmts = new Array<ExpressionRef>();
     let initializer = statement.initializer;
@@ -2505,7 +2505,7 @@ export class Compiler extends DiagnosticEmitter {
     // From here on condition is either true or unknown
 
     // Compile the body assuming the condition turned out true
-    let bodyFlow = flow.forkThen(condExpr);
+    let bodyFlow = flow.forkThen(condExpr, /* newBreakContext */ true);
     let label = bodyFlow.pushBreakLabel();
     let breakLabel = `for-break${label}`;
     bodyFlow.breakLabel = breakLabel;
@@ -2521,26 +2521,28 @@ export class Compiler extends DiagnosticEmitter {
       bodyStmts.push(this.compileStatement(body));
     }
     bodyFlow.popBreakLabel();
+    bodyFlow.breakLabel = null;
+    bodyFlow.continueLabel = null;
 
     let possiblyFallsThrough = !bodyFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
     let possiblyContinues = bodyFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
     let possiblyBreaks = bodyFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
 
-    let ifStmts = new Array<ExpressionRef>();
-    ifStmts.push(
-      module.block(continueLabel, bodyStmts)
-    );
+    if (possiblyContinues) {
+      bodyStmts[0] = module.block(continueLabel, bodyStmts);
+      bodyStmts.length = 1;
+    }
 
-    // Compile the incrementor if it may execute
+    // Compile the incrementor if it possibly executes
     let possiblyLoops = possiblyContinues || possiblyFallsThrough;
     if (possiblyLoops) {
       let incrementor = statement.incrementor;
       if (incrementor) {
-        ifStmts.push(
+        bodyStmts.push(
           this.compileExpression(incrementor, Type.void, Constraints.ConvImplicit | Constraints.WillDrop)
         );
       }
-      ifStmts.push(
+      bodyStmts.push(
         module.br(loopLabel)
       );
 
@@ -2566,17 +2568,13 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.inherit(flow);
     this.currentFlow = outerFlow;
     let expr = module.if(condExprTrueish,
-      module.flatten(ifStmts)
+      module.flatten(bodyStmts)
     );
     if (possiblyLoops) {
-      expr = module.loop(loopLabel,
-        expr
-      );
+      expr = module.loop(loopLabel, expr);
     }
     if (possiblyBreaks) {
-      expr = module.block(breakLabel, [
-        expr
-      ]);
+      expr = module.block(breakLabel, [ expr ]);
     }
     stmts.push(expr);
     if (outerFlow.is(FlowFlags.Terminates)) {
