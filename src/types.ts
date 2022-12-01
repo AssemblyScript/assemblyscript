@@ -430,11 +430,7 @@ export class Type {
 
       return (
         this.classReference == other.classReference
-        && (
-          selfSignatureReference && otherSignatureReference
-            ? selfSignatureReference.equals(otherSignatureReference)
-            : selfSignatureReference == otherSignatureReference
-        )
+        && selfSignatureReference == otherSignatureReference
         && this.isNullableReference == other.isNullableReference
       );
     }
@@ -927,7 +923,7 @@ export class Signature {
       let existing = assert(signatureTypes.get(uniqueKey));
       assert(this.equals(existing));
       this.id = existing.id;
-      return this;
+      return existing;
     }
 
     this.id = program.nextSignatureId++;
