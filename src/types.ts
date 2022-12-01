@@ -1144,7 +1144,7 @@ export class Signature {
   }
 
   /** Creates a clone of this signature that is safe to modify. */
-  clone(requieredParameters: i32 = this.requiredParameters, hasRest: bool = this.hasRest): Signature {
+  clone(requiredParameters: i32 = this.requiredParameters, hasRest: bool = this.hasRest): Signature {
     let parameterTypes = this.parameterTypes;
     let numParameterTypes = parameterTypes.length;
     let cloneParameterTypes = new Array<Type>(numParameterTypes);
@@ -1156,7 +1156,7 @@ export class Signature {
       cloneParameterTypes,
       this.returnType,
       this.thisType,
-      requieredParameters,
+      requiredParameters,
       hasRest
     );
   }
