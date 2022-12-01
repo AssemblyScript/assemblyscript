@@ -425,16 +425,18 @@ export class Type {
       return false;
     }
     if (this.isReference) {
-      if (this.classReference != other.classReference) return false;
       let selfSignatureReference = this.signatureReference;
       let otherSignatureReference = other.signatureReference;
-      if (selfSignatureReference && otherSignatureReference) {
-        if (!selfSignatureReference.equals(otherSignatureReference)) return false;
-      } else {
-        if (selfSignatureReference != otherSignatureReference) return false;
-      }
 
-      return this.isNullableReference == other.isNullableReference;
+      return (
+        this.classReference == other.classReference
+        && (
+          selfSignatureReference && otherSignatureReference
+            ? selfSignatureReference.equals(otherSignatureReference)
+            : selfSignatureReference == otherSignatureReference
+        )
+        && this.isNullableReference == other.isNullableReference
+      );
     }
     return true;
   }
@@ -890,33 +892,26 @@ export function typesToString(types: Type[]): string {
 /** Represents a fully resolved function signature. */
 export class Signature {
   /** Unique id representing this signature. */
-  id: u32 = 0;
-  /** Parameter types, if any, excluding `this`. */
-  parameterTypes: Type[];
-  /** Return type. */
-  returnType: Type;
-  /** This type, if an instance signature. */
-  thisType: Type | null;
+  public readonly id: u32 = 0;
   /** Respective function type. */
-  type: Type;
-  /** The program that created this signature. */
-  program: Program;
+  public readonly type: Type;
 
   /** Constructs a new signature. */
   constructor(
-    program: Program,
-    parameterTypes: Type[] | null = null,
-    returnType: Type | null = null,
-    thisType: Type | null = null,
+    /** The program that created this signature. */
+    public readonly program: Program,
+    /** Parameter types, if any, excluding `this`. */
+    public readonly parameterTypes: Type[] = [],
+    /** Return type. */
+    public readonly returnType: Type = Type.void,
+    /** This type, if an instance signature. */
+    public readonly thisType: Type | null = null,
     /** Number of required parameters excluding `this`. Other parameters are considered optional. */
     public readonly requiredParameters: i32 = parameterTypes ? parameterTypes.length : 0,
     /** Whether the last parameter is a rest parameter. */
     public readonly hasRest: bool = false,
   ) {
-    this.parameterTypes = parameterTypes ? parameterTypes : [];
-    this.returnType = returnType ? returnType : Type.void;
     this.thisType = thisType;
-    this.program = program;
     let usizeType = program.options.usizeType;
     let type = new Type(
       usizeType.kind,
@@ -970,38 +965,25 @@ export class Signature {
     if (thisThisType) {
       if (!otherThisType || !thisThisType.equals(otherThisType)) return false;
     } else if (otherThisType) {
-      trace("failed on thisThisType");
       return false;
     }
 
     // check rest parameter
-    if (this.hasRest != other.hasRest) {
-      trace("failed on hasRest");
-      return false;
-    }
+    if (this.hasRest != other.hasRest) return false;
 
     // check return type
-    if (!this.returnType.equals(other.returnType)) {
-      trace("failed on returnType");
-      return false;
-    }
+    if (!this.returnType.equals(other.returnType)) return false;
 
     // check parameter types
     let selfParameterTypes = this.parameterTypes;
     let otherParameterTypes = other.parameterTypes;
     let numParameters = selfParameterTypes.length;
-    if (numParameters != otherParameterTypes.length) {
-      trace("failed on numParameters");
-      return false;
-    }
+    if (numParameters != otherParameterTypes.length)  return false;
 
     for (let i = 0; i < numParameters; ++i) {
       let selfParameterType = unchecked(selfParameterTypes[i]);
       let otherParameterType = unchecked(otherParameterTypes[i]);
-      if (!selfParameterType.equals(otherParameterType)) {
-        trace("failed on selfParameterType");
-        return false;
-      }
+      if (!selfParameterType.equals(otherParameterType)) return false;
     }
     return true;
   }

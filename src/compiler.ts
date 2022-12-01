@@ -8668,7 +8668,7 @@ export class Compiler extends DiagnosticEmitter {
             )
           ),
           null,
-          new Signature(this.program, null, classInstance.type, classInstance.type),
+          new Signature(this.program, [], classInstance.type, classInstance.type),
           contextualTypeArguments
         );
       }
