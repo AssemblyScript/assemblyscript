@@ -1127,8 +1127,6 @@ export class Signature {
     let thisType = this.thisType;
     if (thisType) {
       sb.push(validWat ? "this:" : "this: ");
-      // sometimes "this" can be a function type
-      // assert(!thisType.signatureReference);
       sb.push(thisType.toString(validWat));
       index = 1;
     }
