@@ -929,12 +929,8 @@ export class Signature {
     let signatureTypes = program.uniqueSignatures;
     let compareString = this.toString();
     if (signatureTypes.has(compareString)) {
-      let existing = signatureTypes.get(compareString)!;
-      if (!this.equals(existing)) {
-        trace(compareString);
-        trace(existing.toString());
-      }
-      assert(this.equals(existing), "Types don't match");
+      let existing = assert(signatureTypes.get(compareString));
+      assert(this.equals(existing));
       this.id = existing.id;
       return this;
     }
