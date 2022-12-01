@@ -922,16 +922,16 @@ export class Signature {
     type.signatureReference = this;
 
     let signatureTypes = program.uniqueSignatures;
-    let compareString = this.toString();
-    if (signatureTypes.has(compareString)) {
-      let existing = assert(signatureTypes.get(compareString));
+    let uniqueKey = this.toString();
+    if (signatureTypes.has(uniqueKey)) {
+      let existing = assert(signatureTypes.get(uniqueKey));
       assert(this.equals(existing));
       this.id = existing.id;
       return this;
     }
 
     this.id = program.nextSignatureId++;
-    signatureTypes.set(compareString, this);
+    signatureTypes.set(uniqueKey, this);
   }
 
   get paramRefs(): TypeRef {
