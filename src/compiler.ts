@@ -42,7 +42,6 @@ import {
   getBlockChildCount,
   getBlockChildAt,
   getBlockName,
-  needsExplicitUnreachable,
   getLocalSetValue,
   getGlobalGetName,
   isGlobalMutable,
@@ -2219,7 +2218,6 @@ export class Compiler extends DiagnosticEmitter {
       stmts = new Array<ExpressionRef>(numStatements);
       stmts.length = 0;
     }
-    let module = this.module;
     let flow = this.currentFlow;
     for (let i = 0; i < numStatements; ++i) {
       let stmt = this.compileStatement(statements[i], isBody && i == numStatements - 1);
@@ -2234,10 +2232,7 @@ export class Compiler extends DiagnosticEmitter {
         default: stmts.push(stmt);
         case ExpressionId.Nop:
       }
-      if (flow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
-        if (needsExplicitUnreachable(stmt)) stmts.push(module.unreachable());
-        break;
-      }
+      if (flow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) break;
     }
     return stmts;
   }
@@ -2329,7 +2324,7 @@ export class Compiler extends DiagnosticEmitter {
     //   (?block $continue
     //    (body)
     //   )
-    //   (br_if (condition) $loop)
+    //   (br_if $loop (condition))
     //  )
     // )
 
@@ -2452,11 +2447,13 @@ export class Compiler extends DiagnosticEmitter {
     // (?block $break           │ (initializer)
     //  (?loop $loop          ┌◄┤ (condition) shortcut if false ◄┐
     //   (if (condition)        ├►┐ bodyFlow                     │
-    //    (?block $continue     │ │ (body)                       │
-    //     (body)               │ │ if loops: (incrementor) ─────┘
-    //    )                     │ │           recompile body?
-    //    (incrementor)         ├◄┘
-    //    (br $loop)          ┌◄┘
+    //    (then                 │ │ (body)                       │
+    //     (?block $continue    │ │ if loops: (incrementor) ─────┘
+    //      (body)              │ │           recompile body?
+    //     )                    ├◄┘    
+    //     (incrementor)      ┌◄┘
+    //     (br $loop)
+    //    )
     //   )
     //  )
     // )
@@ -2598,18 +2595,11 @@ export class Compiler extends DiagnosticEmitter {
     let ifTrue = statement.ifTrue;
     let ifFalse = statement.ifFalse;
 
-    // (if              └►┐ flow
-    //  (condition)      ┌┴───────────┐ condition?
-    //  (block           │            │
-    //   (ifTrue)        └►┐ thenFlow │
-    //                   ┌─┘          │
-    //  )                ├─╢          │
-    //  (block           │          ┌◄┤ present?
-    //   (ifFalse)       │          │ └►┐ elseFlow
-    //                   │          │ ┌─┘
-    //  )                │          │ ├─╢
-    // )                 └┬─────────┴─┘
-    // ...              ┌◄┘
+    // (if
+    //  (condition)
+    //  (ifTrue)
+    //  (ifFalse)
+    // )
 
     // Precompute the condition (always executes)
     let condExpr = this.compileExpression(statement.condition, Type.bool);
@@ -2651,10 +2641,6 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       thenStmts.push(this.compileStatement(ifTrue));
     }
-    let thenTerminates = thenFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
-    if (thenTerminates) {
-      thenStmts.push(module.unreachable());
-    }
     this.currentFlow = flow;
 
     // Compile ifFalse assuming the condition turned out false, if present
@@ -2666,10 +2652,6 @@ export class Compiler extends DiagnosticEmitter {
         this.compileStatements((<BlockStatement>ifFalse).statements, false, elseStmts);
       } else {
         elseStmts.push(this.compileStatement(ifFalse));
-      }
-      let elseTerminates = elseFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
-      if (elseTerminates) {
-        elseStmts.push(module.unreachable());
       }
       flow.inheritAlternatives(thenFlow, elseFlow);
       this.currentFlow = flow;
@@ -3125,8 +3107,10 @@ export class Compiler extends DiagnosticEmitter {
     // (block $break
     //  (loop $continue
     //   (if (condition)
-    //    (body)
-    //    (br $continue)
+    //    (then
+    //     (body)
+    //     (br $continue)
+    //    )
     //   )
     //  )
 
