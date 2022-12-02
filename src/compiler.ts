@@ -2842,9 +2842,9 @@ export class Compiler extends DiagnosticEmitter {
       if (breakingFlowAlternatives) outerFlow.inherit(breakingFlowAlternatives);
       else outerFlow.set(FlowFlags.Terminates);
 
-    // Otherwise either none or any breaking flow can get past
+    // Otherwise either none or any breaking flow can get past conditionally
     } else if (breakingFlowAlternatives) {
-      outerFlow.inheritAlternatives(outerFlow, breakingFlowAlternatives);
+      outerFlow.mergeBranch(breakingFlowAlternatives);
     }
 
     this.currentFlow = outerFlow;
