@@ -2595,11 +2595,15 @@ export class Compiler extends DiagnosticEmitter {
     let ifTrue = statement.ifTrue;
     let ifFalse = statement.ifFalse;
 
-    // (if
-    //  (condition)
-    //  (ifTrue)
-    //  (ifFalse)
+    // (if (condition)
+    //  (then (ifTrue))
+    //  (?else (ifFalse))
     // )
+
+    // Cases of interest:
+    // * If the condition is always true or false, the other branch is eliminated
+    // * If both then and else terminate, the overall flow does as well
+    // * Without an else, when then terminates, follow-up flow acts like an else
 
     // Precompute the condition (always executes)
     let condExpr = this.compileExpression(statement.condition, Type.bool);
