@@ -2657,7 +2657,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         elseStmts.push(this.compileStatement(ifFalse));
       }
-      flow.inheritAlternatives(thenFlow, elseFlow);
+      flow.inheritAlternatives(thenFlow, elseFlow); // terminates if both do
       this.currentFlow = flow;
       return module.if(condExprTrueish,
         module.flatten(thenStmts),
@@ -2665,7 +2665,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     } else {
       if (thenFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
-        // Only getting past if condition was false
+        // Only getting past if condition was false (acts like else)
         flow.inherit(elseFlow);
         flow.mergeSideEffects(thenFlow);
       } else {
