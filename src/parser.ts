@@ -1007,7 +1007,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     let range = Range.join(identifier.range, tn.range());
-    if ((flags & CommonFlags.DefinitelyAssigned) != 0 && (initializer || (flags & CommonFlags.Ambient) != 0)) {
+    if ((flags & CommonFlags.DefinitelyAssigned) != 0 && (flags & CommonFlags.Ambient) != 0) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range
