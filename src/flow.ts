@@ -583,30 +583,22 @@ export class Flow {
     }
   }
 
-  /** Pushes a new label to the stack, for example when entering a loop that one can `break` from. */
-  pushBreakLabel(): string {
+  /** Pushes a new control flow label, for example when entering a loop that one can `break` from. */
+  pushControlFlowLabel(): i32 {
     let targetFunction = this.targetFunction;
     let id = targetFunction.nextBreakId++;
     let stack = targetFunction.breakStack;
     if (!stack) targetFunction.breakStack = [ id ];
     else stack.push(id);
-    let label = id.toString();
-    targetFunction.breakLabel = label;
-    return label;
+    return id;
   }
 
-  /** Pops the most recent label from the stack. */
-  popBreakLabel(): void {
+  /** Pops the most recent control flow label and validates that it matches. */
+  popControlFlowLabel(expectedLabel: i32): void {
     let targetFunction = this.targetFunction;
-    let stack = assert(targetFunction.breakStack);
-    let length = assert(stack.length);
-    stack.pop();
-    if (length > 1) {
-      targetFunction.breakLabel = stack[length - 2].toString();
-    } else {
-      targetFunction.breakLabel = null;
-      targetFunction.breakStack = null;
-    }
+    let stack = assert(targetFunction.breakStack); // should exist
+    assert(stack.length); // should not be empty
+    assert(stack.pop() == expectedLabel); // should match
   }
 
   /** Inherits flags of another flow into this one, i.e. a finished inner block. */

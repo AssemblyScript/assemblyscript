@@ -2331,7 +2331,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile the body (always executes)
     let flow = outerFlow.fork(/* resetBreakContext */ true);
-    let label = flow.pushBreakLabel();
+    let label = flow.pushControlFlowLabel();
     let breakLabel = `do-break|${label}`;
     flow.breakLabel = breakLabel;
     let continueLabel = `do-continue|${label}`;
@@ -2345,7 +2345,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       bodyStmts.push(this.compileStatement(body));
     }
-    flow.popBreakLabel();
+    flow.popControlFlowLabel(label);
 
     let possiblyContinues = flow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
     let possiblyBreaks = flow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
@@ -2496,7 +2496,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile the body assuming the condition turned out true
     let bodyFlow = flow.forkThen(condExpr, /* newBreakContext */ true);
-    let label = bodyFlow.pushBreakLabel();
+    let label = bodyFlow.pushControlFlowLabel();
     let breakLabel = `for-break${label}`;
     bodyFlow.breakLabel = breakLabel;
     let continueLabel = `for-continue|${label}`;
@@ -2510,7 +2510,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       bodyStmts.push(this.compileStatement(body));
     }
-    bodyFlow.popBreakLabel();
+    bodyFlow.popControlFlowLabel(label);
     bodyFlow.breakLabel = null;
     bodyFlow.continueLabel = null;
 
@@ -2750,7 +2750,7 @@ export class Compiler extends DiagnosticEmitter {
     // sequence of br_ifs to a br_table according to optimization levels
     let breakIndex = 1;
     let defaultIndex = -1;
-    let label = outerFlow.pushBreakLabel();
+    let label = outerFlow.pushControlFlowLabel();
     for (let i = 0; i < numCases; ++i) {
       let case_ = cases[i];
       if (case_.isDefault) {
@@ -2823,7 +2823,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = outerFlow;
       currentBlock = module.block(nextLabel, stmts, TypeRef.None); // must be a labeled block
     }
-    outerFlow.popBreakLabel();
+    outerFlow.popControlFlowLabel(label);
 
     // If the switch has a default, we only get past through any breaking flow
     if (defaultIndex >= 0) {
@@ -3123,7 +3123,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile the body assuming the condition turned out true
     let thenFlow = outerFlow.forkThen(condExpr, /* newBreakContext */ true);
-    let label = thenFlow.pushBreakLabel();
+    let label = thenFlow.pushControlFlowLabel();
     let breakLabel = `while-break|${label}`;
     thenFlow.breakLabel = breakLabel;
     let continueLabel = `while-continue|${label}`;
@@ -3139,7 +3139,7 @@ export class Compiler extends DiagnosticEmitter {
     bodyStmts.push(
       module.br(continueLabel)
     );
-    thenFlow.popBreakLabel();
+    thenFlow.popControlFlowLabel(label);
 
     let possiblyContinues = thenFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
     let possiblyBreaks = thenFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
