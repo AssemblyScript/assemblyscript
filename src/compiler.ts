@@ -2892,6 +2892,13 @@ export class Compiler extends DiagnosticEmitter {
       let initExpr: ExpressionRef = 0;
       let initType: Type | null = null;
 
+      if (declaration.is(CommonFlags.DefinitelyAssigned)) {
+        this.warning(
+          DiagnosticCode.Definitive_assignment_has_no_effect_on_local_variables,
+          declaration.name.range
+        );
+      }
+
       // Resolve type if annotated
       let typeNode = declaration.type;
       let initializerNode = declaration.initializer;
