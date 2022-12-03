@@ -198,6 +198,7 @@
    end
   end
   local.get $ret
+  return
  )
  (func $start:memmove (type $none_=>_none)
   global.get $memmove/base

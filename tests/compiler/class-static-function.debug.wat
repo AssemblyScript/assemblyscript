@@ -17,6 +17,7 @@
  (start $~start)
  (func $class-static-function/Example.staticFunc (type $none_=>_i32) (result i32)
   i32.const 42
+  return
  )
  (func $class-static-function/call (type $i32_=>_i32) (param $func i32) (result i32)
   i32.const 0
@@ -24,6 +25,7 @@
   local.get $func
   i32.load $0
   call_indirect $0 (type $none_=>_i32)
+  return
  )
  (func $~start (type $none_=>_none)
   call $start:class-static-function

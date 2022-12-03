@@ -2049,17 +2049,17 @@
    i32.const 2
    i32.shl
    i32.add
-   local.set $3
+   local.set $2
    loop $while-continue|0
     local.get $1
-    local.get $3
+    local.get $2
     i32.lt_u
     if
      local.get $1
      i32.load $0
-     local.tee $2
+     local.tee $3
      if
-      local.get $2
+      local.get $3
       call $byn-split-outlined-A$~lib/rt/itcms/__visit
      end
      local.get $1

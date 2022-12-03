@@ -272,6 +272,7 @@
    end
   end
   local.get $ret
+  return
  )
  (func $start:memset (type $none_=>_none)
   global.get $~lib/memory/__heap_base

@@ -80,6 +80,7 @@
   local.get $space
   call $~lib/rt/itcms/Object#set:prev
   local.get $space
+  return
  )
  (func $~lib/rt/itcms/Object#get:nextWithColor (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -92,12 +93,14 @@
   i32.const -1
   i32.xor
   i32.and
+  return
  )
  (func $~lib/rt/itcms/Object#get:color (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
+  return
  )
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
@@ -255,6 +258,7 @@
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
+  return
  )
  (func $~lib/rt/itcms/Object#get:isPointerfree (type $i32_=>_i32) (param $this i32) (result i32)
   (local $rtId i32)
@@ -274,6 +278,7 @@
    i32.const 0
    i32.ne
   end
+  return
  )
  (func $~lib/rt/itcms/Object#linkTo (type $i32_i32_i32_=>_none) (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
@@ -391,6 +396,7 @@
   i32.xor
   i32.and
   i32.add
+  return
  )
  (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
   local.get $this
@@ -566,22 +572,25 @@
    call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $block
-  local.get $root
-  local.set $root|11
-  local.get $fl
-  local.set $fl|12
-  local.get $sl
-  local.set $sl|13
-  local.get $root|11
-  local.get $fl|12
-  i32.const 4
-  i32.shl
-  local.get $sl|13
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=96
+  block $~lib/rt/tlsf/GETHEAD|inlined.0 (result i32)
+   local.get $root
+   local.set $root|11
+   local.get $fl
+   local.set $fl|12
+   local.get $sl
+   local.set $sl|13
+   local.get $root|11
+   local.get $fl|12
+   i32.const 4
+   i32.shl
+   local.get $sl|13
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=96
+   br $~lib/rt/tlsf/GETHEAD|inlined.0
+  end
   i32.eq
   if
    local.get $root
@@ -606,16 +615,19 @@
    local.get $next
    i32.eqz
    if
-    local.get $root
-    local.set $root|18
-    local.get $fl
-    local.set $fl|19
-    local.get $root|18
-    local.get $fl|19
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0 offset=4
+    block $~lib/rt/tlsf/GETSL|inlined.0 (result i32)
+     local.get $root
+     local.set $root|18
+     local.get $fl
+     local.set $fl|19
+     local.get $root|18
+     local.get $fl|19
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=4
+     br $~lib/rt/tlsf/GETSL|inlined.0
+    end
     local.set $slMap
     local.get $root
     local.set $root|21
@@ -711,18 +723,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $block
-  local.set $block|3
-  local.get $block|3
-  i32.const 4
-  i32.add
-  local.get $block|3
-  call $~lib/rt/common/BLOCK#get:mmInfo
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.add
+  block $~lib/rt/tlsf/GETRIGHT|inlined.0 (result i32)
+   local.get $block
+   local.set $block|3
+   local.get $block|3
+   i32.const 4
+   i32.add
+   local.get $block|3
+   call $~lib/rt/common/BLOCK#get:mmInfo
+   i32.const 3
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.add
+   br $~lib/rt/tlsf/GETRIGHT|inlined.0
+  end
   local.set $right
   local.get $right
   call $~lib/rt/common/BLOCK#get:mmInfo
@@ -746,18 +761,21 @@
    i32.add
    local.tee $blockInfo
    call $~lib/rt/common/BLOCK#set:mmInfo
-   local.get $block
-   local.set $block|6
-   local.get $block|6
-   i32.const 4
-   i32.add
-   local.get $block|6
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
+   block $~lib/rt/tlsf/GETRIGHT|inlined.1 (result i32)
+    local.get $block
+    local.set $block|6
+    local.get $block|6
+    i32.const 4
+    i32.add
+    local.get $block|6
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.1
+   end
    local.set $right
    local.get $right
    call $~lib/rt/common/BLOCK#get:mmInfo
@@ -767,12 +785,15 @@
   i32.const 2
   i32.and
   if
-   local.get $block
-   local.set $block|7
-   local.get $block|7
-   i32.const 4
-   i32.sub
-   i32.load $0
+   block $~lib/rt/tlsf/GETFREELEFT|inlined.0 (result i32)
+    local.get $block
+    local.set $block|7
+    local.get $block|7
+    i32.const 4
+    i32.sub
+    i32.load $0
+    br $~lib/rt/tlsf/GETFREELEFT|inlined.0
+   end
    local.set $left
    local.get $left
    call $~lib/rt/common/BLOCK#get:mmInfo
@@ -920,22 +941,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $root
-  local.set $root|16
-  local.get $fl
-  local.set $fl|17
-  local.get $sl
-  local.set $sl|18
-  local.get $root|16
-  local.get $fl|17
-  i32.const 4
-  i32.shl
-  local.get $sl|18
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=96
+  block $~lib/rt/tlsf/GETHEAD|inlined.1 (result i32)
+   local.get $root
+   local.set $root|16
+   local.get $fl
+   local.set $fl|17
+   local.get $sl
+   local.set $sl|18
+   local.get $root|16
+   local.get $fl|17
+   i32.const 4
+   i32.shl
+   local.get $sl|18
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=96
+   br $~lib/rt/tlsf/GETHEAD|inlined.1
+  end
   local.set $head
   local.get $block
   i32.const 0
@@ -980,16 +1004,19 @@
   local.set $root|26
   local.get $fl
   local.set $fl|27
-  local.get $root
-  local.set $root|24
-  local.get $fl
-  local.set $fl|25
-  local.get $root|24
-  local.get $fl|25
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=4
+  block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
+   local.get $root
+   local.set $root|24
+   local.get $fl
+   local.set $fl|25
+   local.get $root|24
+   local.get $fl|25
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=4
+   br $~lib/rt/tlsf/GETSL|inlined.1
+  end
   i32.const 1
   local.get $sl
   i32.shl
@@ -1044,10 +1071,13 @@
   i32.xor
   i32.and
   local.set $end
-  local.get $root
-  local.set $root|3
-  local.get $root|3
-  i32.load $0 offset=1568
+  block $~lib/rt/tlsf/GETTAIL|inlined.0 (result i32)
+   local.get $root
+   local.set $root|3
+   local.get $root|3
+   i32.load $0 offset=1568
+   br $~lib/rt/tlsf/GETTAIL|inlined.0
+  end
   local.set $tail
   i32.const 0
   local.set $tailInfo
@@ -1163,6 +1193,7 @@
   local.get $left
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
+  return
  )
  (func $~lib/rt/tlsf/initialize (type $none_=>_none)
   (local $rootOffset i32)
@@ -1345,6 +1376,7 @@
    unreachable
   end
   local.get $block
+  return
  )
  (func $~lib/rt/tlsf/freeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   i32.const 0
@@ -1579,6 +1611,7 @@
    br $break|0
   end
   i32.const 0
+  return
  )
  (func $~lib/rt/itcms/interrupt (type $none_=>_none)
   (local $budget i32)
@@ -1657,6 +1690,7 @@
    i32.const 4
    i32.sub
   end
+  return
  )
  (func $~lib/rt/tlsf/prepareSize (type $i32_=>_i32) (param $size i32) (result i32)
   local.get $size
@@ -1672,6 +1706,7 @@
   end
   local.get $size
   call $~lib/rt/tlsf/computeSize
+  return
  )
  (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
   (local $fl i32)
@@ -1762,16 +1797,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $root
-  local.set $root|5
-  local.get $fl
-  local.set $fl|6
-  local.get $root|5
-  local.get $fl|6
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=4
+  block $~lib/rt/tlsf/GETSL|inlined.2 (result i32)
+   local.get $root
+   local.set $root|5
+   local.get $fl
+   local.set $fl|6
+   local.get $root|5
+   local.get $fl|6
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=4
+   br $~lib/rt/tlsf/GETSL|inlined.2
+  end
   i32.const 0
   i32.const -1
   i32.xor
@@ -1804,16 +1842,19 @@
     local.get $flMap
     i32.ctz
     local.set $fl
-    local.get $root
-    local.set $root|10
-    local.get $fl
-    local.set $fl|11
-    local.get $root|10
-    local.get $fl|11
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0 offset=4
+    block $~lib/rt/tlsf/GETSL|inlined.3 (result i32)
+     local.get $root
+     local.set $root|10
+     local.get $fl
+     local.set $fl|11
+     local.get $root|10
+     local.get $fl|11
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=4
+     br $~lib/rt/tlsf/GETSL|inlined.3
+    end
     local.set $slMap
     i32.const 1
     drop
@@ -1827,46 +1868,53 @@
      call $~lib/builtins/abort
      unreachable
     end
+    block $~lib/rt/tlsf/GETHEAD|inlined.2 (result i32)
+     local.get $root
+     local.set $root|12
+     local.get $fl
+     local.set $fl|13
+     local.get $slMap
+     i32.ctz
+     local.set $sl|14
+     local.get $root|12
+     local.get $fl|13
+     i32.const 4
+     i32.shl
+     local.get $sl|14
+     i32.add
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=96
+     br $~lib/rt/tlsf/GETHEAD|inlined.2
+    end
+    local.set $head
+   end
+  else
+   block $~lib/rt/tlsf/GETHEAD|inlined.3 (result i32)
     local.get $root
-    local.set $root|12
+    local.set $root|15
     local.get $fl
-    local.set $fl|13
+    local.set $fl|16
     local.get $slMap
     i32.ctz
-    local.set $sl|14
-    local.get $root|12
-    local.get $fl|13
+    local.set $sl|17
+    local.get $root|15
+    local.get $fl|16
     i32.const 4
     i32.shl
-    local.get $sl|14
+    local.get $sl|17
     i32.add
     i32.const 2
     i32.shl
     i32.add
     i32.load $0 offset=96
-    local.set $head
+    br $~lib/rt/tlsf/GETHEAD|inlined.3
    end
-  else
-   local.get $root
-   local.set $root|15
-   local.get $fl
-   local.set $fl|16
-   local.get $slMap
-   i32.ctz
-   local.set $sl|17
-   local.get $root|15
-   local.get $fl|16
-   i32.const 4
-   i32.shl
-   local.get $sl|17
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load $0 offset=96
    local.set $head
   end
   local.get $head
+  return
  )
  (func $~lib/rt/tlsf/growMemory (type $i32_i32_=>_none) (param $root i32) (param $size i32)
   (local $pagesBefore i32)
@@ -1903,10 +1951,13 @@
   i32.shl
   i32.const 4
   i32.sub
-  local.get $root
-  local.set $root|3
-  local.get $root|3
-  i32.load $0 offset=1568
+  block $~lib/rt/tlsf/GETTAIL|inlined.1 (result i32)
+   local.get $root
+   local.set $root|3
+   local.get $root|3
+   i32.load $0 offset=1568
+   br $~lib/rt/tlsf/GETTAIL|inlined.1
+  end
   i32.ne
   i32.shl
   i32.add
@@ -2026,30 +2077,36 @@
    i32.xor
    i32.and
    call $~lib/rt/common/BLOCK#set:mmInfo
-   local.get $block
-   local.set $block|7
-   local.get $block|7
-   i32.const 4
-   i32.add
-   local.get $block|7
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
-   local.get $block
-   local.set $block|6
-   local.get $block|6
-   i32.const 4
-   i32.add
-   local.get $block|6
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
+   block $~lib/rt/tlsf/GETRIGHT|inlined.3 (result i32)
+    local.get $block
+    local.set $block|7
+    local.get $block|7
+    i32.const 4
+    i32.add
+    local.get $block|7
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.3
+   end
+   block $~lib/rt/tlsf/GETRIGHT|inlined.2 (result i32)
+    local.get $block
+    local.set $block|6
+    local.get $block|6
+    i32.const 4
+    i32.add
+    local.get $block|6
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.2
+   end
    call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 2
    i32.const -1
@@ -2120,6 +2177,7 @@
   i32.const 0
   drop
   local.get $block
+  return
  )
  (func $~lib/rt/tlsf/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
@@ -2132,6 +2190,7 @@
   call $~lib/rt/tlsf/allocateBlock
   i32.const 4
   i32.add
+  return
  )
  (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
   local.get $this
@@ -2194,6 +2253,7 @@
   local.get $size
   memory.fill $0
   local.get $ptr
+  return
  )
  (func $~lib/rt/__newBuffer (type $i32_i32_i32_=>_i32) (param $size i32) (param $id i32) (param $data i32) (result i32)
   (local $buffer i32)
@@ -2209,6 +2269,7 @@
    memory.copy $0 $0
   end
   local.get $buffer
+  return
  )
  (func $~lib/rt/itcms/__link (type $i32_i32_i32_=>_none) (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
   (local $child i32)
@@ -2311,6 +2372,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/util/number/decimalCount32 (type $i32_=>_i32) (param $value i32) (result i32)
   local.get $value
@@ -2738,12 +2800,15 @@
   (local $b64 i64)
   (local $b i64)
   (local $e i32)
-  local.get $base
-  local.set $value
-  local.get $value
-  i32.popcnt
-  i32.const 1
-  i32.eq
+  block $~lib/util/number/isPowerOf2<i32>|inlined.0 (result i32)
+   local.get $base
+   local.set $value
+   local.get $value
+   i32.popcnt
+   i32.const 1
+   i32.eq
+   br $~lib/util/number/isPowerOf2<i32>|inlined.0
+  end
   if
    i32.const 63
    local.get $num
@@ -2805,6 +2870,7 @@
   local.get $e
   i32.const 1
   i32.sub
+  return
  )
  (func $~lib/util/number/utoa64_any_core (type $i32_i64_i32_i32_=>_none) (param $buffer i32) (param $num i64) (param $offset i32) (param $radix i32)
   (local $base i64)
@@ -2901,6 +2967,7 @@
   local.get $this
   local.get $radix
   call $~lib/util/number/utoa64
+  return
  )
  (func $resolve-access/Container#set:foo (type $i32_i64_=>_none) (param $this i32) (param $foo i64)
   local.get $this
@@ -2915,11 +2982,13 @@
   local.get $this
   call $resolve-access/Container#get:foo
   i32.wrap_i64
+  return
  )
  (func $~lib/number/U32#toString (type $i32_i32_=>_i32) (param $this i32) (param $radix i32) (result i32)
   local.get $this
   local.get $radix
   call $~lib/util/number/utoa32
+  return
  )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
@@ -3116,6 +3185,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $7
+  return
  )
  (func $~lib/util/number/utoa64 (type $i64_i32_=>_i32) (param $value i64) (param $radix i32) (result i32)
   (local $out i32)
@@ -3302,6 +3372,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $17
+  return
  )
  (func $resolve-access/arrayAccess (type $none_=>_i32) (result i32)
   (local $0 i32)
@@ -3335,6 +3406,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $~lib/object/Object#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
@@ -3429,6 +3501,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $~lib/util/number/utoa32 (type $i32_i32_=>_i32) (param $value i32) (param $radix i32) (result i32)
   (local $out i32)
@@ -3575,6 +3648,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $12
+  return
  )
  (func $resolve-access/propertyAccess (type $none_=>_i32) (result i32)
   (local $container i32)
@@ -3605,5 +3679,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
 )

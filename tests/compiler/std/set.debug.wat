@@ -85,6 +85,7 @@
   local.get $space
   call $~lib/rt/itcms/Object#set:prev
   local.get $space
+  return
  )
  (func $~lib/rt/itcms/Object#get:nextWithColor (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -97,12 +98,14 @@
   i32.const -1
   i32.xor
   i32.and
+  return
  )
  (func $~lib/rt/itcms/Object#get:color (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
+  return
  )
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
@@ -260,6 +263,7 @@
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
+  return
  )
  (func $~lib/rt/itcms/Object#get:isPointerfree (type $i32_=>_i32) (param $this i32) (result i32)
   (local $rtId i32)
@@ -279,6 +283,7 @@
    i32.const 0
    i32.ne
   end
+  return
  )
  (func $~lib/rt/itcms/Object#linkTo (type $i32_i32_i32_=>_none) (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
@@ -396,6 +401,7 @@
   i32.xor
   i32.and
   i32.add
+  return
  )
  (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
   local.get $this
@@ -571,22 +577,25 @@
    call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $block
-  local.get $root
-  local.set $root|11
-  local.get $fl
-  local.set $fl|12
-  local.get $sl
-  local.set $sl|13
-  local.get $root|11
-  local.get $fl|12
-  i32.const 4
-  i32.shl
-  local.get $sl|13
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=96
+  block $~lib/rt/tlsf/GETHEAD|inlined.0 (result i32)
+   local.get $root
+   local.set $root|11
+   local.get $fl
+   local.set $fl|12
+   local.get $sl
+   local.set $sl|13
+   local.get $root|11
+   local.get $fl|12
+   i32.const 4
+   i32.shl
+   local.get $sl|13
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=96
+   br $~lib/rt/tlsf/GETHEAD|inlined.0
+  end
   i32.eq
   if
    local.get $root
@@ -611,16 +620,19 @@
    local.get $next
    i32.eqz
    if
-    local.get $root
-    local.set $root|18
-    local.get $fl
-    local.set $fl|19
-    local.get $root|18
-    local.get $fl|19
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0 offset=4
+    block $~lib/rt/tlsf/GETSL|inlined.0 (result i32)
+     local.get $root
+     local.set $root|18
+     local.get $fl
+     local.set $fl|19
+     local.get $root|18
+     local.get $fl|19
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=4
+     br $~lib/rt/tlsf/GETSL|inlined.0
+    end
     local.set $slMap
     local.get $root
     local.set $root|21
@@ -716,18 +728,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $block
-  local.set $block|3
-  local.get $block|3
-  i32.const 4
-  i32.add
-  local.get $block|3
-  call $~lib/rt/common/BLOCK#get:mmInfo
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.add
+  block $~lib/rt/tlsf/GETRIGHT|inlined.0 (result i32)
+   local.get $block
+   local.set $block|3
+   local.get $block|3
+   i32.const 4
+   i32.add
+   local.get $block|3
+   call $~lib/rt/common/BLOCK#get:mmInfo
+   i32.const 3
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.add
+   br $~lib/rt/tlsf/GETRIGHT|inlined.0
+  end
   local.set $right
   local.get $right
   call $~lib/rt/common/BLOCK#get:mmInfo
@@ -751,18 +766,21 @@
    i32.add
    local.tee $blockInfo
    call $~lib/rt/common/BLOCK#set:mmInfo
-   local.get $block
-   local.set $block|6
-   local.get $block|6
-   i32.const 4
-   i32.add
-   local.get $block|6
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
+   block $~lib/rt/tlsf/GETRIGHT|inlined.1 (result i32)
+    local.get $block
+    local.set $block|6
+    local.get $block|6
+    i32.const 4
+    i32.add
+    local.get $block|6
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.1
+   end
    local.set $right
    local.get $right
    call $~lib/rt/common/BLOCK#get:mmInfo
@@ -772,12 +790,15 @@
   i32.const 2
   i32.and
   if
-   local.get $block
-   local.set $block|7
-   local.get $block|7
-   i32.const 4
-   i32.sub
-   i32.load $0
+   block $~lib/rt/tlsf/GETFREELEFT|inlined.0 (result i32)
+    local.get $block
+    local.set $block|7
+    local.get $block|7
+    i32.const 4
+    i32.sub
+    i32.load $0
+    br $~lib/rt/tlsf/GETFREELEFT|inlined.0
+   end
    local.set $left
    local.get $left
    call $~lib/rt/common/BLOCK#get:mmInfo
@@ -925,22 +946,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $root
-  local.set $root|16
-  local.get $fl
-  local.set $fl|17
-  local.get $sl
-  local.set $sl|18
-  local.get $root|16
-  local.get $fl|17
-  i32.const 4
-  i32.shl
-  local.get $sl|18
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=96
+  block $~lib/rt/tlsf/GETHEAD|inlined.1 (result i32)
+   local.get $root
+   local.set $root|16
+   local.get $fl
+   local.set $fl|17
+   local.get $sl
+   local.set $sl|18
+   local.get $root|16
+   local.get $fl|17
+   i32.const 4
+   i32.shl
+   local.get $sl|18
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=96
+   br $~lib/rt/tlsf/GETHEAD|inlined.1
+  end
   local.set $head
   local.get $block
   i32.const 0
@@ -985,16 +1009,19 @@
   local.set $root|26
   local.get $fl
   local.set $fl|27
-  local.get $root
-  local.set $root|24
-  local.get $fl
-  local.set $fl|25
-  local.get $root|24
-  local.get $fl|25
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=4
+  block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
+   local.get $root
+   local.set $root|24
+   local.get $fl
+   local.set $fl|25
+   local.get $root|24
+   local.get $fl|25
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=4
+   br $~lib/rt/tlsf/GETSL|inlined.1
+  end
   i32.const 1
   local.get $sl
   i32.shl
@@ -1049,10 +1076,13 @@
   i32.xor
   i32.and
   local.set $end
-  local.get $root
-  local.set $root|3
-  local.get $root|3
-  i32.load $0 offset=1568
+  block $~lib/rt/tlsf/GETTAIL|inlined.0 (result i32)
+   local.get $root
+   local.set $root|3
+   local.get $root|3
+   i32.load $0 offset=1568
+   br $~lib/rt/tlsf/GETTAIL|inlined.0
+  end
   local.set $tail
   i32.const 0
   local.set $tailInfo
@@ -1168,6 +1198,7 @@
   local.get $left
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
+  return
  )
  (func $~lib/rt/tlsf/initialize (type $none_=>_none)
   (local $rootOffset i32)
@@ -1350,6 +1381,7 @@
    unreachable
   end
   local.get $block
+  return
  )
  (func $~lib/rt/tlsf/freeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   i32.const 0
@@ -1584,6 +1616,7 @@
    br $break|0
   end
   i32.const 0
+  return
  )
  (func $~lib/rt/itcms/interrupt (type $none_=>_none)
   (local $budget i32)
@@ -1662,6 +1695,7 @@
    i32.const 4
    i32.sub
   end
+  return
  )
  (func $~lib/rt/tlsf/prepareSize (type $i32_=>_i32) (param $size i32) (result i32)
   local.get $size
@@ -1677,6 +1711,7 @@
   end
   local.get $size
   call $~lib/rt/tlsf/computeSize
+  return
  )
  (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
   (local $fl i32)
@@ -1767,16 +1802,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $root
-  local.set $root|5
-  local.get $fl
-  local.set $fl|6
-  local.get $root|5
-  local.get $fl|6
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=4
+  block $~lib/rt/tlsf/GETSL|inlined.2 (result i32)
+   local.get $root
+   local.set $root|5
+   local.get $fl
+   local.set $fl|6
+   local.get $root|5
+   local.get $fl|6
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=4
+   br $~lib/rt/tlsf/GETSL|inlined.2
+  end
   i32.const 0
   i32.const -1
   i32.xor
@@ -1809,16 +1847,19 @@
     local.get $flMap
     i32.ctz
     local.set $fl
-    local.get $root
-    local.set $root|10
-    local.get $fl
-    local.set $fl|11
-    local.get $root|10
-    local.get $fl|11
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0 offset=4
+    block $~lib/rt/tlsf/GETSL|inlined.3 (result i32)
+     local.get $root
+     local.set $root|10
+     local.get $fl
+     local.set $fl|11
+     local.get $root|10
+     local.get $fl|11
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=4
+     br $~lib/rt/tlsf/GETSL|inlined.3
+    end
     local.set $slMap
     i32.const 1
     drop
@@ -1832,46 +1873,53 @@
      call $~lib/builtins/abort
      unreachable
     end
+    block $~lib/rt/tlsf/GETHEAD|inlined.2 (result i32)
+     local.get $root
+     local.set $root|12
+     local.get $fl
+     local.set $fl|13
+     local.get $slMap
+     i32.ctz
+     local.set $sl|14
+     local.get $root|12
+     local.get $fl|13
+     i32.const 4
+     i32.shl
+     local.get $sl|14
+     i32.add
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=96
+     br $~lib/rt/tlsf/GETHEAD|inlined.2
+    end
+    local.set $head
+   end
+  else
+   block $~lib/rt/tlsf/GETHEAD|inlined.3 (result i32)
     local.get $root
-    local.set $root|12
+    local.set $root|15
     local.get $fl
-    local.set $fl|13
+    local.set $fl|16
     local.get $slMap
     i32.ctz
-    local.set $sl|14
-    local.get $root|12
-    local.get $fl|13
+    local.set $sl|17
+    local.get $root|15
+    local.get $fl|16
     i32.const 4
     i32.shl
-    local.get $sl|14
+    local.get $sl|17
     i32.add
     i32.const 2
     i32.shl
     i32.add
     i32.load $0 offset=96
-    local.set $head
+    br $~lib/rt/tlsf/GETHEAD|inlined.3
    end
-  else
-   local.get $root
-   local.set $root|15
-   local.get $fl
-   local.set $fl|16
-   local.get $slMap
-   i32.ctz
-   local.set $sl|17
-   local.get $root|15
-   local.get $fl|16
-   i32.const 4
-   i32.shl
-   local.get $sl|17
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load $0 offset=96
    local.set $head
   end
   local.get $head
+  return
  )
  (func $~lib/rt/tlsf/growMemory (type $i32_i32_=>_none) (param $root i32) (param $size i32)
   (local $pagesBefore i32)
@@ -1908,10 +1956,13 @@
   i32.shl
   i32.const 4
   i32.sub
-  local.get $root
-  local.set $root|3
-  local.get $root|3
-  i32.load $0 offset=1568
+  block $~lib/rt/tlsf/GETTAIL|inlined.1 (result i32)
+   local.get $root
+   local.set $root|3
+   local.get $root|3
+   i32.load $0 offset=1568
+   br $~lib/rt/tlsf/GETTAIL|inlined.1
+  end
   i32.ne
   i32.shl
   i32.add
@@ -2031,30 +2082,36 @@
    i32.xor
    i32.and
    call $~lib/rt/common/BLOCK#set:mmInfo
-   local.get $block
-   local.set $block|7
-   local.get $block|7
-   i32.const 4
-   i32.add
-   local.get $block|7
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
-   local.get $block
-   local.set $block|6
-   local.get $block|6
-   i32.const 4
-   i32.add
-   local.get $block|6
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
+   block $~lib/rt/tlsf/GETRIGHT|inlined.3 (result i32)
+    local.get $block
+    local.set $block|7
+    local.get $block|7
+    i32.const 4
+    i32.add
+    local.get $block|7
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.3
+   end
+   block $~lib/rt/tlsf/GETRIGHT|inlined.2 (result i32)
+    local.get $block
+    local.set $block|6
+    local.get $block|6
+    i32.const 4
+    i32.add
+    local.get $block|6
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.2
+   end
    call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 2
    i32.const -1
@@ -2125,6 +2182,7 @@
   i32.const 0
   drop
   local.get $block
+  return
  )
  (func $~lib/rt/tlsf/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
@@ -2137,6 +2195,7 @@
   call $~lib/rt/tlsf/allocateBlock
   i32.const 4
   i32.add
+  return
  )
  (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
   local.get $this
@@ -2199,6 +2258,7 @@
   local.get $size
   memory.fill $0
   local.get $ptr
+  return
  )
  (func $~lib/rt/itcms/__link (type $i32_i32_i32_=>_none) (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
   (local $child i32)
@@ -2320,56 +2380,59 @@
   i32.const 4
   i32.le_u
   drop
-  local.get $key
-  i32.extend8_s
-  local.set $key|1
-  i32.const 1
-  local.set $len
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  local.get $len
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash32|inlined.0 (result i32)
+   local.get $key
+   i32.extend8_s
+   local.set $key|1
+   i32.const 1
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.0
+  end
   return
  )
  (func $~lib/set/Set<i8>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -2436,6 +2499,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<i8>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   local.get $this
@@ -2445,6 +2509,7 @@
   call $~lib/set/Set<i8>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<i8>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2514,7 +2579,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i8>|inlined.1 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i8>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -2525,7 +2593,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<i8>#get:entriesOffset
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i8>|inlined.2 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i8>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -2571,12 +2642,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 8
+     block $~lib/set/ENTRY_SIZE<i8>|inlined.3 (result i32)
+      i32.const 8
+      br $~lib/set/ENTRY_SIZE<i8>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<i8>|inlined.4 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<i8>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -2658,7 +2735,10 @@
    i32.add
    call $~lib/set/Set<i8>#set:entriesOffset
    local.get $4
-   i32.const 8
+   block $~lib/set/ENTRY_SIZE<i8>|inlined.5 (result i32)
+    i32.const 8
+    br $~lib/set/ENTRY_SIZE<i8>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -2692,10 +2772,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<i8>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<i8>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<i8>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -2793,6 +2875,7 @@
   select
   memory.copy $0 $0
   local.get $newPtr
+  return
  )
  (func $~lib/array/ensureCapacity (type $i32_i32_i32_i32_=>_none) (param $array i32) (param $newSize i32) (param $alignLog2 i32) (param $canGrow i32)
   (local $oldCapacity i32)
@@ -2907,6 +2990,7 @@
  (func $~lib/array/Array<i8>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<i8>#get:length_
+  return
  )
  (func $~lib/array/Array<i8>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
@@ -2933,6 +3017,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<i8>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
@@ -3000,6 +3085,7 @@
    call $~lib/set/Set<i8>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<i8> (type $none_=>_none)
   (local $set i32)
@@ -3397,57 +3483,60 @@
   i32.const 4
   i32.le_u
   drop
-  local.get $key
-  i32.const 255
-  i32.and
-  local.set $key|1
-  i32.const 1
-  local.set $len
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  local.get $len
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash32|inlined.1 (result i32)
+   local.get $key
+   i32.const 255
+   i32.and
+   local.set $key|1
+   i32.const 1
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.1
+  end
   return
  )
  (func $~lib/set/Set<u8>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -3516,6 +3605,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<u8>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   local.get $this
@@ -3525,6 +3615,7 @@
   call $~lib/set/Set<u8>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<u8>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -3594,7 +3685,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u8>|inlined.1 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u8>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -3605,7 +3699,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<u8>#get:entriesOffset
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u8>|inlined.2 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u8>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -3651,12 +3748,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 8
+     block $~lib/set/ENTRY_SIZE<u8>|inlined.3 (result i32)
+      i32.const 8
+      br $~lib/set/ENTRY_SIZE<u8>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<u8>|inlined.4 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<u8>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -3738,7 +3841,10 @@
    i32.add
    call $~lib/set/Set<u8>#set:entriesOffset
    local.get $4
-   i32.const 8
+   block $~lib/set/ENTRY_SIZE<u8>|inlined.5 (result i32)
+    i32.const 8
+    br $~lib/set/ENTRY_SIZE<u8>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -3772,10 +3878,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<u8>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<u8>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<u8>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -3834,6 +3942,7 @@
  (func $~lib/array/Array<u8>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<u8>#get:length_
+  return
  )
  (func $~lib/array/Array<u8>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
@@ -3860,6 +3969,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<u8>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
@@ -3927,6 +4037,7 @@
    call $~lib/set/Set<u8>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<u8> (type $none_=>_none)
   (local $set i32)
@@ -4324,56 +4435,59 @@
   i32.const 4
   i32.le_u
   drop
-  local.get $key
-  i32.extend16_s
-  local.set $key|1
-  i32.const 2
-  local.set $len
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  local.get $len
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash32|inlined.2 (result i32)
+   local.get $key
+   i32.extend16_s
+   local.set $key|1
+   i32.const 2
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.2
+  end
   return
  )
  (func $~lib/set/Set<i16>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -4440,6 +4554,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<i16>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   local.get $this
@@ -4449,6 +4564,7 @@
   call $~lib/set/Set<i16>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<i16>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -4518,7 +4634,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i16>|inlined.1 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i16>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -4529,7 +4648,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<i16>#get:entriesOffset
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i16>|inlined.2 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i16>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -4575,12 +4697,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 8
+     block $~lib/set/ENTRY_SIZE<i16>|inlined.3 (result i32)
+      i32.const 8
+      br $~lib/set/ENTRY_SIZE<i16>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<i16>|inlined.4 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<i16>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -4662,7 +4790,10 @@
    i32.add
    call $~lib/set/Set<i16>#set:entriesOffset
    local.get $4
-   i32.const 8
+   block $~lib/set/ENTRY_SIZE<i16>|inlined.5 (result i32)
+    i32.const 8
+    br $~lib/set/ENTRY_SIZE<i16>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -4696,10 +4827,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<i16>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<i16>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<i16>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -4758,6 +4891,7 @@
  (func $~lib/array/Array<i16>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<i16>#get:length_
+  return
  )
  (func $~lib/array/Array<i16>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
@@ -4784,6 +4918,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<i16>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
@@ -4851,6 +4986,7 @@
    call $~lib/set/Set<i16>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<i16> (type $none_=>_none)
   (local $set i32)
@@ -5248,57 +5384,60 @@
   i32.const 4
   i32.le_u
   drop
-  local.get $key
-  i32.const 65535
-  i32.and
-  local.set $key|1
-  i32.const 2
-  local.set $len
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  local.get $len
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash32|inlined.3 (result i32)
+   local.get $key
+   i32.const 65535
+   i32.and
+   local.set $key|1
+   i32.const 2
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.3
+  end
   return
  )
  (func $~lib/set/Set<u16>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -5367,6 +5506,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<u16>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   local.get $this
@@ -5376,6 +5516,7 @@
   call $~lib/set/Set<u16>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<u16>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -5445,7 +5586,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u16>|inlined.1 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u16>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -5456,7 +5600,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<u16>#get:entriesOffset
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u16>|inlined.2 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u16>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -5502,12 +5649,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 8
+     block $~lib/set/ENTRY_SIZE<u16>|inlined.3 (result i32)
+      i32.const 8
+      br $~lib/set/ENTRY_SIZE<u16>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<u16>|inlined.4 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<u16>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -5589,7 +5742,10 @@
    i32.add
    call $~lib/set/Set<u16>#set:entriesOffset
    local.get $4
-   i32.const 8
+   block $~lib/set/ENTRY_SIZE<u16>|inlined.5 (result i32)
+    i32.const 8
+    br $~lib/set/ENTRY_SIZE<u16>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -5623,10 +5779,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<u16>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<u16>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<u16>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -5685,6 +5843,7 @@
  (func $~lib/array/Array<u16>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<u16>#get:length_
+  return
  )
  (func $~lib/array/Array<u16>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
@@ -5711,6 +5870,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<u16>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
@@ -5778,6 +5938,7 @@
    call $~lib/set/Set<u16>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<u16> (type $none_=>_none)
   (local $set i32)
@@ -6175,55 +6336,58 @@
   i32.const 4
   i32.le_u
   drop
-  local.get $key
-  local.set $key|1
-  i32.const 4
-  local.set $len
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  local.get $len
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash32|inlined.4 (result i32)
+   local.get $key
+   local.set $key|1
+   i32.const 4
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.4
+  end
   return
  )
  (func $~lib/set/Set<i32>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -6288,6 +6452,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<i32>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   local.get $this
@@ -6297,6 +6462,7 @@
   call $~lib/set/Set<i32>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<i32>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -6366,7 +6532,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i32>|inlined.1 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i32>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -6377,7 +6546,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<i32>#get:entriesOffset
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i32>|inlined.2 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i32>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -6423,12 +6595,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 8
+     block $~lib/set/ENTRY_SIZE<i32>|inlined.3 (result i32)
+      i32.const 8
+      br $~lib/set/ENTRY_SIZE<i32>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<i32>|inlined.4 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<i32>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -6510,7 +6688,10 @@
    i32.add
    call $~lib/set/Set<i32>#set:entriesOffset
    local.get $4
-   i32.const 8
+   block $~lib/set/ENTRY_SIZE<i32>|inlined.5 (result i32)
+    i32.const 8
+    br $~lib/set/ENTRY_SIZE<i32>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -6544,10 +6725,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<i32>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<i32>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<i32>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -6606,6 +6789,7 @@
  (func $~lib/array/Array<i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<i32>#get:length_
+  return
  )
  (func $~lib/array/Array<i32>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
@@ -6632,6 +6816,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<i32>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
@@ -6699,6 +6884,7 @@
    call $~lib/set/Set<i32>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<i32> (type $none_=>_none)
   (local $set i32)
@@ -7096,55 +7282,58 @@
   i32.const 4
   i32.le_u
   drop
-  local.get $key
-  local.set $key|1
-  i32.const 4
-  local.set $len
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  local.get $len
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash32|inlined.5 (result i32)
+   local.get $key
+   local.set $key|1
+   i32.const 4
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.5
+  end
   return
  )
  (func $~lib/set/Set<u32>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -7209,6 +7398,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<u32>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   local.get $this
@@ -7218,6 +7408,7 @@
   call $~lib/set/Set<u32>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<u32>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -7287,7 +7478,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u32>|inlined.1 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u32>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -7298,7 +7492,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<u32>#get:entriesOffset
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u32>|inlined.2 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u32>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -7344,12 +7541,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 8
+     block $~lib/set/ENTRY_SIZE<u32>|inlined.3 (result i32)
+      i32.const 8
+      br $~lib/set/ENTRY_SIZE<u32>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<u32>|inlined.4 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<u32>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -7431,7 +7634,10 @@
    i32.add
    call $~lib/set/Set<u32>#set:entriesOffset
    local.get $4
-   i32.const 8
+   block $~lib/set/ENTRY_SIZE<u32>|inlined.5 (result i32)
+    i32.const 8
+    br $~lib/set/ENTRY_SIZE<u32>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -7465,10 +7671,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<u32>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<u32>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<u32>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -7527,6 +7735,7 @@
  (func $~lib/array/Array<u32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<u32>#get:length_
+  return
  )
  (func $~lib/array/Array<u32>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
@@ -7553,6 +7762,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<u32>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
@@ -7620,6 +7830,7 @@
    call $~lib/set/Set<u32>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<u32> (type $none_=>_none)
   (local $set i32)
@@ -8020,69 +8231,72 @@
   i32.const 8
   i32.eq
   drop
-  local.get $key
-  local.set $key|1
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  i32.const 8
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash64|inlined.0 (result i32)
+   local.get $key
+   local.set $key|1
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   i32.const 8
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i64.const 32
+   i64.shr_u
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash64|inlined.0
+  end
   return
  )
  (func $~lib/set/Set<i64>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -8147,6 +8361,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<i64>#has (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
   local.get $this
@@ -8156,6 +8371,7 @@
   call $~lib/set/Set<i64>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<i64>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -8225,7 +8441,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<i64>|inlined.1 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<i64>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -8236,7 +8455,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<i64>#get:entriesOffset
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<i64>|inlined.2 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<i64>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -8282,12 +8504,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 16
+     block $~lib/set/ENTRY_SIZE<i64>|inlined.3 (result i32)
+      i32.const 16
+      br $~lib/set/ENTRY_SIZE<i64>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 16
+    block $~lib/set/ENTRY_SIZE<i64>|inlined.4 (result i32)
+     i32.const 16
+     br $~lib/set/ENTRY_SIZE<i64>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -8369,7 +8597,10 @@
    i32.add
    call $~lib/set/Set<i64>#set:entriesOffset
    local.get $4
-   i32.const 16
+   block $~lib/set/ENTRY_SIZE<i64>|inlined.5 (result i32)
+    i32.const 16
+    br $~lib/set/ENTRY_SIZE<i64>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -8403,10 +8634,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<i64>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<i64>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<i64>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -8465,6 +8698,7 @@
  (func $~lib/array/Array<i64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<i64>#get:length_
+  return
  )
  (func $~lib/array/Array<i64>#__get (type $i32_i32_=>_i64) (param $this i32) (param $index i32) (result i64)
   (local $value i64)
@@ -8491,6 +8725,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<i64>#delete (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
   (local $entry i32)
@@ -8558,6 +8793,7 @@
    call $~lib/set/Set<i64>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<i64> (type $none_=>_none)
   (local $set i32)
@@ -8958,69 +9194,72 @@
   i32.const 8
   i32.eq
   drop
-  local.get $key
-  local.set $key|1
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  i32.const 8
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash64|inlined.1 (result i32)
+   local.get $key
+   local.set $key|1
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   i32.const 8
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i64.const 32
+   i64.shr_u
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash64|inlined.1
+  end
   return
  )
  (func $~lib/set/Set<u64>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -9085,6 +9324,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<u64>#has (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
   local.get $this
@@ -9094,6 +9334,7 @@
   call $~lib/set/Set<u64>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<u64>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -9163,7 +9404,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<u64>|inlined.1 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<u64>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -9174,7 +9418,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<u64>#get:entriesOffset
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<u64>|inlined.2 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<u64>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -9220,12 +9467,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 16
+     block $~lib/set/ENTRY_SIZE<u64>|inlined.3 (result i32)
+      i32.const 16
+      br $~lib/set/ENTRY_SIZE<u64>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 16
+    block $~lib/set/ENTRY_SIZE<u64>|inlined.4 (result i32)
+     i32.const 16
+     br $~lib/set/ENTRY_SIZE<u64>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -9307,7 +9560,10 @@
    i32.add
    call $~lib/set/Set<u64>#set:entriesOffset
    local.get $4
-   i32.const 16
+   block $~lib/set/ENTRY_SIZE<u64>|inlined.5 (result i32)
+    i32.const 16
+    br $~lib/set/ENTRY_SIZE<u64>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -9341,10 +9597,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<u64>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<u64>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<u64>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -9403,6 +9661,7 @@
  (func $~lib/array/Array<u64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<u64>#get:length_
+  return
  )
  (func $~lib/array/Array<u64>#__get (type $i32_i32_=>_i64) (param $this i32) (param $index i32) (result i64)
   (local $value i64)
@@ -9429,6 +9688,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<u64>#delete (type $i32_i64_=>_i32) (param $this i32) (param $key i64) (result i32)
   (local $entry i32)
@@ -9496,6 +9756,7 @@
    call $~lib/set/Set<u64>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<u64> (type $none_=>_none)
   (local $set i32)
@@ -9893,56 +10154,59 @@
   i32.const 4
   i32.eq
   drop
-  local.get $key
-  i32.reinterpret_f32
-  local.set $key|1
-  i32.const 4
-  local.set $len
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  local.get $len
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash32|inlined.6 (result i32)
+   local.get $key
+   i32.reinterpret_f32
+   local.set $key|1
+   i32.const 4
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.6
+  end
   return
  )
  (func $~lib/set/Set<f32>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -10007,6 +10271,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<f32>#has (type $i32_f32_=>_i32) (param $this i32) (param $key f32) (result i32)
   local.get $this
@@ -10016,6 +10281,7 @@
   call $~lib/set/Set<f32>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<f32>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -10085,7 +10351,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<f32>|inlined.1 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<f32>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -10096,7 +10365,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<f32>#get:entriesOffset
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<f32>|inlined.2 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<f32>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -10142,12 +10414,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 8
+     block $~lib/set/ENTRY_SIZE<f32>|inlined.3 (result i32)
+      i32.const 8
+      br $~lib/set/ENTRY_SIZE<f32>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<f32>|inlined.4 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<f32>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -10229,7 +10507,10 @@
    i32.add
    call $~lib/set/Set<f32>#set:entriesOffset
    local.get $4
-   i32.const 8
+   block $~lib/set/ENTRY_SIZE<f32>|inlined.5 (result i32)
+    i32.const 8
+    br $~lib/set/ENTRY_SIZE<f32>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -10263,10 +10544,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<f32>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<f32>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<f32>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -10325,6 +10608,7 @@
  (func $~lib/array/Array<f32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<f32>#get:length_
+  return
  )
  (func $~lib/array/Array<f32>#__get (type $i32_i32_=>_f32) (param $this i32) (param $index i32) (result f32)
   (local $value f32)
@@ -10351,6 +10635,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<f32>#delete (type $i32_f32_=>_i32) (param $this i32) (param $key f32) (result i32)
   (local $entry i32)
@@ -10418,6 +10703,7 @@
    call $~lib/set/Set<f32>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<f32> (type $none_=>_none)
   (local $set i32)
@@ -10818,70 +11104,73 @@
   i32.const 8
   i32.eq
   drop
-  local.get $key
-  i64.reinterpret_f64
-  local.set $key|1
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  i32.const 8
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash64|inlined.2 (result i32)
+   local.get $key
+   i64.reinterpret_f64
+   local.set $key|1
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   i32.const 8
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i64.const 32
+   i64.shr_u
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash64|inlined.2
+  end
   return
  )
  (func $~lib/set/Set<f64>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
@@ -10946,6 +11235,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/set/Set<f64>#has (type $i32_f64_=>_i32) (param $this i32) (param $key f64) (result i32)
   local.get $this
@@ -10955,6 +11245,7 @@
   call $~lib/set/Set<f64>#find
   i32.const 0
   i32.ne
+  return
  )
  (func $~lib/set/Set<f64>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -11024,7 +11315,10 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   local.get $newEntriesCapacity
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<f64>|inlined.1 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<f64>|inlined.1
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.tee $newEntries
@@ -11035,7 +11329,10 @@
   local.get $oldPtr
   local.get $this
   call $~lib/set/Set<f64>#get:entriesOffset
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<f64>|inlined.2 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<f64>|inlined.2
+  end
   i32.mul
   i32.add
   local.set $oldEnd
@@ -11081,12 +11378,18 @@
      local.get $newPtr
      i32.store $0
      local.get $newPtr
-     i32.const 16
+     block $~lib/set/ENTRY_SIZE<f64>|inlined.3 (result i32)
+      i32.const 16
+      br $~lib/set/ENTRY_SIZE<f64>|inlined.3
+     end
      i32.add
      local.set $newPtr
     end
     local.get $oldPtr
-    i32.const 16
+    block $~lib/set/ENTRY_SIZE<f64>|inlined.4 (result i32)
+     i32.const 16
+     br $~lib/set/ENTRY_SIZE<f64>|inlined.4
+    end
     i32.add
     local.set $oldPtr
     br $while-continue|0
@@ -11168,7 +11471,10 @@
    i32.add
    call $~lib/set/Set<f64>#set:entriesOffset
    local.get $4
-   i32.const 16
+   block $~lib/set/ENTRY_SIZE<f64>|inlined.5 (result i32)
+    i32.const 16
+    br $~lib/set/ENTRY_SIZE<f64>|inlined.5
+   end
    i32.mul
    i32.add
    local.set $entry
@@ -11202,10 +11508,12 @@
    i32.store $0
   end
   local.get $this
+  return
  )
  (func $~lib/set/Set<f64>#get:size (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/set/Set<f64>#get:entriesCount
+  return
  )
  (func $~lib/array/Array<f64>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
   local.get $this
@@ -11264,6 +11572,7 @@
  (func $~lib/array/Array<f64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<f64>#get:length_
+  return
  )
  (func $~lib/array/Array<f64>#__get (type $i32_i32_=>_f64) (param $this i32) (param $index i32) (result f64)
   (local $value f64)
@@ -11290,6 +11599,7 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $~lib/set/Set<f64>#delete (type $i32_f64_=>_i32) (param $this i32) (param $key f64) (result i32)
   (local $entry i32)
@@ -11357,6 +11667,7 @@
    call $~lib/set/Set<f64>#rehash
   end
   i32.const 1
+  return
  )
  (func $std/set/testNumeric<f64> (type $none_=>_none)
   (local $set i32)
@@ -12438,7 +12749,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i8>|inlined.0 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i8>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12494,7 +12808,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i8>|inlined.7 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i8>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12557,7 +12874,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u8>|inlined.0 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u8>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12613,7 +12933,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u8>|inlined.7 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u8>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12676,7 +12999,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i16>|inlined.0 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i16>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12732,7 +13058,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i16>|inlined.7 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i16>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12795,7 +13124,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u16>|inlined.0 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u16>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12851,7 +13183,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u16>|inlined.7 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u16>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12914,7 +13249,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i32>|inlined.0 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i32>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -12970,7 +13308,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<i32>|inlined.7 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<i32>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13033,7 +13374,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u32>|inlined.0 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u32>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13089,7 +13433,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<u32>|inlined.7 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<u32>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13152,7 +13499,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<i64>|inlined.0 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<i64>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13208,7 +13558,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<i64>|inlined.7 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<i64>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13271,7 +13624,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<u64>|inlined.0 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<u64>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13327,7 +13683,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<u64>|inlined.7 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<u64>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13390,7 +13749,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<f32>|inlined.0 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<f32>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13446,7 +13808,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 8
+  block $~lib/set/ENTRY_SIZE<f32>|inlined.7 (result i32)
+   i32.const 8
+   br $~lib/set/ENTRY_SIZE<f32>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13509,7 +13874,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<f64>|inlined.0 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<f64>|inlined.0
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13565,7 +13933,10 @@
   local.get $this
   i32.const 0
   i32.const 4
-  i32.const 16
+  block $~lib/set/ENTRY_SIZE<f64>|inlined.7 (result i32)
+   i32.const 16
+   br $~lib/set/ENTRY_SIZE<f64>|inlined.7
+  end
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
@@ -13627,6 +13998,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $~lib/array/Array<i8>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -13758,7 +14130,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<i8>|inlined.6 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<i8>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -13796,6 +14171,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<u8>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -13927,7 +14303,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<u8>|inlined.6 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<u8>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -13965,6 +14344,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<i16>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14096,7 +14476,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<i16>|inlined.6 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<i16>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -14134,6 +14517,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<u16>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14265,7 +14649,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<u16>|inlined.6 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<u16>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -14303,6 +14690,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<i32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14434,7 +14822,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<i32>|inlined.6 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<i32>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -14472,6 +14863,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<u32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14603,7 +14995,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<u32>|inlined.6 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<u32>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -14641,6 +15036,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<i64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14772,7 +15168,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 16
+    block $~lib/set/ENTRY_SIZE<i64>|inlined.6 (result i32)
+     i32.const 16
+     br $~lib/set/ENTRY_SIZE<i64>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -14810,6 +15209,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<u64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -14941,7 +15341,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 16
+    block $~lib/set/ENTRY_SIZE<u64>|inlined.6 (result i32)
+     i32.const 16
+     br $~lib/set/ENTRY_SIZE<u64>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -14979,6 +15382,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<f32>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -15110,7 +15514,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 8
+    block $~lib/set/ENTRY_SIZE<f32>|inlined.6 (result i32)
+     i32.const 8
+     br $~lib/set/ENTRY_SIZE<f32>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -15148,6 +15555,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
  (func $~lib/array/Array<f64>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $2 i32)
@@ -15279,7 +15687,10 @@
    if
     local.get $start
     local.get $i
-    i32.const 16
+    block $~lib/set/ENTRY_SIZE<f64>|inlined.6 (result i32)
+     i32.const 16
+     br $~lib/set/ENTRY_SIZE<f64>|inlined.6
+    end
     i32.mul
     i32.add
     local.set $entry
@@ -15317,5 +15728,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $8
+  return
  )
 )

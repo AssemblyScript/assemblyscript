@@ -37,6 +37,7 @@
   local.get $fn
   i32.load $0
   call_indirect $0 (type $none_=>_none)
+  return
  )
  (func $return/testVoidReturn (type $i32_=>_none) (param $cond i32)
   local.get $cond
@@ -45,6 +46,7 @@
    return
   end
   call $return/nop
+  return
  )
  (func $~start (type $none_=>_none)
   call $start:return

@@ -78,6 +78,7 @@
   local.get $x
   local.get $y
   i32.eq
+  return
  )
  (func $~lib/object/Object.is<bool> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
   i32.const 0
@@ -89,6 +90,7 @@
   i32.const 0
   i32.ne
   i32.eq
+  return
  )
  (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -101,6 +103,7 @@
   call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
+  return
  )
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
@@ -204,6 +207,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
@@ -246,6 +250,7 @@
   local.get $leftLength
   call $~lib/util/string/compareImpl
   i32.eqz
+  return
  )
  (func $~lib/object/Object.is<~lib/string/String> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
   i32.const 0
@@ -253,6 +258,7 @@
   local.get $x
   local.get $y
   call $~lib/string/String.__eq
+  return
  )
  (func $~lib/object/Object.is<~lib/string/String|null> (type $i32_i32_=>_i32) (param $x i32) (param $y i32) (result i32)
   i32.const 0
@@ -260,6 +266,7 @@
   local.get $x
   local.get $y
   call $~lib/string/String.__eq
+  return
  )
  (func $~lib/rt/stub/maybeGrowMemory (type $i32_=>_none) (param $newOffset i32)
   (local $pagesBefore i32)
@@ -349,19 +356,22 @@
   i32.const 4
   i32.add
   local.set $ptr
-  local.get $size
-  local.set $size|3
-  local.get $size|3
-  i32.const 4
-  i32.add
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 4
-  i32.sub
+  block $~lib/rt/stub/computeSize|inlined.0 (result i32)
+   local.get $size
+   local.set $size|3
+   local.get $size|3
+   i32.const 4
+   i32.add
+   i32.const 15
+   i32.add
+   i32.const 15
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 4
+   i32.sub
+   br $~lib/rt/stub/computeSize|inlined.0
+  end
   local.set $payloadSize
   local.get $ptr
   local.get $payloadSize
@@ -371,6 +381,7 @@
   local.get $payloadSize
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $ptr
+  return
  )
  (func $~lib/rt/common/OBJECT#set:gcInfo (type $i32_i32_=>_none) (param $this i32) (param $gcInfo i32)
   local.get $this
@@ -430,6 +441,7 @@
   local.get $ptr
   i32.const 16
   i32.add
+  return
  )
  (func $std/object/Implicit#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this

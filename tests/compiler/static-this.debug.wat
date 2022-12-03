@@ -15,6 +15,7 @@
  (start $~start)
  (func $static-this/Foo.getBar (type $none_=>_i32) (result i32)
   global.get $static-this/Foo.bar
+  return
  )
  (func $start:static-this (type $none_=>_none)
   call $static-this/Foo.getBar

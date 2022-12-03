@@ -35,6 +35,7 @@
    return
   end
   i32.const 0
+  return
  )
  (func $if/ifThenElseBlock (type $i32_=>_i32) (param $n i32) (result i32)
   local.get $n

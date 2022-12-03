@@ -20,15 +20,18 @@
   local.get $a
   local.get $b
   i32.add
+  return
  )
  (func $export/sub (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.sub
+  return
  )
  (func $export/mul (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.mul
+  return
  )
 )

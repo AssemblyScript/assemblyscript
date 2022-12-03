@@ -24,16 +24,19 @@
   i32.const 8
   i32.const 4
   i32.eq
+  return
  )
  (func $issues/1714/foo<i32,i64> (type $none_=>_i32) (result i32)
   call $issues/1714/a_i64_i32<i64,i32>
   i32.const 1
   i32.eq
+  return
  )
  (func $issues/1714/bar<i32,f64> (type $none_=>_i32) (result i32)
   i32.const 0
   drop
   i32.const 80
+  return
  )
  (func $issues/1714/bar<f64,i32> (type $none_=>_i32) (result i32)
   i32.const 1
@@ -52,6 +55,7 @@
   call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
+  return
  )
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
@@ -155,6 +159,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
@@ -197,6 +202,7 @@
   local.get $leftLength
   call $~lib/util/string/compareImpl
   i32.eqz
+  return
  )
  (func $~start (type $none_=>_none)
   call $start:issues/1714

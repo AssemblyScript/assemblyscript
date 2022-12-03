@@ -17,15 +17,19 @@
  (start $~start)
  (func $call-inferred/foo<i32> (type $i32_=>_i32) (param $a i32) (result i32)
   local.get $a
+  return
  )
  (func $call-inferred/foo<f64> (type $f64_=>_f64) (param $a f64) (result f64)
   local.get $a
+  return
  )
  (func $call-inferred/foo<f32> (type $f32_=>_f32) (param $a f32) (result f32)
   local.get $a
+  return
  )
  (func $call-inferred/bar<f32> (type $f32_=>_f32) (param $a f32) (result f32)
   local.get $a
+  return
  )
  (func $call-inferred/bar<f32>@varargs (type $f32_=>_f32) (param $a f32) (result f32)
   block $1of1

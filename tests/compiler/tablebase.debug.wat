@@ -21,6 +21,7 @@
  (func $~lib/function/Function<%28%29=>void>#get:index (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
+  return
  )
  (func $~start (type $none_=>_none)
   call $start:tablebase

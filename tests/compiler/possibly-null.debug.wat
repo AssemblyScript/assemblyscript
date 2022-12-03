@@ -168,6 +168,7 @@
  )
  (func $possibly-null/requireNonNull (type $i32_=>_i32) (param $a i32) (result i32)
   local.get $a
+  return
  )
  (func $possibly-null/testLogicalAnd (type $i32_=>_none) (param $a i32)
   local.get $a

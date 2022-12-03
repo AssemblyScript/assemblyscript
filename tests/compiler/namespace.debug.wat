@@ -17,9 +17,11 @@
  (start $~start)
  (func $namespace/Outer.Inner.aFunc (type $none_=>_i32) (result i32)
   global.get $namespace/Outer.Inner.aVar
+  return
  )
  (func $namespace/Joined.anotherFunc (type $none_=>_i32) (result i32)
   i32.const 3
+  return
  )
  (func $start:namespace (type $none_=>_none)
   global.get $namespace/Outer.Inner.aVar

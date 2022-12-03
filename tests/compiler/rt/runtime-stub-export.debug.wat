@@ -111,19 +111,22 @@
   i32.const 4
   i32.add
   local.set $ptr
-  local.get $size
-  local.set $size|3
-  local.get $size|3
-  i32.const 4
-  i32.add
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 4
-  i32.sub
+  block $~lib/rt/stub/computeSize|inlined.0 (result i32)
+   local.get $size
+   local.set $size|3
+   local.get $size|3
+   i32.const 4
+   i32.add
+   i32.const 15
+   i32.add
+   i32.const 15
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 4
+   i32.sub
+   br $~lib/rt/stub/computeSize|inlined.0
+  end
   local.set $payloadSize
   local.get $ptr
   local.get $payloadSize
@@ -133,6 +136,7 @@
   local.get $payloadSize
   call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $ptr
+  return
  )
  (func $~lib/rt/common/OBJECT#set:gcInfo (type $i32_i32_=>_none) (param $this i32) (param $gcInfo i32)
   local.get $this
@@ -192,9 +196,11 @@
   local.get $ptr
   i32.const 16
   i32.add
+  return
  )
  (func $~lib/rt/stub/__pin (type $i32_=>_i32) (param $ptr i32) (result i32)
   local.get $ptr
+  return
  )
  (func $~lib/rt/stub/__unpin (type $i32_=>_none) (param $ptr i32)
   nop

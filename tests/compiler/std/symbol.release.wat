@@ -1,12 +1,12 @@
 (module
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (type $none_=>_none (func_subtype func))
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/symbol/nextId (mut i32) (i32.const 12))
  (global $std/symbol/sym1 (mut i32) (i32.const 0))
@@ -2162,7 +2162,7 @@
    local.tee $0
    i32.add
    local.set $2
-   loop $while-continue|06
+   loop $while-continue|09
     local.get $0
     local.get $2
     i32.lt_u
@@ -2185,7 +2185,7 @@
      i32.const 12
      i32.add
      local.set $0
-     br $while-continue|06
+     br $while-continue|09
     end
    end
    local.get $1
@@ -2510,7 +2510,6 @@
      if
       local.get $4
       local.get $7
-      i32.const 0
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
      local.get $4
@@ -2523,7 +2522,6 @@
      if
       local.get $4
       local.get $1
-      i32.const 0
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
      local.get $4
@@ -2559,9 +2557,7 @@
     i32.const 1056
     i32.store $0
     local.get $4
-    i32.const 1056
-    i32.const 1
-    call $byn-split-outlined-A$~lib/rt/itcms/__link
+    call $byn-split-outlined-A$~lib/rt/itcms/__link_0
     local.get $0
     local.get $3
     i32.store $0 offset=4
@@ -2647,7 +2643,7 @@
    i32.load $0
    local.set $0
    block $__inlined_func$~lib/map/Map<usize,~lib/string/String>#find
-    loop $while-continue|02
+    loop $while-continue|00
      local.get $0
      if
       local.get $0
@@ -2668,7 +2664,7 @@
       i32.const -2
       i32.and
       local.set $0
-      br $while-continue|02
+      br $while-continue|00
      end
     end
     i32.const 0
@@ -2680,9 +2676,7 @@
     i32.const 1056
     i32.store $0 offset=4
     local.get $5
-    i32.const 1056
-    i32.const 1
-    call $byn-split-outlined-A$~lib/rt/itcms/__link
+    call $byn-split-outlined-A$~lib/rt/itcms/__link_0
    else
     local.get $5
     i32.load $0 offset=16
@@ -2759,7 +2753,7 @@
      local.set $10
      local.get $1
      local.set $0
-     loop $while-continue|00
+     loop $while-continue|01
       local.get $2
       local.get $10
       i32.ne
@@ -2833,7 +2827,7 @@
        i32.const 12
        i32.add
        local.set $2
-       br $while-continue|00
+       br $while-continue|01
       end
      end
      local.get $5
@@ -2843,7 +2837,6 @@
      if
       local.get $5
       local.get $8
-      i32.const 0
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
      local.get $5
@@ -2856,7 +2849,6 @@
      if
       local.get $5
       local.get $1
-      i32.const 0
       call $byn-split-outlined-A$~lib/rt/itcms/__link
      end
      local.get $5
@@ -2895,9 +2887,7 @@
     i32.const 1056
     i32.store $0 offset=4
     local.get $5
-    i32.const 1056
-    i32.const 1
-    call $byn-split-outlined-A$~lib/rt/itcms/__link
+    call $byn-split-outlined-A$~lib/rt/itcms/__link_0
     local.get $5
     local.get $5
     i32.load $0 offset=20
@@ -3412,7 +3402,6 @@
    if
     local.get $0
     local.get $1
-    i32.const 0
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
    local.get $0
@@ -3431,7 +3420,6 @@
    if
     local.get $0
     local.get $1
-    i32.const 0
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
    local.get $0
@@ -3480,7 +3468,6 @@
    if
     local.get $0
     local.get $1
-    i32.const 0
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
    local.get $0
@@ -3499,7 +3486,6 @@
    if
     local.get $0
     local.get $1
-    i32.const 0
     call $byn-split-outlined-A$~lib/rt/itcms/__link
    end
    local.get $0
@@ -3825,8 +3811,7 @@
    global.set $~lib/rt/itcms/visitCount
   end
  )
- (func $byn-split-outlined-A$~lib/rt/itcms/__link (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
+ (func $byn-split-outlined-A$~lib/rt/itcms/__link (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   local.get $0
   i32.eqz
   if
@@ -3850,30 +3835,74 @@
    local.get $0
    i32.const 20
    i32.sub
-   local.tee $0
    i32.load $0 offset=4
    i32.const 3
    i32.and
-   local.tee $3
+   local.tee $0
    global.get $~lib/rt/itcms/white
    i32.eqz
    i32.eq
    if
-    local.get $0
     local.get $1
-    local.get $2
-    select
     call $~lib/rt/itcms/Object#makeGray
    else
     global.get $~lib/rt/itcms/state
     i32.const 1
     i32.eq
-    local.get $3
+    local.get $0
     i32.const 3
     i32.eq
     i32.and
     if
      local.get $1
+     call $~lib/rt/itcms/Object#makeGray
+    end
+   end
+  end
+ )
+ (func $byn-split-outlined-A$~lib/rt/itcms/__link_0 (type $i32_=>_none) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1200
+   i32.const 295
+   i32.const 14
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/rt/itcms/white
+  i32.const 1040
+  i32.load $0
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   local.get $0
+   i32.const 20
+   i32.sub
+   local.tee $0
+   i32.load $0 offset=4
+   i32.const 3
+   i32.and
+   local.tee $1
+   global.get $~lib/rt/itcms/white
+   i32.eqz
+   i32.eq
+   if
+    local.get $0
+    call $~lib/rt/itcms/Object#makeGray
+   else
+    global.get $~lib/rt/itcms/state
+    i32.const 1
+    i32.eq
+    local.get $1
+    i32.const 3
+    i32.eq
+    i32.and
+    if
+     i32.const 1036
      call $~lib/rt/itcms/Object#makeGray
     end
    end

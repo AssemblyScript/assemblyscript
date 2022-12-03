@@ -1659,7 +1659,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile statements
     if (bodyNode.kind == NodeKind.Block) {
-      stmts = this.compileStatements((<BlockStatement>bodyNode).statements, true, stmts);
+      stmts = this.compileStatements((<BlockStatement>bodyNode).statements, stmts);
     } else {
       // must be an expression statement if not a block
       assert(bodyNode.kind == NodeKind.Expression);
@@ -2109,9 +2109,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles a statement. */
   compileStatement(
     /** Statement to compile. */
-    statement: Statement,
-    /** Whether this is the last statement of the body, if known. */
-    isLastInBody: bool = false
+    statement: Statement
   ): ExpressionRef {
     let module = this.module;
     let stmt: ExpressionRef;
@@ -2153,7 +2151,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.Return: {
-        stmt = this.compileReturnStatement(<ReturnStatement>statement, isLastInBody);
+        stmt = this.compileReturnStatement(<ReturnStatement>statement);
         break;
       }
       case NodeKind.Switch: {
@@ -2208,9 +2206,7 @@ export class Compiler extends DiagnosticEmitter {
   compileStatements(
     /** Statements to compile. */
     statements: Statement[],
-    /** Whether this is an immediate body statement. */
-    isBody: bool = false,
-    /** Statements to append to that is also returned. Created if omitted. */
+    /** Statements to append to. Also returned, created if omitted. */
     stmts: ExpressionRef[] | null = null
   ): ExpressionRef[] {
     let numStatements = statements.length;
@@ -2220,7 +2216,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     let flow = this.currentFlow;
     for (let i = 0; i < numStatements; ++i) {
-      let stmt = this.compileStatement(statements[i], isBody && i == numStatements - 1);
+      let stmt = this.compileStatement(statements[i]);
       switch (getExpressionId(stmt)) {
         case ExpressionId.Block: {
           if (!getBlockName(stmt)) {
@@ -2345,7 +2341,7 @@ export class Compiler extends DiagnosticEmitter {
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
     if (body.kind == NodeKind.Block) {
-      this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
+      this.compileStatements((<BlockStatement>body).statements, bodyStmts);
     } else {
       bodyStmts.push(this.compileStatement(body));
     }
@@ -2510,7 +2506,7 @@ export class Compiler extends DiagnosticEmitter {
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
     if (body.kind == NodeKind.Block) {
-      this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
+      this.compileStatements((<BlockStatement>body).statements, bodyStmts);
     } else {
       bodyStmts.push(this.compileStatement(body));
     }
@@ -2641,7 +2637,7 @@ export class Compiler extends DiagnosticEmitter {
     let thenFlow = flow.forkThen(condExpr);
     this.currentFlow = thenFlow;
     if (ifTrue.kind == NodeKind.Block) {
-      this.compileStatements((<BlockStatement>ifTrue).statements, false, thenStmts);
+      this.compileStatements((<BlockStatement>ifTrue).statements, thenStmts);
     } else {
       thenStmts.push(this.compileStatement(ifTrue));
     }
@@ -2653,7 +2649,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = elseFlow;
       let elseStmts = new Array<ExpressionRef>();
       if (ifFalse.kind == NodeKind.Block) {
-        this.compileStatements((<BlockStatement>ifFalse).statements, false, elseStmts);
+        this.compileStatements((<BlockStatement>ifFalse).statements, elseStmts);
       } else {
         elseStmts.push(this.compileStatement(ifFalse));
       }
@@ -2680,8 +2676,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   private compileReturnStatement(
-    statement: ReturnStatement,
-    isLastInBody: bool
+    statement: ReturnStatement
   ): ExpressionRef {
     let module = this.module;
     let expr: ExpressionRef = 0;
@@ -2713,27 +2708,20 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle inline return
     if (flow.isInline) {
-      return !expr
-        ? isLastInBody
-          ? module.nop()
-          : module.br(assert(flow.inlineReturnLabel))
-        : isLastInBody
-          ? expr
-          : this.currentType == Type.void
-            ? module.block(null, [ expr, module.br(assert(flow.inlineReturnLabel)) ])
-            : module.br(assert(flow.inlineReturnLabel), 0, expr);
+      let inlineReturnLabel = assert(flow.inlineReturnLabel);
+      return expr
+        ? this.currentType == Type.void
+          ? module.block(null, [ expr, module.br(inlineReturnLabel) ])
+          : module.br(inlineReturnLabel, 0, expr)
+        : module.br(inlineReturnLabel);
     }
 
     // Otherwise emit a normal return
-    return !expr
-      ? isLastInBody
-        ? module.nop()
-        : module.return()
-      : isLastInBody
-        ? expr
-        : this.currentType == Type.void
-          ? module.block(null, [ expr, module.return() ])
-          : module.return(expr);
+    return expr
+      ? this.currentType == Type.void
+        ? module.block(null, [ expr, module.return() ])
+        : module.return(expr)
+      : module.return();
   }
 
   private compileSwitchStatement(
@@ -3144,7 +3132,7 @@ export class Compiler extends DiagnosticEmitter {
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
     if (body.kind == NodeKind.Block) {
-      this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
+      this.compileStatements((<BlockStatement>body).statements, bodyStmts);
     } else {
       bodyStmts.push(this.compileStatement(body));
     }

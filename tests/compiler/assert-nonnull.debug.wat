@@ -47,6 +47,7 @@
    call $~lib/builtins/abort
    unreachable
   end
+  return
  )
  (func $assert-nonnull/Foo#get:bar (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -86,6 +87,7 @@
   end
   i32.load $0
   call_indirect $0 (type $none_=>_i32)
+  return
  )
  (func $assert-nonnull/Foo#get:baz (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -139,6 +141,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+  return
  )
  (func $assert-nonnull/testArr (type $i32_=>_i32) (param $foo i32) (result i32)
   (local $1 i32)
@@ -176,6 +179,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+  return
  )
  (func $assert-nonnull/testAll (type $i32_=>_i32) (param $foo i32) (result i32)
   (local $1 i32)
@@ -252,6 +256,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $4
+  return
  )
  (func $assert-nonnull/testAll2 (type $i32_=>_i32) (param $foo i32) (result i32)
   (local $1 i32)
@@ -328,6 +333,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $4
+  return
  )
  (func $assert-nonnull/testProp (type $i32_=>_i32) (param $foo i32) (result i32)
   (local $1 i32)
@@ -362,6 +368,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+  return
  )
  (func $~lib/array/Array<assert-nonnull/Foo>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
@@ -418,6 +425,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $~lib/array/Array<assert-nonnull/Foo|null>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $value i32)
@@ -464,6 +472,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $assert-nonnull/testElem (type $i32_=>_i32) (param $foo i32) (result i32)
   (local $1 i32)
@@ -499,6 +508,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+  return
  )
  (func $assert-nonnull/testFn2 (type $i32_=>_i32) (param $fn i32) (result i32)
   (local $1 i32)
@@ -538,6 +548,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $assert-nonnull/testRet (type $i32_=>_i32) (param $fn i32) (result i32)
   (local $1 i32)
@@ -587,6 +598,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $assert-nonnull/testObjFn (type $i32_=>_i32) (param $foo i32) (result i32)
   (local $1 i32)
@@ -625,6 +637,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $2
+  return
  )
  (func $assert-nonnull/testObjRet (type $i32_=>_i32) (param $foo i32) (result i32)
   (local $1 i32)
@@ -678,6 +691,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $export:assert-nonnull/testVar (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)

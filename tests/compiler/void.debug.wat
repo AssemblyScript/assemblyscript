@@ -13,6 +13,7 @@
  (start $~start)
  (func $void/anInt (type $none_=>_i32) (result i32)
   i32.const 2
+  return
  )
  (func $start:void (type $none_=>_none)
   i32.const 1

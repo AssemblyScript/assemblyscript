@@ -367,6 +367,7 @@
   call $features/reference-types/external
   local.set $d
   local.get $d
+  return
  )
  (func $~start (type $none_=>_none)
   call $start:features/reference-types

@@ -273,6 +273,7 @@
   i64.shl
   i64.or
   f64.reinterpret_i64
+  return
  )
  (func $std/mod/check<f64> (type $f64_f64_=>_i32) (param $actual f64) (param $expected f64) (result i32)
   local.get $expected
@@ -301,6 +302,7 @@
   local.get $actual
   local.get $expected
   f64.eq
+  return
  )
  (func $std/mod/test_fmod (type $f64_f64_f64_=>_i32) (param $left f64) (param $right f64) (param $expected f64) (result i32)
   local.get $left
@@ -317,6 +319,7 @@
   else
    i32.const 0
   end
+  return
  )
  (func $~lib/math/NativeMathf.mod (type $f32_f32_=>_f32) (param $x f32) (param $y f32) (result f32)
   (local $ux i32)
@@ -565,6 +568,7 @@
   local.get $sm
   i32.or
   f32.reinterpret_i32
+  return
  )
  (func $std/mod/check<f32> (type $f32_f32_=>_i32) (param $actual f32) (param $expected f32) (result i32)
   local.get $expected
@@ -593,6 +597,7 @@
   local.get $actual
   local.get $expected
   f32.eq
+  return
  )
  (func $std/mod/test_fmodf (type $f32_f32_f32_=>_i32) (param $left f32) (param $right f32) (param $expected f32) (result i32)
   local.get $left
@@ -600,6 +605,7 @@
   call $~lib/math/NativeMathf.mod
   local.get $expected
   call $std/mod/check<f32>
+  return
  )
  (func $start:std/mod (type $none_=>_none)
   f64.const 3

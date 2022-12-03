@@ -10,5 +10,6 @@
  (export "memory" (memory $0))
  (func $typealias/alias (type $i32_=>_i32) (param $a i32) (result i32)
   local.get $a
+  return
  )
 )

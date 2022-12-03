@@ -27,10 +27,12 @@
   local.get $b
   i32.add
   i32.load $0
+  return
  )
  (func $function-inline-regressions/loadZ (type $none_=>_i32) (result i32)
   i32.const 16
   i32.load $0
+  return
  )
  (func $function-inline-regressions/Struct#set:v0 (type $i32_i32_=>_none) (param $this i32) (param $v0 i32)
   local.get $this
@@ -77,5 +79,6 @@
   local.get $v2
   call $function-inline-regressions/Struct#set:v2
   local.get $z
+  return
  )
 )

@@ -1110,6 +1110,7 @@
    i32.store8 $0
   end
   local.get $ret
+  return
  )
  (func $start:memcpy (type $none_=>_none)
   global.get $memcpy/base

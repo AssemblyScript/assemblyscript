@@ -36,6 +36,7 @@
   call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
+  return
  )
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
@@ -139,6 +140,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
@@ -181,12 +183,14 @@
   local.get $leftLength
   call $~lib/util/string/compareImpl
   i32.eqz
+  return
  )
  (func $~lib/string/String.__ne (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
   local.get $left
   local.get $right
   call $~lib/string/String.__eq
   i32.eqz
+  return
  )
  (func $NonNullable/assertNonNull<~lib/string/String> (type $i32_=>_none) (param $t i32)
   i32.const 0

@@ -48,21 +48,27 @@
   i32.add
   i32.store $0
   local.get $value
+  return
  )
  (func $memory/testGeneric<v128> (type $none_=>_i32) (result i32)
   i32.const 144
+  return
  )
  (func $memory/testGeneric<i64> (type $none_=>_i32) (result i32)
   i32.const 152
+  return
  )
  (func $memory/testGeneric<i32> (type $none_=>_i32) (result i32)
   i32.const 156
+  return
  )
  (func $memory/testGeneric<i16> (type $none_=>_i32) (result i32)
   i32.const 158
+  return
  )
  (func $memory/testGeneric<i8> (type $none_=>_i32) (result i32)
   i32.const 159
+  return
  )
  (func $start:memory (type $none_=>_none)
   call $memory/test

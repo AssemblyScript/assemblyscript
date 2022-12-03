@@ -16,6 +16,7 @@
  (start $~start)
  (func $getter-setter/Foo.get:bar (type $none_=>_i32) (result i32)
   global.get $getter-setter/Foo._bar
+  return
  )
  (func $getter-setter/Foo.set:bar (type $i32_=>_none) (param $bar i32)
   local.get $bar

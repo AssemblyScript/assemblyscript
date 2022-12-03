@@ -43,15 +43,19 @@
  )
  (func $infer-type/reti (type $none_=>_i32) (result i32)
   i32.const 0
+  return
  )
  (func $infer-type/retI (type $none_=>_i64) (result i64)
   i64.const 0
+  return
  )
  (func $infer-type/retf (type $none_=>_f32) (result f32)
   f32.const 0
+  return
  )
  (func $infer-type/refF (type $none_=>_f64) (result f64)
   f64.const 0
+  return
  )
  (func $start:infer-type (type $none_=>_none)
   (local $a i32)

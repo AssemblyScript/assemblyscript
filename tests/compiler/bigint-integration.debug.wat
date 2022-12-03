@@ -46,6 +46,7 @@
  )
  (func $bigint-integration/getInternalValue (type $none_=>_i64) (result i64)
   global.get $bigint-integration/internalValue
+  return
  )
  (func $~start (type $none_=>_none)
   global.get $~started

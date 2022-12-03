@@ -65,6 +65,7 @@
   local.get $rlo
   local.get $rhi
   i64.add
+  return
  )
  (func $~start (type $none_=>_none)
   call $start:const-folding

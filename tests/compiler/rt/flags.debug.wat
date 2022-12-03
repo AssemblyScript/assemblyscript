@@ -50,6 +50,7 @@
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
+  return
  )
  (func $rt/flags/test<~lib/typedarray/Int8Array> (type $i32_=>_none) (param $flags i32)
   i32.const 4

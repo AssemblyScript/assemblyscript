@@ -37,6 +37,7 @@
   call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
+  return
  )
  (func $~lib/util/hash/HASH<~lib/string/String|null> (type $i32_=>_i32) (param $key i32) (result i32)
   (local $key|1 i32)
@@ -109,65 +110,77 @@
      local.get $end
      i32.le_u
      if
-      local.get $s1
-      local.set $h|10
-      local.get $pos
-      i32.load $0
-      local.set $key|11
-      local.get $h|10
-      local.get $key|11
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
+      block $~lib/util/hash/mix|inlined.0 (result i32)
+       local.get $s1
+       local.set $h|10
+       local.get $pos
+       i32.load $0
+       local.set $key|11
+       local.get $h|10
+       local.get $key|11
+       i32.const -2048144777
+       i32.mul
+       i32.add
+       i32.const 13
+       i32.rotl
+       i32.const -1640531535
+       i32.mul
+       br $~lib/util/hash/mix|inlined.0
+      end
       local.set $s1
-      local.get $s2
-      local.set $h|12
-      local.get $pos
-      i32.load $0 offset=4
-      local.set $key|13
-      local.get $h|12
-      local.get $key|13
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
+      block $~lib/util/hash/mix|inlined.1 (result i32)
+       local.get $s2
+       local.set $h|12
+       local.get $pos
+       i32.load $0 offset=4
+       local.set $key|13
+       local.get $h|12
+       local.get $key|13
+       i32.const -2048144777
+       i32.mul
+       i32.add
+       i32.const 13
+       i32.rotl
+       i32.const -1640531535
+       i32.mul
+       br $~lib/util/hash/mix|inlined.1
+      end
       local.set $s2
-      local.get $s3
-      local.set $h|14
-      local.get $pos
-      i32.load $0 offset=8
-      local.set $key|15
-      local.get $h|14
-      local.get $key|15
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
+      block $~lib/util/hash/mix|inlined.2 (result i32)
+       local.get $s3
+       local.set $h|14
+       local.get $pos
+       i32.load $0 offset=8
+       local.set $key|15
+       local.get $h|14
+       local.get $key|15
+       i32.const -2048144777
+       i32.mul
+       i32.add
+       i32.const 13
+       i32.rotl
+       i32.const -1640531535
+       i32.mul
+       br $~lib/util/hash/mix|inlined.2
+      end
       local.set $s3
-      local.get $s4
-      local.set $h|16
-      local.get $pos
-      i32.load $0 offset=12
-      local.set $key|17
-      local.get $h|16
-      local.get $key|17
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
+      block $~lib/util/hash/mix|inlined.3 (result i32)
+       local.get $s4
+       local.set $h|16
+       local.get $pos
+       i32.load $0 offset=12
+       local.set $key|17
+       local.get $h|16
+       local.get $key|17
+       i32.const -2048144777
+       i32.mul
+       i32.add
+       i32.const 13
+       i32.rotl
+       i32.const -1640531535
+       i32.mul
+       br $~lib/util/hash/mix|inlined.3
+      end
       local.set $s4
       local.get $pos
       i32.const 16
@@ -289,11 +302,13 @@
    i32.xor
    local.set $h
    local.get $h
+   br $~lib/util/hash/hashStr|inlined.0
   end
   return
  )
  (func $std/hash/check (type $i32_=>_i32) (param $hash i32) (result i32)
   i32.const 1
+  return
  )
  (func $~lib/util/hash/HASH<~lib/string/String> (type $i32_=>_i32) (param $key i32) (result i32)
   (local $key|1 i32)
@@ -366,65 +381,77 @@
      local.get $end
      i32.le_u
      if
-      local.get $s1
-      local.set $h|10
-      local.get $pos
-      i32.load $0
-      local.set $key|11
-      local.get $h|10
-      local.get $key|11
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
+      block $~lib/util/hash/mix|inlined.4 (result i32)
+       local.get $s1
+       local.set $h|10
+       local.get $pos
+       i32.load $0
+       local.set $key|11
+       local.get $h|10
+       local.get $key|11
+       i32.const -2048144777
+       i32.mul
+       i32.add
+       i32.const 13
+       i32.rotl
+       i32.const -1640531535
+       i32.mul
+       br $~lib/util/hash/mix|inlined.4
+      end
       local.set $s1
-      local.get $s2
-      local.set $h|12
-      local.get $pos
-      i32.load $0 offset=4
-      local.set $key|13
-      local.get $h|12
-      local.get $key|13
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
+      block $~lib/util/hash/mix|inlined.5 (result i32)
+       local.get $s2
+       local.set $h|12
+       local.get $pos
+       i32.load $0 offset=4
+       local.set $key|13
+       local.get $h|12
+       local.get $key|13
+       i32.const -2048144777
+       i32.mul
+       i32.add
+       i32.const 13
+       i32.rotl
+       i32.const -1640531535
+       i32.mul
+       br $~lib/util/hash/mix|inlined.5
+      end
       local.set $s2
-      local.get $s3
-      local.set $h|14
-      local.get $pos
-      i32.load $0 offset=8
-      local.set $key|15
-      local.get $h|14
-      local.get $key|15
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
+      block $~lib/util/hash/mix|inlined.6 (result i32)
+       local.get $s3
+       local.set $h|14
+       local.get $pos
+       i32.load $0 offset=8
+       local.set $key|15
+       local.get $h|14
+       local.get $key|15
+       i32.const -2048144777
+       i32.mul
+       i32.add
+       i32.const 13
+       i32.rotl
+       i32.const -1640531535
+       i32.mul
+       br $~lib/util/hash/mix|inlined.6
+      end
       local.set $s3
-      local.get $s4
-      local.set $h|16
-      local.get $pos
-      i32.load $0 offset=12
-      local.set $key|17
-      local.get $h|16
-      local.get $key|17
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
+      block $~lib/util/hash/mix|inlined.7 (result i32)
+       local.get $s4
+       local.set $h|16
+       local.get $pos
+       i32.load $0 offset=12
+       local.set $key|17
+       local.get $h|16
+       local.get $key|17
+       i32.const -2048144777
+       i32.mul
+       i32.add
+       i32.const 13
+       i32.rotl
+       i32.const -1640531535
+       i32.mul
+       br $~lib/util/hash/mix|inlined.7
+      end
       local.set $s4
       local.get $pos
       i32.const 16
@@ -546,6 +573,7 @@
    i32.xor
    local.set $h
    local.get $h
+   br $~lib/util/hash/hashStr|inlined.1
   end
   return
  )
@@ -563,56 +591,59 @@
   i32.const 4
   i32.eq
   drop
-  local.get $key
-  i32.reinterpret_f32
-  local.set $key|1
-  i32.const 4
-  local.set $len
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  local.get $len
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash32|inlined.0 (result i32)
+   local.get $key
+   i32.reinterpret_f32
+   local.set $key|1
+   i32.const 4
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.0
+  end
   return
  )
  (func $~lib/util/hash/HASH<f64> (type $f64_=>_i32) (param $key f64) (result i32)
@@ -632,70 +663,73 @@
   i32.const 8
   i32.eq
   drop
-  local.get $key
-  i64.reinterpret_f64
-  local.set $key|1
-  i32.const 0
-  i32.const 374761393
-  i32.add
-  i32.const 8
-  i32.add
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $key|1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  i32.add
-  local.set $h
-  local.get $h
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -2048144777
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
-  i32.const -1028477379
-  i32.mul
-  local.set $h
-  local.get $h
-  local.get $h
-  i32.const 16
-  i32.shr_u
-  i32.xor
-  local.set $h
-  local.get $h
+  block $~lib/util/hash/hash64|inlined.0 (result i32)
+   local.get $key
+   i64.reinterpret_f64
+   local.set $key|1
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   i32.const 8
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i64.const 32
+   i64.shr_u
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash64|inlined.0
+  end
   return
  )
  (func $~start (type $none_=>_none)

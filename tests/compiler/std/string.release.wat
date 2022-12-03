@@ -6634,17 +6634,17 @@
     i32.const 2
     i32.shl
     i32.add
-    local.set $3
+    local.set $2
     loop $while-continue|0
      local.get $1
-     local.get $3
+     local.get $2
      i32.lt_u
      if
       local.get $1
       i32.load $0
-      local.tee $2
+      local.tee $3
       if
-       local.get $2
+       local.get $3
        call $byn-split-outlined-A$~lib/rt/itcms/__visit
       end
       local.get $1
@@ -6654,7 +6654,14 @@
       br $while-continue|0
      end
     end
-    br $folding-inner0
+    local.get $0
+    i32.load $0
+    local.tee $0
+    if
+     local.get $0
+     call $byn-split-outlined-A$~lib/rt/itcms/__visit
+    end
+    return
    end
    unreachable
   end
@@ -6779,7 +6786,7 @@
       local.get $5
       i32.gt_s
       select
-      local.tee $2
+      local.tee $1
       i32.const 5
       i32.const 0
       call $~lib/rt/__newArray
@@ -6789,11 +6796,11 @@
       i32.load $0 offset=4
       local.set $4
       i32.const 0
-      local.set $1
+      local.set $2
       loop $for-loop|0
        local.get $1
        local.get $2
-       i32.lt_s
+       i32.gt_s
        if
         global.get $~lib/memory/__stack_pointer
         i32.const 2
@@ -6803,14 +6810,14 @@
         i32.store $0 offset=12
         local.get $5
         local.get $0
-        local.get $1
+        local.get $2
         i32.const 1
         i32.shl
         i32.add
         i32.load16_u $0
         i32.store16 $0
         local.get $4
-        local.get $1
+        local.get $2
         i32.const 2
         i32.shl
         i32.add
@@ -6823,10 +6830,10 @@
          i32.const 1
          call $byn-split-outlined-A$~lib/rt/itcms/__link
         end
-        local.get $1
+        local.get $2
         i32.const 1
         i32.add
-        local.set $1
+        local.set $2
         br $for-loop|0
        end
       end
