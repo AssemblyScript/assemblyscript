@@ -422,7 +422,7 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!returnType) return null;
     }
-    let signature = Signature.new(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
+    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters, hasRest);
     return node.isNullable ? signature.type.asNullable() : signature.type;
   }
 
@@ -2704,7 +2704,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       const type = this.resolveExpression(expr, tempFlow, ctxType, reportMode);
       if (type) {
-        functionType.signatureReference = Signature.new(
+        functionType.signatureReference = Signature.create(
           this.program,
           signatureReference.parameterTypes,
           type,
@@ -2858,7 +2858,7 @@ export class Resolver extends DiagnosticEmitter {
       returnType = type;
     }
 
-    let signature = Signature.new(this.program, parameterTypes, returnType, thisType, requiredParameters);
+    let signature = Signature.create(this.program, parameterTypes, returnType, thisType, requiredParameters);
 
     let nameInclTypeParameters = prototype.name;
     if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;

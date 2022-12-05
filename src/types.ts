@@ -887,9 +887,8 @@ export function typesToString(types: Type[]): string {
 
 /** Represents a fully resolved function signature. */
 export class Signature {
-  
 
-  public static new(
+  public static create(
     /** The program that created this signature. */
     program: Program,
     /** Parameter types, if any, excluding `this`. */
@@ -1152,7 +1151,7 @@ export class Signature {
     for (let i = 0; i < numParameterTypes; ++i) {
       unchecked(cloneParameterTypes[i] = parameterTypes[i]);
     }
-    return Signature.new(
+    return Signature.create(
       this.program,
       cloneParameterTypes,
       this.returnType,

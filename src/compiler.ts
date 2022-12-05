@@ -474,7 +474,7 @@ export class Compiler extends DiagnosticEmitter {
     module.setFeatures(featureFlags);
 
     // set up the main start function
-    let startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, Signature.new(program, [], Type.void));
+    let startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, Signature.create(program, [], Type.void));
     startFunctionInstance.internalName = BuiltinNames.start;
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = new Array<ExpressionRef>();
@@ -7102,7 +7102,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-      let signature = Signature.new(this.program, parameterTypes, returnType, thisType, numParameters);
+      let signature = Signature.create(this.program, parameterTypes, returnType, thisType, numParameters);
       instance = new Function(
         prototype.name,
         prototype,
@@ -8668,7 +8668,7 @@ export class Compiler extends DiagnosticEmitter {
             )
           ),
           null,
-          Signature.new(this.program, [], classInstance.type, classInstance.type),
+          Signature.create(this.program, [], classInstance.type, classInstance.type),
           contextualTypeArguments
         );
       }
