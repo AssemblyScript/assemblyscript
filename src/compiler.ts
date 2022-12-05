@@ -473,7 +473,7 @@ export class Compiler extends DiagnosticEmitter {
     module.setFeatures(featureFlags);
 
     // set up the main start function
-    let startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, new Signature(program, [], Type.void));
+    let startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, Signature.create(program, [], Type.void));
     startFunctionInstance.internalName = BuiltinNames.start;
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = new Array<ExpressionRef>();
@@ -6381,8 +6381,8 @@ export class Compiler extends DiagnosticEmitter {
     assert(operandIndex == minOperands);
 
     // create the varargs stub
-    stub = original.newStub("varargs");
-    stub.signature.requiredParameters = maxArguments;
+    stub = original.newStub("varargs", maxArguments);
+
     original.varargsStub = stub;
 
     // compile initializers of omitted arguments in the scope of the stub,
@@ -7042,8 +7042,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-      let signature = new Signature(this.program, parameterTypes, returnType, thisType);
-      signature.requiredParameters = numParameters; // !
+      let signature = Signature.create(this.program, parameterTypes, returnType, thisType, numParameters);
       instance = new Function(
         prototype.name,
         prototype,
@@ -8619,7 +8618,7 @@ export class Compiler extends DiagnosticEmitter {
             )
           ),
           null,
-          new Signature(this.program, null, classInstance.type, classInstance.type),
+          Signature.create(this.program, [], classInstance.type, classInstance.type),
           contextualTypeArguments
         );
       }

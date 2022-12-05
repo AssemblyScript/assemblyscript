@@ -421,12 +421,17 @@ export class Type {
 
   /** Tests if this type equals the specified. */
   equals(other: Type): bool {
-    if (this.kind != other.kind) return false;
+    if (this.kind != other.kind) {
+      return false;
+    }
     if (this.isReference) {
+      let selfSignatureReference = this.signatureReference;
+      let otherSignatureReference = other.signatureReference;
+
       return (
-        this.classReference == other.classReference &&
-        this.signatureReference == other.signatureReference &&
-        this.isNullableReference == other.isNullableReference
+        this.classReference == other.classReference
+        && selfSignatureReference == otherSignatureReference
+        && this.isNullableReference == other.isNullableReference
       );
     }
     return true;
@@ -882,57 +887,70 @@ export function typesToString(types: Type[]): string {
 
 /** Represents a fully resolved function signature. */
 export class Signature {
-  /** Unique id representing this signature. */
-  id: u32 = 0;
-  /** Parameter types, if any, excluding `this`. */
-  parameterTypes: Type[];
-  /** Number of required parameters excluding `this`. Other parameters are considered optional. */
-  requiredParameters: i32;
-  /** Return type. */
-  returnType: Type;
-  /** This type, if an instance signature. */
-  thisType: Type | null;
-  /** Whether the last parameter is a rest parameter. */
-  hasRest: bool;
-  /** Respective function type. */
-  type: Type;
-  /** The program that created this signature. */
-  program: Program;
-
-  /** Constructs a new signature. */
-  constructor(
+  /** Construct a new signature. */
+  public static create(
+    /** The program that created this signature. */
     program: Program,
-    parameterTypes: Type[] | null = null,
-    returnType: Type | null = null,
-    thisType: Type | null = null
-  ) {
-    this.parameterTypes = parameterTypes ? parameterTypes : [];
-    this.requiredParameters = 0;
-    this.returnType = returnType ? returnType : Type.void;
-    this.thisType = thisType;
-    this.program = program;
-    this.hasRest = false;
+    /** Parameter types, if any, excluding `this`. */
+    parameterTypes: Type[] = [],
+    /** Return type. */
+    returnType: Type = Type.void,
+    /** This type, if an instance signature. */
+    thisType: Type | null = null,
+    /** Number of required parameters excluding `this`. Other parameters are considered optional. */
+    requiredParameters: i32 = parameterTypes ? parameterTypes.length : 0,
+    /** Whether the last parameter is a rest parameter. */
+    hasRest: bool = false,
+  ): Signature {
+    // get the usize type, and the type of the signature
     let usizeType = program.options.usizeType;
     let type = new Type(
       usizeType.kind,
       usizeType.flags & ~TypeFlags.Value | TypeFlags.Reference,
       usizeType.size
     );
-    this.type = type;
-    type.signatureReference = this;
 
+    // calculate the properties
     let signatureTypes = program.uniqueSignatures;
-    let length = signatureTypes.length;
-    for (let i = 0; i < length; i++) {
-      let compare = unchecked(signatureTypes[i]);
-      if (this.equals(compare)) {
-        this.id = compare.id;
-        return this;
-      }
+    let nextId = program.nextSignatureId;
+    
+    // construct the signature and calculate it's unique key
+    let signature = new Signature(program, parameterTypes, returnType, thisType, requiredParameters, hasRest, nextId, type);
+    let uniqueKey = signature.toString();
+
+    // check if it exists, and return it
+    if (signatureTypes.has(uniqueKey)) {
+      let existing = assert(signatureTypes.get(uniqueKey));
+      assert(signature.equals(existing));
+      return existing;
     }
-    this.id = program.nextSignatureId++;
-    signatureTypes.push(this);
+
+    // otherwise increment the program's signature id, set the signature reference of the type, and memoize the signature
+    program.nextSignatureId = nextId + 1;
+    type.signatureReference = signature;
+    signatureTypes.set(uniqueKey, signature);
+    return signature;
   }
+
+  /** Constructs a new signature. */
+  private constructor(
+    /** The program that created this signature. */
+    public readonly program: Program,
+    /** Parameter types, if any, excluding `this`. */
+    public readonly parameterTypes: Type[],
+    /** Return type. */
+    public readonly returnType: Type,
+    /** This type, if an instance signature. */
+    public readonly thisType: Type | null,
+    /** Number of required parameters excluding `this`. Other parameters are considered optional. */
+    public readonly requiredParameters: i32,
+    /** Whether the last parameter is a rest parameter. */
+    public readonly hasRest: bool,
+    /** Unique id representing this signature. */
+    public readonly id: u32,
+    /** Respective function type. */
+    public readonly type: Type,
+  ) {}
 
   get paramRefs(): TypeRef {
     let thisType = this.thisType;
@@ -975,15 +993,15 @@ export class Signature {
     if (!this.returnType.equals(other.returnType)) return false;
 
     // check parameter types
-    let thisParameterTypes = this.parameterTypes;
+    let selfParameterTypes = this.parameterTypes;
     let otherParameterTypes = other.parameterTypes;
-    let numParameters = thisParameterTypes.length;
-    if (numParameters != otherParameterTypes.length) return false;
+    let numParameters = selfParameterTypes.length;
+    if (numParameters != otherParameterTypes.length)  return false;
 
     for (let i = 0; i < numParameters; ++i) {
-      let thisParameterType = unchecked(thisParameterTypes[i]);
+      let selfParameterType = unchecked(selfParameterTypes[i]);
       let otherParameterType = unchecked(otherParameterTypes[i]);
-      if (!thisParameterType.equals(otherParameterType)) return false;
+      if (!selfParameterType.equals(otherParameterType)) return false;
     }
     return true;
   }
@@ -1105,7 +1123,6 @@ export class Signature {
     let thisType = this.thisType;
     if (thisType) {
       sb.push(validWat ? "this:" : "this: ");
-      assert(!thisType.signatureReference);
       sb.push(thisType.toString(validWat));
       index = 1;
     }
@@ -1127,18 +1144,20 @@ export class Signature {
   }
 
   /** Creates a clone of this signature that is safe to modify. */
-  clone(): Signature {
+  clone(requiredParameters: i32 = this.requiredParameters, hasRest: bool = this.hasRest): Signature {
     let parameterTypes = this.parameterTypes;
     let numParameterTypes = parameterTypes.length;
     let cloneParameterTypes = new Array<Type>(numParameterTypes);
     for (let i = 0; i < numParameterTypes; ++i) {
       unchecked(cloneParameterTypes[i] = parameterTypes[i]);
     }
-    return new Signature(
+    return Signature.create(
       this.program,
       cloneParameterTypes,
       this.returnType,
-      this.thisType
+      this.thisType,
+      requiredParameters,
+      hasRest
     );
   }
 }

@@ -473,7 +473,7 @@ export class Program extends DiagnosticEmitter {
   /** Managed classes contained in the program, by id. */
   managedClasses: Map<i32,Class> = new Map();
   /** A set of unique function signatures contained in the program, by id. */
-  uniqueSignatures: Signature[] = new Array<Signature>(0);
+  uniqueSignatures: Map<string, Signature> = new Map<string, Signature>();
   /** Module exports. */
   moduleExports: Map<string,Element> = new Map();
   /** Module imports. */
@@ -3218,7 +3218,7 @@ export class File extends Element {
     program.filesByName.set(this.internalName, this);
     let startFunction = this.program.makeNativeFunction(
       `start:${this.internalName}`,
-      new Signature(program, null, Type.void),
+      Signature.create(program, [], Type.void),
       this
     );
     startFunction.internalName = startFunction.name;
@@ -3830,12 +3830,12 @@ export class Function extends TypedElement {
   }
 
   /** Creates a stub for use with this function, i.e. for varargs or override calls. */
-  newStub(postfix: string): Function {
+  newStub(postfix: string, requiredParameters: i32 = this.signature.requiredParameters): Function {
     let stub = new Function(
       this.original.name + STUB_DELIMITER + postfix,
       this.prototype,
       this.typeArguments,
-      this.signature.clone(),
+      this.signature.clone(requiredParameters),
       this.contextualTypeArguments
     );
     stub.original = this.original;
