@@ -10,5 +10,6 @@
  (export "memory" (memory $0))
  (func $named-export-default/get3 (type $none_=>_i32) (result i32)
   i32.const 3
+  return
  )
 )

@@ -49,7 +49,7 @@ import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/
 // @ts-ignore: decorator
 @lazy let pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
-@lazy let iter: Object; // null
+@lazy let iter: Object = changetype<Object>(0); // unsafe initializion below
 
 function initLazy(space: Object): Object {
   space.nextWithColor = changetype<usize>(space);

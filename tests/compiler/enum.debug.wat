@@ -70,6 +70,7 @@
  (start $~start)
  (func $enum/getZero (type $none_=>_i32) (result i32)
   i32.const 0
+  return
  )
  (func $start:enum (type $none_=>_none)
   call $enum/getZero

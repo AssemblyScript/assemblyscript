@@ -25,5 +25,6 @@
   i32.sub
   call $recursive/fib
   i32.add
+  return
  )
 )

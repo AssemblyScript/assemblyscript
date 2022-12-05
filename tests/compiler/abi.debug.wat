@@ -19,6 +19,7 @@
  (start $~start)
  (func $abi/internal (type $none_=>_i32) (result i32)
   i32.const 128
+  return
  )
  (func $start:abi (type $none_=>_none)
   (local $x i32)
@@ -175,13 +176,16 @@
  (func $abi/exported (type $none_=>_i32) (result i32)
   i32.const 128
   i32.extend8_s
+  return
  )
  (func $abi/exportedExported (type $none_=>_i32) (result i32)
   call $abi/exported
+  return
  )
  (func $abi/exportedInternal (type $none_=>_i32) (result i32)
   call $abi/internal
   i32.extend8_s
+  return
  )
  (func $~start (type $none_=>_none)
   call $start:abi

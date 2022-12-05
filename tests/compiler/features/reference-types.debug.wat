@@ -16,12 +16,12 @@
  (global $features/reference-types/b funcref (ref.null nofunc))
  (global $features/reference-types/nonNullFunc (mut funcref) (ref.null nofunc))
  (global $features/reference-types/nonNullReal (mut externref) (ref.null noextern))
- (global $~lib/memory/__data_end i32 (i32.const 156))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32924))
- (global $~lib/memory/__heap_base i32 (i32.const 32924))
+ (global $~lib/memory/__data_end i32 (i32.const 220))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 32988))
+ (global $~lib/memory/__heap_base i32 (i32.const 32988))
  (memory $0 1)
  (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\02\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 92) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 92) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00^\00\00\00U\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00\'\00n\00u\00l\00l\00\'\00 \00(\00n\00o\00t\00 \00a\00s\00s\00i\00g\00n\00e\00d\00 \00o\00r\00 \00f\00a\00i\00l\00e\00d\00 \00c\00a\00s\00t\00)\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (elem declare func $features/reference-types/someFunc)
@@ -38,6 +38,8 @@
  (func $features/reference-types/testLocal<funcref> (type $none_=>_none)
   (local $local funcref)
   (local $localInit funcref)
+  ref.null nofunc
+  local.set $local
   local.get $local
   ref.is_null
   i32.eqz
@@ -85,6 +87,8 @@
  (func $features/reference-types/testLocal<externref> (type $none_=>_none)
   (local $local externref)
   (local $localInit externref)
+  ref.null noextern
+  local.set $local
   local.get $local
   ref.is_null
   i32.eqz
@@ -363,6 +367,7 @@
   call $features/reference-types/external
   local.set $d
   local.get $d
+  return
  )
  (func $~start (type $none_=>_none)
   call $start:features/reference-types

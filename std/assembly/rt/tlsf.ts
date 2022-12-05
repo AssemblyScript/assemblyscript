@@ -137,7 +137,7 @@ import { E_ALLOCATION_TOO_LARGE } from "../util/error";
 @inline const ROOT_SIZE: usize = HL_END + sizeof<usize>();
 
 // @ts-ignore: decorator
-@lazy export let ROOT: Root;
+@lazy export let ROOT: Root = changetype<Root>(0); // unsafe initializion below
 
 /** Gets the second level map of the specified first level. */
 // @ts-ignore: decorator

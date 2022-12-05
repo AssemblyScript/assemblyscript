@@ -120,11 +120,8 @@
   drop
  )
  (func $possibly-null/testWhile (type $i32_=>_none) (param $a i32)
-  (local $1 i32)
   loop $while-continue|0
    local.get $a
-   local.set $1
-   local.get $1
    if
     i32.const 0
     drop
@@ -138,11 +135,8 @@
   end
  )
  (func $possibly-null/testWhile2 (type $i32_i32_=>_none) (param $a i32) (param $b i32)
-  (local $2 i32)
   loop $while-continue|0
    local.get $a
-   local.set $2
-   local.get $2
    if
     i32.const 0
     drop
@@ -156,11 +150,8 @@
   end
  )
  (func $possibly-null/testWhile3 (type $i32_i32_=>_none) (param $a i32) (param $b i32)
-  (local $2 i32)
   loop $while-continue|0
    local.get $a
-   local.set $2
-   local.get $2
    if
     i32.const 0
     drop
@@ -177,6 +168,7 @@
  )
  (func $possibly-null/requireNonNull (type $i32_=>_i32) (param $a i32) (result i32)
   local.get $a
+  return
  )
  (func $possibly-null/testLogicalAnd (type $i32_=>_none) (param $a i32)
   local.get $a

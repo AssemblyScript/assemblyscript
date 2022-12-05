@@ -400,6 +400,7 @@
   local.get $a7E
   local.set $a7F
   local.get $a7F
+  return
  )
  (func $many-locals/testI8 (type $i32_=>_i32) (param $a i32) (result i32)
   (local $a00 i32)
@@ -788,6 +789,7 @@
   local.set $a7F
   local.get $a7F
   i32.extend8_s
+  return
  )
  (func $start:many-locals (type $none_=>_none)
   i32.const 42

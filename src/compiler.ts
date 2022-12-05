@@ -42,7 +42,6 @@ import {
   getBlockChildCount,
   getBlockChildAt,
   getBlockName,
-  needsExplicitUnreachable,
   getLocalSetValue,
   getGlobalGetName,
   isGlobalMutable,
@@ -1169,6 +1168,27 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     let type = global.type;
+
+    // Enforce either an initializer, a definitive assignment or a nullable type
+    // to guarantee soundness when globals are accessed. In the absence of an
+    // initializer, a definitive assignment guarantees a runtime check, whereas
+    // a nullable type guarantees that obtaining default `null` is OK. Avoids:
+    //
+    //   let foo: string;
+    //   function bar() {
+    //     foo.length; // no error in TS even though undefined
+    //   }
+    //   bar();
+    if (
+      !initializerNode && !global.is(CommonFlags.DefinitelyAssigned) &&
+      type.isReference && !type.isNullableReference
+    ) {
+      this.error(
+        DiagnosticCode.Initializer_definitive_assignment_or_nullable_type_expected,
+        global.identifierNode.range
+      );
+    }
+
     let typeRef = type.toRef();
     let isDeclaredConstant = global.is(CommonFlags.Const) || global.is(CommonFlags.Static | CommonFlags.Readonly);
     let isDeclaredInline = global.hasDecorator(DecoratorFlags.Inline);
@@ -1639,7 +1659,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile statements
     if (bodyNode.kind == NodeKind.Block) {
-      stmts = this.compileStatements((<BlockStatement>bodyNode).statements, true, stmts);
+      stmts = this.compileStatements((<BlockStatement>bodyNode).statements, stmts);
     } else {
       // must be an expression statement if not a block
       assert(bodyNode.kind == NodeKind.Expression);
@@ -2089,9 +2109,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles a statement. */
   compileStatement(
     /** Statement to compile. */
-    statement: Statement,
-    /** Whether this is the last statement of the body, if known. */
-    isLastInBody: bool = false
+    statement: Statement
   ): ExpressionRef {
     let module = this.module;
     let stmt: ExpressionRef;
@@ -2133,7 +2151,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.Return: {
-        stmt = this.compileReturnStatement(<ReturnStatement>statement, isLastInBody);
+        stmt = this.compileReturnStatement(<ReturnStatement>statement);
         break;
       }
       case NodeKind.Switch: {
@@ -2188,9 +2206,7 @@ export class Compiler extends DiagnosticEmitter {
   compileStatements(
     /** Statements to compile. */
     statements: Statement[],
-    /** Whether this is an immediate body statement. */
-    isBody: bool = false,
-    /** Statements to append to that is also returned. Created if omitted. */
+    /** Statements to append to. Also returned, created if omitted. */
     stmts: ExpressionRef[] | null = null
   ): ExpressionRef[] {
     let numStatements = statements.length;
@@ -2198,10 +2214,9 @@ export class Compiler extends DiagnosticEmitter {
       stmts = new Array<ExpressionRef>(numStatements);
       stmts.length = 0;
     }
-    let module = this.module;
     let flow = this.currentFlow;
     for (let i = 0; i < numStatements; ++i) {
-      let stmt = this.compileStatement(statements[i], isBody && i == numStatements - 1);
+      let stmt = this.compileStatement(statements[i]);
       switch (getExpressionId(stmt)) {
         case ExpressionId.Block: {
           if (!getBlockName(stmt)) {
@@ -2213,10 +2228,7 @@ export class Compiler extends DiagnosticEmitter {
         default: stmts.push(stmt);
         case ExpressionId.Nop:
       }
-      if (flow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
-        if (needsExplicitUnreachable(stmt)) stmts.push(module.unreachable());
-        break;
-      }
+      if (flow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) break;
     }
     return stmts;
   }
@@ -2303,110 +2315,97 @@ export class Compiler extends DiagnosticEmitter {
     let outerFlow = this.currentFlow;
     let numLocalsBefore = outerFlow.targetFunction.localsByIndex.length;
 
-    // (block $break                          └►┐ flow
-    //  (loop $loop                             ├◄───────────┐ recompile?
-    //   (?block $continue                      └─┐          │
-    //    (body)                                  │ bodyFlow │
-    //   )                                      ┌─┘          │
-    //                                        ┌◄┼►╢          │ breaks or terminates?
-    //                                        │ └─┐          │ but does not continue
-    //   (br_if (cond) $loop)                 │   │ condFlow │
-    //                                        │ ┌─┘          │
-    //                                        ├◄┴────────────┘ condition?
-    //  )                                     └─┐
-    // )                                      ┌─┘
+    // (block $break
+    //  (loop $loop
+    //   (?block $continue
+    //    (body)
+    //   )
+    //   (br_if $loop (condition))
+    //  )
+    // )
 
-    let label = outerFlow.pushBreakLabel();
+    // Cases of interest:
+    // * If the body never falls through or continues, the condition never executes
+    // * If the condition is always true and body never breaks, overall flow terminates
+    // * If the body terminates with a continue, condition is still reached
+
+    // Compile the body (always executes)
     let flow = outerFlow.fork(/* resetBreakContext */ true);
-    this.currentFlow = flow;
-
+    let label = flow.pushControlFlowLabel();
     let breakLabel = `do-break|${label}`;
     flow.breakLabel = breakLabel;
     let continueLabel = `do-continue|${label}`;
     flow.continueLabel = continueLabel;
     let loopLabel = `do-loop|${label}`;
-
-    // Compile the body (always executes)
-    let bodyFlow = flow.fork();
-    this.currentFlow = bodyFlow;
+    this.currentFlow = flow;
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
     if (body.kind == NodeKind.Block) {
-      this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
+      this.compileStatements((<BlockStatement>body).statements, bodyStmts);
     } else {
       bodyStmts.push(this.compileStatement(body));
     }
+    flow.popControlFlowLabel(label);
 
-    // Shortcut if body never falls through
-    let possiblyContinues = bodyFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
-    if (bodyFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks) && !possiblyContinues) {
+    let possiblyContinues = flow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
+    let possiblyBreaks = flow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
+    let possiblyFallsThrough = !flow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
+
+    // Shortcut if the condition is never reached
+    if (!possiblyFallsThrough && !possiblyContinues) {
       bodyStmts.push(
         module.unreachable()
       );
-      flow.inherit(bodyFlow);
+      outerFlow.inherit(flow);
 
-    // Otherwise evaluate the condition
-    } else {
-      let condFlow = flow.fork();
-      this.currentFlow = condFlow;
-      let condExpr = this.makeIsTrueish(
-        this.compileExpression(statement.condition, Type.i32),
-        this.currentType,
-        statement.condition
-      );
-      let condKind = this.evaluateCondition(condExpr);
-
-      if (possiblyContinues) {
-        bodyStmts = [
-          module.block(continueLabel, bodyStmts)
-        ];
+      // If the body also never breaks, the overall flow terminates
+      if (!possiblyBreaks) {
+        outerFlow.set(FlowFlags.Terminates);
       }
 
-      // Shortcut if condition is always false
-      if (condKind == ConditionKind.False) {
-        bodyStmts.push(
-          module.drop(condExpr)
-        );
-        flow.inherit(bodyFlow);
+    // Otherwise compile and evaluate the condition (from here on always executes)
+    } else {
+      let condExpr = this.compileExpression(statement.condition, Type.bool);
+      let condExprTrueish = this.makeIsTrueish(condExpr, this.currentType, statement.condition);
+      let condKind = this.evaluateCondition(condExprTrueish);
 
-      // Terminate if condition is always true and body never breaks
-      } else if (condKind == ConditionKind.True && !bodyFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks)) {
-        bodyStmts.push(
-          module.drop(condExpr)
-        );
-        bodyStmts.push(
-          module.br(loopLabel)
-        );
-        flow.set(FlowFlags.Terminates);
+      // Detect if local flags are incompatible before and after looping, and
+      // if so recompile by unifying local flags between iterations. Note that
+      // this may be necessary multiple times where locals depend on each other.
+      let possiblyLoops = condKind != ConditionKind.False && (possiblyContinues || possiblyFallsThrough);
+      if (possiblyLoops && outerFlow.resetIfNeedsRecompile(flow.forkThen(condExpr), numLocalsBefore)) {
+        this.currentFlow = outerFlow;
+        return this.doCompileDoStatement(statement);
+      }
 
-      } else {
-        bodyStmts.push(
-          module.br(loopLabel,
-            condExpr
-          )
-        );
-        flow.inherit(condFlow);
+      if (possiblyContinues) {
+        bodyStmts[0] = module.block(continueLabel, bodyStmts);
+        bodyStmts.length = 1;
+        flow.unset(FlowFlags.Terminates); // Continue breaks to condition
+      }
+      bodyStmts.push(
+        module.br(loopLabel,
+          condExprTrueish
+        )
+      );
+      outerFlow.inherit(flow);
 
-        // Detect if local flags are incompatible before and after looping, and
-        // if so recompile by unifying local flags between iterations. Note that
-        // this may be necessary multiple times where locals depend on each other.
-        if (outerFlow.resetIfNeedsRecompile(flow, numLocalsBefore)) {
-          outerFlow.popBreakLabel();
-          this.currentFlow = outerFlow;
-          return this.doCompileDoStatement(statement);
-        }
+      // Terminate if the condition is always true and body never breaks
+      if (condKind == ConditionKind.True && !possiblyBreaks) {
+        outerFlow.set(FlowFlags.Terminates);
       }
     }
 
-    // Finalize
-    outerFlow.inherit(flow);
-    outerFlow.popBreakLabel();
+    // Finalize and leave everything else to the optimizer
     this.currentFlow = outerFlow;
-    let expr = module.block(breakLabel, [
-      module.loop(loopLabel,
-        module.flatten(bodyStmts)
-      )
-    ]);
+    let expr = module.loop(loopLabel,
+      module.flatten(bodyStmts)
+    );
+    if (possiblyBreaks) {
+      expr = module.block(breakLabel, [
+        expr
+      ]);
+    }
     if (outerFlow.is(FlowFlags.Terminates)) {
       expr = module.block(null, [ expr, module.unreachable() ]);
     }
@@ -2440,37 +2439,26 @@ export class Compiler extends DiagnosticEmitter {
     let outerFlow = this.currentFlow;
     let numLocalsBefore = outerFlow.targetFunction.localsByIndex.length;
 
-    // (initializer)                  └►┐ flow
-    // (block $break                    │
-    //  (loop $loop                     ├◄───────────┐ recompile?
-    //   (local.set $tcond (condition)) └─┐ condFlow │
-    //                                  ┌─┘          │
-    //   (if (local.get $tcond)       ┌◄┤            │ condition?
-    //    (block $continue            │ │            │
-    //     (body)                     │ └─┐ bodyFlow │
-    //                                │ ┌─┘          │
-    //    )                           ├◄┼►╢          │ breaks or terminates?
-    //    (incrementor)               │ └─┐ incrFlow │
-    //                                │ ┌─┘          │
-    //                                │ └────────────┘
-    //    (br $loop)                  └─┐
-    //   )                              │
-    //  )                               │
-    // )                                │
-    //                                ┌─┘
+    // (initializer)          └►┐ flow
+    // (?block $break           │ (initializer)
+    //  (?loop $loop          ┌◄┤ (condition) shortcut if false ◄┐
+    //   (if (condition)        ├►┐ bodyFlow                     │
+    //    (then                 │ │ (body)                       │
+    //     (?block $continue    │ │ if loops: (incrementor) ─────┘
+    //      (body)              │ │           recompile body?
+    //     )                    ├◄┘    
+    //     (incrementor)      ┌◄┘
+    //     (br $loop)
+    //    )
+    //   )
+    //  )
+    // )
 
-    let label = outerFlow.pushBreakLabel();
-    let stmts = new Array<ExpressionRef>();
-    let flow = outerFlow.fork(/* resetBreakContext */ true);
+    // Compile initializer if present. The initializer might introduce scoped
+    // locals bound to the for statement, so create a new flow early.
+    let flow = outerFlow.fork();
     this.currentFlow = flow;
-
-    let breakLabel = `for-break${label}`;
-    flow.breakLabel = breakLabel;
-    let continueLabel = `for-continue|${label}`;
-    flow.continueLabel = continueLabel;
-    let loopLabel = `for-loop|${label}`;
-
-    // Compile initializer if present
+    let stmts = new Array<ExpressionRef>();
     let initializer = statement.initializer;
     if (initializer) {
       assert(
@@ -2480,121 +2468,108 @@ export class Compiler extends DiagnosticEmitter {
       stmts.push(this.compileStatement(initializer));
     }
 
-    // Precompute the condition
-    let condFlow = flow.fork();
-    this.currentFlow = condFlow;
+    // Precompute the condition if present, or default to `true`
     let condExpr: ExpressionRef;
+    let condExprTrueish: ExpressionRef;
     let condKind: ConditionKind;
     let condition = statement.condition;
     if (condition) {
-      condExpr = this.makeIsTrueish(
-        this.compileExpression(condition, Type.bool),
-        this.currentType,
-        condition
-      );
-      condKind = this.evaluateCondition(condExpr);
+      condExpr = this.compileExpression(condition, Type.bool);
+      condExprTrueish = this.makeIsTrueish(condExpr, this.currentType, condition);
+      condKind = this.evaluateCondition(condExprTrueish);
 
-      // Shortcut if condition is always false (body never runs)
+      // Shortcut if condition is always false (body never executes)
       if (condKind == ConditionKind.False) {
         stmts.push(
-          module.drop(condExpr)
+          module.drop(condExprTrueish)
         );
-        flow.inherit(condFlow);
         outerFlow.inherit(flow);
-        outerFlow.popBreakLabel();
         this.currentFlow = outerFlow;
         return module.flatten(stmts);
       }
     } else {
       condExpr = module.i32(1);
+      condExprTrueish = condExpr;
       condKind = ConditionKind.True;
     }
-
-    // From here on condition is either always true or unknown
-
-    // Store condition result in a temp
-    let tcond = flow.getTempLocal(Type.bool);
-    let loopStmts = new Array<ExpressionRef>();
-    loopStmts.push(
-      module.local_set(tcond.index, condExpr, false) // bool
-    );
-
-    flow.inherit(condFlow); // always executes
-    this.currentFlow = flow;
+    // From here on condition is either true or unknown
 
     // Compile the body assuming the condition turned out true
-    let bodyFlow = flow.fork();
-    bodyFlow.inheritNonnullIfTrue(condExpr);
+    let bodyFlow = flow.forkThen(condExpr, /* newBreakContext */ true);
+    let label = bodyFlow.pushControlFlowLabel();
+    let breakLabel = `for-break${label}`;
+    bodyFlow.breakLabel = breakLabel;
+    let continueLabel = `for-continue|${label}`;
+    bodyFlow.continueLabel = continueLabel;
+    let loopLabel = `for-loop|${label}`;
     this.currentFlow = bodyFlow;
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
     if (body.kind == NodeKind.Block) {
-      this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
+      this.compileStatements((<BlockStatement>body).statements, bodyStmts);
     } else {
       bodyStmts.push(this.compileStatement(body));
     }
+    bodyFlow.popControlFlowLabel(label);
+    bodyFlow.breakLabel = null;
+    bodyFlow.continueLabel = null;
 
-    // Check if body terminates
-    if (bodyFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
-      bodyStmts.push(module.unreachable());
+    let possiblyFallsThrough = !bodyFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
+    let possiblyContinues = bodyFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
+    let possiblyBreaks = bodyFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
+
+    if (possiblyContinues) {
+      bodyStmts[0] = module.block(continueLabel, bodyStmts);
+      bodyStmts.length = 1;
     }
-    if (condKind == ConditionKind.True) flow.inherit(bodyFlow);
-    else flow.inheritBranch(bodyFlow);
 
-    let ifStmts = new Array<ExpressionRef>();
-    ifStmts.push(
-      module.block(continueLabel, bodyStmts)
-    );
-
-    // Compile the incrementor if it runs
-    // Can still fall through to here if body continues, hence is already known to terminate
-    if (!bodyFlow.is(FlowFlags.Terminates) || bodyFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues)) {
+    // Compile the incrementor if it possibly executes
+    let possiblyLoops = possiblyContinues || possiblyFallsThrough;
+    if (possiblyLoops) {
       let incrementor = statement.incrementor;
       if (incrementor) {
-        let incrFlow = flow.fork();
-        this.currentFlow = incrFlow;
-        ifStmts.push(
+        bodyStmts.push(
           this.compileExpression(incrementor, Type.void, Constraints.ConvImplicit | Constraints.WillDrop)
         );
-        flow.inherit(incrFlow); // mostly local flags, also covers late termination by throwing
-        this.currentFlow = flow;
       }
-
-      ifStmts.push(
+      bodyStmts.push(
         module.br(loopLabel)
       );
 
       // Detect if local flags are incompatible before and after looping, and if
       // so recompile by unifying local flags between iterations. Note that this
       // may be necessary multiple times where locals depend on each other.
-      if (outerFlow.resetIfNeedsRecompile(flow, numLocalsBefore)) {
-        outerFlow.popBreakLabel();
+      if (outerFlow.resetIfNeedsRecompile(bodyFlow.forkThen(condExpr), numLocalsBefore)) {
         this.currentFlow = outerFlow;
         return this.doCompileForStatement(statement);
       }
     }
-    loopStmts.push(
-      module.if(module.local_get(tcond.index, TypeRef.I32),
-        module.flatten(ifStmts)
-      )
-    );
 
-    stmts.push(
-      module.block(breakLabel, [
-        module.loop(loopLabel,
-          module.flatten(loopStmts)
-        )
-      ])
-    );
-    this.currentFlow = flow;
+    // Body executes at least once
+    if (condKind == ConditionKind.True) {
+      flow.inherit(bodyFlow);
+
+    // Otherwise executes conditionally
+    } else {
+      flow.mergeBranch(bodyFlow);
+    }
 
     // Finalize
     outerFlow.inherit(flow);
-    outerFlow.popBreakLabel();
+    this.currentFlow = outerFlow;
+    let expr = module.if(condExprTrueish,
+      module.flatten(bodyStmts)
+    );
+    if (possiblyLoops) {
+      expr = module.loop(loopLabel, expr);
+    }
+    if (possiblyBreaks) {
+      expr = module.block(breakLabel, [ expr ]);
+    }
+    stmts.push(expr);
     if (outerFlow.is(FlowFlags.Terminates)) {
       stmts.push(module.unreachable());
     }
-    this.currentFlow = outerFlow;
     return module.flatten(stmts);
   }
 
@@ -2616,42 +2591,40 @@ export class Compiler extends DiagnosticEmitter {
     let ifTrue = statement.ifTrue;
     let ifFalse = statement.ifFalse;
 
-    // (if              └►┐ flow
-    //  (condition)      ┌┴───────────┐ condition?
-    //  (block           │            │
-    //   (ifTrue)        └►┐ thenFlow │
-    //                   ┌─┘          │
-    //  )                ├─╢          │
-    //  (block           │          ┌◄┤ present?
-    //   (ifFalse)       │          │ └►┐ elseFlow
-    //                   │          │ ┌─┘
-    //  )                │          │ ├─╢
-    // )                 └┬─────────┴─┘
-    // ...              ┌◄┘
+    // (if (condition)
+    //  (then (ifTrue))
+    //  (?else (ifFalse))
+    // )
+
+    // Cases of interest:
+    // * If the condition is always true or false, the other branch is eliminated
+    // * If both then and else terminate, the overall flow does as well
+    // * Without an else, when then terminates, follow-up flow acts like an else
 
     // Precompute the condition (always executes)
-    let condExpr = this.makeIsTrueish(
-      this.compileExpression(statement.condition, Type.bool),
+    let condExpr = this.compileExpression(statement.condition, Type.bool);
+    let condExprTrueish = this.makeIsTrueish(
+      condExpr,
       this.currentType,
       statement.condition
     );
-    let condKind = this.evaluateCondition(condExpr);
+    let condKind = this.evaluateCondition(condExprTrueish);
 
     // Shortcut if the condition is constant
     switch (condKind) {
       case ConditionKind.True: {
         return module.block(null, [
-          module.drop(condExpr),
+          module.drop(condExprTrueish),
           this.compileStatement(ifTrue)
         ]);
       }
       case ConditionKind.False: {
         return ifFalse
           ? module.block(null, [
-              module.drop(condExpr),
+              module.drop(condExprTrueish),
               this.compileStatement(ifFalse)
             ])
-          : module.drop(condExpr);
+          : module.drop(condExprTrueish);
       }
     }
 
@@ -2661,57 +2634,49 @@ export class Compiler extends DiagnosticEmitter {
 
     // Compile ifTrue assuming the condition turned out true
     let thenStmts = new Array<ExpressionRef>();
-    let thenFlow = flow.fork();
+    let thenFlow = flow.forkThen(condExpr);
     this.currentFlow = thenFlow;
-    thenFlow.inheritNonnullIfTrue(condExpr);
     if (ifTrue.kind == NodeKind.Block) {
-      this.compileStatements((<BlockStatement>ifTrue).statements, false, thenStmts);
+      this.compileStatements((<BlockStatement>ifTrue).statements, thenStmts);
     } else {
       thenStmts.push(this.compileStatement(ifTrue));
-    }
-    let thenTerminates = thenFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
-    if (thenTerminates) {
-      thenStmts.push(module.unreachable());
     }
     this.currentFlow = flow;
 
     // Compile ifFalse assuming the condition turned out false, if present
+    let elseFlow = flow.forkElse(condExpr);
     if (ifFalse) {
-      let elseStmts = new Array<ExpressionRef>();
-      let elseFlow = flow.fork();
       this.currentFlow = elseFlow;
-      elseFlow.inheritNonnullIfFalse(condExpr);
+      let elseStmts = new Array<ExpressionRef>();
       if (ifFalse.kind == NodeKind.Block) {
-        this.compileStatements((<BlockStatement>ifFalse).statements, false, elseStmts);
+        this.compileStatements((<BlockStatement>ifFalse).statements, elseStmts);
       } else {
         elseStmts.push(this.compileStatement(ifFalse));
       }
-      let elseTerminates = elseFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
-      if (elseTerminates) {
-        elseStmts.push(module.unreachable());
-      }
+      flow.inheritAlternatives(thenFlow, elseFlow); // terminates if both do
       this.currentFlow = flow;
-      flow.inheritMutual(thenFlow, elseFlow);
-      return module.if(condExpr,
+      return module.if(condExprTrueish,
         module.flatten(thenStmts),
         module.flatten(elseStmts)
       );
     } else {
-      flow.inheritBranch(thenFlow);
-      flow.inheritNonnullIfFalse(condExpr,
-        thenFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)
-          ? null     // thenFlow terminates: just inherit
-          : thenFlow // must become nonnull in thenFlow otherwise
-      );
-      return module.if(condExpr,
+      if (thenFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
+        // Only getting past if condition was false (acts like else)
+        flow.inherit(elseFlow);
+        flow.mergeSideEffects(thenFlow);
+      } else {
+        // Otherwise getting past conditionally
+        flow.inheritAlternatives(thenFlow, elseFlow);
+      }
+      this.currentFlow = flow;
+      return module.if(condExprTrueish,
         module.flatten(thenStmts)
       );
     }
   }
 
   private compileReturnStatement(
-    statement: ReturnStatement,
-    isLastInBody: bool
+    statement: ReturnStatement
   ): ExpressionRef {
     let module = this.module;
     let expr: ExpressionRef = 0;
@@ -2743,138 +2708,134 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle inline return
     if (flow.isInline) {
-      return !expr
-        ? isLastInBody
-          ? module.nop()
-          : module.br(assert(flow.inlineReturnLabel))
-        : isLastInBody
-          ? expr
-          : this.currentType == Type.void
-            ? module.block(null, [ expr, module.br(assert(flow.inlineReturnLabel)) ])
-            : module.br(assert(flow.inlineReturnLabel), 0, expr);
+      let inlineReturnLabel = assert(flow.inlineReturnLabel);
+      return expr
+        ? this.currentType == Type.void
+          ? module.block(null, [ expr, module.br(inlineReturnLabel) ])
+          : module.br(inlineReturnLabel, 0, expr)
+        : module.br(inlineReturnLabel);
     }
 
     // Otherwise emit a normal return
-    return !expr
-      ? isLastInBody
-        ? module.nop()
-        : module.return()
-      : isLastInBody
-        ? expr
-        : this.currentType == Type.void
-          ? module.block(null, [ expr, module.return() ])
-          : module.return(expr);
+    return expr
+      ? this.currentType == Type.void
+        ? module.block(null, [ expr, module.return() ])
+        : module.return(expr)
+      : module.return();
   }
 
   private compileSwitchStatement(
     statement: SwitchStatement
   ): ExpressionRef {
     let module = this.module;
-
     let cases = statement.cases;
     let numCases = cases.length;
-    if (!numCases) {
-      return this.compileExpression(statement.condition, Type.void,
-        Constraints.ConvImplicit
+
+    // Compile the condition (always executes)
+    let condExpr = this.compileExpression(statement.condition, Type.u32,
+      Constraints.ConvImplicit
+    );
+
+    // Shortcut if there are no cases
+    if (!numCases) return module.drop(condExpr);
+    
+    // Assign the condition to a temporary local as we compare it multiple times
+    let outerFlow = this.currentFlow;
+    let tempLocal = outerFlow.getTempLocal(Type.u32);
+    let tempLocalIndex = tempLocal.index;
+    let breaks = new Array<ExpressionRef>(1 + numCases);
+    breaks[0] = module.local_set(tempLocalIndex, condExpr, false); // u32
+    
+    // Make one br_if per labeled case and leave it to Binaryen to optimize the
+    // sequence of br_ifs to a br_table according to optimization levels
+    let breakIndex = 1;
+    let defaultIndex = -1;
+    let label = outerFlow.pushControlFlowLabel();
+    for (let i = 0; i < numCases; ++i) {
+      let case_ = cases[i];
+      if (case_.isDefault) {
+        defaultIndex = i;
+        continue;
+      }
+      breaks[breakIndex++] = module.br(`case${i}|${label}`,
+        module.binary(BinaryOp.EqI32,
+          module.local_get(tempLocalIndex, TypeRef.I32),
+          this.compileExpression(assert(case_.label), Type.u32,
+            Constraints.ConvImplicit
+          )
+        )
       );
     }
 
-    // Everything within a switch uses the same break context
-    let outerFlow = this.currentFlow;
-    let context = outerFlow.pushBreakLabel();
-
-    // introduce a local for evaluating the condition (exactly once)
-    let tempLocal = outerFlow.getTempLocal(Type.u32);
-    let tempLocalIndex = tempLocal.index;
-
-    // Prepend initializer to inner block. Does not initiate a new branch, yet.
-    let breaks = new Array<ExpressionRef>(1 + numCases);
-    breaks[0] = module.local_set( // initializer
-      tempLocalIndex,
-      this.compileExpression(statement.condition, Type.u32,
-        Constraints.ConvImplicit
-      ),
-      false // u32
-    );
-
-    // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
-    let breakIndex = 1;
-    let defaultIndex = -1;
-    for (let i = 0; i < numCases; ++i) {
-      let case_ = cases[i];
-      let label = case_.label;
-      if (label) {
-        breaks[breakIndex++] = module.br(`case${i}|${context}`,
-          module.binary(BinaryOp.EqI32,
-            module.local_get(tempLocalIndex, TypeRef.I32),
-            this.compileExpression(label, Type.u32,
-              Constraints.ConvImplicit
-            )
-          )
-        );
-      } else {
-        defaultIndex = i;
-      }
-    }
-
-    // otherwise br to default respectively out of the switch if there is no default case
+    // If there is a default case, break to it, otherwise break out of the switch
     breaks[breakIndex] = module.br(defaultIndex >= 0
-      ? `case${defaultIndex}|${context}`
-      : `break|${context}`
+      ? `case${defaultIndex}|${label}`
+      : `break|${label}`
     );
 
-    // nest blocks in order
-    let currentBlock = module.block(`case0|${context}`, breaks, TypeRef.None);
-    let commonCategorical = FlowFlags.AnyCategorical;
-    let commonConditional = 0;
+    // Nest the case blocks in order, to be targeted by the br_if sequence
+    let currentBlock = module.block(`case0|${label}`, breaks, TypeRef.None);
+    let fallThroughFlow: Flow | null = null;
+    let breakingFlowAlternatives: Flow | null = null;
     for (let i = 0; i < numCases; ++i) {
       let case_ = cases[i];
       let statements = case_.statements;
       let numStatements = statements.length;
 
-      // Each switch case initiates a new branch
-      let innerFlow = outerFlow.fork();
+      // Can get here by matching the case or possibly by fall-through
+      let innerFlow = outerFlow.fork(/* newBreakContext */ true, /* newContinueContext */ false);
+      if (fallThroughFlow) innerFlow.mergeBranch(fallThroughFlow);
       this.currentFlow = innerFlow;
-      let breakLabel = `break|${context}`;
+      let breakLabel = `break|${label}`;
       innerFlow.breakLabel = breakLabel;
 
       let isLast = i == numCases - 1;
-      let nextLabel = isLast ? breakLabel : `case${i + 1}|${context}`;
+      let nextLabel = isLast ? breakLabel : `case${i + 1}|${label}`;
       let stmts = new Array<ExpressionRef>(1 + numStatements);
       stmts[0] = currentBlock;
       let count = 1;
-      let terminates = false;
+      let possiblyFallsThrough = true;
       for (let j = 0; j < numStatements; ++j) {
         let stmt = this.compileStatement(statements[j]);
         if (getExpressionId(stmt) != ExpressionId.Nop) {
           stmts[count++] = stmt;
         }
         if (innerFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks)) {
-          if (innerFlow.is(FlowFlags.Terminates)) terminates = true;
+          possiblyFallsThrough = false;
           break;
         }
       }
       stmts.length = count;
-      if (terminates || isLast || innerFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks)) {
-        commonCategorical &= innerFlow.flags;
+      fallThroughFlow = possiblyFallsThrough ? innerFlow : null;
+      let possiblyBreaks = innerFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
+      innerFlow.unset(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks); // clear
+
+      // Combine all alternatives that merge again with outer flow
+      if (possiblyBreaks || (isLast && possiblyFallsThrough)) {
+        if (breakingFlowAlternatives) breakingFlowAlternatives.inheritAlternatives(breakingFlowAlternatives, innerFlow);
+        else breakingFlowAlternatives = innerFlow;
+
+      // Otherwise just merge the effects of a non-merging branch
+      } else if (!possiblyFallsThrough) {
+        outerFlow.mergeSideEffects(innerFlow);
       }
 
-      commonConditional |= innerFlow.deriveConditionalFlags();
-
-      // Switch back to the parent flow
-      innerFlow.unset(
-        FlowFlags.Breaks |
-        FlowFlags.ConditionallyBreaks
-      );
       this.currentFlow = outerFlow;
       currentBlock = module.block(nextLabel, stmts, TypeRef.None); // must be a labeled block
     }
-    outerFlow.popBreakLabel();
+    outerFlow.popControlFlowLabel(label);
 
-    // If the switch has a default (guaranteed to handle any value), propagate common flags
-    if (defaultIndex >= 0) outerFlow.flags |= commonCategorical & ~FlowFlags.Breaks;
-    outerFlow.flags |= commonConditional & ~FlowFlags.ConditionallyBreaks;
-    // TODO: what about local states?
+    // If the switch has a default, we only get past through any breaking flow
+    if (defaultIndex >= 0) {
+      if (breakingFlowAlternatives) outerFlow.inherit(breakingFlowAlternatives);
+      else outerFlow.set(FlowFlags.Terminates);
+
+    // Otherwise either none or any breaking flow can get past conditionally
+    } else if (breakingFlowAlternatives) {
+      outerFlow.mergeBranch(breakingFlowAlternatives);
+    }
+
+    this.currentFlow = outerFlow;
     return currentBlock;
   }
 
@@ -2929,6 +2890,14 @@ export class Compiler extends DiagnosticEmitter {
       let name = declaration.name.text;
       let type: Type | null = null;
       let initExpr: ExpressionRef = 0;
+      let initType: Type | null = null;
+
+      if (declaration.is(CommonFlags.DefinitelyAssigned)) {
+        this.warning(
+          DiagnosticCode.Definitive_assignment_has_no_effect_on_local_variables,
+          declaration.name.range
+        );
+      }
 
       // Resolve type if annotated
       let typeNode = declaration.type;
@@ -2949,6 +2918,7 @@ export class Compiler extends DiagnosticEmitter {
           initExpr = this.compileExpression(initializerNode, type, // reports
             Constraints.ConvImplicit
           );
+          initType = this.currentType;
           pendingElements.delete(dummy);
           flow.freeScopedDummyLocal(name);
         }
@@ -2959,6 +2929,7 @@ export class Compiler extends DiagnosticEmitter {
         let temp = flow.addScopedDummyLocal(name, Type.auto, statement); // pending dummy
         pendingElements.add(temp);
         initExpr = this.compileExpression(initializerNode, Type.auto); // reports
+        initType = this.currentType;
         pendingElements.delete(temp);
         flow.freeScopedDummyLocal(name);
 
@@ -2969,7 +2940,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           continue;
         }
-        type = this.currentType;
+        type = initType;
 
       // Error if there's neither a type nor an initializer
       } else {
@@ -3093,7 +3064,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         if (initExpr) {
           initializers.push(
-            this.makeLocalAssignment(local, initExpr, type, false)
+            this.makeLocalAssignment(local, initExpr, initType ? initType : type, false)
           );
         } else {
           // no need to assign zero
@@ -3132,131 +3103,99 @@ export class Compiler extends DiagnosticEmitter {
     let outerFlow = this.currentFlow;
     let numLocalsBefore = outerFlow.targetFunction.localsByIndex.length;
 
-    // (block $break                  └►┐ flow
-    //  (loop $continue                 ├◄───────────┐ recompile?
-    //   (local.set $tcond (condition)) └─┐ condFlow │
-    //                                  ┌─┘          │
-    //   (if (local.get $tcond)       ┌◄┤            │ condition?
-    //    (body)                      │ └─┐ bodyFlow │
-    //                                │ ┌─┘          │
-    //                                ├◄┼►╢          │ breaks or terminates?
-    //    (br $continue)              │ └────────────┘
-    //   )                            └─┐
-    //  )                               │
-    // )                              ┌─┘
+    // (block $break
+    //  (loop $continue
+    //   (if (condition)
+    //    (then
+    //     (body)
+    //     (br $continue)
+    //    )
+    //   )
+    //  )
 
-    let label = outerFlow.pushBreakLabel();
-    let stmts = new Array<ExpressionRef>();
-    let flow = outerFlow.fork(/* resetBreakContext */ true);
-    this.currentFlow = flow;
+    // Cases of interest:
+    // * If the condition is always false, eliminate the body as it never runs
+    // * If the condition is always true and the body never breaks, terminate
+    // * If the body runs but always terminates, continue as if condition was false
 
-    let breakLabel = `while-break|${label}`;
-    flow.breakLabel = breakLabel;
-    let continueLabel = `while-continue|${label}`;
-    flow.continueLabel = continueLabel;
-
-    // Precompute the condition
-    let condFlow = flow.fork();
-    this.currentFlow = condFlow;
-    let condExpr = this.makeIsTrueish(
-      this.compileExpression(statement.condition, Type.bool),
-      this.currentType,
-      statement.condition
-    );
-    let condKind = this.evaluateCondition(condExpr);
+    // Compile and evaluate the condition (always executes)
+    let condExpr = this.compileExpression(statement.condition, Type.bool);
+    let condExprTrueish = this.makeIsTrueish(condExpr, this.currentType, statement.condition);
+    let condKind = this.evaluateCondition(condExprTrueish);
 
     // Shortcut if condition is always false (body never runs)
     if (condKind == ConditionKind.False) {
-      stmts.push(
-        module.drop(condExpr)
-      );
-      outerFlow.popBreakLabel();
-      this.currentFlow = outerFlow;
-      return module.flatten(stmts);
+      return module.drop(condExprTrueish);
     }
 
-    // From here on condition is either always true or unknown
-
-    // Store condition result in a temp
-    let tcond = flow.getTempLocal(Type.bool);
-    stmts.push(
-      module.local_set(tcond.index, condExpr, false) // bool
-    );
-
-    flow.inherit(condFlow); // always executes
-    this.currentFlow = flow;
-
     // Compile the body assuming the condition turned out true
-    let bodyFlow = flow.fork();
-    bodyFlow.inheritNonnullIfTrue(condExpr);
-    this.currentFlow = bodyFlow;
+    let thenFlow = outerFlow.forkThen(condExpr, /* newBreakContext */ true);
+    let label = thenFlow.pushControlFlowLabel();
+    let breakLabel = `while-break|${label}`;
+    thenFlow.breakLabel = breakLabel;
+    let continueLabel = `while-continue|${label}`;
+    thenFlow.continueLabel = continueLabel;
+    this.currentFlow = thenFlow;
     let bodyStmts = new Array<ExpressionRef>();
     let body = statement.body;
     if (body.kind == NodeKind.Block) {
-      this.compileStatements((<BlockStatement>body).statements, false, bodyStmts);
+      this.compileStatements((<BlockStatement>body).statements, bodyStmts);
     } else {
       bodyStmts.push(this.compileStatement(body));
     }
-
-    // Simplify if body always terminates
-    if (bodyFlow.is(FlowFlags.Terminates)) {
-      bodyStmts.push(
-        module.unreachable()
-      );
-      if (condKind == ConditionKind.True) flow.inherit(bodyFlow);
-      else flow.inheritBranch(bodyFlow);
-
-    // Terminate if condition is always true and body never breaks
-    } else if (condKind == ConditionKind.True && !bodyFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks)) {
-      bodyStmts.push(
-        module.br(continueLabel)
-      );
-      flow.set(FlowFlags.Terminates);
-
-    } else {
-      let breaks = bodyFlow.is(FlowFlags.Breaks);
-      if (breaks) {
-        bodyStmts.push(
-          module.unreachable()
-        );
-      } else {
-        bodyStmts.push(
-          module.br(continueLabel)
-        );
-      }
-      if (condKind == ConditionKind.True) flow.inherit(bodyFlow);
-      else flow.inheritBranch(bodyFlow);
-
-      // Detect if local flags are incompatible before and after looping, and
-      // if so recompile by unifying local flags between iterations. Note that
-      // this may be necessary multiple times where locals depend on each other.
-      // Here: Only relevant if flow does not always break.
-      if (!breaks && outerFlow.resetIfNeedsRecompile(flow, numLocalsBefore)) {
-        outerFlow.popBreakLabel();
-        this.currentFlow = outerFlow;
-        return this.doCompileWhileStatement(statement);
-      }
-    }
-    stmts.push(
-      module.if(module.local_get(tcond.index, TypeRef.I32),
-        module.flatten(bodyStmts)
-      )
+    bodyStmts.push(
+      module.br(continueLabel)
     );
-    this.currentFlow = flow;
+    thenFlow.popControlFlowLabel(label);
 
-    // Finalize
-    outerFlow.inherit(flow);
-    outerFlow.popBreakLabel();
-    this.currentFlow = outerFlow;
-    let expr = module.block(breakLabel, [
-      module.loop(continueLabel,
-        module.flatten(stmts)
-      )
-    ]);
-    if (condKind == ConditionKind.True && outerFlow.is(FlowFlags.Terminates)) {
-      expr = module.block(null, [ expr, module.unreachable() ]);
+    let possiblyContinues = thenFlow.isAny(FlowFlags.Continues | FlowFlags.ConditionallyContinues);
+    let possiblyBreaks = thenFlow.isAny(FlowFlags.Breaks | FlowFlags.ConditionallyBreaks);
+    let possiblyFallsThrough = !thenFlow.isAny(FlowFlags.Terminates | FlowFlags.Breaks);
+
+    // Detect if local flags are incompatible before and after looping, and
+    // if so recompile by unifying local flags between iterations. Note that
+    // this may be necessary multiple times where locals depend on each other.
+    let possiblyLoops = possiblyContinues || possiblyFallsThrough;
+    if (possiblyLoops && outerFlow.resetIfNeedsRecompile(thenFlow, numLocalsBefore)) {
+      this.currentFlow = outerFlow;
+      return this.doCompileWhileStatement(statement);
     }
-    return expr;
+
+    // If the condition is always true, the body's effects always happen
+    let alwaysTerminates = false;
+    if (condKind == ConditionKind.True) {
+      outerFlow.inherit(thenFlow);
+
+      // If the body also never breaks, the overall flow terminates
+      if (!possiblyBreaks) {
+        alwaysTerminates = true;
+        outerFlow.set(FlowFlags.Terminates);
+      }
+
+    // Otherwise loop conditionally
+    } else {
+      let elseFlow = outerFlow.forkElse(condExpr);
+      if (!possiblyFallsThrough && !possiblyBreaks) {
+        // Only getting past if condition was false
+        outerFlow.inherit(elseFlow);
+        outerFlow.mergeSideEffects(thenFlow);
+      } else {
+        // Otherwise getting past conditionally
+        outerFlow.inheritAlternatives(thenFlow, elseFlow);
+      }
+    }
+
+    // Finalize and leave everything else to the optimizer
+    this.currentFlow = outerFlow;
+    let stmts: ExpressionRef[] = [
+      module.loop(continueLabel,
+        module.if(condExprTrueish,
+          module.flatten(bodyStmts)
+        )
+      )
+    ];
+    if (alwaysTerminates) stmts.push(module.unreachable());
+    return module.block(breakLabel, stmts);
   }
 
   // === Expressions ==============================================================================
@@ -4549,9 +4488,8 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
         leftType = this.currentType;
 
-        let rightFlow = flow.fork();
+        let rightFlow = flow.forkThen(leftExpr);
         this.currentFlow = rightFlow;
-        rightFlow.inheritNonnullIfTrue(leftExpr);
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
@@ -4561,6 +4499,7 @@ export class Compiler extends DiagnosticEmitter {
           let condKind = this.evaluateCondition(leftExpr);
           if (condKind == ConditionKind.False) {
             expr = leftExpr;
+            // RHS is not compiled
           } else {
             rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
             rightType = this.currentType;
@@ -4569,8 +4508,11 @@ export class Compiler extends DiagnosticEmitter {
             // simplify if lhs is always true
             if (condKind == ConditionKind.True) {
               expr = rightExpr;
+              flow.inherit(rightFlow); // true && RHS -> RHS always executes
             } else {
               expr = module.if(leftExpr, rightExpr, module.i32(0));
+              flow.mergeBranch(rightFlow); // LHS && RHS -> RHS conditionally executes
+              flow.noteThen(expr, rightFlow); // LHS && RHS == true -> RHS always executes
             }
           }
           this.currentFlow = flow;
@@ -4579,7 +4521,6 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.ConvImplicit);
           rightType = this.currentType;
-          this.currentFlow = flow;
 
           // simplify if copying left is trivial
           if (expr = module.tryCopyTrivialExpression(leftExpr)) {
@@ -4600,6 +4541,9 @@ export class Compiler extends DiagnosticEmitter {
               module.local_get(tempLocal.index, leftType.toRef())
             );
           }
+          flow.mergeBranch(rightFlow); // LHS && RHS -> RHS conditionally executes
+          flow.noteThen(expr, rightFlow); // LHS && RHS == true -> RHS always executes
+          this.currentFlow = flow;
           this.currentType = leftType;
         }
         break;
@@ -4610,9 +4554,8 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
         leftType = this.currentType;
 
-        let rightFlow = flow.fork();
+        let rightFlow = flow.forkElse(leftExpr);
         this.currentFlow = rightFlow;
-        rightFlow.inheritNonnullIfFalse(leftExpr);
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
@@ -4622,6 +4565,7 @@ export class Compiler extends DiagnosticEmitter {
           let condKind = this.evaluateCondition(leftExpr);
           if (condKind == ConditionKind.True) {
             expr = leftExpr;
+            // RHS is not compiled
           } else {
             rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
             rightType = this.currentType;
@@ -4630,8 +4574,11 @@ export class Compiler extends DiagnosticEmitter {
             // simplify if lhs is always false
             if (condKind == ConditionKind.False) {
               expr = rightExpr;
+              flow.inherit(rightFlow); // false || RHS -> RHS always executes
             } else {
               expr = module.if(leftExpr, module.i32(1), rightExpr);
+              flow.mergeBranch(rightFlow); // LHS || RHS -> RHS conditionally executes
+              flow.noteElse(expr, rightFlow); // LHS || RHS == false -> RHS always executes
             }
           }
           this.currentFlow = flow;
@@ -4640,7 +4587,6 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.ConvImplicit);
           rightType = this.currentType;
-          this.currentFlow = flow;
 
           // simplify if copying left is trivial
           if (expr = module.tryCopyTrivialExpression(leftExpr)) {
@@ -4662,6 +4608,9 @@ export class Compiler extends DiagnosticEmitter {
               rightExpr
             );
           }
+          flow.mergeBranch(rightFlow); // LHS || RHS -> RHS conditionally executes
+          flow.noteElse(expr, rightFlow); // LHS || RHS == false -> RHS always executes
+          this.currentFlow = flow;
           this.currentType = leftType;
         }
         break;
@@ -5911,7 +5860,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = type;
       return module.block(null, [
         module.global_set(global.internalName, valueExpr),
-        module.global_get(global.internalName, typeRef)
+        module.global_get(global.internalName, typeRef) // known to be assigned now
       ], typeRef);
     } else { // global = value
       this.currentType = Type.void;
@@ -6318,6 +6267,7 @@ export class Compiler extends DiagnosticEmitter {
       body.push(
         module.local_set(thisLocal.index, thisArg, thisType.isManaged)
       );
+      flow.setLocalFlag(thisLocal.index, LocalFlags.Initialized);
       let base = classInstance.base;
       if (base) flow.addScopedAlias(CommonNames.super_, base.type, thisLocal.index);
     } else {
@@ -6333,6 +6283,7 @@ export class Compiler extends DiagnosticEmitter {
       body.push(
         module.local_set(argumentLocal.index, paramExpr, paramType.isManaged)
       );
+      flow.setLocalFlag(argumentLocal.index, LocalFlags.Initialized);
     }
 
     // Compile omitted arguments with final argument locals blocked. Doesn't need to take care of
@@ -6770,24 +6721,13 @@ export class Compiler extends DiagnosticEmitter {
             continue;
           }
           let resolved = this.resolver.lookupExpression(initializer, instance.flow, parameterTypes[i], ReportMode.Swallow);
-          if (resolved) {
-            if (resolved.kind == ElementKind.Global) {
-              let global = <Global>resolved;
-              if (this.compileGlobal(global)) {
-                if (global.is(CommonFlags.Inlined)) {
-                  operands.push(
-                    this.compileInlineConstant(global, parameterTypes[i], Constraints.ConvImplicit)
-                  );
-                } else {
-                  operands.push(
-                    this.convertExpression(
-                      module.global_get(global.internalName, global.type.toRef()),
-                      global.type, parameterTypes[i], false, initializer
-                    )
-                  );
-                }
-                continue;
-              }
+          if (resolved && resolved.kind == ElementKind.Global) {
+            let global = <Global>resolved;
+            if (this.compileGlobal(global) && global.is(CommonFlags.Inlined)) {
+              operands.push(
+                this.compileInlineConstant(global, parameterTypes[i], Constraints.ConvImplicit)
+              );
+              continue;
             }
           }
         }
@@ -7152,7 +7092,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         let ftype = instance.type;
         let local = flow.addScopedLocal(instance.name, ftype);
-        flow.setLocalFlag(local.index, LocalFlags.Constant);
+        flow.setLocalFlag(local.index, LocalFlags.Constant | LocalFlags.Initialized);
         expr = module.local_tee(local.index, expr, ftype.isManaged);
       }
     }
@@ -7322,6 +7262,12 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(local, contextualType, constraints);
         }
         let localIndex = local.index;
+        if (!flow.isLocalFlag(localIndex, LocalFlags.Initialized)) {
+          this.error(
+            DiagnosticCode.Variable_0_is_used_before_being_assigned,
+            expression.range, local.name
+          );
+        }
         assert(localIndex >= 0);
         if (localType.isNullableReference && flow.isLocalFlag(localIndex, LocalFlags.NonNull, false)) {
           localType = localType.nonNullableType;
@@ -7358,8 +7304,12 @@ export class Compiler extends DiagnosticEmitter {
         if (global.is(CommonFlags.Inlined)) {
           return this.compileInlineConstant(global, contextualType, constraints);
         }
+        let expr = module.global_get(global.internalName, globalType.toRef());
+        if (global.is(CommonFlags.DefinitelyAssigned) && globalType.isReference && !globalType.isNullableReference) {
+          expr = this.makeRuntimeNonNullCheck(expr, globalType, expression);
+        }
         this.currentType = globalType;
-        return module.global_get(global.internalName, globalType.toRef());
+        return expr;
       }
       case ElementKind.EnumValue: { // here: if referenced from within the same enum
         let enumValue = <EnumValue>target;
@@ -8861,8 +8811,12 @@ export class Compiler extends DiagnosticEmitter {
         if (global.is(CommonFlags.Inlined)) {
           return this.compileInlineConstant(global, ctxType, constraints);
         }
+        let expr = module.global_get(global.internalName, globalType.toRef());
+        if (global.is(CommonFlags.DefinitelyAssigned) && globalType.isReference && !globalType.isNullableReference) {
+          expr = this.makeRuntimeNonNullCheck(expr, globalType, expression);
+        }
         this.currentType = globalType;
-        return module.global_get(global.internalName, globalType.toRef());
+        return expr;
       }
       case ElementKind.EnumValue: { // enum value
         let enumValue = <EnumValue>target;
@@ -8945,30 +8899,25 @@ export class Compiler extends DiagnosticEmitter {
     let ifThen = expression.ifThen;
     let ifElse = expression.ifElse;
 
-    let condExpr = this.makeIsTrueish(
-      this.compileExpression(expression.condition, Type.bool),
-      this.currentType,
-      expression.condition
-    );
+    let condExpr = this.compileExpression(expression.condition, Type.bool);
+    let condExprTrueish = this.makeIsTrueish(condExpr, this.currentType, expression.condition);
     // Try to eliminate unnecesssary branches if the condition is constant
     // FIXME: skips common denominator, inconsistently picking branch type
-    let condKind = this.evaluateCondition(condExpr);
+    let condKind = this.evaluateCondition(condExprTrueish);
     if (condKind == ConditionKind.True) {
-      return module.maybeDropCondition(condExpr, this.compileExpression(ifThen, ctxType));
+      return module.maybeDropCondition(condExprTrueish, this.compileExpression(ifThen, ctxType));
     }
     if (condKind == ConditionKind.False) {
-      return module.maybeDropCondition(condExpr, this.compileExpression(ifElse, ctxType));
+      return module.maybeDropCondition(condExprTrueish, this.compileExpression(ifElse, ctxType));
     }
 
     let outerFlow = this.currentFlow;
-    let ifThenFlow = outerFlow.fork();
-    ifThenFlow.inheritNonnullIfTrue(condExpr);
+    let ifThenFlow = outerFlow.forkThen(condExpr);
     this.currentFlow = ifThenFlow;
     let ifThenExpr = this.compileExpression(ifThen, ctxType);
     let ifThenType = this.currentType;
 
-    let ifElseFlow = outerFlow.fork();
-    ifElseFlow.inheritNonnullIfFalse(condExpr);
+    let ifElseFlow = outerFlow.forkElse(condExpr);
     this.currentFlow = ifElseFlow;
     let ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType);
     let ifElseType = this.currentType;
@@ -9000,10 +8949,10 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = commonType;
     }
 
+    outerFlow.inheritAlternatives(ifThenFlow, ifElseFlow);
     this.currentFlow = outerFlow;
-    outerFlow.inheritMutual(ifThenFlow, ifElseFlow);
 
-    return module.if(condExpr, ifThenExpr, ifElseExpr);
+    return module.if(condExprTrueish, ifThenExpr, ifElseExpr);
   }
 
   private compileUnaryPostfixExpression(
@@ -10256,7 +10205,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.setLocalFlag(tempIndex, LocalFlags.NonNull);
 
     let staticAbortCallExpr = this.makeStaticAbort(
-      this.ensureStaticString("unexpected null"),
+      this.ensureStaticString("Unexpected 'null' (not assigned or failed cast)"),
       reportNode
     ); // TODO: throw
 
@@ -10396,5 +10345,5 @@ function mangleImportName(
   }
 }
 
-let mangleImportName_moduleName: string;
-let mangleImportName_elementName: string;
+let mangleImportName_moduleName: string = "";
+let mangleImportName_elementName: string = "";

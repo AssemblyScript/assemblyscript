@@ -430,6 +430,7 @@
   local.get $space
   call $~lib/rt/itcms/Object#set:prev
   local.get $space
+  return
  )
  (func $~lib/rt/itcms/Object#get:nextWithColor (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -442,17 +443,18 @@
   i32.const -1
   i32.xor
   i32.and
+  return
  )
  (func $~lib/rt/itcms/Object#get:color (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/rt/itcms/Object#get:nextWithColor
   i32.const 3
   i32.and
+  return
  )
  (func $~lib/rt/itcms/visitRoots (type $i32_=>_none) (param $cookie i32)
   (local $pn i32)
   (local $iter i32)
-  (local $3 i32)
   local.get $cookie
   call $~lib/rt/__visit_globals
   global.get $~lib/rt/itcms/pinSpace
@@ -464,8 +466,6 @@
    local.get $iter
    local.get $pn
    i32.ne
-   local.set $3
-   local.get $3
    if
     i32.const 1
     drop
@@ -608,6 +608,7 @@
   i32.mul
   i32.add
   call $~lib/shared/typeinfo/Typeinfo#get:flags
+  return
  )
  (func $~lib/rt/itcms/Object#get:isPointerfree (type $i32_=>_i32) (param $this i32) (result i32)
   (local $rtId i32)
@@ -627,6 +628,7 @@
    i32.const 0
    i32.ne
   end
+  return
  )
  (func $~lib/rt/itcms/Object#linkTo (type $i32_i32_i32_=>_none) (param $this i32) (param $list i32) (param $withColor i32)
   (local $prev i32)
@@ -712,15 +714,12 @@
  )
  (func $~lib/rt/itcms/visitStack (type $i32_=>_none) (param $cookie i32)
   (local $ptr i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   local.set $ptr
   loop $while-continue|0
    local.get $ptr
    global.get $~lib/memory/__heap_base
    i32.lt_u
-   local.set $2
-   local.get $2
    if
     local.get $ptr
     i32.load $0
@@ -747,6 +746,7 @@
   i32.xor
   i32.and
   i32.add
+  return
  )
  (func $~lib/rt/tlsf/Root#set:flMap (type $i32_i32_=>_none) (param $this i32) (param $flMap i32)
   local.get $this
@@ -922,22 +922,25 @@
    call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $block
-  local.get $root
-  local.set $root|11
-  local.get $fl
-  local.set $fl|12
-  local.get $sl
-  local.set $sl|13
-  local.get $root|11
-  local.get $fl|12
-  i32.const 4
-  i32.shl
-  local.get $sl|13
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=96
+  block $~lib/rt/tlsf/GETHEAD|inlined.0 (result i32)
+   local.get $root
+   local.set $root|11
+   local.get $fl
+   local.set $fl|12
+   local.get $sl
+   local.set $sl|13
+   local.get $root|11
+   local.get $fl|12
+   i32.const 4
+   i32.shl
+   local.get $sl|13
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=96
+   br $~lib/rt/tlsf/GETHEAD|inlined.0
+  end
   i32.eq
   if
    local.get $root
@@ -962,16 +965,19 @@
    local.get $next
    i32.eqz
    if
-    local.get $root
-    local.set $root|18
-    local.get $fl
-    local.set $fl|19
-    local.get $root|18
-    local.get $fl|19
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0 offset=4
+    block $~lib/rt/tlsf/GETSL|inlined.0 (result i32)
+     local.get $root
+     local.set $root|18
+     local.get $fl
+     local.set $fl|19
+     local.get $root|18
+     local.get $fl|19
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=4
+     br $~lib/rt/tlsf/GETSL|inlined.0
+    end
     local.set $slMap
     local.get $root
     local.set $root|21
@@ -1067,18 +1073,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $block
-  local.set $block|3
-  local.get $block|3
-  i32.const 4
-  i32.add
-  local.get $block|3
-  call $~lib/rt/common/BLOCK#get:mmInfo
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.add
+  block $~lib/rt/tlsf/GETRIGHT|inlined.0 (result i32)
+   local.get $block
+   local.set $block|3
+   local.get $block|3
+   i32.const 4
+   i32.add
+   local.get $block|3
+   call $~lib/rt/common/BLOCK#get:mmInfo
+   i32.const 3
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.add
+   br $~lib/rt/tlsf/GETRIGHT|inlined.0
+  end
   local.set $right
   local.get $right
   call $~lib/rt/common/BLOCK#get:mmInfo
@@ -1102,18 +1111,21 @@
    i32.add
    local.tee $blockInfo
    call $~lib/rt/common/BLOCK#set:mmInfo
-   local.get $block
-   local.set $block|6
-   local.get $block|6
-   i32.const 4
-   i32.add
-   local.get $block|6
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
+   block $~lib/rt/tlsf/GETRIGHT|inlined.1 (result i32)
+    local.get $block
+    local.set $block|6
+    local.get $block|6
+    i32.const 4
+    i32.add
+    local.get $block|6
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.1
+   end
    local.set $right
    local.get $right
    call $~lib/rt/common/BLOCK#get:mmInfo
@@ -1123,12 +1135,15 @@
   i32.const 2
   i32.and
   if
-   local.get $block
-   local.set $block|7
-   local.get $block|7
-   i32.const 4
-   i32.sub
-   i32.load $0
+   block $~lib/rt/tlsf/GETFREELEFT|inlined.0 (result i32)
+    local.get $block
+    local.set $block|7
+    local.get $block|7
+    i32.const 4
+    i32.sub
+    i32.load $0
+    br $~lib/rt/tlsf/GETFREELEFT|inlined.0
+   end
    local.set $left
    local.get $left
    call $~lib/rt/common/BLOCK#get:mmInfo
@@ -1276,22 +1291,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $root
-  local.set $root|16
-  local.get $fl
-  local.set $fl|17
-  local.get $sl
-  local.set $sl|18
-  local.get $root|16
-  local.get $fl|17
-  i32.const 4
-  i32.shl
-  local.get $sl|18
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=96
+  block $~lib/rt/tlsf/GETHEAD|inlined.1 (result i32)
+   local.get $root
+   local.set $root|16
+   local.get $fl
+   local.set $fl|17
+   local.get $sl
+   local.set $sl|18
+   local.get $root|16
+   local.get $fl|17
+   i32.const 4
+   i32.shl
+   local.get $sl|18
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=96
+   br $~lib/rt/tlsf/GETHEAD|inlined.1
+  end
   local.set $head
   local.get $block
   i32.const 0
@@ -1336,16 +1354,19 @@
   local.set $root|26
   local.get $fl
   local.set $fl|27
-  local.get $root
-  local.set $root|24
-  local.get $fl
-  local.set $fl|25
-  local.get $root|24
-  local.get $fl|25
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=4
+  block $~lib/rt/tlsf/GETSL|inlined.1 (result i32)
+   local.get $root
+   local.set $root|24
+   local.get $fl
+   local.set $fl|25
+   local.get $root|24
+   local.get $fl|25
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=4
+   br $~lib/rt/tlsf/GETSL|inlined.1
+  end
   i32.const 1
   local.get $sl
   i32.shl
@@ -1400,10 +1421,13 @@
   i32.xor
   i32.and
   local.set $end
-  local.get $root
-  local.set $root|3
-  local.get $root|3
-  i32.load $0 offset=1568
+  block $~lib/rt/tlsf/GETTAIL|inlined.0 (result i32)
+   local.get $root
+   local.set $root|3
+   local.get $root|3
+   i32.load $0 offset=1568
+   br $~lib/rt/tlsf/GETTAIL|inlined.0
+  end
   local.set $tail
   i32.const 0
   local.set $tailInfo
@@ -1519,6 +1543,7 @@
   local.get $left
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
+  return
  )
  (func $~lib/rt/tlsf/initialize (type $none_=>_none)
   (local $rootOffset i32)
@@ -1528,15 +1553,13 @@
   (local $root|4 i32)
   (local $tail i32)
   (local $fl i32)
-  (local $7 i32)
-  (local $root|8 i32)
-  (local $fl|9 i32)
+  (local $root|7 i32)
+  (local $fl|8 i32)
   (local $slMap i32)
   (local $sl i32)
-  (local $12 i32)
-  (local $root|13 i32)
-  (local $fl|14 i32)
-  (local $sl|15 i32)
+  (local $root|11 i32)
+  (local $fl|12 i32)
+  (local $sl|13 i32)
   (local $head i32)
   (local $memStart i32)
   i32.const 0
@@ -1597,17 +1620,15 @@
    local.get $fl
    i32.const 23
    i32.lt_u
-   local.set $7
-   local.get $7
    if
     local.get $root
-    local.set $root|8
+    local.set $root|7
     local.get $fl
-    local.set $fl|9
+    local.set $fl|8
     i32.const 0
     local.set $slMap
-    local.get $root|8
-    local.get $fl|9
+    local.get $root|7
+    local.get $fl|8
     i32.const 2
     i32.shl
     i32.add
@@ -1619,22 +1640,20 @@
      local.get $sl
      i32.const 16
      i32.lt_u
-     local.set $12
-     local.get $12
      if
       local.get $root
-      local.set $root|13
+      local.set $root|11
       local.get $fl
-      local.set $fl|14
+      local.set $fl|12
       local.get $sl
-      local.set $sl|15
+      local.set $sl|13
       i32.const 0
       local.set $head
-      local.get $root|13
-      local.get $fl|14
+      local.get $root|11
+      local.get $fl|12
       i32.const 4
       i32.shl
-      local.get $sl|15
+      local.get $sl|13
       i32.add
       i32.const 2
       i32.shl
@@ -1707,6 +1726,7 @@
    unreachable
   end
   local.get $block
+  return
  )
  (func $~lib/rt/tlsf/freeBlock (type $i32_i32_=>_none) (param $root i32) (param $block i32)
   i32.const 0
@@ -1767,8 +1787,6 @@
   (local $obj i32)
   (local $1 i32)
   (local $black i32)
-  (local $3 i32)
-  (local $4 i32)
   (local $from i32)
   block $break|0
    block $case2|0
@@ -1813,8 +1831,6 @@
      local.get $obj
      global.get $~lib/rt/itcms/toSpace
      i32.ne
-     local.set $3
-     local.get $3
      if
       local.get $obj
       global.set $~lib/rt/itcms/iter
@@ -1864,8 +1880,6 @@
       local.get $obj
       global.get $~lib/rt/itcms/toSpace
       i32.ne
-      local.set $4
-      local.get $4
       if
        local.get $obj
        call $~lib/rt/itcms/Object#get:color
@@ -1947,6 +1961,7 @@
    br $break|0
   end
   i32.const 0
+  return
  )
  (func $~lib/rt/itcms/interrupt (type $none_=>_none)
   (local $budget i32)
@@ -2025,6 +2040,7 @@
    i32.const 4
    i32.sub
   end
+  return
  )
  (func $~lib/rt/tlsf/prepareSize (type $i32_=>_i32) (param $size i32) (result i32)
   local.get $size
@@ -2040,6 +2056,7 @@
   end
   local.get $size
   call $~lib/rt/tlsf/computeSize
+  return
  )
  (func $~lib/rt/tlsf/searchBlock (type $i32_i32_=>_i32) (param $root i32) (param $size i32) (result i32)
   (local $fl i32)
@@ -2130,16 +2147,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $root
-  local.set $root|5
-  local.get $fl
-  local.set $fl|6
-  local.get $root|5
-  local.get $fl|6
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load $0 offset=4
+  block $~lib/rt/tlsf/GETSL|inlined.2 (result i32)
+   local.get $root
+   local.set $root|5
+   local.get $fl
+   local.set $fl|6
+   local.get $root|5
+   local.get $fl|6
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load $0 offset=4
+   br $~lib/rt/tlsf/GETSL|inlined.2
+  end
   i32.const 0
   i32.const -1
   i32.xor
@@ -2172,16 +2192,19 @@
     local.get $flMap
     i32.ctz
     local.set $fl
-    local.get $root
-    local.set $root|10
-    local.get $fl
-    local.set $fl|11
-    local.get $root|10
-    local.get $fl|11
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0 offset=4
+    block $~lib/rt/tlsf/GETSL|inlined.3 (result i32)
+     local.get $root
+     local.set $root|10
+     local.get $fl
+     local.set $fl|11
+     local.get $root|10
+     local.get $fl|11
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=4
+     br $~lib/rt/tlsf/GETSL|inlined.3
+    end
     local.set $slMap
     i32.const 1
     drop
@@ -2195,46 +2218,53 @@
      call $~lib/builtins/abort
      unreachable
     end
+    block $~lib/rt/tlsf/GETHEAD|inlined.2 (result i32)
+     local.get $root
+     local.set $root|12
+     local.get $fl
+     local.set $fl|13
+     local.get $slMap
+     i32.ctz
+     local.set $sl|14
+     local.get $root|12
+     local.get $fl|13
+     i32.const 4
+     i32.shl
+     local.get $sl|14
+     i32.add
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0 offset=96
+     br $~lib/rt/tlsf/GETHEAD|inlined.2
+    end
+    local.set $head
+   end
+  else
+   block $~lib/rt/tlsf/GETHEAD|inlined.3 (result i32)
     local.get $root
-    local.set $root|12
+    local.set $root|15
     local.get $fl
-    local.set $fl|13
+    local.set $fl|16
     local.get $slMap
     i32.ctz
-    local.set $sl|14
-    local.get $root|12
-    local.get $fl|13
+    local.set $sl|17
+    local.get $root|15
+    local.get $fl|16
     i32.const 4
     i32.shl
-    local.get $sl|14
+    local.get $sl|17
     i32.add
     i32.const 2
     i32.shl
     i32.add
     i32.load $0 offset=96
-    local.set $head
+    br $~lib/rt/tlsf/GETHEAD|inlined.3
    end
-  else
-   local.get $root
-   local.set $root|15
-   local.get $fl
-   local.set $fl|16
-   local.get $slMap
-   i32.ctz
-   local.set $sl|17
-   local.get $root|15
-   local.get $fl|16
-   i32.const 4
-   i32.shl
-   local.get $sl|17
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load $0 offset=96
    local.set $head
   end
   local.get $head
+  return
  )
  (func $~lib/rt/tlsf/growMemory (type $i32_i32_=>_none) (param $root i32) (param $size i32)
   (local $pagesBefore i32)
@@ -2271,10 +2301,13 @@
   i32.shl
   i32.const 4
   i32.sub
-  local.get $root
-  local.set $root|3
-  local.get $root|3
-  i32.load $0 offset=1568
+  block $~lib/rt/tlsf/GETTAIL|inlined.1 (result i32)
+   local.get $root
+   local.set $root|3
+   local.get $root|3
+   i32.load $0 offset=1568
+   br $~lib/rt/tlsf/GETTAIL|inlined.1
+  end
   i32.ne
   i32.shl
   i32.add
@@ -2394,30 +2427,36 @@
    i32.xor
    i32.and
    call $~lib/rt/common/BLOCK#set:mmInfo
-   local.get $block
-   local.set $block|7
-   local.get $block|7
-   i32.const 4
-   i32.add
-   local.get $block|7
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
-   local.get $block
-   local.set $block|6
-   local.get $block|6
-   i32.const 4
-   i32.add
-   local.get $block|6
-   call $~lib/rt/common/BLOCK#get:mmInfo
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.add
+   block $~lib/rt/tlsf/GETRIGHT|inlined.3 (result i32)
+    local.get $block
+    local.set $block|7
+    local.get $block|7
+    i32.const 4
+    i32.add
+    local.get $block|7
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.3
+   end
+   block $~lib/rt/tlsf/GETRIGHT|inlined.2 (result i32)
+    local.get $block
+    local.set $block|6
+    local.get $block|6
+    i32.const 4
+    i32.add
+    local.get $block|6
+    call $~lib/rt/common/BLOCK#get:mmInfo
+    i32.const 3
+    i32.const -1
+    i32.xor
+    i32.and
+    i32.add
+    br $~lib/rt/tlsf/GETRIGHT|inlined.2
+   end
    call $~lib/rt/common/BLOCK#get:mmInfo
    i32.const 2
    i32.const -1
@@ -2488,6 +2527,7 @@
   i32.const 0
   drop
   local.get $block
+  return
  )
  (func $~lib/rt/tlsf/__alloc (type $i32_=>_i32) (param $size i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
@@ -2500,6 +2540,7 @@
   call $~lib/rt/tlsf/allocateBlock
   i32.const 4
   i32.add
+  return
  )
  (func $~lib/rt/itcms/Object#set:rtId (type $i32_i32_=>_none) (param $this i32) (param $rtId i32)
   local.get $this
@@ -2562,6 +2603,7 @@
   local.get $size
   memory.fill $0
   local.get $ptr
+  return
  )
  (func $~lib/rt/itcms/__link (type $i32_i32_i32_=>_none) (param $parentPtr i32) (param $childPtr i32) (param $expectMultiple i32)
   (local $child i32)
@@ -2664,6 +2706,7 @@
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
   i32.sub
+  return
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2672,62 +2715,73 @@
  (func $~lib/typedarray/Int8Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
+  return
  )
  (func $~lib/typedarray/Uint8Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
+  return
  )
  (func $~lib/typedarray/Int16Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 1
   i32.shr_u
+  return
  )
  (func $~lib/typedarray/Uint16Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 1
   i32.shr_u
+  return
  )
  (func $~lib/typedarray/Int32Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 2
   i32.shr_u
+  return
  )
  (func $~lib/typedarray/Uint32Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 2
   i32.shr_u
+  return
  )
  (func $~lib/typedarray/Int64Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.shr_u
+  return
  )
  (func $~lib/typedarray/Uint64Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.shr_u
+  return
  )
  (func $~lib/typedarray/Float32Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 2
   i32.shr_u
+  return
  )
  (func $~lib/typedarray/Float64Array#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/arraybuffer/ArrayBufferView#get:byteLength
   i32.const 3
   i32.shr_u
+  return
  )
  (func $std/typedarray/testInstantiate (type $i32_=>_none) (param $len i32)
   (local $i8a i32)
@@ -3318,6 +3372,7 @@
   i32.shl
   i32.add
   i32.load $0
+  return
  )
  (func $~lib/typedarray/Float64Array#__set (type $i32_i32_f64_=>_none) (param $this i32) (param $index i32) (param $value f64)
   local.get $index
@@ -3346,14 +3401,11 @@
  (func $~lib/util/sort/insertionSort<f64> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a f64)
   (local $b f64)
   (local $min f64)
   (local $max f64)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -3385,8 +3437,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -3430,8 +3480,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -3480,8 +3528,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -3535,11 +3581,8 @@
  )
  (func $~lib/util/sort/extendRunRight<f64> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp f64)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -3599,8 +3642,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -3615,8 +3656,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -3683,8 +3722,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -3695,6 +3732,7 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/nodePower (type $i32_i32_i32_i32_i32_=>_i32) (param $left i32) (param $right i32) (param $startA i32) (param $startB i32) (param $endB i32) (result i32)
   (local $n i64)
@@ -3745,15 +3783,13 @@
   i64.xor
   i32.wrap_i64
   i32.clz
+  return
  )
  (func $~lib/util/sort/mergeRuns<f64> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a f64)
   (local $b f64)
   local.get $m
@@ -3772,8 +3808,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -3804,8 +3838,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -3834,8 +3866,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -3907,28 +3937,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -4051,12 +4077,15 @@
    call $~lib/util/sort/insertionSort<f64>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.0 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.0
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -4079,8 +4108,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -4120,13 +4147,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -4145,8 +4172,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -4169,15 +4194,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -4196,16 +4221,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -4218,7 +4241,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -4232,17 +4255,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -4270,29 +4293,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -4304,10 +4325,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<f64>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -4324,6 +4345,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<f64>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<f64>~anonymous|0 (type $f64_f64_=>_i32) (param $a f64) (param $b f64) (result i32)
   (local $ia i64)
@@ -4357,6 +4379,7 @@
   local.get $ib
   i64.lt_s
   i32.sub
+  return
  )
  (func $~lib/typedarray/Float64Array#__get (type $i32_i32_=>_f64) (param $this i32) (param $index i32) (result f64)
   local.get $index
@@ -4380,6 +4403,7 @@
   i32.shl
   i32.add
   f64.load $0
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
@@ -4431,6 +4455,7 @@
   local.get $index
   i32.add
   i32.load8_u $0
+  return
  )
  (func $~lib/typedarray/Int8Array#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
@@ -4539,6 +4564,7 @@
   local.get $end
   call $~lib/util/bytes/FILL<u8>
   local.get $this
+  return
  )
  (func $~lib/rt/__newBuffer (type $i32_i32_i32_=>_i32) (param $size i32) (param $id i32) (param $data i32) (result i32)
   (local $buffer i32)
@@ -4554,6 +4580,7 @@
    memory.copy $0 $0
   end
   local.get $buffer
+  return
  )
  (func $~lib/array/Array<i8>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -4562,6 +4589,7 @@
  (func $~lib/array/Array<i8>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<i8>#get:length_
+  return
  )
  (func $~lib/typedarray/Int8Array#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   local.get $index
@@ -4581,6 +4609,7 @@
   local.get $index
   i32.add
   i32.load8_s $0
+  return
  )
  (func $~lib/array/Array<i8>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -4611,11 +4640,11 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $std/typedarray/isInt8ArrayEqual (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   (local $i i32)
   (local $len i32)
-  (local $4 i32)
   local.get $a
   call $~lib/typedarray/Int8Array#get:length
   local.get $b
@@ -4634,8 +4663,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $a
     local.get $i
@@ -4656,6 +4683,31 @@
    end
   end
   i32.const 1
+  return
+ )
+ (func $~lib/typedarray/Int8Array#fill@varargs (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $value i32) (param $start i32) (param $end i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $start
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $value
+  local.get $start
+  local.get $end
+  call $~lib/typedarray/Int8Array#fill
  )
  (func $~lib/util/bytes/FILL<u32> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $len i32) (param $value i32) (param $start i32) (param $end i32)
   (local $5 i32)
@@ -4666,7 +4718,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   local.get $start
   i32.const 0
   i32.lt_s
@@ -4758,8 +4809,6 @@
    local.get $start
    local.get $end
    i32.lt_s
-   local.set $13
-   local.get $13
    if
     local.get $ptr
     local.get $start
@@ -4786,6 +4835,7 @@
   local.get $end
   call $~lib/util/bytes/FILL<u32>
   local.get $this
+  return
  )
  (func $~lib/array/Array<i32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -4794,6 +4844,7 @@
  (func $~lib/array/Array<i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<i32>#get:length_
+  return
  )
  (func $~lib/array/Array<i32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -4824,11 +4875,11 @@
   i32.const 0
   drop
   local.get $value
+  return
  )
  (func $std/typedarray/isInt32ArrayEqual (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   (local $i i32)
   (local $len i32)
-  (local $4 i32)
   local.get $a
   call $~lib/typedarray/Int32Array#get:length
   local.get $b
@@ -4847,8 +4898,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $a
     local.get $i
@@ -4869,6 +4918,52 @@
    end
   end
   i32.const 1
+  return
+ )
+ (func $~lib/typedarray/Int32Array#fill@varargs (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $value i32) (param $start i32) (param $end i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $start
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $value
+  local.get $start
+  local.get $end
+  call $~lib/typedarray/Int32Array#fill
+ )
+ (func $~lib/typedarray/Int32Array#slice@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $begin
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
+  local.get $this
+  local.get $begin
+  local.get $end
+  call $~lib/typedarray/Int32Array#slice
  )
  (func $~lib/typedarray/Int32Array#copyWithin (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $target i32) (param $start i32) (param $end i32) (result i32)
   (local $array i32)
@@ -4897,132 +4992,156 @@
   (local $27 i32)
   (local $28 i32)
   (local $count i32)
+  block $~lib/typedarray/COPY_WITHIN<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $target
+   local.set $target|5
+   local.get $start
+   local.set $start|6
+   local.get $end
+   local.set $end|7
+   local.get $array
+   call $~lib/typedarray/Int32Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $end|7
+   local.tee $10
+   local.get $len
+   local.tee $11
+   local.get $10
+   local.get $11
+   i32.lt_s
+   select
+   local.set $end|7
+   local.get $target|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $target|5
+    i32.add
+    local.tee $12
+    i32.const 0
+    local.tee $13
+    local.get $12
+    local.get $13
+    i32.gt_s
+    select
+   else
+    local.get $target|5
+    local.tee $14
+    local.get $len
+    local.tee $15
+    local.get $14
+    local.get $15
+    i32.lt_s
+    select
+   end
+   local.set $to
+   local.get $start|6
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $start|6
+    i32.add
+    local.tee $17
+    i32.const 0
+    local.tee $18
+    local.get $17
+    local.get $18
+    i32.gt_s
+    select
+   else
+    local.get $start|6
+    local.tee $19
+    local.get $len
+    local.tee $20
+    local.get $19
+    local.get $20
+    i32.lt_s
+    select
+   end
+   local.set $from
+   local.get $end|7
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|7
+    i32.add
+    local.tee $22
+    i32.const 0
+    local.tee $23
+    local.get $22
+    local.get $23
+    i32.gt_s
+    select
+   else
+    local.get $end|7
+    local.tee $24
+    local.get $len
+    local.tee $25
+    local.get $24
+    local.get $25
+    i32.lt_s
+    select
+   end
+   local.set $last
+   local.get $last
+   local.get $from
+   i32.sub
+   local.tee $27
+   local.get $len
+   local.get $to
+   i32.sub
+   local.tee $28
+   local.get $27
+   local.get $28
+   i32.lt_s
+   select
+   local.set $count
+   local.get $ptr
+   local.get $to
+   i32.const 2
+   i32.shl
+   i32.add
+   local.get $ptr
+   local.get $from
+   i32.const 2
+   i32.shl
+   i32.add
+   local.get $count
+   i32.const 2
+   i32.shl
+   memory.copy $0 $0
+   local.get $array
+   br $~lib/typedarray/COPY_WITHIN<~lib/typedarray/Int32Array,i32>|inlined.0
+  end
+  return
+ )
+ (func $~lib/typedarray/Int32Array#copyWithin@varargs (type $i32_i32_i32_i32_=>_i32) (param $this i32) (param $target i32) (param $start i32) (param $end i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 2
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $end
+  end
   local.get $this
-  local.set $array
   local.get $target
-  local.set $target|5
   local.get $start
-  local.set $start|6
   local.get $end
-  local.set $end|7
-  local.get $array
-  call $~lib/typedarray/Int32Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $end|7
-  local.tee $10
-  local.get $len
-  local.tee $11
-  local.get $10
-  local.get $11
-  i32.lt_s
-  select
-  local.set $end|7
-  local.get $target|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $target|5
-   i32.add
-   local.tee $12
-   i32.const 0
-   local.tee $13
-   local.get $12
-   local.get $13
-   i32.gt_s
-   select
-  else
-   local.get $target|5
-   local.tee $14
-   local.get $len
-   local.tee $15
-   local.get $14
-   local.get $15
-   i32.lt_s
-   select
-  end
-  local.set $to
-  local.get $start|6
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $start|6
-   i32.add
-   local.tee $17
-   i32.const 0
-   local.tee $18
-   local.get $17
-   local.get $18
-   i32.gt_s
-   select
-  else
-   local.get $start|6
-   local.tee $19
-   local.get $len
-   local.tee $20
-   local.get $19
-   local.get $20
-   i32.lt_s
-   select
-  end
-  local.set $from
-  local.get $end|7
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|7
-   i32.add
-   local.tee $22
-   i32.const 0
-   local.tee $23
-   local.get $22
-   local.get $23
-   i32.gt_s
-   select
-  else
-   local.get $end|7
-   local.tee $24
-   local.get $len
-   local.tee $25
-   local.get $24
-   local.get $25
-   i32.lt_s
-   select
-  end
-  local.set $last
-  local.get $last
-  local.get $from
-  i32.sub
-  local.tee $27
-  local.get $len
-  local.get $to
-  i32.sub
-  local.tee $28
-  local.get $27
-  local.get $28
-  i32.lt_s
-  select
-  local.set $count
-  local.get $ptr
-  local.get $to
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $ptr
-  local.get $from
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $count
-  i32.const 2
-  i32.shl
-  memory.copy $0 $0
-  local.get $array
+  call $~lib/typedarray/Int32Array#copyWithin
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -5036,51 +5155,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Int8Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Int8Array,i8,i8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Int8Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_s $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_s $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Int8Array,i8,i8>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $~lib/typedarray/Uint8Array#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
@@ -5114,51 +5234,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Uint8Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Uint8Array,u8,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Uint8Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_u $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Uint8Array,u8,u8>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -5172,51 +5293,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Uint8ClampedArray,u8,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_u $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Uint8ClampedArray,u8,u8>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $~lib/typedarray/Int16Array#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
@@ -5254,51 +5376,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Int16Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Int16Array,i16,i16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Int16Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_s $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_s $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Int16Array,i16,i16>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $~lib/typedarray/Uint16Array#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
@@ -5336,51 +5459,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Uint16Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Uint16Array,u16,u16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Uint16Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_u $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_u $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Uint16Array,u16,u16>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int32Array,i32>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -5394,51 +5518,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Int32Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Int32Array,i32,i32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Int32Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Int32Array,i32,i32>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $~lib/typedarray/Uint32Array#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
@@ -5476,51 +5601,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Uint32Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Uint32Array,u32,u32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Uint32Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Uint32Array,u32,u32>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $~lib/typedarray/Int64Array#__set (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
   local.get $index
@@ -5558,51 +5684,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Int64Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Int64Array,i64,i64>|inlined.0 (result i64)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Int64Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Int64Array,i64,i64>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $~lib/typedarray/Uint64Array#__set (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
   local.get $index
@@ -5640,51 +5767,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Uint64Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Uint64Array,u64,u64>|inlined.0 (result i64)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Uint64Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Uint64Array,u64,u64>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $~lib/typedarray/Float32Array#__set (type $i32_i32_f32_=>_none) (param $this i32) (param $index i32) (param $value f32)
   local.get $index
@@ -5722,51 +5850,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Float32Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Float32Array,f32,f32>|inlined.0 (result f32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Float32Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    f32.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $f32_f32_i32_i32_=>_f32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     f32.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $f32_f32_i32_i32_=>_f32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Float32Array,f32,f32>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 (type $f64_f64_i32_i32_=>_f64) (param $acc f64) (param $val f64) (param $$2 i32) (param $$3 i32) (result f64)
   local.get $acc
@@ -5780,51 +5909,52 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $9 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  i32.const 0
-  local.set $i
-  local.get $array
-  call $~lib/typedarray/Float64Array#get:length
-  local.set $k
-  loop $for-loop|0
-   local.get $i
-   local.get $k
-   i32.lt_s
-   local.set $9
-   local.get $9
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE<~lib/typedarray/Float64Array,f64,f64>|inlined.0 (result f64)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   i32.const 0
+   local.set $i
+   local.get $array
+   call $~lib/typedarray/Float64Array#get:length
+   local.set $k
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    f64.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $f64_f64_i32_i32_=>_f64)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $k
+    i32.lt_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     f64.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $f64_f64_i32_i32_=>_f64)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE<~lib/typedarray/Float64Array,f64,f64>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $~lib/typedarray/Int8Array#at (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   (local $len i32)
@@ -5856,6 +5986,7 @@
   local.get $index
   i32.add
   i32.load8_s $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Int8Array,i8> (type $none_=>_none)
   (local $array i32)
@@ -5962,6 +6093,7 @@
   local.get $index
   i32.add
   i32.load8_u $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Uint8Array,u8> (type $none_=>_none)
   (local $array i32)
@@ -6068,6 +6200,7 @@
   local.get $index
   i32.add
   i32.load8_u $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Uint8ClampedArray,u8> (type $none_=>_none)
   (local $array i32)
@@ -6178,6 +6311,7 @@
   i32.shl
   i32.add
   i32.load16_s $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Int16Array,i16> (type $none_=>_none)
   (local $array i32)
@@ -6288,6 +6422,7 @@
   i32.shl
   i32.add
   i32.load16_u $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Uint16Array,u16> (type $none_=>_none)
   (local $array i32)
@@ -6398,6 +6533,7 @@
   i32.shl
   i32.add
   i32.load $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Int32Array,i32> (type $none_=>_none)
   (local $array i32)
@@ -6508,6 +6644,7 @@
   i32.shl
   i32.add
   i32.load $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Uint32Array,u32> (type $none_=>_none)
   (local $array i32)
@@ -6618,6 +6755,7 @@
   i32.shl
   i32.add
   i64.load $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Int64Array,i64> (type $none_=>_none)
   (local $array i32)
@@ -6728,6 +6866,7 @@
   i32.shl
   i32.add
   i64.load $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Uint64Array,u64> (type $none_=>_none)
   (local $array i32)
@@ -6838,6 +6977,7 @@
   i32.shl
   i32.add
   f32.load $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Float32Array,f32> (type $none_=>_none)
   (local $array i32)
@@ -6948,6 +7088,7 @@
   i32.shl
   i32.add
   f64.load $0
+  return
  )
  (func $std/typedarray/testAt<~lib/typedarray/Float64Array,f64> (type $none_=>_none)
   (local $array i32)
@@ -7035,51 +7176,52 @@
   (local $initialValue|5 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Int8Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int8Array,i8,i8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Int8Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
     i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_s $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_s $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int8Array,i8,i8>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint8Array,u8>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -7092,51 +7234,52 @@
   (local $initialValue|5 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Uint8Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint8Array,u8,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Uint8Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
     i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_u $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint8Array,u8,u8>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -7149,51 +7292,52 @@
   (local $initialValue|5 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint8ClampedArray,u8,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
     i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_u $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint8ClampedArray,u8,u8>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int16Array,i16>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -7206,51 +7350,52 @@
   (local $initialValue|5 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Int16Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int16Array,i16,i16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Int16Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_s $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_s $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int16Array,i16,i16>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint16Array,u16>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -7263,51 +7408,52 @@
   (local $initialValue|5 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Uint16Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint16Array,u16,u16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Uint16Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_u $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_u $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint16Array,u16,u16>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int32Array,i32>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -7320,51 +7466,52 @@
   (local $initialValue|5 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Int32Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int32Array,i32,i32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Int32Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int32Array,i32,i32>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint32Array,u32>~anonymous|0 (type $i32_i32_i32_i32_=>_i32) (param $acc i32) (param $val i32) (param $$2 i32) (param $$3 i32) (result i32)
   local.get $acc
@@ -7377,51 +7524,52 @@
   (local $initialValue|5 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Uint32Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint32Array,u32,u32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Uint32Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint32Array,u32,u32>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int64Array,i64>~anonymous|0 (type $i64_i64_i32_i32_=>_i64) (param $acc i64) (param $val i64) (param $$2 i32) (param $$3 i32) (result i64)
   local.get $acc
@@ -7434,51 +7582,52 @@
   (local $initialValue|5 i64)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Int64Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int64Array,i64,i64>|inlined.0 (result i64)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Int64Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Int64Array,i64,i64>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint64Array,u64>~anonymous|0 (type $i64_i64_i32_i32_=>_i64) (param $acc i64) (param $val i64) (param $$2 i32) (param $$3 i32) (result i64)
   local.get $acc
@@ -7491,51 +7640,52 @@
   (local $initialValue|5 i64)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Uint64Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint64Array,u64,u64>|inlined.0 (result i64)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Uint64Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Uint64Array,u64,u64>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Float32Array,f32>~anonymous|0 (type $f32_f32_i32_i32_=>_f32) (param $acc f32) (param $val f32) (param $$2 i32) (param $$3 i32) (result f32)
   local.get $acc
@@ -7548,51 +7698,52 @@
   (local $initialValue|5 f32)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Float32Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Float32Array,f32,f32>|inlined.0 (result f32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Float32Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    f32.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $f32_f32_i32_i32_=>_f32)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     f32.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $f32_f32_i32_i32_=>_f32)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Float32Array,f32,f32>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Float64Array,f64>~anonymous|0 (type $f64_f64_i32_i32_=>_f64) (param $acc f64) (param $val f64) (param $$2 i32) (param $$3 i32) (result f64)
   local.get $acc
@@ -7605,51 +7756,52 @@
   (local $initialValue|5 f64)
   (local $ptr i32)
   (local $i i32)
-  (local $8 i32)
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|4
-  local.get $initialValue
-  local.set $initialValue|5
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $array
-  call $~lib/typedarray/Float64Array#get:length
-  i32.const 1
-  i32.sub
-  local.set $i
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ge_s
-   local.set $8
-   local.get $8
-   if
-    local.get $initialValue|5
-    local.get $ptr
+  block $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Float64Array,f64,f64>|inlined.0 (result f64)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|4
+   local.get $initialValue
+   local.set $initialValue|5
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
+   local.get $array
+   call $~lib/typedarray/Float64Array#get:length
+   i32.const 1
+   i32.sub
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    f64.load $0
-    local.get $i
-    local.get $array
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $fn|4
-    i32.load $0
-    call_indirect $0 (type $f64_f64_i32_i32_=>_f64)
-    local.set $initialValue|5
-    local.get $i
-    i32.const 1
-    i32.sub
-    local.set $i
-    br $for-loop|0
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $initialValue|5
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     f64.load $0
+     local.get $i
+     local.get $array
+     i32.const 4
+     global.set $~argumentsLength
+     local.get $fn|4
+     i32.load $0
+     call_indirect $0 (type $f64_f64_i32_i32_=>_f64)
+     local.set $initialValue|5
+     local.get $i
+     i32.const 1
+     i32.sub
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $initialValue|5
+   br $~lib/typedarray/REDUCE_RIGHT<~lib/typedarray/Float64Array,f64,f64>|inlined.0
   end
-  local.get $initialValue|5
+  return
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -7679,6 +7831,7 @@
   local.get $index
   i32.add
   i32.load8_u $0
+  return
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -7712,6 +7865,7 @@
   i32.shl
   i32.add
   i32.load16_s $0
+  return
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint16Array,u16>~anonymous|0 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -7740,6 +7894,7 @@
   i32.shl
   i32.add
   i32.load16_u $0
+  return
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int32Array,i32>~anonymous|0 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -7773,6 +7928,7 @@
   i32.shl
   i32.add
   i32.load $0
+  return
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 (type $i64_i32_i32_=>_i64) (param $value i64) (param $$1 i32) (param $$2 i32) (result i64)
   local.get $value
@@ -7801,6 +7957,7 @@
   i32.shl
   i32.add
   i64.load $0
+  return
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint64Array,u64>~anonymous|0 (type $i64_i32_i32_=>_i64) (param $value i64) (param $$1 i32) (param $$2 i32) (result i64)
   local.get $value
@@ -7829,6 +7986,7 @@
   i32.shl
   i32.add
   i64.load $0
+  return
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 (type $f32_i32_i32_=>_f32) (param $value f32) (param $$1 i32) (param $$2 i32) (result f32)
   local.get $value
@@ -7857,6 +8015,7 @@
   i32.shl
   i32.add
   f32.load $0
+  return
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 (type $f64_i32_i32_=>_f64) (param $value f64) (param $$1 i32) (param $$2 i32) (result f64)
   local.get $value
@@ -7917,6 +8076,7 @@
   select
   memory.copy $0 $0
   local.get $newPtr
+  return
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -7987,7 +8147,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8005,8 +8164,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8033,7 +8190,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8054,7 +8213,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8072,8 +8230,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8100,7 +8256,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8122,7 +8280,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8140,8 +8297,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8168,7 +8323,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8189,7 +8346,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8207,8 +8363,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8235,7 +8389,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8256,7 +8412,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8274,8 +8429,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8302,7 +8455,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8322,7 +8477,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8340,8 +8494,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8368,7 +8520,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8386,7 +8540,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8404,8 +8557,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8432,7 +8583,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8450,7 +8603,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8468,8 +8620,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8496,7 +8646,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 (type $i64_i32_i32_=>_i32) (param $value i64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8514,7 +8666,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8532,8 +8683,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8560,7 +8709,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|1 (type $i64_i32_i32_=>_i32) (param $value i64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8578,7 +8729,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8596,8 +8746,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8624,7 +8772,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 (type $f32_i32_i32_=>_i32) (param $value f32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8642,7 +8792,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8660,8 +8809,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8688,7 +8835,9 @@
     end
    end
    i32.const 0
+   br $~lib/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 (type $f64_i32_i32_=>_i32) (param $value f64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8707,7 +8856,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8725,8 +8873,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8753,7 +8899,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8774,7 +8922,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8792,8 +8939,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8820,7 +8965,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8842,7 +8989,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8860,8 +9006,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8888,7 +9032,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8909,7 +9055,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8927,8 +9072,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -8955,7 +9098,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -8976,7 +9121,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -8994,8 +9138,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -9022,7 +9164,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9042,7 +9186,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9060,8 +9203,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -9088,7 +9229,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9106,7 +9249,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9124,8 +9266,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -9152,7 +9292,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9170,7 +9312,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9188,8 +9329,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -9216,7 +9355,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 (type $i64_i32_i32_=>_i32) (param $value i64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9234,7 +9375,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9252,8 +9392,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -9280,7 +9418,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|1 (type $i64_i32_i32_=>_i32) (param $value i64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9298,7 +9438,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9316,8 +9455,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -9344,7 +9481,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 (type $f32_i32_i32_=>_i32) (param $value f32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9362,7 +9501,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9380,8 +9518,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -9408,7 +9544,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 (type $f64_i32_i32_=>_i32) (param $value f64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9426,7 +9564,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9444,8 +9581,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9472,7 +9607,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9492,7 +9629,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9510,8 +9646,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9538,7 +9672,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9559,7 +9695,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9577,8 +9712,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9605,7 +9738,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9625,7 +9760,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9643,8 +9777,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9671,7 +9803,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9691,7 +9825,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9709,8 +9842,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9737,7 +9868,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9756,7 +9889,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9774,8 +9906,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9802,7 +9932,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9819,7 +9951,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9837,8 +9968,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9865,7 +9994,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Uint32Array,u32>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9882,7 +10013,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9900,8 +10030,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9928,7 +10056,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 (type $i64_i32_i32_=>_i32) (param $value i64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -9945,7 +10075,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -9963,8 +10092,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -9991,7 +10118,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Uint64Array,u64>~anonymous|1 (type $i64_i32_i32_=>_i32) (param $value i64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10008,7 +10137,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10026,8 +10154,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -10054,7 +10180,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 (type $f32_i32_i32_=>_i32) (param $value f32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10071,7 +10199,6 @@
   (local $fn|3 i32)
   (local $ptr i32)
   (local $i i32)
-  (local $6 i32)
   block $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10089,8 +10216,6 @@
     local.get $i
     i32.const 0
     i32.ge_s
-    local.set $6
-    local.get $6
     if
      local.get $ptr
      local.get $i
@@ -10117,7 +10242,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/FIND_LAST_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayFindLastIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 (type $f64_i32_i32_=>_i32) (param $value f64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10138,7 +10265,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10156,8 +10282,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10187,7 +10311,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Int8Array,i8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10210,7 +10336,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10228,8 +10353,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10259,7 +10382,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10283,7 +10408,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10301,8 +10425,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10332,7 +10454,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10355,7 +10479,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10373,8 +10496,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10404,7 +10525,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Int16Array,i16>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10427,7 +10550,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10445,8 +10567,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10476,7 +10596,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10498,7 +10620,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10516,8 +10637,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10547,7 +10666,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Int32Array,i32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10567,7 +10688,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10585,8 +10705,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10616,7 +10734,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|1 (type $i32_i32_i32_=>_i32) (param $value i32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10636,7 +10756,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10654,8 +10773,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10685,7 +10802,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Int64Array,i64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|1 (type $i64_i32_i32_=>_i32) (param $value i64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10705,7 +10824,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -10723,8 +10841,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -10754,7 +10870,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|1 (type $i64_i32_i32_=>_i32) (param $value i64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -10770,7 +10888,6 @@
   (local $uy1 i32)
   (local $m f32)
   (local $ux1 i32)
-  (local $10 i32)
   (local $shift i32)
   local.get $y
   f32.abs
@@ -10918,8 +11035,6 @@
    local.get $ex
    local.get $ey
    i32.gt_s
-   local.set $10
-   local.get $10
    if
     local.get $ux
     local.get $uy
@@ -11011,6 +11126,7 @@
   local.get $sm
   i32.or
   f32.reinterpret_i32
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 (type $f32_i32_i32_=>_i32) (param $value f32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -11025,7 +11141,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -11043,8 +11158,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -11074,7 +11187,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Float32Array,f32>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|1 (type $f32_i32_i32_=>_i32) (param $value f32) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -11090,7 +11205,6 @@
   (local $uy1 i64)
   (local $m f64)
   (local $ux1 i64)
-  (local $10 i32)
   (local $shift i64)
   local.get $y
   f64.abs
@@ -11242,8 +11356,6 @@
    local.get $ex
    local.get $ey
    i64.gt_s
-   local.set $10
-   local.get $10
    if
     local.get $ux
     local.get $uy
@@ -11337,6 +11449,7 @@
   i64.shl
   i64.or
   f64.reinterpret_i64
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 (type $f64_i32_i32_=>_i32) (param $value f64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -11351,7 +11464,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   block $~lib/typedarray/EVERY<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -11369,8 +11481,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      block $for-continue|0
       local.get $ptr
@@ -11400,7 +11510,9 @@
     end
    end
    i32.const 1
+   br $~lib/typedarray/EVERY<~lib/typedarray/Float64Array,f64>|inlined.0
   end
+  return
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|1 (type $f64_i32_i32_=>_i32) (param $value f64) (param $$1 i32) (param $$2 i32) (result i32)
   local.get $value
@@ -11413,7 +11525,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11430,8 +11541,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11460,7 +11569,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11477,8 +11585,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11507,7 +11613,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11524,8 +11629,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11554,7 +11657,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11571,8 +11673,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11601,7 +11701,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11618,8 +11717,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11648,7 +11745,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11665,8 +11761,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11695,7 +11789,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11712,8 +11805,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11742,7 +11833,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11759,8 +11849,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11789,7 +11877,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11806,8 +11893,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11836,7 +11921,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11853,8 +11937,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11883,7 +11965,6 @@
   (local $ptr i32)
   (local $i i32)
   (local $k i32)
-  (local $7 i32)
   local.get $this
   local.set $array
   local.get $fn
@@ -11900,8 +11981,6 @@
    local.get $i
    local.get $k
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -11928,18 +12007,16 @@
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
+  (local $7 i64)
   (local $8 i64)
-  (local $9 i64)
   (local $temp i64)
+  (local $10 i64)
   (local $11 i64)
-  (local $12 i64)
-  (local $13 i32)
-  (local $front|14 i32)
-  (local $back|15 i32)
-  (local $temp|16 i32)
+  (local $front|12 i32)
+  (local $back|13 i32)
+  (local $temp|14 i32)
   local.get $len
   i32.const 1
   i32.gt_u
@@ -11968,8 +12045,6 @@
     i32.add
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -11983,23 +12058,23 @@
      local.set $back
      local.get $front
      i64.load $0
-     local.tee $8
+     local.tee $7
      i64.const 8
      i64.shr_u
      i64.const 71777214294589695
      i64.and
-     local.get $8
+     local.get $7
      i64.const 71777214294589695
      i64.and
      i64.const 8
      i64.shl
      i64.or
-     local.tee $9
+     local.tee $8
      i64.const 16
      i64.shr_u
      i64.const 281470681808895
      i64.and
-     local.get $9
+     local.get $8
      i64.const 281470681808895
      i64.and
      i64.const 16
@@ -12011,23 +12086,23 @@
      local.get $front
      local.get $back
      i64.load $0
-     local.tee $11
+     local.tee $10
      i64.const 8
      i64.shr_u
      i64.const 71777214294589695
      i64.and
-     local.get $11
+     local.get $10
      i64.const 71777214294589695
      i64.and
      i64.const 8
      i64.shl
      i64.or
-     local.tee $12
+     local.tee $11
      i64.const 16
      i64.shr_u
      i64.const 281470681808895
      i64.and
-     local.get $12
+     local.get $11
      i64.const 281470681808895
      i64.and
      i64.const 16
@@ -12058,15 +12133,13 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $13
-    local.get $13
     if
      local.get $ptr
      local.get $i
      i32.const 0
      i32.shl
      i32.add
-     local.set $front|14
+     local.set $front|12
      local.get $ptr
      local.get $tail
      local.get $i
@@ -12074,16 +12147,16 @@
      i32.const 0
      i32.shl
      i32.add
-     local.set $back|15
-     local.get $front|14
+     local.set $back|13
+     local.get $front|12
      i32.load8_u $0
-     local.set $temp|16
-     local.get $front|14
-     local.get $back|15
+     local.set $temp|14
+     local.get $front|12
+     local.get $back|13
      i32.load8_u $0
      i32.store8 $0
-     local.get $back|15
-     local.get $temp|16
+     local.get $back|13
+     local.get $temp|14
      i32.store8 $0
      local.get $i
      i32.const 1
@@ -12101,6 +12174,7 @@
   call $~lib/typedarray/Int8Array#get:length
   call $~lib/util/bytes/REVERSE<u8>
   local.get $this
+  return
  )
  (func $~lib/typedarray/Uint8Array#reverse (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -12109,6 +12183,7 @@
   call $~lib/typedarray/Uint8Array#get:length
   call $~lib/util/bytes/REVERSE<u8>
   local.get $this
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#reverse (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -12117,19 +12192,18 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   call $~lib/util/bytes/REVERSE<u8>
   local.get $this
+  return
  )
  (func $~lib/util/bytes/REVERSE<u16> (type $i32_i32_=>_none) (param $ptr i32) (param $len i32)
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp i32)
-  (local $9 i32)
-  (local $front|10 i32)
-  (local $back|11 i32)
-  (local $temp|12 i32)
+  (local $front|8 i32)
+  (local $back|9 i32)
+  (local $temp|10 i32)
   local.get $len
   i32.const 1
   i32.gt_u
@@ -12162,8 +12236,6 @@
     i32.add
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12208,15 +12280,13 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $9
-    local.get $9
     if
      local.get $ptr
      local.get $i
      i32.const 1
      i32.shl
      i32.add
-     local.set $front|10
+     local.set $front|8
      local.get $ptr
      local.get $tail
      local.get $i
@@ -12224,16 +12294,16 @@
      i32.const 1
      i32.shl
      i32.add
-     local.set $back|11
-     local.get $front|10
+     local.set $back|9
+     local.get $front|8
      i32.load16_u $0
-     local.set $temp|12
-     local.get $front|10
-     local.get $back|11
+     local.set $temp|10
+     local.get $front|8
+     local.get $back|9
      i32.load16_u $0
      i32.store16 $0
-     local.get $back|11
-     local.get $temp|12
+     local.get $back|9
+     local.get $temp|10
      i32.store16 $0
      local.get $i
      i32.const 1
@@ -12251,6 +12321,7 @@
   call $~lib/typedarray/Int16Array#get:length
   call $~lib/util/bytes/REVERSE<u16>
   local.get $this
+  return
  )
  (func $~lib/typedarray/Uint16Array#reverse (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -12259,12 +12330,12 @@
   call $~lib/typedarray/Uint16Array#get:length
   call $~lib/util/bytes/REVERSE<u16>
   local.get $this
+  return
  )
  (func $~lib/util/bytes/REVERSE<u32> (type $i32_i32_=>_none) (param $ptr i32) (param $len i32)
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp i32)
@@ -12298,8 +12369,6 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12341,6 +12410,7 @@
   call $~lib/typedarray/Int32Array#get:length
   call $~lib/util/bytes/REVERSE<u32>
   local.get $this
+  return
  )
  (func $~lib/typedarray/Uint32Array#reverse (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -12349,12 +12419,12 @@
   call $~lib/typedarray/Uint32Array#get:length
   call $~lib/util/bytes/REVERSE<u32>
   local.get $this
+  return
  )
  (func $~lib/util/bytes/REVERSE<u64> (type $i32_i32_=>_none) (param $ptr i32) (param $len i32)
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp i64)
@@ -12388,8 +12458,6 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12431,6 +12499,7 @@
   call $~lib/typedarray/Int64Array#get:length
   call $~lib/util/bytes/REVERSE<u64>
   local.get $this
+  return
  )
  (func $~lib/typedarray/Uint64Array#reverse (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -12439,12 +12508,12 @@
   call $~lib/typedarray/Uint64Array#get:length
   call $~lib/util/bytes/REVERSE<u64>
   local.get $this
+  return
  )
  (func $~lib/util/bytes/REVERSE<f32> (type $i32_i32_=>_none) (param $ptr i32) (param $len i32)
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp f32)
@@ -12478,8 +12547,6 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12521,12 +12588,12 @@
   call $~lib/typedarray/Float32Array#get:length
   call $~lib/util/bytes/REVERSE<f32>
   local.get $this
+  return
  )
  (func $~lib/util/bytes/REVERSE<f64> (type $i32_i32_=>_none) (param $ptr i32) (param $len i32)
   (local $i i32)
   (local $tail i32)
   (local $hlen i32)
-  (local $5 i32)
   (local $front i32)
   (local $back i32)
   (local $temp f64)
@@ -12560,8 +12627,6 @@
     local.get $i
     local.get $hlen
     i32.lt_u
-    local.set $5
-    local.get $5
     if
      local.get $ptr
      local.get $i
@@ -12603,6 +12668,7 @@
   call $~lib/typedarray/Float64Array#get:length
   call $~lib/util/bytes/REVERSE<f64>
   local.get $this
+  return
  )
  (func $~lib/typedarray/Int8Array#indexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -12613,7 +12679,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -12663,8 +12728,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -12687,7 +12750,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Int8Array#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -12696,7 +12761,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -12742,8 +12806,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -12766,7 +12828,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Int8Array#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
@@ -12793,7 +12857,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -12825,8 +12888,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -13282,7 +13343,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -13332,8 +13392,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -13357,7 +13415,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint8Array#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -13366,7 +13426,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -13412,8 +13471,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -13437,7 +13494,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint8Array#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
@@ -13464,7 +13523,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -13496,8 +13554,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -13954,7 +14010,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -14004,8 +14059,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -14029,7 +14082,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -14038,7 +14093,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -14084,8 +14138,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -14109,7 +14161,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
@@ -14136,7 +14190,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -14168,8 +14221,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -14626,7 +14677,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -14676,8 +14726,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -14700,7 +14748,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Int16Array#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -14709,7 +14759,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -14755,8 +14804,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -14779,7 +14826,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Int16Array#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
@@ -14806,7 +14855,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -14838,8 +14886,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -15295,7 +15341,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -15345,8 +15390,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -15370,7 +15413,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint16Array#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -15379,7 +15424,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -15425,8 +15469,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -15450,7 +15492,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint16Array#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
@@ -15477,7 +15521,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -15509,8 +15552,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -15967,7 +16008,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -16017,8 +16057,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -16040,7 +16078,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Int32Array#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -16049,7 +16089,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -16095,8 +16134,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -16118,7 +16155,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Int32Array#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
@@ -16145,7 +16184,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -16177,8 +16215,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -16633,7 +16669,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -16683,8 +16718,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -16706,7 +16739,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint32Array#lastIndexOf (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -16715,7 +16750,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -16761,8 +16795,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -16784,7 +16816,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint32Array#lastIndexOf@varargs (type $i32_i32_i32_=>_i32) (param $this i32) (param $searchElement i32) (param $fromIndex i32) (result i32)
   block $1of1
@@ -16811,7 +16845,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -16843,8 +16876,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -17299,7 +17330,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -17349,8 +17379,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -17372,7 +17400,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Int64Array#lastIndexOf (type $i32_i64_i32_=>_i32) (param $this i32) (param $searchElement i64) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -17381,7 +17411,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -17427,8 +17456,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -17450,7 +17477,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Int64Array#lastIndexOf@varargs (type $i32_i64_i32_=>_i32) (param $this i32) (param $searchElement i64) (param $fromIndex i32) (result i32)
   block $1of1
@@ -17477,7 +17506,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -17509,8 +17537,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -17966,7 +17992,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -18016,8 +18041,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -18039,7 +18062,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint64Array#lastIndexOf (type $i32_i64_i32_=>_i32) (param $this i32) (param $searchElement i64) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -18048,7 +18073,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -18094,8 +18118,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -18117,7 +18139,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Uint64Array#lastIndexOf@varargs (type $i32_i64_i32_=>_i32) (param $this i32) (param $searchElement i64) (param $fromIndex i32) (result i32)
   block $1of1
@@ -18144,7 +18168,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -18176,8 +18199,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -18633,7 +18654,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -18683,8 +18703,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -18706,7 +18724,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Float32Array#lastIndexOf (type $i32_f32_i32_=>_i32) (param $this i32) (param $searchElement f32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -18715,7 +18735,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -18761,8 +18780,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -18784,7 +18801,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Float32Array#lastIndexOf@varargs (type $i32_f32_i32_=>_i32) (param $this i32) (param $searchElement f32) (param $fromIndex i32) (result i32)
   block $1of1
@@ -18811,7 +18830,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -18843,8 +18861,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -19300,7 +19316,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -19350,8 +19365,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -19373,7 +19386,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Float64Array#lastIndexOf (type $i32_f64_i32_=>_i32) (param $this i32) (param $searchElement f64) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -19382,7 +19397,6 @@
   (local $index i32)
   (local $len i32)
   (local $dataStart i32)
-  (local $9 i32)
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
    local.set $array
@@ -19428,8 +19442,6 @@
     local.get $index
     i32.const 0
     i32.ge_s
-    local.set $9
-    local.get $9
     if
      local.get $dataStart
      local.get $index
@@ -19451,7 +19463,9 @@
     end
    end
    i32.const -1
+   br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Float64Array#lastIndexOf@varargs (type $i32_f64_i32_=>_i32) (param $this i32) (param $searchElement f64) (param $fromIndex i32) (result i32)
   block $1of1
@@ -19478,7 +19492,6 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $sliced i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
@@ -19510,8 +19523,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -19967,7 +19978,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   (local $elem f64)
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $this
@@ -20020,8 +20030,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -20058,6 +20066,7 @@
    i32.const 0
    br $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0
   end
+  return
  )
  (func $~lib/typedarray/Float32Array#includes (type $i32_f32_i32_=>_i32) (param $this i32) (param $searchElement f32) (param $fromIndex i32) (result i32)
   (local $array i32)
@@ -20068,7 +20077,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $dataStart i32)
-  (local $11 i32)
   (local $elem f32)
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $this
@@ -20121,8 +20129,6 @@
     local.get $index
     local.get $len
     i32.lt_s
-    local.set $11
-    local.get $11
     if
      local.get $dataStart
      local.get $index
@@ -20159,6 +20165,7 @@
    i32.const 0
    br $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0
   end
+  return
  )
  (func $~lib/util/number/decimalCount32 (type $i32_=>_i32) (param $value i32) (result i32)
   local.get $value
@@ -20216,24 +20223,21 @@
   unreachable
  )
  (func $~lib/util/number/utoa32_dec_lut (type $i32_i32_i32_=>_none) (param $buffer i32) (param $num i32) (param $offset i32)
-  (local $3 i32)
   (local $t i32)
   (local $r i32)
   (local $d1 i32)
   (local $d2 i32)
   (local $digits1 i64)
   (local $digits2 i64)
-  (local $t|10 i32)
-  (local $d1|11 i32)
+  (local $t|9 i32)
+  (local $d1|10 i32)
   (local $digits i32)
-  (local $digits|13 i32)
+  (local $digits|12 i32)
   (local $digit i32)
   loop $while-continue|0
    local.get $num
    i32.const 10000
    i32.ge_u
-   local.set $3
-   local.get $3
    if
     local.get $num
     i32.const 10000
@@ -20292,19 +20296,19 @@
    local.get $num
    i32.const 100
    i32.div_u
-   local.set $t|10
+   local.set $t|9
    local.get $num
    i32.const 100
    i32.rem_u
-   local.set $d1|11
-   local.get $t|10
+   local.set $d1|10
+   local.get $t|9
    local.set $num
    local.get $offset
    i32.const 2
    i32.sub
    local.set $offset
    i32.const 6988
-   local.get $d1|11
+   local.get $d1|10
    i32.const 2
    i32.shl
    i32.add
@@ -20332,13 +20336,13 @@
    i32.shl
    i32.add
    i32.load $0
-   local.set $digits|13
+   local.set $digits|12
    local.get $buffer
    local.get $offset
    i32.const 1
    i32.shl
    i32.add
-   local.get $digits|13
+   local.get $digits|12
    i32.store $0
   else
    local.get $offset
@@ -20359,13 +20363,10 @@
   end
  )
  (func $~lib/util/number/utoa_hex_lut (type $i32_i64_i32_=>_none) (param $buffer i32) (param $num i64) (param $offset i32)
-  (local $3 i32)
   loop $while-continue|0
    local.get $offset
    i32.const 2
    i32.ge_u
-   local.set $3
-   local.get $3
    if
     local.get $offset
     i32.const 2
@@ -20413,14 +20414,15 @@
   (local $b64 i64)
   (local $b i64)
   (local $e i32)
-  (local $6 i32)
-  (local $7 i32)
-  local.get $base
-  local.set $value
-  local.get $value
-  i32.popcnt
-  i32.const 1
-  i32.eq
+  block $~lib/util/number/isPowerOf2<i32>|inlined.0 (result i32)
+   local.get $base
+   local.set $value
+   local.get $value
+   i32.popcnt
+   i32.const 1
+   i32.eq
+   br $~lib/util/number/isPowerOf2<i32>|inlined.0
+  end
   if
    i32.const 63
    local.get $num
@@ -20447,8 +20449,6 @@
    local.get $num
    local.get $b
    i64.ge_u
-   local.set $6
-   local.get $6
    if
     local.get $num
     local.get $b
@@ -20469,8 +20469,6 @@
    local.get $num
    i64.const 1
    i64.ge_u
-   local.set $7
-   local.get $7
    if
     local.get $num
     local.get $b64
@@ -20486,6 +20484,7 @@
   local.get $e
   i32.const 1
   i32.sub
+  return
  )
  (func $~lib/util/number/utoa64_any_core (type $i32_i64_i32_i32_=>_none) (param $buffer i32) (param $num i64) (param $offset i32) (param $radix i32)
   (local $base i64)
@@ -20589,6 +20588,7 @@
   call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
+  return
  )
  (func $~lib/util/number/itoa_buffered<i8> (type $i32_i32_=>_i32) (param $buffer i32) (param $value i32) (result i32)
   (local $sign i32)
@@ -20719,6 +20719,7 @@
   local.get $sign
   local.get $decimals
   i32.add
+  return
  )
  (func $~lib/typedarray/Int8Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -20727,12 +20728,12 @@
   call $~lib/typedarray/Int8Array#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<i8>
+  return
  )
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $7 i32)
-  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -20803,8 +20804,6 @@
    i32.sub
    local.set $len
    local.get $7
-   local.set $8
-   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -20833,6 +20832,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
@@ -20875,6 +20875,7 @@
   local.get $leftLength
   call $~lib/util/string/compareImpl
   i32.eqz
+  return
  )
  (func $~lib/util/number/itoa_buffered<u8> (type $i32_i32_=>_i32) (param $buffer i32) (param $value i32) (result i32)
   (local $sign i32)
@@ -20946,6 +20947,7 @@
   local.get $sign
   local.get $decimals
   i32.add
+  return
  )
  (func $~lib/typedarray/Uint8Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -20954,6 +20956,7 @@
   call $~lib/typedarray/Uint8Array#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<u8>
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -20962,6 +20965,7 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<u8>
+  return
  )
  (func $~lib/util/number/itoa_buffered<i16> (type $i32_i32_=>_i32) (param $buffer i32) (param $value i32) (result i32)
   (local $sign i32)
@@ -21107,6 +21111,7 @@
   local.get $sign
   local.get $decimals
   i32.add
+  return
  )
  (func $~lib/typedarray/Int16Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -21115,6 +21120,7 @@
   call $~lib/typedarray/Int16Array#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<i16>
+  return
  )
  (func $~lib/util/number/itoa_buffered<u16> (type $i32_i32_=>_i32) (param $buffer i32) (param $value i32) (result i32)
   (local $sign i32)
@@ -21186,6 +21192,7 @@
   local.get $sign
   local.get $decimals
   i32.add
+  return
  )
  (func $~lib/typedarray/Uint16Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -21194,6 +21201,7 @@
   call $~lib/typedarray/Uint16Array#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<u16>
+  return
  )
  (func $~lib/util/number/itoa_buffered<i32> (type $i32_i32_=>_i32) (param $buffer i32) (param $value i32) (result i32)
   (local $sign i32)
@@ -21287,6 +21295,7 @@
   local.get $sign
   local.get $decimals
   i32.add
+  return
  )
  (func $~lib/typedarray/Int32Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -21295,6 +21304,7 @@
   call $~lib/typedarray/Int32Array#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<i32>
+  return
  )
  (func $~lib/util/number/itoa_buffered<u32> (type $i32_i32_=>_i32) (param $buffer i32) (param $value i32) (result i32)
   (local $sign i32)
@@ -21360,6 +21370,7 @@
   local.get $sign
   local.get $decimals
   i32.add
+  return
  )
  (func $~lib/typedarray/Uint32Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -21368,6 +21379,7 @@
   call $~lib/typedarray/Uint32Array#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<u32>
+  return
  )
  (func $~lib/util/number/decimalCount64High (type $i64_=>_i32) (param $value i64) (result i32)
   local.get $value
@@ -21429,7 +21441,6 @@
   unreachable
  )
  (func $~lib/util/number/utoa64_dec_lut (type $i32_i64_i32_=>_none) (param $buffer i32) (param $num i64) (param $offset i32)
-  (local $3 i32)
   (local $t i64)
   (local $r i32)
   (local $b i32)
@@ -21444,8 +21455,6 @@
    local.get $num
    i64.const 100000000
    i64.ge_u
-   local.set $3
-   local.get $3
    if
     local.get $num
     i64.const 100000000
@@ -21675,6 +21684,7 @@
   local.get $sign
   local.get $decimals
   i32.add
+  return
  )
  (func $~lib/typedarray/Int64Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -21683,6 +21693,7 @@
   call $~lib/typedarray/Int64Array#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<i64>
+  return
  )
  (func $~lib/util/number/itoa_buffered<u64> (type $i32_i64_=>_i32) (param $buffer i32) (param $value i64) (result i32)
   (local $sign i32)
@@ -21780,6 +21791,7 @@
   local.get $sign
   local.get $decimals
   i32.add
+  return
  )
  (func $~lib/typedarray/Uint64Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -21788,6 +21800,7 @@
   call $~lib/typedarray/Uint64Array#get:length
   local.get $separator
   call $~lib/util/string/joinIntegerArray<u64>
+  return
  )
  (func $~lib/util/number/genDigits (type $i32_i64_i32_i64_i32_i64_i32_=>_i32) (param $buffer i32) (param $w_frc i64) (param $w_exp i32) (param $mp_frc i64) (param $mp_exp i32) (param $delta i64) (param $sign i32) (result i32)
   (local $one_exp i32)
@@ -21798,32 +21811,28 @@
   (local $p2 i64)
   (local $kappa i32)
   (local $len i32)
-  (local $15 i32)
   (local $d i32)
+  (local $16 i32)
   (local $17 i32)
-  (local $18 i32)
   (local $tmp i64)
-  (local $buffer|20 i32)
-  (local $len|21 i32)
-  (local $delta|22 i64)
+  (local $buffer|19 i32)
+  (local $len|20 i32)
+  (local $delta|21 i64)
   (local $rest i64)
   (local $ten_kappa i64)
   (local $wp_w i64)
   (local $lastp i32)
   (local $digit i32)
+  (local $d|27 i64)
   (local $28 i32)
-  (local $29 i32)
-  (local $d|30 i64)
-  (local $31 i32)
-  (local $buffer|32 i32)
-  (local $len|33 i32)
-  (local $delta|34 i64)
-  (local $rest|35 i64)
-  (local $ten_kappa|36 i64)
-  (local $wp_w|37 i64)
-  (local $lastp|38 i32)
-  (local $digit|39 i32)
-  (local $40 i32)
+  (local $buffer|29 i32)
+  (local $len|30 i32)
+  (local $delta|31 i64)
+  (local $rest|32 i64)
+  (local $ten_kappa|33 i64)
+  (local $wp_w|34 i64)
+  (local $lastp|35 i32)
+  (local $digit|36 i32)
   i32.const 0
   local.get $mp_exp
   i32.sub
@@ -21860,8 +21869,6 @@
    local.get $kappa
    i32.const 0
    i32.gt_s
-   local.set $15
-   local.get $15
    if
     block $break|1
      block $case10|1
@@ -21876,44 +21883,44 @@
               block $case1|1
                block $case0|1
                 local.get $kappa
-                local.set $17
-                local.get $17
+                local.set $16
+                local.get $16
                 i32.const 10
                 i32.eq
                 br_if $case0|1
-                local.get $17
+                local.get $16
                 i32.const 9
                 i32.eq
                 br_if $case1|1
-                local.get $17
+                local.get $16
                 i32.const 8
                 i32.eq
                 br_if $case2|1
-                local.get $17
+                local.get $16
                 i32.const 7
                 i32.eq
                 br_if $case3|1
-                local.get $17
+                local.get $16
                 i32.const 6
                 i32.eq
                 br_if $case4|1
-                local.get $17
+                local.get $16
                 i32.const 5
                 i32.eq
                 br_if $case5|1
-                local.get $17
+                local.get $16
                 i32.const 4
                 i32.eq
                 br_if $case6|1
-                local.get $17
+                local.get $16
                 i32.const 3
                 i32.eq
                 br_if $case7|1
-                local.get $17
+                local.get $16
                 i32.const 2
                 i32.eq
                 br_if $case8|1
-                local.get $17
+                local.get $16
                 i32.const 1
                 i32.eq
                 br_if $case9|1
@@ -22025,11 +22032,11 @@
     if
      local.get $buffer
      local.get $len
-     local.tee $18
+     local.tee $17
      i32.const 1
      i32.add
      local.set $len
-     local.get $18
+     local.get $17
      i32.const 1
      i32.shl
      i32.add
@@ -22061,11 +22068,11 @@
      i32.add
      global.set $~lib/util/number/_K
      local.get $buffer
-     local.set $buffer|20
+     local.set $buffer|19
      local.get $len
-     local.set $len|21
+     local.set $len|20
      local.get $delta
-     local.set $delta|22
+     local.set $delta|21
      local.get $tmp
      local.set $rest
      i32.const 9712
@@ -22080,8 +22087,8 @@
      local.set $ten_kappa
      local.get $wp_w_frc
      local.set $wp_w
-     local.get $buffer|20
-     local.get $len|21
+     local.get $buffer|19
+     local.get $len|20
      i32.const 1
      i32.sub
      i32.const 1
@@ -22096,7 +22103,7 @@
       local.get $wp_w
       i64.lt_u
       if (result i32)
-       local.get $delta|22
+       local.get $delta|21
        local.get $rest
        i64.sub
        local.get $ten_kappa
@@ -22126,8 +22133,6 @@
       else
        i32.const 0
       end
-      local.set $28
-      local.get $28
       if
        local.get $digit
        i32.const 1
@@ -22151,8 +22156,6 @@
   end
   loop $while-continue|4
    i32.const 1
-   local.set $29
-   local.get $29
    if
     local.get $p2
     i64.const 10
@@ -22166,8 +22169,8 @@
     local.get $one_exp
     i64.extend_i32_s
     i64.shr_u
-    local.set $d|30
-    local.get $d|30
+    local.set $d|27
+    local.get $d|27
     local.get $len
     i64.extend_i32_s
     i64.or
@@ -22176,16 +22179,16 @@
     if
      local.get $buffer
      local.get $len
-     local.tee $31
+     local.tee $28
      i32.const 1
      i32.add
      local.set $len
-     local.get $31
+     local.get $28
      i32.const 1
      i32.shl
      i32.add
      i32.const 48
-     local.get $d|30
+     local.get $d|27
      i32.wrap_i64
      i32.const 65535
      i32.and
@@ -22220,79 +22223,77 @@
      i64.mul
      local.set $wp_w_frc
      local.get $buffer
-     local.set $buffer|32
+     local.set $buffer|29
      local.get $len
-     local.set $len|33
+     local.set $len|30
      local.get $delta
-     local.set $delta|34
+     local.set $delta|31
      local.get $p2
-     local.set $rest|35
+     local.set $rest|32
      local.get $one_frc
-     local.set $ten_kappa|36
+     local.set $ten_kappa|33
      local.get $wp_w_frc
-     local.set $wp_w|37
-     local.get $buffer|32
-     local.get $len|33
+     local.set $wp_w|34
+     local.get $buffer|29
+     local.get $len|30
      i32.const 1
      i32.sub
      i32.const 1
      i32.shl
      i32.add
-     local.set $lastp|38
-     local.get $lastp|38
+     local.set $lastp|35
+     local.get $lastp|35
      i32.load16_u $0
-     local.set $digit|39
+     local.set $digit|36
      loop $while-continue|6
-      local.get $rest|35
-      local.get $wp_w|37
+      local.get $rest|32
+      local.get $wp_w|34
       i64.lt_u
       if (result i32)
-       local.get $delta|34
-       local.get $rest|35
+       local.get $delta|31
+       local.get $rest|32
        i64.sub
-       local.get $ten_kappa|36
+       local.get $ten_kappa|33
        i64.ge_u
       else
        i32.const 0
       end
       if (result i32)
-       local.get $rest|35
-       local.get $ten_kappa|36
+       local.get $rest|32
+       local.get $ten_kappa|33
        i64.add
-       local.get $wp_w|37
+       local.get $wp_w|34
        i64.lt_u
        if (result i32)
         i32.const 1
        else
-        local.get $wp_w|37
-        local.get $rest|35
+        local.get $wp_w|34
+        local.get $rest|32
         i64.sub
-        local.get $rest|35
-        local.get $ten_kappa|36
+        local.get $rest|32
+        local.get $ten_kappa|33
         i64.add
-        local.get $wp_w|37
+        local.get $wp_w|34
         i64.sub
         i64.gt_u
        end
       else
        i32.const 0
       end
-      local.set $40
-      local.get $40
       if
-       local.get $digit|39
+       local.get $digit|36
        i32.const 1
        i32.sub
-       local.set $digit|39
-       local.get $rest|35
-       local.get $ten_kappa|36
+       local.set $digit|36
+       local.get $rest|32
+       local.get $ten_kappa|33
        i64.add
-       local.set $rest|35
+       local.set $rest|32
        br $while-continue|6
       end
      end
-     local.get $lastp|38
-     local.get $digit|39
+     local.get $lastp|35
+     local.get $digit|36
      i32.store16 $0
      local.get $len
      return
@@ -22305,26 +22306,24 @@
  (func $~lib/util/number/prettify (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $length i32) (param $k i32) (result i32)
   (local $kk i32)
   (local $i i32)
-  (local $5 i32)
   (local $ptr i32)
   (local $offset i32)
-  (local $i|8 i32)
-  (local $9 i32)
-  (local $buffer|10 i32)
-  (local $k|11 i32)
+  (local $i|7 i32)
+  (local $buffer|8 i32)
+  (local $k|9 i32)
   (local $sign i32)
   (local $decimals i32)
-  (local $buffer|14 i32)
+  (local $buffer|12 i32)
   (local $num i32)
-  (local $offset|16 i32)
+  (local $offset|14 i32)
   (local $len i32)
-  (local $buffer|18 i32)
-  (local $k|19 i32)
-  (local $sign|20 i32)
-  (local $decimals|21 i32)
-  (local $buffer|22 i32)
-  (local $num|23 i32)
-  (local $offset|24 i32)
+  (local $buffer|16 i32)
+  (local $k|17 i32)
+  (local $sign|18 i32)
+  (local $decimals|19 i32)
+  (local $buffer|20 i32)
+  (local $num|21 i32)
+  (local $offset|22 i32)
   local.get $k
   i32.eqz
   if
@@ -22365,8 +22364,6 @@
     local.get $i
     local.get $kk
     i32.lt_s
-    local.set $5
-    local.get $5
     if
      local.get $buffer
      local.get $i
@@ -22470,25 +22467,23 @@
      i32.or
      i32.store $0
      i32.const 2
-     local.set $i|8
+     local.set $i|7
      loop $for-loop|1
-      local.get $i|8
+      local.get $i|7
       local.get $offset
       i32.lt_s
-      local.set $9
-      local.get $9
       if
        local.get $buffer
-       local.get $i|8
+       local.get $i|7
        i32.const 1
        i32.shl
        i32.add
        i32.const 48
        i32.store16 $0
-       local.get $i|8
+       local.get $i|7
        i32.const 1
        i32.add
-       local.set $i|8
+       local.set $i|7
        br $for-loop|1
       end
      end
@@ -22504,51 +22499,54 @@
       local.get $buffer
       i32.const 101
       i32.store16 $0 offset=2
-      local.get $buffer
-      i32.const 4
-      i32.add
-      local.set $buffer|10
-      local.get $kk
-      i32.const 1
-      i32.sub
-      local.set $k|11
-      local.get $k|11
-      i32.const 0
-      i32.lt_s
-      local.set $sign
-      local.get $sign
-      if
-       i32.const 0
-       local.get $k|11
+      block $~lib/util/number/genExponent|inlined.0 (result i32)
+       local.get $buffer
+       i32.const 4
+       i32.add
+       local.set $buffer|8
+       local.get $kk
+       i32.const 1
        i32.sub
-       local.set $k|11
+       local.set $k|9
+       local.get $k|9
+       i32.const 0
+       i32.lt_s
+       local.set $sign
+       local.get $sign
+       if
+        i32.const 0
+        local.get $k|9
+        i32.sub
+        local.set $k|9
+       end
+       local.get $k|9
+       call $~lib/util/number/decimalCount32
+       i32.const 1
+       i32.add
+       local.set $decimals
+       local.get $buffer|8
+       local.set $buffer|12
+       local.get $k|9
+       local.set $num
+       local.get $decimals
+       local.set $offset|14
+       i32.const 0
+       i32.const 1
+       i32.ge_s
+       drop
+       local.get $buffer|12
+       local.get $num
+       local.get $offset|14
+       call $~lib/util/number/utoa32_dec_lut
+       local.get $buffer|8
+       i32.const 45
+       i32.const 43
+       local.get $sign
+       select
+       i32.store16 $0
+       local.get $decimals
+       br $~lib/util/number/genExponent|inlined.0
       end
-      local.get $k|11
-      call $~lib/util/number/decimalCount32
-      i32.const 1
-      i32.add
-      local.set $decimals
-      local.get $buffer|10
-      local.set $buffer|14
-      local.get $k|11
-      local.set $num
-      local.get $decimals
-      local.set $offset|16
-      i32.const 0
-      i32.const 1
-      i32.ge_s
-      drop
-      local.get $buffer|14
-      local.get $num
-      local.get $offset|16
-      call $~lib/util/number/utoa32_dec_lut
-      local.get $buffer|10
-      i32.const 45
-      i32.const 43
-      local.get $sign
-      select
-      i32.store16 $0
-      local.get $decimals
       local.set $length
       local.get $length
       i32.const 2
@@ -22578,53 +22576,56 @@
       i32.const 101
       i32.store16 $0 offset=2
       local.get $length
-      local.get $buffer
-      local.get $len
-      i32.add
-      i32.const 4
-      i32.add
-      local.set $buffer|18
-      local.get $kk
-      i32.const 1
-      i32.sub
-      local.set $k|19
-      local.get $k|19
-      i32.const 0
-      i32.lt_s
-      local.set $sign|20
-      local.get $sign|20
-      if
-       i32.const 0
-       local.get $k|19
+      block $~lib/util/number/genExponent|inlined.1 (result i32)
+       local.get $buffer
+       local.get $len
+       i32.add
+       i32.const 4
+       i32.add
+       local.set $buffer|16
+       local.get $kk
+       i32.const 1
        i32.sub
-       local.set $k|19
+       local.set $k|17
+       local.get $k|17
+       i32.const 0
+       i32.lt_s
+       local.set $sign|18
+       local.get $sign|18
+       if
+        i32.const 0
+        local.get $k|17
+        i32.sub
+        local.set $k|17
+       end
+       local.get $k|17
+       call $~lib/util/number/decimalCount32
+       i32.const 1
+       i32.add
+       local.set $decimals|19
+       local.get $buffer|16
+       local.set $buffer|20
+       local.get $k|17
+       local.set $num|21
+       local.get $decimals|19
+       local.set $offset|22
+       i32.const 0
+       i32.const 1
+       i32.ge_s
+       drop
+       local.get $buffer|20
+       local.get $num|21
+       local.get $offset|22
+       call $~lib/util/number/utoa32_dec_lut
+       local.get $buffer|16
+       i32.const 45
+       i32.const 43
+       local.get $sign|18
+       select
+       i32.store16 $0
+       local.get $decimals|19
+       br $~lib/util/number/genExponent|inlined.1
       end
-      local.get $k|19
-      call $~lib/util/number/decimalCount32
-      i32.const 1
-      i32.add
-      local.set $decimals|21
-      local.get $buffer|18
-      local.set $buffer|22
-      local.get $k|19
-      local.set $num|23
-      local.get $decimals|21
-      local.set $offset|24
-      i32.const 0
-      i32.const 1
-      i32.ge_s
-      drop
-      local.get $buffer|22
-      local.get $num|23
-      local.get $offset|24
-      call $~lib/util/number/utoa32_dec_lut
-      local.get $buffer|18
-      i32.const 45
-      i32.const 43
-      local.get $sign|20
-      select
-      i32.store16 $0
-      local.get $decimals|21
       i32.add
       local.set $length
       local.get $length
@@ -22713,375 +22714,393 @@
    i32.const 45
    i32.store16 $0
   end
-  local.get $value
-  local.set $value|3
-  local.get $buffer
-  local.set $buffer|4
-  local.get $sign
-  local.set $sign|5
-  local.get $value|3
-  i64.reinterpret_f64
-  local.set $uv
-  local.get $uv
-  i64.const 9218868437227405312
-  i64.and
-  i64.const 52
-  i64.shr_u
-  i32.wrap_i64
-  local.set $exp
-  local.get $uv
-  i64.const 4503599627370495
-  i64.and
-  local.set $sid
-  local.get $exp
-  i32.const 0
-  i32.ne
-  i64.extend_i32_u
-  i64.const 52
-  i64.shl
-  local.get $sid
-  i64.add
-  local.set $frc
-  local.get $exp
-  i32.const 1
-  local.get $exp
-  select
-  i32.const 1023
-  i32.const 52
-  i32.add
-  i32.sub
-  local.set $exp
-  local.get $frc
-  local.set $f
-  local.get $exp
-  local.set $e
-  local.get $f
-  i64.const 1
-  i64.shl
-  i64.const 1
-  i64.add
-  local.set $frc|12
-  local.get $e
-  i32.const 1
-  i32.sub
-  local.set $exp|13
-  local.get $frc|12
-  i64.clz
-  i32.wrap_i64
-  local.set $off
-  local.get $frc|12
-  local.get $off
-  i64.extend_i32_s
-  i64.shl
-  local.set $frc|12
-  local.get $exp|13
-  local.get $off
-  i32.sub
-  local.set $exp|13
-  i32.const 1
-  local.get $f
-  i64.const 4503599627370496
-  i64.eq
-  i32.add
-  local.set $m
-  local.get $frc|12
-  global.set $~lib/util/number/_frc_plus
-  local.get $f
-  local.get $m
-  i64.extend_i32_s
-  i64.shl
-  i64.const 1
-  i64.sub
-  local.get $e
-  local.get $m
-  i32.sub
-  local.get $exp|13
-  i32.sub
-  i64.extend_i32_s
-  i64.shl
-  global.set $~lib/util/number/_frc_minus
-  local.get $exp|13
-  global.set $~lib/util/number/_exp
-  global.get $~lib/util/number/_exp
-  local.set $minExp
-  i32.const -61
-  local.get $minExp
-  i32.sub
-  f64.convert_i32_s
-  f64.const 0.30102999566398114
-  f64.mul
-  f64.const 347
-  f64.add
-  local.set $dk
-  local.get $dk
-  i32.trunc_sat_f64_s
-  local.set $k
-  local.get $k
-  local.get $k
-  f64.convert_i32_s
-  local.get $dk
-  f64.ne
-  i32.add
-  local.set $k
-  local.get $k
-  i32.const 3
-  i32.shr_s
-  i32.const 1
-  i32.add
-  local.set $index
-  i32.const 348
-  local.get $index
-  i32.const 3
-  i32.shl
-  i32.sub
-  global.set $~lib/util/number/_K
-  i32.const 8840
-  local.get $index
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load $0
-  global.set $~lib/util/number/_frc_pow
-  i32.const 9536
-  local.get $index
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_s $0
-  global.set $~lib/util/number/_exp_pow
-  local.get $frc
-  i64.clz
-  i32.wrap_i64
-  local.set $off|20
-  local.get $frc
-  local.get $off|20
-  i64.extend_i32_s
-  i64.shl
-  local.set $frc
-  local.get $exp
-  local.get $off|20
-  i32.sub
-  local.set $exp
-  global.get $~lib/util/number/_frc_pow
-  local.set $frc_pow
-  global.get $~lib/util/number/_exp_pow
-  local.set $exp_pow
-  local.get $frc
-  local.set $u
-  local.get $frc_pow
-  local.set $v
-  local.get $u
-  i64.const 4294967295
-  i64.and
-  local.set $u0
-  local.get $v
-  i64.const 4294967295
-  i64.and
-  local.set $v0
-  local.get $u
-  i64.const 32
-  i64.shr_u
-  local.set $u1
-  local.get $v
-  i64.const 32
-  i64.shr_u
-  local.set $v1
-  local.get $u0
-  local.get $v0
-  i64.mul
-  local.set $l
-  local.get $u1
-  local.get $v0
-  i64.mul
-  local.get $l
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.set $t
-  local.get $u0
-  local.get $v1
-  i64.mul
-  local.get $t
-  i64.const 4294967295
-  i64.and
-  i64.add
-  local.set $w
-  local.get $w
-  i64.const 2147483647
-  i64.add
-  local.set $w
-  local.get $t
-  i64.const 32
-  i64.shr_u
-  local.set $t
-  local.get $w
-  i64.const 32
-  i64.shr_u
-  local.set $w
-  local.get $u1
-  local.get $v1
-  i64.mul
-  local.get $t
-  i64.add
-  local.get $w
-  i64.add
-  local.set $w_frc
-  local.get $exp
-  local.set $e1
-  local.get $exp_pow
-  local.set $e2
-  local.get $e1
-  local.get $e2
-  i32.add
-  i32.const 64
-  i32.add
-  local.set $w_exp
-  global.get $~lib/util/number/_frc_plus
-  local.set $u|36
-  local.get $frc_pow
-  local.set $v|37
-  local.get $u|36
-  i64.const 4294967295
-  i64.and
-  local.set $u0|38
-  local.get $v|37
-  i64.const 4294967295
-  i64.and
-  local.set $v0|39
-  local.get $u|36
-  i64.const 32
-  i64.shr_u
-  local.set $u1|40
-  local.get $v|37
-  i64.const 32
-  i64.shr_u
-  local.set $v1|41
-  local.get $u0|38
-  local.get $v0|39
-  i64.mul
-  local.set $l|42
-  local.get $u1|40
-  local.get $v0|39
-  i64.mul
-  local.get $l|42
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.set $t|43
-  local.get $u0|38
-  local.get $v1|41
-  i64.mul
-  local.get $t|43
-  i64.const 4294967295
-  i64.and
-  i64.add
-  local.set $w|44
-  local.get $w|44
-  i64.const 2147483647
-  i64.add
-  local.set $w|44
-  local.get $t|43
-  i64.const 32
-  i64.shr_u
-  local.set $t|43
-  local.get $w|44
-  i64.const 32
-  i64.shr_u
-  local.set $w|44
-  local.get $u1|40
-  local.get $v1|41
-  i64.mul
-  local.get $t|43
-  i64.add
-  local.get $w|44
-  i64.add
-  i64.const 1
-  i64.sub
-  local.set $wp_frc
-  global.get $~lib/util/number/_exp
-  local.set $e1|46
-  local.get $exp_pow
-  local.set $e2|47
-  local.get $e1|46
-  local.get $e2|47
-  i32.add
-  i32.const 64
-  i32.add
-  local.set $wp_exp
-  global.get $~lib/util/number/_frc_minus
-  local.set $u|49
-  local.get $frc_pow
-  local.set $v|50
-  local.get $u|49
-  i64.const 4294967295
-  i64.and
-  local.set $u0|51
-  local.get $v|50
-  i64.const 4294967295
-  i64.and
-  local.set $v0|52
-  local.get $u|49
-  i64.const 32
-  i64.shr_u
-  local.set $u1|53
-  local.get $v|50
-  i64.const 32
-  i64.shr_u
-  local.set $v1|54
-  local.get $u0|51
-  local.get $v0|52
-  i64.mul
-  local.set $l|55
-  local.get $u1|53
-  local.get $v0|52
-  i64.mul
-  local.get $l|55
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.set $t|56
-  local.get $u0|51
-  local.get $v1|54
-  i64.mul
-  local.get $t|56
-  i64.const 4294967295
-  i64.and
-  i64.add
-  local.set $w|57
-  local.get $w|57
-  i64.const 2147483647
-  i64.add
-  local.set $w|57
-  local.get $t|56
-  i64.const 32
-  i64.shr_u
-  local.set $t|56
-  local.get $w|57
-  i64.const 32
-  i64.shr_u
-  local.set $w|57
-  local.get $u1|53
-  local.get $v1|54
-  i64.mul
-  local.get $t|56
-  i64.add
-  local.get $w|57
-  i64.add
-  i64.const 1
-  i64.add
-  local.set $wm_frc
-  local.get $wp_frc
-  local.get $wm_frc
-  i64.sub
-  local.set $delta
-  local.get $buffer|4
-  local.get $w_frc
-  local.get $w_exp
-  local.get $wp_frc
-  local.get $wp_exp
-  local.get $delta
-  local.get $sign|5
-  call $~lib/util/number/genDigits
+  block $~lib/util/number/grisu2|inlined.0 (result i32)
+   local.get $value
+   local.set $value|3
+   local.get $buffer
+   local.set $buffer|4
+   local.get $sign
+   local.set $sign|5
+   local.get $value|3
+   i64.reinterpret_f64
+   local.set $uv
+   local.get $uv
+   i64.const 9218868437227405312
+   i64.and
+   i64.const 52
+   i64.shr_u
+   i32.wrap_i64
+   local.set $exp
+   local.get $uv
+   i64.const 4503599627370495
+   i64.and
+   local.set $sid
+   local.get $exp
+   i32.const 0
+   i32.ne
+   i64.extend_i32_u
+   i64.const 52
+   i64.shl
+   local.get $sid
+   i64.add
+   local.set $frc
+   local.get $exp
+   i32.const 1
+   local.get $exp
+   select
+   i32.const 1023
+   i32.const 52
+   i32.add
+   i32.sub
+   local.set $exp
+   local.get $frc
+   local.set $f
+   local.get $exp
+   local.set $e
+   local.get $f
+   i64.const 1
+   i64.shl
+   i64.const 1
+   i64.add
+   local.set $frc|12
+   local.get $e
+   i32.const 1
+   i32.sub
+   local.set $exp|13
+   local.get $frc|12
+   i64.clz
+   i32.wrap_i64
+   local.set $off
+   local.get $frc|12
+   local.get $off
+   i64.extend_i32_s
+   i64.shl
+   local.set $frc|12
+   local.get $exp|13
+   local.get $off
+   i32.sub
+   local.set $exp|13
+   i32.const 1
+   local.get $f
+   i64.const 4503599627370496
+   i64.eq
+   i32.add
+   local.set $m
+   local.get $frc|12
+   global.set $~lib/util/number/_frc_plus
+   local.get $f
+   local.get $m
+   i64.extend_i32_s
+   i64.shl
+   i64.const 1
+   i64.sub
+   local.get $e
+   local.get $m
+   i32.sub
+   local.get $exp|13
+   i32.sub
+   i64.extend_i32_s
+   i64.shl
+   global.set $~lib/util/number/_frc_minus
+   local.get $exp|13
+   global.set $~lib/util/number/_exp
+   global.get $~lib/util/number/_exp
+   local.set $minExp
+   i32.const -61
+   local.get $minExp
+   i32.sub
+   f64.convert_i32_s
+   f64.const 0.30102999566398114
+   f64.mul
+   f64.const 347
+   f64.add
+   local.set $dk
+   local.get $dk
+   i32.trunc_sat_f64_s
+   local.set $k
+   local.get $k
+   local.get $k
+   f64.convert_i32_s
+   local.get $dk
+   f64.ne
+   i32.add
+   local.set $k
+   local.get $k
+   i32.const 3
+   i32.shr_s
+   i32.const 1
+   i32.add
+   local.set $index
+   i32.const 348
+   local.get $index
+   i32.const 3
+   i32.shl
+   i32.sub
+   global.set $~lib/util/number/_K
+   i32.const 8840
+   local.get $index
+   i32.const 3
+   i32.shl
+   i32.add
+   i64.load $0
+   global.set $~lib/util/number/_frc_pow
+   i32.const 9536
+   local.get $index
+   i32.const 1
+   i32.shl
+   i32.add
+   i32.load16_s $0
+   global.set $~lib/util/number/_exp_pow
+   local.get $frc
+   i64.clz
+   i32.wrap_i64
+   local.set $off|20
+   local.get $frc
+   local.get $off|20
+   i64.extend_i32_s
+   i64.shl
+   local.set $frc
+   local.get $exp
+   local.get $off|20
+   i32.sub
+   local.set $exp
+   global.get $~lib/util/number/_frc_pow
+   local.set $frc_pow
+   global.get $~lib/util/number/_exp_pow
+   local.set $exp_pow
+   block $~lib/util/number/umul64f|inlined.0 (result i64)
+    local.get $frc
+    local.set $u
+    local.get $frc_pow
+    local.set $v
+    local.get $u
+    i64.const 4294967295
+    i64.and
+    local.set $u0
+    local.get $v
+    i64.const 4294967295
+    i64.and
+    local.set $v0
+    local.get $u
+    i64.const 32
+    i64.shr_u
+    local.set $u1
+    local.get $v
+    i64.const 32
+    i64.shr_u
+    local.set $v1
+    local.get $u0
+    local.get $v0
+    i64.mul
+    local.set $l
+    local.get $u1
+    local.get $v0
+    i64.mul
+    local.get $l
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $t
+    local.get $u0
+    local.get $v1
+    i64.mul
+    local.get $t
+    i64.const 4294967295
+    i64.and
+    i64.add
+    local.set $w
+    local.get $w
+    i64.const 2147483647
+    i64.add
+    local.set $w
+    local.get $t
+    i64.const 32
+    i64.shr_u
+    local.set $t
+    local.get $w
+    i64.const 32
+    i64.shr_u
+    local.set $w
+    local.get $u1
+    local.get $v1
+    i64.mul
+    local.get $t
+    i64.add
+    local.get $w
+    i64.add
+    br $~lib/util/number/umul64f|inlined.0
+   end
+   local.set $w_frc
+   block $~lib/util/number/umul64e|inlined.0 (result i32)
+    local.get $exp
+    local.set $e1
+    local.get $exp_pow
+    local.set $e2
+    local.get $e1
+    local.get $e2
+    i32.add
+    i32.const 64
+    i32.add
+    br $~lib/util/number/umul64e|inlined.0
+   end
+   local.set $w_exp
+   block $~lib/util/number/umul64f|inlined.1 (result i64)
+    global.get $~lib/util/number/_frc_plus
+    local.set $u|36
+    local.get $frc_pow
+    local.set $v|37
+    local.get $u|36
+    i64.const 4294967295
+    i64.and
+    local.set $u0|38
+    local.get $v|37
+    i64.const 4294967295
+    i64.and
+    local.set $v0|39
+    local.get $u|36
+    i64.const 32
+    i64.shr_u
+    local.set $u1|40
+    local.get $v|37
+    i64.const 32
+    i64.shr_u
+    local.set $v1|41
+    local.get $u0|38
+    local.get $v0|39
+    i64.mul
+    local.set $l|42
+    local.get $u1|40
+    local.get $v0|39
+    i64.mul
+    local.get $l|42
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $t|43
+    local.get $u0|38
+    local.get $v1|41
+    i64.mul
+    local.get $t|43
+    i64.const 4294967295
+    i64.and
+    i64.add
+    local.set $w|44
+    local.get $w|44
+    i64.const 2147483647
+    i64.add
+    local.set $w|44
+    local.get $t|43
+    i64.const 32
+    i64.shr_u
+    local.set $t|43
+    local.get $w|44
+    i64.const 32
+    i64.shr_u
+    local.set $w|44
+    local.get $u1|40
+    local.get $v1|41
+    i64.mul
+    local.get $t|43
+    i64.add
+    local.get $w|44
+    i64.add
+    br $~lib/util/number/umul64f|inlined.1
+   end
+   i64.const 1
+   i64.sub
+   local.set $wp_frc
+   block $~lib/util/number/umul64e|inlined.1 (result i32)
+    global.get $~lib/util/number/_exp
+    local.set $e1|46
+    local.get $exp_pow
+    local.set $e2|47
+    local.get $e1|46
+    local.get $e2|47
+    i32.add
+    i32.const 64
+    i32.add
+    br $~lib/util/number/umul64e|inlined.1
+   end
+   local.set $wp_exp
+   block $~lib/util/number/umul64f|inlined.2 (result i64)
+    global.get $~lib/util/number/_frc_minus
+    local.set $u|49
+    local.get $frc_pow
+    local.set $v|50
+    local.get $u|49
+    i64.const 4294967295
+    i64.and
+    local.set $u0|51
+    local.get $v|50
+    i64.const 4294967295
+    i64.and
+    local.set $v0|52
+    local.get $u|49
+    i64.const 32
+    i64.shr_u
+    local.set $u1|53
+    local.get $v|50
+    i64.const 32
+    i64.shr_u
+    local.set $v1|54
+    local.get $u0|51
+    local.get $v0|52
+    i64.mul
+    local.set $l|55
+    local.get $u1|53
+    local.get $v0|52
+    i64.mul
+    local.get $l|55
+    i64.const 32
+    i64.shr_u
+    i64.add
+    local.set $t|56
+    local.get $u0|51
+    local.get $v1|54
+    i64.mul
+    local.get $t|56
+    i64.const 4294967295
+    i64.and
+    i64.add
+    local.set $w|57
+    local.get $w|57
+    i64.const 2147483647
+    i64.add
+    local.set $w|57
+    local.get $t|56
+    i64.const 32
+    i64.shr_u
+    local.set $t|56
+    local.get $w|57
+    i64.const 32
+    i64.shr_u
+    local.set $w|57
+    local.get $u1|53
+    local.get $v1|54
+    i64.mul
+    local.get $t|56
+    i64.add
+    local.get $w|57
+    i64.add
+    br $~lib/util/number/umul64f|inlined.2
+   end
+   i64.const 1
+   i64.add
+   local.set $wm_frc
+   local.get $wp_frc
+   local.get $wm_frc
+   i64.sub
+   local.set $delta
+   local.get $buffer|4
+   local.get $w_frc
+   local.get $w_exp
+   local.get $wp_frc
+   local.get $wp_exp
+   local.get $delta
+   local.get $sign|5
+   call $~lib/util/number/genDigits
+   br $~lib/util/number/grisu2|inlined.0
+  end
   local.set $len
   local.get $buffer
   local.get $sign
@@ -23097,6 +23116,7 @@
   local.get $len
   local.get $sign
   i32.add
+  return
  )
  (func $~lib/util/number/dtoa_buffered (type $i32_f64_=>_i32) (param $buffer i32) (param $value f64) (result i32)
   (local $sign i32)
@@ -23169,6 +23189,7 @@
   local.get $buffer
   local.get $value
   call $~lib/util/number/dtoa_core
+  return
  )
  (func $~lib/typedarray/Float32Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -23177,6 +23198,7 @@
   call $~lib/typedarray/Float32Array#get:length
   local.get $separator
   call $~lib/util/string/joinFloatArray<f32>
+  return
  )
  (func $~lib/typedarray/Float64Array#join (type $i32_i32_=>_i32) (param $this i32) (param $separator i32) (result i32)
   local.get $this
@@ -23185,12 +23207,14 @@
   call $~lib/typedarray/Float64Array#get:length
   local.get $separator
   call $~lib/util/string/joinFloatArray<f64>
+  return
  )
  (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.const 20
   i32.sub
   call $~lib/rt/common/OBJECT#get:rtSize
+  return
  )
  (func $~lib/typedarray/Uint8Array.wrap@varargs (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   block $2of2
@@ -23453,7 +23477,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -23508,8 +23531,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -23545,6 +23566,7 @@
   local.get $index
   i32.add
   i32.load8_s $0
+  return
  )
  (func $~lib/array/Array<i8>#__uget (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   local.get $this
@@ -23554,6 +23576,7 @@
   i32.shl
   i32.add
   i32.load8_s $0
+  return
  )
  (func $~lib/array/Array<f32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -23562,6 +23585,7 @@
  (func $~lib/array/Array<f32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<f32>#get:length_
+  return
  )
  (func $~lib/array/Array<f32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -23575,7 +23599,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -23630,8 +23653,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -23680,7 +23701,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -23735,8 +23755,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -23774,6 +23792,7 @@
  (func $~lib/array/Array<f64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<f64>#get:length_
+  return
  )
  (func $~lib/array/Array<f64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -23787,7 +23806,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -23842,8 +23860,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -23951,7 +23967,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -24006,8 +24021,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -24104,7 +24117,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -24159,8 +24171,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -24197,6 +24207,7 @@
  (func $~lib/array/Array<u8>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<u8>#get:length_
+  return
  )
  (func $~lib/typedarray/Uint8Array#__uget (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   local.get $this
@@ -24204,6 +24215,7 @@
   local.get $index
   i32.add
   i32.load8_u $0
+  return
  )
  (func $~lib/array/Array<u8>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -24217,6 +24229,7 @@
   i32.shl
   i32.add
   i32.load8_u $0
+  return
  )
  (func $~lib/typedarray/Uint8Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -24226,7 +24239,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -24281,8 +24293,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -24331,7 +24341,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -24386,8 +24395,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -24426,7 +24433,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -24481,8 +24487,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -24590,7 +24594,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -24645,8 +24648,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -24743,7 +24744,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -24798,8 +24798,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -24854,6 +24852,7 @@
   local.get $index
   i32.add
   i32.load8_u $0
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -24863,7 +24862,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -24918,8 +24916,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -24971,7 +24967,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -25026,8 +25021,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -25088,7 +25081,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -25143,8 +25135,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -25255,7 +25245,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -25310,8 +25299,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -25368,7 +25355,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -25422,8 +25408,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -25480,7 +25464,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -25535,8 +25518,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -25573,6 +25554,7 @@
  (func $~lib/array/Array<i16>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<i16>#get:length_
+  return
  )
  (func $~lib/typedarray/Int16Array#__uget (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   local.get $this
@@ -25582,6 +25564,7 @@
   i32.shl
   i32.add
   i32.load16_s $0
+  return
  )
  (func $~lib/array/Array<i16>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -25595,6 +25578,7 @@
   i32.shl
   i32.add
   i32.load16_s $0
+  return
  )
  (func $~lib/typedarray/Int16Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -25604,7 +25588,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -25659,8 +25642,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -25709,7 +25690,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -25764,8 +25744,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -25804,7 +25782,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -25859,8 +25836,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -25909,7 +25884,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -25964,8 +25938,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -26062,7 +26034,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -26117,8 +26088,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -26156,7 +26125,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -26211,8 +26179,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -26249,6 +26215,7 @@
  (func $~lib/array/Array<u16>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<u16>#get:length_
+  return
  )
  (func $~lib/typedarray/Uint16Array#__uget (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   local.get $this
@@ -26258,6 +26225,7 @@
   i32.shl
   i32.add
   i32.load16_u $0
+  return
  )
  (func $~lib/array/Array<u16>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -26271,6 +26239,7 @@
   i32.shl
   i32.add
   i32.load16_u $0
+  return
  )
  (func $~lib/typedarray/Uint16Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -26280,7 +26249,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -26335,8 +26303,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -26385,7 +26351,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -26440,8 +26405,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -26480,7 +26443,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -26535,8 +26497,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -26585,7 +26545,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -26640,8 +26599,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -26738,7 +26695,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -26793,8 +26749,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -26891,6 +26845,7 @@
   i32.shl
   i32.add
   i32.load $0
+  return
  )
  (func $~lib/array/Array<i32>#__uget (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   local.get $this
@@ -26900,6 +26855,7 @@
   i32.shl
   i32.add
   i32.load $0
+  return
  )
  (func $~lib/typedarray/Int32Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -26909,7 +26865,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -26964,8 +26919,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27014,7 +26967,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -27069,8 +27021,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27109,7 +27059,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -27164,8 +27113,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27214,7 +27161,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -27269,8 +27215,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27308,7 +27252,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -27363,8 +27306,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27402,7 +27343,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -27457,8 +27397,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27554,6 +27492,7 @@
  (func $~lib/array/Array<u32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<u32>#get:length_
+  return
  )
  (func $~lib/typedarray/Uint32Array#__uget (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
   local.get $this
@@ -27563,6 +27502,7 @@
   i32.shl
   i32.add
   i32.load $0
+  return
  )
  (func $~lib/array/Array<u32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -27576,6 +27516,7 @@
   i32.shl
   i32.add
   i32.load $0
+  return
  )
  (func $~lib/typedarray/Uint32Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -27585,7 +27526,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -27640,8 +27580,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27690,7 +27628,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -27745,8 +27682,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27785,7 +27720,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -27840,8 +27774,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27890,7 +27822,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -27945,8 +27876,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -27984,7 +27913,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -28039,8 +27967,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28078,7 +28004,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -28133,8 +28058,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28172,7 +28095,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -28227,8 +28149,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28266,6 +28186,7 @@
  (func $~lib/array/Array<i64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<i64>#get:length_
+  return
  )
  (func $~lib/typedarray/Int64Array#__uget (type $i32_i32_=>_i64) (param $this i32) (param $index i32) (result i64)
   local.get $this
@@ -28275,6 +28196,7 @@
   i32.shl
   i32.add
   i64.load $0
+  return
  )
  (func $~lib/array/Array<i64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -28288,6 +28210,7 @@
   i32.shl
   i32.add
   i64.load $0
+  return
  )
  (func $~lib/typedarray/Int64Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -28297,7 +28220,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -28352,8 +28274,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28461,7 +28381,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -28516,8 +28435,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28566,7 +28483,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -28621,8 +28537,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28661,7 +28575,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -28716,8 +28629,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28756,7 +28667,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -28811,8 +28721,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28851,7 +28759,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -28906,8 +28813,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -28945,6 +28850,7 @@
  (func $~lib/array/Array<u64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   call $~lib/array/Array<u64>#get:length_
+  return
  )
  (func $~lib/typedarray/Uint64Array#__uget (type $i32_i32_=>_i64) (param $this i32) (param $index i32) (result i64)
   local.get $this
@@ -28954,6 +28860,7 @@
   i32.shl
   i32.add
   i64.load $0
+  return
  )
  (func $~lib/array/Array<u64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -28967,6 +28874,7 @@
   i32.shl
   i32.add
   i64.load $0
+  return
  )
  (func $~lib/typedarray/Uint64Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -28976,7 +28884,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -29031,8 +28938,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29140,7 +29045,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f64)
   local.get $this
@@ -29195,8 +29099,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29245,7 +29147,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -29300,8 +29201,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29340,7 +29239,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -29395,8 +29293,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29435,7 +29331,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -29490,8 +29385,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29530,7 +29423,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -29585,8 +29477,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29625,6 +29515,7 @@
   i32.shl
   i32.add
   f32.load $0
+  return
  )
  (func $~lib/array/Array<f32>#__uget (type $i32_i32_=>_f32) (param $this i32) (param $index i32) (result f32)
   local.get $this
@@ -29634,6 +29525,7 @@
   i32.shl
   i32.add
   f32.load $0
+  return
  )
  (func $~lib/typedarray/Float32Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -29702,7 +29594,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -29757,8 +29648,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29797,7 +29686,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -29852,8 +29740,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29892,7 +29778,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -29947,8 +29832,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -29987,7 +29870,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -30042,8 +29924,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30082,7 +29962,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -30137,8 +30016,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30177,6 +30054,7 @@
   i32.shl
   i32.add
   f64.load $0
+  return
  )
  (func $~lib/array/Array<f64>#__uget (type $i32_i32_=>_f64) (param $this i32) (param $index i32) (result f64)
   local.get $this
@@ -30186,6 +30064,7 @@
   i32.shl
   i32.add
   f64.load $0
+  return
  )
  (func $~lib/typedarray/Float64Array#set<~lib/array/Array<f32>> (type $i32_i32_i32_=>_none) (param $this i32) (param $source i32) (param $offset i32)
   (local $target i32)
@@ -30195,7 +30074,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -30250,8 +30128,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30291,7 +30167,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i64)
   local.get $this
@@ -30346,8 +30221,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30386,7 +30259,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -30441,8 +30313,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30481,7 +30351,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -30536,8 +30405,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30576,7 +30443,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -30631,8 +30497,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30671,7 +30535,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value f32)
   local.get $this
@@ -30726,8 +30589,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30779,7 +30640,6 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
   local.get $this
@@ -30834,8 +30694,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30892,11 +30750,10 @@
   (local $targetStart i32)
   (local $sourceStart i32)
   (local $i i32)
-  (local $10 i32)
   (local $ptr i32)
   (local $value i32)
+  (local $12 i32)
   (local $13 i32)
-  (local $14 i32)
   local.get $this
   local.set $target
   local.get $source
@@ -30949,8 +30806,6 @@
    local.get $i
    local.get $sourceLen
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $targetStart
     local.get $i
@@ -30974,11 +30829,11 @@
     drop
     local.get $ptr
     i32.const 255
-    local.tee $13
+    local.tee $12
     local.get $value
-    local.tee $14
+    local.tee $13
+    local.get $12
     local.get $13
-    local.get $14
     i32.lt_u
     select
     i32.store8 $0
@@ -30993,14 +30848,11 @@
  (func $~lib/util/sort/insertionSort<i8> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a i32)
   (local $b i32)
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -31032,8 +30884,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -31077,8 +30927,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -31127,8 +30975,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -31182,11 +31028,8 @@
  )
  (func $~lib/util/sort/extendRunRight<i8> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -31246,8 +31089,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -31262,8 +31103,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -31330,8 +31169,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -31342,15 +31179,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<i8> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a i32)
   (local $b i32)
   local.get $m
@@ -31369,8 +31204,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -31401,8 +31234,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -31431,8 +31262,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -31504,28 +31333,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -31648,12 +31473,15 @@
    call $~lib/util/sort/insertionSort<i8>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.1 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.1
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -31676,8 +31504,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -31717,13 +31543,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -31742,8 +31568,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -31766,15 +31590,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -31793,16 +31617,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -31815,7 +31637,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -31829,17 +31651,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -31867,29 +31689,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -31901,10 +31721,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<i8>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -31921,6 +31741,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<i8>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<i8>~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
@@ -31945,14 +31766,11 @@
  (func $~lib/util/sort/insertionSort<u8> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a i32)
   (local $b i32)
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -31984,8 +31802,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -32029,8 +31845,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -32079,8 +31893,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -32134,11 +31946,8 @@
  )
  (func $~lib/util/sort/extendRunRight<u8> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -32198,8 +32007,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -32214,8 +32021,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -32282,8 +32087,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -32294,15 +32097,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<u8> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a i32)
   (local $b i32)
   local.get $m
@@ -32321,8 +32122,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -32353,8 +32152,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -32383,8 +32180,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -32456,28 +32251,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -32600,12 +32391,15 @@
    call $~lib/util/sort/insertionSort<u8>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.2 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.2
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -32628,8 +32422,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -32669,13 +32461,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -32694,8 +32486,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -32718,15 +32508,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -32745,16 +32535,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -32767,7 +32555,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -32781,17 +32569,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -32819,29 +32607,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -32853,10 +32639,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<u8>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -32873,6 +32659,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<u8>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<u8>~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
@@ -32916,6 +32703,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<u8>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<u8>~anonymous|1 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
@@ -32954,14 +32742,11 @@
  (func $~lib/util/sort/insertionSort<i16> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a i32)
   (local $b i32)
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -32993,8 +32778,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -33038,8 +32821,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -33088,8 +32869,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -33143,11 +32922,8 @@
  )
  (func $~lib/util/sort/extendRunRight<i16> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -33207,8 +32983,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -33223,8 +32997,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -33291,8 +33063,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -33303,15 +33073,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<i16> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a i32)
   (local $b i32)
   local.get $m
@@ -33330,8 +33098,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -33362,8 +33128,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -33392,8 +33156,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -33465,28 +33227,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -33609,12 +33367,15 @@
    call $~lib/util/sort/insertionSort<i16>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.3 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.3
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -33637,8 +33398,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -33678,13 +33437,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -33703,8 +33462,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -33727,15 +33484,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -33754,16 +33511,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -33776,7 +33531,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -33790,17 +33545,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -33828,29 +33583,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -33862,10 +33615,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<i16>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -33882,6 +33635,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<i16>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<i16>~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
@@ -33906,14 +33660,11 @@
  (func $~lib/util/sort/insertionSort<u16> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a i32)
   (local $b i32)
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -33945,8 +33696,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -33990,8 +33739,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -34040,8 +33787,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -34095,11 +33840,8 @@
  )
  (func $~lib/util/sort/extendRunRight<u16> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -34159,8 +33901,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -34175,8 +33915,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -34243,8 +33981,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -34255,15 +33991,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<u16> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a i32)
   (local $b i32)
   local.get $m
@@ -34282,8 +34016,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -34314,8 +34046,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -34344,8 +34074,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -34417,28 +34145,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -34561,12 +34285,15 @@
    call $~lib/util/sort/insertionSort<u16>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.4 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.4
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -34589,8 +34316,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -34630,13 +34355,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -34655,8 +34380,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -34679,15 +34402,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -34706,16 +34429,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -34728,7 +34449,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -34742,17 +34463,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -34780,29 +34501,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -34814,10 +34533,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<u16>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -34834,6 +34553,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<u16>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<u16>~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
@@ -34872,14 +34592,11 @@
  (func $~lib/util/sort/insertionSort<i32> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a i32)
   (local $b i32)
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -34911,8 +34628,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -34956,8 +34671,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -35006,8 +34719,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -35061,11 +34772,8 @@
  )
  (func $~lib/util/sort/extendRunRight<i32> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -35125,8 +34833,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -35141,8 +34847,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -35209,8 +34913,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -35221,15 +34923,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<i32> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a i32)
   (local $b i32)
   local.get $m
@@ -35248,8 +34948,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -35280,8 +34978,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -35310,8 +35006,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -35383,28 +35077,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -35527,12 +35217,15 @@
    call $~lib/util/sort/insertionSort<i32>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.5 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.5
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -35555,8 +35248,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -35596,13 +35287,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -35621,8 +35312,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -35645,15 +35334,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -35672,16 +35361,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -35694,7 +35381,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -35708,17 +35395,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -35746,29 +35433,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -35780,10 +35465,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<i32>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -35800,6 +35485,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<i32>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<i32>~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
@@ -35818,14 +35504,11 @@
  (func $~lib/util/sort/insertionSort<u32> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a i32)
   (local $b i32)
   (local $min i32)
   (local $max i32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -35857,8 +35540,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -35902,8 +35583,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -35952,8 +35631,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -36007,11 +35684,8 @@
  )
  (func $~lib/util/sort/extendRunRight<u32> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -36071,8 +35745,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -36087,8 +35759,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -36155,8 +35825,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -36167,15 +35835,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<u32> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a i32)
   (local $b i32)
   local.get $m
@@ -36194,8 +35860,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -36226,8 +35890,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -36256,8 +35918,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -36329,28 +35989,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -36473,12 +36129,15 @@
    call $~lib/util/sort/insertionSort<u32>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.6 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.6
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -36501,8 +36160,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -36542,13 +36199,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -36567,8 +36224,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -36591,15 +36246,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -36618,16 +36273,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -36640,7 +36293,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -36654,17 +36307,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -36692,29 +36345,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -36726,10 +36377,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<u32>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -36746,6 +36397,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<u32>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<u32>~anonymous|0 (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
@@ -36768,14 +36420,11 @@
  (func $~lib/util/sort/insertionSort<i64> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a i64)
   (local $b i64)
   (local $min i64)
   (local $max i64)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -36807,8 +36456,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -36852,8 +36499,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -36902,8 +36547,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -36957,11 +36600,8 @@
  )
  (func $~lib/util/sort/extendRunRight<i64> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i64)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -37021,8 +36661,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -37037,8 +36675,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -37105,8 +36741,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -37117,15 +36751,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<i64> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a i64)
   (local $b i64)
   local.get $m
@@ -37144,8 +36776,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -37176,8 +36806,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -37206,8 +36834,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -37279,28 +36905,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -37423,12 +37045,15 @@
    call $~lib/util/sort/insertionSort<i64>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.7 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.7
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -37451,8 +37076,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -37492,13 +37115,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -37517,8 +37140,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -37541,15 +37162,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -37568,16 +37189,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -37590,7 +37209,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -37604,17 +37223,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -37642,29 +37261,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -37676,10 +37293,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<i64>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -37696,6 +37313,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<i64>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<i64>~anonymous|0 (type $i64_i64_=>_i32) (param $a i64) (param $b i64) (result i32)
   local.get $a
@@ -37718,14 +37336,11 @@
  (func $~lib/util/sort/insertionSort<u64> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a i64)
   (local $b i64)
   (local $min i64)
   (local $max i64)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -37757,8 +37372,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -37802,8 +37415,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -37852,8 +37463,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -37907,11 +37516,8 @@
  )
  (func $~lib/util/sort/extendRunRight<u64> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp i64)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -37971,8 +37577,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -37987,8 +37591,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -38055,8 +37657,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -38067,15 +37667,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<u64> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a i64)
   (local $b i64)
   local.get $m
@@ -38094,8 +37692,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -38126,8 +37722,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -38156,8 +37750,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -38229,28 +37821,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -38373,12 +37961,15 @@
    call $~lib/util/sort/insertionSort<u64>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.8 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.8
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -38401,8 +37992,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -38442,13 +38031,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -38467,8 +38056,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -38491,15 +38078,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -38518,16 +38105,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -38540,7 +38125,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -38554,17 +38139,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -38592,29 +38177,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -38626,10 +38209,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<u64>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -38646,6 +38229,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<u64>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<u64>~anonymous|0 (type $i64_i64_=>_i32) (param $a i64) (param $b i64) (result i32)
   local.get $a
@@ -38668,14 +38252,11 @@
  (func $~lib/util/sort/insertionSort<f32> (type $i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $left i32) (param $right i32) (param $presorted i32) (param $comparator i32)
   (local $range i32)
   (local $i i32)
-  (local $7 i32)
   (local $a f32)
   (local $b f32)
   (local $min f32)
   (local $max f32)
   (local $j i32)
-  (local $13 i32)
-  (local $14 i32)
   i32.const 0
   i32.const 1
   i32.ge_s
@@ -38707,8 +38288,6 @@
    local.get $i
    local.get $right
    i32.le_s
-   local.set $7
-   local.get $7
    if
     local.get $ptr
     local.get $i
@@ -38752,8 +38331,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $13
-      local.get $13
       if
        local.get $ptr
        local.get $j
@@ -38802,8 +38379,6 @@
       local.get $j
       local.get $left
       i32.ge_s
-      local.set $14
-      local.get $14
       if
        local.get $ptr
        local.get $j
@@ -38857,11 +38432,8 @@
  )
  (func $~lib/util/sort/extendRunRight<f32> (type $i32_i32_i32_i32_=>_i32) (param $ptr i32) (param $i i32) (param $right i32) (param $comparator i32) (result i32)
   (local $j i32)
-  (local $5 i32)
   (local $k i32)
-  (local $7 i32)
   (local $tmp f32)
-  (local $9 i32)
   local.get $i
   local.get $right
   i32.eq
@@ -38921,8 +38493,6 @@
     else
      i32.const 0
     end
-    local.set $5
-    local.get $5
     if
      local.get $j
      i32.const 1
@@ -38937,8 +38507,6 @@
     local.get $i
     local.get $k
     i32.lt_s
-    local.set $7
-    local.get $7
     if
      local.get $ptr
      local.get $i
@@ -39005,8 +38573,6 @@
     else
      i32.const 0
     end
-    local.set $9
-    local.get $9
     if
      local.get $j
      i32.const 1
@@ -39017,15 +38583,13 @@
    end
   end
   local.get $j
+  return
  )
  (func $~lib/util/sort/mergeRuns<f32> (type $i32_i32_i32_i32_i32_i32_=>_none) (param $ptr i32) (param $l i32) (param $m i32) (param $r i32) (param $buffer i32) (param $comparator i32)
   (local $i i32)
   (local $j i32)
   (local $t i32)
-  (local $9 i32)
-  (local $10 i32)
   (local $k i32)
-  (local $12 i32)
   (local $a f32)
   (local $b f32)
   local.get $m
@@ -39044,8 +38608,6 @@
    local.get $i
    local.get $l
    i32.gt_s
-   local.set $9
-   local.get $9
    if
     local.get $buffer
     local.get $i
@@ -39076,8 +38638,6 @@
    local.get $j
    local.get $r
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $buffer
     local.get $t
@@ -39106,8 +38666,6 @@
    local.get $k
    local.get $r
    i32.le_s
-   local.set $12
-   local.get $12
    if
     local.get $buffer
     local.get $j
@@ -39179,28 +38737,24 @@
   (local $leftRunStartBuf i32)
   (local $leftRunEndBuf i32)
   (local $i i32)
-  (local $16 i32)
   (local $buffer i32)
   (local $hi i32)
   (local $endA i32)
   (local $lenA i32)
+  (local $20 i32)
   (local $21 i32)
-  (local $22 i32)
   (local $top i32)
   (local $startA i32)
-  (local $25 i32)
   (local $startB i32)
   (local $endB i32)
   (local $lenB i32)
-  (local $29 i32)
-  (local $30 i32)
+  (local $27 i32)
+  (local $28 i32)
   (local $k i32)
-  (local $i|32 i32)
-  (local $33 i32)
+  (local $i|30 i32)
   (local $start i32)
-  (local $i|35 i32)
-  (local $36 i32)
-  (local $start|37 i32)
+  (local $i|32 i32)
+  (local $start|33 i32)
   local.get $len
   i32.const 48
   i32.le_s
@@ -39323,12 +38877,15 @@
    call $~lib/util/sort/insertionSort<f32>
    return
   end
-  local.get $len
-  local.set $n
-  i32.const 31
-  local.get $n
-  i32.clz
-  i32.sub
+  block $~lib/util/sort/log2u|inlined.9 (result i32)
+   local.get $len
+   local.set $n
+   i32.const 31
+   local.get $n
+   i32.clz
+   i32.sub
+   br $~lib/util/sort/log2u|inlined.9
+  end
   i32.const 2
   i32.add
   local.set $lgPlus2
@@ -39351,8 +38908,6 @@
    local.get $i
    local.get $lgPlus2
    i32.lt_u
-   local.set $16
-   local.get $16
    if
     local.get $leftRunStartBuf
     local.get $i
@@ -39392,13 +38947,13 @@
   i32.lt_s
   if
    local.get $hi
-   local.tee $21
+   local.tee $20
    i32.const 32
    i32.const 1
    i32.sub
-   local.tee $22
+   local.tee $21
+   local.get $20
    local.get $21
-   local.get $22
    i32.lt_s
    select
    local.set $endA
@@ -39417,8 +38972,6 @@
    local.get $endA
    local.get $hi
    i32.lt_s
-   local.set $25
-   local.get $25
    if
     local.get $endA
     i32.const 1
@@ -39441,15 +38994,15 @@
     i32.lt_s
     if
      local.get $hi
-     local.tee $29
+     local.tee $27
      local.get $startB
      i32.const 32
      i32.add
      i32.const 1
      i32.sub
-     local.tee $30
-     local.get $29
-     local.get $30
+     local.tee $28
+     local.get $27
+     local.get $28
      i32.lt_s
      select
      local.set $endB
@@ -39468,16 +39021,14 @@
     call $~lib/util/sort/nodePower
     local.set $k
     local.get $top
-    local.set $i|32
+    local.set $i|30
     loop $for-loop|3
-     local.get $i|32
+     local.get $i|30
      local.get $k
      i32.gt_u
-     local.set $33
-     local.get $33
      if
       local.get $leftRunStartBuf
-      local.get $i|32
+      local.get $i|30
       i32.const 2
       i32.shl
       i32.add
@@ -39490,7 +39041,7 @@
        local.get $ptr
        local.get $start
        local.get $leftRunEndBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
@@ -39504,17 +39055,17 @@
        local.get $start
        local.set $startA
        local.get $leftRunStartBuf
-       local.get $i|32
+       local.get $i|30
        i32.const 2
        i32.shl
        i32.add
        i32.const -1
        i32.store $0
       end
-      local.get $i|32
+      local.get $i|30
       i32.const 1
       i32.sub
-      local.set $i|32
+      local.set $i|30
       br $for-loop|3
      end
     end
@@ -39542,29 +39093,27 @@
    end
   end
   local.get $top
-  local.set $i|35
+  local.set $i|32
   loop $for-loop|4
-   local.get $i|35
+   local.get $i|32
    i32.const 0
    i32.ne
-   local.set $36
-   local.get $36
    if
     local.get $leftRunStartBuf
-    local.get $i|35
+    local.get $i|32
     i32.const 2
     i32.shl
     i32.add
     i32.load $0
-    local.set $start|37
-    local.get $start|37
+    local.set $start|33
+    local.get $start|33
     i32.const -1
     i32.ne
     if
      local.get $ptr
-     local.get $start|37
+     local.get $start|33
      local.get $leftRunEndBuf
-     local.get $i|35
+     local.get $i|32
      i32.const 2
      i32.shl
      i32.add
@@ -39576,10 +39125,10 @@
      local.get $comparator
      call $~lib/util/sort/mergeRuns<f32>
     end
-    local.get $i|35
+    local.get $i|32
     i32.const 1
     i32.sub
-    local.set $i|35
+    local.set $i|32
     br $for-loop|4
    end
   end
@@ -39596,6 +39145,7 @@
   local.get $comparator
   call $~lib/util/sort/SORT<f32>
   local.get $this
+  return
  )
  (func $~lib/util/sort/COMPARATOR<f32>~anonymous|0 (type $f32_f32_=>_i32) (param $a f32) (param $b f32) (result i32)
   (local $ia i32)
@@ -39629,6 +39179,7 @@
   local.get $ib
   i32.lt_s
   i32.sub
+  return
  )
  (func $std/typedarray/testArraySort<~lib/typedarray/Float32Array,f32>~anonymous|0 (type $f32_f32_=>_i32) (param $a f32) (param $b f32) (result i32)
   local.get $b
@@ -39649,8 +39200,6 @@
   i32.sub
  )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
-  (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   global.get $~lib/rt/itcms/state
@@ -39661,8 +39210,6 @@
     global.get $~lib/rt/itcms/state
     i32.const 0
     i32.ne
-    local.set $0
-    local.get $0
     if
      call $~lib/rt/itcms/step
      drop
@@ -39676,8 +39223,6 @@
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.ne
-   local.set $1
-   local.get $1
    if
     call $~lib/rt/itcms/step
     drop
@@ -50244,11 +49789,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -50283,8 +49826,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -50311,22 +49852,20 @@
   call $~lib/typedarray/Int8Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Int8Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i32.extend8_s
@@ -50340,10 +49879,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -50352,11 +49891,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Int8Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Int8Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -50427,11 +49966,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -50466,8 +50003,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -50496,22 +50031,20 @@
   call $~lib/typedarray/Uint8Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Uint8Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i32.const 255
@@ -50526,10 +50059,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -50538,11 +50071,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Uint8Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Uint8Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -50613,11 +50146,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -50652,8 +50183,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -50682,22 +50211,20 @@
   call $~lib/typedarray/Uint8ClampedArray#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Uint8ClampedArray#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i32.const 255
@@ -50712,10 +50239,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -50724,11 +50251,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Uint8ClampedArray#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Uint8ClampedArray#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -50799,11 +50326,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -50838,8 +50363,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -50866,22 +50389,20 @@
   call $~lib/typedarray/Int16Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Int16Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i32.extend16_s
@@ -50895,10 +50416,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -50907,11 +50428,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Int16Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Int16Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -50982,11 +50503,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -51021,8 +50540,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -51051,22 +50568,20 @@
   call $~lib/typedarray/Uint16Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Uint16Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i32.const 65535
@@ -51081,10 +50596,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -51093,11 +50608,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Uint16Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Uint16Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -51168,11 +50683,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -51207,8 +50720,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -51233,22 +50744,20 @@
   call $~lib/typedarray/Int32Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Int32Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i32.eq
@@ -51261,10 +50770,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -51273,11 +50782,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Int32Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Int32Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -51348,11 +50857,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -51387,8 +50894,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -51413,22 +50918,20 @@
   call $~lib/typedarray/Uint32Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Uint32Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i32.eq
@@ -51441,10 +50944,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -51453,11 +50956,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Uint32Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Uint32Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -51528,11 +51031,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -51567,8 +51068,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -51595,22 +51094,20 @@
   call $~lib/typedarray/Int64Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Int64Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i64.extend_i32_s
@@ -51624,10 +51121,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -51636,11 +51133,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Int64Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Int64Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -51711,11 +51208,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -51750,8 +51245,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -51778,22 +51271,20 @@
   call $~lib/typedarray/Uint64Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Uint64Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     i64.extend_i32_s
@@ -51807,10 +51298,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -51819,11 +51310,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Uint64Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Uint64Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -51894,11 +51385,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -51933,8 +51422,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -51961,22 +51448,20 @@
   call $~lib/typedarray/Float32Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Float32Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     f32.convert_i32_s
@@ -51990,10 +51475,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -52002,11 +51487,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Float32Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Float32Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -52077,11 +51562,9 @@
   (local $array i32)
   (local $arrayWithOffset i32)
   (local $i i32)
-  (local $5 i32)
-  (local $i|6 i32)
-  (local $7 i32)
+  (local $i|5 i32)
   (local $reversedSlice i32)
-  (local $9 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -52116,8 +51599,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $5
-   local.get $5
    if
     local.get $array
     local.get $i
@@ -52144,22 +51625,20 @@
   call $~lib/typedarray/Float64Array#reverse
   drop
   i32.const 0
-  local.set $i|6
+  local.set $i|5
   loop $for-loop|1
-   local.get $i|6
+   local.get $i|5
    local.get $length
    i32.lt_s
-   local.set $7
-   local.get $7
    if
     local.get $array
-    local.get $i|6
+    local.get $i|5
     call $~lib/typedarray/Float64Array#__get
     local.get $values
     local.get $length
     i32.const 1
     i32.sub
-    local.get $i|6
+    local.get $i|5
     i32.sub
     call $~lib/array/Array<i32>#__get
     f64.convert_i32_s
@@ -52173,10 +51652,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|6
+    local.get $i|5
     i32.const 1
     i32.add
-    local.set $i|6
+    local.set $i|5
     br $for-loop|1
    end
   end
@@ -52185,11 +51664,11 @@
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Float64Array#subarray
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=12
-  local.get $9
+  local.get $7
   call $~lib/typedarray/Float64Array#reverse
   local.tee $reversedSlice
   i32.store $0 offset=16
@@ -52278,6 +51757,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int8Array,i8> (type $none_=>_none)
   (local $array i32)
@@ -52402,6 +51882,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint8Array,u8> (type $none_=>_none)
   (local $array i32)
@@ -52526,6 +52007,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint8ClampedArray,u8> (type $none_=>_none)
   (local $array i32)
@@ -52650,6 +52132,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int16Array,i16> (type $none_=>_none)
   (local $array i32)
@@ -52774,6 +52257,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint16Array,u16> (type $none_=>_none)
   (local $array i32)
@@ -52898,6 +52382,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int32Array,i32> (type $none_=>_none)
   (local $array i32)
@@ -53022,6 +52507,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint32Array,u32> (type $none_=>_none)
   (local $array i32)
@@ -53146,6 +52632,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int64Array,i64> (type $none_=>_none)
   (local $array i32)
@@ -53270,6 +52757,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint64Array,u64> (type $none_=>_none)
   (local $array i32)
@@ -53394,6 +52882,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Float32Array,f32> (type $none_=>_none)
   (local $array i32)
@@ -53518,6 +53007,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+  return
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Float64Array,f64> (type $none_=>_none)
   (local $array i32)
@@ -53623,12 +53113,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -53657,8 +53145,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -53677,11 +53163,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -53704,19 +53190,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Int8Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Int8Array#__get
     i32.eq
     i32.eqz
@@ -53728,10 +53212,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -53745,12 +53229,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -53779,8 +53261,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -53800,11 +53280,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -53829,19 +53309,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint8Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint8Array#__get
     i32.eq
     i32.eqz
@@ -53853,10 +53331,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -53870,12 +53348,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -53904,8 +53380,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -53925,11 +53399,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -53956,19 +53430,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint8ClampedArray#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint8ClampedArray#__get
     i32.eq
     i32.eqz
@@ -53980,10 +53452,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -53997,12 +53469,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -54031,8 +53501,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -54051,11 +53519,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -54084,19 +53552,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Int16Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Int16Array#__get
     i32.eq
     i32.eqz
@@ -54108,10 +53574,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -54125,12 +53591,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -54159,8 +53623,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -54180,11 +53642,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -54215,19 +53677,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint16Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint16Array#__get
     i32.eq
     i32.eqz
@@ -54239,10 +53699,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -54256,12 +53716,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -54290,8 +53748,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -54309,11 +53765,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -54346,19 +53802,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Int32Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Int32Array#__get
     i32.eq
     i32.eqz
@@ -54370,10 +53824,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -54387,12 +53841,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -54421,8 +53873,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -54440,11 +53890,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -54479,19 +53929,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint32Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint32Array#__get
     i32.eq
     i32.eqz
@@ -54503,10 +53951,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -54520,12 +53968,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -54554,8 +54000,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -54574,11 +54018,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -54615,19 +54059,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Int64Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Int64Array#__get
     i64.eq
     i32.eqz
@@ -54639,10 +54081,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -54656,12 +54098,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -54690,8 +54130,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -54710,11 +54148,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -54753,19 +54191,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint64Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Uint64Array#__get
     i64.eq
     i32.eqz
@@ -54777,10 +54213,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -54794,12 +54230,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -54828,8 +54262,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -54848,11 +54280,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -54893,19 +54325,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Float32Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Float32Array#__get
     f32.eq
     i32.eqz
@@ -54917,10 +54347,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -54934,12 +54364,10 @@
   (local $length i32)
   (local $array i32)
   (local $i i32)
-  (local $4 i32)
   (local $buffer i32)
   (local $result i32)
-  (local $i|7 i32)
-  (local $8 i32)
-  (local $9 i32)
+  (local $i|6 i32)
+  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -54968,8 +54396,6 @@
    local.get $i
    local.get $length
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $array
     local.get $i
@@ -54988,11 +54414,11 @@
   global.get $~lib/memory/__stack_pointer
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $9
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $7
   i32.store $0 offset=8
-  local.get $9
+  local.get $7
   local.get $array
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $array
@@ -55035,19 +54461,17 @@
   local.tee $result
   i32.store $0 offset=16
   i32.const 0
-  local.set $i|7
+  local.set $i|6
   loop $for-loop|1
-   local.get $i|7
+   local.get $i|6
    local.get $length
    i32.lt_s
-   local.set $8
-   local.get $8
    if
     local.get $array
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Float64Array#__get
     local.get $result
-    local.get $i|7
+    local.get $i|6
     call $~lib/typedarray/Float64Array#__get
     f64.eq
     i32.eqz
@@ -55059,10 +54483,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $i|7
+    local.get $i|6
     i32.const 1
     i32.add
-    local.set $i|7
+    local.set $i|6
     br $for-loop|1
    end
   end
@@ -55074,10 +54498,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int8Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i32)
   (local $valb i32)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -55108,8 +54531,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -55124,11 +54545,11 @@
     i32.ne
     if
      i32.const 10320
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -55371,10 +54792,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint8Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i32)
   (local $valb i32)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -55405,8 +54825,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -55421,11 +54839,11 @@
     i32.ne
     if
      i32.const 10528
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -55668,10 +55086,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint8ClampedArray> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i32)
   (local $valb i32)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -55702,8 +55119,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -55718,11 +55133,11 @@
     i32.ne
     if
      i32.const 10736
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -55965,10 +55380,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int16Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i32)
   (local $valb i32)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -55999,8 +55413,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -56015,11 +55427,11 @@
     i32.ne
     if
      i32.const 10976
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -56262,10 +55674,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint16Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i32)
   (local $valb i32)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -56296,8 +55707,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -56312,11 +55721,11 @@
     i32.ne
     if
      i32.const 11264
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -56559,10 +55968,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int32Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i32)
   (local $valb i32)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -56593,8 +56001,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -56609,11 +56015,11 @@
     i32.ne
     if
      i32.const 11568
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -56856,10 +56262,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint32Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i32)
   (local $valb i32)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -56890,8 +56295,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -56906,11 +56309,11 @@
     i32.ne
     if
      i32.const 11936
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -57153,10 +56556,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int64Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i64)
   (local $valb i64)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -57187,8 +56589,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -57203,11 +56603,11 @@
     i64.ne
     if
      i32.const 12352
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -57450,10 +56850,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint64Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala i64)
   (local $valb i64)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -57484,8 +56883,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -57500,11 +56897,11 @@
     i64.ne
     if
      i32.const 12960
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -57747,10 +57144,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Float32Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala f32)
   (local $valb f32)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -57781,8 +57177,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -57797,11 +57191,11 @@
     f32.ne
     if
      i32.const 13520
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -58021,10 +57415,9 @@
  (func $std/typedarray/valuesEqual<~lib/typedarray/Float64Array> (type $i32_i32_=>_none) (param $target i32) (param $compare i32)
   (local $len i32)
   (local $i i32)
-  (local $4 i32)
   (local $vala f64)
   (local $valb f64)
-  (local $7 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -58055,8 +57448,6 @@
    local.get $i
    local.get $len
    i32.lt_s
-   local.set $4
-   local.get $4
    if
     local.get $target
     local.get $i
@@ -58071,11 +57462,11 @@
     f64.ne
     if
      i32.const 13872
-     local.set $7
+     local.set $6
      global.get $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $6
      i32.store $0
-     local.get $7
+     local.get $6
      i32.const 3
      local.get $i
      f64.convert_i32_s
@@ -60411,8 +59802,10 @@
   local.get $3
   i32.const 0
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int8Array#fill
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int8Array#fill@varargs
   drop
   local.get $3
   i32.const 5
@@ -60465,8 +59858,10 @@
   local.get $3
   i32.const 2
   i32.const -2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int8Array#fill
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int8Array#fill@varargs
   drop
   local.get $3
   i32.const 5
@@ -60526,8 +59921,10 @@
   local.get $14
   i32.const 0
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int8Array#fill
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int8Array#fill@varargs
   drop
   local.get $14
   call $~lib/typedarray/Int8Array#get:length
@@ -60666,8 +60063,10 @@
   local.get $19
   i32.const 0
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#fill
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#fill@varargs
   drop
   local.get $19
   i32.const 5
@@ -60720,8 +60119,10 @@
   local.get $19
   i32.const 2
   i32.const -2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#fill
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#fill@varargs
   drop
   local.get $19
   i32.const 5
@@ -60781,8 +60182,10 @@
   local.get $30
   i32.const 0
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#fill
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#fill@varargs
   drop
   local.get $30
   call $~lib/typedarray/Int32Array#get:length
@@ -61108,15 +60511,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $39
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $40
   i32.store $0 offset=52
   local.get $39
   i32.const 0
   i32.const 3
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -61145,15 +60552,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const 1
   i32.const 3
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -61182,15 +60593,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const 1
   i32.const 2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -61219,15 +60634,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const 2
   i32.const 2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -61256,8 +60675,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -61293,8 +60714,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -61330,8 +60753,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -61367,15 +60792,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const 0
   i32.const -2
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -61404,8 +60833,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -61441,8 +60872,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -61478,8 +60911,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
@@ -61515,15 +60950,19 @@
   global.get $~lib/memory/__stack_pointer
   local.get $40
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 1
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $39
   i32.store $0 offset=48
   local.get $39
   i32.const -4
   i32.const -3
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#copyWithin
+  i32.const 2
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#copyWithin@varargs
   local.set $100
   global.get $~lib/memory/__stack_pointer
   local.get $100
@@ -61758,8 +61197,10 @@
   global.get $~lib/memory/__stack_pointer
   local.get $65
   i32.const 0
-  global.get $~lib/builtins/i32.MAX_VALUE
-  call $~lib/typedarray/Int32Array#slice
+  i32.const 0
+  global.set $~argumentsLength
+  i32.const 0
+  call $~lib/typedarray/Int32Array#slice@varargs
   local.tee $69
   i32.store $0 offset=76
   local.get $69
@@ -62772,112 +62213,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Int32Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Int32Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Int32Array,i32>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 9
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 2
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Float64Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -62905,112 +62350,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Float64Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Float64Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 14
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 3
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Float64Array,f64>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 14
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 3
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 3
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Float64Array#sort@varargs (type $i32_i32_=>_i32) (param $this i32) (param $comparator i32) (result i32)
   (local $2 i32)
@@ -63107,6 +62556,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $7
+  return
  )
  (func $~lib/typedarray/Int8Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -63134,112 +62584,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Int8Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Int8Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 0
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 0
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Int8Array,i8>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 4
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 0
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 0
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Int32Array#slice (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -63266,101 +62720,105 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $start
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Int32Array#get:length
-  local.set $len
-  local.get $start
-  i32.const 0
-  i32.lt_s
-  if (result i32)
+  block $~lib/typedarray/SLICE<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $start
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Int32Array#get:length
+   local.set $len
    local.get $start
-   local.get $len
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $start
+    local.get $len
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $start
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $start
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $end|5
+    local.get $len
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.get $start
+   i32.sub
+   local.tee $15
+   i32.const 0
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $start
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $start
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $end|5
-   local.get $len
-   i32.add
-   local.tee $11
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
-   local.get $end|5
-   local.tee $13
    local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   call $~lib/typedarray/Int32Array#constructor
+   local.tee $slice
+   i32.store $0
+   local.get $slice
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $start
+   i32.const 2
+   i32.shl
+   i32.add
+   local.get $len
+   i32.const 2
+   i32.shl
+   memory.copy $0 $0
+   local.get $slice
+   br $~lib/typedarray/SLICE<~lib/typedarray/Int32Array,i32>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.get $start
-  i32.sub
-  local.tee $15
-  i32.const 0
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  local.get $len
-  call $~lib/typedarray/Int32Array#constructor
-  local.tee $slice
-  i32.store $0
-  local.get $slice
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $start
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $len
-  i32.const 2
-  i32.shl
-  memory.copy $0 $0
-  local.get $slice
   local.set $18
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $18
+  return
  )
  (func $~lib/typedarray/Int8Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -63372,7 +62830,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -63381,87 +62838,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Int8Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 0
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 4
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Int8Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 0
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_s $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
-    i32.store8 $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_s $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     i32.store8 $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Int8Array,i8>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Uint8Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -63473,7 +62932,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -63482,87 +62940,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint8Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 0
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 5
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint8Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 0
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
-    i32.store8 $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_u $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     i32.store8 $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -63574,7 +63034,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -63583,87 +63042,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 0
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 6
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 0
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
-    i32.store8 $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 0
+     i32.shl
+     i32.add
+     i32.load8_u $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     i32.store8 $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Int16Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -63675,7 +63136,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -63684,87 +63144,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Int16Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 1
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 7
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Int16Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 1
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_s $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
-    i32.store16 $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_s $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     i32.store16 $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Int16Array,i16>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Uint16Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -63776,7 +63238,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -63785,87 +63246,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint16Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 1
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 8
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint16Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 1
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_u $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
-    i32.store16 $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_u $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     i32.store16 $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Int32Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -63877,7 +63340,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -63886,87 +63348,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Int32Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 2
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 9
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Int32Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 2
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
-    i32.store $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     i32.store $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Int32Array,i32>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Uint32Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -63978,7 +63442,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -63987,87 +63450,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint32Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 2
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 10
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint32Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 2
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 10
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
-    i32.store $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     i32.store $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Int64Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64079,7 +63544,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64088,87 +63552,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Int64Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 3
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 11
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Int64Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 3
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 11
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i64_i32_i32_=>_i64)
-    i64.store $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i64_i32_i32_=>_i64)
+     i64.store $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Int64Array,i64>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Uint64Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64180,7 +63646,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64189,87 +63654,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint64Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 3
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 12
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint64Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 3
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 12
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i64_i32_i32_=>_i64)
-    i64.store $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     i64.load $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i64_i32_i32_=>_i64)
+     i64.store $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Float32Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64281,7 +63748,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64290,87 +63756,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Float32Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 2
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 13
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Float32Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 2
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 13
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    f32.load $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $f32_i32_i32_=>_f32)
-    f32.store $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 2
+     i32.shl
+     i32.add
+     f32.load $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $f32_i32_i32_=>_f32)
+     f32.store $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Float32Array,f32>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Float64Array#map (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64382,7 +63850,6 @@
   (local $buf i32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64391,87 +63858,89 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Float64Array#get:length
-  local.set $len
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $ptr
-  local.get $len
-  i32.const 3
-  i32.shl
-  local.set $byteLength
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 14
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $byteLength
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/MAP<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Float64Array#get:length
+   local.set $len
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $ptr
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $buf
+   i32.const 3
+   i32.shl
+   local.set $byteLength
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 14
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $byteLength
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $ptr
-    local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    f64.load $0
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $f64_i32_i32_=>_f64)
-    f64.store $0
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
+    local.get $len
+    i32.lt_s
+    if
+     local.get $buf
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $ptr
+     local.get $i
+     i32.const 3
+     i32.shl
+     i32.add
+     f64.load $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $f64_i32_i32_=>_f64)
+     f64.store $0
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
+    end
    end
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $buf
+   i32.store $0 offset=4
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/MAP<~lib/typedarray/Float64Array,f64>|inlined.0
   end
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $buf
-  i32.store $0 offset=4
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/typedarray/Int8Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64482,12 +63951,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i32)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64496,105 +63964,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Int8Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 4
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 0
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Int8Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 0
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_s $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 0
      i32.shl
      i32.add
+     i32.load8_s $0
+     local.set $value
      local.get $value
-     i32.store8 $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 0
+      i32.shl
+      i32.add
+      local.get $value
+      i32.store8 $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 0
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Int8Array,i8>|inlined.0
   end
-  local.get $j
-  i32.const 0
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Uint8Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64605,12 +64075,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i32)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64619,105 +64088,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint8Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 5
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 0
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint8Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 0
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 0
      i32.shl
      i32.add
+     i32.load8_u $0
+     local.set $value
      local.get $value
-     i32.store8 $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 0
+      i32.shl
+      i32.add
+      local.get $value
+      i32.store8 $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 0
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
-  local.get $j
-  i32.const 0
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64728,12 +64199,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i32)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64742,105 +64212,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 6
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 0
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 0
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 0
-    i32.shl
-    i32.add
-    i32.load8_u $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 0
      i32.shl
      i32.add
+     i32.load8_u $0
+     local.set $value
      local.get $value
-     i32.store8 $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 0
+      i32.shl
+      i32.add
+      local.get $value
+      i32.store8 $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 0
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
-  local.get $j
-  i32.const 0
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Int16Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64851,12 +64323,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i32)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64865,105 +64336,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Int16Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 7
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 1
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Int16Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 1
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_s $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 1
      i32.shl
      i32.add
+     i32.load16_s $0
+     local.set $value
      local.get $value
-     i32.store16 $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 1
+      i32.shl
+      i32.add
+      local.get $value
+      i32.store16 $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 1
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Int16Array,i16>|inlined.0
   end
-  local.get $j
-  i32.const 1
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Uint16Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -64974,12 +64447,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i32)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -64988,105 +64460,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint16Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 8
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 1
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint16Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 1
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_u $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 1
      i32.shl
      i32.add
+     i32.load16_u $0
+     local.set $value
      local.get $value
-     i32.store16 $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 1
+      i32.shl
+      i32.add
+      local.get $value
+      i32.store16 $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 1
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
-  local.get $j
-  i32.const 1
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Int32Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -65097,12 +64571,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i32)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -65111,105 +64584,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Int32Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 9
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 2
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Int32Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 2
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 2
      i32.shl
      i32.add
+     i32.load $0
+     local.set $value
      local.get $value
-     i32.store $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 2
+      i32.shl
+      i32.add
+      local.get $value
+      i32.store $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 2
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Int32Array,i32>|inlined.0
   end
-  local.get $j
-  i32.const 2
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Uint32Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -65220,12 +64695,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i32)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -65234,105 +64708,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint32Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 10
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 2
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint32Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 10
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 2
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i32_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 2
      i32.shl
      i32.add
+     i32.load $0
+     local.set $value
      local.get $value
-     i32.store $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 2
+      i32.shl
+      i32.add
+      local.get $value
+      i32.store $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 2
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
-  local.get $j
-  i32.const 2
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Int64Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -65343,12 +64819,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i64)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -65357,105 +64832,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Int64Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 11
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 3
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Int64Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 11
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 3
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i64_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 3
      i32.shl
      i32.add
+     i64.load $0
+     local.set $value
      local.get $value
-     i64.store $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i64_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 3
+      i32.shl
+      i32.add
+      local.get $value
+      i64.store $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 3
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Int64Array,i64>|inlined.0
   end
-  local.get $j
-  i32.const 3
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Uint64Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -65466,12 +64943,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value i64)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -65480,105 +64956,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Uint64Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 12
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 3
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Uint64Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 12
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 3
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    i64.load $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $i64_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 3
      i32.shl
      i32.add
+     i64.load $0
+     local.set $value
      local.get $value
-     i64.store $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $i64_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 3
+      i32.shl
+      i32.add
+      local.get $value
+      i64.store $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 3
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
-  local.get $j
-  i32.const 3
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Float32Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -65589,12 +65067,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value f32)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -65603,105 +65080,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Float32Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 13
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 2
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Float32Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 13
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 2
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 2
-    i32.shl
-    i32.add
-    f32.load $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $f32_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 2
      i32.shl
      i32.add
+     f32.load $0
+     local.set $value
      local.get $value
-     f32.store $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $f32_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 2
+      i32.shl
+      i32.add
+      local.get $value
+      f32.store $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 2
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Float32Array,f32>|inlined.0
   end
-  local.get $j
-  i32.const 2
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Float64Array#filter (type $i32_i32_=>_i32) (param $this i32) (param $fn i32) (result i32)
   (local $array i32)
@@ -65712,12 +65191,11 @@
   (local $dataStart i32)
   (local $j i32)
   (local $i i32)
-  (local $10 i32)
   (local $value f64)
-  (local $12 i32)
+  (local $11 i32)
   (local $byteLength i32)
   (local $data i32)
-  (local $15 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -65726,105 +65204,107 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store $0
-  local.get $this
-  local.set $array
-  local.get $fn
-  local.set $fn|3
-  local.get $array
-  call $~lib/typedarray/Float64Array#get:length
-  local.set $len
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 14
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  local.get $len
-  i32.const 3
-  i32.shl
-  i32.const 1
-  call $~lib/rt/itcms/__new
-  local.tee $buf
-  i32.store $0 offset=4
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.set $dataStart
-  i32.const 0
-  local.set $j
-  i32.const 0
-  local.set $i
-  loop $for-loop|0
-   local.get $i
+  block $~lib/typedarray/FILTER<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $fn
+   local.set $fn|3
+   local.get $array
+   call $~lib/typedarray/Float64Array#get:length
+   local.set $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 14
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   global.get $~lib/memory/__stack_pointer
    local.get $len
-   i32.lt_s
-   local.set $10
-   local.get $10
-   if
-    local.get $dataStart
+   i32.const 3
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $buf
+   i32.store $0 offset=4
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.set $dataStart
+   i32.const 0
+   local.set $j
+   i32.const 0
+   local.set $i
+   loop $for-loop|0
     local.get $i
-    i32.const 3
-    i32.shl
-    i32.add
-    f64.load $0
-    local.set $value
-    local.get $value
-    local.get $i
-    local.get $array
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $fn|3
-    i32.load $0
-    call_indirect $0 (type $f64_i32_i32_=>_i32)
+    local.get $len
+    i32.lt_s
     if
-     local.get $buf
-     local.get $j
-     local.tee $12
-     i32.const 1
-     i32.add
-     local.set $j
-     local.get $12
+     local.get $dataStart
+     local.get $i
      i32.const 3
      i32.shl
      i32.add
+     f64.load $0
+     local.set $value
      local.get $value
-     f64.store $0
+     local.get $i
+     local.get $array
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $fn|3
+     i32.load $0
+     call_indirect $0 (type $f64_i32_i32_=>_i32)
+     if
+      local.get $buf
+      local.get $j
+      local.tee $11
+      i32.const 1
+      i32.add
+      local.set $j
+      local.get $11
+      i32.const 3
+      i32.shl
+      i32.add
+      local.get $value
+      f64.store $0
+     end
+     local.get $i
+     i32.const 1
+     i32.add
+     local.set $i
+     br $for-loop|0
     end
-    local.get $i
-    i32.const 1
-    i32.add
-    local.set $i
-    br $for-loop|0
    end
+   local.get $j
+   i32.const 3
+   i32.shl
+   local.set $byteLength
+   local.get $buf
+   local.get $byteLength
+   call $~lib/rt/itcms/__renew
+   local.set $data
+   local.get $out
+   local.get $data
+   i32.store $0
+   local.get $out
+   local.get $data
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $data
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/FILTER<~lib/typedarray/Float64Array,f64>|inlined.0
   end
-  local.get $j
-  i32.const 3
-  i32.shl
-  local.set $byteLength
-  local.get $buf
-  local.get $byteLength
-  call $~lib/rt/itcms/__renew
-  local.set $data
-  local.get $out
-  local.get $data
-  i32.store $0
-  local.get $out
-  local.get $data
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $data
-  i32.store $0 offset=4
-  local.get $out
-  local.set $15
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $15
+  local.get $14
+  return
  )
  (func $~lib/typedarray/Uint8Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -65852,112 +65332,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Uint8Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Uint8Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 0
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 0
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 5
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 0
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 0
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
   (local $array i32)
@@ -65985,112 +65469,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $start
-  local.set $begin
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Uint8ClampedArray#get:length
-  local.set $len
-  local.get $begin
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $start
+   local.set $begin
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Uint8ClampedArray#get:length
+   local.set $len
    local.get $begin
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin
+   i32.const 0
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin
+   i32.sub
+   i32.const 0
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 6
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin
-  i32.const 0
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin
-  i32.sub
-  i32.const 0
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Int16Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -66118,112 +65606,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Int16Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Int16Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 1
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 1
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Int16Array,i16>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 7
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 1
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Uint16Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -66251,112 +65743,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Uint16Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Uint16Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 1
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 1
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 8
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 1
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Uint32Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -66384,112 +65880,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Uint32Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Uint32Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 10
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 10
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 2
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Int64Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -66517,112 +66017,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Int64Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Int64Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 11
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 3
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Int64Array,i64>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 11
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 3
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 3
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Uint64Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -66650,112 +66154,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Uint64Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Uint64Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 12
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 3
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 12
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 3
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 3
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/typedarray/Float32Array#subarray (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $array i32)
@@ -66783,112 +66291,116 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $this
-  local.set $array
-  local.get $begin
-  local.set $begin|4
-  local.get $end
-  local.set $end|5
-  local.get $array
-  call $~lib/typedarray/Float32Array#get:length
-  local.set $len
-  local.get $begin|4
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
+  block $~lib/typedarray/SUBARRAY<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
+   local.get $this
+   local.set $array
+   local.get $begin
+   local.set $begin|4
+   local.get $end
+   local.set $end|5
+   local.get $array
+   call $~lib/typedarray/Float32Array#get:length
+   local.set $len
    local.get $begin|4
-   i32.add
-   local.tee $7
    i32.const 0
-   local.tee $8
-   local.get $7
-   local.get $8
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $begin|4
+    i32.add
+    local.tee $7
+    i32.const 0
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.gt_s
+    select
+   else
+    local.get $begin|4
+    local.tee $9
+    local.get $len
+    local.tee $10
+    local.get $9
+    local.get $10
+    i32.lt_s
+    select
+   end
+   local.set $begin|4
+   local.get $end|5
+   i32.const 0
+   i32.lt_s
+   if (result i32)
+    local.get $len
+    local.get $end|5
+    i32.add
+    local.tee $11
+    i32.const 0
+    local.tee $12
+    local.get $11
+    local.get $12
+    i32.gt_s
+    select
+   else
+    local.get $end|5
+    local.tee $13
+    local.get $len
+    local.tee $14
+    local.get $13
+    local.get $14
+    i32.lt_s
+    select
+   end
+   local.set $end|5
+   local.get $end|5
+   local.tee $15
+   local.get $begin|4
+   local.tee $16
+   local.get $15
+   local.get $16
    i32.gt_s
    select
-  else
-   local.get $begin|4
-   local.tee $9
-   local.get $len
-   local.tee $10
-   local.get $9
-   local.get $10
-   i32.lt_s
-   select
-  end
-  local.set $begin|4
-  local.get $end|5
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $len
-   local.get $end|5
-   i32.add
-   local.tee $11
+   local.set $end|5
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 13
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:buffer
+   local.set $buf
+   local.get $out
+   local.get $buf
+   i32.store $0
+   local.get $out
+   local.get $buf
    i32.const 0
-   local.tee $12
-   local.get $11
-   local.get $12
-   i32.gt_s
-   select
-  else
+   call $~lib/rt/itcms/__link
+   local.get $out
+   local.get $array
+   call $~lib/arraybuffer/ArrayBufferView#get:dataStart
+   local.get $begin|4
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.store $0 offset=4
+   local.get $out
    local.get $end|5
-   local.tee $13
-   local.get $len
-   local.tee $14
-   local.get $13
-   local.get $14
-   i32.lt_s
-   select
+   local.get $begin|4
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.store $0 offset=8
+   local.get $out
+   br $~lib/typedarray/SUBARRAY<~lib/typedarray/Float32Array,f32>|inlined.0
   end
-  local.set $end|5
-  local.get $end|5
-  local.tee $15
-  local.get $begin|4
-  local.tee $16
-  local.get $15
-  local.get $16
-  i32.gt_s
-  select
-  local.set $end|5
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 13
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:buffer
-  local.set $buf
-  local.get $out
-  local.get $buf
-  i32.store $0
-  local.get $out
-  local.get $buf
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $array
-  call $~lib/arraybuffer/ArrayBufferView#get:dataStart
-  local.get $begin|4
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
-  local.get $end|5
-  local.get $begin|4
-  i32.sub
-  i32.const 2
-  i32.shl
-  i32.store $0 offset=8
-  local.get $out
   local.set $19
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $19
+  return
  )
  (func $~lib/util/number/itoa32 (type $i32_i32_=>_i32) (param $value i32) (param $radix i32) (result i32)
   (local $sign i32)
@@ -67070,6 +66582,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $14
+  return
  )
  (func $~lib/string/String#substring (type $i32_i32_i32_=>_i32) (param $this i32) (param $start i32) (param $end i32) (result i32)
   (local $len i32)
@@ -67213,6 +66726,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $22
+  return
  )
  (func $~lib/util/string/joinIntegerArray<i8> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -67224,7 +66738,6 @@
   (local $value|9 i32)
   (local $i i32)
   (local $11 i32)
-  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -67242,12 +66755,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $lastIndex
@@ -67265,12 +66778,12 @@
    local.get $value
    i32.const 10
    call $~lib/util/number/itoa32
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $separator
@@ -67300,8 +66813,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $11
-   local.get $11
    if
     local.get $dataStart
     local.get $i
@@ -67369,21 +66880,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $result
-  local.set $12
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $12
+  local.get $11
+  return
  )
  (func $~lib/util/number/utoa32 (type $i32_i32_=>_i32) (param $value i32) (param $radix i32) (result i32)
   (local $out i32)
@@ -67530,6 +67042,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $12
+  return
  )
  (func $~lib/util/string/joinIntegerArray<u8> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -67541,7 +67054,6 @@
   (local $value|9 i32)
   (local $i i32)
   (local $11 i32)
-  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -67559,12 +67071,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $lastIndex
@@ -67582,12 +67094,12 @@
    local.get $value
    i32.const 10
    call $~lib/util/number/utoa32
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $separator
@@ -67617,8 +67129,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $11
-   local.get $11
    if
     local.get $dataStart
     local.get $i
@@ -67686,21 +67196,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $result
-  local.set $12
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $12
+  local.get $11
+  return
  )
  (func $~lib/util/string/joinIntegerArray<i16> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -67712,7 +67223,6 @@
   (local $value|9 i32)
   (local $i i32)
   (local $11 i32)
-  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -67730,12 +67240,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $lastIndex
@@ -67753,12 +67263,12 @@
    local.get $value
    i32.const 10
    call $~lib/util/number/itoa32
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $separator
@@ -67788,8 +67298,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $11
-   local.get $11
    if
     local.get $dataStart
     local.get $i
@@ -67857,21 +67365,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $result
-  local.set $12
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $12
+  local.get $11
+  return
  )
  (func $~lib/util/string/joinIntegerArray<u16> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -67883,7 +67392,6 @@
   (local $value|9 i32)
   (local $i i32)
   (local $11 i32)
-  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -67901,12 +67409,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $lastIndex
@@ -67924,12 +67432,12 @@
    local.get $value
    i32.const 10
    call $~lib/util/number/utoa32
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $separator
@@ -67959,8 +67467,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $11
-   local.get $11
    if
     local.get $dataStart
     local.get $i
@@ -68028,21 +67534,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $result
-  local.set $12
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $12
+  local.get $11
+  return
  )
  (func $~lib/util/string/joinIntegerArray<i32> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -68054,7 +67561,6 @@
   (local $value|9 i32)
   (local $i i32)
   (local $11 i32)
-  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -68072,12 +67578,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $lastIndex
@@ -68095,12 +67601,12 @@
    local.get $value
    i32.const 10
    call $~lib/util/number/itoa32
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $separator
@@ -68130,8 +67636,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $11
-   local.get $11
    if
     local.get $dataStart
     local.get $i
@@ -68199,21 +67703,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $result
-  local.set $12
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $12
+  local.get $11
+  return
  )
  (func $~lib/util/string/joinIntegerArray<u32> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -68225,7 +67730,6 @@
   (local $value|9 i32)
   (local $i i32)
   (local $11 i32)
-  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -68243,12 +67747,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $lastIndex
@@ -68266,12 +67770,12 @@
    local.get $value
    i32.const 10
    call $~lib/util/number/utoa32
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $separator
@@ -68301,8 +67805,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $11
-   local.get $11
    if
     local.get $dataStart
     local.get $i
@@ -68370,21 +67872,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $result
-  local.set $12
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $12
+  local.get $11
+  return
  )
  (func $~lib/util/number/itoa64 (type $i64_i32_=>_i32) (param $value i64) (param $radix i32) (result i32)
   (local $sign i32)
@@ -68608,6 +68111,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $18
+  return
  )
  (func $~lib/util/string/joinIntegerArray<i64> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -68619,7 +68123,6 @@
   (local $value|9 i64)
   (local $i i32)
   (local $11 i32)
-  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -68637,12 +68140,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $lastIndex
@@ -68662,12 +68165,12 @@
    i64.extend_i32_s
    i32.const 10
    call $~lib/util/number/itoa64
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $separator
@@ -68697,8 +68200,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $11
-   local.get $11
    if
     local.get $dataStart
     local.get $i
@@ -68766,21 +68267,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $result
-  local.set $12
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $12
+  local.get $11
+  return
  )
  (func $~lib/util/number/utoa64 (type $i64_i32_=>_i32) (param $value i64) (param $radix i32) (result i32)
   (local $out i32)
@@ -68967,6 +68469,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $17
+  return
  )
  (func $~lib/util/string/joinIntegerArray<u64> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -68978,7 +68481,6 @@
   (local $value|9 i64)
   (local $i i32)
   (local $11 i32)
-  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -68996,12 +68498,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $lastIndex
@@ -69019,12 +68521,12 @@
    local.get $value
    i32.const 10
    call $~lib/util/number/utoa64
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $separator
@@ -69054,8 +68556,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $11
-   local.get $11
    if
     local.get $dataStart
     local.get $i
@@ -69123,21 +68623,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $12
+   local.set $11
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $12
+   local.get $11
    return
   end
   local.get $result
-  local.set $12
+  local.set $11
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $12
+  local.get $11
+  return
  )
  (func $~lib/util/number/dtoa (type $f64_=>_i32) (param $value f64) (result i32)
   (local $size i32)
@@ -69221,6 +68722,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $~lib/util/string/joinFloatArray<f32> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -69231,7 +68733,6 @@
   (local $value f32)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -69249,12 +68750,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $11
+   local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $11
+   local.get $10
    return
   end
   local.get $lastIndex
@@ -69264,12 +68765,12 @@
    f32.load $0
    f64.promote_f32
    call $~lib/util/number/dtoa
-   local.set $11
+   local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $11
+   local.get $10
    return
   end
   local.get $separator
@@ -69299,8 +68800,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $dataStart
     local.get $i
@@ -69370,21 +68869,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $11
+   local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $11
+   local.get $10
    return
   end
   local.get $result
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/util/string/joinFloatArray<f64> (type $i32_i32_i32_=>_i32) (param $dataStart i32) (param $length i32) (param $separator i32) (result i32)
   (local $lastIndex i32)
@@ -69395,7 +68895,6 @@
   (local $value f64)
   (local $i i32)
   (local $10 i32)
-  (local $11 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -69413,12 +68912,12 @@
   i32.lt_s
   if
    i32.const 6752
-   local.set $11
+   local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $11
+   local.get $10
    return
   end
   local.get $lastIndex
@@ -69427,12 +68926,12 @@
    local.get $dataStart
    f64.load $0
    call $~lib/util/number/dtoa
-   local.set $11
+   local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $11
+   local.get $10
    return
   end
   local.get $separator
@@ -69462,8 +68961,6 @@
    local.get $i
    local.get $lastIndex
    i32.lt_s
-   local.set $10
-   local.get $10
    if
     local.get $dataStart
     local.get $i
@@ -69531,21 +69028,22 @@
    i32.const 0
    local.get $offset
    call $~lib/string/String#substring
-   local.set $11
+   local.set $10
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $11
+   local.get $10
    return
   end
   local.get $result
-  local.set $11
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $11
+  local.get $10
+  return
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
   (local $buffer i32)
@@ -69586,6 +69084,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
+  return
  )
  (func $~lib/typedarray/Uint8Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -69603,108 +69102,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 0
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 0
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 0
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 0
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 0
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
    i32.const 0
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Uint8Array,u8>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 5
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice (type $i32_i32_i32_=>_i32) (param $this i32) (param $begin i32) (param $end i32) (result i32)
   (local $length i32)
@@ -69812,6 +69315,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $16
+  return
  )
  (func $~lib/typedarray/Int8Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -69829,108 +69333,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 0
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 0
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 0
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 0
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 0
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
    i32.const 0
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Int8Array,i8>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 4
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Uint8ClampedArray.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -69948,108 +69456,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 0
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 0
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 0
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 0
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 0
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
    i32.const 0
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 6
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Int16Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -70067,108 +69579,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 1
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 1
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 1
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 1
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 1
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
-   i32.const 1
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Int16Array,i16>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 7
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Uint16Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -70186,108 +69702,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 1
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 1
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 1
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 1
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 1
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
-   i32.const 1
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Uint16Array,u16>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 8
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Int32Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -70305,108 +69825,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 3
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 3
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 3
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 3
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 2
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
-   i32.const 2
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Int32Array,i32>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 9
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Uint32Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -70424,108 +69948,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 3
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 3
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 3
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 3
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 2
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
-   i32.const 2
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 10
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Uint32Array,u32>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 10
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Int64Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -70543,108 +70071,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 7
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 7
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 7
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 7
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 3
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
-   i32.const 3
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 11
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Int64Array,i64>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 11
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Uint64Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -70662,108 +70194,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 7
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 7
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 7
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 7
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 3
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
-   i32.const 3
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 12
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Uint64Array,u64>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 12
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Float32Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -70781,108 +70317,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 3
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 3
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 3
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 3
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 2
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
-   i32.const 2
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 13
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Float32Array,f32>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 13
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Float64Array.wrap (type $i32_i32_i32_=>_i32) (param $buffer i32) (param $byteOffset i32) (param $length i32) (result i32)
   (local $buffer|3 i32)
@@ -70900,108 +70440,112 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
-  local.get $buffer
-  local.set $buffer|3
-  local.get $byteOffset
-  local.set $byteOffset|4
-  local.get $length
-  local.set $len
-  local.get $buffer|3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $bufferByteLength
-  local.get $byteOffset|4
-  local.get $bufferByteLength
-  i32.gt_u
-  local.get $byteOffset|4
-  i32.const 7
-  i32.and
-  i32.or
-  if
-   i32.const 336
-   i32.const 608
-   i32.const 1860
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $len
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $len
-   i32.const -1
-   i32.eq
+  block $~lib/typedarray/WRAP<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
+   local.get $buffer
+   local.set $buffer|3
+   local.get $byteOffset
+   local.set $byteOffset|4
+   local.get $length
+   local.set $len
+   local.get $buffer|3
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $bufferByteLength
+   local.get $byteOffset|4
+   local.get $bufferByteLength
+   i32.gt_u
+   local.get $byteOffset|4
+   i32.const 7
+   i32.and
+   i32.or
    if
-    local.get $bufferByteLength
-    i32.const 7
-    i32.and
+    i32.const 336
+    i32.const 608
+    i32.const 1860
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $len
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $len
+    i32.const -1
+    i32.eq
     if
+     local.get $bufferByteLength
+     i32.const 7
+     i32.and
+     if
+      i32.const 32
+      i32.const 608
+      i32.const 1865
+      i32.const 9
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $bufferByteLength
+     local.get $byteOffset|4
+     i32.sub
+     local.set $byteLength
+    else
      i32.const 32
      i32.const 608
-     i32.const 1865
-     i32.const 9
+     i32.const 1869
+     i32.const 7
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $bufferByteLength
-    local.get $byteOffset|4
-    i32.sub
-    local.set $byteLength
    else
-    i32.const 32
-    i32.const 608
-    i32.const 1869
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
+    local.get $len
+    i32.const 3
+    i32.shl
+    local.set $byteLength
+    local.get $byteOffset|4
+    local.get $byteLength
+    i32.add
+    local.get $bufferByteLength
+    i32.gt_s
+    if
+     i32.const 32
+     i32.const 608
+     i32.const 1874
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
    end
-  else
-   local.get $len
-   i32.const 3
-   i32.shl
-   local.set $byteLength
-   local.get $byteOffset|4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 14
+   call $~lib/rt/itcms/__new
+   local.tee $out
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.store $0
+   local.get $out
+   local.get $buffer|3
+   i32.const 0
+   call $~lib/rt/itcms/__link
+   local.get $out
    local.get $byteLength
+   i32.store $0 offset=8
+   local.get $out
+   local.get $buffer|3
+   local.get $byteOffset|4
    i32.add
-   local.get $bufferByteLength
-   i32.gt_s
-   if
-    i32.const 32
-    i32.const 608
-    i32.const 1874
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
+   i32.store $0 offset=4
+   local.get $out
+   br $~lib/typedarray/WRAP<~lib/typedarray/Float64Array,f64>|inlined.0
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  i32.const 14
-  call $~lib/rt/itcms/__new
-  local.tee $out
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.store $0
-  local.get $out
-  local.get $buffer|3
-  i32.const 0
-  call $~lib/rt/itcms/__link
-  local.get $out
-  local.get $byteLength
-  i32.store $0 offset=8
-  local.get $out
-  local.get $buffer|3
-  local.get $byteOffset|4
-  i32.add
-  i32.store $0 offset=4
-  local.get $out
   local.set $9
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $9
+  return
  )
  (func $~lib/typedarray/Int8Array#sort@varargs (type $i32_i32_=>_i32) (param $this i32) (param $comparator i32) (result i32)
   (local $2 i32)

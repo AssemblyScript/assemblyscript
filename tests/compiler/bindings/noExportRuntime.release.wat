@@ -1678,7 +1678,14 @@
        br $while-continue|0
       end
      end
-     br $folding-inner0
+     local.get $0
+     i32.load $0
+     local.tee $0
+     if
+      local.get $0
+      call $byn-split-outlined-A$~lib/rt/itcms/__visit
+     end
+     return
     end
     return
    end

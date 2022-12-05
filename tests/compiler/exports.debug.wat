@@ -29,11 +29,13 @@
   local.get $a
   local.get $b
   i32.add
+  return
  )
  (func $exports/subOpt (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   local.get $a
   local.get $b
   i32.sub
+  return
  )
  (func $exports/subOpt@varargs (type $i32_i32_=>_i32) (param $a i32) (param $b i32) (result i32)
   block $1of1
@@ -57,6 +59,7 @@
   local.get $a
   local.get $b
   i32.mul
+  return
  )
  (func $~setArgumentsLength (type $i32_=>_none) (param $0 i32)
   local.get $0

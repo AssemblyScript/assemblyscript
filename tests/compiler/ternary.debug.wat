@@ -40,6 +40,7 @@
   else
    local.get $z
   end
+  return
  )
  (func $ternary/testDropWithTypeMismatch (type $i32_=>_none) (param $cond i32)
   (local $x i32)

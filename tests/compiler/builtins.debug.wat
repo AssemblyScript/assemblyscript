@@ -97,13 +97,16 @@
   local.get $a
   local.get $b
   i32.add
+  return
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
+  return
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 32
+  return
  )
  (func $~lib/rt/common/OBJECT#get:rtSize (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -116,12 +119,12 @@
   call $~lib/rt/common/OBJECT#get:rtSize
   i32.const 1
   i32.shr_u
+  return
  )
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
   (local $7 i32)
-  (local $8 i32)
   (local $a i32)
   (local $b i32)
   local.get $str1
@@ -192,8 +195,6 @@
    i32.sub
    local.set $len
    local.get $7
-   local.set $8
-   local.get $8
    if
     local.get $ptr1
     i32.load16_u $0
@@ -222,6 +223,7 @@
    end
   end
   i32.const 0
+  return
  )
  (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
   (local $leftLength i32)
@@ -264,12 +266,15 @@
   local.get $leftLength
   call $~lib/util/string/compareImpl
   i32.eqz
+  return
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 2
+  return
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString (type $i32_=>_i32) (param $this i32) (result i32)
   i32.const 176
+  return
  )
  (func $~lib/atomics/Atomics.isLockFree (type $i32_=>_i32) (param $size i32) (result i32)
   local.get $size
@@ -289,6 +294,7 @@
    i32.const 4
    i32.eq
   end
+  return
  )
  (func $start:builtins~anonymous|1 (type $none_=>_none)
   nop
@@ -316,6 +322,7 @@
   local.get $6
   i32.gt_s
   select
+  return
  )
  (func $builtins/min3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
   (local $3 i32)
@@ -337,6 +344,7 @@
   local.get $6
   i32.lt_s
   select
+  return
  )
  (func $builtins/rotl3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
   (local $3 i32)
@@ -375,6 +383,7 @@
   i32.shr_u
   i32.or
   i32.extend8_s
+  return
  )
  (func $builtins/rotr3 (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
   (local $3 i32)
@@ -413,6 +422,7 @@
   i32.shl
   i32.or
   i32.extend8_s
+  return
  )
  (func $builtins/test (type $none_=>_none)
   nop

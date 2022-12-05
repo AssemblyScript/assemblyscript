@@ -1167,11 +1167,11 @@
   (local $5 i32)
   (local $6 i32)
   i32.const 1056
-  call $byn-split-outlined-A$~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit_0
   i32.const 1280
-  call $byn-split-outlined-A$~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit_0
   i32.const 1376
-  call $byn-split-outlined-A$~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit_0
   global.get $~lib/rt/tcms/pinSpace
   local.tee $1
   i32.load $0 offset=4
@@ -1369,6 +1369,8 @@
   global.set $~lib/rt/tcms/white
  )
  (func $~lib/rt/__visit_members (type $i32_=>_none) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   block $invalid
    block $~lib/arraybuffer/ArrayBufferView
     block $~lib/string/String
@@ -1390,8 +1392,43 @@
    i32.load $0
    local.tee $0
    if
+    global.get $~lib/rt/tcms/white
     local.get $0
-    call $byn-split-outlined-A$~lib/rt/tcms/__visit
+    i32.const 20
+    i32.sub
+    local.tee $1
+    i32.load $0 offset=4
+    i32.const 3
+    i32.and
+    i32.eq
+    if
+     local.get $1
+     call $~lib/rt/tcms/Object#unlink
+     global.get $~lib/rt/tcms/toSpace
+     local.tee $0
+     i32.load $0 offset=8
+     local.set $2
+     local.get $1
+     local.get $0
+     global.get $~lib/rt/tcms/white
+     i32.eqz
+     i32.or
+     i32.store $0 offset=4
+     local.get $1
+     local.get $2
+     i32.store $0 offset=8
+     local.get $2
+     local.get $1
+     local.get $2
+     i32.load $0 offset=4
+     i32.const 3
+     i32.and
+     i32.or
+     i32.store $0 offset=4
+     local.get $0
+     local.get $1
+     i32.store $0 offset=8
+    end
    end
    return
   end
@@ -1423,7 +1460,7 @@
   i32.const 1424
   global.set $~lib/rt/tcms/toSpace
  )
- (func $byn-split-outlined-A$~lib/rt/tcms/__visit (type $i32_=>_none) (param $0 i32)
+ (func $byn-split-outlined-A$~lib/rt/tcms/__visit_0 (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tcms/white

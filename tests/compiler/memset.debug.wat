@@ -18,7 +18,6 @@
   (local $k i32)
   (local $c32 i32)
   (local $c64 i64)
-  (local $7 i32)
   local.get $dest
   local.set $ret
   local.get $n
@@ -242,8 +241,6 @@
    local.get $n
    i32.const 32
    i32.ge_u
-   local.set $7
-   local.get $7
    if
     local.get $dest
     local.get $c64
@@ -275,6 +272,7 @@
    end
   end
   local.get $ret
+  return
  )
  (func $start:memset (type $none_=>_none)
   global.get $~lib/memory/__heap_base

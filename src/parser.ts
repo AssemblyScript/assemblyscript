@@ -985,6 +985,12 @@ export class Parser extends DiagnosticEmitter {
       }
       initializer = this.parseExpression(tn, Precedence.Comma + 1);
       if (!initializer) return null;
+      if (flags & CommonFlags.DefinitelyAssigned) {
+        this.error(
+          DiagnosticCode.Declarations_with_initializers_cannot_also_have_definite_assignment_assertions,
+          initializer.range
+        );
+      }
     } else if (!isFor) {
       if (flags & CommonFlags.Const) {
         if (!(flags & CommonFlags.Ambient)) {
@@ -1001,7 +1007,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     let range = Range.join(identifier.range, tn.range());
-    if (initializer && (flags & CommonFlags.DefinitelyAssigned) != 0) {
+    if ((flags & CommonFlags.DefinitelyAssigned) != 0 && (flags & CommonFlags.Ambient) != 0) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range
@@ -2383,12 +2389,15 @@ export class Parser extends DiagnosticEmitter {
         }
         initializer = this.parseExpression(tn);
         if (!initializer) return null;
+        if (flags & CommonFlags.DefinitelyAssigned) {
+          this.error(
+            DiagnosticCode.Declarations_with_initializers_cannot_also_have_definite_assignment_assertions,
+            name.range
+          );
+        }
       }
       let range = tn.range(startPos, tn.pos);
-      if (
-        (flags & CommonFlags.DefinitelyAssigned) != 0 &&
-        (isInterface || initializer || (flags & CommonFlags.Static) != 0)
-      ) {
+      if ((flags & CommonFlags.DefinitelyAssigned) != 0 && (isInterface || (flags & CommonFlags.Ambient) != 0)) {
         this.error(
           DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
           range

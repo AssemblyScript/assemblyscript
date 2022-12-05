@@ -21,6 +21,7 @@
   i32.add
   local.get $c
   i32.add
+  return
  )
  (func $call-optional/opt@varargs (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $c i32) (result i32)
   block $2of2

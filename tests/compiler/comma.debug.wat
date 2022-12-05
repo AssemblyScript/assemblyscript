@@ -16,7 +16,6 @@
  (func $start:comma (type $none_=>_none)
   (local $0 i32)
   (local $c i32)
-  (local $2 i32)
   global.get $comma/a
   local.tee $0
   i32.const 1
@@ -152,8 +151,6 @@
    local.get $c
    global.get $comma/a
    i32.lt_s
-   local.set $2
-   local.get $2
    if
     nop
     global.get $comma/a

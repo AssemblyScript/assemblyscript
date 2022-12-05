@@ -178,10 +178,11 @@ export class StaticArray<T> {
       throw new Error(E_INVALIDLENGTH);
     }
     let sourceSize = <usize>sourceLen << alignof<T>();
-    let out!: U;
+    let out = changetype<U>(this); // FIXME: instanceof needs *some* value
 
     if (out instanceof Array<T>) {
       out = changetype<U>(__newArray(outLen, alignof<T>(), idof<Array<T>>()));
+      // ^ FIXME: Function returns type U, but can't __newArray(U extends Array<T>)
       let outStart = changetype<Array<T>>(out).dataStart;
       let otherStart = changetype<Array<T>>(other).dataStart;
       let thisStart = changetype<usize>(this);
@@ -240,11 +241,12 @@ export class StaticArray<T> {
 
     let sourceStart = changetype<usize>(this) + (<usize>start << alignof<T>());
     let size = <usize>length << alignof<T>();
-    let out!: U;
+    let out = changetype<U>(this); // FIXME: instanceof needs *some* value
 
     if (out instanceof Array<T>) {
       // return Array
       out = changetype<U>(__newArray(length, alignof<T>(), idof<Array<T>>()));
+      // ^ FIXME: Function returns type U, but can't __newArray(U extends Array<T>)
       let outStart = changetype<Array<T>>(out).dataStart;
       if (isManaged<T>()) {
         let off: usize = 0;

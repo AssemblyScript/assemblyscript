@@ -20,12 +20,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
   local.get $dest
   local.set $ret
   local.get $dest
@@ -51,8 +45,6 @@
      local.get $dest
      i32.const 8
      i32.rem_u
-     local.set $4
-     local.get $4
      if
       local.get $n
       i32.eqz
@@ -65,17 +57,17 @@
       i32.sub
       local.set $n
       local.get $dest
-      local.tee $5
+      local.tee $4
       i32.const 1
       i32.add
       local.set $dest
-      local.get $5
+      local.get $4
       local.get $src
-      local.tee $6
+      local.tee $5
       i32.const 1
       i32.add
       local.set $src
-      local.get $6
+      local.get $5
       i32.load8_u $0
       i32.store8 $0
       br $while-continue|0
@@ -85,8 +77,6 @@
      local.get $n
      i32.const 8
      i32.ge_u
-     local.set $7
-     local.get $7
      if
       local.get $dest
       local.get $src
@@ -110,21 +100,19 @@
    end
    loop $while-continue|2
     local.get $n
-    local.set $8
-    local.get $8
     if
      local.get $dest
-     local.tee $9
+     local.tee $6
      i32.const 1
      i32.add
      local.set $dest
-     local.get $9
+     local.get $6
      local.get $src
-     local.tee $10
+     local.tee $7
      i32.const 1
      i32.add
      local.set $src
-     local.get $10
+     local.get $7
      i32.load8_u $0
      i32.store8 $0
      local.get $n
@@ -149,8 +137,6 @@
      i32.add
      i32.const 8
      i32.rem_u
-     local.set $11
-     local.get $11
      if
       local.get $n
       i32.eqz
@@ -176,8 +162,6 @@
      local.get $n
      i32.const 8
      i32.ge_u
-     local.set $12
-     local.get $12
      if
       local.get $n
       i32.const 8
@@ -197,8 +181,6 @@
    end
    loop $while-continue|5
     local.get $n
-    local.set $13
-    local.get $13
     if
      local.get $dest
      local.get $n
@@ -216,6 +198,7 @@
    end
   end
   local.get $ret
+  return
  )
  (func $start:memmove (type $none_=>_none)
   global.get $memmove/base

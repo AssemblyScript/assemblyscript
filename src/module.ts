@@ -3617,32 +3617,6 @@ export class BinaryModule {
   ) {}
 }
 
-/** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
-export function needsExplicitUnreachable(expr: ExpressionRef): bool {
-  // not applicable if pushing a value to the stack
-  if (binaryen._BinaryenExpressionGetType(expr) != TypeRef.Unreachable) {
-    return false;
-  }
-
-  switch (binaryen._BinaryenExpressionGetId(expr)) {
-    case ExpressionId.Unreachable:
-    case ExpressionId.Return: return false;
-    case ExpressionId.Break: {
-      return binaryen._BinaryenBreakGetCondition(expr) != 0;
-    }
-    case ExpressionId.Block: {
-      if (!binaryen._BinaryenBlockGetName(expr)) { // can't break out of it
-        let numChildren = binaryen._BinaryenBlockGetNumChildren(expr); // last child needs unreachable
-        return (
-          numChildren > 0 &&
-          needsExplicitUnreachable(binaryen._BinaryenBlockGetChildAt(expr, numChildren - 1))
-        );
-      }
-    }
-  }
-  return true;
-}
-
 // TypeBuilder
 
 const DEBUG_TYPEBUILDER = false;

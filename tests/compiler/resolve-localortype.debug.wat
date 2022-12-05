@@ -13,10 +13,12 @@
  (export "test" (func $export:resolve-localortype/test))
  (func $resolve-localortype/foo<~lib/string/String> (type $i32_=>_i32) (param $s i32) (result i32)
   local.get $s
+  return
  )
  (func $resolve-localortype/test (type $i32_=>_i32) (param $string i32) (result i32)
   local.get $string
   call $resolve-localortype/foo<~lib/string/String>
+  return
  )
  (func $~stack_check (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
