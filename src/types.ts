@@ -887,7 +887,7 @@ export function typesToString(types: Type[]): string {
 
 /** Represents a fully resolved function signature. */
 export class Signature {
-
+  /** Construct a new signature. */
   public static create(
     /** The program that created this signature. */
     program: Program,
