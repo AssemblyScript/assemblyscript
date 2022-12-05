@@ -887,48 +887,71 @@ export function typesToString(types: Type[]): string {
 
 /** Represents a fully resolved function signature. */
 export class Signature {
-  /** Unique id representing this signature. */
-  public readonly id: u32 = 0;
-  /** Respective function type. */
-  public readonly type: Type;
+  
 
-  /** Constructs a new signature. */
-  constructor(
+  public static new(
     /** The program that created this signature. */
-    public readonly program: Program,
+    program: Program,
     /** Parameter types, if any, excluding `this`. */
-    public readonly parameterTypes: Type[] = [],
+    parameterTypes: Type[] = [],
     /** Return type. */
-    public readonly returnType: Type = Type.void,
+    returnType: Type = Type.void,
     /** This type, if an instance signature. */
-    public readonly thisType: Type | null = null,
+    thisType: Type | null = null,
     /** Number of required parameters excluding `this`. Other parameters are considered optional. */
-    public readonly requiredParameters: i32 = parameterTypes ? parameterTypes.length : 0,
+    requiredParameters: i32 = parameterTypes ? parameterTypes.length : 0,
     /** Whether the last parameter is a rest parameter. */
-    public readonly hasRest: bool = false,
-  ) {
-    this.thisType = thisType;
+    hasRest: bool = false,
+  ): Signature {
+    // get the usize type, and the type of the signature
     let usizeType = program.options.usizeType;
     let type = new Type(
       usizeType.kind,
       usizeType.flags & ~TypeFlags.Value | TypeFlags.Reference,
       usizeType.size
     );
-    this.type = type;
-    type.signatureReference = this;
 
+    // calculate the properties
     let signatureTypes = program.uniqueSignatures;
-    let uniqueKey = this.toString();
+    let nextId = program.nextSignatureId;
+    
+    // construct the signature and calculate it's unique key
+    let signature = new Signature(program, parameterTypes, returnType, thisType, requiredParameters, hasRest, nextId, type);;
+    let uniqueKey = signature.toString();
+
+    // check if it exists, and return it
     if (signatureTypes.has(uniqueKey)) {
       let existing = assert(signatureTypes.get(uniqueKey));
-      assert(this.equals(existing));
-      this.id = existing.id;
+      assert(signature.equals(existing));
       return existing;
     }
 
-    this.id = program.nextSignatureId++;
-    signatureTypes.set(uniqueKey, this);
+    // otherwise increment the program's signature id, set the signature reference of the type, and memoize the signature
+    program.nextSignatureId = nextId + 1;
+    type.signatureReference = signature;
+    signatureTypes.set(uniqueKey, signature);
+    return signature;
   }
+
+  /** Constructs a new signature. */
+  private constructor(
+    /** The program that created this signature. */
+    public readonly program: Program,
+    /** Parameter types, if any, excluding `this`. */
+    public readonly parameterTypes: Type[],
+    /** Return type. */
+    public readonly returnType: Type,
+    /** This type, if an instance signature. */
+    public readonly thisType: Type | null,
+    /** Number of required parameters excluding `this`. Other parameters are considered optional. */
+    public readonly requiredParameters: i32,
+    /** Whether the last parameter is a rest parameter. */
+    public readonly hasRest: bool,
+    /** Unique id representing this signature. */
+    public readonly id: u32,
+    /** Respective function type. */
+    public readonly type: Type,
+  ) {}
 
   get paramRefs(): TypeRef {
     let thisType = this.thisType;
@@ -1129,7 +1152,7 @@ export class Signature {
     for (let i = 0; i < numParameterTypes; ++i) {
       unchecked(cloneParameterTypes[i] = parameterTypes[i]);
     }
-    return new Signature(
+    return Signature.new(
       this.program,
       cloneParameterTypes,
       this.returnType,

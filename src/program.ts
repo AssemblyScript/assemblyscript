@@ -3217,7 +3217,7 @@ export class File extends Element {
     program.filesByName.set(this.internalName, this);
     let startFunction = this.program.makeNativeFunction(
       `start:${this.internalName}`,
-      new Signature(program, [], Type.void),
+      Signature.new(program, [], Type.void),
       this
     );
     startFunction.internalName = startFunction.name;
