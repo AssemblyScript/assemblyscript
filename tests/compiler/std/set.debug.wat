@@ -2803,21 +2803,9 @@
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<i8>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/array/Array<i8>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
- )
- (func $~lib/array/Array<i8>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
-  local.get $this
-  call $~lib/array/Array<i8>#get:dataStart
-  local.get $index
-  i32.const 0
-  i32.shl
-  i32.add
-  local.get $value
-  i32.store8 $0
-  i32.const 0
-  drop
+  i32.load $0 offset=12
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2973,6 +2961,51 @@
    i32.store $0 offset=8
   end
  )
+ (func $~lib/array/Array<i8>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/array/Array<i8>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<i8>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 0
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<i8>#set:length_
+  end
+  local.get $this
+  call $~lib/array/Array<i8>#get:dataStart
+  local.get $index
+  i32.const 0
+  i32.shl
+  i32.add
+  local.get $value
+  i32.store8 $0
+  i32.const 0
+  drop
+ )
  (func $~lib/array/Array<i8>#set:length (type $i32_i32_=>_none) (param $this i32) (param $newLength i32)
   local.get $this
   local.get $newLength
@@ -2982,10 +3015,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<i8>#set:length_
- )
- (func $~lib/array/Array<i8>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<i8>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -3909,11 +3938,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<u8>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<u8>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<u8>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<u8>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<u8>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 0
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<u8>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<u8>#get:dataStart
   local.get $index
@@ -3934,10 +3996,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<u8>#set:length_
- )
- (func $~lib/array/Array<u8>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<u8>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -4858,11 +4916,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<i16>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<i16>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<i16>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<i16>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<i16>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 1
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<i16>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<i16>#get:dataStart
   local.get $index
@@ -4883,10 +4974,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<i16>#set:length_
- )
- (func $~lib/array/Array<i16>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<i16>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -5810,11 +5897,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<u16>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<u16>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<u16>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<u16>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<u16>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 1
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<u16>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<u16>#get:dataStart
   local.get $index
@@ -5835,10 +5955,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<u16>#set:length_
- )
- (func $~lib/array/Array<u16>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<u16>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -6756,11 +6872,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<i32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<i32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<i32>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<i32>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<i32>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 2
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<i32>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<i32>#get:dataStart
   local.get $index
@@ -6781,10 +6930,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<i32>#set:length_
- )
- (func $~lib/array/Array<i32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<i32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -7702,11 +7847,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<u32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<u32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<u32>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+ (func $~lib/array/Array<u32>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<u32>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 2
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<u32>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<u32>#get:dataStart
   local.get $index
@@ -7727,10 +7905,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<u32>#set:length_
- )
- (func $~lib/array/Array<u32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<u32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -8665,11 +8839,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<i64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<i64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<i64>#__uset (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
+ (func $~lib/array/Array<i64>#__set (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<i64>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 3
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<i64>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<i64>#get:dataStart
   local.get $index
@@ -8690,10 +8897,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<i64>#set:length_
- )
- (func $~lib/array/Array<i64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<i64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -9628,11 +9831,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<u64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<u64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<u64>#__uset (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
+ (func $~lib/array/Array<u64>#__set (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<u64>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 3
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<u64>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<u64>#get:dataStart
   local.get $index
@@ -9653,10 +9889,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<u64>#set:length_
- )
- (func $~lib/array/Array<u64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<u64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -10575,11 +10807,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<f32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<f32>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<f32>#__uset (type $i32_i32_f32_=>_none) (param $this i32) (param $index i32) (param $value f32)
+ (func $~lib/array/Array<f32>#__set (type $i32_i32_f32_=>_none) (param $this i32) (param $index i32) (param $value f32)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<f32>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 2
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<f32>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<f32>#get:dataStart
   local.get $index
@@ -10600,10 +10865,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<f32>#set:length_
- )
- (func $~lib/array/Array<f32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<f32>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -11539,11 +11800,44 @@
   local.get $length_
   i32.store $0 offset=12
  )
+ (func $~lib/array/Array<f64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<f64>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<f64>#__uset (type $i32_i32_f64_=>_none) (param $this i32) (param $index i32) (param $value f64)
+ (func $~lib/array/Array<f64>#__set (type $i32_i32_f64_=>_none) (param $this i32) (param $index i32) (param $value f64)
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<f64>#get:length_
+  i32.ge_u
+  if
+   local.get $index
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 224
+    i32.const 592
+    i32.const 130
+    i32.const 22
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   i32.const 3
+   i32.const 1
+   call $~lib/array/ensureCapacity
+   local.get $this
+   local.get $index
+   i32.const 1
+   i32.add
+   call $~lib/array/Array<f64>#set:length_
+  end
   local.get $this
   call $~lib/array/Array<f64>#get:dataStart
   local.get $index
@@ -11564,10 +11858,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<f64>#set:length_
- )
- (func $~lib/array/Array<f64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
  )
  (func $~lib/array/Array<f64>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -14152,7 +14442,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<i8>#get:key
-     call $~lib/array/Array<i8>#__uset
+     call $~lib/array/Array<i8>#__set
     end
     local.get $i
     i32.const 1
@@ -14325,7 +14615,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<u8>#get:key
-     call $~lib/array/Array<u8>#__uset
+     call $~lib/array/Array<u8>#__set
     end
     local.get $i
     i32.const 1
@@ -14498,7 +14788,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<i16>#get:key
-     call $~lib/array/Array<i16>#__uset
+     call $~lib/array/Array<i16>#__set
     end
     local.get $i
     i32.const 1
@@ -14671,7 +14961,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<u16>#get:key
-     call $~lib/array/Array<u16>#__uset
+     call $~lib/array/Array<u16>#__set
     end
     local.get $i
     i32.const 1
@@ -14844,7 +15134,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<i32>#get:key
-     call $~lib/array/Array<i32>#__uset
+     call $~lib/array/Array<i32>#__set
     end
     local.get $i
     i32.const 1
@@ -15017,7 +15307,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<u32>#get:key
-     call $~lib/array/Array<u32>#__uset
+     call $~lib/array/Array<u32>#__set
     end
     local.get $i
     i32.const 1
@@ -15190,7 +15480,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<i64>#get:key
-     call $~lib/array/Array<i64>#__uset
+     call $~lib/array/Array<i64>#__set
     end
     local.get $i
     i32.const 1
@@ -15363,7 +15653,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<u64>#get:key
-     call $~lib/array/Array<u64>#__uset
+     call $~lib/array/Array<u64>#__set
     end
     local.get $i
     i32.const 1
@@ -15536,7 +15826,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<f32>#get:key
-     call $~lib/array/Array<f32>#__uset
+     call $~lib/array/Array<f32>#__set
     end
     local.get $i
     i32.const 1
@@ -15709,7 +15999,7 @@
      local.get $7
      local.get $entry
      call $~lib/set/SetEntry<f64>#get:key
-     call $~lib/array/Array<f64>#__uset
+     call $~lib/array/Array<f64>#__set
     end
     local.get $i
     i32.const 1

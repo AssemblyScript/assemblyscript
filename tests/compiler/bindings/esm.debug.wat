@@ -2840,18 +2840,6 @@
    i32.store $0 offset=8
   end
  )
- (func $~lib/array/Array<i32>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
-  local.get $this
-  call $~lib/array/Array<i32>#get:dataStart
-  local.get $index
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $value
-  i32.store $0
-  i32.const 0
-  drop
- )
  (func $~lib/array/Array<i32>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
   local.get $this
@@ -2883,9 +2871,15 @@
    call $~lib/array/Array<i32>#set:length_
   end
   local.get $this
+  call $~lib/array/Array<i32>#get:dataStart
   local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
   local.get $value
-  call $~lib/array/Array<i32>#__uset
+  i32.store $0
+  i32.const 0
+  drop
  )
  (func $bindings/esm/PlainObject#set:a (type $i32_i32_=>_none) (param $this i32) (param $a i32)
   local.get $this
