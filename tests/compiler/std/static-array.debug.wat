@@ -3,17 +3,17 @@
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $none_=>_none (func_subtype func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
- (type $i32_i32_i64_=>_none (func_subtype (param i32 i32 i64) func))
- (type $i32_i32_f32_=>_none (func_subtype (param i32 i32 f32) func))
- (type $i32_i32_f64_=>_none (func_subtype (param i32 i32 f64) func))
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i32_=>_i64 (func_subtype (param i32 i32) (result i64) func))
+ (type $i32_i32_i64_=>_none (func_subtype (param i32 i32 i64) func))
  (type $i32_i32_=>_f32 (func_subtype (param i32 i32) (result f32) func))
+ (type $i32_i32_f32_=>_none (func_subtype (param i32 i32 f32) func))
  (type $i32_i32_=>_f64 (func_subtype (param i32 i32) (result f64) func))
+ (type $i32_i32_f64_=>_none (func_subtype (param i32 i32 f64) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/static-array/i i32 (i32.const 64))
  (global $std/static-array/I i32 (i32.const 160))
@@ -2523,18 +2523,6 @@
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<i32>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
-  local.get $this
-  call $~lib/array/Array<i32>#get:dataStart
-  local.get $index
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $value
-  i32.store $0
-  i32.const 0
-  drop
- )
  (func $~lib/array/Array<i32>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
   local.get $this
@@ -2566,9 +2554,15 @@
    call $~lib/array/Array<i32>#set:length_
   end
   local.get $this
+  call $~lib/array/Array<i32>#get:dataStart
   local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
   local.get $value
-  call $~lib/array/Array<i32>#__uset
+  i32.store $0
+  i32.const 0
+  drop
  )
  (func $~lib/array/Array<i64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2615,18 +2609,6 @@
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<i64>#__uset (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
-  local.get $this
-  call $~lib/array/Array<i64>#get:dataStart
-  local.get $index
-  i32.const 3
-  i32.shl
-  i32.add
-  local.get $value
-  i64.store $0
-  i32.const 0
-  drop
- )
  (func $~lib/array/Array<i64>#__set (type $i32_i32_i64_=>_none) (param $this i32) (param $index i32) (param $value i64)
   local.get $index
   local.get $this
@@ -2658,9 +2640,15 @@
    call $~lib/array/Array<i64>#set:length_
   end
   local.get $this
+  call $~lib/array/Array<i64>#get:dataStart
   local.get $index
+  i32.const 3
+  i32.shl
+  i32.add
   local.get $value
-  call $~lib/array/Array<i64>#__uset
+  i64.store $0
+  i32.const 0
+  drop
  )
  (func $~lib/array/Array<f32>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2707,18 +2695,6 @@
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<f32>#__uset (type $i32_i32_f32_=>_none) (param $this i32) (param $index i32) (param $value f32)
-  local.get $this
-  call $~lib/array/Array<f32>#get:dataStart
-  local.get $index
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $value
-  f32.store $0
-  i32.const 0
-  drop
- )
  (func $~lib/array/Array<f32>#__set (type $i32_i32_f32_=>_none) (param $this i32) (param $index i32) (param $value f32)
   local.get $index
   local.get $this
@@ -2750,9 +2726,15 @@
    call $~lib/array/Array<f32>#set:length_
   end
   local.get $this
+  call $~lib/array/Array<f32>#get:dataStart
   local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
   local.get $value
-  call $~lib/array/Array<f32>#__uset
+  f32.store $0
+  i32.const 0
+  drop
  )
  (func $~lib/array/Array<f64>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2799,18 +2781,6 @@
   local.get $length_
   i32.store $0 offset=12
  )
- (func $~lib/array/Array<f64>#__uset (type $i32_i32_f64_=>_none) (param $this i32) (param $index i32) (param $value f64)
-  local.get $this
-  call $~lib/array/Array<f64>#get:dataStart
-  local.get $index
-  i32.const 3
-  i32.shl
-  i32.add
-  local.get $value
-  f64.store $0
-  i32.const 0
-  drop
- )
  (func $~lib/array/Array<f64>#__set (type $i32_i32_f64_=>_none) (param $this i32) (param $index i32) (param $value f64)
   local.get $index
   local.get $this
@@ -2842,9 +2812,15 @@
    call $~lib/array/Array<f64>#set:length_
   end
   local.get $this
+  call $~lib/array/Array<f64>#get:dataStart
   local.get $index
+  i32.const 3
+  i32.shl
+  i32.add
   local.get $value
-  call $~lib/array/Array<f64>#__uset
+  f64.store $0
+  i32.const 0
+  drop
  )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)

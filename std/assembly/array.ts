@@ -131,10 +131,6 @@ export class Array<T> {
       ensureCapacity(changetype<usize>(this), index + 1, alignof<T>());
       this.length_ = index + 1;
     }
-    this.__uset(index, value);
-  }
-
-  @unsafe @operator("{}=") private __uset(index: i32, value: T): void {
     store<T>(this.dataStart + (<usize>index << alignof<T>()), value);
     if (isManaged<T>()) {
       __link(changetype<usize>(this), changetype<usize>(value), true);

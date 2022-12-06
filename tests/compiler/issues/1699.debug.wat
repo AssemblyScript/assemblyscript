@@ -2498,22 +2498,6 @@
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__uset (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
-  local.get $this
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:dataStart
-  local.get $index
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $value
-  i32.store $0
-  i32.const 1
-  drop
-  local.get $this
-  local.get $value
-  i32.const 1
-  call $~lib/rt/itcms/__link
- )
  (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#__set (type $i32_i32_i32_=>_none) (param $this i32) (param $index i32) (param $value i32)
   local.get $index
   local.get $this
@@ -2545,9 +2529,19 @@
    call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:length_
   end
   local.get $this
+  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:dataStart
   local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
   local.get $value
-  call $~lib/array/Array<issues/1699/MultiAssignmentTest>#__uset
+  i32.store $0
+  i32.const 1
+  drop
+  local.get $this
+  local.get $value
+  i32.const 1
+  call $~lib/rt/itcms/__link
  )
  (func $~lib/array/Array<issues/1699/MultiAssignmentTest>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
