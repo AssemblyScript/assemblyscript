@@ -150,3 +150,12 @@ assert(!(nullCat instanceof BlackCat)); // dynamic false
 assert(!(nullBlackcat instanceof Animal));   // static false
 assert(!(nullBlackcat instanceof Cat));      // dynamic false
 assert(!(nullBlackcat instanceof BlackCat)); // dynamic false
+
+// Interfaces participate and are Object instances
+
+interface IFace {}
+class ImplemensIFace implements IFace {}
+
+let impl = new ImplemensIFace();
+assert(impl instanceof IFace);           // static true
+assert(impl as Object instanceof IFace); // dynamic true

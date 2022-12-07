@@ -4784,6 +4784,18 @@ export class Interface extends Class { // FIXME
       true
     );
   }
+
+  /** Tests if a value of this interface type is assignable to a target of the specified class type. */
+  override isAssignableTo(target: Class): boolean {
+    // Unlike classes, interfaces do not include `Object` in their inheritance
+    // graph, yet we know that an assignment would succeed because any class
+    // implementing an interface directly or indirectly extends `Object`.
+    if (target == this.program.objectInstance) {
+      assert(this.type.isManaged);
+      return true;
+    }
+    return super.isAssignableTo(target);
+  }
 }
 
 /** Registers a concrete element with a program. */

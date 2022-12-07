@@ -556,12 +556,18 @@ export class Compiler extends DiagnosticEmitter {
     for (let _keys = Map_keys(this.pendingInstanceOf), i = 0, k = _keys.length; i < k; ++i) {
       let elem = _keys[i];
       let name = assert(this.pendingInstanceOf.get(elem));
-      if (elem.kind == ElementKind.Class) {
-        this.finalizeInstanceOf(<Class>elem, name);
-      } else if (elem.kind == ElementKind.ClassPrototype) {
-        this.finalizeAnyInstanceOf(<ClassPrototype>elem, name);
-      } else {
-        assert(false);
+      switch (elem.kind) {
+        case ElementKind.Class:
+        case ElementKind.Interface: {
+          this.finalizeInstanceOf(<Class>elem, name);
+          break;
+        }
+        case ElementKind.ClassPrototype:
+        case ElementKind.InterfacePrototype: {
+          this.finalizeAnyInstanceOf(<ClassPrototype>elem, name);
+          break;
+        }
+        default: assert(false);
       }
     }
 
