@@ -249,26 +249,26 @@ export class TSDBuilder extends ExportsWalker {
     if (type.isInternalReference) {
       const sb = new Array<string>();
       const clazz = assert(type.getClassOrWrapper(this.program));
-      if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
+      if (clazz.extendsPrototype(this.program.arrayBufferInstance.prototype)) {
         sb.push("ArrayBuffer");
-      } else if (clazz.extends(this.program.stringInstance.prototype)) {
+      } else if (clazz.extendsPrototype(this.program.stringInstance.prototype)) {
         sb.push("string");
-      } else if (clazz.extends(this.program.arrayPrototype)) {
+      } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
         const valueType = clazz.getArrayValueType();
         sb.push("Array<");
         sb.push(this.toTypeScriptType(valueType, mode));
         sb.push(">");
-      } else if (clazz.extends(this.program.staticArrayPrototype)) {
+      } else if (clazz.extendsPrototype(this.program.staticArrayPrototype)) {
         const valueType = clazz.getArrayValueType();
         sb.push("ArrayLike<");
         sb.push(this.toTypeScriptType(valueType, mode));
         sb.push(">");
-      } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {
+      } else if (clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)) {
         const valueType = clazz.getArrayValueType();
         if (valueType == Type.i8) {
           sb.push("Int8Array");
         } else if (valueType == Type.u8) {
-          if (clazz.extends(this.program.uint8ClampedArrayPrototype)) {
+          if (clazz.extendsPrototype(this.program.uint8ClampedArrayPrototype)) {
             sb.push("Uint8ClampedArray");
           } else {
             sb.push("Uint8Array");

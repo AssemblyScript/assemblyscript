@@ -7438,7 +7438,7 @@ export class Compiler extends DiagnosticEmitter {
     // <nullable> instanceof <nonNullable> - LHS must be != 0
     if (actualType.isNullableReference && !expectedType.isNullableReference) {
 
-      // upcast - check statically
+      // same or upcast - check statically
       if (actualType.nonNullableType.isAssignableTo(expectedType)) {
         return module.binary(
           sizeTypeRef == TypeRef.I64
@@ -7449,8 +7449,8 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-      // downcast - check dynamically
-      if (expectedType.isAssignableTo(actualType)) {
+      // potential downcast - check dynamically
+      if (actualType.nonNullableType.hasSubtypeAssignableTo(expectedType)) {
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
           if (this.options.pedantic) {
             this.pedantic(
@@ -7483,12 +7483,13 @@ export class Compiler extends DiagnosticEmitter {
     // either none or both nullable
     } else {
 
-      // upcast - check statically
+      // same or upcast - check statically
       if (actualType.isAssignableTo(expectedType)) {
         return module.maybeDropCondition(expr, module.i32(1));
+      }
 
-      // downcast - check dynamically
-      } else if (expectedType.isAssignableTo(actualType)) {
+      // potential downcast - check dynamically
+      if (actualType.hasSubtypeAssignableTo(expectedType)) {
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
           let temp = flow.getTempLocal(actualType);
           let tempIndex = temp.index;
@@ -7605,7 +7606,7 @@ export class Compiler extends DiagnosticEmitter {
     if (classReference) {
 
       // static check
-      if (classReference.extends(prototype)) {
+      if (classReference.extendsPrototype(prototype)) {
 
         // <nullable> instanceof <PROTOTYPE> - LHS must be != 0
         if (actualType.isNullableReference) {
@@ -7952,7 +7953,7 @@ export class Compiler extends DiagnosticEmitter {
           let parameterTypes = instance.signature.parameterTypes;
           if (parameterTypes.length) {
             let first = parameterTypes[0].getClass();
-            if (first && !first.extends(tsaArrayInstance.prototype)) {
+            if (first && !first.extendsPrototype(tsaArrayInstance.prototype)) {
               arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ stringType ]));
             }
           }
@@ -8020,7 +8021,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // handle static arrays
     let contextualClass = contextualType.getClass();
-    if (contextualClass && contextualClass.extends(program.staticArrayPrototype)) {
+    if (contextualClass && contextualClass.extendsPrototype(program.staticArrayPrototype)) {
       return this.compileStaticArrayLiteral(expression, contextualType, constraints);
     }
 
@@ -8153,7 +8154,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let program = this.program;
     let module = this.module;
-    assert(!arrayInstance.extends(program.staticArrayPrototype));
+    assert(!arrayInstance.extendsPrototype(program.staticArrayPrototype));
     let elementType = arrayInstance.getArrayValueType(); // asserts
 
     // __newArray(length, alignLog2, classId, staticBuffer)

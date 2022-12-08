@@ -4453,21 +4453,46 @@ export class Class extends TypedElement {
 
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
-    let current: Class | null = this;
-    do {
-      if (current == target) return true;
-      if (target.kind == ElementKind.Interface) {
-        let interfaces = current.interfaces;
-        if (interfaces) {
-          for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
-            let iface = _values[i];
-            if (iface.isAssignableTo(target)) return true;
-          }
-        }
+    // Q: When does the assignment in the comment below succeed?
+    if (target.isInterface) {
+      if (this.isInterface) {
+        // targetInterface = thisInterface
+        return this == target || this.extends(target);
+      } else {
+        // targetInterface = thisClass
+        return this.implements(target);
       }
-      current = current.base;
-    } while (current);
-    return false;
+    } else {
+      if (this.isInterface) {
+        // targetClass = thisInterface
+        return target == this.program.objectInstance;
+      } else {
+        // targetClass = thisClass
+        return this == target || this.extends(target);
+      }
+    }
+  }
+
+  /** Tests if any subclass of this class is assignable to a target of the specified class type. */
+  hasSubclassAssignableTo(target: Class): bool {
+    // Q: When can the cast in the comment below succeed? (while an assignment would not)
+    if (target.isInterface) {
+      if (this.isInterface) {
+        // <TargetInterface>thisInterface
+        return this.hasImplementerImplementing(target);
+      } else {
+        // <TargetInterface>thisClass
+        return this.hasExtendeeImplementing(target);
+      }
+    } else {
+      if (this.isInterface) {
+        // <TargetClass>thisInterface
+        return this.hasImplementer(target);
+      } else {
+        // <TargetClass>thisClass
+        return this.hasExtendee(target);
+      }
+    }
   }
 
   /** Looks up the operator overload of the specified kind. */
@@ -4608,7 +4633,7 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this class extends the specified prototype. */
-  extends(prototype: ClassPrototype): bool {
+  extendsPrototype(prototype: ClassPrototype): bool {
     return this.prototype.extends(prototype);
   }
 
@@ -4627,11 +4652,11 @@ export class Class extends TypedElement {
     let current: Class = this;
     let program = this.program;
     let arrayPrototype = program.arrayPrototype;
-    if (this.extends(arrayPrototype)) {
+    if (this.extendsPrototype(arrayPrototype)) {
       return this.getTypeArgumentsTo(arrayPrototype)![0];
     }
     let staticArrayPrototype = program.staticArrayPrototype;
-    if (this.extends(staticArrayPrototype)) {
+    if (this.extendsPrototype(staticArrayPrototype)) {
       return this.getTypeArgumentsTo(staticArrayPrototype)![0];
     }
     let abvInstance = program.arrayBufferViewInstance;
@@ -4743,6 +4768,77 @@ export class Class extends TypedElement {
     }
     return out;
   }
+
+  /** Tests if this class or interface extends the given classs or interface. */
+  extends(other: Class): bool {
+    let base = this.base;
+    while (base) {
+      if (base == other) return true;
+      base = base.base;
+    }
+    return false;
+  }
+
+  /** Tests if this class has a direct or indirect extendee matching the given class. */
+  hasExtendee(other: Class): bool {
+    let extendees = this.extendees;
+    if (extendees) {
+      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+        let extendee = _values[i];
+        if (extendee == other || extendee.hasExtendee(other)) return true;
+      }
+    }
+    return false;
+  }
+
+  /** Tests if this class has a direct or indirect extendee that implements the given interface. */
+  hasExtendeeImplementing(other: Class): bool {
+    let extendees = this.extendees;
+    if (extendees) {
+      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+        let extendee = _values[i];
+        if (extendee.implements(other) || extendee.hasExtendeeImplementing(other)) return true;
+      }
+    }
+    return false;
+  }
+
+  /** Tests if this class implements the given interface. */
+  implements(other: Class): bool {
+    let interfaces = this.interfaces;
+    if (interfaces) {
+      for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
+        let iface = _values[i];
+        if (iface == other || iface.extends(other)) return true;
+      }
+    }
+    let base = this.base;
+    return base ? base.implements(other) : false;
+  }
+
+  /** Tests if this interface has a direct or indirect implementer matching the given class. */
+  hasImplementer(other: Class): bool {
+    let implementers = this.implementers;
+    if (implementers) {
+      for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
+        let implementer = _values[i];
+        if (implementer == other || implementer.extends(other)) return true;
+      }
+    }
+    return false;
+  }
+
+  /** Tests if this interface has an implementer implementing the given interface. */
+  hasImplementerImplementing(other: Class): bool {
+    let implementers = this.implementers;
+    if (implementers) {
+      for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
+        let implementer = _values[i];
+        if (implementer.implements(other)) return true;
+      }
+    }
+    return false;
+  }
 }
 
 /** A yet unresolved interface. */
@@ -4783,18 +4879,6 @@ export class Interface extends Class { // FIXME
       typeArguments,
       true
     );
-  }
-
-  /** Tests if a value of this interface type is assignable to a target of the specified class type. */
-  override isAssignableTo(target: Class): boolean {
-    // Unlike classes, interfaces do not include `Object` in their inheritance
-    // graph, yet we know that an assignment would succeed because any class
-    // implementing an interface directly or indirectly extends `Object`.
-    if (target == this.program.objectInstance) {
-      assert(this.type.isManaged);
-      return true;
-    }
-    return super.isAssignableTo(target);
   }
 }
 

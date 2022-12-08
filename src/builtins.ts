@@ -861,7 +861,7 @@ function builtin_isArray(ctx: BuiltinContext): ExpressionRef {
   let classReference = type.getClass();
   return reifyConstantType(ctx,
     module.i32(
-      classReference && classReference.extends(compiler.program.arrayPrototype)
+      classReference && classReference.extendsPrototype(compiler.program.arrayPrototype)
         ? 1
         : 0
     )
@@ -10420,26 +10420,26 @@ export function compileRTTI(compiler: Compiler): void {
     assert(instanceId == lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isPointerfree) flags |= TypeinfoFlags.POINTERFREE;
-    if (instance != abvInstance && instance.extends(abvPrototype)) {
+    if (instance != abvInstance && instance.extendsPrototype(abvPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAYBUFFERVIEW;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
-    } else if (instance.extends(arrayPrototype)) {
+    } else if (instance.extendsPrototype(arrayPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAY;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
-    } else if (instance.extends(setPrototype)) {
+    } else if (instance.extendsPrototype(setPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(setPrototype));
       assert(typeArguments.length == 1);
       flags |= TypeinfoFlags.SET;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
-    } else if (instance.extends(mapPrototype)) {
+    } else if (instance.extendsPrototype(mapPrototype)) {
       let typeArguments = assert(instance.getTypeArgumentsTo(mapPrototype));
       assert(typeArguments.length == 2);
       flags |= TypeinfoFlags.MAP;
       flags |= TypeinfoFlags.KEY_ALIGN_0   * typeToRuntimeFlags(typeArguments[0]);
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1]);
-    } else if (instance.extends(staticArrayPrototype)) {
+    } else if (instance.extendsPrototype(staticArrayPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.STATICARRAY;
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
