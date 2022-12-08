@@ -4783,9 +4783,10 @@ export class Class extends TypedElement {
   hasExtendee(other: Class): bool {
     let extendees = this.extendees;
     if (extendees) {
+      if (extendees.has(other)) return true;
       for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
         let extendee = _values[i];
-        if (extendee == other || extendee.hasExtendee(other)) return true;
+        if (/* extendee == other || */extendee.hasExtendee(other)) return true;
       }
     }
     return false;
@@ -4807,9 +4808,10 @@ export class Class extends TypedElement {
   implements(other: Class): bool {
     let interfaces = this.interfaces;
     if (interfaces) {
+      if (interfaces.has(other)) return true;
       for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
         let iface = _values[i];
-        if (iface == other || iface.extends(other)) return true;
+        if (/* iface == other || */iface.extends(other)) return true;
       }
     }
     let base = this.base;
@@ -4820,9 +4822,10 @@ export class Class extends TypedElement {
   hasImplementer(other: Class): bool {
     let implementers = this.implementers;
     if (implementers) {
+      if (implementers.has(other)) return true;
       for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
         let implementer = _values[i];
-        if (implementer == other || implementer.extends(other)) return true;
+        if (/* implementer == other || */implementer.extends(other)) return true;
       }
     }
     return false;
