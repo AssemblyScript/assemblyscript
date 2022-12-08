@@ -151,11 +151,23 @@ assert(!(nullBlackcat instanceof Animal));   // static false
 assert(!(nullBlackcat instanceof Cat));      // dynamic false
 assert(!(nullBlackcat instanceof BlackCat)); // dynamic false
 
-// Interfaces participate and are Object instances
+// Interfaces
 
-interface IFace {}
-class ImplemensIFace implements IFace {}
+interface I1 {}
+interface I2 {}
+interface I3 extends I1 {}
+class A_I1 implements I1 {}
+class B_I1_I2 implements I1, I2 {}
 
-let impl = new ImplemensIFace();
-assert(impl instanceof IFace);           // static true
-assert(impl as Object instanceof IFace); // dynamic true
+let a_i1 = new A_I1();
+assert(a_i1 instanceof Object);           // static true
+assert(a_i1 instanceof I1);               // static true
+assert(a_i1 as Object instanceof I1);     // dynamic true
+assert(!(a_i1 instanceof I2));            // static false
+
+let b_i1_i2 = new B_I1_I2();
+assert(b_i1_i2 instanceof I1);            // static true
+assert(b_i1_i2 instanceof I2);            // static true
+assert(!(a_i1 instanceof B_I1_I2));       // dynamic false
+assert(!(a_i1 as I1 instanceof B_I1_I2)); // dynamic false
+assert(b_i1_i2 as I1 instanceof B_I1_I2); // dynamic true

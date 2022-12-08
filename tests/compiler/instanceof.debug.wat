@@ -42,11 +42,12 @@
  (global $instanceof/nullAnimal (mut i32) (i32.const 0))
  (global $instanceof/nullCat (mut i32) (i32.const 0))
  (global $instanceof/nullBlackcat (mut i32) (i32.const 0))
- (global $instanceof/impl (mut i32) (i32.const 0))
+ (global $instanceof/a_i1 (mut i32) (i32.const 0))
+ (global $instanceof/b_i1_i2 (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 464))
- (global $~lib/memory/__data_end i32 (i32.const 532))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33300))
- (global $~lib/memory/__heap_base i32 (i32.const 33300))
+ (global $~lib/memory/__data_end i32 (i32.const 540))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33308))
+ (global $~lib/memory/__heap_base i32 (i32.const 33308))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -57,7 +58,7 @@
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 412) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00\00\00")
- (data (i32.const 464) "\10\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
+ (data (i32.const 464) "\12\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00 \00\00\00")
  (table $0 1 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -2302,14 +2303,16 @@
   (local $19 i32)
   (local $20 i32)
   (local $21 i32)
+  (local $22 i32)
+  (local $23 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 88
+  i32.const 96
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.const 88
+  i32.const 96
   memory.fill $0
   memory.size $0
   i32.const 16
@@ -3106,12 +3109,14 @@
    unreachable
   end
   i32.const 0
-  call $instanceof/ImplemensIFace#constructor
-  global.set $instanceof/impl
+  call $instanceof/A_I1#constructor
+  global.set $instanceof/a_i1
+  i32.const 1
+  drop
   i32.const 1
   drop
   global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/impl
+  global.get $instanceof/a_i1
   local.tee $21
   i32.store $0 offset=84
   local.get $21
@@ -3120,19 +3125,75 @@
    i32.const 0
   else
    local.get $21
-   call $~instanceof|instanceof/IFace
+   call $~instanceof|instanceof/I1
   end
   i32.eqz
   if
    i32.const 0
    i32.const 432
-   i32.const 161
+   i32.const 165
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  call $instanceof/B_I1_I2#constructor
+  global.set $instanceof/b_i1_i2
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/a_i1
+  local.tee $22
+  i32.store $0 offset=88
+  local.get $22
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $22
+   call $~instanceof|instanceof/B_I1_I2
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 172
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 88
+  global.get $instanceof/b_i1_i2
+  local.tee $23
+  i32.store $0 offset=92
+  local.get $23
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $23
+   call $~instanceof|instanceof/B_I1_I2
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 173
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 96
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -3229,7 +3290,7 @@
   end
   i32.const 1
  )
- (func $~instanceof|instanceof/IFace (type $i32_=>_i32) (param $0 i32) (result i32)
+ (func $~instanceof|instanceof/I1 (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
   block $is_instance
    local.get $0
@@ -3243,6 +3304,27 @@
    br_if $is_instance
    local.get $1
    i32.const 14
+   i32.eq
+   br_if $is_instance
+   local.get $1
+   i32.const 17
+   i32.eq
+   br_if $is_instance
+   i32.const 0
+   return
+  end
+  i32.const 1
+ )
+ (func $~instanceof|instanceof/B_I1_I2 (type $i32_=>_i32) (param $0 i32) (result i32)
+  (local $1 i32)
+  block $is_instance
+   local.get $0
+   i32.const 8
+   i32.sub
+   i32.load $0
+   local.set $1
+   local.get $1
+   i32.const 17
    i32.eq
    br_if $is_instance
    i32.const 0
@@ -3350,7 +3432,14 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  global.get $instanceof/impl
+  global.get $instanceof/a_i1
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $instanceof/b_i1_i2
   local.tee $1
   if
    local.get $1
@@ -3383,37 +3472,43 @@
  )
  (func $~lib/rt/__visit_members (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   block $invalid
-   block $instanceof/IFace
-    block $instanceof/ImplemensIFace
-     block $instanceof/BlackCat
-      block $instanceof/Cat
-       block $instanceof/Animal
-        block $instanceof/SomethingElse<i32>
-         block $instanceof/Parent<f32>
-          block $instanceof/Child<f32>
-           block $instanceof/Parent<i32>
-            block $instanceof/Child<i32>
-             block $instanceof/B
-              block $instanceof/A
-               block $~lib/arraybuffer/ArrayBufferView
-                block $~lib/string/String
-                 block $~lib/arraybuffer/ArrayBuffer
-                  block $~lib/object/Object
-                   local.get $0
-                   i32.const 8
-                   i32.sub
-                   i32.load $0
-                   br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $instanceof/A $instanceof/B $instanceof/Child<i32> $instanceof/Parent<i32> $instanceof/Child<f32> $instanceof/Parent<f32> $instanceof/SomethingElse<i32> $instanceof/Animal $instanceof/Cat $instanceof/BlackCat $instanceof/ImplemensIFace $instanceof/IFace $invalid
+   block $instanceof/B_I1_I2
+    block $instanceof/I2
+     block $instanceof/I1
+      block $instanceof/A_I1
+       block $instanceof/BlackCat
+        block $instanceof/Cat
+         block $instanceof/Animal
+          block $instanceof/SomethingElse<i32>
+           block $instanceof/Parent<f32>
+            block $instanceof/Child<f32>
+             block $instanceof/Parent<i32>
+              block $instanceof/Child<i32>
+               block $instanceof/B
+                block $instanceof/A
+                 block $~lib/arraybuffer/ArrayBufferView
+                  block $~lib/string/String
+                   block $~lib/arraybuffer/ArrayBuffer
+                    block $~lib/object/Object
+                     local.get $0
+                     i32.const 8
+                     i32.sub
+                     i32.load $0
+                     br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $instanceof/A $instanceof/B $instanceof/Child<i32> $instanceof/Parent<i32> $instanceof/Child<f32> $instanceof/Parent<f32> $instanceof/SomethingElse<i32> $instanceof/Animal $instanceof/Cat $instanceof/BlackCat $instanceof/A_I1 $instanceof/I1 $instanceof/I2 $instanceof/B_I1_I2 $invalid
+                    end
+                    return
+                   end
+                   return
                   end
                   return
                  end
+                 local.get $0
+                 local.get $1
+                 call $~lib/arraybuffer/ArrayBufferView~visit
                  return
                 end
                 return
                end
-               local.get $0
-               local.get $1
-               call $~lib/arraybuffer/ArrayBufferView~visit
                return
               end
               return
@@ -3783,7 +3878,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $instanceof/ImplemensIFace#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $instanceof/A_I1#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3799,6 +3894,39 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.const 14
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $instanceof/B_I1_I2#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 17
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0
