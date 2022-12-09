@@ -4460,7 +4460,7 @@ export class Class extends TypedElement {
         return this == target || this.extends(target);
       } else {
         // targetInterface = thisClass
-        return this.implements(target);
+        return this.implements(<Interface>target);
       }
     } else {
       if (this.isInterface) {
@@ -4479,10 +4479,10 @@ export class Class extends TypedElement {
     if (target.isInterface) {
       if (this.isInterface) {
         // <TargetInterface>thisInterface
-        return this.hasImplementerImplementing(target);
+        return this.hasImplementerImplementing(<Interface>target);
       } else {
         // <TargetInterface>thisClass
-        return this.hasExtendeeImplementing(target);
+        return this.hasExtendeeImplementing(<Interface>target);
       }
     } else {
       if (this.isInterface) {
@@ -4793,7 +4793,7 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this class has a direct or indirect extendee that implements the given interface. */
-  hasExtendeeImplementing(other: Class): bool {
+  hasExtendeeImplementing(other: Interface): bool {
     let extendees = this.extendees;
     if (extendees) {
       for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
@@ -4805,7 +4805,7 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this class implements the given interface. */
-  implements(other: Class): bool {
+  implements(other: Interface): bool {
     let interfaces = this.interfaces;
     if (interfaces) {
       if (interfaces.has(other)) return true;
@@ -4832,7 +4832,7 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this interface has an implementer implementing the given interface. */
-  hasImplementerImplementing(other: Class): bool {
+  hasImplementerImplementing(other: Interface): bool {
     let implementers = this.implementers;
     if (implementers) {
       for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
