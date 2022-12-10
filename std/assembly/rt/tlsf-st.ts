@@ -1,10 +1,10 @@
 import {BLOCK_OVERHEAD} from "./common";
-import {allocateBlock, freeBlock, reallocateBlock, ROOT, TLSFinitialize, moveBlock, checkUsedBlock} from "./tlsf-base";
+import {allocateBlock, freeBlock, reallocateBlock, ROOT, ROOT_INIT, TLSFinitialize, checkUsedBlock, moveBlock} from "./tlsf-base";
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __alloc(size: usize): usize {
-  if (!ROOT) TLSFinitialize();
+  if (!load<i32>(ROOT_INIT)) TLSFinitialize();
 
   return changetype<usize>(allocateBlock(ROOT, size)) + BLOCK_OVERHEAD;
 }
@@ -12,7 +12,7 @@ export function __alloc(size: usize): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __realloc(ptr: usize, size: usize): usize {
-  if (!ROOT) TLSFinitialize();
+  if (!load<i32>(ROOT_INIT)) TLSFinitialize();
   return (ptr < __heap_base
     ? changetype<usize>(moveBlock(ROOT, checkUsedBlock(ptr), size))
     : changetype<usize>(reallocateBlock(ROOT, checkUsedBlock(ptr), size))
@@ -23,6 +23,6 @@ export function __realloc(ptr: usize, size: usize): usize {
 @global @unsafe
 export function __free(ptr: usize): void {
   if (ptr < __heap_base) return;
-  if (!ROOT) TLSFinitialize();
+  if (!load<i32>(ROOT_INIT)) TLSFinitialize();
   freeBlock(ROOT, checkUsedBlock(ptr));
 }

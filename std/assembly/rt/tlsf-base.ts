@@ -142,6 +142,9 @@ import { E_ALLOCATION_TOO_LARGE } from "../util/error";
 // @ts-ignore: decorator
 @lazy export let ROOT: Root = changetype<Root>(memory.data(ROOT_SIZE)); // unsafe initializion below
 
+// @ts-ignore: decorator
+@inline export const ROOT_INIT: usize = memory.data(4);
+
 /** Gets the second level map of the specified first level. */
 // @ts-ignore: decorator
 @inline function GETSL(root: Root, fl: usize): u32 {
@@ -486,6 +489,7 @@ export function TLSFinitialize(): void {
   } else {
     addMemory(root, memStart, memory.size() << 16);
   }
+  store<i32>(ROOT_INIT, 1);
 }
 
 /** Allocates a block of the specified size. */
@@ -538,7 +542,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
 }
 
 /** Moves a block to a new one of the specified size. */
-function moveBlock(root: Root, block: Block, newSize: usize): Block {
+export function moveBlock(root: Root, block: Block, newSize: usize): Block {
   let newBlock = allocateBlock(root, newSize);
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, block.mmInfo & ~TAGS_MASK);
   if (changetype<usize>(block) >= __heap_base) {
@@ -556,7 +560,7 @@ export function freeBlock(root: Root, block: Block): void {
 }
 
 /** Checks that a used block is valid to be freed or reallocated. */
-function checkUsedBlock(ptr: usize): Block {
+export function checkUsedBlock(ptr: usize): Block {
   let block = changetype<Block>(ptr - BLOCK_OVERHEAD);
   assert(
     ptr != 0 && !(ptr & AL_MASK) &&  // must exist and be aligned

@@ -1,5 +1,5 @@
 import {BLOCK_OVERHEAD} from "./common";
-import {allocateBlock, freeBlock, reallocateBlock, ROOT, TLSFinitialize, moveBlock, checkUsedBlock} from "./tlsf-base";
+import {allocateBlock, freeBlock, reallocateBlock, ROOT, ROOT_INIT, TLSFinitialize, checkUsedBlock, moveBlock} from "./tlsf-base";
 import {TlsfMutex_lock, TlsfMutex_unlock} from './tlsf-mutex'
 
 const mutex_ptr = memory.data(4, 16);
@@ -9,7 +9,7 @@ const mutex_ptr = memory.data(4, 16);
 export function __alloc(size: usize): usize {
   TlsfMutex_lock(mutex_ptr);
 
-  if (!ROOT) TLSFinitialize();
+  if (!load<i32>(ROOT_INIT)) TLSFinitialize();
   let r: usize = changetype<usize>(allocateBlock(ROOT, size)) + BLOCK_OVERHEAD;
 
   TlsfMutex_unlock(mutex_ptr);
@@ -21,7 +21,7 @@ export function __alloc(size: usize): usize {
 export function __realloc(ptr: usize, size: usize): usize {
   TlsfMutex_lock(mutex_ptr);
 
-  if (!ROOT) TLSFinitialize();
+  if (!load<i32>(ROOT_INIT)) TLSFinitialize();
   let r: usize = (ptr < __heap_base
     ? changetype<usize>(moveBlock(ROOT, checkUsedBlock(ptr), size))
     : changetype<usize>(reallocateBlock(ROOT, checkUsedBlock(ptr), size))
@@ -38,7 +38,7 @@ export function __free(ptr: usize): void {
 
   TlsfMutex_lock(mutex_ptr);
 
-  if (!ROOT) TLSFinitialize();
+  if (!load<i32>(ROOT_INIT)) TLSFinitialize();
   freeBlock(ROOT, checkUsedBlock(ptr));
 
   TlsfMutex_unlock(mutex_ptr);
