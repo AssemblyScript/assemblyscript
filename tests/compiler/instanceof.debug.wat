@@ -2280,922 +2280,126 @@
   i32.const 0
   return
  )
- (func $start:instanceof (type $none_=>_none)
-  (local $0 i32)
+ (func $instanceof/assertStaticTrue<instanceof/A_I1,~lib/object/Object> (type $i32_=>_none) (param $value i32)
+  i32.const 1
+  drop
+  return
+ )
+ (func $instanceof/assertStaticTrue<instanceof/A_I1,instanceof/I1> (type $i32_=>_none) (param $value i32)
+  i32.const 1
+  drop
+  return
+ )
+ (func $instanceof/assertStaticFalse<instanceof/A_I1,instanceof/I2> (type $i32_=>_none) (param $value i32)
+  i32.const 0
+  i32.eqz
+  drop
+  return
+ )
+ (func $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/I1> (type $i32_=>_none) (param $value i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
-  (local $15 i32)
-  (local $16 i32)
-  (local $17 i32)
-  (local $18 i32)
-  (local $19 i32)
-  (local $20 i32)
-  (local $21 i32)
-  (local $22 i32)
-  (local $23 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 96
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.const 96
-  memory.fill $0
-  memory.size $0
-  i32.const 16
-  i32.shl
-  global.get $~lib/memory/__heap_base
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 144
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 176
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 320
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/fromSpace
-  i32.const 0
-  call $instanceof/A#constructor
-  global.set $instanceof/a
-  i32.const 0
-  call $instanceof/B#constructor
-  global.set $instanceof/b
-  i32.const 1
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/a
-  local.tee $0
-  i32.store $0
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   call $~instanceof|instanceof/B
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 18
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  call $instanceof/isI32<i32>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 62
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  call $instanceof/isI32<f64>
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 63
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $instanceof/isI32<u32>
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 64
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $instanceof/isI32<u16>
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 65
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $instanceof/an
-  i32.const 0
-  i32.ne
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 68
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  drop
-  i32.const 1
-  global.set $instanceof/an
-  global.get $instanceof/an
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 71
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  drop
-  i32.const 0
-  call $instanceof/Child<i32>#constructor
-  global.set $instanceof/child
-  i32.const 1
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 1
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  call $instanceof/Child<f32>#constructor
-  global.set $instanceof/childAsParent
-  i32.const 1
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/childAsParent
+  (local $check i32)
+  local.get $value
   local.tee $1
-  i32.store $0 offset=4
-  local.get $1
   i32.eqz
   if (result i32)
    i32.const 0
   else
    local.get $1
-   call $~instanceof|instanceof/Child<f32>
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 94
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  i32.eqz
-  drop
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/childAsParent
-  local.tee $2
-  i32.store $0 offset=8
-  local.get $2
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $2
-   call $~anyinstanceof|instanceof/Child
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 96
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  i32.const 0
-  call $instanceof/Animal#constructor
-  global.set $instanceof/animal
-  i32.const 0
-  call $instanceof/Cat#constructor
-  global.set $instanceof/cat
-  i32.const 0
-  call $instanceof/BlackCat#constructor
-  global.set $instanceof/blackcat
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/animal
-  local.tee $3
-  i32.store $0 offset=12
-  local.get $3
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $3
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 111
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/animal
-  local.tee $4
-  i32.store $0 offset=16
-  local.get $4
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $4
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 112
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/cat
-  local.tee $5
-  i32.store $0 offset=20
-  local.get $5
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $5
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 115
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/cat
-  local.tee $6
-  i32.store $0 offset=24
-  local.get $6
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $6
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 116
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/blackcat
-  local.tee $7
-  i32.store $0 offset=28
-  local.get $7
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $7
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 119
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/blackcat
-  local.tee $8
-  i32.store $0 offset=32
-  local.get $8
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $8
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 120
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $instanceof/Animal#constructor
-  global.set $instanceof/nullableAnimal
-  i32.const 0
-  call $instanceof/Cat#constructor
-  global.set $instanceof/nullableCat
-  i32.const 0
-  call $instanceof/BlackCat#constructor
-  global.set $instanceof/nullableBlackcat
-  global.get $instanceof/nullableAnimal
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 126
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullableAnimal
-  local.tee $9
-  i32.store $0 offset=36
-  local.get $9
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $9
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 127
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullableAnimal
-  local.tee $10
-  i32.store $0 offset=40
-  local.get $10
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $10
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 128
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $instanceof/nullableCat
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 130
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullableCat
-  local.tee $11
-  i32.store $0 offset=44
-  local.get $11
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $11
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 131
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullableCat
-  local.tee $12
-  i32.store $0 offset=48
-  local.get $12
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $12
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 132
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $instanceof/nullableBlackcat
-  i32.const 0
-  i32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 134
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullableBlackcat
-  local.tee $13
-  i32.store $0 offset=52
-  local.get $13
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $13
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 135
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullableBlackcat
-  local.tee $14
-  i32.store $0 offset=56
-  local.get $14
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $14
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 136
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $instanceof/nullAnimal
-  i32.const 0
-  i32.ne
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 142
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullAnimal
-  local.tee $15
-  i32.store $0 offset=60
-  local.get $15
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $15
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 143
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullAnimal
-  local.tee $16
-  i32.store $0 offset=64
-  local.get $16
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $16
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 144
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $instanceof/nullCat
-  i32.const 0
-  i32.ne
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 146
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullCat
-  local.tee $17
-  i32.store $0 offset=68
-  local.get $17
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $17
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 147
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullCat
-  local.tee $18
-  i32.store $0 offset=72
-  local.get $18
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $18
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 148
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $instanceof/nullBlackcat
-  i32.const 0
-  i32.ne
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 150
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullBlackcat
-  local.tee $19
-  i32.store $0 offset=76
-  local.get $19
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $19
-   call $~instanceof|instanceof/Cat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 151
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/nullBlackcat
-  local.tee $20
-  i32.store $0 offset=80
-  local.get $20
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $20
-   call $~instanceof|instanceof/BlackCat
-  end
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 152
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $instanceof/A_I1#constructor
-  global.set $instanceof/a_i1
-  i32.const 1
-  drop
-  i32.const 1
-  drop
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/a_i1
-  local.tee $21
-  i32.store $0 offset=84
-  local.get $21
-  i32.eqz
-  if (result i32)
-   i32.const 0
-  else
-   local.get $21
    call $~instanceof|instanceof/I1
   end
   i32.eqz
   if
    i32.const 0
-   i32.const 432
-   i32.const 165
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 12
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
+  i32.const 1
+  drop
+ )
+ (func $instanceof/assertStaticTrue<instanceof/B_I1_I2,instanceof/I1> (type $i32_=>_none) (param $value i32)
+  i32.const 1
+  drop
+  return
+ )
+ (func $instanceof/assertStaticTrue<instanceof/B_I1_I2,instanceof/I2> (type $i32_=>_none) (param $value i32)
+  i32.const 1
+  drop
+  return
+ )
+ (func $instanceof/assertStaticFalse<instanceof/A_I1,instanceof/B_I1_I2> (type $i32_=>_none) (param $value i32)
   i32.const 0
   i32.eqz
   drop
-  i32.const 0
-  call $instanceof/B_I1_I2#constructor
-  global.set $instanceof/b_i1_i2
-  i32.const 1
-  drop
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/a_i1
-  local.tee $22
-  i32.store $0 offset=88
-  local.get $22
+  return
+ )
+ (func $instanceof/assertDynamicFalse<instanceof/I1,instanceof/B_I1_I2> (type $i32_=>_none) (param $value i32)
+  (local $1 i32)
+  (local $check i32)
+  local.get $value
+  local.tee $1
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $22
+   local.get $1
    call $~instanceof|instanceof/B_I1_I2
   end
-  i32.eqz
-  i32.eqz
   if
    i32.const 0
-   i32.const 432
-   i32.const 172
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 19
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
-  global.get $~lib/memory/__stack_pointer
-  global.get $instanceof/b_i1_i2
-  local.tee $23
-  i32.store $0 offset=92
-  local.get $23
+  i32.const 1
+  drop
+ )
+ (func $instanceof/assertDynamicTrue<instanceof/I1,instanceof/B_I1_I2> (type $i32_=>_none) (param $value i32)
+  (local $1 i32)
+  (local $check i32)
+  local.get $value
+  local.tee $1
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $23
+   local.get $1
    call $~instanceof|instanceof/B_I1_I2
   end
   i32.eqz
   if
    i32.const 0
-   i32.const 432
-   i32.const 173
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
+   local.set $check
+   i32.const 0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 12
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 96
-  i32.add
-  global.set $~lib/memory/__stack_pointer
+  i32.const 1
+  drop
  )
  (func $~instanceof|instanceof/B (type $i32_=>_i32) (param $0 i32) (result i32)
   (local $1 i32)
@@ -3552,6 +2756,906 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $start:instanceof (type $none_=>_none)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
+  (local $21 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 88
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.const 88
+  memory.fill $0
+  memory.size $0
+  i32.const 16
+  i32.shl
+  global.get $~lib/memory/__heap_base
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 144
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 176
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/toSpace
+  i32.const 320
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/fromSpace
+  i32.const 0
+  call $instanceof/A#constructor
+  global.set $instanceof/a
+  i32.const 0
+  call $instanceof/B#constructor
+  global.set $instanceof/b
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/a
+  local.tee $0
+  i32.store $0
+  local.get $0
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $0
+   call $~instanceof|instanceof/B
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 41
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  call $instanceof/isI32<i32>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 85
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  call $instanceof/isI32<f64>
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 86
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $instanceof/isI32<u32>
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 87
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $instanceof/isI32<u16>
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 88
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $instanceof/an
+  i32.const 0
+  i32.ne
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 91
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  drop
+  i32.const 1
+  global.set $instanceof/an
+  global.get $instanceof/an
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 94
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  drop
+  i32.const 0
+  call $instanceof/Child<i32>#constructor
+  global.set $instanceof/child
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  call $instanceof/Child<f32>#constructor
+  global.set $instanceof/childAsParent
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/childAsParent
+  local.tee $1
+  i32.store $0 offset=4
+  local.get $1
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $1
+   call $~instanceof|instanceof/Child<f32>
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 117
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  i32.eqz
+  drop
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/childAsParent
+  local.tee $2
+  i32.store $0 offset=8
+  local.get $2
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $2
+   call $~anyinstanceof|instanceof/Child
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 119
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  call $instanceof/Animal#constructor
+  global.set $instanceof/animal
+  i32.const 0
+  call $instanceof/Cat#constructor
+  global.set $instanceof/cat
+  i32.const 0
+  call $instanceof/BlackCat#constructor
+  global.set $instanceof/blackcat
+  i32.const 1
+  drop
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/animal
+  local.tee $3
+  i32.store $0 offset=12
+  local.get $3
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $3
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 134
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/animal
+  local.tee $4
+  i32.store $0 offset=16
+  local.get $4
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $4
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 135
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  drop
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/cat
+  local.tee $5
+  i32.store $0 offset=20
+  local.get $5
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $5
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 138
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/cat
+  local.tee $6
+  i32.store $0 offset=24
+  local.get $6
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $6
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 139
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  drop
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/blackcat
+  local.tee $7
+  i32.store $0 offset=28
+  local.get $7
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $7
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 142
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/blackcat
+  local.tee $8
+  i32.store $0 offset=32
+  local.get $8
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $8
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 143
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $instanceof/Animal#constructor
+  global.set $instanceof/nullableAnimal
+  i32.const 0
+  call $instanceof/Cat#constructor
+  global.set $instanceof/nullableCat
+  i32.const 0
+  call $instanceof/BlackCat#constructor
+  global.set $instanceof/nullableBlackcat
+  global.get $instanceof/nullableAnimal
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 149
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullableAnimal
+  local.tee $9
+  i32.store $0 offset=36
+  local.get $9
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $9
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 150
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullableAnimal
+  local.tee $10
+  i32.store $0 offset=40
+  local.get $10
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $10
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 151
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $instanceof/nullableCat
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 153
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullableCat
+  local.tee $11
+  i32.store $0 offset=44
+  local.get $11
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $11
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 154
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullableCat
+  local.tee $12
+  i32.store $0 offset=48
+  local.get $12
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $12
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 155
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $instanceof/nullableBlackcat
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 157
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullableBlackcat
+  local.tee $13
+  i32.store $0 offset=52
+  local.get $13
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $13
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 158
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullableBlackcat
+  local.tee $14
+  i32.store $0 offset=56
+  local.get $14
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $14
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 159
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $instanceof/nullAnimal
+  i32.const 0
+  i32.ne
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 165
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullAnimal
+  local.tee $15
+  i32.store $0 offset=60
+  local.get $15
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $15
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 166
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullAnimal
+  local.tee $16
+  i32.store $0 offset=64
+  local.get $16
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $16
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 167
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $instanceof/nullCat
+  i32.const 0
+  i32.ne
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 169
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullCat
+  local.tee $17
+  i32.store $0 offset=68
+  local.get $17
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $17
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 170
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullCat
+  local.tee $18
+  i32.store $0 offset=72
+  local.get $18
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $18
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 171
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $instanceof/nullBlackcat
+  i32.const 0
+  i32.ne
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 173
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullBlackcat
+  local.tee $19
+  i32.store $0 offset=76
+  local.get $19
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $19
+   call $~instanceof|instanceof/Cat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 174
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $instanceof/nullBlackcat
+  local.tee $20
+  i32.store $0 offset=80
+  local.get $20
+  i32.eqz
+  if (result i32)
+   i32.const 0
+  else
+   local.get $20
+   call $~instanceof|instanceof/BlackCat
+  end
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 432
+   i32.const 175
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $instanceof/A_I1#constructor
+  global.set $instanceof/a_i1
+  global.get $instanceof/a_i1
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertStaticTrue<instanceof/A_I1,~lib/object/Object>
+  global.get $instanceof/a_i1
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertStaticTrue<instanceof/A_I1,instanceof/I1>
+  global.get $instanceof/a_i1
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertStaticFalse<instanceof/A_I1,instanceof/I2>
+  global.get $instanceof/a_i1
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertDynamicTrue<~lib/object/Object,instanceof/I1>
+  i32.const 0
+  call $instanceof/B_I1_I2#constructor
+  global.set $instanceof/b_i1_i2
+  global.get $instanceof/b_i1_i2
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertStaticTrue<instanceof/B_I1_I2,instanceof/I1>
+  global.get $instanceof/b_i1_i2
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertStaticTrue<instanceof/B_I1_I2,instanceof/I2>
+  global.get $instanceof/a_i1
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertStaticFalse<instanceof/A_I1,instanceof/B_I1_I2>
+  global.get $instanceof/a_i1
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertDynamicFalse<instanceof/I1,instanceof/B_I1_I2>
+  global.get $instanceof/b_i1_i2
+  local.set $21
+  global.get $~lib/memory/__stack_pointer
+  local.get $21
+  i32.store $0 offset=84
+  local.get $21
+  call $instanceof/assertDynamicTrue<instanceof/I1,instanceof/B_I1_I2>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 88
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/object/Object#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)

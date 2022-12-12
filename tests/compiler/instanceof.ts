@@ -1,3 +1,26 @@
+function assertStaticTrue<T,U>(value: T): void {
+  if (value instanceof U) return;
+  ERROR("should be statically true");
+}
+function assertStaticFalse<T,U>(value: T): void {
+  if (!(value instanceof U)) return;
+  ERROR("should be statically false");
+}
+function assertDynamicTrue<T,U>(value: T): void {
+  if (!(value instanceof U)) {
+    var check: i32 = 0;
+    assert(false);
+  }
+  assert(isDefined(check));
+}
+function assertDynamicFalse<T,U>(value: T): void {
+  if (value instanceof U) {
+    var check: i32 = 0;
+    assert(false);
+  }
+  assert(isDefined(check));
+}
+
 class A {}
 class B extends A {}
 
@@ -160,14 +183,14 @@ class A_I1 implements I1 {}
 class B_I1_I2 implements I1, I2 {}
 
 let a_i1 = new A_I1();
-assert(a_i1 instanceof Object);           // static true
-assert(a_i1 instanceof I1);               // static true
-assert(a_i1 as Object instanceof I1);     // dynamic true
-assert(!(a_i1 instanceof I2));            // static false
+assertStaticTrue<A_I1,Object>(a_i1);
+assertStaticTrue<A_I1,I1>(a_i1);
+assertStaticFalse<A_I1,I2>(a_i1);
+assertDynamicTrue<Object,I1>(a_i1);
 
 let b_i1_i2 = new B_I1_I2();
-assert(b_i1_i2 instanceof I1);            // static true
-assert(b_i1_i2 instanceof I2);            // static true
-assert(!(a_i1 instanceof B_I1_I2));       // dynamic false
-assert(!(a_i1 as I1 instanceof B_I1_I2)); // dynamic false
-assert(b_i1_i2 as I1 instanceof B_I1_I2); // dynamic true
+assertStaticTrue<B_I1_I2,I1>(b_i1_i2);
+assertStaticTrue<B_I1_I2,I2>(b_i1_i2);
+assertStaticFalse<A_I1,B_I1_I2>(a_i1);
+assertDynamicFalse<I1,B_I1_I2>(a_i1);
+assertDynamicTrue<I1,B_I1_I2>(b_i1_i2);

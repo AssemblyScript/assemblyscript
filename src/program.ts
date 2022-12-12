@@ -4298,9 +4298,9 @@ export class Class extends TypedElement {
   prototype: ClassPrototype;
   /** Resolved type arguments. */
   typeArguments: Type[] | null;
-  /** Base class, if applicable. */
+  /** Base class, if any. */
   base: Class | null = null;
-  /** Implemented interfaces, if applicable. */
+  /** Directly implemented interfaces, if any. */
   interfaces: Set<Interface> | null = null;
   /** Contextual type arguments for fields and methods. */
   contextualTypeArguments: Map<string,Type> | null = null;
@@ -4318,9 +4318,9 @@ export class Class extends TypedElement {
   rttiFlags: u32 = 0;
   /** Wrapped type, if a wrapper for a basic type. */
   wrappedType: Type | null = null;
-  /** Classes directly extending this class. */
+  /** Classes directly extending this class, if any. */
   extendees: Set<Class> | null = null;
-  /** Classes implementing this interface. */
+  /** Classes directly implementing this interface, if any. */
   implementers: Set<Class> | null = null;
   /** Whether the field initialization check has already been performed. */
   didCheckFieldInitialization: bool = false;
@@ -4748,7 +4748,7 @@ export class Class extends TypedElement {
     return out;
   }
 
-  /** Gets all extendees and implementers of this class. */
+  /** Gets all extendees and implementers of this class or interface. */
   getAllExtendeesAndImplementers(out: Set<Class> = new Set()): Set<Class> {
     let extendees = this.extendees;
     if (extendees) {
@@ -4769,7 +4769,7 @@ export class Class extends TypedElement {
     return out;
   }
 
-  /** Tests if this class or interface extends the given classs or interface. */
+  /** Tests if this class or interface extends the given class or interface. */
   extends(other: Class): bool {
     let base = this.base;
     while (base) {
@@ -4781,15 +4781,7 @@ export class Class extends TypedElement {
 
   /** Tests if this class has a direct or indirect extendee matching the given class. */
   hasExtendee(other: Class): bool {
-    let extendees = this.extendees;
-    if (extendees) {
-      if (extendees.has(other)) return true;
-      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-        let extendee = _values[i];
-        if (/* extendee == other || */extendee.hasExtendee(other)) return true;
-      }
-    }
-    return false;
+    return other.extends(this);
   }
 
   /** Tests if this class has a direct or indirect extendee that implements the given interface. */
@@ -4804,7 +4796,7 @@ export class Class extends TypedElement {
     return false;
   }
 
-  /** Tests if this class implements the given interface. */
+  /** Tests if this class directly or indirectly implements the given interface. */
   implements(other: Interface): bool {
     let interfaces = this.interfaces;
     if (interfaces) {
@@ -4820,15 +4812,7 @@ export class Class extends TypedElement {
 
   /** Tests if this interface has a direct or indirect implementer matching the given class. */
   hasImplementer(other: Class): bool {
-    let implementers = this.implementers;
-    if (implementers) {
-      if (implementers.has(other)) return true;
-      for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
-        let implementer = _values[i];
-        if (/* implementer == other || */implementer.extends(other)) return true;
-      }
-    }
-    return false;
+    return other.implements(this);
   }
 
   /** Tests if this interface has an implementer implementing the given interface. */
