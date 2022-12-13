@@ -4466,7 +4466,7 @@ export class Class extends TypedElement {
               let thisExtendee = extendeesArray[i];
               baseInterfaceImplementers.add(thisExtendee);
             }
-            baseInterface = <Interface>baseInterface.base;
+            baseInterface = <Interface | null>baseInterface.base;
             assert(!baseInterface || baseInterface.isInterface);
           } while (baseInterface);
         }
