@@ -4466,7 +4466,8 @@ export class Class extends TypedElement {
               let thisExtendee = extendeesArray[i];
               baseInterfaceImplementers.add(thisExtendee);
             }
-            baseInterface = baseInterface.base;
+            baseInterface = <Interface>baseInterface.base;
+            assert(!baseInterface || baseInterface.isInterface);
           } while (baseInterface);
         }
       }
@@ -4817,13 +4818,14 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this class directly or indirectly implements the given interface. */
-  implements(other: Interface): bool {
+  implements(other: Class): bool {
     let implementers = other.implementers;
     return implementers != null && implementers.has(this);
   }
 
   /** Tests if this interface has a direct or indirect implementer matching the given class. */
   hasImplementer(other: Class): bool {
+    assert(this.isInterface);
     return other.implements(this);
   }
 
