@@ -4182,7 +4182,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
   /** Classes extending this class. */
-  extendees: Set<ClassPrototype> = new Set();
+  extenders: Set<ClassPrototype> = new Set();
   /** Whether this class implicitly extends `Object`. */
   implicitlyExtendsObject: bool = false;
 
@@ -4319,7 +4319,7 @@ export class Class extends TypedElement {
   /** Wrapped type, if a wrapper for a basic type. */
   wrappedType: Type | null = null;
   /** Classes directly or indirectly extending this class, if any. */
-  extendees: Set<Class> | null = null;
+  extenders: Set<Class> | null = null;
   /** Classes directly or indirectly implementing this interface, if any. */
   implementers: Set<Class> | null = null;
   /** Whether the field initialization check has already been performed. */
@@ -4437,16 +4437,16 @@ export class Class extends TypedElement {
       }
     }
 
-    // This class and its extendees now extend each direct or indirect base class
-    base.propagateExtendeeUp(this);
-    let extendees = this.extendees;
-    if (extendees) {
-      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-        base.propagateExtendeeUp(_values[i]);
+    // This class and its extenders now extend each direct or indirect base class
+    base.propagateExtenderUp(this);
+    let extenders = this.extenders;
+    if (extenders) {
+      for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+        base.propagateExtenderUp(_values[i]);
       }
     }
 
-    // Direct or indirect base interfaces are now implemented by this class and its extendees
+    // Direct or indirect base interfaces are now implemented by this class and its extenders
     let nextBase: Class | null = base;
     do {
       let baseInterfaces = nextBase.interfaces;
@@ -4459,29 +4459,29 @@ export class Class extends TypedElement {
     } while (nextBase);
   }
 
-  /** Propagates an extendee to this class and its base classes. */
-  private propagateExtendeeUp(extendee: Class): void {
+  /** Propagates an extender to this class and its base classes. */
+  private propagateExtenderUp(extender: Class): void {
     let nextBase: Class | null = this;
     do {
-      let extendees = nextBase.extendees;
-      if (!extendees) nextBase.extendees = extendees = new Set();
-      extendees.add(extendee);
+      let baseExtenders = nextBase.extenders;
+      if (!baseExtenders) nextBase.extenders = baseExtenders = new Set();
+      baseExtenders.add(extender);
       nextBase = nextBase.base;
     } while (nextBase);
   }
 
-  /** Propagates an interface and its base interfaces to this class and its extendees. */
+  /** Propagates an interface and its base interfaces to this class and its extenders. */
   private propagateInterfaceDown(iface: Interface): void {
     let nextIface: Interface | null = iface;
-    let extendees = this.extendees;
+    let extenders = this.extenders;
     do {
       let implementers = nextIface.implementers;
       if (!implementers) nextIface.implementers = implementers = new Set();
       implementers.add(this);
-      if (extendees) {
-        for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-          let extendee = _values[i];
-          implementers.add(extendee);
+      if (extenders) {
+        for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+          let extender = _values[i];
+          implementers.add(extender);
         }
       }
       nextIface = <Interface | null>nextIface.base;
@@ -4527,7 +4527,7 @@ export class Class extends TypedElement {
         return this.hasImplementerImplementing(<Interface>target);
       } else {
         // <TargetInterface>thisClass
-        return this.hasExtendeeImplementing(<Interface>target);
+        return this.hasExtenderImplementing(<Interface>target);
       }
     } else {
       if (this.isInterface) {
@@ -4535,7 +4535,7 @@ export class Class extends TypedElement {
         return this.hasImplementer(target);
       } else {
         // <TargetClass>thisClass
-        return this.hasExtendee(target);
+        return this.hasExtender(target);
       }
     }
   }
@@ -4778,22 +4778,22 @@ export class Class extends TypedElement {
 
   /** Tests if this class or interface extends the given class or interface. */
   extends(other: Class): bool {
-    let extendees = other.extendees;
-    return extendees != null && extendees.has(this);
+    let extenders = other.extenders;
+    return extenders != null && extenders.has(this);
   }
 
-  /** Tests if this class has a direct or indirect extendee matching the given class. */
-  hasExtendee(other: Class): bool {
+  /** Tests if this class has a direct or indirect extender matching the given class. */
+  hasExtender(other: Class): bool {
     return other.extends(this);
   }
 
-  /** Tests if this class has a direct or indirect extendee that implements the given interface. */
-  hasExtendeeImplementing(other: Interface): bool {
-    let extendees = this.extendees;
-    if (extendees) {
-      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-        let extendee = _values[i];
-        if (extendee.implements(other)) return true;
+  /** Tests if this class has a direct or indirect extender that implements the given interface. */
+  hasExtenderImplementing(other: Interface): bool {
+    let extenders = this.extenders;
+    if (extenders) {
+      for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+        let extender = _values[i];
+        if (extender.implements(other)) return true;
       }
     }
     return false;

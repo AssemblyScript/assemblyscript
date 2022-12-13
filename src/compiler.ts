@@ -6575,16 +6575,16 @@ export class Compiler extends DiagnosticEmitter {
         }
         let classInstance = assert(overrideInstance.getBoundClassOrInterface());
         builder.addCase(classInstance.id, stmts);
-        // Also alias each extendee inheriting this exact overload
-        let extendees = classInstance.extendees;
-        if (extendees) {
-          for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-            let extendee = _values[i];
-            let instanceMembers = extendee.prototype.instanceMembers;
+        // Also alias each extender inheriting this exact overload
+        let extenders = classInstance.extenders;
+        if (extenders) {
+          for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+            let extender = _values[i];
+            let instanceMembers = extender.prototype.instanceMembers;
             if (instanceMembers && instanceMembers.has(instance.declaration.name.text)) {
               continue; // skip those not inheriting
             }
-            builder.addCase(extendee.id, stmts);
+            builder.addCase(extender.id, stmts);
           }
         }
       }
@@ -6593,7 +6593,7 @@ export class Compiler extends DiagnosticEmitter {
     // Call the original function if no other id matches and the method is not
     // abstract or part of an interface. Note that doing so will not catch an
     // invalid id, but can reduce code size significantly since we also don't
-    // have to add branches for extendees inheriting the original function.
+    // have to add branches for extender inheriting the original function.
     let body: ExpressionRef;
     let instanceClass = instance.getBoundClassOrInterface();
     if (!instance.is(CommonFlags.Abstract) && !(instanceClass && instanceClass.kind == ElementKind.Interface)) {
@@ -7577,11 +7577,11 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       allInstances = new Set();
       allInstances.add(instance);
-      let extendees = instance.extendees;
-      if (extendees) {
-        for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-          let extendee = _values[i];
-          allInstances.add(extendee);
+      let extenders = instance.extenders;
+      if (extenders) {
+        for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+          let extender = _values[i];
+          allInstances.add(extender);
         }
       }
     }
@@ -7724,11 +7724,11 @@ export class Compiler extends DiagnosticEmitter {
           }
         } else {
           allInstances.add(instance);
-          let extendees = instance.extendees;
-          if (extendees) {
-            for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-              let extendee = _values[i];
-              allInstances.add(extendee);
+          let extenders = instance.extenders;
+          if (extenders) {
+            for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+              let extender = _values[i];
+              allInstances.add(extender);
             }
           }
         }
