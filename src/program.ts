@@ -4459,7 +4459,7 @@ export class Class extends TypedElement {
     } while (nextBase);
   }
 
-  /** Propagates an extendee to this class as its base classes. */
+  /** Propagates an extendee to this class and its base classes. */
   private propagateExtendeeUp(extendee: Class): void {
     let nextBase: Class | null = this;
     do {
