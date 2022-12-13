@@ -4437,81 +4437,63 @@ export class Class extends TypedElement {
       }
     }
 
-    // This class is now an extendee of the base class
-    let extendees = base.extendees;
-    if (!extendees) base.extendees = extendees = new Set();
-    extendees.add(this);
-
-    let iter: Class | null = base;
-    let extendeesArray = Set_values(extendees);
-    do {
-      // Extendees of this class are now also extendees of its base classes
-      for (let i = 0, k = extendeesArray.length; i < k; ++i) {
-        let thisExtendee = extendeesArray[i];
-        let baseExtendees = iter.extendees;
-        if (!baseExtendees) iter.extendees = baseExtendees = new Set();
-        baseExtendees.add(thisExtendee);
+    // This class and its extendees now extend each direct or indirect base class
+    base.propagateExtendeeUp(this);
+    let extendees = this.extendees;
+    if (extendees) {
+      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+        base.propagateExtendeeUp(_values[i]);
       }
-      // Interfaces directly or indirectly implemented by a base class are now
-      // also implemented by this class and its extendees
-      let baseInterfaces = iter.interfaces;
+    }
+
+    // Direct or indirect base interfaces are now implemented by this class and its extendees
+    let nextBase: Class | null = base;
+    do {
+      let baseInterfaces = nextBase.interfaces;
       if (baseInterfaces) {
         for (let _values = Set_values(baseInterfaces), i = 0, k = _values.length; i < k; ++i) {
-          let baseInterface: Interface | null = _values[i];
-          do {
-            let baseInterfaceImplementers = baseInterface.implementers;
-            if (!baseInterfaceImplementers) baseInterface.implementers = baseInterfaceImplementers = new Set();
-            baseInterfaceImplementers.add(this);
-            for (let i = 0, k = extendeesArray.length; i < k; ++i) {
-              let thisExtendee = extendeesArray[i];
-              baseInterfaceImplementers.add(thisExtendee);
-            }
-            baseInterface = <Interface | null>baseInterface.base;
-            assert(!baseInterface || baseInterface.isInterface);
-          } while (baseInterface);
+          this.propagateInterfaceDown(_values[i]);
         }
       }
-      iter = iter.base;
-    } while (iter);
+      nextBase = nextBase.base;
+    } while (nextBase);
+  }
+
+  /** Propagates an extendee to this class as its base classes. */
+  private propagateExtendeeUp(extendee: Class): void {
+    let nextBase: Class | null = this;
+    do {
+      let extendees = nextBase.extendees;
+      if (!extendees) nextBase.extendees = extendees = new Set();
+      extendees.add(extendee);
+      nextBase = nextBase.base;
+    } while (nextBase);
+  }
+
+  /** Propagates an interface and its base interfaces to this class and its extendees. */
+  private propagateInterfaceDown(iface: Interface): void {
+    let nextIface: Interface | null = iface;
+    let extendees = this.extendees;
+    do {
+      let implementers = nextIface.implementers;
+      if (!implementers) nextIface.implementers = implementers = new Set();
+      implementers.add(this);
+      if (extendees) {
+        for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+          let extendee = _values[i];
+          implementers.add(extendee);
+        }
+      }
+      nextIface = <Interface | null>nextIface.base;
+    } while (nextIface);
   }
 
   /** Adds an interface. */
   addInterface(iface: Interface): void {
-    let thisInterfaces = this.interfaces;
-    if (!thisInterfaces) this.interfaces = thisInterfaces = new Set();
-    thisInterfaces.add(iface);
-
-    // The interface is now implemented by this class
-    let interfaceImplementers = iface.implementers;
-    if (!interfaceImplementers) iface.implementers = interfaceImplementers = new Set();
-    interfaceImplementers.add(this);
-
-    // The interface's base interfaces are implemented by this class as well
-    let baseInterface = iface.base;
-    while (baseInterface) {
-      let baseInterfaceImplementers = baseInterface.implementers;
-      if (!baseInterfaceImplementers) baseInterface.implementers = baseInterfaceImplementers = new Set();
-      baseInterfaceImplementers.add(this);
-      baseInterface = baseInterface.base;
-    }
-
-    // Propagate the interface to this class's extendees
-    let thisExtendees = this.extendees;
-    if (thisExtendees) {
-      for (let _values = Set_values(thisExtendees), i = 0, k = _values.length; i < k; ++i) {
-        // The interface is now also implemented by any of this class's extendees
-        let thisExtendee = _values[i];
-        interfaceImplementers.add(thisExtendee);
-        // Base interfaces of the interface are implemented by extendees as well
-        let baseInterface = iface.base;
-        while (baseInterface) {
-          let baseInterfaceImplementers = baseInterface.implementers;
-          if (!baseInterfaceImplementers) baseInterface.implementers = baseInterfaceImplementers = new Set();
-          baseInterfaceImplementers.add(thisExtendee);
-          baseInterface = baseInterface.base;
-        }
-      }
-    }
+    let interfaces = this.interfaces;
+    if (!interfaces) this.interfaces = interfaces = new Set();
+    interfaces.add(iface);
+    this.propagateInterfaceDown(iface);
   }
 
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
