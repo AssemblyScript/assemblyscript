@@ -4778,13 +4778,13 @@ export class Class extends TypedElement {
 
   /** Tests if this class or interface extends the given class or interface. */
   extends(other: Class): bool {
-    let extenders = other.extenders;
-    return extenders != null && extenders.has(this);
+    return other.hasExtender(this);
   }
 
   /** Tests if this class has a direct or indirect extender matching the given class. */
   hasExtender(other: Class): bool {
-    return other.extends(this);
+    let extenders = this.extenders;
+    return extenders != null && extenders.has(other);
   }
 
   /** Tests if this class has a direct or indirect extender that implements the given interface. */
@@ -4801,14 +4801,13 @@ export class Class extends TypedElement {
 
   /** Tests if this class directly or indirectly implements the given interface. */
   implements(other: Class): bool {
-    let implementers = other.implementers;
-    return implementers != null && implementers.has(this);
+    return other.hasImplementer(this);
   }
 
   /** Tests if this interface has a direct or indirect implementer matching the given class. */
   hasImplementer(other: Class): bool {
-    assert(this.isInterface);
-    return other.implements(this);
+    let implementers = this.implementers;
+    return implementers != null && implementers.has(other);
   }
 
   /** Tests if this interface has an implementer implementing the given interface. */
