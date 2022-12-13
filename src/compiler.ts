@@ -6576,10 +6576,16 @@ export class Compiler extends DiagnosticEmitter {
         let classInstance = assert(overrideInstance.getBoundClassOrInterface());
         builder.addCase(classInstance.id, stmts);
         // Also alias each extendee inheriting this exact overload
-        let extendees = classInstance.getAllExtendees(instance.declaration.name.text); // without get:/set:
-        for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
-          let extendee = _values[a];
-          builder.addCase(extendee.id, stmts);
+        let extendees = classInstance.extendees;
+        if (extendees) {
+          for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+            let extendee = _values[i];
+            let instanceMembers = extendee.prototype.instanceMembers;
+            if (instanceMembers && instanceMembers.has(instance.declaration.name.text)) {
+              continue; // skip those not inheriting
+            }
+            builder.addCase(extendee.id, stmts);
+          }
         }
       }
     }
@@ -7565,19 +7571,32 @@ export class Compiler extends DiagnosticEmitter {
         ), false // managedness is irrelevant here, isn't interrupted
       )
     );
-    let allInstances = new Set<Class>();
-    allInstances.add(instance);
-    instance.getAllExtendeesAndImplementers(allInstances);
-    for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
-      let instance = _values[i];
-      stmts.push(
-        module.br("is_instance",
-          module.binary(BinaryOp.EqI32,
-            module.local_get(1, TypeRef.I32),
-            module.i32(instance.id)
+    let allInstances: Set<Class> | null;
+    if (instance.isInterface) {
+      allInstances = instance.implementers;
+    } else {
+      allInstances = new Set();
+      allInstances.add(instance);
+      let extendees = instance.extendees;
+      if (extendees) {
+        for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+          let extendee = _values[i];
+          allInstances.add(extendee);
+        }
+      }
+    }
+    if (allInstances) {
+      for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
+        let instance = _values[i];
+        stmts.push(
+          module.br("is_instance",
+            module.binary(BinaryOp.EqI32,
+              module.local_get(1, TypeRef.I32),
+              module.i32(instance.id)
+            )
           )
-        )
-      );
+        );
+      }
     }
     stmts.push(
       module.return(
@@ -7695,8 +7714,24 @@ export class Compiler extends DiagnosticEmitter {
       let allInstances = new Set<Class>();
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
         let instance = _values[i];
-        allInstances.add(instance);
-        instance.getAllExtendeesAndImplementers(allInstances);
+        if (instance.isInterface) {
+          let implementers = instance.implementers;
+          if (implementers) {
+            for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
+              let implementer = _values[i];
+              allInstances.add(implementer);
+            }
+          }
+        } else {
+          allInstances.add(instance);
+          let extendees = instance.extendees;
+          if (extendees) {
+            for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+              let extendee = _values[i];
+              allInstances.add(extendee);
+            }
+          }
+        }
       }
       for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
         let instance = _values[i];

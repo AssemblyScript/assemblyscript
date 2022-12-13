@@ -2280,15 +2280,18 @@
     if (result i32)
      block $__inlined_func$~instanceof|instanceof/I1 (result i32)
       block $is_instance13
-       block $tablify|0
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load $0
-        i32.const 14
-        i32.sub
-        br_table $is_instance13 $is_instance13 $tablify|0 $is_instance13 $tablify|0
-       end
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load $0
+       local.tee $0
+       i32.const 14
+       i32.eq
+       br_if $is_instance13
+       local.get $0
+       i32.const 17
+       i32.eq
+       br_if $is_instance13
        i32.const 0
        br $__inlined_func$~instanceof|instanceof/I1
       end
