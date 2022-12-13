@@ -6593,7 +6593,7 @@ export class Compiler extends DiagnosticEmitter {
     // Call the original function if no other id matches and the method is not
     // abstract or part of an interface. Note that doing so will not catch an
     // invalid id, but can reduce code size significantly since we also don't
-    // have to add branches for extender inheriting the original function.
+    // have to add branches for extenders inheriting the original function.
     let body: ExpressionRef;
     let instanceClass = instance.getBoundClassOrInterface();
     if (!instance.is(CommonFlags.Abstract) && !(instanceClass && instanceClass.kind == ElementKind.Interface)) {
