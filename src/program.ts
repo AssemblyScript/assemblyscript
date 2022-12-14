@@ -4442,7 +4442,8 @@ export class Class extends TypedElement {
     let extenders = this.extenders;
     if (extenders) {
       for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
-        base.propagateExtenderUp(_values[i]);
+        let extender = _values[i];
+        base.propagateExtenderUp(extender);
       }
     }
 
@@ -4452,7 +4453,8 @@ export class Class extends TypedElement {
       let baseInterfaces = nextBase.interfaces;
       if (baseInterfaces) {
         for (let _values = Set_values(baseInterfaces), i = 0, k = _values.length; i < k; ++i) {
-          this.propagateInterfaceDown(_values[i]);
+          let baseInterface = _values[i];
+          this.propagateInterfaceDown(baseInterface);
         }
       }
       nextBase = nextBase.base;
@@ -4461,17 +4463,22 @@ export class Class extends TypedElement {
 
   /** Propagates an extender to this class and its base classes. */
   private propagateExtenderUp(extender: Class): void {
+    // Start with this class, adding the extender to it. Repeat for the class's
+    // bases that are indirectly extended by the extender.
     let nextBase: Class | null = this;
     do {
-      let baseExtenders = nextBase.extenders;
-      if (!baseExtenders) nextBase.extenders = baseExtenders = new Set();
-      baseExtenders.add(extender);
+      let extenders = nextBase.extenders;
+      if (!extenders) nextBase.extenders = extenders = new Set();
+      extenders.add(extender);
       nextBase = nextBase.base;
     } while (nextBase);
   }
 
   /** Propagates an interface and its base interfaces to this class and its extenders. */
   private propagateInterfaceDown(iface: Interface): void {
+    // Start with the interface itself, adding this class and its extenders to
+    // its implementers. Repeat for the interface's bases that are indirectly
+    // implemented by means of being extended by the interface.
     let nextIface: Interface | null = iface;
     let extenders = this.extenders;
     do {
@@ -4493,6 +4500,8 @@ export class Class extends TypedElement {
     let interfaces = this.interfaces;
     if (!interfaces) this.interfaces = interfaces = new Set();
     interfaces.add(iface);
+
+    // This class and its extenders now implement the interface and its bases
     this.propagateInterfaceDown(iface);
   }
 
@@ -4800,7 +4809,7 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this class directly or indirectly implements the given interface. */
-  implements(other: Class): bool {
+  implements(other: Interface): bool {
     return other.hasImplementer(this);
   }
 
