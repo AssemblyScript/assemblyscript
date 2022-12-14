@@ -176,21 +176,188 @@ assert(!(nullBlackcat instanceof BlackCat)); // dynamic false
 
 // Interfaces
 
-interface I1 {}
-interface I2 {}
-interface I3 extends I1 {}
-class A_I1 implements I1 {}
-class B_I1_I2 implements I1, I2 {}
+//  IA    W
+//   |
+//  IB    IC   IE
+//   |   /
+//   X  ID
+//   | /
+//   Y
+//   |
+//   Z
+class W {}
+interface IA {}
+interface IB extends IA {}
+class X implements IB {}
+interface IC {}
+interface ID extends IC {}
+class Y extends X implements ID {}
+class Z extends Y {}
+interface IE {}
 
-let a_i1 = new A_I1();
-assertStaticTrue<A_I1,Object>(a_i1);
-assertStaticTrue<A_I1,I1>(a_i1);
-assertStaticFalse<A_I1,I2>(a_i1);
-assertDynamicTrue<Object,I1>(a_i1);
+let w = new W();
+let x = new X();
+let y = new Y();
+let z = new Z();
 
-let b_i1_i2 = new B_I1_I2();
-assertStaticTrue<B_I1_I2,I1>(b_i1_i2);
-assertStaticTrue<B_I1_I2,I2>(b_i1_i2);
-assertStaticFalse<A_I1,B_I1_I2>(a_i1);
-assertDynamicFalse<I1,B_I1_I2>(a_i1);
-assertDynamicTrue<I1,B_I1_I2>(b_i1_i2);
+// <x> instanceof Object
+
+assertStaticTrue<W,Object>(w);
+assertStaticTrue<X,Object>(x);
+assertStaticTrue<Y,Object>(y);
+assertStaticTrue<Z,Object>(z);
+
+assertStaticTrue<IA,Object>(x);
+assertStaticTrue<IB,Object>(x);
+assertStaticTrue<IA,Object>(y);
+assertStaticTrue<IB,Object>(y);
+assertStaticTrue<IC,Object>(y);
+assertStaticTrue<ID,Object>(y);
+assertStaticTrue<IA,Object>(z);
+assertStaticTrue<IB,Object>(z);
+assertStaticTrue<IC,Object>(z);
+assertStaticTrue<ID,Object>(z);
+
+// Object instanceof <x>
+
+assertDynamicTrue<Object,W>(w);
+assertDynamicTrue<Object,X>(x);
+assertDynamicTrue<Object,X>(y);
+assertDynamicTrue<Object,X>(z);
+assertDynamicTrue<Object,Y>(y);
+assertDynamicTrue<Object,Y>(z);
+assertDynamicTrue<Object,Z>(z);
+
+assertDynamicTrue<Object,IA>(x);
+assertDynamicTrue<Object,IB>(x);
+assertDynamicTrue<Object,IA>(y);
+assertDynamicTrue<Object,IB>(y);
+assertDynamicTrue<Object,IC>(y);
+assertDynamicTrue<Object,ID>(y);
+assertDynamicTrue<Object,IA>(z);
+assertDynamicTrue<Object,IB>(z);
+assertDynamicTrue<Object,IC>(z);
+assertDynamicTrue<Object,ID>(z);
+
+// <class> instanceof <class>
+
+assertStaticTrue<W,W>(w);
+assertStaticFalse<W,X>(w);
+assertStaticFalse<W,Y>(w);
+assertStaticFalse<W,Z>(w);
+assertStaticFalse<X,W>(x);
+assertStaticFalse<Y,W>(y);
+assertStaticFalse<Z,W>(z);
+
+assertStaticTrue<X,X>(x);
+assertDynamicFalse<X,Y>(x);
+assertDynamicFalse<X,Z>(x);
+assertStaticTrue<X,X>(y);
+assertDynamicTrue<X,Y>(y);
+assertDynamicFalse<X,Z>(y);
+assertStaticTrue<X,X>(z);
+assertDynamicTrue<X,Y>(z);
+assertDynamicTrue<X,Z>(z);
+
+assertStaticTrue<Y,X>(y);
+assertStaticTrue<Y,Y>(y);
+assertDynamicFalse<Y,Z>(y);
+assertStaticTrue<Y,X>(z);
+assertStaticTrue<Y,Y>(z);
+assertDynamicTrue<Y,Z>(z);
+
+assertStaticTrue<Z,X>(z);
+assertStaticTrue<Z,Y>(z);
+assertStaticTrue<Z,Z>(z);
+
+// <interface> instanceof <interface>
+
+assertDynamicFalse<IA,IC>(x);
+assertDynamicFalse<IB,IC>(x);
+assertDynamicFalse<IA,ID>(x);
+assertDynamicFalse<IB,ID>(x);
+assertStaticFalse<IA,IE>(x);
+assertStaticFalse<IB,IE>(x);
+
+assertDynamicTrue<IA,IC>(y);
+assertDynamicTrue<IB,IC>(y);
+assertDynamicTrue<IA,ID>(y);
+assertDynamicTrue<IB,ID>(y);
+assertStaticFalse<IA,IE>(y);
+assertStaticFalse<IB,IE>(y);
+
+assertDynamicTrue<IA,IC>(z);
+assertDynamicTrue<IB,IC>(z);
+assertDynamicTrue<IA,ID>(z);
+assertDynamicTrue<IB,ID>(z);
+assertStaticFalse<IA,IE>(z);
+assertStaticFalse<IB,IE>(z);
+
+// <class> instanceof <interface>
+
+assertStaticTrue<X,IA>(x);
+assertStaticTrue<X,IB>(x);
+assertDynamicFalse<X,ID>(x);
+assertDynamicFalse<X,IC>(x);
+assertStaticFalse<X,IE>(x);
+assertStaticTrue<X,IA>(y);
+assertStaticTrue<X,IB>(y);
+assertDynamicTrue<X,ID>(y);
+assertDynamicTrue<X,IC>(y);
+assertStaticFalse<X,IE>(y);
+assertStaticTrue<X,IA>(z);
+assertStaticTrue<X,IB>(z);
+assertDynamicTrue<X,ID>(z);
+assertDynamicTrue<X,IC>(z);
+assertStaticFalse<X,IE>(z);
+
+assertStaticTrue<Y,IA>(y);
+assertStaticTrue<Y,IB>(y);
+assertStaticTrue<Y,ID>(y);
+assertStaticTrue<Y,IC>(y);
+assertStaticFalse<Y,IE>(y);
+assertStaticTrue<Y,IA>(z);
+assertStaticTrue<Y,IB>(z);
+assertStaticTrue<Y,ID>(z);
+assertStaticTrue<Y,IC>(z);
+assertStaticFalse<Y,IE>(z);
+
+assertStaticTrue<Z,IA>(z);
+assertStaticTrue<Z,IB>(z);
+assertStaticTrue<Z,ID>(z);
+assertStaticTrue<Z,IC>(z);
+assertStaticFalse<Z,IE>(z);
+
+// <interface> instanceof <class>
+
+assertStaticFalse<IA,W>(x);
+assertStaticFalse<IB,W>(x);
+assertStaticFalse<IA,W>(y);
+assertStaticFalse<IB,W>(y);
+assertStaticFalse<IC,W>(y);
+assertStaticFalse<ID,W>(y);
+assertStaticFalse<IA,W>(z);
+assertStaticFalse<IB,W>(z);
+assertStaticFalse<IC,W>(z);
+assertStaticFalse<ID,W>(z);
+
+assertDynamicTrue<IA,X>(x);
+assertDynamicTrue<IB,X>(x);
+assertDynamicTrue<IA,X>(y);
+assertDynamicTrue<IB,X>(y);
+assertDynamicTrue<IA,X>(z);
+assertDynamicTrue<IB,X>(z);
+
+assertDynamicTrue<IA,Y>(y);
+assertDynamicTrue<IB,Y>(y);
+assertDynamicTrue<IC,Y>(y);
+assertDynamicTrue<ID,Y>(y);
+assertDynamicTrue<IA,Y>(z);
+assertDynamicTrue<IB,Y>(z);
+assertDynamicTrue<IC,Y>(z);
+assertDynamicTrue<ID,Y>(z);
+
+assertDynamicTrue<IA,Z>(z);
+assertDynamicTrue<IB,Z>(z);
+assertDynamicTrue<IC,Z>(z);
+assertDynamicTrue<ID,Z>(z);
