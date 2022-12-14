@@ -548,6 +548,16 @@ export class Type {
 
   /** Determines the common denominator type of two types, if there is any. */
   static commonDenominator(left: Type, right: Type, signednessIsImportant: bool): Type | null {
+    if (left.isInternalReference && right.isInternalReference) {
+      let leftClass = left.getClass();
+      let rightClass = right.getClass();
+      if (leftClass && rightClass) {
+        let lubClass = Class.leastUpperBound(leftClass, rightClass);
+        if (lubClass) {
+          return left.is(TypeFlags.Nullable) || right.is(TypeFlags.Nullable) ? lubClass.type.nullableType : lubClass.type;
+        }
+      }
+    }
     if (right.isAssignableTo(left, signednessIsImportant)) return left;
     else if (left.isAssignableTo(right, signednessIsImportant)) return right;
     return null;

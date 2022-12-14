@@ -4415,6 +4415,27 @@ export class Class extends TypedElement {
     registerConcreteElement(program, this);
   }
 
+  /** Computes the least upper bound of two class types. */
+  static leastUpperBound(a: Class, b: Class): Class | null {
+    if (a == b) return a;
+    let candidates = new Set<Class>();
+    candidates.add(a);
+    candidates.add(b);
+    while (true) {
+      let aBase = a.base;
+      let bBase = b.base;
+      if (!aBase && !bBase) return null; // none
+      if (aBase) {
+        if (candidates.has(aBase)) return aBase;
+        candidates.add(a = aBase);
+      }
+      if (bBase) {
+        if (candidates.has(bBase)) return bBase;
+        candidates.add(b = bBase);
+      }
+    }
+  }
+
   /** Sets the base class. */
   setBase(base: Class): void {
     assert(!this.base);
