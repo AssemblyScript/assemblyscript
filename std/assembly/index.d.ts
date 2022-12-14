@@ -2281,6 +2281,10 @@ interface TypedPropertyDescriptor<T> {
   set?(value: T): void;
 }
 
+type Constructor =
+  (new (...args: any[]) => unknown)
+  | (abstract new (...args: any[]) => unknown);
+
 /** Annotates a method as a binary operator overload for the specified `token`. */
 declare function operator(token:
   "[]" | "[]=" | "{}" | "{}=" | "==" | "!=" | ">" | "<" | "<=" | ">=" |
@@ -2319,10 +2323,10 @@ declare namespace operator {
 declare function global(...args: any[]): any;
 
 /** Annotates a class as being unmanaged with limited capabilities. */
-declare function unmanaged(constructor: Function): void;
+declare function unmanaged(constructor: Constructor): void;
 
 /** Annotates a class as being final / non-derivable. */
-declare function final(constructor: Function): void;
+declare function final(constructor: Constructor): void;
 
 /** Annotates a method, function or constant global as always inlined. */
 declare function inline(...args: any[]): any;
