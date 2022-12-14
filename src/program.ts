@@ -4182,7 +4182,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
   /** Classes extending this class. */
-  extendees: Set<ClassPrototype> = new Set();
+  extenders: Set<ClassPrototype> = new Set();
   /** Whether this class implicitly extends `Object`. */
   implicitlyExtendsObject: bool = false;
 
@@ -4298,9 +4298,9 @@ export class Class extends TypedElement {
   prototype: ClassPrototype;
   /** Resolved type arguments. */
   typeArguments: Type[] | null;
-  /** Base class, if applicable. */
+  /** Base class, if any. */
   base: Class | null = null;
-  /** Implemented interfaces, if applicable. */
+  /** Directly implemented interfaces, if any. */
   interfaces: Set<Interface> | null = null;
   /** Contextual type arguments for fields and methods. */
   contextualTypeArguments: Map<string,Type> | null = null;
@@ -4318,9 +4318,9 @@ export class Class extends TypedElement {
   rttiFlags: u32 = 0;
   /** Wrapped type, if a wrapper for a basic type. */
   wrappedType: Type | null = null;
-  /** Classes directly extending this class. */
-  extendees: Set<Class> | null = null;
-  /** Classes implementing this interface. */
+  /** Classes directly or indirectly extending this class, if any. */
+  extenders: Set<Class> | null = null;
+  /** Classes directly or indirectly implementing this interface, if any. */
   implementers: Set<Class> | null = null;
   /** Whether the field initialization check has already been performed. */
   didCheckFieldInitialization: bool = false;
@@ -4419,9 +4419,6 @@ export class Class extends TypedElement {
   setBase(base: Class): void {
     assert(!this.base);
     this.base = base;
-    let extendees = base.extendees;
-    if (!extendees) base.extendees = extendees = new Set();
-    extendees.add(this);
 
     // Inherit contextual type arguments from base class
     let inheritedTypeArguments = base.contextualTypeArguments;
@@ -4439,6 +4436,63 @@ export class Class extends TypedElement {
         }
       }
     }
+
+    // This class and its extenders now extend each direct or indirect base class
+    base.propagateExtenderUp(this);
+    let extenders = this.extenders;
+    if (extenders) {
+      for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+        let extender = _values[i];
+        base.propagateExtenderUp(extender);
+      }
+    }
+
+    // Direct or indirect base interfaces are now implemented by this class and its extenders
+    let nextBase: Class | null = base;
+    do {
+      let baseInterfaces = nextBase.interfaces;
+      if (baseInterfaces) {
+        for (let _values = Set_values(baseInterfaces), i = 0, k = _values.length; i < k; ++i) {
+          let baseInterface = _values[i];
+          this.propagateInterfaceDown(baseInterface);
+        }
+      }
+      nextBase = nextBase.base;
+    } while (nextBase);
+  }
+
+  /** Propagates an extender to this class and its base classes. */
+  private propagateExtenderUp(extender: Class): void {
+    // Start with this class, adding the extender to it. Repeat for the class's
+    // bases that are indirectly extended by the extender.
+    let nextBase: Class | null = this;
+    do {
+      let extenders = nextBase.extenders;
+      if (!extenders) nextBase.extenders = extenders = new Set();
+      extenders.add(extender);
+      nextBase = nextBase.base;
+    } while (nextBase);
+  }
+
+  /** Propagates an interface and its base interfaces to this class and its extenders. */
+  private propagateInterfaceDown(iface: Interface): void {
+    // Start with the interface itself, adding this class and its extenders to
+    // its implementers. Repeat for the interface's bases that are indirectly
+    // implemented by means of being extended by the interface.
+    let nextIface: Interface | null = iface;
+    let extenders = this.extenders;
+    do {
+      let implementers = nextIface.implementers;
+      if (!implementers) nextIface.implementers = implementers = new Set();
+      implementers.add(this);
+      if (extenders) {
+        for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+          let extender = _values[i];
+          implementers.add(extender);
+        }
+      }
+      nextIface = <Interface | null>nextIface.base;
+    } while (nextIface);
   }
 
   /** Adds an interface. */
@@ -4446,28 +4500,53 @@ export class Class extends TypedElement {
     let interfaces = this.interfaces;
     if (!interfaces) this.interfaces = interfaces = new Set();
     interfaces.add(iface);
-    let implementers = iface.implementers;
-    if (!implementers) iface.implementers = implementers = new Set();
-    implementers.add(this);
+
+    // This class and its extenders now implement the interface and its bases
+    this.propagateInterfaceDown(iface);
   }
 
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
-    let current: Class | null = this;
-    do {
-      if (current == target) return true;
-      if (target.kind == ElementKind.Interface) {
-        let interfaces = current.interfaces;
-        if (interfaces) {
-          for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
-            let iface = _values[i];
-            if (iface.isAssignableTo(target)) return true;
-          }
-        }
+    // Q: When does the assignment in the comment below succeed?
+    if (target.isInterface) {
+      if (this.isInterface) {
+        // targetInterface = thisInterface
+        return this == target || this.extends(target);
+      } else {
+        // targetInterface = thisClass
+        return this.implements(<Interface>target);
       }
-      current = current.base;
-    } while (current);
-    return false;
+    } else {
+      if (this.isInterface) {
+        // targetClass = thisInterface
+        return target == this.program.objectInstance;
+      } else {
+        // targetClass = thisClass
+        return this == target || this.extends(target);
+      }
+    }
+  }
+
+  /** Tests if any subclass of this class is assignable to a target of the specified class type. */
+  hasSubclassAssignableTo(target: Class): bool {
+    // Q: When can the cast in the comment below succeed? (while an assignment would not)
+    if (target.isInterface) {
+      if (this.isInterface) {
+        // <TargetInterface>thisInterface
+        return this.hasImplementerImplementing(<Interface>target);
+      } else {
+        // <TargetInterface>thisClass
+        return this.hasExtenderImplementing(<Interface>target);
+      }
+    } else {
+      if (this.isInterface) {
+        // <TargetClass>thisInterface
+        return this.hasImplementer(target);
+      } else {
+        // <TargetClass>thisClass
+        return this.hasExtender(target);
+      }
+    }
   }
 
   /** Looks up the operator overload of the specified kind. */
@@ -4608,7 +4687,7 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this class extends the specified prototype. */
-  extends(prototype: ClassPrototype): bool {
+  extendsPrototype(prototype: ClassPrototype): bool {
     return this.prototype.extends(prototype);
   }
 
@@ -4627,11 +4706,11 @@ export class Class extends TypedElement {
     let current: Class = this;
     let program = this.program;
     let arrayPrototype = program.arrayPrototype;
-    if (this.extends(arrayPrototype)) {
+    if (this.extendsPrototype(arrayPrototype)) {
       return this.getTypeArgumentsTo(arrayPrototype)![0];
     }
     let staticArrayPrototype = program.staticArrayPrototype;
-    if (this.extends(staticArrayPrototype)) {
+    if (this.extendsPrototype(staticArrayPrototype)) {
       return this.getTypeArgumentsTo(staticArrayPrototype)![0];
     }
     let abvInstance = program.arrayBufferViewInstance;
@@ -4706,42 +4785,50 @@ export class Class extends TypedElement {
     return true;
   }
 
-  /** Gets all extendees of this class (that do not have the specified instance member). */
-  getAllExtendees(exceptIfMember: string | null = null, out: Set<Class> = new Set()): Set<Class> {
-    let extendees = this.extendees;
-    if (extendees) {
-      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-        let extendee = _values[i];
-        if (exceptIfMember) {
-          let instanceMembers = extendee.prototype.instanceMembers;
-          if (instanceMembers && instanceMembers.has(exceptIfMember)) continue;
-        }
-        out.add(extendee);
-        extendee.getAllExtendees(exceptIfMember, out);
-      }
-    }
-    return out;
+  /** Tests if this class or interface extends the given class or interface. */
+  extends(other: Class): bool {
+    return other.hasExtender(this);
   }
 
-  /** Gets all extendees and implementers of this class. */
-  getAllExtendeesAndImplementers(out: Set<Class> = new Set()): Set<Class> {
-    let extendees = this.extendees;
-    if (extendees) {
-      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
-        let extendee = _values[i];
-        out.add(extendee);
-        extendee.getAllExtendeesAndImplementers(out);
+  /** Tests if this class has a direct or indirect extender matching the given class. */
+  hasExtender(other: Class): bool {
+    let extenders = this.extenders;
+    return extenders != null && extenders.has(other);
+  }
+
+  /** Tests if this class has a direct or indirect extender that implements the given interface. */
+  hasExtenderImplementing(other: Interface): bool {
+    let extenders = this.extenders;
+    if (extenders) {
+      for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+        let extender = _values[i];
+        if (extender.implements(other)) return true;
       }
     }
+    return false;
+  }
+
+  /** Tests if this class directly or indirectly implements the given interface. */
+  implements(other: Interface): bool {
+    return other.hasImplementer(this);
+  }
+
+  /** Tests if this interface has a direct or indirect implementer matching the given class. */
+  hasImplementer(other: Class): bool {
+    let implementers = this.implementers;
+    return implementers != null && implementers.has(other);
+  }
+
+  /** Tests if this interface has an implementer implementing the given interface. */
+  hasImplementerImplementing(other: Interface): bool {
     let implementers = this.implementers;
     if (implementers) {
       for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
         let implementer = _values[i];
-        out.add(implementer);
-        implementer.getAllExtendeesAndImplementers(out);
+        if (implementer.implements(other)) return true;
       }
     }
-    return out;
+    return false;
   }
 }
 

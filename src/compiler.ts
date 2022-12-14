@@ -556,12 +556,18 @@ export class Compiler extends DiagnosticEmitter {
     for (let _keys = Map_keys(this.pendingInstanceOf), i = 0, k = _keys.length; i < k; ++i) {
       let elem = _keys[i];
       let name = assert(this.pendingInstanceOf.get(elem));
-      if (elem.kind == ElementKind.Class) {
-        this.finalizeInstanceOf(<Class>elem, name);
-      } else if (elem.kind == ElementKind.ClassPrototype) {
-        this.finalizeAnyInstanceOf(<ClassPrototype>elem, name);
-      } else {
-        assert(false);
+      switch (elem.kind) {
+        case ElementKind.Class:
+        case ElementKind.Interface: {
+          this.finalizeInstanceOf(<Class>elem, name);
+          break;
+        }
+        case ElementKind.ClassPrototype:
+        case ElementKind.InterfacePrototype: {
+          this.finalizeAnyInstanceOf(<ClassPrototype>elem, name);
+          break;
+        }
+        default: assert(false);
       }
     }
 
@@ -6569,11 +6575,17 @@ export class Compiler extends DiagnosticEmitter {
         }
         let classInstance = assert(overrideInstance.getBoundClassOrInterface());
         builder.addCase(classInstance.id, stmts);
-        // Also alias each extendee inheriting this exact overload
-        let extendees = classInstance.getAllExtendees(instance.declaration.name.text); // without get:/set:
-        for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
-          let extendee = _values[a];
-          builder.addCase(extendee.id, stmts);
+        // Also alias each extender inheriting this exact overload
+        let extenders = classInstance.extenders;
+        if (extenders) {
+          for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+            let extender = _values[i];
+            let instanceMembers = extender.prototype.instanceMembers;
+            if (instanceMembers && instanceMembers.has(instance.declaration.name.text)) {
+              continue; // skip those not inheriting
+            }
+            builder.addCase(extender.id, stmts);
+          }
         }
       }
     }
@@ -6581,7 +6593,7 @@ export class Compiler extends DiagnosticEmitter {
     // Call the original function if no other id matches and the method is not
     // abstract or part of an interface. Note that doing so will not catch an
     // invalid id, but can reduce code size significantly since we also don't
-    // have to add branches for extendees inheriting the original function.
+    // have to add branches for extenders inheriting the original function.
     let body: ExpressionRef;
     let instanceClass = instance.getBoundClassOrInterface();
     if (!instance.is(CommonFlags.Abstract) && !(instanceClass && instanceClass.kind == ElementKind.Interface)) {
@@ -7432,7 +7444,7 @@ export class Compiler extends DiagnosticEmitter {
     // <nullable> instanceof <nonNullable> - LHS must be != 0
     if (actualType.isNullableReference && !expectedType.isNullableReference) {
 
-      // upcast - check statically
+      // same or upcast - check statically
       if (actualType.nonNullableType.isAssignableTo(expectedType)) {
         return module.binary(
           sizeTypeRef == TypeRef.I64
@@ -7443,8 +7455,8 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-      // downcast - check dynamically
-      if (expectedType.isAssignableTo(actualType)) {
+      // potential downcast - check dynamically
+      if (actualType.nonNullableType.hasSubtypeAssignableTo(expectedType)) {
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
           if (this.options.pedantic) {
             this.pedantic(
@@ -7477,12 +7489,13 @@ export class Compiler extends DiagnosticEmitter {
     // either none or both nullable
     } else {
 
-      // upcast - check statically
+      // same or upcast - check statically
       if (actualType.isAssignableTo(expectedType)) {
         return module.maybeDropCondition(expr, module.i32(1));
+      }
 
-      // downcast - check dynamically
-      } else if (expectedType.isAssignableTo(actualType)) {
+      // potential downcast - check dynamically
+      if (actualType.hasSubtypeAssignableTo(expectedType)) {
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
           let temp = flow.getTempLocal(actualType);
           let tempIndex = temp.index;
@@ -7558,19 +7571,32 @@ export class Compiler extends DiagnosticEmitter {
         ), false // managedness is irrelevant here, isn't interrupted
       )
     );
-    let allInstances = new Set<Class>();
-    allInstances.add(instance);
-    instance.getAllExtendeesAndImplementers(allInstances);
-    for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
-      let instance = _values[i];
-      stmts.push(
-        module.br("is_instance",
-          module.binary(BinaryOp.EqI32,
-            module.local_get(1, TypeRef.I32),
-            module.i32(instance.id)
+    let allInstances: Set<Class> | null;
+    if (instance.isInterface) {
+      allInstances = instance.implementers;
+    } else {
+      allInstances = new Set();
+      allInstances.add(instance);
+      let extenders = instance.extenders;
+      if (extenders) {
+        for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+          let extender = _values[i];
+          allInstances.add(extender);
+        }
+      }
+    }
+    if (allInstances) {
+      for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
+        let instance = _values[i];
+        stmts.push(
+          module.br("is_instance",
+            module.binary(BinaryOp.EqI32,
+              module.local_get(1, TypeRef.I32),
+              module.i32(instance.id)
+            )
           )
-        )
-      );
+        );
+      }
     }
     stmts.push(
       module.return(
@@ -7599,7 +7625,7 @@ export class Compiler extends DiagnosticEmitter {
     if (classReference) {
 
       // static check
-      if (classReference.extends(prototype)) {
+      if (classReference.extendsPrototype(prototype)) {
 
         // <nullable> instanceof <PROTOTYPE> - LHS must be != 0
         if (actualType.isNullableReference) {
@@ -7688,8 +7714,24 @@ export class Compiler extends DiagnosticEmitter {
       let allInstances = new Set<Class>();
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
         let instance = _values[i];
-        allInstances.add(instance);
-        instance.getAllExtendeesAndImplementers(allInstances);
+        if (instance.isInterface) {
+          let implementers = instance.implementers;
+          if (implementers) {
+            for (let _values = Set_values(implementers), i = 0, k = _values.length; i < k; ++i) {
+              let implementer = _values[i];
+              allInstances.add(implementer);
+            }
+          }
+        } else {
+          allInstances.add(instance);
+          let extenders = instance.extenders;
+          if (extenders) {
+            for (let _values = Set_values(extenders), i = 0, k = _values.length; i < k; ++i) {
+              let extender = _values[i];
+              allInstances.add(extender);
+            }
+          }
+        }
       }
       for (let _values = Set_values(allInstances), i = 0, k = _values.length; i < k; ++i) {
         let instance = _values[i];
@@ -7946,7 +7988,7 @@ export class Compiler extends DiagnosticEmitter {
           let parameterTypes = instance.signature.parameterTypes;
           if (parameterTypes.length) {
             let first = parameterTypes[0].getClass();
-            if (first && !first.extends(tsaArrayInstance.prototype)) {
+            if (first && !first.extendsPrototype(tsaArrayInstance.prototype)) {
               arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ stringType ]));
             }
           }
@@ -8014,7 +8056,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // handle static arrays
     let contextualClass = contextualType.getClass();
-    if (contextualClass && contextualClass.extends(program.staticArrayPrototype)) {
+    if (contextualClass && contextualClass.extendsPrototype(program.staticArrayPrototype)) {
       return this.compileStaticArrayLiteral(expression, contextualType, constraints);
     }
 
@@ -8147,7 +8189,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     let program = this.program;
     let module = this.module;
-    assert(!arrayInstance.extends(program.staticArrayPrototype));
+    assert(!arrayInstance.extendsPrototype(program.staticArrayPrototype));
     let elementType = arrayInstance.getArrayValueType(); // asserts
 
     // __newArray(length, alignLog2, classId, staticBuffer)

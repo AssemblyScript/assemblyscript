@@ -506,6 +506,14 @@ export class Type {
     return this.kind == target.kind;
   }
 
+  /** Tests if this type has a subtype assignable to the target type. */
+  hasSubtypeAssignableTo(target: Type): bool {
+    let thisClass = this.getClass();
+    let targetClass = target.getClass();
+    if (!thisClass || !targetClass) return false; // TODO: what about basic types?
+    return thisClass.hasSubclassAssignableTo(targetClass);
+  }
+
   /** Tests if a value of this type can be changed to the target type using `changetype`. */
   isChangeableTo(target: Type): bool {
     // special in that it allows integer references as well

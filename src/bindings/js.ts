@@ -950,13 +950,13 @@ export class JSBuilder extends ExportsWalker {
     if (type.isInternalReference) {
       // Lift reference types
       const clazz = assert(type.getClassOrWrapper(this.program));
-      if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
+      if (clazz.extendsPrototype(this.program.arrayBufferInstance.prototype)) {
         sb.push("__liftBuffer(");
         this.needsLiftBuffer = true;
-      } else if (clazz.extends(this.program.stringInstance.prototype)) {
+      } else if (clazz.extendsPrototype(this.program.stringInstance.prototype)) {
         sb.push("__liftString(");
         this.needsLiftString = true;
-      } else if (clazz.extends(this.program.arrayPrototype)) {
+      } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__liftArray(");
         this.makeLiftFromMemory(valueType, sb);
@@ -964,7 +964,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push(valueType.alignLog2.toString());
         sb.push(", ");
         this.needsLiftArray = true;
-      } else if (clazz.extends(this.program.staticArrayPrototype)) {
+      } else if (clazz.extendsPrototype(this.program.staticArrayPrototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__liftStaticArray(");
         this.makeLiftFromMemory(valueType, sb);
@@ -972,7 +972,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push(valueType.alignLog2.toString());
         sb.push(", ");
         this.needsLiftStaticArray = true;
-      } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {
+      } else if (clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)) {
         sb.push("__liftTypedArray(");
         if (clazz.name == "Uint64Array") {
           sb.push("BigUint64Array");
@@ -1021,13 +1021,13 @@ export class JSBuilder extends ExportsWalker {
     if (type.isInternalReference) {
       // Lower reference types
       const clazz = assert(type.getClassOrWrapper(this.program));
-      if (clazz.extends(this.program.arrayBufferInstance.prototype)) {
+      if (clazz.extendsPrototype(this.program.arrayBufferInstance.prototype)) {
         sb.push("__lowerBuffer(");
         this.needsLowerBuffer = true;
-      } else if (clazz.extends(this.program.stringInstance.prototype)) {
+      } else if (clazz.extendsPrototype(this.program.stringInstance.prototype)) {
         sb.push("__lowerString(");
         this.needsLowerString = true;
-      } else if (clazz.extends(this.program.arrayPrototype)) {
+      } else if (clazz.extendsPrototype(this.program.arrayPrototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__lowerArray(");
         this.makeLowerToMemory(valueType, sb);
@@ -1037,7 +1037,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push(clazz.getArrayValueType().alignLog2.toString());
         sb.push(", ");
         this.needsLowerArray = true;
-      } else if (clazz.extends(this.program.staticArrayPrototype)) {
+      } else if (clazz.extendsPrototype(this.program.staticArrayPrototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__lowerStaticArray(");
         this.makeLowerToMemory(valueType, sb);
@@ -1047,7 +1047,7 @@ export class JSBuilder extends ExportsWalker {
         sb.push(valueType.alignLog2.toString());
         sb.push(", ");
         this.needsLowerStaticArray = true;
-      } else if (clazz.extends(this.program.arrayBufferViewInstance.prototype)) {
+      } else if (clazz.extendsPrototype(this.program.arrayBufferViewInstance.prototype)) {
         let valueType = clazz.getArrayValueType();
         sb.push("__lowerTypedArray(");
         if (valueType == Type.u64) {
@@ -1079,7 +1079,7 @@ export class JSBuilder extends ExportsWalker {
         this.needsLowerInternref = true;
       }
       sb.push(name);
-      if (clazz.extends(this.program.staticArrayPrototype)) {
+      if (clazz.extendsPrototype(this.program.staticArrayPrototype)) {
         // optional last argument for __lowerStaticArray
         let valueType = clazz.getArrayValueType();
         if (valueType.isNumericValue) {
@@ -1397,16 +1397,16 @@ export function liftRequiresExportRuntime(type: Type): bool {
   let program = clazz.program;
   // flat collections lift via memory copy
   if (
-    clazz.extends(program.arrayBufferInstance.prototype) ||
-    clazz.extends(program.stringInstance.prototype) ||
-    clazz.extends(program.arrayBufferViewInstance.prototype)
+    clazz.extendsPrototype(program.arrayBufferInstance.prototype) ||
+    clazz.extendsPrototype(program.stringInstance.prototype) ||
+    clazz.extendsPrototype(program.arrayBufferViewInstance.prototype)
   ) {
     return false;
   }
   // nested collections lift depending on element type
   if (
-    clazz.extends(program.arrayPrototype) ||
-    clazz.extends(program.staticArrayPrototype)
+    clazz.extendsPrototype(program.arrayPrototype) ||
+    clazz.extendsPrototype(program.staticArrayPrototype)
   ) {
     return liftRequiresExportRuntime(clazz.getArrayValueType());
   }
@@ -1428,11 +1428,11 @@ export function lowerRequiresExportRuntime(type: Type): bool {
   // lowers using __new
   let program = clazz.program;
   if (
-    clazz.extends(program.arrayBufferInstance.prototype) ||
-    clazz.extends(program.stringInstance.prototype) ||
-    clazz.extends(program.arrayBufferViewInstance.prototype) ||
-    clazz.extends(program.arrayPrototype) ||
-    clazz.extends(program.staticArrayPrototype)
+    clazz.extendsPrototype(program.arrayBufferInstance.prototype) ||
+    clazz.extendsPrototype(program.stringInstance.prototype) ||
+    clazz.extendsPrototype(program.arrayBufferViewInstance.prototype) ||
+    clazz.extendsPrototype(program.arrayPrototype) ||
+    clazz.extendsPrototype(program.staticArrayPrototype)
   ) {
     return true;
   }
