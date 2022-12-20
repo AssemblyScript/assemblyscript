@@ -65,12 +65,12 @@ export const enum TypeKind {
   /** A 128-bit vector. */
   V128,
 
-  // references
+  // references (keep in same order as in Binaryen)
 
-  /** Function reference. */
-  Funcref,
   /** External reference. */
   Externref,
+  /** Function reference. */
+  Funcref,
   /** Any reference. */
   Anyref,
   /** Equatable reference. */
@@ -546,18 +546,40 @@ export class Type {
     return true;
   }
 
-  /** Determines the common denominator type of two types, if there is any. */
-  static commonDenominator(left: Type, right: Type, signednessIsImportant: bool): Type | null {
-    let leftClass = left.getClass();
-    let rightClass = right.getClass();
-    if (leftClass && rightClass) {
-      let lubClass = Class.leastUpperBound(leftClass, rightClass);
-      if (lubClass) {
-        return left.is(TypeFlags.Nullable) || right.is(TypeFlags.Nullable) ? lubClass.type.nullableType : lubClass.type;
+  /** Computes the common type of a binary-like expression, if any. */
+  static commonType(
+    /** LHS type. */
+    left: Type,
+    /** RHS type. */
+    right: Type,
+    /** Contextual type, if any. */
+    contextualType: Type = Type.auto,
+    /** Whether signedness is relevant. */
+    signednessIsRelevant: bool = false
+  ): Type | null {
+    // Compute LUB of internal reference types (classes)
+    if (left.isInternalReference) {
+      if (!right.isInternalReference) return null;
+      // Prefer contextual type if meaningful
+      if (contextualType != Type.void && left.isAssignableTo(contextualType) && right.isAssignableTo(contextualType)) {
+        return contextualType;
       }
+      let leftClass = left.getClass();
+      let rightClass = right.getClass();
+      if (leftClass && rightClass) {
+        let lubClass = Class.leastUpperBound(leftClass, rightClass);
+        if (lubClass) {
+          let ret = left.is(TypeFlags.Nullable) || right.is(TypeFlags.Nullable) ? lubClass.type.asNullable() : lubClass.type;
+          return ret;
+        }
+      }
+    } else if (right.isInternalReference) {
+      return null;
     }
-    if (right.isAssignableTo(left, signednessIsImportant)) return left;
-    else if (left.isAssignableTo(right, signednessIsImportant)) return right;
+    // TODO: External reference types (needs nullability)
+    // Otherwise do a trivial check
+    if (right.isAssignableTo(left, signednessIsRelevant)) return left;
+    else if (left.isAssignableTo(right, signednessIsRelevant)) return right;
     return null;
   }
 

@@ -83,7 +83,8 @@ import {
   Type,
   Signature,
   typesToString,
-  TypeKind
+  TypeKind,
+  TypeFlags
 } from "./types";
 
 import {
@@ -2070,12 +2071,12 @@ export class Resolver extends DiagnosticEmitter {
         }
         let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
         if (!rightType) return null;
-        let commonType = Type.commonDenominator(leftType, rightType, false);
+        let commonType = Type.commonType(leftType, rightType, ctxType);
         if (!commonType) {
           if (reportMode == ReportMode.Report) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-              node.range, leftType.toString(), rightType.toString()
+              node.range, operatorTokenToString(operator), leftType.toString(), rightType.toString()
             );
           }
         }
@@ -2120,7 +2121,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         let rightType = this.resolveExpression(right, ctxFlow, ctxType, reportMode);
         if (!rightType) return null;
-        let commonType = Type.commonDenominator(leftType, rightType, false);
+        let commonType = Type.commonType(leftType, rightType, ctxType);
         if (!commonType || !commonType.isIntegerValue) {
           if (reportMode == ReportMode.Report) {
             this.error(
@@ -2132,11 +2133,43 @@ export class Resolver extends DiagnosticEmitter {
         return commonType;
       }
 
-      // logical: result is LHS (RHS is converted to LHS), not supporting overloads
+      // logical
 
-      case Token.Ampersand_Ampersand:
+      case Token.Ampersand_Ampersand: {
+        let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftType) return null;
+        let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
+        if (!rightType) return null;
+        let commonType = Type.commonType(leftType, rightType, ctxType);
+        if (!commonType) {
+          if (reportMode == ReportMode.Report) {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              node.range, "&&", leftType.toString(), rightType.toString()
+            );
+          }
+        }
+        return commonType;
+      }
       case Token.Bar_Bar: {
-        return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
+        if (!leftType) return null;
+        let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
+        if (!rightType) return null;
+        let commonType = Type.commonType(leftType, rightType, ctxType);
+        if (!commonType) {
+          if (reportMode == ReportMode.Report) {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              node.range, "||", leftType.toString(), rightType.toString()
+            );
+          }
+          return null;
+        }
+        // `LHS || RHS` can only be null if both LHS and RHS are null
+        return leftType.is(TypeFlags.Nullable) && rightType.is(TypeFlags.Nullable)
+          ? commonType
+          : commonType.nonNullableType;
       }
     }
     assert(false);
@@ -2317,7 +2350,7 @@ export class Resolver extends DiagnosticEmitter {
               if (!currentType) return null;
               if (elementType == Type.auto) elementType = currentType;
               else if (currentType != elementType) {
-                let commonType = Type.commonDenominator(elementType, currentType, false);
+                let commonType = Type.commonType(elementType, currentType, elementType);
                 if (commonType) elementType = commonType;
                 // otherwise triggers error on compilation
               }
@@ -2574,7 +2607,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!thenType) return null;
     let elseType = this.resolveExpression(node.ifElse, ctxFlow, thenType, reportMode);
     if (!elseType) return null;
-    let commonType = Type.commonDenominator(thenType, elseType, false);
+    let commonType = Type.commonType(thenType, elseType, ctxType);
     if (!commonType) {
       if (reportMode == ReportMode.Report) {
         this.error(

@@ -3767,7 +3767,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        commonType = Type.commonDenominator(leftType, rightType, true);
+        commonType = Type.commonType(leftType, rightType, contextualType, true);
         if (!commonType || !commonType.isNumericValue) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -3802,7 +3802,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        commonType = Type.commonDenominator(leftType, rightType, true);
+        commonType = Type.commonType(leftType, rightType, contextualType, true);
         if (!commonType || !commonType.isNumericValue) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -3837,7 +3837,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        commonType = Type.commonDenominator(leftType, rightType, true);
+        commonType = Type.commonType(leftType, rightType, contextualType, true);
         if (!commonType || !commonType.isNumericValue) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -3872,7 +3872,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        commonType = Type.commonDenominator(leftType, rightType, true);
+        commonType = Type.commonType(leftType, rightType, contextualType, true);
         if (!commonType || !commonType.isNumericValue) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -3909,7 +3909,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        commonType = Type.commonDenominator(leftType, rightType, false);
+        commonType = Type.commonType(leftType, rightType, contextualType);
         if (!commonType) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -3961,7 +3961,7 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        commonType = Type.commonDenominator(leftType, rightType, false);
+        commonType = Type.commonType(leftType, rightType, contextualType);
         if (!commonType) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4026,7 +4026,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4071,7 +4071,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !leftType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4116,7 +4116,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4161,7 +4161,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4206,7 +4206,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4251,7 +4251,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4378,7 +4378,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !commonType.isIntegerValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4423,7 +4423,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !commonType.isIntegerValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4468,7 +4468,7 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          commonType = Type.commonDenominator(leftType, rightType, false);
+          commonType = Type.commonType(leftType, rightType, contextualType);
           if (!commonType || !commonType.isIntegerValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4525,8 +4525,21 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = Type.bool;
 
         } else {
-          rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.ConvImplicit);
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
           rightType = this.currentType;
+          commonType = Type.commonType(leftType, rightType, contextualType);
+          if (!commonType) {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "&&", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return module.unreachable();
+          }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
 
           // simplify if copying left is trivial
           if (expr = module.tryCopyTrivialExpression(leftExpr)) {
@@ -4550,7 +4563,7 @@ export class Compiler extends DiagnosticEmitter {
           flow.mergeBranch(rightFlow); // LHS && RHS -> RHS conditionally executes
           flow.noteThen(expr, rightFlow); // LHS && RHS == true -> RHS always executes
           this.currentFlow = flow;
-          this.currentType = leftType;
+          this.currentType = commonType;
         }
         break;
       }
@@ -4591,8 +4604,22 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = Type.bool;
 
         } else {
-          rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.ConvImplicit);
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
           rightType = this.currentType;
+          commonType = Type.commonType(leftType, rightType, contextualType);
+          if (!commonType) {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "||", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return module.unreachable();
+          }
+          let possiblyNull = leftType.is(TypeFlags.Nullable) && rightType.is(TypeFlags.Nullable);
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
 
           // simplify if copying left is trivial
           if (expr = module.tryCopyTrivialExpression(leftExpr)) {
@@ -4617,7 +4644,9 @@ export class Compiler extends DiagnosticEmitter {
           flow.mergeBranch(rightFlow); // LHS || RHS -> RHS conditionally executes
           flow.noteElse(expr, rightFlow); // LHS || RHS == false -> RHS always executes
           this.currentFlow = flow;
-          this.currentType = leftType;
+          this.currentType = possiblyNull
+            ? commonType
+            : commonType.nonNullableType;
         }
         break;
       }
@@ -8933,7 +8962,7 @@ export class Compiler extends DiagnosticEmitter {
 
   private compileTernaryExpression(
     expression: TernaryExpression,
-    ctxType: Type,
+    contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
     let module = this.module;
@@ -8946,24 +8975,24 @@ export class Compiler extends DiagnosticEmitter {
     // FIXME: skips common denominator, inconsistently picking branch type
     let condKind = this.evaluateCondition(condExprTrueish);
     if (condKind == ConditionKind.True) {
-      return module.maybeDropCondition(condExprTrueish, this.compileExpression(ifThen, ctxType));
+      return module.maybeDropCondition(condExprTrueish, this.compileExpression(ifThen, contextualType));
     }
     if (condKind == ConditionKind.False) {
-      return module.maybeDropCondition(condExprTrueish, this.compileExpression(ifElse, ctxType));
+      return module.maybeDropCondition(condExprTrueish, this.compileExpression(ifElse, contextualType));
     }
 
     let outerFlow = this.currentFlow;
     let ifThenFlow = outerFlow.forkThen(condExpr);
     this.currentFlow = ifThenFlow;
-    let ifThenExpr = this.compileExpression(ifThen, ctxType);
+    let ifThenExpr = this.compileExpression(ifThen, contextualType);
     let ifThenType = this.currentType;
 
     let ifElseFlow = outerFlow.forkElse(condExpr);
     this.currentFlow = ifElseFlow;
-    let ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType);
+    let ifElseExpr = this.compileExpression(ifElse, contextualType == Type.auto ? ifThenType : contextualType);
     let ifElseType = this.currentType;
 
-    if (ctxType == Type.void) { // values, including type mismatch, are irrelevant
+    if (contextualType == Type.void) { // values, including type mismatch, are irrelevant
       if (ifThenType != Type.void) {
         ifThenExpr = module.drop(ifThenExpr);
         ifThenType = Type.void;
@@ -8974,13 +9003,13 @@ export class Compiler extends DiagnosticEmitter {
       }
       this.currentType = Type.void;
     } else {
-      let commonType = Type.commonDenominator(ifThenType, ifElseType, false);
+      let commonType = Type.commonType(ifThenType, ifElseType, contextualType);
       if (!commonType) {
         this.error(
           DiagnosticCode.Type_0_is_not_assignable_to_type_1,
           ifElse.range, ifElseType.toString(), ifThenType.toString()
         );
-        this.currentType = ctxType;
+        this.currentType = contextualType;
         return module.unreachable();
       }
       ifThenExpr = this.convertExpression(ifThenExpr, ifThenType, commonType, false, ifThen);
