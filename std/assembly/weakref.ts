@@ -21,13 +21,16 @@ export class WeakRef<T> {
   constructor(value: T) {
     assert(isReference<T>() && !isNullable<T>());
 
-    const ref = changetype<usize>(value);
-    const cookie = CURRENT_COOKIE;
-    ALL_REFERENCES.set(ref, cookie);
-    REGISTRY.register(ref, ref);
+    this.ref = changetype<usize>(value);
 
-    this.ref = ref;
-    this.cookie = cookie;
+    if (ALL_REFERENCES.has(this.ref)) {
+      this.cookie = ALL_REFERENCES.get(this.ref);
+    } else {
+      this.cookie = CURRENT_COOKIE;
+      ALL_REFERENCES.set(this.ref, this.cookie);
+      // Avoid creating many variances of register
+      REGISTRY.register(this.ref, this.ref);
+    }
   }
 
   deref(): T | null {

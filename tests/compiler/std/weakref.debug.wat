@@ -9,7 +9,6 @@
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/weakref/CURRENT_COOKIE (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -27,18 +26,17 @@
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/weakref/ALL_REFERENCES (mut i32) (i32.const 0))
+ (global $~lib/weakref/CURRENT_COOKIE (mut i32) (i32.const 0))
  (global $~lib/finalizationregistry/ALL_REGISTRIES (mut i32) (i32.const 0))
  (global $~lib/finalizationregistry/INITIALIZED (mut i32) (i32.const 0))
  (global $~lib/finalizationregistry/PREVIOUS_FINALIZER (mut i32) (i32.const 0))
  (global $~lib/weakref/REGISTRY (mut i32) (i32.const 0))
- (global $std/weakref/weakref (mut i32) (i32.const 0))
  (global $std/weakref/globalRefs i32 (i32.const 800))
- (global $std/weakref/weakref2 (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 880))
- (global $~lib/memory/__data_end i32 (i32.const 932))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33700))
- (global $~lib/memory/__heap_base i32 (i32.const 33700))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1008))
+ (global $~lib/memory/__data_end i32 (i32.const 1060))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33828))
+ (global $~lib/memory/__heap_base i32 (i32.const 33828))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -50,19 +48,25 @@
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 412) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 460) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 556) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 588) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t\00\00\00\00\00\00\00\00\00")
- (data (i32.const 652) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 524) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 588) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 636) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 668) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 700) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00s\00t\00d\00/\00w\00e\00a\00k\00r\00e\00f\00.\00t\00s\00")
  (data (i32.const 748) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 780) ",\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\10\00\00\00\00\03\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 828) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 880) "\0c\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00\10\01\02\00\00\00\00\00\00\00\00\00\10\01\02\00\00\00\00\00\02A\00\00")
+ (data (i32.const 876) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1008) "\0c\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00\10\01\02\00\00\00\00\00\00\00\00\00\10\01\02\00\00\00\00\00\02A\00\00")
  (table $0 3 3 funcref)
  (elem $0 (i32.const 1) $~lib/finalizationregistry/BaseRegistry.finalizeAll $start:~lib/weakref~anonymous|0)
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/weakref/WeakRef<std/weakref/Dummy>#set:ref (type $i32_i32_=>_none) (param $this i32) (param $ref i32)
+  local.get $this
+  local.get $ref
+  i32.store $0
+ )
  (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $nextWithColor i32)
   local.get $this
   local.get $nextWithColor
@@ -2368,6 +2372,10 @@
   local.get $entriesCount
   i32.store $0 offset=20
  )
+ (func $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
  (func $~lib/util/hash/HASH<usize> (type $i32_=>_i32) (param $key i32) (result i32)
   (local $key|1 i32)
   (local $len i32)
@@ -2500,6 +2508,51 @@
   i32.const 0
   return
  )
+ (func $~lib/map/Map<usize,u32>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,u32>#find
+  i32.const 0
+  i32.ne
+  return
+ )
+ (func $~lib/map/MapEntry<usize,u32>#get:value (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/map/Map<usize,u32>#get (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  (local $entry i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,u32>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   i32.const 544
+   i32.const 608
+   i32.const 105
+   i32.const 17
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<usize,u32>#get:value
+  return
+ )
+ (func $~lib/weakref/WeakRef<std/weakref/Dummy>#set:cookie (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  local.get $this
+  local.get $cookie
+  i32.store $0 offset=4
+ )
+ (func $~lib/weakref/WeakRef<std/weakref/Dummy>#get:cookie (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
  (func $~lib/map/MapEntry<usize,u32>#set:value (type $i32_i32_=>_none) (param $this i32) (param $value i32)
   local.get $this
   local.get $value
@@ -2525,10 +2578,6 @@
   local.get $this
   local.get $key
   i32.store $0
- )
- (func $~lib/map/MapEntry<usize,u32>#get:value (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=4
  )
  (func $~lib/map/MapEntry<usize,u32>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
   local.get $this
@@ -3118,56 +3167,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/weakref/WeakRef<std/weakref/Dummy>#set:ref (type $i32_i32_=>_none) (param $this i32) (param $ref i32)
-  local.get $this
-  local.get $ref
-  i32.store $0
- )
- (func $~lib/weakref/WeakRef<std/weakref/Dummy>#set:cookie (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
-  local.get $this
-  local.get $cookie
-  i32.store $0 offset=4
- )
- (func $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0
- )
- (func $~lib/map/Map<usize,u32>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
-  local.get $this
-  local.get $key
-  local.get $key
-  call $~lib/util/hash/HASH<usize>
-  call $~lib/map/Map<usize,u32>#find
-  i32.const 0
-  i32.ne
-  return
- )
- (func $~lib/map/Map<usize,u32>#get (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
-  (local $entry i32)
-  local.get $this
-  local.get $key
-  local.get $key
-  call $~lib/util/hash/HASH<usize>
-  call $~lib/map/Map<usize,u32>#find
-  local.set $entry
-  local.get $entry
-  i32.eqz
-  if
-   i32.const 608
-   i32.const 672
-   i32.const 105
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $entry
-  call $~lib/map/MapEntry<usize,u32>#get:value
-  return
- )
- (func $~lib/weakref/WeakRef<std/weakref/Dummy>#get:cookie (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=4
- )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
   i32.const 0
   drop
@@ -3447,8 +3446,8 @@
   local.get $entry
   i32.eqz
   if
+   i32.const 544
    i32.const 608
-   i32.const 672
    i32.const 105
    i32.const 17
    call $~lib/builtins/abort
@@ -3575,21 +3574,7 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
-  global.get $std/weakref/weakref
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
   global.get $std/weakref/globalRefs
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
-  global.get $std/weakref/weakref2
   local.tee $1
   if
    local.get $1
@@ -3602,7 +3587,10 @@
   i32.const 432
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 608
+  i32.const 896
+  local.get $0
+  call $~lib/rt/itcms/__visit
+  i32.const 544
   local.get $0
   call $~lib/rt/itcms/__visit
   i32.const 32
@@ -3855,8 +3843,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33728
-   i32.const 33776
+   i32.const 33856
+   i32.const 33904
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4087,7 +4075,7 @@
   if
    global.get $~lib/rt/__finalize
    global.set $~lib/finalizationregistry/PREVIOUS_FINALIZER
-   i32.const 544
+   i32.const 656
    local.set $2
    global.get $~lib/memory/__stack_pointer
    local.get $2
@@ -4162,9 +4150,7 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/weakref/WeakRef<std/weakref/Dummy>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $value i32) (result i32)
-  (local $ref i32)
-  (local $cookie i32)
-  (local $4 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -4192,42 +4178,65 @@
   i32.const 0
   i32.eqz
   drop
+  local.get $this
   local.get $value
-  local.set $ref
-  global.get $~lib/weakref/CURRENT_COOKIE
-  local.set $cookie
-  global.get $~lib/weakref/ALL_REFERENCES
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0 offset=4
-  local.get $4
-  local.get $ref
-  local.get $cookie
-  call $~lib/map/Map<usize,u32>#set
-  drop
-  global.get $~lib/weakref/REGISTRY
-  local.set $4
-  global.get $~lib/memory/__stack_pointer
-  local.get $4
-  i32.store $0 offset=4
-  local.get $4
-  local.get $ref
-  local.get $ref
-  call $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize>
-  local.get $this
-  local.get $ref
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#set:ref
+  global.get $~lib/weakref/ALL_REFERENCES
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
   local.get $this
-  local.get $cookie
-  call $~lib/weakref/WeakRef<std/weakref/Dummy>#set:cookie
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref
+  call $~lib/map/Map<usize,u32>#has
+  if
+   local.get $this
+   global.get $~lib/weakref/ALL_REFERENCES
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store $0 offset=4
+   local.get $2
+   local.get $this
+   call $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref
+   call $~lib/map/Map<usize,u32>#get
+   call $~lib/weakref/WeakRef<std/weakref/Dummy>#set:cookie
+  else
+   local.get $this
+   global.get $~lib/weakref/CURRENT_COOKIE
+   call $~lib/weakref/WeakRef<std/weakref/Dummy>#set:cookie
+   global.get $~lib/weakref/ALL_REFERENCES
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store $0 offset=4
+   local.get $2
+   local.get $this
+   call $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref
+   local.get $this
+   call $~lib/weakref/WeakRef<std/weakref/Dummy>#get:cookie
+   call $~lib/map/Map<usize,u32>#set
+   drop
+   global.get $~lib/weakref/REGISTRY
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store $0 offset=4
+   local.get $2
+   local.get $this
+   call $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref
+   local.get $this
+   call $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref
+   call $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize>
+  end
   local.get $this
-  local.set $4
+  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $2
  )
  (func $std/weakref/produceDummy (type $none_=>_i32) (result i32)
   (local $0 i32)
@@ -4314,7 +4323,7 @@
   end
   unreachable
  )
- (func $std/weakref/makeDummy (type $none_=>_i32) (result i32)
+ (func $std/weakref/makeRefencedDummy (type $none_=>_i32) (result i32)
   (local $instance i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -4350,18 +4359,57 @@
   local.get $1
   return
  )
- (func $start:std/weakref (type $none_=>_none)
+ (func $std/weakref/grabGlobalRef (type $none_=>_i32) (result i32)
   (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store $0
+  i32.const 0
+  i32.store $0
+  i32.const 0
+  global.get $std/weakref/globalRefs
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<std/weakref/Dummy>#__get
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store $0
+  local.get $0
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
+  return
+ )
+ (func $start:std/weakref (type $none_=>_none)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 28
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.const 28
+  memory.fill $0
   memory.size $0
   i32.const 16
   i32.shl
@@ -4383,22 +4431,19 @@
   call $~lib/map/Map<usize,u32>#constructor
   global.set $~lib/weakref/ALL_REFERENCES
   i32.const 0
-  i32.const 576
-  local.set $2
+  i32.const 688
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $7
   i32.store $0
-  local.get $2
+  local.get $7
   call $~lib/finalizationregistry/FinalizationRegistry<usize>#constructor
   global.set $~lib/weakref/REGISTRY
-  call $std/weakref/produceDummy
-  global.set $std/weakref/weakref
-  global.get $std/weakref/weakref
-  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  call $std/weakref/produceDummy
+  local.tee $0
   i32.store $0 offset=4
-  local.get $2
+  local.get $0
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
   i32.ne
@@ -4406,18 +4451,13 @@
   if
    i32.const 0
    i32.const 720
-   i32.const 10
-   i32.const 1
+   i32.const 11
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   call $~lib/rt/itcms/__collect
-  global.get $std/weakref/weakref
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0 offset=4
-  local.get $2
+  local.get $0
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
   i32.eq
@@ -4425,19 +4465,16 @@
   if
    i32.const 0
    i32.const 720
-   i32.const 12
-   i32.const 1
+   i32.const 13
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/weakref/makeDummy
-  global.set $std/weakref/weakref2
-  global.get $std/weakref/weakref2
-  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0 offset=4
-  local.get $2
+  call $std/weakref/makeRefencedDummy
+  local.tee $3
+  i32.store $0 offset=8
+  local.get $3
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
   i32.ne
@@ -4445,18 +4482,13 @@
   if
    i32.const 0
    i32.const 720
-   i32.const 25
-   i32.const 1
+   i32.const 28
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   call $~lib/rt/itcms/__collect
-  global.get $std/weakref/weakref2
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0 offset=4
-  local.get $2
+  local.get $3
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
   i32.ne
@@ -4464,26 +4496,21 @@
   if
    i32.const 0
    i32.const 720
-   i32.const 29
-   i32.const 1
+   i32.const 32
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   global.get $std/weakref/globalRefs
-  local.set $2
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0 offset=4
-  local.get $2
+  local.get $7
+  i32.store $0 offset=12
+  local.get $7
   i32.const 0
   call $~lib/array/Array<std/weakref/Dummy>#set:length
   call $~lib/rt/itcms/__collect
-  global.get $std/weakref/weakref2
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store $0 offset=4
-  local.get $2
+  local.get $3
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
   i32.eq
@@ -4491,13 +4518,139 @@
   if
    i32.const 0
    i32.const 720
-   i32.const 33
-   i32.const 1
+   i32.const 36
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  call $std/weakref/makeRefencedDummy
+  local.tee $4
+  i32.store $0 offset=16
+  global.get $~lib/memory/__stack_pointer
+  call $std/weakref/produceDummy
+  local.tee $5
+  i32.store $0 offset=20
+  local.get $4
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 51
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $5
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 52
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  call $~lib/rt/itcms/__collect
+  local.get $4
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 55
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $5
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 56
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  call $std/weakref/grabGlobalRef
+  local.tee $6
+  i32.store $0 offset=24
+  local.get $4
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 59
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $6
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 60
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $std/weakref/globalRefs
+  local.set $7
+  global.get $~lib/memory/__stack_pointer
+  local.get $7
+  i32.store $0 offset=12
+  local.get $7
+  i32.const 0
+  call $~lib/array/Array<std/weakref/Dummy>#set:length
+  call $~lib/rt/itcms/__collect
+  local.get $4
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 65
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $6
+  call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 66
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 28
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -4904,5 +5057,62 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $~lib/array/Array<std/weakref/Dummy>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+  (local $value i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<std/weakref/Dummy>#get:length_
+  i32.ge_u
+  if
+   i32.const 224
+   i32.const 848
+   i32.const 114
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  call $~lib/array/Array<std/weakref/Dummy>#get:dataStart
+  local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load $0
+  local.tee $value
+  i32.store $0
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  local.get $value
+  i32.eqz
+  if
+   i32.const 896
+   i32.const 848
+   i32.const 118
+   i32.const 40
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $value
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
  )
 )
