@@ -2924,7 +2924,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize> (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#register<std/weakref/Dummy> (type $i32_i32_i32_=>_none) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3383,6 +3383,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -3406,28 +3407,28 @@
   i32.const 8
   i32.const 5
   call $~lib/rt/itcms/__new
-  local.tee $2
+  local.tee $4
   i32.store $0
-  local.get $2
+  local.get $4
   i32.const 0
   i32.store $0
-  local.get $2
+  local.get $4
   i32.const 0
   i32.store $0 offset=4
-  local.get $2
+  local.get $4
   local.get $0
   i32.store $0
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/weakref/ALL_REFERENCES
-  local.tee $0
+  local.tee $1
   i32.store $0 offset=4
-  local.get $0
+  local.get $1
   i32.load $0
-  local.get $0
+  local.get $1
   i32.load $0 offset=4
-  local.get $2
+  local.get $4
   i32.load $0
-  local.tee $3
+  local.tee $2
   i32.const -1028477379
   i32.mul
   i32.const 374761397
@@ -3436,22 +3437,22 @@
   i32.rotl
   i32.const 668265263
   i32.mul
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   i32.const 15
   i32.shr_u
   i32.xor
   i32.const -2048144777
   i32.mul
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   i32.const 13
   i32.shr_u
   i32.xor
   i32.const -1028477379
   i32.mul
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   i32.const 16
   i32.shr_u
   i32.xor
@@ -3460,77 +3461,76 @@
   i32.shl
   i32.add
   i32.load $0
-  local.set $0
+  local.set $1
   block $__inlined_func$~lib/map/Map<usize,u32>#find
    loop $while-continue|0
-    local.get $0
+    local.get $1
     if
-     local.get $0
+     local.get $1
      i32.load $0 offset=8
-     local.tee $1
+     local.tee $3
      i32.const 1
      i32.and
      if (result i32)
       i32.const 0
      else
-      local.get $0
+      local.get $1
       i32.load $0
-      local.get $3
+      local.get $2
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<usize,u32>#find
-     local.get $1
+     local.get $3
      i32.const -2
      i32.and
-     local.set $0
+     local.set $1
      br $while-continue|0
     end
    end
    i32.const 0
-   local.set $0
+   local.set $1
   end
-  local.get $0
+  local.get $1
   if
    global.get $~lib/memory/__stack_pointer
    global.get $~lib/weakref/ALL_REFERENCES
    local.tee $0
    i32.store $0 offset=4
-   local.get $2
+   local.get $4
    local.get $0
-   local.get $2
+   local.get $4
    i32.load $0
    call $~lib/map/Map<usize,u32>#get
    i32.store $0 offset=4
   else
-   local.get $2
+   local.get $4
    global.get $~lib/weakref/CURRENT_COOKIE
    i32.store $0 offset=4
    global.get $~lib/memory/__stack_pointer
    global.get $~lib/weakref/ALL_REFERENCES
-   local.tee $0
+   local.tee $1
    i32.store $0 offset=4
-   local.get $0
-   local.get $2
+   local.get $1
+   local.get $4
    i32.load $0
-   local.get $2
+   local.get $4
    i32.load $0 offset=4
    call $~lib/map/Map<usize,u32>#set
    global.get $~lib/memory/__stack_pointer
    global.get $~lib/weakref/REGISTRY
-   local.tee $0
+   local.tee $1
    i32.store $0 offset=4
+   local.get $1
    local.get $0
-   local.get $2
+   local.get $4
    i32.load $0
-   local.get $2
-   i32.load $0
-   call $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize>
+   call $~lib/finalizationregistry/FinalizationRegistry<usize>#register<std/weakref/Dummy>
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
  )
  (func $std/weakref/produceDummy (type $none_=>_i32) (result i32)
   (local $0 i32)

@@ -43,6 +43,8 @@ export class FinalizationRegistry<T> extends BaseRegistry {
   }
 
   register<U>(key: U, value: T): void {
+    assert(isManaged<U>());
+
     const ptr = changetype<usize>(key);
     if (this.entries.has(ptr)) { return; }
 
@@ -58,6 +60,8 @@ export class FinalizationRegistry<T> extends BaseRegistry {
   }
 
   unregister<U>(key: U): bool {
+    assert(isManaged<U>());
+
     return this.entries.delete(changetype<usize>(key));
   }
 

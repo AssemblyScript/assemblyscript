@@ -4778,7 +4778,7 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize> (type $i32_i32_i32_=>_none) (param $this i32) (param $key i32) (param $value i32)
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#register<std/weakref/Dummy> (type $i32_i32_i32_=>_none) (param $this i32) (param $key i32) (param $value i32)
   (local $ptr i32)
   (local $registries i32)
   (local $5 i32)
@@ -4793,6 +4793,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0 offset=8
+  i32.const 1
+  drop
   local.get $key
   local.set $ptr
   local.get $this
@@ -4900,8 +4902,7 @@
   local.get $this
   i32.const 0
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#set:cookie
-  i32.const 0
-  i32.eqz
+  i32.const 1
   drop
   local.get $this
   local.get $value
@@ -4949,11 +4950,10 @@
    local.get $2
    i32.store $0 offset=4
    local.get $2
+   local.get $value
    local.get $this
    call $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref
-   local.get $this
-   call $~lib/weakref/WeakRef<std/weakref/Dummy>#get:ref
-   call $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize>
+   call $~lib/finalizationregistry/FinalizationRegistry<usize>#register<std/weakref/Dummy>
   end
   local.get $this
   local.set $2

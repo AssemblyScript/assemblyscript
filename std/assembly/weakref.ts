@@ -19,7 +19,7 @@ export class WeakRef<T> {
   private cookie: u32;
 
   constructor(value: T) {
-    assert(isReference<T>() && !isNullable<T>());
+    assert(isManaged<T>());
 
     this.ref = changetype<usize>(value);
 
@@ -28,8 +28,7 @@ export class WeakRef<T> {
     } else {
       this.cookie = CURRENT_COOKIE;
       ALL_REFERENCES.set(this.ref, this.cookie);
-      // Avoid creating many variances of register
-      REGISTRY.register(this.ref, this.ref);
+      REGISTRY.register(value, this.ref);
     }
   }
 
