@@ -729,13 +729,13 @@ export class Flow {
     let rightTargetFunction = right.targetFunction;
     if (leftTargetFunction != rightTargetFunction) {
       console.log("left: " + left.toString());
-      let iter = left.parent;
-      while (iter) {
-        console.log("- " + iter.toString());
-        iter = iter.parent;
-      }
+      // let iter = left.parent;
+      // while (iter) {
+      //   console.log("- " + iter.toString());
+      //   iter = iter.parent;
+      // }
       console.log("right: " + right.toString());
-      iter = right.parent;
+      let iter = right.parent;
       while (iter) {
         console.log("- " + iter.toString());
         iter = iter.parent;

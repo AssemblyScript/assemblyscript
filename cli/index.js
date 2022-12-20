@@ -800,12 +800,12 @@ export async function main(argv, options) {
 
   {
     let begin = stats.begin();
-    // try {
-    //   stats.optimizeCount++;
-    //   assemblyscript.optimize(module, optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
-    // } catch (e) {
-    //   crash("optimize", e);
-    // }
+    try {
+      stats.optimizeCount++;
+      assemblyscript.optimize(module, optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
+    } catch (e) {
+      crash("optimize", e);
+    }
     try {
       binaryenModule.runPasses(runPasses);
     } catch (e) {
