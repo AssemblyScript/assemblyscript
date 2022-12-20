@@ -19,7 +19,7 @@ export class WeakRef<T> {
   private cookie: u32;
 
   constructor(value: T) {
-    assert(isManaged<T>());
+    if(!isManaged<T>()) { ERROR("invalid target"); }
 
     this.ref = changetype<usize>(value);
 
