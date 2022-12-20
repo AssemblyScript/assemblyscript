@@ -725,20 +725,19 @@ export class Flow {
 
   /** Inherits two alternate branches to become this flow, i.e. then with else. */
   inheritAlternatives(left: Flow, right: Flow): void {
-    let leftTargetFunction = left.targetFunction;
-    let rightTargetFunction = right.targetFunction;
-    if (leftTargetFunction != rightTargetFunction) {
-      console.log("left: " + left.toString());
+    if (left.targetFunction != right.targetFunction) {
+      console.log("= left =");
+      console.log(left.toString());
       // let iter = left.parent;
-      console.log("- ?");
       // while (iter) {
       //   console.log("- " + iter.toString());
       //   iter = iter.parent;
       // }
-      console.log("right: " + right.toString());
+      console.log("= right =");
+      console.log(right.toString());
       let iter = right.parent;
       while (iter) {
-        console.log("- " + iter.toString());
+        console.log(iter.toString());
         iter = iter.parent;
       }
     }
