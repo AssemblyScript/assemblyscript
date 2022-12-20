@@ -1,17 +1,15 @@
 (module
- (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_none (func_subtype (param i32 i32) func))
- (type $i32_=>_none (func_subtype (param i32) func))
+ (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
+ (type $i32_=>_none (func_subtype (param i32) func))
  (type $none_=>_none (func_subtype func))
- (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
+ (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/weakref/INITIALIZED (mut i32) (i32.const 0))
- (global $~lib/weakref/PREVIOUS_FINALIZER (mut i32) (i32.const 0))
- (global $~lib/rt/__finalize (mut i32) (i32.const 0))
+ (global $~lib/weakref/CURRENT_COOKIE (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -23,19 +21,24 @@
  (global $~lib/shared/runtime/Runtime.Stub i32 (i32.const 0))
  (global $~lib/shared/runtime/Runtime.Minimal i32 (i32.const 1))
  (global $~lib/shared/runtime/Runtime.Incremental i32 (i32.const 2))
+ (global $~lib/rt/__finalize (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/weakref/ALL_REFERENCES (mut i32) (i32.const 0))
- (global $~lib/weakref/CURRENT_COOKIE (mut i32) (i32.const 0))
+ (global $~lib/finalizationregistry/ALL_REGISTRIES (mut i32) (i32.const 0))
+ (global $~lib/finalizationregistry/INITIALIZED (mut i32) (i32.const 0))
+ (global $~lib/finalizationregistry/PREVIOUS_FINALIZER (mut i32) (i32.const 0))
+ (global $~lib/weakref/REGISTRY (mut i32) (i32.const 0))
  (global $std/weakref/weakref (mut i32) (i32.const 0))
- (global $std/weakref/globalRefs i32 (i32.const 768))
+ (global $std/weakref/globalRefs i32 (i32.const 800))
  (global $std/weakref/weakref2 (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 848))
- (global $~lib/memory/__data_end i32 (i32.const 888))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33656))
- (global $~lib/memory/__heap_base i32 (i32.const 33656))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 880))
+ (global $~lib/memory/__data_end i32 (i32.const 932))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33700))
+ (global $~lib/memory/__heap_base i32 (i32.const 33700))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -47,16 +50,17 @@
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 412) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 460) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 556) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t\00\00\00\00\00\00\00\00\00")
- (data (i32.const 620) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 668) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00s\00t\00d\00/\00w\00e\00a\00k\00r\00e\00f\00.\00t\00s\00")
- (data (i32.const 716) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 748) ",\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\10\00\00\00\e0\02\00\00\e0\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 796) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 848) "\t\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00\00\00\00\00\10\01\02\00\02A\00\00")
- (table $0 2 2 funcref)
- (elem $0 (i32.const 1) $~lib/weakref/WeakRef.finalize)
+ (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 556) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 588) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 652) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 700) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00s\00t\00d\00/\00w\00e\00a\00k\00r\00e\00f\00.\00t\00s\00")
+ (data (i32.const 748) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 780) ",\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\10\00\00\00\00\03\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 828) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
+ (data (i32.const 880) "\0c\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00\10\01\02\00\00\00\00\00\00\00\00\00\10\01\02\00\00\00\00\00\02A\00\00")
+ (table $0 3 3 funcref)
+ (elem $0 (i32.const 1) $~lib/finalizationregistry/BaseRegistry.finalizeAll $start:~lib/weakref~anonymous|0)
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (type $i32_i32_=>_none) (param $this i32) (param $nextWithColor i32)
@@ -2496,26 +2500,26 @@
   i32.const 0
   return
  )
- (func $~lib/map/MapEntry<usize,u32>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+ (func $~lib/map/MapEntry<usize,u32>#set:value (type $i32_i32_=>_none) (param $this i32) (param $value i32)
   local.get $this
-  local.get $taggedNext
-  i32.store $0 offset=8
+  local.get $value
+  i32.store $0 offset=4
  )
- (func $~lib/map/Map<usize,u32>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/map/Map<usize,u32>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=20
+  i32.load $0 offset=16
  )
  (func $~lib/map/Map<usize,u32>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=12
  )
+ (func $~lib/map/Map<usize,u32>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=20
+ )
  (func $~lib/map/Map<usize,u32>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
- )
- (func $~lib/map/Map<usize,u32>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=16
  )
  (func $~lib/map/MapEntry<usize,u32>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
   local.get $this
@@ -2526,10 +2530,10 @@
   local.get $this
   i32.load $0 offset=4
  )
- (func $~lib/map/MapEntry<usize,u32>#set:value (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+ (func $~lib/map/MapEntry<usize,u32>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
   local.get $this
-  local.get $value
-  i32.store $0 offset=4
+  local.get $taggedNext
+  i32.store $0 offset=8
  )
  (func $~lib/map/Map<usize,u32>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
   (local $newBucketsCapacity i32)
@@ -2678,6 +2682,124 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $~lib/finalizationregistry/BaseRegistry#set:next (type $i32_i32_=>_none) (param $this i32) (param $next i32)
+  local.get $this
+  local.get $next
+  i32.store $0
+  local.get $this
+  local.get $next
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/finalizationregistry/BaseRegistry#finalize (type $i32_i32_=>_none) (param $this i32) (param $ptr i32)
+  unreachable
+ )
+ (func $~lib/finalizationregistry/BaseRegistry#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/finalizationregistry/BaseRegistry.finalizeAll (type $i32_=>_none) (param $ptr i32)
+  (local $i i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/finalizationregistry/ALL_REGISTRIES
+  local.tee $i
+  i32.store $0
+  loop $for-loop|0
+   local.get $i
+   i32.const 0
+   i32.ne
+   if
+    local.get $i
+    local.get $ptr
+    call $~lib/finalizationregistry/BaseRegistry#finalize@override
+    global.get $~lib/memory/__stack_pointer
+    local.get $i
+    call $~lib/finalizationregistry/BaseRegistry#get:next
+    local.tee $i
+    i32.store $0
+    br $for-loop|0
+   end
+  end
+  global.get $~lib/finalizationregistry/PREVIOUS_FINALIZER
+  if
+   local.get $ptr
+   global.get $~lib/finalizationregistry/PREVIOUS_FINALIZER
+   call_indirect $0 (type $i32_=>_none)
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/function/Function<%28usize%29=>void>#get:index (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+  return
+ )
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#set:finalizer (type $i32_i32_=>_none) (param $this i32) (param $finalizer i32)
+  local.get $this
+  local.get $finalizer
+  i32.store $0 offset=8
+  local.get $this
+  local.get $finalizer
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/map/Map<usize,usize>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
+  local.get $this
+  local.get $buckets
+  i32.store $0
+  local.get $this
+  local.get $buckets
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/map/Map<usize,usize>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+  local.get $this
+  local.get $bucketsMask
+  i32.store $0 offset=4
+ )
+ (func $~lib/map/Map<usize,usize>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+  local.get $this
+  local.get $entries
+  i32.store $0 offset=8
+  local.get $this
+  local.get $entries
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/map/Map<usize,usize>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+  local.get $this
+  local.get $entriesCapacity
+  i32.store $0 offset=12
+ )
+ (func $~lib/map/Map<usize,usize>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store $0 offset=16
+ )
+ (func $~lib/map/Map<usize,usize>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store $0 offset=20
+ )
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+  local.get $this
+  local.get $entries
+  i32.store $0 offset=4
+  local.get $this
+  local.get $entries
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
  (func $~lib/map/Map<usize,u32>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
   (local $halfBucketsMask i32)
@@ -2746,10 +2868,255 @@
   i32.const 1
   return
  )
- (func $~lib/function/Function<%28usize%29=>void>#get:index (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/map/Map<usize,usize>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0
+ )
+ (func $~lib/map/Map<usize,usize>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/map/MapEntry<usize,usize>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/map/MapEntry<usize,usize>#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/map/Map<usize,usize>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
+  (local $entry i32)
+  (local $taggedNext i32)
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:buckets
+  local.get $hashCode
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:bucketsMask
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load $0
+  local.set $entry
+  loop $while-continue|0
+   local.get $entry
+   if
+    local.get $entry
+    call $~lib/map/MapEntry<usize,usize>#get:taggedNext
+    local.set $taggedNext
+    local.get $taggedNext
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $entry
+     call $~lib/map/MapEntry<usize,usize>#get:key
+     local.get $key
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $entry
+     return
+    end
+    local.get $taggedNext
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $entry
+    br $while-continue|0
+   end
+  end
+  i32.const 0
   return
+ )
+ (func $~lib/map/MapEntry<usize,usize>#set:value (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
+  i32.store $0 offset=4
+ )
+ (func $~lib/map/Map<usize,usize>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
+ (func $~lib/map/Map<usize,usize>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/map/Map<usize,usize>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=20
+ )
+ (func $~lib/map/Map<usize,usize>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/map/MapEntry<usize,usize>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+  local.get $this
+  local.get $key
+  i32.store $0
+ )
+ (func $~lib/map/MapEntry<usize,usize>#get:value (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/map/MapEntry<usize,usize>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
+  local.get $this
+  local.get $taggedNext
+  i32.store $0 offset=8
+ )
+ (func $~lib/map/Map<usize,usize>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+  (local $newBucketsCapacity i32)
+  (local $newBuckets i32)
+  (local $newEntriesCapacity i32)
+  (local $newEntries i32)
+  (local $oldPtr i32)
+  (local $oldEnd i32)
+  (local $newPtr i32)
+  (local $oldEntry i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $newBucketsMask
+  i32.const 1
+  i32.add
+  local.set $newBucketsCapacity
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  local.get $newBucketsCapacity
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $newBuckets
+  i32.store $0
+  local.get $newBucketsCapacity
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $newEntriesCapacity
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  local.get $newEntriesCapacity
+  block $~lib/map/ENTRY_SIZE<usize,usize>|inlined.1 (result i32)
+   i32.const 12
+   br $~lib/map/ENTRY_SIZE<usize,usize>|inlined.1
+  end
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $newEntries
+  i32.store $0 offset=4
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:entries
+  local.set $oldPtr
+  local.get $oldPtr
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:entriesOffset
+  block $~lib/map/ENTRY_SIZE<usize,usize>|inlined.2 (result i32)
+   i32.const 12
+   br $~lib/map/ENTRY_SIZE<usize,usize>|inlined.2
+  end
+  i32.mul
+  i32.add
+  local.set $oldEnd
+  local.get $newEntries
+  local.set $newPtr
+  loop $while-continue|0
+   local.get $oldPtr
+   local.get $oldEnd
+   i32.ne
+   if
+    local.get $oldPtr
+    local.set $oldEntry
+    local.get $oldEntry
+    call $~lib/map/MapEntry<usize,usize>#get:taggedNext
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $newPtr
+     local.set $newEntry
+     local.get $oldEntry
+     call $~lib/map/MapEntry<usize,usize>#get:key
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
+     call $~lib/map/MapEntry<usize,usize>#set:key
+     local.get $newEntry
+     local.get $oldEntry
+     call $~lib/map/MapEntry<usize,usize>#get:value
+     call $~lib/map/MapEntry<usize,usize>#set:value
+     local.get $oldEntryKey
+     call $~lib/util/hash/HASH<usize>
+     local.get $newBucketsMask
+     i32.and
+     local.set $newBucketIndex
+     local.get $newBuckets
+     local.get $newBucketIndex
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
+     i32.load $0
+     call $~lib/map/MapEntry<usize,usize>#set:taggedNext
+     local.get $newBucketPtrBase
+     local.get $newPtr
+     i32.store $0
+     local.get $newPtr
+     block $~lib/map/ENTRY_SIZE<usize,usize>|inlined.3 (result i32)
+      i32.const 12
+      br $~lib/map/ENTRY_SIZE<usize,usize>|inlined.3
+     end
+     i32.add
+     local.set $newPtr
+    end
+    local.get $oldPtr
+    block $~lib/map/ENTRY_SIZE<usize,usize>|inlined.4 (result i32)
+     i32.const 12
+     br $~lib/map/ENTRY_SIZE<usize,usize>|inlined.4
+    end
+    i32.add
+    local.set $oldPtr
+    br $while-continue|0
+   end
+  end
+  local.get $this
+  local.get $newBuckets
+  call $~lib/map/Map<usize,usize>#set:buckets
+  local.get $this
+  local.get $newBucketsMask
+  call $~lib/map/Map<usize,usize>#set:bucketsMask
+  local.get $this
+  local.get $newEntries
+  call $~lib/map/Map<usize,usize>#set:entries
+  local.get $this
+  local.get $newEntriesCapacity
+  call $~lib/map/Map<usize,usize>#set:entriesCapacity
+  local.get $this
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:entriesCount
+  call $~lib/map/Map<usize,usize>#set:entriesOffset
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/weakref/WeakRef<std/weakref/Dummy>#set:ref (type $i32_i32_=>_none) (param $this i32) (param $ref i32)
   local.get $this
@@ -2786,8 +3153,8 @@
   local.get $entry
   i32.eqz
   if
-   i32.const 576
-   i32.const 640
+   i32.const 608
+   i32.const 672
    i32.const 105
    i32.const 17
    call $~lib/builtins/abort
@@ -2936,7 +3303,7 @@
    i32.gt_u
    if
     i32.const 432
-    i32.const 816
+    i32.const 848
     i32.const 19
     i32.const 48
     call $~lib/builtins/abort
@@ -3059,9 +3426,149 @@
   local.get $newLength
   call $~lib/array/Array<std/weakref/Dummy>#set:length_
  )
+ (func $~lib/map/Map<usize,usize>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,usize>#find
+  i32.const 0
+  i32.ne
+  return
+ )
+ (func $~lib/map/Map<usize,usize>#get (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  (local $entry i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,usize>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   i32.const 608
+   i32.const 672
+   i32.const 105
+   i32.const 17
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<usize,usize>#get:value
+  return
+ )
+ (func $~lib/map/Map<usize,usize>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  (local $entry i32)
+  (local $halfBucketsMask i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,usize>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   i32.const 0
+   return
+  end
+  local.get $entry
+  local.get $entry
+  call $~lib/map/MapEntry<usize,usize>#get:taggedNext
+  i32.const 1
+  i32.or
+  call $~lib/map/MapEntry<usize,usize>#set:taggedNext
+  local.get $this
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:entriesCount
+  i32.const 1
+  i32.sub
+  call $~lib/map/Map<usize,usize>#set:entriesCount
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:bucketsMask
+  i32.const 1
+  i32.shr_u
+  local.set $halfBucketsMask
+  local.get $halfBucketsMask
+  i32.const 1
+  i32.add
+  i32.const 4
+  local.tee $4
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:entriesCount
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.gt_u
+  select
+  i32.ge_u
+  if (result i32)
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:entriesCount
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:entriesCapacity
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
+   i32.lt_s
+  else
+   i32.const 0
+  end
+  if
+   local.get $this
+   local.get $halfBucketsMask
+   call $~lib/map/Map<usize,usize>#rehash
+  end
+  i32.const 1
+  return
+ )
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#get:finalizer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/finalizationregistry/BaseRegistry#finalize@override (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  block $default
+   block $case0
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load $0
+    local.set $2
+    local.get $2
+    i32.const 7
+    i32.eq
+    br_if $case0
+    br $default
+   end
+   local.get $0
+   local.get $1
+   call $~lib/finalizationregistry/FinalizationRegistry<usize>#finalize
+   return
+  end
+  unreachable
+ )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
+  global.get $~lib/finalizationregistry/ALL_REGISTRIES
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
   global.get $~lib/weakref/ALL_REFERENCES
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $~lib/weakref/REGISTRY
   local.tee $1
   if
    local.get $1
@@ -3095,7 +3602,7 @@
   i32.const 432
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 576
+  i32.const 608
   local.get $0
   call $~lib/rt/itcms/__visit
   i32.const 32
@@ -3119,24 +3626,6 @@
  (func $~lib/object/Object~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/function/Function<%28usize%29=>void>#get:_env (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=4
- )
- (func $~lib/function/Function<%28usize%29=>void>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
-  local.get $this
-  call $~lib/function/Function<%28usize%29=>void>#get:_env
-  local.get $cookie
-  call $~lib/rt/itcms/__visit
- )
- (func $~lib/function/Function<%28usize%29=>void>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/object/Object~visit
-  local.get $0
-  local.get $1
-  call $~lib/function/Function<%28usize%29=>void>#__visit
- )
  (func $~lib/map/Map<usize,u32>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   (local $entries i32)
   local.get $this
@@ -3159,6 +3648,83 @@
   local.get $0
   local.get $1
   call $~lib/map/Map<usize,u32>#__visit
+ )
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.get $1
+  call $~lib/finalizationregistry/BaseRegistry~visit
+  local.get $0
+  i32.load $0 offset=4
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/itcms/__visit
+  end
+  local.get $0
+  i32.load $0 offset=8
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/itcms/__visit
+  end
+ )
+ (func $~lib/finalizationregistry/BaseRegistry~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  i32.load $0
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/itcms/__visit
+  end
+ )
+ (func $~lib/map/Map<usize,usize>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  (local $entries i32)
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:buckets
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  local.get $this
+  call $~lib/map/Map<usize,usize>#get:entries
+  local.set $entries
+  i32.const 0
+  drop
+  local.get $entries
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/map/Map<usize,usize>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<usize,usize>#__visit
+ )
+ (func $~lib/function/Function<%28usize%29=>void>#get:_env (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/function/Function<%28usize%29=>void>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  local.get $this
+  call $~lib/function/Function<%28usize%29=>void>#get:_env
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28usize%29=>void>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28usize%29=>void>#__visit
  )
  (func $~lib/array/Array<std/weakref/Dummy>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -3217,20 +3783,32 @@
  (func $~lib/rt/__visit_members (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   block $invalid
    block $~lib/array/Array<std/weakref/Dummy>
-    block $~lib/map/Map<usize,u32>
-     block $~lib/function/Function<%28usize%29=>void>
-      block $~lib/weakref/WeakRef<std/weakref/Dummy>
-       block $std/weakref/Dummy
-        block $~lib/arraybuffer/ArrayBufferView
-         block $~lib/string/String
-          block $~lib/arraybuffer/ArrayBuffer
-           block $~lib/object/Object
-            local.get $0
-            i32.const 8
-            i32.sub
-            i32.load $0
-            br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $std/weakref/Dummy $~lib/weakref/WeakRef<std/weakref/Dummy> $~lib/function/Function<%28usize%29=>void> $~lib/map/Map<usize,u32> $~lib/array/Array<std/weakref/Dummy> $invalid
+    block $~lib/function/Function<%28usize%29=>void>
+     block $~lib/map/Map<usize,usize>
+      block $~lib/finalizationregistry/BaseRegistry
+       block $~lib/finalizationregistry/FinalizationRegistry<usize>
+        block $~lib/map/Map<usize,u32>
+         block $~lib/weakref/WeakRef<std/weakref/Dummy>
+          block $std/weakref/Dummy
+           block $~lib/arraybuffer/ArrayBufferView
+            block $~lib/string/String
+             block $~lib/arraybuffer/ArrayBuffer
+              block $~lib/object/Object
+               local.get $0
+               i32.const 8
+               i32.sub
+               i32.load $0
+               br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $std/weakref/Dummy $~lib/weakref/WeakRef<std/weakref/Dummy> $~lib/map/Map<usize,u32> $~lib/finalizationregistry/FinalizationRegistry<usize> $~lib/finalizationregistry/BaseRegistry $~lib/map/Map<usize,usize> $~lib/function/Function<%28usize%29=>void> $~lib/array/Array<std/weakref/Dummy> $invalid
+              end
+              return
+             end
+             return
+            end
+            return
            end
+           local.get $0
+           local.get $1
+           call $~lib/arraybuffer/ArrayBufferView~visit
            return
           end
           return
@@ -3239,21 +3817,27 @@
         end
         local.get $0
         local.get $1
-        call $~lib/arraybuffer/ArrayBufferView~visit
+        call $~lib/map/Map<usize,u32>~visit
         return
        end
+       local.get $0
+       local.get $1
+       call $~lib/finalizationregistry/FinalizationRegistry<usize>~visit
        return
       end
+      local.get $0
+      local.get $1
+      call $~lib/finalizationregistry/BaseRegistry~visit
       return
      end
      local.get $0
      local.get $1
-     call $~lib/function/Function<%28usize%29=>void>~visit
+     call $~lib/map/Map<usize,usize>~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/map/Map<usize,u32>~visit
+    call $~lib/function/Function<%28usize%29=>void>~visit
     return
    end
    local.get $0
@@ -3271,8 +3855,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 33680
    i32.const 33728
+   i32.const 33776
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3294,7 +3878,7 @@
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 24
-   i32.const 7
+   i32.const 6
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0
@@ -3348,7 +3932,181 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/weakref/WeakRef.finalize (type $i32_=>_none) (param $ptr i32)
+ (func $~lib/finalizationregistry/BaseRegistry#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  i32.const 0
+  call $~lib/finalizationregistry/BaseRegistry#set:next
+  local.get $this
+  global.get $~lib/finalizationregistry/ALL_REGISTRIES
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/finalizationregistry/BaseRegistry#set:next
+  local.get $this
+  global.set $~lib/finalizationregistry/ALL_REGISTRIES
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $~lib/map/Map<usize,usize>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 24
+   i32.const 9
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/map/Map<usize,usize>#set:buckets
+  local.get $this
+  i32.const 4
+  i32.const 1
+  i32.sub
+  call $~lib/map/Map<usize,usize>#set:bucketsMask
+  local.get $this
+  i32.const 0
+  i32.const 4
+  block $~lib/map/ENTRY_SIZE<usize,usize>|inlined.0 (result i32)
+   i32.const 12
+   br $~lib/map/ENTRY_SIZE<usize,usize>|inlined.0
+  end
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/map/Map<usize,usize>#set:entries
+  local.get $this
+  i32.const 4
+  call $~lib/map/Map<usize,usize>#set:entriesCapacity
+  local.get $this
+  i32.const 0
+  call $~lib/map/Map<usize,usize>#set:entriesOffset
+  local.get $this
+  i32.const 0
+  call $~lib/map/Map<usize,usize>#set:entriesCount
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $finalizer i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 7
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.get $finalizer
+  call $~lib/finalizationregistry/FinalizationRegistry<usize>#set:finalizer
+  local.get $this
+  i32.const 0
+  call $~lib/map/Map<usize,usize>#constructor
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  call $~lib/finalizationregistry/FinalizationRegistry<usize>#set:entries
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  call $~lib/finalizationregistry/BaseRegistry#constructor
+  local.tee $this
+  i32.store $0
+  global.get $~lib/finalizationregistry/INITIALIZED
+  i32.eqz
+  if
+   global.get $~lib/rt/__finalize
+   global.set $~lib/finalizationregistry/PREVIOUS_FINALIZER
+   i32.const 544
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store $0 offset=8
+   local.get $2
+   call $~lib/function/Function<%28usize%29=>void>#get:index
+   global.set $~lib/rt/__finalize
+   i32.const 1
+   global.set $~lib/finalizationregistry/INITIALIZED
+  end
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
+ (func $start:~lib/weakref~anonymous|0 (type $i32_=>_none) (param $ptr i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3372,12 +4130,32 @@
    i32.add
    global.set $~lib/weakref/CURRENT_COOKIE
   end
-  global.get $~lib/weakref/PREVIOUS_FINALIZER
-  if
-   local.get $ptr
-   global.get $~lib/weakref/PREVIOUS_FINALIZER
-   call_indirect $0 (type $i32_=>_none)
-  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize> (type $i32_i32_i32_=>_none) (param $this i32) (param $key i32) (param $value i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  call $~lib/finalizationregistry/FinalizationRegistry<usize>#get:entries
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $key
+  local.get $value
+  call $~lib/map/Map<usize,usize>#set
+  drop
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -3414,22 +4192,6 @@
   i32.const 0
   i32.eqz
   drop
-  global.get $~lib/weakref/INITIALIZED
-  i32.eqz
-  if
-   global.get $~lib/rt/__finalize
-   global.set $~lib/weakref/PREVIOUS_FINALIZER
-   i32.const 544
-   local.set $4
-   global.get $~lib/memory/__stack_pointer
-   local.get $4
-   i32.store $0 offset=4
-   local.get $4
-   call $~lib/function/Function<%28usize%29=>void>#get:index
-   global.set $~lib/rt/__finalize
-   i32.const 1
-   global.set $~lib/weakref/INITIALIZED
-  end
   local.get $value
   local.set $ref
   global.get $~lib/weakref/CURRENT_COOKIE
@@ -3444,6 +4206,15 @@
   local.get $cookie
   call $~lib/map/Map<usize,u32>#set
   drop
+  global.get $~lib/weakref/REGISTRY
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0 offset=4
+  local.get $4
+  local.get $ref
+  local.get $ref
+  call $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize>
   local.get $this
   local.get $ref
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#set:ref
@@ -3584,13 +4355,13 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
+  i64.const 0
+  i64.store $0
   memory.size $0
   i32.const 16
   i32.shl
@@ -3611,13 +4382,22 @@
   i32.const 0
   call $~lib/map/Map<usize,u32>#constructor
   global.set $~lib/weakref/ALL_REFERENCES
+  i32.const 0
+  i32.const 576
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0
+  local.get $2
+  call $~lib/finalizationregistry/FinalizationRegistry<usize>#constructor
+  global.set $~lib/weakref/REGISTRY
   call $std/weakref/produceDummy
   global.set $std/weakref/weakref
   global.get $std/weakref/weakref
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store $0 offset=4
   local.get $2
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
@@ -3625,7 +4405,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 720
    i32.const 10
    i32.const 1
    call $~lib/builtins/abort
@@ -3636,7 +4416,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store $0 offset=4
   local.get $2
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
@@ -3644,7 +4424,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 720
    i32.const 12
    i32.const 1
    call $~lib/builtins/abort
@@ -3656,7 +4436,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store $0 offset=4
   local.get $2
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
@@ -3664,7 +4444,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 720
    i32.const 25
    i32.const 1
    call $~lib/builtins/abort
@@ -3675,7 +4455,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store $0 offset=4
   local.get $2
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
@@ -3683,7 +4463,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 720
    i32.const 29
    i32.const 1
    call $~lib/builtins/abort
@@ -3693,7 +4473,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store $0 offset=4
   local.get $2
   i32.const 0
   call $~lib/array/Array<std/weakref/Dummy>#set:length
@@ -3702,7 +4482,7 @@
   local.set $2
   global.get $~lib/memory/__stack_pointer
   local.get $2
-  i32.store $0
+  i32.store $0 offset=4
   local.get $2
   call $~lib/weakref/WeakRef<std/weakref/Dummy>#deref
   i32.const 0
@@ -3710,11 +4490,65 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 720
    i32.const 33
    i32.const 1
    call $~lib/builtins/abort
    unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/finalizationregistry/FinalizationRegistry<usize>#finalize (type $i32_i32_=>_none) (param $this i32) (param $ptr i32)
+  (local $value i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  call $~lib/finalizationregistry/FinalizationRegistry<usize>#get:entries
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  local.get $ptr
+  call $~lib/map/Map<usize,usize>#has
+  if
+   local.get $this
+   call $~lib/finalizationregistry/FinalizationRegistry<usize>#get:entries
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   local.get $3
+   i32.store $0
+   local.get $3
+   local.get $ptr
+   call $~lib/map/Map<usize,usize>#get
+   local.set $value
+   local.get $this
+   call $~lib/finalizationregistry/FinalizationRegistry<usize>#get:entries
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   local.get $3
+   i32.store $0
+   local.get $3
+   local.get $ptr
+   call $~lib/map/Map<usize,usize>#delete
+   drop
+   local.get $value
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $this
+   call $~lib/finalizationregistry/FinalizationRegistry<usize>#get:finalizer
+   i32.load $0
+   call_indirect $0 (type $i32_=>_none)
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -3873,6 +4707,130 @@
    local.get $bucketPtrBase
    i32.load $0
    call $~lib/map/MapEntry<usize,u32>#set:taggedNext
+   local.get $bucketPtrBase
+   local.get $entry
+   i32.store $0
+  end
+  local.get $this
+  local.set $8
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $8
+  return
+ )
+ (func $~lib/map/Map<usize,usize>#set (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $value i32) (result i32)
+  (local $hashCode i32)
+  (local $entry i32)
+  (local $entries i32)
+  (local $6 i32)
+  (local $bucketPtrBase i32)
+  (local $8 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  local.set $hashCode
+  local.get $this
+  local.get $key
+  local.get $hashCode
+  call $~lib/map/Map<usize,usize>#find
+  local.set $entry
+  local.get $entry
+  if
+   local.get $entry
+   local.get $value
+   call $~lib/map/MapEntry<usize,usize>#set:value
+   i32.const 0
+   drop
+  else
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:entriesOffset
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:entriesCapacity
+   i32.eq
+   if
+    local.get $this
+    local.get $this
+    call $~lib/map/Map<usize,usize>#get:entriesCount
+    local.get $this
+    call $~lib/map/Map<usize,usize>#get:entriesCapacity
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $this
+     call $~lib/map/Map<usize,usize>#get:bucketsMask
+    else
+     local.get $this
+     call $~lib/map/Map<usize,usize>#get:bucketsMask
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<usize,usize>#rehash
+   end
+   global.get $~lib/memory/__stack_pointer
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:entries
+   local.tee $entries
+   i32.store $0
+   local.get $entries
+   local.get $this
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:entriesOffset
+   local.tee $6
+   i32.const 1
+   i32.add
+   call $~lib/map/Map<usize,usize>#set:entriesOffset
+   local.get $6
+   block $~lib/map/ENTRY_SIZE<usize,usize>|inlined.5 (result i32)
+    i32.const 12
+    br $~lib/map/ENTRY_SIZE<usize,usize>|inlined.5
+   end
+   i32.mul
+   i32.add
+   local.set $entry
+   local.get $entry
+   local.get $key
+   call $~lib/map/MapEntry<usize,usize>#set:key
+   i32.const 0
+   drop
+   local.get $entry
+   local.get $value
+   call $~lib/map/MapEntry<usize,usize>#set:value
+   i32.const 0
+   drop
+   local.get $this
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:entriesCount
+   i32.const 1
+   i32.add
+   call $~lib/map/Map<usize,usize>#set:entriesCount
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:buckets
+   local.get $hashCode
+   local.get $this
+   call $~lib/map/Map<usize,usize>#get:bucketsMask
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $bucketPtrBase
+   local.get $entry
+   local.get $bucketPtrBase
+   i32.load $0
+   call $~lib/map/MapEntry<usize,usize>#set:taggedNext
    local.get $bucketPtrBase
    local.get $entry
    i32.store $0

@@ -2058,6 +2058,12 @@ declare class WeakRef<T> {
   deref(): T | null;
 }
 
+declare class FinalizationRegistry<T> {
+  constructor(finalizer: (heldValue: T) => void);
+  register<U>(key: U, value: T): void;
+  unregister<U>(key: U): bool;
+}
+
 interface SymbolConstructor {
   readonly hasInstance: symbol;
   readonly isConcatSpreadable: symbol;

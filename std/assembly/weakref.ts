@@ -8,11 +8,14 @@ let CURRENT_COOKIE: u32 = 0;
 
 // @ts-ignore: decorators
 @lazy
-let PREVIOUS_FINALIZER: i32 = 0;
-
-// @ts-ignore: decorators
-@lazy
-let INITIALIZED: boolean = false;
+const REGISTRY: FinalizationRegistry<usize> = new FinalizationRegistry<usize>(
+  (ptr: usize) => {
+    if (ALL_REFERENCES.delete(ptr)) {
+      // The memory block could be reused by the allocator after this point
+      ++CURRENT_COOKIE;
+    }
+  }
+);
 
 export class WeakRef<T> {
   private ref: usize;
@@ -21,15 +24,10 @@ export class WeakRef<T> {
   constructor(value: T) {
     assert(isReference<T>() && !isNullable<T>());
 
-    if (!INITIALIZED) {
-      PREVIOUS_FINALIZER = __finalize;
-      __finalize = WeakRef.finalize.index;
-      INITIALIZED = true;
-    }
-
     const ref = changetype<usize>(value);
     const cookie = CURRENT_COOKIE;
     ALL_REFERENCES.set(ref, cookie);
+    REGISTRY.register(ref, ref);
 
     this.ref = ref;
     this.cookie = cookie;
@@ -41,16 +39,6 @@ export class WeakRef<T> {
       return changetype<T>(ref);
     } else {
       return null;
-    }
-  }
-
-  static finalize(ptr: usize): void {
-    if (ALL_REFERENCES.delete(ptr)) {
-      ++CURRENT_COOKIE;
-    }
-
-    if (PREVIOUS_FINALIZER) {
-      call_indirect<void>(PREVIOUS_FINALIZER, ptr);
     }
   }
 }

@@ -22,6 +22,7 @@
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/__finalize (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/native/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -1433,8 +1434,14 @@
    call $~lib/rt/itcms/Object#get:size
    i32.sub
    global.set $~lib/rt/itcms/total
-   i32.const 0
-   drop
+   global.get $~lib/rt/__finalize
+   if
+    local.get $obj
+    i32.const 20
+    i32.add
+    global.get $~lib/rt/__finalize
+    call_indirect $0 (type $i32_=>_none)
+   end
    local.get $obj
    i32.const 4
    i32.add
