@@ -2053,6 +2053,11 @@ declare class Set<K> {
   toString(): string;
 }
 
+declare class WeakRef<T> {
+  constructor(value: T);
+  deref(): T | null;
+}
+
 interface SymbolConstructor {
   readonly hasInstance: symbol;
   readonly isConcatSpreadable: symbol;
