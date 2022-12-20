@@ -1,18 +1,11 @@
 // @ts-ignore: decorators
-@lazy
-let CURRENT_COOKIE: u32 = 0;
+@lazy let PREVIOUS_FINALIZER: i32 = 0;
 
 // @ts-ignore: decorators
-@lazy
-let PREVIOUS_FINALIZER: i32 = 0;
+@lazy let INITIALIZED: boolean = false;
 
 // @ts-ignore: decorators
-@lazy
-let INITIALIZED: boolean = false;
-
-// @ts-ignore: decorators
-@lazy
-let ALL_REGISTRIES: BaseRegistry | null = null;
+@lazy let ALL_REGISTRIES: BaseRegistry | null = null;
 
 abstract class BaseRegistry {
   private next: BaseRegistry | null;

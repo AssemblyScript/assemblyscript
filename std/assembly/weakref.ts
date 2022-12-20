@@ -1,14 +1,11 @@
 // @ts-ignore: decorators
-@lazy
-const ALL_REFERENCES: Map<usize, u32> = new Map<usize, u32>();
+@lazy const ALL_REFERENCES: Map<usize, u32> = new Map<usize, u32>();
 
 // @ts-ignore: decorators
-@lazy
-let CURRENT_COOKIE: u32 = 0;
+@lazy let CURRENT_COOKIE: u32 = 0;
 
 // @ts-ignore: decorators
-@lazy
-const REGISTRY: FinalizationRegistry<usize> = new FinalizationRegistry<usize>(
+@lazy const REGISTRY: FinalizationRegistry<usize> = new FinalizationRegistry<usize>(
   (ptr: usize) => {
     if (ALL_REFERENCES.delete(ptr)) {
       // The memory block could be reused by the allocator after this point
