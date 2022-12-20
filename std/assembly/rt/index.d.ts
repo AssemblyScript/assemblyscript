@@ -23,7 +23,7 @@ declare function __newBuffer(size: usize, id: u32, data?: usize): usize;
 declare function __newArray(length: i32, alignLog2: usize, id: u32, data?: usize): usize;
 
 // Finalization
-declare function __finalize(ptr: usize): void;
+declare let __finalize: i32;
 
 // Debugging
 declare const ASC_RTRACE: bool;

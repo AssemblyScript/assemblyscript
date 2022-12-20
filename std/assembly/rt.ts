@@ -52,6 +52,8 @@ function __tostack(ptr: usize): usize { // eslint-disable-line
   return ptr;
 }
 
+export let __finalize: u32 = 0;
+
 // These are provided by the respective implementation, included as another entry file by asc:
 
 // // @ts-ignore: decorator

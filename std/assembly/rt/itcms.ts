@@ -246,8 +246,8 @@ function free(obj: Object): void {
     obj.prev = changetype<Object>(0);
   } else {
     total -= obj.size;
-    if (isDefined(__finalize)) {
-      __finalize(changetype<usize>(obj) + TOTAL_OVERHEAD);
+    if (__finalize) {
+      call_indirect<void>(__finalize, changetype<usize>(obj) + TOTAL_OVERHEAD);
     }
     __free(changetype<usize>(obj) + BLOCK_OVERHEAD);
   }

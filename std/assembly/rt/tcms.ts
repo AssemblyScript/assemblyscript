@@ -236,7 +236,7 @@ export function __collect(): void {
       iter.prev = changetype<Object>(0);
     } else {
       total -= iter.size;
-      if (isDefined(__finalize)) __finalize(changetype<usize>(iter) + TOTAL_OVERHEAD);
+      if (__finalize) call_indirect<void>(__finalize, changetype<usize>(iter) + TOTAL_OVERHEAD);
       __free(changetype<usize>(iter) + BLOCK_OVERHEAD);
     }
     iter = newNext;
