@@ -3,8 +3,8 @@
  (type $i32_=>_i32 (func_subtype (param i32) (result i32) func))
  (type $i32_i32_=>_i32 (func_subtype (param i32 i32) (result i32) func))
  (type $i32_=>_none (func_subtype (param i32) func))
- (type $none_=>_none (func_subtype func))
  (type $i32_i32_i32_=>_i32 (func_subtype (param i32 i32 i32) (result i32) func))
+ (type $none_=>_none (func_subtype func))
  (type $i32_i32_i32_=>_none (func_subtype (param i32 i32 i32) func))
  (type $none_=>_i32 (func_subtype (result i32) func))
  (type $i32_i32_i32_i32_=>_none (func_subtype (param i32 i32 i32 i32) func))
@@ -27,16 +27,16 @@
  (global $~lib/native/ASC_RUNTIME i32 (i32.const 2))
  (global $~lib/weakref/ALL_REFERENCES (mut i32) (i32.const 0))
  (global $~lib/weakref/CURRENT_COOKIE (mut i32) (i32.const 0))
- (global $~lib/finalizationregistry/ALL_REGISTRIES (mut i32) (i32.const 0))
  (global $~lib/finalizationregistry/INITIALIZED (mut i32) (i32.const 0))
  (global $~lib/finalizationregistry/PREVIOUS_FINALIZER (mut i32) (i32.const 0))
+ (global $~lib/finalizationregistry/REGISTRIES_FOR_PTR (mut i32) (i32.const 0))
  (global $~lib/weakref/REGISTRY (mut i32) (i32.const 0))
- (global $std/weakref/globalRefs i32 (i32.const 800))
+ (global $std/weakref/globalRefs i32 (i32.const 976))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1008))
- (global $~lib/memory/__data_end i32 (i32.const 1060))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33828))
- (global $~lib/memory/__heap_base i32 (i32.const 33828))
+ (global $~lib/memory/__data_end i32 (i32.const 1068))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 33836))
+ (global $~lib/memory/__heap_base i32 (i32.const 33836))
  (memory $0 1)
  (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -50,14 +50,14 @@
  (data (i32.const 460) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 524) "<\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t\00\00\00\00\00\00\00\00\00")
  (data (i32.const 588) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s\00\00\00\00\00\00\00")
- (data (i32.const 636) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 668) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 700) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00s\00t\00d\00/\00w\00e\00a\00k\00r\00e\00f\00.\00t\00s\00")
- (data (i32.const 748) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 780) ",\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\10\00\00\00\00\03\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 828) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 876) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1008) "\0c\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00\10\01\02\00\00\00\00\00\00\00\00\00\10\01\02\00\00\00\00\00\02A\00\00")
+ (data (i32.const 636) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
+ (data (i32.const 684) "|\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 812) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 844) "\1c\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 876) ",\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\1c\00\00\00s\00t\00d\00/\00w\00e\00a\00k\00r\00e\00f\00.\00t\00s\00")
+ (data (i32.const 924) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 956) ",\00\00\00\00\00\00\00\00\00\00\00\r\00\00\00\10\00\00\00\b0\03\00\00\b0\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1008) "\0e\00\00\00 \00\00\00 \00\00\00 \00\00\00\00\00\00\00 \00\00\00 \00\00\00\10\01\02\00\00\00\00\00 \00\00\00\10\01\02\00\00\00\00\00\02A\00\00\10A\02\00\02A\00\00")
  (table $0 3 3 funcref)
  (elem $0 (i32.const 1) $~lib/finalizationregistry/BaseRegistry.finalizeAll $start:~lib/weakref~anonymous|0)
  (export "memory" (memory $0))
@@ -2731,62 +2731,258 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/finalizationregistry/BaseRegistry#set:next (type $i32_i32_=>_none) (param $this i32) (param $next i32)
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:buckets (type $i32_i32_=>_none) (param $this i32) (param $buckets i32)
   local.get $this
-  local.get $next
+  local.get $buckets
   i32.store $0
   local.get $this
-  local.get $next
+  local.get $buckets
   i32.const 0
   call $~lib/rt/itcms/__link
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:bucketsMask (type $i32_i32_=>_none) (param $this i32) (param $bucketsMask i32)
+  local.get $this
+  local.get $bucketsMask
+  i32.store $0 offset=4
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
+  local.get $this
+  local.get $entries
+  i32.store $0 offset=8
+  local.get $this
+  local.get $entries
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesCapacity (type $i32_i32_=>_none) (param $this i32) (param $entriesCapacity i32)
+  local.get $this
+  local.get $entriesCapacity
+  i32.store $0 offset=12
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesOffset (type $i32_i32_=>_none) (param $this i32) (param $entriesOffset i32)
+  local.get $this
+  local.get $entriesOffset
+  i32.store $0 offset=16
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesCount (type $i32_i32_=>_none) (param $this i32) (param $entriesCount i32)
+  local.get $this
+  local.get $entriesCount
+  i32.store $0 offset=20
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:bucketsMask (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:taggedNext (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:key (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#find (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $hashCode i32) (result i32)
+  (local $entry i32)
+  (local $taggedNext i32)
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:buckets
+  local.get $hashCode
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:bucketsMask
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load $0
+  local.set $entry
+  loop $while-continue|0
+   local.get $entry
+   if
+    local.get $entry
+    call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:taggedNext
+    local.set $taggedNext
+    local.get $taggedNext
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $entry
+     call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:key
+     local.get $key
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $entry
+     return
+    end
+    local.get $taggedNext
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $entry
+    br $while-continue|0
+   end
+  end
+  i32.const 0
+  return
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#find
+  i32.const 0
+  i32.ne
+  return
+ )
+ (func $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:value (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  (local $entry i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
+  if
+   i32.const 544
+   i32.const 608
+   i32.const 105
+   i32.const 17
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $entry
+  call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:value
+  return
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:length (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:length_
+  return
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=4
  )
  (func $~lib/finalizationregistry/BaseRegistry#finalize (type $i32_i32_=>_none) (param $this i32) (param $ptr i32)
   unreachable
  )
- (func $~lib/finalizationregistry/BaseRegistry#get:next (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:taggedNext (type $i32_i32_=>_none) (param $this i32) (param $taggedNext i32)
   local.get $this
-  i32.load $0
+  local.get $taggedNext
+  i32.store $0 offset=8
  )
- (func $~lib/finalizationregistry/BaseRegistry.finalizeAll (type $i32_=>_none) (param $ptr i32)
-  (local $i i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCount (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=20
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCapacity (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=8
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesOffset (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=16
+ )
+ (func $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:key (type $i32_i32_=>_none) (param $this i32) (param $key i32)
+  local.get $this
+  local.get $key
   i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  global.get $~lib/finalizationregistry/ALL_REGISTRIES
-  local.tee $i
-  i32.store $0
-  loop $for-loop|0
-   local.get $i
-   i32.const 0
-   i32.ne
-   if
-    local.get $i
-    local.get $ptr
-    call $~lib/finalizationregistry/BaseRegistry#finalize@override
-    global.get $~lib/memory/__stack_pointer
-    local.get $i
-    call $~lib/finalizationregistry/BaseRegistry#get:next
-    local.tee $i
-    i32.store $0
-    br $for-loop|0
-   end
-  end
-  global.get $~lib/finalizationregistry/PREVIOUS_FINALIZER
+ )
+ (func $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:value (type $i32_i32_=>_none) (param $this i32) (param $value i32)
+  local.get $this
+  local.get $value
+  i32.store $0 offset=4
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#delete (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  (local $entry i32)
+  (local $halfBucketsMask i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#find
+  local.set $entry
+  local.get $entry
+  i32.eqz
   if
-   local.get $ptr
-   global.get $~lib/finalizationregistry/PREVIOUS_FINALIZER
-   call_indirect $0 (type $i32_=>_none)
+   i32.const 0
+   return
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  local.get $entry
+  local.get $entry
+  call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:taggedNext
+  i32.const 1
+  i32.or
+  call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:taggedNext
+  local.get $this
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCount
+  i32.const 1
+  i32.sub
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesCount
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:bucketsMask
+  i32.const 1
+  i32.shr_u
+  local.set $halfBucketsMask
+  local.get $halfBucketsMask
+  i32.const 1
   i32.add
-  global.set $~lib/memory/__stack_pointer
+  i32.const 4
+  local.tee $4
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCount
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.gt_u
+  select
+  i32.ge_u
+  if (result i32)
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCount
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCapacity
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
+   i32.lt_s
+  else
+   i32.const 0
+  end
+  if
+   local.get $this
+   local.get $halfBucketsMask
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#rehash
+  end
+  i32.const 1
+  return
  )
  (func $~lib/function/Function<%28usize%29=>void>#get:index (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2796,7 +2992,7 @@
  (func $~lib/finalizationregistry/FinalizationRegistry<usize>#set:finalizer (type $i32_i32_=>_none) (param $this i32) (param $finalizer i32)
   local.get $this
   local.get $finalizer
-  i32.store $0 offset=8
+  i32.store $0 offset=4
   local.get $this
   local.get $finalizer
   i32.const 0
@@ -2843,7 +3039,7 @@
  (func $~lib/finalizationregistry/FinalizationRegistry<usize>#set:entries (type $i32_i32_=>_none) (param $this i32) (param $entries i32)
   local.get $this
   local.get $entries
-  i32.store $0 offset=4
+  i32.store $0
   local.get $this
   local.get $entries
   i32.const 0
@@ -2919,7 +3115,7 @@
  )
  (func $~lib/finalizationregistry/FinalizationRegistry<usize>#get:entries (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=4
+  i32.load $0
  )
  (func $~lib/map/Map<usize,usize>#get:buckets (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -2983,6 +3179,16 @@
    end
   end
   i32.const 0
+  return
+ )
+ (func $~lib/map/Map<usize,usize>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
+  local.get $this
+  local.get $key
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  call $~lib/map/Map<usize,usize>#find
+  i32.const 0
+  i32.ne
   return
  )
  (func $~lib/map/MapEntry<usize,usize>#set:value (type $i32_i32_=>_none) (param $this i32) (param $value i32)
@@ -3167,56 +3373,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
- (func $~lib/rt/itcms/__collect (type $none_=>_none)
-  i32.const 0
-  drop
-  global.get $~lib/rt/itcms/state
-  i32.const 0
-  i32.gt_s
-  if
-   loop $while-continue|0
-    global.get $~lib/rt/itcms/state
-    i32.const 0
-    i32.ne
-    if
-     call $~lib/rt/itcms/step
-     drop
-     br $while-continue|0
-    end
-   end
-  end
-  call $~lib/rt/itcms/step
-  drop
-  loop $while-continue|1
-   global.get $~lib/rt/itcms/state
-   i32.const 0
-   i32.ne
-   if
-    call $~lib/rt/itcms/step
-    drop
-    br $while-continue|1
-   end
-  end
-  global.get $~lib/rt/itcms/total
-  i64.extend_i32_u
-  i32.const 200
-  i64.extend_i32_u
-  i64.mul
-  i64.const 100
-  i64.div_u
-  i32.wrap_i64
-  i32.const 1024
-  i32.add
-  global.set $~lib/rt/itcms/threshold
-  i32.const 0
-  drop
-  i32.const 0
-  drop
- )
- (func $~lib/array/Array<std/weakref/Dummy>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
-  local.get $this
-  i32.load $0 offset=12
- )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteLength (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=8
@@ -3302,7 +3458,7 @@
    i32.gt_u
    if
     i32.const 432
-    i32.const 848
+    i32.const 656
     i32.const 19
     i32.const 48
     call $~lib/builtins/abort
@@ -3371,6 +3527,115 @@
    i32.store $0 offset=8
   end
  )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:length_ (type $i32_i32_=>_none) (param $this i32) (param $length_ i32)
+  local.get $this
+  local.get $length_
+  i32.store $0 offset=12
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#push (type $i32_i32_=>_i32) (param $this i32) (param $value i32) (result i32)
+  (local $oldLen i32)
+  (local $len i32)
+  local.get $this
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:length_
+  local.set $oldLen
+  local.get $oldLen
+  i32.const 1
+  i32.add
+  local.set $len
+  local.get $this
+  local.get $len
+  i32.const 2
+  i32.const 1
+  call $~lib/array/ensureCapacity
+  i32.const 1
+  drop
+  local.get $this
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:dataStart
+  local.get $oldLen
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $value
+  i32.store $0
+  local.get $this
+  local.get $value
+  i32.const 1
+  call $~lib/rt/itcms/__link
+  local.get $this
+  local.get $len
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:length_
+  local.get $len
+  return
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:buffer (type $i32_i32_=>_none) (param $this i32) (param $buffer i32)
+  local.get $this
+  local.get $buffer
+  i32.store $0
+  local.get $this
+  local.get $buffer
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:dataStart (type $i32_i32_=>_none) (param $this i32) (param $dataStart i32)
+  local.get $this
+  local.get $dataStart
+  i32.store $0 offset=4
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:byteLength (type $i32_i32_=>_none) (param $this i32) (param $byteLength i32)
+  local.get $this
+  local.get $byteLength
+  i32.store $0 offset=8
+ )
+ (func $~lib/rt/itcms/__collect (type $none_=>_none)
+  i32.const 0
+  drop
+  global.get $~lib/rt/itcms/state
+  i32.const 0
+  i32.gt_s
+  if
+   loop $while-continue|0
+    global.get $~lib/rt/itcms/state
+    i32.const 0
+    i32.ne
+    if
+     call $~lib/rt/itcms/step
+     drop
+     br $while-continue|0
+    end
+   end
+  end
+  call $~lib/rt/itcms/step
+  drop
+  loop $while-continue|1
+   global.get $~lib/rt/itcms/state
+   i32.const 0
+   i32.ne
+   if
+    call $~lib/rt/itcms/step
+    drop
+    br $while-continue|1
+   end
+  end
+  global.get $~lib/rt/itcms/total
+  i64.extend_i32_u
+  i32.const 200
+  i64.extend_i32_u
+  i64.mul
+  i64.const 100
+  i64.div_u
+  i32.wrap_i64
+  i32.const 1024
+  i32.add
+  global.set $~lib/rt/itcms/threshold
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+ )
+ (func $~lib/array/Array<std/weakref/Dummy>#get:length_ (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0 offset=12
+ )
  (func $~lib/array/Array<std/weakref/Dummy>#get:dataStart (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
   i32.load $0 offset=4
@@ -3424,16 +3689,6 @@
   local.get $this
   local.get $newLength
   call $~lib/array/Array<std/weakref/Dummy>#set:length_
- )
- (func $~lib/map/Map<usize,usize>#has (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
-  local.get $this
-  local.get $key
-  local.get $key
-  call $~lib/util/hash/HASH<usize>
-  call $~lib/map/Map<usize,usize>#find
-  i32.const 0
-  i32.ne
-  return
  )
  (func $~lib/map/Map<usize,usize>#get (type $i32_i32_=>_i32) (param $this i32) (param $key i32) (result i32)
   (local $entry i32)
@@ -3527,7 +3782,7 @@
  )
  (func $~lib/finalizationregistry/FinalizationRegistry<usize>#get:finalizer (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
-  i32.load $0 offset=8
+  i32.load $0 offset=4
  )
  (func $~lib/finalizationregistry/BaseRegistry#finalize@override (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -3553,7 +3808,7 @@
  )
  (func $~lib/rt/__visit_globals (type $i32_=>_none) (param $0 i32)
   (local $1 i32)
-  global.get $~lib/finalizationregistry/ALL_REGISTRIES
+  global.get $~lib/finalizationregistry/REGISTRIES_FOR_PTR
   local.tee $1
   if
    local.get $1
@@ -3587,7 +3842,7 @@
   i32.const 432
   local.get $0
   call $~lib/rt/itcms/__visit
-  i32.const 896
+  i32.const 704
   local.get $0
   call $~lib/rt/itcms/__visit
   i32.const 544
@@ -3643,7 +3898,7 @@
   local.get $1
   call $~lib/finalizationregistry/BaseRegistry~visit
   local.get $0
-  i32.load $0 offset=4
+  i32.load $0
   local.tee $2
   if
    local.get $2
@@ -3651,7 +3906,7 @@
    call $~lib/rt/itcms/__visit
   end
   local.get $0
-  i32.load $0 offset=8
+  i32.load $0 offset=4
   local.tee $2
   if
    local.get $2
@@ -3660,18 +3915,9 @@
   end
  )
  (func $~lib/finalizationregistry/BaseRegistry~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
-  (local $2 i32)
   local.get $0
   local.get $1
   call $~lib/object/Object~visit
-  local.get $0
-  i32.load $0
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/itcms/__visit
-  end
  )
  (func $~lib/map/Map<usize,usize>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
   (local $entries i32)
@@ -3713,6 +3959,135 @@
   local.get $0
   local.get $1
   call $~lib/function/Function<%28usize%29=>void>#__visit
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
+  local.get $this
+  i32.load $0
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  (local $cur i32)
+  (local $end i32)
+  (local $val i32)
+  i32.const 1
+  drop
+  local.get $this
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:dataStart
+  local.set $cur
+  local.get $cur
+  local.get $this
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:length_
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $end
+  loop $while-continue|0
+   local.get $cur
+   local.get $end
+   i32.lt_u
+   if
+    local.get $cur
+    i32.load $0
+    local.set $val
+    local.get $val
+    if
+     local.get $val
+     local.get $cookie
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $cur
+    i32.const 4
+    i32.add
+    local.set $cur
+    br $while-continue|0
+   end
+  end
+  local.get $this
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:buffer
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#__visit
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#__visit (type $i32_i32_=>_none) (param $this i32) (param $cookie i32)
+  (local $entries i32)
+  (local $cur i32)
+  (local $end i32)
+  (local $entry i32)
+  (local $val i32)
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:buckets
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entries
+  local.set $entries
+  i32.const 1
+  drop
+  local.get $entries
+  local.set $cur
+  local.get $cur
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesOffset
+  block $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.6 (result i32)
+   i32.const 12
+   br $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.6
+  end
+  i32.mul
+  i32.add
+  local.set $end
+  loop $while-continue|0
+   local.get $cur
+   local.get $end
+   i32.lt_u
+   if
+    local.get $cur
+    local.set $entry
+    local.get $entry
+    call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:taggedNext
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     i32.const 0
+     drop
+     i32.const 1
+     drop
+     local.get $entry
+     call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:value
+     local.set $val
+     i32.const 0
+     drop
+     local.get $val
+     local.get $cookie
+     call $~lib/rt/itcms/__visit
+    end
+    local.get $cur
+    block $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.7 (result i32)
+     i32.const 12
+     br $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.7
+    end
+    i32.add
+    local.set $cur
+    br $while-continue|0
+   end
+  end
+  local.get $entries
+  local.get $cookie
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>~visit (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/object/Object~visit
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#__visit
  )
  (func $~lib/array/Array<std/weakref/Dummy>#get:buffer (type $i32_=>_i32) (param $this i32) (result i32)
   local.get $this
@@ -3771,61 +4146,70 @@
  (func $~lib/rt/__visit_members (type $i32_i32_=>_none) (param $0 i32) (param $1 i32)
   block $invalid
    block $~lib/array/Array<std/weakref/Dummy>
-    block $~lib/function/Function<%28usize%29=>void>
-     block $~lib/map/Map<usize,usize>
-      block $~lib/finalizationregistry/BaseRegistry
-       block $~lib/finalizationregistry/FinalizationRegistry<usize>
-        block $~lib/map/Map<usize,u32>
-         block $~lib/weakref/WeakRef<std/weakref/Dummy>
-          block $std/weakref/Dummy
-           block $~lib/arraybuffer/ArrayBufferView
-            block $~lib/string/String
-             block $~lib/arraybuffer/ArrayBuffer
-              block $~lib/object/Object
-               local.get $0
-               i32.const 8
-               i32.sub
-               i32.load $0
-               br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $std/weakref/Dummy $~lib/weakref/WeakRef<std/weakref/Dummy> $~lib/map/Map<usize,u32> $~lib/finalizationregistry/FinalizationRegistry<usize> $~lib/finalizationregistry/BaseRegistry $~lib/map/Map<usize,usize> $~lib/function/Function<%28usize%29=>void> $~lib/array/Array<std/weakref/Dummy> $invalid
+    block $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>
+     block $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>
+      block $~lib/function/Function<%28usize%29=>void>
+       block $~lib/map/Map<usize,usize>
+        block $~lib/finalizationregistry/BaseRegistry
+         block $~lib/finalizationregistry/FinalizationRegistry<usize>
+          block $~lib/map/Map<usize,u32>
+           block $~lib/weakref/WeakRef<std/weakref/Dummy>
+            block $std/weakref/Dummy
+             block $~lib/arraybuffer/ArrayBufferView
+              block $~lib/string/String
+               block $~lib/arraybuffer/ArrayBuffer
+                block $~lib/object/Object
+                 local.get $0
+                 i32.const 8
+                 i32.sub
+                 i32.load $0
+                 br_table $~lib/object/Object $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $std/weakref/Dummy $~lib/weakref/WeakRef<std/weakref/Dummy> $~lib/map/Map<usize,u32> $~lib/finalizationregistry/FinalizationRegistry<usize> $~lib/finalizationregistry/BaseRegistry $~lib/map/Map<usize,usize> $~lib/function/Function<%28usize%29=>void> $~lib/array/Array<~lib/finalizationregistry/BaseRegistry> $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>> $~lib/array/Array<std/weakref/Dummy> $invalid
+                end
+                return
+               end
+               return
               end
               return
              end
+             local.get $0
+             local.get $1
+             call $~lib/arraybuffer/ArrayBufferView~visit
              return
             end
             return
            end
-           local.get $0
-           local.get $1
-           call $~lib/arraybuffer/ArrayBufferView~visit
            return
           end
+          local.get $0
+          local.get $1
+          call $~lib/map/Map<usize,u32>~visit
           return
          end
+         local.get $0
+         local.get $1
+         call $~lib/finalizationregistry/FinalizationRegistry<usize>~visit
          return
         end
-        local.get $0
-        local.get $1
-        call $~lib/map/Map<usize,u32>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/finalizationregistry/FinalizationRegistry<usize>~visit
+       call $~lib/map/Map<usize,usize>~visit
        return
       end
       local.get $0
       local.get $1
-      call $~lib/finalizationregistry/BaseRegistry~visit
+      call $~lib/function/Function<%28usize%29=>void>~visit
       return
      end
      local.get $0
      local.get $1
-     call $~lib/map/Map<usize,usize>~visit
+     call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/function/Function<%28usize%29=>void>~visit
+    call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>~visit
     return
    end
    local.get $0
@@ -3920,7 +4304,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $~lib/finalizationregistry/BaseRegistry#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -3934,25 +4318,53 @@
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.const 8
+   i32.const 24
+   i32.const 12
    call $~lib/rt/itcms/__new
    local.tee $this
    i32.store $0
   end
   local.get $this
   i32.const 0
-  call $~lib/finalizationregistry/BaseRegistry#set:next
-  local.get $this
-  global.get $~lib/finalizationregistry/ALL_REGISTRIES
+  i32.const 4
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store $0 offset=4
   local.get $1
-  call $~lib/finalizationregistry/BaseRegistry#set:next
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:buckets
   local.get $this
-  global.set $~lib/finalizationregistry/ALL_REGISTRIES
+  i32.const 4
+  i32.const 1
+  i32.sub
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:bucketsMask
+  local.get $this
+  i32.const 0
+  i32.const 4
+  block $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.0 (result i32)
+   i32.const 12
+   br $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.0
+  end
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entries
+  local.get $this
+  i32.const 4
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesCapacity
+  local.get $this
+  i32.const 0
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesOffset
+  local.get $this
+  i32.const 0
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesCount
   local.get $this
   local.set $1
   global.get $~lib/memory/__stack_pointer
@@ -3960,6 +4372,249 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $1
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#rehash (type $i32_i32_=>_none) (param $this i32) (param $newBucketsMask i32)
+  (local $newBucketsCapacity i32)
+  (local $newBuckets i32)
+  (local $newEntriesCapacity i32)
+  (local $newEntries i32)
+  (local $oldPtr i32)
+  (local $oldEnd i32)
+  (local $newPtr i32)
+  (local $oldEntry i32)
+  (local $newEntry i32)
+  (local $oldEntryKey i32)
+  (local $newBucketIndex i32)
+  (local $newBucketPtrBase i32)
+  (local $14 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  local.get $newBucketsMask
+  i32.const 1
+  i32.add
+  local.set $newBucketsCapacity
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  local.get $newBucketsCapacity
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $newBuckets
+  i32.store $0
+  local.get $newBucketsCapacity
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $newEntriesCapacity
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  local.get $newEntriesCapacity
+  block $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.1 (result i32)
+   i32.const 12
+   br $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.1
+  end
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.tee $newEntries
+  i32.store $0 offset=4
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entries
+  local.set $oldPtr
+  local.get $oldPtr
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesOffset
+  block $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.2 (result i32)
+   i32.const 12
+   br $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.2
+  end
+  i32.mul
+  i32.add
+  local.set $oldEnd
+  local.get $newEntries
+  local.set $newPtr
+  loop $while-continue|0
+   local.get $oldPtr
+   local.get $oldEnd
+   i32.ne
+   if
+    local.get $oldPtr
+    local.set $oldEntry
+    local.get $oldEntry
+    call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:taggedNext
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $newPtr
+     local.set $newEntry
+     local.get $oldEntry
+     call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:key
+     local.set $oldEntryKey
+     local.get $newEntry
+     local.get $oldEntryKey
+     call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:key
+     local.get $newEntry
+     local.get $oldEntry
+     call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:value
+     local.set $14
+     global.get $~lib/memory/__stack_pointer
+     local.get $14
+     i32.store $0 offset=8
+     local.get $14
+     call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:value
+     local.get $oldEntryKey
+     call $~lib/util/hash/HASH<usize>
+     local.get $newBucketsMask
+     i32.and
+     local.set $newBucketIndex
+     local.get $newBuckets
+     local.get $newBucketIndex
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $newBucketPtrBase
+     local.get $newEntry
+     local.get $newBucketPtrBase
+     i32.load $0
+     call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:taggedNext
+     local.get $newBucketPtrBase
+     local.get $newPtr
+     i32.store $0
+     local.get $newPtr
+     block $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.3 (result i32)
+      i32.const 12
+      br $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.3
+     end
+     i32.add
+     local.set $newPtr
+    end
+    local.get $oldPtr
+    block $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.4 (result i32)
+     i32.const 12
+     br $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.4
+    end
+    i32.add
+    local.set $oldPtr
+    br $while-continue|0
+   end
+  end
+  local.get $this
+  local.get $newBuckets
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:buckets
+  local.get $this
+  local.get $newBucketsMask
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:bucketsMask
+  local.get $this
+  local.get $newEntries
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entries
+  local.get $this
+  local.get $newEntriesCapacity
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesCapacity
+  local.get $this
+  local.get $this
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCount
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesOffset
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~lib/finalizationregistry/BaseRegistry.finalizeAll (type $i32_=>_none) (param $ptr i32)
+  (local $registries i32)
+  (local $i i32)
+  (local $numRegistries i32)
+  (local $4 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/finalizationregistry/REGISTRIES_FOR_PTR
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $ptr
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#has
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   return
+  end
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/finalizationregistry/REGISTRIES_FOR_PTR
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $ptr
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get
+  local.tee $registries
+  i32.store $0 offset=4
+  i32.const 0
+  local.set $i
+  local.get $registries
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:length
+  local.set $numRegistries
+  loop $for-loop|0
+   local.get $i
+   local.get $numRegistries
+   i32.lt_s
+   if
+    local.get $registries
+    local.get $i
+    call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#__get
+    local.set $4
+    global.get $~lib/memory/__stack_pointer
+    local.get $4
+    i32.store $0
+    local.get $4
+    local.get $ptr
+    call $~lib/finalizationregistry/BaseRegistry#finalize@override
+    local.get $i
+    i32.const 1
+    i32.add
+    local.set $i
+    br $for-loop|0
+   end
+  end
+  global.get $~lib/finalizationregistry/REGISTRIES_FOR_PTR
+  local.set $4
+  global.get $~lib/memory/__stack_pointer
+  local.get $4
+  i32.store $0
+  local.get $4
+  local.get $ptr
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#delete
+  drop
+  global.get $~lib/finalizationregistry/PREVIOUS_FINALIZER
+  if
+   local.get $ptr
+   global.get $~lib/finalizationregistry/PREVIOUS_FINALIZER
+   call_indirect $0 (type $i32_=>_none)
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/map/Map<usize,usize>#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
@@ -4047,7 +4702,7 @@
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 8
    i32.const 7
    call $~lib/rt/itcms/__new
    local.tee $this
@@ -4075,7 +4730,7 @@
   if
    global.get $~lib/rt/__finalize
    global.set $~lib/finalizationregistry/PREVIOUS_FINALIZER
-   i32.const 656
+   i32.const 832
    local.set $2
    global.get $~lib/memory/__stack_pointer
    local.get $2
@@ -4124,28 +4779,98 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $~lib/finalizationregistry/FinalizationRegistry<usize>#register<usize> (type $i32_i32_i32_=>_none) (param $this i32) (param $key i32) (param $value i32)
-  (local $3 i32)
+  (local $ptr i32)
+  (local $registries i32)
+  (local $5 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=8
+  local.get $key
+  local.set $ptr
   local.get $this
   call $~lib/finalizationregistry/FinalizationRegistry<usize>#get:entries
-  local.set $3
+  local.set $5
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $5
   i32.store $0
-  local.get $3
-  local.get $key
+  local.get $5
+  local.get $ptr
+  call $~lib/map/Map<usize,usize>#has
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   return
+  end
+  local.get $this
+  call $~lib/finalizationregistry/FinalizationRegistry<usize>#get:entries
+  local.set $5
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  i32.store $0
+  local.get $5
+  local.get $ptr
   local.get $value
   call $~lib/map/Map<usize,usize>#set
   drop
+  global.get $~lib/finalizationregistry/REGISTRIES_FOR_PTR
+  local.set $5
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  local.get $5
+  i32.store $0
+  local.get $5
+  local.get $ptr
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#has
+  if
+   global.get $~lib/finalizationregistry/REGISTRIES_FOR_PTR
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   local.get $5
+   i32.store $0 offset=4
+   local.get $5
+   local.get $ptr
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   local.get $5
+   i32.store $0
+   local.get $5
+   local.get $this
+   call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#push
+   drop
+  else
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 0
+   call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#constructor
+   local.tee $registries
+   i32.store $0 offset=8
+   local.get $registries
+   local.get $this
+   call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#push
+   drop
+   global.get $~lib/finalizationregistry/REGISTRIES_FOR_PTR
+   local.set $5
+   global.get $~lib/memory/__stack_pointer
+   local.get $5
+   i32.store $0
+   local.get $5
+   local.get $ptr
+   local.get $registries
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set
+   drop
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -4431,7 +5156,10 @@
   call $~lib/map/Map<usize,u32>#constructor
   global.set $~lib/weakref/ALL_REFERENCES
   i32.const 0
-  i32.const 688
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#constructor
+  global.set $~lib/finalizationregistry/REGISTRIES_FOR_PTR
+  i32.const 0
+  i32.const 864
   local.set $7
   global.get $~lib/memory/__stack_pointer
   local.get $7
@@ -4450,7 +5178,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 11
    i32.const 3
    call $~lib/builtins/abort
@@ -4464,7 +5192,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 13
    i32.const 3
    call $~lib/builtins/abort
@@ -4481,7 +5209,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 28
    i32.const 3
    call $~lib/builtins/abort
@@ -4495,7 +5223,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 32
    i32.const 3
    call $~lib/builtins/abort
@@ -4517,7 +5245,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 36
    i32.const 3
    call $~lib/builtins/abort
@@ -4538,7 +5266,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 51
    i32.const 3
    call $~lib/builtins/abort
@@ -4551,7 +5279,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 52
    i32.const 3
    call $~lib/builtins/abort
@@ -4565,7 +5293,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 55
    i32.const 3
    call $~lib/builtins/abort
@@ -4578,7 +5306,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 56
    i32.const 3
    call $~lib/builtins/abort
@@ -4595,7 +5323,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 59
    i32.const 3
    call $~lib/builtins/abort
@@ -4608,7 +5336,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 60
    i32.const 3
    call $~lib/builtins/abort
@@ -4630,7 +5358,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 65
    i32.const 3
    call $~lib/builtins/abort
@@ -4643,7 +5371,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 720
+   i32.const 896
    i32.const 66
    i32.const 3
    call $~lib/builtins/abort
@@ -4873,6 +5601,124 @@
   local.get $8
   return
  )
+ (func $~lib/object/Object#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 0
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $~lib/finalizationregistry/BaseRegistry#constructor (type $i32_=>_i32) (param $this i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  call $~lib/object/Object#constructor
+  local.tee $this
+  i32.store $0
+  local.get $this
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#__get (type $i32_i32_=>_i32) (param $this i32) (param $index i32) (result i32)
+  (local $value i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $index
+  local.get $this
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:length_
+  i32.ge_u
+  if
+   i32.const 224
+   i32.const 656
+   i32.const 114
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $this
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#get:dataStart
+  local.get $index
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load $0
+  local.tee $value
+  i32.store $0
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  local.get $value
+  i32.eqz
+  if
+   i32.const 704
+   i32.const 656
+   i32.const 118
+   i32.const 40
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $value
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
  (func $~lib/map/Map<usize,usize>#set (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $value i32) (result i32)
   (local $hashCode i32)
   (local $entry i32)
@@ -4997,8 +5843,103 @@
   local.get $8
   return
  )
- (func $~lib/object/Object#constructor (type $i32_=>_i32) (param $this i32) (result i32)
-  (local $1 i32)
+ (func $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#constructor (type $i32_i32_=>_i32) (param $this i32) (param $length i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $bufferSize i32)
+  (local $buffer i32)
+  (local $6 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 16
+   i32.const 11
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  i32.const 0
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:buffer
+  local.get $this
+  i32.const 0
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:dataStart
+  local.get $this
+  i32.const 0
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:byteLength
+  local.get $this
+  i32.const 0
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:length_
+  local.get $length
+  i32.const 1073741820
+  i32.const 2
+  i32.shr_u
+  i32.gt_u
+  if
+   i32.const 432
+   i32.const 656
+   i32.const 70
+   i32.const 60
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $length
+  local.tee $2
+  i32.const 8
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_u
+  select
+  i32.const 2
+  i32.shl
+  local.set $bufferSize
+  global.get $~lib/memory/__stack_pointer
+  local.get $bufferSize
+  i32.const 1
+  call $~lib/rt/itcms/__new
+  local.tee $buffer
+  i32.store $0 offset=4
+  i32.const 2
+  global.get $~lib/shared/runtime/Runtime.Incremental
+  i32.ne
+  drop
+  local.get $this
+  local.get $buffer
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:buffer
+  local.get $this
+  local.get $buffer
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:dataStart
+  local.get $this
+  local.get $bufferSize
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:byteLength
+  local.get $this
+  local.get $length
+  call $~lib/array/Array<~lib/finalizationregistry/BaseRegistry>#set:length_
+  local.get $this
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $6
+ )
+ (func $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set (type $i32_i32_i32_=>_i32) (param $this i32) (param $key i32) (param $value i32) (result i32)
+  (local $hashCode i32)
+  (local $entry i32)
+  (local $entries i32)
+  (local $6 i32)
+  (local $bucketPtrBase i32)
+  (local $8 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -5007,23 +5948,122 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store $0
+  local.get $key
+  call $~lib/util/hash/HASH<usize>
+  local.set $hashCode
   local.get $this
-  i32.eqz
+  local.get $key
+  local.get $hashCode
+  call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#find
+  local.set $entry
+  local.get $entry
   if
+   local.get $entry
+   local.get $value
+   call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:value
+   i32.const 1
+   drop
+   local.get $this
+   local.get $value
+   i32.const 1
+   call $~lib/rt/itcms/__link
+  else
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesOffset
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCapacity
+   i32.eq
+   if
+    local.get $this
+    local.get $this
+    call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCount
+    local.get $this
+    call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCapacity
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $this
+     call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:bucketsMask
+    else
+     local.get $this
+     call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:bucketsMask
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#rehash
+   end
    global.get $~lib/memory/__stack_pointer
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entries
+   local.tee $entries
+   i32.store $0
+   local.get $entries
+   local.get $this
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesOffset
+   local.tee $6
+   i32.const 1
+   i32.add
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesOffset
+   local.get $6
+   block $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.5 (result i32)
+    i32.const 12
+    br $~lib/map/ENTRY_SIZE<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>|inlined.5
+   end
+   i32.mul
+   i32.add
+   local.set $entry
+   local.get $entry
+   local.get $key
+   call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:key
    i32.const 0
-   i32.const 0
-   call $~lib/rt/itcms/__new
-   local.tee $this
+   drop
+   local.get $entry
+   local.get $value
+   call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:value
+   i32.const 1
+   drop
+   local.get $this
+   local.get $value
+   i32.const 1
+   call $~lib/rt/itcms/__link
+   local.get $this
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:entriesCount
+   i32.const 1
+   i32.add
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:entriesCount
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:buckets
+   local.get $hashCode
+   local.get $this
+   call $~lib/map/Map<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#get:bucketsMask
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $bucketPtrBase
+   local.get $entry
+   local.get $bucketPtrBase
+   i32.load $0
+   call $~lib/map/MapEntry<usize,~lib/array/Array<~lib/finalizationregistry/BaseRegistry>>#set:taggedNext
+   local.get $bucketPtrBase
+   local.get $entry
    i32.store $0
   end
   local.get $this
-  local.set $1
+  local.set $8
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $8
+  return
  )
  (func $std/weakref/Dummy#constructor (type $i32_=>_i32) (param $this i32) (result i32)
   (local $1 i32)
@@ -5075,7 +6115,7 @@
   i32.ge_u
   if
    i32.const 224
-   i32.const 848
+   i32.const 656
    i32.const 114
    i32.const 42
    call $~lib/builtins/abort
@@ -5099,8 +6139,8 @@
   local.get $value
   i32.eqz
   if
-   i32.const 896
-   i32.const 848
+   i32.const 704
+   i32.const 656
    i32.const 118
    i32.const 40
    call $~lib/builtins/abort

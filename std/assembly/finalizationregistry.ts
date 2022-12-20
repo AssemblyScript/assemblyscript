@@ -5,20 +5,21 @@
 @lazy let INITIALIZED: boolean = false;
 
 // @ts-ignore: decorators
-@lazy let ALL_REGISTRIES: BaseRegistry | null = null;
+@lazy let REGISTRIES_FOR_PTR: Map<usize, BaseRegistry[]> = new Map<usize, BaseRegistry[]>();
 
 abstract class BaseRegistry {
-  private next: BaseRegistry | null;
-
-  constructor() {
-    this.next = ALL_REGISTRIES;
-    ALL_REGISTRIES = this;
-  }
-
   static finalizeAll(ptr: usize): void {
-    for (let i = ALL_REGISTRIES; i !== null; i = i.next) {
-      i.finalize(ptr);
+    if (!REGISTRIES_FOR_PTR.has(ptr)) { return; }
+
+    const registries = REGISTRIES_FOR_PTR.get(ptr);
+    for (
+      let i = 0, numRegistries = registries.length;
+      i < numRegistries;
+      ++i
+    ) {
+      registries[i].finalize(ptr);
     }
+    REGISTRIES_FOR_PTR.delete(ptr);
 
     if (PREVIOUS_FINALIZER) {
       call_indirect<void>(PREVIOUS_FINALIZER, ptr);
@@ -42,7 +43,18 @@ export class FinalizationRegistry<T> extends BaseRegistry {
   }
 
   register<U>(key: U, value: T): void {
-    this.entries.set(changetype<usize>(key), value);
+    const ptr = changetype<usize>(key);
+    if (this.entries.has(ptr)) { return; }
+
+    this.entries.set(ptr, value);
+
+    if (REGISTRIES_FOR_PTR.has(ptr)) {
+      REGISTRIES_FOR_PTR.get(ptr).push(this);
+    } else {
+      const registries: BaseRegistry[] = new Array<BaseRegistry>();
+      registries.push(this);
+      REGISTRIES_FOR_PTR.set(ptr, registries);
+    }
   }
 
   unregister<U>(key: U): bool {
