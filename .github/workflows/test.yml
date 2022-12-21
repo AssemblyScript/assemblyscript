@@ -64,7 +64,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build
-        path: build/
+        path: |
+          build/
+          dist/
     - name: "Test ${{ matrix.target }}"
       run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target }}-bootstrap.js
     - name: "Compile ${{ matrix.target }} -> ${{ matrix.target == 'debug' && 'release' || 'debug' }}"
