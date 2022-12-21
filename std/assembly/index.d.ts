@@ -2060,7 +2060,7 @@ declare class WeakRef<T> {
 
 declare class FinalizationRegistry<T> {
   constructor(finalizer: (heldValue: T) => void);
-  register<U, V>(target: U, value: T, token: V): void;
+  register<U, V>(target: U, heldValue: T, token: V): void;
   unregister<V>(token: V): bool;
 }
 

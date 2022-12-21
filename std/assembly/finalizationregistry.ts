@@ -78,23 +78,23 @@ export class FinalizationRegistry<T> extends BaseRegistry {
     }
   }
 
-  register<U, V>(key: U, value: T, token: V): void {
+  register<U, V>(target: U, heldValue: T, token: V): void {
     if(!isManaged<U>()) { ERROR("invalid target"); }
 
-    const keyPtr = changetype<usize>(key);
-    if (this.entries.has(keyPtr)) { return; }
-
+    const targetPtr = changetype<usize>(target);
     const tokenPtr = changetype<usize>(token);
-    this.entries.set(tokenPtr, value);
+
+    if (this.entries.has(tokenPtr)) { return; }
+    this.entries.set(tokenPtr, heldValue);
 
     const newEntry = FinalizationEntry.alloc();
     newEntry.registry = this;
     newEntry.token = tokenPtr;
-    const head: FinalizationEntry | null = ENTRIES_FOR_PTR.has(keyPtr)
-      ? ENTRIES_FOR_PTR.get(keyPtr)
+    const head: FinalizationEntry | null = ENTRIES_FOR_PTR.has(targetPtr)
+      ? ENTRIES_FOR_PTR.get(targetPtr)
       : null;
     newEntry.next = head;
-    ENTRIES_FOR_PTR.set(keyPtr, newEntry);
+    ENTRIES_FOR_PTR.set(targetPtr, newEntry);
   }
 
   unregister<V>(token: V): bool {
