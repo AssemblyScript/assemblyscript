@@ -12,23 +12,17 @@
 
 class FinalizationEntry {
   next: FinalizationEntry | null = null;
-
-  private constructor(
-    public registry: BaseRegistry,
-    public token: usize,
-  ) {
-  }
+  registry: BaseRegistry | null = null;
+  token: usize = 0;
 
   // @ts-ignore: decorators
   @inline
-  static alloc(registry: BaseRegistry, token: usize): FinalizationEntry {
+  static alloc(): FinalizationEntry {
     const instance: FinalizationEntry | null = ENTRY_POOL;
     if (instance === null) {
-      return new FinalizationEntry(registry, token);
+      return new FinalizationEntry;
     } else {
       ENTRY_POOL = instance.next;
-      instance.registry = registry;
-      instance.token = token;
       return instance;
     }
   }
@@ -36,6 +30,7 @@ class FinalizationEntry {
   // @ts-ignore: decorators
   @inline
   static recycle(entry: FinalizationEntry): void {
+    entry.registry = null; // Allow the registry to be GC-ed
     entry.next = ENTRY_POOL;
     ENTRY_POOL = entry;
   }
@@ -51,7 +46,10 @@ abstract class BaseRegistry {
       let i: FinalizationEntry | null = entries;
       i !== null;
     ) {
-      i.registry.finalize(i.token);
+      const registry = i.registry;
+      assert(registry !== null);
+
+      registry!.finalize(i.token);
       const next: FinalizationEntry | null = i.next;
       FinalizationEntry.recycle(i);
       i = next;
@@ -89,7 +87,9 @@ export class FinalizationRegistry<T> extends BaseRegistry {
     const tokenPtr = changetype<usize>(token);
     this.entries.set(tokenPtr, value);
 
-    const newEntry = FinalizationEntry.alloc(this, tokenPtr);
+    const newEntry = FinalizationEntry.alloc();
+    newEntry.registry = this;
+    newEntry.token = tokenPtr;
     const head: FinalizationEntry | null = ENTRIES_FOR_PTR.has(keyPtr)
       ? ENTRIES_FOR_PTR.get(keyPtr)
       : null;
