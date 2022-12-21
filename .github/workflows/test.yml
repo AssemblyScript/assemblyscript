@@ -52,13 +52,19 @@ jobs:
     - uses: actions/checkout@v3
     - uses: dcodeIO/setup-node-nvm@master
       with:
-        node-version: 18
+        node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Build
       run: npm run build
     - name: "Bootstrap ${{ matrix.target }}"
       run: npm run bootstrap:${{ matrix.target }}
+    - name: Upload artifact
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build/
     - name: "Test ${{ matrix.target }}"
       run: npm run test:compiler -- --wasm build/assemblyscript.${{ matrix.target }}-bootstrap.js
     - name: "Compile ${{ matrix.target }} -> ${{ matrix.target == 'debug' && 'release' || 'debug' }}"
