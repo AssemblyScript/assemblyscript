@@ -725,22 +725,6 @@ export class Flow {
 
   /** Inherits two alternate branches to become this flow, i.e. then with else. */
   inheritAlternatives(left: Flow, right: Flow): void {
-    if (left.targetFunction != right.targetFunction) {
-      console.log("= left =");
-      console.log(left.toString());
-      // let iter = left.parent;
-      // while (iter) {
-      //   console.log("- " + iter.toString());
-      //   iter = iter.parent;
-      // }
-      console.log("= right =");
-      console.log(right.toString());
-      let iter = right.parent;
-      while (iter) {
-        console.log(iter.toString());
-        iter = iter.parent;
-      }
-    }
     assert(left.targetFunction == right.targetFunction);
     assert(left.targetFunction == this.targetFunction);
     // Differs from `mergeBranch` in that the alternatives are intersected to
