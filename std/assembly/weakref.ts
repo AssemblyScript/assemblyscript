@@ -28,7 +28,7 @@ export class WeakRef<T> {
     } else {
       this.cookie = CURRENT_COOKIE;
       ALL_REFERENCES.set(this.ref, this.cookie);
-      REGISTRY.register(value, this.ref);
+      REGISTRY.register(value, this.ref, value);
     }
   }
 

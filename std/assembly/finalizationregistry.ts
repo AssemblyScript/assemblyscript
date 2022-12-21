@@ -5,28 +5,40 @@
 @lazy let INITIALIZED: boolean = false;
 
 // @ts-ignore: decorators
-@lazy let REGISTRIES_FOR_PTR: Map<usize, BaseRegistry[]> = new Map<usize, BaseRegistry[]>();
+@lazy let ENTRIES_FOR_PTR: Map<usize, FinalizationEntry> = new Map<usize, FinalizationEntry>();
+
+class FinalizationEntry {
+  next: FinalizationEntry | null = null;
+
+  constructor(
+    public readonly registry: BaseRegistry,
+    public readonly token: usize,
+  ) {
+  }
+}
 
 abstract class BaseRegistry {
   static finalizeAll(ptr: usize): void {
-    if (!REGISTRIES_FOR_PTR.has(ptr)) { return; }
+    if (!ENTRIES_FOR_PTR.has(ptr)) { return; }
 
-    const registries = REGISTRIES_FOR_PTR.get(ptr);
+    const entries = ENTRIES_FOR_PTR.get(ptr);
+
     for (
-      let i = 0, numRegistries = registries.length;
-      i < numRegistries;
-      ++i
+      let i: FinalizationEntry | null = entries;
+      i !== null;
+      i = i.next
     ) {
-      registries[i].finalize(ptr);
+      i.registry.finalize(i.token);
     }
-    REGISTRIES_FOR_PTR.delete(ptr);
+
+    ENTRIES_FOR_PTR.delete(ptr);
 
     if (PREVIOUS_FINALIZER) {
       call_indirect<void>(PREVIOUS_FINALIZER, ptr);
     }
   }
 
-  protected abstract finalize(ptr: usize): void;
+  protected abstract finalize(token: usize): void;
 }
 
 export class FinalizationRegistry<T> extends BaseRegistry {
@@ -42,33 +54,31 @@ export class FinalizationRegistry<T> extends BaseRegistry {
     }
   }
 
-  register<U>(key: U, value: T): void {
+  register<U, V>(key: U, value: T, token: V): void {
     if(!isManaged<U>()) { ERROR("invalid target"); }
 
-    const ptr = changetype<usize>(key);
-    if (this.entries.has(ptr)) { return; }
+    const keyPtr = changetype<usize>(key);
+    if (this.entries.has(keyPtr)) { return; }
 
-    this.entries.set(ptr, value);
+    const tokenPtr = changetype<usize>(token);
+    this.entries.set(tokenPtr, value);
 
-    if (REGISTRIES_FOR_PTR.has(ptr)) {
-      REGISTRIES_FOR_PTR.get(ptr).push(this);
-    } else {
-      const registries: BaseRegistry[] = new Array<BaseRegistry>();
-      registries.push(this);
-      REGISTRIES_FOR_PTR.set(ptr, registries);
-    }
+    const newEntry = new FinalizationEntry(this, tokenPtr);
+    const head: FinalizationEntry | null = ENTRIES_FOR_PTR.has(keyPtr)
+      ? ENTRIES_FOR_PTR.get(keyPtr)
+      : null;
+    newEntry.next = head;
+    ENTRIES_FOR_PTR.set(keyPtr, newEntry);
   }
 
-  unregister<U>(key: U): bool {
-    if(!isManaged<U>()) { ERROR("invalid target"); }
-
-    return this.entries.delete(changetype<usize>(key));
+  unregister<V>(token: V): bool {
+    return this.entries.delete(changetype<usize>(token));
   }
 
-  protected finalize(ptr: usize): void {
-    if (this.entries.has(ptr)) {
-      const value = this.entries.get(ptr);
-      this.entries.delete(ptr);
+  protected finalize(token: usize): void {
+    if (this.entries.has(token)) {
+      const value = this.entries.get(token);
+      this.entries.delete(token);
 
       this.finalizer(value);
     }
