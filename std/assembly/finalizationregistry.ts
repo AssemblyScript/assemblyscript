@@ -5,15 +5,39 @@
 @lazy let INITIALIZED: boolean = false;
 
 // @ts-ignore: decorators
-@lazy let ENTRIES_FOR_PTR: Map<usize, FinalizationEntry> = new Map<usize, FinalizationEntry>();
+@lazy const ENTRIES_FOR_PTR: Map<usize, FinalizationEntry> = new Map<usize, FinalizationEntry>();
+
+// @ts-ignore: decorators
+@lazy let ENTRY_POOL: FinalizationEntry | null = null;
 
 class FinalizationEntry {
   next: FinalizationEntry | null = null;
 
-  constructor(
-    public readonly registry: BaseRegistry,
-    public readonly token: usize,
+  private constructor(
+    public registry: BaseRegistry,
+    public token: usize,
   ) {
+  }
+
+  // @ts-ignore: decorators
+  @inline
+  static alloc(registry: BaseRegistry, token: usize): FinalizationEntry {
+    const instance: FinalizationEntry | null = ENTRY_POOL;
+    if (instance === null) {
+      return new FinalizationEntry(registry, token);
+    } else {
+      ENTRY_POOL = instance.next;
+      instance.registry = registry;
+      instance.token = token;
+      return instance;
+    }
+  }
+
+  // @ts-ignore: decorators
+  @inline
+  static recycle(entry: FinalizationEntry): void {
+    entry.next = ENTRY_POOL;
+    ENTRY_POOL = entry;
   }
 }
 
@@ -26,9 +50,11 @@ abstract class BaseRegistry {
     for (
       let i: FinalizationEntry | null = entries;
       i !== null;
-      i = i.next
     ) {
       i.registry.finalize(i.token);
+      const next: FinalizationEntry | null = i.next;
+      FinalizationEntry.recycle(i);
+      i = next;
     }
 
     ENTRIES_FOR_PTR.delete(ptr);
@@ -63,7 +89,7 @@ export class FinalizationRegistry<T> extends BaseRegistry {
     const tokenPtr = changetype<usize>(token);
     this.entries.set(tokenPtr, value);
 
-    const newEntry = new FinalizationEntry(this, tokenPtr);
+    const newEntry = FinalizationEntry.alloc(this, tokenPtr);
     const head: FinalizationEntry | null = ENTRIES_FOR_PTR.has(keyPtr)
       ? ENTRIES_FOR_PTR.get(keyPtr)
       : null;
