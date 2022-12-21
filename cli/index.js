@@ -47,6 +47,15 @@ if (~wasmPos) {
   assemblyscript = await import(new URL(wasmPath, url.pathToFileURL(process.cwd() + "/")));
 }
 
+{
+  let original = assemblyscript;
+  assemblyscript = Object.create(original);
+  assemblyscript.parse =  assemblyscript.parse = function(program, text, path, isEntry) {
+    console.log(`parse ${path} (${text ? text.length : "not found"})`)
+    return original.parse(program, text, path, isEntry);
+  };
+}
+
 const require = module.createRequire(import.meta.url);
 
 const WIN = process.platform === "win32";
