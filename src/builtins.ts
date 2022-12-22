@@ -3589,8 +3589,9 @@ function builtin_unchecked(ctx: BuiltinContext): ExpressionRef {
   ) return module.unreachable();
   let flow = compiler.currentFlow;
   let ignoreUnchecked = compiler.options.uncheckedBehavior === UncheckedBehavior.Never;
-  let alreadyUnchecked = !ignoreUnchecked && flow.is(FlowFlags.UncheckedContext);
-  if (!ignoreUnchecked) flow.set(FlowFlags.UncheckedContext);
+  let alreadyUnchecked = flow.is(FlowFlags.UncheckedContext);
+  if (ignoreUnchecked) assert(!alreadyUnchecked);
+  else flow.set(FlowFlags.UncheckedContext);
   // eliminate unnecessary tees by preferring contextualType(=void)
   let expr = compiler.compileExpression(ctx.operands[0], ctx.contextualType);
   if (!alreadyUnchecked) flow.unset(FlowFlags.UncheckedContext);
