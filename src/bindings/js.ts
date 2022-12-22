@@ -92,6 +92,18 @@ import {
 //   callee expects a properly coerced integer value, leading to more `>>> 0`
 //   coercions than necessary when the import is actually another Wasm module.
 
+/** Maps special imports to their actual modules. */
+function importToModule(moduleName: string): string {
+  // Map rtrace via `imports` in package.json
+  if (moduleName == "rtrace") return "#rtrace";
+  return moduleName;
+}
+
+/** Determines whether a module's imports should be instrumented. */
+function shouldInstrument(moduleName: string): bool {
+  return moduleName != "rtrace";
+}
+
 /** A JavaScript bindings builder. */
 export class JSBuilder extends ExportsWalker {
 
@@ -515,6 +527,12 @@ export class JSBuilder extends ExportsWalker {
         sb.push(escapeString(moduleName, CharCode.DoubleQuote));
         sb.push("\"");
       }
+      if (!shouldInstrument(moduleName)) {
+        sb.push(": __module");
+        sb.push(moduleId.toString());
+        sb.push(",\n");
+        continue;
+      }
       let resetPos = sb.length;
       sb.push(": Object.assign(Object.create(");
       if (moduleName == "env") {
@@ -580,6 +598,14 @@ export class JSBuilder extends ExportsWalker {
         map.push("  const env = imports.env;\n");
       } else {
         let moduleId = <i32>mappings.get(moduleName);
+        if (moduleName == "rtrace") {
+          // Rtrace is special in that it needs to be installed on the imports
+          // object. Use sensible defaults and substitute the original import.
+          map.push("  ((rtrace) => {\n");
+          map.push("    delete imports.rtrace;\n");
+          map.push("    new rtrace.Rtrace({ getMemory() { return memory; }, onerror() { console.log(`RTRACE: ${err.stack}`); } }).install(imports);\n");
+          map.push("  })(imports.rtrace);\n");
+        }
         map.push("  const __module");
         map.push(moduleId.toString());
         map.push(" = imports");
@@ -914,7 +940,7 @@ export class JSBuilder extends ExportsWalker {
           importExpr.push("import * as __import");
           importExpr.push(moduleId.toString());
           importExpr.push(" from \"");
-          importExpr.push(escapeString(moduleName, CharCode.DoubleQuote));
+          importExpr.push(escapeString(importToModule(moduleName), CharCode.DoubleQuote));
           importExpr.push("\";\n");
           needsMaybeDefault = true;
         }
