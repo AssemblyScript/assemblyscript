@@ -26,7 +26,8 @@
 import {
   Compiler,
   Constraints,
-  RuntimeFeatures
+  RuntimeFeatures,
+  UncheckedBehavior
 } from "./compiler";
 
 import {
@@ -3587,8 +3588,10 @@ function builtin_unchecked(ctx: BuiltinContext): ExpressionRef {
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
   let flow = compiler.currentFlow;
+  let ignoreUnchecked = compiler.options.uncheckedBehavior === UncheckedBehavior.Never;
   let alreadyUnchecked = flow.is(FlowFlags.UncheckedContext);
-  flow.set(FlowFlags.UncheckedContext);
+  if (ignoreUnchecked) assert(!alreadyUnchecked);
+  else flow.set(FlowFlags.UncheckedContext);
   // eliminate unnecessary tees by preferring contextualType(=void)
   let expr = compiler.compileExpression(ctx.operands[0], ctx.contextualType);
   if (!alreadyUnchecked) flow.unset(FlowFlags.UncheckedContext);

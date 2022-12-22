@@ -295,13 +295,19 @@ export async function main(argv, options) {
   }
 
   // Set up options
-  let program, runtime;
+  let program, runtime, uncheckedBehavior;
   const compilerOptions = assemblyscript.newOptions();
   switch (opts.runtime) {
     case "stub": runtime = 0; break;
     case "minimal": runtime = 1; break;
     /* incremental */
     default: runtime = 2; break;
+  }
+  switch (opts.uncheckedBehavior) {
+    /* default */
+    default: uncheckedBehavior = 0; break;
+    case "never": uncheckedBehavior = 1; break;
+    case "always": uncheckedBehavior = 2; break;
   }
   assemblyscript.setTarget(compilerOptions, 0);
   assemblyscript.setDebugInfo(compilerOptions, !!opts.debug);
@@ -320,6 +326,7 @@ export async function main(argv, options) {
   assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
   assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, opts.sourceMap != null);
+  assemblyscript.setUncheckedBehavior(compilerOptions, uncheckedBehavior);
   assemblyscript.setNoUnsafe(compilerOptions, opts.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);

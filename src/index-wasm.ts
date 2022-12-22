@@ -22,7 +22,8 @@ import {
 
 import {
   Compiler,
-  Options
+  Options,
+  UncheckedBehavior
 } from "./compiler";
 
 import {
@@ -100,6 +101,11 @@ export function setExportTable(options: Options, exportTable: bool): void {
 /** Sets the `sourceMap` option. */
 export function setSourceMap(options: Options, sourceMap: bool): void {
   options.sourceMap = sourceMap;
+}
+
+/** Sets the `uncheckedBehavior` option. */
+export function setUncheckedBehavior(options: Options, uncheckedBehavior: UncheckedBehavior): void {
+  options.uncheckedBehavior = uncheckedBehavior;
 }
 
 /** Sets the `memoryBase` option. */
