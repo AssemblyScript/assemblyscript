@@ -1432,6 +1432,7 @@
  )
  (func $~start (type $none_=>_none)
   (local $0 i32)
+  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -1478,7 +1479,7 @@
    i32.const 1392
    global.set $~lib/rt/itcms/fromSpace
    local.get $0
-   i32.const 4
+   i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -1487,20 +1488,27 @@
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
-   i32.const 0
-   i32.store $0
+   i64.const 0
+   i64.store $0
    local.get $0
    call $~lib/rt/itcms/__new
    local.tee $0
    i32.store $0
-   local.get $0
-   i32.const 2
-   i32.store $0
-   local.get $0
-   i32.const 2
-   i32.store $0
    global.get $~lib/memory/__stack_pointer
-   i32.const 4
+   local.tee $1
+   local.get $0
+   i32.store $0 offset=4
+   local.get $0
+   i32.const 2
+   i32.store $0
+   local.get $1
+   local.get $0
+   i32.store $0 offset=4
+   local.get $0
+   i32.const 2
+   i32.store $0
+   local.get $1
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0
@@ -1509,8 +1517,29 @@
    global.get $reexport/car
    local.tee $0
    i32.store $0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1512
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $1
+   i32.const 0
+   i32.store $0
+   local.get $1
+   local.get $0
+   i32.store $0
    local.get $0
    i32.load $0
+   local.set $0
+   local.get $1
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $0
    i32.const 2
    i32.ne
    if

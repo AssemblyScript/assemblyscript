@@ -1401,6 +1401,7 @@
  )
  (func $~start (type $none_=>_none)
   (local $0 i32)
+  (local $1 i32)
   memory.size $0
   i32.const 16
   i32.shl
@@ -1434,7 +1435,7 @@
   i32.const 1344
   global.set $~lib/rt/itcms/fromSpace
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
@@ -1450,33 +1451,55 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.tee $0
+  i64.const 0
+  i64.store $0
+  local.get $0
   i32.const 0
-  i32.store $0
+  i32.store $0 offset=8
   local.get $0
   call $~lib/rt/itcms/__new
-  local.tee $0
+  local.tee $1
   i32.store $0
-  local.get $0
+  global.get $~lib/memory/__stack_pointer
+  local.tee $0
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
   i32.const 4
   i32.store $0 offset=8
   local.get $0
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
   i32.const 0
   i32.store $0
   local.get $0
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
   i32.const 0
   i32.store $0 offset=4
   local.get $0
+  local.get $1
+  i32.store $0 offset=4
   local.get $0
+  local.get $1
+  i32.store $0 offset=8
+  local.get $1
+  local.get $1
   i32.load $0 offset=8
   i32.store $0 offset=4
   local.get $0
+  local.get $1
+  i32.store $0 offset=4
+  local.get $1
   i32.const 4
   i32.store $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  local.get $0
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   global.set $issues/1225/x
   call $issues/1225/normal
   i32.const 4

@@ -1636,7 +1636,7 @@
    i32.const 1344
    global.set $~lib/rt/itcms/fromSpace
    local.get $0
-   i32.const 8
+   i32.const 12
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -1648,6 +1648,9 @@
    i64.const 0
    i64.store $0
    local.get $0
+   i32.const 0
+   i32.store $0 offset=8
+   local.get $0
    i32.const 4
    i32.const 4
    call $~lib/rt/itcms/__new
@@ -1655,6 +1658,9 @@
    i32.store $0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
+   local.get $0
+   i32.store $0 offset=4
+   local.get $1
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -1683,20 +1689,23 @@
    local.get $0
    i32.store $0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1456
+   local.get $0
    i32.store $0 offset=4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1456
+   i32.store $0 offset=8
    local.get $0
    i32.const 1456
    call $issues/1095/Foo#set:bar
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 12
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store $0
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 16
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -1708,10 +1717,19 @@
    i64.const 0
    i64.store $0
    local.get $1
+   i64.const 0
+   i64.store $0 offset=8
+   local.get $1
+   local.get $0
+   i32.store $0
+   local.get $1
+   local.get $0
+   i32.store $0 offset=8
+   local.get $1
    local.get $0
    i32.load $0
    local.tee $1
-   i32.store $0 offset=4
+   i32.store $0 offset=12
    local.get $1
    i32.eqz
    if
@@ -1724,12 +1742,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    local.get $1
-   i32.store $0
+   i32.store $0 offset=4
    local.get $0
    local.get $1
    call $issues/1095/Foo#set:bar
    global.get $~lib/memory/__stack_pointer
-   i32.const 8
+   i32.const 16
    i32.add
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer

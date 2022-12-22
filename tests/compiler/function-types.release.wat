@@ -163,7 +163,7 @@
    i32.const 2
    global.set $~argumentsLength
    global.get $~lib/memory/__stack_pointer
-   i32.const 4
+   i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
@@ -171,8 +171,8 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.store $0
+   i64.const 0
+   i64.store $0
    block $1of1
     block $0of1
      block $outOfRange
@@ -189,6 +189,9 @@
     i32.const 1056
     i32.store $0
    end
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store $0 offset=4
    i32.const 2
    global.set $~argumentsLength
    i32.const 1
@@ -198,7 +201,7 @@
    call_indirect $0 (type $i32_i32_=>_i32)
    local.set $0
    global.get $~lib/memory/__stack_pointer
-   i32.const 4
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $0

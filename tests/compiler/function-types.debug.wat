@@ -105,6 +105,47 @@
    unreachable
   end
  )
+ (func $function-types/makeAndAdd<i32>@varargs (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $adder i32) (result i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 2
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   call $function-types/makeAdder<i32>
+   local.tee $adder
+   i32.store $0
+  end
+  local.get $a
+  local.get $b
+  local.get $adder
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0 offset=4
+  local.get $3
+  call $function-types/makeAndAdd<i32>
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+ )
  (func $start:function-types (type $none_=>_none)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
@@ -268,41 +309,5 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
- )
- (func $function-types/makeAndAdd<i32>@varargs (type $i32_i32_i32_=>_i32) (param $a i32) (param $b i32) (param $adder i32) (result i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 2
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/memory/__stack_pointer
-   call $function-types/makeAdder<i32>
-   local.tee $adder
-   i32.store $0
-  end
-  local.get $a
-  local.get $b
-  local.get $adder
-  call $function-types/makeAndAdd<i32>
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
  )
 )

@@ -39,6 +39,181 @@
   i32.shr_u
   return
  )
+ (func $std/hash/check (type $i32_=>_i32) (param $hash i32) (result i32)
+  i32.const 1
+  return
+ )
+ (func $~lib/util/hash/HASH<f32> (type $f32_=>_i32) (param $key f32) (result i32)
+  (local $key|1 i32)
+  (local $len i32)
+  (local $h i32)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 1
+  drop
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  block $~lib/util/hash/hash32|inlined.0 (result i32)
+   local.get $key
+   i32.reinterpret_f32
+   local.set $key|1
+   i32.const 4
+   local.set $len
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   local.get $len
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash32|inlined.0
+  end
+  return
+ )
+ (func $~lib/util/hash/HASH<f64> (type $f64_=>_i32) (param $key f64) (result i32)
+  (local $key|1 i64)
+  (local $h i32)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 1
+  drop
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  block $~lib/util/hash/hash64|inlined.0 (result i32)
+   local.get $key
+   i64.reinterpret_f64
+   local.set $key|1
+   i32.const 0
+   i32.const 374761393
+   i32.add
+   i32.const 8
+   i32.add
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $key|1
+   i64.const 32
+   i64.shr_u
+   i32.wrap_i64
+   i32.const -1028477379
+   i32.mul
+   i32.add
+   local.set $h
+   local.get $h
+   i32.const 17
+   i32.rotl
+   i32.const 668265263
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -2048144777
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   i32.const -1028477379
+   i32.mul
+   local.set $h
+   local.get $h
+   local.get $h
+   i32.const 16
+   i32.shr_u
+   i32.xor
+   local.set $h
+   local.get $h
+   br $~lib/util/hash/hash64|inlined.0
+  end
+  return
+ )
+ (func $~start (type $none_=>_none)
+  call $start:std/hash
+ )
+ (func $~stack_check (type $none_=>_none)
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__data_end
+  i32.lt_s
+  if
+   i32.const 33168
+   i32.const 33216
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
  (func $~lib/util/hash/HASH<~lib/string/String|null> (type $i32_=>_i32) (param $key i32) (result i32)
   (local $key|1 i32)
   (local $h i32)
@@ -58,11 +233,22 @@
   (local $h|16 i32)
   (local $key|17 i32)
   (local $end|18 i32)
+  (local $19 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.0 (result i32)
+   global.get $~lib/memory/__stack_pointer
    local.get $key
-   local.set $key|1
+   local.tee $key|1
+   i32.store $0
    local.get $key|1
    i32.const 0
    i32.eq
@@ -71,6 +257,11 @@
     br $~lib/util/hash/hashStr|inlined.0
    end
    local.get $key|1
+   local.set $19
+   global.get $~lib/memory/__stack_pointer
+   local.get $19
+   i32.store $0 offset=4
+   local.get $19
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
@@ -304,10 +495,12 @@
    local.get $h
    br $~lib/util/hash/hashStr|inlined.0
   end
-  return
- )
- (func $std/hash/check (type $i32_=>_i32) (param $hash i32) (result i32)
-  i32.const 1
+  local.set $19
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $19
   return
  )
  (func $~lib/util/hash/HASH<~lib/string/String> (type $i32_=>_i32) (param $key i32) (result i32)
@@ -329,11 +522,22 @@
   (local $h|16 i32)
   (local $key|17 i32)
   (local $end|18 i32)
+  (local $19 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
   i32.const 1
   drop
   block $~lib/util/hash/hashStr|inlined.1 (result i32)
+   global.get $~lib/memory/__stack_pointer
    local.get $key
-   local.set $key|1
+   local.tee $key|1
+   i32.store $0
    local.get $key|1
    i32.const 0
    i32.eq
@@ -342,6 +546,11 @@
     br $~lib/util/hash/hashStr|inlined.1
    end
    local.get $key|1
+   local.set $19
+   global.get $~lib/memory/__stack_pointer
+   local.get $19
+   i32.store $0 offset=4
+   local.get $19
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
@@ -575,178 +784,13 @@
    local.get $h
    br $~lib/util/hash/hashStr|inlined.1
   end
-  return
- )
- (func $~lib/util/hash/HASH<f32> (type $f32_=>_i32) (param $key f32) (result i32)
-  (local $key|1 i32)
-  (local $len i32)
-  (local $h i32)
-  i32.const 0
-  drop
-  i32.const 0
-  drop
-  i32.const 1
-  drop
-  i32.const 4
-  i32.const 4
-  i32.eq
-  drop
-  block $~lib/util/hash/hash32|inlined.0 (result i32)
-   local.get $key
-   i32.reinterpret_f32
-   local.set $key|1
-   i32.const 4
-   local.set $len
-   i32.const 0
-   i32.const 374761393
-   i32.add
-   local.get $len
-   i32.add
-   local.set $h
-   local.get $h
-   local.get $key|1
-   i32.const -1028477379
-   i32.mul
-   i32.add
-   local.set $h
-   local.get $h
-   i32.const 17
-   i32.rotl
-   i32.const 668265263
-   i32.mul
-   local.set $h
-   local.get $h
-   local.get $h
-   i32.const 15
-   i32.shr_u
-   i32.xor
-   local.set $h
-   local.get $h
-   i32.const -2048144777
-   i32.mul
-   local.set $h
-   local.get $h
-   local.get $h
-   i32.const 13
-   i32.shr_u
-   i32.xor
-   local.set $h
-   local.get $h
-   i32.const -1028477379
-   i32.mul
-   local.set $h
-   local.get $h
-   local.get $h
-   i32.const 16
-   i32.shr_u
-   i32.xor
-   local.set $h
-   local.get $h
-   br $~lib/util/hash/hash32|inlined.0
-  end
-  return
- )
- (func $~lib/util/hash/HASH<f64> (type $f64_=>_i32) (param $key f64) (result i32)
-  (local $key|1 i64)
-  (local $h i32)
-  i32.const 0
-  drop
-  i32.const 0
-  drop
-  i32.const 1
-  drop
-  i32.const 8
-  i32.const 4
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 8
-  i32.eq
-  drop
-  block $~lib/util/hash/hash64|inlined.0 (result i32)
-   local.get $key
-   i64.reinterpret_f64
-   local.set $key|1
-   i32.const 0
-   i32.const 374761393
-   i32.add
-   i32.const 8
-   i32.add
-   local.set $h
-   local.get $h
-   local.get $key|1
-   i32.wrap_i64
-   i32.const -1028477379
-   i32.mul
-   i32.add
-   local.set $h
-   local.get $h
-   i32.const 17
-   i32.rotl
-   i32.const 668265263
-   i32.mul
-   local.set $h
-   local.get $h
-   local.get $key|1
-   i64.const 32
-   i64.shr_u
-   i32.wrap_i64
-   i32.const -1028477379
-   i32.mul
-   i32.add
-   local.set $h
-   local.get $h
-   i32.const 17
-   i32.rotl
-   i32.const 668265263
-   i32.mul
-   local.set $h
-   local.get $h
-   local.get $h
-   i32.const 15
-   i32.shr_u
-   i32.xor
-   local.set $h
-   local.get $h
-   i32.const -2048144777
-   i32.mul
-   local.set $h
-   local.get $h
-   local.get $h
-   i32.const 13
-   i32.shr_u
-   i32.xor
-   local.set $h
-   local.get $h
-   i32.const -1028477379
-   i32.mul
-   local.set $h
-   local.get $h
-   local.get $h
-   i32.const 16
-   i32.shr_u
-   i32.xor
-   local.set $h
-   local.get $h
-   br $~lib/util/hash/hash64|inlined.0
-  end
-  return
- )
- (func $~start (type $none_=>_none)
-  call $start:std/hash
- )
- (func $~stack_check (type $none_=>_none)
+  local.set $19
   global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__data_end
-  i32.lt_s
-  if
-   i32.const 33168
-   i32.const 33216
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $19
+  return
  )
  (func $start:std/hash (type $none_=>_none)
   (local $0 i32)
