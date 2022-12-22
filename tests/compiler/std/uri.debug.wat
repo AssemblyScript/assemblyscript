@@ -2742,14 +2742,6 @@
   local.get $dst
   return
  )
- (func $~lib/uri/encodeURIComponent (type $i32_=>_i32) (param $str i32) (result i32)
-  local.get $str
-  local.get $str
-  call $~lib/string/String#get:length
-  global.get $~lib/util/uri/URL_UNSAFE
-  call $~lib/util/uri/encode
-  return
- )
  (func $~lib/util/string/compareImpl (type $i32_i32_i32_i32_i32_=>_i32) (param $str1 i32) (param $index1 i32) (param $str2 i32) (param $index2 i32) (param $len i32) (result i32)
   (local $ptr1 i32)
   (local $ptr2 i32)
@@ -2852,57 +2844,6 @@
    end
   end
   i32.const 0
-  return
- )
- (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
-  (local $leftLength i32)
-  local.get $left
-  local.get $right
-  i32.eq
-  if
-   i32.const 1
-   return
-  end
-  local.get $left
-  i32.const 0
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $right
-   i32.const 0
-   i32.eq
-  end
-  if
-   i32.const 0
-   return
-  end
-  local.get $left
-  call $~lib/string/String#get:length
-  local.set $leftLength
-  local.get $leftLength
-  local.get $right
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  local.get $left
-  i32.const 0
-  local.get $right
-  i32.const 0
-  local.get $leftLength
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  return
- )
- (func $~lib/uri/encodeURI (type $i32_=>_i32) (param $str i32) (result i32)
-  local.get $str
-  local.get $str
-  call $~lib/string/String#get:length
-  global.get $~lib/util/uri/URI_UNSAFE
-  call $~lib/util/uri/encode
   return
  )
  (func $~lib/util/uri/loadHex (type $i32_i32_=>_i32) (param $src i32) (param $offset i32) (result i32)
@@ -3408,22 +3349,6 @@
   local.get $dst
   return
  )
- (func $~lib/uri/decodeURIComponent (type $i32_=>_i32) (param $str i32) (result i32)
-  local.get $str
-  local.get $str
-  call $~lib/string/String#get:length
-  i32.const 1
-  call $~lib/util/uri/decode
-  return
- )
- (func $~lib/uri/decodeURI (type $i32_=>_i32) (param $str i32) (result i32)
-  local.get $str
-  local.get $str
-  call $~lib/string/String#get:length
-  i32.const 0
-  call $~lib/util/uri/decode
-  return
- )
  (func $~lib/rt/itcms/__collect (type $none_=>_none)
   i32.const 0
   drop
@@ -3539,6 +3464,214 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $~lib/uri/encodeURIComponent (type $i32_=>_i32) (param $str i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.get $str
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/string/String#get:length
+  global.get $~lib/util/uri/URL_UNSAFE
+  call $~lib/util/uri/encode
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $~lib/string/String.__eq (type $i32_i32_=>_i32) (param $left i32) (param $right i32) (result i32)
+  (local $leftLength i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  local.get $left
+  local.get $right
+  i32.eq
+  if
+   i32.const 1
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  local.get $left
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $right
+   i32.const 0
+   i32.eq
+  end
+  if
+   i32.const 0
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  local.get $left
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/string/String#get:length
+  local.set $leftLength
+  local.get $leftLength
+  local.get $right
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
+   return
+  end
+  local.get $left
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0
+  local.get $3
+  i32.const 0
+  local.get $right
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store $0 offset=4
+  local.get $3
+  i32.const 0
+  local.get $leftLength
+  call $~lib/util/string/compareImpl
+  i32.eqz
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
+  return
+ )
+ (func $~lib/uri/encodeURI (type $i32_=>_i32) (param $str i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.get $str
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/string/String#get:length
+  global.get $~lib/util/uri/URI_UNSAFE
+  call $~lib/util/uri/encode
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $~lib/uri/decodeURIComponent (type $i32_=>_i32) (param $str i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.get $str
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/string/String#get:length
+  i32.const 1
+  call $~lib/util/uri/decode
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
+ )
+ (func $~lib/uri/decodeURI (type $i32_=>_i32) (param $str i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $str
+  local.get $str
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $~lib/string/String#get:length
+  i32.const 0
+  call $~lib/util/uri/decode
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+  return
  )
  (func $start:std/uri (type $none_=>_none)
   (local $0 i32)

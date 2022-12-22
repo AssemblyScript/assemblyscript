@@ -31,20 +31,6 @@
   local.get $b
   i32.store16 $0 offset=4
  )
- (func $class-extends/test (type $i32_=>_none) (param $b i32)
-  local.get $b
-  call $class-extends/A#get:a
-  drop
-  local.get $b
-  call $class-extends/B#get:b
-  drop
-  local.get $b
-  i32.const 2
-  call $class-extends/A#set:a
-  local.get $b
-  i32.const 3
-  call $class-extends/B#set:b
- )
  (func $~stack_check (type $none_=>_none)
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
@@ -57,6 +43,53 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $class-extends/test (type $i32_=>_none) (param $b i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0
+  local.get $b
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $class-extends/A#get:a
+  drop
+  local.get $b
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  call $class-extends/B#get:b
+  drop
+  local.get $b
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 2
+  call $class-extends/A#set:a
+  local.get $b
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store $0
+  local.get $1
+  i32.const 3
+  call $class-extends/B#set:b
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $export:class-extends/test (type $i32_=>_none) (param $0 i32)
   global.get $~lib/memory/__stack_pointer

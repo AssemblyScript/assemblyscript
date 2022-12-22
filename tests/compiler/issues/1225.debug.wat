@@ -2438,6 +2438,83 @@
    unreachable
   end
  )
+ (func $issues/1225/X#constructor (type $i32_i32_=>_i32) (param $this i32) (param $x i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store $0 offset=8
+  local.get $this
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $this
+   i32.store $0
+  end
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $x
+  call $issues/1225/X#set:x
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  i32.const 0
+  call $issues/1225/X#set:normal
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  i32.const 0
+  call $issues/1225/X#set:viaThis
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=8
+  local.get $2
+  call $issues/1225/X#get:x
+  call $issues/1225/X#set:viaThis
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store $0 offset=4
+  local.get $2
+  local.get $x
+  call $issues/1225/X#set:normal
+  local.get $this
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
  (func $issues/1225/normal (type $none_=>_i32) (result i32)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2487,49 +2564,5 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
   return
- )
- (func $issues/1225/X#constructor (type $i32_i32_=>_i32) (param $this i32) (param $x i32) (result i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store $0
-  local.get $this
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 12
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $this
-   i32.store $0
-  end
-  local.get $this
-  local.get $x
-  call $issues/1225/X#set:x
-  local.get $this
-  i32.const 0
-  call $issues/1225/X#set:normal
-  local.get $this
-  i32.const 0
-  call $issues/1225/X#set:viaThis
-  local.get $this
-  local.get $this
-  call $issues/1225/X#get:x
-  call $issues/1225/X#set:viaThis
-  local.get $this
-  local.get $x
-  call $issues/1225/X#set:normal
-  local.get $this
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
  )
 )
